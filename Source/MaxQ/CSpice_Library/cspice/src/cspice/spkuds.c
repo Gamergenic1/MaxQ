@@ -10,10 +10,10 @@
 static integer c__2 = 2;
 static integer c__6 = 6;
 
-/* $Procedure      SPKUDS ( SPK - unpack segment descriptor ) */
+/* $Procedure SPKUDS ( SPK - unpack segment descriptor ) */
 /* Subroutine */ int spkuds_(doublereal *descr, integer *body, integer *
 	center, integer *frame, integer *type__, doublereal *first, 
-	doublereal *last, integer *begin, integer *end)
+	doublereal *last, integer *baddrs, integer *eaddrs)
 {
     extern /* Subroutine */ int chkin_(char *, ftnlen), dafus_(doublereal *, 
 	    integer *, integer *, doublereal *, integer *);
@@ -25,7 +25,7 @@ static integer c__6 = 6;
 
 /* $ Abstract */
 
-/*     Unpack the contents of an SPK segment descriptor */
+/*     Unpack the contents of an SPK segment descriptor. */
 
 /* $ Disclaimer */
 
@@ -72,37 +72,49 @@ static integer c__6 = 6;
 /*     TYPE       O   The type of SPK segment. */
 /*     FIRST      O   The first epoch for which the segment is valid. */
 /*     LAST       O   The last  epoch for which the segment is valid. */
-/*     BEGIN      O   Beginning DAF address of the segment. */
-/*     END        O   Ending DAF address of the segment. */
+/*     BADDRS     O   Beginning DAF address of the segment. */
+/*     EADDRS     O   Ending DAF address of the segment. */
 
 /* $ Detailed_Input */
 
-/*     DESCR      is an SPK segment descriptor. */
+/*     DESCR    is an SPK segment descriptor. */
 
 /* $ Detailed_Output */
 
-/*     BODY       is the NAIF ID code for the body of the segment. */
+/*     BODY     is the NAIF ID code for the body of the segment. */
 
-/*     CENTER     is the center of motion for BODY. */
+/*     CENTER   is the center of motion for BODY. */
 
-/*     FRAME      is SPICE integer code for the frame to which states */
-/*                for the body are be referenced. */
+/*     FRAME    is the SPICE integer code for the frame to which states */
+/*              for the body are be referenced. */
 
-/*     TYPE       is the type of SPK segment. */
+/*     TYPE     is the type of SPK segment. */
 
-/*     FIRST      is the first epoch for which the segment has */
-/*                ephemeris data. */
+/*     FIRST    is the first epoch for which the segment has */
+/*              ephemeris data. */
 
-/*     LAST       is the last epoch for which the segment has */
-/*                ephemeris data. */
+/*     LAST     is the last epoch for which the segment has */
+/*              ephemeris data. */
 
-/*     BEGIN      is the starting address of the data associated */
-/*                with this descriptor */
+/*     BADDRS   is the starting address of the data associated */
+/*              with this descriptor. */
 
-/*     END        is the last address of the data associated with */
-/*                this descriptor */
+/*     EADDRS   is the last address of the data associated with */
+/*              this descriptor. */
 
 /* $ Parameters */
+
+/*     None. */
+
+/* $ Exceptions */
+
+/*     Error free. */
+
+/*     1)  If the input descriptor DESCR is invalid, it's possible for */
+/*         the output times to contain bit patterns that don't represent */
+/*         normal double precision values. This error is not diagnosed. */
+
+/* $ Files */
 
 /*     None. */
 
@@ -110,7 +122,7 @@ static integer c__6 = 6;
 
 /*     This routine extracts the contents of an SPK segment */
 /*     descriptor into the components needed for reading and */
-/*     evaluating the data stored in the segment.  It serves */
+/*     evaluating the data stored in the segment. It serves */
 /*     as a macro for expanding the SPK segment descriptor. */
 
 /* $ Examples */
@@ -120,48 +132,49 @@ static integer c__6 = 6;
 /*     The following code fragment shows how you might use this */
 /*     routine to create a summary message concerning the segment. */
 
-/*     CALL SPKUDS ( DESCR, BODY,  CENTER, FRAME, */
-/*    .              TYPE,  FIRST, LAST,   BADDR, EADDR ) */
+/*        CALL SPKUDS ( DESCR, BODY,  CENTER, FRAME, */
+/*       .              TYPE,  FIRST, LAST,   BADDR, EADDR ) */
 
 /*     Convert the start and stop times to ephemeris calendar strings */
 
-/*     CALL ETCAL ( FIRST, FSTCAL ) */
-/*     CALL ETCAL ( LAST,  LSTCAL ) */
+/*        CALL ETCAL ( FIRST, FSTCAL ) */
+/*        CALL ETCAL ( LAST,  LSTCAL ) */
 
-/*     WRITE (*,*) */
-/*     WRITE (*,*) 'Body     : ', BODY */
-/*     WRITE (*,*) 'Center   : ', CENTER */
-/*     WRITE (*,*) 'Frame ID : ', FRAME */
-/*     WRITE (*,*) 'Data Type: ', TYPE */
-/*     WRITE (*,*) */
-/*     WRITE (*,*) 'Segment Start : ', FSTCAL */
-/*     WRITE (*,*) 'Segment Stop  : ', LSTCAL */
-
+/*        WRITE (*,*) */
+/*        WRITE (*,*) 'Body     : ', BODY */
+/*        WRITE (*,*) 'Center   : ', CENTER */
+/*        WRITE (*,*) 'Frame ID : ', FRAME */
+/*        WRITE (*,*) 'Data Type: ', TYPE */
+/*        WRITE (*,*) */
+/*        WRITE (*,*) 'Segment Start : ', FSTCAL */
+/*        WRITE (*,*) 'Segment Stop  : ', LSTCAL */
 
 /* $ Restrictions */
 
 /*     None. */
 
-/* $ Exceptions */
-
-/*     None. */
-
-/* $ Files */
+/* $ Literature_References */
 
 /*     None. */
 
 /* $ Author_and_Institution */
 
-/*     W.L. Taber      (JPL) */
-/*     K.R. Gehringer    (JPL) */
-
-/* $ Literature_References */
-
-/*     None. */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
 
-/* -    SPICELIB Version 1.0.0, 1994-JAN-4 (WLT) (KRG) */
+/* -    SPICELIB Version 1.1.0, 02-OCT-2021 (JDR) (NJB) */
+
+/*        Changed output argument names "BEGIN" and "END" to "BADDRS" and */
+/*        "EADDRS" for consistency with other routines. */
+
+/*        Edited the header to comply with NAIF standard. Added entry */
+/*        #1 to $Exceptions section and declared the routine error free. */
+
+/* -    SPICELIB Version 1.0.0, 04-JAN-1994 (WLT) (KRG) */
 
 /* -& */
 /* $ Index_Entries */
@@ -185,11 +198,10 @@ static integer c__6 = 6;
 
     if (return_()) {
 	return 0;
-    } else {
-	chkin_("SPKUDS", (ftnlen)6);
     }
+    chkin_("SPKUDS", (ftnlen)6);
 
-/*     No judgements are made about the descriptor when we */
+/*     No judgments are made about the descriptor when we */
 /*     unpack it.  If things were done right when the descriptor */
 /*     was created, it should be fine now. */
 
@@ -202,8 +214,8 @@ static integer c__6 = 6;
     *center = ipart[1];
     *frame = ipart[2];
     *type__ = ipart[3];
-    *begin = ipart[4];
-    *end = ipart[5];
+    *baddrs = ipart[4];
+    *eaddrs = ipart[5];
     *first = dppart[0];
     *last = dppart[1];
     chkout_("SPKUDS", (ftnlen)6);

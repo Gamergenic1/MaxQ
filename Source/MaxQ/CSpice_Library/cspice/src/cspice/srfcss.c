@@ -66,7 +66,7 @@
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     CODE       I   Integer surface ID code to translate to a string. */
 /*     BODSTR     I   Name or ID of body associated with surface. */
@@ -76,69 +76,66 @@
 
 /* $ Detailed_Input */
 
-/*     CODE       is an integer ID code for a surface associated with a */
-/*                specified body. */
+/*     CODE     is an integer ID code for a surface associated with a */
+/*              specified body. */
 
+/*     BODSTR   is a string designating the body associated with the */
+/*              input surface ID code. BODSTR may contain a body name */
+/*              or a string representation of the body's integer ID */
+/*              code. For example, BODSTR may contain */
 
-/*     BODSTR     is a string designating the body associated with the */
-/*                input surface ID code. BODSTR may contain a body name */
-/*                or a string representation of the body's integer ID */
-/*                code. For example, BODSTR may contain */
+/*                 '1000012' */
 
-/*                   '1000012' */
+/*              instead of */
 
-/*                instead of */
+/*                 '67P/CHURYUMOV-GERASIMENKO (1969 R1)' */
 
-/*                   '67P/CHURYUMOV-GERASIMENKO (1969 R1)' */
+/*              Case and leading and trailing blanks in a name are not */
+/*              significant. Sequences of consecutive embedded blanks */
+/*              are considered equivalent to a single blank. That is, */
+/*              all of the following strings are equivalent names: */
 
-/*                Case and leading and trailing blanks in a name are not */
-/*                significant. Sequences of consecutive embedded blanks */
-/*                are considered equivalent to a single blank. That is, */
-/*                all of the following strings are equivalent names: */
+/*                 '67P/CHURYUMOV-GERASIMENKO (1969 R1)' */
+/*                 '67P/Churyumov-Gerasimenko (1969 R1)' */
+/*                 '67P/CHURYUMOV-GERASIMENKO (1969 R1)   ' */
+/*                 '67P/CHURYUMOV-GERASIMENKO    (1969 R1)' */
+/*                 '   67P/CHURYUMOV-GERASIMENKO (1969 R1)' */
 
-/*                   '67P/CHURYUMOV-GERASIMENKO (1969 R1)' */
-/*                   '67P/Churyumov-Gerasimenko (1969 R1)' */
-/*                   '67P/CHURYUMOV-GERASIMENKO (1969 R1)   ' */
-/*                   '67P/CHURYUMOV-GERASIMENKO    (1969 R1)' */
-/*                   '   67P/CHURYUMOV-GERASIMENKO (1969 R1)' */
-
-/*                However, '67P/CHURYUMOV-GERASIMENKO(1969R1)' */
-/*                is not equivalent to the names above. */
-
+/*              However, '67P/CHURYUMOV-GERASIMENKO(1969R1)' */
+/*              is not equivalent to the names above. */
 
 /* $ Detailed_Output */
 
-/*     SRFSTR     the name of the surface identified by CODE, for the */
-/*                body designated by BODSTR, if for this body an */
-/*                association exists between the input surface ID and a */
-/*                surface name. */
+/*     SRFSTR   is the name of the surface identified by CODE, for the */
+/*              body designated by BODSTR, if for this body an */
+/*              association exists between the input surface ID and a */
+/*              surface name. */
 
-/*                If CODE has more than one translation, then the most */
-/*                recently defined surface name corresponding to CODE is */
-/*                returned. SRFSTR will have the exact format (case and */
-/*                embedded blanks) used in the definition of the */
-/*                name/code association. */
+/*              If CODE has more than one translation, then the most */
+/*              recently defined surface name corresponding to CODE is */
+/*              returned. SRFSTR will have the exact format (case and */
+/*              embedded blanks) used in the definition of the */
+/*              name/code association. */
 
-/*                If the input surface ID code and body name do not map */
-/*                to a surface name, SRFSTR is set to the string */
-/*                representation of CODE. */
+/*              If the input surface ID code and body name do not map */
+/*              to a surface name, SRFSTR is set to the string */
+/*              representation of CODE. */
 
-/*                SRFSTR should be declared with length SFNMLN (see the */
-/*                Parameters section below). */
+/*              SRFSTR should be declared with length SFNMLN (see the */
+/*              $Parameters section below). */
 
-
-/*     ISNAME     is a logical flag that is .TRUE. if a surface name */
-/*                corresponding to the input ID codes was found and */
-/*                .FALSE. otherwise. When ISNAME is .FALSE., the output */
-/*                string SRFSTR contains a string representing the */
-/*                integer CODE. */
+/*     ISNAME   is a logical flag that is .TRUE. if a surface name */
+/*              corresponding to the input ID codes was found and */
+/*              .FALSE. otherwise. When ISNAME is .FALSE., the output */
+/*              string SRFSTR contains a string representing the */
+/*              integer CODE. */
 
 /* $ Parameters */
 
-/*     SFNMLN     is the maximum length of a surface name. This */
-/*                parameter is declared in the SPICELIB include file */
+/*     SFNMLN   is the maximum length of a surface name. This */
+/*              parameter is declared in the SPICELIB include file */
 
-/*                   srftrn.inc */
+/*                 srftrn.inc */
 
 /* $ Exceptions */
 
@@ -234,7 +231,7 @@
 /*        for a surface ID having no matching name. */
 
 /*        Use the meta-kernel shown below to define the required SPICE */
-/*        kernel variables: */
+/*        kernel variables. */
 
 
 /*           KPL/MK */
@@ -258,92 +255,92 @@
 /*           \begintext */
 
 
-/*       Example code begins here. */
+/*        Example code begins here. */
 
 
-/*          PROGRAM EX1 */
-/*          IMPLICIT NONE */
+/*              PROGRAM SRFCSS_EX1 */
+/*              IMPLICIT NONE */
 
-/*          INCLUDE 'srftrn.inc' */
+/*              INCLUDE 'srftrn.inc' */
 
-/*          INTEGER               FILSIZ */
-/*          PARAMETER           ( FILSIZ = 255 ) */
+/*              INTEGER               FILSIZ */
+/*              PARAMETER           ( FILSIZ = 255 ) */
 
-/*          INTEGER               NCASE */
-/*          PARAMETER           ( NCASE = 5 ) */
+/*              INTEGER               NCASE */
+/*              PARAMETER           ( NCASE = 5 ) */
 
-/*          INTEGER               BDNMLN */
-/*          PARAMETER           ( BDNMLN = 36 ) */
+/*              INTEGER               BDNMLN */
+/*              PARAMETER           ( BDNMLN = 36 ) */
 
-/*          CHARACTER*(BDNMLN)    BODSTR ( NCASE ) */
-/*          CHARACTER*(FILSIZ)    META */
-/*          CHARACTER*(SFNMLN)    SRFNAM */
+/*              CHARACTER*(BDNMLN)    BODSTR ( NCASE ) */
+/*              CHARACTER*(FILSIZ)    META */
+/*              CHARACTER*(SFNMLN)    SRFNAM */
 
-/*          INTEGER               I */
-/*          INTEGER               SURFID ( NCASE ) */
+/*              INTEGER               I */
+/*              INTEGER               SURFID ( NCASE ) */
 
-/*          LOGICAL               ISNAME */
-
-
-/*          DATA  ( SURFID(I), BODSTR(I), I = 1, NCASE ) / */
-/*         . */
-/*         .        1,         'MARS', */
-/*         .        1,         'PHOBOS', */
-/*         .        2,         '499', */
-/*         .        3,         'MARS', */
-/*         .        1,         'ZZZ'                     / */
+/*              LOGICAL               ISNAME */
 
 
-/*          META = 'srfcss_ex1.tm' */
-
-/*          CALL FURNSH ( META ) */
-
-/*          WRITE (*,*) ' ' */
-
-/*          DO I = 1, NCASE */
-
-/*             CALL SRFCSS ( SURFID(I), BODSTR(I), */
-/*         .                 SRFNAM,    ISNAME     ) */
-
-/*             WRITE (*,*) 'surface ID     = ', SURFID(I) */
-/*             WRITE (*,*) 'body string    = ', BODSTR(I) */
-/*             WRITE (*,*) 'name found     = ', ISNAME */
-/*             WRITE (*,*) 'surface string = ', SRFNAM */
-/*             WRITE (*,*) ' ' */
-
-/*          END DO */
-
-/*          END */
+/*              DATA  ( SURFID(I), BODSTR(I), I = 1, NCASE ) / */
+/*             . */
+/*             .        1,         'MARS', */
+/*             .        1,         'PHOBOS', */
+/*             .        2,         '499', */
+/*             .        3,         'MARS', */
+/*             .        1,         'ZZZ'                     / */
 
 
-/*     When this program was executed on a PC/Linux/gfortran/64-bit */
-/*     platform, the output was: */
+/*              META = 'srfcss_ex1.tm' */
+
+/*              CALL FURNSH ( META ) */
+
+/*              WRITE (*,*) ' ' */
+
+/*              DO I = 1, NCASE */
+
+/*                 CALL SRFCSS ( SURFID(I), BODSTR(I), */
+/*             .                 SRFNAM,    ISNAME     ) */
+
+/*                 WRITE (*,*) 'surface ID     = ', SURFID(I) */
+/*                 WRITE (*,*) 'body string    = ', BODSTR(I) */
+/*                 WRITE (*,*) 'name found     = ', ISNAME */
+/*                 WRITE (*,*) 'surface string = ', SRFNAM */
+/*                 WRITE (*,*) ' ' */
+
+/*              END DO */
+
+/*              END */
 
 
-/*        surface ID     =            1 */
-/*        body string    = MARS */
-/*        name found     =  T */
-/*        surface string = MGS MOLA  64 pixel/deg */
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
 
-/*        surface ID     =            1 */
-/*        body string    = PHOBOS */
-/*        name found     =  T */
-/*        surface string = PHOBOS GASKELL Q512 */
 
-/*        surface ID     =            2 */
-/*        body string    = 499 */
-/*        name found     =  T */
-/*        surface string = MGS MOLA 128 pixel/deg */
+/*         surface ID     =            1 */
+/*         body string    = MARS */
+/*         name found     =  T */
+/*         surface string = MGS MOLA  64 pixel/deg */
 
-/*        surface ID     =            3 */
-/*        body string    = MARS */
-/*        name found     =  F */
-/*        surface string = 3 */
+/*         surface ID     =            1 */
+/*         body string    = PHOBOS */
+/*         name found     =  T */
+/*         surface string = PHOBOS GASKELL Q512 */
 
-/*        surface ID     =            1 */
-/*        body string    = ZZZ */
-/*        name found     =  F */
-/*        surface string = 1 */
+/*         surface ID     =            2 */
+/*         body string    = 499 */
+/*         name found     =  T */
+/*         surface string = MGS MOLA 128 pixel/deg */
+
+/*         surface ID     =            3 */
+/*         body string    = MARS */
+/*         name found     =  F */
+/*         surface string = 3 */
+
+/*         surface ID     =            1 */
+/*         body string    = ZZZ */
+/*         name found     =  F */
+/*         surface string = 1 */
 
 
 /* $ Restrictions */
@@ -356,11 +353,16 @@
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     B.V. Semenov    (JPL) */
-/*     E.D. Wright     (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     B.V. Semenov       (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.0.1, 12-AUG-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.0.0, 14-JAN-2016 (NJB) (EDW) (BVS) */
 

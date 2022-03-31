@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      IRFTRN ( Inertial reference frame transformation ) */
+/* $Procedure IRFTRN ( Inertial reference frame transformation ) */
 /* Subroutine */ int irftrn_(char *refa, char *refb, doublereal *rotab, 
 	ftnlen refa_len, ftnlen refb_len)
 {
@@ -61,7 +61,7 @@
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     REFA       I   Name of reference frame to transform vectors FROM. */
 /*     REFB       I   Name of reference frame to transform vectors TO. */
@@ -70,29 +70,31 @@
 /* $ Detailed_Input */
 
 /*     REFA, */
-/*     REFB           Names of two inertial reference frames.  Any names */
-/*                    accepted by the routine IRFNUM may be used.  See */
-/*                    $Particulars for a list of some of the more */
-/*                    commonly used inertial reference frame names. */
+/*     REFB     are the names of two inertial reference frames. Any names */
+/*              accepted by the routine IRFNUM may be used. See */
+/*              $Particulars for a list of some of the more commonly used */
+/*              inertial reference frame names. */
 
 /* $ Detailed_Output */
 
-/*     ROTAB          is a rotation matrix that transforms the */
-/*                    coordinates of a vector V relative to the */
-/*                    reference frame specified by REFA to the */
-/*                    coordinates of V relative to the reference frame */
-/*                    specified by REFB.  The transformation is carried */
-/*                    out by the matrix multiplication */
+/*     ROTAB    is a rotation matrix that transforms the */
+/*              coordinates of a vector V relative to the */
+/*              reference frame specified by REFA to the */
+/*              coordinates of V relative to the reference frame */
+/*              specified by REFB. The transformation is carried */
+/*              out by the matrix multiplication */
 
-/*                       V = ROTAB * V. */
+/*                 V = ROTAB * V. */
+
 /* $ Parameters */
 
 /*     None. */
 
 /* $ Exceptions */
 
-/*     1)  If either of the input reference frame names is invalid, the */
-/*         error will be diagnosed by routines called by this routine. */
+/*     1)  If either of the input reference frame names is invalid, an */
+/*         error is signaled by a routine in the call tree of this */
+/*         routine. */
 
 /* $ Files */
 
@@ -130,7 +132,6 @@
 
 /*     See the SPICELIB routine GHGIRF for details. */
 
-
 /* $ Examples */
 
 /*     1)  Transform a vector V1950 from the B1950 to the J2000 */
@@ -157,13 +158,21 @@
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
 
+/* -    SPICELIB Version 1.1.0, 20-AUG-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
+
 /* -    SPICELIB Version 1.0.2, 28-SEP-2004 (NJB) */
 
-/*        Corrected comment in code example in header.  Made other minor */
+/*        Corrected comment in code example in header. Made other minor */
 /*        updates to header. */
 
 /* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
@@ -176,7 +185,7 @@
 /* -& */
 /* $ Index_Entries */
 
-/*     tranformation from one inertial frame to another */
+/*     transformation from one inertial frame to another */
 
 /* -& */
 

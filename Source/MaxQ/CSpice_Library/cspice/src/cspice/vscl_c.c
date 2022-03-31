@@ -1,11 +1,11 @@
 /*
 
--Procedure      vscl_c ( Vector scaling, 3 dimensions )
+-Procedure vscl_c ( Vector scaling, 3 dimensions )
 
 -Abstract
- 
-   Multiply a scalar and a 3-dimensional double precision vector. 
- 
+
+   Multiply a scalar and a double precision 3-dimensional vector.
+
 -Disclaimer
 
    THIS SOFTWARE AND ANY RELATED MATERIALS WERE CREATED BY THE
@@ -32,13 +32,13 @@
    ACTIONS OF RECIPIENT IN THE USE OF THE SOFTWARE.
 
 -Required_Reading
- 
-   None. 
- 
+
+   None.
+
 -Keywords
- 
-   VECTOR 
- 
+
+   VECTOR
+
 */
 
    #include "SpiceUsr.h"
@@ -47,86 +47,170 @@
 
    void vscl_c ( SpiceDouble        s,
                  ConstSpiceDouble   v1[3],
-                 SpiceDouble        vout[3] ) 
+                 SpiceDouble        vout[3] )
 
 /*
 
 -Brief_I/O
- 
-   VARIABLE  I/O  DESCRIPTION 
-   --------  ---  -------------------------------------------------- 
-    s         I     Scalar to multiply a vector. 
-    v1        I     Vector to be multiplied. 
-    vout      O     Product vector, s*v1. vout can overwrite v1. 
- 
+
+   VARIABLE  I/O  DESCRIPTION
+   --------  ---  --------------------------------------------------
+   s          I   Scalar to multiply a vector.
+   v1         I   Vector to be multiplied.
+   vout       O   Product vector, s * v1.
+
 -Detailed_Input
- 
-   s    This is a double precision scalar used to multiply the 
-        vector v1. 
- 
-   v1   This is a 3-dimensional, double precision vector which is 
-        to be scaled by s. 
- 
+
+   s           is a double precision scalar used to multiply the vector
+               `v1'.
+
+   v1          is a double precision 3-dimensional vector, which is to
+               be scaled by `s'.
+
 -Detailed_Output
- 
-   vout   This is a 3-dimensional, double precision vector which 
-          is the scalar multiple of v1.  vout = s*v1. 
- 
+
+   vout        is a double precision 3-dimensional vector containing
+               the product of the scalar with the vector `v1'. `vout' may
+               overwrite `v1'.
+
 -Parameters
- 
-   None. 
- 
--Particulars
- 
-   vscl_c multiplies each component of v1 by s to form the respective 
-   components of vout.  No error checking is performed. 
- 
--Examples
- 
-   The following table shows the output vout as a function of the 
-   the inputs v1, and s from the subroutine vscl_c. 
- 
-   v1                   s         vout 
-   ------------------------------------------------------- 
-   (1, -2, 0)          -1       (-1, 2, 0) 
-   (0,  0, 0)           5       ( 0, 0, 0) 
- 
--Restrictions
- 
-   The user is responsible for insuring that no floating point 
-   overflow occurs from multiplying s by any component of v1. 
-   No error recovery or reporting scheme is incorporated in this 
-   subroutine. 
- 
+
+   None.
+
 -Exceptions
- 
-   Error free. 
- 
+
+   Error free.
+
 -Files
- 
-   None. 
- 
--Author_and_Institution
- 
-   W.M. Owen       (JPL) 
-   E.D. Wright     (JPL)
- 
+
+   None.
+
+-Particulars
+
+   For each value of the index `i' from 0 to 2, this function
+   performs the following multiplication
+
+      vout[i] = s * v1[i];
+
+   No error checking is performed to guard against numeric overflow
+   or underflow.
+
+-Examples
+
+   The numerical results shown for this example may differ across
+   platforms. The results depend on the SPICE kernels used as
+   input, the compiler and supporting libraries, and the machine
+   specific arithmetic implementation.
+
+   1) Define a sets of scalar double precision values and use them
+      to scale a given 3-dimensional vector.
+
+
+      Example code begins here.
+
+
+      /.
+         Program vscl_ex1
+      ./
+      #include <stdio.h>
+      #include "SpiceUsr.h"
+
+      int main( )
+      {
+
+         /.
+         Local parameters.
+         ./
+         #define SETSIZ       3
+
+         /.
+         Local variables.
+         ./
+         SpiceDouble          vout   [3];
+
+         SpiceInt             i;
+
+         /.
+         Define the set of scalars and the input vector.
+         ./
+         SpiceDouble          s      [SETSIZ] = { 3.0, 0.0, -1.0 };
+
+         SpiceDouble          v1     [3]      = { 1.0, 2.0, -3.0 };
+
+         printf( "Input vector :  %5.1f %5.1f %5.1f\n",
+                                   v1[0], v1[1], v1[2] );
+         printf( "\n" );
+
+         /.
+         Calculate product of each scalar and `v1'.
+         ./
+         for ( i = 0; i < SETSIZ; i++ )
+         {
+
+            vscl_c ( s[i], v1, vout );
+
+            printf( "Scale factor :  %5.1f\n", s[i] );
+            printf( "Output vector:  %5.1f %5.1f %5.1f\n",
+                              vout[0], vout[1], vout[2] );
+            printf( "\n" );
+
+         }
+
+         return ( 0 );
+      }
+
+
+      When this program was executed on a Mac/Intel/cc/64-bit
+      platform, the output was:
+
+
+      Input vector :    1.0   2.0  -3.0
+
+      Scale factor :    3.0
+      Output vector:    3.0   6.0  -9.0
+
+      Scale factor :    0.0
+      Output vector:    0.0   0.0  -0.0
+
+      Scale factor :   -1.0
+      Output vector:   -1.0  -2.0   3.0
+
+
+-Restrictions
+
+   1)  The user is responsible for insuring that no floating point
+       overflow occurs from multiplying `s' by any component of `v1'. No
+       error recovery or reporting scheme is incorporated in this
+       function.
+
 -Literature_References
- 
-   None. 
- 
+
+   None.
+
+-Author_and_Institution
+
+   N.J. Bachman        (JPL)
+   J. Diaz del Rio     (ODC Space)
+   W.M. Owen           (JPL)
+   E.D. Wright         (JPL)
+
 -Version
- 
+
+   -CSPICE Version 1.1.1, 23-JUL-2020 (JDR)
+
+       Edited the header to comply with NAIF standard. Added complete
+       code example based on existing example.
+
    -CSPICE Version 1.1.0, 22-OCT-1998 (NJB)
 
-      Made input vector const.
+       Made input vector const.
 
-   -CSPICE Version 1.0.0, 08-FEB-1998 (EDW)
+   -CSPICE Version 1.0.0, 08-FEB-1998 (EDW) (WMO)
 
 -Index_Entries
- 
-   3-dimensional vector scaling 
- 
+
+   3-dimensional vector scaling
+
 -&
 */
 

@@ -9,7 +9,7 @@
 
 static integer c__1 = 1;
 
-/* $Procedure            BEDEC  ( Be a decimal number? ) */
+/* $Procedure BEDEC  ( Be a decimal number? ) */
 logical bedec_(char *string, ftnlen string_len)
 {
     /* System generated locals */
@@ -54,7 +54,7 @@ logical bedec_(char *string, ftnlen string_len)
 
 /* $ Required_Reading */
 
-/*     WORDS */
+/*     None. */
 
 /* $ Keywords */
 
@@ -66,22 +66,22 @@ logical bedec_(char *string, ftnlen string_len)
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     STRING     I   Character string. */
 
-/*     The function returns TRUE if the string represents a decimal */
-/*     number. Otherwise, it returns FALSE. */
+/*     The function returns .TRUE. if the string represents a decimal */
+/*     number. Otherwise, it returns .FALSE. */
 
 /* $ Detailed_Input */
 
-/*     STRING      is any string. */
+/*     STRING   is any string. */
 
 /* $ Detailed_Output */
 
 /*     If the input string contains a decimal number (as defined */
-/*     in $Particulars below), the function returns TRUE. Otherwise, */
-/*     the functions returns FALSE. */
+/*     in $Particulars below), the function returns .TRUE. Otherwise, */
+/*     the functions returns .FALSE. */
 
 /* $ Parameters */
 
@@ -171,9 +171,16 @@ logical bedec_(char *string, ftnlen string_len)
 
 /* $ Author_and_Institution */
 
-/*     W.L. Taber     (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 24-NOV-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.0.0, 01-DEC-1995 (WLT) */
 
@@ -250,7 +257,7 @@ logical bedec_(char *string, ftnlen string_len)
 
 /*           The decimal point is in the middle of the string and */
 /*           is preceded by a '+' or '-'.  There should be nothing */
-/*           preceeding the sign and what follows the decimal point */
+/*           preceding the sign and what follows the decimal point */
 /*           should be an unsigned integer. (we already know that the */
 /*           character following the decimal point is not a blank) */
 

@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      LX4UNS (Scan for unsigned integer) */
+/* $Procedure LX4UNS (Scan for unsigned integer) */
 /* Subroutine */ int lx4uns_(char *string, integer *first, integer *last, 
 	integer *nchar, ftnlen string_len)
 {
@@ -55,46 +55,42 @@
 
 /* $ Required_Reading */
 
-/*      None. */
+/*     None. */
 
 /* $ Keywords */
 
-/*      PARSING */
+/*     PARSING */
 
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*      VARIABLE  I/O  DESCRIPTION */
-/*      --------  ---  -------------------------------------------------- */
-/*      STRING     I   any character string */
-/*      FIRST      I   first character to scan from in STRING */
-/*      LAST       O   last character that is part of an unsigned integer */
-/*      NCHAR      O   number of characters in the unsigned integer. */
+/*     VARIABLE  I/O  DESCRIPTION */
+/*     --------  ---  -------------------------------------------------- */
+/*     STRING     I   any character string */
+/*     FIRST      I   first character to scan from in STRING */
+/*     LAST       O   last character that is part of an unsigned integer */
+/*     NCHAR      O   number of characters in the unsigned integer. */
 
 /* $ Detailed_Input */
 
-/*     STRING      is any character string. */
+/*     STRING   is any character string. */
 
-/*     FIRST       is the location in the string to beginning scanning */
-/*                 for an unsigned integer.  It is assumed that the */
-/*                 unsigned integer begins at FIRST. */
+/*     FIRST    is the location in the string to beginning scanning */
+/*              for an unsigned integer. It is assumed that the */
+/*              unsigned integer begins at FIRST. */
 
 /* $ Detailed_Output */
 
-/*     LAST        is the last character at or after FIRST such that */
-/*                 the substring STRING(FIRST:LAST) is an unsigned */
-/*                 integer.  If there is no such substring, LAST */
-/*                 will be returned with the value FIRST-1. */
+/*     LAST     is the last character at or after FIRST such that */
+/*              the substring STRING(FIRST:LAST) is an unsigned */
+/*              integer. If there is no such substring, LAST */
+/*              will be returned with the value FIRST-1. */
 
-/*     NCHAR       is the number of characters in the unsigned integer */
-/*                 that begins at FIRST and ends at last.  If there */
-/*                 is no such string NCHAR will be given the value 0. */
+/*     NCHAR    is the number of characters in the unsigned integer */
+/*              that begins at FIRST and ends at last. If there */
+/*              is no such string NCHAR will be given the value 0. */
 
 /* $ Parameters */
-
-/*     None. */
-
-/* $ Files */
 
 /*     None. */
 
@@ -102,19 +98,22 @@
 
 /*     Error free. */
 
-/*     1) If FIRST is beyond either end of the string, then */
-/*        LAST will be returned with the value FIRST and NCHAR */
-/*        will be returned with the value 0. */
+/*     1)  If FIRST is beyond either end of the string, then LAST will be */
+/*         returned with the value FIRST-1 and NCHAR will be returned */
+/*         with the value 0. */
 
-/*     2) If STRING(FIRST:FIRST) is not part of an unsigned integer */
-/*        then LAST will be returned with the value FIRST-1 and NCHAR */
-/*        will be returned with the value 0. */
+/*     2)  If STRING(FIRST:FIRST) is not part of an unsigned integer then */
+/*         LAST will be returned with the value FIRST-1 and NCHAR will be */
+/*         returned with the value 0. */
+
+/* $ Files */
+
+/*     None. */
 
 /* $ Particulars */
 
 /*     This routine allows you to scan forward in a string to locate */
 /*     an unsigned integer that begins on the input character FIRST. */
-
 
 /* $ Examples */
 
@@ -125,7 +124,7 @@
 /*     where X, Y, and Z are unsigned integers of some unknown */
 /*     length and % stands for some non-digit character. You could */
 /*     use this routine to locate the unsigned integers in the */
-/*     string as shown below.  We'll keep track of the beginning and */
+/*     string as shown below. We'll keep track of the beginning and */
 /*     ending of the unsigned integers in the integer arrays B and E. */
 
 /*     FIRST = 1 */
@@ -150,26 +149,34 @@
 
 /*     END DO */
 
-
 /* $ Restrictions */
 
-/*     1) Assumes ICHAR returns values in the range [-128, 255]. */
-
-/* $ Author_and_Institution */
-
-/*     N.J. Bachman    (JPL) */
-/*     W.L. Taber      (JPL) */
+/*     1)  Assumes ICHAR returns values in the range [-128, 255]. */
 
 /* $ Literature_References */
 
 /*     None. */
 
+/* $ Author_and_Institution */
+
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
+
 /* $ Version */
+
+/* -    SPICELIB Version 1.2.0, 04-AUG-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
+
+/*        Fixed return value for LAST in $Exceptions section entry #1. */
 
 /* -    SPICELIB Version 1.1.0, 03-DEC-2001 (NJB) */
 
 /*        Updated to work if non-printing characters are present in */
-/*        the input string.  Updated Restrictions section. */
+/*        the input string. Updated $Restrictions section. */
 
 /* -    SPICELIB Version 1.0.0, 12-JUL-1994 (WLT) */
 
@@ -199,28 +206,28 @@
 	doinit = FALSE_;
 	for (i__ = -128; i__ <= 255; ++i__) {
 	    digit[(i__1 = i__ + 128) < 384 && 0 <= i__1 ? i__1 : s_rnge("dig"
-		    "it", i__1, "lx4uns_", (ftnlen)206)] = FALSE_;
+		    "it", i__1, "lx4uns_", (ftnlen)217)] = FALSE_;
 	}
 	digit[(i__1 = '0' + 128) < 384 && 0 <= i__1 ? i__1 : s_rnge("digit", 
-		i__1, "lx4uns_", (ftnlen)209)] = TRUE_;
+		i__1, "lx4uns_", (ftnlen)220)] = TRUE_;
 	digit[(i__1 = '1' + 128) < 384 && 0 <= i__1 ? i__1 : s_rnge("digit", 
-		i__1, "lx4uns_", (ftnlen)210)] = TRUE_;
+		i__1, "lx4uns_", (ftnlen)221)] = TRUE_;
 	digit[(i__1 = '2' + 128) < 384 && 0 <= i__1 ? i__1 : s_rnge("digit", 
-		i__1, "lx4uns_", (ftnlen)211)] = TRUE_;
+		i__1, "lx4uns_", (ftnlen)222)] = TRUE_;
 	digit[(i__1 = '3' + 128) < 384 && 0 <= i__1 ? i__1 : s_rnge("digit", 
-		i__1, "lx4uns_", (ftnlen)212)] = TRUE_;
+		i__1, "lx4uns_", (ftnlen)223)] = TRUE_;
 	digit[(i__1 = '4' + 128) < 384 && 0 <= i__1 ? i__1 : s_rnge("digit", 
-		i__1, "lx4uns_", (ftnlen)213)] = TRUE_;
+		i__1, "lx4uns_", (ftnlen)224)] = TRUE_;
 	digit[(i__1 = '5' + 128) < 384 && 0 <= i__1 ? i__1 : s_rnge("digit", 
-		i__1, "lx4uns_", (ftnlen)214)] = TRUE_;
+		i__1, "lx4uns_", (ftnlen)225)] = TRUE_;
 	digit[(i__1 = '6' + 128) < 384 && 0 <= i__1 ? i__1 : s_rnge("digit", 
-		i__1, "lx4uns_", (ftnlen)215)] = TRUE_;
+		i__1, "lx4uns_", (ftnlen)226)] = TRUE_;
 	digit[(i__1 = '7' + 128) < 384 && 0 <= i__1 ? i__1 : s_rnge("digit", 
-		i__1, "lx4uns_", (ftnlen)216)] = TRUE_;
+		i__1, "lx4uns_", (ftnlen)227)] = TRUE_;
 	digit[(i__1 = '8' + 128) < 384 && 0 <= i__1 ? i__1 : s_rnge("digit", 
-		i__1, "lx4uns_", (ftnlen)217)] = TRUE_;
+		i__1, "lx4uns_", (ftnlen)228)] = TRUE_;
 	digit[(i__1 = '9' + 128) < 384 && 0 <= i__1 ? i__1 : s_rnge("digit", 
-		i__1, "lx4uns_", (ftnlen)218)] = TRUE_;
+		i__1, "lx4uns_", (ftnlen)229)] = TRUE_;
     }
     *last = *first - 1;
     l = i_len(string, string_len);
@@ -238,12 +245,12 @@
     i__1 = l;
     for (i__ = *first; i__ <= i__1; ++i__) {
 
-/*        If this character is a digit, move the LAST pointe one */
+/*        If this character is a digit, move the LAST pointer one */
 /*        further down on the string.  Otherwise set NCHAR and return. */
 
 	if (digit[(i__2 = *(unsigned char *)&string[i__ - 1] + 128) < 384 && 
 		0 <= i__2 ? i__2 : s_rnge("digit", i__2, "lx4uns_", (ftnlen)
-		241)]) {
+		255)]) {
 	    ++(*last);
 	} else {
 	    *nchar = *last + 1 - *first;

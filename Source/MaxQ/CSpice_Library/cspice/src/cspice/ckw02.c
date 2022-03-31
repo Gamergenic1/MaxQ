@@ -13,7 +13,7 @@ static integer c__4 = 4;
 static integer c__3 = 3;
 static integer c__1 = 1;
 
-/* $Procedure  CKW02 ( C-Kernel, write segment to C-kernel, data type 2 ) */
+/* $Procedure CKW02 ( C-Kernel, write segment to C-kernel, data type 2 ) */
 /* Subroutine */ int ckw02_(integer *handle, doublereal *begtim, doublereal *
 	endtim, integer *inst, char *ref, char *segid, integer *nrec, 
 	doublereal *start, doublereal *stop, doublereal *quats, doublereal *
@@ -87,7 +87,7 @@ static integer c__1 = 1;
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     I   Handle of an open CK file. */
 /*     BEGTIM     I   The beginning encoded SCLK of the segment. */
@@ -104,61 +104,61 @@ static integer c__1 = 1;
 
 /* $ Detailed_Input */
 
-/*     HANDLE     is the handle of the CK file to which the segment will */
-/*                be written. The file must have been opened with write */
-/*                access. */
+/*     HANDLE   is the handle of the CK file to which the segment will */
+/*              be written. The file must have been opened with write */
+/*              access. */
 
-/*     BEGTIM     is the beginning encoded SCLK time of the segment. This */
-/*                value should be less than or equal to the first START */
-/*                time in the segment. */
+/*     BEGTIM   is the beginning encoded SCLK time of the segment. This */
+/*              value should be less than or equal to the first START */
+/*              time in the segment. */
 
-/*     ENDTIM     is the encoded SCLK time at which the segment ends. */
-/*                This value should be greater than or equal to the last */
-/*                STOP time in the segment. */
+/*     ENDTIM   is the encoded SCLK time at which the segment ends. */
+/*              This value should be greater than or equal to the last */
+/*              STOP time in the segment. */
 
-/*     INST       is the NAIF integer ID code for the instrument. */
+/*     INST     is the NAIF integer ID code for the instrument. */
 
-/*     REF        is a character string that specifies the */
-/*                reference frame of the segment. This should be one of */
-/*                the frames supported by the SPICELIB routine NAMFRM */
-/*                which is an entry point to FRAMEX. */
+/*     REF      is a character string that specifies the */
+/*              reference frame of the segment. This should be one of */
+/*              the frames supported by the SPICELIB routine NAMFRM */
+/*              which is an entry point to FRAMEX. */
 
-/*     SEGID      is the segment identifier.  A CK segment identifier may */
-/*                contain up to 40 characters. */
+/*     SEGID    is the segment identifier. A CK segment identifier may */
+/*              contain up to 40 characters. */
 
-/*     NREC       is the number of pointing intervals that will be */
-/*                written to the segment. */
+/*     NREC     is the number of pointing intervals that will be */
+/*              written to the segment. */
 
-/*     START      are the start times of each interval in encoded */
-/*                spacecraft clock. These times must be strictly */
-/*                increasing. */
+/*     START    are the start times of each interval in encoded */
+/*              spacecraft clock. These times must be strictly */
+/*              increasing. */
 
-/*     STOP       are the stop times of each interval in encoded */
-/*                spacecraft clock. These times must be greater than */
-/*                the START times that they correspond to but less */
-/*                than or equal to the START time of the next interval. */
+/*     STOP     are the stop times of each interval in encoded */
+/*              spacecraft clock. These times must be greater than */
+/*              the START times that they correspond to but less */
+/*              than or equal to the START time of the next interval. */
 
-/*     QUATS      is an array of SPICE-style quaternions representing */
-/*                the C-matrices associated with the start times of each */
-/*                interval. See the discussion of quaternion styles in */
-/*                Particulars below. */
+/*     QUATS    is an array of SPICE-style quaternions representing */
+/*              the C-matrices associated with the start times of each */
+/*              interval. See the discussion of quaternion styles in */
+/*              $Particulars below. */
 
-/*     AVVS       are the angular velocity vectors for each interval. */
+/*     AVVS     are the angular velocity vectors for each interval. */
 
-/*     RATES      are the number of seconds per encoded spacecraft clock */
-/*                tick for each interval. */
+/*     RATES    are the number of seconds per encoded spacecraft clock */
+/*              tick for each interval. */
 
-/*                In most applications this value will be the same for */
-/*                each interval within a segment.  For example, when */
-/*                constructing a predict C-kernel for Mars Observer, the */
-/*                rate would be 1/256 for each interval since this is */
-/*                the smallest time unit expressible by the MO clock. The */
-/*                nominal seconds per tick rates for Galileo and Voyager */
-/*                are 1/120 and 0.06 respectively. */
+/*              In most applications this value will be the same for */
+/*              each interval within a segment. For example, when */
+/*              constructing a predict C-kernel for Mars Observer, the */
+/*              rate would be 1/256 for each interval since this is */
+/*              the smallest time unit expressible by the MO clock. The */
+/*              nominal seconds per tick rates for Galileo and Voyager */
+/*              are 1/120 and 0.06 respectively. */
 
 /* $ Detailed_Output */
 
-/*     None.  See Files section. */
+/*     None. See $Files section. */
 
 /* $ Parameters */
 
@@ -166,53 +166,53 @@ static integer c__1 = 1;
 
 /* $ Exceptions */
 
-/*     1)  If HANDLE is not the handle of a C-kernel opened for writing */
-/*         the error will be diagnosed by routines called by this */
+/*     1)  If HANDLE is not the handle of a C-kernel opened for writing, */
+/*         an error is signaled by a routine in the call tree of this */
 /*         routine. */
 
 /*     2)  If SEGID is more than 40 characters long, the error */
-/*         SPICE(SEGIDTOOLONG) is signalled. */
+/*         SPICE(SEGIDTOOLONG) is signaled. */
 
 /*     3)  If SEGID contains any nonprintable characters, the error */
-/*         SPICE(NONPRINTABLECHARS) is signalled. */
+/*         SPICE(NONPRINTABLECHARS) is signaled. */
 
 /*     4)  If the first START time is negative, the error */
-/*         SPICE(INVALIDSCLKTIME) is signalled. If any of the subsequent */
-/*         START times are negative the error SPICE(TIMESOUTOFORDER) */
-/*         will be signalled. */
+/*         SPICE(INVALIDSCLKTIME) is signaled. */
 
-/*     5)  If any of the STOP times are negative, the error */
-/*         SPICE(DEGENERATEINTERVAL) is signalled. */
+/*     5)  If the second or any subsequent START times are negative, the */
+/*         error SPICE(TIMESOUTOFORDER) is signaled. */
 
-/*     6)  If the STOP time of any of the intervals is less than or equal */
+/*     6)  If any of the STOP times are negative, the error */
+/*         SPICE(DEGENERATEINTERVAL) is signaled. */
+
+/*     7)  If the STOP time of any of the intervals is less than or equal */
 /*         to the START time, the error SPICE(DEGENERATEINTERVAL) is */
-/*         signalled. */
+/*         signaled. */
 
-/*     7)  If the START times are not strictly increasing, the */
-/*         error SPICE(TIMESOUTOFORDER) is signalled. */
+/*     8)  If the START times are not strictly increasing, the */
+/*         error SPICE(TIMESOUTOFORDER) is signaled. */
 
-/*     8)  If the STOP time of one interval is greater than the START */
+/*     9)  If the STOP time of one interval is greater than the START */
 /*         time of the next interval, the error SPICE(BADSTOPTIME) */
-/*         is signalled. */
+/*         is signaled. */
 
-/*     9)  If BEGTIM is greater than START(1) or ENDTIM is less than */
+/*     10) If BEGTIM is greater than START(1) or ENDTIM is less than */
 /*         STOP(NREC), the error SPICE(INVALIDDESCRTIME) is */
-/*         signalled. */
+/*         signaled. */
 
-/*    10)  If the name of the reference frame is not one of those */
+/*     11) If the name of the reference frame is not one of those */
 /*         supported by the routine NAMFRM, the error */
-/*         SPICE(INVALIDREFFRAME) is signalled. */
+/*         SPICE(INVALIDREFFRAME) is signaled. */
 
-/*    11)  If NREC, the number of pointing records, is less than or */
-/*         equal to 0, the error SPICE(INVALIDNUMRECS) is signalled. */
+/*     12) If NREC, the number of pointing records, is less than or */
+/*         equal to 0, the error SPICE(INVALIDNUMRECS) is signaled. */
 
-/*    12)  If the squared length of any quaternion differes from 1 */
-/*         by more than 1.0D-2, the error SPICE(NONUNITQUATERNION) is */
-/*         signalled. */
+/*     13) If any quaternion has magnitude zero, the error */
+/*         SPICE(ZEROQUATERNION) is signaled. */
 
 /* $ Files */
 
-/*     This routine adds a type 2 segment to a C-kernel.  The C-kernel */
+/*     This routine adds a type 2 segment to a C-kernel. The C-kernel */
 /*     may be either a new one or an existing one opened for writing. */
 
 /* $ Particulars */
@@ -231,12 +231,12 @@ static integer c__1 = 1;
 /*     science and engineering applications. Quaternion styles */
 /*     are characterized by */
 
-/*        - The order of quaternion elements */
+/*     -  The order of quaternion elements */
 
-/*        - The quaternion multiplication formula */
+/*     -  The quaternion multiplication formula */
 
-/*        - The convention for associating quaternions */
-/*          with rotation matrices */
+/*     -  The convention for associating quaternions */
+/*        with rotation matrices */
 
 /*     Two of the commonly used styles are */
 
@@ -316,7 +316,7 @@ static integer c__1 = 1;
 
 /*     the elements of M are derived from the elements of q as follows: */
 
-/*          +-                                                         -+ */
+/*          .-                                                         -. */
 /*          |           2    2                                          | */
 /*          | 1 - 2*( q2 + q3 )   2*(q1*q2 - q0*q3)   2*(q1*q3 + q0*q2) | */
 /*          |                                                           | */
@@ -328,7 +328,7 @@ static integer c__1 = 1;
 /*          |                                                   2    2  | */
 /*          | 2*(q1*q3 - q0*q2)   2*(q2*q3 + q0*q1)   1 - 2*( q1 + q2 ) | */
 /*          |                                                           | */
-/*          +-                                                         -+ */
+/*          `-                                                         -' */
 
 /*     Note that substituting the elements of -q for those of q in the */
 /*     right hand side leaves each element of M unchanged; this shows */
@@ -347,16 +347,16 @@ static integer c__1 = 1;
 
 /*     OMEGA is a skew-symmetric matrix of the form */
 
-/*                   +-             -+ */
+/*                   .-             -. */
 /*                   |  0   -n3   n2 | */
 /*                   |               | */
 /*         OMEGA  =  |  n3   0   -n1 | */
 /*                   |               | */
 /*                   | -n2   n1   0  | */
-/*                   +-             -+ */
+/*                   `-             -' */
 
 /*     The vector N of matrix entries (n1, n2, n3) is the rotation axis */
-/*     of M and theta is M's rotation angle.  Note that N and theta */
+/*     of M and theta is M's rotation angle. Note that N and theta */
 /*     are not unique. */
 
 /*     Let */
@@ -421,53 +421,200 @@ static integer c__1 = 1;
 
 /*        M1*M2 */
 
-
 /* $ Examples */
 
-/*  C */
-/*  C     This example writes a predict type 2 C-kernel segment for */
-/*  C     the Mars Observer spacecraft bus to a previously opened CK file */
-/*  C     attached to HANDLE. */
+/*     The numerical results shown for this example may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
 
-/*  C */
-/*  C     Assume arrays of quaternions, angular velocities, and interval */
-/*  C     start and stop times are produced elsewhere. */
-/*  C */
-/*        . */
-/*        . */
-/*        . */
+/*     1) The following example creates a CK file with a type-2 segment, */
+/*        with data for a simple time dependent rotation and angular */
+/*        velocity. */
 
-/*  C */
-/*  C     The nominal number of seconds in a tick for MO is 1/256 */
-/*  C */
-/*        SECTIK = 1.D0 / 256.D0 */
+/*        Example code begins here. */
 
-/*        DO I = 1, NREC */
-/*           RATE(I) = SECTIK */
-/*        END DO */
 
-/*  C */
-/*  C     The subroutine CKW02 needs the following components of the */
-/*  C     segment descriptor: */
-/*  C */
-/*  C        1) SCLK limits of the segment. */
-/*  C        2) Instrument code. */
-/*  C        3) Reference frame. */
+/*              PROGRAM CKW02_EX1 */
+/*              IMPLICIT NONE */
 
-/*        BEGTIM = START (    1 ) */
-/*        ENDTIM = STOP  ( NREC ) */
+/*        C */
+/*        C     Local parameters. */
+/*        C */
+/*              CHARACTER*(*)         CK2 */
+/*              PARAMETER           ( CK2 = 'ckw02_ex1.bc' ) */
 
-/*        INST  = -94000 */
-/*        REF   = 'J2000' */
+/*              DOUBLE PRECISION      SPTICK */
+/*              PARAMETER           ( SPTICK = 0.001D0 ) */
 
-/*        SEGID = 'MO PREDICT SEG TYPE 2' */
+/*              INTEGER               INST */
+/*              PARAMETER           ( INST = -77702 ) */
 
-/*  C */
-/*  C     Write the segment. */
-/*  C */
-/*        CALL CKW02 ( HANDLE, BEGTIM, ENDTIM, INST, REF, SEGID, */
-/*       .             NREC,   START,  STOP,   QUAT, AVV, RATES  ) */
+/*              INTEGER               MAXREC */
+/*              PARAMETER           ( MAXREC = 21 ) */
 
+/*              INTEGER               NAMLEN */
+/*              PARAMETER           ( NAMLEN = 42 ) */
+
+/*        C */
+/*        C     Local variables. */
+/*        C */
+/*              CHARACTER*(NAMLEN)    REF */
+/*              CHARACTER*(NAMLEN)    IFNAME */
+/*              CHARACTER*(NAMLEN)    SEGID */
+
+/*              DOUBLE PRECISION      AVVS   (   3,MAXREC ) */
+/*              DOUBLE PRECISION      BEGTIM */
+/*              DOUBLE PRECISION      ENDTIM */
+/*              DOUBLE PRECISION      QUATS  ( 0:3,MAXREC ) */
+/*              DOUBLE PRECISION      RATE */
+/*              DOUBLE PRECISION      RATES  (     MAXREC ) */
+/*              DOUBLE PRECISION      RWMAT  ( 3, 3 ) */
+/*              DOUBLE PRECISION      SPACES */
+/*              DOUBLE PRECISION      STARTS (     MAXREC ) */
+/*              DOUBLE PRECISION      STOPS  (     MAXREC ) */
+/*              DOUBLE PRECISION      STICKS */
+/*              DOUBLE PRECISION      THETA */
+/*              DOUBLE PRECISION      WMAT   ( 3, 3 ) */
+/*              DOUBLE PRECISION      WQUAT  ( 0:3 ) */
+
+/*              INTEGER               HANDLE */
+/*              INTEGER               I */
+/*              INTEGER               NCOMCH */
+
+/*        C */
+/*        C     NCOMCH is the number of characters to reserve for the */
+/*        C     kernel's comment area. This example doesn't write */
+/*        C     comments, so set to zero. */
+/*        C */
+/*              NCOMCH = 0 */
+
+/*        C */
+/*        C     The base reference from for the rotation data. */
+/*        C */
+/*              REF = 'J2000' */
+
+/*        C */
+/*        C     Time spacing in encoded ticks and in seconds */
+/*        C */
+/*              STICKS = 10.D0 */
+/*              SPACES = STICKS * SPTICK */
+
+/*        C */
+/*        C     Declare an angular rate in radians per sec. */
+/*        C */
+/*              RATE = 1.D-2 */
+
+/*        C */
+/*        C     Internal file name and segment ID. */
+/*        C */
+/*              SEGID  = 'Test type 2 CK segment' */
+/*              IFNAME = 'Test CK type 2 segment created by CKW02' */
+
+
+/*        C */
+/*        C     Open a new kernel. */
+/*        C */
+/*              CALL CKOPN ( CK2, IFNAME, NCOMCH, HANDLE ) */
+
+/*        C */
+/*        C     Create a 3x3 double precision identity matrix. */
+/*        C */
+/*              CALL IDENT ( WMAT ) */
+
+/*        C */
+/*        C     Convert the matrix to quaternion. */
+/*        C */
+/*              CALL M2Q ( WMAT, WQUAT ) */
+
+/*        C */
+/*        C     Copy the work quaternion to the first row of */
+/*        C     QUATS. */
+/*        C */
+/*              CALL MOVED ( WQUAT, 4, QUATS(0,1) ) */
+
+/*        C */
+/*        C     Create an angular velocity vector. This vector is in the */
+/*        C     REF reference frame and indicates a constant rotation */
+/*        C     about the Z axis. */
+/*        C */
+/*              CALL VPACK ( 0.D0, 0.D0, RATE, AVVS(1,1) ) */
+
+/*        C */
+/*        C     Set the initial value of the encoded ticks. The interval */
+/*        C     associated with each quaternion will start at the epoch */
+/*        C     of the quaternion and will extend 0.8 * STICKS forward in */
+/*        C     time, leaving small gaps between the intervals. */
+/*        C */
+/*        C     The clock rates array will have a constant SPTICK value. */
+/*        C */
+/*              STARTS(1) = 1000.D0 */
+/*              STOPS(1)  = STARTS(1) + ( 0.8D0 * STICKS ) */
+/*              RATES(1)  = SPTICK */
+
+/*        C */
+/*        C     Fill the rest of the AVVS and QUATS matrices */
+/*        C     with simple data. */
+/*        C */
+/*              DO I = 2, MAXREC */
+
+/*        C */
+/*        C        Create the corresponding encoded tick value in */
+/*        C        increments of STICKS with an initial value of */
+/*        C        1000.0 ticks. */
+/*        C */
+/*                 STARTS(I) = 1000.D0 + (I-1) * STICKS */
+/*                 STOPS(I)  = STARTS(I) + ( 0.8D0 * STICKS ) */
+/*                 RATES(I)  = SPTICK */
+
+/*        C */
+/*        C        Create the transformation matrix for a rotation of */
+/*        C        THETA about the Z axis. Calculate THETA from the */
+/*        C        constant angular rate RATE at increments of SPACES. */
+/*        C */
+/*                 THETA = (I-1) * RATE * SPACES */
+/*                 CALL ROTMAT ( WMAT, THETA, 3, RWMAT ) */
+
+/*        C */
+/*        C        Convert the RWMAT matrix to SPICE type quaternion. */
+/*        C */
+/*                 CALL M2Q ( RWMAT, WQUAT ) */
+
+/*        C */
+/*        C        Store the quaternion in the QUATS matrix. */
+/*        C        Store angular velocity in AVVS. */
+/*        C */
+/*                 CALL MOVED ( WQUAT, 4, QUATS(0,I) ) */
+/*                 CALL VPACK ( 0.D0, 0.D0, RATE, AVVS(1,I) ) */
+
+/*              END DO */
+
+/*        C */
+/*        C     Set the segment boundaries equal to the first and last */
+/*        C     time for the data arrays. */
+/*        C */
+/*              BEGTIM = STARTS(1) */
+/*              ENDTIM = STOPS(MAXREC) */
+
+/*        C */
+/*        C     All information ready to write. Write to a CK type 2 */
+/*        C     segment to the file indicated by HANDLE. */
+/*        C */
+/*              CALL CKW02 ( HANDLE, BEGTIM, ENDTIM, INST,  REF, */
+/*             .             SEGID,  MAXREC, STARTS, STOPS, QUATS, */
+/*             .             AVVS,   RATES                       ) */
+
+/*        C */
+/*        C     SAFELY close the file. */
+/*        C */
+/*              CALL CKCLS ( HANDLE ) */
+
+/*              END */
+
+
+/*        When this program is executed, no output is presented on */
+/*        screen. After run completion, a new CK file exists in the */
+/*        output directory. */
 
 /* $ Restrictions */
 
@@ -479,12 +626,21 @@ static integer c__1 = 1;
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     K.R. Gehringer  (JPL) */
-/*     J.M. Lynch      (JPL) */
-/*     W.L. Taber      (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
+/*     J.M. Lynch         (JPL) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 3.0.1, 26-MAY-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. Created */
+/*        complete code example from existing fragment. */
+
+/*        Updated Exception #12 to describe the actual check and error */
+/*        produced by this routine. */
 
 /* -    SPICELIB Version 3.0.0, 01-JUN-2010 (NJB) */
 
@@ -511,15 +667,15 @@ static integer c__1 = 1;
 /* -    SPICELIB Version 1.1.1, 05-SEP-1993 (KRG) */
 
 /*        Removed all references to a specific method of opening the CK */
-/*        file in the $ Brief_I/O, $ Detailed_Input, $ Exceptions, */
-/*        $ Files, and $ Examples sections of the header. It is assumed */
+/*        file in the $Brief_I/O, $Detailed_Input, $Exceptions, */
+/*        $Files, and $Examples sections of the header. It is assumed */
 /*        that a person using this routine has some knowledge of the DAF */
 /*        system and the methods for obtaining file handles. */
 
 /* -    SPICELIB Version 1.1.0, 25-NOV-1992 (JML) */
 
 /*        1) If the number of pointing records is not positive an error */
-/*           is now signalled. */
+/*           is now signaled. */
 
 /*        2) FAILED is checked after the call to DAFBNA. */
 
@@ -536,7 +692,7 @@ static integer c__1 = 1;
 /* -& */
 /* $ Index_Entries */
 
-/*     write ck type_2 pointing data segment */
+/*     write CK type_2 pointing data segment */
 
 /* -& */
 /* $ Revisions */
@@ -549,15 +705,15 @@ static integer c__1 = 1;
 /* -    SPICELIB Version 1.1.1, 05-SEP-1993 (KRG) */
 
 /*        Removed all references to a specific method of opening the CK */
-/*        file in the $ Brief_I/O, $ Detailed_Input, $ Exceptions, */
-/*        $ Files, and $ Examples sections of the header. It is assumed */
+/*        file in the $Brief_I/O, $Detailed_Input, $Exceptions, */
+/*        $Files, and $Examples sections of the header. It is assumed */
 /*        that a person using this routine has some knowledge of the DAF */
 /*        system and the methods for obtaining file handles. */
 
 /* -    SPICELIB Version 1.1.0, 25-NOV-1992 (JML) */
 
 /*        1) If the number of pointing records is not positive an error */
-/*           is now signalled. */
+/*           is now signaled. */
 
 /*        2) FAILED is checked after the call to DAFBNA. */
 

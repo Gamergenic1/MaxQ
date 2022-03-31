@@ -10,8 +10,8 @@
 static integer c__8 = 8;
 static logical c_false = FALSE_;
 
-/* $Procedure      DSKOBJ ( DSK, get object IDs ) */
-/* Subroutine */ int dskobj_(char *dsk, integer *bodids, ftnlen dsk_len)
+/* $Procedure DSKOBJ ( DSK, get object IDs ) */
+/* Subroutine */ int dskobj_(char *dskfnm, integer *bodids, ftnlen dskfnm_len)
 {
     /* System generated locals */
     integer i__1, i__2;
@@ -34,15 +34,15 @@ static logical c_false = FALSE_;
 	    integer *, integer *, integer *), dascls_(integer *), getfat_(
 	    char *, char *, char *, ftnlen, ftnlen, ftnlen);
     doublereal dskdsc[24];
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     integer nxtdsc[8];
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), dasopr_(char *, 
-	    integer *, ftnlen), dskcls_(integer *, logical *), errint_(char *,
-	     integer *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen), sigerr_(char *, 
+	    ftnlen), dasopr_(char *, integer *, ftnlen), dskcls_(integer *, 
+	    logical *);
     char kertyp[4];
     extern logical return_(void);
-    extern /* Subroutine */ int appndi_(integer *, integer *);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen), appndi_(
+	    integer *, integer *);
     integer bid;
 
 /* $ Abstract */
@@ -81,6 +81,7 @@ static logical c_false = FALSE_;
 /*     DAS */
 /*     DSK */
 /*     SETS */
+/*     NAIF_IDS */
 
 /* $ Keywords */
 
@@ -374,40 +375,38 @@ static logical c_false = FALSE_;
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
-/*     DSK        I   Name of DSK file. */
+/*     DSKFNM     I   Name of DSK file. */
 /*     BODIDS    I-O  Set of ID codes of objects in DSK file. */
 
 /* $ Detailed_Input */
 
-/*     DSK            is the name of a DSK file. This file will be */
-/*                    opened for read access by this routine. */
+/*     DSKFNM   is the name of a DSK file. This file will be opened for */
+/*              read access by this routine. */
 
-/*     BODIDS         is an initialized SPICELIB set data structure. */
+/*     BODIDS   is an initialized SPICE set data structure. */
 
-/*                    BODIDS optionally may contain a set of body ID */
-/*                    codes on input; on output, the data already */
-/*                    present in BODIDS will be combined with ID code */
-/*                    set found for the file DSK. */
+/*              BODIDS optionally may contain a set of body ID codes on */
+/*              input; on output, the data already present in BODIDS will */
+/*              be combined with ID code set found for the file DSKFNM. */
 
-/*                    If BODIDS contains no data on input, its size and */
-/*                    cardinality still must be initialized. */
+/*              If BODIDS contains no data on input, its size and */
+/*              cardinality still must be initialized. */
 
 /* $ Detailed_Output */
 
-/*     BODIDS         is a SPICELIB set data structure that contains the */
-/*                    union of its contents upon input with the set of */
-/*                    body ID codes of segments in the indicated DSK */
-/*                    file. */
+/*     BODIDS   is a SPICE set data structure that contains the union */
+/*              of its contents upon input with the set of body ID codes */
+/*              of segments in the indicated DSK file. */
 
-/*                    The elements of SPICELIB sets are unique; each ID */
-/*                    code in BODIDS appears only once, even if the DSK */
-/*                    file contains multiple segments for that ID code. */
+/*              The elements of SPICE sets are unique; each ID code in */
+/*              BODIDS appears only once, even if the DSK file contains */
+/*              multiple segments for that ID code. */
 
-/*                    See the Examples section below for a complete */
-/*                    example program showing how to retrieve the body */
-/*                    and surface ID codes from a DSK file. */
+/*              See the $Examples section below for a complete example */
+/*              program showing how to retrieve the body and surface ID */
+/*              codes from a DSK file. */
 
 /* $ Parameters */
 
@@ -419,22 +418,22 @@ static logical c_false = FALSE_;
 /*         SPICE(INVALIDFORMAT) is signaled. */
 
 /*     2)  If the input file is not a transfer file but has architecture */
-/*         other than DAS, the error SPICE(BADARCHTYPE) is signaled. */
+/*         other than DAS, the error SPICE(INVALIDARCHTYPE) is signaled. */
 
-/*     3)  If the input file is a binary DAS file of type other than */
-/*         DSK, the error SPICE(BADFILETYPE) is signaled. */
+/*     3)  If the input file is a binary DAS file of type other than DSK, */
+/*         the error SPICE(INVALIDFILETYPE) is signaled. */
 
-/*     4)  If the DSK file cannot be opened or read, the error will */
-/*         be diagnosed by routines called by this routine. */
+/*     4)  If the DSK file cannot be opened or read, an error is signaled */
+/*         by a routine in the call tree of this routine. */
 
 /*     5)  If the size of the output set argument BODIDS is insufficient */
-/*         to contain the actual number of ID codes of objects covered */
-/*         by the indicated DSK file, the error will be diagnosed by */
-/*         routines called by this routine. */
+/*         to contain the actual number of ID codes of objects covered by */
+/*         the indicated DSK file, the error SPICE(CELLTOOSMALL) is */
+/*         signaled. */
 
 /* $ Files */
 
-/*     See the description of the argument DSK above. */
+/*     See the description of the argument DSKFNM above. */
 
 /* $ Particulars */
 
@@ -444,18 +443,18 @@ static logical c_false = FALSE_;
 
 /* $ Examples */
 
+/*     The numerical results shown for this example may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
 
-/*     The formatting of the results shown for this example may differ */
-/*     across platforms. */
+/*     1) Display the coverage for each object in a specified DSK file. */
+/*        Find the set of objects in the file. Loop over the contents */
+/*        of the ID code set: find the surface ID for each item in the */
+/*        set and display the surface ID. */
 
 
-/*     1)  Display the coverage for each object in a specified DSK file. */
-/*         Find the set of objects in the file. Loop over the contents */
-/*         of the ID code set: find the surface ID for each item in the */
-/*         set and display the surface ID. */
-
-
-/*     Example code begins here. */
+/*        Example code begins here. */
 
 
 /*        C */
@@ -464,7 +463,7 @@ static logical c_false = FALSE_;
 /*        C     in the file. For each body, find the */
 /*        C     set of surfaces associated with that body. */
 /*        C */
-/*              PROGRAM EX1 */
+/*              PROGRAM DSKOBJ_EX1 */
 /*              IMPLICIT NONE */
 /*        C */
 /*        C     SPICELIB functions */
@@ -484,7 +483,7 @@ static logical c_false = FALSE_;
 /*        C */
 /*        C     Local variables */
 /*        C */
-/*              CHARACTER*(FILSIZ)    DSK */
+/*              CHARACTER*(FILSIZ)    DSKFNM */
 
 /*              INTEGER               BODIDS ( LBCELL : MAXID ) */
 /*              INTEGER               I */
@@ -500,12 +499,12 @@ static logical c_false = FALSE_;
 /*        C */
 /*        C     Prompt for the name of a DSK file. */
 /*        C */
-/*              CALL PROMPT ( 'Enter name of DSK file > ', DSK ) */
+/*              CALL PROMPT ( 'Enter name of DSK file > ', DSKFNM ) */
 
 /*        C */
 /*        C     Obtain body ID set for the DSK. */
 /*        C */
-/*              CALL DSKOBJ ( DSK, BODIDS ) */
+/*              CALL DSKOBJ ( DSKFNM, BODIDS ) */
 
 /*              DO I = 1, CARDI( BODIDS ) */
 
@@ -514,7 +513,7 @@ static logical c_false = FALSE_;
 /*        C */
 /*        C        Get the surface IDs for the Ith body. */
 /*        C */
-/*                 CALL DSKSRF ( DSK, BODIDS(I), SRFIDS ) */
+/*                 CALL DSKSRF ( DSKFNM, BODIDS(I), SRFIDS ) */
 
 /*                 DO J = 1, CARDI( SRFIDS ) */
 /*                    WRITE (*,*) '   Surface ID: ', SRFIDS(J) */
@@ -525,23 +524,21 @@ static logical c_false = FALSE_;
 /*              END */
 
 
-/*     When this program was executed on a PC/Linux/gfortran/64-bit */
-/*     platform, using as input the name of a DSK created by a code */
-/*     example in the header of DSKW02, the output was: */
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, using the DSK file named phobos512.bds, the output */
+/*        was: */
 
 
-/*        Enter name of DSK file > phobos_3_3_3seg.bds */
+/*        Enter name of DSK file > phobos512.bds */
 
 /*         Body ID:              401 */
-/*            Surface ID:            1 */
-/*            Surface ID:            2 */
-/*            Surface ID:            3 */
+/*            Surface ID:          401 */
 
 
 /* $ Restrictions */
 
-/*     1) If an error occurs while this routine is updating the set */
-/*        BODIDS, the set may be corrupted. */
+/*     1)  If an error occurs while this routine is updating the set */
+/*         BODIDS, the set may be corrupted. */
 
 /* $ Literature_References */
 
@@ -549,17 +546,32 @@ static logical c_false = FALSE_;
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 08-OCT-2021 (JDR) (NJB) */
+
+/*        Changed input argument name "DSK" to "DSKFNM" for consistency */
+/*        with other routines. */
+
+/*        Bug fix: added call to FAILED after call to GETFAT. */
+
+/*        Edited the header comments to comply with NAIF standard. */
+/*        Changed the DKS file used in the code example's solution. */
+/*        Added NAIF_IDS to the $Required_Reading section. */
+
+/*        Corrected short error message in entries #2, #3 and #5 in */
+/*        $Exceptions section. */
 
 /* -    SPICELIB Version 1.0.0, 22-AUG-2016 (NJB) */
 
 /* -& */
 /* $ Index_Entries */
 
-/*     find id codes of ephemeris objects in dsk file */
-/*     find id codes of bodies in dsk file */
+/*     find id codes of ephemeris objects in DSK file */
+/*     find id codes of bodies in DSK file */
 
 /* -& */
 
@@ -578,13 +590,17 @@ static logical c_false = FALSE_;
 
 /*     See whether GETFAT thinks we've got a DSK file. */
 
-    getfat_(dsk, arch, kertyp, dsk_len, (ftnlen)4, (ftnlen)4);
+    getfat_(dskfnm, arch, kertyp, dskfnm_len, (ftnlen)4, (ftnlen)4);
+    if (failed_()) {
+	chkout_("DSKOBJ", (ftnlen)6);
+	return 0;
+    }
     if (s_cmp(arch, "XFR", (ftnlen)4, (ftnlen)3) == 0) {
 	setmsg_("Input file # has architecture #. The file must be a binary "
 		"DSK file to be readable by this routine. If the input file i"
 		"s an DSK file in transfer format, run TOBIN on the file to c"
 		"onvert it to binary format.", (ftnlen)206);
-	errch_("#", dsk, (ftnlen)1, dsk_len);
+	errch_("#", dskfnm, (ftnlen)1, dskfnm_len);
 	errch_("#", arch, (ftnlen)1, (ftnlen)4);
 	sigerr_("SPICE(INVALIDFORMAT)", (ftnlen)20);
 	chkout_("DSKOBJ", (ftnlen)6);
@@ -596,7 +612,7 @@ static logical c_false = FALSE_;
 		" DSK file, the problem may be due to the file being an old n"
 		"on-native file lacking binary file format information. It's "
 		"also possible the file has been corrupted.", (ftnlen)341);
-	errch_("#", dsk, (ftnlen)1, dsk_len);
+	errch_("#", dskfnm, (ftnlen)1, dskfnm_len);
 	errch_("#", arch, (ftnlen)1, (ftnlen)4);
 	sigerr_("SPICE(INVALIDARCHTYPE)", (ftnlen)22);
 	chkout_("DSKOBJ", (ftnlen)6);
@@ -608,7 +624,7 @@ static logical c_false = FALSE_;
 		"le being an old non-native file lacking binary file format i"
 		"nformation. It's also possible the file has been corrupted.", 
 		(ftnlen)298);
-	errch_("#", dsk, (ftnlen)1, dsk_len);
+	errch_("#", dskfnm, (ftnlen)1, dskfnm_len);
 	errch_("#", kertyp, (ftnlen)1, (ftnlen)4);
 	sigerr_("SPICE(INVALIDFILETYPE)", (ftnlen)22);
 	chkout_("DSKOBJ", (ftnlen)6);
@@ -617,7 +633,7 @@ static logical c_false = FALSE_;
 
 /*     Open the DSK for read access; start a forward search. */
 
-    dasopr_(dsk, &handle, dsk_len);
+    dasopr_(dskfnm, &handle, dskfnm_len);
     dlabfs_(&handle, nxtdsc, &found);
     if (failed_()) {
 	chkout_("DSKOBJ", (ftnlen)6);
@@ -652,7 +668,7 @@ static logical c_false = FALSE_;
 	    setmsg_("Cannot append body ID # to cell while reading DSK file "
 		    "#. Cell size is #.", (ftnlen)73);
 	    errint_("#", &bid, (ftnlen)1);
-	    errch_("#", dsk, (ftnlen)1, dsk_len);
+	    errch_("#", dskfnm, (ftnlen)1, dskfnm_len);
 	    i__1 = sizei_(bodids);
 	    errint_("#", &i__1, (ftnlen)1);
 	    sigerr_("SPICE(CELLTOOSMALL)", (ftnlen)19);

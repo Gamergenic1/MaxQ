@@ -9,14 +9,14 @@
 
 static integer c__9 = 9;
 
-/* $Procedure      MEQU  ( Matrix equal to another, 3x3 ) */
+/* $Procedure MEQU ( Matrix equal to another, 3x3 ) */
 /* Subroutine */ int mequ_(doublereal *m1, doublereal *mout)
 {
     extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
 
 /* $ Abstract */
 
-/*      Set one double precision 3x3 matrix equal to another. */
+/*     Set one double precision 3x3 matrix equal to another. */
 
 /* $ Disclaimer */
 
@@ -49,57 +49,29 @@ static integer c__9 = 9;
 
 /* $ Keywords */
 
-/*      ASSIGNMENT,  MATRIX */
+/*     ASSIGNMENT */
+/*     MATRIX */
 
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*      VARIABLE  I/O  DESCRIPTION */
-/*      --------  ---  -------------------------------------------------- */
-/*      M1         I     Input matrix. */
-/*      MOUT       O     Output matrix equal to M1. */
+/*     VARIABLE  I/O  DESCRIPTION */
+/*     --------  ---  -------------------------------------------------- */
+/*     M1         I   Input matrix. */
+/*     MOUT       O   Output matrix equal to M1. */
 
 /* $ Detailed_Input */
 
-/*      M1      This is an arbitrary input 3x3 matrix.  There are no */
+/*     M1       is an arbitrary input 3x3 matrix. There are no */
 /*              restrictions on what it may contain. */
 
 /* $ Detailed_Output */
 
-/*      MOUT    This 3x3 matrix is set to be equal to M1. */
+/*     MOUT     is a 3x3 matrix set to be equal to M1. */
 
 /* $ Parameters */
 
-/*      None. */
-
-/* $ Particulars */
-
-/*      None. */
-
-/* $ Examples */
-
-/*      If  M1 = | 1.0D0   0.0D0   0.0D0 | */
-/*               |                       | */
-/*               | 0.0D0   1.0D0   0.0D0 | */
-/*               |                       | */
-/*               | 0.0D0   0.0D0   1.0D0 | */
-
-/*      the call */
-
-/*      CALL MEQU ( M1, MOUT ) */
-
-/*      produces the matrix */
-
-/*       MOUT =  | 1.0D0   0.0D0   0.0D0 | */
-/*               |                       | */
-/*               | 0.0D0   1.0D0   0.0D0 | */
-/*               |                       | */
-/*               | 0.0D0   0.0D0   1.0D0 | */
-
-
-/* $ Restrictions */
-
-/*      None. */
+/*     None. */
 
 /* $ Exceptions */
 
@@ -107,17 +79,92 @@ static integer c__9 = 9;
 
 /* $ Files */
 
-/*      None. */
+/*     None. */
 
-/* $ Author_and_Institution */
+/* $ Particulars */
 
-/*      W.M. Owen       (JPL) */
+/*     None. */
+
+/* $ Examples */
+
+/*     The numerical results shown for this example may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
+
+/*     1) This trivial example demonstrates how to use MEQU to assign */
+/*        one matrix to another. */
+
+
+/*        Example code begins here. */
+
+
+/*              PROGRAM MEQU_EX1 */
+/*              IMPLICIT NONE */
+
+/*        C */
+/*        C     Local variables. */
+/*        C */
+/*              DOUBLE PRECISION      M1   ( 3, 3 ) */
+/*              DOUBLE PRECISION      MOUT ( 3, 3 ) */
+
+/*              INTEGER               I */
+/*              INTEGER               J */
+
+/*        C */
+/*        C     Define M1. */
+/*        C */
+/*              DATA                  M1   /  0.0D0,  1.0D0,  0.0D0, */
+/*             .                             -1.0D0,  0.0D0,  0.0D0, */
+/*             .                              0.0D0,  0.0D0,  1.0D0  / */
+
+/*        C */
+/*        C     Assign M1 to MOUT and print MOUT. */
+/*        C */
+/*              CALL MEQU ( M1, MOUT ) */
+
+/*              WRITE(*,'(A)') 'MOUT:' */
+/*              DO I=1, 3 */
+
+/*                 WRITE(*,'(3F16.7)') ( MOUT(I,J), J=1,3 ) */
+
+/*              END DO */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*        MOUT: */
+/*               0.0000000      -1.0000000       0.0000000 */
+/*               1.0000000       0.0000000       0.0000000 */
+/*               0.0000000       0.0000000       1.0000000 */
+
+
+/* $ Restrictions */
+
+/*     None. */
 
 /* $ Literature_References */
 
-/*      None. */
+/*     None. */
+
+/* $ Author_and_Institution */
+
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.M. Owen          (JPL) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 04-JUL-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. Added complete */
+/*        code example based on existing example. */
 
 /* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
 
@@ -133,7 +180,6 @@ static integer c__9 = 9;
 
 /* -& */
     moved_(m1, &c__9, mout);
-
     return 0;
 } /* mequ_ */
 

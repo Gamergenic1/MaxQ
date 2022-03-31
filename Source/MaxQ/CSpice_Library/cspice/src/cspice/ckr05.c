@@ -10,7 +10,7 @@
 static integer c__2 = 2;
 static integer c__6 = 6;
 
-/* $Procedure      CKR05 ( Read CK record from segment, type 05 ) */
+/* $Procedure CKR05 ( Read CK record from segment, type 05 ) */
 /* Subroutine */ int ckr05_(integer *handle, doublereal *descr, doublereal *
 	sclkdp, doublereal *tol, logical *needav, doublereal *record, logical 
 	*found)
@@ -393,7 +393,7 @@ static integer c__6 = 6;
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     I   File handle. */
 /*     DESCR      I   Segment descriptor. */
@@ -406,60 +406,60 @@ static integer c__6 = 6;
 /* $ Detailed_Input */
 
 /*     HANDLE, */
-/*     DESCR       are the file handle and segment descriptor for */
-/*                 a CK segment of type 05. */
+/*     DESCR    are the file handle and segment descriptor for */
+/*              a CK segment of type 05. */
 
-/*     SCLKDP      is an encoded spacecraft clock time indicating */
-/*                 the epoch for which pointing is desired. */
+/*     SCLKDP   is an encoded spacecraft clock time indicating */
+/*              the epoch for which pointing is desired. */
 
-/*     TOL        is a time tolerance, measured in the same units as */
-/*                encoded spacecraft clock. */
+/*     TOL      is a time tolerance, measured in the same units as */
+/*              encoded spacecraft clock. */
 
-/*                When SCLKDP falls within the bounds of one of the */
-/*                interpolation intervals then the tolerance has no */
-/*                effect because pointing will be returned at the */
-/*                request time. */
+/*              When SCLKDP falls within the bounds of one of the */
+/*              interpolation intervals then the tolerance has no */
+/*              effect because pointing will be returned at the */
+/*              request time. */
 
-/*                However, if the request time is not in one of the */
-/*                intervals, then the tolerance is used to determine */
-/*                if pointing at one of the interval endpoints should */
-/*                be returned. */
+/*              However, if the request time is not in one of the */
+/*              intervals, then the tolerance is used to determine */
+/*              if pointing at one of the interval endpoints should */
+/*              be returned. */
 
-/*     NEEDAV     is true if angular velocity is requested. */
+/*     NEEDAV   is .TRUE. if angular velocity is requested. */
 
 /* $ Detailed_Output */
 
-/*     RECORD      is a set of data from the specified segment which, */
-/*                 when evaluated at epoch SCLKDP, will give the */
-/*                 attitude and angular velocity of some body, relative */
-/*                 to the reference frame indicated by DESCR. */
+/*     RECORD   is a set of data from the specified segment which, */
+/*              when evaluated at epoch SCLKDP, will give the */
+/*              attitude and angular velocity of some body, relative */
+/*              to the reference frame indicated by DESCR. */
 
-/*                 The structure of the record is as follows: */
+/*              The structure of the record is as follows: */
 
-/*                    +----------------------+ */
-/*                    | evaluation epoch     | */
-/*                    +----------------------+ */
-/*                    | subtype code         | */
-/*                    +----------------------+ */
-/*                    | number of packets (n)| */
-/*                    +----------------------+ */
-/*                    | nominal SCLK rate    | */
-/*                    +----------------------+ */
-/*                    | packet 1             | */
-/*                    +----------------------+ */
-/*                    | packet 2             | */
-/*                    +----------------------+ */
-/*                                . */
-/*                                . */
-/*                                . */
-/*                    +----------------------+ */
-/*                    | packet n             | */
-/*                    +----------------------+ */
-/*                    | epochs 1--n          | */
-/*                    +----------------------+ */
+/*                 +----------------------+ */
+/*                 | evaluation epoch     | */
+/*                 +----------------------+ */
+/*                 | subtype code         | */
+/*                 +----------------------+ */
+/*                 | number of packets (n)| */
+/*                 +----------------------+ */
+/*                 | nominal SCLK rate    | */
+/*                 +----------------------+ */
+/*                 | packet 1             | */
+/*                 +----------------------+ */
+/*                 | packet 2             | */
+/*                 +----------------------+ */
+/*                             . */
+/*                             . */
+/*                             . */
+/*                 +----------------------+ */
+/*                 | packet n             | */
+/*                 +----------------------+ */
+/*                 | epochs 1--n          | */
+/*                 +----------------------+ */
 
-/*                 The packet size is a function of the subtype code. */
-/*                 All packets in a record have the same size. */
+/*              The packet size is a function of the subtype code. */
+/*              All packets in a record have the same size. */
 
 /* $ Parameters */
 
@@ -469,30 +469,31 @@ static integer c__6 = 6;
 
 /*     This routine follows the pattern established in the lower-numbered */
 /*     CK data type readers of not explicitly performing error */
-/*     diagnoses.  Exceptions are listed below nonetheless. */
+/*     diagnoses. Exceptions are listed below nonetheless. */
 
-/*     1) If the input HANDLE does not designate a loaded CK file, the */
-/*        error will be diagnosed by routines called by this routine. */
+/*     1)  If the input HANDLE does not designate a loaded CK file, an */
+/*         error is signaled by a routine in the call tree of this */
+/*         routine. */
 
-/*     2) If the segment specified by DESCR is not of data type 05, */
-/*        the error 'SPICE(WRONGCKTYPE)' is signaled. */
+/*     2)  If the segment specified by DESCR is not of data type 05, */
+/*         the error SPICE(WRONGCKTYPE) is signaled. */
 
-/*     3) If the input SCLK value is not within the range specified */
-/*        in the segment descriptor, the error SPICE(TIMEOUTOFBOUNDS) */
-/*        is signaled. */
+/*     3)  If the input SCLK value is not within the range specified */
+/*         in the segment descriptor, the error SPICE(TIMEOUTOFBOUNDS) */
+/*         is signaled. */
 
-/*     4) If the window size is non-positive or greater than the */
-/*        maximum allowed value, the error SPICE(INVALIDVALUE) is */
-/*        signaled. */
+/*     4)  If the window size is non-positive or greater than the */
+/*         maximum allowed value, the error SPICE(INVALIDVALUE) is */
+/*         signaled. */
 
-/*     5) If the window size is not compatible with the segment */
-/*        subtype, the error SPICE(INVALIDVALUE) is signaled. */
+/*     5)  If the window size is not compatible with the segment */
+/*         subtype, the error SPICE(INVALIDVALUE) is signaled. */
 
-/*     6) If the segment subtype is not recognized, the error */
-/*        SPICE(NOTSUPPORTED) is signaled. */
+/*     6)  If the segment subtype is not recognized, the error */
+/*         SPICE(NOTSUPPORTED) is signaled. */
 
-/*     7) If the tolerance is negative, the error SPICE(VALUEOUTOFRANGE) */
-/*        is signaled. */
+/*     7)  If the tolerance is negative, the error SPICE(VALUEOUTOFRANGE) */
+/*         is signaled. */
 
 /* $ Files */
 
@@ -506,17 +507,21 @@ static integer c__6 = 6;
 /* $ Examples */
 
 /*     The data returned by the CKRnn routine is in its rawest form, */
-/*     taken directly from the segment.  As such, it will be meaningless */
+/*     taken directly from the segment. As such, it will be meaningless */
 /*     to a user unless he/she understands the structure of the data type */
-/*     completely.  Given that understanding, however, the CKRxx */
+/*     completely. Given that understanding, however, the CKRxx */
 /*     routines might be used to "dump" and check segment data for a */
 /*     particular epoch. */
 
+/*     The search performed here does not mimic the behavior of the CK */
+/*     reader APIs CKGP and CKGPAV, which continue searching when an */
+/*     applicable segment doesn't satisfy a pointing request. See the CK */
+/*     Required reading for details. */
 
 /*     C */
 /*     C     Get a segment applicable to a specified body and epoch. */
 /*     C */
-/*     C     CALL CKBSS ( INST,   SCLKDP, TOL,   NEEDAV ) */
+/*           CALL CKBSS ( INST,   SCLKDP, TOL,   NEEDAV ) */
 /*           CALL CKSNS ( HANDLE, DESCR,  SEGID, SFND   ) */
 
 /*           IF ( .NOT. SFND ) THEN */
@@ -557,9 +562,19 @@ static integer c__6 = 6;
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 2.0.1, 06-JUL-2021 (NJB) (JDR) */
+
+/*        Corrected code example: removed comment character preceding */
+/*        CKBSS call. Added note regarding difference between this */
+/*        search and those performed by the CK reader APIs CKGP and */
+/*        CKGPAV. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 2.0.0, 27-JAN-2014 (NJB) */
 
@@ -570,12 +585,7 @@ static integer c__6 = 6;
 /* -& */
 /* $ Index_Entries */
 
-/*     read record from type_5 ck segment */
-
-/* -& */
-/* $ Revisions */
-
-/*     None. */
+/*     read record from type_5 CK segment */
 
 /* -& */
 
@@ -814,7 +824,7 @@ static integer c__6 = 6;
 	dafgda_(handle, &i__1, &i__2, pbuffr);
 	remain = npdir - npread;
 	while(pbuffr[(i__1 = npread - 1) < 101 && 0 <= i__1 ? i__1 : s_rnge(
-		"pbuffr", i__1, "ckr05_", (ftnlen)639)] < t && remain > 0) {
+		"pbuffr", i__1, "ckr05_", (ftnlen)650)] < t && remain > 0) {
 	    bufbas += npread;
 	    npread = min(remain,100);
 
@@ -915,12 +925,12 @@ static integer c__6 = 6;
 
 	t = pbuffr[0];
     } else if (t > pbuffr[(i__1 = npread - 1) < 101 && 0 <= i__1 ? i__1 : 
-	    s_rnge("pbuffr", i__1, "ckr05_", (ftnlen)754)]) {
+	    s_rnge("pbuffr", i__1, "ckr05_", (ftnlen)765)]) {
 
 /*        This can happen only if T follows all epochs. */
 
 	if (*sclkdp - *tol > pbuffr[(i__1 = npread - 1) < 101 && 0 <= i__1 ? 
-		i__1 : s_rnge("pbuffr", i__1, "ckr05_", (ftnlen)758)]) {
+		i__1 : s_rnge("pbuffr", i__1, "ckr05_", (ftnlen)769)]) {
 	    chkout_("CKR05", (ftnlen)5);
 	    return 0;
 	}
@@ -928,7 +938,7 @@ static integer c__6 = 6;
 /*        Bracket T to move it within the range of buffered epochs. */
 
 	t = pbuffr[(i__1 = npread - 1) < 101 && 0 <= i__1 ? i__1 : s_rnge(
-		"pbuffr", i__1, "ckr05_", (ftnlen)768)];
+		"pbuffr", i__1, "ckr05_", (ftnlen)779)];
     }
 
 /*     At this point, */
@@ -967,14 +977,14 @@ static integer c__6 = 6;
 	    high = 2;
 	}
 	hepoch = pbuffr[(i__1 = high - 1) < 101 && 0 <= i__1 ? i__1 : s_rnge(
-		"pbuffr", i__1, "ckr05_", (ftnlen)811)];
+		"pbuffr", i__1, "ckr05_", (ftnlen)822)];
     } else {
 	low = pbegix + i__ - 1;
 	lepoch = pbuffr[(i__1 = i__ - 1) < 101 && 0 <= i__1 ? i__1 : s_rnge(
-		"pbuffr", i__1, "ckr05_", (ftnlen)816)];
+		"pbuffr", i__1, "ckr05_", (ftnlen)827)];
 	high = low + 1;
 	hepoch = pbuffr[(i__1 = i__) < 101 && 0 <= i__1 ? i__1 : s_rnge("pbu"
-		"ffr", i__1, "ckr05_", (ftnlen)819)];
+		"ffr", i__1, "ckr05_", (ftnlen)830)];
     }
 
 /*     We now need to find the interpolation interval containing */
@@ -1037,7 +1047,7 @@ static integer c__6 = 6;
 	    i__2 = bufbas + nsread;
 	    dafgda_(handle, &i__1, &i__2, sbuffr);
 	    while(sbuffr[(i__1 = nsread - 1) < 103 && 0 <= i__1 ? i__1 : 
-		    s_rnge("sbuffr", i__1, "ckr05_", (ftnlen)891)] < t && 
+		    s_rnge("sbuffr", i__1, "ckr05_", (ftnlen)902)] < t && 
 		    remain > 0) {
 		bufbas += nsread;
 		nsread = min(remain,100);
@@ -1098,7 +1108,7 @@ static integer c__6 = 6;
 	nsrch = min(101,nsread);
 	i__ = lstled_(&t, &nsrch, sbuffr);
 	start = sbuffr[(i__1 = i__ - 1) < 103 && 0 <= i__1 ? i__1 : s_rnge(
-		"sbuffr", i__1, "ckr05_", (ftnlen)962)];
+		"sbuffr", i__1, "ckr05_", (ftnlen)973)];
 
 /*        Let NSTART ("next start") be the start time that follows */
 /*        START, if START is not the last start time.  If NSTART */
@@ -1106,10 +1116,10 @@ static integer c__6 = 6;
 
 	if (i__ < nsread) {
 	    nstart = sbuffr[(i__1 = i__) < 103 && 0 <= i__1 ? i__1 : s_rnge(
-		    "sbuffr", i__1, "ckr05_", (ftnlen)971)];
+		    "sbuffr", i__1, "ckr05_", (ftnlen)982)];
 	    if (i__ + 1 < nsread) {
 		nnstrt = sbuffr[(i__1 = i__ + 1) < 103 && 0 <= i__1 ? i__1 : 
-			s_rnge("sbuffr", i__1, "ckr05_", (ftnlen)975)];
+			s_rnge("sbuffr", i__1, "ckr05_", (ftnlen)986)];
 	    } else {
 		nnstrt = dpmax_();
 	    }
@@ -1277,7 +1287,7 @@ static integer c__6 = 6;
 
     i__2 = j - i__;
     moved_(&pbuffr[(i__1 = i__) < 101 && 0 <= i__1 ? i__1 : s_rnge("pbuffr", 
-	    i__1, "ckr05_", (ftnlen)1164)], &i__2, &record[wndsiz * packsz + 
+	    i__1, "ckr05_", (ftnlen)1175)], &i__2, &record[wndsiz * packsz + 
 	    4]);
 
 /*     Save the information about the interval and segment. */

@@ -10,7 +10,7 @@
 static integer c__2 = 2;
 static integer c__6 = 6;
 
-/* $Procedure      SPKR09 ( Read SPK record from segment, type 9 ) */
+/* $Procedure SPKR09 ( Read SPK record from segment, type 9 ) */
 /* Subroutine */ int spkr09_(integer *handle, doublereal *descr, doublereal *
 	et, doublereal *record)
 {
@@ -85,7 +85,7 @@ static integer c__6 = 6;
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     I   File handle. */
 /*     DESCR      I   Segment descriptor. */
@@ -95,36 +95,36 @@ static integer c__6 = 6;
 /* $ Detailed_Input */
 
 /*     HANDLE, */
-/*     DESCR       are the file handle and segment descriptor for */
-/*                 a SPK segment of type 9. */
+/*     DESCR    are the file handle and segment descriptor for */
+/*              a SPK segment of type 9. */
 
-/*     ET          is a target epoch, for which a data record from */
-/*                 a specific segment is required. */
+/*     ET       is a target epoch, for which a data record from */
+/*              a specific segment is required. */
 
 /* $ Detailed_Output */
 
-/*     RECORD      is a set of data from the specified segment which, */
-/*                 when evaluated at epoch ET, will give the state */
-/*                 (position and velocity) of some body, relative */
-/*                 to some center, in some inertial reference frame. */
+/*     RECORD   is a set of data from the specified segment which, */
+/*              when evaluated at epoch ET, will give the state */
+/*              (position and velocity) of some body, relative */
+/*              to some center, in some inertial reference frame. */
 
-/*                 The structure of the record is as follows: */
+/*              The structure of the record is as follows: */
 
-/*                    +----------------------+ */
-/*                    | number of states (n) | */
-/*                    +----------------------+ */
-/*                    | state 1 (6 elts.)    | */
-/*                    +----------------------+ */
-/*                    | state 2 (6 elts.)    | */
-/*                    +----------------------+ */
-/*                                . */
-/*                                . */
-/*                                . */
-/*                    +----------------------+ */
-/*                    | state n (6 elts.)    | */
-/*                    +----------------------+ */
-/*                    | epochs 1--n          | */
-/*                    +----------------------+ */
+/*                 +----------------------+ */
+/*                 | number of states (n) | */
+/*                 +----------------------+ */
+/*                 | state 1 (6 elts.)    | */
+/*                 +----------------------+ */
+/*                 | state 2 (6 elts.)    | */
+/*                 +----------------------+ */
+/*                             . */
+/*                             . */
+/*                             . */
+/*                 +----------------------+ */
+/*                 | state n (6 elts.)    | */
+/*                 +----------------------+ */
+/*                 | epochs 1--n          | */
+/*                 +----------------------+ */
 
 /* $ Parameters */
 
@@ -134,17 +134,18 @@ static integer c__6 = 6;
 
 /*     This routine follows the pattern established in the lower-numbered */
 /*     SPK data type readers of not explicitly performing error */
-/*     diagnoses.  Exceptions are listed below nonetheless. */
+/*     diagnoses. Exceptions are listed below nonetheless. */
 
-/*     1)  If the input HANDLE does not designate a loaded SPK file, the */
-/*         error will be diagnosed by routines called by this routine. */
+/*     1)  If the input HANDLE does not designate a loaded SPK file, an */
+/*         error is signaled by a routine in the call tree of this */
+/*         routine. */
 
-/*     2) If the segment specified by DESCR is not of data types 9 or 13, */
-/*        the error 'SPICE(WRONGSPKTYPE)' is signalled. */
+/*     2)  If the segment specified by DESCR is not of data types 9 or */
+/*         13, the error SPICE(WRONGSPKTYPE) is signaled. */
 
 /*     3)  If the input ET value is not within the range specified */
 /*         in the segment descriptor, the error SPICE(TIMEOUTOFBOUNDS) */
-/*         is signalled. */
+/*         is signaled. */
 
 /* $ Files */
 
@@ -158,9 +159,9 @@ static integer c__6 = 6;
 /* $ Examples */
 
 /*     The data returned by the SPKRnn routine is in its rawest form, */
-/*     taken directly from the segment.  As such, it will be meaningless */
+/*     taken directly from the segment. As such, it will be meaningless */
 /*     to a user unless he/she understands the structure of the data type */
-/*     completely.  Given that understanding, however, the SPKRxx */
+/*     completely. Given that understanding, however, the SPKRxx */
 /*     routines might be used to "dump" and check segment data for a */
 /*     particular epoch. */
 
@@ -196,9 +197,15 @@ static integer c__6 = 6;
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 2.1.1, 12-AUG-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 2.1.0, 07-SEP-2001 (EDW) */
 
@@ -215,15 +222,12 @@ static integer c__6 = 6;
 /*        In-line comment concerning transpose of state data was */
 /*        removed. */
 
-/* -    SPICELIB Version 1.0.0,  14-AUG-1993 (NJB) */
+/* -    SPICELIB Version 1.0.0, 14-AUG-1993 (NJB) */
 
 /* -& */
 /* $ Index_Entries */
 
-/*     read record from type_9 spk segment */
-
-/* -& */
-/* $ Revisions */
+/*     read record from type_9 SPK segment */
 
 /* -& */
 
@@ -341,7 +345,7 @@ static integer c__6 = 6;
 	i__2 = bufbas + nread;
 	dafgda_(handle, &i__1, &i__2, buffer);
 	while(buffer[(i__1 = nread - 1) < 101 && 0 <= i__1 ? i__1 : s_rnge(
-		"buffer", i__1, "spkr09_", (ftnlen)373)] < *et && remain > 0) 
+		"buffer", i__1, "spkr09_", (ftnlen)377)] < *et && remain > 0) 
 		{
 	    bufbas += nread;
 	    nread = min(remain,101);
@@ -425,9 +429,9 @@ static integer c__6 = 6;
 
 	    near__ = low;
 	} else if ((d__1 = *et - buffer[(i__1 = i__ - 1) < 101 && 0 <= i__1 ? 
-		i__1 : s_rnge("buffer", i__1, "spkr09_", (ftnlen)467)], abs(
+		i__1 : s_rnge("buffer", i__1, "spkr09_", (ftnlen)471)], abs(
 		d__1)) < (d__2 = *et - buffer[(i__2 = i__) < 101 && 0 <= i__2 
-		? i__2 : s_rnge("buffer", i__2, "spkr09_", (ftnlen)467)], abs(
+		? i__2 : s_rnge("buffer", i__2, "spkr09_", (ftnlen)471)], abs(
 		d__2))) {
 	    near__ = low;
 	} else {

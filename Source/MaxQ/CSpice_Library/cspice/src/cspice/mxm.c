@@ -9,7 +9,7 @@
 
 static integer c__9 = 9;
 
-/* $Procedure      MXM  ( Matrix times matrix, 3x3 ) */
+/* $Procedure MXM ( Matrix times matrix, 3x3 ) */
 /* Subroutine */ int mxm_(doublereal *m1, doublereal *m2, doublereal *mout)
 {
     /* System generated locals */
@@ -63,23 +63,22 @@ static integer c__9 = 9;
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     VARIABLE  I/O              DESCRIPTION */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     M1         I   3x3 double precision matrix. */
-/*     M2         I   3x3 double prercision matrix. */
-/*     MOUT       O   3x3 double precision matrix. MOUT is the product */
-/*                    M1*M2. */
+/*     M2         I   3x3 double precision matrix. */
+/*     MOUT       O   The 3x3 double precision matrix product M1*M2. */
 
 /* $ Detailed_Input */
 
-/*     M1         is an arbitrary 3x3 double precision matrix. */
+/*     M1       is an arbitrary 3x3 double precision matrix. */
 
-/*     M2         is an arbitrary 3x3 double precision matrix. */
+/*     M2       is an arbitrary 3x3 double precision matrix. */
 
 /* $ Detailed_Output */
 
-/*     MOUT       is a 3x3 double precision matrix. MOUT is the product */
-/*                M1*M2. */
+/*     MOUT     is a 3x3 double precision matrix. MOUT is the product */
+/*              M1*M2. */
 
 /* $ Parameters */
 
@@ -99,34 +98,102 @@ static integer c__9 = 9;
 
 /*        For each value of the subscripts I and J from 1 to 3: */
 
-/*        MOUT(I,J) = Summation from K=1 to 3 of  ( M1(I,K) * M2(K,J) ) */
+/*                          3 */
+/*                       .----- */
+/*                        \ */
+/*           MOUT(I,J) =   )  M1(I,K) * M2(K,J) */
+/*                        / */
+/*                       '----- */
+/*                         K=1 */
 
 /* $ Examples */
 
-/*     Let M1 = |  1.0D0  1.0D0  0.0D0 | */
-/*              |                      | */
-/*              | -1.0D0  1.0D0  0.0D0 | */
-/*              |                      | */
-/*              |  0.0D0  0.0D0  1.0D0 | */
+/*     The numerical results shown for this example may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
+
+/*     1) Given two 3x3 double precision matrices, compute their */
+/*        product. */
 
 
-/*     and M2 = |  1.0D0  0.0D0  0.0D0 | */
-/*              |                      | */
-/*              |  0.0D0  1.0D0  1.0D0 | */
-/*              |                      | */
-/*              |  0.0D0 -1.0D0  1.0D0 | */
+/*        Example code begins here. */
 
-/*     then the call */
 
-/*        CALL MXM ( M1, M2, MOUT ) */
+/*              PROGRAM MXM_EX1 */
+/*              IMPLICIT NONE */
 
-/*     produces the matrix */
+/*        C */
+/*        C     Local variables. */
+/*        C */
+/*              DOUBLE PRECISION      M1   ( 3, 3 ) */
+/*              DOUBLE PRECISION      M2   ( 3, 3 ) */
+/*              DOUBLE PRECISION      MOUT ( 3, 3 ) */
 
-/*        MOUT = |  1.0D0  1.0D0  1.0D0 | */
-/*               |                      | */
-/*               | -1.0D0  1.0D0  1.0D0 | */
-/*               |                      | */
-/*               |  0.0D0 -1.0D0  1.0D0 | */
+/*              INTEGER               I */
+/*              INTEGER               J */
+
+/*        C */
+/*        C     Define M1 and M2. */
+/*        C */
+/*              DATA                  M1   /  1.0D0, -1.0D0,  0.0D0, */
+/*             .                              1.0D0,  1.0D0,  0.0D0, */
+/*             .                              0.0D0,  0.0D0,  1.0D0  / */
+
+/*              DATA                  M2   /  1.0D0,  0.0D0,  0.0D0, */
+/*             .                              0.0D0,  1.0D0, -1.0D0, */
+/*             .                              0.0D0,  1.0D0,  1.0D0  / */
+
+/*        C */
+/*        C     Compute M1 times M2. */
+/*        C */
+/*              CALL MXM ( M1, M2, MOUT ) */
+
+/*              WRITE(*,'(A)') 'M1:' */
+/*              DO I=1, 3 */
+
+/*                 WRITE(*,'(3F16.7)') ( M1(I,J), J=1,3 ) */
+
+/*              END DO */
+
+/*              WRITE(*,*) */
+/*              WRITE(*,'(A)') 'M2:' */
+/*              DO I=1, 3 */
+
+/*                 WRITE(*,'(3F16.7)') ( M2(I,J), J=1,3 ) */
+
+/*              END DO */
+
+/*              WRITE(*,*) */
+/*              WRITE(*,'(A)') 'M1 times M2:' */
+/*              DO I=1, 3 */
+
+/*                 WRITE(*,'(3F16.7)') ( MOUT(I,J), J=1,3 ) */
+
+/*              END DO */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*        M1: */
+/*               1.0000000       1.0000000       0.0000000 */
+/*              -1.0000000       1.0000000       0.0000000 */
+/*               0.0000000       0.0000000       1.0000000 */
+
+/*        M2: */
+/*               1.0000000       0.0000000       0.0000000 */
+/*               0.0000000       1.0000000       1.0000000 */
+/*               0.0000000      -1.0000000       1.0000000 */
+
+/*        M1 times M2: */
+/*               1.0000000       1.0000000       1.0000000 */
+/*              -1.0000000       1.0000000       1.0000000 */
+/*               0.0000000      -1.0000000       1.0000000 */
+
 
 /* $ Restrictions */
 
@@ -138,9 +205,19 @@ static integer c__9 = 9;
 
 /* $ Author_and_Institution */
 
-/*     W.M. Owen       (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.M. Owen          (JPL) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 06-JUL-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. Added complete */
+/*        code example based on existing example. */
 
 /* -    SPICELIB Version 1.0.2, 22-APR-2010 (NJB) */
 
@@ -169,17 +246,17 @@ static integer c__9 = 9;
     for (i__ = 1; i__ <= 3; ++i__) {
 	for (j = 1; j <= 3; ++j) {
 	    prodm[(i__1 = i__ + j * 3 - 4) < 9 && 0 <= i__1 ? i__1 : s_rnge(
-		    "prodm", i__1, "mxm_", (ftnlen)162)] = m1[(i__2 = i__ - 1)
+		    "prodm", i__1, "mxm_", (ftnlen)243)] = m1[(i__2 = i__ - 1)
 		     < 9 && 0 <= i__2 ? i__2 : s_rnge("m1", i__2, "mxm_", (
-		    ftnlen)162)] * m2[(i__3 = j * 3 - 3) < 9 && 0 <= i__3 ? 
-		    i__3 : s_rnge("m2", i__3, "mxm_", (ftnlen)162)] + m1[(
+		    ftnlen)243)] * m2[(i__3 = j * 3 - 3) < 9 && 0 <= i__3 ? 
+		    i__3 : s_rnge("m2", i__3, "mxm_", (ftnlen)243)] + m1[(
 		    i__4 = i__ + 2) < 9 && 0 <= i__4 ? i__4 : s_rnge("m1", 
-		    i__4, "mxm_", (ftnlen)162)] * m2[(i__5 = j * 3 - 2) < 9 &&
+		    i__4, "mxm_", (ftnlen)243)] * m2[(i__5 = j * 3 - 2) < 9 &&
 		     0 <= i__5 ? i__5 : s_rnge("m2", i__5, "mxm_", (ftnlen)
-		    162)] + m1[(i__6 = i__ + 5) < 9 && 0 <= i__6 ? i__6 : 
-		    s_rnge("m1", i__6, "mxm_", (ftnlen)162)] * m2[(i__7 = j * 
+		    243)] + m1[(i__6 = i__ + 5) < 9 && 0 <= i__6 ? i__6 : 
+		    s_rnge("m1", i__6, "mxm_", (ftnlen)243)] * m2[(i__7 = j * 
 		    3 - 1) < 9 && 0 <= i__7 ? i__7 : s_rnge("m2", i__7, "mxm_"
-		    , (ftnlen)162)];
+		    , (ftnlen)243)];
 	}
     }
 

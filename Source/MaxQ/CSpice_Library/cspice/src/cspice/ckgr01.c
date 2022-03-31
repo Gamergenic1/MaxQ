@@ -10,7 +10,7 @@
 static integer c__2 = 2;
 static integer c__6 = 6;
 
-/* $Procedure      CKGR01 ( C-kernel, get record, type 01 ) */
+/* $Procedure CKGR01 ( C-kernel, get record, type 01 ) */
 /* Subroutine */ int ckgr01_(integer *handle, doublereal *descr, integer *
 	recno, doublereal *record)
 {
@@ -31,8 +31,9 @@ static integer c__6 = 6;
 
 /* $ Abstract */
 
-/*     Given the handle and descriptor of a data type 1 segment in a */
-/*     CK file, return a specified pointing record from that segment. */
+/*     Return a specified pointing instance from a CK type 01 segment. */
+/*     The segment is identified by a CK file handle and segment */
+/*     descriptor. */
 
 /* $ Disclaimer */
 
@@ -71,7 +72,7 @@ static integer c__6 = 6;
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     I   The handle of the file containing the segment. */
 /*     DESCR      I   The segment descriptor. */
@@ -80,41 +81,41 @@ static integer c__6 = 6;
 
 /* $ Detailed_Input */
 
-/*     HANDLE     is the handle of the binary CK file containing the */
-/*                desired segment. The file should have been opened */
-/*                for read access, either by CKLPF or DAFOPR. */
+/*     HANDLE   is the handle of the binary CK file containing the */
+/*              desired segment. The file should have been opened */
+/*              for read access, either by CKLPF or DAFOPR. */
 
-/*     DESCR      is the packed descriptor of the data type 1 segment. */
+/*     DESCR    is the packed descriptor of the data type 1 segment. */
 
-/*     RECNO      is the number of the individual pointing record to be */
-/*                returned from the data type 1 segment. */
+/*     RECNO    is the number of the individual pointing record to be */
+/*              returned from the data type 1 segment. */
 
 /* $ Detailed_Output */
 
-/*     RECORD     is the pointing record indexed by RECNO in the segment. */
-/*                The contents are as follows: */
+/*     RECORD   is the pointing record indexed by RECNO in the segment. */
+/*              The contents are as follows: */
 
-/*                   RECORD( 1 ) = CLKOUT */
+/*                 RECORD( 1 ) = CLKOUT */
 
-/*                   RECORD( 2 ) = q0 */
-/*                   RECORD( 3 ) = q1 */
-/*                   RECORD( 4 ) = q2 */
-/*                   RECORD( 5 ) = q3 */
+/*                 RECORD( 2 ) = q0 */
+/*                 RECORD( 3 ) = q1 */
+/*                 RECORD( 4 ) = q2 */
+/*                 RECORD( 5 ) = q3 */
 
-/*                   RECORD( 6 ) = Av1  ] */
-/*                   RECORD( 7 ) = Av2  |-- Returned optionally */
-/*                   RECORD( 8 ) = Av3  ] */
+/*                 RECORD( 6 ) = Av1  ] */
+/*                 RECORD( 7 ) = Av2  |-- Returned optionally */
+/*                 RECORD( 8 ) = Av3  ] */
 
-/*                CLKOUT is the encoded spacecraft clock time associated */
-/*                with the returned pointing values. */
+/*              CLKOUT is the encoded spacecraft clock time associated */
+/*              with the returned pointing values. */
 
-/*                The quantities q0 - q3 represent a quaternion. */
-/*                The quantities Av1, Av2, and Av3 represent the */
-/*                angular velocity vector, and are returned only if the */
-/*                segment contains angular velocity data. The */
-/*                components of the angular velocity vector are */
-/*                specified relative to the inertial reference */
-/*                frame of the segment. */
+/*              The quantities q0 - q3 represent a quaternion. */
+/*              The quantities Av1, Av2, and Av3 represent the */
+/*              angular velocity vector, and are returned only if the */
+/*              segment contains angular velocity data. The */
+/*              components of the angular velocity vector are */
+/*              specified relative to the inertial reference */
+/*              frame of the segment. */
 
 /* $ Parameters */
 
@@ -123,15 +124,15 @@ static integer c__6 = 6;
 /* $ Exceptions */
 
 /*     1)  If the segment is not of data type 1, the error */
-/*         SPICE(CKWRONGDATATYPE) is signalled. */
+/*         SPICE(CKWRONGDATATYPE) is signaled. */
 
 /*     2)  If RECNO is less than one or greater than the number of */
 /*         records in the specified segment, the error */
-/*         SPICE(CKNONEXISTREC) is signalled. */
+/*         SPICE(CKNONEXISTREC) is signaled. */
 
 /*     3)  If the specified handle does not belong to any file that is */
-/*         currently known to be open, an error is diagnosed by a */
-/*         routine that this routine calls. */
+/*         currently known to be open, an error is signaled by a routine */
+/*         in the call tree of this routine. */
 
 /*     4)  If DESCR is not a valid, packed descriptor of a segment in */
 /*         the CK file specified by HANDLE, the results of this routine */
@@ -146,7 +147,7 @@ static integer c__6 = 6;
 /*     For a detailed description of the structure of a type 1 segment, */
 /*     see the CK required reading. */
 
-/*     This is a utility routine that performs as follows.  It finds out */
+/*     This is a utility routine that performs as follows. It finds out */
 /*     how many records are in the segment, checks to see if the request */
 /*     fits the bounds of the segment, and then moves directly to get */
 /*     the requested data. */
@@ -154,7 +155,7 @@ static integer c__6 = 6;
 /* $ Examples */
 
 /*     The following code fragment prints the records of the first */
-/*     segment in a CK file.  Suppose MOC.CK is valid CK file that */
+/*     segment in a CK file. Suppose MOC.CK is valid CK file that */
 /*     contains segments of data type 1. */
 
 /*           INTEGER               ICD     ( 6 ) */
@@ -214,9 +215,9 @@ static integer c__6 = 6;
 
 /* $ Restrictions */
 
-/*     The binay CK file containing the segment whose descriptor was */
-/*     passed to this routine must be opened for read access by either */
-/*     CKLPF or DAFOPR. */
+/*     1)  The binary CK file containing the segment whose descriptor was */
+/*         passed to this routine must be opened for read access by */
+/*         either CKLPF or DAFOPR. */
 
 /* $ Literature_References */
 
@@ -224,12 +225,18 @@ static integer c__6 = 6;
 
 /* $ Author_and_Institution */
 
-/*     J.E. McLean    (JPL) */
-/*     M.J. Spencer   (JPL) */
-/*     R.E. Thurman   (JPL) */
-/*     I.M. Underwood (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     J.M. Lynch         (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     R.E. Thurman       (JPL) */
+/*     I.M. Underwood     (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.1, 26-OCT-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.1.0, 07-SEP-2001 (EDW) */
 
@@ -244,7 +251,7 @@ static integer c__6 = 6;
 /* -    SPICELIB Version 1.0.2, 06-MAR-1991 (JML) */
 
 /*        A correction was made to the example program in the */
-/*        header.  The array of double precision components of */
+/*        header. The array of double precision components of */
 /*        the descriptor ( DCD ) had originally been declared */
 /*        as an integer. */
 
@@ -258,19 +265,19 @@ static integer c__6 = 6;
 /* -& */
 /* $ Index_Entries */
 
-/*     get ck type_1 record */
+/*     get CK type_1 record */
 
 /* -& */
 /* $ Revisions */
 
-/* -    SPICELIB Version 1.1.0, 07-SEP-2000 (EDW) */
+/* -    SPICELIB Version 1.1.0, 07-SEP-2001 (EDW) */
 
 /*        Replaced DAFRDA call with DAFGDA. */
 
 /* -    SPICELIB Version 1.0.2, 06-MAR-1991 (JML) */
 
 /*        A correction was made to the example program in the */
-/*        header.  The array of double precision components of */
+/*        header. The array of double precision components of */
 /*        the descriptor ( DCD ) had originally been declared */
 /*        as an integer. */
 

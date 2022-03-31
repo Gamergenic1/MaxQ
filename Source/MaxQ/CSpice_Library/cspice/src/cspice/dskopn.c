@@ -169,7 +169,7 @@
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     FNAME      I   Name of a DSK file to be opened. */
 /*     IFNAME     I   Internal file name. */
@@ -178,25 +178,25 @@
 
 /* $ Detailed_Input */
 
-/*     FNAME       is the name of a new DSK file to be created.  The */
-/*                 file will be left opened for write access. */
+/*     FNAME    is the name of a new DSK file to be created. The */
+/*              file will be left opened for write access. */
 
-/*     IFNAME      is the internal file name for the new file.  The name */
-/*                 may contain as many as 60 characters.  All characters */
-/*                 of IFNAME should be printing characters (ASCII codes */
-/*                 32-126 decimal). This name should uniquely identify */
-/*                 the file. */
+/*     IFNAME   is the internal file name for the new file. The name */
+/*              may contain as many as 60 characters. All characters */
+/*              of IFNAME should be printing characters (ASCII codes */
+/*              32-126 decimal). This name should uniquely identify */
+/*              the file. */
 
-/*     NCOMCH      is the number of comment characters to allocate. */
-/*                 Allocating comment characters at file creation time */
-/*                 may reduce the likelihood of having to expand the */
-/*                 comment area later. */
+/*     NCOMCH   is the number of comment characters to allocate. */
+/*              Allocating comment characters at file creation time */
+/*              may reduce the likelihood of having to expand the */
+/*              comment area later. */
 
 /* $ Detailed_Output */
 
-/*     HANDLE      is the file handle associated with the file. This */
-/*                 handle is used to identify the file in subsequent */
-/*                 calls to other DSK routines. */
+/*     HANDLE   is the file handle associated with the file. This */
+/*              handle is used to identify the file in subsequent */
+/*              calls to other DSK routines. */
 
 /* $ Parameters */
 
@@ -204,35 +204,35 @@
 
 /* $ Exceptions */
 
-/*     1)  If the input filename is blank, the error will be diagnosed */
-/*         by routines in the call tree of this routine.  No file will */
-/*         be created. */
+/*     1)  If the input filename is blank, an error is signaled by a */
+/*         routine in the call tree of this routine. No file will be */
+/*         created. */
 
 /*     2)  If the specified file cannot be opened without exceeding the */
-/*         maximum allowed number of open DAS files, the error will be */
-/*         diagnosed by routines in the call tree of this routine.  No */
+/*         maximum allowed number of open DAS files, an error is signaled */
+/*         by a routine in the call tree of this routine. No file will be */
+/*         created. */
+
+/*     3)  If the file cannot be opened properly, an error is signaled by */
+/*         a routine in the call tree of this routine. No file will be */
+/*         created. */
+
+/*     4)  If the initial records in the file cannot be written, an error */
+/*         is signaled by a routine in the call tree of this routine. No */
 /*         file will be created. */
 
-/*     3)  If the file cannot be opened properly, the error will be */
-/*         diagnosed by routines in the call tree of this routine.  No */
-/*         file will be created. */
-
-/*     4)  If the initial records in the file cannot be written, the */
-/*         error is diagnosed by routines in the call tree of this */
-/*         routine.  No file will be created. */
-
-/*     5)  If no logical units are available, the error will be */
-/*         diagnosed by routines in the call tree of this routine. No */
-/*         file will be created. */
+/*     5)  If no logical units are available, an error is signaled by a */
+/*         routine in the call tree of this routine. No file will be */
+/*         created. */
 
 /*     6)  If the internal file name contains nonprinting characters */
-/*         (ASCII codes decimal 0-31 and 127-255), the error will be */
-/*         diagnosed by routines in the call tree of this routine.  No */
-/*         file will be created. */
+/*         (ASCII codes decimal 0-31 and 127-255), an error is signaled */
+/*         by a routine in the call tree of this routine. No file will be */
+/*         created. */
 
 /*     7)  If the number of comment characters allocated NCOMCH is */
-/*         negative, the error will be diagnosed by routines in the call */
-/*         tree of this routine.  No file will be created. */
+/*         negative, an error is signaled by a routine in the call */
+/*         tree of this routine. No file will be created. */
 
 /* $ Files */
 
@@ -243,7 +243,7 @@
 /*     DSK files are built using the DLA low-level format and */
 /*     the DAS architecture; DLA files are a specialized type of DAS */
 /*     file in which data are organized as a doubly linked list of */
-/*     segments.  Each segment's data belong to contiguous components of */
+/*     segments. Each segment's data belong to contiguous components of */
 /*     character, double precision, and integer type. */
 
 /*     This routine creates a new DSK file and sets the type of the */
@@ -260,7 +260,7 @@
 /* $ Examples */
 
 /*     1)  Create a new DSK file, using an internal file name that */
-/*         attempts to serve as an unique identifier.  No room for */
+/*         attempts to serve as an unique identifier. No room for */
 /*         comments will be reserved. */
 
 /*            FNAME  =  'TEST.DSK' */
@@ -279,9 +279,14 @@
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.0.1, 02-JUL-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.0.0, 08-FEB-2017 (NJB) */
 
@@ -300,8 +305,8 @@
 /* -& */
 /* $ Index_Entries */
 
-/*     open a new dsk file */
-/*     open a new dsk file with write access */
+/*     open a new DSK file */
+/*     open a new DSK file with write access */
 
 /* -& */
 

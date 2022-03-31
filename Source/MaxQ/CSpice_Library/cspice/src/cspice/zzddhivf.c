@@ -115,6 +115,10 @@
 
 /* $ Version */
 
+/* -    SPICELIB Version 2.6.0, 28-NOV-2021 (BVS) */
+
+/*        Updated for MAC-OSX-M1-64BIT-CLANG_C. */
+
 /* -    SPICELIB Version 2.5.0, 10-MAR-2014 (BVS) */
 
 /*        Updated for SUN-SOLARIS-64BIT-INTEL. */
@@ -403,6 +407,14 @@
 
 /* $ Version */
 
+/* -    SPICELIB Version 1.26.0, 28-NOV-2021 (BVS) */
+
+/*        Updated for MAC-OSX-M1-64BIT-CLANG_C. */
+
+/* -    SPICELIB Version 1.25.1, 02-OCT-2021 (NJB) */
+
+/*        Corrected typo in comments. */
+
 /* -    SPICELIB Version 1.25.0, 10-MAR-2014 (BVS) */
 
 /*        Updated for SUN-SOLARIS-64BIT-INTEL. */
@@ -539,7 +551,7 @@
 /*       (b) A VAX G-Floating file */
 /*       (c) A damaged file */
 
-/*     In the case of (c) the algorithm outlined below is not guarenteed */
+/*     In the case of (c) the algorithm outlined below is not guaranteed */
 /*     to produce correct results.  If the case is either (a) or (b), */
 /*     then the routine will correctly determine the source binary file */
 /*     format.  Here's why: */

@@ -821,7 +821,7 @@ static integer c__0 = 0;
 /*                    qualified by a table name, in which case it */
 /*                    conforms to the sytax */
 
-/*                       <identifier> . <identifer> */
+/*                       <identifier> . <identifier> */
 
 /*                    or QCOL may be unqualified, in which case it */
 /*                    is simply an <identifier> in the EK query language. */
@@ -877,13 +877,13 @@ static integer c__0 = 0;
 /*         will not be modified. */
 
 /*     2)  If the input query has not been semantically checked, the */
-/*         error SPICE(NOTSEMCHECKED) will be signalled.  The outputs */
+/*         error SPICE(NOTSEMCHECKED) will be signaled.  The outputs */
 /*         will not be modified. */
 
 /*     3)  If the input QCOL does not parse as a qualified or */
 /*         unqualified column name, the error flag and message will */
 /*         indicate that a parse error occurred.  No error will be */
-/*         signalled. */
+/*         signaled. */
 
 /* $ Files */
 
@@ -935,6 +935,10 @@ static integer c__0 = 0;
 /*     N.J. Bachman       (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.0.1, 02-OCT-2021 (NJB) */
+
+/*        Corrected typos in comments. */
 
 /* -    Beta Version 1.0.0, 11-OCT-1995 (NJB) */
 
@@ -1013,15 +1017,15 @@ static integer c__0 = 0;
 	i__ = values[0];
 	j = values[2];
 	i__1 = chbegs[(i__2 = i__ - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge("chb"
-		"egs", i__2, "zzekpcol_", (ftnlen)346)] - 1;
+		"egs", i__2, "zzekpcol_", (ftnlen)350)] - 1;
 	s_copy(tmptab, chrbuf + i__1, (ftnlen)64, chends[(i__3 = i__ - 1) < 3 
 		&& 0 <= i__3 ? i__3 : s_rnge("chends", i__3, "zzekpcol_", (
-		ftnlen)346)] - i__1);
+		ftnlen)350)] - i__1);
 	i__1 = chbegs[(i__2 = j - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge("chbegs"
-		, i__2, "zzekpcol_", (ftnlen)347)] - 1;
+		, i__2, "zzekpcol_", (ftnlen)351)] - 1;
 	s_copy(column, chrbuf + i__1, column_len, chends[(i__3 = j - 1) < 3 &&
 		 0 <= i__3 ? i__3 : s_rnge("chends", i__3, "zzekpcol_", (
-		ftnlen)347)] - i__1);
+		ftnlen)351)] - i__1);
 	qual = TRUE_;
     } else {
 	*error = TRUE_;
@@ -1043,8 +1047,8 @@ static integer c__0 = 0;
     for (i__ = 1; i__ <= i__1; ++i__) {
 	zzekqtab_(eqryi, eqryc, &i__, tablst + (((i__2 = i__ - 1) < 10 && 0 <=
 		 i__2 ? i__2 : s_rnge("tablst", i__2, "zzekpcol_", (ftnlen)
-		371)) << 6), alslst + (((i__3 = i__ - 1) < 10 && 0 <= i__3 ? 
-		i__3 : s_rnge("alslst", i__3, "zzekpcol_", (ftnlen)371)) << 6)
+		375)) << 6), alslst + (((i__3 = i__ - 1) < 10 && 0 <= i__3 ? 
+		i__3 : s_rnge("alslst", i__3, "zzekpcol_", (ftnlen)375)) << 6)
 		, eqryc_len, (ftnlen)64, (ftnlen)64);
     }
 
@@ -1073,7 +1077,7 @@ static integer c__0 = 0;
 /*        the table. */
 
 	ekccnt_(tablst + (((i__1 = *tabidx - 1) < 10 && 0 <= i__1 ? i__1 : 
-		s_rnge("tablst", i__1, "zzekpcol_", (ftnlen)402)) << 6), &cc, 
+		s_rnge("tablst", i__1, "zzekpcol_", (ftnlen)406)) << 6), &cc, 
 		(ftnlen)64);
 	if (failed_()) {
 	    return 0;
@@ -1082,7 +1086,7 @@ static integer c__0 = 0;
 	j = 1;
 	while(j <= cc && ! fnd) {
 	    ekcii_(tablst + (((i__1 = *tabidx - 1) < 10 && 0 <= i__1 ? i__1 : 
-		    s_rnge("tablst", i__1, "zzekpcol_", (ftnlen)414)) << 6), &
+		    s_rnge("tablst", i__1, "zzekpcol_", (ftnlen)418)) << 6), &
 		    j, tmpcol, attdsc, (ftnlen)64, (ftnlen)32);
 	    if (s_cmp(tmpcol, column, (ftnlen)32, column_len) == 0) {
 		*colidx = j;
@@ -1116,7 +1120,7 @@ static integer c__0 = 0;
 	i__1 = ntab;
 	for (i__ = 1; i__ <= i__1; ++i__) {
 	    ekccnt_(tablst + (((i__2 = i__ - 1) < 10 && 0 <= i__2 ? i__2 : 
-		    s_rnge("tablst", i__2, "zzekpcol_", (ftnlen)452)) << 6), &
+		    s_rnge("tablst", i__2, "zzekpcol_", (ftnlen)456)) << 6), &
 		    cc, (ftnlen)64);
 	    if (failed_()) {
 		return 0;
@@ -1124,7 +1128,7 @@ static integer c__0 = 0;
 	    i__2 = cc;
 	    for (j = 1; j <= i__2; ++j) {
 		ekcii_(tablst + (((i__3 = i__ - 1) < 10 && 0 <= i__3 ? i__3 : 
-			s_rnge("tablst", i__3, "zzekpcol_", (ftnlen)460)) << 
+			s_rnge("tablst", i__3, "zzekpcol_", (ftnlen)464)) << 
 			6), &j, tmpcol, attdsc, (ftnlen)64, (ftnlen)32);
 		if (s_cmp(tmpcol, column, (ftnlen)32, column_len) == 0) {
 		    ++nmatch;
@@ -1163,10 +1167,10 @@ static integer c__0 = 0;
 /*     of our output variables. */
 
     s_copy(table, tablst + (((i__1 = *tabidx - 1) < 10 && 0 <= i__1 ? i__1 : 
-	    s_rnge("tablst", i__1, "zzekpcol_", (ftnlen)504)) << 6), 
+	    s_rnge("tablst", i__1, "zzekpcol_", (ftnlen)508)) << 6), 
 	    table_len, (ftnlen)64);
     s_copy(alias, alslst + (((i__1 = *tabidx - 1) < 10 && 0 <= i__1 ? i__1 : 
-	    s_rnge("alslst", i__1, "zzekpcol_", (ftnlen)505)) << 6), 
+	    s_rnge("alslst", i__1, "zzekpcol_", (ftnlen)509)) << 6), 
 	    alias_len, (ftnlen)64);
     return 0;
 } /* zzekpcol_ */

@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure             LASTNB ( Last non-blank character ) */
+/* $Procedure LASTNB ( Last non-blank character ) */
 integer lastnb_(char *string, ftnlen string_len)
 {
     /* System generated locals */
@@ -19,8 +19,8 @@ integer lastnb_(char *string, ftnlen string_len)
 
 /* $ Abstract */
 
-/*      Return the index of the last non-blank character in */
-/*      a character string. */
+/*     Return the index of the last non-blank character in */
+/*     a character string. */
 
 /* $ Disclaimer */
 
@@ -53,84 +53,96 @@ integer lastnb_(char *string, ftnlen string_len)
 
 /* $ Keywords */
 
-/*      ASCII,  CHARACTER,  SEARCH */
+/*     ASCII */
+/*     CHARACTER */
+/*     SEARCH */
 
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*      VARIABLE  I/O  DESCRIPTION */
-/*      --------  ---  -------------------------------------------------- */
-/*      STRING     I   Input character string. */
-/*      LASTNB     O   Index of the last non-blank character in STRING. */
+/*     VARIABLE  I/O  DESCRIPTION */
+/*     --------  ---  -------------------------------------------------- */
+/*     STRING     I   Input character string. */
+
+/*     The function returns the index of the last non-blank character in */
+/*     STRING. */
 
 /* $ Detailed_Input */
 
-/*      STRING      is the input character string. */
+/*     STRING   is the input character string. */
 
 /* $ Detailed_Output */
 
-/*      LASTNB      is the index of the last non-blank character */
-/*                  in the input string. If there are no non-blank */
-/*                  characters in the string, LASTNB is zero. */
+/*     The function returns the index of the last non-blank character in */
+/*     the input string. If there are no non-blank characters in the */
+/*     string, LASTNB is zero. */
 
 /* $ Parameters */
 
 /*     None. */
 
-/* $ Particulars */
-
-/*      If the string is blank, return zero. Otherwise, step through */
-/*      the string one character at a time until something other than */
-/*      a blank is found. Return the index of that something within */
-/*      the string. */
-
-/* $ Examples */
-
-/*      The following examples illustrate the use of LASTNB. */
-
-/*            LASTNB ( 'ABCDE'              )   = 5 */
-/*            LASTNB ( 'AN EXAMPLE'         )   = 10 */
-/*            LASTNB ( 'AN EXAMPLE        ' )   = 10 */
-/*            LASTNB ( '                  ' )   = 0 */
-
-/* $ Restrictions */
-
-/*      None. */
-
 /* $ Exceptions */
 
-/*      Error free. */
+/*     Error free. */
 
 /* $ Files */
 
-/*      None. */
+/*     None. */
 
-/* $ Author_and_Institution */
+/* $ Particulars */
 
-/*      K.R. Gehringer  (JPL) */
-/*      I.M. Underwood  (JPL) */
+/*     If the string is blank, return zero. Otherwise, step through */
+/*     the string one character at a time until something other than */
+/*     a blank is found. Return the index of that something within */
+/*     the string. */
+
+/* $ Examples */
+
+/*     The following examples illustrate the use of LASTNB. */
+
+/*           LASTNB ( 'ABCDE'              )   = 5 */
+/*           LASTNB ( 'AN EXAMPLE'         )   = 10 */
+/*           LASTNB ( 'AN EXAMPLE        ' )   = 10 */
+/*           LASTNB ( '                  ' )   = 0 */
+
+/* $ Restrictions */
+
+/*     None. */
 
 /* $ Literature_References */
 
-/*      None. */
+/*     None. */
+
+/* $ Author_and_Institution */
+
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
 
-/* -     SPICELIB Version 2.0.0, 12-MAR-1996 (KRG) */
+/* -    SPICELIB Version 2.1.0, 08-APR-2021 (JDR) */
 
-/*         Modified the comparison to use integer values and the ICHAR() */
-/*         function. This improves the performance of the subroutine. */
+/*        Added IMPLICIT NONE statement. */
 
-/* -     SPICELIB Version 1.0.2, 10-MAR-1992 (WLT) */
+/*        Edited the header to comply with NAIF standard. */
 
-/*         Comment section for permuted index source lines was added */
-/*         following the header. */
+/* -    SPICELIB Version 2.0.0, 12-MAR-1996 (KRG) */
 
-/* -     SPICELIB Version 1.0.1,  7-DEC-1990 (IMU) */
+/*        Modified the comparison to use integer values and the ICHAR() */
+/*        function. This improves the performance of the subroutine. */
 
-/*         Corrected a misprint in the description of LASTNB. */
+/* -    SPICELIB Version 1.0.2, 10-MAR-1992 (WLT) */
 
-/* -     SPICELIB Version 1.0.0, 31-JAN-1990 (IMU) */
+/*        Comment section for permuted index source lines was added */
+/*        following the header. */
+
+/* -    SPICELIB Version 1.0.1, 07-DEC-1990 (IMU) */
+
+/*        Corrected a misprint in the description of LASTNB. */
+
+/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (IMU) */
 
 /* -& */
 /* $ Index_Entries */

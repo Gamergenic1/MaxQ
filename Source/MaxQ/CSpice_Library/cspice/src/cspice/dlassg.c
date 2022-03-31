@@ -175,7 +175,7 @@ logical dlassg_(integer *han1, integer *han2, integer *dsc1, integer *dsc2)
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     HAN1       I   Handle of an open DLA file. */
 /*     HAN2       I   Handle of a second open DLA file. */
@@ -187,17 +187,17 @@ logical dlassg_(integer *han1, integer *han2, integer *dsc1, integer *dsc2)
 
 /* $ Detailed_Input */
 
-/*     HAN1        is the integer handle associated with a DLA file. */
-/*                 The file is open for read access. */
+/*     HAN1     is the integer handle associated with a DLA file. */
+/*              The file is open for read access. */
 
-/*     HAN2        is the integer handle associated with a second DLA */
-/*                 file. The file is open for read access. */
+/*     HAN2     is the integer handle associated with a second DLA */
+/*              file. The file is open for read access. */
 
-/*     DSC1        is the DLA descriptor of a segment in the file */
-/*                 associated with HAN1. */
+/*     DSC1     is the DLA descriptor of a segment in the file */
+/*              associated with HAN1. */
 
-/*     DSC2        is the DLA descriptor of a segment in the file */
-/*                 associated with HAN2. */
+/*     DSC2     is the DLA descriptor of a segment in the file */
+/*              associated with HAN2. */
 
 /* $ Detailed_Output */
 
@@ -212,8 +212,8 @@ logical dlassg_(integer *han1, integer *han2, integer *dsc1, integer *dsc2)
 
 /* $ Exceptions */
 
-/*     1) If any of the inputs are invalid, this routine will */
-/*        fail in an unspecified manner. */
+/*     1)  If any of the inputs are invalid, this routine will */
+/*         fail in an unspecified manner. */
 
 /* $ Files */
 
@@ -223,7 +223,7 @@ logical dlassg_(integer *han1, integer *han2, integer *dsc1, integer *dsc2)
 
 /*     DLA files are built using the DAS low-level format; DLA files are */
 /*     a specialized type of DAS file in which data are organized as a */
-/*     doubly linked list of segments.  Each segment's data belong to */
+/*     doubly linked list of segments. Each segment's data belong to */
 /*     contiguous components of character, double precision, and integer */
 /*     type. */
 
@@ -294,10 +294,9 @@ logical dlassg_(integer *han1, integer *han2, integer *dsc1, integer *dsc2)
 
 /*                   END */
 
-
 /* $ Restrictions */
 
-/*     This routine relies on uniqueness of DAS file handles. */
+/*     1)  This routine relies on uniqueness of DAS file handles. */
 
 /* $ Literature_References */
 
@@ -305,9 +304,14 @@ logical dlassg_(integer *han1, integer *han2, integer *dsc1, integer *dsc2)
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.0.1, 22-JUL-2020 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.0.0, 19-MAY-2016 (NJB) */
 
@@ -336,9 +340,9 @@ logical dlassg_(integer *han1, integer *han2, integer *dsc1, integer *dsc2)
 
     for (i__ = 1; i__ <= 8; ++i__) {
 	if (dsc1[(i__1 = i__ - 1) < 8 && 0 <= i__1 ? i__1 : s_rnge("dsc1", 
-		i__1, "dlassg_", (ftnlen)226)] != dsc2[(i__2 = i__ - 1) < 8 &&
+		i__1, "dlassg_", (ftnlen)232)] != dsc2[(i__2 = i__ - 1) < 8 &&
 		 0 <= i__2 ? i__2 : s_rnge("dsc2", i__2, "dlassg_", (ftnlen)
-		226)]) {
+		232)]) {
 	    return ret_val;
 	}
     }

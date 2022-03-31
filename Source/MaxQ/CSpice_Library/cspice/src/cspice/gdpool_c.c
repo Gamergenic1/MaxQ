@@ -60,47 +60,47 @@
    VARIABLE  I/O  DESCRIPTION
    --------  ---  --------------------------------------------------
    name       I   Name of the variable whose value is to be returned.
-   start      I   Which component to start retrieving for name
+   start      I   Which component to start retrieving for `name'.
    room       I   The largest number of values to return.
-   n          O   Number of values returned for name.
-   values     O   Values associated with name.
-   found      O   True if variable is in pool.
+   n          O   Number of values returned for `name'.
+   values     O   Values associated with `name'.
+   found      O   SPICETRUE if variable is in pool.
 
 -Detailed_Input
 
-   name       is the name of the variable whose values are to be
-              returned. If the variable is not in the pool with
-              numeric type, found will be SPICEFALSE.
+   name        is the name of the variable whose values are to be
+               returned. If the variable is not in the pool with
+               numeric type, found will be SPICEFALSE.
 
-   start      is the index of the first component of name to return.
-              The index follows the C convention of being 0 based.
-              If start is less than 0, it will be treated as 0.  If
-              start is greater than the total number of components
-              available for name, no values will be returned (n will
-              be set to zero).  However, found will still be set to
-              SPICETRUE
+   start       is the index of the first component of name to return.
+               The index follows the C convention of being 0 based.
+               If start is less than 0, it will be treated as 0. If
+               start is greater than the total number of components
+               available for name, no values will be returned (n will
+               be set to zero).  However, found will still be set to
+               SPICETRUE
 
-   room       is the maximum number of components that should be
-              returned for this variable.  (Usually it is the amount
-              of room available in the array values). If room is
-              less than 1 the error SPICE(BADARRAYSIZE) will be
-              signaled.
+   room        is the maximum number of components that should be
+               returned for this variable. (Usually it is the amount
+               of room available in the array values). If room is
+               less than 1 the error SPICE(BADARRAYSIZE) will be
+               signaled.
 
 -Detailed_Output
 
-   n          is the number of values associated with name that
-              are returned.  It will always be less than or equal
-              to room.
+   n           is the number of values associated with name that
+               are returned. It will always be less than or equal
+               to room.
 
-              If name is not in the pool with numeric type, no value
-              is given to n.
+               If name is not in the pool with numeric type, no value
+               is given to n.
 
-   values     is the array of values associated with name.
-              If name is not in the pool with numeric type, no
-              values are given to the elements of values.
+   values      is the array of values associated with name.
+               If name is not in the pool with numeric type, no
+               values are given to the elements of values.
 
-   found      is SPICETRUE if the variable is in the pool and has
-              numeric type, SPICEFALSE if it is not.
+   found       is SPICETRUE if the variable is in the pool and has
+               numeric type, SPICEFALSE if it is not.
 
 -Parameters
 
@@ -108,14 +108,15 @@
 
 -Exceptions
 
-   1) If the value of room is less than one the error
-      SPICE(BADARRAYSIZE) is signaled.
+   1)  If the value of `room' is less than one, the error
+       SPICE(BADARRAYSIZE) is signaled by a routine in the call tree
+       of this routine.
 
-   2) If the input string pointer is null, the error SPICE(NULLPOINTER)
-      will be signaled.
+   2)  If the `name' input string pointer is null, the error
+       SPICE(NULLPOINTER) is signaled.
 
-   3) If the input string has length zero, the error SPICE(EMPTYSTRING)
-      will be signaled.
+   3)  If the `name' input string has zero length, the error
+       SPICE(EMPTYSTRING) is signaled.
 
 -Files
 
@@ -124,9 +125,9 @@
 -Particulars
 
    This routine provides the user interface to retrieving
-   numeric data stored in the kernel pool.  This interface
+   numeric data stored in the kernel pool. This interface
    allows you to retrieve the data associated with a variable
-   in multiple accesses.  Under some circumstances this alleviates
+   in multiple accesses. Under some circumstances this alleviates
    the problem of having to know in advance the maximum amount
    of space needed to accommodate all kernel variables.
 
@@ -143,77 +144,101 @@
 
 -Examples
 
+   The numerical results shown for this example may differ across
+   platforms. The results depend on the SPICE kernels used as
+   input, the compiler and supporting libraries, and the machine
+   specific arithmetic implementation.
 
-   The following code fragment demonstrates how the data stored
-   in a kernel pool variable can be retrieved in pieces.  Using the
-   kernel "test.ker" which contains
+   1) The following code example demonstrates how the data stored
+      in a kernel pool variable can be retrieved in pieces.
 
-   \begindata
-
-   CTEST_VAL = ('LARRY', 'MOE', 'CURLY' )
-
-   ITEST_VAL = ( 3141, 186, 282 )
-
-   DTEST_VAL = ( 3.1415, 186.282, .0175 )
+      Use the kernel shown below to load the kernel pool with the
+      variables used within the example.
 
 
-   The program...
+         KPL/MK
 
-   #include <stdio.h>
-   #include <string.h>
+         File name: gdpool_ex1.tm
 
-   #include "SpiceUsr.h"
-   #include "SpiceZmc.h"
+         This kernel is intended to support operation of SPICE
+         example programs.
 
-   #define   NUMVALS 2
+         \begindata
+
+            CTEST_VAL = ('LARRY', 'MOE', 'CURLY' )
+
+            ITEST_VAL = ( 3141, 186, 282 )
+
+            DTEST_VAL = ( 3.1415, 186. , 282.397 )
+
+         \begintext
+
+         End of meta-kernel
 
 
-   void main()
+      Example code begins here.
+
+
+      /.
+         Program gdpool_ex1
+      ./
+      #include <stdio.h>
+      #include "SpiceUsr.h"
+
+      int main()
       {
+         /.
+         Local parameters.
+         ./
+         #define   NUMVALS 2
 
-      SpiceInt          n;
-      SpiceInt          i;
+         /.
+         Local variables.
+         ./
+         SpiceBoolean      found;
 
-      SpiceBoolean      found;
+         SpiceDouble       vals[NUMVALS];
 
-      SpiceDouble       vals[NUMVALS];
+         SpiceInt          n;
+         SpiceInt          i;
 
+         /.
+         Load the test data.
+         ./
+         furnsh_c ( "gdpool_ex1.tm" );
 
-      ldpool_c ( "test.ker" );
+         /.
+         Is data available by that name?
+         ./
+         gdpool_c ( "DTEST_VAL", 1, NUMVALS, &n, vals, &found );
 
-
-      /. Is data available by that name. ./
-
-      gdpool_c ( "DTEST_VAL", 0, NUMVALS, &n, vals, &found );
-
-
-      /. If so, show me the values. ./
-
-      if ( !found )
+         /.
+         If so, show me the values.
+         ./
+         if ( !found )
          {
-         printf ( "No dp data available for DTEST_VAL.\n" );
+            printf ( "No dp data available for DTEST_VAL.\n" );
          }
-
-      else
+         else
          {
-
-         for ( i=0; i < NUMVALS; i++ )
+            for ( i=0; i < NUMVALS; i++ )
             {
-            gdpool_c ( "DTEST_VAL", i, NUMVALS, &n, vals, &found );
-
-            printf ( "%f \n", vals[i] );
+               printf ( "%f \n", vals[i] );
             }
 
          }
 
-      exit(0);
+         return ( 0 );
       }
 
 
-   Output should be
+      When this program was executed on a Mac/Intel/cc/64-bit
+      platform, the output was:
 
-      186.282000
-      0.017500
+
+      186.000000
+      282.397000
+
 
 -Restrictions
 
@@ -225,29 +250,35 @@
 
 -Author_and_Institution
 
-   W.L. Taber  (JPL)
-   E.D. Wright (JPL)
+   J. Diaz del Rio     (ODC Space)
+   E.D. Wright         (JPL)
 
 -Version
 
-   -CSPICE Version 2.1.0 22-JUN-1999   (EDW)
+   -CSPICE Version 2.1.1, 10-AUG-2021 (JDR)
 
-      Re-implemented routine without dynamically allocated, temporary
-      strings.
+       Edited the header to comply with NAIF standard.
+       Removed unnecessary includes, replaced "ldpool_c" by
+       "furnsh_c" and fixed bug in the code example.
 
-      Added local variable to return boolean/logical values.  This
-      fix allows the routine to function if int and long are different
-      sizes.
+   -CSPICE Version 2.1.0, 22-JUN-1999 (EDW)
 
-   -CSPICE Version 2.0.1 08-FEB-1998   (EDW)
+       Re-implemented routine without dynamically allocated, temporary
+       strings.
 
-      The start parameter is now zero based as per C convention.
+       Added local variable to return boolean/logical values. This
+       fix allows the routine to function if int and long are different
+       sizes.
 
-   -CSPICE Version 1.0.1, 6-JAN-1998    (EDW)
+   -CSPICE Version 2.0.1, 08-FEB-1998 (EDW)
 
-      Replaced example routine.  Included the data for a test kernel.
+       The start parameter is now zero based as per C convention.
 
-   -CSPICE Version 1.0.0, 25-OCT-1997   (EDW)
+   -CSPICE Version 1.0.1, 06-JAN-1998 (EDW)
+
+       Replaced example routine. Included the data for a test kernel.
+
+   -CSPICE Version 1.0.0, 25-OCT-1997 (EDW)
 
 -Index_Entries
 

@@ -12,7 +12,7 @@ static integer c__6 = 6;
 static integer c__7 = 7;
 static doublereal c_b18 = 128.;
 
-/* $Procedure      CKR04 ( C-kernel, read pointing record, data type 4 ) */
+/* $Procedure CKR04 ( C-kernel, read pointing record, data type 4 ) */
 /* Subroutine */ int ckr04_(integer *handle, doublereal *descr, doublereal *
 	sclkdp, doublereal *tol, logical *needav, doublereal *record, logical 
 	*found)
@@ -282,7 +282,7 @@ static doublereal c_b18 = 128.;
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     I   File handle. */
 /*     DESCR      I   Segment descriptor. */
@@ -290,79 +290,79 @@ static doublereal c_b18 = 128.;
 /*     TOL        I   Time tolerance. */
 /*     NEEDAV     I   Angular velocity request flag. */
 /*     RECORD     O   Pointing data record. */
-/*     FOUND      O   True when a record covering SCLKDP is found. */
+/*     FOUND      O   .TRUE. when a record covering SCLKDP is found. */
 
 /* $ Detailed_Input */
 
-/*     HANDLE     is the integer handle of the CK file containing the */
-/*                segment. */
+/*     HANDLE   is the integer handle of the CK file containing the */
+/*              segment. */
 
-/*     DESCR      is the descriptor of the segment. */
+/*     DESCR    is the descriptor of the segment. */
 
-/*     SCLKDP     is the encoded spacecraft clock time for which */
-/*                pointing is being requested. */
+/*     SCLKDP   is the encoded spacecraft clock time for which */
+/*              pointing is being requested. */
 
-/*     TOL        is a time tolerance, measured in the same units as */
-/*                encoded spacecraft clock. */
+/*     TOL      is a time tolerance, measured in the same units as */
+/*              encoded spacecraft clock. */
 
-/*                When SCLKDP falls within the bounds of one of the */
-/*                interpolation intervals then the tolerance has no */
-/*                effect because pointing will be returned at the */
-/*                request time. */
+/*              When SCLKDP falls within the bounds of one of the */
+/*              interpolation intervals then the tolerance has no */
+/*              effect because pointing will be returned at the */
+/*              request time. */
 
-/*                However, if the request time is not in one of the */
-/*                intervals, then the tolerance is used to determine */
-/*                if pointing at one of the interval endpoints should */
-/*                be returned. */
+/*              However, if the request time is not in one of the */
+/*              intervals, then the tolerance is used to determine */
+/*              if pointing at one of the interval endpoints should */
+/*              be returned. */
 
-/*     NEEDAV     is true if angular velocity is requested. */
+/*     NEEDAV   is .TRUE. if angular velocity is requested. */
 
 /* $ Detailed_Output */
 
-/*     RECORD     is the record that CKE04 will evaluate to determine */
-/*                the pointing and it includes parameters: */
+/*     RECORD   is the record that CKE04 will evaluate to determine */
+/*              the pointing and it includes parameters: */
 
-/*                --------------------------------------------------- */
-/*                |    Encoded onboard time which is the closest    | */
-/*                |  to SCLKDP and belongs to one of approximation  | */
-/*                |                   intervals                     | */
-/*                --------------------------------------------------- */
-/*                |       encoded SCLK time of the midpoint of      | */
-/*                |             interpolation interval              | */
-/*                --------------------------------------------------- */
-/*                |          radii of interpolation interval        | */
-/*                |    expressed as double precision SCLK ticks     | */
-/*                --------------------------------------------------- */
-/*                |         Number of coefficients for q0           | */
-/*                --------------------------------------------------- */
-/*                |         Number of coefficients for q1           | */
-/*                --------------------------------------------------- */
-/*                |         Number of coefficients for q2           | */
-/*                --------------------------------------------------- */
-/*                |         Number of coefficients for q3           | */
-/*                --------------------------------------------------- */
-/*                |         Number of coefficients for AV1          | */
-/*                --------------------------------------------------- */
-/*                |         Number of coefficients for AV2          | */
-/*                --------------------------------------------------- */
-/*                |         Number of coefficients for AV3          | */
-/*                --------------------------------------------------- */
-/*                |               q0 Cheby coefficients             | */
-/*                --------------------------------------------------- */
-/*                |               q1 Cheby coefficients             | */
-/*                --------------------------------------------------- */
-/*                |               q2 Cheby coefficients             | */
-/*                --------------------------------------------------- */
-/*                |               q3 Cheby coefficients             | */
-/*                --------------------------------------------------- */
-/*                |         AV1 Cheby coefficients (optional)       | */
-/*                --------------------------------------------------- */
-/*                |         AV2 Cheby coefficients (optional)       | */
-/*                --------------------------------------------------- */
-/*                |         AV3 Cheby coefficients (optional)       | */
-/*                --------------------------------------------------- */
+/*              --------------------------------------------------- */
+/*              |    Encoded onboard time which is the closest    | */
+/*              |  to SCLKDP and belongs to one of approximation  | */
+/*              |                   intervals                     | */
+/*              --------------------------------------------------- */
+/*              |       encoded SCLK time of the midpoint of      | */
+/*              |             interpolation interval              | */
+/*              --------------------------------------------------- */
+/*              |          radii of interpolation interval        | */
+/*              |    expressed as double precision SCLK ticks     | */
+/*              --------------------------------------------------- */
+/*              |         Number of coefficients for q0           | */
+/*              --------------------------------------------------- */
+/*              |         Number of coefficients for q1           | */
+/*              --------------------------------------------------- */
+/*              |         Number of coefficients for q2           | */
+/*              --------------------------------------------------- */
+/*              |         Number of coefficients for q3           | */
+/*              --------------------------------------------------- */
+/*              |         Number of coefficients for AV1          | */
+/*              --------------------------------------------------- */
+/*              |         Number of coefficients for AV2          | */
+/*              --------------------------------------------------- */
+/*              |         Number of coefficients for AV3          | */
+/*              --------------------------------------------------- */
+/*              |               q0 Cheby coefficients             | */
+/*              --------------------------------------------------- */
+/*              |               q1 Cheby coefficients             | */
+/*              --------------------------------------------------- */
+/*              |               q2 Cheby coefficients             | */
+/*              --------------------------------------------------- */
+/*              |               q3 Cheby coefficients             | */
+/*              --------------------------------------------------- */
+/*              |         AV1 Cheby coefficients (optional)       | */
+/*              --------------------------------------------------- */
+/*              |         AV2 Cheby coefficients (optional)       | */
+/*              --------------------------------------------------- */
+/*              |         AV3 Cheby coefficients (optional)       | */
+/*              --------------------------------------------------- */
 
-/*     FOUND    is true if a record was found to satisfy the pointing */
+/*     FOUND    is .TRUE. if a record was found to satisfy the pointing */
 /*              request. This occurs when the time for which pointing */
 /*              is requested falls inside one of the interpolation */
 /*              intervals, or when the request time is within the */
@@ -375,24 +375,25 @@ static doublereal c_b18 = 128.;
 /* $ Exceptions */
 
 /*     1)  If the specified handle does not belong to an open DAF file, */
-/*         an error is diagnosed by a routine that this routine calls. */
+/*         an error is signaled by a routine in the call tree of this */
+/*         routine. */
 
-/*     2)  If the specified descriptor does not belong a segment */
-/*         data in which are organized in accordance with generic */
-/*         segment architecture, an error is diagnosed by DAF generic */
-/*         segment routines that this routine calls. */
+/*     2)  If the specified descriptor does not belong to a segment data */
+/*         format organized in accordance with generic segment */
+/*         architecture, an error is signaled by a routine in the call */
+/*         tree of this routine. */
 
 /*     3)  If DESCR is not a valid descriptor of a segment in the CK */
 /*         file specified by HANDLE, the results of this routine are */
 /*         unpredictable. */
 
 /*     4)  If the segment is not of data type 4, as specified in the */
-/*         third integer component of the segment descriptor, then */
-/*         the error SPICE(WRONGDATATYPE) is signalled. */
+/*         third integer component of the segment descriptor, */
+/*         the error SPICE(WRONGDATATYPE) is signaled. */
 
 /*     5)  If angular velocity data was requested but the segment */
 /*         contains no such data, the error SPICE(NOAVDATA) is */
-/*         signalled. */
+/*         signaled. */
 
 /* $ Files */
 
@@ -405,7 +406,7 @@ static doublereal c_b18 = 128.;
 
 /*     When the time for which pointing was requested falls within an */
 /*     interpolation interval, then FOUND will be true and RECORD will */
-/*     contain the set of Chebychev polynomial coefficients for the */
+/*     contain the set of Chebyshev polynomial coefficients for the */
 /*     time interval that brackets the request time. CKE04 will */
 /*     evaluate RECORD to give pointing at the request time. */
 
@@ -413,11 +414,10 @@ static doublereal c_b18 = 128.;
 /*     interpolation intervals, then FOUND will be true only if the */
 /*     interval endpoint closest to the request time is within the */
 /*     tolerance specified by the user. In this case RECORD will */
-/*     contain the set of Chebychev polynomial coefficients for the */
+/*     contain the set of Chebyshev polynomial coefficients for the */
 /*     time interval one of the ends of which was within tolerance */
 /*     from the request time, and CKE04 will evaluate RECORD to give */
 /*     pointing at the time associated with that interval end time. */
-
 
 /* $ Examples */
 
@@ -425,18 +425,23 @@ static doublereal c_b18 = 128.;
 /*     routines, which evaluate the record returned by CKRnn to give */
 /*     the pointing information and output time. */
 
-/*     The following code fragment searches through all of the segments */
-/*     in a file applicable to the Mars Global Surveyor spacecraft bus */
-/*     that are of data type 4, for a particular spacecraft clock time. */
-/*     It then evaluates the pointing for that epoch and prints the */
-/*     result. */
+/*     The following code fragment searches backwards through all of the */
+/*     segments in a file applicable to the Mars Global Surveyor */
+/*     spacecraft bus that are of data type 4, for a particular */
+/*     spacecraft clock time. It then evaluates the pointing for that */
+/*     epoch and prints the result. */
+
+/*     The search performed here does not mimic the behavior of the CK */
+/*     reader APIs CKGP and CKGPAV, which consider data from multiple CK */
+/*     files, when available. See the CK Required reading for details. */
 
 /*     C */
 /*     C     CK parameters include file. */
 /*     C */
 /*           INCLUDE               'ckparam.inc' */
+
 /*     C */
-/*     C     Declarations */
+/*     C     Local variables */
 /*     C */
 /*           CHARACTER*(20)        SCLKCH */
 /*           CHARACTER*(20)        SCTIME */
@@ -460,48 +465,56 @@ static doublereal c_b18 = 128.;
 /*           LOGICAL               FND */
 /*           LOGICAL               NEEDAV */
 /*           LOGICAL               SFND */
+
 /*     C */
 /*     C     Initial values. */
 /*     C */
 /*           SC     = -94 */
 /*           INST   = -94000 */
 /*           NEEDAV = .FALSE. */
+
 /*     C */
 /*     C     Load the MGS SCLK kernel and the C-kernel. */
 /*     C */
 /*           CALL FURNSH( 'MGS_SCLK.TSC' ) */
 /*           CALL DAFOPR( 'MGS_CK4.BC', HANDLE ) */
+
 /*     C */
 /*     C     Get the spacecraft clock time. Then encode it for use */
 /*     C     in the C-kernel. */
 /*     C */
 /*           CALL PROMPT( 'Enter SCLK string: ', SCLKCH ) */
 /*           CALL SCENCD( SC, SCLKCH, SCLKDP ) */
+
 /*     C */
 /*     C     Use a tolerance of 2 seconds (half of the nominal */
 /*     C     separation between MGS pointing instances ). */
 /*     C */
 /*           CALL SCTIKS ( SC, '0000000002:000', TOL ) */
+
 /*     C */
-/*     C     Search from the beginning of the CK file through all */
+/*     C     Search backwards from the end of the CK file through all */
 /*     C     of the segments. */
 /*     C */
-/*           CALL DAFBFS( HANDLE ) */
-/*           CALL DAFFNA( SFND   ) */
+/*           CALL DAFBBS( HANDLE ) */
+/*           CALL DAFFPA( SFND   ) */
 
 /*           FND = .FALSE. */
 
 /*           DO WHILE ( ( SFND ) .AND. ( .NOT. FND ) ) */
+
 /*     C */
 /*     C        Get the segment identifier and descriptor. */
 /*     C */
 /*              CALL DAFGN( IDENT ) */
 /*              CALL DAFGS( DESCR ) */
+
 /*     C */
 /*     C        Unpack the segment descriptor into its integer and */
 /*     C        double precision components. */
 /*     C */
 /*              CALL DAFUS( DESCR, 2, 6, DCD, ICD ) */
+
 /*     C */
 /*     C        Determine if this segment should be processed. */
 /*     C */
@@ -509,6 +522,7 @@ static doublereal c_b18 = 128.;
 /*          .        ( SCLKDP + TOL  .GE. DCD( 1 ) ) .AND. */
 /*          .        ( SCLKDP - TOL  .LE. DCD( 2 ) ) .AND. */
 /*          .        ( CK4DTP        .EQ. ICD( 3 ) )      ) THEN */
+
 /*     C */
 /*     C           Find CK 4 record covering requested time. */
 /*     C */
@@ -516,6 +530,7 @@ static doublereal c_b18 = 128.;
 /*          .                  RECORD, FND ) */
 
 /*                 IF ( FND ) THEN */
+
 /*     C */
 /*     C              Compute pointing using found CK 4 record. */
 /*     C */
@@ -540,17 +555,17 @@ static doublereal c_b18 = 128.;
 
 /*              END IF */
 
-/*              CALL DAFFNA ( SFND ) */
+/*              CALL DAFFPA ( SFND ) */
 
 /*           END DO */
 
 /* $ Restrictions */
 
-/*     1) The file containing the segment should be opened for read */
-/*        or write access either by CKLPF, DAFOPR, or DAFOPW. */
+/*     1)  The file containing the segment should be opened for read */
+/*         or write access either by CKLPF, DAFOPR, or DAFOPW. */
 
-/*     2) The record returned by this routine is intended to be */
-/*        evaluated by CKE04. */
+/*     2)  The record returned by this routine is intended to be */
+/*         evaluated by CKE04. */
 
 /* $ Literature_References */
 
@@ -558,10 +573,21 @@ static doublereal c_b18 = 128.;
 
 /* $ Author_and_Institution */
 
-/*     Y.K. Zaiko     (JPL) */
-/*     B.V. Semenov   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     B.V. Semenov       (JPL) */
+/*     E.D. Wright        (JPL) */
+/*     Y.K. Zaiko         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.0.3, 17-AUG-2021 (NJB) (JDR) */
+
+/*        Updated code example to use backwards search. Added */
+/*        note regarding difference between this search and those */
+/*        performed by the CK reader APIs CKGP and CKGPAV. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.0.2, 18-APR-2014 (BVS) */
 
@@ -797,7 +823,7 @@ static doublereal c_b18 = 128.;
 	numall = 0;
 	for (k = 1; k <= 7; ++k) {
 	    numall += numcft[(i__1 = k - 1) < 7 && 0 <= i__1 ? i__1 : s_rnge(
-		    "numcft", i__1, "ckr04_", (ftnlen)668)];
+		    "numcft", i__1, "ckr04_", (ftnlen)696)];
 	}
 
 /*        Move coefficients to the right and insert numbers of */
@@ -809,7 +835,7 @@ static doublereal c_b18 = 128.;
 	for (k = 1; k <= 7; ++k) {
 	    record[k + 2] = (doublereal) numcft[(i__1 = k - 1) < 7 && 0 <= 
 		    i__1 ? i__1 : s_rnge("numcft", i__1, "ckr04_", (ftnlen)
-		    680)];
+		    708)];
 	}
 	record[2] = record[1];
 	record[1] = record[0];

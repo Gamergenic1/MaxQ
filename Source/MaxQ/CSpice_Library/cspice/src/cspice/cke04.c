@@ -9,7 +9,7 @@
 
 static integer c__4 = 4;
 
-/* $Procedure      CKE04 ( C-kernel, evaluate pointing record, type 4 ) */
+/* $Procedure CKE04 ( C-kernel, evaluate pointing record, type 4 ) */
 /* Subroutine */ int cke04_(logical *needav, doublereal *record, doublereal *
 	cmat, doublereal *av, doublereal *clkout)
 {
@@ -261,9 +261,9 @@ static integer c__4 = 4;
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
-/*     NEEDAV     I   True if angular velocity is requested. */
+/*     NEEDAV     I   .TRUE. if angular velocity is requested. */
 /*     RECORD     I   Data type 4 pointing record. */
 /*     CMAT       O   C-matrix. */
 /*     AV         O   Angular velocity vector. */
@@ -271,95 +271,95 @@ static integer c__4 = 4;
 
 /* $ Detailed_Input */
 
-/*     NEEDAV     is true if angular velocity is requested. */
+/*     NEEDAV   is .TRUE. if angular velocity is requested. */
 
-/*     RECORD     is a set of double precision numbers returned by */
-/*                CKR04. RECORD must have the following structure: */
+/*     RECORD   is a set of double precision numbers returned by */
+/*              CKR04. RECORD must have the following structure: */
 
-/*                --------------------------------------------------- */
-/*                |    Encoded onboard time which is the closest    | */
-/*                |  to SCLKDP and belongs to one of approximation  | */
-/*                |                   intervals                     | */
-/*                --------------------------------------------------- */
-/*                |       encoded SCLK time of the midpoint of      | */
-/*                |             interpolation interval              | */
-/*                --------------------------------------------------- */
-/*                |          radii of interpolation interval        | */
-/*                |    expressed as double precision SCLK ticks     | */
-/*                --------------------------------------------------- */
-/*                |         Number of coefficients for q0           | */
-/*                --------------------------------------------------- */
-/*                |         Number of coefficients for q1           | */
-/*                --------------------------------------------------- */
-/*                |         Number of coefficients for q2           | */
-/*                --------------------------------------------------- */
-/*                |         Number of coefficients for q3           | */
-/*                --------------------------------------------------- */
-/*                |         Number of coefficients for AV1          | */
-/*                --------------------------------------------------- */
-/*                |         Number of coefficients for AV2          | */
-/*                --------------------------------------------------- */
-/*                |         Number of coefficients for AV3          | */
-/*                --------------------------------------------------- */
-/*                |               q0 Cheby coefficients             | */
-/*                --------------------------------------------------- */
-/*                |               q1 Cheby coefficients             | */
-/*                --------------------------------------------------- */
-/*                |               q2 Cheby coefficients             | */
-/*                --------------------------------------------------- */
-/*                |               q3 Cheby coefficients             | */
-/*                --------------------------------------------------- */
-/*                |         AV1 Cheby coefficients (optional)       | */
-/*                --------------------------------------------------- */
-/*                |         AV2 Cheby coefficients (optional)       | */
-/*                --------------------------------------------------- */
-/*                |         AV3 Cheby coefficients (optional)       | */
-/*                --------------------------------------------------- */
+/*              --------------------------------------------------- */
+/*              |    Encoded onboard time which is the closest    | */
+/*              |  to SCLKDP and belongs to one of approximation  | */
+/*              |                   intervals                     | */
+/*              --------------------------------------------------- */
+/*              |       encoded SCLK time of the midpoint of      | */
+/*              |             interpolation interval              | */
+/*              --------------------------------------------------- */
+/*              |          radii of interpolation interval        | */
+/*              |    expressed as double precision SCLK ticks     | */
+/*              --------------------------------------------------- */
+/*              |         Number of coefficients for q0           | */
+/*              --------------------------------------------------- */
+/*              |         Number of coefficients for q1           | */
+/*              --------------------------------------------------- */
+/*              |         Number of coefficients for q2           | */
+/*              --------------------------------------------------- */
+/*              |         Number of coefficients for q3           | */
+/*              --------------------------------------------------- */
+/*              |         Number of coefficients for AV1          | */
+/*              --------------------------------------------------- */
+/*              |         Number of coefficients for AV2          | */
+/*              --------------------------------------------------- */
+/*              |         Number of coefficients for AV3          | */
+/*              --------------------------------------------------- */
+/*              |               q0 Cheby coefficients             | */
+/*              --------------------------------------------------- */
+/*              |               q1 Cheby coefficients             | */
+/*              --------------------------------------------------- */
+/*              |               q2 Cheby coefficients             | */
+/*              --------------------------------------------------- */
+/*              |               q3 Cheby coefficients             | */
+/*              --------------------------------------------------- */
+/*              |         AV1 Cheby coefficients (optional)       | */
+/*              --------------------------------------------------- */
+/*              |         AV2 Cheby coefficients (optional)       | */
+/*              --------------------------------------------------- */
+/*              |         AV3 Cheby coefficients (optional)       | */
+/*              --------------------------------------------------- */
 
 /* $ Detailed_Output */
 
-/*     CMAT       is a rotation matrix that transforms the components */
-/*                of a vector expressed in the inertial frame given in */
-/*                the segment to components expressed in the instrument */
-/*                fixed frame at the returned time. */
+/*     CMAT     is a rotation matrix that transforms the components */
+/*              of a vector expressed in the inertial frame given in */
+/*              the segment to components expressed in the instrument */
+/*              fixed frame at the returned time. */
 
-/*                Thus, if a vector v has components x, y, z in the */
-/*                inertial frame, then v has components x', y', z' in */
-/*                the instrument fixed frame where: */
+/*              Thus, if a vector v has components x, y, z in the */
+/*              inertial frame, then v has components x', y', z' in */
+/*              the instrument fixed frame where: */
 
-/*                     [ x' ]     [          ] [ x ] */
-/*                     | y' |  =  |   CMAT   | | y | */
-/*                     [ z' ]     [          ] [ z ] */
+/*                   [ x' ]     [          ] [ x ] */
+/*                   | y' |  =  |   CMAT   | | y | */
+/*                   [ z' ]     [          ] [ z ] */
 
-/*                If the x', y', z' components are known, use the */
-/*                transpose of the C-matrix to determine x, y, z as */
-/*                follows. */
+/*              If the x', y', z' components are known, use the */
+/*              transpose of the C-matrix to determine x, y, z as */
+/*              follows. */
 
-/*                     [ x ]      [          ]T    [ x' ] */
-/*                     | y |  =   |   CMAT   |     | y' | */
-/*                     [ z ]      [          ]     [ z' ] */
-/*                              (Transpose of CMAT) */
+/*                   [ x ]      [          ]T    [ x' ] */
+/*                   | y |  =   |   CMAT   |     | y' | */
+/*                   [ z ]      [          ]     [ z' ] */
+/*                            (Transpose of CMAT) */
 
-/*     AV         is the angular velocity vector of the instrument fixed */
-/*                frame defined by CMAT.  The angular velocity is */
-/*                returned only if NEEDAV is true. */
+/*     AV       is the angular velocity vector of the instrument fixed */
+/*              frame defined by CMAT. The angular velocity is */
+/*              returned only if NEEDAV is .TRUE. */
 
-/*                The direction of the angular velocity vector gives */
-/*                the right-handed axis about which the instrument fixed */
-/*                reference frame is rotating. The magnitude of AV is */
-/*                the magnitude of the instantaneous velocity of the */
-/*                rotation, in radians per second. */
+/*              The direction of the angular velocity vector gives */
+/*              the right-handed axis about which the instrument fixed */
+/*              reference frame is rotating. The magnitude of AV is */
+/*              the magnitude of the instantaneous velocity of the */
+/*              rotation, in radians per second. */
 
-/*                The angular velocity vector is returned in component */
-/*                form */
+/*              The angular velocity vector is returned in component */
+/*              form */
 
-/*                         AV = [ AV1  , AV2  , AV3  ] */
+/*                       AV = [ AV1  , AV2  , AV3  ] */
 
-/*                which is in terms of the inertial coordinate frame */
-/*                specified in the segment descriptor. */
+/*              which is in terms of the inertial coordinate frame */
+/*              specified in the segment descriptor. */
 
-/*     CLKOUT     is the encoded SCLK associated with the returned */
-/*                C-matrix and angular velocity vector. */
+/*     CLKOUT   is the encoded SCLK associated with the returned */
+/*              C-matrix and angular velocity vector. */
 
 /* $ Parameters */
 
@@ -369,7 +369,7 @@ static integer c__4 = 4;
 
 /*     Error free. */
 
-/*     No checking is done to determine whether RECORD is valid. */
+/*     1)  No checking is done to determine whether RECORD is valid. */
 
 /* $ Files */
 
@@ -387,7 +387,7 @@ static integer c__4 = 4;
 /*     form. */
 
 /*     The angular velocity vector will only be returned if it has been */
-/*     requested. In other words, if NEEDAV is true, the routine will */
+/*     requested. In other words, if NEEDAV is .TRUE., the routine will */
 /*     expect the angular velocity component of the record to be */
 /*     present. */
 
@@ -408,7 +408,7 @@ static integer c__4 = 4;
 /*     C */
 /*           INCLUDE               'ckparam.inc' */
 /*     C */
-/*     C     Declarations */
+/*     C     Local variables */
 /*     C */
 /*           CHARACTER*(20)        SCLKCH */
 /*           CHARACTER*(20)        SCTIME */
@@ -518,7 +518,7 @@ static integer c__4 = 4;
 
 /* $ Restrictions */
 
-/*     1) No checking is done on the input RECORD. */
+/*     1)  No checking is done on the input RECORD. */
 
 /* $ Literature_References */
 
@@ -526,10 +526,16 @@ static integer c__4 = 4;
 
 /* $ Author_and_Institution */
 
-/*     Y.K. Zaiko     (JPL) */
-/*     B.V. Semenov   (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     B.V. Semenov       (JPL) */
+/*     E.D. Wright        (JPL) */
+/*     Y.K. Zaiko         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.0.3, 12-AUG-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.0.2, 18-APR-2014 (BVS) */
 
@@ -563,7 +569,7 @@ static integer c__4 = 4;
 
     for (i__ = 1; i__ <= 7; ++i__) {
 	ideg[(i__1 = i__ - 1) < 7 && 0 <= i__1 ? i__1 : s_rnge("ideg", i__1, 
-		"cke04_", (ftnlen)369)] = (integer) record[i__ + 2];
+		"cke04_", (ftnlen)377)] = (integer) record[i__ + 2];
     }
 
 /*     Evaluate polynomial function for quaternion components at time */
@@ -572,12 +578,12 @@ static integer c__4 = 4;
     basadd = 11;
     for (i__ = 1; i__ <= 4; ++i__) {
 	i__3 = ideg[(i__1 = i__ - 1) < 7 && 0 <= i__1 ? i__1 : s_rnge("ideg", 
-		i__1, "cke04_", (ftnlen)380)] - 1;
+		i__1, "cke04_", (ftnlen)388)] - 1;
 	chbval_(&record[basadd - 1], &i__3, &record[1], record, &q[(i__2 = 
 		i__ - 1) < 4 && 0 <= i__2 ? i__2 : s_rnge("q", i__2, "cke04_",
-		 (ftnlen)380)]);
+		 (ftnlen)388)]);
 	basadd += ideg[(i__1 = i__ - 1) < 7 && 0 <= i__1 ? i__1 : s_rnge(
-		"ideg", i__1, "cke04_", (ftnlen)382)];
+		"ideg", i__1, "cke04_", (ftnlen)390)];
     }
 
 /*     Normalize quaternion. */
@@ -595,12 +601,12 @@ static integer c__4 = 4;
     if (*needav) {
 	for (i__ = 5; i__ <= 7; ++i__) {
 	    i__3 = ideg[(i__1 = i__ - 1) < 7 && 0 <= i__1 ? i__1 : s_rnge(
-		    "ideg", i__1, "cke04_", (ftnlen)406)] - 1;
+		    "ideg", i__1, "cke04_", (ftnlen)414)] - 1;
 	    chbval_(&record[basadd - 1], &i__3, &record[1], record, &av[(i__2 
 		    = i__ - 5) < 3 && 0 <= i__2 ? i__2 : s_rnge("av", i__2, 
-		    "cke04_", (ftnlen)406)]);
+		    "cke04_", (ftnlen)414)]);
 	    basadd += ideg[(i__1 = i__ - 1) < 7 && 0 <= i__1 ? i__1 : s_rnge(
-		    "ideg", i__1, "cke04_", (ftnlen)408)];
+		    "ideg", i__1, "cke04_", (ftnlen)416)];
 	}
     }
 

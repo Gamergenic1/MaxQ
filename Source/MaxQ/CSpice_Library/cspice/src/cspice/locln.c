@@ -77,78 +77,78 @@ static integer c__1 = 1;
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     UNIT       I   Logical unit connected to text file. */
 /*     BMARK      I   Begin marker. */
 /*     EMARK      I   End marker. */
-/*     LINE      I,O  Workspace. */
+/*     LINE      I-O  Workspace. */
 /*     BLINE      O   Beginning line. */
 /*     ELINE      O   Ending line. */
 /*     FOUND      O   Markers found? */
 
 /* $ Detailed_Input */
 
-/*     UNIT        is a logical unit that has been connected to a */
-/*                 text file by the calling program.  Use the routine */
-/*                 TXTOPR to open the file for read access and get its */
-/*                 logical unit.  The file pointer may be pointing to */
-/*                 any line in the file due to previous read statements, */
-/*                 for example, or due to previous calls to LOCLN. */
+/*     UNIT     is a logical unit that has been connected to a */
+/*              text file by the calling program. Use the routine */
+/*              TXTOPR to open the file for read access and get its */
+/*              logical unit. The file pointer may be pointing to */
+/*              any line in the file due to previous read statements, */
+/*              for example, or due to previous calls to LOCLN. */
 
 /*     BMARK, */
-/*     EMARK       are markers that delimit some group of lines in */
-/*                 the part of the file following the current position */
-/*                 of the file pointer. The group begins with the */
-/*                 first line equivalent to BMARK and ends with the */
-/*                 next line equivalent to EMARK, ignoring leading */
-/*                 and trailing blanks. */
+/*     EMARK    are markers that delimit some group of lines in */
+/*              the part of the file following the current position */
+/*              of the file pointer. The group begins with the */
+/*              first line equivalent to BMARK and ends with the */
+/*              next line equivalent to EMARK, ignoring leading */
+/*              and trailing blanks. */
 
-/*                 If BMARK is blank, the group of lines begins with */
-/*                 the first line following the current position of the */
-/*                 file pointer; if EMARK is blank, the group of lines */
-/*                 ends with the last line in the file. */
+/*              If BMARK is blank, the group of lines begins with */
+/*              the first line following the current position of the */
+/*              file pointer; if EMARK is blank, the group of lines */
+/*              ends with the last line in the file. */
 
 /*      LINE       on input, is an arbitrary character string whose */
-/*                 contents are ignored. LINE is used to read lines */
-/*                 from the file connected to UNIT; its function */
-/*                 is to determine the maximum length of the lines */
-/*                 that can be read from the file. Lines longer */
-/*                 than the declared length of LINE are truncated */
-/*                 as they are read. */
+/*              contents are ignored. LINE is used to read lines */
+/*              from the file connected to UNIT; its function */
+/*              is to determine the maximum length of the lines */
+/*              that can be read from the file. Lines longer */
+/*              than the declared length of LINE are truncated */
+/*              as they are read. */
 
 /* $ Detailed_Output */
 
-/*      LINE       on output, is undefined. */
+/*     LINE     on output, is undefined. */
 
-/*      BLINE, */
-/*      ELINE      are the line numbers of the first and last lines */
-/*                 in the group delimited by BMARK and EMARK. */
+/*     BLINE, */
+/*     ELINE    are the line numbers of the first and last lines */
+/*              in the group delimited by BMARK and EMARK. */
 
-/*                 By convention, the first line read by the routine */
-/*                 is line 1; the second line is line 2; and so on. */
-/*                 If BMARK is blank, BLINE will be 1. */
+/*              By convention, the first line read by the routine */
+/*              is line 1; the second line is line 2; and so on. */
+/*              If BMARK is blank, BLINE will be 1. */
 
-/*      FOUND      is true if a group of lines delimited by BMARK and */
-/*                 EMARK is found, and is false otherwise.  ELINE is */
-/*                 the last line read by LOCLN, so if FOUND is true, */
-/*                 the file pointer will be positioned on the line */
-/*                 after ELINE. */
+/*     FOUND    is .TRUE. if a group of lines delimited by BMARK and */
+/*              EMARK is found, and is .FALSE. otherwise. ELINE is */
+/*              the last line read by LOCLN, so if FOUND is .TRUE., */
+/*              the file pointer will be positioned on the line */
+/*              after ELINE. */
 
 /* $ Parameters */
 
-/*      None. */
+/*     None. */
 
 /* $ Exceptions */
 
-/*      1) If FOUND is false, the values of BLINE and ELINE are not */
+/*     1)  If FOUND is .FALSE., the values of BLINE and ELINE are not */
 /*         changed. */
 
-/*      2) If an error occurs while reading from the input file, */
-/*         the error SPICE(FILEREADFAILED) is signalled. */
+/*     2)  If an error occurs while reading from the input file, */
+/*         the error SPICE(FILEREADFAILED) is signaled. */
 
-/*      3) Lines in the file that are longer than the declared length of */
-/*         LINE are truncated as they are read.  If the truncation of */
+/*     3)  Lines in the file that are longer than the declared length of */
+/*         LINE are truncated as they are read. If the truncation of */
 /*         line containing a marker causes truncation of that marker, */
 /*         it will not match the input value for that marker, so */
 /*         FOUND will be .FALSE. */
@@ -393,7 +393,7 @@ static integer c__1 = 1;
 /*           END DO */
 
 /*     saves the locations of the various input cases (skipping past */
-/*     the intervening commentary) in the arrays BEG and END.  After */
+/*     the intervening commentary) in the arrays BEG and END. After */
 /*     running the code, CASES, BEG, and END have the following values: */
 
 /*           CASES = 3 */
@@ -428,9 +428,17 @@ static integer c__1 = 1;
 
 /* $ Author_and_Institution */
 
-/*     J.E. McLean    (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     J.E. McLean        (JPL) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 12-AUG-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
 

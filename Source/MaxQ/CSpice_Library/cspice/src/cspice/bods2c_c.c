@@ -58,7 +58,7 @@
 
 -Brief_I/O
 
-   Variable  I/O  Description
+   VARIABLE  I/O  DESCRIPTION
    --------  ---  --------------------------------------------------
    name       I   String to be translated to an ID code.
    code       O   Integer ID code corresponding to `name'.
@@ -76,9 +76,9 @@
                in the SPICE kernel pool.
 
                Case and leading and trailing blanks in `name'
-               are not significant.  However when a name is made
+               are not significant. However when a name is made
                up of more than one word, they must be separated by
-               at least one blank.  That is, all of the following
+               at least one blank. That is, all of the following
                strings are equivalent names:
 
                        "JUPITER BARYCENTER"
@@ -89,46 +89,56 @@
 
                However, "JUPITERBARYCENTER" is not equivalent to
                the names above.
- 
+
                If NAME is a string representation of an integer,
                for example
 
                   "399"
 
                the string will be translated to the equivalent SpiceInt
-               datum.  The input integer need not be one recognized by
-               the SPICE system:  the integer need not be a built-in
+               datum. The input integer need not be one recognized by
+               the SPICE system: the integer need not be a built-in
                NAIF ID code, nor need it be associated with a name via
                run-time registration.
 
 -Detailed_Output
 
-   code         is, if `name' contains the name of a body or object,
-                the corresponding NAIF or user-defined integer ID code,
-                as determined by the SPICE name-code mapping subsystem.
-                If the input argument `name' represents an integer, the
-                same integer is returned in `code'.
- 
+   code        is, if `name' contains the name of a body or object,
+               the corresponding NAIF or user-defined integer ID
+               code, as determined by the SPICE name-code mapping
+               subsystem. If `name' represents an integer, the same
+               integer is returned in `code'.
+
                `code' is assigned a value only if `found' is returned
                as SPICETRUE; otherwise it is returned unchanged.
-                 
 
-   found       is SPICETRUE if `name' has a translation.  Otherwise,
-               `found' is SPICEFALSE.
+   found       is SPICETRUE if `name' has a translation or represents an
+               integer within the bounds of representable integers
+               as defined by the CSPICE routines intmax_c and intmin_c.
+               Otherwise, `found' is SPICEFALSE.
 
 -Parameters
 
-   None.
+   MAXL        is the maximum allowable length of a body name. The
+               current value of this parameter is 36.
 
 -Exceptions
 
-   1) The error SPICE(EMPTYSTRING) is signaled if the input string
-      `name' does not contain at least one character, since the input
-      string cannot be converted to a Fortran-style string in this
-      case.
-      
-   2) The error SPICE(NULLPOINTER) is signaled if the input string
-      pointer `name' is null.
+   1)  If there is any problem with the body name-ID mapping kernel
+       variables present in the kernel pool, an error is signaled by
+       a routine in the call tree of this routine.
+
+   2)  Body name strings are upper-cased, their leading and trailing
+       blanks removed, and embedded blanks are compressed out, after
+       which they get truncated to the maximum body name length MAXL.
+       Therefore, two body names that differ only after that maximum
+       length are considered equal.
+
+   3)  If the `name' input string pointer is null, the error
+       SPICE(NULLPOINTER) is signaled.
+
+   4)  If the `name' input string has zero length, the error
+       SPICE(EMPTYSTRING) is signaled.
 
 -Files
 
@@ -138,7 +148,7 @@
       NAIF_BODY_NAME += ( <name 1>, ... )
       NAIF_BODY_CODE += ( <code 1>, ... )
 
-   See NAIF_IDs for details.
+   See naif_ids.req for details.
 
 -Particulars
 
@@ -150,8 +160,8 @@
       bodc2n_c      Body code to name
       boddef_c      Body name/code definition
 
-   bods2c_c, bodc2s_c, bodn2c_c, and bodc2n_c perform translations between 
-   body names and their corresponding integer ID codes which are 
+   bods2c_c, bodc2s_c, bodn2c_c, and bodc2n_c perform translations between
+   body names and their corresponding integer ID codes which are
    used in SPICE files and routines.
 
    bods2c_c is a slightly more general version of bodn2c_c: support
@@ -163,7 +173,7 @@
    the name assigned in the body ID to name mapping or a string
    representation of the CODE value if no mapping exists.
 
-   boddef_c assigns a body name to ID mapping. The mapping has priority 
+   boddef_c assigns a body name to ID mapping. The mapping has priority
    in name-to-ID and ID-to-name translations.
 
    Refer to NAIF_IDs for the list of name/code associations built into
@@ -172,55 +182,92 @@
 
 -Examples
 
-   1.  In the following code fragment, bodeul_ returns the Euler
-       angles representing the orientation of Jupiter relative to
-       the J2000 reference frame. bodeul_ requires the NAIF integer
-       ID code for Jupiter, so we use bods2c_c to convert the name to
-       its corresponding integer ID code.
- 
-          bods2c_c ( "JUPITER", &jupid, &found );
+   The numerical results shown for this example may differ across
+   platforms. The results depend on the SPICE kernels used as
+   input, the compiler and supporting libraries, and the machine
+   specific arithmetic implementation.
 
-          bodeul_  ( &jupid, &et, &ra, &dec, &w, &lambda );
+   1) Apply the bods2c_c call to several body names to retrieve
+      their associated NAIF IDs included in the default SPICE ID-name
+      lists, a name not included in that list, a string representing a
+      positive integer and another representing a negative integer.
 
-   2.  In this example, we assume that only the set of default 
-       name/code pairs has been defined.
-
-       Given these names, bods2c_c will return the following codes:
-
-          Name                           Code              Found?
-          ------------------------       ----------        ------
-          "EARTH"                               399        Yes
-          "  Earth "                            399        Yes
-          "399"                                 399        Yes
-          " 399 "                               399        Yes
-          "EMB"                                   3        Yes
-          "3"                                     3        Yes
-          "1000000000"                   1000000000        Yes
-          "Solar System Barycenter"               0        Yes
-          "SolarSystemBarycenter"                 -        No
-          "SSB"                                   0        Yes
-          "Voyager 2"                           -32        Yes
-          "U.S.S. Enterprise"                     -        No
-          " "                                     -        No
-          "Halley's Comet"                        -        No
+      Example code begins here.
 
 
-       Given these codes, bodc2n_c will return the following names:
+      /.
+         Program bods2c_ex1
+      ./
+      #include <stdio.h>
+      #include "SpiceUsr.h"
 
-        Code           Name                                Found?
-        ----------     ------------------------            ------
-               399     "EARTH"                             Yes
-                 0     "SOLAR SYSTEM BARYCENTER"           Yes
-                 3     "EARTH BARYCENTER"                  Yes
-               -77     "GALILEO ORBITER"                   Yes
-                11      -                                  No
-        1000000000      -                                  No
+      int main()
+      {
 
+         /.
+         Local variables.
+         ./
+         SpiceBoolean            found;
+         SpiceInt                code;
+         SpiceInt                i;
+
+         /.
+         Assign an array of body names. Not all the listed names
+         map to a NAIF ID.
+         ./
+         SpiceChar             * names[] = { "Hyperion", "Earth",
+                                             "  Earth ", "EMB",
+                                             "Solar System Barycenter",
+                                             "Voyager 2",
+                                             "U.S.S. Enterprise",
+                                             "1000000", "-999" };
+
+         /.
+         Loop over the `names' array, call bods2c_c for each
+         element of `names'.
+         ./
+         printf( "Name                      Code   \n" );
+         printf( "-----------------------   -------\n" );
+
+         for ( i = 0; i < 9; i++ )
+         {
+            bods2c_c ( names[i], &code, &found );
+
+            if ( found )
+            {
+               printf( "%23s   %7d\n", names[i], (int)code);
+            }
+            else
+            {
+               printf( "%23s   **UNK**\n", names[i] );
+            }
+
+         }
+
+         return ( 0 );
+      }
+
+
+      When this program was executed on a Mac/Intel/cc/64-bit
+      platform, the output was:
+
+
+      Name                      Code
+      -----------------------   -------
+                     Hyperion       607
+                        Earth       399
+                       Earth        399
+                          EMB         3
+      Solar System Barycenter         0
+                    Voyager 2       -32
+            U.S.S. Enterprise   **UNK**
+                      1000000   1000000
+                         -999      -999
 
 
 -Restrictions
 
-   None.
+   1)  See exception <2>.
 
 -Literature_References
 
@@ -228,20 +275,30 @@
 
 -Author_and_Institution
 
-   C.H. Acton      (JPL)
-   N.J. Bachman    (JPL)
-   K.R. Gehringer  (JPL)
-   B.V. Semenov    (JPL)
+   C.H. Acton          (JPL)
+   N.J. Bachman        (JPL)
+   J. Diaz del Rio     (ODC Space)
+   K.R. Gehringer      (JPL)
+   B.V. Semenov        (JPL)
+   E.D. Wright         (JPL)
 
 -Version
 
-   -CSPICE Version 1.0.2, 16-MAY-2009 (EDW) 
+   -CSPICE Version 1.0.3, 10-AUG-2021 (JDR)
 
-       Edit to Particulars section to document the bodc2s_c routine.
+       Edited the header to comply with NAIF standard. Added complete
+       code example.
+
+       Updated output argument `found' description in -Detailed_Output. Added
+       description of MAXL parameter. Added -Exceptions and -Restrictions.
+
+   -CSPICE Version 1.0.2, 16-MAY-2009 (EDW)
+
+       Edit to -Particulars section to document the bodc2s_c routine.
 
    -CSPICE Version 1.0.1, 27-FEB-2008 (BVS)
 
-       Corrected the contents of the Required_Reading section of 
+       Corrected the contents of the -Required_Reading section of
        the header.
 
    -CSPICE Version 1.0.0, 23-JUL-2004 (CHA) (NJB) (KRG)
@@ -259,8 +316,8 @@
    Local variables
    */
    logical                 fnd;
-   
-   
+
+
    /*
    Participate in error handling
    */
@@ -286,10 +343,10 @@
    /*
    Assign the SpiceBoolean found flag.
    */
-   
+
    *found = fnd;
-   
-   
+
+
 
    chkout_c ( "bods2c_c");
 

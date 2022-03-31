@@ -5,8 +5,8 @@
 
 #include "f2c.h"
 
-/* $Procedure             ODD ( Is a number odd? ) */
-logical odd_(integer *i__)
+/* $Procedure ODD ( Is a number odd? ) */
+logical odd_(integer *ival)
 {
     /* System generated locals */
     logical ret_val;
@@ -53,24 +53,34 @@ logical odd_(integer *i__)
 
 /*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
-/*     I          I   The integer in question. */
-/*     ODD        O   True if I is odd, otherwise false. */
+/*     IVAL       I   The integer in question. */
+
+/*     The function returns .TRUE. if IVAL is odd, otherwise .FALSE. */
 
 /* $ Detailed_Input */
 
-/*     I           is the integer to be tested for oddness. */
+/*     IVAL     is the integer to be tested for oddness. */
 
 /* $ Detailed_Output */
 
-/*     ODD is returned as true if I is odd, false if I is even. */
+/*     The function returns .TRUE. if IVAL is odd, .FALSE. if IVAL is */
+/*     even. */
 
 /* $ Parameters */
 
 /*     None. */
 
+/* $ Exceptions */
+
+/*     Error free. */
+
+/* $ Files */
+
+/*     None. */
+
 /* $ Particulars */
 
-/*     Divide I by two. If the remainder is one, I is odd. */
+/*     Divide IVAL by two. If the remainder is one, IVAL is odd. */
 
 /* $ Examples */
 
@@ -99,23 +109,28 @@ logical odd_(integer *i__)
 
 /*     None. */
 
-/* $ Exceptions */
-
-/*     Error free. */
-
-/* $ Files */
+/* $ Literature_References */
 
 /*     None. */
 
 /* $ Author_and_Institution */
 
-/*     I.M. Underwood  (JPL) */
-
-/* $ Literature_References */
-
-/*     None. */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 08-APR-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Changed the input argument name "I" to "IVAL" for consistency */
+/*        with other routines. */
+
+/*        Edited the header to comply with NAIF standard. Removed */
+/*        unnecessary $Revisions section. */
 
 /* -    SPICELIB Version 1.0.2, 07-NOV-2005 (BVS) */
 
@@ -134,17 +149,10 @@ logical odd_(integer *i__)
 /*     test whether an integer is odd */
 
 /* -& */
-/* $ Revisions */
-
-/* -    Beta Version 1.0.1, 27-JAN-1989 (IMU) */
-
-/*        Examples section completed. */
-
-/* -& */
 
 /*     Self-explanatory. */
 
-    ret_val = *i__ % 2 != 0;
+    ret_val = *ival % 2 != 0;
     return ret_val;
 } /* odd_ */
 

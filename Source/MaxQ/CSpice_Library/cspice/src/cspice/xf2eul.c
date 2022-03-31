@@ -9,7 +9,7 @@
 
 static integer c__6 = 6;
 
-/* $Procedure      XF2EUL ( State transformation to Euler angles ) */
+/* $Procedure XF2EUL ( State transformation to Euler angles ) */
 /* Subroutine */ int xf2eul_0_(int n__, doublereal *xform, integer *axisa, 
 	integer *axisb, integer *axisc, doublereal *eulang, logical *unique)
 {
@@ -53,11 +53,7 @@ static integer c__6 = 6;
 /* $ Abstract */
 
 /*     Convert a state transformation matrix to Euler angles and their */
-/*     derivatives with respect to a specified set of axes. */
-
-/*     The companion entry point EUL2XF converts Euler angles and their */
-/*     derivatives with respect to a specified set of axes to a state */
-/*     transformation matrix. */
+/*     derivatives, given a specified set of axes. */
 
 /* $ Disclaimer */
 
@@ -86,14 +82,14 @@ static integer c__6 = 6;
 
 /* $ Required_Reading */
 
-/*     ROTATION */
 /*     PCK */
+/*     ROTATION */
 
 /* $ Keywords */
 
 /*     ANGLES */
-/*     STATE */
 /*     DERIVATIVES */
+/*     STATE */
 
 /* $ Declarations */
 /* $ Brief_I/O */
@@ -109,88 +105,91 @@ static integer c__6 = 6;
 
 /* $ Detailed_Input */
 
-/*     XFORM       is a state transformation from some frame FRAME1 to */
-/*                 another frame FRAME2.  Pictorially, XFORM has the */
-/*                 structure shown here. */
+/*     XFORM    is a state transformation matrix from some frame FRAME1 */
+/*              to another frame FRAME2. Pictorially, XFORM has the */
+/*              structure shown here. */
 
-/*                      [       |        ] */
-/*                      |  R    |    0   | */
-/*                      |       |        | */
-/*                      |-------+--------| */
-/*                      |       |        | */
-/*                      | dR/dt |    R   | */
-/*                      [       |        ] */
+/*                 .-             -. */
+/*                 |       |       | */
+/*                 |   R   |   0   | */
+/*                 |       |       | */
+/*                 |-------+-------| */
+/*                 |       |       | */
+/*                 | dR/dt |   R   | */
+/*                 |       |       | */
+/*                 `-             -' */
 
-/*                 where R is a rotation that varies with respect to time */
-/*                 and dR/dt is its time derivative. */
+/*              where R is a rotation matrix that varies with respect to */
+/*              time and dR/dt is its time derivative. */
 
-/*                 More specifically, if S1 is the state of some object */
-/*                 in FRAME1, then S2, the state of the same object */
-/*                 relative to FRAME2 is given by */
+/*              More specifically, if S1 is the state of some object */
+/*              in FRAME1, then S2, the state of the same object */
+/*              relative to FRAME2 is given by */
 
-/*                    S2 = XFORM*S1 */
+/*                 S2 = XFORM * S1 */
 
-/*                 where '*' denotes the matrix vector product. */
+/*              where "*" denotes the matrix vector product. */
 
-/*     AXISA       are the axes desired for the factorization of R. */
-/*     AXISB       All must be in the range from 1 to 3.  Moreover */
-/*     AXISC       it must be the case that AXISA and AXISB are distinct */
-/*                 and that AXISB and AXISC are distinct. */
+/*     AXISA, */
+/*     AXISB, */
+/*     AXISC    are the axes desired for the factorization of R. */
 
-/*                 Every rotation matrix can be represented as a product */
-/*                 of three rotation matrices about the principal axes */
-/*                 of a reference frame. */
+/*              All must be in the range from 1 to 3. Moreover */
+/*              it must be the case that AXISA and AXISB are distinct */
+/*              and that AXISB and AXISC are distinct. */
 
-/*                     R =  [ ALPHA ]     [ BETA ]     [ GAMMA ] */
-/*                                   AXISA        AXISB         AXISC */
+/*              Every rotation matrix can be represented as a product */
+/*              of three rotation matrices about the principal axes */
+/*              of a reference frame. */
 
-/*                 The value 1 corresponds to the X axis. */
-/*                 The value 2 corresponds to the Y axis. */
-/*                 The value 3 corresponds to the Z axis. */
+/*                 R =  [ ALPHA ]      [ BETA ]      [ GAMMA ] */
+/*                               AXISA         AXISB          AXISC */
+
+/*              The value 1 corresponds to the X axis. */
+/*              The value 2 corresponds to the Y axis. */
+/*              The value 3 corresponds to the Z axis. */
 
 /* $ Detailed_Output */
 
-/*     EULANG      is the set of Euler angles corresponding to the */
-/*                 specified factorization. */
+/*     EULANG   is the set of Euler angles corresponding to the */
+/*              specified factorization. */
 
-/*                 If we represent R as shown here: */
+/*              If we represent R as shown here: */
 
-/*                     R =  [ ALPHA ]     [ BETA ]     [ GAMMA ] */
-/*                                   AXISA        AXISB         AXISC */
+/*                 R =  [ ALPHA ]      [ BETA ]      [ GAMMA ] */
+/*                               AXISA         AXISB          AXISC */
 
-/*                 then */
+/*              then */
 
+/*                 EULANG(1) = ALPHA */
+/*                 EULANG(2) = BETA */
+/*                 EULANG(3) = GAMMA */
+/*                 EULANG(4) = dALPHA/dt */
+/*                 EULANG(5) = dBETA/dt */
+/*                 EULANG(6) = dGAMMA/dt */
 
-/*                    EULANG(1) = ALPHA */
-/*                    EULANG(2) = BETA */
-/*                    EULANG(3) = GAMMA */
-/*                    EULANG(4) = dALPHA/dt */
-/*                    EULANG(5) = dBETA/dt */
-/*                    EULANG(6) = dGAMMA/dt */
+/*              The range of ALPHA and GAMMA is (-pi, pi]. */
 
-/*                 The range of ALPHA and GAMMA is (-pi, pi]. */
+/*              The range of BETA depends on the exact set of */
+/*              axes used for the factorization. For */
+/*              factorizations in which the first and third axes */
+/*              are the same, the range of BETA is [0, pi]. */
 
-/*                 The range of BETA depends on the exact set of */
-/*                 axes used for the factorization.  For */
-/*                 factorizations in which the first and third axes */
-/*                 are the same, the range of BETA is [0, pi]. */
+/*              For factorizations in which the first and third */
+/*              axes are different, the range of BETA is */
+/*              [-pi/2, pi/2]. */
 
-/*                 For factorizations in which the first and third */
-/*                 axes are different, the range of BETA is */
-/*                 [-pi/2, pi/2]. */
+/*              For rotations such that ALPHA and GAMMA are not */
+/*              uniquely determined, ALPHA and dALPHA/dt will */
+/*              always be set to zero; GAMMA and dGAMMA/dt are */
+/*              then uniquely determined. */
 
-/*                 For rotations such that ALPHA and GAMMA are not */
-/*                 uniquely determined, ALPHA and dALPHA/dt will */
-/*                 always be set to zero; GAMMA and dGAMMA/dt are */
-/*                 then uniquely determined. */
-
-/*     UNIQUE      is a logical that indicates whether or not the */
-/*                 values in EULANG are uniquely determined.  If */
-/*                 the values are unique then UNIQUE will be set to */
-/*                 TRUE.  If the values are not unique and some */
-/*                 components ( EULANG(1) and EULANG(4) ) have been set */
-/*                 to zero, then UNIQUE will have the value FALSE. */
-
+/*     UNIQUE   is a logical that indicates whether or not the */
+/*              values in EULANG are uniquely determined. If */
+/*              the values are unique then UNIQUE will be set to */
+/*              .TRUE. If the values are not unique and some */
+/*              components ( EULANG(1) and EULANG(4) ) have been set */
+/*              to zero, then UNIQUE will have the value .FALSE. */
 
 /* $ Parameters */
 
@@ -198,25 +197,24 @@ static integer c__6 = 6;
 
 /* $ Exceptions */
 
-/*     All erroneous inputs are diagnosed by routines in the call */
-/*     tree to this routines.  These include */
+/*     1)  If any of AXISA, AXISB, or AXISC do not have values in */
 
-/*     1)   If any of AXISA, AXISB, or AXISC do not have values in */
+/*            { 1, 2, 3 } */
 
-/*             { 1, 2, 3 }, */
+/*         an error is signaled by a routine in the call tree of this */
+/*         routine. */
 
-/*          then the error SPICE(INPUTOUTOFRANGE) is signaled. */
+/*     2)  If AXISB is equal to AXISC or AXISA, an error is signaled by a */
+/*         routine in the call tree of this routine. An arbitrary */
+/*         rotation matrix cannot be expressed using a sequence of Euler */
+/*         angles unless the second rotation axis differs from the other */
+/*         two. */
 
-/*     2)   An arbitrary rotation matrix cannot be expressed using */
-/*          a sequence of Euler angles unless the second rotation axis */
-/*          differs from the other two.  If AXISB is equal to AXISC or */
-/*          AXISA, then the error SPICE(BADAXISNUMBERS) is signaled. */
+/*     3)  If the input matrix XFORM is not a rotation matrix, an error */
+/*         is signaled by a routine in the call tree of this routine. */
 
-/*     3)   If the input matrix R is not a rotation matrix, the error */
-/*          SPICE(NOTAROTATION) is signaled. */
-
-/*     4)   If EULANG(1) and EULANG(3) are not uniquely determined, */
-/*          EULANG(1) is set to zero, and EULANG(3) is determined. */
+/*     4)  If EULANG(1) and EULANG(3) are not uniquely determined, */
+/*         EULANG(1) is set to zero, and EULANG(3) is determined. */
 
 /* $ Files */
 
@@ -224,13 +222,13 @@ static integer c__6 = 6;
 
 /* $ Particulars */
 
-/*     A word about notation:  the symbol */
+/*     A word about notation: the symbol */
 
 /*        [ x ] */
 /*             i */
 
 /*     indicates a coordinate system rotation of x radians about the */
-/*     ith coordinate axis.  To be specific, the symbol */
+/*     ith coordinate axis. To be specific, the symbol */
 
 /*        [ x ] */
 /*             1 */
@@ -238,17 +236,17 @@ static integer c__6 = 6;
 /*     indicates a coordinate system rotation of x radians about the */
 /*     first, or x-, axis; the corresponding matrix is */
 
-/*        +-                    -+ */
+/*        .-                    -. */
 /*        |  1      0       0    | */
 /*        |                      | */
-/*        |  0    cos(x)  sin(x) |. */
+/*        |  0    cos(x)  sin(x) | */
 /*        |                      | */
 /*        |  0   -sin(x)  cos(x) | */
-/*        +-                    -+ */
+/*        `-                    -' */
 
 /*     Remember, this is a COORDINATE SYSTEM rotation by x radians; this */
 /*     matrix, when applied to a vector, rotates the vector by -x */
-/*     radians, not x radians.  Applying the matrix to a vector yields */
+/*     radians, not x radians. Applying the matrix to a vector yields */
 /*     the vector's representation relative to the rotated coordinate */
 /*     system. */
 
@@ -260,13 +258,13 @@ static integer c__6 = 6;
 
 /*     which symbolizes the matrix */
 
-/*        +-                    -+ */
+/*        .-                    -. */
 /*        | cos(x)   0   -sin(x) | */
 /*        |                      | */
-/*        |  0       1      0    |, */
+/*        |  0       1      0    | */
 /*        |                      | */
 /*        | sin(x)   0    cos(x) | */
-/*        +-                    -+ */
+/*        `-                    -' */
 
 /*     and the analogous rotation about the third, or z-, axis is */
 /*     represented by */
@@ -276,47 +274,46 @@ static integer c__6 = 6;
 
 /*     which symbolizes the matrix */
 
-/*        +-                    -+ */
+/*        .-                    -. */
 /*        |  cos(x)  sin(x)   0  | */
 /*        |                      | */
-/*        | -sin(x)  cos(x)   0  |. */
+/*        | -sin(x)  cos(x)   0  | */
 /*        |                      | */
 /*        |  0        0       1  | */
-/*        +-                    -+ */
-
+/*        `-                    -' */
 
 /*     The input matrix is assumed to be the product of three */
 /*     rotation matrices, each one of the form */
 
-/*        +-                    -+ */
+/*        .-                    -. */
 /*        |  1      0       0    | */
 /*        |                      | */
 /*        |  0    cos(r)  sin(r) |     (rotation of r radians about the */
 /*        |                      |      x-axis), */
 /*        |  0   -sin(r)  cos(r) | */
-/*        +-                    -+ */
+/*        `-                    -' */
 
 
-/*        +-                    -+ */
+/*        .-                    -. */
 /*        | cos(s)   0   -sin(s) | */
 /*        |                      | */
 /*        |  0       1      0    |     (rotation of s radians about the */
 /*        |                      |      y-axis), */
 /*        | sin(s)   0    cos(s) | */
-/*        +-                    -+ */
+/*        `-                    -' */
 
 /*     or */
 
-/*        +-                    -+ */
+/*        .-                    -. */
 /*        |  cos(t)  sin(t)   0  | */
 /*        |                      | */
 /*        | -sin(t)  cos(t)   0  |     (rotation of t radians about the */
 /*        |                      |      z-axis), */
 /*        |  0        0       1  | */
-/*        +-                    -+ */
+/*        `-                    -' */
 
 /*     where the second rotation axis is not equal to the first or */
-/*     third.  Any rotation matrix can be factored as a sequence of */
+/*     third. Any rotation matrix can be factored as a sequence of */
 /*     three such rotations, provided that this last criterion is met. */
 
 /*     This routine is related to the routine EUL2XF which produces */
@@ -326,52 +323,165 @@ static integer c__6 = 6;
 /*     The two subroutine calls shown here will not change */
 /*     XFORM except for round off errors. */
 
-/*     CALL XF2EUL ( XFORM,  AXISA, AXISB, AXISC, EULANG, UNIQUE ) */
-/*     CALL EUL2XF ( EULANG, AXISA, AXISB, AXISC, XFORM          ) */
+/*        CALL XF2EUL ( XFORM,  AXISA, AXISB, AXISC, EULANG, UNIQUE ) */
+/*        CALL EUL2XF ( EULANG, AXISA, AXISB, AXISC, XFORM          ) */
 
 /*     On the other hand the two calls */
 
-/*     CALL EUL2XF ( EULANG, AXISA, AXISB, AXISC, XFORM          ) */
-/*     CALL XF2EUL ( XFORM,  AXISA, AXISB, AXISC, EULANG, UNIQUE ) */
+/*        CALL EUL2XF ( EULANG, AXISA, AXISB, AXISC, XFORM          ) */
+/*        CALL XF2EUL ( XFORM,  AXISA, AXISB, AXISC, EULANG, UNIQUE ) */
 
 /*     will leave EULANG unchanged only if the components of EULANG */
-/*     are in the range produced by EUL2XF and the Euler representation */
+/*     are in the range produced by XF2EUL and the Euler representation */
 /*     of the rotation component of XFORM is unique within that range. */
-
 
 /* $ Examples */
 
-/*     Suppose that you wish to determine the rate of change of */
-/*     the right ascension and declination of the pole of an object, */
-/*     from the state transformation matrix that transforms J2000 */
-/*     states to object fixed states. */
+/*     The numerical results shown for this example may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
 
-/*     Using this routine with the routine TISBOD you can determine */
-/*     these instanteous rates. */
+/*     1) Determine the rate of change of the right ascension and */
+/*        declination of the pole of the moon, from the state */
+/*        transformation matrix that transforms J2000 states to object */
+/*        fixed states. */
 
-/*     Recall that the rotation component of TSIPM is given by */
+/*        Recall that the rotation component of the state transformation */
+/*        matrix is given by */
 
-/*                   [W] [HALFPI-DEC] [RA+HALFPI] */
-/*                      3            1           3 */
+/*           [W]  [HALFPI-DEC]  [RA+HALFPI] */
+/*              3             1            3 */
 
 
-/*     Thus the calls: */
+/*        Use the meta-kernel shown below to load the required SPICE */
+/*        kernels. */
 
-/*     CALL TISBOD ( 'J2000', BODY, ET, TSIPM ) */
-/*     CALL XF2EUL (  TSIPM,  3, 1, 3,  EULANG, UNIQUE ) */
 
-/*     yield the following: */
+/*           KPL/MK */
 
-/*        EULANG(1) is  W */
-/*        EULANG(2) is  HALFPI - DEC */
-/*        EULANG(3) is  RA     + HALFPI */
-/*        EULANG(4) is  dW/dt */
-/*        EULANG(5) is -dDEC/dt */
-/*        EULANG(6) is  dRA/dt */
+/*           File name: xf2eul_ex1.tm */
 
-/*     Hence: */
+/*           This meta-kernel is intended to support operation of SPICE */
+/*           example programs. The kernels shown here should not be */
+/*           assumed to contain adequate or correct versions of data */
+/*           required by SPICE-based user applications. */
 
-/*        dDEC/dt = -EULANG(5) */
+/*           In order for an application to use this meta-kernel, the */
+/*           kernels referenced here must be present in the user's */
+/*           current working directory. */
+
+/*           The names and contents of the kernels referenced */
+/*           by this meta-kernel are as follows: */
+
+/*              File name                     Contents */
+/*              ---------                     -------- */
+/*              pck00010.tpc                  Planet orientation and */
+/*                                            radii */
+/*              naif0012.tls                  Leapseconds */
+
+
+/*           \begindata */
+
+/*              KERNELS_TO_LOAD = ( 'pck00010.tpc', */
+/*                                  'naif0012.tls'  ) */
+
+/*           \begintext */
+
+/*           End of meta-kernel */
+
+
+/*        Example code begins here. */
+
+
+/*              PROGRAM XF2EUL_EX1 */
+/*              IMPLICIT NONE */
+
+/*        C */
+/*        C     SPICELIB functions. */
+/*        C */
+/*              DOUBLE PRECISION      HALFPI */
+
+/*        C */
+/*        C     Local parameters. */
+/*        C */
+/*              CHARACTER*(*)         META */
+/*              PARAMETER           ( META   = 'xf2eul_ex1.tm' ) */
+
+/*              CHARACTER*(*)         UTCSTR */
+/*              PARAMETER           ( UTCSTR = 'May 15, 2007' ) */
+
+/*        C */
+/*        C     Local variables. */
+/*        C */
+/*              DOUBLE PRECISION      EULANG ( 6    ) */
+/*              DOUBLE PRECISION      ET */
+/*              DOUBLE PRECISION      FTMTRX ( 6, 6 ) */
+
+/*              INTEGER               I */
+/*              INTEGER               J */
+
+/*              LOGICAL               UNIQUE */
+
+/*        C */
+/*        C     Load SPICE kernels. */
+/*        C */
+/*              CALL FURNSH ( META ) */
+
+/*        C */
+/*        C     Convert the input time to seconds past J2000 TDB. */
+/*        C */
+/*              CALL STR2ET ( UTCSTR, ET ) */
+
+/*        C */
+/*        C     Get the transformation matrix from J2000 frame to */
+/*        C     IAU_MOON. */
+/*        C */
+/*              CALL SXFORM ( 'J2000', 'IAU_MOON', ET, FTMTRX ) */
+
+/*        C */
+/*        C     Convert the transformation matrix to */
+/*        C     Euler angles (3-1-3). */
+/*        C */
+/*              CALL XF2EUL ( FTMTRX, 3, 1, 3, EULANG, UNIQUE ) */
+
+/*        C */
+/*        C     Display the results. */
+/*        C */
+/*              IF ( UNIQUE ) THEN */
+
+/*                 WRITE(*,'(2A)') 'UTC: ', UTCSTR */
+/*                 WRITE(*,'(A,F20.16)') 'W       = ', EULANG(1) */
+/*                 WRITE(*,'(A,F20.16)') 'DEC     = ', */
+/*             .                  HALFPI() - EULANG(2) */
+/*                 WRITE(*,'(A,F20.16)') 'RA      = ', */
+/*             .                  EULANG(3) - HALFPI() */
+/*                 WRITE(*,'(A,F20.16)') 'dW/dt   = ', EULANG(4) */
+/*                 WRITE(*,'(A,F20.16)') 'dDEC/dt = ', EULANG(5) */
+/*                 WRITE(*,'(A,F20.16)') 'dRA/dt  = ', EULANG(6) */
+
+/*              ELSE */
+
+/*                 WRITE(*,*) 'The values in EULANG are not uniquely ' */
+/*             .          //  'determined.' */
+
+/*              END IF */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*        UTC: May 15, 2007 */
+/*        W       =  -2.6490877296701645 */
+/*        DEC     =   1.1869108599473206 */
+/*        RA      =  -1.5496443908099826 */
+/*        dW/dt   =   0.0000026578085601 */
+/*        dDEC/dt =   0.0000000004021737 */
+/*        dRA/dt  =   0.0000000039334471 */
+
 
 /* $ Restrictions */
 
@@ -383,20 +493,33 @@ static integer c__6 = 6;
 
 /* $ Author_and_Institution */
 
-/*     W.L. Taber      (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
 
+/* -    SPICELIB Version 2.1.0, 26-OCT-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. Removed */
+/*        unnecessary $Revisions section. */
+
+/*        Added complete code example based on existing fragment. */
+/*        Corrected input argument name in $Exceptions section. */
+
 /* -    SPICELIB Version 2.0.1, 25-APR-2007 (EDW) */
 
-/*      Corrected code in EUL2EF entry point Examples section, example */
-/*      showed a XF2EUL call: */
+/*        Corrected code in EUL2EF entry point $Examples section, example */
+/*        showed a XF2EUL call: */
 
-/*            CALL XF2EUL ( XFORM,  1, 2, 3, RPYANG ) */
+/*           CALL XF2EUL ( XFORM,  1, 2, 3, RPYANG ) */
 
-/*      The proper form of the call: */
+/*        The proper form of the call: */
 
-/*            CALL XF2EUL ( XFORM,  1, 2, 3, RPYANG, UNIQUE ) */
+/*           CALL XF2EUL ( XFORM,  1, 2, 3, RPYANG, UNIQUE ) */
 
 /* -    SPICELIB Version 2.0.0, 31-OCT-2005 (NJB) */
 
@@ -406,7 +529,6 @@ static integer c__6 = 6;
 
 /* -    SPICELIB Version 1.0.0, 31-JUL-1995 (WLT) */
 
-
 /* -& */
 /* $ Index_Entries */
 
@@ -414,7 +536,7 @@ static integer c__6 = 6;
 
 /* -& */
 
-/*     Spicelib Functions. */
+/*     Spicelib Functions */
 
 
 /*     Parameters */
@@ -695,13 +817,13 @@ static integer c__6 = 6;
 	k = i__ + 3;
 	for (j = 1; j <= 3; ++j) {
 	    r__[(i__1 = i__ + j * 3 - 4) < 9 && 0 <= i__1 ? i__1 : s_rnge(
-		    "r", i__1, "xf2eul_", (ftnlen)714)] = xform[(i__2 = i__ + 
+		    "r", i__1, "xf2eul_", (ftnlen)841)] = xform[(i__2 = i__ + 
 		    j * 6 - 7) < 36 && 0 <= i__2 ? i__2 : s_rnge("xform", 
-		    i__2, "xf2eul_", (ftnlen)714)];
+		    i__2, "xf2eul_", (ftnlen)841)];
 	    drdt[(i__1 = i__ + j * 3 - 4) < 9 && 0 <= i__1 ? i__1 : s_rnge(
-		    "drdt", i__1, "xf2eul_", (ftnlen)715)] = xform[(i__2 = k 
+		    "drdt", i__1, "xf2eul_", (ftnlen)842)] = xform[(i__2 = k 
 		    + j * 6 - 7) < 36 && 0 <= i__2 ? i__2 : s_rnge("xform", 
-		    i__2, "xf2eul_", (ftnlen)715)];
+		    i__2, "xf2eul_", (ftnlen)842)];
 	}
     }
 
@@ -722,7 +844,7 @@ static integer c__6 = 6;
     b = *axisb;
     l = 6 - a - b;
     d__ = delta[(i__1 = a + b * 3 - 4) < 9 && 0 <= i__1 ? i__1 : s_rnge("del"
-	    "ta", i__1, "xf2eul_", (ftnlen)740)];
+	    "ta", i__1, "xf2eul_", (ftnlen)867)];
 
 /*                      t */
 /*     Compute DR/DT * R   and extract OMEGA */
@@ -748,11 +870,11 @@ static integer c__6 = 6;
 /*        omega(3) = w(L) = d*drdtrt(B,A) */
 
     omega[0] = d__ * drdtrt[(i__1 = l + b * 3 - 4) < 9 && 0 <= i__1 ? i__1 : 
-	    s_rnge("drdtrt", i__1, "xf2eul_", (ftnlen)768)];
+	    s_rnge("drdtrt", i__1, "xf2eul_", (ftnlen)895)];
     omega[1] = d__ * drdtrt[(i__1 = a + l * 3 - 4) < 9 && 0 <= i__1 ? i__1 : 
-	    s_rnge("drdtrt", i__1, "xf2eul_", (ftnlen)769)];
+	    s_rnge("drdtrt", i__1, "xf2eul_", (ftnlen)896)];
     omega[2] = d__ * drdtrt[(i__1 = b + a * 3 - 4) < 9 && 0 <= i__1 ? i__1 : 
-	    s_rnge("drdtrt", i__1, "xf2eul_", (ftnlen)770)];
+	    s_rnge("drdtrt", i__1, "xf2eul_", (ftnlen)897)];
 
 /*     Compute the various sines and cosines that we need. */
 
@@ -827,14 +949,13 @@ static integer c__6 = 6;
     mxv_(solutn, omega, &eulang[3]);
     chkout_("XF2EUL", (ftnlen)6);
     return 0;
-/* $Procedure      EUL2XF ( Euler angles and derivative to transformation) */
+/* $Procedure EUL2XF ( Euler angles and derivative to transformation ) */
 
 L_eul2xf:
 /* $ Abstract */
 
-/*     This routine computes a state transformation from an Euler angle */
-/*     factorization of a rotation and the derivatives of those Euler */
-/*     angles. */
+/*     Compute a state transformation from an Euler angle factorization */
+/*     of a rotation and the derivatives of those Euler angles. */
 
 /* $ Disclaimer */
 
@@ -868,8 +989,8 @@ L_eul2xf:
 /* $ Keywords */
 
 /*     ANGLES */
-/*     STATE */
 /*     DERIVATIVES */
+/*     STATE */
 
 /* $ Declarations */
 
@@ -891,57 +1012,60 @@ L_eul2xf:
 
 /* $ Detailed_Input */
 
+/*     EULANG   is the set of Euler angles corresponding to the */
+/*              specified factorization. */
 
-/*     EULANG      is the set of Euler angles corresponding to the */
-/*                 specified factorization. */
+/*              If we represent R as shown here: */
 
-/*                 If we represent R as shown here: */
+/*                 R =  [ ALPHA ]      [ BETA ]      [ GAMMA ] */
+/*                               AXISA         AXISB          AXISC */
 
-/*                     R =  [ ALPHA ]     [ BETA ]     [ GAMMA ] */
-/*                                   AXISA        AXISB         AXISC */
+/*              then */
 
-/*                 then */
-
-
-/*                    EULANG(1) = ALPHA */
-/*                    EULANG(2) = BETA */
-/*                    EULANG(3) = GAMMA */
-/*                    EULANG(4) = dALPHA/dt */
-/*                    EULANG(5) = dBETA/dt */
-/*                    EULANG(6) = dGAMMA/dt */
+/*                 EULANG(1) = ALPHA */
+/*                 EULANG(2) = BETA */
+/*                 EULANG(3) = GAMMA */
+/*                 EULANG(4) = dALPHA/dt */
+/*                 EULANG(5) = dBETA/dt */
+/*                 EULANG(6) = dGAMMA/dt */
 
 
-/*     AXISA       are the axes desired for the factorization of R. */
-/*     AXISB       All must be in the range from 1 to 3.  Moreover */
-/*     AXISC       it must be the case that AXISA and AXISB are distinct */
-/*                 and that AXISB and AXISC are distinct. */
+/*     AXISA, */
+/*     AXISB, */
+/*     AXISC    are the axes desired for the factorization of R. */
 
-/*                 Every rotation matrix can be represented as a product */
-/*                 of three rotation matrices about the principal axes */
-/*                 of a reference frame. */
+/*              All must be in the range from 1 to 3. Moreover */
+/*              it must be the case that AXISA and AXISB are distinct */
+/*              and that AXISB and AXISC are distinct. */
 
-/*                     R =  [ ALPHA ]     [ BETA ]     [ GAMMA ] */
-/*                                   AXISA        AXISB         AXISC */
+/*              Every rotation matrix can be represented as a product */
+/*              of three rotation matrices about the principal axes */
+/*              of a reference frame. */
 
-/*                 The value 1 corresponds to the X axis. */
-/*                 The value 2 corresponds to the Y axis. */
-/*                 The value 3 corresponds to the Z axis. */
+/*                 R =  [ ALPHA ]      [ BETA ]      [ GAMMA ] */
+/*                               AXISA         AXISB          AXISC */
+
+/*              The value 1 corresponds to the X axis. */
+/*              The value 2 corresponds to the Y axis. */
+/*              The value 3 corresponds to the Z axis. */
 
 /* $ Detailed_Output */
 
-/*     XFORM       is the state transformation corresponding R and dR/dt */
-/*                 as described above.  Pictorially, */
+/*     XFORM    is the state transformation matrix corresponding to R */
+/*              and dR/dt as described above. Pictorially, */
 
-/*                      [       |        ] */
-/*                      |  R    |    0   | */
-/*                      |       |        | */
-/*                      |-------+--------| */
-/*                      |       |        | */
-/*                      | dR/dt |    R   | */
-/*                      [       |        ] */
+/*                 .-             -. */
+/*                 |       |       | */
+/*                 |   R   |   0   | */
+/*                 |       |       | */
+/*                 |-------+-------| */
+/*                 |       |       | */
+/*                 | dR/dt |   R   | */
+/*                 |       |       | */
+/*                 `-             -' */
 
-/*                 where R is a rotation that varies with respect to time */
-/*                 and dR/dt is its time derivative. */
+/*              where R is a rotation matrix that varies with respect to */
+/*              time and dR/dt is its time derivative. */
 
 /* $ Parameters */
 
@@ -949,14 +1073,12 @@ L_eul2xf:
 
 /* $ Exceptions */
 
-/*     All erroneous inputs are diagnosed by routines in the call */
-/*     tree to this routine.  These include */
+/*     1)  If any of AXISA, AXISB, or AXISC do not have values in */
 
-/*     1)   If any of AXISA, AXISB, or AXISC do not have values in */
+/*            { 1, 2, 3 } */
 
-/*             { 1, 2, 3 }, */
-
-/*          then the error SPICE(INPUTOUTOFRANGE) is signaled. */
+/*         an error is signaled by a routine in the call tree of this */
+/*         routine. */
 
 /* $ Files */
 
@@ -964,41 +1086,200 @@ L_eul2xf:
 
 /* $ Particulars */
 
-/*     This entry point is intended to provide an inverse for the */
-/*     entry point XF2EUL.  See that entry point for a discussion */
-/*     of notation. */
+/*     A word about notation: the symbol */
+
+/*        [ x ] */
+/*             i */
+
+/*     indicates a coordinate system rotation of x radians about the */
+/*     ith coordinate axis. To be specific, the symbol */
+
+/*        [ x ] */
+/*             1 */
+
+/*     indicates a coordinate system rotation of x radians about the */
+/*     first, or x-, axis; the corresponding matrix is */
+
+/*        .-                    -. */
+/*        |  1      0       0    | */
+/*        |                      | */
+/*        |  0    cos(x)  sin(x) | */
+/*        |                      | */
+/*        |  0   -sin(x)  cos(x) | */
+/*        `-                    -' */
+
+/*     Remember, this is a COORDINATE SYSTEM rotation by x radians; this */
+/*     matrix, when applied to a vector, rotates the vector by -x */
+/*     radians, not x radians. Applying the matrix to a vector yields */
+/*     the vector's representation relative to the rotated coordinate */
+/*     system. */
+
+/*     The analogous rotation about the second, or y-, axis is */
+/*     represented by */
+
+/*        [ x ] */
+/*             2 */
+
+/*     which symbolizes the matrix */
+
+/*        .-                    -. */
+/*        | cos(x)   0   -sin(x) | */
+/*        |                      | */
+/*        |  0       1      0    | */
+/*        |                      | */
+/*        | sin(x)   0    cos(x) | */
+/*        `-                    -' */
+
+/*     and the analogous rotation about the third, or z-, axis is */
+/*     represented by */
+
+/*        [ x ] */
+/*             3 */
+
+/*     which symbolizes the matrix */
+
+/*        .-                    -. */
+/*        |  cos(x)  sin(x)   0  | */
+/*        |                      | */
+/*        | -sin(x)  cos(x)   0  | */
+/*        |                      | */
+/*        |  0        0       1  | */
+/*        `-                    -' */
+
+/*     The input matrix is assumed to be the product of three */
+/*     rotation matrices, each one of the form */
+
+/*        .-                    -. */
+/*        |  1      0       0    | */
+/*        |                      | */
+/*        |  0    cos(r)  sin(r) |     (rotation of r radians about the */
+/*        |                      |      x-axis), */
+/*        |  0   -sin(r)  cos(r) | */
+/*        `-                    -' */
+
+
+/*        .-                    -. */
+/*        | cos(s)   0   -sin(s) | */
+/*        |                      | */
+/*        |  0       1      0    |     (rotation of s radians about the */
+/*        |                      |      y-axis), */
+/*        | sin(s)   0    cos(s) | */
+/*        `-                    -' */
+
+/*     or */
+
+/*        .-                    -. */
+/*        |  cos(t)  sin(t)   0  | */
+/*        |                      | */
+/*        | -sin(t)  cos(t)   0  |     (rotation of t radians about the */
+/*        |                      |      z-axis), */
+/*        |  0        0       1  | */
+/*        `-                    -' */
+
+/*     where the second rotation axis is not equal to the first or */
+/*     third. Any rotation matrix can be factored as a sequence of */
+/*     three such rotations, provided that this last criterion is met. */
+
+/*     This routine is intended to provide an inverse for XF2EUL. */
+
+/*     The two subroutine calls shown here will not change */
+/*     XFORM except for round off errors. */
+
+/*        CALL XF2EUL ( XFORM,  AXISA, AXISB, AXISC, EULANG, UNIQUE ) */
+/*        CALL EUL2XF ( EULANG, AXISA, AXISB, AXISC, XFORM          ) */
+
+/*     On the other hand the two calls */
+
+/*        CALL EUL2XF ( EULANG, AXISA, AXISB, AXISC, XFORM          ) */
+/*        CALL XF2EUL ( XFORM,  AXISA, AXISB, AXISC, EULANG, UNIQUE ) */
+
+/*     will leave EULANG unchanged only if the components of EULANG */
+/*     are in the range produced by XF2EUL and the Euler representation */
+/*     of the rotation component of XFORM is unique within that range. */
 
 /* $ Examples */
 
-/*     Suppose you have a set of Euler angles and their derivatives */
-/*     for a 3 1 3 rotation, and that you would like to determine */
-/*     the equivalent angles and derivatives for a 1 2 3 rotation. */
+/*     The numerical results shown for this example may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
 
-/*         R = [ALPHA]  [BETA]  [GAMMA] */
-/*                    3       1        3 */
+/*     1) Suppose you have a set of Euler angles and their derivatives */
+/*        for a 3 1 3 rotation, and that you would like to determine */
+/*        the equivalent angles and derivatives for a 1 2 3 rotation. */
 
-/*         R = [ROLL]  [PITCH]  [YAW] */
-/*                   1        2      3 */
+/*           R = [ALPHA]  [BETA]  [GAMMA] */
+/*                      3       1        3 */
 
-/*     The following pair of subroutine calls will perform the */
-/*     desired computation. */
+/*           R = [ROLL]  [PITCH]  [YAW] */
+/*                     1        2      3 */
 
-/*        ABGANG(1) = ALPHA */
-/*        ABGANG(2) = BETA */
-/*        ABGANG(3) = GAMMA */
-/*        ABGANG(4) = DALPHA */
-/*        ABGANG(5) = DBETA */
-/*        ABGANG(6) = DGAMMA */
+/*        The following code example will perform the desired */
+/*        computation. */
 
-/*        CALL EUL2XF ( ABGANG, 3, 1, 3, XFORM  ) */
-/*        CALL XF2EUL ( XFORM,  1, 2, 3, RPYANG, UNIQUE ) */
 
-/*        ROLL     = RPYANG(1) */
-/*        PITCH    = RPYANG(2) */
-/*        YAW      = RPYANG(3) */
-/*        DROLL    = RPYANG(4) */
-/*        DPITCH   = RPYANG(5) */
-/*        DYAW     = RPYANG(6) */
+/*        Example code begins here. */
+
+
+/*              PROGRAM EUL2XF_EX1 */
+/*              IMPLICIT NONE */
+
+/*        C */
+/*        C     Local variables. */
+/*        C */
+/*              DOUBLE PRECISION      ABGANG ( 6    ) */
+/*              DOUBLE PRECISION      RPYANG ( 6    ) */
+/*              DOUBLE PRECISION      XFORM  ( 6, 6 ) */
+
+/*              LOGICAL               UNIQUE */
+
+/*        C */
+/*        C     Define the initial set of Euler angles. */
+/*        C */
+/*              ABGANG(1) =  0.01D0 */
+/*              ABGANG(2) =  0.03D0 */
+/*              ABGANG(3) =  0.09D0 */
+/*              ABGANG(4) = -0.001D0 */
+/*              ABGANG(5) = -0.003D0 */
+/*              ABGANG(6) = -0.009D0 */
+
+/*        C */
+/*        C     Compute the equivalent angles and derivatives for a */
+/*        C     1-2-3 rotation. */
+/*        C */
+/*              CALL EUL2XF ( ABGANG, 3, 1, 3, XFORM  ) */
+/*              CALL XF2EUL ( XFORM,  1, 2, 3, RPYANG, UNIQUE ) */
+
+/*              IF ( UNIQUE )  THEN */
+
+/*                 WRITE(*,'(A)') '1-2-3 equivalent rotation to input ' */
+/*             .               // '(radians):' */
+/*                 WRITE(*,'(2(A,F13.9))') 'Roll  ', RPYANG(1), */
+/*             .                           ', dRoll/dt  ', RPYANG(4) */
+/*                 WRITE(*,'(2(A,F13.9))') 'Pitch ', RPYANG(2), */
+/*             .                           ', dPitch/dt ', RPYANG(5) */
+/*                 WRITE(*,'(2(A,F13.9))') 'Yaw   ', RPYANG(3), */
+/*             .                           ', dYaw/dt   ', RPYANG(6) */
+
+/*              ELSE */
+
+/*                 WRITE(*,*) 'The values in RPYANG are not uniquely ' */
+/*             .          //  'determined.' */
+
+/*              END IF */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*        1-2-3 equivalent rotation to input (radians): */
+/*        Roll    0.029998501, dRoll/dt   -0.002999550 */
+/*        Pitch  -0.000299950, dPitch/dt   0.000059980 */
+/*        Yaw     0.099995501, dYaw/dt    -0.009998650 */
+
 
 /* $ Restrictions */
 
@@ -1010,20 +1291,30 @@ L_eul2xf:
 
 /* $ Author_and_Institution */
 
-/*     W.L. Taber      (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
 
+/* -    SPICELIB Version 2.1.0, 26-OCT-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. Added complete */
+/*        code example based on existing fragment. */
+
 /* -    SPICELIB Version 2.0.1, 25-APR-2007 (EDW) */
 
-/*      Corrected code in Examples section, example showed */
-/*      a XF2EUL call: */
+/*        Corrected code in $Examples section, example showed */
+/*        a XF2EUL call: */
 
-/*            CALL XF2EUL ( XFORM,  1, 2, 3, RPYANG ) */
+/*           CALL XF2EUL ( XFORM,  1, 2, 3, RPYANG ) */
 
-/*      The proper form of the call: */
+/*        The proper form of the call: */
 
-/*            CALL XF2EUL ( XFORM,  1, 2, 3, RPYANG, UNIQUE ) */
+/*           CALL XF2EUL ( XFORM,  1, 2, 3, RPYANG, UNIQUE ) */
 
 /* -    SPICELIB Version 2.0.0, 31-OCT-2005 (NJB) */
 
@@ -1075,14 +1366,14 @@ L_eul2xf:
 /*        second angle to zero.  The same goes for the angular rates. */
 
 	locang[(i__1 = i__ - 1) < 6 && 0 <= i__1 ? i__1 : s_rnge("locang", 
-		i__1, "xf2eul_", (ftnlen)1119)] = locang[(i__2 = i__ - 1) < 6 
+		i__1, "xf2eul_", (ftnlen)1416)] = locang[(i__2 = i__ - 1) < 6 
 		&& 0 <= i__2 ? i__2 : s_rnge("locang", i__2, "xf2eul_", (
-		ftnlen)1119)] + locang[1];
+		ftnlen)1416)] + locang[1];
 	locang[1] = 0.;
 	locang[(i__1 = i__ + 2) < 6 && 0 <= i__1 ? i__1 : s_rnge("locang", 
-		i__1, "xf2eul_", (ftnlen)1122)] = locang[(i__2 = i__ + 2) < 6 
+		i__1, "xf2eul_", (ftnlen)1419)] = locang[(i__2 = i__ + 2) < 6 
 		&& 0 <= i__2 ? i__2 : s_rnge("locang", i__2, "xf2eul_", (
-		ftnlen)1122)] + locang[4];
+		ftnlen)1419)] + locang[4];
 	locang[4] = 0.;
 
 /*        Pick a second axis that doesn't match the others.  Since */
@@ -1090,13 +1381,13 @@ L_eul2xf:
 /*        matters here is picking a distinct axis. */
 
 	if (*axisc == next[(i__1 = *axisa - 1) < 3 && 0 <= i__1 ? i__1 : 
-		s_rnge("next", i__1, "xf2eul_", (ftnlen)1130)]) {
+		s_rnge("next", i__1, "xf2eul_", (ftnlen)1427)]) {
 
 /*           The first axis is the predecessor of the third, so we pick */
 /*           the successor of the third. */
 
 	    locaxb = next[(i__1 = *axisc - 1) < 3 && 0 <= i__1 ? i__1 : 
-		    s_rnge("next", i__1, "xf2eul_", (ftnlen)1135)];
+		    s_rnge("next", i__1, "xf2eul_", (ftnlen)1432)];
 	} else {
 
 /*           Either the third axis is the predecessor of the first or */
@@ -1104,7 +1395,7 @@ L_eul2xf:
 /*           choice. */
 
 	    locaxb = next[(i__1 = *axisa - 1) < 3 && 0 <= i__1 ? i__1 : 
-		    s_rnge("next", i__1, "xf2eul_", (ftnlen)1143)];
+		    s_rnge("next", i__1, "xf2eul_", (ftnlen)1440)];
 	}
     }
 
@@ -1131,7 +1422,7 @@ L_eul2xf:
     b = locaxb;
     l = 6 - a - b;
     d__ = delta[(i__1 = a + b * 3 - 4) < 9 && 0 <= i__1 ? i__1 : s_rnge("del"
-	    "ta", i__1, "xf2eul_", (ftnlen)1175)];
+	    "ta", i__1, "xf2eul_", (ftnlen)1472)];
 
 /*     Compute the various sines and cosines that we need. */
 
@@ -1183,17 +1474,17 @@ L_eul2xf:
     solutn[8] = -d__ * ca * v;
     mxv_(solutn, &locang[3], domega);
     drdtrt[(i__1 = l + b * 3 - 4) < 9 && 0 <= i__1 ? i__1 : s_rnge("drdtrt", 
-	    i__1, "xf2eul_", (ftnlen)1233)] = domega[0];
+	    i__1, "xf2eul_", (ftnlen)1530)] = domega[0];
     drdtrt[(i__1 = b + l * 3 - 4) < 9 && 0 <= i__1 ? i__1 : s_rnge("drdtrt", 
-	    i__1, "xf2eul_", (ftnlen)1234)] = -domega[0];
+	    i__1, "xf2eul_", (ftnlen)1531)] = -domega[0];
     drdtrt[(i__1 = a + l * 3 - 4) < 9 && 0 <= i__1 ? i__1 : s_rnge("drdtrt", 
-	    i__1, "xf2eul_", (ftnlen)1236)] = domega[1];
+	    i__1, "xf2eul_", (ftnlen)1533)] = domega[1];
     drdtrt[(i__1 = l + a * 3 - 4) < 9 && 0 <= i__1 ? i__1 : s_rnge("drdtrt", 
-	    i__1, "xf2eul_", (ftnlen)1237)] = -domega[1];
+	    i__1, "xf2eul_", (ftnlen)1534)] = -domega[1];
     drdtrt[(i__1 = b + a * 3 - 4) < 9 && 0 <= i__1 ? i__1 : s_rnge("drdtrt", 
-	    i__1, "xf2eul_", (ftnlen)1239)] = domega[2];
+	    i__1, "xf2eul_", (ftnlen)1536)] = domega[2];
     drdtrt[(i__1 = a + b * 3 - 4) < 9 && 0 <= i__1 ? i__1 : s_rnge("drdtrt", 
-	    i__1, "xf2eul_", (ftnlen)1240)] = -domega[2];
+	    i__1, "xf2eul_", (ftnlen)1537)] = -domega[2];
     drdtrt[0] = 0.;
     drdtrt[4] = 0.;
     drdtrt[8] = 0.;
@@ -1201,19 +1492,19 @@ L_eul2xf:
     for (j = 1; j <= 3; ++j) {
 	for (i__ = 1; i__ <= 3; ++i__) {
 	    xform[(i__1 = i__ + j * 6 - 7) < 36 && 0 <= i__1 ? i__1 : s_rnge(
-		    "xform", i__1, "xf2eul_", (ftnlen)1250)] = r__[(i__2 = 
+		    "xform", i__1, "xf2eul_", (ftnlen)1547)] = r__[(i__2 = 
 		    i__ + j * 3 - 4) < 9 && 0 <= i__2 ? i__2 : s_rnge("r", 
-		    i__2, "xf2eul_", (ftnlen)1250)];
+		    i__2, "xf2eul_", (ftnlen)1547)];
 	    xform[(i__1 = i__ + 3 + (j + 3) * 6 - 7) < 36 && 0 <= i__1 ? i__1 
-		    : s_rnge("xform", i__1, "xf2eul_", (ftnlen)1251)] = r__[(
+		    : s_rnge("xform", i__1, "xf2eul_", (ftnlen)1548)] = r__[(
 		    i__2 = i__ + j * 3 - 4) < 9 && 0 <= i__2 ? i__2 : s_rnge(
-		    "r", i__2, "xf2eul_", (ftnlen)1251)];
+		    "r", i__2, "xf2eul_", (ftnlen)1548)];
 	    xform[(i__1 = i__ + 3 + j * 6 - 7) < 36 && 0 <= i__1 ? i__1 : 
-		    s_rnge("xform", i__1, "xf2eul_", (ftnlen)1252)] = drdt[(
+		    s_rnge("xform", i__1, "xf2eul_", (ftnlen)1549)] = drdt[(
 		    i__2 = i__ + j * 3 - 4) < 9 && 0 <= i__2 ? i__2 : s_rnge(
-		    "drdt", i__2, "xf2eul_", (ftnlen)1252)];
+		    "drdt", i__2, "xf2eul_", (ftnlen)1549)];
 	    xform[(i__1 = i__ + (j + 3) * 6 - 7) < 36 && 0 <= i__1 ? i__1 : 
-		    s_rnge("xform", i__1, "xf2eul_", (ftnlen)1253)] = 0.;
+		    s_rnge("xform", i__1, "xf2eul_", (ftnlen)1550)] = 0.;
 	}
     }
     chkout_("EUL2XF", (ftnlen)6);

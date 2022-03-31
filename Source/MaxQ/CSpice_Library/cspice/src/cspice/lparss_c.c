@@ -3,7 +3,7 @@
 -Procedure lparss_c (Parse a list of items; return a set)
 
 -Abstract
- 
+
    Parse a list of items separated by multiple delimiters, placing the
    resulting items into a set.
 
@@ -33,13 +33,16 @@
    ACTIONS OF RECIPIENT IN THE USE OF THE SOFTWARE.
 
 -Required_Reading
- 
-   None. 
- 
+
+   None.
+
 -Keywords
- 
-   CHARACTER,  LIST,  PARSING,  STRING 
- 
+
+   CHARACTER
+   LIST
+   PARSING
+   STRING
+
 */
 
    #include "SpiceUsr.h"
@@ -50,161 +53,186 @@
 
    void lparss_c ( ConstSpiceChar   * list,
                    ConstSpiceChar   * delims,
-                   SpiceCell        * set     ) 
+                   SpiceCell        * set     )
 
 /*
 
 -Brief_I/O
- 
-   VARIABLE  I/O  DESCRIPTION 
-   --------  ---  -------------------------------------------------- 
-   list       I    List of items delimited by delims. 
-   delims     I    Single characters which delimit items. 
-   set        O    Set containing items in the list, left justified. 
- 
+
+   VARIABLE  I/O  DESCRIPTION
+   --------  ---  --------------------------------------------------
+   list       I    List of items delimited by delims.
+   delims     I    Single characters which delimit items.
+   set        O    Set containing items in the list, left justified.
+
 -Detailed_Input
- 
-   list        is a list of items delimited by any one of the
-               characters in the string delims. Consecutive delimiters,
-               and delimiters at the beginning and end of the list, are
+
+   list        is a list of items delimited by any one of the characters
+               in the string `delims'. Consecutive delimiters, and
+               delimiters at the beginning and end of the list, are
                considered to delimit empty items. A blank or empty list
-               is considered to contain a single, empty item.  Leading
-               and trailing blanks in list are ignored.
-  
-   delims      contains the individual characters which delimit
-               the items in the list. These may be any ASCII
-               characters, including blanks.
+               is considered to contain a single, empty item. Leading and
+               trailing blanks in list are ignored.
+
+   delims      contains the individual characters which delimit the
+               items in the list. These may be any ASCII characters,
+               including blanks.
 
                However, by definition, consecutive blanks are NOT
-               considered to be consecutive delimiters. Nor are
-               a blank and any other delimiter considered to be
-               consecutive delimiters.  
+               considered to be consecutive delimiters. Nor are a blank
+               and any other delimiter considered to be consecutive
+               delimiters. In addition, leading and trailing blanks are
+               ignored.
 
 -Detailed_Output
- 
-   set         is a CSPICE set containing the items in the list,
-               left justified. Any item in the list too long to fit into 
-               an element of items is truncated on the right.  Empty
-               (null) or blank items in the input string are mapped to
-               empty strings on output.
 
-               set should be declared by the caller as a character
-               SpiceCell:
+   set         is a SPICE set containing the items in the list, left
+               justified. Any item in the list too long to fit into an
+               element of `set' is truncated on the right. Empty or blank
+               items in the input string are mapped to empty strings on
+               output.
 
-                  SPICECHAR_CELL ( set, NMAX, LENGTH );
-
-               where NMAX is the maximum number of strings the set is
-               expected to hold and LENGTH is the maximum length of
-               the strings, counting the terminating null.
-
-               The strings in set will be sorted in increasing order,
-               and duplicates will be removed.  Trailing blanks are
+               The strings in `set' will be sorted in increasing order,
+               and duplicates will be removed. Trailing blanks are
                ignored in string comparisons.
 
+               The size of the set must be initialized prior to calling
+               lparss_c.
+
+               `set' must be declared as a character SpiceCell.
+
+               CSPICE provides the following macro, which declares and
+               initializes the cell
+
+                  SPICECHAR_CELL          ( set, SETSZ, SETMLEN );
+
+               where SETSZ is the maximum capacity of `set' and SETMLEN is the
+               maximum length of any member in the character cell.
+
 -Parameters
- 
-   None. 
- 
+
+   None.
+
 -Exceptions
- 
- 
-   1)  If the size of the set is not large enough to accomodate all of
-       the items in the set, the error SPICE(SETEXCESS) is signaled.
-       
-   2)  The error SPICE(NULLPOINTER) is signaled if either of the input
-       string pointers is null.
 
-   3)  If the set does not have character type, the error 
-       SPICE(TYPEMISMATCH) will be signaled..
-       
-   4)  An empty input string will result in a single, empty output 
-       token.  This case is not an error.
+   1)  If the size of the set is not large enough to accommodate all
+       of the items in the set, an error is signaled by a routine in
+       the call tree of this routine.
 
-   5)  If the string length associated with set is too short to
-       be usable when constructing a character Fortran-style cell,
-       the error will be diagnosed by routines in the call tree
-       of this routine.  See the routine enchar_ for details.
-    
+   2)  If the string length of `set' is too short to accommodate an
+       item, the item will be truncated on the right.
+
+   3)  If the string length of `set' is too short to permit encoding of
+       integers via the SPICELIB routine ENCHAR, an error is signaled
+       by a routine in the call tree of this routine.
+
+   4)  If any of the `list', `delims' or `list' input string pointers
+       is null, the error SPICE(NULLPOINTER) is signaled.
+
+   5)  If any of the `list' or `delims' input strings has zero
+       length, the error SPICE(EMPTYSTRING) is signaled.
+
+   6)  If the `set' cell argument has a type other than SpiceChar,
+       the error SPICE(TYPEMISMATCH) is signaled.
+
+   7)  If the string length associated with the argument `set' is
+       non-positive or too short to be usable when constructing the
+       equivalent SPICE character cell required by the wrapped
+       SPICELIB routine, an error is signaled by a routine in the
+       call tree of this routine.
+
+   8)  An empty input `list' will result in a single, empty string item
+       added to `set'. This case is not an error.
+
 -Files
- 
-   None. 
- 
+
+   None.
+
 -Particulars
- 
-   None. 
- 
+
+   None.
+
 -Examples
- 
-   The following examples illustrate the operation of lparss_c. 
 
-  1) Let 
+   The following examples illustrate the operation of lparss_c.
 
-        list   == "  A number of words   separated   by spaces.   " 
-        delims == " ,." 
-         
-     Let set be declared with size 20.
+   1) Let
 
-     Then 
+         list   == "  A number of words   separated   by spaces.   "
+         delims == " ,."
 
-        Element 0 of set == " " 
-        Element 1 of set == "A" 
-        Element 2 of set == "by" 
-        Element 3 of set == "number" 
-        Element 4 of set == "of" 
-        Element 5 of set == "separated" 
-        Element 6 of set == "spaces" 
-        Element 7 of set == "words" 
+      Let set be declared with size 20.
 
-   2) Let 
+      Then
 
-         list   == "  1986-187// 13:15:12.184 " 
-         delims == " ,/-:" 
-         nmax   == 20 
+         Element 0 of set == " "
+         Element 1 of set == "A"
+         Element 2 of set == "by"
+         Element 3 of set == "number"
+         Element 4 of set == "of"
+         Element 5 of set == "separated"
+         Element 6 of set == "spaces"
+         Element 7 of set == "words"
 
-      Then 
+    2) Let
 
-         Element 0 of set == ""      
-         Element 1 of set == "12.184" 
-         Element 2 of set == "13" 
-         Element 3 of set == "15" 
-         Element 4 of set == "187" 
-         Element 5 of set == "1986"
- 
- 
+          list   == "  1986-187// 13:15:12.184 "
+          delims == " ,/-:"
+          nmax   == 20
+
+       Then
+
+          Element 0 of set == ""
+          Element 1 of set == "12.184"
+          Element 2 of set == "13"
+          Element 3 of set == "15"
+          Element 4 of set == "187"
+          Element 5 of set == "1986"
+
 -Restrictions
- 
+
    1)  String comparisons performed by this routine are Fortran-style:
        trailing blanks in the input array or key value are ignored.
        This gives consistent behavior with CSPICE code generated by
        the f2c translator, as well as with the Fortran SPICE Toolkit.
-      
+
        Note that this behavior is not identical to that of the ANSI
        C library functions strcmp and strncmp.
- 
--Author_and_Institution
- 
-   N.J. Bachman    (JPL)
-   I.M. Underwood  (JPL) 
- 
+
 -Literature_References
- 
-   None. 
- 
+
+   None.
+
+-Author_and_Institution
+
+   N.J. Bachman        (JPL)
+   J. Diaz del Rio     (ODC Space)
+   I.M. Underwood      (JPL)
+
 -Version
- 
+
+   -CSPICE Version 1.0.1, 29-OCT-2021 (JDR)
+
+       Edited the header to comply with NAIF standard.
+
+       Extended description of argument "set" in -Detailed_Output to include
+       type and preferred declaration method.
+
+       Added entries #2 and #3 in -Exceptions section.
+
    -CSPICE Version 1.0.0, 27-AUG-2002 (NJB) (IMU)
 
 -Index_Entries
- 
-   parse a list of items 
- 
+
+   parse a list of items
+
 -&
 */
 
 { /* Begin lparss_c */
 
    /*
-   Local variables 
+   Local variables
    */
    SpiceChar             * fCell;
 
@@ -220,32 +248,32 @@
    }
    chkin_c ( "lparss_c" );
 
-  
+
    /*
    Special case:  if the input string is empty, return a set
-   containing a single empty string. 
-   
+   containing a single empty string.
+
    We must know that list is not a null pointer first.
    */
    CHKPTR ( CHK_STANDARD, "lparss_c", list  );
-   
-   if ( list[0] == NULLCHAR ) 
+
+   if ( list[0] == NULLCHAR )
    {
       insrtc_c ( "", set );
-      
+
       chkout_c ( "lparss_c" );
       return;
    }
-   
-   
+
+
    /*
-   Check the input delimiter string to make sure the pointers are 
+   Check the input delimiter string to make sure the pointers are
    non-null and the string lengths are non-zero.
    */
    CHKFSTR ( CHK_STANDARD, "lparss_c", list   );
    CHKFSTR ( CHK_STANDARD, "lparss_c", delims );
-   
-   
+
+
    /*
    Make sure we've been handed a character set.
    */
@@ -253,7 +281,7 @@
 
 
    /*
-   Initialize the set if necessary. 
+   Initialize the set if necessary.
    */
    CELLINIT ( set );
 
@@ -281,15 +309,15 @@
              ( ftnlen       ) strlen(list),
              ( ftnlen       ) strlen(delims),
              ( ftnlen       ) fLen           );
-   
+
    /*
    Map the Fortran set to a CSPICE set.
    */
    F2C_MAP_CELL ( fCell, fLen, set );
-   
+
 
    /*
-   We're done with the dynamically allocated Fortran-style array. 
+   We're done with the dynamically allocated Fortran-style array.
    */
    free ( fCell );
 

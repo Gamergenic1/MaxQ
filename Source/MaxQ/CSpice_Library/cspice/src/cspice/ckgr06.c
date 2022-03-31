@@ -49,8 +49,8 @@ static integer c__6 = 6;
 
 /* $ Abstract */
 
-/*     Given the handle and descriptor of a type 6 segment in a CK file, */
-/*     return a specified pointing record from that segment. */
+/*     Return a specified pointing record from a type 6 CK segment, given */
+/*     the CK file's handle and the segment's descriptor. */
 
 /* $ Disclaimer */
 
@@ -210,7 +210,7 @@ static integer c__6 = 6;
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     I   The handle of the file containing the segment. */
 /*     DESCR      I   The segment descriptor. */
@@ -220,89 +220,89 @@ static integer c__6 = 6;
 
 /* $ Detailed_Input */
 
-/*     HANDLE     is the handle of the binary CK file containing the */
-/*                segment. Normally the CK file should be open for read */
-/*                access. See the Files section below for details. */
+/*     HANDLE   is the handle of the binary CK file containing the */
+/*              segment. Normally the CK file should be open for read */
+/*              access. See the $Files section below for details. */
 
-/*     DESCR      is the DAF descriptor of the type 6 segment. */
+/*     DESCR    is the DAF descriptor of the type 6 segment. */
 
-/*     RECNO      is the number of the discrete pointing instance to be */
-/*                returned from the specified type 6 segment. */
+/*     RECNO    is the number of the discrete pointing instance to be */
+/*              returned from the specified type 6 segment. */
 
 /* $ Detailed_Output */
 
-/*     RECORD     is the pointing record indexed by RECNO in the */
-/*                segment. The contents are as follows: */
+/*     RECORD   is the pointing record indexed by RECNO in the */
+/*              segment. The contents are as follows: */
 
-/*                   RECORD( 1 ) = CLKOUT */
+/*                 RECORD( 1 ) = CLKOUT */
 
-/*                CLKOUT is the encoded spacecraft clock time associated */
-/*                with the returned pointing values. */
+/*              CLKOUT is the encoded spacecraft clock time associated */
+/*              with the returned pointing values. */
 
-/*                   RECORD( 2 ) = SUBTYP */
+/*                 RECORD( 2 ) = SUBTYP */
 
-/*                SUBTYP is the CK type 6 subtype code. This code */
-/*                identifies the structure and meaning of the rest */
-/*                of the record. However, all subtypes have a */
-/*                quaternion stored in elements 4-7. */
+/*              SUBTYP is the CK type 6 subtype code. This code */
+/*              identifies the structure and meaning of the rest */
+/*              of the record. However, all subtypes have a */
+/*              quaternion stored in elements 4-7. */
 
-/*                   RECORD( 3 ) = RATE */
+/*                 RECORD( 3 ) = RATE */
 
-/*                RATE is the nominal SCLK rate expressed in units of */
-/*                seconds per tick. This rate is required to convert */
-/*                quaternion or angular velocity derivatives from units */
-/*                of radians/tick to radians/s. */
+/*              RATE is the nominal SCLK rate expressed in units of */
+/*              seconds per tick. This rate is required to convert */
+/*              quaternion or angular velocity derivatives from units */
+/*              of radians/tick to radians/s. */
 
-/*                   RECORD( 4 ) = q0 */
-/*                   RECORD( 5 ) = q1 */
-/*                   RECORD( 6 ) = q2 */
-/*                   RECORD( 7 ) = q3 */
+/*                 RECORD( 4 ) = q0 */
+/*                 RECORD( 5 ) = q1 */
+/*                 RECORD( 6 ) = q2 */
+/*                 RECORD( 7 ) = q3 */
 
-/*                Subtype 1 ends here; there are no angular velocity */
-/*                data. Angular velocity is derived by differentiating */
-/*                Lagrange interpolating polynomials. */
+/*              Subtype 1 ends here; there are no angular velocity */
+/*              data. Angular velocity is derived by differentiating */
+/*              Lagrange interpolating polynomials. */
 
-/*                   RECORD(  8 ) =  ] */
-/*                   RECORD(  9 ) =  ] --- For subtypes 0 and 2, these */
-/*                   RECORD( 10 ) =  ]     elements contain a quaternion */
-/*                   RECORD( 11 ) =  ]     derivative. For subtype 3, */
-/*                                         elements 8-10 contain an */
-/*                                         angular velocity vector; */
-/*                                         element 11 is unassigned. */
+/*                 RECORD(  8 ) =  ] */
+/*                 RECORD(  9 ) =  ] --- For subtypes 0 and 2, these */
+/*                 RECORD( 10 ) =  ]     elements contain a quaternion */
+/*                 RECORD( 11 ) =  ]     derivative. For subtype 3, */
+/*                                       elements 8-10 contain an */
+/*                                       angular velocity vector; */
+/*                                       element 11 is unassigned. */
 
-/*                                         All subtypes except subtype */
-/*                                         2 stop here. */
+/*                                       All subtypes except subtype */
+/*                                       2 stop here. */
 
-/*                   RECORD( 12 ) =  ] */
-/*                   RECORD( 13 ) =  ] --- For subtype 2, these */
-/*                   RECORD( 14 ) =  ]     elements contain an angular */
-/*                                         velocity vector. */
+/*                 RECORD( 12 ) =  ] */
+/*                 RECORD( 13 ) =  ] --- For subtype 2, these */
+/*                 RECORD( 14 ) =  ]     elements contain an angular */
+/*                                       velocity vector. */
 
 
-/*                   RECORD( 15 ) =  ] */
-/*                   RECORD( 16 ) =  ] --- For subtype 2, these */
-/*                   RECORD( 17 ) =  ]     elements contain the */
-/*                                         derivative of an angular */
-/*                                         velocity vector. */
+/*                 RECORD( 15 ) =  ] */
+/*                 RECORD( 16 ) =  ] --- For subtype 2, these */
+/*                 RECORD( 17 ) =  ]     elements contain the */
+/*                                       derivative of an angular */
+/*                                       velocity vector. */
 
-/*                The quantities q0 - q3 are the components of the */
-/*                quaternion that represents the C-matrix that transforms */
-/*                vectors from the inertial reference frame of the */
-/*                segment to the instrument frame at time CLKOUT. */
+/*              The quantities q0 - q3 are the components of the */
+/*              quaternion that represents the C-matrix that transforms */
+/*              vectors from the inertial reference frame of the */
+/*              segment to the instrument frame at time CLKOUT. */
 
-/*                Quaternion derivatives, angular velocity, or the */
-/*                derivative of angular velocity are valid only if */
-/*                these are supported by the segment subtype and */
-/*                if the segment descriptor indicates that angular */
-/*                velocity is present. */
+/*              Quaternion derivatives, angular velocity, or the */
+/*              derivative of angular velocity are valid only if */
+/*              these are supported by the segment subtype and */
+/*              if the segment descriptor indicates that angular */
+/*              velocity is present. */
 
-/*                The components of the angular velocity vector are */
-/*                specified relative to the inertial reference frame of */
-/*                the segment. */
+/*              The components of the angular velocity vector are */
+/*              specified relative to the inertial reference frame of */
+/*              the segment. */
 
-/*                Units of angular velocity and of quaternion */
-/*                derivatives are radians/second and 1/second */
-/*                respectively. */
+/*              Units of angular velocity and of quaternion */
+/*              derivatives are radians/second and 1/second */
+/*              respectively. */
 
 /* $ Parameters */
 
@@ -322,7 +322,7 @@ static integer c__6 = 6;
 /*         SPICE(CKNONEXISTREC) is signaled. */
 
 /*     4)  If the specified handle does not belong to any DAF file that */
-/*         is currently known to be open, an error is diagnosed by a */
+/*         is currently known to be open, an error is signaled by a */
 /*         routine in the call tree of this routine. */
 
 /*     5)  If DESCR is not a valid descriptor of a valid segment in the */
@@ -371,235 +371,314 @@ static integer c__6 = 6;
 /*        Example code begins here. */
 
 
-/*             PROGRAM GREX1 */
-/*             IMPLICIT NONE */
-/*       C */
-/*       C     Dump all records from a CK that */
-/*       C     contains only segments of type 6. */
-/*       C */
+/*              PROGRAM CKGR06_EX1 */
+/*              IMPLICIT NONE */
 
-/*             INCLUDE 'ck06.inc' */
-/*       C */
-/*       C     Local parameters */
-/*       C */
-/*             INTEGER               ND */
-/*             PARAMETER           ( ND     = 2 ) */
+/*        C */
+/*        C     Dump all records from a CK that */
+/*        C     contains only segments of type 6. */
+/*        C */
+/*              INCLUDE 'ck06.inc' */
 
-/*             INTEGER               NI */
-/*             PARAMETER           ( NI     = 6 ) */
+/*        C */
+/*        C     Local parameters */
+/*        C */
+/*              INTEGER               ND */
+/*              PARAMETER           ( ND     = 2 ) */
 
-/*             INTEGER               DSCSIZ */
-/*             PARAMETER           ( DSCSIZ = 5 ) */
+/*              INTEGER               NI */
+/*              PARAMETER           ( NI     = 6 ) */
 
-/*             INTEGER               FILSIZ */
-/*             PARAMETER           ( FILSIZ = 255 ) */
+/*              INTEGER               DSCSIZ */
+/*              PARAMETER           ( DSCSIZ = 5 ) */
 
-/*       C */
-/*       C     RECSIZ is the size of the largest pointing */
-/*       C     record, which corresponds to subtype 2. */
-/*       C */
-/*             INTEGER               RECSIZ */
-/*             PARAMETER           ( RECSIZ = C06PS2 + 3 ) */
+/*              INTEGER               FILSIZ */
+/*              PARAMETER           ( FILSIZ = 255 ) */
 
-/*       C */
-/*       C     Local variables */
-/*       C */
-/*             CHARACTER*(FILSIZ)    CK */
+/*        C */
+/*        C     RECSIZ is the size of the largest pointing */
+/*        C     record, which corresponds to subtype 2. */
+/*        C */
+/*              INTEGER               RECSIZ */
+/*              PARAMETER           ( RECSIZ = C06PS2 + 3 ) */
 
-/*             DOUBLE PRECISION      DC     ( ND ) */
-/*             DOUBLE PRECISION      DESCR  ( DSCSIZ ) */
-/*             DOUBLE PRECISION      IVLBDS ( 2 ) */
-/*             DOUBLE PRECISION      LSTEPC */
-/*             DOUBLE PRECISION      RATE */
-/*             DOUBLE PRECISION      RECORD ( RECSIZ ) */
+/*        C */
+/*        C     Local variables */
+/*        C */
+/*              CHARACTER*(FILSIZ)    CK */
 
-/*             INTEGER               DTYPE */
-/*             INTEGER               HANDLE */
-/*             INTEGER               IC     ( NI ) */
-/*             INTEGER               RECNO */
-/*             INTEGER               MSNO */
-/*             INTEGER               NMINI */
-/*             INTEGER               NREC */
-/*             INTEGER               SEGNO */
-/*             INTEGER               SUBTYP */
-/*             INTEGER               WINSIZ */
+/*              DOUBLE PRECISION      DC     ( ND ) */
+/*              DOUBLE PRECISION      DESCR  ( DSCSIZ ) */
+/*              DOUBLE PRECISION      IVLBDS ( 2 ) */
+/*              DOUBLE PRECISION      LSTEPC */
+/*              DOUBLE PRECISION      RATE */
+/*              DOUBLE PRECISION      RECORD ( RECSIZ ) */
 
-/*             LOGICAL               FOUND */
+/*              INTEGER               DTYPE */
+/*              INTEGER               HANDLE */
+/*              INTEGER               IC     ( NI ) */
+/*              INTEGER               RECNO */
+/*              INTEGER               MSNO */
+/*              INTEGER               NMINI */
+/*              INTEGER               NREC */
+/*              INTEGER               SEGNO */
+/*              INTEGER               SUBTYP */
+/*              INTEGER               WINSIZ */
 
-
-/*             CALL PROMPT ( 'Enter name of CK to dump > ', CK ) */
-
-/*             CALL DAFOPR ( CK, HANDLE ) */
-/*       C */
-/*       C     Dump data from each CK segment. */
-/*       C */
-/*             SEGNO = 0 */
-
-/*             CALL DAFBFS ( HANDLE ) */
-/*             CALL DAFFNA ( FOUND  ) */
-
-/*             DO WHILE ( FOUND ) */
-
-/*                SEGNO = SEGNO + 1 */
-
-/*                WRITE (*,*) ' ' */
-/*                WRITE (*,*) ' ' */
-/*                WRITE (*,*) 'Segment number: ', SEGNO */
-
-/*       C */
-/*       C        Fetch and unpack the descriptor of the */
-/*       C        current segment; check the data type. */
-/*       C */
-/*                CALL DAFGS ( DESCR ) */
-/*                CALL DAFUS ( DESCR, ND, NI, DC, IC ) */
-
-/*                DTYPE = IC(3) */
-
-/*                IF ( DTYPE .NE. 6 ) THEN */
-
-/*                   CALL SETMSG ( 'Data type must be 6 but was #.' ) */
-/*                   CALL ERRINT ( '#',  DTYPE                      ) */
-/*                   CALL SIGERR ( 'SPICE(NOTSUPPORTED)'            ) */
-
-/*                END IF */
-/*       C */
-/*       C        Get the mini-segment count for this */
-/*       C        segment. */
-/*       C */
-/*                CALL CKNM06 ( HANDLE, DESCR, NMINI ) */
-/*       C */
-/*       C        Dump data from each mini-segment. */
-/*       C */
-/*                DO MSNO = 1, NMINI */
-/*       C */
-/*       C           Get the mini-segment's record count */
-/*       C           and time bounds. */
-/*       C */
-/*                   CALL CKMP06 ( HANDLE, DESCR, MSNO,   RATE,  SUBTYP, */
-/*            .                    WINSIZ, NREC,  IVLBDS, LSTEPC        ) */
-
-/*                   WRITE (*,*) ' ' */
-/*                   WRITE (*,*) '   Mini-segment number: ', MSNO */
-/*                   WRITE (*,*) '      Rate:           ',   RATE */
-/*                   WRITE (*,*) '      Subtype:        ',   SUBTYP */
-/*                   WRITE (*,*) '      Window size:    ',   WINSIZ */
-/*                   WRITE (*,*) '      Interval start: ',   IVLBDS(1) */
-/*                   WRITE (*,*) '      Interval stop:  ',   IVLBDS(2) */
-/*                   WRITE (*,*) '      Last epoch:     ',   LSTEPC */
-/*                   WRITE (*,*) ' ' */
-
-/*                   DO RECNO = 1, NREC */
-
-/*                      CALL CKGR06 ( HANDLE, DESCR, */
-/*            .                       MSNO,   RECNO,  RECORD ) */
-
-/*                      WRITE (*,*) '      Record number: ', RECNO */
-/*                      WRITE (*,*) '         SCLKDP:     ', RECORD(1) */
-/*                      WRITE (*,*) '         Clock rate: ', RECORD(3) */
-
-/*                      IF ( SUBTYP .EQ. C06TP0 ) THEN */
-
-/*                         WRITE (*,*) '         Q(0): ', RECORD(4) */
-/*                         WRITE (*,*) '         Q(1): ', RECORD(5) */
-/*                         WRITE (*,*) '         Q(2): ', RECORD(6) */
-/*                         WRITE (*,*) '         Q(3): ', RECORD(7) */
-/*                         WRITE (*,*) '    d Q(0)/dt: ', RECORD(8) */
-/*                         WRITE (*,*) '    d Q(1)/dt: ', RECORD(9) */
-/*                         WRITE (*,*) '    d Q(2)/dt: ', RECORD(10) */
-/*                         WRITE (*,*) '    d Q(3)/dt: ', RECORD(11) */
-
-/*                      ELSE IF ( SUBTYP .EQ. C06TP1 ) THEN */
-
-/*                         WRITE (*,*) '         Q(0): ', RECORD(4) */
-/*                         WRITE (*,*) '         Q(1): ', RECORD(5) */
-/*                         WRITE (*,*) '         Q(2): ', RECORD(6) */
-/*                         WRITE (*,*) '         Q(3): ', RECORD(7) */
-
-/*                      ELSE IF ( SUBTYP .EQ. C06TP2 ) THEN */
-
-/*                         WRITE (*,*) '         Q(0): ', RECORD(4) */
-/*                         WRITE (*,*) '         Q(1): ', RECORD(5) */
-/*                         WRITE (*,*) '         Q(2): ', RECORD(6) */
-/*                         WRITE (*,*) '         Q(3): ', RECORD(7) */
-/*                         WRITE (*,*) '    d Q(0)/dt: ', RECORD(8) */
-/*                         WRITE (*,*) '    d Q(1)/dt: ', RECORD(9) */
-/*                         WRITE (*,*) '    d Q(2)/dt: ', RECORD(10) */
-/*                         WRITE (*,*) '    d Q(3)/dt: ', RECORD(11) */
-/*                         WRITE (*,*) '        AV(1): ', RECORD(12) */
-/*                         WRITE (*,*) '        AV(2): ', RECORD(13) */
-/*                         WRITE (*,*) '        AV(3): ', RECORD(14) */
-/*                         WRITE (*,*) '   d AV(1)/dt: ', RECORD(15) */
-/*                         WRITE (*,*) '   d AV(2)/dt: ', RECORD(16) */
-/*                         WRITE (*,*) '   d AV(3)/dt: ', RECORD(17) */
-
-/*                      ELSE IF ( SUBTYP .EQ. C06TP3 ) THEN */
-
-/*                         WRITE (*,*) '         Q(0): ', RECORD(4) */
-/*                         WRITE (*,*) '         Q(1): ', RECORD(5) */
-/*                         WRITE (*,*) '         Q(2): ', RECORD(6) */
-/*                         WRITE (*,*) '         Q(3): ', RECORD(7) */
-/*                         WRITE (*,*) '        AV(1): ', RECORD(8) */
-/*                         WRITE (*,*) '        AV(2): ', RECORD(9) */
-/*                         WRITE (*,*) '        AV(3): ', RECORD(10) */
-
-/*                      ELSE */
-/*                         CALL SETMSG ( 'Subtype # is not ' */
-/*            .            //            'recognized.'         ) */
-/*                         CALL ERRINT ( '#', SUBTYP           ) */
-/*                         CALL SIGERR ( 'SPICE(NOTSUPPORTED)' ) */
-/*                      END IF */
-
-/*                      WRITE (*,*) ' ' */
-
-/*                  END DO */
-
-/*                END DO */
-
-/*                CALL DAFFNA ( FOUND ) */
-
-/*             END DO */
-
-/*             END */
+/*              LOGICAL               FOUND */
 
 
-/*     An initial portion of the output created by this program, when */
-/*     the program was executed on a PC/Linux/gfortran platform, for */
-/*     a sample CK containing type 6 segments, is shown below: */
+/*              CALL PROMPT ( 'Enter name of CK to dump > ', CK ) */
+
+/*              CALL DAFOPR ( CK, HANDLE ) */
+
+/*        C */
+/*        C     Dump data from each CK segment. */
+/*        C */
+/*              SEGNO = 0 */
+
+/*              CALL DAFBFS ( HANDLE ) */
+/*              CALL DAFFNA ( FOUND  ) */
+
+/*              DO WHILE ( FOUND ) */
+
+/*                 SEGNO = SEGNO + 1 */
+
+/*                 WRITE (*,*) ' ' */
+/*                 WRITE (*,*) ' ' */
+/*                 WRITE (*,*) 'Segment number: ', SEGNO */
+
+/*        C */
+/*        C        Fetch and unpack the descriptor of the */
+/*        C        current segment; check the data type. */
+/*        C */
+/*                 CALL DAFGS ( DESCR ) */
+/*                 CALL DAFUS ( DESCR, ND, NI, DC, IC ) */
+
+/*                 DTYPE = IC(3) */
+
+/*                 IF ( DTYPE .NE. 6 ) THEN */
+
+/*                    CALL SETMSG ( 'Data type must be 6 but was #.' ) */
+/*                    CALL ERRINT ( '#',  DTYPE                      ) */
+/*                    CALL SIGERR ( 'SPICE(NOTSUPPORTED)'            ) */
+
+/*                 END IF */
+
+/*        C */
+/*        C        Get the mini-segment count for this */
+/*        C        segment. */
+/*        C */
+/*                 CALL CKNM06 ( HANDLE, DESCR, NMINI ) */
+
+/*        C */
+/*        C        Dump data from each mini-segment. */
+/*        C */
+/*                 DO MSNO = 1, NMINI */
+
+/*        C */
+/*        C           Get the mini-segment's record count */
+/*        C           and time bounds. */
+/*        C */
+/*                    CALL CKMP06 ( HANDLE, DESCR,  MSNO, */
+/*             .                    RATE,   SUBTYP, WINSIZ, */
+/*             .                    NREC,   IVLBDS, LSTEPC ) */
+
+/*                    WRITE (*,*) ' ' */
+/*                    WRITE (*,*) '   Mini-segment number: ', MSNO */
+/*                    WRITE (*,*) '      Rate:           ',   RATE */
+/*                    WRITE (*,*) '      Subtype:        ',   SUBTYP */
+/*                    WRITE (*,*) '      Window size:    ',   WINSIZ */
+/*                    WRITE (*,*) '      Interval start: ',   IVLBDS(1) */
+/*                    WRITE (*,*) '      Interval stop:  ',   IVLBDS(2) */
+/*                    WRITE (*,*) '      Last epoch:     ',   LSTEPC */
+/*                    WRITE (*,*) ' ' */
+
+/*                    DO RECNO = 1, NREC */
+
+/*                       CALL CKGR06 ( HANDLE, DESCR, */
+/*             .                       MSNO,   RECNO,  RECORD ) */
+
+/*                       WRITE (*,*) '      Record number: ', RECNO */
+/*                       WRITE (*,*) '         SCLKDP:     ', RECORD(1) */
+/*                       WRITE (*,*) '         Clock rate: ', RECORD(3) */
+
+/*                       IF ( SUBTYP .EQ. C06TP0 ) THEN */
+
+/*                          WRITE (*,*) '         Q(0): ', RECORD(4) */
+/*                          WRITE (*,*) '         Q(1): ', RECORD(5) */
+/*                          WRITE (*,*) '         Q(2): ', RECORD(6) */
+/*                          WRITE (*,*) '         Q(3): ', RECORD(7) */
+/*                          WRITE (*,*) '    d Q(0)/dt: ', RECORD(8) */
+/*                          WRITE (*,*) '    d Q(1)/dt: ', RECORD(9) */
+/*                          WRITE (*,*) '    d Q(2)/dt: ', RECORD(10) */
+/*                          WRITE (*,*) '    d Q(3)/dt: ', RECORD(11) */
+
+/*                       ELSE IF ( SUBTYP .EQ. C06TP1 ) THEN */
+
+/*                          WRITE (*,*) '         Q(0): ', RECORD(4) */
+/*                          WRITE (*,*) '         Q(1): ', RECORD(5) */
+/*                          WRITE (*,*) '         Q(2): ', RECORD(6) */
+/*                          WRITE (*,*) '         Q(3): ', RECORD(7) */
+
+/*                       ELSE IF ( SUBTYP .EQ. C06TP2 ) THEN */
+
+/*                          WRITE (*,*) '         Q(0): ', RECORD(4) */
+/*                          WRITE (*,*) '         Q(1): ', RECORD(5) */
+/*                          WRITE (*,*) '         Q(2): ', RECORD(6) */
+/*                          WRITE (*,*) '         Q(3): ', RECORD(7) */
+/*                          WRITE (*,*) '    d Q(0)/dt: ', RECORD(8) */
+/*                          WRITE (*,*) '    d Q(1)/dt: ', RECORD(9) */
+/*                          WRITE (*,*) '    d Q(2)/dt: ', RECORD(10) */
+/*                          WRITE (*,*) '    d Q(3)/dt: ', RECORD(11) */
+/*                          WRITE (*,*) '        AV(1): ', RECORD(12) */
+/*                          WRITE (*,*) '        AV(2): ', RECORD(13) */
+/*                          WRITE (*,*) '        AV(3): ', RECORD(14) */
+/*                          WRITE (*,*) '   d AV(1)/dt: ', RECORD(15) */
+/*                          WRITE (*,*) '   d AV(2)/dt: ', RECORD(16) */
+/*                          WRITE (*,*) '   d AV(3)/dt: ', RECORD(17) */
+
+/*                       ELSE IF ( SUBTYP .EQ. C06TP3 ) THEN */
+
+/*                          WRITE (*,*) '         Q(0): ', RECORD(4) */
+/*                          WRITE (*,*) '         Q(1): ', RECORD(5) */
+/*                          WRITE (*,*) '         Q(2): ', RECORD(6) */
+/*                          WRITE (*,*) '         Q(3): ', RECORD(7) */
+/*                          WRITE (*,*) '        AV(1): ', RECORD(8) */
+/*                          WRITE (*,*) '        AV(2): ', RECORD(9) */
+/*                          WRITE (*,*) '        AV(3): ', RECORD(10) */
+
+/*                       ELSE */
+/*                          CALL SETMSG ( 'Subtype # is not ' */
+/*             .            //            'recognized.'         ) */
+/*                          CALL ERRINT ( '#', SUBTYP           ) */
+/*                          CALL SIGERR ( 'SPICE(NOTSUPPORTED)' ) */
+/*                       END IF */
+
+/*                       WRITE (*,*) ' ' */
+
+/*                   END DO */
+
+/*                 END DO */
+
+/*                 CALL DAFFNA ( FOUND ) */
+
+/*              END DO */
+
+/*              END */
 
 
-/*        Segment number:            1 */
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, using the Rosetta CK file named */
+/*        RATT_DV_257_02_01_T6_00344.BC, the output was: */
 
-/*           Mini-segment number:            1 */
-/*              Rate:             1.52587890625000000E-005 */
-/*              Subtype:                   1 */
-/*              Window size:              10 */
-/*              Interval start:    11288914762710.869 */
-/*              Interval stop:     11290384616127.203 */
-/*              Last epoch:        11290384616127.203 */
 
-/*              Record number:            1 */
-/*                 SCLKDP:        11288914762710.869 */
-/*                 Clock rate:   1.52587890625000000E-005 */
-/*                 Q(0):   0.46164827229286126 */
-/*                 Q(1):  -0.70575355403199758 */
-/*                 Q(2):  -0.29319084125475281 */
-/*                 Q(3):  -0.45036865373250068 */
+/*        Enter name of CK to dump > RATT_DV_257_02_01_T6_00344.BC */
 
-/*              Record number:            2 */
-/*                 SCLKDP:        11288998883607.230 */
-/*                 Clock rate:   1.52587890625000000E-005 */
-/*                 Q(0):   0.46162099825988423 */
-/*                 Q(1):  -0.70570932104748119 */
-/*                 Q(2):  -0.29323821047130305 */
-/*                 Q(3):  -0.45043507864268195 */
 
-/*              Record number:            3 */
-/*                 SCLKDP:        11289077342579.063 */
-/*                 Clock rate:   1.52587890625000000E-005 */
-/*                 Q(0):   0.46159435700379842 */
-/*                 Q(1):  -0.70566850733850173 */
-/*                 Q(2):  -0.29328062251407311 */
-/*                 Q(3):  -0.45049870564815003 */
+/*         Segment number:            1 */
+
+/*            Mini-segment number:            1 */
+/*               Rate:              1.5258789062500000E-005 */
+/*               Subtype:                   1 */
+/*               Window size:              10 */
+/*               Interval start:    24471796593941.691 */
+/*               Interval stop:     24472844252095.523 */
+/*               Last epoch:        24472844252095.523 */
+
+/*               Record number:            1 */
+/*                  SCLKDP:        24471796593941.691 */
+/*                  Clock rate:    1.5258789062500000E-005 */
+/*                  Q(0):  -0.95514652599900884 */
+/*                  Q(1):   0.16277660709912350 */
+/*                  Q(2):   0.11688592199582469 */
+/*                  Q(3):  -0.21802883133317097 */
+
+/*               Record number:            2 */
+/*                  SCLKDP:        24472234538651.801 */
+/*                  Clock rate:    1.5258789062500000E-005 */
+/*                  Q(0):  -0.95746293340938016 */
+/*                  Q(1):   0.14880147654385018 */
+/*                  Q(2):   0.12021705739210503 */
+/*                  Q(3):  -0.21603405018065600 */
+
+/*               Record number:            3 */
+/*                  SCLKDP:        24472676416997.039 */
+/*                  Clock rate:    1.5258789062500000E-005 */
+/*                  Q(0):  -0.95956954083287593 */
+/*                  Q(1):   0.13478976855182764 */
+/*                  Q(2):   0.12355113537344563 */
+/*                  Q(3):  -0.21399329790313779 */
+
+/*               Record number:            4 */
+/*                  SCLKDP:        24472844252095.523 */
+/*                  Clock rate:    1.5258789062500000E-005 */
+/*                  Q(0):  -0.96030932381589129 */
+/*                  Q(1):   0.12949634043544370 */
+/*                  Q(2):   0.12480922302154081 */
+/*                  Q(3):  -0.21321200307405938 */
+
+
+/*            Mini-segment number:            2 */
+/*               Rate:              1.5258789062500000E-005 */
+/*               Subtype:                   1 */
+/*               Window size:              10 */
+/*               Interval start:    24472844252095.523 */
+/*               Interval stop:     24472863912889.105 */
+/*               Last epoch:        24472863912889.105 */
+
+/*               Record number:            1 */
+/*                  SCLKDP:        24472844252095.523 */
+/*                  Clock rate:    1.5258789062500000E-005 */
+/*                  Q(0):  -0.96030932403888680 */
+/*                  Q(1):   0.12949633879120778 */
+/*                  Q(2):   0.12480922338599261 */
+/*                  Q(3):  -0.21321200285498659 */
+
+/*               Record number:            2 */
+/*                  SCLKDP:        24472851309816.297 */
+/*                  Clock rate:    1.5258789062500000E-005 */
+/*                  Q(0):  -0.96035266600496283 */
+/*                  Q(1):   0.12922730685291675 */
+/*                  Q(2):   0.12480259688433022 */
+/*                  Q(3):  -0.21318389214860939 */
+
+/*               Record number:            3 */
+/*                  SCLKDP:        24472859879905.805 */
+/*                  Clock rate:    1.5258789062500000E-005 */
+/*                  Q(0):  -0.96041575813224878 */
+/*                  Q(1):   0.12886248165419970 */
+/*                  Q(2):   0.12474605317805663 */
+/*                  Q(3):  -0.21315359384649502 */
+
+/*               Record number:            4 */
+/*                  SCLKDP:        24472863912889.105 */
+/*                  Clock rate:    1.5258789062500000E-005 */
+/*                  Q(0):  -0.96043784177251290 */
+/*                  Q(1):   0.12871819083493355 */
+/*                  Q(2):   0.12475418449192528 */
+/*                  Q(3):  -0.21313651233726627 */
+
+
+/*            Mini-segment number:            3 */
+/*               Rate:              1.5258789062500000E-005 */
+/*               Subtype:                   1 */
+/*               Window size:              10 */
+/*               Interval start:    24472863912889.105 */
+/*               Interval stop:     24473139163999.207 */
+/*               Last epoch:        24473139163999.207 */
+
+/*               Record number:            1 */
+/*                  SCLKDP:        24472863912889.105 */
+/*                  Clock rate:    1.5258789062500000E-005 */
+/*                  Q(0):  -0.96043784177455394 */
+/*                  Q(1):   0.12871819083614683 */
+
+/*        [...] */
+
+
+/*        Warning: incomplete output. Only 100 out of 2378824 lines have */
+/*        been provided. */
 
 
 /* $ Restrictions */
@@ -612,18 +691,23 @@ static integer c__6 = 6;
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman     (JPL) */
-/*     J.M. Lynch       (JPL) */
-/*     B.V. Semenov     (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     J.M. Lynch         (JPL) */
+/*     B.V. Semenov       (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.0.1, 06-JUL-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.0.0, 14-MAR-2014 (NJB) (JML) (BVS) */
 
 /* -& */
 /* $ Index_Entries */
 
-/*     get ck type_6 record */
+/*     get CK type_6 record */
 
 /* -& */
 
@@ -766,7 +850,7 @@ static integer c__6 = 6;
 	return 0;
     }
     pktsiz = pktszs[(i__1 = subtyp) < 4 && 0 <= i__1 ? i__1 : s_rnge("pktszs",
-	     i__1, "ckgr06_", (ftnlen)686)];
+	     i__1, "ckgr06_", (ftnlen)772)];
 
 /*     Check the record index. */
 

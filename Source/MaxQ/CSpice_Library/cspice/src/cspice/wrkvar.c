@@ -11,7 +11,7 @@ static integer c__9 = 9;
 static integer c__1 = 1;
 static integer c__5 = 5;
 
-/* $Procedure      WRKVAR ( Write a variable to a kernel file ) */
+/* $Procedure WRKVAR ( Write a variable to a kernel file ) */
 /* Subroutine */ int wrkvar_(integer *unit, char *name__, char *dirctv, char *
 	tabsym, integer *tabptr, doublereal *tabval, ftnlen name_len, ftnlen 
 	dirctv_len, ftnlen tabsym_len)
@@ -84,7 +84,8 @@ static integer c__5 = 5;
 
 /* $ Required_Reading */
 
-/*     KERNEL, SYMBOLS */
+/*     KERNEL */
+/*     SYMBOLS */
 
 /* $ Keywords */
 
@@ -100,49 +101,44 @@ static integer c__5 = 5;
 /*     DIRCTV     I   Kernel directive: '=' or '+='. */
 /*     TABSYM, */
 /*     TABPTR, */
-/*     TABVAL    I/O  Symbol table. */
+/*     TABVAL     I   Double precision symbol table. */
 
 /* $ Detailed_Input */
 
-/*     UNIT        is the logical unit to which the variable will be */
-/*                 written. This is usually the logical unit to which */
-/*                 the output kernel file is connected. */
+/*     UNIT     is the logical unit to which the variable will be */
+/*              written. This is usually the logical unit to which the */
+/*              output kernel file is connected. */
 
-/*     NAME        is the name of the variable to be written to UNIT. */
+/*     NAME     is the name of the variable to be written to UNIT. */
 
-/*     DIRCTV      is the directive linking NAME and its associated */
-/*                 values in the kernel file. This may be any of the */
-/*                 directives recognized by RDKVAR. */
+/*     DIRCTV   is the directive linking NAME and its associated values */
+/*              in the kernel file. This may be any of the directives */
+/*              recognized by RDKVAR. */
 
 /*     TABSYM, */
 /*     TABPTR, */
-/*     TABVAL      are the components of a double precision symbol */
-/*                 table. On input, the table may or may not contain */
-/*                 any variables. */
+/*     TABVAL   are the components of a double precision symbol table. */
+
+/*              On input, the table may or may not contain any variables. */
 
 /* $ Detailed_Output */
 
-/*     TABSYM, */
-/*     TABPTR, */
-/*     TABVAL      are the components of a double precision symbol */
-/*                 table. This subroutine does not change the components; */
-/*                 they contain the same values on output as they did */
-/*                 on input. */
+/*     None. */
 
 /* $ Parameters */
 
-/*      None. */
+/*     None. */
+
+/* $ Exceptions */
+
+/*     1)  If an error occurs writing the variable to UNIT, the error */
+/*         SPICE(WRITEERROR) is signaled. */
 
 /* $ Files */
 
 /*     If the variable is to be written to an output kernel file, the */
 /*     file should be opened with a logical unit determined by the */
 /*     calling program. */
-
-/* $ Exceptions */
-
-/*     1) If an error occurs writing the variable to UNIT, the */
-/*        error SPICE(WRITEERROR) is signalled. */
 
 /* $ Particulars */
 
@@ -165,8 +161,8 @@ static integer c__5 = 5;
 /*     The output to UNIT might look like this, depending on the */
 /*     length of the symbol table variables: */
 
-/*     MEAN_ANOM   = ( 6.239996D0, */
-/*                     1.99096871D-7  ) */
+/*        MEAN_ANOM   = ( 6.239996D0, */
+/*                        1.99096871D-7  ) */
 
 /* $ Restrictions */
 
@@ -178,17 +174,31 @@ static integer c__5 = 5;
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     I.M. Underwood  (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 08-APR-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
+
+/*        Updated $Brief_I/O entry for symbol table (TABSYM, TABPTR, */
+/*        TABVAR) to indicate that these arguments only are an input to */
+/*        the routine, and not an output. Removed $Detailed_Output */
+/*        documentation, as the routine operates by side-effects and has */
+/*        no output arguments. */
 
 /* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
 
 /*        Comment section for permuted index source lines was added */
 /*        following the header. */
 
-/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (IMU) */
+/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (IMU) (NJB) */
 
 /* -& */
 /* $ Index_Entries */
@@ -201,7 +211,7 @@ static integer c__5 = 5;
 /* -    Beta Version 1.1.0, 20-DEC-1988 (NJB) */
 
 /*        Call to IOERR changed to be consistent with new calling */
-/*        protocol.  SETMSG call deleted, since IOERR now calls SETMSG. */
+/*        protocol. SETMSG call deleted, since IOERR now calls SETMSG. */
 
 /* -& */
 

@@ -38,8 +38,8 @@
 
 -Keywords
 
-   ERROR
    CONVERSION
+   ERROR
 
 */
 
@@ -63,23 +63,22 @@
 
 -Detailed_Input
 
+   marker      is a character string that marks a position in
+               the long error message where a character string
+               is to be substituted. Leading and trailing blanks
+               in marker are not significant.
 
-   marker     is a character string that marks a position in
-              the long error message where a character string
-              is to be substituted.  Leading and trailing blanks
-              in marker are not significant.
+               Case IS significant:  "XX" is considered to be
+               a different marker from "xx".
 
-              Case IS significant:  "XX" is considered to be
-              a different marker from "xx".
-
-   string     is a character string that will be substituted for
-              the first occurrence of marker in the long error
-              message.  This occurrence of the substring indicated
-              by marker will be removed and replaced by string.
-              Leading and trailing blanks in string are not
-              significant.  However, if string is completely blank,
-              a single blank character will be substituted for
-              the marker.
+   string      is a character string that will be substituted for
+               the first occurrence of marker in the long error
+               message. This occurrence of the substring indicated
+               by marker will be removed and replaced by string.
+               Leading and trailing blanks in string are not
+               significant. However, if string is completely blank,
+               a single blank character will be substituted for
+               the marker.
 
 -Detailed_Output
 
@@ -87,34 +86,33 @@
 
 -Parameters
 
-   LMSGLN  is the maximum length of the long error message.  See
+   LMSGLN  is the maximum length of the long error message. See
            the include file errhnd.inc for the value of LMSGLN.
 
 -Exceptions
 
    1)  If the character string resulting from the substitution
        exceeds the maximum length of the long error message, the
-       long error message is truncated on the right.  No error is
+       long error message is truncated on the right. No error is
        signaled.
 
-   2)  If marker is blank, no substitution is performed.  No error
+   2)  If `marker' is blank, no substitution is performed. No error
        is signaled.
 
-   3)  If string is blank, then the first occurrence of marker is
-       replaced by a single blank.
+   3)  If `string' is blank, then the first occurrence of `marker'
+       is replaced by a single blank.
 
-   4)  If marker does not appear in the long error message, no
-       substitution is performed.  No error is signaled.
+   4)  If `marker' does not appear in the long error message, no
+       substitution is performed. No error is signaled.
 
    5)  If changes to the long error message are disabled, this
        routine has no effect.
 
-   6) The error SPICE(EMPTYSTRING) is signaled if either input string
-      does not contain at least one character, since an input string
-      cannot be converted to a Fortran-style string in this case.
+   6)  If any of the `marker' or `string' input string pointers is
+       null, the error SPICE(NULLPOINTER) is signaled.
 
-   7) The error SPICE(NULLPOINTER) is signalled if either string pointer
-      argument is null.
+   7)  If any of the `marker' or `string' input strings has zero
+       length, the error SPICE(EMPTYSTRING) is signaled.
 
 -Files
 
@@ -124,14 +122,14 @@
 
    The purpose of this routine is to allow you to tailor the long
    error message to include specific information that is available
-   only at run time.  This capability is somewhat like being able to
+   only at run time. This capability is somewhat like being able to
    put variables in your error messages.
 
 -Examples
 
    1)   In this example, the marker is  "#".  We'll signal a file
         open error, and we'll include in the error message the name
-        of the file we tried to open.  There are three steps:
+        of the file we tried to open. There are three steps:
 
            -- Set the long message, using a marker for the location
               where a value is to be substituted.
@@ -142,22 +140,22 @@
               using the CSPICE routine sigerr_c.
 
            /.
-           Error on file open attempt.  Signal an error.
+           Error on file open attempt. Signal an error.
            The character string variable FILE contains the
            file name.
 
            After the call to errch_c, the long error message
            will contain the file name held in the string
-           FILE.  For example, if FILE contains the name
+           FILE. For example, if FILE contains the name
            "MYFILE.DAT", the long error message will be
 
-               "File open error.  File is MYFILE.DAT."
+               "File open error. File is MYFILE.DAT."
 
            ./
 
-           setmsg_c ( "File open error.  File is #." );
+           setmsg_c ( "File open error. File is #." );
            errch_c  ( "#",  FILE                     );
-           sigerr_c ( "SPICE(FILEOPENFAILED)"        );
+           sigerr_c ( SPICE(FILEOPENFAILED)        );
 
 
    2)   Same example as (1), except this time we'll use a better-
@@ -166,21 +164,21 @@
         long error message; it just makes the code more readable.
 
            /.
-           Error on file open attempt.  Signal an error.
+           Error on file open attempt. Signal an error.
            The character string variable FILE contains the
            file name.
            ./
 
            setmsg_c ( "File open error. File is FILENAME.");
            errch_c  ( "FILENAME",  FILE                   );
-           sigerr_c ( "SPICE(FILEOPENFAILED)"             );
+           sigerr_c ( SPICE(FILEOPENFAILED)             );
 
 
    3)   Same example as (2), except this time there's a problem with
-        the variable FILE: it's blank.  This time, the code fragment
+        the variable FILE: it's blank. This time, the code fragment
 
            /.
-           Error on file open attempt.  Signal an error.
+           Error on file open attempt. Signal an error.
            The character string variable FILE contains the
            file name.
            ./
@@ -189,14 +187,13 @@
 
         sets the long error message to
 
-           "File open error.  File is  "
-
+           "File open error. File is  "
 
 -Restrictions
 
-   1) The caller must ensure that the message length, after sub-
-      stitution is performed, doesn't exceed LMSGLN characters.
-      See errch.c.
+   1)  The caller must ensure that the message length, after sub-
+       stitution is performed, doesn't exceed LMSGLN characters.
+       See errch.c.
 
 -Literature_References
 
@@ -204,17 +201,22 @@
 
 -Author_and_Institution
 
-   J.E. McLean     (JPL)
-   N.J. Bachman    (JPL)
+   N.J. Bachman        (JPL)
+   J. Diaz del Rio     (ODC Space)
+   E.D. Wright         (JPL)
 
 -Version
 
+   -CSPICE Version 1.2.1, 02-AUG-2021 (JDR)
+
+       Edited the header to comply with NAIF standard.
+
    -CSPICE Version 1.2.0, 08-FEB-1998 (NJB)
 
-      Re-implemented routine without dynamically allocated, temporary
-      strings.  Made various header fixes.
+       Re-implemented routine without dynamically allocated, temporary
+       strings. Made various header fixes.
 
-   -CSPICE Version 1.0.0, 25-OCT-1997   (EDW)
+   -CSPICE Version 1.0.0, 25-OCT-1997 (EDW)
 
 -Index_Entries
 

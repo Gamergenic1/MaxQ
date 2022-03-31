@@ -10,7 +10,7 @@
 static integer c__22 = 22;
 static integer c__1 = 1;
 
-/* $Procedure      DASACU ( DAS add comments from a logical unit ) */
+/* $Procedure DASACU ( DAS add comments from a logical unit ) */
 /* Subroutine */ int dasacu_(integer *comlun, char *begmrk, char *endmrk, 
 	logical *insbln, integer *handle, ftnlen begmrk_len, ftnlen 
 	endmrk_len)
@@ -104,25 +104,25 @@ static integer c__1 = 1;
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
-/*      COMLUN    I   Logical unit of the open comment text file. */
-/*      BEGMRK    I   The begin comments marker in the comment text file. */
-/*      ENDMRK    I   The end comments marker in the comment text file. */
-/*      INSBLN    I   A flag indicating whether to insert a blank line. */
-/*      HANDLE    I   Handle of a DAS file opened with write access. */
-/*      LNSIZE    P   Maximum length of comment line. */
+/*     COMLUN    I   Logical unit of the open comment text file. */
+/*     BEGMRK    I   The begin comments marker in the comment text file. */
+/*     ENDMRK    I   The end comments marker in the comment text file. */
+/*     INSBLN    I   A flag indicating whether to insert a blank line. */
+/*     HANDLE    I   Handle of a DAS file opened with write access. */
+/*     LNSIZE    P   Maximum length of comment line. */
 
 /* $ Detailed_Input */
 
-/*     COMLUN   The Fortran logical unit of a previously opened text */
+/*     COMLUN   is the Fortran logical unit of a previously opened text */
 /*              file which contains comments that are to be added to */
 /*              the comment area of a binary E-Kernel file. */
 
-/*     BEGMRK   A marker which identifies the beginning of the comments */
-/*              in the comment text file. This marker must appear on a */
-/*              line by itself, and leading and trailing blanks are not */
-/*              significant. */
+/*     BEGMRK   is a marker which identifies the beginning of the */
+/*              comments in the comment text file. This marker must */
+/*              appear on a line by itself, and leading and trailing */
+/*              blanks are not significant. */
 
 /*              The line immediately following this marker is the first */
 /*              comment line to be placed into the comment area of the */
@@ -132,9 +132,9 @@ static integer c__1 = 1;
 /*              comments are assumed to start at the current location */
 /*              in the comment text file. */
 
-/*     ENDMRK   A marker which identifies the end of the comments in the */
-/*              comment text file. This marker must appear on a line by */
-/*              itself, and leading and trailing blanks are not */
+/*     ENDMRK   is a marker which identifies the end of the comments in */
+/*              the comment text file. This marker must appear on a line */
+/*              by itself, and leading and trailing blanks are not */
 /*              significant. */
 
 /*              The line immediately preceding this marker is the last */
@@ -145,7 +145,7 @@ static integer c__1 = 1;
 /*              comments are assumed to stop at the end of the comment */
 /*              text file. */
 
-/*     INSBLN   A logical flag which indicates whether a blank line is */
+/*     INSBLN   is a logical flag which indicates whether a blank line is */
 /*              to be inserted into the comment area of the binary DAS */
 /*              file attached to HANDLE before any comments are added */
 /*              to the comment area of the DAS file. This is to provide */
@@ -157,7 +157,7 @@ static integer c__1 = 1;
 /*              value of this flag is not significant, the comments will */
 /*              simply be placed into the comment area. */
 
-/*     HANDLE   The file handle for a binary DAS file that has been */
+/*     HANDLE   is the file handle for a binary DAS file that has been */
 /*              opened with write access. */
 
 /* $ Detailed_Output */
@@ -180,57 +180,56 @@ static integer c__1 = 1;
 
 /* $ Exceptions */
 
-/*     1)   If the scratch file for temporarily holding the comments */
-/*          culled from the text file cannot be opened, then the */
-/*          error SPICE(FILEOPENFAILED) will be signaled. */
+/*     1)  If the scratch file for temporarily holding the comments */
+/*         culled from the text file cannot be opened, the */
+/*         error SPICE(FILEOPENFAILED) is signaled. */
 
-/*     2)   If a non printing ASCII character is encountered in the */
-/*          comments, the error SPICE(ILLEGALCHARACTER) will be */
-/*          signaled. */
+/*     2)  If a non printing ASCII character is encountered in the */
+/*         comments, the error SPICE(ILLEGALCHARACTER) is signaled. */
 
-/*     3)   If the begin marker cannot be found in the text file, the */
-/*          error SPICE(MARKERNOTFOUND) will be signaled. */
+/*     3)  If the begin marker cannot be found in the text file, the */
+/*         error SPICE(MARKERNOTFOUND) is signaled. */
 
-/*     4)   If the end marker cannot be found in the text file, the */
-/*          error SPICE(MARKERNOTFOUND) will be signaled. */
+/*     4)  If the end marker cannot be found in the text file, the */
+/*         error SPICE(MARKERNOTFOUND) is signaled. */
 
 /* $ Files */
 
-/*     1)   See parameters COMLUN and HANDLE in the $ Detailed_Inputs */
-/*          section. */
+/*     See parameters COMLUN and HANDLE in the $Detailed_Inputs */
+/*     section. */
 
-/*     2)   A scratch file is used to temporarily hold the comments */
-/*          culled from the comment text file. This is so we do not */
-/*          have to find the place where we started searching for */
-/*          comments in the original file. */
+/*     A scratch file is used to temporarily hold the comments culled */
+/*     from the comment text file. This is so we do not have to find the */
+/*     place where we started searching for comments in the original */
+/*     file. */
 
 /* $ Particulars */
 
 /*     This routine will place all lines between two specified markers, */
-/*     a `begin comments marker' and an `end comments marker,' in a */
+/*     a "begin comments marker" and an "end comments marker," in a */
 /*     text file into the comment area of a binary DAS file attached to */
-/*     HANDLE. If the `begin comments marker' is blank, then the */
+/*     HANDLE. If the "begin comments marker" is blank, then the */
 /*     comments are assumed to start at the current location of the */
-/*     comment text file attached to COMLUN. If the `end comments */
-/*     marker' is blank, then the comments are assumed to stop at the */
+/*     comment text file attached to COMLUN. If the "end comments */
+/*     marker" is blank, then the comments are assumed to stop at the */
 /*     end of the comment text file attached to COMLUN. */
 
 /* $ Examples */
 
-/*     We will be using the files `jabber.txt', 'batty.txt', and */
-/*     `wndrland.das' in the example which follows. */
+/*     We will be using the files 'jabber.txt', 'batty.txt', and */
+/*     'wndrland.DAS' in the example which follows. */
 
-/*     `wndrland.das' is a binary DAS file with an empty comment area */
+/*     'wndrland.dat' is a binary DAS file with an empty comment area */
 /*                    into which we are going to place the entire file */
-/*                    `jabber.txt' and a selected portion of the file */
-/*                    `batty.txt'. */
+/*                    'jabber.txt' and a selected portion of the file */
+/*                    'batty.txt'. */
 
-/*     `jabber.txt'   is a text file that is to be placed into the */
-/*                    comment area of the binary DAS file `wndrland.das'. */
+/*     'jabber.txt'   is a text file that is to be placed into the */
+/*                    comment area of the binary DAS file 'wndrland.DAS'. */
 
-/*     `batty.txt'    is a text file from which will have a selected */
+/*     'batty.txt'    is a text file from which will have a selected */
 /*                    portion of its text placed into the comment area */
-/*                    of the binary DAS file `wndrland.das'. */
+/*                    of the binary DAS file 'wndrland.DAS'. */
 
 /*     Let -BOF- and -EOF- denote the beginning and end of a file, */
 /*     respectively. */
@@ -287,21 +286,21 @@ static integer c__1 = 1;
 
 /*     Let */
 
-/*           JABLUN   be the logical unit for the file `jabber.txt' */
-/*           BATLUN   be the logical unit for the file `batty.txt' */
+/*           JABLUN   be the logical unit for the file 'jabber.txt' */
+/*           BATLUN   be the logical unit for the file 'batty.txt' */
 /*     and */
-/*           HANDLE   be the DAS handle for the file `wndrland.das' */
+/*           HANDLE   be the DAS handle for the file 'wndrland.DAS' */
 
 /*     The code fragment */
 
 /*     C */
 /*     C      Open the files. */
 /*     C */
-/*            CALL DASOPW ( `wndrland.das', HANDLE ) */
-/*            CALL TXTOPN ( `jabber.txt'  , JABLUN ) */
-/*            CALL TXTOPN ( `batty.txt'   , BATLUN ) */
+/*            CALL DASOPW ( 'wndrland.DAS', HANDLE ) */
+/*            CALL TXTOPN ( 'jabber.txt'  , JABLUN ) */
+/*            CALL TXTOPN ( 'batty.txt'   , BATLUN ) */
 /*     C */
-/*     C      Initialize the markers for the file `jabber.txt'. We want */
+/*     C      Initialize the markers for the file 'jabber.txt'. We want */
 /*     C      to include the entire file, so both markers are blank. */
 /*     C */
 /*            BEGMRK = ' ' */
@@ -330,7 +329,7 @@ static integer c__1 = 1;
 /*            CLOSE       ( BATLUN ) */
 /*            CALL DASCLS ( HANDLE ) */
 
-/*     will create a comment area in `wndrland.das' which contains: */
+/*     will create a comment area in 'wndrland.DAS' which contains: */
 
 /*        -BOC- */
 /*                  The Jabberwock */
@@ -398,38 +397,43 @@ static integer c__1 = 1;
 
 /* $ Author_and_Institution */
 
-/*     K.R. Gehringer (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
 
 /* $ Version */
 
-/* -    SPICELIB 1.2.1, 15-MAR-2017 (NJB) */
+/* -    SPICELIB Version 1.2.2, 02-JUN-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
+
+/* -    SPICELIB Version 1.2.1, 15-MAR-2017 (NJB) */
 
 /*        Added description of parameter LNSIZE. Fixed typos */
 /*        throughout the comments. */
 
-/* -    SPICELIB 1.2.0, 07-JUL-1996 (NJB) */
+/* -    SPICELIB Version 1.2.0, 07-JUL-1996 (NJB) (KRG) */
 
 /*        Removed declaration, DATA and SAVE statements for unused */
 /*        variable FIRST. */
 
-/* -    Beta Version 1.1.0, 20-SEP-1995 (KRG) */
+/*     Beta Version 1.1.0, 20-SEP-1995 (KRG) */
 
 /*        Added a check of FAILED after the call to GETLUN to trap */
 /*        an error, if one is signaled by GETLUN, before attempting to */
 /*        open the SCRATCH file. */
 
-/* -    Beta Version 1.0.0, 4-JAN-1993 (KRG) */
+/*     Beta Version 1.0.0, 04-JAN-1993 (KRG) */
 
 /* -& */
 /* $ Index_Entries */
 
-/*      add comments from a logical unit to a das file */
+/*     add comments from a logical unit to a DAS file */
 
 /* -& */
 /* $ Revisions */
 
-
-/* -    SPICELIB 1.2.0, 07-JUL-1996 (NJB) */
+/* -    SPICELIB Version 1.2.0, 07-JUL-1996 (NJB) */
 
 /*        Removed declaration, DATA and SAVE statements for unused */
 /*        variable FIRST. */
@@ -591,7 +595,7 @@ static integer c__1 = 1;
 		for (i__ = 1; i__ <= i__1; ++i__) {
 		    length = lastnb_(combuf + ((i__2 = i__ - 1) < 22 && 0 <= 
 			    i__2 ? i__2 : s_rnge("combuf", i__2, "dasacu_", (
-			    ftnlen)587)) * 255, (ftnlen)255);
+			    ftnlen)596)) * 255, (ftnlen)255);
 
 /*                 Scan the comment line for non printing characters. */
 
@@ -606,7 +610,7 @@ static integer c__1 = 1;
 
 			intchr = *(unsigned char *)&combuf[((i__3 = i__ - 1) <
 				 22 && 0 <= i__3 ? i__3 : s_rnge("combuf", 
-				i__3, "dasacu_", (ftnlen)599)) * 255 + (j - 1)
+				i__3, "dasacu_", (ftnlen)608)) * 255 + (j - 1)
 				];
 			if (intchr > 126 || intchr < 32) {
 			    cl__1.cerr = 0;
@@ -663,7 +667,7 @@ static integer c__1 = 1;
 		while(more && i__ <= numcom) {
 		    s_copy(line, combuf + ((i__1 = i__ - 1) < 22 && 0 <= i__1 
 			    ? i__1 : s_rnge("combuf", i__1, "dasacu_", (
-			    ftnlen)662)) * 255, (ftnlen)255, (ftnlen)255);
+			    ftnlen)671)) * 255, (ftnlen)255, (ftnlen)255);
 		    ljust_(line, line, (ftnlen)255, (ftnlen)255);
 		    if (s_cmp(line, endmrk, (ftnlen)255, endmrk_len) == 0) {
 			more = FALSE_;
@@ -682,7 +686,7 @@ static integer c__1 = 1;
 		for (i__ = 1; i__ <= i__1; ++i__) {
 		    length = lastnb_(combuf + ((i__2 = i__ - 1) < 22 && 0 <= 
 			    i__2 ? i__2 : s_rnge("combuf", i__2, "dasacu_", (
-			    ftnlen)687)) * 255, (ftnlen)255);
+			    ftnlen)696)) * 255, (ftnlen)255);
 
 /*                 Scan the comment line for non printinig characters. */
 
@@ -697,7 +701,7 @@ static integer c__1 = 1;
 
 			intchr = *(unsigned char *)&combuf[((i__3 = i__ - 1) <
 				 22 && 0 <= i__3 ? i__3 : s_rnge("combuf", 
-				i__3, "dasacu_", (ftnlen)699)) * 255 + (j - 1)
+				i__3, "dasacu_", (ftnlen)708)) * 255 + (j - 1)
 				];
 			if (intchr > 126 || intchr < 32) {
 			    cl__1.cerr = 0;

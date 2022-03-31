@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure  INTSTR  ( Integer to character string ) */
+/* $Procedure INTSTR  ( Integer to character string ) */
 /* Subroutine */ int intstr_(integer *number, char *string, ftnlen string_len)
 {
     /* Initialized data */
@@ -71,11 +71,11 @@
 
 /* $ Detailed_Input */
 
-/*     NUMBER   The integer to be converted into a character string. */
+/*     NUMBER   is the integer to be converted into a character string. */
 
 /* $ Detailed_Output */
 
-/*     STRING   The character string representing the integer NUMBER. */
+/*     STRING   is the character string representing the integer NUMBER. */
 
 /* $ Parameters */
 
@@ -85,9 +85,9 @@
 
 /*     Error free. */
 
-/*     1)   If the output character string is not large enough to */
-/*          contain the entire character string produced, the output */
-/*          character string will be truncated on the right. */
+/*     1)  If the output character string is not large enough to */
+/*         contain the entire character string produced, the output */
+/*         character string will be truncated on the right. */
 
 /* $ Files */
 
@@ -117,21 +117,30 @@
 
 /* $ Restrictions */
 
-/*     This routine assumes that all signed integers will fit into a */
-/*     character string with LINLEN or fewer digits. See the parameter */
-/*     LINLEN below for the current value. */
-
-/* $ Author_and_Institution */
-
-/*     K.R. Gehringer   (JPL) */
-/*     W.L. Taber       (JPL) */
-/*     I.M. Underwood   (JPL) */
+/*     1)  This routine assumes that all signed integers will fit into a */
+/*         character string with LINLEN or fewer digits. See the */
+/*         parameter LINLEN below for the current value. */
 
 /* $ Literature_References */
 
 /*     None. */
 
+/* $ Author_and_Institution */
+
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
+/*     H.A. Neilan        (JPL) */
+/*     M.J. Spencer       (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
+
 /* $ Version */
+
+/* -    SPICELIB Version 2.2.0, 12-AUG-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 2.1.0, 11-MAY-1993 (HAN) (MJS) */
 
@@ -161,7 +170,7 @@
 /*        Comment section for permuted index source lines was added */
 /*        following the header. */
 
-/* -    SPICELIB Version 1.0.1   7-DEC-1990 (WLT) */
+/* -    SPICELIB Version 1.0.1, 07-DEC-1990 (WLT) */
 
 /*        References to the old name INT2CH were removed and */
 /*        an exception added to that section. */
@@ -222,7 +231,7 @@
 	    tmpnum = result;
 	    *(unsigned char *)&tmpstr[i__ - 1] = *(unsigned char *)&digits[(
 		    i__1 = remndr) < 10 && 0 <= i__1 ? i__1 : s_rnge("digits",
-		     i__1, "intstr_", (ftnlen)237)];
+		     i__1, "intstr_", (ftnlen)249)];
 	}
 
 /*        Put the minus sign in place. */
@@ -240,7 +249,7 @@
 	    tmpnum = result;
 	    *(unsigned char *)&tmpstr[i__ - 1] = *(unsigned char *)&digits[(
 		    i__1 = remndr) < 10 && 0 <= i__1 ? i__1 : s_rnge("digits",
-		     i__1, "intstr_", (ftnlen)257)];
+		     i__1, "intstr_", (ftnlen)269)];
 	}
     } else {
 

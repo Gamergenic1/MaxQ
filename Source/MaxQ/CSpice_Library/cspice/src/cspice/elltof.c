@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      ELLTOF ( Elliptic time of flight ) */
+/* $Procedure ELLTOF ( Elliptic time of flight ) */
 /* Subroutine */ int elltof_(doublereal *ma, doublereal *ecc, doublereal *e)
 {
     /* System generated locals */
@@ -79,33 +79,33 @@
 
 /* $ Detailed_Input */
 
-/*     MA          is the elliptic mean anomaly of an orbiting body at */
-/*                 some epoch t, */
+/*     MA       is the elliptic mean anomaly of an orbiting body at */
+/*              some epoch t, */
 
-/*                                      3 1/2 */
-/*                       MA = (t-T)(mu/a ) */
+/*                                3 1/2 */
+/*                 MA = (t-T)(mu/a ) */
 
-/*                 where T is the time of periapsis passage, a is */
-/*                 the semi-major axis of the orbit, and mu is the */
-/*                 gravitational parameter of the primary body. */
+/*              where T is the time of periapsis passage, a is */
+/*              the semi-major axis of the orbit, and mu is the */
+/*              gravitational parameter of the primary body. */
 
-/*     ECC         is the eccentricity of the orbit. */
+/*     ECC      is the eccentricity of the orbit. */
 
 /* $ Detailed_Output */
 
-/*     E           is the corresponding eccentric anomaly. This is the */
-/*                 solution to the time of flight equation */
+/*     E        is the corresponding eccentric anomaly. This is the */
+/*              solution to the time of flight equation */
 
-/*                       MA = E - e sin(E) */
+/*                 MA = E - e sin(E) */
 
 /* $ Parameters */
 
-/*      None. */
+/*     None. */
 
 /* $ Exceptions */
 
-/*     1) If the eccentricity (ECC) is outside the range [0,1), */
-/*        the error 'SPICE(WRONGCONIC)' is signalled. */
+/*     1)  If the eccentricity (ECC) is outside the range [0,1), */
+/*         the error SPICE(WRONGCONIC) is signaled. */
 
 /* $ Files */
 
@@ -115,7 +115,7 @@
 
 /*     Iterate to solve */
 
-/*           f(E,MA,e) = E - e sin(E) - MA = 0 */
+/*        f(E,MA,e) = E - e sin(E) - MA = 0 */
 
 /* $ Examples */
 
@@ -127,17 +127,27 @@
 
 /* $ Literature_References */
 
-/*     [1] Roger Bate, Fundamentals of Astrodynamics, Dover, 1971. */
+/*     [1]  R. Bate, D. Mueller, and J. White, "Fundamentals of */
+/*          Astrodynamics," Dover Publications Inc., 1971. */
 
-/*     [2] Ed Ng, "A General Algorithm for the Solution of Kepler's */
-/*         Equation for Elliptic Orbits", Cel. Mech. 20, 243, 1979. */
+/*     [2]  E. W. Ng, "A General Algorithm for the Solution of Kepler's */
+/*          Equation for Elliptic Orbits", Cel. Mech. 20, pp.243-249, */
+/*          1979. */
 
 /* $ Author_and_Institution */
 
-/*     K.R. Gehringer  (JPL) */
-/*     I.M. Underwood  (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.2.0, 14-APR-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.1.0, 29-FEB-1996 (KRG) */
 

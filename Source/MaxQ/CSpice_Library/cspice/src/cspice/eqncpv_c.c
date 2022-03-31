@@ -4,7 +4,7 @@
 
 -Abstract
 
-   Compute the state (position and velocity of an object whose
+   Compute the state (position and velocity) of an object whose
    trajectory is described via equinoctial elements relative to some
    fixed plane (usually the equatorial plane of some planet).
 
@@ -21,7 +21,7 @@
    SECTIONS 2312-2313) OR FOR ANY PURPOSE WHATSOEVER, FOR THE
    SOFTWARE AND RELATED MATERIALS, HOWEVER USED.
 
-   IN NO EVENT SHALL CALTECH, ITS Jet PROPULSION LABORATORY, OR NASA
+   IN NO EVENT SHALL CALTECH, ITS JET PROPULSION LABORATORY, OR NASA
    BE LIABLE FOR ANY DAMAGES AND/OR COSTS, INCLUDING, BUT NOT
    LIMITED TO, INCIDENTAL OR CONSEQUENTIAL DAMAGES OF ANY KIND,
    INCLUDING ECONOMIC DAMAGE OR INJURY TO PROPERTY AND LOST PROFITS,
@@ -35,7 +35,7 @@
 
 -Required_Reading
 
-   None.
+   SPK
 
 -Keywords
 
@@ -66,85 +66,96 @@
    eqel       I   Array of equinoctial elements
    rapol      I   Right Ascension of the pole of the reference plane
    decpol     I   Declination of the pole of the reference plane
-   state      O   State of the object described by eqel.
+   state      O   State of the object described by `eqel'.
 
 -Detailed_Input
 
-   et         is the epoch (ephemeris time) at which the state
-              of the target body is to be computed. et is measured
-              in seconds past the J2000 epoch.
+   et          is the epoch (ephemeris time) at which the state
+               of the target body is to be computed. `et' is measured
+               in seconds past the J2000 epoch.
 
-   epoch      is the epoch of the equinoctial elements in seconds
-              past the J2000 epoch.
+   epoch       is the epoch of the equinoctial elements in seconds
+               past the J2000 epoch.
 
-   eqel       is an array of 9 double precision numbers that
-              are the equinoctial elements for some orbit expressed
-              relative to the equatorial frame of the central body.
-              (The z-axis of the equatorial frame is the direction
-              of the pole of the central body relative to some
-              inertial frame.  The x-axis is given by the cross
-              product of the Z-axis of the inertial frame
-              with the direction of the pole of the central body.
-              The Y-axis completes a right handed frame.
-              (If the z-axis of the equatorial frame is aligned
-              with the z-axis of the inertial frame, then the
-              x-axis of the equatorial frame will be located at
-              90 degrees + rapol in the inertial frame.)
+   eqel        is an array of 9 double precision numbers that are the
+               equinoctial elements for some orbit expressed relative to
+               the equatorial frame of the central body defined as
 
-              The specific arrangement of the elements is spelled
-              out below.  The following terms are used in the
-              discussion of elements of eqel
+               -  The Z-axis of the equatorial frame is the direction
+                  of the pole of the central body relative to some
+                  inertial frame;
 
-                  inc  --- inclination of the orbit
-                  argp --- argument of periapse
-                  node --- longitude of the ascending node
-                  e    --- eccentricity of the orbit
+               -  The X-axis is given by the cross product of the Z-axis
+                  of the inertial frame with the direction of the pole
+                  of the central body; and
 
-              eqel[0] is the semi-major axis (a) of the orbit in km.
+               -  The Y-axis completes a right handed frame.
 
-              eqel[1] is the value of 'h' at the specified epoch.
-                      ( e*sin(argp+node) ).
+               If the X-axis of the equatorial frame is aligned with the
+               X-axis of the inertial frame, then the X-axis of the
+               equatorial frame will be located at 90 degrees + rapol in
+               the inertial frame.
 
-              eqel[2] is the value of 'k' at the specified epoch
-                      ( e*cos(argp+node) ).
+               The specific arrangement of the elements is spelled out
+               below:
 
-              eqel[3] is the mean longitude (mean0+argp+node) at
-                      the epoch of the elements measured in radians.
+                  eqel[0]   is the semi-major axis (A) of the orbit in
+                            km.
 
-              eqel[4] is the value of 'p' (tan(inc/2)*sin(node))at
-                      the specified epoch.
+                  eqel[1]   is the value of H at the specified epoch.
+                            ( E*sin(argp+node) ).
 
-              eqel[5] is the value of 'q' (tan(inc/2)*cos(node))at
-                      the specified epoch.
+                  eqel[2]   is the value of K at the specified epoch
+                            ( E*cos(argp+node) ).
 
-              eqel[6] is the rate of the longitude of periapse
-                      (dargp/dt + dnode/dt ) at the epoch of
-                      the elements. This rate is assumed to hold
-                      for all time. The rate is measured in
-                      radians per second.
+                  eqel[3]   is the mean longitude (mean0+argp+node) at
+                            the epoch of the elements measured in
+                            radians.
 
-              eqel[7] is the derivative of the mean longitude
-                      ( dm/dt + dargp/dt + dnode/dt ). This
-                      rate is assumed to be constant and is
-                      measured in radians/second.
+                  eqel[4]   is the value of P (tan(inc/2)*sin(node))at
+                            the specified epoch.
 
-              eqel[8] is the rate of the longitude of the ascending
-                      node ( dnode/dt). This rate is measured
-                      in radians per second.
+                  eqel[5]   is the value of Q (tan(inc/2)*cos(node))at
+                            the specified epoch.
 
-   rapol      Right Ascension of the pole of the reference plane
-              with respect to some inertial frame (measured in
-              radians).
+                  eqel[6]   is the rate of the longitude of periapse
+                            (dargp/dt + dnode/dt ) at the epoch of
+                            the elements. This rate is assumed to hold
+                            for all time. The rate is measured in
+                            radians per second.
 
-   decpol     Declination of the pole of the reference plane
-              with respect to some inertial frame (measured in
-              radians).
+                  eqel[7]   is the derivative of the mean longitude
+                            ( dm/dt + dargp/dt + dnode/dt ). This
+                            rate is assumed to be constant and is
+                            measured in radians/second.
+
+                  eqel[8]   is the rate of the longitude of the
+                            ascending node ( dnode/dt). This rate is
+                            measured in radians per second.
+
+               where
+
+                  inc       is the inclination of the orbit,
+
+                  argp      is the argument of periapse,
+
+                  node      is longitude of the ascending node, and
+
+                  E         is eccentricity of the orbit.
+
+   rapol       is the Right Ascension of the pole of the reference plane
+               with respect to some inertial frame (measured in
+               radians).
+
+   decpol      is the Declination of the pole of the reference plane
+               with respect to some inertial frame (measured in
+               radians).
 
 -Detailed_Output
 
-   state      State of the object described by eqel relative to the
-              inertial frame used to define rapol and decpol. Units
-              are in km and km/sec.
+   state       is the state of the object described by `eqel' relative to
+               the inertial frame used to define `rapol' and `decpol'. Units
+               are in km and km/sec.
 
 -Parameters
 
@@ -152,7 +163,13 @@
 
 -Exceptions
 
-   None.
+   1)  If the eccentricity corresponding to the input elements is
+       greater than 0.9, the error SPICE(ECCOUTOFRANGE) is signaled
+       by a routine in the call tree of this routine.
+
+   2)  If the semi-major axis of the elements is non-positive, the
+       error SPICE(BADSEMIAXIS) is signaled by a routine in the call
+       tree of this routine.
 
 -Files
 
@@ -164,51 +181,92 @@
    the specified epoch and return the corresponding state.
 
    This routine was adapted from a routine provided by
-   Bob Jacobson at JPL.
+   Bob Jacobson of the Planetary Dynamics Group of
+   the Navigation and Flight Mechanics Section at JPL.
 
 -Examples
 
-   Any numerical results shown for this example may differ between
-   platforms as the results depend on the SPICE kernels used as input
-   and the machine specific arithmetic implementation.
+   The numerical results shown for this example may differ across
+   platforms. The results depend on the SPICE kernels used as
+   input, the compiler and supporting libraries, and the machine
+   specific arithmetic implementation.
 
-      Compute a state vector from a set of equinoctial elements.
+   1) Compute a state vector from a set of equinoctial elements.
 
-      #include "SpiceUsr.h"
+      Suppose you have classical elements and rates of change of the
+      ascending node and argument of periapse for some satellite of
+      the Earth.
+
+      By transforming the classical elements this routine computes the
+      state of the object at an arbitrary epoch. The code below
+      illustrates how to do this.
+
+      The table below illustrates the meanings of the various
+      variables used in the discussion below.
+
+         Variable     Meaning
+         --------     ----------------------------------
+         a            Semi-major axis in km.
+         ecc          Eccentricity of orbit.
+         inc          Inclination of orbit.
+         node         Longitude of the ascending node at epoch.
+         omega        Argument of periapse at epoch.
+         m            Mean anomaly at epoch.
+         dmdt         Mean anomaly rate in radians/second.
+         dnode        Rate of change of longitude of ascending node
+                      in radians/second.
+         domega       Rate of change of argument of periapse in
+                      radians/second.
+         epoch        is the epoch of the elements in seconds past
+                      the J2000 epoch.
+
+
+      Example code begins here.
+
+
+      /.
+         Program eqncpv_ex1
+      ./
       #include <stdio.h>
       #include <math.h>
+      #include "SpiceUsr.h"
 
       int main()
-         {
+      {
+         /.
+         Local variables.
+         ./
+         SpiceInt               i;
+
+         SpiceDouble            a;
+         SpiceDouble            argp;
+         SpiceDouble            decpol;
+         SpiceDouble            ecc;
+         SpiceDouble            eqel   [9];
+         SpiceDouble            et;
+         SpiceDouble            gm;
+         SpiceDouble            inc;
+         SpiceDouble            m0;
+         SpiceDouble            n;
+         SpiceDouble            node;
+         SpiceDouble            p;
+         SpiceDouble            rapol;
+         SpiceDouble            t0;
+         SpiceDouble            state  [6];
+
+         p    =      1.0e4;
+         gm   = 398600.436;
+         ecc  =      0.1;
+         a    = p/( 1. - ecc );
+         n    = sqrt ( gm / a ) / a;
+         argp = 30. * rpd_c();
+         node = 15. * rpd_c();
+         inc  = 10. * rpd_c();
+         m0   = 45. * rpd_c();
+         t0   = -100000000.;
 
          /.
-
-         Suppose you have classical elements and rates of
-         change of the ascending node and argument of periapse
-         for some satellite of the earth.
-
-         By transforming the classical elements this routine
-         compute the state of the object at an arbitrary epoch.
-         The code below illustrates how to do this.
-
-         The table below illustrates the meanings of the various
-         variables used in the discussion below.
-
-              Variable     Meaning
-              --------     ----------------------------------
-              a            Semi-major axis in km.
-              ecc          Eccentricity of orbit.
-              inc          Inclination of orbit.
-              node         Longitude of the ascending node at epoch.
-              omega        Argument of periapse at epoch.
-              m            Mean anomaly at epoch.
-              dmdt         Mean anomaly rate in radians/second.
-              dnode        Rate of change of longitude of ascending node
-                           in radians/second.
-              domega       Rate of change of argument of periapse in
-                           radians/second.
-              epoch        is the epoch of the elements in seconds past
-                           the J2000 epoch.
+         Define the input equinoctial elements.
 
               eqel[0] = a
               eqel[1] = ecc * sin( omega + node )
@@ -226,38 +284,7 @@
          In this case, the rates of node and argument of
          periapse are zero and the pole of the central
          frame is aligned with the pole of an inertial frame.
-
          ./
-
-         SpiceInt               i;
-
-         SpiceDouble            a;
-         SpiceDouble            argp;
-         SpiceDouble            decpol;
-         SpiceDouble            ecc;
-         SpiceDouble            eqel   [9];
-         SpiceDouble            et;
-         SpiceDouble            gm;
-         SpiceDouble            inc;
-         SpiceDouble            m0;
-         SpiceDouble            n;
-         SpiceDouble            node;
-         SpiceDouble            p;
-         SpiceDouble            rapol;
-         SpiceDouble            t0;
-         SpiceDouble            theta;
-         SpiceDouble            state  [6];
-
-         p    =      1.0e4;
-         gm   = 398600.436;
-         ecc  =      0.1;
-         a    = p/( 1. - ecc );
-         n    = sqrt ( gm / a ) / a;
-         argp = 30. * rpd_c();
-         node = 15. * rpd_c();
-         inc  = 10. * rpd_c();
-         m0   = 45. * rpd_c();
-         t0   = -100000000.;
 
          eqel[0] = a;
          eqel[1] = ecc*sin(argp+node);
@@ -275,7 +302,7 @@
          et = t0 - 10000.0;
 
          for ( i = 0; i < 10; i++)
-            {
+         {
             et = et + 250.;
 
             eqncpv_c ( et, t0, eqel, rapol, decpol, state );
@@ -283,12 +310,15 @@
                              state[0], state[1], state[2] );
             printf (  "Vel = %16.6f %16.6f %16.6f \n",
                              state[3], state[4], state[5] );
-            }
-
-         return 0;
          }
 
-   The program outputs:
+         return ( 0 );
+      }
+
+
+      When this program was executed on a Mac/Intel/cc/64-bit
+      platform, the output was:
+
 
       Pos =    -10732.167433      3902.505791      1154.451615
       Vel =        -2.540767        -5.152269        -0.761576
@@ -320,44 +350,54 @@
       Pos =     -9441.170335     -7701.967890      -880.925189
       Vel =         3.386822        -4.144103        -0.860382
 
+
 -Restrictions
 
-   The equinoctial elements used by this routine are taken
-   from  "Tangent" formulation of equinoctial elements
+   1)  The equinoctial elements used by this routine are taken
+       from  "Tangent" formulation of equinoctial elements
 
-      p = Tan(inclination/2) * Sin(R.A. of ascending node)
-      q = Tan(inclination/2) * Cos(R.A. of ascending node)
+          P = tan(inclination/2) * sin(R.A. of ascending node)
+          Q = tan(inclination/2) * cos(R.A. of ascending node)
 
-   Other formulations use Sine instead of Tangent.  We shall
-   call these the "Sine" formulations.
+       Other formulations use Sine instead of Tangent. We shall
+       call these the "Sine" formulations.
 
-      p = Sin(inclination/2) * Sin(R.A. of ascending node)
-      q = Sin(inclination/2) * Cos(R.A. of ascending node)
+          P = sin(inclination/2) * sin(R.A. of ascending node)
+          Q = sin(inclination/2) * cos(R.A. of ascending node)
 
-   If you have equinoctial elements from this alternative
-   formulation you should replace p and q  by the
-   expressions below.
+       If you have equinoctial elements from this alternative
+       formulation you should replace P and Q  by the
+       expressions below.
 
-     P = P / sqrt( 1.0 - P*P - Q*Q )
-     Q = Q / sqrt( 1.0 - P*P - Q*Q )
+          P = P / sqrt( 1.0 - P*P - Q*Q )
+          Q = Q / sqrt( 1.0 - P*P - Q*Q )
 
-   This will convert the Sine formulation to the Tangent formulation.
+       This will convert the Sine formulation to the Tangent
+       formulation.
 
 -Literature_References
 
-   JPL Engineering Memorandum 314-513 "Optical Navigation Program
-   Mathematical Models" by William M. Owen, Jr. and Robin M Vaughan
-   August 9, 1991.
+   [1]  W. Owen and R. Vaughan, "Optical Navigation Program
+        Mathematical Models," JPL Engineering Memorandum 314-513,
+        August 9, 1991.
 
 -Author_and_Institution
 
-   W.L. Taber      (JPL)
-   R.A. Jacobson   (JPL)
-   B.V. Semenov    (JPL)
+   J. Diaz del Rio     (ODC Space)
+   E.D. Wright         (JPL)
 
 -Version
 
-   -CSPICE Version 1.0.0, 20-MAR-2012  (EDW)
+   -CSPICE Version 1.0.1, 02-AUG-2021 (JDR)
+
+       Edited the header to comply with NAIF standard.
+
+       Added example's problem statement. Removed unused variable from code
+       example. Added SPK required reading and -Exceptions section.
+
+       Removed unnecessary comments from the code.
+
+   -CSPICE Version 1.0.0, 20-MAR-2012 (EDW)
 
 -Index_Entries
 
@@ -369,29 +409,8 @@
 { /* Begin eqncpv_c */
 
    /*
-   Local constants
-   */
-
-
-   /*
-   Local macros
-   */
-
-
-   /*
-   Local variables
-   */
-
-
-   /*
-   Static variables
-   */
-
-
-   /*
    Participate in error tracing.
    */
-
    chkin_c ( "eqncpv_c" );
 
    eqncpv_ ( ( doublereal * ) &et,

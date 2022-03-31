@@ -644,6 +644,12 @@ static integer c__3 = 3;
 
 /* $ Version */
 
+/* -    SPICELIB Version 1.1.0, 11-OCT-2021 (NJB) */
+
+/*        Added and moved calls to FAILED() in order to prevent use */
+/*        of uninitialized value of SEGFND. Added SAVE statement for */
+/*        variable PRVFID. */
+
 /* -    SPICELIB Version 1.0.0, 26-JUL-2016 (NJB) */
 
 /*        Updated to use reference ellipsoid parameters and altitude */
@@ -715,7 +721,7 @@ static integer c__3 = 3;
 		while(i__ <= *nsurf && same) {
 		    same = srflst[i__ - 1] == prvlst[(i__1 = i__ - 1) < 100 &&
 			     0 <= i__1 ? i__1 : s_rnge("prvlst", i__1, "zzds"
-			    "ksph_", (ftnlen)353)];
+			    "ksph_", (ftnlen)360)];
 		    ++i__;
 		}
 
@@ -773,11 +779,11 @@ static integer c__3 = 3;
 	zzdskbss_(bodyid);
 	zzdsksbd_(bodyid);
 	zzdsksns_((U_fp)zzdskbdc_, &handle, dladsc, dskdsc, &segfnd);
+	if (failed_()) {
+	    chkout_("ZZDSKSPH", (ftnlen)8);
+	    return 0;
+	}
 	while(segfnd) {
-	    if (failed_()) {
-		chkout_("ZZDSKSPH", (ftnlen)8);
-		return 0;
-	    }
 	    if (*nsurf > 0) {
 		surfid = i_dnnt(dskdsc);
 		i__ = isrchi_(&surfid, nsurf, srflst);
@@ -940,6 +946,10 @@ static integer c__3 = 3;
 
 	    zzdsksbd_(bodyid);
 	    zzdsksns_((U_fp)zzdskbdc_, &handle, dladsc, dskdsc, &segfnd);
+	    if (failed_()) {
+		chkout_("ZZDSKSPH", (ftnlen)8);
+		return 0;
+	    }
 	}
 	if (maxr > 0. && ! failed_()) {
 

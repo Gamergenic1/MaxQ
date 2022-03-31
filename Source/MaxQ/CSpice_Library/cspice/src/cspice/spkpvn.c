@@ -62,8 +62,9 @@ static integer c__198 = 198;
 
 /* $ Abstract */
 
-/*     Return the state (position and velocity) of a target body */
-/*     relative to some center of motion. */
+/*     Return, for a specified SPK segment and time, the state (position */
+/*     and velocity) of the segment's target body relative to its center */
+/*     of motion. */
 
 /* $ Disclaimer */
 
@@ -169,7 +170,7 @@ static integer c__198 = 198;
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     I   File handle. */
 /*     DESCR      I   Segment descriptor. */
@@ -182,44 +183,42 @@ static integer c__198 = 198;
 /* $ Detailed_Input */
 
 /*     HANDLE, */
-/*     DESCR       are the file handle assigned to a SPK file, and the */
-/*                 descriptor for a segment within the file. Together */
-/*                 they determine the ephemeris data from which the */
-/*                 state of the body is to be computed. */
+/*     DESCR    are the file handle assigned to a SPK file, and the */
+/*              descriptor for a segment within the file. Together */
+/*              they determine the ephemeris data from which the */
+/*              state of the body is to be computed. */
 
-/*     ET          is the epoch (ephemeris time) at which the state */
-/*                 is to be computed. */
+/*     ET       is the epoch (ephemeris time) at which the state */
+/*              is to be computed. */
 
 /* $ Detailed_Output */
 
-/*     REF         is the id-code of the reference frame to */
-/*                 which the vectors returned by the routine belong. */
+/*     REF      is the id-code of the reference frame to */
+/*              which the vectors returned by the routine belong. */
 
-/*     STATE       contains the position and velocity, at epoch ET, */
-/*                 for whatever body is covered by the specified segment. */
-/*                 STATE has six elements:  the first three contain the */
-/*                 body's position; the last three contain the body's */
-/*                 velocity.  These vectors are rotated into the */
-/*                 specified  reference frame, the origin of */
-/*                 which is located at the center of motion for the */
-/*                 body (see CENTER, below).  Units are always km and */
-/*                 km/sec. */
+/*     STATE    is a 6-dimensional vector that contains the position and */
+/*              velocity, at epoch ET, for whatever body is covered by */
+/*              the specified segment. STATE has six elements: the first */
+/*              three contain the body's position; the last three contain */
+/*              the body's velocity. These vectors are rotated into the */
+/*              specified  reference frame, the origin of which is */
+/*              located at the center of motion for the body (see CENTER, */
+/*              below). Units are always km and km/sec. */
 
-/*     CENTER      is the integer ID code of the center of motion for */
-/*                 the state. */
+/*     CENTER   is the integer ID code of the center of motion for */
+/*              the state. */
 
 /* $ Parameters */
 
-/*     MAXREC      is the maximum length of a record returned by any of */
-/*                 data type-specific routines SPKRnn, which are called */
-/*                 by SPKPVN (see Particulars). */
+/*     MAXREC   is the maximum length of a record returned by any of */
+/*              data type-specific routines SPKRnn, which are called */
+/*              by SPKPVN (see $Particulars). */
 
 /* $ Exceptions */
 
-/*     1) If the segment type is not supported by the current */
-/*        version of SPKPVN, the error 'SPICE(SPKTYPENOTSUPP)' */
-/*        is signaled. */
-
+/*     1)  If the segment type is not supported by the current */
+/*         version of SPKPVN, the error SPICE(SPKTYPENOTSUPP) */
+/*         is signaled. */
 
 /* $ Files */
 
@@ -258,7 +257,7 @@ static integer c__198 = 198;
 /*          21   Extended Modified Difference Array */
 
 /*     SPKPVN is the only reader that needs to be changed in order to */
-/*     add a new segment type to the SPK format.  If a new data type is */
+/*     add a new segment type to the SPK format. If a new data type is */
 /*     added, the following steps should be taken: */
 
 /*     1) Write two new routines, SPKRnn and SPKEnn, to read and */
@@ -305,6 +304,7 @@ static integer c__198 = 198;
 /*        CALL DAFFNA ( FOUND  ) */
 
 /*        DO WHILE ( FOUND ) */
+
 /*           CALL DAFGS ( DESCR ) */
 /*           CALL DAFUS ( DESCR, 2, 6, DC, IC ) */
 
@@ -321,6 +321,7 @@ static integer c__198 = 198;
 /*           END IF */
 
 /*           CALL DAFFNA ( FOUND ) */
+
 /*        END DO */
 
 /* $ Restrictions */
@@ -333,49 +334,46 @@ static integer c__198 = 198;
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     W.L. Taber      (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
 
-/* -    SPICELIB Version 4.0.0,  23-DEC-2013 (NJB) */
+/* -    SPICELIB Version 4.0.1, 27-AUG-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. Removed */
+/*        unnecessary $Revisions section. Improved $Abstract section. */
+
+/* -    SPICELIB Version 4.0.0, 23-DEC-2013 (NJB) */
 
 /*        Added support for types 19, 20 and 21. Added header */
 /*        comments giving description for types 18, 19, */
 /*        and 21. Removed header reference to type 4. */
 
-/* -    SPICELIB Version 3.0.0,  16-AUG-2002 (NJB) */
+/* -    SPICELIB Version 3.0.0, 16-AUG-2002 (NJB) */
 
-/*        Added support for type 18.  This routine now uses the */
+/*        Added support for type 18. This routine now uses the */
 /*        include file spkrec.inc to declare the record size. */
 
 /*        Corrected header comments giving record sizes for types */
 /*        8, 9, 12, 13. */
 
-/* -    SPICELIB Version 2.0.0,  06-NOV-1999 (NJB) */
+/* -    SPICELIB Version 2.0.0, 06-NOV-1999 (NJB) */
 
 /*        Added support for types 12 and 13. */
 
-/* -    SPICELIB Version 1.1.0,  7-JAN-1997 (WLT) */
+/* -    SPICELIB Version 1.1.0, 07-JAN-1997 (WLT) */
 
 /*        Added support for type 17. */
 
 /* -    SPICELIB Version 1.0.0, 19-SEP-1995 (WLT) */
 
-
 /* -& */
 /* $ Index_Entries */
 
 /*     position and velocity from ephemeris */
-/*     spk file position and velocity */
-
-/* -& */
-/* $ Revisions */
-
-/* -    SPICELIB Version 1.1.0,  7-JAN-1997 (WLT) */
-
-/*        Added support for type 17. */
-
+/*     SPK file position and velocity */
 
 /* -& */
 

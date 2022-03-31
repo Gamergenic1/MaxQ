@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure  VZERO    ( Is a vector the zero vector? ) */
+/* $Procedure VZERO    ( Is a vector the zero vector? ) */
 logical vzero_(doublereal *v)
 {
     /* System generated locals */
@@ -52,7 +52,7 @@ logical vzero_(doublereal *v)
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     V          I   Vector to be tested. */
 
@@ -61,7 +61,7 @@ logical vzero_(doublereal *v)
 
 /* $ Detailed_Input */
 
-/*     V              is a vector in 3-space. */
+/*     V        is a vector in 3-space. */
 
 /* $ Detailed_Output */
 
@@ -90,7 +90,7 @@ logical vzero_(doublereal *v)
 
 /*        VZERO ( V ) */
 
-/*     has several advantages:  the latter expresses the test more */
+/*     has several advantages: the latter expresses the test more */
 /*     clearly, looks better, and doesn't go through the work of scaling, */
 /*     squaring, taking a square root, and re-scaling (all of which */
 /*     VNORM must do) just to find out that a vector is non-zero. */
@@ -141,17 +141,25 @@ logical vzero_(doublereal *v)
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
-/*     I.M. Underwood (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 05-JUL-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
 
 /*        Comment section for permuted index source lines was added */
 /*        following the header. */
 
-/* -    SPICELIB Version 1.0.0, 17-JUL-1990  (NJB) (IMU) */
+/* -    SPICELIB Version 1.0.0, 17-JUL-1990 (NJB) (IMU) */
 
 /* -& */
 /* $ Index_Entries */

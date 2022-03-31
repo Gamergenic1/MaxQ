@@ -1,11 +1,11 @@
 /*
 
--Procedure  bodvar_c ( Return values from the kernel pool )
+-Procedure bodvar_c ( Return values from the kernel pool )
 
 -Abstract
 
    Deprecated: This routine has been superseded by bodvcd_c and
-   bodvrd_c.  This routine is supported for purposes of backward
+   bodvrd_c. This routine is supported for purposes of backward
    compatibility only.
 
    Return the values of some item for any body in the
@@ -39,6 +39,8 @@
 -Required_Reading
 
    KERNEL
+   PCK
+   SPK
 
 -Keywords
 
@@ -62,29 +64,26 @@
    VARIABLE  I/O  DESCRIPTION
    --------  ---  --------------------------------------------------
    body       I   ID code of body.
-   item       I   Item for which values are desired. ("RADII",
-                  "NUT_PREC_ANGLES", etc. )
+   item       I   Item for which values are desired.
    dim        O   Number of values returned.
    values     O   Values.
 
-
 -Detailed_Input
 
-   body       is the ID code of the body for which ITEM is
-              requested. Bodies are numbered according to the
-              standard NAIF numbering scheme.
+   body        is the ID code of the body for which `item' is
+               requested.
 
-   item       is the item to be returned. Together, the body and
-              item name combine to form a variable name, e.g.,
+   item        is the item to be returned. Together, the body and
+               item name combine to form a variable name, e.g.,
 
-                    "BODY599_RADII"
-                    "BODY401_POLE_RA"
+                  "BODY599_RADII"
+                  "BODY401_POLE_RA"
 
 -Detailed_Output
 
-   dim        is the number of values associated with the variable.
+   dim         is the number of values associated with the variable.
 
-   values     are the values associated with the variable.
+   values      are the values associated with the variable.
 
 -Parameters
 
@@ -92,7 +91,15 @@
 
 -Exceptions
 
-   Error free.
+   1)  If the requested item is not found, the error
+       SPICE(KERNELVARNOTFOUND) is signaled by a routine in the call
+       tree of this routine.
+
+   2)  If the `item' input string pointer is null, the error
+       SPICE(NULLPOINTER) is signaled.
+
+   3)  If the `item' input string has zero length, the error
+       SPICE(EMPTYSTRING) is signaled.
 
 -Files
 
@@ -104,44 +111,107 @@
 
 -Examples
 
-   The call
+   The numerical results shown for this example may differ across
+   platforms. The results depend on the SPICE kernels used as
+   input, the compiler and supporting libraries, and the machine
+   specific arithmetic implementation.
 
-        SpiceInt       body;
-        SpiceInt       dim;
-        SpiceChar    * item;
-        SpiceDouble    value[10];
+   1) Retrieve the Earth's radii values from the kernel pool
 
-        body = 399;
-        item = "RADII";
+      Use the PCK kernel below to load the required triaxial
+      ellipsoidal shape model for the Earth.
 
-        bodvar_c ( body, item, &dim, value );
+         pck00008.tpc
 
-   returns the dimension and values associated with the variable
-   "BODY399_RADII", for example,
 
-        dim      is 3
-        value[0] is 6378.140
-        value[1] is 6378.140
-        value[2] is 6356.755
+      Example code begins here.
+
+
+      /.
+         Program bodvar_ex1
+      ./
+      #include <stdio.h>
+      #include "SpiceUsr.h"
+
+      int main( )
+      {
+         /.
+         Local constants.
+         ./
+         #define  BODYID         399
+
+         /.
+         Local variables.
+         ./
+         SpiceBoolean            found;
+         SpiceDouble             radii [ 3 ];
+         SpiceInt                dim;
+
+         /.
+         Load a PCK file.
+         ./
+         furnsh_c( "pck00008.tpc" );
+
+         /.
+         Test if Earth's radii values exist in the
+         kernel pool.
+
+         The procedure searches for the kernel variable
+         BODY399_RADII.
+         ./
+         found = bodfnd_c( BODYID, "RADII" );
+
+         /.
+         If found, retrieve the values.
+         ./
+         if ( found )
+         {
+            bodvar_c( BODYID, "RADII", &dim, radii );
+
+            printf ( "%d RADII: %10.3f %10.3f %10.3f\n",
+                     (int)BODYID, radii[0], radii[1], radii[2] );
+         }
+         else
+         {
+            printf ( "No RADII data found for object %d\n",
+                     (int)BODYID                          );
+         }
+
+         return ( 0 );
+      }
+
+
+      When this program was executed on a Mac/Intel/cc/64-bit
+      platform, the output was:
+
+
+      399 RADII:   6378.140   6378.140   6356.750
 
 
 -Restrictions
 
-   1) If the requested item is not found, the error
-      SPICE(KERNELVARNOTFOUND) is signalled.
+   None.
 
 -Literature_References
 
-   1) Refer to the SPK required reading file for a complete list of
-      the NAIF integer ID codes for bodies.
+   None.
 
 -Author_and_Institution
 
-   W.L. Taber      (JPL)
-   I.M. Underwood  (JPL)
-   E.D. Wright     (JPL)
+   N.J. Bachman        (JPL)
+   J. Diaz del Rio     (ODC Space)
+   B.V. Semenov        (JPL)
+   W.L. Taber          (JPL)
+   I.M. Underwood      (JPL)
+   E.D. Wright         (JPL)
 
 -Version
+
+   -CSPICE Version 2.0.5, 06-AUG-2021 (JDR)
+
+       Edited the header to comply with NAIF standard. Added complete
+       code example. Moved SPK required reading from -Literature_References
+       to -Required_Reading section.
 
    -CSPICE Version 2.0.4, 19-MAY-2010 (BVS)
 
@@ -164,10 +234,10 @@
        Input argument item was changed to type ConstSpiceChar *.
 
        References to C2F_CreateStr_Sig were removed; code was
-       cleaned up accordingly.  String checks are now done using
+       cleaned up accordingly. String checks are now done using
        the macro CHKFSTR.
 
-   -CSPICE Version 1.0.0, 25-OCT-1997 (EDW)
+   -CSPICE Version 1.0.0, 25-OCT-1997 (EDW) (WLT) (IMU)
 
 -Index_Entries
 
@@ -176,7 +246,6 @@
 
 -&
 */
-
 
 { /* Begin  bodvar_c */
 

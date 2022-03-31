@@ -11,7 +11,7 @@ static integer c__2 = 2;
 static integer c__6 = 6;
 static integer c__100 = 100;
 
-/* $Procedure      SPKR01 ( Read SPK record from segment, type 1 ) */
+/* $Procedure SPKR01 ( Read SPK record from segment, type 1 ) */
 /* Subroutine */ int spkr01_(integer *handle, doublereal *descr, doublereal *
 	et, doublereal *record)
 {
@@ -74,7 +74,7 @@ static integer c__100 = 100;
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     I   File handle. */
 /*     DESCR      I   Segment descriptor. */
@@ -84,18 +84,18 @@ static integer c__100 = 100;
 /* $ Detailed_Input */
 
 /*     HANDLE, */
-/*     DESCR       are the file handle and segment descriptor for */
-/*                 a SPK segment of type 1. */
+/*     DESCR    are the file handle and segment descriptor for */
+/*              a SPK segment of type 1. */
 
-/*     ET          is a target epoch, for which a data record from */
-/*                 a specific segment is required. */
+/*     ET       is a target epoch, for which a data record from */
+/*              a specific segment is required. */
 
 /* $ Detailed_Output */
 
-/*     RECORD      is the record from the specified segment which, */
-/*                 when evaluated at epoch ET, will give the state */
-/*                 (position and velocity) of some body, relative */
-/*                 to some center, in some inertial reference frame. */
+/*     RECORD   is the record from the specified segment which, */
+/*              when evaluated at epoch ET, will give the state */
+/*              (position and velocity) of some body, relative */
+/*              to some center, in some inertial reference frame. */
 
 /* $ Parameters */
 
@@ -103,7 +103,8 @@ static integer c__100 = 100;
 
 /* $ Exceptions */
 
-/*     None. */
+/*     1)  If an error occurs while looking up SPK data, the error is */
+/*         signaled by a routine in the call tree of this routine. */
 
 /* $ Files */
 
@@ -117,9 +118,9 @@ static integer c__100 = 100;
 /* $ Examples */
 
 /*     The data returned by the SPKRnn routine is in its rawest form, */
-/*     taken directly from the segment.  As such, it will be meaningless */
+/*     taken directly from the segment. As such, it will be meaningless */
 /*     to a user unless he/she understands the structure of the data type */
-/*     completely.  Given that understanding, however, the SPKRxx */
+/*     completely. Given that understanding, however, the SPKRxx */
 /*     routines might be used to "dump" and check segment data for a */
 /*     particular epoch. */
 
@@ -150,14 +151,23 @@ static integer c__100 = 100;
 
 /* $ Literature_References */
 
-/*     NAIF Document 168.0, "S- and P- Kernel (SPK) Specification and */
-/*     User's Guide" */
+/*     None. */
 
 /* $ Author_and_Institution */
 
-/*     I.M. Underwood  (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     H.A. Neilan        (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.1, 14-APR-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. Added entry #1 */
+/*        to $Exceptions section. Moved SPK required reading from */
+/*        $Literature_References to $Required_Reading section. */
 
 /* -    SPICELIB Version 1.1.0, 07-SEP-2001 (EDW) */
 
@@ -170,7 +180,7 @@ static integer c__100 = 100;
 
 /* -    SPICELIB Version 1.0.2, 23-AUG-1991 (HAN) */
 
-/*        SPK01 was removed from the Required_Reading section of the */
+/*        SPK01 was removed from the $Required_Reading section of the */
 /*        header. The information in the SPK01 Required Reading file */
 /*        is now part of the SPK Required Reading file. */
 
@@ -183,7 +193,7 @@ static integer c__100 = 100;
 /* -& */
 /* $ Index_Entries */
 
-/*     read record from type_1 spk segment */
+/*     read record from type_1 SPK segment */
 
 /* -& */
 

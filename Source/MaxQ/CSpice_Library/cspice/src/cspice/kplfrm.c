@@ -96,8 +96,8 @@ static integer c__100 = 100;
 /* $ Abstract */
 
 /*     The parameters below form an enumerated list of the recognized */
-/*     frame types.  They are: INERTL, PCK, CK, TK, DYN.  The meanings */
-/*     are outlined below. */
+/*     frame types. They are: INERTL, PCK, CK, TK, DYN, SWTCH, and ALL. */
+/*     The meanings are outlined below. */
 
 /* $ Disclaimer */
 
@@ -147,6 +147,11 @@ static integer c__100 = 100;
 /*                 definition depends on parameters supplied via a */
 /*                 frame kernel. */
 
+/*     SWTCH       is a "switch" frame. These frames have orientation */
+/*                 defined by their alignment with base frames selected */
+/*                 from a prioritized list. The base frames optionally */
+/*                 have associated time intervals of applicability. */
+
 /*     ALL         indicates any of the above classes. This parameter */
 /*                 is used in APIs that fetch information about frames */
 /*                 of a specified class. */
@@ -155,6 +160,7 @@ static integer c__100 = 100;
 /* $ Author_and_Institution */
 
 /*     N.J. Bachman    (JPL) */
+/*     B.V. Semenov    (JPL) */
 /*     W.L. Taber      (JPL) */
 
 /* $ Literature_References */
@@ -162,6 +168,11 @@ static integer c__100 = 100;
 /*     None. */
 
 /* $ Version */
+
+/* -    SPICELIB Version 5.0.0, 08-OCT-2020 (NJB) (BVS) */
+
+/*       The parameter SWTCH was added to support the switch */
+/*       frame class. */
 
 /* -    SPICELIB Version 4.0.0, 08-MAY-2012 (NJB) */
 
@@ -312,17 +323,41 @@ static integer c__100 = 100;
 
 /* $ Version */
 
+/* -    SPICELIB Version 1.7.0, 26-AUG-2021 (BVS) */
+
+/*        Increased the number of non-inertial frames from 106 to 124 */
+/*        in order to accommodate the following PCK based frames: */
+
+/*           IAU_52_EUROPA */
+/*           IAU_NIX */
+/*           IAU_HYDRA */
+/*           IAU_RYUGU */
+/*           IAU_ARROKOTH */
+/*           IAU_DIDYMOS_BARYCENTER */
+/*           IAU_DIDYMOS */
+/*           IAU_DIMORPHOS */
+/*           IAU_DONALDJOHANSON */
+/*           IAU_EURYBATES */
+/*           IAU_EURYBATES_BARYCENTER */
+/*           IAU_QUETA */
+/*           IAU_POLYMELE */
+/*           IAU_LEUCUS */
+/*           IAU_ORUS */
+/*           IAU_PATROCLUS_BARYCENTER */
+/*           IAU_PATROCLUS */
+/*           IAU_MENOETIUS */
+
 /* -    SPICELIB Version 1.6.0, 30-OCT-2014 (BVS) */
 
 /*        Increased the number of non-inertial frames from 105 to 106 */
-/*        in order to accomodate the following PCK based frame: */
+/*        in order to accommodate the following PCK based frame: */
 
 /*           IAU_BENNU */
 
 /* -    SPICELIB Version 1.5.0, 11-OCT-2011 (BVS) */
 
 /*        Increased the number of non-inertial frames from 100 to 105 */
-/*        in order to accomodate the following PCK based frames: */
+/*        in order to accommodate the following PCK based frames: */
 
 /*           IAU_CERES */
 /*           IAU_PALLAS */
@@ -333,7 +368,7 @@ static integer c__100 = 100;
 /* -    SPICELIB Version 1.4.0, 11-MAY-2010 (BVS) */
 
 /*        Increased the number of non-inertial frames from 96 to 100 */
-/*        in order to accomodate the following PCK based frames: */
+/*        in order to accommodate the following PCK based frames: */
 
 /*           IAU_BORRELLY */
 /*           IAU_TEMPEL_1 */
@@ -343,7 +378,7 @@ static integer c__100 = 100;
 /* -    SPICELIB Version 1.3.0, 12-DEC-2002 (BVS) */
 
 /*        Increased the number of non-inertial frames from 85 to 96 */
-/*        in order to accomodate the following PCK based frames: */
+/*        in order to accommodate the following PCK based frames: */
 
 /*           IAU_CALLIRRHOE */
 /*           IAU_THEMISTO */
@@ -360,7 +395,7 @@ static integer c__100 = 100;
 /* -    SPICELIB Version 1.2.0, 02-AUG-2002 (FST) */
 
 /*        Increased the number of non-inertial frames from 81 to 85 */
-/*        in order to accomodate the following PCK based frames: */
+/*        in order to accommodate the following PCK based frames: */
 
 /*           IAU_PAN */
 /*           IAU_GASPRA */
@@ -370,7 +405,7 @@ static integer c__100 = 100;
 /* -    SPICELIB Version 1.1.0, 20-FEB-1997 (WLT) */
 
 /*        Increased the number of non-inertial frames from 79 to 81 */
-/*        in order to accomodate the following earth rotation */
+/*        in order to accommodate the following earth rotation */
 /*        models: */
 
 /*           ITRF93 */
@@ -388,49 +423,51 @@ static integer c__100 = 100;
 
 /* $ Detailed_Input */
 
-/*     FRMCLS         is an integer code specifying the frame class or */
-/*                    classes for which frame ID codes are requested. */
-/*                    The applicable reference frames are those having */
-/*                    specifications present in the kernel pool. */
+/*     FRMCLS   is an integer code specifying the frame class or */
+/*              classes for which frame ID codes are requested. */
+/*              The applicable reference frames are those having */
+/*              specifications present in the kernel pool. */
 
-/*                    FRMCLS may designate a single class or "all */
-/*                    classes." */
+/*              FRMCLS may designate a single class or "all */
+/*              classes." */
 
-/*                    The include file frmtyp.inc declares parameters */
-/*                    identifying frame classes. The supported values */
-/*                    and corresponding meanings of FRMCLS are */
+/*              The include file frmtyp.inc declares parameters */
+/*              identifying frame classes. The supported values */
+/*              and corresponding meanings of FRMCLS are */
 
-/*                       Parameter      Value    Meaning */
-/*                       =========      =====    ================= */
-/*                       ALL              -1     All frame classes */
-/*                                               specified in the */
-/*                                               kernel pool. Class 1 */
-/*                                               is not included. */
+/*                 Parameter      Value    Meaning */
+/*                 =========      =====    ================= */
+/*                 ALL              -1     All frame classes */
+/*                                         specified in the */
+/*                                         kernel pool. Class 1 */
+/*                                         is not included. */
 
-/*                       INERTL            1     Built-in inertial. */
-/*                                               No frames will be */
-/*                                               returned in the */
-/*                                               output set. */
+/*                 INERTL            1     Built-in inertial. */
+/*                                         No frames will be */
+/*                                         returned in the */
+/*                                         output set. */
 
-/*                       PCK               2     PCK-based frame */
+/*                 PCK               2     PCK-based frame */
 
-/*                       CK                3     CK-based frame */
+/*                 CK                3     CK-based frame */
 
-/*                       TK                4     Fixed rotational */
-/*                                               offset ("text */
-/*                                               kernel") frame */
+/*                 TK                4     Fixed rotational */
+/*                                         offset ("text */
+/*                                         kernel") frame */
 
-/*                       DYN               5     Dynamic frame */
+/*                 DYN               5     Dynamic frame */
+
+/*                 SWTCH             6     Switch frame */
 
 /* $ Detailed_Output */
 
-/*     IDSET          is a SPICE set containing the ID codes of all */
-/*                    reference frames having specifications present in */
-/*                    the kernel pool and belonging to the specified */
-/*                    class or classes. */
+/*     IDSET    is a SPICE set containing the ID codes of all */
+/*              reference frames having specifications present in */
+/*              the kernel pool and belonging to the specified */
+/*              class or classes. */
 
-/*                    Note that if FRMCLS is set to INERTL, IDSET */
-/*                    will be empty on output. */
+/*              Note that if FRMCLS is set to INERTL, IDSET */
+/*              will be empty on output. */
 
 /* $ Parameters */
 
@@ -453,26 +490,26 @@ static integer c__100 = 100;
 /*         variable assignments for a reference frame in order to */
 /*         determine that that reference frame has been specified: */
 
-/*           FRAME_<frame name>       = <ID code> */
-/*           FRAME_<ID code>_NAME     = <frame name> */
+/*            FRAME_<frame name>       = <ID code> */
+/*            FRAME_<ID code>_NAME     = <frame name> */
 
-/*        and either */
+/*         and either */
 
-/*           FRAME_<ID code>_CLASS    = <class> */
+/*            FRAME_<ID code>_CLASS    = <class> */
 
-/*        or */
+/*         or */
 
-/*           FRAME_<frame name>_CLASS = <class> */
+/*            FRAME_<frame name>_CLASS = <class> */
 
-/*        It is possible for the presence of an incomplete frame */
-/*        specification to trick this routine into incorrectly */
-/*        deciding that a frame has been specified. This routine */
-/*        does not attempt to diagnose this problem. */
+/*         It is possible for the presence of an incomplete frame */
+/*         specification to trick this routine into incorrectly */
+/*         deciding that a frame has been specified. This routine */
+/*         does not attempt to diagnose this problem. */
 
 /* $ Files */
 
-/*     1) Reference frame specifications for frames that are not */
-/*        built in are typically established by loading frame kernels. */
+/*     Reference frame specifications for frames that are not built in */
+/*     are typically established by loading frame kernels. */
 
 /* $ Particulars */
 
@@ -487,8 +524,7 @@ static integer c__100 = 100;
 /*        PIPOOL */
 
 /*     Given a reference frame's ID code, other attributes of the */
-/*     frame can be obtained via calls to entry points of the */
-/*     umbrella routine FRAMEX: */
+/*     frame can be obtained via calls to the SPICELIB routines */
 
 /*        FRMNAM {Return a frame's name} */
 /*        FRINFO {Return a frame's center, class, and class ID} */
@@ -501,217 +537,200 @@ static integer c__100 = 100;
 
 /* $ Examples */
 
-/*     1)  Display the IDs and names of all reference frames having */
-/*         specifications present in the kernel pool. Group the outputs */
-/*         by frame class. Also fetch and display the entire set of IDs */
-/*         and names using the parameter ALL. */
+/*     The numerical results shown for this example may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
 
-/*         The meta-kernel used for this example is shown below. The */
-/*         Rosetta kernels referenced by the meta-kernel are available */
-/*         in the path */
+/*     1) Display the IDs and names of all reference frames having */
+/*        specifications present in the kernel pool. Group the outputs */
+/*        by frame class. Also fetch and display the entire set of IDs */
+/*        and names using the parameter ALL. */
 
-/*            pub/naif/ROSETTA/kernels/fk */
-
-/*         on the NAIF server. Older, but officially archived versions */
-/*         of these kernels are available in the path */
-
-/*            pub/naif/pds/data/ros-e_m_a_c-spice-6-v1.0/ */
-/*            rossp_1000/DATA/FK */
-
-/*         The referenced PCK is available from the pck path under the */
-/*         generic_kernels path on the same server. */
+/*        Use the meta-kernel shown below to load the required SPICE */
+/*        kernels. */
 
 
-/*            KPL/MK */
+/*           KPL/MK */
 
-/*            \begindata */
+/*           File: kplfrm_ex1.tm */
 
-/*               KERNELS_TO_LOAD = ( 'pck00010.tpc' */
-/*                                   'EARTHFIXEDITRF93.TF' */
-/*                                   'ROS_LUTETIA_RSOC_V03.TF' */
-/*                                   'ROS_V18.TF' */
-/*                                   'RSSD0002.TF'            ) */
-/*            \begintext */
+/*           This meta-kernel is intended to support operation of SPICE */
+/*           example programs. The kernels shown here should not be */
+/*           assumed to contain adequate or correct versions of data */
+/*           required by SPICE-based user applications. */
 
+/*           In order for an application to use this meta-kernel, the */
+/*           kernels referenced here must be present in the user's */
+/*           current working directory. */
 
-/*         Program source code: */
+/*           The names and contents of the kernels referenced */
+/*           by this meta-kernel are as follows: */
 
-
-/*                PROGRAM EX1 */
-/*                IMPLICIT NONE */
-
-/*                INCLUDE 'frmtyp.inc' */
-/*          C */
-/*          C     SPICELIB functions */
-/*          C */
-/*                INTEGER               CARDI */
-/*          C */
-/*          C     Local parameters */
-/*          C */
-/*                CHARACTER*(*)         META */
-/*                PARAMETER           ( META   = 'kplfrm.tm' ) */
-
-/*                INTEGER               NFRAME */
-/*                PARAMETER           ( NFRAME = 1000 ) */
-
-/*                INTEGER               LBCELL */
-/*                PARAMETER           ( LBCELL = -5 ) */
-
-/*                INTEGER               LNSIZE */
-/*                PARAMETER           ( LNSIZE = 80 ) */
-
-/*                INTEGER               FRNMLN */
-/*                PARAMETER           ( FRNMLN = 32 ) */
-
-/*          C */
-/*          C     Local variables */
-/*          C */
-/*                CHARACTER*(FRNMLN)    FRNAME */
-/*                CHARACTER*(LNSIZE)    OUTLIN */
-
-/*                INTEGER               I */
-/*                INTEGER               IDSET ( LBCELL : NFRAME ) */
-/*                INTEGER               J */
-
-/*          C */
-/*          C     Initialize the frame set. */
-/*          C */
-/*                CALL SSIZEI ( NFRAME, IDSET ) */
-
-/*          C */
-/*          C     Load kernels that contain frame specifications. */
-/*          C */
-/*                CALL FURNSH ( META ) */
-
-/*          C */
-/*          C     Fetch and display the frames of each class. */
-/*          C */
-/*                DO I = 1, 6 */
-
-/*                   IF ( I .LT. 6 ) THEN */
-/*          C */
-/*          C           Fetch the frames of class I. */
-/*          C */
-/*                      CALL KPLFRM ( I, IDSET ) */
-
-/*                      OUTLIN = 'Number of frames of class #: #' */
-/*                      CALL REPMI ( OUTLIN, '#', I,            OUTLIN ) */
-/*                      CALL REPMI ( OUTLIN, '#', CARDI(IDSET), OUTLIN ) */
-
-/*                   ELSE */
-/*          C */
-/*          C           Fetch IDs of all frames specified in the kernel */
-/*          C           pool. */
-/*          C */
-/*                      CALL KPLFRM ( ALL, IDSET ) */
-
-/*                      OUTLIN = 'Number of frames in the kernel pool: #' */
-/*                      CALL REPMI ( OUTLIN, '#', CARDI(IDSET), OUTLIN ) */
-
-/*                   END IF */
-
-/*                   CALL TOSTDO ( ' '    ) */
-/*                   CALL TOSTDO ( OUTLIN ) */
-/*                   CALL TOSTDO ( '   Frame IDs and names' ) */
-
-/*                   DO J = 1, CARDI(IDSET) */
-/*                      CALL FRMNAM ( IDSET(J), FRNAME ) */
-/*                      WRITE (*,*) IDSET(J), '  ', FRNAME */
-/*                   END DO */
-
-/*                END DO */
-
-/*                END */
+/*              File name            Contents */
+/*              --------------       -------------------------- */
+/*              clem_v20.tf          Clementine FK */
+/*              moon_060721.tf       Generic Lunar SPICE frames */
 
 
-/*         The output from the program, when the program was linked */
-/*         against the N0064 SPICE Toolkit, is shown below. The output */
-/*         shown here has been abbreviated. */
+/*           \begindata */
+
+/*              KERNELS_TO_LOAD = ( 'clem_v20.tf' */
+/*                                  'moon_060721.tf' ) */
+/*           \begintext */
+
+/*           End of meta-kernel */
 
 
-/*            Number of frames of class 1: 0 */
-/*               Frame IDs and names */
+/*        Example code begins here. */
 
-/*            Number of frames of class 2: 3 */
-/*               Frame IDs and names */
-/*                 1000012   67P/C-G_FIXED */
-/*                 2000021   LUTETIA_FIXED */
-/*                 2002867   STEINS_FIXED */
 
-/*            Number of frames of class 3: 7 */
-/*               Frame IDs and names */
-/*                 -226570   ROS_RPC_BOOM2 */
-/*                 -226215   ROS_VIRTIS-M_SCAN */
-/*                 -226072   ROS_HGA_AZ */
-/*                 -226071   ROS_HGA_EL */
-/*                 -226025   ROS_SA-Y */
-/*                 -226015   ROS_SA+Y */
-/*                 -226000   ROS_SPACECRAFT */
+/*              PROGRAM KPLFRM_EX1 */
+/*              IMPLICIT NONE */
 
-/*            Number of frames of class 4: 64 */
-/*               Frame IDs and names */
-/*                -2260021   ROS_LUTETIA */
-/*                 -226999   ROSLND_LOCAL_LEVEL */
-/*                 -226900   ROSLND_LANDER */
-/*                 -226560   ROS_RPC_BOOM1 */
+/*              INCLUDE 'frmtyp.inc' */
+/*        C */
+/*        C     SPICELIB functions */
+/*        C */
+/*              INTEGER               CARDI */
+/*        C */
+/*        C     Local parameters */
+/*        C */
+/*              CHARACTER*(*)         META */
+/*              PARAMETER           ( META   = 'kplfrm_ex1.tm' ) */
 
-/*                    ... */
+/*              INTEGER               NFRAME */
+/*              PARAMETER           ( NFRAME = 1000 ) */
 
-/*                 -226030   ROS_MGA-S */
-/*                 -226020   ROS_SA-Y_ZERO */
-/*                 -226010   ROS_SA+Y_ZERO */
-/*                 1502010   HCI */
-/*                 1502301   LME2000 */
-/*                 1503299   VME2000 */
-/*                 1503499   MME2000 */
+/*              INTEGER               LBCELL */
+/*              PARAMETER           ( LBCELL = -5 ) */
 
-/*            Number of frames of class 5: 19 */
-/*               Frame IDs and names */
-/*                 -226967   2867/STEINS_CSO */
-/*                 -226945   45P/H-M-P_CSO */
-/*                 -226921   21/LUTETIA_CSO */
-/*                 -226920   21/LUTETIA_CSEQ */
-/*                 -226912   67P/C-G_CSO */
-/*                 -226910   67P/C-G_CSEQ */
-/*                 1500010   HEE */
-/*                 1500299   VSO */
-/*                 1500301   LSE */
-/*                 1500399   GSE */
-/*                 1500499   MME */
-/*                 1501010   HEEQ */
-/*                 1501299   VME */
-/*                 1501301   LME */
-/*                 1501399   EME */
-/*                 1501499   MME_IAU2000 */
-/*                 1502399   GSEQ */
-/*                 1502499   MSO */
-/*                 1503399   ECLIPDATE */
+/*              INTEGER               LNSIZE */
+/*              PARAMETER           ( LNSIZE = 80 ) */
 
-/*            Number of frames in the kernel pool: 93 */
-/*               Frame IDs and names */
-/*                -2260021   ROS_LUTETIA */
-/*                 -226999   ROSLND_LOCAL_LEVEL */
-/*                 -226967   2867/STEINS_CSO */
-/*                 -226945   45P/H-M-P_CSO */
-/*                 -226921   21/LUTETIA_CSO */
+/*              INTEGER               FRNMLN */
+/*              PARAMETER           ( FRNMLN = 32 ) */
 
-/*                    ... */
+/*        C */
+/*        C     Local variables */
+/*        C */
+/*              CHARACTER*(FRNMLN)    FRNAME */
+/*              CHARACTER*(LNSIZE)    OUTLIN */
 
-/*                 1503299   VME2000 */
-/*                 1503399   ECLIPDATE */
-/*                 1503499   MME2000 */
-/*                 2000021   LUTETIA_FIXED */
-/*                 2002867   STEINS_FIXED */
+/*              INTEGER               I */
+/*              INTEGER               IDSET ( LBCELL : NFRAME ) */
+/*              INTEGER               J */
+
+/*        C */
+/*        C     Initialize the frame set. */
+/*        C */
+/*              CALL SSIZEI ( NFRAME, IDSET ) */
+
+/*        C */
+/*        C     Load kernels that contain frame specifications. */
+/*        C */
+/*              CALL FURNSH ( META ) */
+
+/*        C */
+/*        C     Fetch and display the frames of each class. */
+/*        C */
+/*              DO I = 1, 7 */
+
+/*                 IF ( I .LT. 7 ) THEN */
+/*        C */
+/*        C           Fetch the frames of class I. */
+/*        C */
+/*                    CALL KPLFRM ( I, IDSET ) */
+
+/*                    OUTLIN = 'Number of frames of class #: #' */
+/*                    CALL REPMI ( OUTLIN, '#', I,            OUTLIN ) */
+/*                    CALL REPMI ( OUTLIN, '#', CARDI(IDSET), OUTLIN ) */
+
+/*                 ELSE */
+/*        C */
+/*        C           Fetch IDs of all frames specified in the kernel */
+/*        C           pool. */
+/*        C */
+/*                    CALL KPLFRM ( ALL, IDSET ) */
+
+/*                    OUTLIN = 'Number of frames in the kernel pool: #' */
+/*                    CALL REPMI ( OUTLIN, '#', CARDI(IDSET), OUTLIN ) */
+
+/*                 END IF */
+
+/*                 CALL TOSTDO ( ' '    ) */
+/*                 CALL TOSTDO ( OUTLIN ) */
+/*                 CALL TOSTDO ( '   Frame IDs and names' ) */
+
+/*                 DO J = 1, CARDI(IDSET) */
+/*                    CALL FRMNAM ( IDSET(J), FRNAME ) */
+/*                    WRITE (*,*) IDSET(J), '  ', FRNAME */
+/*                 END DO */
+
+/*              END DO */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*        Number of frames of class 1: 0 */
+/*           Frame IDs and names */
+
+/*        Number of frames of class 2: 1 */
+/*           Frame IDs and names */
+/*               31002   MOON_PA_DE403 */
+
+/*        Number of frames of class 3: 1 */
+/*           Frame IDs and names */
+/*              -40000   CLEM_SC_BUS */
+
+/*        Number of frames of class 4: 11 */
+/*           Frame IDs and names */
+/*              -40008   CLEM_CPT */
+/*              -40007   CLEM_BSTAR */
+/*              -40006   CLEM_ASTAR */
+/*              -40005   CLEM_LIDAR */
+/*              -40004   CLEM_LWIR */
+/*              -40003   CLEM_NIR */
+/*              -40002   CLEM_UVVIS */
+/*              -40001   CLEM_HIRES */
+/*               31000   MOON_PA */
+/*               31001   MOON_ME */
+/*               31003   MOON_ME_DE403 */
+
+/*        Number of frames of class 5: 0 */
+/*           Frame IDs and names */
+
+/*        Number of frames of class 6: 0 */
+/*           Frame IDs and names */
+
+/*        Number of frames in the kernel pool: 13 */
+/*           Frame IDs and names */
+/*              -40008   CLEM_CPT */
+/*              -40007   CLEM_BSTAR */
+/*              -40006   CLEM_ASTAR */
+/*              -40005   CLEM_LIDAR */
+/*              -40004   CLEM_LWIR */
+/*              -40003   CLEM_NIR */
+/*              -40002   CLEM_UVVIS */
+/*              -40001   CLEM_HIRES */
+/*              -40000   CLEM_SC_BUS */
+/*               31000   MOON_PA */
+/*               31001   MOON_ME */
+/*               31002   MOON_PA_DE403 */
+/*               31003   MOON_ME_DE403 */
 
 
 /* $ Restrictions */
 
-/*     1) This routine will work correctly if the kernel pool */
-/*        contains no invalid frame specifications. See the */
-/*        description of exception 4 above. Users must ensure */
-/*        that no invalid frame specifications are introduced */
-/*        into the kernel pool, either by loaded kernels or */
-/*        by means of the kernel pool "put" APIs. */
+/*     1)  This routine will work correctly if the kernel pool contains */
+/*         no invalid frame specifications. See the description of */
+/*         exception 4 above. Users must ensure that no invalid frame */
+/*         specifications are introduced into the kernel pool, either by */
+/*         loaded kernels or by means of the kernel pool "put" APIs. */
 
 /* $ Literature_References */
 
@@ -719,9 +738,19 @@ static integer c__100 = 100;
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 2.0.0, 08-AUG-2021 (JDR) (NJB) */
+
+/*        Updated to account for switch frame class. */
+
+/*        Edited the header to comply with NAIF standard. */
+
+/*        Updated Example's kernels set to use Clementine PDS archived */
+/*        data. */
 
 /* -    SPICELIB Version 1.1.0, 18-JUN-2015 (NJB) */
 
@@ -760,7 +789,7 @@ static integer c__100 = 100;
 
 /*     This block of code must be kept in sync with frmtyp.inc. */
 
-    if (*frmcls > 5 || *frmcls == 0 || *frmcls < -1) {
+    if (*frmcls > 6 || *frmcls == 0 || *frmcls < -1) {
 	setmsg_("Frame class specifier FRMCLS was #; this value is not suppo"
 		"rted.", (ftnlen)64);
 	errint_("#", frmcls, (ftnlen)1);
@@ -807,7 +836,7 @@ static integer c__100 = 100;
 /*           GNPOOL call. */
 
 	    gcpool_(kvbuff + (((i__2 = i__ - 1) < 100 && 0 <= i__2 ? i__2 : 
-		    s_rnge("kvbuff", i__2, "kplfrm_", (ftnlen)536)) << 5), &
+		    s_rnge("kvbuff", i__2, "kplfrm_", (ftnlen)532)) << 5), &
 		    c__1, &c__1, &m, frname, &found, (ftnlen)32, (ftnlen)32);
 	    if (found) {
 

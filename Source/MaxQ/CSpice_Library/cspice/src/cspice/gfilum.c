@@ -517,7 +517,7 @@ static logical c_false = FALSE_;
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     LBCELL     P   SPICE Cell lower bound. */
 /*     CNVTOL     P   Convergence tolerance. */
@@ -537,314 +537,300 @@ static logical c_false = FALSE_;
 /*     CNFINE     I   SPICE window to which the search is confined. */
 /*     MW         I   Workspace window size. */
 /*     NW         I   Workspace window count. */
-/*     WORK      I-O   Array of workspace windows. */
-/*     RESULT    I-O   SPICE window containing results. */
+/*     WORK       O   Array of workspace windows. */
+/*     RESULT    I-O  SPICE window containing results. */
 
 /* $ Detailed_Input */
 
-/*     METHOD      is a short string providing parameters defining */
-/*                 the computation method to be used. Parameters */
-/*                 include, but are not limited to, the shape model */
-/*                 used to represent the surface of the target body. */
+/*     METHOD   is a short string providing parameters defining the */
+/*              computation method to be used. Parameters include, but */
+/*              are not limited to, the shape model used to represent the */
+/*              surface of the target body. */
 
-/*                 The only choice currently supported is */
+/*              The only choice currently supported is */
 
-/*                    'Ellipsoid'        The illumination angle */
-/*                                       computation uses a triaxial */
-/*                                       ellipsoid to model the surface */
-/*                                       of the target body. The */
-/*                                       ellipsoid's radii must be */
-/*                                       available in the kernel pool. */
+/*                 'Ellipsoid'        The illumination angle */
+/*                                    computation uses a triaxial */
+/*                                    ellipsoid to model the surface */
+/*                                    of the target body. The */
+/*                                    ellipsoid's radii must be */
+/*                                    available in the kernel pool. */
+
+/*              Neither case nor whitespaces are significant in METHOD. */
+/*              For example, the string ' eLLipsoid ' is valid. */
 
-/*                 Neither case nor blanks are significant in METHOD. */
-/*                 For example, the string ' eLLipsoid ' is valid. */
+/*     ANGTYP   is a string specifying the type of illumination angle for */
+/*              which a search is to be performed. The possible values of */
+/*              ANGTYP are */
 
+/*                 'PHASE' */
+/*                 'INCIDENCE' */
+/*                 'EMISSION' */
 
-/*     ANGTYP      is a string specifying the type of illumination */
-/*                 angle for which a search is to be performed. The */
-/*                 possible values of ANGTYP are */
+/*              When the illumination source is the sun, the incidence */
+/*              angle is commonly called the "solar incidence angle." */
 
-/*                    'PHASE' */
-/*                    'INCIDENCE' */
-/*                    'EMISSION' */
+/*              See the $Particulars section below for a detailed */
+/*              description of these angles. */
 
-/*                 When the illumination source is the sun, the */
-/*                 incidence angle is commonly called the "solar */
-/*                 incidence angle." */
+/*              Neither case nor whitespaces are significant in ANGTYP. */
+/*              For example, the string ' Incidence ' is valid. */
 
-/*                 See the Particulars section below for a detailed */
-/*                 description of these angles. */
+/*     TARGET   is the name of a target body. The point at which the */
+/*              illumination angles are defined is located on the surface */
+/*              of this body. */
 
-/*                 Neither case nor white space are significant in */
-/*                 ANGTYP. For example, the string ' Incidence ' is */
-/*                 valid. */
+/*              Optionally, you may supply the integer ID code for the */
+/*              object as an integer string. For example both 'MOON' and */
+/*              '301' are legitimate strings that indicate the moon is */
+/*              the target body. */
 
+/*              Neither case nor leading and trailing blanks are */
+/*              significant in TARGET. For example, the string */
+/*              ' Incidence ' is valid. Sequences of embedded blanks are */
+/*              treated as a single blank. */
 
-/*     TARGET      is the name of a target body. The point at which the */
-/*                 illumination angles are defined is located on the */
-/*                 surface of this body. */
+/*     ILLMN    is the name of the illumination source. This source may */
+/*              be any ephemeris object. Case, blanks, and numeric values */
+/*              are treated in the same way as for the input TARGET. */
 
-/*                 Optionally, you may supply the integer ID code for */
-/*                 the object as an integer string. For example both */
-/*                 'MOON' and '301' are legitimate strings that indicate */
-/*                 the moon is the target body. */
+/*     FIXREF   is the name of the body-fixed, body-centered reference */
+/*              frame associated with the target body. The input surface */
+/*              point SPOINT is expressed relative to this reference */
+/*              frame, and this frame is used to define the orientation */
+/*              of the target body as a function of time. */
 
-/*                 Neither case nor leading and trailing blanks are */
-/*                 significant in TARGET. For example, the string */
-/*                 ' Incidence ' is valid. Sequences of embedded blanks */
-/*                 are treated as a single blank. */
+/*              The string FIXREF is case-insensitive, and leading */
+/*              and trailing blanks in FIXREF are not significant. */
 
+/*     ABCORR   indicates the aberration corrections to be applied to the */
+/*              observer-surface point vector, the surface point- */
+/*              illumination source vector, and the target body */
+/*              orientation to account for one-way light time and stellar */
+/*              aberration. */
 
-/*     ILLMN       is the name of the illumination source. This source */
-/*                 may be any ephemeris object. Case, blanks, and */
-/*                 numeric values are treated in the same way as for the */
-/*                 input TARGET. */
+/*              Any "reception" correction accepted by SPKEZR can be used */
+/*              here. See the header of SPKEZR for a detailed description */
+/*              of the aberration correction options. For convenience, */
+/*              the options are listed below: */
 
+/*                 'NONE'     Apply no correction. */
 
-/*     FIXREF      is the name of the body-fixed, body-centered */
-/*                 reference frame associated with the target body. The */
-/*                 input surface point SPOINT is expressed relative to */
-/*                 this reference frame, and this frame is used to */
-/*                 define the orientation of the target body as a */
-/*                 function of time. */
+/*                 'LT'       "Reception" case: correct for */
+/*                            one-way light time using a Newtonian */
+/*                            formulation. */
 
-/*                 The string FIXREF is case-insensitive, and leading */
-/*                 and trailing blanks in FIXREF are not significant. */
+/*                 'LT+S'     "Reception" case: correct for */
+/*                            one-way light time and stellar */
+/*                            aberration using a Newtonian */
+/*                            formulation. */
 
+/*                 'CN'       "Reception" case: converged */
+/*                            Newtonian light time correction. */
 
-/*     ABCORR      indicates the aberration corrections to be applied to */
-/*                 the observer-surface point vector, the surface point- */
-/*                 illumination source vector, and the target body */
-/*                 orientation to account for one-way light time and */
-/*                 stellar aberration. */
+/*                 'CN+S'     "Reception" case: converged */
+/*                            Newtonian light time and stellar */
+/*                            aberration corrections. */
 
-/*                 Any "reception" correction accepted by SPKEZR can be */
-/*                 used here. See the header of SPKEZR for a detailed */
-/*                 description of the aberration correction options. For */
-/*                 convenience, the options are listed below: */
+/*              Case and blanks are not significant in the string ABCORR. */
 
-/*                    'NONE'     Apply no correction. */
+/*     OBSRVR   is the name of an observing body. Case, blanks, and */
+/*              numeric values are treated in the same way as for the */
+/*              input TARGET. */
 
-/*                    'LT'       "Reception" case:  correct for */
-/*                               one-way light time using a Newtonian */
-/*                               formulation. */
+/*     SPOINT   is a surface point on the target body, expressed in */
+/*              Cartesian coordinates, relative to the body-fixed target */
+/*              frame designated by FIXREF. */
 
-/*                    'LT+S'     "Reception" case:  correct for */
-/*                               one-way light time and stellar */
-/*                               aberration using a Newtonian */
-/*                               formulation. */
+/*              SPOINT need not be visible from the observer's location */
+/*              in order for the constraint specified by RELATE and */
+/*              REFVAL (see descriptions below) to be satisfied. */
 
-/*                    'CN'       "Reception" case:  converged */
-/*                               Newtonian light time correction. */
+/*              The components of SPOINT have units of km. */
 
-/*                    'CN+S'     "Reception" case:  converged */
-/*                               Newtonian light time and stellar */
-/*                               aberration corrections. */
+/*     RELATE   is a relational operator used to define a constraint on a */
+/*              specified illumination angle. The result window found by */
+/*              this routine indicates the time intervals where the */
+/*              constraint is satisfied. Supported values of RELATE and */
+/*              corresponding meanings are shown below: */
 
-/*                 Case and blanks are not significant in the string */
-/*                 ABCORR. */
+/*                 '>'      The angle is greater than the reference */
+/*                          value REFVAL. */
 
+/*                 '='      The angle is equal to the reference */
+/*                          value REFVAL. */
 
-/*     OBSRVR      is the name of an observing body. Case, blanks, and */
-/*                 numeric values are treated in the same way as for the */
-/*                 input TARGET. */
+/*                 '<'      The angle is less than the reference */
+/*                          value REFVAL. */
 
 
-/*     SPOINT      is a surface point on the target body, expressed in */
-/*                 Cartesian coordinates, relative to the body-fixed */
-/*                 target frame designated by FIXREF. */
+/*                'ABSMAX'  The angle is at an absolute maximum. */
 
-/*                 SPOINT need not be visible from the observer's */
-/*                 location in order for the constraint specified by */
-/*                 RELATE and REFVAL (see descriptions below) to be */
-/*                 satisfied. */
+/*                'ABSMIN'  The angle is at an absolute minimum. */
 
-/*                 The components of SPOINT have units of km. */
+/*                'LOCMAX'  The angle is at a local maximum. */
 
+/*                'LOCMIN'  The angle is at a local minimum. */
 
-/*     RELATE      is a relational operator used to define a constraint */
-/*                 on a specified illumination angle. The result window */
-/*                 found by this routine indicates the time intervals */
-/*                 where the constraint is satisfied. Supported values */
-/*                 of RELATE and corresponding meanings are shown below: */
+/*              The caller may indicate that the window of interest is */
+/*              the set of time intervals where the angle is within a */
+/*              specified separation from an absolute extremum. The */
+/*              argument ADJUST (described below) is used to specify this */
+/*              separation. */
 
-/*                    '>'      The angle is greater than the reference */
-/*                             value REFVAL. */
+/*              Local extrema are considered to exist only in the */
+/*              interiors of the intervals comprising the confinement */
+/*              window: a local extremum cannot exist at a boundary point */
+/*              of the confinement window. */
 
-/*                    '='      The angle is equal to the reference */
-/*                             value REFVAL. */
+/*              Case is not significant in the string RELATE. */
 
-/*                    '<'      The angle is less than the reference */
-/*                             value REFVAL. */
+/*     REFVAL   is the reference value used together with the argument */
+/*              RELATE to define an equality or inequality to be */
+/*              satisfied by the specified illumination angle. See the */
+/*              discussion of RELATE above for further information. */
 
+/*              The units of REFVAL are radians. */
 
-/*                   'ABSMAX'  The angle is at an absolute maximum. */
+/*     ADJUST   is a parameter used to modify searches for absolute */
+/*              extrema: when RELATE is set to 'ABSMAX' or 'ABSMIN' and */
+/*              ADJUST is set to a positive value, GFILUM will find times */
+/*              when the specified illumination angle is within ADJUST */
+/*              radians of the specified extreme value. */
 
-/*                   'ABSMIN'  The angle is at an absolute minimum. */
+/*              If ADJUST is non-zero and a search for an absolute */
+/*              minimum is performed, the result window contains time */
+/*              intervals when the specified illumination angle has */
+/*              values between the absolute minimum ABSMIN and */
+/*              ABSMIN + ADJUST radians. */
 
-/*                   'LOCMAX'  The angle is at a local maximum. */
+/*              If ADJUST is non-zero and the search is for an absolute */
+/*              maximum, the corresponding angle is between the absolute */
+/*              maximum ABSMAX and ABSMAX - ADJUST radians. */
 
-/*                   'LOCMIN'  The angle is at a local minimum. */
+/*              ADJUST is not used for searches for local extrema, */
+/*              equality or inequality conditions. */
 
-/*                The caller may indicate that the window of interest is */
-/*                the set of time intervals where the angle is within a */
-/*                specified separation from an absolute extremum. The */
-/*                argument ADJUST (described below) is used to specify */
-/*                this separation. */
+/*     STEP     is the step size to be used in the search. STEP must be */
+/*              short enough for a search using this step size to locate */
+/*              the time intervals where the specified illumination angle */
+/*              is monotone increasing or decreasing. However, STEP must */
+/*              not be *too* short, or the search will take an */
+/*              unreasonable amount of time. */
 
-/*                Local extrema are considered to exist only in the */
-/*                interiors of the intervals comprising the confinement */
-/*                window: a local extremum cannot exist at a boundary */
-/*                point of the confinement window. */
+/*              The choice of STEP affects the completeness but not the */
+/*              precision of solutions found by this routine; the */
+/*              precision is controlled by the convergence tolerance. See */
+/*              the discussion of the parameter CNVTOL for details. */
 
-/*                Case is not significant in the string RELATE. */
+/*              STEP has units of seconds. */
 
+/*     CNFINE   is a SPICE window that confines the time period over */
+/*              which the specified search is conducted. CNFINE may */
+/*              consist of a single interval or a collection of */
+/*              intervals. */
 
-/*     REFVAL     is the reference value used together with the argument */
-/*                RELATE to define an equality or inequality to be */
-/*                satisfied by the specified illumination angle. See the */
-/*                discussion of RELATE above for further information. */
+/*              The endpoints of the time intervals comprising CNFINE are */
+/*              interpreted as seconds past J2000 TDB. */
 
-/*                The units of REFVAL are radians. */
+/*              In some cases the confinement window can be used to */
+/*              greatly reduce the time window that must be searched for */
+/*              the desired solution. See the $Particulars section below */
+/*              for further discussion. */
 
+/*              See the $Examples section below for a code example that */
+/*              shows how to create a confinement window. */
 
-/*     ADJUST     is a parameter used to modify searches for absolute */
-/*                extrema: when RELATE is set to ABSMAX or ABSMIN and */
-/*                ADJUST is set to a positive value, GFILUM will find */
-/*                times when the specified illumination angle is within */
-/*                ADJUST radians of the specified extreme value. */
+/*              CNFINE must be initialized by the caller via the SPICELIB */
+/*              routine SSIZED. */
 
-/*                If ADJUST is non-zero and a search for an absolute */
-/*                minimum is performed, the result window contains */
-/*                time intervals when the specified illumination angle */
-/*                has values between the absolute minimum MIN */
-/*                MIN + ADJUST radians. */
+/*              In some cases the observer's state may be computed at */
+/*              times outside of CNFINE by as much as 2 seconds. See */
+/*              $Particulars for details. */
 
-/*                If ADJUST is non-zero and the search is for an */
-/*                absolute maximum, the corresponding angle is between */
-/*                the absolute maximum MAX and MAX - ADJUST radians. */
+/*     MW       is a parameter specifying the length of the workspace */
+/*              array WORK (see description below) used by this routine. */
+/*              MW should be at least as large as TWICE the number of */
+/*              intervals within the search window on which the specified */
+/*              illumination angle is monotone increasing or decreasing. */
+/*              It does no harm to pick a value of MW larger than the */
+/*              minimum required to execute the specified search, but if */
+/*              MW is too small, the search will fail. */
 
-/*                ADJUST is not used for searches for local extrema, */
-/*                equality or inequality conditions. */
+/*     RESULT   is a double precision SPICE window which will contain */
+/*              the search results. RESULT must be declared and */
+/*              initialized with sufficient size to capture the full */
+/*              set of time intervals within the search region on which */
+/*              the specified condition is satisfied. */
 
+/*              RESULT must be initialized by the caller via the */
+/*              SPICELIB routine SSIZED. */
 
-/*     STEP       is the step size to be used in the search. STEP must */
-/*                be short enough for a search using this step size to */
-/*                locate the time intervals where the specified */
-/*                illumination angle is monotone increasing or */
-/*                decreasing. However, STEP must not be *too* short, or */
-/*                the search will take an unreasonable amount of time. */
-
-/*                The choice of STEP affects the completeness but not */
-/*                the precision of solutions found by this routine; the */
-/*                precision is controlled by the convergence tolerance. */
-/*                See the discussion of the parameter CNVTOL for */
-/*                details. */
-
-/*                STEP has units of seconds. */
-
-
-/*     CNFINE     is a SPICE window that confines the time period over */
-/*                which the specified search is conducted. CNFINE may */
-/*                consist of a single interval or a collection of */
-/*                intervals. */
-
-/*                In some cases the confinement window can be used to */
-/*                greatly reduce the time window that must be searched */
-/*                for the desired solution. See the Particulars section */
-/*                below for further discussion. */
-
-/*                See the Examples section below for a code example */
-/*                that shows how to create a confinement window. */
-
-/*                CNFINE must be initialized by the caller via the */
-/*                SPICELIB routine SSIZED. */
-
-
-/*     MW         is a parameter specifying the length of the workspace */
-/*                array WORK (see description below) used by this */
-/*                routine. MW should be at least as large as TWICE the */
-/*                number of intervals within the search window on which */
-/*                the specified illumination angle is monotone increasing */
-/*                or decreasing. It does no harm to pick a value of */
-/*                MW larger than the minimum required to execute the */
-/*                specified search, but if MW is too small, the */
-/*                search will fail. */
-
-
-/*     WORK       is an array used to store workspace windows. This */
-/*                array should be declared by the caller as shown: */
-
-/*                   INCLUDE 'gf.inc' */
-/*                      ... */
-
-/*                   DOUBLE PRECISION    WORK ( LBCELL : MW, NWILUM ) */
-
-/*                where MW is a constant declared by the caller and */
-/*                NWILUM is a constant defined in the SPICELIB INCLUDE */
-/*                file gf.inc. */
-
-/*                WORK need not be initialized by the caller. */
-
-
-/*     RESULT     is the result window. RESULT must be initialized via a */
-/*                call to SSIZED. RESULT must be declared and initialized */
-/*                with sufficient size to capture the full set of time */
-/*                intervals within the search window on which the */
-/*                specified constraint is satisfied. */
-
+/*              If RESULT is non-empty on input, its contents will be */
+/*              discarded before GFILUM conducts its search. */
 
 /* $ Detailed_Output */
 
-/*     WORK       is the input workspace array, modified by this */
-/*                routine. The caller should re-initialize this array */
-/*                before attempting to use it for any other purpose. */
+/*     WORK     is an array used to store workspace windows. */
 
-/*     RESULT     is the window of intervals, contained within the */
-/*                confinement window CNFINE, on which the specified */
-/*                constraint is satisfied. */
+/*              This array should be declared by the caller as shown: */
 
-/*                The endpoints of the time intervals comprising RESULT */
-/*                are interpreted as seconds past J2000 TDB. */
+/*                 INCLUDE 'gf.inc' */
+/*                    ... */
 
-/*                If RESULT is non-empty on input, its contents will be */
-/*                discarded before gfilum_c conducts its search. */
+/*                 DOUBLE PRECISION    WORK ( LBCELL : MW, NWILUM ) */
 
-/*                If the search is for local extrema, or for absolute */
-/*                extrema with ADJUST set to zero, then normally each */
-/*                interval of RESULT will be a singleton: the left and */
-/*                right endpoints of each interval will be identical. */
+/*              where MW is a constant declared by the caller and NWILUM */
+/*              is a constant defined in the SPICELIB INCLUDE file */
+/*              gf.inc. */
 
-/*                If no times within the confinement window satisfy the */
-/*                constraint, RESULT will be returned with a */
-/*                cardinality of zero. */
+/*              WORK need not be initialized by the caller. */
+
+/*              WORK is modified by this routine. The caller should */
+/*              re-initialize this array before attempting to use it for */
+/*              any other purpose. */
+
+/*     RESULT   is the SPICE window of intervals, contained within the */
+/*              confinement window CNFINE, on which the specified */
+/*              constraint is satisfied. */
+
+/*              The endpoints of the time intervals comprising RESULT are */
+/*              interpreted as seconds past J2000 TDB. */
+
+/*              If the search is for local extrema, or for absolute */
+/*              extrema with ADJUST set to zero, then normally each */
+/*              interval of RESULT will be a singleton: the left and */
+/*              right endpoints of each interval will be identical. */
+
+/*              If no times within the confinement window satisfy the */
+/*              search criteria, RESULT will be returned with a */
+/*              cardinality of zero. */
 
 /* $ Parameters */
 
-/*     LBCELL     is the lower bound for SPICE Cell arrays. */
+/*     LBCELL   is the lower bound for SPICE Cell arrays. */
 
-/*     CNVTOL     is the default convergence tolerance used for finding */
-/*                endpoints of the intervals comprising the result */
-/*                window. CNVTOL is also used for finding intermediate */
-/*                results; in particular, CNVTOL is used for finding the */
-/*                windows on which the specified illumination angle is */
-/*                increasing or decreasing. CNVTOL is used to determine */
-/*                when binary searches for roots should terminate: when */
-/*                a root is bracketed within an interval of length */
-/*                CNVTOL, the root is considered to have been found. */
+/*     CNVTOL   is the default convergence tolerance used for finding */
+/*              endpoints of the intervals comprising the result */
+/*              window. CNVTOL is also used for finding intermediate */
+/*              results; in particular, CNVTOL is used for finding the */
+/*              windows on which the specified illumination angle is */
+/*              increasing or decreasing. CNVTOL is used to determine */
+/*              when binary searches for roots should terminate: when */
+/*              a root is bracketed within an interval of length */
+/*              CNVTOL, the root is considered to have been found. */
 
-/*                The accuracy, as opposed to precision, of roots found */
-/*                by this routine depends on the accuracy of the input */
-/*                data. In most cases, the accuracy of solutions will be */
-/*                inferior to their precision. */
+/*              The accuracy, as opposed to precision, of roots found */
+/*              by this routine depends on the accuracy of the input */
+/*              data. In most cases, the accuracy of solutions will be */
+/*              inferior to their precision. */
 
-/*                The calling program can reset the convergence */
-/*                tolerance; see the Particulars section below for */
-/*                further information. */
+/*              The calling program can reset the convergence */
+/*              tolerance; see the $Particulars section below for */
+/*              further information. */
 
-
-/*     NWILUM     is the number of workspace windows required by */
-/*                this routine. */
+/*     NWILUM   is the number of workspace windows required by */
+/*              this routine. */
 
 /*     See INCLUDE file gf.inc for declarations and descriptions of */
 /*     parameters used throughout the GF subsystem. */
@@ -877,59 +863,60 @@ static logical c_false = FALSE_;
 /*         WNCOND can be used to contract the result window. */
 
 /*     3)  If the window size MW is less than 2, the error */
-/*         SPICE(INVALIDDIMENSION) will be signaled. */
+/*         SPICE(INVALIDDIMENSION) is signaled. */
 
 /*     4)  If the window count NW is less than NWILUM, the error */
-/*         SPICE(INVALIDDIMENSION) will be signaled. */
+/*         SPICE(INVALIDDIMENSION) is signaled. */
 
 /*     5)  If an error (typically cell overflow) occurs while performing */
-/*         window arithmetic, the error will be diagnosed by a routine */
+/*         window arithmetic, the error is signaled by a routine */
 /*         in the call tree of this routine. */
 
-/*     6)  If the output SPICE window RESULT has insufficient capacity */
-/*         to hold the set of intervals on which the specified */
-/*         illumination angle condition is met, the error will be */
-/*         diagnosed by a routine in the call tree of this routine. If */
-/*         the result window has size less than 2, the error */
-/*         SPICE(INVALIDDIMENSION) will be signaled by this routine. */
+/*     6)  If the output SPICE window RESULT has size less than 2, the */
+/*         error SPICE(INVALIDDIMENSION) is signaled. */
 
-/*     7)  If the input target body-fixed frame FIXREF is not */
+/*     7)  If the output SPICE window RESULT has insufficient capacity to */
+/*         hold the set of intervals on which the specified illumination */
+/*         angle condition is met, an error is signaled by a routine in */
+/*         the call tree of this routine. */
+
+/*     8)  If the input target body-fixed frame FIXREF is not */
 /*         recognized, an error is signaled by a routine in the call */
 /*         tree of this routine. A frame name may fail to be recognized */
 /*         because a required frame specification kernel has not been */
 /*         loaded; another cause is a misspelling of the frame name. */
 
-/*     8)  If the input frame FIXREF is not centered at the target body, */
+/*     9)  If the input frame FIXREF is not centered at the target body, */
 /*         an error is signaled by a routine in the call tree of this */
 /*         routine. */
 
-/*     9)  If the input argument METHOD is not recognized, the error */
-/*         SPICE(INVALIDMETHOD) is signaled. */
+/*     10) If the input argument METHOD is not recognized, an error is */
+/*         signaled by a routine in the call tree of this routine. */
 
-/*    10)  If the illumination angle type ANGTYP is not recognized, */
+/*     11) If the illumination angle type ANGTYP is not recognized, */
 /*         an error is signaled by a routine in the call tree */
 /*         of this routine. */
 
-/*    11)  If the relational operator RELATE is not recognized, an */
+/*     12) If the relational operator RELATE is not recognized, an */
 /*         error is signaled by a routine in the call tree of this */
 /*         routine. */
 
-/*    12)  If the aberration correction specifier contains an */
+/*     13) If the aberration correction specifier contains an */
 /*         unrecognized value, an error is signaled by a routine in the */
 /*         call tree of this routine. */
 
-/*    13)  If ADJUST is negative, an error is signaled by a routine in */
+/*     14) If ADJUST is negative, an error is signaled by a routine in */
 /*         the call tree of this routine. */
 
-/*    14)  If any of the input body names do not map to NAIF ID */
+/*     15) If any of the input body names do not map to NAIF ID */
 /*         codes, an error is signaled by a routine in the call tree of */
 /*         this routine. */
 
-/*    15)  If the target coincides with the observer or the illumination */
+/*     16) If the target coincides with the observer or the illumination */
 /*         source, an error is signaled by a routine in the call tree */
 /*         of this routine. */
 
-/*    16)  If required ephemerides or other kernel data are not */
+/*     17) If required ephemerides or other kernel data are not */
 /*         available, an error is signaled by a routine in the call tree */
 /*         of this routine. */
 
@@ -940,32 +927,36 @@ static logical c_false = FALSE_;
 
 /*     The following data are required: */
 
-/*        - SPK data: ephemeris data for target, observer, and the */
-/*          illumination source must be loaded. If aberration */
-/*          corrections are used, the states of target, observer, and */
-/*          the illumination source relative to the solar system */
-/*          barycenter must be calculable from the available ephemeris */
-/*          data. Typically ephemeris data are made available by loading */
-/*          one or more SPK files via FURNSH. */
+/*     -  SPK data: ephemeris data for target, observer, and the */
+/*        illumination source must be loaded. If aberration */
+/*        corrections are used, the states of target, observer, and */
+/*        the illumination source relative to the solar system */
+/*        barycenter must be calculable from the available ephemeris */
+/*        data. Typically ephemeris data are made available by loading */
+/*        one or more SPK files via FURNSH. */
 
-/*        - PCK data: if the target body shape is modeled as an */
-/*          ellipsoid (currently no other shapes are supported), */
-/*          triaxial radii for the target body must be loaded */
-/*          into the kernel pool. Typically this is done by loading a */
-/*          text PCK file via FURNSH. */
+/*     -  PCK data: if the target body shape is modeled as an */
+/*        ellipsoid (currently no other shapes are supported), */
+/*        triaxial radii for the target body must be loaded */
+/*        into the kernel pool. Typically this is done by loading a */
+/*        text PCK file via FURNSH. */
 
-/*        - Further PCK data: rotation data for the target body must be */
-/*          loaded. These may be provided in a text or binary PCK file. */
+/*     -  Further PCK data: rotation data for the target body must be */
+/*        loaded. These may be provided in a text or binary PCK file. */
 
-/*        - Frame data: if a frame definition not built into SPICE */
-/*          is required to convert the observer and target states to the */
-/*          body-fixed frame of the target, that definition must be */
-/*          available in the kernel pool. Typically the definition is */
-/*          supplied by loading a frame kernel via FURNSH. */
+/*     -  Frame data: if a frame definition not built into SPICE */
+/*        is required to convert the observer and target states to the */
+/*        body-fixed frame of the target, that definition must be */
+/*        available in the kernel pool. Typically the definition is */
+/*        supplied by loading a frame kernel via FURNSH. */
+
+/*     -  In some cases the observer's state may be computed at times */
+/*        outside of CNFINE by as much as 2 seconds; data required to */
+/*        compute this state must be provided by loaded kernels. See */
+/*        $Particulars for details. */
 
 /*     In all cases, kernel data are normally loaded once per program */
 /*     run, NOT every time this routine is called. */
-
 
 /* $ Particulars */
 
@@ -1001,6 +992,7 @@ static logical c_false = FALSE_;
 /*     and phase angles are "inc.", "e.", and "phase". */
 
 
+
 /*                                                      * */
 /*                                              illumination source */
 
@@ -1019,6 +1011,7 @@ static logical c_false = FALSE_;
 /*      viewing            vector            target body */
 /*      location           to viewing */
 /*      (observer)         location */
+
 
 
 /*     Note that if the target-observer vector, the target normal vector */
@@ -1044,7 +1037,7 @@ static logical c_false = FALSE_;
 /*           ------------------------------------ */
 
 /*           Let ET be the epoch at which an observation or remote */
-/*           sensing measurement is made, and let ET - LT ("LT" stands */
+/*           sensing measurement is made, and let ET - LT (LT stands */
 /*           for "light time") be the epoch at which the photons */
 /*           received at ET were emitted from the surface point SPOINT. */
 /*           Note that the light time between the surface point and */
@@ -1121,8 +1114,9 @@ static logical c_false = FALSE_;
 /*     of the solution set for any inequality constraint is contained in */
 /*     the union of */
 
-/*        - the set of points where an equality constraint is met */
-/*        - the boundary points of the confinement window */
+/*     -  the set of points where an equality constraint is met */
+
+/*     -  the boundary points of the confinement window */
 
 /*     the solutions of both equality and inequality constraints can be */
 /*     found easily once the monotone windows have been found. */
@@ -1164,6 +1158,7 @@ static logical c_false = FALSE_;
 /*     picking a reasonable step size. In general, the user can */
 /*     compensate for lack of such knowledge by picking a very short */
 /*     step size; the cost is increased computation time. */
+
 /*     Note that the step size is not related to the precision with which */
 /*     the endpoints of the intervals of the result window are computed. */
 /*     That precision level is controlled by the convergence tolerance. */
@@ -1222,19 +1217,48 @@ static logical c_false = FALSE_;
 /*     to reduce the size of the time period over which a relatively */
 /*     slow search of interest must be performed. */
 
+/*     Certain types of searches require the state of the observer, */
+/*     relative to the solar system barycenter, to be computed at times */
+/*     slightly outside the confinement window CNFINE. The time window */
+/*     that is actually used is the result of "expanding" CNFINE by a */
+/*     specified amount "T": each time interval of CNFINE is expanded by */
+/*     shifting the interval's left endpoint to the left and the right */
+/*     endpoint to the right by T seconds. Any overlapping intervals are */
+/*     merged. (The input argument CNFINE is not modified.) */
+
+/*     The window expansions listed below are additive: if both */
+/*     conditions apply, the window expansion amount is the sum of the */
+/*     individual amounts. */
+
+/*     -  If a search uses an equality constraint, the time window */
+/*        over which the state of the observer is computed is expanded */
+/*        by 1 second at both ends of all of the time intervals */
+/*        comprising the window over which the search is conducted. */
+
+/*     -  If a search uses stellar aberration corrections, the time */
+/*        window over which the state of the observer is computed is */
+/*        expanded as described above. */
+
+/*     When light time corrections are used, expansion of the search */
+/*     window also affects the set of times at which the light time- */
+/*     corrected state of the target is computed. */
+
+/*     In addition to the possible 2 second expansion of the search */
+/*     window that occurs when both an equality constraint and stellar */
+/*     aberration corrections are used, round-off error should be taken */
+/*     into account when the need for data availability is analyzed. */
+
 /* $ Examples */
 
-
-/*     The numerical results shown for these examples may differ across */
+/*     The numerical results shown for this example may differ across */
 /*     platforms. The results depend on the SPICE kernels used as */
 /*     input, the compiler and supporting libraries, and the machine */
 /*     specific arithmetic implementation. */
 
-
 /*     1) Determine time intervals over which the MER-1 ("Opportunity") */
 /*        rover's location satisfies certain constraints on its */
 /*        illumination and visibility as seen from the Mars */
-/*        Reconaissance Orbiter (MRO) spacecraft. */
+/*        Reconnaissance Orbiter (MRO) spacecraft. */
 
 /*        In this case we require the emission angle to be less than */
 /*        20 degrees and the solar incidence angle to be less than */
@@ -1258,7 +1282,7 @@ static logical c_false = FALSE_;
 
 /*           KPL/MK */
 
-/*           File: mer1_ex.tm */
+/*           File: gfilum_ex1.tm */
 
 /*           This meta-kernel is intended to support operation of SPICE */
 /*           example programs. The kernels shown here should not be */
@@ -1299,24 +1323,20 @@ static logical c_false = FALSE_;
 /*                                  'mer1_v10.tf'                    ) */
 /*           \begintext */
 
+/*           End of meta-kernel */
 
 
 /*        Example code begins here. */
 
 
-/*              PROGRAM MER1_EX */
+/*              PROGRAM GFILUM_EX1 */
 /*              IMPLICIT NONE */
+
 /*        C */
 /*        C     Global parameters */
 /*        C */
 /*              INCLUDE 'gf.inc' */
 /*              INCLUDE 'zzabcorr.inc' */
-
-/*        C */
-/*        C     SPICE cell lower bound: */
-/*        C */
-/*              INTEGER               LBCELL */
-/*              PARAMETER           ( LBCELL = -5 ) */
 
 /*        C */
 /*        C     SPICELIB functions */
@@ -1330,21 +1350,27 @@ static logical c_false = FALSE_;
 /*        C     Local parameters */
 /*        C */
 /*        C */
-/*        C     Output time format: */
+/*        C     Output time format */
 /*        C */
 /*              CHARACTER*(*)         FMT */
 /*              PARAMETER           ( FMT = */
-/*             .             'YYYY MON DD HR:MN:SC.###### UTC' ) */
+/*             .             'YYYY MON DD HR:MN:SC.### UTC' ) */
 
 /*        C */
-/*        C     Meta-kernel name: */
+/*        C     Meta-kernel name */
 /*        C */
 /*              CHARACTER*(*)         META */
-/*              PARAMETER           ( META   = 'mer1_ex.tm' ) */
+/*              PARAMETER           ( META   = 'gfilum_ex1.tm' ) */
 
 /*        C */
-/*        C        Maximum number of intervals in the windows */
-/*        C        used in this program: */
+/*        C     SPICE cell lower bound */
+/*        C */
+/*              INTEGER               LBCELL */
+/*              PARAMETER           ( LBCELL = -5 ) */
+
+/*        C */
+/*        C     Maximum number of intervals in the windows */
+/*        C     used in this program */
 /*        C */
 /*              INTEGER               MAXIVL */
 /*              PARAMETER           ( MAXIVL = 1000 ) */
@@ -1353,25 +1379,25 @@ static logical c_false = FALSE_;
 /*              PARAMETER           ( MAXWIN = 2 * MAXIVL ) */
 
 /*        C */
-/*        C     Maximum length of reference frame name: */
+/*        C     Maximum length of reference frame name */
 /*        C */
 /*              INTEGER               FRNMLN */
 /*              PARAMETER           ( FRNMLN = 32 ) */
 
 /*        C */
-/*        C     Maximum length of body name: */
+/*        C     Maximum length of body name */
 /*        C */
 /*              INTEGER               BDNMLN */
 /*              PARAMETER           ( BDNMLN = 36 ) */
 
 /*        C */
-/*        C     Maximum length of time string: */
+/*        C     Maximum length of time string */
 /*        C */
 /*              INTEGER               TIMLEN */
 /*              PARAMETER           ( TIMLEN = 40 ) */
 
 /*        C */
-/*        C     Length of computation method string: */
+/*        C     Length of computation method string */
 /*        C */
 /*              INTEGER               METLEN */
 /*              PARAMETER           ( METLEN = 80 ) */
@@ -1390,7 +1416,7 @@ static logical c_false = FALSE_;
 /*              CHARACTER*(TIMLEN)    UTCEND */
 
 /*              DOUBLE PRECISION      ADJUST */
-/*              DOUBLE PRECISION      CNFINE ( LBCELL : MAXWIN ) */
+/*              DOUBLE PRECISION      CNFINE ( LBCELL : 2 ) */
 /*              DOUBLE PRECISION      EMISSN */
 /*              DOUBLE PRECISION      ET0 */
 /*              DOUBLE PRECISION      ET1 */
@@ -1409,6 +1435,18 @@ static logical c_false = FALSE_;
 /*              DOUBLE PRECISION      WNSOLR ( LBCELL : MAXWIN ) */
 
 /*              INTEGER               I */
+
+/*        C */
+/*        C     Saved variables */
+/*        C */
+/*        C     The confinement, workspace and result windows CNFINE, */
+/*        C     WORK, WNSOLR and RESULT are saved because this practice */
+/*        C     helps to prevent stack overflow. */
+/*        C */
+/*              SAVE                  CNFINE */
+/*              SAVE                  RESULT */
+/*              SAVE                  WORK */
+/*              SAVE                  WNSOLR */
 
 /*        C */
 /*        C     Load kernels: */
@@ -1506,13 +1544,14 @@ static logical c_false = FALSE_;
 /*              STEP   = 900.D0 */
 
 /*        C */
-/*        C     Search over the previous result window for times when the */
-/*        C     emission angle is less than the reference value. */
+/*        C     Search over the previous result window for times when */
+/*        C     the emission angle is less than the reference value. */
 /*        C */
 /*              CALL GFILUM ( METHOD, 'EMISSION', TARGET, ILLMN, */
 /*             .              FIXREF, ABCORR,     OBSRVR, ROVPOS, */
 /*             .              '<',    REFVAL,     ADJUST, STEP, */
-/*             .              WNSOLR, MAXWIN,     NWILUM, WORK,  RESULT ) */
+/*             .              WNSOLR, MAXWIN,     NWILUM, WORK, */
+/*             .              RESULT                             ) */
 
 /*        C */
 /*        C     Display the result window. Show the solar incidence */
@@ -1528,10 +1567,10 @@ static logical c_false = FALSE_;
 
 /*              ELSE */
 
-/*                 WRITE (*,*) '                                     ' */
-/*             .   //          '      Solar Incidence   Emission' */
-/*                 WRITE (*,*) '                                     ' */
-/*             .   //          '            (deg)         (deg)' */
+/*                 WRITE (*,*) '                                   ' */
+/*             .   //          'Solar Incidence   Emission' */
+/*                 WRITE (*,*) '                                   ' */
+/*             .   //          '      (deg)         (deg)' */
 /*                 WRITE (*,*) ' ' */
 
 /*                 DO I = 1, WNCARD( RESULT ) */
@@ -1547,7 +1586,7 @@ static logical c_false = FALSE_;
 /*             .                    ABCORR, OBSRVR, ROVPOS, TRGEPC, */
 /*             .                    SRFVEC, PHASE,  SOLAR,  EMISSN ) */
 
-/*                    WRITE (*, '(A11, A31, 2F15.9)' ) */
+/*                    WRITE (*, '(A7, A28, 2F14.8)' ) */
 /*             .            'Start: ', TIMSTR, SOLAR*DPR(), EMISSN*DPR() */
 
 
@@ -1557,7 +1596,7 @@ static logical c_false = FALSE_;
 /*             .                    ABCORR, OBSRVR, ROVPOS, TRGEPC, */
 /*             .                    SRFVEC, PHASE,  SOLAR,  EMISSN ) */
 
-/*                    WRITE (*, '(A11, A31, 2F15.9)' ) */
+/*                    WRITE (*, '(A7, A28, 2F14.8)' ) */
 /*             .            'Stop:  ', TIMSTR, SOLAR*DPR(), EMISSN*DPR() */
 
 /*                    WRITE (*,*) ' ' */
@@ -1569,48 +1608,47 @@ static logical c_false = FALSE_;
 /*              END */
 
 
-/*        When this program was executed on a PC/Linux/gfortran */
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
 /*        platform, the output was: */
 
 
-/*                                           Solar Incidence   Emission */
-/*                                                 (deg)         (deg) */
+/*                                            Solar Incidence   Emission */
+/*                                                  (deg)         (deg) */
 
-/*   Start: 2006 OCT 03 12:43:46.949483 UTC   56.104150191   20.000000187 */
-/*   Stop:  2006 OCT 03 12:44:42.288747 UTC   56.299961806   20.000000155 */
+/*        Start: 2006 OCT 03 12:43:46.949 UTC   56.10415019   20.00000019 */
+/*        Stop:  2006 OCT 03 12:44:42.288 UTC   56.29996181   20.00000015 */
 
-/*   Start: 2006 OCT 08 16:03:33.956839 UTC   56.489554846   20.000000207 */
-/*   Stop:  2006 OCT 08 16:04:29.495919 UTC   56.687545101   19.999999969 */
+/*        Start: 2006 OCT 08 16:03:33.956 UTC   56.48955485   20.00000021 */
+/*        Stop:  2006 OCT 08 16:04:29.495 UTC   56.68754510   19.99999997 */
 
-/*   Start: 2006 OCT 13 19:23:24.634854 UTC   56.887410591   19.999999879 */
-/*   Stop:  2006 OCT 13 19:24:12.492952 UTC   57.059318573   20.000000174 */
+/*        Start: 2006 OCT 13 19:23:24.634 UTC   56.88741059   19.99999988 */
+/*        Stop:  2006 OCT 13 19:24:12.492 UTC   57.05931857   20.00000017 */
 
-/*   Start: 2006 OCT 18 22:43:21.631086 UTC   57.309244667   20.000000118 */
-/*   Stop:  2006 OCT 18 22:43:47.966990 UTC   57.404572725   20.000000043 */
+/*        Start: 2006 OCT 18 22:43:21.631 UTC   57.30924467   20.00000012 */
+/*        Stop:  2006 OCT 18 22:43:47.966 UTC   57.40457272   20.00000004 */
 
-/*   Start: 2006 NOV 14 15:39:44.153177 UTC   54.328758385   19.999999935 */
-/*   Stop:  2006 NOV 14 15:40:10.446479 UTC   54.426680766   19.999999896 */
+/*        Start: 2006 NOV 14 15:39:44.153 UTC   54.32875839   19.99999994 */
+/*        Stop:  2006 NOV 14 15:40:10.446 UTC   54.42668077   19.99999990 */
 
-/*   Start: 2006 NOV 19 18:59:10.190551 UTC   54.630961112   20.000000067 */
-/*   Stop:  2006 NOV 19 18:59:54.776369 UTC   54.798407529   19.999999848 */
+/*        Start: 2006 NOV 19 18:59:10.190 UTC   54.63096111   20.00000007 */
+/*        Stop:  2006 NOV 19 18:59:54.776 UTC   54.79840753   19.99999985 */
 
-/*   Start: 2006 NOV 24 22:18:38.342454 UTC   54.949599996   19.999999822 */
-/*   Stop:  2006 NOV 24 22:19:30.964843 UTC   55.148838833   20.000000029 */
+/*        Start: 2006 NOV 24 22:18:38.342 UTC   54.94960000   19.99999982 */
+/*        Stop:  2006 NOV 24 22:19:30.964 UTC   55.14883883   20.00000003 */
 
-/*   Start: 2006 NOV 30 01:38:07.309245 UTC   55.280547838   19.999999832 */
-/*   Stop:  2006 NOV 30 01:39:03.296253 UTC   55.494189248   19.999999989 */
-
+/*        Start: 2006 NOV 30 01:38:07.309 UTC   55.28054784   19.99999983 */
+/*        Stop:  2006 NOV 30 01:39:03.296 UTC   55.49418925   19.99999999 */
 
 
 /* $ Restrictions */
 
-/*     1) The kernel files to be used by this routine must be loaded */
-/*        (normally using the SPICELIB routine FURNSH) before this */
-/*        routine is called. */
+/*     1)  The kernel files to be used by this routine must be loaded */
+/*         (normally using the SPICELIB routine FURNSH) before this */
+/*         routine is called. */
 
-/*     2) This routine has the side effect of re-initializing the */
-/*        illumination angle utility package. Callers may */
-/*        need to re-initialize the package after calling this routine. */
+/*     2)  This routine has the side effect of re-initializing the */
+/*         illumination angle utility package. Callers may */
+/*         need to re-initialize the package after calling this routine. */
 
 /* $ Literature_References */
 
@@ -1618,11 +1656,27 @@ static logical c_false = FALSE_;
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
-/*     B.V. Semenov   (JPL) */
-/*     E.D. Wright    (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     B.V. Semenov       (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 27-OCT-2021 (JDR) (NJB) */
+
+/*        Edited the header to comply with NAIF standard. */
+
+/*        Changed the code example for the solution to fit within the */
+/*        $Examples section without modifications. Added SAVE statements */
+/*        for CNFINE, WNSOLR, WORK and RESULT variables in code example. */
+
+/*        Added initialization of QCPARS(8) to pacify Valgrind. */
+
+/*        Updated description of WORK and RESULT arguments in $Brief_I/O, */
+/*        $Detailed_Input and $Detailed_Output. */
+
+/*        Updated header to describe use of expanded confinement window. */
 
 /* -    SPICELIB Version 1.0.0, 20-NOV-2012 (NJB) (BVS) (EDW) */
 
@@ -1729,6 +1783,13 @@ static logical c_false = FALSE_;
 
     s_copy(qpnams + 560, "SPOINT", (ftnlen)80, (ftnlen)6);
     moved_(spoint, &c__3, qdpars);
+
+/*     Initialize the corresponding character parameter, even though */
+/*     we don't need it, since GFEVNT will left-justify it and convert */
+/*     it to upper case. Memory usage checkers such as Valgrind dislike */
+/*     code that operates on uninitialized variables. */
+
+    s_copy(qcpars + 560, " ", (ftnlen)80, (ftnlen)1);
 
 /*     Set the step size. */
 

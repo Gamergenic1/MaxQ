@@ -1,6 +1,6 @@
 /*
 
--Procedure  dpr_c ( Degrees per radian )
+-Procedure dpr_c ( Degrees per radian )
 
 -Abstract
 
@@ -63,7 +63,7 @@
 
          dpr_c = 180. / acos ( -1. );
 
--Files
+-Parameters
 
    None.
 
@@ -71,14 +71,14 @@
 
    Error free.
 
+-Files
+
+   None.
+
 -Particulars
 
    When he function is referenced, the value is computed
    as shown above.
-
--Parameters
-
-   None.
 
 -Examples
 
@@ -100,13 +100,18 @@
 
 -Author_and_Institution
 
-   E.D. Wright     (JPL)
-   W.L. Taber      (JPL)
-   I.M. Underwood  (JPL)
+   J. Diaz del Rio     (ODC Space)
+   W.L. Taber          (JPL)
+   I.M. Underwood      (JPL)
+   E.D. Wright         (JPL)
 
 -Version
 
-   -CSPICE Version 1.0.0, 16-APR-1999 (EDW)
+   -CSPICE Version 1.0.1, 02-JUN-2021 (JDR)
+
+       Edited the header to comply with NAIF standard.
+
+   -CSPICE Version 1.0.0, 16-APR-1999 (EDW) (WLT) (IMU)
 
 -Index_Entries
 
@@ -115,9 +120,7 @@
 -&
 */
 
-
-/* Begin dpr_c */
-   {
+{ /* Begin dpr_c */
 
      /*
      Local Variables
@@ -137,5 +140,4 @@
 
      return value;
 
-   }
-/* End dpr_c */
+} /* End dpr_c */

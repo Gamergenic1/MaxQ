@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure            BSRCHI ( Binary search for an integer value ) */
+/* $Procedure BSRCHI ( Binary search for an integer value ) */
 integer bsrchi_(integer *value, integer *ndim, integer *array)
 {
     /* System generated locals */
@@ -16,9 +16,9 @@ integer bsrchi_(integer *value, integer *ndim, integer *array)
 
 /* $ Abstract */
 
-/*      Do a binary search for a given value within an INTEGER array, */
-/*      assumed to be in increasing order. Return the index of the */
-/*      matching array entry, or zero if the key value is not found. */
+/*     Do a binary search for a given value within an integer array, */
+/*     assumed to be in nondecreasing order. Return the index of the */
+/*     matching array entry, or zero if the key value is not found. */
 
 /* $ Disclaimer */
 
@@ -51,86 +51,102 @@ integer bsrchi_(integer *value, integer *ndim, integer *array)
 
 /* $ Keywords */
 
-/*      ARRAY,  SEARCH */
+/*     ARRAY */
+/*     SEARCH */
 
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*      VARIABLE  I/O  DESCRIPTION */
-/*      --------  ---  -------------------------------------------------- */
-/*      VALUE      I   Value to find in ARRAY. */
-/*      NDIM       I   Dimension of ARRAY. */
-/*      ARRAY      I   Array to be searched. */
-/*      BSRCHI     O   Index of VALUE in ARRAY. (Zero if not found.) */
+/*     VARIABLE  I/O  DESCRIPTION */
+/*     --------  ---  -------------------------------------------------- */
+/*     VALUE      I   Value to find in ARRAY. */
+/*     NDIM       I   Dimension of ARRAY. */
+/*     ARRAY      I   Array to be searched. */
+
+/*     The function returns the index of VALUE in ARRAY, or zero if not */
+/*     found. */
 
 /* $ Detailed_Input */
 
-/*      VALUE       is the value to be found in the input array. */
+/*     VALUE    is the value to be found in the input array. */
 
-/*      NDIM        is the number of elements in the input array. */
+/*     NDIM     is the number of elements in the input array. */
 
-/*      ARRAY       is the array to be searched. The elements in */
-/*                  ARRAY are assumed to sorted in increasing order. */
+/*     ARRAY    is the integer array to be searched. The elements in */
+/*              ARRAY are assumed to sorted in increasing order. */
 
 /* $ Detailed_Output */
 
-/*      BSRCHI      is the index of the input value in the input array. */
-/*                  If ARRAY does not contain VALUE, BSRCHI is zero. */
+/*     The function returns the index of the specified value in the input */
+/*     array. Indices range from 1 to NDIM. */
 
-/*                  If ARRAY contains more than one occurrence of VALUE, */
-/*                  BSRCHI may point to any of the occurrences. */
+/*     If the input array does not contain the specified value, the */
+/*     function returns zero. */
+
+/*     If the input array contains more than one occurrence of the */
+/*     specified value, the returned index may point to any of the */
+/*     occurrences. */
 
 /* $ Parameters */
 
 /*     None. */
 
-/* $ Particulars */
-
-/*      A binary search is implemented on the input array. If an */
-/*      element of the array is found to match the input value, the */
-/*      index of that element is returned. If no matching element */
-/*      is found, zero is returned. */
-
-
-/* $ Examples */
-
-/*      Let ARRAY contain the following elements: */
-
-/*              -11 */
-/*                0 */
-/*               22 */
-/*              750 */
-
-/*      Then */
-
-/*            BSRCHI ( -11, 4, ARRAY )    = 1 */
-/*            BSRCHI (  22, 4, ARRAY )    = 3 */
-/*            BSRCHI ( 751, 4, ARRAY )    = 0 */
-
-/* $ Restrictions */
-
-/*      ARRAY is assumed to be sorted in increasing order. If this */
-/*      condition is not met, the results of BSRCHI are unpredictable. */
-
 /* $ Exceptions */
 
-/*      Error free. */
+/*     Error free. */
 
-/*      If NDIM < 1 the value of the function is zero. */
+/*     1)  If NDIM < 1, the value of the function is zero. */
 
 /* $ Files */
 
-/*      None. */
+/*     None. */
 
-/* $ Author_and_Institution */
+/* $ Particulars */
 
-/*      I.M. Underwood  (JPL) */
+/*     A binary search is performed on the input array. If an element of */
+/*     the array is found to match the input value, the index of that */
+/*     element is returned. If no matching element is found, zero is */
+/*     returned. */
+
+/* $ Examples */
+
+/*     Let ARRAY contain the following elements: */
+
+/*             -11 */
+/*               0 */
+/*              22 */
+/*             750 */
+
+/*     Then */
+
+/*           BSRCHI ( -11, 4, ARRAY )    = 1 */
+/*           BSRCHI (  22, 4, ARRAY )    = 3 */
+/*           BSRCHI ( 751, 4, ARRAY )    = 0 */
+
+/* $ Restrictions */
+
+/*     1)  ARRAY is assumed to be sorted in increasing order. If this */
+/*         condition is not met, the results of BSRCHI are unpredictable. */
 
 /* $ Literature_References */
 
-/*      None. */
+/*     None. */
+
+/* $ Author_and_Institution */
+
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 26-OCT-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. Removed */
+/*        unnecessary $Revisions section. Improved $Detailed_Output */
+/*        section. */
 
 /* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
 
@@ -143,13 +159,6 @@ integer bsrchi_(integer *value, integer *ndim, integer *array)
 /* $ Index_Entries */
 
 /*     binary search for an integer value */
-
-/* -& */
-/* $ Revisions */
-
-/* -    Beta Version 1.1.0, 8-JAN-1989 (IMU) */
-
-/*        Now works for all values of NDIM. */
 
 /* -& */
 

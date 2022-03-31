@@ -174,6 +174,18 @@
  
 -Version
 
+   -CSPICE Version 2.3.0, 28-NOV-2021 (BVS)
+
+      Updated for:
+       
+         MAC-OSX-M1-64BIT-CLANG_C
+          
+      environment. Added the corresponding tag:
+       
+         CSPICE_MAC_OSX_M1_64BIT_CLANG
+
+      tag to the #ifdefs set.
+
    -CSPICE Version 2.2.0, 10-MAR-2014 (BVS)
 
        Updated for:
@@ -245,6 +257,10 @@
        return ( INT_MAX );
 
    #elif defined( CSPICE_MAC_OSX_INTEL_64BIT_GCC )
+
+       return ( INT_MAX );
+
+   #elif defined( CSPICE_MAC_OSX_M1_64BIT_CLANG )
 
        return ( INT_MAX );
 

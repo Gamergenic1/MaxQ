@@ -101,8 +101,8 @@
 /* $ Abstract */
 
 /*     The parameters below form an enumerated list of the recognized */
-/*     frame types.  They are: INERTL, PCK, CK, TK, DYN.  The meanings */
-/*     are outlined below. */
+/*     frame types. They are: INERTL, PCK, CK, TK, DYN, SWTCH, and ALL. */
+/*     The meanings are outlined below. */
 
 /* $ Disclaimer */
 
@@ -152,6 +152,11 @@
 /*                 definition depends on parameters supplied via a */
 /*                 frame kernel. */
 
+/*     SWTCH       is a "switch" frame. These frames have orientation */
+/*                 defined by their alignment with base frames selected */
+/*                 from a prioritized list. The base frames optionally */
+/*                 have associated time intervals of applicability. */
+
 /*     ALL         indicates any of the above classes. This parameter */
 /*                 is used in APIs that fetch information about frames */
 /*                 of a specified class. */
@@ -160,6 +165,7 @@
 /* $ Author_and_Institution */
 
 /*     N.J. Bachman    (JPL) */
+/*     B.V. Semenov    (JPL) */
 /*     W.L. Taber      (JPL) */
 
 /* $ Literature_References */
@@ -167,6 +173,11 @@
 /*     None. */
 
 /* $ Version */
+
+/* -    SPICELIB Version 5.0.0, 08-OCT-2020 (NJB) (BVS) */
+
+/*       The parameter SWTCH was added to support the switch */
+/*       frame class. */
 
 /* -    SPICELIB Version 4.0.0, 08-MAY-2012 (NJB) */
 

@@ -9,7 +9,7 @@
 
 static integer c__0 = 0;
 
-/* $Procedure      LNKFSL ( LNK, free sublist of a list  ) */
+/* $Procedure LNKFSL ( LNK, free sublist of a list  ) */
 /* Subroutine */ int lnkfsl_(integer *head, integer *tail, integer *pool)
 {
     integer node, prev, next;
@@ -50,7 +50,7 @@ static integer c__0 = 0;
 
 /* $ Required_Reading */
 
-/*     LNK */
+/*     None. */
 
 /* $ Keywords */
 
@@ -59,7 +59,7 @@ static integer c__0 = 0;
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     HEAD, */
 /*     TAIL       I   Head and tail nodes of a sublist to be freed. */
@@ -68,46 +68,45 @@ static integer c__0 = 0;
 /* $ Detailed_Input */
 
 /*     HEAD, */
-/*     TAIL           are, respectively, the head and tail nodes of a */
-/*                    sublist to be extracted. */
+/*     TAIL     are, respectively, the head and tail nodes of a */
+/*              sublist to be extracted. */
 
-/*     POOL           is a doubly linked list pool. */
+/*     POOL     is a doubly linked list pool. */
 
 /* $ Detailed_Output */
 
-/*     POOL           is the input pool, with the following */
-/*                    modifications: */
+/*     POOL     is the input pool, with the following */
+/*              modifications: */
 
-/*                       -- All of the nodes of the sublist bounded by */
-/*                          HEAD and by TAIL have now been returned to */
-/*                          the free list. */
+/*                 -- All of the nodes of the sublist bounded by */
+/*                    HEAD and by TAIL have now been returned to */
+/*                    the free list. */
 
-/*                       If on input, HEAD was preceded by the node */
-/*                       PREV, and tail was followed by the node */
-/*                       NEXT, then on output */
+/*                 If on input, HEAD was preceded by the node */
+/*                 PREV, and tail was followed by the node */
+/*                 NEXT, then on output */
 
-/*                       -- The successor of PREV is NEXT. */
-/*                       -- The predecessor of NEXT is PREV. */
-
+/*                 -- The successor of PREV is NEXT. */
+/*                 -- The predecessor of NEXT is PREV. */
 
 /* $ Parameters */
 
-/*     LBPOOL        is the lower bound of the column indices of the POOL */
-/*                   array.  The columns indexed LBPOOL to 0 are reserved */
-/*                   as a control area for the pool. */
+/*     LBPOOL   is the lower bound of the column indices of the POOL */
+/*              array. The columns indexed LBPOOL to 0 are reserved */
+/*              as a control area for the pool. */
 
 /* $ Exceptions */
 
 /*     1)  If either of HEAD or TAIL are not valid node numbers, the */
-/*         error SPICE(INVALIDNODE) will be signalled.  POOL will not be */
+/*         error SPICE(INVALIDNODE) is signaled. POOL will not be */
 /*         modified. */
 
-/*     2)  If either of HEAD or TAIL are valid node numbers but are */
-/*         not allocated, the error SPICE(UNALLOCATEDNODE) will be */
-/*         signalled.  POOL will not be modified. */
+/*     2)  If either of HEAD or TAIL are valid node numbers but are not */
+/*         allocated, the error SPICE(UNALLOCATEDNODE) is signaled. POOL */
+/*         will not be modified. */
 
 /*     3)  If TAIL cannot be reached by forward traversal of the list */
-/*         containing HEAD, the error SPICE(INVALIDSUBLIST) is signalled. */
+/*         containing HEAD, the error SPICE(INVALIDSUBLIST) is signaled. */
 /*         POOL will not be modified. */
 
 /* $ Files */
@@ -137,7 +136,7 @@ static integer c__0 = 0;
 
 /*            CALL LNKFSL ( 3, 88, POOL ) */
 
-/*         can be used.  The resulting list will be: */
+/*         can be used. The resulting list will be: */
 
 /*            1002 <--> 2 */
 
@@ -155,12 +154,11 @@ static integer c__0 = 0;
 
 /*         should be used. */
 
-
 /* $ Restrictions */
 
-/*     Linked list pools must be initialized via the routine */
-/*     LNKINI.  Failure to initialize a linked list pool */
-/*     will almost certainly lead to confusing results. */
+/*     1)  Linked list pools must be initialized via the routine */
+/*         LNKINI. Failure to initialize a linked list pool */
+/*         will almost certainly lead to confusing results. */
 
 /* $ Literature_References */
 
@@ -168,10 +166,15 @@ static integer c__0 = 0;
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
-/*     W.L. Taber     (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.0.1, 24-NOV-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.0.0, 19-DEC-1995 (NJB) (WLT) */
 

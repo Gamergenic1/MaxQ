@@ -9,7 +9,7 @@
 
 static integer c__10 = 10;
 
-/* $Procedure       SCPS01 ( Convert type 1 SCLK string to ticks ) */
+/* $Procedure SCPS01 ( Convert type 1 SCLK string to ticks ) */
 /* Subroutine */ int scps01_(integer *sc, char *clkstr, logical *error, char *
 	msg, doublereal *ticks, ftnlen clkstr_len, ftnlen msg_len)
 {
@@ -137,6 +137,14 @@ static integer c__10 = 10;
 
 /* $ Version */
 
+/* -    SPICELIB Version 2.0.1, 20-OCT-2020 (NJB) */
+
+/*        Increased MXCOEF to 100000. */
+
+/*        Updated comments with reminder to keep constants declared */
+/*        in the include file zzsc01.inc synced with constants in */
+/*        this file. */
+
 /* -    SPICELIB Version 2.0.0, 24-MAY-2010 (NJB) */
 
 /*        Increased value of maximum coefficient record count */
@@ -145,6 +153,19 @@ static integer c__10 = 10;
 /* -    SPICELIB Version 1.0.0, 11-FEB-2008 (NJB) */
 
 /* -& */
+
+/*        NOTE: many of the declarations present here are duplicated */
+/*        in the include file zzsc01.inc. Declarations in that file */
+/*        must be kept in sync with those in this file. The */
+/*        duplicated declarations are: */
+
+/*           NDELIM */
+/*           DELIMS */
+/*           MXPART */
+/*           MXCOEF */
+/*           MXNFLD */
+/*           DPLEN */
+
 
 /*     Number of supported SCLK field delimiters: */
 
@@ -179,7 +200,7 @@ static integer c__10 = 10;
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     SC         I   NAIF spacecraft ID code. */
 /*     CLKSTR     I   Character representation of a clock count. */
@@ -192,99 +213,99 @@ static integer c__10 = 10;
 
 /* $ Detailed_Input */
 
-/*     SC         is a NAIF spacecraft identification code.  See the */
-/*                `Examples' section below, and also the NAIF_IDS */
-/*                required reading file for a complete list of body ID */
-/*                codes. */
+/*     SC       is a NAIF spacecraft identification code. See the */
+/*              `Examples' section below, and also the NAIF_IDS */
+/*              required reading file for a complete list of body ID */
+/*              codes. */
 
 
-/*     CLKSTR     on input is the character representation of a */
-/*                spacecraft clock count (SCLK), without a partition */
-/*                number. */
+/*     CLKSTR   on input is the character representation of a */
+/*              spacecraft clock count (SCLK), without a partition */
+/*              number. */
 
-/*                Using Galileo as an example, a SCLK string without */
-/*                a partition number has the form */
+/*              Using Galileo as an example, a SCLK string without */
+/*              a partition number has the form */
 
-/*                               wwwwwwww:xx:y:z */
+/*                             wwwwwwww:xx:y:z */
 
-/*                where z is a mod-8 counter (values 0-7) which */
-/*                increments approximately once every 8 1/3 ms., y is a */
-/*                mod-10 counter (values 0-9) which increments once */
-/*                every time z turns over, i.e., approximately once every */
-/*                66 2/3 ms., xx is a mod-91 (values 0-90) counter */
-/*                which increments once every time y turns over, i.e., */
-/*                once every 2/3 seconds. wwwwwwww is the Real-Time */
-/*                Image Count (RIM), which increments once every time */
-/*                xx turns over, i.e., once every 60 2/3 seconds. The */
-/*                roll-over expression for the RIM is 16777215, which */
-/*                corresponds to approximately 32 years. */
+/*              where z is a mod-8 counter (values 0-7) which */
+/*              increments approximately once every 8 1/3 ms., y is a */
+/*              mod-10 counter (values 0-9) which increments once */
+/*              every time z turns over, i.e., approximately once every */
+/*              66 2/3 ms., xx is a mod-91 (values 0-90) counter */
+/*              which increments once every time y turns over, i.e., */
+/*              once every 2/3 seconds. wwwwwwww is the Real-Time */
+/*              Image Count (RIM), which increments once every time */
+/*              xx turns over, i.e., once every 60 2/3 seconds. The */
+/*              roll-over expression for the RIM is 16777215, which */
+/*              corresponds to approximately 32 years. */
 
-/*                wwwwwwww, xx, y, and z are referred to interchangeably */
-/*                as the fields or components of the spacecraft count. */
-/*                SCLK components may be separated by any of the */
-/*                single character delimiters in the string DELIMS, with */
-/*                any number of spaces separating the components and */
-/*                the delimiters. The presence of the RIM component */
-/*                is required. Successive components may be omitted, and */
-/*                in such cases are assumed to represent zero values. */
+/*              wwwwwwww, xx, y, and z are referred to interchangeably */
+/*              as the fields or components of the spacecraft count. */
+/*              SCLK components may be separated by any of the */
+/*              single character delimiters in the string DELIMS, with */
+/*              any number of spaces separating the components and */
+/*              the delimiters. The presence of the RIM component */
+/*              is required. Successive components may be omitted, and */
+/*              in such cases are assumed to represent zero values. */
 
-/*                Values for the individual components may exceed the */
-/*                maximum expected values. For instance, '0:0:0:9' is */
-/*                an acceptable Galileo clock string, and indicates the */
-/*                same time interval as '0:0:1:1'. */
+/*              Values for the individual components may exceed the */
+/*              maximum expected values. For instance, '0:0:0:9' is */
+/*              an acceptable Galileo clock string, and indicates the */
+/*              same time interval as '0:0:1:1'. */
 
-/*                Consecutive delimiters containing no intervening digits */
-/*                are treated as if they delimit zero components, except */
-/*                in the case of blanks.  Consecutive blanks are treated */
-/*                as a single blank. */
+/*              Consecutive delimiters containing no intervening digits */
+/*              are treated as if they delimit zero components, except */
+/*              in the case of blanks.  Consecutive blanks are treated */
+/*              as a single blank. */
 
-/*                Trailing zeros should always be included to match the */
-/*                length of the counter.  For example, a Galileo clock */
-/*                count of '25684.90' should not be represented as */
-/*                '25684.9'. */
+/*              Trailing zeros should always be included to match the */
+/*              length of the counter.  For example, a Galileo clock */
+/*              count of '25684.90' should not be represented as */
+/*              '25684.9'. */
 
-/*                Some spacecraft clock components have offset, or */
-/*                starting, values different from zero.  For example, */
-/*                with an offset value of 1, a mod 20 counter would */
-/*                cycle from 1 to 20 instead of from 0 to 19. */
+/*              Some spacecraft clock components have offset, or */
+/*              starting, values different from zero.  For example, */
+/*              with an offset value of 1, a mod 20 counter would */
+/*              cycle from 1 to 20 instead of from 0 to 19. */
 
-/*                See the SCLK required reading for a detailed */
-/*                description of the Galileo, Mars Observer, and Voyager */
-/*                clock formats. */
+/*              See the SCLK required reading for a detailed */
+/*              description of the Galileo, Mars Observer, and Voyager */
+/*              clock formats. */
 
-/*                See the `Examples' section in SCPS01, below. */
+/*              See the `Examples' section in SCPS01, below. */
 
 /* $ Detailed_Output */
 
-/*     ERROR      is true if an error occurred parsing the input clock */
-/*                string and converting it to ticks. */
+/*     ERROR    is .TRUE. if an error occurred parsing the input clock */
+/*              string and converting it to ticks. */
 
-/*     MSG        is the message generated if an error occurred parsing */
-/*                the input clock string. */
+/*     MSG      is the message generated if an error occurred parsing */
+/*              the input clock string. */
 
-/*     TICKS      is the number of "ticks" corresponding to the input */
-/*                spacecraft clock string CLKSTR.  "Ticks" are the units */
-/*                in which encoded SCLK strings are represented. */
+/*     TICKS    is the number of "ticks" corresponding to the input */
+/*              spacecraft clock string CLKSTR.  "Ticks" are the units */
+/*              in which encoded SCLK strings are represented. */
 
-/*                A typical Galileo SCLK string looks like */
+/*              A typical Galileo SCLK string looks like */
 
-/*                             'wwwwwwww xx y z', */
+/*                           'wwwwwwww xx y z', */
 
-/*                as described above. Since z is the mod-8 (one tick) */
-/*                counter, the number of ticks represented by y is 8*y. */
-/*                And since y is the mod-10 counter, the number of ticks */
-/*                represented by xx is 10*8*xx. The total number of */
-/*                ticks represented by the above string is */
+/*              as described above. Since z is the mod-8 (one tick) */
+/*              counter, the number of ticks represented by y is 8*y. */
+/*              And since y is the mod-10 counter, the number of ticks */
+/*              represented by xx is 10*8*xx. The total number of */
+/*              ticks represented by the above string is */
 
-/*                              wwwwwwww( 7280 ) + */
-/*                                    xx(   80 ) + */
-/*                                     y(    8 ) + */
-/*                                     z */
+/*                            wwwwwwww( 7280 ) + */
+/*                                  xx(   80 ) + */
+/*                                   y(    8 ) + */
+/*                                   z */
 
-/*                Clock strings for other spacecraft are converted in */
-/*                a similar manner. */
+/*              Clock strings for other spacecraft are converted in */
+/*              a similar manner. */
 
-/*                See Examples below. */
+/*              See $Examples below. */
 
 /* $ Parameters */
 
@@ -292,13 +313,16 @@ static integer c__10 = 10;
 
 /* $ Exceptions */
 
-/*     1)  This routine assumes that that an SCLK kernel appropriate */
-/*         to the spacecraft clock identified by the input argument SC */
-/*         has been loaded.  If an SCLK kernel has not been loaded, */
-/*         does not contain all of the required data, or contains */
-/*         invalid data, error diagnoses will be performed by routines */
-/*         called by this routine.  The output argument TICKS will not */
-/*         be modified. */
+/*     In the case of any SPICELIB error occurring, ERROR is set to */
+/*     .TRUE. and MSG to 'SPICELIB error detected.'. */
+
+/*     1)  This routine assumes that that an SCLK kernel appropriate to */
+/*         the spacecraft clock identified by the input argument SC has */
+/*         been loaded. If an SCLK kernel has not been loaded, does not */
+/*         contain all of the required data, or contains invalid data, an */
+/*         error is signaled by a routine in the call tree of this */
+/*         routine. The output argument TICKS will not be modified. and */
+/*         MSG */
 
 /*         The variables that must be set by the SCLK kernel are: */
 
@@ -311,13 +335,13 @@ static integer c__10 = 10;
 /*            -  The partition start times */
 /*            -  The partition end times */
 
-/*         When using SCLK kernels that map SCLK to a time system other */
+/*     2)  When using SCLK kernels that map SCLK to a time system other */
 /*         than ET (also called barycentric dynamical time---`TDB'), it */
 /*         is necessary to have a leapseconds kernel loaded at the time */
-/*         this routine is called.  If a leapseconds kernel is required */
-/*         for conversion between SCLK and ET but is not loaded, the */
-/*         error will be diagnosed by routines called by this routine. */
-/*         The output argument TICKS will not be modified. */
+/*         this routine is called. If a leapseconds kernel is required */
+/*         for conversion between SCLK and ET but is not loaded, an error */
+/*         is signaled by a routine in the call tree of this routine. The */
+/*         output argument TICKS will not be modified. */
 
 /*         The time system that an SCLK kernel maps SCLK to is indicated */
 /*         by the variable SCLK_TIME_SYSTEM_nn in the kernel, where nn */
@@ -325,9 +349,8 @@ static integer c__10 = 10;
 /*         The time system used in a kernel is TDB if and only if the */
 /*         variable is assigned the value 1. */
 
-
-/*     2)  If any of the following kernel variables have invalid values, */
-/*         the error will be diagnosed by routines called by this */
+/*     3)  If any of the following kernel variables have invalid values, */
+/*         an error is signaled by a routine in the call tree of this */
 /*         routine: */
 
 /*            -  The time system code */
@@ -340,11 +363,10 @@ static integer c__10 = 10;
 /*         If the number of values for any item read from the kernel */
 /*         pool exceeds the maximum allowed value, it is may not be */
 /*         possible to diagnose the error correctly, since overwriting */
-/*         of memory may occur.  This particular type of error is not */
+/*         of memory may occur. This particular type of error is not */
 /*         diagnosed by this routine. */
 
-
-/*     3)  The input argument CLKSTR may be invalid for a variety of */
+/*     4)  The input argument CLKSTR may be invalid for a variety of */
 /*         reasons: */
 
 /*            -- One of the extracted clock components cannot be parsed */
@@ -355,9 +377,9 @@ static integer c__10 = 10;
 /*            -- the value  of one of the components is less than the */
 /*               offset value */
 
-/*         If any of these conditions is detected, the error */
-/*         SPICE(INVALIDSCLKSTRING) is signaled.  The output argument */
-/*         TICKS will not be modified. */
+/*         If any of these conditions is detected, no error is signaled. */
+/*         ERROR is set to .TRUE. and MSG contains the specific issue. */
+/*         The output argument TICKS will not be modified. */
 
 /* $ Files */
 
@@ -367,7 +389,7 @@ static integer c__10 = 10;
 
 /*     This routine converts a character string representation of a */
 /*     spacecraft clock count into the number of ticks represented */
-/*     by the clock count.  An important distinction between this type */
+/*     by the clock count. An important distinction between this type */
 /*     of conversion and that carried out by SCENCD is that this routine */
 /*     treats spacecraft clock times as representations of time */
 /*     intervals, not absolute times. */
@@ -418,7 +440,6 @@ static integer c__10 = 10;
 /*         '1-1-1'               48800 */
 /*         '1-1-2'               48801 */
 
-
 /* $ Restrictions */
 
 /*     1)  An SCLK kernel appropriate to the spacecraft clock identified */
@@ -434,11 +455,19 @@ static integer c__10 = 10;
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman (JPL) */
-/*     J.M. Lynch   (JPL) */
-/*     R.E. Thurman (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     J.M. Lynch         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.1, 20-AUG-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
+
+/*        Added introductory paragraph to $Exceptions section, split */
+/*        entry #1 into two, and added description of behavior in entry */
+/*        #4. */
 
 /* -    SPICELIB Version 1.1.0, 11-FEB-2008 (NJB) */
 
@@ -485,8 +514,8 @@ static integer c__10 = 10;
     s_copy(msg, "SPICELIB error detected.", msg_len, (ftnlen)24);
 
 /*     Our first piece of business is to look up all of the data */
-/*     we require from the kernel pool.  We must form the names */
-/*     of the items we want using the input S/C ID code.  The items */
+/*     we require from the kernel pool. We must form the names */
+/*     of the items we want using the input S/C ID code. The items */
 /*     we need are: */
 
 /*        -  The number of fields in an (unabridged) SCLK string */
@@ -517,13 +546,13 @@ static integer c__10 = 10;
 /*     Determine how many ticks is each field is worth. */
 
     cmptks[(i__1 = nfield - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge("cmptks", 
-	    i__1, "scps01_", (ftnlen)464)] = 1.;
+	    i__1, "scps01_", (ftnlen)474)] = 1.;
     for (i__ = nfield - 1; i__ >= 1; --i__) {
 	cmptks[(i__1 = i__ - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge("cmptks", 
-		i__1, "scps01_", (ftnlen)467)] = cmptks[(i__2 = i__) < 10 && 
+		i__1, "scps01_", (ftnlen)477)] = cmptks[(i__2 = i__) < 10 && 
 		0 <= i__2 ? i__2 : s_rnge("cmptks", i__2, "scps01_", (ftnlen)
-		467)] * moduli[(i__3 = i__) < 10 && 0 <= i__3 ? i__3 : s_rnge(
-		"moduli", i__3, "scps01_", (ftnlen)467)];
+		477)] * moduli[(i__3 = i__) < 10 && 0 <= i__3 ? i__3 : s_rnge(
+		"moduli", i__3, "scps01_", (ftnlen)477)];
     }
 
 /*     Parse the clock components from the input string. There should */
@@ -555,17 +584,17 @@ static integer c__10 = 10;
     i__1 = n;
     for (i__ = 1; i__ <= i__1; ++i__) {
 	if (s_cmp(cmp + ((i__2 = i__ - 1) < 10 && 0 <= i__2 ? i__2 : s_rnge(
-		"cmp", i__2, "scps01_", (ftnlen)504)) * 30, " ", (ftnlen)30, (
+		"cmp", i__2, "scps01_", (ftnlen)514)) * 30, " ", (ftnlen)30, (
 		ftnlen)1) == 0) {
 	    cmpval[(i__2 = i__ - 1) < 10 && 0 <= i__2 ? i__2 : s_rnge("cmpval"
-		    , i__2, "scps01_", (ftnlen)505)] = offset[(i__3 = i__ - 1)
+		    , i__2, "scps01_", (ftnlen)515)] = offset[(i__3 = i__ - 1)
 		     < 10 && 0 <= i__3 ? i__3 : s_rnge("offset", i__3, "scps"
-		    "01_", (ftnlen)505)];
+		    "01_", (ftnlen)515)];
 	} else {
 	    nparsd_(cmp + ((i__2 = i__ - 1) < 10 && 0 <= i__2 ? i__2 : s_rnge(
-		    "cmp", i__2, "scps01_", (ftnlen)507)) * 30, &cmpval[(i__3 
+		    "cmp", i__2, "scps01_", (ftnlen)517)) * 30, &cmpval[(i__3 
 		    = i__ - 1) < 10 && 0 <= i__3 ? i__3 : s_rnge("cmpval", 
-		    i__3, "scps01_", (ftnlen)507)], strerr, &pntr, (ftnlen)30,
+		    i__3, "scps01_", (ftnlen)517)], strerr, &pntr, (ftnlen)30,
 		     (ftnlen)240);
 	}
 	if (s_cmp(strerr, " ", (ftnlen)240, (ftnlen)1) != 0) {
@@ -573,7 +602,7 @@ static integer c__10 = 10;
 	    s_copy(msg, "Could not parse SCLK component # from # as a number."
 		    , msg_len, (ftnlen)52);
 	    repmc_(msg, "#", cmp + ((i__2 = i__ - 1) < 10 && 0 <= i__2 ? i__2 
-		    : s_rnge("cmp", i__2, "scps01_", (ftnlen)517)) * 30, msg, 
+		    : s_rnge("cmp", i__2, "scps01_", (ftnlen)527)) * 30, msg, 
 		    msg_len, (ftnlen)1, (ftnlen)30, msg_len);
 	    repmc_(msg, "#", clkstr, msg, msg_len, (ftnlen)1, clkstr_len, 
 		    msg_len);
@@ -587,18 +616,18 @@ static integer c__10 = 10;
 /*        have been invalid. */
 
 	cmpval[(i__2 = i__ - 1) < 10 && 0 <= i__2 ? i__2 : s_rnge("cmpval", 
-		i__2, "scps01_", (ftnlen)531)] = cmpval[(i__3 = i__ - 1) < 10 
+		i__2, "scps01_", (ftnlen)541)] = cmpval[(i__3 = i__ - 1) < 10 
 		&& 0 <= i__3 ? i__3 : s_rnge("cmpval", i__3, "scps01_", (
-		ftnlen)531)] - offset[(i__4 = i__ - 1) < 10 && 0 <= i__4 ? 
-		i__4 : s_rnge("offset", i__4, "scps01_", (ftnlen)531)];
+		ftnlen)541)] - offset[(i__4 = i__ - 1) < 10 && 0 <= i__4 ? 
+		i__4 : s_rnge("offset", i__4, "scps01_", (ftnlen)541)];
 	if (d_nint(&cmpval[(i__2 = i__ - 1) < 10 && 0 <= i__2 ? i__2 : s_rnge(
-		"cmpval", i__2, "scps01_", (ftnlen)533)]) < 0.) {
+		"cmpval", i__2, "scps01_", (ftnlen)543)]) < 0.) {
 	    *error = TRUE_;
 	    s_copy(msg, "Component number #, # in the SCLK string  # is inva"
 		    "lid.", msg_len, (ftnlen)55);
 	    repmi_(msg, "#", &i__, msg, msg_len, (ftnlen)1, msg_len);
 	    repmc_(msg, "#", cmp + ((i__2 = i__ - 1) < 10 && 0 <= i__2 ? i__2 
-		    : s_rnge("cmp", i__2, "scps01_", (ftnlen)541)) * 30, msg, 
+		    : s_rnge("cmp", i__2, "scps01_", (ftnlen)551)) * 30, msg, 
 		    msg_len, (ftnlen)1, (ftnlen)30, msg_len);
 	    repmc_(msg, "#", clkstr, msg, msg_len, (ftnlen)1, clkstr_len, 
 		    msg_len);
@@ -615,9 +644,9 @@ static integer c__10 = 10;
     i__1 = n;
     for (i__ = 1; i__ <= i__1; ++i__) {
 	*ticks += cmpval[(i__2 = i__ - 1) < 10 && 0 <= i__2 ? i__2 : s_rnge(
-		"cmpval", i__2, "scps01_", (ftnlen)559)] * cmptks[(i__3 = i__ 
+		"cmpval", i__2, "scps01_", (ftnlen)569)] * cmptks[(i__3 = i__ 
 		- 1) < 10 && 0 <= i__3 ? i__3 : s_rnge("cmptks", i__3, "scps"
-		"01_", (ftnlen)559)];
+		"01_", (ftnlen)569)];
     }
     *error = FALSE_;
     s_copy(msg, " ", msg_len, (ftnlen)1);

@@ -53,52 +53,23 @@
 
 -Brief_I/O
 
-    VARIABLE  I/O  DESCRIPTION
-    --------  ---  --------------------------------------------------
-    m1         I     Input matrix.
-    mout       O     Output matrix equal to m1.
+   VARIABLE  I/O  DESCRIPTION
+   --------  ---  --------------------------------------------------
+   m1         I   Input matrix.
+   mout       O   Output matrix equal to `m1'.
 
 -Detailed_Input
 
-    m1      This is an arbitrary input 3x3 matrix.  There are no
-            restrictions on what it may contain.
+   m1          is an arbitrary input 3x3 matrix. There are no
+               restrictions on what it may contain.
 
 -Detailed_Output
 
-    mout    This 3x3 matrix is set to be equal to m1.
+   mout        is a 3x3 matrix set to be equal to `m1'.
 
 -Parameters
 
-    None.
-
--Particulars
-
-    None.
-
--Examples
-
-    If  m1 = | 1.0   0.0   0.0 |
-             |                 |
-             | 0.0   1.0   0.0 |
-             |                 |
-             | 0.0   0.0   1.0 |
-
-    the call
-
-    mequ_c ( m1, mout );
-
-    produces the matrix
-
-     mout =  | 1.0   0.0   0.0 |
-             |                 |
-             | 0.0   1.0   0.0 |
-             |                 |
-             | 0.0   0.0   1.0 |
-
-
--Restrictions
-
-    None.
+   None.
 
 -Exceptions
 
@@ -106,20 +77,97 @@
 
 -Files
 
-    None.
+   None.
 
--Author_and_Institution
+-Particulars
 
-    W.M. Owen       (JPL)
-    E.D. Wright     (JPL)
+   None.
+
+-Examples
+
+   The numerical results shown for this example may differ across
+   platforms. The results depend on the SPICE kernels used as
+   input, the compiler and supporting libraries, and the machine
+   specific arithmetic implementation.
+
+   1) This trivial example demonstrates how to use mequ_c to assign
+      one matrix to another.
+
+
+      Example code begins here.
+
+
+      /.
+         Program mequ_ex1
+      ./
+      #include <stdio.h>
+      #include "SpiceUsr.h"
+
+      int main( )
+      {
+
+         /.
+         Local variables.
+         ./
+         SpiceDouble          mout   [3][3];
+
+         SpiceInt             i;
+
+         /.
+         Define `m1'.
+         ./
+         SpiceDouble          m1     [3][3] = { {0.0, -1.0,  0.0},
+                                                {1.0,  0.0,  0.0},
+                                                {0.0,  0.0,  1.0} };
+
+         /.
+         Assign `m1' to `mout' and print `mout'.
+         ./
+         mequ_c ( m1, mout );
+
+         printf( "MOUT:\n" );
+         for ( i = 0; i < 3; i++ )
+         {
+            printf( "%16.7f %15.7f %15.7f\n",
+                    mout[i][0], mout[i][1], mout[i][2] );
+         }
+
+         return ( 0 );
+      }
+
+
+      When this program was executed on a Mac/Intel/cc/64-bit
+      platform, the output was:
+
+
+      MOUT:
+             0.0000000      -1.0000000       0.0000000
+             1.0000000       0.0000000       0.0000000
+             0.0000000       0.0000000       1.0000000
+
+
+-Restrictions
+
+   None.
 
 -Literature_References
 
-    None.
+   None.
+
+-Author_and_Institution
+
+   J. Diaz del Rio     (ODC Space)
+   W.M. Owen           (JPL)
+   E.D. Wright         (JPL)
 
 -Version
 
-   -CSPICE Version 1.0.0, 29-JUN-1999
+   -CSPICE Version 1.0.1, 04-JUL-2021 (JDR)
+
+       Edited the header to comply with NAIF standard. Added complete
+       code example based on existing example.
+
+   -CSPICE Version 1.0.0, 29-JUN-1999 (EDW) (WMO)
 
 -Index_Entries
 

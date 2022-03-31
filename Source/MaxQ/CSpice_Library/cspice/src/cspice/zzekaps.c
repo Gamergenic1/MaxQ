@@ -286,7 +286,7 @@ static integer c__0 = 0;
 
 /*     This routine operates by side effects:  it allocates an EK data */
 /*     page for a specified segment.  The segment's metadata is updated */
-/*     to reflect aquisition of the page. */
+/*     to reflect acquisition of the page. */
 
 /*     The allocated page is initialized as follows: */
 
@@ -319,6 +319,10 @@ static integer c__0 = 0;
 /*     N.J. Bachman   (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.0.1, 01-OCT-2021 (NJB) */
+
+/*        Corrected typo in comments. */
 
 /* -    Beta Version 1.0.0, 08-NOV-1995 (NJB) */
 

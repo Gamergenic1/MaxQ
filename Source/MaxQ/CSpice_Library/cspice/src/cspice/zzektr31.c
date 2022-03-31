@@ -485,7 +485,7 @@ static integer c__3 = 3;
 /*         error will be diagnosed by routines called by this routine. */
 
 /*     3)  If there is not exactly 1 key in the root at the time this */
-/*         routine is called, the error SPICE(BUG) is signalled. */
+/*         routine is called, the error SPICE(BUG) is signaled. */
 
 /* $ Files */
 
@@ -601,6 +601,10 @@ static integer c__3 = 3;
 
 /* $ Version */
 
+/* -    SPICELIB Version 1.0.1, 03-OCT-2021 (NJB) */
+
+/*        Corrected typos in comments. */
+
 /* -    Beta Version 1.0.0, 27-OCT-1995 (NJB) */
 
 /* -& */
@@ -655,9 +659,9 @@ static integer c__3 = 3;
 /*     need not be shifted; they'll be overwritten later. */
 
     rpage[(i__1 = nlkeys + 5) < 256 && 0 <= i__1 ? i__1 : s_rnge("rpage", 
-	    i__1, "zzektr31_", (ftnlen)279)] = rpage[5];
+	    i__1, "zzektr31_", (ftnlen)283)] = rpage[5];
     rpage[(i__1 = nlkeys + 172) < 256 && 0 <= i__1 ? i__1 : s_rnge("rpage", 
-	    i__1, "zzektr31_", (ftnlen)280)] = rpage[172];
+	    i__1, "zzektr31_", (ftnlen)284)] = rpage[172];
 
 /*     Copy in the keys, data pointers, and child pointers from the */
 /*     left child into the root.  The number of predecessors of the */
@@ -675,19 +679,19 @@ static integer c__3 = 3;
 
     middle = nlkeys + 1;
     delta = rpage[(i__1 = middle + 4) < 256 && 0 <= i__1 ? i__1 : s_rnge(
-	    "rpage", i__1, "zzektr31_", (ftnlen)298)];
+	    "rpage", i__1, "zzektr31_", (ftnlen)302)];
     i__1 = nrkeys;
     for (i__ = 1; i__ <= i__1; ++i__) {
 	rpage[(i__2 = middle + 5 + i__ - 1) < 256 && 0 <= i__2 ? i__2 : 
-		s_rnge("rpage", i__2, "zzektr31_", (ftnlen)301)] = c2page[(
+		s_rnge("rpage", i__2, "zzektr31_", (ftnlen)305)] = c2page[(
 		i__3 = i__) < 256 && 0 <= i__3 ? i__3 : s_rnge("c2page", i__3,
-		 "zzektr31_", (ftnlen)301)] + delta;
+		 "zzektr31_", (ftnlen)305)] + delta;
     }
     movei_(&c2page[128], &nrkeys, &rpage[(i__1 = middle + 172) < 256 && 0 <= 
-	    i__1 ? i__1 : s_rnge("rpage", i__1, "zzektr31_", (ftnlen)304)]);
+	    i__1 ? i__1 : s_rnge("rpage", i__1, "zzektr31_", (ftnlen)308)]);
     i__2 = nrkeys + 1;
     movei_(&c2page[64], &i__2, &rpage[(i__1 = middle + 88) < 256 && 0 <= i__1 
-	    ? i__1 : s_rnge("rpage", i__1, "zzektr31_", (ftnlen)305)]);
+	    ? i__1 : s_rnge("rpage", i__1, "zzektr31_", (ftnlen)309)]);
 
 /*     Now the root must be updated.  The root now contains */
 /*     the maximum allowed number of keys.  The depth of the tree */
@@ -705,7 +709,7 @@ static integer c__3 = 3;
 
     for (i__ = 1; i__ <= 2; ++i__) {
 	zzekpgfr_(handle, &c__3, &child[(i__1 = i__ - 1) < 2 && 0 <= i__1 ? 
-		i__1 : s_rnge("child", i__1, "zzektr31_", (ftnlen)325)]);
+		i__1 : s_rnge("child", i__1, "zzektr31_", (ftnlen)329)]);
     }
     return 0;
 } /* zzektr31_ */

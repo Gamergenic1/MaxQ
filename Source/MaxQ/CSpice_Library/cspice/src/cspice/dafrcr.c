@@ -76,7 +76,7 @@ static integer c__1 = 1;
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     I   Handle of DAF. */
 /*     RECNO      I   Record number of character record. */
@@ -84,31 +84,31 @@ static integer c__1 = 1;
 
 /* $ Detailed_Input */
 
-/*     HANDLE      is the handle associated with a DAF. */
+/*     HANDLE   is the handle associated with a DAF. */
 
-/*     RECNO       is the record number of a character record within */
-/*                 the file. */
+/*     RECNO    is the record number of a character record within */
+/*              the file. */
 
 /* $ Detailed_Output */
 
-/*     CREC        contains the first 1000 characters of the specified */
-/*                 record from the specified file. */
+/*     CREC     contains the first 1000 characters of the specified */
+/*              record from the specified file. */
 
 /* $ Parameters */
-
-/*      None. */
-
-/* $ Files */
 
 /*     None. */
 
 /* $ Exceptions */
 
-/*     1) If the declared length of CREC is not 1000 characters, */
-/*        the error SPICE(DAFBADRECLEN) is signalled. */
+/*     1)  If the declared length of CREC is not 1000 characters, */
+/*         the error SPICE(DAFBADRECLEN) is signaled. */
 
-/*     2) If the specified record cannot (for some reason) be read, */
-/*        the error SPICE(DAFCRNOTFOUND) is signalled. */
+/*     2)  If the specified record cannot (for some reason) be read, */
+/*         the error SPICE(DAFCRNOTFOUND) is signaled. */
+
+/* $ Files */
+
+/*     None. */
 
 /* $ Particulars */
 
@@ -130,21 +130,32 @@ static integer c__1 = 1;
 
 /* $ Restrictions */
 
-/*     1) This routine is only used to read records on environments */
-/*        whose characters are a single byte in size.  Updates */
-/*        to this routine and routines in its call tree may be */
-/*        required to properly handle other cases. */
+/*     1)  This routine is only used to read records on environments */
+/*         whose characters are a single byte in size. Updates */
+/*         to this routine and routines in its call tree may be */
+/*         required to properly handle other cases. */
 
 /* $ Literature_References */
 
-/*     NAIF Document 167.0, "Double Precision Array Files (DAF) */
-/*     Specification and User's Guide" */
+/*     None. */
 
 /* $ Author_and_Institution */
 
-/*     I.M. Underwood  (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     H.A. Neilan        (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     F.S. Turner        (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 2.1.0, 17-JUN-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. Moved DAF */
+/*        required reading from $Literature_References to */
+/*        $Required_Reading section. */
 
 /* -    SPICELIB Version 2.0.0, 16-NOV-2001 (FST) */
 
@@ -166,7 +177,7 @@ static integer c__1 = 1;
 /* -& */
 /* $ Index_Entries */
 
-/*     read daf character record */
+/*     read DAF character record */
 
 /* -& */
 /* $ Revisions */
@@ -174,11 +185,11 @@ static integer c__1 = 1;
 /* -    SPICELIB Version 2.0.0, 16-NOV-2001 (FST) */
 
 /*        This routine now makes use of the handle manager */
-/*        code.  A call to DAFSIH was inserted just after */
+/*        code. A call to DAFSIH was inserted just after */
 /*        the standard SPICE error handling code at the */
-/*        head of the module.  This was done to insure that */
-/*        the caller is referring to a legitmately loaded */
-/*        DAF.  The penalty for performing this check is */
+/*        head of the module. This was done to insure that */
+/*        the caller is referring to a legitimately loaded */
+/*        DAF. The penalty for performing this check is */
 /*        a binary search on the number of loaded files, */
 /*        which should be small compared to the actual READ */
 /*        performed below. */

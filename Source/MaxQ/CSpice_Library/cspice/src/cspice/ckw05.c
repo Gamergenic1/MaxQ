@@ -13,7 +13,7 @@ static integer c__2 = 2;
 static integer c__6 = 6;
 static integer c__1 = 1;
 
-/* $Procedure      CKW05 ( Write CK segment, type 5 ) */
+/* $Procedure CKW05 ( Write CK segment, type 5 ) */
 /* Subroutine */ int ckw05_(integer *handle, integer *subtyp, integer *degree,
 	 doublereal *begtim, doublereal *endtim, integer *inst, char *ref, 
 	logical *avflag, char *segid, integer *n, doublereal *sclkdp, 
@@ -89,8 +89,8 @@ static integer c__1 = 1;
 
 /* $ Keywords */
 
-/*     POINTING */
 /*     FILES */
+/*     POINTING */
 
 /* $ Declarations */
 /* $ Abstract */
@@ -183,7 +183,7 @@ static integer c__1 = 1;
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     I   Handle of an CK file open for writing. */
 /*     SUBTYP     I   CK type 5 subtype code. */
@@ -192,7 +192,8 @@ static integer c__1 = 1;
 /*     ENDTIM     I   End time of interval covered by segment. */
 /*     INST       I   NAIF code for a s/c instrument or structure. */
 /*     REF        I   Reference frame name. */
-/*     AVFLAG     I   True if the segment will contain angular velocity. */
+/*     AVFLAG     I   Flag indicating if the segment will contain angular */
+/*                    velocity. */
 /*     SEGID      I   Segment identifier. */
 /*     N          I   Number of packets. */
 /*     SCLKDP     I   Encoded SCLK times. */
@@ -204,166 +205,166 @@ static integer c__1 = 1;
 
 /* $ Detailed_Input */
 
-/*     HANDLE         is the file handle of a CK file that has been */
-/*                    opened for writing. */
+/*     HANDLE   is the file handle of a CK file that has been */
+/*              opened for writing. */
 
-/*     SUBTYP         is an integer code indicating the subtype of the */
-/*                    the segment to be created. */
+/*     SUBTYP   is an integer code indicating the subtype of the */
+/*              the segment to be created. */
 
-/*     DEGREE         is the degree of the polynomials used to */
-/*                    interpolate the quaternions contained in the input */
-/*                    packets.  All components of the quaternions are */
-/*                    interpolated by polynomials of fixed degree. */
+/*     DEGREE   is the degree of the polynomials used to */
+/*              interpolate the quaternions contained in the input */
+/*              packets. All components of the quaternions are */
+/*              interpolated by polynomials of fixed degree. */
 
 /*     BEGTIM, */
-/*     ENDTIM         are the beginning and ending encoded SCLK times */
-/*                    for which the segment provides pointing */
-/*                    information. BEGTIM must be less than or equal to */
-/*                    ENDTIM, and at least one data packet must have a */
-/*                    time tag T such that */
+/*     ENDTIM   are the beginning and ending encoded SCLK times */
+/*              for which the segment provides pointing */
+/*              information. BEGTIM must be less than or equal to */
+/*              ENDTIM, and at least one data packet must have a */
+/*              time tag T such that */
 
-/*                       BEGTIM  <  T  <  ENDTIM */
-/*                               -     - */
+/*                 BEGTIM  <  T  <  ENDTIM */
+/*                         -     - */
 
-/*     INST           is the NAIF integer code for the instrument or */
-/*                    structure for which a segment is to be created. */
+/*     INST     is the NAIF integer code for the instrument or */
+/*              structure for which a segment is to be created. */
 
-/*     REF            is the NAIF name for a reference frame relative to */
-/*                    which the pointing information for INST is */
-/*                    specified. */
+/*     REF      is the NAIF name for a reference frame relative to */
+/*              which the pointing information for INST is */
+/*              specified. */
 
-/*     AVFLAG         is a logical flag which indicates whether or not */
-/*                    the segment will contain angular velocity. */
+/*     AVFLAG   is a logical flag which indicates whether or not */
+/*              the segment will contain angular velocity. */
 
-/*     SEGID          is the segment identifier.  A CK segment */
-/*                    identifier may contain up to 40 characters. */
+/*     SEGID    is the segment identifier.  A CK segment */
+/*              identifier may contain up to 40 characters. */
 
-/*     N              is the number of packets in the input packet */
-/*                    array. */
+/*     N        is the number of packets in the input packet */
+/*              array. */
 
-/*     SCLKDP         are the encoded spacecraft clock times associated */
-/*                    with each pointing instance. These times must be */
-/*                    strictly increasing. */
+/*     SCLKDP   are the encoded spacecraft clock times associated */
+/*              with each pointing instance. These times must be */
+/*              strictly increasing. */
 
-/*     PACKTS         contains a time-ordered array of data packets */
-/*                    representing the orientation of INST relative to */
-/*                    the frame REF. Each packet contains a SPICE-style */
-/*                    quaternion and optionally, depending on the */
-/*                    segment subtype, attitude derivative data, from */
-/*                    which a C-matrix and an angular velocity vector */
-/*                    may be derived. */
+/*     PACKTS   contains a time-ordered array of data packets */
+/*              representing the orientation of INST relative to */
+/*              the frame REF. Each packet contains a SPICE-style */
+/*              quaternion and optionally, depending on the */
+/*              segment subtype, attitude derivative data, from */
+/*              which a C-matrix and an angular velocity vector */
+/*              may be derived. */
 
-/*                    See the discussion of quaternion styles in */
-/*                    Particulars below. */
+/*              See the discussion of quaternion styles in */
+/*              $Particulars below. */
 
-/*                    The C-matrix represented by the Ith data packet is */
-/*                    a rotation matrix that transforms the components */
-/*                    of a vector expressed in the base frame specified */
-/*                    by REF to components expressed in the instrument */
-/*                    fixed frame at the time SCLKDP(I). */
+/*              The C-matrix represented by the Ith data packet is */
+/*              a rotation matrix that transforms the components */
+/*              of a vector expressed in the base frame specified */
+/*              by REF to components expressed in the instrument */
+/*              fixed frame at the time SCLKDP(I). */
 
-/*                    Thus, if a vector V has components x, y, z in the */
-/*                    base frame, then V has components x', y', z' */
-/*                    in the instrument fixed frame where: */
+/*              Thus, if a vector V has components x, y, z in the */
+/*              base frame, then V has components x', y', z' */
+/*              in the instrument fixed frame where: */
 
-/*                       [ x' ]     [          ] [ x ] */
-/*                       | y' |  =  |   CMAT   | | y | */
-/*                       [ z' ]     [          ] [ z ] */
+/*                 [ x' ]     [          ] [ x ] */
+/*                 | y' |  =  |   CMAT   | | y | */
+/*                 [ z' ]     [          ] [ z ] */
 
 
-/*                    The attitude derivative information in PACKTS(I) */
-/*                    gives the angular velocity of the instrument fixed */
-/*                    frame at time SCLKDP(I) with respect to the */
-/*                    reference frame specified by REF. */
+/*              The attitude derivative information in PACKTS(I) */
+/*              gives the angular velocity of the instrument fixed */
+/*              frame at time SCLKDP(I) with respect to the */
+/*              reference frame specified by REF. */
 
-/*                    The direction of an angular velocity vector gives */
-/*                    the right-handed axis about which the instrument */
-/*                    fixed reference frame is rotating. The magnitude */
-/*                    of the vector is the magnitude of the */
-/*                    instantaneous velocity of the rotation, in radians */
-/*                    per second. */
+/*              The direction of an angular velocity vector gives */
+/*              the right-handed axis about which the instrument */
+/*              fixed reference frame is rotating. The magnitude */
+/*              of the vector is the magnitude of the */
+/*              instantaneous velocity of the rotation, in radians */
+/*              per second. */
 
-/*                    Packet contents and the corresponding */
-/*                    interpolation methods depend on the segment */
-/*                    subtype, and are as follows: */
+/*              Packet contents and the corresponding */
+/*              interpolation methods depend on the segment */
+/*              subtype, and are as follows: */
 
-/*                       Subtype 0:  Hermite interpolation, 8-element */
-/*                                   packets. Quaternion and quaternion */
-/*                                   derivatives only, no angular */
-/*                                   velocity vector provided. */
-/*                                   Quaternion elements are listed */
-/*                                   first, followed by derivatives. */
-/*                                   Angular velocity is derived from */
-/*                                   the quaternions and quaternion */
-/*                                   derivatives. */
+/*                 Subtype 0:  Hermite interpolation, 8-element */
+/*                             packets. Quaternion and quaternion */
+/*                             derivatives only, no angular */
+/*                             velocity vector provided. */
+/*                             Quaternion elements are listed */
+/*                             first, followed by derivatives. */
+/*                             Angular velocity is derived from */
+/*                             the quaternions and quaternion */
+/*                             derivatives. */
 
-/*                       Subtype 1:  Lagrange interpolation, 4-element */
-/*                                   packets. Quaternion only. Angular */
-/*                                   velocity is derived by */
-/*                                   differentiating the interpolating */
-/*                                   polynomials. */
+/*                 Subtype 1:  Lagrange interpolation, 4-element */
+/*                             packets. Quaternion only. Angular */
+/*                             velocity is derived by */
+/*                             differentiating the interpolating */
+/*                             polynomials. */
 
-/*                       Subtype 2:  Hermite interpolation, 14-element */
-/*                                   packets.  Quaternion and angular */
-/*                                   angular velocity vector, as well as */
-/*                                   derivatives of each, are provided. */
-/*                                   The quaternion comes first, then */
-/*                                   quaternion derivatives, then */
-/*                                   angular velocity and its */
-/*                                   derivatives. */
+/*                 Subtype 2:  Hermite interpolation, 14-element */
+/*                             packets. Quaternion and angular */
+/*                             angular velocity vector, as well as */
+/*                             derivatives of each, are provided. */
+/*                             The quaternion comes first, then */
+/*                             quaternion derivatives, then */
+/*                             angular velocity and its */
+/*                             derivatives. */
 
-/*                       Subtype 3:  Lagrange interpolation, 7-element */
-/*                                   packets. Quaternion and angular */
-/*                                   velocity vector provided.  The */
-/*                                   quaternion comes first. */
+/*                 Subtype 3:  Lagrange interpolation, 7-element */
+/*                             packets. Quaternion and angular */
+/*                             velocity vector provided. The */
+/*                             quaternion comes first. */
 
-/*                    Angular velocity is always specified relative to */
-/*                    the base frame. */
+/*              Angular velocity is always specified relative to */
+/*              the base frame. */
 
-/*     RATE           is the nominal rate of the spacecraft clock */
-/*                    associated with INST.  Units are seconds per */
-/*                    tick.  RATE is used to scale angular velocity */
-/*                    to radians/second. */
+/*     RATE     is the nominal rate of the spacecraft clock */
+/*              associated with INST. Units are seconds per */
+/*              tick. RATE is used to scale angular velocity */
+/*              to radians/second. */
 
-/*     NINTS          is the number of intervals that the pointing */
-/*                    instances are partitioned into. */
+/*     NINTS    is the number of intervals that the pointing */
+/*              instances are partitioned into. */
 
-/*     STARTS         are the start times of each of the interpolation */
-/*                    intervals. These times must be strictly increasing */
-/*                    and must coincide with times for which the segment */
-/*                    contains pointing. */
+/*     STARTS   are the start times of each of the interpolation */
+/*              intervals. These times must be strictly increasing */
+/*              and must coincide with times for which the segment */
+/*              contains pointing. */
 
 /* $ Detailed_Output */
 
-/*     None.  See $Particulars for a description of the effect of this */
+/*     None. See $Particulars for a description of the effect of this */
 /*     routine. */
 
 /* $ Parameters */
 
-/*     MAXDEG         is the maximum allowed degree of the interpolating */
-/*                    polynomial.  If the value of MAXDEG is increased, */
-/*                    the SPICELIB routine CKPFS must be changed */
-/*                    accordingly.  In particular, the size of the */
-/*                    record passed to CKRnn and CKEnn must be */
-/*                    increased, and comments describing the record size */
-/*                    must be changed. */
+/*     MAXDEG   is the maximum allowed degree of the interpolating */
+/*              polynomial. If the value of MAXDEG is increased, */
+/*              the SPICELIB routine CKPFS must be changed */
+/*              accordingly. In particular, the size of the */
+/*              record passed to CKRnn and CKEnn must be */
+/*              increased, and comments describing the record size */
+/*              must be changed. */
 
 /* $ Exceptions */
 
-/*     If any of the following exceptions occur, this routine will return */
-/*     without creating a new segment. */
+/*     If any of the following exceptions occur, this routine will */
+/*     return without creating a new segment. */
 
-/*     1)  If HANDLE is not the handle of a C-kernel opened for writing */
-/*         the error will be diagnosed by routines called by this */
+/*     1)  If HANDLE is not the handle of a C-kernel opened for writing, */
+/*         an error is signaled by a routine in the call tree of this */
 /*         routine. */
 
-/*     2)  If the last non-blank character of SEGID occurs past index 40, */
-/*         the error SPICE(SEGIDTOOLONG) is signaled. */
+/*     2)  If the last non-blank character of SEGID occurs past index */
+/*         40, the error SPICE(SEGIDTOOLONG) is signaled. */
 
 /*     3)  If SEGID contains any nonprintable characters, the error */
 /*         SPICE(NONPRINTABLECHARS) is signaled. */
 
-/*     4)  If the first encoded SCLK time is negative then the error */
+/*     4)  If the first encoded SCLK time is negative, the error */
 /*         SPICE(INVALIDSCLKTIME) is signaled. If any subsequent times */
 /*         are negative the error will be detected in exception (5). */
 
@@ -375,7 +376,7 @@ static integer c__1 = 1;
 /*         SPICE(INVALIDREFFRAME) is signaled. */
 
 /*     7)  If the number of packets N is not at least 1, the error */
-/*         SPICE(TOOFEWPACKETS) will be signaled. */
+/*         SPICE(TOOFEWPACKETS) is signaled. */
 
 /*     8)  If NINTS, the number of interpolation intervals, is less than */
 /*         or equal to 0, the error SPICE(INVALIDNUMINTS) is signaled. */
@@ -383,16 +384,15 @@ static integer c__1 = 1;
 /*     9)  If the encoded SCLK interval start times are not strictly */
 /*         increasing, the error SPICE(TIMESOUTOFORDER) is signaled. */
 
-/*    10)  If an interval start time does not coincide with a time for */
-/*         which there is an actual pointing instance in the segment, */
-/*         then the error SPICE(INVALIDSTARTTIME) is signaled. */
+/*     10) If an interval start time does not coincide with a time for */
+/*         which there is an actual pointing instance in the segment, the */
+/*         error SPICE(INVALIDSTARTTIME) is signaled. */
 
-/*    11)  This routine assumes that the rotation between adjacent */
+/*     11) This routine assumes that the rotation between adjacent */
 /*         quaternions that are stored in the same interval has a */
 /*         rotation angle of THETA radians, where */
 
-/*            0  <  THETA  <  pi. */
-/*               _ */
+/*            0  <=  THETA  <  pi. */
 
 /*         The routines that evaluate the data in the segment produced */
 /*         by this routine cannot distinguish between rotations of THETA */
@@ -401,33 +401,32 @@ static integer c__1 = 1;
 
 /*            THETA   +   2 * k * pi */
 
-/*         radians, where k is any integer.  These "large" rotations will */
-/*         yield invalid results when interpolated.  You must ensure that */
+/*         radians, where k is any integer. These "large" rotations will */
+/*         yield invalid results when interpolated. You must ensure that */
 /*         the data stored in the segment will not be subject to this */
 /*         sort of ambiguity. */
 
-/*    12)  If any quaternion has magnitude zero, the error */
+/*     12) If any quaternion has magnitude zero, the error */
 /*         SPICE(ZEROQUATERNION) is signaled. */
 
-/*    13)  If the interpolation window size implied by DEGREE is not */
-/*         even, the error SPICE(INVALIDDEGREE) is signaled.  The window */
+/*     13) If the interpolation window size implied by DEGREE is not */
+/*         even, the error SPICE(INVALIDDEGREE) is signaled. The window */
 /*         size is DEGREE+1 for Lagrange subtypes and is (DEGREE+1)/2 */
 /*         for Hermite subtypes. */
 
-/*    14)  If an unrecognized subtype code is supplied, the error */
+/*     14) If an unrecognized subtype code is supplied, the error */
 /*         SPICE(NOTSUPPORTED) is signaled. */
 
-/*    15)  If DEGREE is not at least 1 or is greater than MAXDEG, the */
+/*     15) If DEGREE is not at least 1 or is greater than MAXDEG, the */
 /*         error SPICE(INVALIDDEGREE) is signaled. */
 
-/*    16)  If the segment descriptor bounds are out of order, the */
+/*     16) If the segment descriptor bounds are out of order, the */
 /*         error SPICE(BADDESCRTIMES) is signaled. */
 
-/*    17)  If there is no element of SCLKDP that lies between BEGTIM and */
+/*     17) If there is no element of SCLKDP that lies between BEGTIM and */
 /*         ENDTIM inclusive, the error SPICE(EMPTYSEGMENT) is signaled. */
 
-/*    18)  If RATE is zero, the error SPICE(INVALIDVALUE) is signaled. */
-
+/*     18) If RATE is zero, the error SPICE(INVALIDVALUE) is signaled. */
 
 /* $ Files */
 
@@ -449,12 +448,12 @@ static integer c__1 = 1;
 /*     science and engineering applications. Quaternion styles */
 /*     are characterized by */
 
-/*        - The order of quaternion elements */
+/*     -  The order of quaternion elements */
 
-/*        - The quaternion multiplication formula */
+/*     -  The quaternion multiplication formula */
 
-/*        - The convention for associating quaternions */
-/*          with rotation matrices */
+/*     -  The convention for associating quaternions */
+/*        with rotation matrices */
 
 /*     Two of the commonly used styles are */
 
@@ -574,7 +573,7 @@ static integer c__1 = 1;
 /*                   +-             -+ */
 
 /*     The vector N of matrix entries (n1, n2, n3) is the rotation axis */
-/*     of M and theta is M's rotation angle.  Note that N and theta */
+/*     of M and theta is M's rotation angle. Note that N and theta */
 /*     are not unique. */
 
 /*     Let */
@@ -639,7 +638,6 @@ static integer c__1 = 1;
 
 /*        M1*M2 */
 
-
 /* $ Examples */
 
 /*     Suppose that you have data packets and are prepared to produce */
@@ -661,7 +659,6 @@ static integer c__1 = 1;
 /*             .             INST,   REF,    AVFLAG, SEGID,  N, */
 /*             .             SCLKDP, PACKTS, RATE,   NINTS,  STARTS ) */
 
-
 /* $ Restrictions */
 
 /*     None. */
@@ -672,12 +669,17 @@ static integer c__1 = 1;
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     W.L. Taber      (JPL) */
-/*     K.R. Gehringer  (JPL) */
-/*     J.M. Lynch      (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
+/*     J.M. Lynch         (JPL) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 3.0.1, 08-JUN-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 3.0.0, 27-JAN-2014 (NJB) */
 
@@ -697,7 +699,7 @@ static integer c__1 = 1;
 
 /* -    SPICELIB Version 1.0.1, 07-JAN-2005 (NJB) */
 
-/*        Description in Detailed_Input header section of */
+/*        Description in $Detailed_Input header section of */
 /*        constraints on BEGTIM and ENDTIM was corrected. */
 
 /* -    SPICELIB Version 1.0.0, 30-AUG-2002 (NJB) (KRG) (JML) (WLT) */
@@ -705,7 +707,7 @@ static integer c__1 = 1;
 /* -& */
 /* $ Index_Entries */
 
-/*     write ck type_5 data segment */
+/*     write CK type_5 data segment */
 
 /* -& */
 /* $ Revisions */

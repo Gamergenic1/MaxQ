@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      SYGETI ( Return all components for a symbol ) */
+/* $Procedure SYGETI ( Return all components for a symbol ) */
 /* Subroutine */ int sygeti_(char *name__, char *tabsym, integer *tabptr, 
 	integer *tabval, integer *n, integer *values, logical *found, ftnlen 
 	name_len, ftnlen tabsym_len)
@@ -76,37 +76,36 @@
 
 /*     N          O   Dimension of the symbol. */
 /*     VALUES     O   Values associated with the symbol. */
-/*     FOUND      O   True if the symbol NAME is in the symbol table, */
-/*                    false if it is not. */
+/*     FOUND      O   .TRUE. if the symbol NAME is in the symbol table. */
 
 /* $ Detailed_Input */
 
-/*     NAME       is the name of the symbol whose components are to be */
-/*                returned. If NAME is not in the symbol table, FOUND is */
-/*                false. */
+/*     NAME     is the name of the symbol whose components are to be */
+/*              returned. If NAME is not in the symbol table, FOUND is */
+/*              .FALSE. */
 
 /*     TABSYM, */
 /*     TABPTR, */
-/*     TABVAL     are the components of an integer symbol table. */
-/*                The symbol NAME may or may not be in the symbol */
-/*                table. The symbol table is not modified by this */
-/*                subroutine. */
+/*     TABVAL   are the components of an integer symbol table. */
+/*              The symbol NAME may or may not be in the symbol */
+/*              table. The symbol table is not modified by this */
+/*              subroutine. */
 
 /* $ Detailed_Output */
 
-/*     N          is the dimension of the symbol NAME. The dimension is */
-/*                the number of values associated with the given symbol. */
-/*                N is defined only if the output argument FOUND is */
-/*                .TRUE. */
+/*     N        is the dimension of the symbol NAME. The dimension is */
+/*              the number of values associated with the given symbol. */
+/*              N is defined only if the output argument FOUND is */
+/*              .TRUE. */
 
-/*     VALUES     is an array containing the values associated with the */
-/*                symbol. If the array is not large enough to hold all */
-/*                of the values associated with NAME, as many as will */
-/*                fit are returned.  VALUES is defined only if the */
-/*                output argument FOUND is .TRUE. */
+/*     VALUES   is an array containing the values associated with the */
+/*              symbol. If the array is not large enough to hold all */
+/*              of the values associated with NAME, as many as will */
+/*              fit are returned. VALUES is defined only if the */
+/*              output argument FOUND is .TRUE. */
 
-/*     FOUND      is true if NAME is in the symbol table. */
-/*                If NAME is not in the table, FOUND is false. */
+/*     FOUND    is .TRUE. if NAME is in the symbol table. */
+/*              If NAME is not in the table, FOUND is .FALSE. */
 
 /* $ Parameters */
 
@@ -114,10 +113,10 @@
 
 /* $ Exceptions */
 
-/*     1)  This subroutine does not check to see if the output array */
-/*         VALUES is large enough to hold all of the values associated */
-/*         with the symbol NAME.  The caller must provide the required */
-/*         space. */
+/*     1)  If there is an issue while reading the components of a */
+/*         integer symbol table, an error is signaled by a routine in */
+/*         the call tree of this routine. This normally indicates that */
+/*         the integer symbol table is corrupted. */
 
 /* $ Files */
 
@@ -131,42 +130,45 @@
 
 /*     The contents of the symbol table are: */
 
-/*        books   -->   5 */
-/*        erasers -->   6 */
-/*        pencils -->  12 */
-/*                     24 */
-/*        pens    -->  10 */
-/*                     12 */
-/*                     24 */
+/*         books   -->   5 */
+/*         erasers -->   6 */
+/*         pencils -->  12 */
+/*                      24 */
+/*         pens    -->  10 */
+/*                      12 */
+/*                      24 */
 
-/*     Let the dimension of VALUES be 3. */
+/*      Let the dimension of VALUES be 3. */
 
-/*     The calls, */
+/*      The calls, */
 
-/*     CALL SYGETI ( 'pencils', TABSYM, TABPTR, TABVAL, */
-/*    .               N,         VALUES, FOUND           ) */
+/*      CALL SYGETI ( 'pencils', TABSYM, TABPTR, TABVAL, */
+/*     .               N,         VALUES, FOUND           ) */
 
-/*     CALL SYGETI ( 'pens',     TABSYM, TABPTR, TABVAL, */
-/*    .               N,         VALUES, FOUND           ) */
+/*      CALL SYGETI ( 'pens',     TABSYM, TABPTR, TABVAL, */
+/*     .               N,         VALUES, FOUND           ) */
 
-/*     CALL SYGETI ( 'desks',    TABSYM, TABPTR, TABVAL, */
-/*    .               N,         VALUES, FOUND           ) */
+/*      CALL SYGETI ( 'desks',    TABSYM, TABPTR, TABVAL, */
+/*     .               N,         VALUES, FOUND           ) */
 
 
-/*     return the values for N, VALUES, and FOUND associated with NAME: */
+/*      return the values for N, VALUES, and FOUND associated with NAME: */
 
-/*     NAME         N      VALUES    FOUND */
-/*     ----------  ---    --------  ------- */
-/*     pencils      2        12       TRUE */
-/*                           24 */
-/*     pens         3        10       TRUE */
-/*                           12 */
-/*                           24 */
-/*     desks                         FALSE */
+/*         NAME         N      VALUES    FOUND */
+/*         ----------  ---    --------  ------- */
+/*         pencils      2        12      .TRUE. */
+/*                               24 */
+/*         pens         3        10      .TRUE. */
+/*                               12 */
+/*                               24 */
+/*         desks                        .FALSE. */
 
 /* $ Restrictions */
 
-/*     1) See Exceptions section. */
+/*     1)  This subroutine does not check to see if the output array */
+/*         VALUES is large enough to hold all of the values associated */
+/*         with the symbol NAME. The caller must provide the required */
+/*         space. */
 
 /* $ Literature_References */
 
@@ -174,24 +176,35 @@
 
 /* $ Author_and_Institution */
 
-/*     H.A. Neilan     (JPL) */
-/*     I.M. Underwood  (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     H.A. Neilan        (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
 
-/* -     SPICELIB Version 1.0.2, 03-NOV-2005 (NJB) */
+/* -    SPICELIB Version 1.1.0, 16-AUG-2021 (JDR) */
 
-/*         Various header corrections were made.  In particular, */
-/*         the header no longer asserts that this routine will */
-/*         "return as many values as will fit" in the output array */
-/*         VALUES. */
+/*        Added IMPLICIT NONE statement. */
 
-/* -     SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+/*        Edited the header to comply with NAIF standard. Moved entry */
+/*        from $Exceptions to $Restrictions and added entry #1 in */
+/*        $Exceptions. */
 
-/*         Comment section for permuted index source lines was added */
-/*         following the header. */
+/* -    SPICELIB Version 1.0.2, 03-NOV-2005 (NJB) */
 
-/* -     SPICELIB Version 1.0.0, 31-JAN-1990 (IMU) (HAN) */
+/*        Various header corrections were made. In particular, */
+/*        the header no longer asserts that this routine will */
+/*        "return as many values as will fit" in the output array */
+/*        VALUES. */
+
+/* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+
+/*        Comment section for permuted index source lines was added */
+/*        following the header. */
+
+/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (IMU) (HAN) */
 
 /* -& */
 /* $ Index_Entries */

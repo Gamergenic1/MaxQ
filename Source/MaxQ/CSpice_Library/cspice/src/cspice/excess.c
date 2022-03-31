@@ -10,7 +10,7 @@
 static integer c__1 = 1;
 static integer c__0 = 0;
 
-/* $Procedure      EXCESS ( Report an excess of elements in a cell ) */
+/* $Procedure EXCESS ( Report an excess of elements in a cell ) */
 /* Subroutine */ int excess_(integer *number, char *struct__, ftnlen 
 	struct_len)
 {
@@ -63,7 +63,8 @@ static integer c__0 = 0;
 
 /* $ Keywords */
 
-/*     CELLS,  ERROR */
+/*     CELLS */
+/*     ERROR */
 
 /* $ Declarations */
 /* $ Brief_I/O */
@@ -75,17 +76,16 @@ static integer c__0 = 0;
 
 /* $ Detailed_Input */
 
+/*     NUMBER   is the number of excess elements encountered. */
+/*              This may be zero or negative, which indicates */
+/*              no excess. */
 
-/*     NUMBER      is the number of excess elements encountered. */
-/*                 This may be zero or negative, which indicates */
-/*                 no excess. */
-
-/*     STRUCT      is the name of the data structure being manipulated. */
-/*                 Typically, this is one of the strings: 'cell', 'set', */
-/*                 or 'symbol table'. However, it may be any character */
-/*                 string. STRUCT should NOT end in a period. */
-/*                 The period at the end of the message is supplied */
-/*                 automatically. */
+/*     STRUCT   is the name of the data structure being manipulated. */
+/*              Typically, this is one of the strings: 'cell', 'set', */
+/*              or 'symbol table'. However, it may be any character */
+/*              string. STRUCT should NOT end in a period. */
+/*              The period at the end of the message is supplied */
+/*              automatically. */
 
 /* $ Detailed_Output */
 
@@ -93,16 +93,24 @@ static integer c__0 = 0;
 
 /* $ Parameters */
 
-/*      None. */
+/*     None. */
+
+/* $ Exceptions */
+
+/*     1)  This routine does not detect any errors. */
+
+/* $ Files */
+
+/*     None. */
 
 /* $ Particulars */
 
 /*     This routine is part of the SPICELIB error handling mechanism. */
 
-/*     EXCESS sets the long error message.  The message has the form: */
+/*     EXCESS sets the long error message. The message has the form: */
 
 /*                 An excess of <NUMBER> element(s) could */
-/*                 not be accomodated in the output <STRUCT>. */
+/*                 not be accommodated in the output <STRUCT>. */
 
 /*     Leading and trailing blanks in STRUCT are removed. If there is */
 /*     no excess (NUMBER is zero or negative), then is blank. */
@@ -115,12 +123,12 @@ static integer c__0 = 0;
 /*           NUMBER = 1 */
 /*           STRUCT = 'set' */
 /*           ERROR  = 'An excess of 1 element could not */
-/*                     be accomodated in the output set.' */
+/*                     be accommodated in the output set.' */
 
 /*           NUMBER = 5 */
 /*           STRUCT = 'stack' */
 /*           ERROR  =  An excess of 5 elements could not */
-/*                     be accomodated in the output stack.' */
+/*                     be accommodated in the output stack.' */
 
 /*           NUMBER = 0 */
 /*           STRUCT = */
@@ -139,33 +147,32 @@ static integer c__0 = 0;
 
 /*     None. */
 
-/* $ Exceptions */
-
-/*     This subprogram does not detect any errors. */
-
-/* $ Files */
-
-/*     None. */
-
 /* $ Literature_References */
 
 /*     None. */
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     C.A. Curzon     (JPL) */
-/*     W.L. Taber      (JPL) */
-/*     I.M. Underwood  (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     C.A. Curzon        (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 13-AUG-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
 
 /*        Comment section for permuted index source lines was added */
 /*        following the header. */
 
-/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (CAC) (WLT) (IMU) */
+/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (CAC) (WLT) (IMU) (NJB) */
 
 /* -& */
 /* $ Index_Entries */
@@ -177,8 +184,8 @@ static integer c__0 = 0;
 
 /* -    Beta Version 2.0.0, 11-JAN-1989 (NJB) */
 
-/*        Sets the long error message directly.  No longer returns */
-/*        an error message.  Message no longer contains name of */
+/*        Sets the long error message directly. No longer returns */
+/*        an error message. Message no longer contains name of */
 /*        routine which detected the error. */
 
 /* -& */

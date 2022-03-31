@@ -3,10 +3,10 @@
 -Procedure wnelmd_c ( Element of a DP window )
 
 -Abstract
- 
-   Determine whether a point is an element of a double precision 
-   window. 
- 
+
+   Determine whether a point is an element of a double precision
+   window.
+
 -Disclaimer
 
    THIS SOFTWARE AND ANY RELATED MATERIALS WERE CREATED BY THE
@@ -33,13 +33,13 @@
    ACTIONS OF RECIPIENT IN THE USE OF THE SOFTWARE.
 
 -Required_Reading
- 
-   WINDOWS 
- 
+
+   WINDOWS
+
 -Keywords
- 
-   WINDOWS 
- 
+
+   WINDOWS
+
 */
 
    #include "SpiceUsr.h"
@@ -47,61 +47,76 @@
    #include "SpiceZmc.h"
 
    SpiceBoolean wnelmd_c ( SpiceDouble    point,
-                           SpiceCell    * window ) 
+                           SpiceCell    * window )
 
 /*
 
 -Brief_I/O
 
-   VARIABLE  I/O  DESCRIPTION 
-   --------  ---  -------------------------------------------------- 
-   point      I   Input point. 
-   window     I   Input window. 
+   VARIABLE  I/O  DESCRIPTION
+   --------  ---  --------------------------------------------------
+   point      I   Input point.
+   window     I   Input window.
 
-   The function returns SPICETRUE if point is an element of window. 
- 
+   The function returns SPICETRUE if point is an element of window.
+
 -Detailed_Input
 
-   point       is a point, which may or may not be contained in 
-               one of the intervals in window. 
+   point       is a point, which may or may not be contained in one of
+               the intervals in `window'.
 
-   window      is a CSPICE window containing zero or more intervals. 
+   window      is a SPICE window containing zero or more intervals.
 
-               window must be declared as a double precision SpiceCell.
- 
+               `window' must be declared as a double precision SpiceCell.
+
+               CSPICE provides the following macro, which declares and
+               initializes the cell
+
+                  SPICEDOUBLE_CELL        ( window, WINDOWSZ );
+
+               where WINDOWSZ is the maximum capacity of `window'.
+
 -Detailed_Output
- 
-   The function returns SPICETRUE if the input point is an element of 
-   the input window---that is, if 
 
-      a(i)  <  point  <  b(i) 
-            -         - 
+   The function returns SPICETRUE if the input point is an element of
+   the input window --- that is, if
 
-   for some interval [ a(i), b(i) ] in window---and returns SPICEFALSE 
-   otherwise. 
- 
+      a(i)  <  point  <  b(i)
+            -         -
+
+   for some interval [ a(i), b(i) ] in `window' --- and returns SPICEFALSE
+   otherwise.
+
 -Parameters
- 
-   None. 
- 
--Exceptions
-  
-   1) If the input window does not have double precision type,
-      the error SPICE(TYPEMISMATCH) is signaled.
- 
--Files
- 
-   None. 
- 
--Particulars
- 
-   None. 
- 
--Examples
- 
-   Let a contain the intervals 
 
-      [ 1, 3 ]  [ 7, 11 ]  [ 23, 27 ] 
+   None.
+
+-Exceptions
+
+   1)  The cardinality of the input `window' must be even. Left
+       endpoints of stored intervals must be strictly greater than
+       preceding right endpoints. Right endpoints must be greater
+       than or equal to corresponding left endpoints. Invalid window
+       data are not diagnosed by this routine and may lead to
+       unpredictable results.
+
+   2)  If the `window' cell argument has a type other than
+       SpiceDouble, the error SPICE(TYPEMISMATCH) is signaled. The
+       function returns the value SPICEFALSE.
+
+-Files
+
+   None.
+
+-Particulars
+
+   None.
+
+-Examples
+
+   Let a contain the intervals
+
+      [ 1, 3 ]  [ 7, 11 ]  [ 23, 27 ]
 
    Then the following expressions take the value SPICETRUE
 
@@ -115,35 +130,45 @@
       wnelmd_c ( 29.0, &window );
 
 -Restrictions
- 
-   None. 
- 
+
+   None.
+
 -Literature_References
- 
-   None. 
- 
+
+   None.
+
 -Author_and_Institution
- 
-   N.J. Bachman    (JPL)
-   H.A. Neilan     (JPL) 
-   W.L. Taber      (JPL) 
-   I.M. Underwood  (JPL) 
- 
+
+   N.J. Bachman        (JPL)
+   J. Diaz del Rio     (ODC Space)
+   H.A. Neilan         (JPL)
+   W.L. Taber          (JPL)
+   I.M. Underwood      (JPL)
+
 -Version
- 
+
+   -CSPICE Version 1.0.1, 25-AUG-2021 (JDR)
+
+       Edited the header to comply with NAIF standard.
+
+       Extended description of argument "window" in -Detailed_Input to include
+       type and preferred declaration method.
+
+       Added entry #1 in -Exceptions section.
+
    -CSPICE Version 1.0.0, 29-JUL-2002 (NJB) (HAN) (WLT) (IMU)
 
 -Index_Entries
- 
-   element of a d.p. window 
- 
+
+   element of a d.p. window
+
 -&
 */
 
 { /* Begin wnelmd_c */
 
    /*
-   Local variables 
+   Local variables
    */
    SpiceBoolean            retval;
 
@@ -151,18 +176,17 @@
    /*
    Use discovery check-in.
 
-   Make sure cell data type is d.p. 
+   Make sure cell data type is d.p.
    */
-   CELLTYPECHK_VAL ( CHK_DISCOVER, 
-                     "wnelmd_c", SPICE_DP, window, SPICEFALSE );
+   CELLTYPECHK_VAL ( CHK_DISCOVER, "wnelmd_c", SPICE_DP, window, SPICEFALSE );
 
    /*
-   Initialize the cell if necessary. 
+   Initialize the cell if necessary.
    */
    CELLINIT ( window );
-   
+
    /*
-   Let the f2c'd routine do the work. 
+   Let the f2c'd routine do the work.
    */
    retval = wnelmd_ ( (doublereal * ) &point,
                       (doublereal * ) (window->base) );

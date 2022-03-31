@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure  TRACEG ( Trace of a matrix, general dimension ) */
+/* $Procedure TRACEG ( Trace of a matrix, general dimension ) */
 doublereal traceg_(doublereal *matrix, integer *ndim)
 {
     /* System generated locals */
@@ -20,7 +20,7 @@ doublereal traceg_(doublereal *matrix, integer *ndim)
 
 /* $ Abstract */
 
-/*      Return the trace of a square matrix of arbitrary dimension. */
+/*     Return the trace of a square matrix of arbitrary dimension. */
 
 /* $ Disclaimer */
 
@@ -53,82 +53,167 @@ doublereal traceg_(doublereal *matrix, integer *ndim)
 
 /* $ Keywords */
 
-/*      MATRIX */
+/*     MATRIX */
 
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*      VARIABLE  I/O  DESCRIPTION */
-/*      --------  ---  -------------------------------------------------- */
-/*      MATRIX     I     NDIM x NDIM matrix of double precision numbers. */
-/*      NDIM       I     Dimension of the matrix. */
-/*      TRACEG     O     The trace of MATRIX. */
+/*     VARIABLE  I/O  DESCRIPTION */
+/*     --------  ---  -------------------------------------------------- */
+/*     MATRIX     I     NDIM x NDIM matrix of double precision numbers. */
+/*     NDIM       I     Dimension of the matrix. */
+
+/*     The function returns the trace of the square matrix of arbitrary */
+/*     dimension MATRIX. */
 
 /* $ Detailed_Input */
 
-/*      MATRIX  is a double precision square matrix of arbitrary */
-/*              dimension.  The input matrix must be square or else */
-/*              the concept is meaningless. */
+/*     MATRIX   is a double precision square matrix of arbitrary */
+/*              dimension. The input matrix must be square or else the */
+/*              concept is meaningless. */
 
-/*      NDIM    is the dimension of MATRIX. */
+/*     NDIM     is the dimension of MATRIX. */
 
 /* $ Detailed_Output */
 
-/*      TRACEG  is the trace of MATRIX, i.e. it is the sum of the */
-/*              diagonal elements of MATRIX. */
+/*     The function returns the trace of MATRIX, i.e. it is the sum of */
+/*     the diagonal elements of MATRIX. */
 
 /* $ Parameters */
 
 /*     None. */
 
-/* $ Particulars */
-
-/*      TRACEG simply executes in FORTRAN code the following loop: */
-
-/*      TRACEG = Summation from I = 1 to NDIM of MATRIX(I,I) */
-
-/*      No error detection or correction is implemented within this */
-/*      function. */
-
-/* $ Examples */
-
-/*                            | 3   5   7 | */
-/*      Suppose that MATRIX = | 0  -2   8 |  (with NDIM = 3), then */
-/*                            | 3   0  -1 | */
-
-/*      TRACEG (MATRIX, 3) = 0.  (which is the sum of 3, -2 and -1). */
-
-/* $ Restrictions */
-
-/*      No checking is performed to guard against floating point overflow */
-/*      or underflow.  This routine should probably not be used if the */
-/*      input matrix is expected to have large double precision numbers */
-/*      along the diagonal. */
-
 /* $ Exceptions */
 
-/*      Error free. */
+/*     Error free. */
 
 /* $ Files */
 
-/*      None. */
+/*     None. */
 
-/* $ Author_and_Institution */
+/* $ Particulars */
 
-/*      W.L. Taber      (JPL) */
+/*     The code reflects precisely the following mathematical */
+/*     expression: */
+
+/*                   NDIM */
+/*                 .------ */
+/*                  \ */
+/*        TRACEG =   ) MATRIX(I,I) */
+/*                  / */
+/*                 '------ */
+/*                    I=1 */
+
+/*     No error detection or correction is implemented within this */
+/*     function. */
+
+/* $ Examples */
+
+/*     The numerical results shown for this example may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
+
+/*     1) Given a 4x4 double precision matrix, compute its trace. */
+
+
+/*        Example code begins here. */
+
+
+/*              PROGRAM TRACEG_EX1 */
+/*              IMPLICIT NONE */
+
+/*        C */
+/*        C     SPICELIB functions. */
+/*        C */
+/*              DOUBLE PRECISION      TRACEG */
+
+/*        C */
+/*        C     Local parameters. */
+/*        C */
+/*              INTEGER               NDIM */
+/*              PARAMETER           ( NDIM   = 4 ) */
+
+/*        C */
+/*        C     Local variables. */
+/*        C */
+/*              DOUBLE PRECISION      MATRIX ( NDIM, NDIM ) */
+
+/*              INTEGER               I */
+/*              INTEGER               J */
+
+/*        C */
+/*        C     Define MATRIX. */
+/*        C */
+/*              DATA                  MATRIX  / */
+/*             .                          3.D0,  0.D0,  4.D0,  0.D0, */
+/*             .                          5.D0, -2.D0,  0.D0,  0.D0, */
+/*             .                          7.D0,  8.D0, -1.D0,  1.D0, */
+/*             .                          3.D0,  1.D0,  0.D0,  0.D0  / */
+
+
+/*              WRITE(*,'(A)') 'Matrix:' */
+/*              DO I=1, NDIM */
+
+/*                 WRITE(*,'(4F6.1)') ( MATRIX(I,J), J=1,NDIM ) */
+
+/*              END DO */
+
+/*        C */
+/*        C     Compute the trace of MATRIX and display the result. */
+/*        C */
+/*              WRITE(*,*) */
+/*              WRITE(*,'(A,F4.1)') 'Trace: ', TRACEG ( MATRIX, NDIM ) */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*        Matrix: */
+/*           3.0   5.0   7.0   3.0 */
+/*           0.0  -2.0   8.0   1.0 */
+/*           4.0   0.0  -1.0   0.0 */
+/*           0.0   0.0   1.0   0.0 */
+
+/*        Trace:  0.0 */
+
+
+/* $ Restrictions */
+
+/*     1)  No checking is performed to guard against floating point */
+/*         overflow or underflow. This routine should probably not be */
+/*         used if the input matrix is expected to have large double */
+/*         precision numbers along the diagonal. */
 
 /* $ Literature_References */
 
-/*      None. */
+/*     None. */
+
+/* $ Author_and_Institution */
+
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
 
-/* -     SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+/* -    SPICELIB Version 1.1.0, 08-APR-2021 (JDR) */
 
-/*         Comment section for permuted index source lines was added */
-/*         following the header. */
+/*        Added IMPLICIT NONE statement. */
 
-/* -     SPICELIB Version 1.0.0, 31-JAN-1990 (WLT) */
+/*        Edited the header to comply with NAIF standard. Created */
+/*        complete code example based on existing fragment. Updated */
+/*        $Particulars to provide mathematical representation of the */
+/*        implemented algorithm. */
+
+/* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+
+/*        Comment section for permuted index source lines was added */
+/*        following the header. */
+
+/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (WLT) */
 
 /* -& */
 /* $ Index_Entries */
@@ -147,7 +232,7 @@ doublereal traceg_(doublereal *matrix, integer *ndim)
     for (i__ = 1; i__ <= i__1; ++i__) {
 	ret_val += matrix[(i__2 = i__ + i__ * matrix_dim1 - matrix_offset) < 
 		matrix_dim1 * matrix_dim2 && 0 <= i__2 ? i__2 : s_rnge("matr"
-		"ix", i__2, "traceg_", (ftnlen)133)];
+		"ix", i__2, "traceg_", (ftnlen)222)];
     }
     return ret_val;
 } /* traceg_ */

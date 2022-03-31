@@ -12,7 +12,7 @@ static integer c__4 = 4;
 static integer c__1 = 1;
 static integer c__17 = 17;
 
-/* $Procedure  SGSEQW ( Generic segements: Sequential writer. ) */
+/* $Procedure SGSEQW ( Generic segments: Sequential writer. ) */
 /* Subroutine */ int sgseqw_0_(int n__, integer *handle, doublereal *descr, 
 	char *segid, integer *nconst, doublereal *const__, integer *npkts, 
 	integer *pktsiz, doublereal *pktdat, integer *nrefs, doublereal *
@@ -110,7 +110,7 @@ static integer c__17 = 17;
 
 /* $ Required_Reading */
 
-/*     DAF Required Reading. */
+/*     DAF */
 
 /* $ Keywords */
 
@@ -121,188 +121,189 @@ static integer c__17 = 17;
 
 /*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
-/*      HANDLE    I    Handle of a DAF file opened with write access. */
-/*      DESCR     I    Descriptor for a generic segment. */
-/*      SEGID     I    Identifier for a generic segment. */
-/*      NCONST    I    Number of constant values in a generic segment. */
-/*      CONST     I    Array of constant values for a generic segment. */
-/*      NPKTS     I    Number of data packets to write to a segment. */
-/*      PKTSIZ    I    Size of fixed size packets or sizes of variable */
-/*                     size packets. */
-/*      PKTDAT    I    Array of packet data. */
-/*      NREFS     I    Number of reference values. */
-/*      REFDAT    I    Reference data. */
-/*      IDXTYP    I    Index type for the reference values. */
+/*     HANDLE    I    Handle of a DAF file opened with write access. */
+/*     DESCR     I    Descriptor for a generic segment. */
+/*     SEGID     I    Identifier for a generic segment. */
+/*     NCONST    I    Number of constant values in a generic segment. */
+/*     CONST     I    Array of constant values for a generic segment. */
+/*     NPKTS     I    Number of data packets to write to a segment. */
+/*     PKTSIZ    I    Size of fixed size packets or sizes of variable */
+/*                    size packets. */
+/*     PKTDAT    I    Array of packet data. */
+/*     NREFS     I    Number of reference values. */
+/*     REFDAT    I    Reference data. */
+/*     IDXTYP    I    Index type for the reference values. */
 
 /* $ Detailed_Input */
 
-/*      HANDLE   Handle of a DAF file opened with write access. This is */
-/*               the handle of the file in which a generic segment will */
-/*               be started, or the handle of a file in which a generic */
-/*               segment is currently being written. */
+/*     HANDLE   is the handle of a DAF file opened with write access. */
+/*              This is the handle of the file in which a generic segment */
+/*              will be started, or the handle of a file in which a */
+/*              generic segment is currently being written. */
 
-/*      DESCR    Descriptor for the generic segment that is being */
-/*               written. This is the packed form of the DAF double */
-/*               precision and integer summaries which contains ND double */
-/*               precision numbers and NI integers, respectively. */
+/*     DESCR    is the descriptor for the generic segment that is being */
+/*              written. This is the packed form of the DAF double */
+/*              precision and integer summaries which contains ND double */
+/*              precision numbers and NI integers, respectively. */
 
-/*      SEGID    Identifier for the generic segment that is being */
-/*               written. This is a character string containing at most */
-/*               NC printing ASCII characters where */
+/*     SEGID    is an identifier for the generic segment that is being */
+/*              written. This is a character string containing at most */
+/*              NC printing ASCII characters where */
 
-/*                                 /  ND + ( NI + 1 )  \ */
-/*                      NC =  8 *  | ----------------- | */
-/*                                 \         2         / */
+/*                                /  ND + ( NI + 1 )  \ */
+/*                     NC =  8 *  | ----------------- | */
+/*                                \         2         / */
 
-/*                SEGID may be blank. */
+/*               SEGID may be blank. */
 
-/*      NCONST   The number of constant values to be placed in the */
-/*               generic segment. */
+/*     NCONST   is the number of constant values to be placed in the */
+/*              generic segment. */
 
-/*      CONST    An array of NCONST constant values for the generic */
-/*               segment. */
+/*     CONST    is an array of NCONST constant values for the generic */
+/*              segment. */
 
-/*      NPKTS    Number of data packets to write to a generic segment. */
+/*     NPKTS    is the number of data packets to write to a generic */
+/*              segment. */
 
-/*      PKTSIZ   Size of fixed size packets or sizes of variable size */
-/*               packets. */
+/*     PKTSIZ   is the size of fixed size packets or sizes of variable */
+/*              size packets. */
 
-/*               The size of a packet is the number of double precision */
-/*               numbers it contains. */
+/*              The size of a packet is the number of double precision */
+/*              numbers it contains. */
 
-/*               When writing a segment with fixed size packets, only */
-/*               the first element of the array, PKTSIZ(1), is used, and */
-/*               it should contain the size of the fixed size packets. In */
-/*               this instance, the calling program need not declare this */
-/*               variable as an array of one integer; it may be declared */
-/*               as an integer variable. */
+/*              When writing a segment with fixed size packets, only */
+/*              the first element of the array, PKTSIZ(1), is used, and */
+/*              it should contain the size of the fixed size packets. In */
+/*              this instance, the calling program need not declare this */
+/*              variable as an array of one integer; it may be declared */
+/*              as an integer variable. */
 
-/*               When writing a segment with variable size packets, */
-/*               there must be an element in the array PKTSIZ for each of */
-/*               the data packets. */
+/*              When writing a segment with variable size packets, */
+/*              there must be an element in the array PKTSIZ for each of */
+/*              the data packets. */
 
-/*      PKTDAT   A singly dimensioned array containing the double */
-/*               precision data for the fixed or variable size data */
-/*               packets to be added to the generic segment associated */
-/*               with HANDLE. */
+/*     PKTDAT   is a singly dimensioned array containing the double */
+/*              precision data for the fixed or variable size data */
+/*              packets to be added to the generic segment associated */
+/*              with HANDLE. */
 
-/*               For fixed size data packets, PKTDAT will have the */
-/*               following structure: */
+/*              For fixed size data packets, PKTDAT will have the */
+/*              following structure: */
 
-/*               Packet #  Range of locations for the packet data. */
-/*               --------  --------------------------------------------- */
+/*                 Packet #  Range of locations for the packet data. */
+/*                 --------  ------------------------------------------ */
 
-/*                     1   PKTDAT(1)              to PKTDAT(PS) */
-/*                     2   PKTDAT(PS+1)           to PKTDAT(2*PS) */
-/*                     3   PKTDAT(2*PS+1)         to PKTDAT(3*PS) */
-/*                     4   PKTDAT(3*PS+1)         to PKTDAT(4*PS) */
+/*                    1      PKTDAT(1)              to PKTDAT(PS) */
+/*                    2      PKTDAT(PS+1)           to PKTDAT(2*PS) */
+/*                    3      PKTDAT(2*PS+1)         to PKTDAT(3*PS) */
+/*                    4      PKTDAT(3*PS+1)         to PKTDAT(4*PS) */
 
-/*                                          . */
-/*                                          . */
-/*                                          . */
+/*                                            . */
+/*                                            . */
+/*                                            . */
 
-/*                 NPKTS   PKTDAT((NPKTS-1)*PS+1) to PKTDAT(NPKTS*PS) */
+/*                   NPKTS   PKTDAT((NPKTS-1)*PS+1) to PKTDAT(NPKTS*PS) */
 
-/*               where PS = PKTSIZ(1). */
+/*              where PS = PKTSIZ(1). */
 
-/*               For variable size data packets, PKTDAT will have the */
-/*               following structure: */
+/*              For variable size data packets, PKTDAT will have the */
+/*              following structure: */
 
-/*               Packet #  Range of locations for the packet data. */
-/*               --------  --------------------------------------------- */
+/*                 Packet #  Range of locations for the packet data. */
+/*                 --------  ------------------------------------------ */
 
-/*                     1   PKTDAT(1)           to PKTDAT(P(1)) */
-/*                     2   PKTDAT(P(1)+1)      to PKTDAT(P(2)) */
-/*                     3   PKTDAT(P(2)+1)      to PKTDAT(P(3)) */
-/*                     4   PKTDAT(P(3)+1)      to PKTDAT(P(4)) */
+/*                    1      PKTDAT(1)           to PKTDAT(P(1)) */
+/*                    2      PKTDAT(P(1)+1)      to PKTDAT(P(2)) */
+/*                    3      PKTDAT(P(2)+1)      to PKTDAT(P(3)) */
+/*                    4      PKTDAT(P(3)+1)      to PKTDAT(P(4)) */
 
-/*                                          . */
-/*                                          . */
-/*                                          . */
+/*                                            . */
+/*                                            . */
+/*                                            . */
 
-/*                 NPKTS   PKTDAT(P(NPKTS-1)+1) to PKTDAT(P(NPKTS)) */
+/*                   NPKTS   PKTDAT(P(NPKTS-1)+1) to PKTDAT(P(NPKTS)) */
 
-/*                                I */
-/*                               --- */
-/*               where P(I) =    >   PKTSIZ(K). */
-/*                               --- */
-/*                              K = 1 */
+/*                               I */
+/*                              --- */
+/*              where P(I) =    >   PKTSIZ(K). */
+/*                              --- */
+/*                             K = 1 */
 
-/*      NREFS    Number of reference values. */
+/*     NREFS    is the number of reference values. */
 
-/*               For implicitly indexed packets, NREFS must have a value */
-/*               of two (2). */
+/*              For implicitly indexed packets, NREFS must have a value */
+/*              of two (2). */
 
-/*               When writing packets to a generic segment which uses an */
-/*               implicit index type, the value specified by NREFS is */
-/*               used only on the first call to SGWFPK or SGWVPK. On all */
-/*               subsequent calls to these subroutines for a particular */
-/*               implicitly indexed generic segment, the value of NREFS */
-/*               is ignored. */
+/*              When writing packets to a generic segment which uses an */
+/*              implicit index type, the value specified by NREFS is */
+/*              used only on the first call to SGWFPK or SGWVPK. On all */
+/*              subsequent calls to these subroutines for a particular */
+/*              implicitly indexed generic segment, the value of NREFS */
+/*              is ignored. */
 
-/*               For explicitly indexed packets, NREFS must be equal to */
-/*               NPKTS; there should be a reference value for each data */
-/*               packet being written to the generic segment. */
+/*              For explicitly indexed packets, NREFS must be equal to */
+/*              NPKTS; there should be a reference value for each data */
+/*              packet being written to the generic segment. */
 
-/*               When writing packets to a segment which uses an explicit */
-/*               index type, the value specified by NREFS is used on */
-/*               every call to SGWFPK or SGWVPK and it must always be */
-/*               equal to NPKTS. */
+/*              When writing packets to a segment which uses an explicit */
+/*              index type, the value specified by NREFS is used on */
+/*              every call to SGWFPK or SGWVPK and it must always be */
+/*              equal to NPKTS. */
 
-/*      REFDAT   Reference data values. */
+/*     REFDAT   is the reference data values. */
 
-/*               For implicitly indexed packets, there must be two (2) */
-/*               values. The values represent a starting value, which */
-/*               will have an index of 1, and a step size between */
-/*               reference values, which are used to compute an index and */
-/*               a reference value associated with a specified key value. */
+/*              For implicitly indexed packets, there must be two (2) */
+/*              values. The values represent a starting value, which */
+/*              will have an index of 1, and a step size between */
+/*              reference values, which are used to compute an index and */
+/*              a reference value associated with a specified key value. */
 
-/*               In order to avoid, or at least minimize, numerical */
-/*               difficulties associated with computing index values for */
-/*               generic segments with implicit index types, the value of */
-/*               the stepsize must be an integer, i.e., DINT(REFDAT(2)) */
-/*               must equal REFDAT(2). In this case, we also recommend */
-/*               that REFDAT(1) be an integer, although this is not */
-/*               enforced. */
+/*              In order to avoid, or at least minimize, numerical */
+/*              difficulties associated with computing index values for */
+/*              generic segments with implicit index types, the value of */
+/*              the step size must be an integer, i.e., DINT(REFDAT(2)) */
+/*              must equal REFDAT(2). In this case, we also recommend */
+/*              that REFDAT(1) be an integer, although this is not */
+/*              enforced. */
 
-/*               When writing packets to a generic segment which uses an */
-/*               implicit index type, the values specified by REFDAT are */
-/*               used only on the first call to SGWFPK or SGWVPK. On all */
-/*               subsequent calls to these subroutines for a particular */
-/*               implicitly indexed generic segment REFDAT is ignored. */
+/*              When writing packets to a generic segment which uses an */
+/*              implicit index type, the values specified by REFDAT are */
+/*              used only on the first call to SGWFPK or SGWVPK. On all */
+/*              subsequent calls to these subroutines for a particular */
+/*              implicitly indexed generic segment REFDAT is ignored. */
 
-/*               For explicitly indexed packets, there must be NPKTS */
-/*               reference values and the values must be in increasing */
-/*               order: */
+/*              For explicitly indexed packets, there must be NPKTS */
+/*              reference values and the values must be in increasing */
+/*              order: */
 
-/*                  REFDAT(I) < REFDAT(I+1), I = 1, NPKTS-1 */
+/*                 REFDAT(I) < REFDAT(I+1), I = 1, NPKTS-1 */
 
-/*               When writing packets to a segment which uses an explicit */
-/*               index type, the values specified by REFDAT are used on */
-/*               every call to SGWFPK or SGWVPK. On all calls to these */
-/*               subroutines after the first, the value of REFDAT(1) must */
-/*               be strictly greater than than the value of REFDAT(NPKTS) */
-/*               from the previous call. This preserves the ordering of */
-/*               the reference values for the entire segment. */
+/*              When writing packets to a segment which uses an explicit */
+/*              index type, the values specified by REFDAT are used on */
+/*              every call to SGWFPK or SGWVPK. On all calls to these */
+/*              subroutines after the first, the value of REFDAT(1) must */
+/*              be strictly greater than than the value of REFDAT(NPKTS) */
+/*              from the previous call. This preserves the ordering of */
+/*              the reference values for the entire segment. */
 
-/*      IDXTYP   Index type to use for the reference values. */
+/*     IDXTYP   is the index type to use for the reference values. */
 
-/*               Two forms of indexing are provided: */
+/*              Two forms of indexing are provided: */
 
-/*                  1) An implicit form of indexing based on using two */
-/*                     values, a starting value, which will have an index */
-/*                     of 1, and a step size between reference values, */
-/*                     which are used to compute an index and a reference */
-/*                     value associated with a specified key value. See */
-/*                     the descriptions of the implicit types below for */
-/*                     the particular formula used in each case. */
+/*                 1) An implicit form of indexing based on using two */
+/*                    values, a starting value, which will have an index */
+/*                    of 1, and a step size between reference values, */
+/*                    which are used to compute an index and a reference */
+/*                    value associated with a specified key value. See */
+/*                    the descriptions of the implicit types below for */
+/*                    the particular formula used in each case. */
 
-/*                  2) An explicit form of indexing based on a reference */
-/*                     value for each data packet. */
+/*                 2) An explicit form of indexing based on a reference */
+/*                    value for each data packet. */
 
-/*               See the chapter on Generic segments in the DAF required */
-/*               or the include file 'sgparam.inc' for more details */
-/*               about the index types that are available. */
+/*              See the chapter on Generic segments in the DAF required */
+/*              or the include file 'sgparam.inc' for more details */
+/*              about the index types that are available. */
 
 /* $ Detailed_Output */
 
@@ -319,16 +320,15 @@ static integer c__17 = 17;
 
 /* $ Exceptions */
 
-/*     1) If this subroutine is called directly rather than through one */
-/*        of its entry points, the error SPICE(BOGUSENTRY) will be */
-/*        signalled. */
+/*     1)  If this subroutine is called directly rather than through one */
+/*         of its entry points, the error SPICE(BOGUSENTRY) is signaled. */
 
-/*     See the individual entry points for descriptions of their */
-/*     exceptions. */
+/*     2)  See the individual entry points for descriptions of their */
+/*         exceptions. */
 
 /* $ Files */
 
-/*     See HANDLE in the $ Detailed_Input section above. */
+/*     See HANDLE in the $Detailed_Input section above. */
 
 /* $ Particulars */
 
@@ -475,7 +475,7 @@ static integer c__17 = 17;
 /*     returned in fixed size blocks from a black-box that fills a local */
 /*     buffer with data and always returned the entire buffer when data */
 /*     is requested, e.g., an instrument that measures the concentrations */
-/*     of carbon dioxide, sulfer dioxide, ozone, and other constituents */
+/*     of carbon dioxide, sulfur dioxide, ozone, and other constituents */
 /*     of the air. In the second case, the data is returned in variably */
 /*     sized blocks from a black-box, e.g., an algorithm which integrates */
 /*     a function using polynomials of varying degree; different numbers */
@@ -559,8 +559,8 @@ static integer c__17 = 17;
 /*        C                  complete data packet. */
 /*        C        EXPCLS -- The type of indexing scheme that we will use */
 /*        C                  for searching the segment to obtain a data */
-/*        C                  packet. In this case, we are going to use */
-/*        C                  an exlicit index, which requires a reference */
+/*        C                  packet. In this case, we are going to use an */
+/*        C                  explicit index, which requires a reference */
 /*        C                  value for each data packet, and when */
 /*        C                  searching for a data packet we will choose */
 /*        C                  the packet with a reference value closest to */
@@ -604,7 +604,7 @@ static integer c__17 = 17;
 /*        reference values other than that they were increasing. We now */
 /*        will assume that the reference values are also equally spaced */
 /*        and that we have a priori values for a beginning reference */
-/*        value, BEGIN_REF, and a stepsize, STEP_SIZE, that is the */
+/*        value, BEGIN_REF, and a step size, STEP_SIZE, that is the */
 /*        difference between two consecutive reference values. We have */
 
 /*           BEGIN_REF <= REF <= BEGIN_REF + (N-1) * STEP_SIZE */
@@ -614,7 +614,7 @@ static integer c__17 = 17;
 /*        reference value returned. Under these assumptions we can use an */
 /*        implicit index for the data packets which will provide a more */
 /*        space efficient method for putting the data packets into a */
-/*        generic segment.  We repeat the example under these assumptions */
+/*        generic segment. We repeat the example under these assumptions */
 /*        using an implicit indexing method. Nothing else has changed. */
 
 /*        The index for a data packet in the implicitly indexed generic */
@@ -751,8 +751,8 @@ static integer c__17 = 17;
 /*        C                  complete data packet. */
 /*        C        EXPCLS -- The type of indexing scheme that we will use */
 /*        C                  for searching the segment to obtain a data */
-/*        C                  packet. In this case, we are going to use */
-/*        C                  an exlicit index, which requires a reference */
+/*        C                  packet. In this case, we are going to use an */
+/*        C                  explicit index, which requires a reference */
 /*        C                  value for each data packet, and when */
 /*        C                  searching for a data packet we will choose */
 /*        C                  the packet with a reference value closest to */
@@ -826,8 +826,8 @@ static integer c__17 = 17;
 /*        C                  with all of the packets in a segment. */
 /*        C        EXPCLS -- The type of indexing scheme that we will use */
 /*        C                  for searching the segment to obtain a data */
-/*        C                  packet. In this case, we are going to use */
-/*        C                  an exlicit index, which requires a reference */
+/*        C                  packet. In this case, we are going to use an */
+/*        C                  explicit index, which requires a reference */
 /*        C                  value for each data packet, and when */
 /*        C                  searching for a data packet we will choose */
 /*        C                  the packet with a reference value closest to */
@@ -871,7 +871,7 @@ static integer c__17 = 17;
 /*        reference values other than that they were increasing. We now */
 /*        will assume that the reference values are also equally spaced */
 /*        and that we have a priori values for a beginning reference */
-/*        value, BEGIN_REF, and a stepsize, STEP_SIZE, that is the */
+/*        value, BEGIN_REF, and a step size, STEP_SIZE, that is the */
 /*        difference between two consecutive reference values. We have */
 
 /*           BEGIN_REF <= REF <= BEGIN_REF + (N-1) * STEP_SIZE */
@@ -881,7 +881,7 @@ static integer c__17 = 17;
 /*        reference value returned. Putting all of this together means */
 /*        that we can use an implicit index for the data packets which */
 /*        will provide a more space efficient method for putting the data */
-/*        packets into a generic segment.  We repeat the example under */
+/*        packets into a generic segment. We repeat the example under */
 /*        these assumptions using an implicit indexing method. Nothing */
 /*        else has changed. */
 
@@ -1012,8 +1012,8 @@ static integer c__17 = 17;
 /*        C                  with all of the packets in a segment. */
 /*        C        EXPCLS -- The type of indexing scheme that we will use */
 /*        C                  for searching the segment to obtain a data */
-/*        C                  packet. In this case, we are going to use */
-/*        C                  an exlicit index, which requires a reference */
+/*        C                  packet. In this case, we are going to use an */
+/*        C                  explicit index, which requires a reference */
 /*        C                  value for each data packet, and when */
 /*        C                  searching for a data packet we will choose */
 /*        C                  the packet with a reference value closest to */
@@ -1227,19 +1227,26 @@ static integer c__17 = 17;
 
 /* $ Restrictions */
 
-/*     See the individual entry points for any restrictions thay may */
-/*     have. */
-
-/* $ Author_and_Institution */
-
-/*     K.R. Gehringer    (JPL) */
-/*     W.L. Taber        (JPL) */
+/*     1)  See the individual entry points for any restrictions they may */
+/*         have. */
 
 /* $ Literature_References */
 
 /*     None. */
 
+/* $ Author_and_Institution */
+
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     E.D. Wright        (JPL) */
+
 /* $ Version */
+
+/* -    SPICELIB Version 1.2.1, 27-OCT-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.2.0, 07-SEP-2001 (EDW) */
 
@@ -1737,7 +1744,7 @@ static integer c__17 = 17;
     sigerr_("SPICE(BOGUSENTRY)", (ftnlen)17);
     chkout_("SGSEQW", (ftnlen)6);
     return 0;
-/* $Procedure SGBWFS ( Generic segements: Begin a fixed size segment. ) */
+/* $Procedure SGBWFS ( Generic segments: Begin a fixed size segment. ) */
 
 L_sgbwfs:
 /* $ Abstract */
@@ -1772,13 +1779,15 @@ L_sgbwfs:
 
 /* $ Required_Reading */
 
-/*     DAF Required Reading. */
+/*     DAF */
 
 /* $ Keywords */
 
 /*     GENERIC SEGMENTS */
 
 /* $ Declarations */
+
+/*     IMPLICIT NONE */
 
 /*     INTEGER               HANDLE */
 /*     DOUBLE PRECISION      DESCR  ( * ) */
@@ -1792,62 +1801,62 @@ L_sgbwfs:
 
 /*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
-/*      HANDLE    I    Handle of a DAF file opened with write access. */
-/*      DESCR     I    Descriptor for a generic segment. */
-/*      SEGID     I    Identifier for a generic segment. */
-/*      NCONST    I    Number of constant values in a generic segment. */
-/*      CONST     I    Array of constant values for a generic segment. */
-/*      PKTSIZ    I    Size of the data packets. */
-/*      IDXTYP    I    Index type for the reference values. */
+/*     HANDLE    I    Handle of a DAF file opened with write access. */
+/*     DESCR     I    Descriptor for a generic segment. */
+/*     SEGID     I    Identifier for a generic segment. */
+/*     NCONST    I    Number of constant values in a generic segment. */
+/*     CONST     I    Array of constant values for a generic segment. */
+/*     PKTSIZ    I    Size of the data packets. */
+/*     IDXTYP    I    Index type for the reference values. */
 
 /* $ Detailed_Input */
 
-/*      HANDLE   Handle of a DAF file opened with write access. This is */
-/*               the handle of the file in which a generic segment will */
-/*               be written. */
+/*     HANDLE   is the handle of a DAF file opened with write access. */
+/*              This is the handle of the file in which a generic segment */
+/*              will be written. */
 
-/*      DESCR    Descriptor for a segment that is being written. This is */
-/*               the packed form of the DAF double precision and integer */
-/*               summaries which contain ND double precision numbers and */
-/*               NI integers. */
+/*     DESCR    is the descriptor for a segment that is being written. */
+/*              This is the packed form of the DAF double precision and */
+/*              integer summaries which contain ND double precision */
+/*              numbers and NI integers. */
 
-/*      SEGID    Identifier for a segment that is being written. This is */
-/*               a character string containing at most NC printing ASCII */
-/*               characters where */
+/*     SEGID    is an identifier for a segment that is being written. */
+/*              This is a character string containing at most NC printing */
+/*              ASCII characters where */
 
-/*                                 /  ND + ( NI + 1 )  \ */
-/*                      NC =  8 *  | ----------------- | */
-/*                                 \         2         / */
+/*                                /  ND + ( NI + 1 )  \ */
+/*                     NC =  8 *  | ----------------- | */
+/*                                \         2         / */
 
-/*                SEGID may be blank. */
+/*               SEGID may be blank. */
 
-/*      NCONST   The number of constant values to be placed in a segment. */
+/*     NCONST   is the number of constant values to be placed in a */
+/*              segment. */
 
-/*      CONST    An array of NCONST constant values for a segment. */
+/*     CONST    is an array of NCONST constant values for a segment. */
 
-/*      PKTSIZ   Size of fixed size packets. The size of a packet */
-/*               is the number of double precision numbers contained in */
-/*               the data packet. */
+/*     PKTSIZ   is the size of fixed size packets. The size of a packet */
+/*              is the number of double precision numbers contained in */
+/*              the data packet. */
 
-/*      IDXTYP   Index type to use for the reference values. */
+/*     IDXTYP   is the index type to use for the reference values. */
 
-/*               Two forms of indexing are provided: */
+/*              Two forms of indexing are provided: */
 
-/*                  1) An implicit form of indexing based on using two */
-/*                     values, a starting value, which will have an index */
-/*                     of 1, and a step size between reference values, */
-/*                     which are used to compute an index and a reference */
-/*                     value associated with a specified key value. See */
-/*                     the descriptions of the implicit types below for */
-/*                     the particular formula used in each case. */
+/*                 1) An implicit form of indexing based on using two */
+/*                    values, a starting value, which will have an index */
+/*                    of 1, and a step size between reference values, */
+/*                    which are used to compute an index and a reference */
+/*                    value associated with a specified key value. See */
+/*                    the descriptions of the implicit types below for */
+/*                    the particular formula used in each case. */
 
-/*                  2) An explicit form of indexing based on a reference */
-/*                     value for each data packet. */
+/*                 2) An explicit form of indexing based on a reference */
+/*                    value for each data packet. */
 
-/*               See the chapter on generic segments in the DAF required */
-/*               or the include file 'sgparam.inc' for more details */
-/*               about the index types that are available. */
-
+/*              See the chapter on generic segments in the DAF required */
+/*              or the include file 'sgparam.inc' for more details */
+/*              about the index types that are available. */
 
 /* $ Detailed_Output */
 
@@ -1860,32 +1869,32 @@ L_sgbwfs:
 
 /* $ Exceptions */
 
-/*     1) If this routine is called more than once for a particular file */
-/*        and segment, the error SPICE(CALLEDOUTOFORDER) will be */
-/*        signalled. */
+/*     1)  If this routine is called more than once for a particular file */
+/*         and segment, the error SPICE(CALLEDOUTOFORDER) is signaled. */
 
-/*     2) If the length of the segment identifier, SEGID, is greater than */
-/*        NC, as determined from the ND and NI values for a particular */
-/*        DAF file, the error SPICE(SEGIDTOOLONG) will be signalled. */
+/*     2)  If the length of the segment identifier, SEGID, is greater */
+/*         than NC, as determined from the ND and NI values for a */
+/*         particular DAF file, the error SPICE(SEGIDTOOLONG) is */
+/*         signaled. */
 
-/*     3) If the segment identifier contains nonprinting characters, the */
-/*        error SPICE(NONPRINTINGCHARS) will be signalled. */
+/*     3)  If the segment identifier contains nonprinting characters, the */
+/*         error SPICE(NONPRINTINGCHARS) is signaled. */
 
-/*     4) If the number of constant values, NCONST, is negative, the */
-/*        error SPICE(NUMCONSTANTSNEG) will be signalled. */
+/*     4)  If the number of constant values, NCONST, is negative, the */
+/*         error SPICE(NUMCONSTANTSNEG) is signaled. */
 
-/*     5) If the packet size, PKTSIZ, is not positive, the error */
-/*        SPICE(NONPOSPACKETSIZE) will be signalled. */
+/*     5)  If the packet size, PKTSIZ, is not positive, the error */
+/*         SPICE(NONPOSPACKETSIZE) is signaled. */
 
-/*     6) If the index type for the reference values is not recognized, */
-/*        the error SPICE(UNKNOWNINDEXTYPE) will be signalled. */
+/*     6)  If the index type for the reference values is not recognized, */
+/*         the error SPICE(UNKNOWNINDEXTYPE) is signaled. */
 
-/*     7) If the file table is full, the error SPICE(FILETABLEFULL) will */
-/*        be signalled. */
+/*     7)  If the file table is full, the error SPICE(FILETABLEFULL) is */
+/*         signaled. */
 
 /* $ Files */
 
-/*     See HANDLE in the $ Detailed_Input section. */
+/*     See HANDLE in the $Detailed_Input section. */
 
 /* $ Particulars */
 
@@ -1894,8 +1903,8 @@ L_sgbwfs:
 
 /* $ Examples */
 
-/*     See the $ Examples section in the header for the main subroutine. */
-/*     It contains examples wich demonstrate the use of the entry points */
+/*     See the $Examples section in the header for the main subroutine. */
+/*     It contains examples which demonstrate the use of the entry points */
 /*     in the generic segments sequential writer. The entry points which */
 /*     comprise the generic segments sequential writer must be used */
 /*     together in the proper manner. Rather than repeating the examples */
@@ -1905,19 +1914,23 @@ L_sgbwfs:
 
 /*     None. */
 
-/* $ Author_and_Institution */
-
-/*     K.R. Gehringer    (JPL) */
-/*     W.L. Taber        (JPL) */
-
 /* $ Literature_References */
 
 /*     None. */
 
+/* $ Author_and_Institution */
+
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
+/*     W.L. Taber         (JPL) */
+
 /* $ Version */
 
-/* -    SPICELIB Version 1.0.0, 05-APR-1995 (KRG) (WLT) */
+/* -    SPICELIB Version 1.0.1, 03-JUN-2021 (JDR) */
 
+/*        Edited the header to comply with NAIF standard. */
+
+/* -    SPICELIB Version 1.0.0, 05-APR-1995 (KRG) (WLT) */
 
 /* -& */
 /* $ Index_Entries */
@@ -1947,7 +1960,7 @@ L_sgbwfs:
 /*     that. */
 
 /*     Check to see if the file attached to the handle is open for */
-/*     writing. If not, an error is signalled. */
+/*     writing. If not, an error is signaled. */
 
     dafsih_(handle, "WRITE", (ftnlen)5);
     if (failed_()) {
@@ -2114,44 +2127,44 @@ L_sgbwfs:
 
     ++nft;
     ftityp[(i__1 = nft - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge("ftityp", i__1, 
-	    "sgseqw_", (ftnlen)1781)] = *idxtyp;
+	    "sgseqw_", (ftnlen)1799)] = *idxtyp;
     ftpksz[(i__1 = nft - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge("ftpksz", i__1, 
-	    "sgseqw_", (ftnlen)1782)] = pktsiz[0];
+	    "sgseqw_", (ftnlen)1800)] = pktsiz[0];
     ftmxsz[(i__1 = nft - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge("ftmxsz", i__1, 
-	    "sgseqw_", (ftnlen)1783)] = 0;
+	    "sgseqw_", (ftnlen)1801)] = 0;
     ftncon[(i__1 = nft - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge("ftncon", i__1, 
-	    "sgseqw_", (ftnlen)1785)] = *nconst;
+	    "sgseqw_", (ftnlen)1803)] = *nconst;
     ftnpkt[(i__1 = nft - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge("ftnpkt", i__1, 
-	    "sgseqw_", (ftnlen)1786)] = 0;
+	    "sgseqw_", (ftnlen)1804)] = 0;
     ftnref[(i__1 = nft - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge("ftnref", i__1, 
-	    "sgseqw_", (ftnlen)1787)] = 0;
+	    "sgseqw_", (ftnlen)1805)] = 0;
     ftnres[(i__1 = nft - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge("ftnres", i__1, 
-	    "sgseqw_", (ftnlen)1788)] = 0;
+	    "sgseqw_", (ftnlen)1806)] = 0;
     ftexpl[(i__1 = nft - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge("ftexpl", i__1, 
-	    "sgseqw_", (ftnlen)1790)] = explct;
+	    "sgseqw_", (ftnlen)1808)] = explct;
     ftfixd[(i__1 = nft - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge("ftfixd", i__1, 
-	    "sgseqw_", (ftnlen)1792)] = fxdseg;
+	    "sgseqw_", (ftnlen)1810)] = fxdseg;
     fthan[(i__1 = nft - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge("fthan", i__1, 
-	    "sgseqw_", (ftnlen)1794)] = *handle;
+	    "sgseqw_", (ftnlen)1812)] = *handle;
     ftbadr[(i__1 = nft - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge("ftbadr", i__1, 
-	    "sgseqw_", (ftnlen)1795)] = begadr;
+	    "sgseqw_", (ftnlen)1813)] = begadr;
     ftrefs[(i__1 = (nft << 1) - 2) < 40 && 0 <= i__1 ? i__1 : s_rnge("ftrefs",
-	     i__1, "sgseqw_", (ftnlen)1797)] = 0.;
+	     i__1, "sgseqw_", (ftnlen)1815)] = 0.;
     ftrefs[(i__1 = (nft << 1) - 1) < 40 && 0 <= i__1 ? i__1 : s_rnge("ftrefs",
-	     i__1, "sgseqw_", (ftnlen)1798)] = 0.;
+	     i__1, "sgseqw_", (ftnlen)1816)] = 0.;
     if (explct) {
 	ftoff[(i__1 = nft - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge("ftoff", 
-		i__1, "sgseqw_", (ftnlen)1801)] = 1;
+		i__1, "sgseqw_", (ftnlen)1819)] = 1;
     } else {
 	ftoff[(i__1 = nft - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge("ftoff", 
-		i__1, "sgseqw_", (ftnlen)1803)] = 0;
+		i__1, "sgseqw_", (ftnlen)1821)] = 0;
     }
     lsthan = *handle;
     index = nft;
     ++numfxd;
     chkout_("SGBWFS", (ftnlen)6);
     return 0;
-/* $Procedure SGBWVS ( Generic segements: Begin a variable size segment. ) */
+/* $Procedure SGBWVS ( Generic segments: Begin a variable size segment. ) */
 
 L_sgbwvs:
 /* $ Abstract */
@@ -2186,13 +2199,15 @@ L_sgbwvs:
 
 /* $ Required_Reading */
 
-/*     DAF Required Reading. */
+/*     DAF */
 
 /* $ Keywords */
 
 /*     GENERIC SEGMENTS */
 
 /* $ Declarations */
+
+/*     IMPLICIT NONE */
 
 /*     INTEGER               HANDLE */
 /*     DOUBLE PRECISION      DESCR  ( * ) */
@@ -2205,56 +2220,57 @@ L_sgbwvs:
 
 /*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
-/*      HANDLE    I    Handle of a DAF file opened with write access. */
-/*      DESCR     I    Descriptor for a segment. */
-/*      SEGID     I    Identifier for a segment. */
-/*      NCONST    I    Number of constant values in a segment. */
-/*      CONST     I    Array of constant values for a segment. */
-/*      IDXTYP    I    Index type for the reference values. */
+/*     HANDLE    I    Handle of a DAF file opened with write access. */
+/*     DESCR     I    Descriptor for a segment. */
+/*     SEGID     I    Identifier for a segment. */
+/*     NCONST    I    Number of constant values in a segment. */
+/*     CONST     I    Array of constant values for a segment. */
+/*     IDXTYP    I    Index type for the reference values. */
 
 /* $ Detailed_Input */
 
-/*      HANDLE   Handle of a DAF file opened with write access. This is */
-/*               the handle of the file in which a generic segment will */
-/*               be written. */
+/*     HANDLE   is the handle of a DAF file opened with write access. */
+/*              This is the handle of the file in which a generic segment */
+/*              will be written. */
 
-/*      DESCR    Descriptor for a segment that is being written. This is */
-/*               the packed form of the DAF double precision and integer */
-/*               summaries which contain ND double precision numbers and */
-/*               NI integers. */
+/*     DESCR    is the descriptor for a segment that is being written. */
+/*              This is the packed form of the DAF double precision and */
+/*              integer summaries which contain ND double precision */
+/*              numbers and NI integers. */
 
-/*      SEGID    Identifier for a segment that is being written. This is */
-/*               a character string containing at most NC printing ASCII */
-/*               characters where */
+/*     SEGID    is an identifier for a segment that is being written. */
+/*              This is a character string containing at most NC printing */
+/*              ASCII characters where */
 
-/*                                 /  ND + ( NI + 1 )  \ */
-/*                      NC =  8 *  | ----------------- | */
-/*                                 \         2         / */
+/*                                /  ND + ( NI + 1 )  \ */
+/*                     NC =  8 *  | ----------------- | */
+/*                                \         2         / */
 
-/*                SEGID may be blank. */
+/*               SEGID may be blank. */
 
-/*      NCONST   The number of constant values to be placed in a segment. */
+/*     NCONST   is the number of constant values to be placed in a */
+/*              segment. */
 
-/*      CONST    An array of NCONST constant values for a segment. */
+/*     CONST    is an array of NCONST constant values for a segment. */
 
-/*      IDXTYP   Index type to use for the reference values. */
+/*     IDXTYP   is the index type to use for the reference values. */
 
-/*               Two forms of indexing are provided: */
+/*              Two forms of indexing are provided: */
 
-/*                  1) An implicit form of indexing based on using two */
-/*                     values, a starting value, which will have an index */
-/*                     of 1, and a step size between reference values, */
-/*                     which are used to compute an index and a reference */
-/*                     value associated with a specified key value. See */
-/*                     the descriptions of the implicit types below for */
-/*                     the particular formula used in each case. */
+/*                 1) An implicit form of indexing based on using two */
+/*                    values, a starting value, which will have an index */
+/*                    of 1, and a step size between reference values, */
+/*                    which are used to compute an index and a reference */
+/*                    value associated with a specified key value. See */
+/*                    the descriptions of the implicit types below for */
+/*                    the particular formula used in each case. */
 
-/*                  2) An explicit form of indexing based on a reference */
-/*                     value for each data packet. */
+/*                 2) An explicit form of indexing based on a reference */
+/*                    value for each data packet. */
 
-/*               See the chapter on generic segments in the DAF required */
-/*               or the include file 'sgparam.inc' for more details */
-/*               about the index types that are available. */
+/*              See the chapter on generic segments in the DAF required */
+/*              or the include file 'sgparam.inc' for more details */
+/*              about the index types that are available. */
 
 /* $ Detailed_Output */
 
@@ -2267,29 +2283,29 @@ L_sgbwvs:
 
 /* $ Exceptions */
 
-/*     1) If this routine is called more than once for a particular file */
-/*        and segment, the error SPICE(CALLEDOUTOFORDER) will be */
-/*        signalled. */
+/*     1)  If this routine is called more than once for a particular file */
+/*         and segment, the error SPICE(CALLEDOUTOFORDER) is signaled. */
 
-/*     2) If the length of the segment identifier, SEGID, is greater than */
-/*        NC, as determined from the ND and NI values for a particular */
-/*        DAF file, the error SPICE(SEGIDTOOLONG) will be signalled. */
+/*     2)  If the length of the segment identifier, SEGID, is greater */
+/*         than NC, as determined from the ND and NI values for a */
+/*         particular DAF file, the error SPICE(SEGIDTOOLONG) is */
+/*         signaled. */
 
-/*     3) If the segment identifier contains nonprinting characters, the */
-/*        error SPICE(NONPRINTINGCHARS) will be signalled. */
+/*     3)  If the segment identifier contains nonprinting characters, the */
+/*         error SPICE(NONPRINTINGCHARS) is signaled. */
 
-/*     4) If the number of constant values, NCONST, is negative, the */
-/*        error SPICE(NUMCONSTANTSNEG) will be signalled. */
+/*     4)  If the number of constant values, NCONST, is negative, the */
+/*         error SPICE(NUMCONSTANTSNEG) is signaled. */
 
-/*     5) If the index type for the reference values is not recognized, */
-/*        the error SPICE(UNKNOWNINDEXTYPE) will be signalled. */
+/*     5)  If the index type for the reference values is not recognized, */
+/*         the error SPICE(UNKNOWNINDEXTYPE) is signaled. */
 
-/*     6) If the file table is full, the error SPICE(FILETABLEFULL) will */
-/*        be signalled. */
+/*     6)  If the file table is full, the error SPICE(FILETABLEFULL) is */
+/*         signaled. */
 
 /* $ Files */
 
-/*     See HANDLE in the $ Detailed_Input section. */
+/*     See HANDLE in the $Detailed_Input section. */
 
 /* $ Particulars */
 
@@ -2298,8 +2314,8 @@ L_sgbwvs:
 
 /* $ Examples */
 
-/*     See the $ Examples section in the header for the main subroutine. */
-/*     It contains examples wich demonstrate the use of the entry points */
+/*     See the $Examples section in the header for the main subroutine. */
+/*     It contains examples which demonstrate the use of the entry points */
 /*     in the generic segments sequential writer. The entry points which */
 /*     comprise the generic segments sequential writer must be used */
 /*     together in the proper manner. Rather than repeating the examples */
@@ -2309,19 +2325,23 @@ L_sgbwvs:
 
 /*     None. */
 
-/* $ Author_and_Institution */
-
-/*     K.R. Gehringer    (JPL) */
-/*     W.L. Taber        (JPL) */
-
 /* $ Literature_References */
 
 /*     None. */
 
+/* $ Author_and_Institution */
+
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
+/*     W.L. Taber         (JPL) */
+
 /* $ Version */
 
-/* -    SPICELIB Version 1.0.0, 05-APR-1995 (KRG) (WLT) */
+/* -    SPICELIB Version 1.0.1, 03-JUN-2021 (JDR) */
 
+/*        Edited the header to comply with NAIF standard. */
+
+/* -    SPICELIB Version 1.0.0, 05-APR-1995 (KRG) (WLT) */
 
 /* -& */
 /* $ Index_Entries */
@@ -2351,7 +2371,7 @@ L_sgbwvs:
 /*     that. */
 
 /*     Check to see if the file attached to the handle is open for */
-/*     writing. If not, an error is signalled. */
+/*     writing. If not, an error is signaled. */
 
     dafsih_(handle, "WRITE", (ftnlen)5);
     if (failed_()) {
@@ -2507,44 +2527,44 @@ L_sgbwvs:
 
     ++nft;
     ftityp[(i__1 = nft - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge("ftityp", i__1, 
-	    "sgseqw_", (ftnlen)2209)] = *idxtyp;
+	    "sgseqw_", (ftnlen)2236)] = *idxtyp;
     ftpksz[(i__1 = nft - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge("ftpksz", i__1, 
-	    "sgseqw_", (ftnlen)2210)] = 0;
+	    "sgseqw_", (ftnlen)2237)] = 0;
     ftmxsz[(i__1 = nft - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge("ftmxsz", i__1, 
-	    "sgseqw_", (ftnlen)2211)] = 0;
+	    "sgseqw_", (ftnlen)2238)] = 0;
     ftncon[(i__1 = nft - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge("ftncon", i__1, 
-	    "sgseqw_", (ftnlen)2213)] = *nconst;
+	    "sgseqw_", (ftnlen)2240)] = *nconst;
     ftnpkt[(i__1 = nft - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge("ftnpkt", i__1, 
-	    "sgseqw_", (ftnlen)2214)] = 0;
+	    "sgseqw_", (ftnlen)2241)] = 0;
     ftnref[(i__1 = nft - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge("ftnref", i__1, 
-	    "sgseqw_", (ftnlen)2215)] = 0;
+	    "sgseqw_", (ftnlen)2242)] = 0;
     ftnres[(i__1 = nft - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge("ftnres", i__1, 
-	    "sgseqw_", (ftnlen)2216)] = 0;
+	    "sgseqw_", (ftnlen)2243)] = 0;
     ftexpl[(i__1 = nft - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge("ftexpl", i__1, 
-	    "sgseqw_", (ftnlen)2218)] = explct;
+	    "sgseqw_", (ftnlen)2245)] = explct;
     ftfixd[(i__1 = nft - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge("ftfixd", i__1, 
-	    "sgseqw_", (ftnlen)2220)] = fxdseg;
+	    "sgseqw_", (ftnlen)2247)] = fxdseg;
     fthan[(i__1 = nft - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge("fthan", i__1, 
-	    "sgseqw_", (ftnlen)2222)] = *handle;
+	    "sgseqw_", (ftnlen)2249)] = *handle;
     ftbadr[(i__1 = nft - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge("ftbadr", i__1, 
-	    "sgseqw_", (ftnlen)2223)] = begadr;
+	    "sgseqw_", (ftnlen)2250)] = begadr;
     ftrefs[(i__1 = (nft << 1) - 2) < 40 && 0 <= i__1 ? i__1 : s_rnge("ftrefs",
-	     i__1, "sgseqw_", (ftnlen)2225)] = 0.;
+	     i__1, "sgseqw_", (ftnlen)2252)] = 0.;
     ftrefs[(i__1 = (nft << 1) - 1) < 40 && 0 <= i__1 ? i__1 : s_rnge("ftrefs",
-	     i__1, "sgseqw_", (ftnlen)2226)] = 0.;
+	     i__1, "sgseqw_", (ftnlen)2253)] = 0.;
     if (explct) {
 	ftoff[(i__1 = nft - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge("ftoff", 
-		i__1, "sgseqw_", (ftnlen)2229)] = 2;
+		i__1, "sgseqw_", (ftnlen)2256)] = 2;
     } else {
 	ftoff[(i__1 = nft - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge("ftoff", 
-		i__1, "sgseqw_", (ftnlen)2231)] = 1;
+		i__1, "sgseqw_", (ftnlen)2258)] = 1;
     }
     lsthan = *handle;
     index = nft;
     ++numvar;
     chkout_("SGBWVS", (ftnlen)6);
     return 0;
-/* $Procedure SGWFPK ( Generic segements: Write fixed size packets. ) */
+/* $Procedure SGWFPK ( Generic segments: Write fixed size packets. ) */
 
 L_sgwfpk:
 /* $ Abstract */
@@ -2579,13 +2599,15 @@ L_sgwfpk:
 
 /* $ Required_Reading */
 
-/*     DAF Required Reading. */
+/*     DAF */
 
 /* $ Keywords */
 
 /*     GENERIC SEGMENTS */
 
 /* $ Declarations */
+
+/*     IMPLICIT NONE */
 
 /*     INTEGER               HANDLE */
 /*     INTEGER               NPKTS */
@@ -2597,94 +2619,94 @@ L_sgwfpk:
 
 /*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
-/*      HANDLE    I    Handle of a DAF file opened with write access. */
-/*      NPKTS     I    Number of data packets to write to a segment. */
-/*      PKTDAT    I    Array of packet data. */
-/*      NREFS     I    Number of reference values. */
-/*      REFDAT    I    Reference data. */
+/*     HANDLE    I    Handle of a DAF file opened with write access. */
+/*     NPKTS     I    Number of data packets to write to a segment. */
+/*     PKTDAT    I    Array of packet data. */
+/*     NREFS     I    Number of reference values. */
+/*     REFDAT    I    Reference data. */
 
 /* $ Detailed_Input */
 
-/*      HANDLE   Handle of a DAF file opened with write access. This is */
-/*               the handle of a file in which a generic segment has */
-/*               been started and is currently being written. */
+/*     HANDLE   is the handle of a DAF file opened with write access. */
+/*              This is the handle of a file in which a generic segment */
+/*              has been started and is currently being written. */
 
-/*      NPKTS    Number of data packets to write to a segment. */
+/*     NPKTS    is the number of data packets to write to a segment. */
 
-/*      PKTDAT   A singly dimensioned array containing the fixed size */
-/*               data packets to be added to the segment associated with */
-/*               HANDLE. */
+/*     PKTDAT   is a singly dimensioned array containing the fixed size */
+/*              data packets to be added to the segment associated with */
+/*              HANDLE. */
 
-/*               For fixed size data packets, PKTDAT will have the */
-/*               following structure: */
+/*              For fixed size data packets, PKTDAT will have the */
+/*              following structure: */
 
-/*               Packet #  Range of Locations */
-/*               --------  --------------------------------------------- */
+/*                 Packet #  Range of Locations */
+/*                 --------  ------------------------------------------ */
 
-/*                     1   PKTDAT(1)              to PKTDAT(PS) */
-/*                     2   PKTDAT(PS+1)           to PKTDAT(2*PS) */
-/*                     3   PKTDAT(2*PS+1)         to PKTDAT(3*PS) */
-/*                     4   PKTDAT(3*PS+1)         to PKTDAT(4*PS) */
+/*                    1      PKTDAT(1)              to PKTDAT(PS) */
+/*                    2      PKTDAT(PS+1)           to PKTDAT(2*PS) */
+/*                    3      PKTDAT(2*PS+1)         to PKTDAT(3*PS) */
+/*                    4      PKTDAT(3*PS+1)         to PKTDAT(4*PS) */
 
-/*                                          . */
-/*                                          . */
-/*                                          . */
+/*                                            . */
+/*                                            . */
+/*                                            . */
 
-/*                 NPKTS   PKTDAT((NPKTS-1)*PS+1) to PKTDAT(NPKTS*PS) */
+/*                   NPKTS   PKTDAT((NPKTS-1)*PS+1) to PKTDAT(NPKTS*PS) */
 
-/*               where PS = PKTSIZ. */
+/*              where PS = PKTSIZ. */
 
-/*      NREFS    Number of reference values. */
+/*     NREFS    is the number of reference values. */
 
-/*               For implicitly indexed packets, NREFS must have a value */
-/*               of two (2). */
+/*              For implicitly indexed packets, NREFS must have a value */
+/*              of two (2). */
 
-/*               When writing packets to a segment which uses an implicit */
-/*               index type, the value specified by NREFS is used only on */
-/*               the first call to SGWFPK. On all subsequent calls to */
-/*               these subroutines for a particular implicitly indexed */
-/*               segment, the value of NREFS is ignored. */
+/*              When writing packets to a segment which uses an implicit */
+/*              index type, the value specified by NREFS is used only on */
+/*              the first call to SGWFPK. On all subsequent calls to */
+/*              these subroutines for a particular implicitly indexed */
+/*              segment, the value of NREFS is ignored. */
 
-/*               For explicitly indexed packets, NREFS must be equal to */
-/*               NPKTS, i.e., there should ba a reference value for each */
-/*               data packet being written to the segment. */
+/*              For explicitly indexed packets, NREFS must be equal to */
+/*              NPKTS, i.e., there should ba a reference value for each */
+/*              data packet being written to the segment. */
 
-/*               When writing packets to a segment which uses an explicit */
-/*               index type, the value specified by NREFS is used on */
-/*               every call to SGWFPK and it must be equal to NPKTS. */
+/*              When writing packets to a segment which uses an explicit */
+/*              index type, the value specified by NREFS is used on */
+/*              every call to SGWFPK and it must be equal to NPKTS. */
 
-/*      REFDAT   Reference data values. */
+/*     REFDAT   is the reference data values. */
 
-/*               For implicitly indexed packets, there must be two (2) */
-/*               values. The reference values represent a starting */
-/*               reference value and a stepsize between consecutive */
-/*               reference values, respectively. */
+/*              For implicitly indexed packets, there must be two (2) */
+/*              values. The reference values represent a starting */
+/*              reference value and a step size between consecutive */
+/*              reference values, respectively. */
 
-/*               In order to avoid, or at least minimize, numerical */
-/*               difficulties associated with computing index values for */
-/*               generic segments with implicit index types, the value of */
-/*               the stepsize must be an integer, i.e., DINT(REFDAT(2)) */
-/*               must equal REFDAT(2). */
+/*              In order to avoid, or at least minimize, numerical */
+/*              difficulties associated with computing index values for */
+/*              generic segments with implicit index types, the value of */
+/*              the step size must be an integer, i.e., DINT(REFDAT(2)) */
+/*              must equal REFDAT(2). */
 
-/*               When writing packets to a segment which uses an implicit */
-/*               index type, the values specified by REFDAT are used only */
-/*               on the first call to SGWFPK. On all subsequent calls to */
-/*               this subroutine for a particular implicitly indexed */
-/*               segment, REFDAT is ignored. */
+/*              When writing packets to a segment which uses an implicit */
+/*              index type, the values specified by REFDAT are used only */
+/*              on the first call to SGWFPK. On all subsequent calls to */
+/*              this subroutine for a particular implicitly indexed */
+/*              segment, REFDAT is ignored. */
 
-/*               For explicitly indexed packets, there must be NPKTS */
-/*               referencevalues and the values must be in increasing */
-/*               order: */
+/*              For explicitly indexed packets, there must be NPKTS */
+/*              reference values and the values must be in increasing */
+/*              order: */
 
-/*                  REFDAT(I) < REFDAT(I+1), I = 1, NPKTS-1 */
+/*                 REFDAT(I) < REFDAT(I+1), I = 1, NPKTS-1 */
 
-/*               When writing packets to a segment which uses an explicit */
-/*               index type, the values specified by REFDAT are used on */
-/*               every call to SGWFPK. On all calls to these subroutines */
-/*               after the first, the value of REFDAT(1) must be greater */
-/*               than than the value of REFDAT(NPKTS) from the previous */
-/*               call. This preserves the ordering of the reference */
-/*               values for the entire segment. */
+/*              When writing packets to a segment which uses an explicit */
+/*              index type, the values specified by REFDAT are used on */
+/*              every call to SGWFPK. On all calls to these subroutines */
+/*              after the first, the value of REFDAT(1) must be greater */
+/*              than than the value of REFDAT(NPKTS) from the previous */
+/*              call. This preserves the ordering of the reference */
+/*              values for the entire segment. */
 
 /* $ Detailed_Output */
 
@@ -2697,50 +2719,50 @@ L_sgwfpk:
 
 /* $ Exceptions */
 
-/*     1) If there are no generic segments with fixed packet sizes */
-/*        currently being written, the error SPICE(CALLEDOUTOFORDER) will */
-/*        be signalled. */
+/*     1)  If there are no generic segments with fixed packet sizes */
+/*         currently being written, the error SPICE(CALLEDOUTOFORDER) is */
+/*         signaled. */
 
-/*     2) If there is not a generic segment with fixed packet size being */
-/*        written to the file associated with HANDLE, the error */
-/*        SPICE(SEGMENTNOTFOUND) will be signalled. */
+/*     2)  If there is not a generic segment with fixed packet size being */
+/*         written to the file associated with HANDLE, the error */
+/*         SPICE(SEGMENTNOTFOUND) is signaled. */
 
-/*     3) If the type of generic segment being written to this file is */
-/*        not a fixed packet size generic segment, the error */
-/*        SPICE(SEGTYPECONFLICT) will be signalled. */
+/*     3)  If the type of generic segment being written to this file is */
+/*         not a fixed packet size generic segment, the error */
+/*         SPICE(SEGTYPECONFLICT) is signaled. */
 
-/*     4) If the number of packets to be written to the generic segment */
-/*        is not positive, the error SPICE(NUMPACKETSNOTPOS) will be */
-/*        signalled. */
+/*     4)  If the number of packets to be written to the generic segment */
+/*         is not positive, the error SPICE(NUMPACKETSNOTPOS) is */
+/*         signaled. */
 
-/*     5) If an explicitly indexed generic segment is being written and */
-/*        the number of reference values, NREFS, is not equal to the */
-/*        number of data packets being written, NPKTS, the error */
-/*        SPICE(INCOMPATIBLENUMREF) will be signalled. */
+/*     5)  If an explicitly indexed generic segment is being written and */
+/*         the number of reference values, NREFS, is not equal to the */
+/*         number of data packets being written, NPKTS, the error */
+/*         SPICE(INCOMPATIBLENUMREF) is signaled. */
 
-/*     6) If an explicitly indexed generic segment is being written and */
-/*        the reference values are not in increasing order, the error */
-/*        SPICE(UNORDEREDREFS) will be signalled. */
+/*     6)  If an explicitly indexed generic segment is being written and */
+/*         the reference values are not in increasing order, the error */
+/*         SPICE(UNORDEREDREFS) is signaled. */
 
-/*     7) If an explicitly indexed generic segment is being written and */
-/*        the first reference value on the second or later additions */
-/*        of packets to the generic segment is not greater than the last */
-/*        reference value from the previous addition of packets, the */
-/*        error SPICE(UNORDEREDREFS) will be signalled. */
+/*     7)  If an explicitly indexed generic segment is being written and */
+/*         the first reference value on the second or later additions */
+/*         of packets to the generic segment is not greater than the last */
+/*         reference value from the previous addition of packets, the */
+/*         error SPICE(UNORDEREDREFS) is signaled. */
 
-/*     8) If an implicitly indexed generic segment is being written and */
-/*        the number of reference values, NREFS, is not equal to two (2) */
-/*        on the first call to this subroutine for a particular segment, */
-/*        then the error SPICE(INCOMPATIBLENUMREF) will be signalled. */
+/*     8)  If an implicitly indexed generic segment is being written and */
+/*         the number of reference values, NREFS, is not equal to two (2) */
+/*         on the first call to this subroutine for a particular segment, */
+/*         the error SPICE(INCOMPATIBLENUMREF) is signaled. */
 
-/*     9) If an implicitly indexed generic segment is being written and */
-/*        the second reference value, the step size used for indexing, is */
-/*        not integral, i.e., DINT(REFDAT(2)) .NE. REFDAT(2), the error */
-/*        SPICE(REFVALNOTINTEGER) will be signalled. */
+/*     9)  If an implicitly indexed generic segment is being written and */
+/*         the second reference value, the step size used for indexing, */
+/*         is not integral, i.e., DINT(REFDAT(2)) .NE. REFDAT(2), the */
+/*         error SPICE(REFVALNOTINTEGER) is signaled. */
 
 /* $ Files */
 
-/*     See HANDLE in the $ Detailed_Input section. */
+/*     See HANDLE in the $Detailed_Input section. */
 
 /* $ Particulars */
 
@@ -2750,8 +2772,8 @@ L_sgwfpk:
 
 /* $ Examples */
 
-/*     See the $ Examples section in the header for the main subroutine. */
-/*     It contains examples wich demonstrate the use of the entry points */
+/*     See the $Examples section in the header for the main subroutine. */
+/*     It contains examples which demonstrate the use of the entry points */
 /*     in the generic segments sequential writer. The entry points which */
 /*     comprise the generic segments sequential writer must be used */
 /*     together in the proper manner. Rather than repeating the examples */
@@ -2761,19 +2783,23 @@ L_sgwfpk:
 
 /*     None. */
 
-/* $ Author_and_Institution */
-
-/*     K.R. Gehringer    (JPL) */
-/*     W.L. Taber        (JPL) */
-
 /* $ Literature_References */
 
 /*     None. */
 
+/* $ Author_and_Institution */
+
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
+/*     W.L. Taber         (JPL) */
+
 /* $ Version */
 
-/* -    SPICELIB Version 1.0.0, 05-APR-1995 (KRG) (WLT) */
+/* -    SPICELIB Version 1.0.1, 03-JUN-2021 (JDR) */
 
+/*        Edited the header to comply with NAIF standard. */
+
+/* -    SPICELIB Version 1.0.0, 05-APR-1995 (KRG) (WLT) */
 
 /* -& */
 /* $ Index_Entries */
@@ -2828,9 +2854,9 @@ L_sgwfpk:
 	    return 0;
 	}
 	explct = ftexpl[(i__1 = index - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge(
-		"ftexpl", i__1, "sgseqw_", (ftnlen)2539)];
+		"ftexpl", i__1, "sgseqw_", (ftnlen)2574)];
 	fxdseg = ftfixd[(i__1 = index - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge(
-		"ftfixd", i__1, "sgseqw_", (ftnlen)2540)];
+		"ftfixd", i__1, "sgseqw_", (ftnlen)2575)];
 	lsthan = *handle;
 	dafcad_(handle);
 	if (failed_()) {
@@ -2862,8 +2888,8 @@ L_sgwfpk:
 
     if (*npkts <= 0) {
 	setmsg_("The number of packets to store is not positive.  The value "
-		"supplied was #. Perhaps this packet count was unitialized.", (
-		ftnlen)117);
+		"supplied was #. Perhaps this packet count was uninitialized.",
+		 (ftnlen)119);
 	errint_("#", npkts, (ftnlen)1);
 	sigerr_("SPICE(NUMPACKETSNOTPOS)", (ftnlen)23);
 	chkout_("SGWFPK", (ftnlen)6);
@@ -2893,15 +2919,15 @@ L_sgwfpk:
 	    return 0;
 	}
 
-/*        If this is not the first time we have asdded data to this */
+/*        If this is not the first time we have added data to this */
 /*        segment, we need to be sure that all of the current reference */
 /*        values are greater then the last reference value from the */
 /*        previous addition of packets to the segment. */
 
 	if (ftnpkt[(i__1 = index - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge("ftn"
-		"pkt", i__1, "sgseqw_", (ftnlen)2622)] > 0) {
+		"pkt", i__1, "sgseqw_", (ftnlen)2657)] > 0) {
 	    if (ftrefs[(i__1 = (index << 1) - 2) < 40 && 0 <= i__1 ? i__1 : 
-		    s_rnge("ftrefs", i__1, "sgseqw_", (ftnlen)2624)] >= 
+		    s_rnge("ftrefs", i__1, "sgseqw_", (ftnlen)2659)] >= 
 		    refdat[0]) {
 		setmsg_("Reference values are out of order. The offending va"
 			"lue, #, was found to be out of order. The reference "
@@ -2912,7 +2938,7 @@ L_sgwfpk:
 		errdp_("#", refdat, (ftnlen)1);
 		errdp_("#", &ftrefs[(i__1 = (index << 1) - 2) < 40 && 0 <= 
 			i__1 ? i__1 : s_rnge("ftrefs", i__1, "sgseqw_", (
-			ftnlen)2635)], (ftnlen)1);
+			ftnlen)2670)], (ftnlen)1);
 		sigerr_("SPICE(UNORDEREDREFS)", (ftnlen)20);
 		chkout_("SGWFPK", (ftnlen)6);
 		return 0;
@@ -2945,8 +2971,8 @@ L_sgwfpk:
 	    dafada_(&refdat[i__ - 1], &c__1);
 	    dafada_(&pktdat[(i__ - 1) * ftpksz[(i__2 = index - 1) < 20 && 0 <=
 		     i__2 ? i__2 : s_rnge("ftpksz", i__2, "sgseqw_", (ftnlen)
-		    2673)]], &ftpksz[(i__3 = index - 1) < 20 && 0 <= i__3 ? 
-		    i__3 : s_rnge("ftpksz", i__3, "sgseqw_", (ftnlen)2673)]);
+		    2708)]], &ftpksz[(i__3 = index - 1) < 20 && 0 <= i__3 ? 
+		    i__3 : s_rnge("ftpksz", i__3, "sgseqw_", (ftnlen)2708)]);
 	    if (failed_()) {
 		chkout_("SGWFPK", (ftnlen)6);
 		return 0;
@@ -2958,20 +2984,20 @@ L_sgwfpk:
 /*        the increasing order of the reference values. */
 
 	ftrefs[(i__1 = (index << 1) - 2) < 40 && 0 <= i__1 ? i__1 : s_rnge(
-		"ftrefs", i__1, "sgseqw_", (ftnlen)2687)] = refdat[*nrefs - 1]
+		"ftrefs", i__1, "sgseqw_", (ftnlen)2722)] = refdat[*nrefs - 1]
 		;
 
 /*        Update the counts for the number of packets, the number of */
 /*        references. */
 
 	ftnpkt[(i__1 = index - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge("ftnpkt", 
-		i__1, "sgseqw_", (ftnlen)2692)] = ftnpkt[(i__2 = index - 1) < 
+		i__1, "sgseqw_", (ftnlen)2727)] = ftnpkt[(i__2 = index - 1) < 
 		20 && 0 <= i__2 ? i__2 : s_rnge("ftnpkt", i__2, "sgseqw_", (
-		ftnlen)2692)] + *npkts;
+		ftnlen)2727)] + *npkts;
 	ftnref[(i__1 = index - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge("ftnref", 
-		i__1, "sgseqw_", (ftnlen)2693)] = ftnref[(i__2 = index - 1) < 
+		i__1, "sgseqw_", (ftnlen)2728)] = ftnref[(i__2 = index - 1) < 
 		20 && 0 <= i__2 ? i__2 : s_rnge("ftnref", i__2, "sgseqw_", (
-		ftnlen)2693)] + *nrefs;
+		ftnlen)2728)] + *nrefs;
     } else {
 
 /*        For implicitly indexed packets the number of reference values */
@@ -2983,7 +3009,7 @@ L_sgwfpk:
 /*        these arguments are ignored. */
 
 	if (ftnpkt[(i__1 = index - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge("ftn"
-		"pkt", i__1, "sgseqw_", (ftnlen)2706)] == 0) {
+		"pkt", i__1, "sgseqw_", (ftnlen)2741)] == 0) {
 	    if (*nrefs != 2) {
 		setmsg_("The number of reference values supplied, #, is not "
 			"compatible with implicitly indexed packets. Implicit"
@@ -3006,7 +3032,7 @@ L_sgwfpk:
 /*        Add the packets to the segment. */
 
 	i__2 = ftpksz[(i__1 = index - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge(
-		"ftpksz", i__1, "sgseqw_", (ftnlen)2736)] * *npkts;
+		"ftpksz", i__1, "sgseqw_", (ftnlen)2771)] * *npkts;
 	dafada_(pktdat, &i__2);
 	if (failed_()) {
 	    chkout_("SGWFPK", (ftnlen)6);
@@ -3018,27 +3044,27 @@ L_sgwfpk:
 /*        through the routine. */
 
 	if (ftnpkt[(i__1 = index - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge("ftn"
-		"pkt", i__1, "sgseqw_", (ftnlen)2747)] == 0) {
+		"pkt", i__1, "sgseqw_", (ftnlen)2782)] == 0) {
 	    ftnref[(i__1 = index - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge("ftn"
-		    "ref", i__1, "sgseqw_", (ftnlen)2749)] = *nrefs;
+		    "ref", i__1, "sgseqw_", (ftnlen)2784)] = *nrefs;
 	    ftrefs[(i__1 = (index << 1) - 2) < 40 && 0 <= i__1 ? i__1 : 
-		    s_rnge("ftrefs", i__1, "sgseqw_", (ftnlen)2750)] = refdat[
+		    s_rnge("ftrefs", i__1, "sgseqw_", (ftnlen)2785)] = refdat[
 		    0];
 	    ftrefs[(i__1 = (index << 1) - 1) < 40 && 0 <= i__1 ? i__1 : 
-		    s_rnge("ftrefs", i__1, "sgseqw_", (ftnlen)2751)] = refdat[
+		    s_rnge("ftrefs", i__1, "sgseqw_", (ftnlen)2786)] = refdat[
 		    1];
 	}
 
 /*        Update the count for the number of packets. */
 
 	ftnpkt[(i__1 = index - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge("ftnpkt", 
-		i__1, "sgseqw_", (ftnlen)2757)] = ftnpkt[(i__2 = index - 1) < 
+		i__1, "sgseqw_", (ftnlen)2792)] = ftnpkt[(i__2 = index - 1) < 
 		20 && 0 <= i__2 ? i__2 : s_rnge("ftnpkt", i__2, "sgseqw_", (
-		ftnlen)2757)] + *npkts;
+		ftnlen)2792)] + *npkts;
     }
     chkout_("SGWFPK", (ftnlen)6);
     return 0;
-/* $Procedure SGWVPK ( Generic segement: Write variable size packets. ) */
+/* $Procedure SGWVPK ( Generic segment: Write variable size packets. ) */
 
 L_sgwvpk:
 /* $ Abstract */
@@ -3074,13 +3100,15 @@ L_sgwvpk:
 
 /* $ Required_Reading */
 
-/*     DAF Required Reading. */
+/*     DAF */
 
 /* $ Keywords */
 
 /*     GENERIC SEGMENTS */
 
 /* $ Declarations */
+
+/*     IMPLICIT NONE */
 
 /*     INTEGER               HANDLE */
 /*     INTEGER               NPKTS */
@@ -3093,108 +3121,108 @@ L_sgwvpk:
 
 /*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
-/*      HANDLE    I    Handle of a DAF file opened with write access. */
-/*      NPKTS     I    Number of data packets to write to a segment. */
-/*      PKTSIZ    I    Array of sizes of variable size packets. */
-/*      PKTDAT    I    Array of packet data. */
-/*      NREFS     I    Number of reference values. */
-/*      REFDAT    I    Reference data. */
+/*     HANDLE    I    Handle of a DAF file opened with write access. */
+/*     NPKTS     I    Number of data packets to write to a segment. */
+/*     PKTSIZ    I    Array of sizes of variable size packets. */
+/*     PKTDAT    I    Array of packet data. */
+/*     NREFS     I    Number of reference values. */
+/*     REFDAT    I    Reference data. */
 
 /* $ Detailed_Input */
 
-/*      HANDLE   Handle of a DAF file opened with write access. This is */
-/*               the handle of a file in which a generic segment has */
-/*               been started and is currently being written. */
+/*     HANDLE   is the handle of a DAF file opened with write access. */
+/*              This is the handle of a file in which a generic segment */
+/*              has been started and is currently being written. */
 
-/*      NPKTS    Number of data packets to write to a segment. */
+/*     NPKTS    is the number of data packets to write to a segment. */
 
-/*      PKTSIZ   Sizes of variable size packets. */
+/*     PKTSIZ   is the sizes of variable size packets. */
 
-/*               By the size of a packet we mean the number of double */
-/*               precision numbers contained in a data packet. */
+/*              By the size of a packet we mean the number of double */
+/*              precision numbers contained in a data packet. */
 
-/*               When writing a segment with variable size packets, */
-/*               there must be an element in the array PKTSIZ for each of */
-/*               the variable size data packets. */
+/*              When writing a segment with variable size packets, */
+/*              there must be an element in the array PKTSIZ for each of */
+/*              the variable size data packets. */
 
-/*      PKTDAT   A singly dimensioned array containing the variable */
-/*               size data packets to be added to the generic segment */
-/*               associated with HANDLE. */
+/*     PKTDAT   is a singly dimensioned array containing the variable */
+/*              size data packets to be added to the generic segment */
+/*              associated with HANDLE. */
 
-/*               For variable size data packets, PKTDAT will have the */
-/*               following structure: */
+/*              For variable size data packets, PKTDAT will have the */
+/*              following structure: */
 
-/*               Packet #  Range of Locations */
-/*               --------  --------------------------------------------- */
+/*                 Packet #  Range of Locations */
+/*                 --------  ------------------------------------------ */
 
-/*                     1   PKTDAT(1)           to PKTDAT(P(1)) */
-/*                     2   PKTDAT(P(1)+1)      to PKTDAT(P(2)) */
-/*                     3   PKTDAT(P(2)+1)      to PKTDAT(P(3)) */
-/*                     4   PKTDAT(P(3)+1)      to PKTDAT(P(4)) */
+/*                    1      PKTDAT(1)           to PKTDAT(P(1)) */
+/*                    2      PKTDAT(P(1)+1)      to PKTDAT(P(2)) */
+/*                    3      PKTDAT(P(2)+1)      to PKTDAT(P(3)) */
+/*                    4      PKTDAT(P(3)+1)      to PKTDAT(P(4)) */
 
-/*                                          . */
-/*                                          . */
-/*                                          . */
+/*                                            . */
+/*                                            . */
+/*                                            . */
 
-/*                 NPKTS   PKTDAT(P(NPKTS-1)+1) to PKTDAT(P(NPKTS)) */
+/*                   NPKTS   PKTDAT(P(NPKTS-1)+1) to PKTDAT(P(NPKTS)) */
 
-/*                                I */
-/*                               --- */
-/*               where P(I) =    >   PKTSIZ(K). */
-/*                               --- */
-/*                              K = 1 */
+/*                               I */
+/*                              --- */
+/*              where P(I) =    >   PKTSIZ(K). */
+/*                              --- */
+/*                             K = 1 */
 
-/*      NREFS    Number of reference values. */
+/*     NREFS    is the number of reference values. */
 
-/*               For implicitly indexed packets, NREFS must have a value */
-/*               of two (2). */
+/*              For implicitly indexed packets, NREFS must have a value */
+/*              of two (2). */
 
-/*               When writing packets to a segment which uses an implicit */
-/*               index type, the value specified by NREFS is used only on */
-/*               the first call to SGWVPK. On all subsequent calls to */
-/*               these subroutines for a particular implicitly indexed */
-/*               segment, the value of NREFS is ignored. */
+/*              When writing packets to a segment which uses an implicit */
+/*              index type, the value specified by NREFS is used only on */
+/*              the first call to SGWVPK. On all subsequent calls to */
+/*              these subroutines for a particular implicitly indexed */
+/*              segment, the value of NREFS is ignored. */
 
-/*               For explicitly indexed packets, NREFS must be equal to */
-/*               NPKTS, i.e., there should be a reference value for each */
-/*               data packet being written to the segment. */
+/*              For explicitly indexed packets, NREFS must be equal to */
+/*              NPKTS, i.e., there should be a reference value for each */
+/*              data packet being written to the segment. */
 
-/*               When writing packets to a segment which uses an explicit */
-/*               index type, the value specified by NREFS is used on */
-/*               every call to SGWVPK and it must be equal to NPKTS. */
+/*              When writing packets to a segment which uses an explicit */
+/*              index type, the value specified by NREFS is used on */
+/*              every call to SGWVPK and it must be equal to NPKTS. */
 
-/*      REFDAT   Reference data values. */
+/*     REFDAT   is the reference data values. */
 
-/*               For implicitly indexed packets, there must be two (2) */
-/*               values. The reference values represent a starting */
-/*               reference value and a stepsize between consecutive */
-/*               reference values, respectively. */
+/*              For implicitly indexed packets, there must be two (2) */
+/*              values. The reference values represent a starting */
+/*              reference value and a step size between consecutive */
+/*              reference values, respectively. */
 
-/*               In order to avoid, or at least minimize, numerical */
-/*               difficulties associated with computing index values for */
-/*               generic segments with implicit index types, the value of */
-/*               the stepsize must be an integer, i.e., DINT(REFDAT(2)) */
-/*               must equal REFDAT(2). */
+/*              In order to avoid, or at least minimize, numerical */
+/*              difficulties associated with computing index values for */
+/*              generic segments with implicit index types, the value of */
+/*              the step size must be an integer, i.e., DINT(REFDAT(2)) */
+/*              must equal REFDAT(2). */
 
-/*               When writing packets to a segment which uses an implicit */
-/*               index type, the values specified by REFDAT are used only */
-/*               on the first call to SGWVPK. On all subsequent calls to */
-/*               this subroutine for a particular implicitly indexed */
-/*               segment, REFDAT is ignored. */
+/*              When writing packets to a segment which uses an implicit */
+/*              index type, the values specified by REFDAT are used only */
+/*              on the first call to SGWVPK. On all subsequent calls to */
+/*              this subroutine for a particular implicitly indexed */
+/*              segment, REFDAT is ignored. */
 
-/*               For explicitly indexed packets, there must be NPKTS */
-/*               reference values and the values must be in increasing */
-/*               order: */
+/*              For explicitly indexed packets, there must be NPKTS */
+/*              reference values and the values must be in increasing */
+/*              order: */
 
-/*                  REFDAT(I) < REFDAT(I+1), I = 1, NPKTS-1 */
+/*                 REFDAT(I) < REFDAT(I+1), I = 1, NPKTS-1 */
 
-/*               When writing packets to a segment which uses an explicit */
-/*               index type, the values specified by REFDAT are used on */
-/*               every call to SGWVPK. On all calls to this subroutine */
-/*               after the first, the value of REFDAT(1) must be greater */
-/*               than than the value of REFDAT(NPKTS) from the previous */
-/*               call. This preserves the ordering of the reference */
-/*               values for the entire segment. */
+/*              When writing packets to a segment which uses an explicit */
+/*              index type, the values specified by REFDAT are used on */
+/*              every call to SGWVPK. On all calls to this subroutine */
+/*              after the first, the value of REFDAT(1) must be greater */
+/*              than than the value of REFDAT(NPKTS) from the previous */
+/*              call. This preserves the ordering of the reference */
+/*              values for the entire segment. */
 
 /* $ Detailed_Output */
 
@@ -3207,54 +3235,54 @@ L_sgwvpk:
 
 /* $ Exceptions */
 
-/*     1) If there are no generic segments with variable packet sizes */
-/*        currently being written, the error SPICE(CALLEDOUTOFORDER) will */
-/*        be signalled. */
+/*     1)  If there are no generic segments with variable packet sizes */
+/*         currently being written, the error SPICE(CALLEDOUTOFORDER) */
+/*         is signaled. */
 
-/*     2) If there is not a generic segment with variable packet size */
-/*        being written to the file associated with HANDLE, the error */
-/*        SPICE(SEGMENTNOTFOUND) will be signalled. */
+/*     2)  If there is not a generic segment with variable packet size */
+/*         being written to the file associated with HANDLE, the error */
+/*         SPICE(SEGMENTNOTFOUND) is signaled. */
 
-/*     3) If the type of generic segment being written to this file is */
-/*        not a variable packet size generic segment, the error */
-/*        SPICE(SEGTYPECONFLICT) will be signalled. */
+/*     3)  If the type of generic segment being written to this file is */
+/*         not a variable packet size generic segment, the error */
+/*         SPICE(SEGTYPECONFLICT) is signaled. */
 
-/*     4) If the number of packets to be written to the generic segment */
-/*        is not positive, the error SPICE(NUMPACKETSNOTPOS) will be */
-/*        signalled. */
+/*     4)  If the number of packets to be written to the generic segment */
+/*         is not positive, the error SPICE(NUMPACKETSNOTPOS) is */
+/*         signaled. */
 
-/*     5) If an explicitly indexed generic segment is being written and */
-/*        the number of reference values, NREFS, is not equal to the */
-/*        number of data packets being written, NPKTS, the error */
-/*        SPICE(INCOMPATIBLENUMREF) will be signalled. */
+/*     5)  If an explicitly indexed generic segment is being written and */
+/*         the number of reference values, NREFS, is not equal to the */
+/*         number of data packets being written, NPKTS, the error */
+/*         SPICE(INCOMPATIBLENUMREF) is signaled. */
 
-/*     6) If an explicitly indexed generic segment is being written and */
-/*        the reference values are not in increasing order, the error */
-/*        SPICE(UNORDEREDREFS) will be signalled. */
+/*     6)  If an explicitly indexed generic segment is being written and */
+/*         the reference values are not in increasing order, the error */
+/*         SPICE(UNORDEREDREFS) is signaled. */
 
-/*     7) If an explicitly indexed generic segment is being written and */
-/*        the first reference value on the second or later additions */
-/*        of packets to the generic segment is not greater than the last */
-/*        reference value from the previous addition of packets, the */
-/*        error SPICE(UNORDEREDREFS) will be signalled. */
+/*     7)  If an explicitly indexed generic segment is being written and */
+/*         the first reference value on the second or later additions */
+/*         of packets to the generic segment is not greater than the last */
+/*         reference value from the previous addition of packets, the */
+/*         error SPICE(UNORDEREDREFS) is signaled. */
 
-/*     8) If an explicitly indexed generic segment is being written and */
-/*        one or more of the packet sizes is not positive, the error */
-/*        SPICE(NONPOSPACKETSIZE) will be signalled. */
+/*     8)  If an explicitly indexed generic segment is being written and */
+/*         one or more of the packet sizes is not positive, the error */
+/*         SPICE(NONPOSPACKETSIZE) is signaled. */
 
-/*     9) If an implicitly indexed generic segment is being written and */
-/*        the number of reference values, NREFS, is not equal to two (2) */
-/*        on the first call to this subroutine for a particular segment, */
-/*        then the error SPICE(INCOMPATIBLENUMREF) will be signalled. */
+/*     9)  If an implicitly indexed generic segment is being written and */
+/*         the number of reference values, NREFS, is not equal to two (2) */
+/*         on the first call to this subroutine for a particular segment, */
+/*         the error SPICE(INCOMPATIBLENUMREF) is signaled. */
 
-/*    10) If an implicitly indexed generic segment is being written and */
-/*        the second reference value, the step size used for indexing, is */
-/*        not integral, i.e., DINT(REFDAT(2)) .NE. REFDAT(2), the error */
-/*        SPICE(REFVALNOTINTEGER) will be signalled. */
+/*     10) If an implicitly indexed generic segment is being written and */
+/*         the second reference value, the step size used for indexing, */
+/*         is not integral, i.e., DINT(REFDAT(2)) .NE. REFDAT(2), the */
+/*         error SPICE(REFVALNOTINTEGER) is signaled. */
 
 /* $ Files */
 
-/*     See HANDLE in the $ Detailed_Input section. */
+/*     See HANDLE in the $Detailed_Input section. */
 
 /* $ Particulars */
 
@@ -3264,8 +3292,8 @@ L_sgwvpk:
 
 /* $ Examples */
 
-/*     See the $ Examples section in the header for the main subroutine. */
-/*     It contains examples wich demonstrate the use of the entry points */
+/*     See the $Examples section in the header for the main subroutine. */
+/*     It contains examples which demonstrate the use of the entry points */
 /*     in the generic segments sequential writer. The entry points which */
 /*     comprise the generic segments sequential writer must be used */
 /*     together in the proper manner. Rather than repeating the examples */
@@ -3275,19 +3303,25 @@ L_sgwvpk:
 
 /*     None. */
 
-/* $ Author_and_Institution */
-
-/*     K.R. Gehringer    (JPL) */
-/*     W.L. Taber        (JPL) */
-
 /* $ Literature_References */
 
 /*     None. */
 
+/* $ Author_and_Institution */
+
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
+/*     W.L. Taber         (JPL) */
+
 /* $ Version */
 
-/* -    SPICELIB Version 1.0.0, 05-APR-1995 (KRG) (WLT) */
+/* -    SPICELIB Version 1.0.1, 27-OCT-2021 (JDR) (NJB) */
 
+/*        Edited the header to comply with NAIF standard. Corrected */
+/*        typos in comments. */
+
+/* -    SPICELIB Version 1.0.0, 05-APR-1995 (KRG) (WLT) */
 
 /* -& */
 /* $ Index_Entries */
@@ -3342,9 +3376,9 @@ L_sgwvpk:
 	    return 0;
 	}
 	explct = ftexpl[(i__1 = index - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge(
-		"ftexpl", i__1, "sgseqw_", (ftnlen)3082)];
+		"ftexpl", i__1, "sgseqw_", (ftnlen)3127)];
 	fxdseg = ftfixd[(i__1 = index - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge(
-		"ftfixd", i__1, "sgseqw_", (ftnlen)3083)];
+		"ftfixd", i__1, "sgseqw_", (ftnlen)3128)];
 	lsthan = *handle;
 	dafcad_(handle);
 	if (failed_()) {
@@ -3377,8 +3411,8 @@ L_sgwvpk:
 
     if (*npkts <= 0) {
 	setmsg_("The number of packets to store is not positive.  The value "
-		"supplied was #. Perhaps this packet count was unitialized.", (
-		ftnlen)117);
+		"supplied was #. Perhaps this packet count was uninitialized.",
+		 (ftnlen)119);
 	errint_("#", npkts, (ftnlen)1);
 	sigerr_("SPICE(NUMPACKETSNOTPOS)", (ftnlen)23);
 	chkout_("SGWVPK", (ftnlen)6);
@@ -3411,12 +3445,12 @@ L_sgwvpk:
 /*        If this is not the first time we have added data to this */
 /*        segment, we need to be sure that all of the current reference */
 /*        values are greater then the last reference value from the */
-/*        provious addition of packets to the segment. */
+/*        previous addition of packets to the segment. */
 
 	if (ftnpkt[(i__1 = index - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge("ftn"
-		"pkt", i__1, "sgseqw_", (ftnlen)3166)] > 0) {
+		"pkt", i__1, "sgseqw_", (ftnlen)3211)] > 0) {
 	    if (ftrefs[(i__1 = (index << 1) - 2) < 40 && 0 <= i__1 ? i__1 : 
-		    s_rnge("ftrefs", i__1, "sgseqw_", (ftnlen)3168)] >= 
+		    s_rnge("ftrefs", i__1, "sgseqw_", (ftnlen)3213)] >= 
 		    refdat[0]) {
 		setmsg_("Reference values are out of order. The offending va"
 			"lue, #, was found The reference values for explicitl"
@@ -3427,7 +3461,7 @@ L_sgwvpk:
 		errdp_("#", refdat, (ftnlen)1);
 		errdp_("#", &ftrefs[(i__1 = (index << 1) - 2) < 40 && 0 <= 
 			i__1 ? i__1 : s_rnge("ftrefs", i__1, "sgseqw_", (
-			ftnlen)3179)], (ftnlen)1);
+			ftnlen)3224)], (ftnlen)1);
 		sigerr_("SPICE(UNORDEREDREFS)", (ftnlen)20);
 		chkout_("SGWVPK", (ftnlen)6);
 		return 0;
@@ -3484,17 +3518,17 @@ L_sgwvpk:
 	    }
 	    pktpos += pktsiz[i__ - 1];
 	    ftpksz[(i__2 = index - 1) < 20 && 0 <= i__2 ? i__2 : s_rnge("ftp"
-		    "ksz", i__2, "sgseqw_", (ftnlen)3250)] = ftpksz[(i__3 = 
+		    "ksz", i__2, "sgseqw_", (ftnlen)3295)] = ftpksz[(i__3 = 
 		    index - 1) < 20 && 0 <= i__3 ? i__3 : s_rnge("ftpksz", 
-		    i__3, "sgseqw_", (ftnlen)3250)] + pktsiz[i__ - 1];
+		    i__3, "sgseqw_", (ftnlen)3295)] + pktsiz[i__ - 1];
 
 /*           Remember the maximum packet size encountered. */
 
 	    if (pktsiz[i__ - 1] > ftmxsz[(i__2 = index - 1) < 20 && 0 <= i__2 
-		    ? i__2 : s_rnge("ftmxsz", i__2, "sgseqw_", (ftnlen)3254)])
+		    ? i__2 : s_rnge("ftmxsz", i__2, "sgseqw_", (ftnlen)3299)])
 		     {
 		ftmxsz[(i__2 = index - 1) < 20 && 0 <= i__2 ? i__2 : s_rnge(
-			"ftmxsz", i__2, "sgseqw_", (ftnlen)3256)] = pktsiz[
+			"ftmxsz", i__2, "sgseqw_", (ftnlen)3301)] = pktsiz[
 			i__ - 1];
 	    }
 	}
@@ -3504,20 +3538,20 @@ L_sgwvpk:
 /*        the increasing order of the reference values. */
 
 	ftrefs[(i__1 = (index << 1) - 2) < 40 && 0 <= i__1 ? i__1 : s_rnge(
-		"ftrefs", i__1, "sgseqw_", (ftnlen)3266)] = refdat[*nrefs - 1]
+		"ftrefs", i__1, "sgseqw_", (ftnlen)3311)] = refdat[*nrefs - 1]
 		;
 
 /*        Update the counts for the number of packets, the number of */
 /*        references. */
 
 	ftnpkt[(i__1 = index - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge("ftnpkt", 
-		i__1, "sgseqw_", (ftnlen)3271)] = ftnpkt[(i__2 = index - 1) < 
+		i__1, "sgseqw_", (ftnlen)3316)] = ftnpkt[(i__2 = index - 1) < 
 		20 && 0 <= i__2 ? i__2 : s_rnge("ftnpkt", i__2, "sgseqw_", (
-		ftnlen)3271)] + *npkts;
+		ftnlen)3316)] + *npkts;
 	ftnref[(i__1 = index - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge("ftnref", 
-		i__1, "sgseqw_", (ftnlen)3272)] = ftnref[(i__2 = index - 1) < 
+		i__1, "sgseqw_", (ftnlen)3317)] = ftnref[(i__2 = index - 1) < 
 		20 && 0 <= i__2 ? i__2 : s_rnge("ftnref", i__2, "sgseqw_", (
-		ftnlen)3272)] + *nrefs;
+		ftnlen)3317)] + *nrefs;
     } else {
 
 /*        For implicitly indexed packets the number of reference values */
@@ -3529,7 +3563,7 @@ L_sgwvpk:
 /*        these arguments are ignored. */
 
 	if (ftnpkt[(i__1 = index - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge("ftn"
-		"pkt", i__1, "sgseqw_", (ftnlen)3284)] == 0) {
+		"pkt", i__1, "sgseqw_", (ftnlen)3329)] == 0) {
 	    if (*nrefs != 2) {
 		setmsg_("The number of reference values supplied, #, is not "
 			"compatible with implicitly indexed packets. Implicit"
@@ -3564,9 +3598,9 @@ L_sgwvpk:
 	    }
 	    pktpos += pktsiz[i__ - 1];
 	    ftpksz[(i__2 = index - 1) < 20 && 0 <= i__2 ? i__2 : s_rnge("ftp"
-		    "ksz", i__2, "sgseqw_", (ftnlen)3331)] = ftpksz[(i__3 = 
+		    "ksz", i__2, "sgseqw_", (ftnlen)3376)] = ftpksz[(i__3 = 
 		    index - 1) < 20 && 0 <= i__3 ? i__3 : s_rnge("ftpksz", 
-		    i__3, "sgseqw_", (ftnlen)3331)] + pktsiz[i__ - 1];
+		    i__3, "sgseqw_", (ftnlen)3376)] + pktsiz[i__ - 1];
 	}
 
 /*        Save the reference values and the number of reference values */
@@ -3574,27 +3608,27 @@ L_sgwvpk:
 /*        the routine. */
 
 	if (ftnpkt[(i__1 = index - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge("ftn"
-		"pkt", i__1, "sgseqw_", (ftnlen)3339)] == 0) {
+		"pkt", i__1, "sgseqw_", (ftnlen)3384)] == 0) {
 	    ftnref[(i__1 = index - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge("ftn"
-		    "ref", i__1, "sgseqw_", (ftnlen)3341)] = *nrefs;
+		    "ref", i__1, "sgseqw_", (ftnlen)3386)] = *nrefs;
 	    ftrefs[(i__1 = (index << 1) - 2) < 40 && 0 <= i__1 ? i__1 : 
-		    s_rnge("ftrefs", i__1, "sgseqw_", (ftnlen)3342)] = refdat[
+		    s_rnge("ftrefs", i__1, "sgseqw_", (ftnlen)3387)] = refdat[
 		    0];
 	    ftrefs[(i__1 = (index << 1) - 1) < 40 && 0 <= i__1 ? i__1 : 
-		    s_rnge("ftrefs", i__1, "sgseqw_", (ftnlen)3343)] = refdat[
+		    s_rnge("ftrefs", i__1, "sgseqw_", (ftnlen)3388)] = refdat[
 		    1];
 	}
 
 /*        Update the counts for the number of packets. */
 
 	ftnpkt[(i__1 = index - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge("ftnpkt", 
-		i__1, "sgseqw_", (ftnlen)3349)] = ftnpkt[(i__2 = index - 1) < 
+		i__1, "sgseqw_", (ftnlen)3394)] = ftnpkt[(i__2 = index - 1) < 
 		20 && 0 <= i__2 ? i__2 : s_rnge("ftnpkt", i__2, "sgseqw_", (
-		ftnlen)3349)] + *npkts;
+		ftnlen)3394)] + *npkts;
     }
     chkout_("SGWVPK", (ftnlen)6);
     return 0;
-/* $Procedure SGWES ( Generic segements: End a segment. ) */
+/* $Procedure SGWES ( Generic segments: End a segment. ) */
 
 L_sgwes:
 /* $ Abstract */
@@ -3628,7 +3662,7 @@ L_sgwes:
 
 /* $ Required_Reading */
 
-/*     DAF Required Reading. */
+/*     DAF */
 
 /* $ Keywords */
 
@@ -3636,19 +3670,21 @@ L_sgwes:
 
 /* $ Declarations */
 
+/*     IMPLICIT NONE */
+
 /*     INTEGER               HANDLE */
 
 /* $ Brief_I/O */
 
 /*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
-/*      HANDLE    I    Handle of a DAF file opened with write access. */
+/*     HANDLE    I    Handle of a DAF file opened with write access. */
 
 /* $ Detailed_Input */
 
-/*      HANDLE   Handle of a DAF file opened with write access. This is */
-/*               the handle of the file which contains the generic */
-/*               segment that we wish to end. */
+/*     HANDLE   is the handle of a DAF file opened with write access. */
+/*              This is the handle of the file which contains the generic */
+/*              segment that we wish to end. */
 
 /* $ Detailed_Output */
 
@@ -3661,16 +3697,16 @@ L_sgwes:
 
 /* $ Exceptions */
 
-/*     1) If there are no generic segments currently being written, the */
-/*        error SPICE(CALLEDOUTOFORDER) will be signalled. */
+/*     1)  If there are no generic segments currently being written, the */
+/*         error SPICE(CALLEDOUTOFORDER) is signaled. */
 
-/*     2) If there is no generic segment being written to the file */
-/*        associated with HANDLE, the error SPICE(SEGMENTNOTFOUND) will */
-/*        be signalled. */
+/*     2)  If there is no generic segment being written to the file */
+/*         associated with HANDLE, the error SPICE(SEGMENTNOTFOUND) is */
+/*         signaled. */
 
 /* $ Files */
 
-/*     See HANDLE in the $ Detailed_Input section. */
+/*     See HANDLE in the $Detailed_Input section. */
 
 /* $ Particulars */
 
@@ -3680,8 +3716,8 @@ L_sgwes:
 
 /* $ Examples */
 
-/*     See the $ Examples section in the header for the main subroutine. */
-/*     It contains examples wich demonstrate the use of the entry points */
+/*     See the $Examples section in the header for the main subroutine. */
+/*     It contains examples which demonstrate the use of the entry points */
 /*     in the generic segments sequential writer. The entry points which */
 /*     comprise the generic segments sequential writer must be used */
 /*     together in the proper manner. Rather than repeating the examples */
@@ -3691,16 +3727,23 @@ L_sgwes:
 
 /*     None. */
 
-/* $ Author_and_Institution */
-
-/*     K.R. Gehringer    (JPL) */
-/*     W.L. Taber        (JPL) */
-
 /* $ Literature_References */
 
 /*     None. */
 
+/* $ Author_and_Institution */
+
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
+/*     W.L. Taber         (JPL) */
+
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.1, 03-JUN-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. Removed */
+/*        unnecessary $Revisions section. */
 
 /* -    SPICELIB Version 1.1.0, 30-JUL-1996 (KRG) (NJB) */
 
@@ -3712,7 +3755,7 @@ L_sgwes:
 
 /*        The address calculations, see the variable MYADDR, were fixed. */
 /*        This involved initializing the variable outside of the loop */
-/*        that scans throught the packet data and then incrementing this */
+/*        that scans through the packet data and then incrementing this */
 /*        variable in the same way as PKTADR. */
 
 /*        The changes were made in two places, for the explicitly indexed */
@@ -3724,25 +3767,6 @@ L_sgwes:
 /* $ Index_Entries */
 
 /*     end a generic segment */
-
-/* -& */
-/* $ Revisions */
-
-/* -    SPICELIB Version 1.1.0, 30-JUL-1996 (KRG) (NJB) */
-
-/*        Fixed an annoying little bug in the variable segments code */
-/*        when ending a segment. Rather than storing an appropriate */
-/*        offset from the beginning of the segment as the packet */
-/*        address in the packet directory, the absolute address, the */
-/*        DAF address, was stored. This bug has been fixed. */
-
-/*        The address calculations, see the variable MYADDR, were fixed. */
-/*        This involved initializing the variable outside of the loop */
-/*        that scans throught the packet data and then incrementing this */
-/*        variable in the same way as PKTADR. */
-
-/*        The changes were made in two places, for the explicitly indexed */
-/*        case and for the implicitly indexed case. */
 
 /* -& */
 
@@ -3792,9 +3816,9 @@ L_sgwes:
 	    return 0;
 	}
 	explct = ftexpl[(i__1 = index - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge(
-		"ftexpl", i__1, "sgseqw_", (ftnlen)3569)];
+		"ftexpl", i__1, "sgseqw_", (ftnlen)3605)];
 	fxdseg = ftfixd[(i__1 = index - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge(
-		"ftfixd", i__1, "sgseqw_", (ftnlen)3570)];
+		"ftfixd", i__1, "sgseqw_", (ftnlen)3606)];
 	lsthan = *handle;
 	dafcad_(handle);
 	if (failed_()) {
@@ -3828,20 +3852,20 @@ L_sgwes:
 /*              segment. */
 
 	    size = ftoff[(i__1 = index - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge(
-		    "ftoff", i__1, "sgseqw_", (ftnlen)3606)] + ftpksz[(i__2 = 
+		    "ftoff", i__1, "sgseqw_", (ftnlen)3642)] + ftpksz[(i__2 = 
 		    index - 1) < 20 && 0 <= i__2 ? i__2 : s_rnge("ftpksz", 
-		    i__2, "sgseqw_", (ftnlen)3606)];
+		    i__2, "sgseqw_", (ftnlen)3642)];
 	    refadr = ftbadr[(i__1 = index - 1) < 20 && 0 <= i__1 ? i__1 : 
-		    s_rnge("ftbadr", i__1, "sgseqw_", (ftnlen)3607)] + ftncon[
+		    s_rnge("ftbadr", i__1, "sgseqw_", (ftnlen)3643)] + ftncon[
 		    (i__2 = index - 1) < 20 && 0 <= i__2 ? i__2 : s_rnge(
-		    "ftncon", i__2, "sgseqw_", (ftnlen)3607)];
+		    "ftncon", i__2, "sgseqw_", (ftnlen)3643)];
 
 /*           2) Collect all of the references stored with the packets */
 /*              when they were written, and copy them into the */
 /*              reference area. */
 
 	    i__2 = ftnpkt[(i__1 = index - 1) < 20 && 0 <= i__1 ? i__1 : 
-		    s_rnge("ftnpkt", i__1, "sgseqw_", (ftnlen)3613)];
+		    s_rnge("ftnpkt", i__1, "sgseqw_", (ftnlen)3649)];
 	    for (i__ = 1; i__ <= i__2; ++i__) {
 		dafgda_(handle, &refadr, &refadr, &myref);
 		dafada_(&myref, &c__1);
@@ -3856,16 +3880,16 @@ L_sgwes:
 /*              references is greater than DIRSIZ. */
 
 	    if (ftnref[(i__2 = index - 1) < 20 && 0 <= i__2 ? i__2 : s_rnge(
-		    "ftnref", i__2, "sgseqw_", (ftnlen)3630)] > 100) {
+		    "ftnref", i__2, "sgseqw_", (ftnlen)3666)] > 100) {
 		refadr = ftbadr[(i__2 = index - 1) < 20 && 0 <= i__2 ? i__2 : 
-			s_rnge("ftbadr", i__2, "sgseqw_", (ftnlen)3632)] + 
+			s_rnge("ftbadr", i__2, "sgseqw_", (ftnlen)3668)] + 
 			ftncon[(i__1 = index - 1) < 20 && 0 <= i__1 ? i__1 : 
-			s_rnge("ftncon", i__1, "sgseqw_", (ftnlen)3632)];
+			s_rnge("ftncon", i__1, "sgseqw_", (ftnlen)3668)];
 		refadr = refadr + ftnpkt[(i__2 = index - 1) < 20 && 0 <= i__2 
 			? i__2 : s_rnge("ftnpkt", i__2, "sgseqw_", (ftnlen)
-			3633)] * size + 99;
+			3669)] * size + 99;
 		i__1 = (ftnref[(i__2 = index - 1) < 20 && 0 <= i__2 ? i__2 : 
-			s_rnge("ftnref", i__2, "sgseqw_", (ftnlen)3635)] - 1) 
+			s_rnge("ftnref", i__2, "sgseqw_", (ftnlen)3671)] - 1) 
 			/ 100;
 		for (i__ = 1; i__ <= i__1; ++i__) {
 		    dafgda_(handle, &refadr, &refadr, &myref);
@@ -3881,35 +3905,35 @@ L_sgwes:
 /*           4) Construct the meta data for the segment. */
 
 	    size = (ftoff[(i__1 = index - 1) < 20 && 0 <= i__1 ? i__1 : 
-		    s_rnge("ftoff", i__1, "sgseqw_", (ftnlen)3653)] + ftpksz[(
+		    s_rnge("ftoff", i__1, "sgseqw_", (ftnlen)3689)] + ftpksz[(
 		    i__2 = index - 1) < 20 && 0 <= i__2 ? i__2 : s_rnge("ftp"
-		    "ksz", i__2, "sgseqw_", (ftnlen)3653)]) * ftnpkt[(i__3 = 
+		    "ksz", i__2, "sgseqw_", (ftnlen)3689)]) * ftnpkt[(i__3 = 
 		    index - 1) < 20 && 0 <= i__3 ? i__3 : s_rnge("ftnpkt", 
-		    i__3, "sgseqw_", (ftnlen)3653)];
+		    i__3, "sgseqw_", (ftnlen)3689)];
 	    meta[0] = 0;
 	    meta[1] = ftncon[(i__1 = index - 1) < 20 && 0 <= i__1 ? i__1 : 
-		    s_rnge("ftncon", i__1, "sgseqw_", (ftnlen)3656)];
+		    s_rnge("ftncon", i__1, "sgseqw_", (ftnlen)3692)];
 	    meta[10] = meta[0] + meta[1];
 	    meta[11] = ftnpkt[(i__1 = index - 1) < 20 && 0 <= i__1 ? i__1 : 
-		    s_rnge("ftnpkt", i__1, "sgseqw_", (ftnlen)3658)];
+		    s_rnge("ftnpkt", i__1, "sgseqw_", (ftnlen)3694)];
 	    meta[15] = ftoff[(i__1 = index - 1) < 20 && 0 <= i__1 ? i__1 : 
-		    s_rnge("ftoff", i__1, "sgseqw_", (ftnlen)3659)];
+		    s_rnge("ftoff", i__1, "sgseqw_", (ftnlen)3695)];
 	    meta[7] = 0;
 	    meta[8] = 0;
 	    meta[9] = 0;
 	    meta[5] = meta[10] + size;
 	    meta[6] = ftnref[(i__1 = index - 1) < 20 && 0 <= i__1 ? i__1 : 
-		    s_rnge("ftnref", i__1, "sgseqw_", (ftnlen)3664)];
+		    s_rnge("ftnref", i__1, "sgseqw_", (ftnlen)3700)];
 	    meta[2] = meta[5] + meta[6];
 	    meta[3] = (ftnref[(i__1 = index - 1) < 20 && 0 <= i__1 ? i__1 : 
-		    s_rnge("ftnref", i__1, "sgseqw_", (ftnlen)3666)] - 1) / 
+		    s_rnge("ftnref", i__1, "sgseqw_", (ftnlen)3702)] - 1) / 
 		    100;
 	    meta[4] = ftityp[(i__1 = index - 1) < 20 && 0 <= i__1 ? i__1 : 
-		    s_rnge("ftityp", i__1, "sgseqw_", (ftnlen)3667)];
+		    s_rnge("ftityp", i__1, "sgseqw_", (ftnlen)3703)];
 	    meta[12] = 0;
 	    meta[13] = 0;
 	    meta[14] = ftpksz[(i__1 = index - 1) < 20 && 0 <= i__1 ? i__1 : 
-		    s_rnge("ftpksz", i__1, "sgseqw_", (ftnlen)3670)];
+		    s_rnge("ftpksz", i__1, "sgseqw_", (ftnlen)3706)];
 	    meta[16] = 17;
 	} else {
 
@@ -3926,13 +3950,13 @@ L_sgwes:
 /*              packet. */
 
 	    pktadr = ftbadr[(i__1 = index - 1) < 20 && 0 <= i__1 ? i__1 : 
-		    s_rnge("ftbadr", i__1, "sgseqw_", (ftnlen)3687)] + ftncon[
+		    s_rnge("ftbadr", i__1, "sgseqw_", (ftnlen)3723)] + ftncon[
 		    (i__2 = index - 1) < 20 && 0 <= i__2 ? i__2 : s_rnge(
-		    "ftncon", i__2, "sgseqw_", (ftnlen)3687)] + ftoff[(i__3 = 
+		    "ftncon", i__2, "sgseqw_", (ftnlen)3723)] + ftoff[(i__3 = 
 		    index - 1) < 20 && 0 <= i__3 ? i__3 : s_rnge("ftoff", 
-		    i__3, "sgseqw_", (ftnlen)3687)];
+		    i__3, "sgseqw_", (ftnlen)3723)];
 	    myaddr = (doublereal) (ftoff[(i__1 = index - 1) < 20 && 0 <= i__1 
-		    ? i__1 : s_rnge("ftoff", i__1, "sgseqw_", (ftnlen)3688)] 
+		    ? i__1 : s_rnge("ftoff", i__1, "sgseqw_", (ftnlen)3724)] 
 		    + 1);
 
 /*           2) Create a packet directory. The packet directory consists */
@@ -3941,7 +3965,7 @@ L_sgwes:
 /*              compute the size of the last packet. */
 
 	    i__2 = ftnpkt[(i__1 = index - 1) < 20 && 0 <= i__1 ? i__1 : 
-		    s_rnge("ftnpkt", i__1, "sgseqw_", (ftnlen)3695)];
+		    s_rnge("ftnpkt", i__1, "sgseqw_", (ftnlen)3731)];
 	    for (i__ = 1; i__ <= i__2; ++i__) {
 		i__1 = pktadr - 1;
 		i__3 = pktadr - 1;
@@ -3954,10 +3978,10 @@ L_sgwes:
 		size = (integer) mysize;
 		pktadr = pktadr + size + ftoff[(i__1 = index - 1) < 20 && 0 <=
 			 i__1 ? i__1 : s_rnge("ftoff", i__1, "sgseqw_", (
-			ftnlen)3707)];
+			ftnlen)3743)];
 		myaddr += (doublereal) (size + ftoff[(i__1 = index - 1) < 20 
 			&& 0 <= i__1 ? i__1 : s_rnge("ftoff", i__1, "sgseqw_",
-			 (ftnlen)3708)]);
+			 (ftnlen)3744)]);
 	    }
 
 /*           Put in the fake beginning for an extra packet. PKTADR should */
@@ -3975,11 +3999,11 @@ L_sgwes:
 /*              reference area. */
 
 	    refadr = ftbadr[(i__2 = index - 1) < 20 && 0 <= i__2 ? i__2 : 
-		    s_rnge("ftbadr", i__2, "sgseqw_", (ftnlen)3729)] + ftncon[
+		    s_rnge("ftbadr", i__2, "sgseqw_", (ftnlen)3765)] + ftncon[
 		    (i__1 = index - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge(
-		    "ftncon", i__1, "sgseqw_", (ftnlen)3729)];
+		    "ftncon", i__1, "sgseqw_", (ftnlen)3765)];
 	    i__1 = ftnpkt[(i__2 = index - 1) < 20 && 0 <= i__2 ? i__2 : 
-		    s_rnge("ftnpkt", i__2, "sgseqw_", (ftnlen)3731)];
+		    s_rnge("ftnpkt", i__2, "sgseqw_", (ftnlen)3767)];
 	    for (i__ = 1; i__ <= i__1; ++i__) {
 		dafgda_(handle, &refadr, &refadr, &myref);
 		i__2 = refadr + 1;
@@ -3993,7 +4017,7 @@ L_sgwes:
 		size = (integer) mysize;
 		refadr = refadr + size + ftoff[(i__2 = index - 1) < 20 && 0 <=
 			 i__2 ? i__2 : s_rnge("ftoff", i__2, "sgseqw_", (
-			ftnlen)3743)];
+			ftnlen)3779)];
 	    }
 
 /*           3) Create a reference directory if the number of */
@@ -4003,23 +4027,23 @@ L_sgwes:
 /*              packet. */
 
 	    if (ftnref[(i__1 = index - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge(
-		    "ftnref", i__1, "sgseqw_", (ftnlen)3753)] > 100) {
+		    "ftnref", i__1, "sgseqw_", (ftnlen)3789)] > 100) {
 		refadr = ftbadr[(i__1 = index - 1) < 20 && 0 <= i__1 ? i__1 : 
-			s_rnge("ftbadr", i__1, "sgseqw_", (ftnlen)3755)] + 
+			s_rnge("ftbadr", i__1, "sgseqw_", (ftnlen)3791)] + 
 			ftncon[(i__2 = index - 1) < 20 && 0 <= i__2 ? i__2 : 
-			s_rnge("ftncon", i__2, "sgseqw_", (ftnlen)3755)];
+			s_rnge("ftncon", i__2, "sgseqw_", (ftnlen)3791)];
 		refadr += ftpksz[(i__1 = index - 1) < 20 && 0 <= i__1 ? i__1 :
-			 s_rnge("ftpksz", i__1, "sgseqw_", (ftnlen)3756)];
+			 s_rnge("ftpksz", i__1, "sgseqw_", (ftnlen)3792)];
 		refadr += ftoff[(i__1 = index - 1) < 20 && 0 <= i__1 ? i__1 : 
-			s_rnge("ftoff", i__1, "sgseqw_", (ftnlen)3757)] * 
+			s_rnge("ftoff", i__1, "sgseqw_", (ftnlen)3793)] * 
 			ftnpkt[(i__2 = index - 1) < 20 && 0 <= i__2 ? i__2 : 
-			s_rnge("ftnpkt", i__2, "sgseqw_", (ftnlen)3757)];
+			s_rnge("ftnpkt", i__2, "sgseqw_", (ftnlen)3793)];
 		refadr = refadr + ftnpkt[(i__1 = index - 1) < 20 && 0 <= i__1 
 			? i__1 : s_rnge("ftnpkt", i__1, "sgseqw_", (ftnlen)
-			3758)] + 1;
+			3794)] + 1;
 		refadr += 99;
 		i__2 = (ftnref[(i__1 = index - 1) < 20 && 0 <= i__1 ? i__1 : 
-			s_rnge("ftnref", i__1, "sgseqw_", (ftnlen)3761)] - 1) 
+			s_rnge("ftnref", i__1, "sgseqw_", (ftnlen)3797)] - 1) 
 			/ 100;
 		for (i__ = 1; i__ <= i__2; ++i__) {
 		    dafgda_(handle, &refadr, &refadr, &myref);
@@ -4036,34 +4060,34 @@ L_sgwes:
 
 	    meta[0] = 0;
 	    meta[1] = ftncon[(i__2 = index - 1) < 20 && 0 <= i__2 ? i__2 : 
-		    s_rnge("ftncon", i__2, "sgseqw_", (ftnlen)3780)];
+		    s_rnge("ftncon", i__2, "sgseqw_", (ftnlen)3816)];
 	    meta[10] = meta[0] + meta[1];
 	    meta[11] = ftnpkt[(i__2 = index - 1) < 20 && 0 <= i__2 ? i__2 : 
-		    s_rnge("ftnpkt", i__2, "sgseqw_", (ftnlen)3782)];
+		    s_rnge("ftnpkt", i__2, "sgseqw_", (ftnlen)3818)];
 	    meta[15] = ftoff[(i__2 = index - 1) < 20 && 0 <= i__2 ? i__2 : 
-		    s_rnge("ftoff", i__2, "sgseqw_", (ftnlen)3783)];
+		    s_rnge("ftoff", i__2, "sgseqw_", (ftnlen)3819)];
 	    meta[7] = meta[10] + ftpksz[(i__2 = index - 1) < 20 && 0 <= i__2 ?
-		     i__2 : s_rnge("ftpksz", i__2, "sgseqw_", (ftnlen)3784)] 
+		     i__2 : s_rnge("ftpksz", i__2, "sgseqw_", (ftnlen)3820)] 
 		    + ftoff[(i__1 = index - 1) < 20 && 0 <= i__1 ? i__1 : 
-		    s_rnge("ftoff", i__1, "sgseqw_", (ftnlen)3784)] * ftnpkt[(
+		    s_rnge("ftoff", i__1, "sgseqw_", (ftnlen)3820)] * ftnpkt[(
 		    i__3 = index - 1) < 20 && 0 <= i__3 ? i__3 : s_rnge("ftn"
-		    "pkt", i__3, "sgseqw_", (ftnlen)3784)];
+		    "pkt", i__3, "sgseqw_", (ftnlen)3820)];
 	    meta[8] = ftnpkt[(i__2 = index - 1) < 20 && 0 <= i__2 ? i__2 : 
-		    s_rnge("ftnpkt", i__2, "sgseqw_", (ftnlen)3786)] + 1;
+		    s_rnge("ftnpkt", i__2, "sgseqw_", (ftnlen)3822)] + 1;
 	    meta[9] = 1;
 	    meta[5] = meta[7] + meta[8];
 	    meta[6] = ftnref[(i__2 = index - 1) < 20 && 0 <= i__2 ? i__2 : 
-		    s_rnge("ftnref", i__2, "sgseqw_", (ftnlen)3789)];
+		    s_rnge("ftnref", i__2, "sgseqw_", (ftnlen)3825)];
 	    meta[2] = meta[5] + meta[6];
 	    meta[3] = (ftnref[(i__2 = index - 1) < 20 && 0 <= i__2 ? i__2 : 
-		    s_rnge("ftnref", i__2, "sgseqw_", (ftnlen)3791)] - 1) / 
+		    s_rnge("ftnref", i__2, "sgseqw_", (ftnlen)3827)] - 1) / 
 		    100;
 	    meta[4] = ftityp[(i__2 = index - 1) < 20 && 0 <= i__2 ? i__2 : 
-		    s_rnge("ftityp", i__2, "sgseqw_", (ftnlen)3792)];
+		    s_rnge("ftityp", i__2, "sgseqw_", (ftnlen)3828)];
 	    meta[12] = 0;
 	    meta[13] = 0;
 	    meta[14] = ftmxsz[(i__2 = index - 1) < 20 && 0 <= i__2 ? i__2 : 
-		    s_rnge("ftmxsz", i__2, "sgseqw_", (ftnlen)3795)];
+		    s_rnge("ftmxsz", i__2, "sgseqw_", (ftnlen)3831)];
 	    meta[16] = 17;
 	}
     } else {
@@ -4078,9 +4102,9 @@ L_sgwes:
 /*           values. */
 
 	    dafada_(&ftrefs[(i__2 = (index << 1) - 2) < 40 && 0 <= i__2 ? 
-		    i__2 : s_rnge("ftrefs", i__2, "sgseqw_", (ftnlen)3811)], &
+		    i__2 : s_rnge("ftrefs", i__2, "sgseqw_", (ftnlen)3847)], &
 		    ftnref[(i__1 = index - 1) < 20 && 0 <= i__1 ? i__1 : 
-		    s_rnge("ftnref", i__1, "sgseqw_", (ftnlen)3811)]);
+		    s_rnge("ftnref", i__1, "sgseqw_", (ftnlen)3847)]);
 	    if (failed_()) {
 		chkout_("SGWES", (ftnlen)5);
 		return 0;
@@ -4090,33 +4114,33 @@ L_sgwes:
 /*           will write it to the file a bit later. */
 
 	    size = (ftoff[(i__2 = index - 1) < 20 && 0 <= i__2 ? i__2 : 
-		    s_rnge("ftoff", i__2, "sgseqw_", (ftnlen)3821)] + ftpksz[(
+		    s_rnge("ftoff", i__2, "sgseqw_", (ftnlen)3857)] + ftpksz[(
 		    i__1 = index - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge("ftp"
-		    "ksz", i__1, "sgseqw_", (ftnlen)3821)]) * ftnpkt[(i__3 = 
+		    "ksz", i__1, "sgseqw_", (ftnlen)3857)]) * ftnpkt[(i__3 = 
 		    index - 1) < 20 && 0 <= i__3 ? i__3 : s_rnge("ftnpkt", 
-		    i__3, "sgseqw_", (ftnlen)3821)];
+		    i__3, "sgseqw_", (ftnlen)3857)];
 	    meta[0] = 0;
 	    meta[1] = ftncon[(i__2 = index - 1) < 20 && 0 <= i__2 ? i__2 : 
-		    s_rnge("ftncon", i__2, "sgseqw_", (ftnlen)3824)];
+		    s_rnge("ftncon", i__2, "sgseqw_", (ftnlen)3860)];
 	    meta[10] = meta[0] + meta[1];
 	    meta[11] = ftnpkt[(i__2 = index - 1) < 20 && 0 <= i__2 ? i__2 : 
-		    s_rnge("ftnpkt", i__2, "sgseqw_", (ftnlen)3826)];
+		    s_rnge("ftnpkt", i__2, "sgseqw_", (ftnlen)3862)];
 	    meta[15] = ftoff[(i__2 = index - 1) < 20 && 0 <= i__2 ? i__2 : 
-		    s_rnge("ftoff", i__2, "sgseqw_", (ftnlen)3827)];
+		    s_rnge("ftoff", i__2, "sgseqw_", (ftnlen)3863)];
 	    meta[7] = 0;
 	    meta[8] = 0;
 	    meta[9] = 0;
 	    meta[5] = meta[10] + size;
 	    meta[6] = ftnref[(i__2 = index - 1) < 20 && 0 <= i__2 ? i__2 : 
-		    s_rnge("ftnref", i__2, "sgseqw_", (ftnlen)3832)];
+		    s_rnge("ftnref", i__2, "sgseqw_", (ftnlen)3868)];
 	    meta[2] = meta[5] + meta[6];
 	    meta[3] = 0;
 	    meta[4] = ftityp[(i__2 = index - 1) < 20 && 0 <= i__2 ? i__2 : 
-		    s_rnge("ftityp", i__2, "sgseqw_", (ftnlen)3835)];
+		    s_rnge("ftityp", i__2, "sgseqw_", (ftnlen)3871)];
 	    meta[12] = 0;
 	    meta[13] = 0;
 	    meta[14] = ftpksz[(i__2 = index - 1) < 20 && 0 <= i__2 ? i__2 : 
-		    s_rnge("ftpksz", i__2, "sgseqw_", (ftnlen)3838)];
+		    s_rnge("ftpksz", i__2, "sgseqw_", (ftnlen)3874)];
 	    meta[16] = 17;
 	} else {
 
@@ -4131,13 +4155,13 @@ L_sgwes:
 /*              packet. */
 
 	    pktadr = ftbadr[(i__2 = index - 1) < 20 && 0 <= i__2 ? i__2 : 
-		    s_rnge("ftbadr", i__2, "sgseqw_", (ftnlen)3853)] + ftncon[
+		    s_rnge("ftbadr", i__2, "sgseqw_", (ftnlen)3889)] + ftncon[
 		    (i__1 = index - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge(
-		    "ftncon", i__1, "sgseqw_", (ftnlen)3853)] + ftoff[(i__3 = 
+		    "ftncon", i__1, "sgseqw_", (ftnlen)3889)] + ftoff[(i__3 = 
 		    index - 1) < 20 && 0 <= i__3 ? i__3 : s_rnge("ftoff", 
-		    i__3, "sgseqw_", (ftnlen)3853)];
+		    i__3, "sgseqw_", (ftnlen)3889)];
 	    myaddr = (doublereal) (ftoff[(i__2 = index - 1) < 20 && 0 <= i__2 
-		    ? i__2 : s_rnge("ftoff", i__2, "sgseqw_", (ftnlen)3854)] 
+		    ? i__2 : s_rnge("ftoff", i__2, "sgseqw_", (ftnlen)3890)] 
 		    + 1);
 
 /*           2) Create a packet directory. The packet directory consists */
@@ -4146,7 +4170,7 @@ L_sgwes:
 /*              compute the size of the last packet. */
 
 	    i__1 = ftnpkt[(i__2 = index - 1) < 20 && 0 <= i__2 ? i__2 : 
-		    s_rnge("ftnpkt", i__2, "sgseqw_", (ftnlen)3861)];
+		    s_rnge("ftnpkt", i__2, "sgseqw_", (ftnlen)3897)];
 	    for (i__ = 1; i__ <= i__1; ++i__) {
 		i__2 = pktadr - 1;
 		i__3 = pktadr - 1;
@@ -4159,10 +4183,10 @@ L_sgwes:
 		size = (integer) mysize;
 		pktadr = pktadr + size + ftoff[(i__2 = index - 1) < 20 && 0 <=
 			 i__2 ? i__2 : s_rnge("ftoff", i__2, "sgseqw_", (
-			ftnlen)3872)];
+			ftnlen)3908)];
 		myaddr += (doublereal) (size + ftoff[(i__2 = index - 1) < 20 
 			&& 0 <= i__2 ? i__2 : s_rnge("ftoff", i__2, "sgseqw_",
-			 (ftnlen)3873)]);
+			 (ftnlen)3909)]);
 	    }
 
 /*           Put in the fake beginning for an extra packet. PKTADR should */
@@ -4170,7 +4194,7 @@ L_sgwes:
 
 	    myaddr = (doublereal) (pktadr - ftbadr[(i__1 = index - 1) < 20 && 
 		    0 <= i__1 ? i__1 : s_rnge("ftbadr", i__1, "sgseqw_", (
-		    ftnlen)3880)]);
+		    ftnlen)3916)]);
 	    dafada_(&myaddr, &c__1);
 	    if (failed_()) {
 		chkout_("SGWES", (ftnlen)5);
@@ -4181,32 +4205,32 @@ L_sgwes:
 
 	    meta[0] = 0;
 	    meta[1] = ftncon[(i__1 = index - 1) < 20 && 0 <= i__1 ? i__1 : 
-		    s_rnge("ftncon", i__1, "sgseqw_", (ftnlen)3892)];
+		    s_rnge("ftncon", i__1, "sgseqw_", (ftnlen)3928)];
 	    meta[10] = meta[0] + meta[1];
 	    meta[11] = ftnpkt[(i__1 = index - 1) < 20 && 0 <= i__1 ? i__1 : 
-		    s_rnge("ftnpkt", i__1, "sgseqw_", (ftnlen)3894)];
+		    s_rnge("ftnpkt", i__1, "sgseqw_", (ftnlen)3930)];
 	    meta[15] = ftoff[(i__1 = index - 1) < 20 && 0 <= i__1 ? i__1 : 
-		    s_rnge("ftoff", i__1, "sgseqw_", (ftnlen)3895)];
+		    s_rnge("ftoff", i__1, "sgseqw_", (ftnlen)3931)];
 	    meta[7] = meta[10] + ftpksz[(i__1 = index - 1) < 20 && 0 <= i__1 ?
-		     i__1 : s_rnge("ftpksz", i__1, "sgseqw_", (ftnlen)3896)] 
+		     i__1 : s_rnge("ftpksz", i__1, "sgseqw_", (ftnlen)3932)] 
 		    + ftoff[(i__2 = index - 1) < 20 && 0 <= i__2 ? i__2 : 
-		    s_rnge("ftoff", i__2, "sgseqw_", (ftnlen)3896)] * ftnpkt[(
+		    s_rnge("ftoff", i__2, "sgseqw_", (ftnlen)3932)] * ftnpkt[(
 		    i__3 = index - 1) < 20 && 0 <= i__3 ? i__3 : s_rnge("ftn"
-		    "pkt", i__3, "sgseqw_", (ftnlen)3896)];
+		    "pkt", i__3, "sgseqw_", (ftnlen)3932)];
 	    meta[8] = ftnpkt[(i__1 = index - 1) < 20 && 0 <= i__1 ? i__1 : 
-		    s_rnge("ftnpkt", i__1, "sgseqw_", (ftnlen)3898)] + 1;
+		    s_rnge("ftnpkt", i__1, "sgseqw_", (ftnlen)3934)] + 1;
 	    meta[9] = 1;
 	    meta[5] = meta[7] + meta[8];
 	    meta[6] = ftnref[(i__1 = index - 1) < 20 && 0 <= i__1 ? i__1 : 
-		    s_rnge("ftnref", i__1, "sgseqw_", (ftnlen)3901)];
+		    s_rnge("ftnref", i__1, "sgseqw_", (ftnlen)3937)];
 	    meta[2] = meta[5] + meta[6];
 	    meta[3] = 0;
 	    meta[4] = ftityp[(i__1 = index - 1) < 20 && 0 <= i__1 ? i__1 : 
-		    s_rnge("ftityp", i__1, "sgseqw_", (ftnlen)3904)];
+		    s_rnge("ftityp", i__1, "sgseqw_", (ftnlen)3940)];
 	    meta[12] = 0;
 	    meta[13] = 0;
 	    meta[14] = ftmxsz[(i__1 = index - 1) < 20 && 0 <= i__1 ? i__1 : 
-		    s_rnge("ftmxsz", i__1, "sgseqw_", (ftnlen)3907)];
+		    s_rnge("ftmxsz", i__1, "sgseqw_", (ftnlen)3943)];
 	    meta[16] = 17;
 	}
     }
@@ -4215,9 +4239,9 @@ L_sgwes:
 
     for (i__ = 1; i__ <= 17; ++i__) {
 	xmeta[(i__1 = i__ - 1) < 17 && 0 <= i__1 ? i__1 : s_rnge("xmeta", 
-		i__1, "sgseqw_", (ftnlen)3917)] = (doublereal) meta[(i__2 = 
+		i__1, "sgseqw_", (ftnlen)3953)] = (doublereal) meta[(i__2 = 
 		i__ - 1) < 17 && 0 <= i__2 ? i__2 : s_rnge("meta", i__2, 
-		"sgseqw_", (ftnlen)3917)];
+		"sgseqw_", (ftnlen)3953)];
     }
     dafada_(xmeta, &c__17);
 
@@ -4236,49 +4260,49 @@ L_sgwes:
     i__1 = nft;
     for (i__ = index; i__ <= i__1; ++i__) {
 	ftbadr[(i__2 = i__ - 1) < 20 && 0 <= i__2 ? i__2 : s_rnge("ftbadr", 
-		i__2, "sgseqw_", (ftnlen)3937)] = ftbadr[(i__3 = i__) < 20 && 
+		i__2, "sgseqw_", (ftnlen)3973)] = ftbadr[(i__3 = i__) < 20 && 
 		0 <= i__3 ? i__3 : s_rnge("ftbadr", i__3, "sgseqw_", (ftnlen)
-		3937)];
+		3973)];
 	fthan[(i__2 = i__ - 1) < 20 && 0 <= i__2 ? i__2 : s_rnge("fthan", 
-		i__2, "sgseqw_", (ftnlen)3938)] = fthan[(i__3 = i__) < 20 && 
+		i__2, "sgseqw_", (ftnlen)3974)] = fthan[(i__3 = i__) < 20 && 
 		0 <= i__3 ? i__3 : s_rnge("fthan", i__3, "sgseqw_", (ftnlen)
-		3938)];
+		3974)];
 	ftityp[(i__2 = i__ - 1) < 20 && 0 <= i__2 ? i__2 : s_rnge("ftityp", 
-		i__2, "sgseqw_", (ftnlen)3939)] = ftityp[(i__3 = i__) < 20 && 
+		i__2, "sgseqw_", (ftnlen)3975)] = ftityp[(i__3 = i__) < 20 && 
 		0 <= i__3 ? i__3 : s_rnge("ftityp", i__3, "sgseqw_", (ftnlen)
-		3939)];
+		3975)];
 	ftncon[(i__2 = i__ - 1) < 20 && 0 <= i__2 ? i__2 : s_rnge("ftncon", 
-		i__2, "sgseqw_", (ftnlen)3940)] = ftncon[(i__3 = i__) < 20 && 
+		i__2, "sgseqw_", (ftnlen)3976)] = ftncon[(i__3 = i__) < 20 && 
 		0 <= i__3 ? i__3 : s_rnge("ftncon", i__3, "sgseqw_", (ftnlen)
-		3940)];
+		3976)];
 	ftnpkt[(i__2 = i__ - 1) < 20 && 0 <= i__2 ? i__2 : s_rnge("ftnpkt", 
-		i__2, "sgseqw_", (ftnlen)3941)] = ftnpkt[(i__3 = i__) < 20 && 
+		i__2, "sgseqw_", (ftnlen)3977)] = ftnpkt[(i__3 = i__) < 20 && 
 		0 <= i__3 ? i__3 : s_rnge("ftnpkt", i__3, "sgseqw_", (ftnlen)
-		3941)];
+		3977)];
 	ftnref[(i__2 = i__ - 1) < 20 && 0 <= i__2 ? i__2 : s_rnge("ftnref", 
-		i__2, "sgseqw_", (ftnlen)3942)] = ftnref[(i__3 = i__) < 20 && 
+		i__2, "sgseqw_", (ftnlen)3978)] = ftnref[(i__3 = i__) < 20 && 
 		0 <= i__3 ? i__3 : s_rnge("ftnref", i__3, "sgseqw_", (ftnlen)
-		3942)];
+		3978)];
 	ftnres[(i__2 = i__ - 1) < 20 && 0 <= i__2 ? i__2 : s_rnge("ftnres", 
-		i__2, "sgseqw_", (ftnlen)3943)] = ftnres[(i__3 = i__) < 20 && 
+		i__2, "sgseqw_", (ftnlen)3979)] = ftnres[(i__3 = i__) < 20 && 
 		0 <= i__3 ? i__3 : s_rnge("ftnres", i__3, "sgseqw_", (ftnlen)
-		3943)];
+		3979)];
 	ftoff[(i__2 = i__ - 1) < 20 && 0 <= i__2 ? i__2 : s_rnge("ftoff", 
-		i__2, "sgseqw_", (ftnlen)3944)] = ftoff[(i__3 = i__) < 20 && 
+		i__2, "sgseqw_", (ftnlen)3980)] = ftoff[(i__3 = i__) < 20 && 
 		0 <= i__3 ? i__3 : s_rnge("ftoff", i__3, "sgseqw_", (ftnlen)
-		3944)];
+		3980)];
 	ftpksz[(i__2 = i__ - 1) < 20 && 0 <= i__2 ? i__2 : s_rnge("ftpksz", 
-		i__2, "sgseqw_", (ftnlen)3945)] = ftpksz[(i__3 = i__) < 20 && 
+		i__2, "sgseqw_", (ftnlen)3981)] = ftpksz[(i__3 = i__) < 20 && 
 		0 <= i__3 ? i__3 : s_rnge("ftpksz", i__3, "sgseqw_", (ftnlen)
-		3945)];
+		3981)];
 	ftfixd[(i__2 = i__ - 1) < 20 && 0 <= i__2 ? i__2 : s_rnge("ftfixd", 
-		i__2, "sgseqw_", (ftnlen)3946)] = ftfixd[(i__3 = i__) < 20 && 
+		i__2, "sgseqw_", (ftnlen)3982)] = ftfixd[(i__3 = i__) < 20 && 
 		0 <= i__3 ? i__3 : s_rnge("ftfixd", i__3, "sgseqw_", (ftnlen)
-		3946)];
+		3982)];
 	ftexpl[(i__2 = i__ - 1) < 20 && 0 <= i__2 ? i__2 : s_rnge("ftexpl", 
-		i__2, "sgseqw_", (ftnlen)3947)] = ftexpl[(i__3 = i__) < 20 && 
+		i__2, "sgseqw_", (ftnlen)3983)] = ftexpl[(i__3 = i__) < 20 && 
 		0 <= i__3 ? i__3 : s_rnge("ftexpl", i__3, "sgseqw_", (ftnlen)
-		3947)];
+		3983)];
     }
     if (fxdseg) {
 	--numfxd;

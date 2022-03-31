@@ -55,7 +55,7 @@ doublereal clight_(void)
 
 /* $ Brief_I/O */
 
-/*     The function returns the speed of light in vacuo (km/sec). */
+/*     The function returns the speed of light in vacuum (km/sec). */
 
 /* $ Detailed_Input */
 
@@ -64,7 +64,7 @@ doublereal clight_(void)
 /* $ Detailed_Output */
 
 /*     The function returns the IAU official value for the speed of light */
-/*     in vacuo: 299792.458 km/sec. */
+/*     in vacuum: 299792.458 km/sec. */
 
 /* $ Parameters */
 
@@ -123,23 +123,28 @@ doublereal clight_(void)
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     W.L. Taber      (JPL) */
-/*     I.M. Underwood  (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
 
-/* -     SPICELIB Version 1.0.2, 08-JAN-2008 (NJB) */
+/* -    SPICELIB Version 1.0.3, 25-AUG-2021 (JDR) */
 
-/*         Example section was updated to remove references to SPKAPP */
-/*         and BODMAT. */
+/*        Edited the header to comply with NAIF standard. */
 
-/* -     SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+/* -    SPICELIB Version 1.0.2, 08-JAN-2008 (NJB) */
 
-/*         Comment section for permuted index source lines was added */
-/*         following the header. */
+/*        $Examples section was updated to remove references to SPKAPP */
+/*        and BODMAT. */
 
-/* -     SPICELIB Version 1.0.0, 31-JAN-1990 (WLT) (IMU) */
+/* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+
+/*        Comment section for permuted index source lines was added */
+/*        following the header. */
+
+/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (WLT) (IMU) */
 
 /* -& */
 /* $ Index_Entries */

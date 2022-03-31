@@ -1,9 +1,9 @@
 /*
- 
+
 -Procedure subpt_pl02 ( Sub-observer point using DSK type 2 plate model )
- 
+
 -Abstract
- 
+
    Deprecated: This routine has been superseded by the CSPICE routine
    subpnt_c. This routine is supported for purposes of backward
    compatibility only.
@@ -42,21 +42,23 @@
    ACTIONS OF RECIPIENT IN THE USE OF THE SOFTWARE.
 
 -Required_Reading
- 
+
    FRAMES
    PCK
    SPK
    TIME
- 
+
 -Keywords
- 
+
    GEOMETRY
- 
+
 */
- 
+
    #include "SpiceUsr.h"
    #include "SpiceZfc.h"
    #include "SpiceZmc.h"
+   #include "SpiceZst.h"
+
 
    void subpt_pl02 ( SpiceInt               handle,
                      ConstSpiceDLADescr   * dladsc,
@@ -68,14 +70,15 @@
                      SpiceDouble            spoint [3],
                      SpiceDouble          * alt,
                      SpiceInt             * plateID     )
+
 /*
- 
+
 -Brief_I/O
- 
-   Variable  I/O  Description
+
+   VARIABLE  I/O  DESCRIPTION
    --------  ---  --------------------------------------------------
    handle     I   DSK handle.
-   dlasdc     I   DLA descriptor of target body segment.
+   dladsc     I   DLA descriptor of target body segment.
    method     I   Computation method.
    target     I   Name of target body.
    et         I   Epoch in ephemeris seconds past J2000 TDB.
@@ -84,9 +87,9 @@
    spoint     O   Sub-observer point on the target body.
    alt        O   Altitude of the observer above the target body.
    plateID    O   DSK plate ID of sub-point.
- 
+
 -Detailed_Input
- 
+
    handle      is the DAS file handle of a DSK file open for read
                access.  This kernel must contain a type 2 segment
                that provides a plate model representing the entire
@@ -99,14 +102,14 @@
 
    method      is a short string specifying the computation method
                to be used.  The choices are:
- 
+
                   "Intercept"        The sub-observer point is defined
                                      as the plate model surface
                                      intercept of the ray starting at
                                      the observer and passing through
                                      the target's center.
 
-                  "Ellipsoid 
+                  "Ellipsoid
                    near point"       The sub-observer point is defined
                                      as the plate model surface
                                      intercept of the ray starting at
@@ -118,7 +121,7 @@
                                      This option requires that the
                                      reference ellipsoid's radii be
                                      available in the kernel pool.
- 
+
                For both computation methods, this routine finds a
                sub-point on the same side of the target body as the
                observer.  If the observer is inside the target body,
@@ -128,64 +131,64 @@
                selected.
 
                Neither case nor white space are significant in the
-               string "method".  For example, the string 
-           
+               string "method".  For example, the string
+
                   "  ellipsoidNEARPOINT"
 
                is valid.
- 
- 
+
+
    target      is the name of the target body.  `target' is
                case-insensitive, and leading and trailing blanks in
                `target' are not significant. Optionally, you may supply
                a string containing the integer ID code for the object.
                For example both "MOON" and "301" are legitimate strings
                that indicate the moon is the target body.
- 
+
                This routine assumes that the target body's surface is
                represented by a plate model, and that a DSK file
                containing the plate model has been loaded via dasopr_c.
- 
+
 
    et          is the epoch, represented  as seconds past J2000 TDB, at
                which the sub-observer point on the target body is to be
                computed.  When aberration corrections are used, `et'
                refers to the epoch at which radiation is received at
                the observer.
- 
- 
+
+
    abcorr      indicates the aberration corrections to be applied to
                the position and orientation of the target body to
                account for one-way light time and stellar aberration.
                See the discussion in the Particulars section for
                recommendations on how to choose aberration corrections.
-                 
-               `abcorr' may be any of the following: 
- 
+
+               `abcorr' may be any of the following:
+
                   "NONE"     Apply no correction. Use the geometric
                              position of the target body relative to
                              the observer; evaluate the target body's
                              orientation at `et'.
- 
+
                The following values of `abcorr' apply to the
                "reception" case in which photons depart from the
                target's location at the light-time corrected epoch
                et-lt and *arrive* at the observer's location at
                `et':
- 
+
                   "LT"       Correct for one-way light time (also
                              called "planetary aberration") using a
                              Newtonian formulation. This correction
                              uses the position and orientation of the
                              target at the moment it emitted photons
                              arriving at the observer at `et'.
- 
+
                              The light time correction uses an
-                             iterative solution of the light time 
-                             equation (see Particulars for details). 
-                             The solution invoked by the "LT" option 
-                             uses one iteration. 
- 
+                             iterative solution of the light time
+                             equation (see Particulars for details).
+                             The solution invoked by the "LT" option
+                             uses one iteration.
+
                   "LT+S"     Correct for one-way light time and stellar
                              aberration using a Newtonian formulation.
                              This option modifies the position obtained
@@ -195,26 +198,26 @@
                              sub-observer point computed using the
                              apparent position and orientation of the
                              target as seen by the observer.
- 
-                  "CN"       Converged Newtonian light time 
-                             correction.  In solving the light time 
-                             equation, the "CN" correction iterates 
-                             until the solution converges (three 
-                             iterations on all supported platforms). 
- 
-                             The "CN" correction typically does not 
-                             substantially improve accuracy because 
-                             the errors made by ignoring 
-                             relativistic effects may be larger than 
-                             the improvement afforded by obtaining 
-                             convergence of the light time solution. 
-                             The "CN" correction computation also  
-                             requires a significantly greater number 
-                             of CPU cycles than does the  
-                             one-iteration light time correction. 
- 
-                  "CN+S"     Converged Newtonian light time 
-                             and stellar aberration corrections. 
+
+                  "CN"       Converged Newtonian light time
+                             correction.  In solving the light time
+                             equation, the "CN" correction iterates
+                             until the solution converges (three
+                             iterations on all supported platforms).
+
+                             The "CN" correction typically does not
+                             substantially improve accuracy because
+                             the errors made by ignoring
+                             relativistic effects may be larger than
+                             the improvement afforded by obtaining
+                             convergence of the light time solution.
+                             The "CN" correction computation also
+                             requires a significantly greater number
+                             of CPU cycles than does the
+                             one-iteration light time correction.
+
+                  "CN+S"     Converged Newtonian light time
+                             and stellar aberration corrections.
 
 
    obsrvr      is the name of the observing body.  This is typically a
@@ -225,31 +228,31 @@
                the object.  For example both "EARTH" and "399" are
                legitimate strings that indicate the earth is the
                observer.
- 
+
 -Detailed_Output
 
    spoint      is the sub-observer point on the target body expressed
                relative to the body-fixed reference frame of the target
                body.
- 
+
                The definition of sub-observer point depends on the
                selected computation method.  See the description of the
                input argument `method' for details.
- 
+
                The target body-fixed frame, which is time-dependent, is
                evaluated at `et' if `abcorr' is "NONE"; otherwise the
                frame is evaluated at et-lt, where `lt' is the one-way
                light time from target to observer.
- 
+
                The position and orientation of the target body are
                corrected for aberration as specified by `abcorr'; the
                corrected position and orientation are used in the
                computation of `spoint'.
- 
+
 
    alt         is the signed distance between the observer and the
                sub-point.  When the observer is outside the body
-               `alt' is positive; when the observer is inside, `alt'         
+               `alt' is positive; when the observer is inside, `alt'
                is negative.
 
                Note that `alt' is not truly an `altitude' unless the
@@ -260,64 +263,60 @@
                body's surface very nearly matches the target body's
                reference ellipsoid and the "ellipsoid near point"
                computation method is selected.
-               
-           
- 
-   plateID     is the integer ID code of the plate on which the 
+
+
+
+   plateID     is the integer ID code of the plate on which the
                sub-observer point is located.  This ID code can be
                use to look up data associated with the plate, such
                as the plate's vertices or outward normal vector.
- 
 
 -Parameters
- 
+
    None.
- 
+
 -Exceptions
- 
+
    If any of the listed errors occur, the output arguments are
    left unchanged.
- 
- 
-   1) If the input argument `method' is not recognized, the error
-      SPICE(DUBIOUSMETHOD) is signaled.
- 
-   2) If either of the input body names `target' or `obsrvr' cannot be
-      mapped to NAIF integer codes, the error SPICE(IDCODENOTFOUND)
-      is signaled.
- 
-   3) If `obsrvr' and `target' map to the same NAIF integer ID codes, the
-      error SPICE(BODIESNOTDISTINCT) is signaled.
- 
-   4) If frame definition data enabling the evaluation of the state
-      of the target relative to the observer in the target body-fixed
-      frame have not been loaded prior to calling subpt_pl02, the
-      error will be diagnosed and signaled by a routine in the call
-      tree of this routine.
- 
-   5) If the specified aberration correction is not recognized, the
-      error will be diagnosed and signaled by a routine in the call
-      tree of this routine.
- 
-   6) If insufficient ephemeris data have been loaded prior to
-      calling subpt_pl02, the error will be diagnosed and signaled by a
-      routine in the call tree of this routine. 
- 
-   7) If a DSK providing a DSK type 2 plate model has not been
-      loaded prior to calling subpt_pl02, the error will be
-      diagnosed and signaled by a routine in the call tree of this
-      routine.
 
-   8) If the computation method is "ellipsoid near point" and radii of
-      the target body have not been loaded into the kernel pool, the
-      error will be diagnosed and signaled by routines in the call tree
-      of this routine.
- 
-   9) If PCK data supplying a rotation model for the target body have
-      not been loaded prior to calling subpt_pl02, the error will be
-      diagnosed and signaled by a routine in the call tree of this
-      routine.
- 
+   1)  If the input argument `method' is not recognized, the error
+       SPICE(DUBIOUSMETHOD) is signaled.
+
+   2)  If either of the input body names `target' or `obsrvr' cannot be
+       mapped to NAIF integer codes, the error SPICE(IDCODENOTFOUND)
+       is signaled.
+
+   3)  If `obsrvr' and `target' map to the same NAIF integer ID codes, the
+       error SPICE(BODIESNOTDISTINCT) is signaled.
+
+   4)  If frame definition data enabling the evaluation of the state
+       of the target relative to the observer in the target
+       body-fixed frame have not been loaded prior to calling
+       subpt_pl02, an error is signaled by a routine in the call tree
+       of this routine.
+
+   5)  If the specified aberration correction is not recognized, an
+       error is signaled by a routine in the call tree of this
+       routine.
+
+   6)  If insufficient ephemeris data have been loaded prior to
+       calling subpt_pl02, an error is signaled by a
+       routine in the call tree of this routine.
+
+   7)  If a DSK providing a DSK type 2 plate model has not been
+       loaded prior to calling subpt_pl02, an error is signaled by a
+       routine in the call tree of this routine.
+
+   8)  If the computation method is "ellipsoid near point" and radii
+       of the target body have not been loaded into the kernel pool,
+       an error is signaled by a routine in the call tree of this
+       routine.
+
+   9)  If PCK data supplying a rotation model for the target body
+       have not been loaded prior to calling subpt_pl02, an error is
+       signaled by a routine in the call tree of this routine.
+
    10) If the segment associated with the input DLA descriptor does not
        contain data for the designated target, the error
        SPICE(TARGETMISMATCH) is signaled.
@@ -331,63 +330,63 @@
        the error SPICE(NOINTERCEPT) is signaled.
 
    13) Use of transmission-style aberration corrections is not
-       permitted.  If abcorr specified such a correction, the 
-       error SPICE(NOTSUPPORTED) is signled.
+       permitted.  If abcorr specified such a correction, the
+       error SPICE(NOTSUPPORTED) is signaled.
 
    14) If any input string pointer is null, the error SPICE(NULLPOINTER)
-       will be signaled.
- 
+       is signaled.
+
    15) If any input string has length zero, the error SPICE(EMPTYSTRING)
-       will be signaled.
+       is signaled.
 
 -Files
- 
+
    Appropriate DSK, SPK, PCK, and frame data must be available to
    the calling program before this routine is called.  Typically
    the data are made available by loading kernels; however the
    data may be supplied via subroutine interfaces if applicable.
- 
+
    The following data are required:
- 
-      - DSK data:  a DSK file containing a plate model representing the
-        target body's surface must be loaded. This kernel must contain
-        a type 2 segment that contains data for the entire surface of
-        the target body.
 
-      - SPK data:  ephemeris data for target and observer must be
-        loaded.  If aberration corrections are used, the states of
-        target and observer relative to the solar system barycenter
-        must be calculable from the available ephemeris data.
-        Typically ephemeris data are made available by loading one
-        or more SPK files via furnsh_c.
- 
-      - PCK data:  triaxial radii for the target body must be loaded
-        into the kernel pool if the "Ellipsoid Near Point" method is
-        selected. Typically these data are made available by loading a
-        text PCK file via furnsh_c.
- 
-      - Further PCK data:  rotation data for the target body must
-        be loaded.  These may be provided in a text or binary PCK file.
-        Either type of file may be loaded via furnsh_c.
+   -  DSK data:  a DSK file containing a plate model representing the
+      target body's surface must be loaded. This kernel must contain
+      a type 2 segment that contains data for the entire surface of
+      the target body.
 
-      - Frame data:  if a frame definition is required to convert
-        the observer and target states to the body-fixed frame of
-        the target, that definition must be available in the kernel
-        pool.  Typically the definition is supplied by loading a
-        frame kernel via furnsh_c.
- 
+   -  SPK data:  ephemeris data for target and observer must be
+      loaded.  If aberration corrections are used, the states of
+      target and observer relative to the solar system barycenter
+      must be calculable from the available ephemeris data.
+      Typically ephemeris data are made available by loading one
+      or more SPK files via furnsh_c.
+
+   -  PCK data:  triaxial radii for the target body must be loaded
+      into the kernel pool if the "Ellipsoid Near Point" method is
+      selected. Typically these data are made available by loading a
+      text PCK file via furnsh_c.
+
+   -  Further PCK data:  rotation data for the target body must
+      be loaded.  These may be provided in a text or binary PCK file.
+      Either type of file may be loaded via furnsh_c.
+
+   -  Frame data:  if a frame definition is required to convert
+      the observer and target states to the body-fixed frame of
+      the target, that definition must be available in the kernel
+      pool.  Typically the definition is supplied by loading a
+      frame kernel via furnsh_c.
+
    In all cases, kernel data are normally loaded once per program
    run, NOT every time this routine is called.
- 
+
 -Particulars
- 
+
    subpt_pl02 computes the sub-observer point (abbreviated as
    "sub-point") on a target body. subpt_pl02 also determines the
    distance from the observer to the sub-observer point.
 
    Sub-point Definitions
    =====================
- 
+
    This routine offers two ways of defining the sub-point:
 
       - The "intercept" method. In general, this definition
@@ -395,7 +394,7 @@
         passing through the center of the target body.  The intercept
         on the first plate (the one closest to the observer) hit by this
         ray is the sub-point.
-  
+
         The details of this definition are a bit more complex, because
         this routine handles the case where the observer is inside the
         target.  In such cases, the sub-point is actually the point
@@ -407,8 +406,8 @@
         associated with a sub-point on the opposite side of the target.
         However, the possibility that the "sub-point" may be "above"
         the observer may seem counterintuitive.
-         
-      - The "ellipsoid near point" method.  When a target's surface is 
+
+      - The "ellipsoid near point" method.  When a target's surface is
         modeled by a set of triangular plates, the notion of "dropping
         a perpendicular segment to the surface," which makes sense
         for convex surfaces, becomes problematic:  there need not be
@@ -433,7 +432,7 @@
    The example program provided below demonstrates this fact; Phobos is
    the target body in this case.  Some analysis on the user's part will
    be needed to select the "best" definition for a given application.
- 
+
    When comparing sub-point computations with results from sources
    other than SPICE, it's essential to make sure the same geometric
    definitions are used.
@@ -442,16 +441,16 @@
    Aberration Corrections
    ======================
 
-   Below, we indicate the aberration corrections to use for some 
-   common applications: 
- 
+   Below, we indicate the aberration corrections to use for some
+   common applications:
+
       1) Compute the sub-observer point using the apparent direction
          and orientation of a target. This is the most common case for
          a remote-sensing observation.  When the observer's altitude
          is more than one target radius above the surface:
- 
-            Use "LT+S":  apply both light time and stellar  
-            aberration corrections. 
+
+            Use "LT+S":  apply both light time and stellar
+            aberration corrections.
 
          Note that when the observer is close to the target surface,
          this choice may yield inaccurate results, since light time is
@@ -460,59 +459,83 @@
          surface, aberration corrections should be omitted, so in this
          case abcorr should be set to:
 
-            "NONE"          
+            "NONE"
 
       2) Use a geometric position vector and uncorrected target
          orientation as low-accuracy estimates for an application where
          execution speed is critical.
- 
-            Use "NONE". 
- 
+
+            Use "NONE".
+
    See the header of the CSPICE routine spkezr_c for a detailed
    discussion of aberration corrections.
- 
+
 -Examples
- 
+
    The numerical results shown for this example may differ across
    platforms. The results depend on the SPICE kernels used as input,
    the compiler and supporting libraries, and the machine specific
    arithmetic implementation.
- 
-   In the following example program, the file
 
-      phobos.3.3.dsk
-
-   is a DSK file containing a type 2 segment that provides a plate model 
-   representation of the surface of Phobos.  The file
- 
-      mar085.bsp
- 
-   is a binary SPK file containing data for Phobos, the Earth, and the
-   Sun for a time interval bracketing the date
-    
-      2006 NOV 3 00:00:00 UTC.
- 
-   pck00009.tpc is a planetary constants kernel file containing radii
-   and rotation model constants.  naif0009.tls is a leapseconds kernel.
- 
-   All of the kernels other than the DSK file should be loaded via
-   a meta-kernel.  An example of the contents of such a kernel is:
-
-       \begindata
-
-          KERNELS_TO_LOAD = ( 'naif0009.tls'
-                              'pck00009.tpc'
-                              'mar085.bsp' )
-       \begintext
+   1) Find the sub-observer point on Phobos as seen from Earth for a
+      specified sequence of times, using a DSK file to provide
+      topographic data. Perform the computation twice,
+      using both the "intercept" and "ellipsoid near point"
+      options. Compute the corresponding sub-observer point values
+      using an ellipsoidal surface for comparison.
 
 
-   Find the sub-observer point of the Earth on Phobos for a specified
-   sequence of times. Perform the computation twice, using both the
-   "intercept" and "ellipsoid near point" options. Compute the
-   corresponding near point values using an ellipsoidal surface for
-   comparison.
+      Use the meta-kernel shown below to load the required SPICE
+      kernels.
 
 
+         KPL/MK
+
+         File: subpt_pl02_ex1.tm
+
+         This meta-kernel is intended to support operation of SPICE
+         example programs. The kernels shown here should not be
+         assumed to contain adequate or correct versions of data
+         required by SPICE-based user applications.
+
+         In order for an application to use this meta-kernel, the
+         kernels referenced here must be present in the user's
+         current working directory.
+
+         The names and contents of the kernels referenced
+         by this meta-kernel are as follows:
+
+            File name                        Contents
+            ---------                        --------
+            mar097.bsp                       Mars satellite ephemeris
+            pck00010.tpc                     Planet orientation and
+                                             radii
+            naif0010.tls                     Leapseconds
+
+
+         \begindata
+
+            KERNELS_TO_LOAD = ( 'mar097.bsp',
+                                'pck00010.tpc',
+                                'naif0010.tls' )
+         \begintext
+
+         End of meta-kernel
+
+
+      Use the DSK kernel below to provide the plate model representation
+      of the surface of Phobos.
+
+         phobos_3_3.bds
+
+
+
+      Example code begins here.
+
+
+      /.
+         Program subpt_pl02_ex1
+      ./
       #include <stdio.h>
       #include <math.h>
       #include "SpiceUsr.h"
@@ -522,13 +545,13 @@
          /.
          Local parameters
          ./
-         #define  FILSIZ         256 
-         #define  NCORR          2 
+         #define  FILSIZ         256
+         #define  NCORR          2
          #define  NSAMP          3
          #define  NMETHOD        2
          #define  TOL            ( 1.e-12 )
          #define  CORLEN         15
-         #define  METHLEN        81 
+         #define  METHLEN        81
          #define  TIMLEN         41
 
          /.
@@ -537,7 +560,7 @@
          SpiceBoolean            found;
 
          SpiceChar             * abcorr;
-         SpiceChar             * abcorrs[ NCORR ]   = 
+         SpiceChar             * abcorrs[ NCORR ]   =
                                  {
                                     "NONE",
                                     "LT+S"
@@ -546,19 +569,19 @@
          SpiceChar               dsk     [ FILSIZ  ];
 
          SpiceChar             * emethod;
-         SpiceChar             * emethods[ NMETHOD ] = 
-                                 { 
-                                    "Intercept", 
-                                    "Near point" 
+         SpiceChar             * emethods[ NMETHOD ] =
+                                 {
+                                    "Intercept",
+                                    "Near point"
                                  };
 
          SpiceChar               meta    [ FILSIZ  ];
 
          SpiceChar             * method;
-         SpiceChar             * methods [ NMETHOD ] = 
-                                 { 
-                                    "Intercept", 
-                                    "Ellipsoid near point" 
+         SpiceChar             * methods [ NMETHOD ] =
+                                 {
+                                    "Intercept",
+                                    "Ellipsoid near point"
                                  };
 
          SpiceChar             * obsrvr = "Earth";
@@ -605,7 +628,7 @@
 
          /.
          Look up radii of the target; compute flattening
-         coefficient. 
+         coefficient.
          ./
          bodvrd_c ( target, "RADII", 3, &n, radii );
 
@@ -654,18 +677,18 @@
          for ( i = 0;  i < NSAMP;  i++  )
          {
             /.
-            Set the computation time for the ith 
-            sample. 
+            Set the computation time for the ith
+            sample.
             ./
             et = et0 + i*stepsize;
 
-            timout_c ( et, 
+            timout_c ( et,
                        "YYYY-MON-DD "
                        "HR:MN:SC.### ::TDB(TDB)",
                        TIMLEN,
                        timstr                    );
 
-            printf ( "\n\nObservation epoch:  %s\n", 
+            printf ( "\n\nObservation epoch:  %s\n",
                      timstr                      );
 
             for ( coridx = 0;  coridx < NCORR;  coridx++  )
@@ -680,7 +703,7 @@
                for ( midx = 0;  midx < NMETHOD;  midx++  )
                {
                   /.
-                  Select the computation method. 
+                  Select the computation method.
                   ./
                   method  = methods [midx];
                   emethod = emethods[midx];
@@ -690,19 +713,19 @@
 
                   /.
                   Compute the sub-observer point using a plate model
-                  representation of the target's surface. 
+                  representation of the target's surface.
                   ./
-                  subpt_pl02 ( handle, &dladsc, method, 
-                               target, et,      abcorr, 
+                  subpt_pl02 ( handle, &dladsc, method,
+                               target, et,      abcorr,
                                obsrvr, xpt,     &alt,   &plid );
 
                   /.
                   Represent the intercept in latitudinal
-                  coordinates. 
-                  ./ 
+                  coordinates.
+                  ./
                   reclat_c ( xpt, &xr, &xlon, &xlat );
 
-                  printf ( 
+                  printf (
                   "         Sub-point on plate model surface:\n"
                   "             Planetocentric Longitude (deg):  %f\n"
                   "             Planetocentric Latitude  (deg):  %f\n"
@@ -717,18 +740,18 @@
 
                   /.
                   Compute the sub-observer point using an ellipsoidal
-                  representation of the target's surface. 
+                  representation of the target's surface.
                   ./
-                  subpt_c ( emethod, target, et,  abcorr, 
+                  subpt_c ( emethod, target, et,  abcorr,
                             obsrvr,  xpt,    &alt        );
 
                   /.
                   Represent the intercept in latitudinal
-                  coordinates. 
-                  ./ 
+                  coordinates.
+                  ./
                   reclat_c ( xpt, &erad, &elon, &elat );
 
-                  printf ( 
+                  printf (
                   "         Sub-point on ellipsoid surface:\n"
                   "             Planetocentric Longitude (deg):  %f\n"
                   "             Planetocentric Latitude  (deg):  %f\n"
@@ -752,14 +775,14 @@
          return ( 0 );
       }
 
-   
-   When this program was executed on a PC/Linux/gcc platform, 
-   the output for the first epoch (the rest of the output 
-   is not shown due to its large volume) was:
+
+      When this program was executed on a Mac/Intel/cc/64-bit
+      platform, using the meta-kernel file named subpt_pl02_ex1.tm
+      and the DSK file named phobos_3_3.bds, the output was:
 
 
-      Enter meta-kernel name > meta
-      Enter DSK name         > phobos.3.3.bds
+      Enter meta-kernel name > subpt_pl02_ex1.tm
+      Enter DSK name         > phobos_3_3.bds
 
 
       Observation epoch:  2000-JAN-01 12:00:00.000 (TDB)
@@ -771,26 +794,26 @@
                    Planetocentric Longitude (deg):  68.184433
                    Planetocentric Latitude  (deg):  -22.013938
                    Radius                    (km):  10.904558
-                   Observer altitude         (km):  276700025.660436
+                   Observer altitude         (km):  276700025.580291
                    ID of intercept plate         :  154969
                Sub-point on ellipsoid surface:
                    Planetocentric Longitude (deg):  68.184433
                    Planetocentric Latitude  (deg):  -22.013938
-                   Radius                    (km):  11.025255
-                   Observer altitude         (km):  276700025.539740
+                   Radius                    (km):  11.111635
+                   Observer altitude         (km):  276700025.373214
 
              Method = Ellipsoid near point
                Sub-point on plate model surface:
-                   Planetocentric Longitude (deg):  60.014037
-                   Planetocentric Latitude  (deg):  -14.125157
-                   Radius                    (km):  11.183612
-                   Observer altitude         (km):  276700025.589277
-                   ID of intercept plate         :  174834
+                   Planetocentric Longitude (deg):  62.358996
+                   Planetocentric Latitude  (deg):  -13.611694
+                   Radius                    (km):  11.189797
+                   Observer altitude         (km):  276700025.467226
+                   ID of intercept plate         :  182987
                Sub-point on ellipsoid surface:
-                   Planetocentric Longitude (deg):  60.187859
-                   Planetocentric Latitude  (deg):  -14.303488
-                   Radius                    (km):  11.434090
-                   Observer altitude         (km):  276700025.334162
+                   Planetocentric Longitude (deg):  62.501544
+                   Planetocentric Latitude  (deg):  -13.828255
+                   Radius                    (km):  11.480112
+                   Observer altitude         (km):  276700025.172491
 
          abcorr = LT+S
 
@@ -799,49 +822,100 @@
                    Planetocentric Longitude (deg):  80.397650
                    Planetocentric Latitude  (deg):  -22.012145
                    Radius                    (km):  11.102641
-                   Observer altitude         (km):  276710248.126440
+                   Observer altitude         (km):  276710248.044155
                    ID of intercept plate         :  161027
                Sub-point on ellipsoid surface:
                    Planetocentric Longitude (deg):  80.397650
                    Planetocentric Latitude  (deg):  -22.012145
-                   Radius                    (km):  10.875799
-                   Observer altitude         (km):  276710248.353283
+                   Radius                    (km):  10.997901
+                   Observer altitude         (km):  276710248.148895
 
              Method = Ellipsoid near point
                Sub-point on plate model surface:
-                   Planetocentric Longitude (deg):  76.429369
-                   Planetocentric Latitude  (deg):  -15.127315
-                   Radius                    (km):  11.229597
-                   Observer altitude         (km):  276710248.104555
-                   ID of intercept plate         :  184528
+                   Planetocentric Longitude (deg):  77.596717
+                   Planetocentric Latitude  (deg):  -14.326159
+                   Radius                    (km):  11.278719
+                   Observer altitude         (km):  276710247.981509
+                   ID of intercept plate         :  184540
                Sub-point on ellipsoid surface:
-                   Planetocentric Longitude (deg):  76.386733
-                   Planetocentric Latitude  (deg):  -15.050012
-                   Radius                    (km):  11.106379
-                   Observer altitude         (km):  276710248.228951
+                   Planetocentric Longitude (deg):  77.592522
+                   Planetocentric Latitude  (deg):  -14.314136
+                   Radius                    (km):  11.261264
+                   Observer altitude         (km):  276710247.999143
 
- 
+
+      Observation epoch:  2000-JAN-13 01:46:40.000 (TDB)
+
+         abcorr = NONE
+
+             Method = Intercept
+               Sub-point on plate model surface:
+                   Planetocentric Longitude (deg):  -28.168808
+                   Planetocentric Latitude  (deg):  -23.838824
+                   Radius                    (km):  12.939782
+                   Observer altitude         (km):  286106844.028053
+                   ID of intercept plate         :  105656
+               Sub-point on ellipsoid surface:
+                   Planetocentric Longitude (deg):  -28.168808
+                   Planetocentric Latitude  (deg):  -23.838824
+                   Radius                    (km):  11.740687
+                   Observer altitude         (km):  286106845.227148
+
+             Method = Ellipsoid near point
+               Sub-point on plate model surface:
+                   Planetocentric Longitude (deg):  -22.941997
+                   Planetocentric Latitude  (deg):  -13.930327
+                   Radius                    (km):  13.832136
+                   Observer altitude         (km):  286106843.393083
+                   ID of intercept plate         :  135034
+               Sub-point on ellipsoid surface:
+                   Planetocentric Longitude (deg):  -22.381480
+                   Planetocentric Latitude  (deg):  -12.794856
+                   Radius                    (km):  12.437687
+                   Observer altitude         (km):  286106844.817034
+
+         abcorr = LT+S
+
+             Method = Intercept
+               Sub-point on plate model surface:
+                   Planetocentric Longitude (deg):  -15.758498
+                   Planetocentric Latitude  (deg):  -23.837297
+                   Radius                    (km):  13.159728
+
+      [...]
+
+
+      Warning: incomplete output. Only 100 out of 179 lines have been
+      provided.
+
 
 -Restrictions
- 
-   1) This routine assumes that the origin of the body-fixed reference 
-      frame associated with the target body is located in the interior
-      of that body.
- 
+
+   1)  This routine assumes that the origin of the body-fixed reference
+       frame associated with the target body is located in the interior
+       of that body.
+
 -Literature_References
- 
+
    None.
- 
+
 -Author_and_Institution
 
-   C.H. Acton     (JPL)
-   N.J. Bachman   (JPL)
-   J.E. McLean    (JPL)
- 
+   N.J. Bachman        (JPL)
+   J. Diaz del Rio     (ODC Space)
+
 -Version
- 
-   -CSPICE Version 2.0.0, 23-JUL-2016 (NJB) 
- 
+
+   -CSPICE Version 2.1.0, 26-OCT-2021 (JDR) (NJB)
+
+       Bug fix: call to ljust_ is now followed by call to F2C_ConvertStr.
+
+       Edited the Examples section to comply with NAIF standard.
+
+       Index lines now state that this routine is deprecated.
+
+   -CSPICE Version 2.0.0, 23-JUL-2016 (NJB)
+
        Bug fix: the DSK segment's surface ID code is no longer
        required to match that of the target. The segment's
        center ID must match.
@@ -872,39 +946,39 @@
        Bug fix:  type of local variable fDLADescr was changed to SpiceInt.
 
    -Beta Version 1.0.0, 06-NOV-2006 (NJB)
- 
+
 -Index_Entries
- 
-   sub-observer point
- 
+
+   DEPRECATED sub-observer point
+
 -&
 */
- 
+
 { /* Begin subpt_pl02 */
- 
+
 
    /*
-   Prototypes 
+   Prototypes
    */
 
 
    /*
-   Local parameters 
+   Local parameters
    */
-   #define FRNMLN          33 
+   #define FRNMLN          33
    #define CTRIDX          1
    #define TYPIDX          3
    #define NEARPT          "Near Point"
    #define CORLEN          16
 
    /*
-   Local variables 
+   Local variables
    */
    SpiceBoolean            found;
 
    SpiceChar               loccor     [ CORLEN ];
    SpiceChar               frname     [ FRNMLN ];
-   
+
    SpiceDouble             fDSKDescr  [ SPICE_DSK_DSCSIZ ];
    SpiceDouble             lt;
    SpiceDouble             mag;
@@ -927,9 +1001,9 @@
    SpiceInt                n;
    SpiceInt                obscde;
    SpiceInt                trgcde;
-   
 
- 
+
+
    /*
    Participate in error tracing.
    */
@@ -938,7 +1012,7 @@
       return;
    }
    chkin_c ( "subpt_pl02" );
- 
+
 
    /*
    Check the input strings: method, target, abcorr, and obsrvr.  Make
@@ -952,12 +1026,14 @@
 
    /*
    Check the aberration correction string:  reject transmission
-   corrections. 
+   corrections.
    */
    ljust_ ( ( char * ) abcorr,
             ( char * ) loccor,
             ( ftnlen ) strlen(abcorr),
             ( ftnlen ) CORLEN-1         );
+
+   F2C_ConvertStr( CORLEN, loccor );
 
    if (  matchi_c( loccor, "X*", '*', '?' )  )
    {
@@ -970,8 +1046,8 @@
    }
 
    /*
-   Obtain integer codes for the target and observer. 
-   */ 
+   Obtain integer codes for the target and observer.
+   */
    bods2c_c ( target, &trgcde, &found );
 
    if ( failed_c() )
@@ -1013,7 +1089,7 @@
    }
 
    /*
-   Make sure target and observer don't coincide. 
+   Make sure target and observer don't coincide.
    */
    if ( trgcde == obscde  )
    {
@@ -1030,7 +1106,7 @@
    the target body.
    */
    cidfrm_c ( trgcde, FRNMLN, &frcode, frname, &found );
- 
+
    if ( failed_c() )
    {
       chkout_c ( "subpt_pl02" );
@@ -1038,7 +1114,7 @@
    }
 
    if ( !found  )
-   { 
+   {
       setmsg_c ( "No body-fixed frame is associated with "
                  "target body #; a frame kernel must be "
                  "loaded to make this association.  Consult "
@@ -1084,7 +1160,7 @@
    }
 
    /*
-   Extract center ID and DSK data type from the descriptor. 
+   Extract center ID and DSK data type from the descriptor.
    */
    centerID = (SpiceInt)fDSKDescr[CTRIDX];
    dataType = (SpiceInt)fDSKDescr[TYPIDX];
@@ -1100,7 +1176,7 @@
       return;
    }
 
-   if ( dataType != 2 ) 
+   if ( dataType != 2 )
    {
       setmsg_c ( "Input segment has DSK data type #.  A segment of "
                  "type 2 is required."                               );
@@ -1114,7 +1190,7 @@
    /*
    We're done with error checks on our inputs.
 
-   Get the maximum radius value associated with the target body.  
+   Get the maximum radius value associated with the target body.
    We'll use this later to compute a numerically safe ray vertex.
    */
    maxrad = zzdsksgr_ ( fDSKDescr );
@@ -1124,11 +1200,11 @@
       chkout_c ( "subpt_pl02" );
       return;
    }
-   
+
    /*
    Look up the aberration-corrected position of the target's center as
    seen from the observer.  Use the aberration-corrected target
-   body-fixed reference frame. 
+   body-fixed reference frame.
    */
    spkezp_c ( trgcde, et, frname, abcorr, obscde, trgpos, &lt );
 
@@ -1152,7 +1228,7 @@
       /*
       To avoid numerical problems, we pick a vertex that is guaranteed
       to be a reasonable distance away from the target's surface.
-      */ 
+      */
       scale = maxd_c ( 2,  1.0,  2.0*maxrad );
 
       vscl_c ( -scale, raydir, vertex );
@@ -1164,7 +1240,7 @@
       The ray we wish to use points towards the closest point to the
       observer on the reference ellipsoid.  We can get this point from
       the CSPICE sub-point routine for ellipsoids.
-      */ 
+      */
       subpt_c ( NEARPT, target, et, abcorr, obsrvr, npt, &nptalt );
 
       if ( failed_c() )
@@ -1174,7 +1250,7 @@
       }
 
       /*
-      Fetch the radii of the reference ellipsoid. 
+      Fetch the radii of the reference ellipsoid.
       */
       bodvrd_c ( target, "RADII", 3, &n, radii );
 
@@ -1185,8 +1261,8 @@
       }
 
       /*
-      Check for failure here because unavailability of ellipsoid 
-      radii is a possibility. 
+      Check for failure here because unavailability of ellipsoid
+      radii is a possibility.
       */
       if ( failed_c() )
       {
@@ -1201,24 +1277,24 @@
       compute the vertex by adding a scaled outward normal vector to
       `npt'.  Compute the scale, look up the outward normal, and
       compute the vertex itself.
-      */ 
+      */
       scale = maxd_c ( 2,  1.0,  2.0*maxrad );
-      
+
       surfnm_c ( radii[0], radii[1], radii[2], npt, normal );
 
       if ( failed_c() )
       {
-         chkout_c ( "subpt_pl02" );   
+         chkout_c ( "subpt_pl02" );
          return;
       }
 
       vlcom_c  ( scale, normal, 1.0, npt, vertex );
 
       /*
-      The ray direction is just the negative of the outward normal. 
+      The ray direction is just the negative of the outward normal.
       */
       vminus_c ( normal, raydir );
-    
+
    }
    else
    {
@@ -1244,10 +1320,10 @@
    }
 
    if ( !found  )
-   { 
+   {
       setmsg_c ( "Ray from observer # to center of target # "
                  "did not intersect the surface defined by "
-                 "the input handle and descriptor."           );    
+                 "the input handle and descriptor."           );
       errch_c  ( "#", obsrvr                                  );
       errch_c  ( "#", target                                  );
       sigerr_c ( "SPICE(NOINTERCEPT)"                         );
@@ -1256,7 +1332,7 @@
    }
 
    /*
-   Use the observer-intercept distance as magnitude of the altitude. 
+   Use the observer-intercept distance as magnitude of the altitude.
    Note that the "altitude" we compute here is not a true altitude
    in the sense of being the height above the nearest point to the
    observer.
@@ -1264,9 +1340,9 @@
    We must find the sign of the altitude.  Let `obspos' be the
    position of the observer relative to the target body's center.
    Let `offset' be the vector from the observer to `spoint'.  If
-   `offset' has positive inner product with raydir, then the 
-   observer is considered to be "above" the sub-point. 
-   */ 
+   `offset' has positive inner product with raydir, then the
+   observer is considered to be "above" the sub-point.
+   */
    vminus_c ( trgpos, obspos );
    vsub_c   ( spoint, obspos, offset );
 
@@ -1287,5 +1363,5 @@
 
 
    chkout_c ( "subpt_pl02" );
- 
+
 } /* End subpt_pl02 */

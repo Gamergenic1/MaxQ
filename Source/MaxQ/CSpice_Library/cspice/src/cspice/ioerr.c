@@ -11,7 +11,7 @@ static integer c__1 = 1;
 static integer c__0 = 0;
 static integer c__2 = 2;
 
-/* $Procedure      IOERR ( I/O error message writer ) */
+/* $Procedure IOERR ( I/O error message writer ) */
 /* Subroutine */ int ioerr_(char *action, char *file, integer *iostat, ftnlen 
 	action_len, ftnlen file_len)
 {
@@ -26,9 +26,9 @@ static integer c__2 = 2;
 
 /* $ Abstract */
 
-/*      Set the long error message equal to a standard I/O error message */
-/*      composed from an action, the name of a file, and a value of */
-/*      IOSTAT. */
+/*     Set the long error message equal to a standard I/O error message */
+/*     composed from an action, the name of a file, and a value of */
+/*     IOSTAT. */
 
 /* $ Disclaimer */
 
@@ -61,32 +61,32 @@ static integer c__2 = 2;
 
 /* $ Keywords */
 
-/*      ERROR,  FILES */
+/*     ERROR */
+/*     FILES */
 
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*      VARIABLE  I/O  DESCRIPTION */
-/*      --------  ---  -------------------------------------------------- */
-/*      ACTION     I   Action which caused the error. */
-/*      FILE       I   The name of the file involved. */
-/*      IOSTAT     I   The value of IOSTAT returned by ACTION. */
+/*     VARIABLE  I/O  DESCRIPTION */
+/*     --------  ---  -------------------------------------------------- */
+/*     ACTION     I   Action which caused the error. */
+/*     FILE       I   The name of the file involved. */
+/*     IOSTAT     I   The value of IOSTAT returned by ACTION. */
 
 /* $ Detailed_Input */
 
+/*     ACTION   is the action which caused the error. This may */
+/*              be the name of a basic operation, such as 'OPEN', */
+/*              'READ', or 'WRITE', or may be more sophisticated, */
+/*              for example, 'add an empty cluster header to'. */
 
-/*      ACTION    is the action which caused the error. This may */
-/*                be the name of a basic operation, such as 'OPEN', */
-/*                'READ', or 'WRITE', or may be more sophisticated, */
-/*                for example, 'add an empty cluster header to'. */
+/*     FILE     is the name of the file involved in the error. */
+/*              This may be the system or logical name of a file */
+/*              ('USER$DISK:[USER.SUB]TEMP.DAT', 'PLNEPH'), or one */
+/*              of the standard files ('SYS$INPUT', 'SYS$OUTPUT'). */
 
-/*      FILE      is the name of the file involved in the error. */
-/*                This may be the system or logical name of a file */
-/*                ('USER$DISK:[USER.SUB]TEMP.DAT', 'PLNEPH'), or one */
-/*                of the standard files ('SYS$INPUT', 'SYS$OUTPUT'). */
-
-/*      IOSTAT    is the value of IOSTAT returned by ACTION. This */
-/*                is appended to the end of the error message. */
+/*     IOSTAT   is the value of IOSTAT returned by ACTION. This */
+/*              is appended to the end of the error message. */
 
 /* $ Detailed_Output */
 
@@ -94,7 +94,7 @@ static integer c__2 = 2;
 
 /* $ Parameters */
 
-/*      None. */
+/*     None. */
 
 /* $ Exceptions */
 
@@ -102,95 +102,103 @@ static integer c__2 = 2;
 
 /* $ Files */
 
-/*      None. */
+/*     None. */
 
 /* $ Particulars */
 
-/*      The input arguments are inserted into the standard form shown */
-/*      below.  Spaces are inserted where needed. Leading and trailing */
-/*      spaces are removed. */
+/*     The input arguments are inserted into the standard form shown */
+/*     below. Spaces are inserted where needed. Leading and trailing */
+/*     spaces are removed. */
 
-/*      The long error message is set equal to a standard I/O error */
-/*      message, of the form: */
+/*     The long error message is set equal to a standard I/O error */
+/*     message, of the form: */
 
-/*                  An error occurred while --------1---------- */
-/*                  -------2-------.  The value of IOSTAT returned */
-/*                  was --3--. */
+/*                 An error occurred while --------1---------- */
+/*                 -------2-------.  The value of IOSTAT returned */
+/*                 was --3--. */
 
-/*                where the values of ACTION, FILE, and IOSTAT are */
-/*                assigned to positions 1, 2 and 3 */
-/*                respectively. */
+/*               where the values of ACTION, FILE, and IOSTAT are */
+/*               assigned to positions 1, 2 and 3 */
+/*               respectively. */
 
-/*      If the length of the entire composed message exceeds 320 */
-/*      characters, it is truncated. */
+/*     If the length of the entire composed message exceeds 320 */
+/*     characters, it is truncated. */
 
-/*      SIGERR must be called following a call to this routine to */
-/*      actually output the resulting long error message to the error */
-/*      output device. */
+/*     SIGERR must be called following a call to this routine to */
+/*     actually output the resulting long error message to the error */
+/*     output device. */
 
 /* $ Examples */
 
-/*      The following example illustrates the use of IOERR. */
+/*     The following example illustrates the use of IOERR. */
 
-/*            CALL IOERR ( 'adding a new header to', */
-/*                         EPHEM, */
-/*                         24                      ) */
+/*           CALL IOERR ( 'adding a new header to', */
+/*                        EPHEM, */
+/*                        24                      ) */
 
-/*      The resulting error message would be: */
+/*     The resulting error message would be: */
 
-/*            'An error occurred while adding a new header */
-/*             to LIBDISK:[EPHEM.NESYS]VGR2_T860502.GEF.  The value */
-/*             of IOSTAT returned was 24.' */
+/*           'An error occurred while adding a new header */
+/*            to LIBDISK:[EPHEM.NESYS]VGR2_T860502.GEF.  The value */
+/*            of IOSTAT returned was 24.' */
 
-/*      Note that the user is not responsible for adding and eliminating */
-/*      spaces to make the string readable. That is all done */
-/*      automatically. */
+/*     Note that the user is not responsible for adding and eliminating */
+/*     spaces to make the string readable. That is all done */
+/*     automatically. */
 
-/*      It is possible to omit the name of the file entirely, as in the */
-/*      following (somewhat frivolous) example. */
+/*     It is possible to omit the name of the file entirely, as in the */
+/*     following (somewhat frivolous) example. */
 
-/*            CALL IOERR ( 'cleaning a fish', */
-/*                         ' ', */
-/*                         -3                                ) */
+/*           CALL IOERR ( 'cleaning a fish', */
+/*                        ' ', */
+/*                        -3                                ) */
 
-/*      The resulting error message would be: */
+/*     The resulting error message would be: */
 
-/*            'An error occurred while cleaning a fish. */
-/*             The value of IOSTAT returned was -3.' */
+/*           'An error occurred while cleaning a fish. */
+/*            The value of IOSTAT returned was -3.' */
 
-/*      In fact, if the value of IOSTAT is zero, the last part of the */
-/*      message is omitted entirely, as in the following example. */
+/*     In fact, if the value of IOSTAT is zero, the last part of the */
+/*     message is omitted entirely, as in the following example. */
 
-/*            CALL IOERR ( 'writing the status line to', */
-/*                         'SYS$OUTPUT', */
-/*                         0                                 ) */
+/*           CALL IOERR ( 'writing the status line to', */
+/*                        'SYS$OUTPUT', */
+/*                        0                                 ) */
 
-/*      The resulting error message would be: */
+/*     The resulting error message would be: */
 
-/*            'An error occurred while writing the status */
-/*             line to SYS$OUTPUT.' */
+/*           'An error occurred while writing the status */
+/*            line to SYS$OUTPUT.' */
 
 /* $ Restrictions */
 
-/*      None. */
-
-/* $ Author_and_Institution */
-
-/*      N.J. Bachman    (JPL) */
-/*      I.M. Underwood  (JPL) */
+/*     None. */
 
 /* $ Literature_References */
 
-/*      None. */
+/*     None. */
+
+/* $ Author_and_Institution */
+
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 03-JUN-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
 
 /*        Comment section for permuted index source lines was added */
 /*        following the header. */
 
-/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (IMU) */
+/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (IMU) (NJB) */
 
 /* -& */
 /* $ Index_Entries */
@@ -208,6 +216,7 @@ static integer c__2 = 2;
 /*        changed accordingly, and a call to SETMSG has been added. */
 /*        Also, the name of the calling routine no longer appears */
 /*        in the constructed message. */
+
 /* -& */
 
 /*     Local variables */

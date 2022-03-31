@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      SPKE17 ( Evaluate a type 17 SPK data record) */
+/* $Procedure SPKE17 ( Evaluate a type 17 SPK data record) */
 /* Subroutine */ int spke17_(doublereal *et, doublereal *recin, doublereal *
 	state)
 {
@@ -26,8 +26,8 @@
 
 /* $ Abstract */
 
-/*     Evaluates a single SPK data record from a segment of type 17 */
-/*    (Equinoctial Elements). */
+/*     Evaluate a single SPK data record from a segment of type 17 */
+/*     (Equinoctial Elements). */
 
 /* $ Disclaimer */
 
@@ -65,7 +65,7 @@
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     ET         I   Target epoch. */
 /*     RECIN      I   Data record. */
@@ -73,50 +73,51 @@
 
 /* $ Detailed_Input */
 
-/*     ET          is a target epoch, specified as ephemeris seconds past */
-/*                 J2000, at which a state vector is to be computed. */
+/*     ET       is a target epoch, specified as ephemeris seconds past */
+/*              J2000, at which a state vector is to be computed. */
 
-/*     RECIN       is a data record which, when evaluated at epoch ET, */
-/*                 will give the state (position and velocity) of some */
-/*                 body, relative to some center, in some inertial */
-/*                 reference frame. */
+/*     RECIN    is a data record which, when evaluated at epoch ET, */
+/*              will give the state (position and velocity) of some */
+/*              body, relative to some center, in some inertial */
+/*              reference frame. */
 
-/*                 The structure of RECIN is: */
+/*              The structure of RECIN is: */
 
 /*                 RECIN (1)  epoch of the elements in ephemeris seconds */
 /*                            past J2000. */
 
 /*                 RECIN (2)-RECIN (10) Equinoctial Elements: */
 
+/*                    RECIN (2)  is the semi-major axis (A) of the orbit. */
 
-/*                 RECIN (2)  is the semi-major axis (A) of the orbit. */
+/*                    RECIN (3)  is the value of H at the specified */
+/*                               epoch. ( E*SIN(ARGP+NODE) ). */
 
-/*                 RECIN (3)  is the value of H at the specified epoch. */
-/*                            ( E*SIN(ARGP+NODE) ). */
+/*                    RECIN (4)  is the value of K at the specified epoch */
+/*                               ( E*COS(ARGP+NODE) ). */
 
-/*                 RECIN (4)  is the value of K at the specified epoch */
-/*                            ( E*COS(ARGP+NODE) ). */
+/*                    RECIN (5)  is the mean longitude (MEAN0+ARGP+NODE) */
+/*                               at the epoch of the elements. */
 
-/*                 RECIN (5)  is the mean longitude (MEAN0+ARGP+NODE)at */
-/*                            the epoch of the elements. */
+/*                    RECIN (6)  is the value of P */
+/*                               (TAN(INC/2)*SIN(NODE)) at the specified */
+/*                               epoch. */
 
-/*                 RECIN (6)  is the value of P (TAN(INC/2)*SIN(NODE))at */
-/*                            the specified epoch. */
+/*                    RECIN (7)  is the value of Q */
+/*                               (TAN(INC/2)*COS(NODE)) at the specified */
+/*                               epoch. */
 
-/*                 RECIN (7)  is the value of Q (TAN(INC/2)*COS(NODE))at */
-/*                            the specified epoch. */
+/*                    RECIN (8)  is the rate of the longitude of periapse */
+/*                               (dARGP/dt + dNODE/dt ) at the epoch of */
+/*                               the elements. This rate is assumed to */
+/*                               hold for all time. */
 
-/*                 RECIN (8)  is the rate of the longitude of periapse */
-/*                            (dARGP/dt + dNODE/dt ) at the epoch of */
-/*                            the elements.  This rate is assumed to hold */
-/*                            for all time. */
+/*                    RECIN (9)  is the derivative of the mean longitude */
+/*                               ( dM/dt + dARGP/dt + dNODE/dt ).  This */
+/*                               rate is assumed to be constant. */
 
-/*                 RECIN (9)  is the derivative of the mean longitude */
-/*                            ( dM/dt + dARGP/dt + dNODE/dt ).  This */
-/*                            rate is assumed to be constant. */
-
-/*                 RECIN (10)  is the rate of the longitude of the */
-/*                             ascending node ( dNODE/dt). */
+/*                    RECIN (10)  is the rate of the longitude of the */
+/*                                ascending node ( dNODE/dt). */
 
 /*                 RECIN (11) Right Ascension of the pole of the */
 /*                            orbital reference system relative to the */
@@ -130,25 +131,24 @@
 
 /* $ Detailed_Output */
 
-/*     STATE       is the state produced by evaluating RECIN at ET. */
-/*                 Units are km and km/sec. */
+/*     STATE    is the state produced by evaluating RECIN at ET. */
+/*              Units are km and km/sec. */
 
 /* $ Parameters */
 
-/*      None. */
-
-/* $ Files */
-
-/*      None. */
+/*     None. */
 
 /* $ Exceptions */
 
-/*     1) If the eccentricity is greater than 0.9, the error */
-/*        'SPICE(BADECCENTRICITY)' will be signalled. */
+/*     1)  If the eccentricity is greater than 0.9, the error */
+/*         SPICE(BADECCENTRICITY) is signaled. */
 
-/*     2) If the semi-major axis is non-positive, the error */
-/*        'SPICE(BADSEMIAXIS)' is signalled. */
+/*     2)  If the semi-major axis is non-positive, the error */
+/*         SPICE(BADSEMIAXIS) is signaled. */
 
+/* $ Files */
+
+/*     None. */
 
 /* $ Particulars */
 
@@ -164,9 +164,9 @@
 /*     SPK files. */
 
 /*     The data returned by the SPKRnn routine is in its rawest form, */
-/*     taken directly from the segment.  As such, it will be meaningless */
+/*     taken directly from the segment. As such, it will be meaningless */
 /*     to a user unless he/she understands the structure of the data type */
-/*     completely.  Given that understanding, however, the SPKRnn */
+/*     completely. Given that understanding, however, the SPKRnn */
 /*     routines might be used to examine raw segment data before */
 /*     evaluating it with the SPKEnn routines. */
 
@@ -200,22 +200,29 @@
 
 /*     None. */
 
-/* $ Author_and_Institution */
-
-/*      W.L. Taber      (JPL) */
-
 /* $ Literature_References */
 
 /*     None. */
 
+/* $ Author_and_Institution */
+
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
+
 /* $ Version */
 
-/* -    SPICELIB Version 1.0.0, 8-JAN-1997 (WLT) */
+/* -    SPICELIB Version 1.1.0, 27-AUG-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
+
+/* -    SPICELIB Version 1.0.0, 08-JAN-1997 (WLT) */
 
 /* -& */
 /* $ Index_Entries */
 
-/*     evaluate type_17 spk segment */
+/*     evaluate type_17 SPK segment */
 
 /* -& */
 

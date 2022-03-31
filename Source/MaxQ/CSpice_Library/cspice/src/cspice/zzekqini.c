@@ -13,7 +13,7 @@ static integer c__2000 = 2000;
 static integer c__0 = 0;
 static integer c__19 = 19;
 
-/* $Procedure   ZZEKQINI ( Private: EK, intialize encoded query ) */
+/* $Procedure   ZZEKQINI ( Private: EK, initialize encoded query ) */
 /* Subroutine */ int zzekqini_(integer *isize, integer *dsize, integer *eqryi,
 	 char *eqryc, doublereal *eqryd, ftnlen eqryc_len)
 {
@@ -625,15 +625,15 @@ static integer c__19 = 19;
 /*     1) ISIZE must be large enough to accommodate a query with the */
 /*        maximum number of tables, constraints, and tokens, and */
 /*        indicated by the parameters in ekqlimit.inc.  If ISIZE is */
-/*        too small, the error SPICE(CELLTOOSMALL) will be signalled. */
+/*        too small, the error SPICE(CELLTOOSMALL) will be signaled. */
 
 /*     2) DSIZE must be large enough to accommodate the largest number */
 /*        of numeric tokens that can occur in a query.  If DSIZE is */
-/*        too small, the error SPICE(CELLTOOSMALL) will be signalled. */
+/*        too small, the error SPICE(CELLTOOSMALL) will be signaled. */
 
 /*     3) EQRYC must be long enough to accommodate all of the character */
 /*        data that can occur in a query.  If EQRYC is too short, the */
-/*        error  SPICE(STRINGTOOSHORT) will be signalled. */
+/*        error  SPICE(STRINGTOOSHORT) will be signaled. */
 
 /* $ Files */
 
@@ -665,6 +665,10 @@ static integer c__19 = 19;
 /*     N.J. Bachman       (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.0.1, 02-OCT-2021 (NJB) */
+
+/*        Corrected typos in comments. */
 
 /* -    Beta Version 1.0.0, 17-OCT-1995 (NJB) */
 

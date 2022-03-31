@@ -43,10 +43,10 @@
 
 -Keywords
 
-   SEPARATION
+   EVENT
    GEOMETRY
    SEARCH
-   EVENT
+   SEPARATION
 
 */
 
@@ -77,260 +77,308 @@
 
 -Brief_I/O
 
-   Variable  I/O  Description
+   VARIABLE  I/O  DESCRIPTION
    --------  ---  --------------------------------------------------
    SPICE_GF_CNVTOL
               P   Convergence tolerance.
-   targ1      I   Name of first body
-   shape1     I   Name of shape model describing the first body
-   frame1     I   The body-fixed reference frame of the first body
-   targ2      I   Name of second body
-   shape2     I   Name of the shape model describing the second body
-   frame2     I   The body-fixed reference frame of the second body
-   abcorr     I   Aberration correction flag
-   obsrvr     I   Name of the observing body
+   targ1      I   Name of first body.
+   shape1     I   Name of shape model describing the first body.
+   frame1     I   The body-fixed reference frame of the first body.
+   targ2      I   Name of second body.
+   shape2     I   Name of the shape model describing the second body.
+   frame2     I   The body-fixed reference frame of the second body.
+   abcorr     I   Aberration correction flag.
+   obsrvr     I   Name of the observing body.
    relate     I   Operator that either looks for an extreme value
                   (max, min, local, absolute) or compares the
-                  angular separation value and refval
-   refval     I   Reference value
-   adjust     I   Absolute extremum adjustment value
+                  angular separation value and `refval'.
+   refval     I   Reference value.
+   adjust     I   Absolute extremum adjustment value.
    step       I   Step size in seconds for finding angular separation
-                  events
-   nintvls    I   Workspace window interval count
-   cnfine    I-O  SPICE window to which the search is restricted
-   result     O   SPICE window containing results
+                  events.
+   nintvls    I   Workspace window interval count.
+   cnfine    I-O  SPICE window to which the search is restricted.
+   result     O   SPICE window containing results.
 
 -Detailed_Input
 
-   targ1       the string naming the first body of interest. You can
+   targ1       is the string naming the first body of interest. You can
                also supply the integer ID code for the object as an
-               integer string.  For example both "MOON" and "301"
+               integer string. For example both "MOON" and "301"
                are legitimate strings that indicate the moon is the
                target body.
 
-   shape1      the string naming the geometric model used to represent
-               the shape of the targ1 body. Models supported by this routine:
+   shape1      is the string naming the geometric model used to
+               represent the shape of the `targ1' body. Models supported
+               by this routine:
 
-                 "SPHERE"        Treat the body as a sphere with radius
-                                 equal to the maximum value of
-                                 BODYnnn_RADII
+                  "SPHERE"   Treat the body as a sphere with radius
+                             equal to the maximum value of
+                             BODYnnn_RADII.
 
-                 "POINT"         Treat the body as a point;
-                                 radius has value zero.
+                  "POINT"    Treat the body as a point; radius has value
+                             zero.
 
-               The 'shape1' string lacks sensitivity to case, leading
+               The `shape1' string lacks sensitivity to case, leading
                and trailing blanks.
 
-   frame1      the string naming the body-fixed reference frame
-               corresponding to targ1. gfsep_c does not currently use
+   frame1      is the string naming the body-fixed reference frame
+               corresponding to `targ1'. gfsep_c does not currently use
                this argument's value, its use is reserved for future
                shape models. The value "NULL" will suffice for
                "POINT" and "SPHERE" shaped bodies.
 
-   targ2       the string naming the second body of interest. You can
+   targ2       is the string naming the second body of interest. You can
                also supply the integer ID code for the object as an
-               integer string.  For example both "MOON" and "301"
+               integer string. For example both "MOON" and "301"
                are legitimate strings that indicate the moon is the
                target body.
 
-   shape2      the string naming the geometric model used to represent
-               the shape of the targ2. Models supported by this routine:
+   shape2      is the string naming the geometric model used to
+               represent the shape of the `targ2'. Models supported by
+               this routine:
 
-                 "SPHERE"        Treat the body as a sphere with radius
-                                 equal to the maximum value of
-                                 BODYnnn_RADII
+                  "SPHERE"   Treat the body as a sphere with radius
+                             equal to the maximum value of
+                             BODYnnn_RADII.
 
-                 "POINT"         Treat the body as a single point;
-                                 radius has value zero.
+                  "POINT"    Treat the body as a single point; radius
+                             has value zero.
 
-               The 'shape2' string lacks sensitivity to case, leading
+               The `shape2' string lacks sensitivity to case, leading
                and trailing blanks.
 
-   frame2      the string naming the body-fixed reference frame
-               corresponding to 'targ2'. gfsep_c does not currently use
+   frame2      is the string naming the body-fixed reference frame
+               corresponding to `targ2'. gfsep_c does not currently use
                this argument's value, its use is reserved for future
                shape models. The value "NULL" will suffice for
                "POINT" and "SPHERE" shaped bodies.
 
-   abcorr      the string indicating the aberration corrections to apply
-               to the observer-target position vector to account for
+   abcorr      is the string description of the aberration corrections
+               to apply to the state evaluations to account for
                one-way light time and stellar aberration.
 
-               This routine accepts the same aberration corrections as does
-               the SPICE routine SPKEZR. See the header of SPKEZR for a
-               detailed description of the aberration correction options.
-               For convenience, the options are listed below:
+               This routine accepts the same aberration corrections
+               as does the SPICE routine spkezr_c. See the header of
+               spkezr_c for a detailed description of the aberration
+               correction options. For convenience, the options are
+               listed below:
 
                   "NONE"     Apply no correction.
 
-                  "LT"       "Reception" case:  correct for
+                  "LT"       "Reception" case: correct for
                              one-way light time using a Newtonian
                              formulation.
 
-                  "LT+S"     "Reception" case:  correct for
+                  "LT+S"     "Reception" case: correct for
                              one-way light time and stellar
                              aberration using a Newtonian
                              formulation.
 
-                  "CN"       "Reception" case:  converged
+                  "CN"       "Reception" case: converged
                              Newtonian light time correction.
 
-                  "CN+S"     "Reception" case:  converged
+                  "CN+S"     "Reception" case: converged
                              Newtonian light time and stellar
                              aberration corrections.
 
-                  "XLT"      "Transmission" case:  correct for
+                  "XLT"      "Transmission" case: correct for
                              one-way light time using a Newtonian
                              formulation.
 
-                  "XLT+S"    "Transmission" case:  correct for
+                  "XLT+S"    "Transmission" case: correct for
                              one-way light time and stellar
                              aberration using a Newtonian
                              formulation.
 
-                  "XCN"      "Transmission" case:  converged
+                  "XCN"      "Transmission" case: converged
                              Newtonian light time correction.
 
-                  "XCN+S"    "Transmission" case:  converged
+                  "XCN+S"    "Transmission" case: converged
                              Newtonian light time and stellar
                              aberration corrections.
 
-               The abcorr string lacks sensitivity to case, leading
+               The `abcorr' string lacks sensitivity to case, leading
                and trailing blanks.
 
-   obsrvr      the string naming the observing body. Optionally, you
+   obsrvr      is the string naming the observing body. Optionally, you
                may supply the ID code of the object as an integer
                string. For example, both "EARTH" and "399" are
                legitimate strings to supply to indicate the
                observer is Earth.
 
-   relate      the string identifying the relational operator used to
-               define a constraint on the angular separation. The result
-               window found by this routine indicates the time intervals
-               where the constraint is satisfied. Supported values of
-               relate and corresponding meanings are shown below:
+   relate      is the string identifying the relational operator used to
+               define a constraint on the angular separation. The
+               result window found by this routine indicates the time
+               intervals where the constraint is satisfied. Supported
+               values of `relate' and corresponding meanings are shown
+               below:
 
-                  ">"      Separation is greater than the reference
-                           value refval.
+                  ">"       Separation is greater than the reference
+                            value `refval'.
 
-                  "="      Separation is equal to the reference
-                           value refval.
+                  "="       Separation is equal to the reference
+                            value `refval'.
 
-                  "<"      Separation is less than the reference
-                           value refval.
+                  "<"       Separation is less than the reference
+                            value `refval'.
 
-                 "ABSMAX"  Separation is at an absolute maximum.
+                 "ABSMAX"   Separation is at an absolute maximum.
 
-                 "ABSMIN"  Separation is at an absolute  minimum.
+                 "ABSMIN"   Separation is at an absolute  minimum.
 
-                 "LOCMAX"  Separation is at a local maximum.
+                 "LOCMAX"   Separation is at a local maximum.
 
-                 "LOCMIN"  Separation is at a local minimum.
+                 "LOCMIN"   Separation is at a local minimum.
 
-              The caller may indicate that the region of interest
-              is the set of time intervals where the quantity is
-              within a specified angular separation of an absolute extremum.
-              The argument adjust (described below) is used to
-              specify this angular separation.
+               The caller may indicate that the region of interest
+               is the set of time intervals where the quantity is
+               within a specified angular separation of an absolute
+               extremum. The argument `adjust' (described below) is used
+               to specify this angular separation.
 
-              Local extrema are considered to exist only in the
-              interiors of the intervals comprising the confinement
-              window:  a local extremum cannot exist at a boundary
-              point of the confinement window.
+               Local extrema are considered to exist only in the
+               interiors of the intervals comprising the confinement
+               window:  a local extremum cannot exist at a boundary
+               point of the confinement window.
 
-              The relate string lacks sensitivity to case, leading
-              and trailing blanks.
+               The `relate' string lacks sensitivity to case, leading
+               and trailing blanks.
 
-   refval     the double precision reference value used together with
-              relate argument to define an equality or inequality to be
-              satisfied by the angular separation between the specified target
-              and observer. See the discussion of relate above for
-              further information.
+   refval      is the double precision reference value used together
+               with `relate' argument to define an equality or inequality
+               to be satisfied by the angular separation between the
+               specified target and observer. See the discussion of
+               `relate' above for further information.
 
-              The units of refval are radians.
+               The units of `refval' are radians.
 
-   adjust     a double precision value used to modify searches for
-              absolute extrema: when relate is set to ABSMAX or ABSMIN and
-              adjust is set to a positive value, GFSEP finds times when the
-              angular separation between the bodies is within adjust radians
-              of the specified extreme value.
+   adjust      is a double precision value used to modify searches for
+               absolute extrema: when `relate' is set to "ABSMAX" or
+               "ABSMIN" and `adjust' is set to a positive value, gfsep_c
+               finds times when the angular separation between the
+               bodies is within `adjust' radians of the specified
+               extreme value.
 
-              For relate set to ABSMAX, the result window contains
-              time intervals when the angular separation has
-              values between ABSMAX - adjust and ABSMAX.
+               For `relate' set to "ABSMAX", the `result' window contains
+               time intervals when the angular separation has
+               values between absmax - adjust and `absmax'.
 
-              For relate set to ABSMIN, the result window contains
-              time intervals when the angular separation has
-              values between ABSMIN and ABSMIN + adjust.
+               For `relate' set to "ABSMIN", the `result' window contains
+               time intervals when the angular separation has
+               values between `absmin' and absmin + adjust.
 
-              adjust is not used for searches for local extrema,
-              equality or inequality conditions.
+               `adjust' is not used for searches for local extrema,
+               equality or inequality conditions.
 
-   step       a double precision value defining the step size to use in
-              the search. step must be short enough for a search using step
-              to locate the time intervals where the specified
-              angular separation function is monotone increasing or
-              decreasing. However, step must not be *too* short, or
-              the search will take an unreasonable amount of time.
+   step        is the double precision time step size to use in the
+               search.
 
-              The choice of step affects the completeness but not
-              the precision of solutions found by this routine; the
-              precision is controlled by the convergence tolerance.
-              See the discussion of the parameter SPICE_GF_CNVTOL for
-              details.
+               `step' must be short enough to for a search using this
+               step size to locate the time intervals where the
+               specified angular separation function is monotone
+               increasing or decreasing. However, `step' must not be
+               *too* short, or the search will take an unreasonable
+               amount of time.
 
-              'step' has units of TDB seconds.
+               The choice of `step' affects the completeness but not
+               the precision of solutions found by this routine; the
+               precision is controlled by the convergence tolerance.
+               See the discussion of the parameter SPICE_GF_CNVTOL for
+               details.
 
-   nintvls    an integer value specifying the number of intervals in the
-              the internal workspace array used by this routine. 'nintvls'
-              should be at least as large as the number of intervals
-              within the search region on which the specified observer-target
-              vector coordinate function is monotone increasing or decreasing.
-              It does no harm to pick a value of 'nintvls' larger than the
-              minimum required to execute the specified search, but if chosen
-              too small, the search will fail.
+               `step' has units of TDB seconds.
 
-   cnfine     a double precision SPICE window that confines the time
-              period over which the specified search is conducted.
-              cnfine may consist of a single interval or a collection
-              of intervals.
+   nintvls     is an integer parameter specifying the number of intervals
+               that can be accommodated by each of the dynamically allocated
+               workspace windows used internally by this routine.
 
-              In some cases the confinement window can be used to
-              greatly reduce the time period that must be searched
-              for the desired solution. See the Particulars section
-              below for further discussion.
+               In many cases, it's not necessary to compute an accurate
+               estimate of how many intervals are needed; rather, the user
+               can pick a size considerably larger than what's really
+               required.
 
-              See the Examples section below for a code example
-              that shows how to create a confinement window.
+               However, since excessively large arrays can prevent
+               applications from compiling, linking, or running properly,
+               sometimes `nintvls' must be set according to the actual
+               workspace requirement. A rule of thumb for the number of
+               intervals needed is
+
+                  nintvls  =  2*n  +  ( m / step )
+
+               where
+
+                  n      is the number of intervals in the confinement
+                         window.
+
+                  m      is the measure of the confinement window, in units
+                         of seconds.
+
+                  step   is the search step size in seconds.
+
+   cnfine      is a double precision SPICE window that confines the time
+               period over which the specified search is conducted.
+               `cnfine' may consist of a single interval or a collection
+               of intervals.
+
+               In some cases the confinement window can be used to
+               greatly reduce the time period that must be searched
+               for the desired solution. See the -Particulars section
+               below for further discussion.
+
+               See the -Examples section below for a code example
+               that shows how to create a confinement window.
+
+               In some cases the observer's state may be computed at
+               times outside of `cnfine' by as much as 2 seconds. See
+               -Particulars for details.
+
+               `cnfine' must be declared as a double precision SpiceCell.
+
+               CSPICE provides the following macro, which declares and
+               initializes the cell
+
+                  SPICEDOUBLE_CELL        ( cnfine, CNFINESZ );
+
+               where CNFINESZ is the maximum capacity of `cnfine'.
 
 -Detailed_Output
 
-   cnfine     is the input confinement window, updated if necessary
-              so the control area of its data array indicates the
-              window's size and cardinality. The window data are
-              unchanged.
+   cnfine      is the input confinement window, updated if necessary so the
+               control area of its data array indicates the window's size
+               and cardinality. The window data are unchanged.
 
-   result     the SPICE window of intervals, contained within the
-              confinement window cnfine, on which the specified
-              constraint is satisfied.
+   result      is the SPICE window of intervals, contained within the
+               confinement window `cnfine', on which the specified
+               constraint is satisfied.
 
-              If 'result' is non-empty on input, its contents
-              will be discarded before gfsep_c conducts its
-              search.
+               `result' must be declared and initialized with sufficient
+               size to capture the full set of time intervals within the
+               search region on which the specified condition is satisfied.
 
-              'result' must be declared and initialized with sufficient
-              size to capture the full set of time intervals
-              within the search region on which the specified constraint
-              is satisfied.
+               If `result' is non-empty on input, its contents will be
+               discarded before gfsep_c conducts its search.
 
-              If the search is for local extrema, or for absolute
-              extrema with adjust set to zero, then normally each
-              interval of result will be a singleton: the left and
-              right endpoints of each interval will be identical.
+               The endpoints of the time intervals comprising `result' are
+               interpreted as seconds past J2000 TDB.
 
-              If no times within the confinement window satisfy the
-              constraint, result will be returned with a
-              cardinality of zero.
+               If the search is for local extrema, or for absolute
+               extrema with `adjust' set to zero, then normally each
+               interval of `result' will be a singleton: the left and
+               right endpoints of each interval will be identical.
+
+               If no times within the confinement window satisfy the
+               search criteria, `result' will be returned with a
+               cardinality of zero.
+
+               `result' must be declared as a double precision SpiceCell.
+
+               CSPICE provides the following macro, which declares and
+               initializes the cell
+
+                  SPICEDOUBLE_CELL        ( result, RESULTSZ );
+
+               where RESULTSZ is the maximum capacity of `result'.
 
 -Parameters
 
@@ -366,66 +414,78 @@
 
    2)  Due to numerical errors, in particular,
 
-          - Truncation error in time values
-          - Finite tolerance value
-          - Errors in computed geometric quantities
+          - truncation error in time values
+          - finite tolerance value
+          - errors in computed geometric quantities
 
        it is *normal* for the condition of interest to not always be
        satisfied near the endpoints of the intervals comprising the
-       result window.
+       `result' window. One technique to handle such a situation,
+       slightly contract `result' using the window routine wncond_c.
 
-       The result window may need to be contracted slightly by the
-       caller to achieve desired results. The SPICE window routine
-       wncond_c can be used to contract the result window.
+   3)  If the number of intervals `nintvls' is less than 1, the error
+       SPICE(VALUEOUTOFRANGE) is signaled.
 
-   3)  If any input string argument pointer is null, the error
-       SPICE(NULLPOINTER) will be signaled.
+   4)  If result window, `result', is not at least 2 and an even value,
+       the error SPICE(INVALIDDIMENSION) is signaled by a routine in
+       the call tree of this routine.
 
-   4)  If any input string argument is empty, the error
-       SPICE(EMPTYSTRING) will be signaled.
+   5)  If `result' has insufficient capacity to contain the
+       number of intervals on which the specified distance condition
+       is met, an error is signaled by a routine in the call
+       tree of this routine.
 
-   5)  If the workspace interval count 'nintvls' is less than 1, the
-       error SPICE(VALUEOUTOFRANGE) will be signaled.
-
-   6)  If the required amount of workspace memory cannot be
-       allocated, the error SPICE(MALLOCFAILURE) will be
-       signaled.
-
-   7)  If an error (typically cell overflow) occurs while performing
-       window arithmetic, the error will be diagnosed by a routine
+   6)  If an error (typically cell overflow) occurs during
+       window arithmetic, the error is signaled by a routine
        in the call tree of this routine.
 
-   8)  If the relational operator `relate' is not recognized, an
+   7)  If the relational operator `relate' is not recognized, an
        error is signaled by a routine in the call tree of this
        routine.
 
-   9)  If the aberration correction specifier contains an
+   8)  If the aberration correction specifier contains an
        unrecognized value, an error is signaled by a routine in the
        call tree of this routine.
 
-   10) If 'adjust' is negative, an error is signaled by a routine in
+   9)  If `adjust' is negative, an error is signaled by a routine in
        the call tree of this routine.
 
-   11) If either of the input body names, 'targ1', 'targ2' do not map
+   10) If either of the input body names, `targ1', `targ2' do not map
        to NAIF ID codes, an error is signaled by a routine in the
        call tree of this routine.
 
-   12) If either of the input body shape names, 'shape1', 'shape2',
+   11) If either of the input body shape names, `shape1', `shape2',
        are not recognized by the GF subsystem, an error is signaled
        by a routine in the call tree of this routine.
 
-   13) If either of the input body frame names, 'frame1', 'frame2',
+   12) If either of the input body frame names, `frame1', `frame2',
        are not recognized by the frame subsystem, an error is
        signaled by a routine in the call tree of this routine.
 
-   14) If either of the input body frames, 'frame1', 'frame2',
-       are not centered on the corresponding body ('frame1' on 'targ1',
-       'frame2' on 'targ2'), an error is signaled by a routine in the
+   13) If either of the input body frames, `frame1', `frame2',
+       are not centered on the corresponding body (`frame1' on `targ1',
+       `frame2' on `targ2'), an error is signaled by a routine in the
        call tree of this routine.
 
-   15) If required ephemerides or other kernel data are not
+   14) If required ephemerides or other kernel data are not
        available, an error is signaled by a routine in the call tree
        of this routine.
+
+   15) If any of the `targ1', `shape1', `frame1', `targ2', `shape2',
+       `frame2', `abcorr', `obsrvr' or `relate' input string pointers
+       is null, the error SPICE(NULLPOINTER) is signaled.
+
+   16) If any of the `targ1', `shape1', `frame1', `targ2', `shape2',
+       `frame2', `abcorr', `obsrvr' or `relate' input strings has
+       zero length, the error SPICE(EMPTYSTRING) is signaled.
+
+   17) If any the `cnfine' or `result' cell arguments has a type
+       other than SpiceDouble, the error SPICE(TYPEMISMATCH) is
+       signaled.
+
+   18) If memory cannot be allocated to create the temporary variable
+       required for the execution of the underlying Fortran routine,
+       the error SPICE(MALLOCFAILED) is signaled.
 
 -Files
 
@@ -434,30 +494,34 @@
 
    The following data are required:
 
-      - SPK data: the calling application must load ephemeris data
-        for the targets, observer, and any intermediate objects in
-        a chain connecting the targets and observer that cover the time
-        period specified by the window CNFINE. If aberration
-        corrections are used, the states of target and observer
-        relative to the solar system barycenter must be calculable
-        from the available ephemeris data. Typically ephemeris data
-        are made available by loading one or more SPK files using
-        FURNSH.
+   -  SPK data: the calling application must load ephemeris data
+      for the targets, observer, and any intermediate objects in
+      a chain connecting the targets and observer that cover the
+      time period specified by the window `cnfine'. If aberration
+      corrections are used, the states of target and observer
+      relative to the solar system barycenter must be calculable
+      from the available ephemeris data. Typically ephemeris data
+      are made available by loading one or more SPK files using
+      furnsh_c.
 
-      - PCK data: bodies modeled as triaxial ellipsoids must have
-        semi-axis lengths provided by variables in the kernel pool.
-        Typically these data are made available by loading a text
-        PCK file using FURNSH.
+   -  PCK data: bodies modeled as triaxial ellipsoids must have
+      semi-axis lengths provided by variables in the kernel pool.
+      Typically these data are made available by loading a text
+      PCK file using furnsh_c.
 
-      - If non-inertial reference frames are used, then PCK
-        files, frame kernels, C-kernels, and SCLK kernels may be
-        needed.
+   -  If non-inertial reference frames are used, then PCK
+      files, frame kernels, C-kernels, and SCLK kernels may be
+      needed.
+
+   -  In some cases the observer's state may be computed at times
+      outside of `cnfine' by as much as 2 seconds; data required to
+      compute this state must be provided by loaded kernels. See
+      -Particulars for details.
 
    Such kernel data are normally loaded once per program
    run, NOT every time this routine is called.
 
 -Particulars
-
 
    This routine provides a simpler, but less flexible interface
    than does the routine gfevnt_c for conducting searches for
@@ -482,18 +546,19 @@
    routine starts the search for solutions by determining the time
    periods, within the confinement window, over which the specified
    angular separation function is monotone increasing and monotone
-   decreasing. Each of these time periods is represented by a SPICE window.
-   Having found these windows, all of the angular separation function's
-   local extrema within the confinement window are known. Absolute extrema
-   then can be found very easily.
+   decreasing. Each of these time periods is represented by a SPICE
+   window. Having found these windows, all of the angular separation
+   function's local extrema within the confinement window are known.
+   Absolute extrema then can be found very easily.
 
    Within any interval of these "monotone" windows, there will be at
    most one solution of any equality constraint. Since the boundary
    of the solution set for any inequality constraint is contained in
    the union of
 
-      - the set of points where an equality constraint is met
-      - the boundary points of the confinement window
+   -  the set of points where an equality constraint is met
+
+   -  the boundary points of the confinement window
 
    the solutions of both equality and inequality constraints can be
    found easily once the monotone windows have been found.
@@ -545,38 +610,33 @@
    =====================
 
    As described above, the root-finding process used by this routine
-   involves first bracketing roots and then using a search process to
-   locate them.  "Roots" include times when extrema are attained and
-   times when the geometric quantity function is equal to a reference
-   value or adjusted extremum. All endpoints of the intervals comprising
-   the result window are either endpoints of intervals of the confinement
-   window or roots.
+   involves first bracketing roots and then using a search process
+   to locate them. "Roots" are both times when local extrema are
+   attained and times when the distance function is equal to a
+   reference value. All endpoints of the intervals comprising the
+   result window are either endpoints of intervals of the
+   confinement window or roots.
 
    Once a root has been bracketed, a refinement process is used to
    narrow down the time interval within which the root must lie.
    This refinement process terminates when the location of the root
    has been determined to within an error margin called the
-   "convergence tolerance." The convergence tolerance used by this
-   routine is set via the parameter SPICE_GF_CNVTOL.
+   "convergence tolerance." The default convergence tolerance
+   used by this routine is set by the parameter SPICE_GF_CNVTOL (defined
+   in SpiceGF.h).
 
    The value of SPICE_GF_CNVTOL is set to a "tight" value so that the
-   tolerance doesn't limit the accuracy of solutions found by this
-   routine. In general the accuracy of input data will be the limiting
-   factor.
+   tolerance doesn't become the limiting factor in the accuracy of
+   solutions found by this routine. In general the accuracy of input
+   data will be the limiting factor.
 
    The user may change the convergence tolerance from the default
    SPICE_GF_CNVTOL value by calling the routine gfstol_c, e.g.
 
-      gfstol_c( tolerance value in seconds )
+      gfstol_c ( tolerance value );
 
    Call gfstol_c prior to calling this routine. All subsequent
    searches will use the updated tolerance value.
-
-   Searches over time windows of long duration may require use of
-   larger tolerance values than the default: the tolerance must be
-   large enough so that it, when added to or subtracted from the
-   confinement window's lower and upper bounds, yields distinct time
-   values.
 
    Setting the tolerance tighter than SPICE_GF_CNVTOL is unlikely to be
    useful, since the results are unlikely to be more accurate.
@@ -584,7 +644,6 @@
    since a few convergence steps will be omitted. However, in most
    cases, the step size is likely to have a much greater effect
    on processing time than would the convergence tolerance.
-
 
    The Confinement Window
    ======================
@@ -596,6 +655,36 @@
    to reduce the size of the time period over which a relatively
    slow search of interest must be performed.
 
+   Certain types of searches require the state of the observer,
+   relative to the solar system barycenter, to be computed at times
+   slightly outside the confinement window `cnfine'. The time window
+   that is actually used is the result of "expanding" `cnfine' by a
+   specified amount "T": each time interval of `cnfine' is expanded by
+   shifting the interval's left endpoint to the left and the right
+   endpoint to the right by T seconds. Any overlapping intervals are
+   merged. (The input argument `cnfine' is not modified.)
+
+   The window expansions listed below are additive: if both
+   conditions apply, the window expansion amount is the sum of the
+   individual amounts.
+
+   -  If a search uses an equality constraint, the time window
+      over which the state of the observer is computed is expanded
+      by 1 second at both ends of all of the time intervals
+      comprising the window over which the search is conducted.
+
+   -  If a search uses stellar aberration corrections, the time
+      window over which the state of the observer is computed is
+      expanded as described above.
+
+   When light time corrections are used, expansion of the search
+   window also affects the set of times at which the light time-
+   corrected state of the target is computed.
+
+   In addition to the possible 2 second expansion of the search
+   window that occurs when both an equality constraint and stellar
+   aberration corrections are used, round-off error should be taken
+   into account when the need for data availability is analyzed.
 
    Negative Angular Separation
    ===========================
@@ -618,18 +707,22 @@
 
 -Examples
 
-
    The numerical results shown for these examples may differ across
    platforms. The results depend on the SPICE kernels used as
    input, the compiler and supporting libraries, and the machine
    specific arithmetic implementation.
 
+   1) Determine the times of local maxima of the angular separation
+      between the moon and earth as observed from the sun from
+      January 1, 2007 UTC to July 1, 2007 UTC.
+
       Use the meta-kernel shown below to load the required SPICE
       kernels.
 
+
          KPL/MK
 
-         File name: standard.tm
+         File name: gfsep_ex1.tm
 
          This meta-kernel is intended to support operation of SPICE
          example programs. The kernels shown here should not be
@@ -658,24 +751,25 @@
 
          \begintext
 
-   Example(1):
+         End of meta-kernel
 
-      Determine the times of local maxima of the angular separation
-      between the moon and earth as observed from the sun from
-      January 1, 2007 UTC to January 1 2008 UTC.
 
+      Example code begins here.
+
+
+      /.
+         Program gfsep_ex1
+      ./
       #include <stdio.h>
-      #include <stdlib.h>
-      #include <string.h>
-
       #include "SpiceUsr.h"
 
-      #define       MAXWIN    1000
-      #define       TIMFMT    "YYYY-MON-DD HR:MN:SC.###### (TDB) ::TDB ::RND"
-      #define       TIMLEN   41
-
-      int main( int argc, char **argv )
+      int main( )
          {
+
+         #define BODYLN    21
+         #define MAXWIN    1000
+         #define TIMFMT    "YYYY-MON-DD HR:MN:SC.###### (TDB) ::TDB ::RND"
+         #define TIMLEN    41
 
          /.
          Create the needed windows. Note, one window
@@ -697,18 +791,18 @@
          SpiceChar         begstr [ TIMLEN ];
          SpiceChar         endstr [ TIMLEN ];
 
-         SpiceChar       * targ1  = "MOON";
+         SpiceChar         targ1  [ BODYLN ];
+         SpiceChar         targ2  [ BODYLN ];
+         SpiceChar         obsrvr [ BODYLN ];
+
          SpiceChar       * frame1 = "NULL";
          SpiceChar       * shape1 = "SPHERE";
 
-         SpiceChar       * targ2  = "EARTH";
          SpiceChar       * frame2 = "NULL";
          SpiceChar       * shape2 = "SPHERE";
 
          SpiceChar       * abcorr = "NONE";
          SpiceChar       * relate = "LOCMAX";
-
-         SpiceChar       * obsrvr = "SUN";
 
          SpiceInt          count;
          SpiceInt          i;
@@ -716,16 +810,23 @@
          /.
          Load kernels.
          ./
-         furnsh_c( "standard.tm" );
+         furnsh_c( "gfsep_ex1.tm" );
 
          /.
          Store the time bounds of our search interval in
          the cnfine confinement window.
          ./
          str2et_c( "2007 JAN 01", &begtim );
-         str2et_c( "2008 JAN 01", &endtim );
+         str2et_c( "2007 JUL 01", &endtim );
 
          wninsd_c ( begtim, endtim, &cnfine );
+
+         /.
+         Prompt for the inputs.
+         ./
+         prompt_c ( "First body     > ", BODYLN, targ1  );
+         prompt_c ( "Second body    > ", BODYLN, targ2  );
+         prompt_c ( "Observing body > ", BODYLN, obsrvr );
 
          /.
          Search using a step size of 6 days (in units of seconds).
@@ -788,76 +889,110 @@
          return( 0 );
          }
 
-      The program's partial output:
 
-         Interval 1
-         Beginning TDB 2007-JAN-11 11:21:20.213872 (TDB)
-         Ending TDB    2007-JAN-11 11:21:20.213872 (TDB)
+      When this program was executed on a Mac/Intel/cc/64-bit
+      platform, using "MOON" as first body, "EARTH" as second body
+      and "SUN" as observing body, the output was:
 
-         Interval 2
-         Beginning TDB 2007-JAN-26 01:43:41.029955 (TDB)
-         Ending TDB    2007-JAN-26 01:43:41.029955 (TDB)
 
-            ...
+      First body     > MOON
+      Second body    > EARTH
+      Observing body > SUN
+      Interval 1
+      Beginning TDB 2007-JAN-11 11:21:20.214305 (TDB)
+      Ending TDB    2007-JAN-11 11:21:20.214305 (TDB)
+      Interval 2
+      Beginning TDB 2007-JAN-26 01:43:41.027309 (TDB)
+      Ending TDB    2007-JAN-26 01:43:41.027309 (TDB)
+      Interval 3
+      Beginning TDB 2007-FEB-10 04:49:53.431964 (TDB)
+      Ending TDB    2007-FEB-10 04:49:53.431964 (TDB)
+      Interval 4
+      Beginning TDB 2007-FEB-24 13:18:18.953256 (TDB)
+      Ending TDB    2007-FEB-24 13:18:18.953256 (TDB)
+      Interval 5
+      Beginning TDB 2007-MAR-11 20:41:59.571964 (TDB)
+      Ending TDB    2007-MAR-11 20:41:59.571964 (TDB)
+      Interval 6
+      Beginning TDB 2007-MAR-26 01:20:26.860201 (TDB)
+      Ending TDB    2007-MAR-26 01:20:26.860201 (TDB)
+      Interval 7
+      Beginning TDB 2007-APR-10 10:24:39.017514 (TDB)
+      Ending TDB    2007-APR-10 10:24:39.017514 (TDB)
+      Interval 8
+      Beginning TDB 2007-APR-24 14:00:49.422728 (TDB)
+      Ending TDB    2007-APR-24 14:00:49.422728 (TDB)
+      Interval 9
+      Beginning TDB 2007-MAY-09 21:53:25.643532 (TDB)
+      Ending TDB    2007-MAY-09 21:53:25.643532 (TDB)
+      Interval 10
+      Beginning TDB 2007-MAY-24 03:14:05.873982 (TDB)
+      Ending TDB    2007-MAY-24 03:14:05.873982 (TDB)
+      Interval 11
+      Beginning TDB 2007-JUN-08 07:24:13.686616 (TDB)
+      Ending TDB    2007-JUN-08 07:24:13.686616 (TDB)
+      Interval 12
+      Beginning TDB 2007-JUN-22 16:45:56.506850 (TDB)
+      Ending TDB    2007-JUN-22 16:45:56.506850 (TDB)
 
-         Interval 24
-         Beginning TDB 2007-DEC-17 04:04:46.935442 (TDB)
-         Ending TDB    2007-DEC-17 04:04:46.935442 (TDB)
 
-         Interval 25
-         Beginning TDB 2007-DEC-31 13:43:52.558897 (TDB)
-         Ending TDB    2007-DEC-31 13:43:52.558897 (TDB)
+   2) Determine the time of local maxima elongation of the
+      Moon as seen from Earth for the same time interval
+      as the previous example, i.e. find the local maxima of
+      the angular separation between the Moon and the Sun as
+      seen from the Earth, by running the code in example #1.
 
-   Example(2):
 
-      Determine the time of local maxima elongation of the
-      Moon as seen from earth for the same time interval
-      as the previous example:
+      When Example #1 was executed on a Mac/Intel/cc/64-bit
+      platform, using "MOON" as first body, "SUN" as second body
+      and "EARTH" as observing body, the output was:
 
-      Edit the Example(1) program to use the assignments:
 
-         SpiceChar       * targ1  = "MOON";
-         SpiceChar       * targ2  = "SUN";
-         SpiceChar       * obsrvr = "EARTH";
+      First body     > MOON
+      Second body    > SUN
+      Observing body > EARTH
+      Interval 1
+      Beginning TDB 2007-JAN-03 14:20:24.617627 (TDB)
+      Ending TDB    2007-JAN-03 14:20:24.617627 (TDB)
+      Interval 2
+      Beginning TDB 2007-FEB-02 06:16:24.101517 (TDB)
+      Ending TDB    2007-FEB-02 06:16:24.101517 (TDB)
+      Interval 3
+      Beginning TDB 2007-MAR-03 23:22:41.994972 (TDB)
+      Ending TDB    2007-MAR-03 23:22:41.994972 (TDB)
+      Interval 4
+      Beginning TDB 2007-APR-02 16:49:16.135505 (TDB)
+      Ending TDB    2007-APR-02 16:49:16.135505 (TDB)
+      Interval 5
+      Beginning TDB 2007-MAY-02 09:41:43.830081 (TDB)
+      Ending TDB    2007-MAY-02 09:41:43.830081 (TDB)
+      Interval 6
+      Beginning TDB 2007-JUN-01 01:03:44.527470 (TDB)
+      Ending TDB    2007-JUN-01 01:03:44.527470 (TDB)
+      Interval 7
+      Beginning TDB 2007-JUN-30 14:15:26.576292 (TDB)
+      Ending TDB    2007-JUN-30 14:15:26.576292 (TDB)
 
-      The program's partial output:
-
-         Interval 1
-         Beginning TDB 2007-JAN-03 14:20:24.618884 (TDB)
-         Ending TDB    2007-JAN-03 14:20:24.618884 (TDB)
-
-         Interval 2
-         Beginning TDB 2007-FEB-02 06:16:24.101655 (TDB)
-         Ending TDB    2007-FEB-02 06:16:24.101655 (TDB)
-
-            ...
-
-         Interval 12
-         Beginning TDB 2007-NOV-24 14:31:04.334590 (TDB)
-         Ending TDB    2007-NOV-24 14:31:04.334590 (TDB)
-
-         Interval 13
-         Beginning TDB 2007-DEC-24 01:40:12.238389 (TDB)
-         Ending TDB    2007-DEC-24 01:40:12.238389 (TDB)
 
 -Restrictions
 
-   1) The kernel files to be used by this routine must be loaded
-      (normally via the CSPICE routine furnsh_c) before this routine
-      is called.
+   1)  The kernel files to be used by this routine must be loaded
+       (normally via the CSPICE routine furnsh_c) before this routine
+       is called.
 
-   2) This routine has the side effect of re-initializing the
-      angular separation quantity utility package.  Callers may
-      need to re-initialize the package after calling this routine.
+   2)  This routine has the side effect of re-initializing the
+       angular separation quantity utility package. Callers may
+       need to re-initialize the package after calling this routine.
 
-   3) Due to the current logic implemented in zzgfspu, a direct
-      search for zero angular separation of two point targets will
-      always fails, i.e.,
+   3)  Due to the current logic implemented in zzgfspu, a direct
+       search for zero angular separation of two point targets will
+       always fails, i.e.,
 
-           'relate' has value "="
-           'refval' has value 0.
+            'relate' has value "="
+            'refval' has value 0.
 
-        Use 'relate' values of "ABSMIN" or "LOCMIN" to detect such an event(s).
+         Use 'relate' values of "ABSMIN" or "LOCMIN" to detect such an
+         event(s).
 
 -Literature_References
 
@@ -865,46 +1000,64 @@
 
 -Author_and_Institution
 
-   N.J. Bachman   (JPL)
-   E.D. Wright    (JPL)
+   N.J. Bachman        (JPL)
+   J. Diaz del Rio     (ODC Space)
+   E.D. Wright         (JPL)
 
 -Version
 
+   -CSPICE Version 1.1.0, 01-NOV-2021 (JDR) (EDW)
+
+       Added use of ALLOC_CHECK_INTRA to check net null effect on
+       alloc count.
+
+       Updated header to describe use of expanded confinement window.
+
+       Edited the header to comply with NAIF standard.
+
+       Reduced the search interval to limit the length of the solutions
+       and modified the example code to prompt for the required inputs.
+
+       Updated the description of "nintvls", "cnfine" and "result"
+       arguments.
+
+       Added entries #4, #5 and #17 in -Exceptions section.
+
    -CSPICE Version 1.0.2, 30-JUL-2014 (EDW)
 
-      Edit to argument I/O 'frame1' and 'frame2' to mention use of
-      "NULL."
+       Edit to argument I/O 'frame1' and 'frame2' to mention use of
+       "NULL."
 
-      Edit to header, correct Required Reading entry eliminating ".REQ"
-      suffix.
+       Edit to header, correct Required Reading entry eliminating ".REQ"
+       suffix.
 
    -CSPICE Version 1.0.1, 28-FEB-2013 (NJB) (EDW)
 
-      Header was updated to discuss use of gfstol_c.
+       Header was updated to discuss use of gfstol_c.
 
-      Edit to comments to correct search description.
+       Edit to comments to correct search description.
 
-      Edited argument descriptions. Removed mention of "ELLIPSOID"
-      shape from 'shape1' and 'shape2' as that option is not yet
-      implemented.
+       Edited argument descriptions. Removed mention of "ELLIPSOID"
+       shape from 'shape1' and 'shape2' as that option is not yet
+       implemented.
 
-      Typo corrected in 1.0.1 Version description, replaced
-      "gfrr_c" with "gfsep_c."
+       Typo corrected in -Version: entry 1.0.1 updated: replaced
+       "gfrr_c" with "gfsep_c."
 
-      Small text edit for clarity on example code description; full date
-      strings replaced abbreviated versions.
+       Small text edit for clarity on example code description; full date
+       strings replaced abbreviated versions.
 
-      Edits to Example section, proper description of "standard.tm"
-      meta kernel.
+       Edits to Example section, proper description of "standard.tm"
+       meta kernel.
 
-      Edits to Exceptions section to improve description of
-      exceptions and error signals.
+       Edits to -Exceptions section to improve description of
+       exceptions and error signals.
 
    -CSPICE Version 1.0.1, 19-AUG-2009 (EDW)
 
-      Corrected typo in the VALUEOUTOFRANGE error message. Corrected
-      the routine name in "chkout_c" call, "gfposc_c", with correct
-      name "gfsep_c."
+       Corrected typo in the VALUEOUTOFRANGE error message. Corrected
+       the routine name in "chkout_c" call, "gfposc_c", with correct
+       name "gfsep_c."
 
    -CSPICE Version 1.0.0, 10-FEB-2009 (NJB) (EDW)
 
@@ -923,6 +1076,9 @@
    doublereal            * work;
 
    static SpiceInt         nw = SPICE_GF_NWSEP;
+
+   int                     nowalloc;
+
    SpiceInt                nBytes;
 
 
@@ -981,6 +1137,8 @@
    intervals returned in 'result'. An interval consists of
    two values.
    */
+
+   nowalloc = alloc_count();
 
    nintvls = 2 * nintvls;
 
@@ -1042,7 +1200,7 @@
       zzsynccl_c ( F2C, result ) ;
       }
 
-   ALLOC_CHECK;
+   ALLOC_CHECK_INTRA(nowalloc);
 
    chkout_c ( "gfsep_c" );
 

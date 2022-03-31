@@ -28,7 +28,7 @@ static integer c__5 = 5;
 /*     routines.  Users should not call this routine directly due */
 /*     to the volatile nature of this routine. */
 
-/*     Set an encoded integer at a specifed address from a character */
+/*     Set an encoded integer at a specified address from a character */
 /*     data page. */
 
 
@@ -250,6 +250,10 @@ static integer c__5 = 5;
 /*     N.J. Bachman       (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.1, 03-OCT-2021 (NJB) */
+
+/*        Corrected typo in comments. */
 
 /* -    Beta Version 1.0.0, 10-OCT-1995 (NJB) */
 

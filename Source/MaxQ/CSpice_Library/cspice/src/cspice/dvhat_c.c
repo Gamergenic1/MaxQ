@@ -38,9 +38,9 @@
 
 -Keywords
 
-   VECTOR
    DERIVATIVE
    MATH
+   VECTOR
 
 */
    #include "SpiceUsr.h"
@@ -55,22 +55,23 @@
 
    VARIABLE  I/O  DESCRIPTION
    --------  ---  --------------------------------------------------
-   s1        I     State to be normalized.
-   sout      O     Unit vector s1 / |s1|, and its time derivative.
+   s1         I   State to be normalized.
+   sout       O   Unit vector s1 / |s1|, and its time derivative.
 
 -Detailed_Input
 
-   s1       This is any double precision state. If the position
-            component of the state is the zero vector, this routine
-            will detect it and will not attempt to divide by zero.
+   s1          is any double precision state. If the position
+               component of the state is the zero vector, this
+               routine will detect it and will not attempt to divide
+               by zero.
 
 -Detailed_Output
 
-   sout     sout is a state containing the unit vector pointing in
-            the direction of position component of s1 and the
-            derivative of the unit vector with respect to time.
+   sout        is a state containing the unit vector pointing in
+               the direction of position component of `s1' and the
+               derivative of the unit vector with respect to time.
 
-            sout may overwrite s1.
+               `sout' may overwrite `s1'.
 
 -Parameters
 
@@ -80,10 +81,10 @@
 
    Error free.
 
-   1) If s1 represents the zero vector, then the position
-      component of sout will also be the zero vector.  The
-      velocity component will be the velocity component
-      of s1.
+   1)  If `s1' represents the zero vector, then the position
+       component of `sout' will also be the zero vector. The
+       velocity component will be the velocity component
+       of `s1'.
 
 -Files
 
@@ -91,32 +92,78 @@
 
 -Particulars
 
-   Let s1 be a state vector with position and velocity components p
-   and v respectively.  From these components one can compute the
-   unit vector parallel to p, call it u and the derivative of u
-   with respect to time, du.  This pair (u,du) is the state returned
-   by this routine in sout.
+   Let `s1' be a state vector with position and velocity components P
+   and V respectively. From these components one can compute the
+   unit vector parallel to P, call it `u' and the derivative of `u'
+   with respect to time, `du'. This pair (u,du) is the state returned
+   by this routine in `sout'.
 
 -Examples
 
-   Any numerical results shown for this example may differ between
-   platforms as the results depend on the SPICE kernels used as input
-   and the machine specific arithmetic implementation.
- 
-   Suppose that 'state' gives the apparent state of a body with
-   respect to an observer.  This routine can be used to compute the
-   instantaneous angular rate of the object across the sky as seen
-   from the observers vantage.
+   The numerical results shown for this example may differ across
+   platforms. The results depend on the SPICE kernels used as
+   input, the compiler and supporting libraries, and the machine
+   specific arithmetic implementation.
 
-      #include "SpiceUsr.h"
+   1) Suppose that `state' gives the apparent state of a body with
+      respect to an observer. This routine can be used to compute the
+      instantaneous angular rate of the object across the sky as seen
+      from the observers vantage.
+
+      Use the meta-kernel shown below to load the required SPICE
+      kernels.
+
+
+         KPL/MK
+
+         File name: dvhat_ex1.tm
+
+         This meta-kernel is intended to support operation of SPICE
+         example programs. The kernels shown here should not be
+         assumed to contain adequate or correct versions of data
+         required by SPICE-based user applications.
+
+         In order for an application to use this meta-kernel, the
+         kernels referenced here must be present in the user's
+         current working directory.
+
+         The names and contents of the kernels referenced
+         by this meta-kernel are as follows:
+
+            File name                     Contents
+            ---------                     --------
+            de421.bsp                     Planetary ephemeris
+            pck00008.tpc                  Planet orientation and
+                                          radii
+            naif0009.tls                  Leapseconds
+
+
+         \begindata
+
+            KERNELS_TO_LOAD = ( 'de421.bsp',
+                                'pck00008.tpc',
+                                'naif0009.tls'  )
+
+         \begintext
+
+         End of meta-kernel
+
+
+      Example code begins here.
+
+
+      /.
+         Program dvhat_ex1
+      ./
       #include <stdio.h>
       #include <math.h>
+      #include "SpiceUsr.h"
 
       int main()
-         {
+      {
 
          SpiceDouble       et;
-         SpiceDouble       ltime;
+         SpiceDouble       lt;
          SpiceDouble       omega;
          SpiceDouble       state  [6];
          SpiceDouble       ustate [6];
@@ -128,9 +175,10 @@
          SpiceChar       * obsrvr = "EARTH BARYCENTER";
 
          /.
-         Load SPK, PCK, and LSK kernels, use a meta kernel for convenience.
+         Load SPK, PCK, and LSK kernels, use a meta kernel for
+         convenience.
          ./
-         furnsh_c ( "standard.tm" );
+         furnsh_c ( "dvhat_ex1.tm" );
 
          /.
          Define an arbitrary epoch, convert the epoch to ephemeris time.
@@ -139,21 +187,21 @@
 
          /.
          Calculate the state of the moon with respect to the earth-moon
-         barycenter in J2000, corrected for light time and stellar aberration
-         at ET.
+         barycenter in J2000, corrected for light time and stellar
+         aberration at `et'.
          ./
 
-         spkezr_c ( target, et, frame, abcorr, obsrvr, state, &ltime );
+         spkezr_c ( target, et, frame, abcorr, obsrvr, state, &lt );
 
          /.
-         Calculate the unit vector of STATE and the derivative of the
+         Calculate the unit vector of `state' and the derivative of the
          unit vector.
          ./
          dvhat_c ( state, ustate );
 
          /.
-         Calculate the instantaneous angular velocity from the magnitude of the
-         derivative of the unit vector.
+         Calculate the instantaneous angular velocity from the magnitude
+         of the derivative of the unit vector.
 
             v = r x omega
 
@@ -163,16 +211,21 @@
 
              ||omega|| = ||v||  for  ||r|| = 1
          ./
-         omega = vnorm_c( &ustate[3] );
+         omega = vnorm_c ( ustate+3 );
 
-         printf( "Instantaneous angular velocity, rad/sec %.10g\n", omega );
-         
-         return 0;
-         }
+         printf( "Instantaneous angular velocity (rad/sec): %18.12e\n",
+                                                                 omega );
 
-   The program outputs:
-   
-      Instantaneous angular velocity, rad/sec 2.48106658e-06
+         return ( 0 );
+      }
+
+
+      When this program was executed on a Mac/Intel/cc/64-bit
+      platform, the output was:
+
+
+      Instantaneous angular velocity (rad/sec): 2.481066592694e-06
+
 
 -Restrictions
 
@@ -180,21 +233,26 @@
 
 -Literature_References
 
-     None.
+   None.
 
 -Author_and_Institution
 
-     W.L. Taber      (JPL)
-     E.D. Wright     (JPL)
+   J. Diaz del Rio     (ODC Space)
+   E.D. Wright         (JPL)
 
 -Version
 
-   -CSPICE Version 1.0.1, 06-MAY-2010  (EDW)
+   -CSPICE Version 1.0.2, 02-JUL-2021 (JDR)
 
-      Reordered header sections to proper NAIF convention.
-      Minor edit to code comments eliminating typo.
+       Edits to header to comply with NAIF standard. Added
+       meta-kernel to the example.
 
-   -CSPICE Version 1.0.0, 07-JUL-1999  (EDW)
+   -CSPICE Version 1.0.1, 06-MAY-2010 (EDW)
+
+       Reordered header sections to proper NAIF convention.
+       Minor edit to code comments eliminating typo.
+
+   -CSPICE Version 1.0.0, 07-JUL-1999 (EDW)
 
 -Index_Entries
 

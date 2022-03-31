@@ -3,9 +3,9 @@
 -Procedure nvp2pl_c ( Normal vector and point to plane )
 
 -Abstract
- 
-   Make a CSPICE plane from a normal vector and a point. 
- 
+
+   Make a SPICE plane from a normal vector and a point.
+
 -Disclaimer
 
    THIS SOFTWARE AND ANY RELATED MATERIALS WERE CREATED BY THE
@@ -32,131 +32,136 @@
    ACTIONS OF RECIPIENT IN THE USE OF THE SOFTWARE.
 
 -Required_Reading
- 
-   PLANES 
- 
+
+   PLANES
+
 -Keywords
- 
-   GEOMETRY 
-   MATH 
-   PLANE 
- 
+
+   GEOMETRY
+   MATH
+   PLANE
+
 */
 
    #include "SpiceUsr.h"
    #undef    nvp2pl_c
-   
+
 
    void nvp2pl_c ( ConstSpiceDouble    normal[3],
                    ConstSpiceDouble    point [3],
-                   SpicePlane        * plane     ) 
+                   SpicePlane        * plane     )
 
 /*
 
 -Brief_I/O
- 
-   Variable  I/O  Description 
-   --------  ---  -------------------------------------------------- 
-   normal, 
-   point      I   A normal vector and a point defining a plane. 
-   plane      O   A CSPICE plane structure representing the plane. 
- 
+
+   VARIABLE  I/O  DESCRIPTION
+   --------  ---  --------------------------------------------------
+   normal,
+   point      I   A normal vector and a point defining a plane.
+   plane      O   A SPICE plane structure representing the plane.
+
 -Detailed_Input
- 
-   normal, 
-   point 
-                  are, respectively, a normal vector and point that 
-                  define a plane in three-dimensional space.  normal 
-                  need not be a unit vector. Let the symbol < a, b > 
-                  indicate the inner product of vectors a and b; 
-                  then the geometric plane is the set of vectors x 
-                  in three-dimensional space that satisfy 
- 
-                     < x - point, normal >  =  0. 
- 
+
+   normal,
+   point
+                  are, respectively, a normal vector and point that
+                  define a plane in three-dimensional space. normal
+                  need not be a unit vector. Let the symbol < a, b >
+                  indicate the inner product of vectors a and b;
+                  then the geometric plane is the set of vectors x
+                  in three-dimensional space that satisfy
+
+                     < x - point, normal >  =  0.
+
 -Detailed_Output
- 
-   plane          is a CSPICE plane structure that represents the 
-                  geometric plane defined by point and normal. 
- 
+
+   plane       is a SPICE plane structure that represents the
+               geometric plane defined by point and normal.
+
 -Parameters
- 
-   None. 
- 
+
+   None.
+
 -Exceptions
- 
-   1)  If the input vector normal is the zero vector, the error 
-       SPICE(ZEROVECTOR) is signaled. 
- 
+
+   1)  If the input vector `normal' is the zero vector, the error
+       SPICE(ZEROVECTOR) is signaled.
+
 -Files
- 
-   None. 
- 
+
+   None.
+
 -Particulars
 
-   CSPICE geometry routines that deal with planes use the `plane' 
-   data type to represent input and output planes.  This data type 
-   makes the subroutine interfaces simpler and more uniform. 
- 
-   The CSPICE routines that produce CSPICE planes from data that 
-   define a plane are: 
- 
-      nvc2pl_c ( Normal vector and constant to plane ) 
-      nvp2pl_c ( Normal vector and point to plane    ) 
-      psv2pl_c ( Point and spanning vectors to plane ) 
- 
-   The CSPICE routines that convert CSPICE planes to data that 
-   define a plane are: 
- 
-      pl2nvc_c ( Plane to normal vector and constant ) 
-      pl2nvp_c ( Plane to normal vector and point    ) 
-      pl2psv_c ( Plane to point and spanning vectors ) 
- 
-   Any of these last three routines may be used to convert this 
-   routine's output, plane, to another representation of a 
-   geometric plane. 
- 
+   CSPICE geometry routines that deal with planes use the `plane'
+   data type to represent input and output planes. This data type
+   makes the routine interfaces simpler and more uniform.
+
+   The CSPICE routines that produce SPICE planes from data that
+   define a plane are:
+
+      nvc2pl_c ( Normal vector and constant to plane )
+      nvp2pl_c ( Normal vector and point to plane    )
+      psv2pl_c ( Point and spanning vectors to plane )
+
+   The CSPICE routines that convert SPICE planes to data that
+   define a plane are:
+
+      pl2nvc_c ( Plane to normal vector and constant )
+      pl2nvp_c ( Plane to normal vector and point    )
+      pl2psv_c ( Plane to point and spanning vectors )
+
+   Any of these last three routines may be used to convert this
+   routine's output, `plane', to another representation of a
+   geometric plane.
+
 -Examples
- 
-   1)  Project a vector v orthogonally onto a plane defined by point 
-       and normal.  proj is the projection we want; it is the 
-       closest vector in the plane to v. 
- 
-          nvp2pl_c ( normal,  point,   &plane ); 
+
+   1)  Project a vector v orthogonally onto a plane defined by point
+       and normal. proj is the projection we want; it is the
+       closest vector in the plane to v.
+
+          nvp2pl_c ( normal,  point,   &plane );
           vprjp_c  ( v,       &plane,  proj   );
- 
- 
-   2)  Given a point in a plane and a normal vector, find the 
-       distance of the plane from the origin.  We make a 
-       `plane' from the point and normal, then convert the 
-       plane to a unit normal and constant.  The output constant 
-       is (according to the specification of pl2nvc_c) the distance of 
-       the plane from the origin. 
- 
-          nvp2pl_c ( normal,  point,  &plane   ); 
+
+
+   2)  Given a point in a plane and a normal vector, find the
+       distance of the plane from the origin. We make a
+       `plane' from the point and normal, then convert the
+       plane to a unit normal and constant. The output constant
+       is (according to the specification of pl2nvc_c) the distance of
+       the plane from the origin.
+
+          nvp2pl_c ( normal,  point,  &plane   );
           pl2nvc_c ( &plane,  normal, constant );
-          
- 
+
 -Restrictions
- 
-   None. 
- 
+
+   None.
+
 -Literature_References
- 
-   [1] `Calculus and Analytic Geometry', Thomas and Finney. 
- 
+
+   [1]  G. Thomas and R. Finney, "Calculus and Analytic Geometry,"
+        7th Edition, Addison Wesley, 1988.
+
 -Author_and_Institution
- 
-   N.J. Bachman   (JPL) 
- 
+
+   N.J. Bachman        (JPL)
+   J. Diaz del Rio     (ODC Space)
+
 -Version
- 
+
+   -CSPICE Version 1.0.1, 24-AUG-2021 (JDR)
+
+       Edited the header to comply with NAIF standard.
+
    -CSPICE Version 1.0.0, 05-MAR-1999 (NJB)
 
 -Index_Entries
- 
-   normal vector and point to plane 
- 
+
+   normal vector and point to plane
+
 -&
 */
 
@@ -171,12 +176,12 @@
    {
       return;
    }
-   
- 
+
+
    /*
    The normal vector must be non-zero.
    */
-   
+
    if ( vzero_c (normal) )
    {
       chkin_c  ( "nvp2pl_c"                         );
@@ -185,26 +190,25 @@
       chkout_c ( "nvp2pl_c"                         );
       return;
    }
- 
-   
+
+
    vhat_c ( normal, plane->normal );
- 
+
    plane->constant  =  vdot_c ( point, plane->normal );
- 
- 
+
+
    /*
    The constant should be the distance of the plane from the
    origin.  If the constant is negative, negate both it and the
    normal vector.
    */
-      
-   if ( plane->constant  <  0. ) 
+
+   if ( plane->constant  <  0. )
    {
       plane->constant  =   - (plane->constant);
-      
+
       vminus_c ( plane->normal, plane->normal );
    }
- 
+
 
 } /* End nvp2pl_c */
-

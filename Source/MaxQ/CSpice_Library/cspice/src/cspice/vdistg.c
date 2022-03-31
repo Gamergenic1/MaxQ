@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      VDISTG ( Vector distance, general dimension ) */
+/* $Procedure VDISTG ( Vector distance, general dimension ) */
 doublereal vdistg_(doublereal *v1, doublereal *v2, integer *ndim)
 {
     /* System generated locals */
@@ -59,7 +59,7 @@ doublereal vdistg_(doublereal *v1, doublereal *v2, integer *ndim)
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     V1, */
 /*     V2         I   Two vectors of arbitrary dimension. */
@@ -70,20 +70,20 @@ doublereal vdistg_(doublereal *v1, doublereal *v2, integer *ndim)
 /* $ Detailed_Input */
 
 /*     V1, */
-/*     V2         are two vectors of arbitrary dimension, the */
-/*                distance between which is desired. */
+/*     V2       are two vectors of arbitrary dimension, the */
+/*              distance between which is desired. */
 
-/*     NDIM       is the common dimension of V1 and V2.  NDIM must be */
-/*                non-negative and must not exceed the minimum of the */
-/*                declared sizes of the actual arguments corresponding */
-/*                to V1 and V2. */
+/*     NDIM     is the common dimension of V1 and V2. NDIM must be */
+/*              non-negative and must not exceed the minimum of the */
+/*              declared sizes of the actual arguments corresponding */
+/*              to V1 and V2. */
 
 /* $ Detailed_Output */
 
-/*     The function returns the distance between V1 and V2.  This is */
+/*     The function returns the distance between V1 and V2. This is */
 /*     defined as */
 
-/*              ||  V1 - V2  ||, */
+/*        ||  V1 - V2  ||, */
 
 /*     where || x || indicates the Euclidean norm of the vector x. */
 
@@ -116,7 +116,7 @@ doublereal vdistg_(doublereal *v1, doublereal *v2, integer *ndim)
 /*             1        2                  n */
 
 /*     This number is the distance of the point (x, y, z) from the */
-/*     origin.  If n = 3, and A and B are two vectors whose components */
+/*     origin. If n = 3, and A and B are two vectors whose components */
 /*     are */
 
 /*        ( A(1), A(2), A(3) )    and    ( B(1), B(2), B(3) ), */
@@ -155,9 +155,17 @@ doublereal vdistg_(doublereal *v1, doublereal *v2, integer *ndim)
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 25-MAY-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
 

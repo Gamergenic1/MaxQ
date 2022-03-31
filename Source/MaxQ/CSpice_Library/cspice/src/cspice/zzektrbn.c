@@ -326,7 +326,7 @@ static integer c__124 = 124;
 /*         routine. */
 
 /*     3)  If either LEFT or RIGHT are actually the root, the error */
-/*         SPICE(BUG) is signalled. */
+/*         SPICE(BUG) is signaled. */
 
 /*     4)  If LEFT and RIGHT are not neighboring sibling nodes, the */
 /*         error will be diagnosed by routines called by this routine. */
@@ -335,7 +335,7 @@ static integer c__124 = 124;
 /*     5)  The sum of the key counts in LEFT and RIGHT must be between */
 /*         2*MNKEYC and 2*MXKEYC; otherwise the key count invariants */
 /*         cannot be satisfied by balancing.  If the sum fails to meet */
-/*         this condition, the error SPICE(BUG) is signalled. */
+/*         this condition, the error SPICE(BUG) is signaled. */
 
 /* $ Files */
 
@@ -398,6 +398,10 @@ static integer c__124 = 124;
 /*     N.J. Bachman   (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.0.1, 03-OCT-2021 (NJB) */
+
+/*        Corrected typos in comments. */
 
 /* -    Beta Version 1.0.0, 27-OCT-1995 (NJB) */
 

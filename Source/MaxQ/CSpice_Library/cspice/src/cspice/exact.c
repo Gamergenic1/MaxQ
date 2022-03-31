@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure                     EXACT ( Round to exact value ) */
+/* $Procedure EXACT ( Round to exact value ) */
 doublereal exact_(doublereal *number, doublereal *value, doublereal *tol)
 {
     /* System generated locals */
@@ -64,13 +64,13 @@ doublereal exact_(doublereal *number, doublereal *value, doublereal *tol)
 
 /* $ Detailed_Input */
 
-/*     NUMBER      is an arbitrary double precision number. */
+/*     NUMBER   is an arbitrary double precision number. */
 
-/*     VALUE       is a target value. */
+/*     VALUE    is a target value. */
 
-/*     TOL         is a tolerance. NUMBER and VALUE are considered to */
-/*                 be equal if they differ by no more than this amount. */
-/*                 If TOL is negative, they are never considered equal. */
+/*     TOL      is a tolerance. NUMBER and VALUE are considered to */
+/*              be equal if they differ by no more than this amount. */
+/*              If TOL is negative, they are never considered equal. */
 
 /* $ Detailed_Output */
 
@@ -83,7 +83,7 @@ doublereal exact_(doublereal *number, doublereal *value, doublereal *tol)
 
 /* $ Exceptions */
 
-/*      Error free. */
+/*     Error free. */
 
 /* $ Files */
 
@@ -110,16 +110,24 @@ doublereal exact_(doublereal *number, doublereal *value, doublereal *tol)
 
 /* $ Author_and_Institution */
 
-/*     I.M. Underwood  (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
 
-/* -     SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+/* -    SPICELIB Version 1.1.0, 12-AUG-2021 (JDR) */
 
-/*         Comment section for permuted index source lines was added */
-/*         following the header. */
+/*        Added IMPLICIT NONE statement. */
 
-/* -     SPICELIB Version 1.0.0, 31-JAN-1990 (IMU) */
+/*        Edited the header to comply with NAIF standard. */
+
+/* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+
+/*        Comment section for permuted index source lines was added */
+/*        following the header. */
+
+/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (IMU) */
 
 /* -& */
 /* $ Index_Entries */

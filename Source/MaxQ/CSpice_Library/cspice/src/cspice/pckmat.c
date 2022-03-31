@@ -49,9 +49,9 @@ static integer c__130 = 130;
 
 /* $ Abstract */
 
-/*      Given a body and epoch, return the name of an inertial */
-/*      reference frame and the 6 x 6 state transformation matrix */
-/*      from that frame to the body fixed frame. */
+/*     Return the name of an inertial reference frame and the 6 x 6 */
+/*     state transformation matrix from that frame to the body fixed */
+/*     frame of a given body at a specified epoch. */
 
 /* $ Disclaimer */
 
@@ -87,8 +87,8 @@ static integer c__130 = 130;
 
 /* $ Keywords */
 
-/*     TRANSFORMATION */
 /*     ROTATION */
+/*     TRANSFORMATION */
 
 /* $ Declarations */
 /* $ Brief_I/O */
@@ -99,74 +99,74 @@ static integer c__130 = 130;
 /*     ET         I   Epoch of transformation. */
 /*     REF        O   Integer code for inertial reference frame. */
 /*     TSIPM      O   Transformation from Inertial to PM for BODY at ET. */
-/*     FOUND      O   True if data for BODY and ET are found. */
+/*     FOUND      O   .TRUE. if data for BODY and ET are found. */
 
 /* $ Detailed_Input */
 
-/*     BODY        is the integer ID code of the body for which the */
-/*                 state transformation matrix is requested. Bodies */
-/*                 are numbered according to the standard NAIF */
-/*                 numbering scheme.  The numbering scheme is */
-/*                 explained in the NAIF_IDS required reading file. */
+/*     BODY     is the integer ID code of the body for which the */
+/*              state transformation matrix is requested. Bodies */
+/*              are numbered according to the standard NAIF */
+/*              numbering scheme. The numbering scheme is */
+/*              explained in the NAIF_IDS required reading file. */
 
-/*     ET          is the epoch at which the state transformation */
-/*                 matrix is requested. */
+/*     ET       is the epoch at which the state transformation */
+/*              matrix is requested. */
 
 /* $ Detailed_Output */
 
-/*     REF         is the integer code for the inertial reference frame */
-/*                 of the state transformation matrix TSIPM. (See the */
-/*                 routine CHGIRF for a full list of inertial reference */
-/*                 frame names.) */
+/*     REF      is the integer code for the inertial reference frame */
+/*              of the state transformation matrix TSIPM. (See the */
+/*              routine CHGIRF for a full list of inertial reference */
+/*              frame names.) */
 
-/*     TSIPM       is a 6x6 transformation matrix. It is used to */
-/*                 transform states from inertial coordinates to body */
-/*                 fixed (also called equator and prime meridian --- PM) */
-/*                 coordinates. */
+/*     TSIPM    is a 6x6 transformation matrix. It is used to */
+/*              transform states from inertial coordinates to body */
+/*              fixed (also called equator and prime meridian --- PM) */
+/*              coordinates. */
 
-/*                 Given a state S in the inertial reference frame */
-/*                 specified by REF, the corresponding state in the body */
-/*                 fixed reference frame is given by the matrix vector */
-/*                 product: */
+/*              Given a state S in the inertial reference frame */
+/*              specified by REF, the corresponding state in the body */
+/*              fixed reference frame is given by the matrix vector */
+/*              product: */
 
-/*                    TSIPM * S */
+/*                 TSIPM * S */
 
-/*                 See the PCK required reading for further details */
-/*                 concerning PCK reference frames. */
+/*              See the PCK required reading for further details */
+/*              concerning PCK reference frames. */
 
-/*                 NOTE: The inverse of TSIPM is NOT its transpose. The */
-/*                 matrix, TSIPM, has the structure shown below: */
+/*              NOTE: The inverse of TSIPM is NOT its transpose. The */
+/*              matrix, TSIPM, has the structure shown below: */
 
-/*                             -            - */
-/*                            |       :      | */
-/*                            |   R   :  0   | */
-/*                            | ......:......| */
-/*                            |       :      | */
-/*                            | dR_dt :  R   | */
-/*                            |       :      | */
-/*                             -            - */
+/*                          -            - */
+/*                         |       :      | */
+/*                         |   R   :  0   | */
+/*                         | ......:......| */
+/*                         |       :      | */
+/*                         | dR_dt :  R   | */
+/*                         |       :      | */
+/*                          -            - */
 
-/*                 where R is a time varying rotation matrix and dR_dt */
-/*                 is its derivative.  The inverse of this matrix is: */
+/*              where R is a time varying rotation matrix and dR_dt */
+/*              is its derivative. The inverse of this matrix is: */
 
-/*                             -              - */
-/*                            |     T  :       | */
-/*                            |    R   :  0    | */
-/*                            | .......:.......| */
-/*                            |        :       | */
-/*                            |      T :   T   | */
-/*                            | dR_dt  :  R    | */
-/*                            |        :       | */
-/*                             -              - */
+/*                          -              - */
+/*                         |     T  :       | */
+/*                         |    R   :  0    | */
+/*                         | .......:.......| */
+/*                         |        :       | */
+/*                         |      T :   T   | */
+/*                         | dR_dt  :  R    | */
+/*                         |        :       | */
+/*                          -              - */
 
-/*                 The SPICE routine INVSTM is available for producing */
-/*                 this inverse. */
+/*              The SPICE routine INVSTM is available for producing */
+/*              this inverse. */
 
 /*      FOUND      if the data allowing the computation of a state */
-/*                 transformation matrix for the requested time and body */
-/*                 are found in a binary PCK file, FOUND will have the */
-/*                 value .TRUE., otherwise it will have the value */
-/*                 .FALSE.. */
+/*              transformation matrix for the requested time and body */
+/*              are found in a binary PCK file, FOUND will have the */
+/*              value .TRUE., otherwise it will have the value */
+/*              .FALSE. */
 
 /* $ Parameters */
 
@@ -176,14 +176,14 @@ static integer c__130 = 130;
 
 /*     1)  If the size of the type 20 PCK record to be  retrieved is too */
 /*         large to fit into RECORD, the error SPICE(PCKRECTOOLARGE) */
-/*         will be signaled. */
+/*         is signaled. */
 
-/*     2)  Any error that occurs while reading PCK data will be */
-/*         diagnosed by a routine in the call tree of this routine. */
+/*     2)  If any issue is detected while reading PCK data, an error is */
+/*         signaled by a routine in the call tree of this routine. */
 
 /*     3)  If the requested transformation matrix cannot be computed */
 /*         using data from loaded binary PCK files, FOUND is returned */
-/*         with the value .FALSE.. This is not a SPICE error. */
+/*         with the value .FALSE. This is not a SPICE error. */
 
 /* $ Files */
 
@@ -211,7 +211,6 @@ static integer c__130 = 130;
 /*     files in backward time order. If no binary PCK file has been */
 /*     loaded, the text P_constants kernel file is used. */
 
-
 /* $ Examples */
 
 /*     Here we load a binary PCK files and use PCKEUL to get the */
@@ -228,38 +227,46 @@ static integer c__130 = 130;
 
 /* $ Restrictions */
 
-/*      None. */
+/*     None. */
 
 /* $ Literature_References */
 
-/*      None. */
+/*     None. */
 
 /* $ Author_and_Institution */
 
-/*      K. S. Zukor     (JPL) */
-/*      K. R. Gehringer (JPL) */
-/*      N. J. Bachman   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
+/*     E.D. Wright        (JPL) */
+/*     K.S. Zukor         (JPL) */
 
 /* $ Version */
 
-/* -     SPICELIB Version 3.0.0, 03-JAN-2014 (NJB) (EDW) */
+/* -    SPICELIB Version 3.1.0, 26-OCT-2021 (JDR) */
 
-/*         Minor edits to Procedure; clean trailing whitespace. */
-/*         Removed unneeded Revisions section. */
+/*        Added IMPLICIT NONE statement. */
 
-/*         Updated to support type 20. Changed long error message */
-/*         for the case of RECORD having insufficient room: the */
-/*         user is no longer advised to modify the record size. */
+/*        Edited the header to comply with NAIF standard. */
 
-/* -     SPICELIB Version 2.0.0, 22-MAR-1995 (KRG) (KSZ) */
+/* -    SPICELIB Version 3.0.0, 03-JAN-2014 (NJB) (EDW) */
 
-/*         Added PCK type 03. Added a new exception. Made some minor */
-/*         comment changes. */
+/*        Minor edits to $Procedure; clean trailing whitespace. */
+/*        Removed unneeded $Revisions section. */
 
-/* -     SPICELIB Version 1.0.0, 21-MAR-1995 (KSZ) */
+/*        Updated to support type 20. Changed long error message */
+/*        for the case of RECORD having insufficient room: the */
+/*        user is no longer advised to modify the record size. */
 
-/*         Replaces PCKEUL and returns the transformation */
-/*         matrix rather than the Euler angles. */
+/* -    SPICELIB Version 2.0.0, 22-MAR-1995 (KRG) (KSZ) */
+
+/*        Added PCK type 03. Added a new exception. Made some minor */
+/*        comment changes. */
+
+/* -    SPICELIB Version 1.0.0, 21-MAR-1995 (KSZ) */
+
+/*        Replaces PCKEUL and returns the transformation */
+/*        matrix rather than the Euler angles. */
 
 /* -& */
 /* $ Index_Entries */

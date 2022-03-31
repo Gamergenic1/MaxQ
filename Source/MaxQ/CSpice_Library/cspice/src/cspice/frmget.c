@@ -9,16 +9,21 @@
 
 static integer c__36 = 36;
 static integer c__1 = 1;
+static integer c__6 = 6;
 
-/* $Procedure      FRMGET ( Frame get transformation ) */
+/* $Procedure FRMGET ( Frame get transformation ) */
 /* Subroutine */ int frmget_(integer *infrm, doublereal *et, doublereal *
 	xform, integer *outfrm, logical *found)
 {
+    /* Initialized data */
+
+    static logical pass1 = TRUE_;
+    static char versn[6] = "5.0.0 ";
+
     /* System generated locals */
     integer i__1, i__2;
 
     /* Builtin functions */
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
     integer s_rnge(char *, integer, char *, integer);
 
     /* Local variables */
@@ -26,10 +31,11 @@ static integer c__1 = 1;
     extern /* Subroutine */ int zzdynfrm_(integer *, integer *, doublereal *, 
 	    doublereal *, integer *);
     integer i__, j;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errch_(char *, char *,
-	     ftnlen, ftnlen);
+    extern /* Subroutine */ int zzswfxfm_(integer *, doublereal *, integer *, 
+	    doublereal *, integer *, logical *), chkin_(char *, ftnlen), 
+	    errch_(char *, char *, ftnlen, ftnlen);
+    static doublereal idnt66[36]	/* was [6][6] */;
     doublereal tsipm[36]	/* was [6][6] */;
-    char versn[6];
     extern logical failed_(void);
     extern /* Subroutine */ int cleard_(integer *, doublereal *), ckfxfm_(
 	    integer *, doublereal *, doublereal *, integer *, logical *);
@@ -88,8 +94,8 @@ static integer c__1 = 1;
 /* $ Abstract */
 
 /*     The parameters below form an enumerated list of the recognized */
-/*     frame types.  They are: INERTL, PCK, CK, TK, DYN.  The meanings */
-/*     are outlined below. */
+/*     frame types. They are: INERTL, PCK, CK, TK, DYN, SWTCH, and ALL. */
+/*     The meanings are outlined below. */
 
 /* $ Disclaimer */
 
@@ -139,6 +145,11 @@ static integer c__1 = 1;
 /*                 definition depends on parameters supplied via a */
 /*                 frame kernel. */
 
+/*     SWTCH       is a "switch" frame. These frames have orientation */
+/*                 defined by their alignment with base frames selected */
+/*                 from a prioritized list. The base frames optionally */
+/*                 have associated time intervals of applicability. */
+
 /*     ALL         indicates any of the above classes. This parameter */
 /*                 is used in APIs that fetch information about frames */
 /*                 of a specified class. */
@@ -147,6 +158,7 @@ static integer c__1 = 1;
 /* $ Author_and_Institution */
 
 /*     N.J. Bachman    (JPL) */
+/*     B.V. Semenov    (JPL) */
 /*     W.L. Taber      (JPL) */
 
 /* $ Literature_References */
@@ -154,6 +166,11 @@ static integer c__1 = 1;
 /*     None. */
 
 /* $ Version */
+
+/* -    SPICELIB Version 5.0.0, 08-OCT-2020 (NJB) (BVS) */
+
+/*       The parameter SWTCH was added to support the switch */
+/*       frame class. */
 
 /* -    SPICELIB Version 4.0.0, 08-MAY-2012 (NJB) */
 
@@ -182,37 +199,37 @@ static integer c__1 = 1;
 /*     ET         I   An epoch in seconds past J2000. */
 /*     XFORM      O   A state transformation matrix. */
 /*     OUTFRM     O   The frame that XFORM transforms INFRM to. */
-/*     FOUND      O   TRUE if a frame transformation can be found. */
+/*     FOUND      O   .TRUE. if a frame transformation can be found. */
 
 /* $ Detailed_Input */
 
-/*     INFRM       is the SPICE ID-code for some reference frame. */
+/*     INFRM    is the SPICE ID-code for some reference frame. */
 
-/*     ET          is an epoch in ephemeris seconds past J2000 at */
-/*                 which the user wishes to retrieve a state */
-/*                 transformation matrix. */
+/*     ET       is an epoch in ephemeris seconds past J2000 at */
+/*              which the user wishes to retrieve a state */
+/*              transformation matrix. */
 
 /* $ Detailed_Output */
 
-/*     XFORM       is a 6x6 matrix that transforms states relative to */
-/*                 INFRM to states relative to OUTFRM. (Assuming such a */
-/*                 transformation can be found.) */
+/*     XFORM    is a 6x6 matrix that transforms states relative to */
+/*              INFRM to states relative to OUTFRM. (Assuming such a */
+/*              transformation can be found.) */
 
-/*     OUTFRM      is the SPICE ID-code of a reference frame. The 6x6 */
-/*                 matrix XFORM transforms states relative to INFRM to */
-/*                 states relative to OUTFRM. The state transformation */
-/*                 is achieved by multiplying XFORM on the right by a */
-/*                 state relative to INFRM.  This is easily accomplished */
-/*                 via the subroutine call shown below. */
+/*     OUTFRM   is the SPICE ID-code of a reference frame. The 6x6 */
+/*              matrix XFORM transforms states relative to INFRM to */
+/*              states relative to OUTFRM. The state transformation */
+/*              is achieved by multiplying XFORM on the right by a */
+/*              state relative to INFRM. This is easily accomplished */
+/*              via the subroutine call shown below. */
 
-/*                    CALL MXVG ( XFORM, STATE, 6, 6, OSTATE ) */
+/*                 CALL MXVG ( XFORM, STATE, 6, 6, OSTATE ) */
 
-/*     FOUND       is a logical flag indicating whether or not a */
-/*                 transformation matrix could be found from INFRM to */
-/*                 some other frame. If a transformation matrix cannot */
-/*                 be found OUTFRM will be set to zero, FOUND will be */
-/*                 set to FALSE and XFORM will be returned as the zero */
-/*                 matrix. */
+/*     FOUND    is a logical flag indicating whether or not a */
+/*              transformation matrix could be found from INFRM to */
+/*              some other frame. If a transformation matrix cannot */
+/*              be found OUTFRM will be set to zero, FOUND will be */
+/*              set to .FALSE. and XFORM will be returned as the zero */
+/*              matrix. */
 
 /* $ Parameters */
 
@@ -220,12 +237,12 @@ static integer c__1 = 1;
 
 /* $ Exceptions */
 
-/*     1) If a transformation matrix cannot be located, then FOUND will */
-/*        be set to FALSE, OUTFRM will be set to zero and XFORM will be */
-/*        set to the zero 6x6 matrix. */
+/*     1)  If a transformation matrix cannot be located, then FOUND will */
+/*         be set to .FALSE., OUTFRM will be set to zero and XFORM will */
+/*         be set to the zero 6x6 matrix. */
 
-/*     2) If the class of the requested frame is not recognized the */
-/*        exception 'SPICE(UNKNOWNFRAMETYPE)' will be signaled. */
+/*     2)  If the class of the requested frame is not recognized the */
+/*         exception, the error SPICE(UNKNOWNFRAMETYPE) is signaled. */
 
 /* $ Files */
 
@@ -251,11 +268,23 @@ static integer c__1 = 1;
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     B.V. Semenov    (JPL) */
-/*     W.L. Taber      (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 5.0.0, 15-MAR-2021 (NJB) (JDR) */
+
+/*        **Updated shadow routines ZZFRMGT0 and ZZFRMGT1, as must be */
+/*          done each time this routine is updated.** */
+
+/*        Support for switch frames was added. VERSN is now */
+/*        initialized via a DATA statement. Corrected long error */
+/*        message to use the term "class" rather than "class id-code." */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 4.0.0, 05-JAN-2014 (BVS) */
 
@@ -275,11 +304,10 @@ static integer c__1 = 1;
 /* -    SPICELIB Version 2.0.0, 03-APR-1997 (WLT) */
 
 /*        Added the new frame type 'TK' to the list of frame */
-/*        types recognized by FRMGET.  In addition the routine */
+/*        types recognized by FRMGET. In addition the routine */
 /*        now checks FAILED after "getting" the frame transformation. */
 
 /* -    SPICELIB Version 1.0.0, 20-OCT-1994 (WLT) */
-
 
 /* -& */
 /* $ Index_Entries */
@@ -294,9 +322,14 @@ static integer c__1 = 1;
 /*     Local Variables */
 
 
-/*     Set version and output flag. */
+/*     Saved variables */
 
-    s_copy(versn, "4.0.0", (ftnlen)6, (ftnlen)5);
+
+/*     Initial values */
+
+
+/*     Set output flag. */
+
     *found = FALSE_;
 
 /*     Standard SPICE error handling. */
@@ -305,6 +338,17 @@ static integer c__1 = 1;
 	return 0;
     }
     chkin_("FRMGET", (ftnlen)6);
+
+/*     On the first pass, initialize the identity matrix. */
+
+    if (pass1) {
+	cleard_(&c__36, idnt66);
+	for (i__ = 1; i__ <= 6; ++i__) {
+	    idnt66[(i__1 = i__ + i__ * 6 - 7) < 36 && 0 <= i__1 ? i__1 : 
+		    s_rnge("idnt66", i__1, "frmget_", (ftnlen)240)] = 1.;
+	}
+	pass1 = FALSE_;
+    }
 
 /*     Get all the needed information about this frame. */
 
@@ -325,21 +369,21 @@ static integer c__1 = 1;
 	    for (i__ = 1; i__ <= 3; ++i__) {
 		for (j = 1; j <= 3; ++j) {
 		    xform[(i__1 = i__ + j * 6 - 7) < 36 && 0 <= i__1 ? i__1 : 
-			    s_rnge("xform", i__1, "frmget_", (ftnlen)233)] = 
+			    s_rnge("xform", i__1, "frmget_", (ftnlen)274)] = 
 			    rotate[(i__2 = i__ + j * 3 - 4) < 9 && 0 <= i__2 ?
 			     i__2 : s_rnge("rotate", i__2, "frmget_", (ftnlen)
-			    233)];
+			    274)];
 		    xform[(i__1 = i__ + 3 + (j + 3) * 6 - 7) < 36 && 0 <= 
 			    i__1 ? i__1 : s_rnge("xform", i__1, "frmget_", (
-			    ftnlen)234)] = rotate[(i__2 = i__ + j * 3 - 4) < 
+			    ftnlen)275)] = rotate[(i__2 = i__ + j * 3 - 4) < 
 			    9 && 0 <= i__2 ? i__2 : s_rnge("rotate", i__2, 
-			    "frmget_", (ftnlen)234)];
+			    "frmget_", (ftnlen)275)];
 		    xform[(i__1 = i__ + 3 + j * 6 - 7) < 36 && 0 <= i__1 ? 
 			    i__1 : s_rnge("xform", i__1, "frmget_", (ftnlen)
-			    235)] = 0.;
+			    276)] = 0.;
 		    xform[(i__1 = i__ + (j + 3) * 6 - 7) < 36 && 0 <= i__1 ? 
 			    i__1 : s_rnge("xform", i__1, "frmget_", (ftnlen)
-			    236)] = 0.;
+			    277)] = 0.;
 		}
 	    }
 	    *outfrm = 1;
@@ -358,21 +402,21 @@ static integer c__1 = 1;
 	    for (i__ = 1; i__ <= 3; ++i__) {
 		for (j = 1; j <= 3; ++j) {
 		    xform[(i__1 = i__ + j * 6 - 7) < 36 && 0 <= i__1 ? i__1 : 
-			    s_rnge("xform", i__1, "frmget_", (ftnlen)271)] = 
+			    s_rnge("xform", i__1, "frmget_", (ftnlen)312)] = 
 			    rotate[(i__2 = i__ + j * 3 - 4) < 9 && 0 <= i__2 ?
 			     i__2 : s_rnge("rotate", i__2, "frmget_", (ftnlen)
-			    271)];
+			    312)];
 		    xform[(i__1 = i__ + 3 + (j + 3) * 6 - 7) < 36 && 0 <= 
 			    i__1 ? i__1 : s_rnge("xform", i__1, "frmget_", (
-			    ftnlen)272)] = rotate[(i__2 = i__ + j * 3 - 4) < 
+			    ftnlen)313)] = rotate[(i__2 = i__ + j * 3 - 4) < 
 			    9 && 0 <= i__2 ? i__2 : s_rnge("rotate", i__2, 
-			    "frmget_", (ftnlen)272)];
+			    "frmget_", (ftnlen)313)];
 		    xform[(i__1 = i__ + 3 + j * 6 - 7) < 36 && 0 <= i__1 ? 
 			    i__1 : s_rnge("xform", i__1, "frmget_", (ftnlen)
-			    273)] = 0.;
+			    314)] = 0.;
 		    xform[(i__1 = i__ + (j + 3) * 6 - 7) < 36 && 0 <= i__1 ? 
 			    i__1 : s_rnge("xform", i__1, "frmget_", (ftnlen)
-			    274)] = 0.;
+			    315)] = 0.;
 		}
 	    }
 	}
@@ -388,14 +432,16 @@ static integer c__1 = 1;
 /*        it here. If ZZDYNFRM signaled an error, FOUND will be set */
 /*        to .FALSE. at end of this routine. */
 
+    } else if (type__ == 6) {
+	zzswfxfm_(infrm, et, &c__6, xform, outfrm, found);
     } else {
 	cleard_(&c__36, xform);
 	*outfrm = 0;
 	*found = FALSE_;
-	setmsg_("The reference frame # has class id-code #. This form of ref"
-		"erence frame is not supported in version # of FRMGET. You ne"
-		"ed to update your version of SPICELIB to the latest version "
-		"in order to support this frame. ", (ftnlen)211);
+	setmsg_("The reference frame # has class #. This form of reference f"
+		"rame is not supported in version # of FRMGET. You need to up"
+		"date your version of SPICELIB to the latest version in order"
+		" to support this frame. ", (ftnlen)203);
 	errint_("#", infrm, (ftnlen)1);
 	errint_("#", &type__, (ftnlen)1);
 	errch_("#", versn, (ftnlen)1, (ftnlen)6);

@@ -9,7 +9,7 @@
 
 static integer c__1 = 1;
 
-/* $Procedure            BENUM  ( Be a number? ) */
+/* $Procedure BENUM  ( Be a number? ) */
 logical benum_(char *string, ftnlen string_len)
 {
     /* System generated locals */
@@ -55,7 +55,7 @@ logical benum_(char *string, ftnlen string_len)
 
 /* $ Required_Reading */
 
-/*     WORDS */
+/*     None. */
 
 /* $ Keywords */
 
@@ -67,22 +67,22 @@ logical benum_(char *string, ftnlen string_len)
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     STRING     I   Character string. */
 
-/*     The function returns TRUE if the string is a number. */
-/*     Otherwise, it returns FALSE. */
+/*     The function returns .TRUE. if the string is a number. */
+/*     Otherwise, it returns .FALSE. */
 
 /* $ Detailed_Input */
 
-/*     STRING      is any string. */
+/*     STRING   is any string. */
 
 /* $ Detailed_Output */
 
 /*     If the input string contains a number (as defined in */
-/*     $Particulars below) the function returns TRUE. Otherwise, */
-/*     the function returns FALSE. */
+/*     $Particulars below) the function returns .TRUE. Otherwise, */
+/*     the function returns .FALSE. */
 
 /* $ Parameters */
 
@@ -168,9 +168,16 @@ logical benum_(char *string, ftnlen string_len)
 
 /* $ Author_and_Institution */
 
-/*     W.L. Taber     (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 24-NOV-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.0.0, 01-DEC-1995 (WLT) */
 

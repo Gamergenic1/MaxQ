@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      RMAINI ( Remainder --- integer ) */
+/* $Procedure RMAINI ( Remainder --- integer ) */
 /* Subroutine */ int rmaini_(integer *num, integer *denom, integer *q, 
 	integer *rem)
 {
@@ -54,7 +54,7 @@
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     NUM        I   Numerator used to compute quotient and remainder. */
 /*     DENOM      I   Denominator used to compute quotient and remainder. */
@@ -63,16 +63,16 @@
 
 /* $ Detailed_Input */
 
-/*     NUM        is the numerator of a quotient */
+/*     NUM      is the numerator of a quotient */
 
-/*     DENOM      is the denominator of a quotient */
+/*     DENOM    is the denominator of a quotient */
 
 /* $ Detailed_Output */
 
-/*     Q          is the largest integer less than or equal to the */
-/*                quotient NUM/DENOM */
+/*     Q        is the largest integer less than or equal to the */
+/*              quotient NUM/DENOM */
 
-/*     REM        is the remainder of the integer division NUM/DENOM */
+/*     REM      is the remainder of the integer division NUM/DENOM */
 
 /* $ Parameters */
 
@@ -80,8 +80,7 @@
 
 /* $ Exceptions */
 
-/*     1) If DENOM is zero, the error 'SPICE(DIVIDEBYZERO)' will be */
-/*        signalled. */
+/*     1)  If DENOM is zero, the error SPICE(DIVIDEBYZERO) is signaled. */
 
 /* $ Files */
 
@@ -97,15 +96,15 @@
 /*         2) REM is a non negative integer less than the absolute */
 /*            value of DENOM. */
 
-/*     This routine serves as a macro.  In this way the code to perform */
+/*     This routine serves as a macro. In this way the code to perform */
 /*     this task can be written and maintained in a single location. */
 
 /* $ Examples */
 
 /*     One frequently needs to compute the  ``360 modulus'' of a */
-/*     number.  For positive numbers the FORTRAN intrinsic mod */
-/*     function works well.  However, for negative numbers the */
-/*     intrinsic will return a negative modulus.  This routine */
+/*     number. For positive numbers the FORTRAN intrinsic mod */
+/*     function works well. However, for negative numbers the */
+/*     intrinsic will return a negative modulus. This routine */
 /*     can be used to compute the positive 360 pi modulus (MOD360) for */
 /*     any integer I by the call: */
 
@@ -121,9 +120,16 @@
 
 /* $ Author_and_Institution */
 
-/*     W.L. Taber     (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 12-AUG-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.0.0, 01-DEC-1995 (WLT) */
 

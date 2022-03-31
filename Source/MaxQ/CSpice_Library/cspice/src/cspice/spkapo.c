@@ -100,7 +100,7 @@ static integer c__9 = 9;
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     TARG       I   Target body. */
 /*     ET         I   Observer epoch. */
@@ -112,157 +112,157 @@ static integer c__9 = 9;
 
 /* $ Detailed_Input */
 
-/*     TARG        is the NAIF ID code for a target body.  The target */
-/*                 and observer define a position vector which points */
-/*                 from the observer to the target. */
+/*     TARG     is the NAIF ID code for a target body. The target */
+/*              and observer define a position vector which points */
+/*              from the observer to the target. */
 
-/*     ET          is the ephemeris time, expressed as seconds past */
-/*                 J2000 TDB, at which the position of the target body */
-/*                 relative to the observer is to be computed.  ET */
-/*                 refers to time at the observer's location. */
+/*     ET       is the ephemeris time, expressed as seconds past */
+/*              J2000 TDB, at which the position of the target body */
+/*              relative to the observer is to be computed. ET */
+/*              refers to time at the observer's location. */
 
-/*     REF         is the inertial reference frame with respect to which */
-/*                 the observer's state SOBS is expressed. REF must be */
-/*                 recognized by the SPICE Toolkit.  The acceptable */
-/*                 frames are listed in the Frames Required Reading, as */
-/*                 well as in the SPICELIB routine CHGIRF. */
+/*     REF      is the inertial reference frame with respect to which */
+/*              the observer's state SOBS is expressed. REF must be */
+/*              recognized by the SPICE Toolkit. The acceptable */
+/*              frames are listed in the Frames Required Reading, as */
+/*              well as in the SPICELIB routine CHGIRF. */
 
-/*                 Case and blanks are not significant in the string REF. */
+/*              Case and blanks are not significant in the string REF. */
 
-/*     SOBS        is the geometric (uncorrected) state of the observer */
-/*                 relative to the solar system barycenter at epoch ET. */
-/*                 SOBS is a 6-vector:  the first three components of */
-/*                 SOBS represent a Cartesian position vector; the last */
-/*                 three components represent the corresponding velocity */
-/*                 vector.  SOBS is expressed relative to the inertial */
-/*                 reference frame designated by REF. */
+/*     SOBS     is the geometric (uncorrected) state of the observer */
+/*              relative to the solar system barycenter at epoch ET. */
+/*              SOBS is a 6-vector:  the first three components of */
+/*              SOBS represent a Cartesian position vector; the last */
+/*              three components represent the corresponding velocity */
+/*              vector. SOBS is expressed relative to the inertial */
+/*              reference frame designated by REF. */
 
-/*                 Units are always km and km/sec. */
-
-
-/*     ABCORR      indicates the aberration corrections to be applied to */
-/*                 the position of the target body to account for */
-/*                 one-way light time and stellar aberration.  See the */
-/*                 discussion in the Particulars section for */
-/*                 recommendations on how to choose aberration */
-/*                 corrections. */
-
-/*                 ABCORR may be any of the following: */
-
-/*                    'NONE'     Apply no correction. Return the */
-/*                               geometric position of the target body */
-/*                               relative to the observer. */
-
-/*                 The following values of ABCORR apply to the */
-/*                 "reception" case in which photons depart from the */
-/*                 target's location at the light-time corrected epoch */
-/*                 ET-LT and *arrive* at the observer's location at ET: */
-
-/*                    'LT'       Correct for one-way light time (also */
-/*                               called "planetary aberration") using a */
-/*                               Newtonian formulation. This correction */
-/*                               yields the position of the target at the */
-/*                               moment it emitted photons arriving at */
-/*                               the observer at ET. */
-
-/*                               The light time correction involves */
-/*                               iterative solution of the light time */
-/*                               equation (see Particulars for details). */
-/*                               The solution invoked by the 'LT' option */
-/*                               uses one iteration. */
-
-/*                    'LT+S'     Correct for one-way light time and */
-/*                               stellar aberration using a Newtonian */
-/*                               formulation. This option modifies the */
-/*                               position obtained with the 'LT' option */
-/*                               to account for the observer's velocity */
-/*                               relative to the solar system */
-/*                               barycenter. The result is the apparent */
-/*                               position of the target---the position */
-/*                               of the target as seen by the observer. */
-
-/*                    'CN'       Converged Newtonian light time */
-/*                               correction. In solving the light time */
-/*                               equation, the 'CN' correction iterates */
-/*                               until the solution converges (three */
-/*                               iterations on all supported platforms). */
-/*                               Whether the 'CN+S' solution is */
-/*                               substantially more accurate than the */
-/*                               'LT' solution depends on the geometry */
-/*                               of the participating objects and on the */
-/*                               accuracy of the input data. In all */
-/*                               cases this routine will execute more */
-/*                               slowly when a converged solution is */
-/*                               computed. See the Particulars section */
-/*                               of SPKEZR for a discussion of precision */
-/*                               of light time corrections. */
-
-/*                    'CN+S'     Converged Newtonian light time */
-/*                               correction and stellar aberration */
-/*                               correction. */
+/*              Units are always km and km/sec. */
 
 
-/*                 The following values of ABCORR apply to the */
-/*                 "transmission" case in which photons *depart* from */
-/*                 the observer's location at ET and arrive at the */
-/*                 target's location at the light-time corrected epoch */
-/*                 ET+LT: */
+/*     ABCORR   indicates the aberration corrections to be applied to */
+/*              the position of the target body to account for */
+/*              one-way light time and stellar aberration. See the */
+/*              discussion in the $Particulars section for */
+/*              recommendations on how to choose aberration */
+/*              corrections. */
 
-/*                    'XLT'      "Transmission" case:  correct for */
-/*                               one-way light time using a Newtonian */
-/*                               formulation. This correction yields the */
-/*                               position of the target at the moment it */
-/*                               receives photons emitted from the */
-/*                               observer's location at ET. */
+/*              ABCORR may be any of the following: */
 
-/*                    'XLT+S'    "Transmission" case:  correct for */
-/*                               one-way light time and stellar */
-/*                               aberration using a Newtonian */
-/*                               formulation  This option modifies the */
-/*                               position obtained with the 'XLT' option */
-/*                               to account for the observer's velocity */
-/*                               relative to the solar system */
-/*                               barycenter. The target position */
-/*                               indicates the direction that photons */
-/*                               emitted from the observer's location */
-/*                               must be "aimed" to hit the target. */
+/*                 'NONE'     Apply no correction. Return the */
+/*                            geometric position of the target body */
+/*                            relative to the observer. */
 
-/*                    'XCN'      "Transmission" case:  converged */
-/*                               Newtonian light time correction. */
+/*              The following values of ABCORR apply to the */
+/*              "reception" case in which photons depart from the */
+/*              target's location at the light-time corrected epoch */
+/*              ET-LT and *arrive* at the observer's location at ET: */
 
-/*                    'XCN+S'    "Transmission" case:  converged */
-/*                               Newtonian light time correction and */
-/*                               stellar aberration correction. */
+/*                 'LT'       Correct for one-way light time (also */
+/*                            called "planetary aberration") using a */
+/*                            Newtonian formulation. This correction */
+/*                            yields the position of the target at the */
+/*                            moment it emitted photons arriving at */
+/*                            the observer at ET. */
 
-/*                 Neither special nor general relativistic effects are */
-/*                 accounted for in the aberration corrections applied */
-/*                 by this routine. */
+/*                            The light time correction involves */
+/*                            iterative solution of the light time */
+/*                            equation (see $Particulars for details). */
+/*                            The solution invoked by the 'LT' option */
+/*                            uses one iteration. */
 
-/*                 Case and blanks are not significant in the string */
-/*                 ABCORR. */
+/*                 'LT+S'     Correct for one-way light time and */
+/*                            stellar aberration using a Newtonian */
+/*                            formulation. This option modifies the */
+/*                            position obtained with the 'LT' option */
+/*                            to account for the observer's velocity */
+/*                            relative to the solar system */
+/*                            barycenter. The result is the apparent */
+/*                            position of the target---the position */
+/*                            of the target as seen by the observer. */
+
+/*                 'CN'       Converged Newtonian light time */
+/*                            correction. In solving the light time */
+/*                            equation, the 'CN' correction iterates */
+/*                            until the solution converges (three */
+/*                            iterations on all supported platforms). */
+/*                            Whether the 'CN+S' solution is */
+/*                            substantially more accurate than the */
+/*                            'LT' solution depends on the geometry */
+/*                            of the participating objects and on the */
+/*                            accuracy of the input data. In all */
+/*                            cases this routine will execute more */
+/*                            slowly when a converged solution is */
+/*                            computed. See the $Particulars section */
+/*                            of SPKEZR for a discussion of precision */
+/*                            of light time corrections. */
+
+/*                 'CN+S'     Converged Newtonian light time */
+/*                            correction and stellar aberration */
+/*                            correction. */
+
+
+/*              The following values of ABCORR apply to the */
+/*              "transmission" case in which photons *depart* from */
+/*              the observer's location at ET and arrive at the */
+/*              target's location at the light-time corrected epoch */
+/*              ET+LT: */
+
+/*                 'XLT'      "Transmission" case: correct for */
+/*                            one-way light time using a Newtonian */
+/*                            formulation. This correction yields the */
+/*                            position of the target at the moment it */
+/*                            receives photons emitted from the */
+/*                            observer's location at ET. */
+
+/*                 'XLT+S'    "Transmission" case: correct for */
+/*                            one-way light time and stellar */
+/*                            aberration using a Newtonian */
+/*                            formulation  This option modifies the */
+/*                            position obtained with the 'XLT' option */
+/*                            to account for the observer's velocity */
+/*                            relative to the solar system */
+/*                            barycenter. The target position */
+/*                            indicates the direction that photons */
+/*                            emitted from the observer's location */
+/*                            must be "aimed" to hit the target. */
+
+/*                 'XCN'      "Transmission" case: converged */
+/*                            Newtonian light time correction. */
+
+/*                 'XCN+S'    "Transmission" case: converged */
+/*                            Newtonian light time correction and */
+/*                            stellar aberration correction. */
+
+/*              Neither special nor general relativistic effects are */
+/*              accounted for in the aberration corrections applied */
+/*              by this routine. */
+
+/*              Case and blanks are not significant in the string */
+/*              ABCORR. */
 
 /* $ Detailed_Output */
 
-/*     PTARG       is a Cartesian 3-vector representing the position of */
-/*                 the target body relative to the specified observer. */
-/*                 PTARG is corrected for the specified aberrations, and */
-/*                 is expressed with respect to the specified inertial */
-/*                 reference frame.  The components of PTARG represent */
-/*                 the x-, y- and z-components of the target's position. */
+/*     PTARG    is a Cartesian 3-vector representing the position of */
+/*              the target body relative to the specified observer. */
+/*              PTARG is corrected for the specified aberrations, and */
+/*              is expressed with respect to the specified inertial */
+/*              reference frame. The components of PTARG represent */
+/*              the x-, y- and z-components of the target's position. */
 
-/*                 The vector PTARG points from the observer's position */
-/*                 at ET to the aberration-corrected location of the */
-/*                 target. Note that the sense of the position vector is */
-/*                 independent of the direction of radiation travel */
-/*                 implied by the aberration correction. */
+/*              The vector PTARG points from the observer's position */
+/*              at ET to the aberration-corrected location of the */
+/*              target. Note that the sense of the position vector is */
+/*              independent of the direction of radiation travel */
+/*              implied by the aberration correction. */
 
-/*                 Units are always km. */
+/*              Units are always km. */
 
-/*     LT          is the one-way light time between the observer and */
-/*                 target in seconds.  If the target position is */
-/*                 corrected for aberrations, then LT is the one-way */
-/*                 light time between the observer and the light time */
-/*                 corrected target location. */
+/*     LT       is the one-way light time between the observer and */
+/*              target in seconds. If the target position is */
+/*              corrected for aberrations, then LT is the one-way */
+/*              light time between the observer and the light time */
+/*              corrected target location. */
 
 /* $ Parameters */
 
@@ -270,23 +270,22 @@ static integer c__9 = 9;
 
 /* $ Exceptions */
 
-/*     1) If the value of ABCORR is not recognized, the error */
-/*        'SPICE(SPKINVALIDOPTION)' is signaled. */
+/*     1)  If the value of ABCORR is not recognized, the error */
+/*         SPICE(SPKINVALIDOPTION) is signaled. */
 
-/*     2) If the reference frame requested is not a recognized */
-/*        inertial reference frame the error 'SPICE(BADFRAME)' is */
-/*        signaled. */
+/*     2)  If the reference frame requested is not a recognized */
+/*         inertial reference frame, the error SPICE(BADFRAME) is */
+/*         signaled. */
 
-/*     3) If the position of the target relative to the solar system */
-/*        barycenter cannot be computed, the error will be diagnosed */
-/*        by routines in the call tree of this routine. */
+/*     3)  If the position of the target relative to the solar system */
+/*         barycenter cannot be computed, an error is signaled by a */
+/*         routine in the call tree of this routine. */
 
 /* $ Files */
 
-
 /*     This routine computes positions using SPK files that have been */
 /*     loaded into the SPICE system, normally via the kernel loading */
-/*     interface routine FURNSH.  Application programs typically load */
+/*     interface routine FURNSH. Application programs typically load */
 /*     kernels once before this routine is called, for example during */
 /*     program initialization; kernels need not be loaded repeatedly. */
 /*     See the routine FURNSH and the SPK and KERNEL Required Reading */
@@ -295,8 +294,8 @@ static integer c__9 = 9;
 /*     If any of the ephemeris data used to compute PTARG are expressed */
 /*     relative to a non-inertial frame in the SPK files providing those */
 /*     data, additional kernels may be needed to enable the reference */
-/*     frame transformations required to compute PTARG.  Normally */
-/*     these additional kernels are PCK files or frame kernels.  Any */
+/*     frame transformations required to compute PTARG. Normally */
+/*     these additional kernels are PCK files or frame kernels. Any */
 /*     such kernels must already be loaded at the time this routine is */
 /*     called. */
 
@@ -305,42 +304,42 @@ static integer c__9 = 9;
 /*     In space science or engineering applications one frequently */
 /*     wishes to know where to point a remote sensing instrument, such */
 /*     as an optical camera or radio antenna, in order to observe or */
-/*     otherwise receive radiation from a target.  This pointing problem */
-/*     is complicated by the finite speed of light:  one needs to point */
+/*     otherwise receive radiation from a target. This pointing problem */
+/*     is complicated by the finite speed of light: one needs to point */
 /*     to where the target appears to be as opposed to where it actually */
-/*     is at the epoch of observation.  We use the adjectives */
+/*     is at the epoch of observation. We use the adjectives */
 /*     "geometric," "uncorrected," or "true" to refer to an actual */
-/*     position or state of a target at a specified epoch.  When a */
+/*     position or state of a target at a specified epoch. When a */
 /*     geometric position or state vector is modified to reflect how it */
 /*     appears to an observer, we describe that vector by any of the */
 /*     terms "apparent," "corrected," "aberration corrected," or "light */
 /*     time and stellar aberration corrected." */
 
 /*     The SPICE Toolkit can correct for two phenomena affecting the */
-/*     apparent location of an object:  one-way light time (also called */
-/*     "planetary aberration") and stellar aberration.  Correcting for */
+/*     apparent location of an object: one-way light time (also called */
+/*     "planetary aberration") and stellar aberration. Correcting for */
 /*     one-way light time is done by computing, given an observer and */
 /*     observation epoch, where a target was when the observed photons */
-/*     departed the target's location.  The vector from the observer to */
+/*     departed the target's location. The vector from the observer to */
 /*     this computed target location is called a "light time corrected" */
-/*     vector.  The light time correction depends on the motion of the */
+/*     vector. The light time correction depends on the motion of the */
 /*     target, but it is independent of the velocity of the observer */
 /*     relative to the solar system barycenter. Relativistic effects */
 /*     such as light bending and gravitational delay are not accounted */
 /*     for in the light time correction performed by this routine. */
 
 /*     The velocity of the observer also affects the apparent location */
-/*     of a target:  photons arriving at the observer are subject to a */
+/*     of a target: photons arriving at the observer are subject to a */
 /*     "raindrop effect" whereby their velocity relative to the observer */
 /*     is, using a Newtonian approximation, the photons' velocity */
 /*     relative to the solar system barycenter minus the velocity of the */
-/*     observer relative to the solar system barycenter.  This effect is */
-/*     called "stellar aberration."  Stellar aberration is independent */
-/*     of the motion of the target.  The stellar aberration formula used */
+/*     observer relative to the solar system barycenter. This effect is */
+/*     called "stellar aberration." Stellar aberration is independent */
+/*     of the motion of the target. The stellar aberration formula used */
 /*     by this routine is non- relativistic. */
 
 /*     Stellar aberration corrections are applied after light time */
-/*     corrections:  the light time corrected target position vector is */
+/*     corrections: the light time corrected target position vector is */
 /*     used as an input to the stellar aberration correction. */
 
 /*     When light time and stellar aberration corrections are both */
@@ -350,16 +349,16 @@ static integer c__9 = 9;
 
 /*     As opposed to computing the apparent position of a target, one */
 /*     may wish to compute the pointing direction required for */
-/*     transmission of photons to the target.  This requires correction */
+/*     transmission of photons to the target. This requires correction */
 /*     of the geometric target position for the effects of light time and */
 /*     stellar aberration, but in this case the corrections are computed */
 /*     for radiation traveling from the observer to the target. */
 
 /*     The "transmission" light time correction yields the target's */
 /*     location as it will be when photons emitted from the observer's */
-/*     location at ET arrive at the target.  The transmission stellar */
+/*     location at ET arrive at the target. The transmission stellar */
 /*     aberration correction is the inverse of the traditional stellar */
-/*     aberration correction:  it indicates the direction in which */
+/*     aberration correction: it indicates the direction in which */
 /*     radiation should be emitted so that, using a Newtonian */
 /*     approximation, the sum of the velocity of the radiation relative */
 /*     to the observer and of the observer's velocity, relative to the */
@@ -374,7 +373,7 @@ static integer c__9 = 9;
 
 /*     One may reasonably object to using the term "observer" in the */
 /*     transmission case, in which radiation is emitted from the */
-/*     observer's location.  The terminology was retained for */
+/*     observer's location. The terminology was retained for */
 /*     consistency with earlier documentation. */
 
 /*     Below, we indicate the aberration corrections to use for some */
@@ -478,7 +477,7 @@ static integer c__9 = 9;
 
 /*        When any of the options 'LT', 'CN', 'LT+S', 'CN+S' are */
 /*        selected, SPKAPO computes the position of the target body at */
-/*        epoch ET-LT, where LT is the one-way light time.  Let T(t) */
+/*        epoch ET-LT, where LT is the one-way light time. Let T(t) */
 /*        and O(t) represent the positions of the target and observer */
 /*        relative to the solar system barycenter at time t; then LT */
 /*        is the solution of the */
@@ -522,7 +521,7 @@ static integer c__9 = 9;
 /*        velocity vector of the observer. The magnitude of the rotation */
 /*        depends on the magnitude of the observer's velocity relative */
 /*        to the solar system barycenter and the angle between */
-/*        this velocity and the observer-target vector.  The rotation */
+/*        this velocity and the observer-target vector. The rotation */
 /*        is computed as follows: */
 
 /*           Let r be the light time corrected vector from the observer */
@@ -546,7 +545,7 @@ static integer c__9 = 9;
 
 /*        When any of the options 'XLT', 'XCN', 'XLT+S', 'XCN+S' are */
 /*        selected, SPKAPO computes the position of the target body T at */
-/*        epoch ET+LT, where LT is the one-way light time.  LT is the */
+/*        epoch ET+LT, where LT is the one-way light time. LT is the */
 /*        solution of the light-time equation */
 
 /*                  | T(ET+LT) - O(ET) | */
@@ -572,7 +571,7 @@ static integer c__9 = 9;
 
 /*        If correction for stellar aberration is requested, the target */
 /*        position is rotated away from the solar system barycenter- */
-/*        relative velocity vector of the observer.  The magnitude of the */
+/*        relative velocity vector of the observer. The magnitude of the */
 /*        rotation depends on the magnitude of the velocity and the */
 /*        angle between the velocity and the observer-target vector. */
 /*        The rotation is computed as in the reception case, but the */
@@ -588,7 +587,7 @@ static integer c__9 = 9;
 /*     Voyager 2 spacecraft (Body -32) at a series of epochs. */
 
 /*     Normally, one would call the high-level reader SPKPOS to obtain */
-/*     position vectors.  The example below illustrates the interface */
+/*     position vectors. The example below illustrates the interface */
 /*     of this routine, but is not intended as a recommendation on */
 /*     how to use the SPICE SPK subsystem. */
 
@@ -613,32 +612,37 @@ static integer c__9 = 9;
 
 /* $ Restrictions */
 
-/*     1) The ephemeris files to be used by SPKAPO must be loaded */
-/*        (normally by the SPICELIB kernel loader FURNSH) before */
-/*        this routine is called. */
+/*     1)  The ephemeris files to be used by SPKAPO must be loaded */
+/*         (normally by the SPICELIB kernel loader FURNSH) before */
+/*         this routine is called. */
 
-/*     2) Unlike most other SPK position computation routines, this */
-/*        routine requires that the input state be relative to an */
-/*        inertial reference frame.  Non-inertial frames are not */
-/*        supported by this routine. */
+/*     2)  Unlike most other SPK position computation routines, this */
+/*         routine requires that the input state be relative to an */
+/*         inertial reference frame. Non-inertial frames are not */
+/*         supported by this routine. */
 
-/*     3) In a future version of this routine, the implementation */
-/*        of the aberration corrections may be enhanced to improve */
-/*        accuracy. */
+/*     3)  In a future version of this routine, the implementation */
+/*         of the aberration corrections may be enhanced to improve */
+/*         accuracy. */
 
 /* $ Literature_References */
 
-/*     SPK Required Reading. */
+/*     None. */
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     H.A. Neilan     (JPL) */
-/*     B.V. Semenov    (JPL) */
-/*     W.L. Taber      (JPL) */
-/*     I.M. Underwood  (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 2.3.1, 28-APR-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. Removed */
+/*        unnecessary $Revisions section. */
 
 /* -    SPICELIB Version 2.3.0, 03-JUL-2014 (NJB) (BVS) */
 
@@ -646,9 +650,9 @@ static integer c__9 = 9;
 /*        that converged light time corrections are unlikely to be */
 /*        useful were removed. */
 
-/*     Last update was 21-SEP-2013 (BVS) */
+/*        Last update was 21-SEP-2013 (BVS) */
 
-/*        Updated to call LJUCRS instead of CMPRSS/UCASE. */
+/*           Updated to call LJUCRS instead of CMPRSS/UCASE. */
 
 /* -    SPICELIB Version 2.2.0, 17-MAY-2010 (NJB) */
 
@@ -668,8 +672,8 @@ static integer c__9 = 9;
 /* -    SPICELIB Version 2.0.0, 18-DEC-2001 (NJB) */
 
 /*        Updated to handle aberration corrections for transmission */
-/*        of radiation.  Formerly, only the reception case was */
-/*        supported.  The header was revised and expanded to explain */
+/*        of radiation. Formerly, only the reception case was */
+/*        supported. The header was revised and expanded to explain */
 /*        the functionality of this routine in more detail. */
 
 /* -    SPICELIB Version 1.0.0, 03-MAR-1999 (WLT) */
@@ -677,16 +681,8 @@ static integer c__9 = 9;
 /* -& */
 /* $ Index_Entries */
 
-/*     apparent position from spk file */
+/*     apparent position from SPK file */
 /*     get apparent position */
-
-/* -& */
-/* $ Revisions */
-
-/* -    SPICELIB Version 1.1.0, 31-AUG-2005 (NJB) */
-
-/*        Updated to remove non-standard use of duplicate arguments */
-/*        in VSUB call. */
 
 /* -& */
 

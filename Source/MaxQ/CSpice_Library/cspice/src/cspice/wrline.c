@@ -13,7 +13,7 @@ static integer c__3 = 3;
 static integer c__0 = 0;
 static integer c__2 = 2;
 
-/* $Procedure      WRLINE ( Write Output Line to a Device ) */
+/* $Procedure WRLINE ( Write Output Line to a Device ) */
 /* Subroutine */ int wrline_0_(int n__, char *device, char *line, ftnlen 
 	device_len, ftnlen line_len)
 {
@@ -98,9 +98,9 @@ static integer c__2 = 2;
 
 /* $ Keywords */
 
-/*     TEXT */
-/*     FILES */
 /*     ERROR */
+/*     FILES */
+/*     TEXT */
 
 /* $ Declarations */
 /* $ Brief_I/O */
@@ -113,37 +113,37 @@ static integer c__2 = 2;
 
 /* $ Detailed_Input */
 
-/*     LINE           is a line of text to be written to the output */
-/*                    device specified by DEVICE. */
+/*     LINE     is a line of text to be written to the output */
+/*              device specified by DEVICE. */
 
-/*     DEVICE         is the output device to which the line of text */
-/*                    will be written. */
+/*     DEVICE   is the output device to which the line of text */
+/*              will be written. */
 
-/*                    Possible values and meanings of DEVICE are: */
+/*              Possible values and meanings of DEVICE are: */
 
-/*                       a device name   This may be the name of a */
-/*                                       file, or any other name that */
-/*                                       is valid in a FORTRAN OPEN */
-/*                                       statement.  For example, on a */
-/*                                       VAX, a logical name may be */
-/*                                       used. */
+/*                 a device name   This may be the name of a */
+/*                                 file, or any other name that */
+/*                                 is valid in a FORTRAN OPEN */
+/*                                 statement. For example, on a */
+/*                                 VAX, a logical name may be */
+/*                                 used. */
 
-/*                                       The device name must not */
-/*                                       be any of the reserved strings */
-/*                                       below. */
-
-
-/*                       'SCREEN'        The output will go to the */
-/*                                       terminal screen. */
+/*                                 The device name must not */
+/*                                 be any of the reserved strings */
+/*                                 below. */
 
 
-/*                       'NULL'          The data will not be output. */
+/*                 'SCREEN'        The output will go to the */
+/*                                 terminal screen. */
 
 
-/*                 'SCREEN' and 'NULL' can be written in mixed */
-/*                  case.  For example, the following call will work: */
+/*                 'NULL'          The data will not be output. */
 
-/*                  CALL WRLINE ( 'screEn', LINE ) */
+
+/*              'SCREEN' and 'NULL' can be written in mixed */
+/*              case. For example, the following call will work: */
+
+/*                 CALL WRLINE ( 'screEn', LINE ) */
 
 /* $ Detailed_Output */
 
@@ -151,7 +151,7 @@ static integer c__2 = 2;
 
 /* $ Parameters */
 
-/*     FILEN        is the maximum length of a file name. */
+/*     FILEN    is the maximum length of a file name. */
 
 /* $ Exceptions */
 
@@ -160,7 +160,7 @@ static integer c__2 = 2;
 /*     messages resulting from errors detected by other routines. */
 /*     In such a case, calling SIGERR would constitute recursion. */
 /*     Therefore, this routine prints error messages rather */
-/*     than signalling errors via SIGERR and setting the long */
+/*     than signaling errors via SIGERR and setting the long */
 /*     error message via SETMSG. */
 
 /*     The following exceptional cases are treated as errors: */
@@ -175,7 +175,7 @@ static integer c__2 = 2;
 /*     4)  SPICE(INQUIREFAILED) -- INQUIRE statement failed. */
 
 /*     5)  Leading blanks in (non-blank) file names are not */
-/*         significant.  The file names */
+/*         significant. The file names */
 
 /*             'MYFILE.DAT' */
 /*             '   MYFILE.DAT' */
@@ -184,8 +184,8 @@ static integer c__2 = 2;
 
 /*     6)  If different names that indicate the same file are supplied */
 /*         to this routine on different calls, all output associated */
-/*         with these calls WILL be written to the file.  For example, */
-/*         on a system where logical filenames are supported, if */
+/*         with these calls WILL be written to the file. For example, */
+/*         on a system where logical file names are supported, if */
 /*         ALIAS is a logical name pointing to MYFILE, then the calls */
 
 /*             CALL WRLINE ( 'MYFILE', 'This is the first line'  ) */
@@ -196,21 +196,21 @@ static integer c__2 = 2;
 /*              'This is the first line' */
 /*              'This is the second line' */
 
-/*         in MYFILE.  See $Restrictions for more information on use */
+/*         in MYFILE. See $Restrictions for more information on use */
 /*         of logical names on VAX systems. */
 
 /* $ Files */
 
-/*     1)  If DEVICE specifies a device other than 'SCREEN' or 'NULL', */
-/*         that device is opened (if it's not already open) as a NEW, */
-/*         SEQUENTIAL, FORMATTED file.  The logical unit used is */
-/*         determined at run time. */
+/*     If DEVICE specifies a device other than 'SCREEN' or 'NULL', */
+/*     that device is opened (if it's not already open) as a NEW, */
+/*     SEQUENTIAL, FORMATTED file. The logical unit used is */
+/*     determined at run time. */
 
 /* $ Particulars */
 
 /*     If the output device is a file that is not open, the file will */
 /*     be opened (if possible) as a NEW, sequential, formatted file, */
-/*     and the line of text will be written to the file.  If the file */
+/*     and the line of text will be written to the file. If the file */
 /*     is already opened as a sequential, formatted file, the line of */
 /*     text will be written to the file. */
 
@@ -245,7 +245,7 @@ static integer c__2 = 2;
 
 /*             C */
 /*             C     Ask the user whether verbose program output is */
-/*             C     desired.  Set the output device accordingly. */
+/*             C     desired. Set the output device accordingly. */
 /*             C */
 /*                   WRITE (*,*) 'Do you want to see test results '    // */
 /*                  .            'on the screen?' */
@@ -275,11 +275,11 @@ static integer c__2 = 2;
 /*     1)  File names must not exceed FILEN characters. */
 
 /*     2)  On VAX systems, caution should be exercised when using */
-/*         multiple logical names to point to the same file.  Logical */
+/*         multiple logical names to point to the same file. Logical */
 /*         name translation supporting execution of the Fortran */
 /*         INQUIRE statement does not appear to work reliably in all */
 /*         cases, which may lead this routine to believe that different */
-/*         logical names indicate different files.  The specific problem */
+/*         logical names indicate different files. The specific problem */
 /*         that has been observed is that logical names that include */
 /*         disk specifications are not always recognized as pointing */
 /*         to the file they actually name. */
@@ -290,10 +290,23 @@ static integer c__2 = 2;
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     H.A. Neilan     (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     H.A. Neilan        (JPL) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 4.27.0, 28-NOV-2021 (BVS) */
+
+/*        Updated for MAC-OSX-M1-64BIT-CLANG_C. */
+
+/* -    SPICELIB Version 4.26.0, 13-AUG-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 4.25.0, 10-MAR-2014 (BVS) */
 
@@ -402,36 +415,35 @@ static integer c__2 = 2;
 /* -    SPICELIB Version 4.0.4, 08-OCT-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitely given.  New */
+/*        environments are now explicitly given. New */
 /*        environments are WIN-NT */
 
 /* -    SPICELIB Version 4.0.3, 16-SEP-1999 (NJB) */
 
-/*        CSPICE environments were added.  Some typos were corrected. */
+/*        CSPICE environments were added. Some typos were corrected. */
 
 /* -    SPICELIB Version 4.0.2, 28-JUL-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitly given.  New */
+/*        environments are now explicitly given. New */
 /*        environments are PC-DIGITAL, SGI-O32 and SGI-N32. */
 
 /* -    SPICELIB Version 4.0.1, 18-MAR-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitly given.  Previously, */
+/*        environments are now explicitly given. Previously, */
 /*        environments such as SUN-SUNOS and SUN-SOLARIS were implied */
 /*        by the environment label SUN. */
 
 /* -    SPICELIB Version 4.0.0, 07-APR-1998 (NJB) */
 
-/*        References to the PC-LINUX environment were added.  The */
+/*        References to the PC-LINUX environment were added. The */
 /*        write format for the case where the output device is the */
 /*        screen has been made system-dependent; list-directed output */
 /*        format is now used for systems that require a leading carriage */
 /*        control character; other systems use character format. The */
 /*        write format for the case where the output device is a file */
 /*        has been changed from list-directed to character. */
-
 
 /* -    SPICELIB Version 3.0.0, 11-NOV-1993 (HAN) */
 
@@ -501,10 +513,10 @@ static integer c__2 = 2;
 
 /* -    SPICELIB Version 3.0.0, 11-NOV-1993 (HAN) */
 
-/*         Module was updated to include the value for FILEN */
-/*         and the appropriate OPEN statement for the Silicon */
-/*         Graphics, DEC Alpha-OSF/1, and NeXT platforms. The previous */
-/*         value of 256 for Unix platforms was changed to 255. */
+/*        Module was updated to include the value for FILEN */
+/*        and the appropriate OPEN statement for the Silicon */
+/*        Graphics, DEC Alpha-OSF/1, and NeXT platforms. The previous */
+/*        value of 256 for Unix platforms was changed to 255. */
 
 /* -     SPICELIB Version 2.1.0, 13-OCT-1992 (HAN) */
 
@@ -515,12 +527,12 @@ static integer c__2 = 2;
 /*        create the source file for a specific environment given a */
 /*        master source file. */
 
-/* -    SPICELIB Version 2.0.0, 25-MAR-1991 (NJB) */
+/* -    SPICELIB Version 2.0.0, 26-MAR-1991 (NJB) */
 
 /*        1)  This routine now can write to files that have been opened */
-/*            by other routines.  WRLINE uses an INQUIRE statement to */
+/*            by other routines. WRLINE uses an INQUIRE statement to */
 /*            determine whether the file indicated by DEVICE is open, */
-/*            and if it is, WRLINE does not attempt to open it.  This */
+/*            and if it is, WRLINE does not attempt to open it. This */
 /*            allows use of WRLINE to feed error output into a log file */
 /*            opened by another routine. */
 
@@ -531,14 +543,14 @@ static integer c__2 = 2;
 /*            they indicated different files. */
 
 /*        2)  The limit imposed by this routine on the number of files it */
-/*            can open has been removed.  The file database used in */
+/*            can open has been removed. The file database used in */
 /*            previous versions of this routine is no longer used. */
 
 /*        3)  On VAX systems, this routine now opens the output file */
 /*            (when required to do so) as a normal text file. */
 
 /*        4)  Improper treatment of the case where DEVICE is blank was */
-/*            remedied.  Any value of DEVICE that is not equal to */
+/*            remedied. Any value of DEVICE that is not equal to */
 /*            'SCREEN' or 'NULL' after being left-justified and */
 /*            converted to upper case is considered to be a file name. */
 
@@ -551,12 +563,12 @@ static integer c__2 = 2;
 
 /*        7)  Use of the EXIST specifier was added to the INQUIRE */
 /*            statement used to determine whether the file named by */
-/*            DEVICE is open.  This is a work-around for a rather */
+/*            DEVICE is open. This is a work-around for a rather */
 /*            peculiar behavior of at least one version of Sun Fortran: */
 /*            files that don't exist may be considered to be open, as */
 /*            indicated by the OPENED specifier of the INQUIRE statement. */
 
-/*        8)  One other thing:  now that LJUST and UCASE are error-free, */
+/*        8)  One other thing: now that LJUST and UCASE are error-free, */
 /*            WRLINE uses them; this simplifies the code. */
 
 
@@ -565,13 +577,13 @@ static integer c__2 = 2;
 /*        Call to GETLUN replaced by call to FNDLUN, which is error-free. */
 /*        Call to IOERR replaced with in-line code to construct long */
 /*        error message indicating file open failure. Arrangement of */
-/*        declarations changed.  Keywords added. FILEN declaration */
-/*        moved to "declarations" section.  Parameters section added. */
+/*        declarations changed. Keywords added. FILEN declaration */
+/*        moved to "declarations" section. $Parameters section added. */
 
 /* -    Beta Version 1.1.0, 06-OCT-1988 (NJB) */
 
 /*        Upper bound of written substring changed to prevent use of */
-/*        invalid substring bound.  Specifically, LASTNB ( LINE ) was */
+/*        invalid substring bound. Specifically, LASTNB ( LINE ) was */
 /*        replaced by  MAX ( 1, LASTNB (LINE) ).  This upper bound */
 /*        now used in the PRINT statement as well. */
 
@@ -759,12 +771,12 @@ L100002:
 	return 0;
     }
     return 0;
-/* $Procedure  CLLINE ( Close a device ) */
+/* $Procedure CLLINE ( Close a device ) */
 
 L_clline:
 /* $ Abstract */
 
-/*      Close a device. */
+/*     Close a device. */
 
 /* $ Disclaimer */
 
@@ -793,77 +805,91 @@ L_clline:
 
 /* $ Required_Reading */
 
-/*      None. */
+/*     None. */
 
 /* $ Keywords */
 
-/*      TEXT, FILES, ERROR */
+/*     ERROR */
+/*     FILES */
+/*     TEXT */
 
 /* $ Declarations */
 
-/*      CHARACTER*(*)        DEVICE */
+/*     IMPLICIT NONE */
+
+/*     CHARACTER*(*)        DEVICE */
 
 /* $ Brief_I/O */
 
-/*      VARIABLE  I/O  DESCRIPTION */
-/*      --------  ---  -------------------------------------------------- */
-/*      DEVICE     I   Device to be closed. */
+/*     VARIABLE  I/O  DESCRIPTION */
+/*     --------  ---  -------------------------------------------------- */
+/*     DEVICE     I   Device to be closed. */
 
 /* $ Detailed_Input */
 
-/*      DEVICE         is the name of a device which is currently */
-/*                     opened for reading or writing. */
+/*     DEVICE   is the name of a device which is currently */
+/*              opened for reading or writing. */
 
 /* $ Detailed_Output */
 
-/*      None. */
+/*     None. */
 
 /* $ Parameters */
 
-/*      None. */
+/*     None. */
 
 /* $ Exceptions */
 
-/*      This routine is called by SPICELIB error handling routines, so */
-/*      it cannot use the normal SPICELIB error signalling mechanism. */
-/*      Instead, it writes error messages to the screen if necessary. */
+/*     This routine is called by SPICELIB error handling routines, so */
+/*     it cannot use the normal SPICELIB error signaling mechanism. */
+/*     Instead, it writes error messages to the screen if necessary. */
 
-/*      1)  If the device indicated by DEVICE was not opened by WRLINE, */
-/*          this routine closes it anyway. */
+/*     1)  If the device indicated by DEVICE was not opened by WRLINE, */
+/*         this routine closes it anyway. */
 
-/*      2)  If the INQUIRE performed by this routine fails, an error */
-/*          diagnosis is printed to the screen. */
+/*     2)  If the INQUIRE performed by this routine fails, an error */
+/*         diagnosis is printed to the screen. */
 
 /* $ Files */
 
-/*      This routin */
+/*     See argument DEVICE. */
 
 /* $ Particulars */
 
-/*      CLLINE closes a device that is currently open. */
+/*     CLLINE closes a device that is currently open. */
 
 /* $ Examples */
 
-/*      1)  Write two lines to the file, SPUD.DAT (VAX file name */
-/*          syntax), and then close the file. */
+/*     1)  Write two lines to the file, SPUD.DAT (VAX file name */
+/*         syntax), and then close the file. */
 
-/*          CALL WRLINE ( 'SPUD.DAT', ' This is line 1 ' ) */
-/*          CALL WRLINE ( 'SPUD.DAT', ' This is line 2 ' ) */
-/*          CALL CLLINE ( 'SPUD.DAT' ) */
+/*         CALL WRLINE ( 'SPUD.DAT', ' This is line 1 ' ) */
+/*         CALL WRLINE ( 'SPUD.DAT', ' This is line 2 ' ) */
+/*         CALL CLLINE ( 'SPUD.DAT' ) */
 
 /* $ Restrictions */
 
-/*      None. */
+/*     None. */
 
 /* $ Literature_References */
 
-/*      None. */
+/*     None. */
 
 /* $ Author_and_Institution */
 
-/*      N.J. Bachman    (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 4.1.0, 03-JUN-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. Fixed $Files */
+/*        section and added entry to $Index_Entries. */
 
 /* -    SPICELIB Version 4.0.5, 17-JUL-2002 (BVS) */
 
@@ -872,19 +898,19 @@ L_clline:
 /* -    SPICELIB Version 4.0.4, 08-OCT-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitely given.  New */
+/*        environments are now explicitly given. New */
 /*        environments are WIN-NT */
 
 /* -    SPICELIB Version 4.0.2, 28-JUL-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitly given.  New */
+/*        environments are now explicitly given. New */
 /*        environments are PC-DIGITAL, SGI-O32 and SGI-N32. */
 
 /* -    SPICELIB Version 4.0.1, 18-MAR-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitly given.  Previously, */
+/*        environments are now explicitly given. Previously, */
 /*        environments such as SUN-SUNOS and SUN-SOLARIS were implied */
 /*        by the environment label SUN. */
 
@@ -906,7 +932,7 @@ L_clline:
 /* -& */
 /* $ Index_Entries */
 
-/*     None. */
+/*     close a device */
 
 /* -& */
 /* $ Revisions */
@@ -925,7 +951,8 @@ L_clline:
 
 /* -    Beta Version 1.0.1, 08-NOV-1988 (NJB) */
 
-/*        Keywords added. */
+/*        $Keywords added. */
+
 /* -& */
 
 /*     Find the unit connected to DEVICE. */

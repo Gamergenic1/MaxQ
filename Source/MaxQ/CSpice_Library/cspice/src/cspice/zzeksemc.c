@@ -819,11 +819,11 @@ static integer c__1 = 1;
 /*         will not be modified. */
 
 /*     3)  If the input query has not had its names resolved, the error */
-/*         SPICE(UNRESOLVEDNAMES) will be signalled.  The outputs */
+/*         SPICE(UNRESOLVEDNAMES) will be signaled.  The outputs */
 /*         will not be modified. */
 
 /*     4)  If the input query contains time values that have not been */
-/*         resolved, the error SPICE(UNRESOLVEDTIMES) will be signalled. */
+/*         resolved, the error SPICE(UNRESOLVEDTIMES) will be signaled. */
 /*         The outputs will not be modified. */
 
 /*     5)  If any sort of semantic error is detected in the input query, */
@@ -881,6 +881,10 @@ static integer c__1 = 1;
 /*     N.J. Bachman       (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.0.1, 03-OCT-2021 (NJB) */
+
+/*        Corrected typos in comments. */
 
 /* -    Beta Version 1.0.0, 23-OCT-1995 (NJB) */
 
@@ -1004,7 +1008,7 @@ static integer c__1 = 1;
 		    lxe[0] - i__2, errmsg_len);
 	    repmc_(errmsg, "#", typstr + (((i__2 = lhstyp - 1) < 4 && 0 <= 
 		    i__2 ? i__2 : s_rnge("typstr", i__2, "zzeksemc_", (ftnlen)
-		    379)) << 5), errmsg, errmsg_len, (ftnlen)1, (ftnlen)32, 
+		    383)) << 5), errmsg, errmsg_len, (ftnlen)1, (ftnlen)32, 
 		    errmsg_len);
 	    *errptr = lxb[0];
 	    return 0;
@@ -1058,14 +1062,14 @@ static integer c__1 = 1;
 			    ftnlen)1, lxe[0] - i__2, errmsg_len);
 		    repmc_(errmsg, "#", typstr + (((i__2 = lhstyp - 1) < 4 && 
 			    0 <= i__2 ? i__2 : s_rnge("typstr", i__2, "zzeks"
-			    "emc_", (ftnlen)440)) << 5), errmsg, errmsg_len, (
+			    "emc_", (ftnlen)444)) << 5), errmsg, errmsg_len, (
 			    ftnlen)1, (ftnlen)32, errmsg_len);
 		    i__2 = lxb[1] - 1;
 		    repmc_(errmsg, "#", query + i__2, errmsg, errmsg_len, (
 			    ftnlen)1, lxe[1] - i__2, errmsg_len);
 		    repmc_(errmsg, "#", typstr + (((i__2 = rhstyp - 1) < 4 && 
 			    0 <= i__2 ? i__2 : s_rnge("typstr", i__2, "zzeks"
-			    "emc_", (ftnlen)442)) << 5), errmsg, errmsg_len, (
+			    "emc_", (ftnlen)446)) << 5), errmsg, errmsg_len, (
 			    ftnlen)1, (ftnlen)32, errmsg_len);
 		    *errptr = lxb[1];
 		    return 0;
@@ -1102,14 +1106,14 @@ static integer c__1 = 1;
 			    ftnlen)1, lxe[0] - i__2, errmsg_len);
 		    repmc_(errmsg, "#", typstr + (((i__2 = lhstyp - 1) < 4 && 
 			    0 <= i__2 ? i__2 : s_rnge("typstr", i__2, "zzeks"
-			    "emc_", (ftnlen)484)) << 5), errmsg, errmsg_len, (
+			    "emc_", (ftnlen)488)) << 5), errmsg, errmsg_len, (
 			    ftnlen)1, (ftnlen)32, errmsg_len);
 		    i__2 = lxb[1] - 1;
 		    repmc_(errmsg, "#", query + i__2, errmsg, errmsg_len, (
 			    ftnlen)1, lxe[1] - i__2, errmsg_len);
 		    repmc_(errmsg, "#", typstr + (((i__2 = rhstyp - 1) < 4 && 
 			    0 <= i__2 ? i__2 : s_rnge("typstr", i__2, "zzeks"
-			    "emc_", (ftnlen)486)) << 5), errmsg, errmsg_len, (
+			    "emc_", (ftnlen)490)) << 5), errmsg, errmsg_len, (
 			    ftnlen)1, (ftnlen)32, errmsg_len);
 		    *errptr = lxb[1];
 		    return 0;

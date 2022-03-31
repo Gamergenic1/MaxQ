@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure            BSRCHC ( Binary search for a character string ) */
+/* $Procedure BSRCHC ( Binary search for a character string ) */
 integer bsrchc_(char *value, integer *ndim, char *array, ftnlen value_len, 
 	ftnlen array_len)
 {
@@ -21,9 +21,9 @@ integer bsrchc_(char *value, integer *ndim, char *array, ftnlen value_len,
 
 /* $ Abstract */
 
-/*      Do a binary search for a given value within a character array, */
-/*      assumed to be in increasing order. Return the index of the */
-/*      matching array entry, or zero if the key value is not found. */
+/*     Do a binary search for a given value within a character array, */
+/*     assumed to be in nondecreasing order. Return the index of the */
+/*     matching array entry, or zero if the key value is not found. */
 
 /* $ Disclaimer */
 
@@ -56,91 +56,113 @@ integer bsrchc_(char *value, integer *ndim, char *array, ftnlen value_len,
 
 /* $ Keywords */
 
-/*      ARRAY,  SEARCH */
+/*     ARRAY */
+/*     SEARCH */
 
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*      VARIABLE  I/O  DESCRIPTION */
-/*      --------  ---  -------------------------------------------------- */
-/*      VALUE      I   Value to find in ARRAY. */
-/*      NDIM       I   Dimension of ARRAY. */
-/*      ARRAY      I   Array to be searched. */
-/*      BSRCHC     O   Index of VALUE in ARRAY. (Zero if not found.) */
+/*     VARIABLE  I/O  DESCRIPTION */
+/*     --------  ---  -------------------------------------------------- */
+/*     VALUE      I   Key value to be found in ARRAY. */
+/*     NDIM       I   Dimension of ARRAY. */
+/*     ARRAY      I   Character string array to search. */
+
+/*     The function returns the index of the first matching array element */
+/*     or zero if the value is not found. */
 
 /* $ Detailed_Input */
 
-/*      VALUE       is the value to be found in the input array. */
+/*     VALUE    is the key value to be found in the array. Trailing */
+/*              blanks in this key are not significant: string matches */
+/*              found by this routine do not require trailing blanks in */
+/*              value to match those in the corresponding element of */
+/*              array. */
 
-/*      NDIM        is the number of elements in the input array. */
+/*     NDIM     is the number of elements in the input array. */
 
-/*      ARRAY       is the array to be searched. The elements in */
-/*                  ARRAY are assumed to sorted according to the */
-/*                  ASCII collating sequence. */
+/*     ARRAY    is the array of character strings to be searched. */
+/*              Trailing blanks in the strings in this array are not */
+/*              significant. The elements in ARRAY are assumed to */
+/*              sorted according to the ASCII collating sequence. */
 
 /* $ Detailed_Output */
 
-/*      BSRCHC      is the index of the input value in the input array. */
-/*                  If ARRAY does not contain VALUE, BSRCHC is zero. */
+/*     The function returns the index of the specified value in the input */
+/*     array. Indices range from 1 to NDIM. */
 
-/*                  If ARRAY contains more than one occurrence of VALUE, */
-/*                  BSRCHC may point to any of the occurrences. */
+/*     If the input array does not contain the specified value, the */
+/*     function returns zero. */
+
+/*     If the input array contains more than one occurrence of the */
+/*     specified value, the returned index may point to any of the */
+/*     occurrences. */
 
 /* $ Parameters */
 
 /*     None. */
 
-/* $ Particulars */
-
-/*      A binary search is implemented on the input array. If an */
-/*      element of the array is found to match the input value, the */
-/*      index of that element is returned. If no matching element */
-/*      is found, zero is returned. */
-
-
-/* $ Examples */
-
-/*      Let ARRAY contain the following elements: */
-
-/*            'BOHR' */
-/*            'EINSTEIN' */
-/*            'FEYNMAN' */
-/*            'GALILEO' */
-/*            'NEWTON' */
-
-/*      Then */
-
-/*            BSRCHC ( 'NEWTON',   5, ARRAY )    = 5 */
-/*            BSRCHC ( 'EINSTEIN', 5, ARRAY )    = 2 */
-/*            BSRCHC ( 'GALILEO',  5, ARRAY )    = 4 */
-/*            BSRCHC ( 'Galileo',  5, ARRAY )    = 0 */
-/*            BSRCHC ( 'BETHE',    5, ARRAY )    = 0 */
-
-/* $ Restrictions */
-
-/*      ARRAY is assumed to be sorted in increasing order according to */
-/*      the ASCII collating sequence. If this condition is not met, */
-/*      the results of BSRCHC are unpredictable. */
-
 /* $ Exceptions */
 
-/*      Error free. */
+/*     Error free. */
 
-/*      If NDIM < 1 the value of the function is zero. */
+/*     1)  If NDIM < 1, the value of the function is zero. This is not */
+/*         considered an error. */
 
 /* $ Files */
 
-/*      None. */
+/*     None. */
 
-/* $ Author_and_Institution */
+/* $ Particulars */
 
-/*      I.M. Underwood  (JPL) */
+/*     A binary search is performed on the input array. If an element of */
+/*     the array is found to match the input value, the index of that */
+/*     element is returned. If no matching element is found, zero is */
+/*     returned. */
+
+/* $ Examples */
+
+/*     Let ARRAY contain the following elements: */
+
+/*           'BOHR' */
+/*           'EINSTEIN' */
+/*           'FEYNMAN' */
+/*           'GALILEO' */
+/*           'NEWTON' */
+
+/*     Then */
+
+/*           BSRCHC ( 'NEWTON',   5, ARRAY )    = 5 */
+/*           BSRCHC ( 'EINSTEIN', 5, ARRAY )    = 2 */
+/*           BSRCHC ( 'GALILEO',  5, ARRAY )    = 4 */
+/*           BSRCHC ( 'Galileo',  5, ARRAY )    = 0 */
+/*           BSRCHC ( 'BETHE',    5, ARRAY )    = 0 */
+
+/* $ Restrictions */
+
+/*     1)  ARRAY is assumed to be sorted in increasing order according to */
+/*         the ASCII collating sequence. If this condition is not met, */
+/*         the results of BSRCHC are unpredictable. */
 
 /* $ Literature_References */
 
-/*      None. */
+/*     None. */
+
+/* $ Author_and_Institution */
+
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 26-OCT-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. Removed */
+/*        unnecessary $Revisions section. Improved $Detailed_Input and */
+/*        $Detailed_Output section. */
 
 /* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
 
@@ -153,13 +175,6 @@ integer bsrchc_(char *value, integer *ndim, char *array, ftnlen value_len,
 /* $ Index_Entries */
 
 /*     binary search for a character_string */
-
-/* -& */
-/* $ Revisions */
-
-/* -    Beta Version 1.1.0, 8-JAN-1989 (IMU) */
-
-/*        Now works for all values of NDIM. */
 
 /* -& */
 

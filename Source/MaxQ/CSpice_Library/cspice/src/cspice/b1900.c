@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure                     B1900 ( Besselian Date 1900.0 ) */
+/* $Procedure B1900 ( Besselian Date 1900.0 ) */
 doublereal b1900_(void)
 {
     /* System generated locals */
@@ -72,7 +72,7 @@ doublereal b1900_(void)
 
 /* $ Exceptions */
 
-/*      Error free. */
+/*     Error free. */
 
 /* $ Files */
 
@@ -98,21 +98,29 @@ doublereal b1900_(void)
 
 /* $ Literature_References */
 
-/*     None. */
+/*     [1]  J. Lieske, "Precession Matrix Based on IAU (1976) System of */
+/*          Astronomical Constants," Astron. Astrophys. 73, 282-284, */
+/*          1979. */
 
 /* $ Author_and_Institution */
 
-/*     W.L. Taber      (JPL) */
-/*     I.M. Underwood  (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
 
-/* -     SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+/* -    SPICELIB Version 1.0.2, 13-APR-2021 (JDR) */
 
-/*         Comment section for permuted index source lines was added */
-/*         following the header. */
+/*        Edited the header to comply with NAIF standard. Added entry [1] */
+/*        to $Literature_References section. */
 
-/* -     SPICELIB Version 1.0.0, 31-JAN-1990 (WLT) (IMU) */
+/* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+
+/*        Comment section for permuted index source lines was added */
+/*        following the header. */
+
+/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (WLT) (IMU) */
 
 /* -& */
 /* $ Index_Entries */

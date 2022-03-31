@@ -1350,7 +1350,7 @@ static integer c__11000 = 11000;
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Entry points */
+/*     VARIABLE  I/O  ENTRY POINTS */
 /*     --------  ---  -------------------------------------------------- */
 /*     CINDEX     I   EKCII */
 /*     ELMENT     I   EKGC, EKGD, EKGI */
@@ -1393,40 +1393,39 @@ static integer c__11000 = 11000;
 
 /* $ Parameters */
 
-/*     FTSIZE         is the maximum number of EK files that may be */
-/*                    loaded.  Any other DAS files loaded by the calling */
-/*                    program count against this limit. */
+/*     FTSIZE   is the maximum number of EK files that may be */
+/*              loaded. Any other DAS files loaded by the calling */
+/*              program count against this limit. */
 
-/*     STSIZE         is the size of the segment table; this is the */
-/*                    maximum number of segments that can be loaded at */
-/*                    one time. */
+/*     STSIZE   is the size of the segment table; this is the */
+/*              maximum number of segments that can be loaded at */
+/*              one time. */
 
-/*     MXTBLD         is the maximum number of tables that can be loaded */
-/*                    at any time.  A table can consist of multiple */
-/*                    segments. */
+/*     MXTBLD   is the maximum number of tables that can be loaded */
+/*              at any time. A table can consist of multiple */
+/*              segments. */
 
-/*     MXCLLD         is the maximum number of columns that can be loaded */
-/*                    at any time.  A column may be spread across */
-/*                    multiple segments; in this case, the portions of */
-/*                    the column contained in each segment count against */
-/*                    this limit. */
+/*     MXCLLD   is the maximum number of columns that can be loaded */
+/*              at any time. A column may be spread across */
+/*              multiple segments; in this case, the portions of */
+/*              the column contained in each segment count against */
+/*              this limit. */
 
-/*     ADSCSZ         is the size of column attribute descriptor. */
-/*                    (Defined in ekattdsc.inc.) */
+/*     ADSCSZ   is the size of column attribute descriptor. */
+/*              (Defined in ekattdsc.inc.) */
 
-/*     LBCELL         is the SPICELIB cell lower bound. */
+/*     LBCELL   is the SPICE cell lower bound. */
 
 /*     Many other parameters are defined in the include files referenced */
-/*     above.  See those files for details. */
-
+/*     above. See those files for details. */
 
 /* $ Exceptions */
 
 /*     1)  If this routine is called directly, the error */
 /*         SPICE(BOGUSENTRY) is signaled. */
 
-/*     See the headers of the entry points for descriptions of exceptions */
-/*     specific to those routines. */
+/*     2)  See the headers of the entry points for descriptions of */
+/*         exceptions specific to those routines. */
 
 /* $ Files */
 
@@ -1440,11 +1439,11 @@ static integer c__11000 = 11000;
 
 /* $ Particulars */
 
-/*     EKQMGR is an umbrella routine for its entry points:  all variables */
+/*     EKQMGR is an umbrella routine for its entry points: all variables */
 /*     used by the entry points are declared here. */
 
 /*     EKQMGR supports loading and unloading EK files, executing queries, */
-/*     and fetching the results of executed queries.  The entry points */
+/*     and fetching the results of executed queries. The entry points */
 /*     and their functions are: */
 
 /*        File loading and unloading: */
@@ -1472,167 +1471,338 @@ static integer c__11000 = 11000;
 
 
 /*     To issue queries to the EK system, users would normally call the */
-/*     high-level interface routine EKFIND.  EKFIND parses queries and */
-/*     converts them to the encoded form expected by EKSRCH.  It is */
+/*     high-level interface routine EKFIND. EKFIND parses queries and */
+/*     converts them to the encoded form expected by EKSRCH. It is */
 /*     possible to call EKSRCH directly, but this should not be attempted */
-/*     by others than EK masters.  EKFIND is not an entry point of */
+/*     by others than EK masters. EKFIND is not an entry point of */
 /*     EKQMGR, but instead is a separate subroutine. */
 
 /* $ Examples */
 
-/*     1)  Query the EK system and fetch data matching queries. */
-/*         The code fragment shown here does not rely on advance */
-/*         knowledge of the input query or the contents of any loaded EK */
-/*         files. */
+/*     The numerical results shown for this example may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
 
-/*         To simplify the example, we assume that all data are scalar. */
-/*         This assumption relieves us of the need to test the size of */
-/*         column entries before fetching them.  In the event that a */
-/*         column contains variable-size array entries, the entry point */
-/*         EKNELT may be called to obtain the size of column entries to */
-/*         be fetched.  See EKNELT for an example. */
+/*     1) Query the EK system and fetch data matching that query. */
 
+/*        The program shown here does not rely on advance */
+/*        knowledge of the input query or the contents of any loaded EK */
+/*        files. */
 
-/*            C */
-/*            C     Load EK file.  Also load leapseconds file for */
-/*            C     time conversion. */
-/*            C */
-/*                  CALL EKLEF  ( EK, HANDLE ) */
-/*                  CALL FURNSH ( LEAP       ) */
-
-/*            C */
-/*            C     Prompt for query.  Parse the SELECT clause using */
-/*            C     EKPSEL. */
-/*            C */
-/*                  CALL PROMPT ( 'Enter query > ', QUERY ) */
-
-/*                  CALL EKPSEL ( QUERY, */
-/*                                N, */
-/*                                XBEGS, */
-/*                                XENDS, */
-/*                                XBEGS, */
-/*                                XTYPES, */
-/*                                XCLASS, */
-/*                                TABS, */
-/*                                COLS, */
-/*                                ERROR, */
-/*                                ERRMSG ) */
+/*        To simplify the example, we assume that all data are scalar. */
+/*        This assumption relieves us of the need to test the size of */
+/*        column entries before fetching them. In the event that a */
+/*        column contains variable-size array entries, the entry point */
+/*        EKNELT may be called to obtain the size of column entries to */
+/*        be fetched. See EKNELT for an example. */
 
 
-/*                  IF ( ERROR ) THEN */
+/*        Use the EK kernel below to load the information from the */
+/*        original Supplementary Engineering Data Record (SEDR) data */
+/*        set generated by the Viking Project. */
 
-/*                     WRITE (*,*) ERRMSG */
+/*           vo_sedr.bdb */
 
-/*                  ELSE */
-/*            C */
-/*            C        Submit query to the EK query system. */
-/*            C */
-/*                     CALL EKFIND ( QUERY, NMROWS, ERROR, ERRMSG ) */
+/*        Use the LSK kernel below to load the leap seconds and time */
+/*        constants required for the conversions. */
 
-/*                     IF ( ERROR ) THEN */
-
-/*                        WRITE (*,*) ERRMSG */
-
-/*                     ELSE */
-/*            C */
-/*            C           Fetch the rows that matched the query. */
-/*            C */
-/*                        DO ROW = 1, NMROWS */
-/*            C */
-/*            C              Fetch data from the Ith row. */
-/*            C */
-/*                           WRITE (*,*) ' ' */
-/*                           WRITE (*,*) 'ROW = ', ROW */
-
-/*                           DO COL = 1, N */
-/*            C */
-/*            C                 Fetch the data from the Jth selected */
-/*            C                 column. */
-/*            C */
-/*                              IF ( XCLASS(COL) .EQ. 'COL' ) THEN */
-
-/*                                 OUTSTR  =  COLS(COL) */
-/*                                 CALL PREFIX ( '.',       0, OUTSTR ) */
-/*                                 CALL PREFIX ( TABS(COL), 0, OUTSTR ) */
-/*                                 WRITE (*,*) 'COLUMN = ', OUTSTR */
-
-/*                              ELSE */
-
-/*                                 B  =  XBEGS(COL) */
-/*                                 E  =  XENDS(COL) */
-/*                                 WRITE (*,*) 'ITEM = ', QUERY(B:E) */
-
-/*                              END IF */
-
-/*                              IF ( XTYPES(COL) .EQ. 'CHR' ) THEN */
-
-/*                                 CALL EKGC ( COL,   ROW,   1, */
-/*                 .                           CDATA, NULL,  FOUND ) */
-
-/*                                 IF ( NULL ) THEN */
-/*                                    WRITE (*,*) '<Null>' */
-/*                                 ELSE */
-/*                                    WRITE (*,*) CDATA */
-/*                                 END IF */
+/*           naif0012.tls */
 
 
-/*                              ELSE IF ( XTYPES(COL) .EQ. 'DP' ) THEN */
-
-/*                                 CALL EKGD ( COL,   ROW,   1, */
-/*                 .                           DDATA, NULL,  FOUND ) */
-
-/*                                 IF ( NULL ) THEN */
-/*                                    WRITE (*,*) '<Null>' */
-/*                                 ELSE */
-/*                                    WRITE (*,*) DDATA */
-/*                                 END IF */
+/*        Example code begins here. */
 
 
-/*                              ELSE IF ( XTYPES(COL) .EQ. 'INT' ) THEN */
+/*              PROGRAM EKQMGR_EX1 */
+/*              IMPLICIT NONE */
 
-/*                                 CALL EKGI ( COL,   ROW,   1, */
-/*                 .                           IDATA, NULL,  FOUND ) */
+/*        C */
+/*        C     Include EK Query Limit Parameters */
+/*        C */
+/*              INCLUDE 'ekqlimit.inc' */
 
-/*                                 IF ( NULL ) THEN */
-/*                                    WRITE (*,*) '<Null>' */
-/*                                 ELSE */
-/*                                    WRITE (*,*) IDATA */
-/*                                 END IF */
+/*        C */
+/*        C     SPICELIB functions */
+/*        C */
+/*              INTEGER               RTRIM */
+
+/*        C */
+/*        C     Local parameters */
+/*        C */
+/*              CHARACTER*(*)         EKNAME */
+/*              PARAMETER           ( EKNAME = 'vo_sedr.bdb' ) */
+
+/*              CHARACTER*(*)         LSKNAM */
+/*              PARAMETER           ( LSKNAM = 'naif0012.tls' ) */
+
+/*              INTEGER               DESCSZ */
+/*              PARAMETER           ( DESCSZ = 31   ) */
+
+/*              INTEGER               ERRLEN */
+/*              PARAMETER           ( ERRLEN = 1840 ) */
+
+/*              INTEGER               ITEMSZ */
+/*              PARAMETER           ( ITEMSZ = DESCSZ + 4 ) */
+
+/*              INTEGER               TIMLEN */
+/*              PARAMETER           ( TIMLEN = 27   ) */
+
+/*              INTEGER               TYPLEN */
+/*              PARAMETER           ( TYPLEN = 4    ) */
+
+/*              INTEGER               XCLSLN */
+/*              PARAMETER           ( XCLSLN = 4    ) */
+
+/*        C */
+/*        C     Local variables */
+/*        C */
+/*              CHARACTER*(MAXSTR)    CDATA */
+/*              CHARACTER*(MAXCLN)    COLS   ( MAXSEL ) */
+/*              CHARACTER*(ERRLEN)    ERRMSG */
+/*              CHARACTER*(ITEMSZ)    ITEM */
+/*              CHARACTER*(DESCSZ)    OUTSTR */
+/*              CHARACTER*(MAXQRY)    QUERY */
+/*              CHARACTER*(TIMLEN)    UTCSTR */
+/*              CHARACTER*(MAXCLN)    TABS   ( MAXTAB ) */
+/*              CHARACTER*(XCLSLN)    XCLASS ( MAXSEL ) */
+/*              CHARACTER*(TYPLEN)    XTYPES ( MAXSEL ) */
+
+/*              DOUBLE PRECISION      DDATA */
+/*              DOUBLE PRECISION      TDATA */
+
+/*              INTEGER               B */
+/*              INTEGER               COLNO */
+/*              INTEGER               E */
+/*              INTEGER               HANDLE */
+/*              INTEGER               IDATA */
+/*              INTEGER               N */
+/*              INTEGER               NMROWS */
+/*              INTEGER               ROW */
+/*              INTEGER               XBEGS  ( MAXSEL ) */
+/*              INTEGER               XENDS  ( MAXSEL ) */
+
+/*              LOGICAL               ERROR */
+/*              LOGICAL               FOUND */
+/*              LOGICAL               NULL */
+
+/*        C */
+/*        C     Load leapseconds file for time conversion. */
+/*        C */
+/*              CALL FURNSH ( LSKNAM ) */
+
+/*        C */
+/*        C     Load EK. */
+/*        C */
+/*              CALL EKLEF  ( EKNAME, HANDLE ) */
+
+/*        C */
+/*        C     Setup the query.  Parse the SELECT clause using */
+/*        C     EKPSEL. */
+/*        C */
+/*              QUERY = 'Select IMAGE_NUMBER, IMAGE_ID, ' */
+/*             .   //          'PLATFORM_CLOCK, IMAGE_TIME ' */
+/*             .   //   'from VIKING_SEDR_DATA ' */
+/*             .   //   'where IMAGE_NUMBER < 25850000 ' */
+/*             .   //   'order by IMAGE_NUMBER' */
+
+/*              CALL EKPSEL ( QUERY,  N,    XBEGS, XENDS, XTYPES, */
+/*             .              XCLASS, TABS, COLS,  ERROR, ERRMSG ) */
+
+/*              IF ( ERROR ) THEN */
+
+/*                 WRITE(*,*) ERRMSG */
+
+/*              ELSE */
+
+/*        C */
+/*        C        Submit query to the EK query system. */
+/*        C */
+/*                 CALL EKFIND ( QUERY, NMROWS, ERROR, ERRMSG ) */
+
+/*                 IF ( ERROR ) THEN */
+
+/*                    WRITE(*,*) ERRMSG */
+
+/*                 ELSE */
+
+/*        C */
+/*        C           Fetch the rows that matched the query. */
+/*        C */
+/*                    DO ROW = 1, NMROWS */
+
+/*        C */
+/*        C              Fetch data from the Ith row. */
+/*        C */
+/*                       WRITE (*,*) ' ' */
+/*                       WRITE (*,*) 'ROW = ', ROW */
+
+/*                       DO COLNO = 1, N */
+
+/*        C */
+/*        C                 Fetch the data from the Jth selected */
+/*        C                 column. */
+/*        C */
+/*                          IF ( XCLASS(COLNO) .EQ. 'COL' ) THEN */
+
+/*                             OUTSTR  =  COLS(COLNO) */
+/*                             CALL PREFIX ( '.',         0, OUTSTR ) */
+/*                             CALL PREFIX ( TABS(COLNO), 0, OUTSTR ) */
+/*                             ITEM = '  ' // OUTSTR // ':' */
+
+/*                          ELSE */
+
+/*                             B  =  XBEGS(COLNO) */
+/*                             E  =  XENDS(COLNO) */
+/*                             ITEM = '  ITEM = ' // QUERY(B:E) */
+
+/*                          END IF */
+
+/*                          IF ( XTYPES(COLNO) .EQ. 'CHR' ) THEN */
+
+/*                             CALL EKGC ( COLNO,  ROW,  1, */
+/*             .                           CDATA, NULL, FOUND ) */
+
+/*                             IF ( NULL ) THEN */
+/*                                WRITE(*,*) ITEM, '<Null>' */
+/*                             ELSE */
+/*                                WRITE(*,*) ITEM, CDATA(:RTRIM(CDATA)) */
+/*                             END IF */
 
 
-/*                              ELSE */
-/*            C */
-/*            C                    The item is a time value.  Convert it */
-/*            C                    to UTC for output. */
-/*            C */
-/*                                 CALL EKGD   ( COL,   ROW,   1, */
-/*                 .                             TDATA, NULL,  FOUND ) */
+/*                          ELSE IF ( XTYPES(COLNO) .EQ. 'DP' ) THEN */
 
-/*                                 IF ( NULL ) THEN */
-/*                                    WRITE (*,*) '<Null>' */
-/*                                 ELSE */
-/*                                    CALL ET2UTC ( TDATA, 'C', 3, UTC ) */
-/*                                    WRITE (*,*) UTC */
-/*                                 END IF */
+/*                             CALL EKGD ( COLNO,  ROW,  1, */
+/*             .                           DDATA, NULL, FOUND ) */
 
-/*                              END IF */
+/*                             IF ( NULL ) THEN */
+/*                                WRITE(*,*) ITEM, '<Null>' */
+/*                             ELSE */
+/*                                WRITE(*,*) ITEM, DDATA */
+/*                             END IF */
 
-/*                           END DO */
-/*            C */
-/*            C              We're done with the column having index COL. */
-/*            C */
-/*                        END DO */
-/*            C */
-/*            C           We're done with the row having index ROW. */
-/*            C */
-/*                     END IF */
-/*            C */
-/*            C        We either processed the query or had an error. */
-/*            C */
-/*                  END IF */
-/*            C */
-/*            C     We either parsed the SELECT clause or had an error. */
-/*            C */
+
+/*                          ELSE IF ( XTYPES(COLNO) .EQ. 'INT' ) THEN */
+
+/*                             CALL EKGI ( COLNO,  ROW,  1, */
+/*             .                           IDATA, NULL, FOUND ) */
+
+/*                             IF ( NULL ) THEN */
+/*                                WRITE(*,*) ITEM, '<Null>' */
+/*                             ELSE */
+/*                                WRITE(*,*) ITEM, IDATA */
+/*                             END IF */
+
+
+/*                          ELSE */
+/*        C */
+/*        C                    The item is a time value.  Convert it */
+/*        C                    to UTC for output. */
+/*        C */
+/*                             CALL EKGD ( COLNO,  ROW,  1, */
+/*             .                           TDATA, NULL, FOUND ) */
+
+/*                             IF ( NULL ) THEN */
+/*                                WRITE(*,*) ITEM, '<Null>' */
+/*                             ELSE */
+/*                                CALL ET2UTC ( TDATA, 'C', 3, UTCSTR ) */
+/*                                WRITE(*,*) ITEM, UTCSTR */
+/*                             END IF */
+
+/*                          END IF */
+
+/*        C */
+/*        C              We're done with the column having index COLNO. */
+/*        C */
+/*                       END DO */
+
+/*        C */
+/*        C           We're done with the row having index ROW. */
+/*        C */
+/*                    END DO */
+
+/*        C */
+/*        C        We either processed the query or had an error. */
+/*        C */
+/*                 END IF */
+
+/*        C */
+/*        C     We either parsed the SELECT clause or had an error. */
+/*        C */
+/*              END IF */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*         ROW =            1 */
+/*           VIKING_SEDR_DATA.IMAGE_NUMBER  :     25837050 */
+/*           VIKING_SEDR_DATA.IMAGE_ID      : 168C09 */
+/*           VIKING_SEDR_DATA.PLATFORM_CLOCK:    119.88000000000000 */
+/*           VIKING_SEDR_DATA.IMAGE_TIME    : 1976 JUN 16 16:50:55.925 */
+
+/*         ROW =            2 */
+/*           VIKING_SEDR_DATA.IMAGE_NUMBER  :     25837051 */
+/*           VIKING_SEDR_DATA.IMAGE_ID      : 168C10 */
+/*           VIKING_SEDR_DATA.PLATFORM_CLOCK:    119.27000000000000 */
+/*           VIKING_SEDR_DATA.IMAGE_TIME    : 1976 JUN 16 16:51:00.269 */
+
+/*         ROW =            3 */
+/*           VIKING_SEDR_DATA.IMAGE_NUMBER  :     25840344 */
+/*           VIKING_SEDR_DATA.IMAGE_ID      : 168C11 */
+/*           VIKING_SEDR_DATA.PLATFORM_CLOCK:    119.88000000000000 */
+/*           VIKING_SEDR_DATA.IMAGE_TIME    : 1976 JUN 16 20:56:53.051 */
+
+/*         ROW =            4 */
+/*           VIKING_SEDR_DATA.IMAGE_NUMBER  :     25840345 */
+/*           VIKING_SEDR_DATA.IMAGE_ID      : 168C12 */
+/*           VIKING_SEDR_DATA.PLATFORM_CLOCK:    119.27000000000000 */
+/*           VIKING_SEDR_DATA.IMAGE_TIME    : 1976 JUN 16 20:56:57.395 */
+
+/*         ROW =            5 */
+/*           VIKING_SEDR_DATA.IMAGE_NUMBER  :     25843638 */
+/*           VIKING_SEDR_DATA.IMAGE_ID      : 169C01 */
+/*           VIKING_SEDR_DATA.PLATFORM_CLOCK:    119.88000000000000 */
+/*           VIKING_SEDR_DATA.IMAGE_TIME    : 1976 JUN 17 01:02:50.177 */
+
+/*         ROW =            6 */
+/*           VIKING_SEDR_DATA.IMAGE_NUMBER  :     25843639 */
+/*           VIKING_SEDR_DATA.IMAGE_ID      : 169C02 */
+/*           VIKING_SEDR_DATA.PLATFORM_CLOCK:    119.27000000000000 */
+/*           VIKING_SEDR_DATA.IMAGE_TIME    : 1976 JUN 17 01:02:54.521 */
+
+/*         ROW =            7 */
+/*           VIKING_SEDR_DATA.IMAGE_NUMBER  :     25846934 */
+/*           VIKING_SEDR_DATA.IMAGE_ID      : 169C03 */
+/*           VIKING_SEDR_DATA.PLATFORM_CLOCK:    120.14000000000000 */
+/*           VIKING_SEDR_DATA.IMAGE_TIME    : 1976 JUN 17 05:08:56.263 */
+
+/*         ROW =            8 */
+/*           VIKING_SEDR_DATA.IMAGE_NUMBER  :     25846935 */
+/*           VIKING_SEDR_DATA.IMAGE_ID      : 169C04 */
+/*           VIKING_SEDR_DATA.PLATFORM_CLOCK:    119.52000000000000 */
+/*           VIKING_SEDR_DATA.IMAGE_TIME    : 1976 JUN 17 05:09:00.607 */
+
+/*         ROW =            9 */
+/*           VIKING_SEDR_DATA.IMAGE_NUMBER  :     25848026 */
+/*           VIKING_SEDR_DATA.IMAGE_ID      : 169C05 */
+/*           VIKING_SEDR_DATA.PLATFORM_CLOCK:    120.14000000000000 */
+/*           VIKING_SEDR_DATA.IMAGE_TIME    : 1976 JUN 17 06:30:28.424 */
+
+/*         ROW =           10 */
+/*           VIKING_SEDR_DATA.IMAGE_NUMBER  :     25848030 */
+/*           VIKING_SEDR_DATA.IMAGE_ID      : 169C09 */
+/*           VIKING_SEDR_DATA.PLATFORM_CLOCK:    120.14000000000000 */
+/*           VIKING_SEDR_DATA.IMAGE_TIME    : 1976 JUN 17 06:30:46.174 */
+
+/*         ROW =           11 */
+/*           VIKING_SEDR_DATA.IMAGE_NUMBER  :     25848032 */
+/*           VIKING_SEDR_DATA.IMAGE_ID      : 169C11 */
+/*           VIKING_SEDR_DATA.PLATFORM_CLOCK:    120.14000000000000 */
+/*           VIKING_SEDR_DATA.IMAGE_TIME    : 1976 JUN 17 06:30:55.168 */
+
 
 /* $ Restrictions */
 
@@ -1644,10 +1814,19 @@ static integer c__11000 = 11000;
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
-/*     B.V. Semenov   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     B.V. Semenov       (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 2.2.0, 27-AUG-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header of EKQMGR umbrella routine and all its entry */
+/*        points. Removed unnecessary $Revisions section. */
 
 /* -    SPICELIB Version 2.1.0, 09-FEB-2015 (NJB) */
 
@@ -1656,7 +1835,7 @@ static integer c__11000 = 11000;
 
 /* -    SPICELIB Version 2.0.3, 10-FEB-2014 (BVS) */
 
-/*        Added descriptions of ADSCSZ and LBCELL to the Parameters */
+/*        Added descriptions of ADSCSZ and LBCELL to the $Parameters */
 /*        section of the header. */
 
 /* -    SPICELIB Version 2.0.2, 22-AUG-2006 (EDW) */
@@ -1671,20 +1850,20 @@ static integer c__11000 = 11000;
 
 /* -    SPICELIB Version 2.0.0, 16-NOV-2001 (NJB) */
 
-/*        Bug fix:   When an already loaded kernel is opened with EKOPR, */
+/*        Bug fix: When an already loaded kernel is opened with EKOPR, */
 /*        it now has its link count reset to 1 via a call to EKCLS. */
 
 /* -    SPICELIB Version 1.3.0, 12-FEB-1999 (NJB) */
 
-/*        Bug fix:  in entry point EKNELT, there was a error handling */
+/*        Bug fix: in entry point EKNELT, there was a error handling */
 /*        branch that called CHKOUT where CHKIN should have been called. */
 /*        This has been fixed. */
 
 /* -    SPICELIB Version 1.2.0, 21-JUL-1998 (NJB) */
 
 /*        In the entry point EKSRCH, a ZZEKJSQZ call was added after */
-/*        the ZZEKJOIN call.  This change reduces the scratch area usage */
-/*        for intermediate results of joins.  It also prevents ZZEKJOIN */
+/*        the ZZEKJOIN call. This change reduces the scratch area usage */
+/*        for intermediate results of joins. It also prevents ZZEKJOIN */
 /*        from being handed a join row set containing a segment vector */
 /*        having no corresponding row vectors. */
 
@@ -1694,7 +1873,7 @@ static integer c__11000 = 11000;
 
 /*           EKNELT, EKGC, EKGD, EKGI */
 
-/*        Version lines were fixed in all routines:  versions were */
+/*        Version lines were fixed in all routines: versions were */
 /*        changed from "Beta" to "SPICELIB." */
 
 /* -    SPICELIB Version 1.0.0, 23-OCT-1995 (NJB) */
@@ -1703,32 +1882,6 @@ static integer c__11000 = 11000;
 /* $ Index_Entries */
 
 /*     Manage EK query operations */
-
-/* -& */
-/* $ Revisions */
-
-/* -    SPICELIB Version 1.3.0, 12-FEB-1999 (NJB) */
-
-/*        Bug fix:  in entry point EKNELT, there was a error handling */
-/*        branch that called CHKOUT where CHKIN should have been called. */
-/*        This has been fixed. */
-
-/* -    SPICELIB Version 1.2.0, 21-JUL-1998 (NJB) */
-
-/*        In the entry point EKSRCH, a ZZEKJSQZ call was added after */
-/*        the ZZEKJOIN call.  This change reduces the scratch area usage */
-/*        for intermediate results of joins.  It also prevents ZZEKJOIN */
-/*        from being handed a join row set containing a segment vector */
-/*        having no corresponding row vectors. */
-
-/* -    SPICELIB Version 1.1.0, 07-JUL-1996 (NJB) */
-
-/*        Code fixes were made in routines */
-
-/*           EKNELT, EKGC, EKGD, EKGI */
-
-/*        Version lines were fixed in all routines:  versions were */
-/*        changed from "Beta" to "SPICELIB." */
 
 /* -& */
 
@@ -1957,7 +2110,7 @@ static integer c__11000 = 11000;
     sigerr_("SPICE(BOGUSENTRY)", (ftnlen)17);
     chkout_("EKQMGR", (ftnlen)6);
     return 0;
-/* $Procedure     EKLEF  ( EK, load event file ) */
+/* $Procedure EKLEF ( EK, load event file ) */
 
 L_eklef:
 /* $ Abstract */
@@ -2006,20 +2159,20 @@ L_eklef:
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     FNAME      I   Name of EK file to load. */
 /*     HANDLE     O   File handle of loaded EK file. */
 
 /* $ Detailed_Input */
 
-/*     FNAME          is the name of a binary EK file to be loaded. */
+/*     FNAME    is the name of a binary EK file to be loaded. */
 
 /* $ Detailed_Output */
 
-/*     HANDLE         is the handle of the EK file.  The file is */
-/*                    accessible by the EK reader routines once it */
-/*                    has been loaded. */
+/*     HANDLE   is the handle of the EK file. The file is */
+/*              accessible by the EK reader routines once it */
+/*              has been loaded. */
 
 /* $ Parameters */
 
@@ -2031,54 +2184,54 @@ L_eklef:
 /*         name matches that of a column in an already loaded EK, but */
 /*         whose declared attributes don't match those of the loaded */
 /*         column of the same name, the error SPICE(BADATTRIBUTES) is */
-/*         signaled.  HANDLE is is undefined in this case. */
+/*         signaled. HANDLE is is undefined in this case. */
 
 /*     2)  Loading an EK file that is already loaded does not cause side */
-/*         effects.  The handle already associated with the file will be */
+/*         effects. The handle already associated with the file will be */
 /*         returned. */
 
-/*     3)  If a file open error occurs, the problem will be diagnosed by */
-/*         routines called by this routine.  HANDLE is undefined in */
-/*         this case. */
+/*     3)  If a file open error occurs, the error is signaled by a */
+/*         routine in the call tree of this routine. HANDLE is undefined */
+/*         in this case. */
 
 /*     4)  If loading the input file would cause the maximum number of */
 /*         loaded EK files to be exceeded, the error */
-/*         SPICE(EKFILETABLEFULL) will be signaled.  HANDLE is */
-/*         undefined in this case.  This routine will attempt to */
-/*         unload the file from the DAS system. */
+/*         SPICE(EKFILETABLEFULL) is signaled. HANDLE is undefined in */
+/*         this case. This routine will attempt to unload the file */
+/*         from the DAS system. */
 
 /*     5)  If loading the input file would cause the maximum number of */
-/*         loaded DAS files to be exceeded, the error will be diagnosed */
-/*         by routines called by this routine.  HANDLE is undefined in */
-/*         this case.  This routine will attempt to unload the file */
+/*         loaded DAS files to be exceeded, an error is signaled by a */
+/*         routine in the call tree of this routine. HANDLE is undefined */
+/*         in this case. This routine will attempt to unload the file */
 /*         from the DAS system. */
 
 /*     6)  If loading the input file would cause the maximum number of */
 /*         segments allowed in loaded EK files to be exceeded, the error */
-/*         SPICE(EKSEGMENTTABLEFULL) will be signaled.  HANDLE is */
-/*         is undefined in this case.  This routine will attempt to */
-/*         unload the file from the DAS system. */
+/*         SPICE(EKSEGMENTTABLEFULL) is signaled. HANDLE is undefined in */
+/*         this case. This routine will attempt to unload the file from */
+/*         the DAS system. */
 
 /*     7)  If loading the input file would cause the maximum number of */
 /*         columns allowed in loaded EK files to be exceeded, the error */
-/*         SPICE(EKCOLDESCTABLEFULL) will be signaled.  HANDLE is */
-/*         is undefined in this case.  This routine will attempt to */
-/*         unload the file from the DAS system. */
+/*         SPICE(EKCOLDESCTABLEFULL) is signaled. HANDLE is undefined in */
+/*         this case. This routine will attempt to unload the file from */
+/*         the DAS system. */
 
 /*     8)  If loading the input file would cause the maximum allowed */
 /*         number of columns having distinct attributes in loaded EK */
-/*         files to be exceeded, the error SPICE(EKCOLATTRTABLEFULL) will */
-/*         be signaled.  HANDLE is is undefined in this case.  This */
-/*         routine will attempt to unload the file from the DAS system. */
+/*         files to be exceeded, the error SPICE(EKCOLATTRTABLEFULL) is */
+/*         signaled. HANDLE is undefined in this case. This routine will */
+/*         attempt to unload the file from the DAS system. */
 
 /*     9)  If loading the input file would cause the maximum number of */
 /*         instrument codes allowed in loaded EK files to be exceeded, */
-/*         the error SPICE(EKIDTABLEFULL) will be signaled.  HANDLE is */
-/*         is undefined in this case.  This routine will attempt to */
-/*         unload the file from the DAS system. */
+/*         the error SPICE(EKIDTABLEFULL) is signaled. HANDLE is */
+/*         undefined in this case. This routine will attempt to unload */
+/*         the file from the DAS system. */
 
 /*     10) If the input file does not contain at least one segment, the */
-/*         error SPICE(EKNOSEGMENTS) will be signaled. */
+/*         error SPICE(EKNOSEGMENTS) is signaled. */
 
 /* $ Files */
 
@@ -2086,40 +2239,268 @@ L_eklef:
 
 /* $ Particulars */
 
-/*     This routine makes EK files known to the EK system.  It is */
+/*     This routine makes EK files known to the EK system. It is */
 /*     necessary to load EK files using this routine in order to */
 /*     query the files using the EK readers. */
 
 /* $ Examples */
 
-/*     1)  Load three EK files.  During query execution, all files */
-/*         will be searched. */
+/*     The numerical results shown for these examples may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
 
-/*            DO I = 1, 3 */
-/*               CALL EKLEF ( EK(I), HANDLE ) */
-/*            END DO */
+/*     1) Load two EK files and perform a query on them. During query */
+/*        execution, all files will be searched. */
 
-/*            [Perform queries] */
+/*        Use the EK kernel below to load the Cassini Science Plan */
+/*        SPICE E-Kernel File based upon the integrated science */
+/*        plan #78. */
+
+/*           S78_CIMSSSUPa.bep */
+
+/*        Use the EK kernel below to load the data based upon the */
+/*        integrated science plan #79. */
+
+/*           S79_CIMSSSUPa.bep */
 
 
-/*     2)  Load 25 EK files sequentially, unloading the previous file */
-/*         before each new file is loaded.  Unloading files prevents */
-/*         them from being searched during query execution. */
+/*        Example code begins here. */
 
-/*            DO I = 1, 25 */
 
-/*               CALL EKLEF ( EK(I), HANDLE ) */
+/*              PROGRAM EKLEF_EX1 */
+/*              IMPLICIT NONE */
 
-/*               [Perform queries] */
+/*        C */
+/*        C     Include the EK Maximum length of an input query, */
+/*        C     MAXQRY. */
+/*        C */
+/*              INCLUDE 'ekqlimit.inc' */
 
-/*               CALL EKUEF ( HANDLE ) */
+/*        C */
+/*        C     Local parameters. */
+/*        C */
+/*              INTEGER               EKNMLN */
+/*              PARAMETER           ( EKNMLN = 17 ) */
 
-/*            END DO */
+/*              INTEGER               ERRLEN */
+/*              PARAMETER           ( ERRLEN = 1840 ) */
+
+/*        C */
+/*        C     Local variables */
+/*        C */
+/*              CHARACTER*(EKNMLN)    EKNAMS ( 2 ) */
+/*              CHARACTER*(ERRLEN)    ERRMSG */
+/*              CHARACTER*(MAXQRY)    QUERY */
+
+/*              INTEGER               HANDLE */
+/*              INTEGER               I */
+/*              INTEGER               N */
+/*              INTEGER               NMROWS */
+
+/*              LOGICAL               ERROR */
+
+/*        C */
+/*        C     Set up the array holding the EK file names. */
+/*        C */
+/*              DATA                  EKNAMS / 'S78_CIMSSSUPa.bep', */
+/*             .                               'S79_CIMSSSUPa.bep'  / */
+
+/*        C */
+/*        C     Load the EK files. This call could be replaced by a call */
+/*        C     to FURNSH (in this case, a meta-kernel listing the EKs */
+/*        C     to be loaded could also be used). */
+/*        C */
+/*              DO I = 1, 2 */
+
+/*                 CALL EKLEF ( EKNAMS(I), HANDLE ) */
+/*                 WRITE(*,'(2A)') 'Loading EK: ', EKNAMS(I) */
+
+/*              END DO */
+
+/*        C */
+/*        C     The EK files contain a table 'CASSINI_SP_OBSERVATION', */
+/*        C     that contains columns named: */
+/*        C */
+/*        C        NOTES, OBSERVATION_ID, OBSERVATION_TITLE, */
+/*        C        OBS_DESCRIPTION, SCIENCE_OBJECTIVE, SEQUENCE, */
+/*        C        SUBSYSTEM */
+/*        C */
+/*        C     Define a set of constraints to perform a query on all */
+/*        C     loaded EK files (the SELECT clause). */
+/*        C */
+/*              QUERY = 'Select SUBSYSTEM, SCIENCE_OBJECTIVE, ' */
+/*             .   //   'OBSERVATION_ID from CASSINI_SP_OBSERVATION ' */
+/*             .   //   'order by SUBSYSTEM' */
+
+/*        C */
+/*        C     Query the EK system for data rows matching the */
+/*        C     SELECT constraints. */
+/*        C */
+/*              CALL EKFIND ( QUERY, NMROWS, ERROR, ERRMSG ) */
+
+/*        C */
+/*        C     Check whether an error occurred while processing the */
+/*        C     SELECT clause. If so, output the error message. */
+/*        C */
+/*              WRITE(*,*) */
+/*              IF ( ERROR ) THEN */
+
+/*                 WRITE(*,'(2A)') 'SELECT clause error: ', ERRMSG */
+
+/*              ELSE */
+
+/*        C */
+/*        C        If no error, NMROWS contains the number of rows */
+/*        C        matching the constraints specified in the query */
+/*        C        string. */
+/*        C */
+/*                 WRITE(*,'(A,I3)') 'Number of matching rows: ', NMROWS */
+
+/*              END IF */
+
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*        Loading EK: S78_CIMSSSUPa.bep */
+/*        Loading EK: S79_CIMSSSUPa.bep */
+
+/*        Number of matching rows:   9 */
+
+
+/*     2) Repeat the previous exercise, using the same input kernels, */
+/*        but this time unloading the previous file before each new */
+/*        file is loaded. Unloading files prevents them from being */
+/*        searched during query execution. */
+
+
+/*        Example code begins here. */
+
+
+/*              PROGRAM EKLEF_EX2 */
+/*              IMPLICIT NONE */
+
+/*        C */
+/*        C     Include the EK Maximum length of an input query, */
+/*        C     MAXQRY. */
+/*        C */
+/*              INCLUDE 'ekqlimit.inc' */
+
+/*        C */
+/*        C     Local parameters. */
+/*        C */
+/*              INTEGER               EKNMLN */
+/*              PARAMETER           ( EKNMLN = 17 ) */
+
+/*              INTEGER               ERRLEN */
+/*              PARAMETER           ( ERRLEN = 1840 ) */
+
+/*        C */
+/*        C     Local variables */
+/*        C */
+/*              CHARACTER*(EKNMLN)    EKNAMS ( 2 ) */
+/*              CHARACTER*(ERRLEN)    ERRMSG */
+/*              CHARACTER*(MAXQRY)    QUERY */
+
+/*              INTEGER               HANDLE */
+/*              INTEGER               I */
+/*              INTEGER               N */
+/*              INTEGER               NMROWS */
+
+/*              LOGICAL               ERROR */
+
+/*        C */
+/*        C     Set up the array holding the EK file names. */
+/*        C */
+/*              DATA                  EKNAMS / 'S78_CIMSSSUPa.bep', */
+/*             .                               'S79_CIMSSSUPa.bep'  / */
+
+/*        C */
+/*        C     The EK files contain a table 'CASSINI_SP_OBSERVATION', */
+/*        C     that contains columns named: */
+/*        C */
+/*        C        NOTES, OBSERVATION_ID, OBSERVATION_TITLE, */
+/*        C        OBS_DESCRIPTION, SCIENCE_OBJECTIVE, SEQUENCE, */
+/*        C        SUBSYSTEM */
+/*        C */
+/*        C     Define a set of constraints to perform a query on all */
+/*        C     loaded EK files (the SELECT clause). */
+/*        C */
+/*              QUERY = 'Select SUBSYSTEM, SCIENCE_OBJECTIVE, ' */
+/*             .   //   'OBSERVATION_ID from CASSINI_SP_OBSERVATION ' */
+/*             .   //   'order by SUBSYSTEM' */
+
+/*        C */
+/*        C     Load the EK files. This call could be replaced by a call */
+/*        C     to FURNSH. */
+/*        C */
+/*              DO I = 1, 2 */
+
+/*                 CALL EKLEF ( EKNAMS(I), HANDLE ) */
+/*                 WRITE(*,'(2A)') 'Loading EK: ', EKNAMS(I) */
+
+/*        C */
+/*        C        Query the EK system for data rows matching the */
+/*        C        SELECT constraints. */
+/*        C */
+/*                 CALL EKFIND ( QUERY, NMROWS, ERROR, ERRMSG ) */
+
+/*        C */
+/*        C        Check whether an error occurred while processing the */
+/*        C        SELECT clause. If so, output the error message. */
+/*        C */
+/*                 IF ( ERROR ) THEN */
+
+/*                    WRITE(*,'(2A)') 'SELECT clause error: ', ERRMSG */
+
+/*                 ELSE */
+
+/*        C */
+/*        C           If no error, NMROWS contains the number of rows */
+/*        C           matching the constraints specified in the query */
+/*        C           string. */
+/*        C */
+/*                    WRITE(*,'(A,I3)') 'Number of matching rows: ', */
+/*             .                        NMROWS */
+
+/*                 END IF */
+
+/*        C */
+/*        C        Unload the current file. Unloading files prevents */
+/*        C        them from being searched during query execution. */
+/*        C */
+/*                 CALL EKUEF ( HANDLE ) */
+/*                 WRITE(*,'(2A)') 'Unloading EK: ', EKNAMS(I) */
+/*                 WRITE(*,*) */
+
+/*              END DO */
+
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*        Loading EK: S78_CIMSSSUPa.bep */
+/*        Number of matching rows:   4 */
+/*        Unloading EK: S78_CIMSSSUPa.bep */
+
+/*        Loading EK: S79_CIMSSSUPa.bep */
+/*        Number of matching rows:   5 */
+/*        Unloading EK: S79_CIMSSSUPa.bep */
+
 
 /* $ Restrictions */
 
 /*     1)  EK files containing columns having the same name but */
-/*         inconsistent declarations are not diagnosed.  Such kernels */
+/*         inconsistent declarations are not diagnosed. Such kernels */
 /*         are invalid in any case. */
 
 /* $ Literature_References */
@@ -2128,9 +2509,17 @@ L_eklef:
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 2.2.0, 06-JUL-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. Added complete */
+/*        code examples based on existing fragments. */
 
 /* -    SPICELIB Version 2.1.0, 09-FEB-2015 (NJB) */
 
@@ -2139,7 +2528,7 @@ L_eklef:
 
 /* -    SPICELIB Version 2.0.0, 16-NOV-2001 (NJB) */
 
-/*        Bug fix:   When an already loaded kernel is opened with EKOPR, */
+/*        Bug fix: When an already loaded kernel is opened with EKOPR, */
 /*        it now has its link count reset to 1 via a call to EKCLS. */
 
 /* -    SPICELIB Version 1.0.1, 07-JUL-1996 (NJB) */
@@ -2243,7 +2632,7 @@ L_eklef:
     i__ = fthead;
     while(i__ > 0) {
 	if (*handle == fthan[(i__1 = i__ - 1) < 20 && 0 <= i__1 ? i__1 : 
-		s_rnge("fthan", i__1, "ekqmgr_", (ftnlen)1214)]) {
+		s_rnge("fthan", i__1, "ekqmgr_", (ftnlen)1604)]) {
 
 /*           The last call we made to EKOPR added another link to */
 /*           the EK file.  Remove this link. */
@@ -2326,7 +2715,7 @@ L_eklef:
 	    lnkilb_(&new__, &fthead, ftpool);
 	    fthead = new__;
 	    fthan[(i__1 = new__ - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge("fthan"
-		    , i__1, "ekqmgr_", (ftnlen)1317)] = *handle;
+		    , i__1, "ekqmgr_", (ftnlen)1707)] = *handle;
 	    s_copy(state, "SUMMARIZE_SEGMENT", (ftnlen)80, (ftnlen)17);
 	} else if (s_cmp(state, "SUMMARIZE_SEGMENT", (ftnlen)80, (ftnlen)17) 
 		== 0) {
@@ -2359,7 +2748,7 @@ L_eklef:
 	    while(tbcurr > 0 && ! presnt) {
 		if (s_cmp(tabnam, tbnams + (((i__1 = tbcurr - 1) < 100 && 0 <=
 			 i__1 ? i__1 : s_rnge("tbnams", i__1, "ekqmgr_", (
-			ftnlen)1362)) << 6), (ftnlen)64, (ftnlen)64) == 0) {
+			ftnlen)1752)) << 6), (ftnlen)64, (ftnlen)64) == 0) {
 		    presnt = TRUE_;
 		} else {
 		    tbcurr = lnknxt_(&tbcurr, tbpool);
@@ -2378,11 +2767,11 @@ L_eklef:
 /*              parent table. */
 
 		if (ncols != tbncol[(i__1 = tbcurr - 1) < 100 && 0 <= i__1 ? 
-			i__1 : s_rnge("tbncol", i__1, "ekqmgr_", (ftnlen)1382)
+			i__1 : s_rnge("tbncol", i__1, "ekqmgr_", (ftnlen)1772)
 			]) {
 		    npcol = tbncol[(i__1 = tbcurr - 1) < 100 && 0 <= i__1 ? 
 			    i__1 : s_rnge("tbncol", i__1, "ekqmgr_", (ftnlen)
-			    1384)];
+			    1774)];
 		    s_copy(state, "ABORT", (ftnlen)80, (ftnlen)5);
 		    s_copy(problm, "COLUMN_NUMBER_MISMATCH", (ftnlen)80, (
 			    ftnlen)22);
@@ -2393,12 +2782,12 @@ L_eklef:
 
 		    tbfils[(i__1 = tbcurr * 20 - 20) < 2000 && 0 <= i__1 ? 
 			    i__1 : s_rnge("tbfils", i__1, "ekqmgr_", (ftnlen)
-			    1393)] = *handle;
+			    1783)] = *handle;
 		    tbflsz[(i__1 = tbcurr - 1) < 100 && 0 <= i__1 ? i__1 : 
-			    s_rnge("tbflsz", i__1, "ekqmgr_", (ftnlen)1394)] =
+			    s_rnge("tbflsz", i__1, "ekqmgr_", (ftnlen)1784)] =
 			     tbflsz[(i__2 = tbcurr - 1) < 100 && 0 <= i__2 ? 
 			    i__2 : s_rnge("tbflsz", i__2, "ekqmgr_", (ftnlen)
-			    1394)] + 1;
+			    1784)] + 1;
 		    s_copy(state, "MAKE_SEGMENT_TABLE_ENTRY", (ftnlen)80, (
 			    ftnlen)24);
 		}
@@ -2439,27 +2828,27 @@ L_eklef:
 /*              Fill in the table name. */
 
 		s_copy(tbnams + (((i__1 = tbcurr - 1) < 100 && 0 <= i__1 ? 
-			i__1 : s_rnge("tbnams", i__1, "ekqmgr_", (ftnlen)1442)
+			i__1 : s_rnge("tbnams", i__1, "ekqmgr_", (ftnlen)1832)
 			) << 6), tabnam, (ftnlen)64, (ftnlen)64);
 
 /*              Since this table is new, the file list for this table */
 /*              contains only the handle of the current EK. */
 
 		tbfils[(i__1 = tbcurr * 20 - 20) < 2000 && 0 <= i__1 ? i__1 : 
-			s_rnge("tbfils", i__1, "ekqmgr_", (ftnlen)1447)] = *
+			s_rnge("tbfils", i__1, "ekqmgr_", (ftnlen)1837)] = *
 			handle;
 		tbflsz[(i__1 = tbcurr - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-			"tbflsz", i__1, "ekqmgr_", (ftnlen)1448)] = 1;
+			"tbflsz", i__1, "ekqmgr_", (ftnlen)1838)] = 1;
 
 /*              Initialize the column count, column table pointer, and */
 /*              segment list pointer for this table. */
 
 		tbncol[(i__1 = tbcurr - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-			"tbncol", i__1, "ekqmgr_", (ftnlen)1454)] = ncols;
+			"tbncol", i__1, "ekqmgr_", (ftnlen)1844)] = ncols;
 		tbctpt[(i__1 = tbcurr - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-			"tbctpt", i__1, "ekqmgr_", (ftnlen)1455)] = 0;
+			"tbctpt", i__1, "ekqmgr_", (ftnlen)1845)] = 0;
 		tbstpt[(i__1 = tbcurr - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-			"tbstpt", i__1, "ekqmgr_", (ftnlen)1456)] = 0;
+			"tbstpt", i__1, "ekqmgr_", (ftnlen)1846)] = 0;
 
 /*              Go on to add a segment table entry for the current */
 /*              segment. */
@@ -2483,12 +2872,12 @@ L_eklef:
 /*           the segment list pointer to the current segment node. */
 
 	    if (tbstpt[(i__1 = tbcurr - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-		    "tbstpt", i__1, "ekqmgr_", (ftnlen)1482)] <= 0) {
+		    "tbstpt", i__1, "ekqmgr_", (ftnlen)1872)] <= 0) {
 		tbstpt[(i__1 = tbcurr - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-			"tbstpt", i__1, "ekqmgr_", (ftnlen)1484)] = stnew;
+			"tbstpt", i__1, "ekqmgr_", (ftnlen)1874)] = stnew;
 	    } else {
 		lnkilb_(&tbstpt[(i__1 = tbcurr - 1) < 100 && 0 <= i__1 ? i__1 
-			: s_rnge("tbstpt", i__1, "ekqmgr_", (ftnlen)1488)], &
+			: s_rnge("tbstpt", i__1, "ekqmgr_", (ftnlen)1878)], &
 			stnew, stpool);
 	    }
 
@@ -2497,18 +2886,18 @@ L_eklef:
 /*           and the column base addresses. */
 
 	    sthan[(i__1 = stnew - 1) < 200 && 0 <= i__1 ? i__1 : s_rnge("sth"
-		    "an", i__1, "ekqmgr_", (ftnlen)1497)] = *handle;
+		    "an", i__1, "ekqmgr_", (ftnlen)1887)] = *handle;
 	    stsidx[(i__1 = stnew - 1) < 200 && 0 <= i__1 ? i__1 : s_rnge(
-		    "stsidx", i__1, "ekqmgr_", (ftnlen)1498)] = seg;
+		    "stsidx", i__1, "ekqmgr_", (ftnlen)1888)] = seg;
 	    stnrow[(i__1 = stnew - 1) < 200 && 0 <= i__1 ? i__1 : s_rnge(
-		    "stnrow", i__1, "ekqmgr_", (ftnlen)1499)] = segdsc[5];
+		    "stnrow", i__1, "ekqmgr_", (ftnlen)1889)] = segdsc[5];
 	    stncol[(i__1 = stnew - 1) < 200 && 0 <= i__1 ? i__1 : s_rnge(
-		    "stncol", i__1, "ekqmgr_", (ftnlen)1500)] = segdsc[4];
+		    "stncol", i__1, "ekqmgr_", (ftnlen)1890)] = segdsc[4];
 	    stdtpt[(i__1 = stnew - 1) < 200 && 0 <= i__1 ? i__1 : s_rnge(
-		    "stdtpt", i__1, "ekqmgr_", (ftnlen)1501)] = 0;
+		    "stdtpt", i__1, "ekqmgr_", (ftnlen)1891)] = 0;
 	    movei_(segdsc, &c__24, &stdscs[(i__1 = stnew * 24 - 24) < 4800 && 
 		    0 <= i__1 ? i__1 : s_rnge("stdscs", i__1, "ekqmgr_", (
-		    ftnlen)1503)]);
+		    ftnlen)1893)]);
 
 /*           The next step is to set up the column attributes and */
 /*           descriptors. */
@@ -2534,12 +2923,12 @@ L_eklef:
 /*              looking for a match. */
 
 		j = tbctpt[(i__1 = tbcurr - 1) < 100 && 0 <= i__1 ? i__1 : 
-			s_rnge("tbctpt", i__1, "ekqmgr_", (ftnlen)1532)];
+			s_rnge("tbctpt", i__1, "ekqmgr_", (ftnlen)1922)];
 		while(j > 0 && s_cmp(state, "ABORT", (ftnlen)80, (ftnlen)5) !=
 			 0) {
 		    k = isrchc_(ctnams + (((i__1 = j - 1) < 500 && 0 <= i__1 ?
 			     i__1 : s_rnge("ctnams", i__1, "ekqmgr_", (ftnlen)
-			    1538)) << 5), &ncols, cnams, (ftnlen)32, (ftnlen)
+			    1928)) << 5), &ncols, cnams, (ftnlen)32, (ftnlen)
 			    32);
 		    if (k > 0) {
 
@@ -2551,35 +2940,35 @@ L_eklef:
 
 			indexd = cdscrs[(i__1 = k * 11 - 6) < 5500 && 0 <= 
 				i__1 ? i__1 : s_rnge("cdscrs", i__1, "ekqmgr_"
-				, (ftnlen)1549)] != -1;
+				, (ftnlen)1939)] != -1;
 			nulsok = cdscrs[(i__1 = k * 11 - 4) < 5500 && 0 <= 
 				i__1 ? i__1 : s_rnge("cdscrs", i__1, "ekqmgr_"
-				, (ftnlen)1550)] != -1;
+				, (ftnlen)1940)] != -1;
 			attmch = cdscrs[(i__1 = k * 11 - 11) < 5500 && 0 <= 
 				i__1 ? i__1 : s_rnge("cdscrs", i__1, "ekqmgr_"
-				, (ftnlen)1551)] == ctclas[(i__2 = j - 1) < 
+				, (ftnlen)1941)] == ctclas[(i__2 = j - 1) < 
 				500 && 0 <= i__2 ? i__2 : s_rnge("ctclas", 
-				i__2, "ekqmgr_", (ftnlen)1551)] && cdscrs[(
+				i__2, "ekqmgr_", (ftnlen)1941)] && cdscrs[(
 				i__3 = k * 11 - 10) < 5500 && 0 <= i__3 ? 
 				i__3 : s_rnge("cdscrs", i__3, "ekqmgr_", (
-				ftnlen)1551)] == cttyps[(i__4 = j - 1) < 500 
+				ftnlen)1941)] == cttyps[(i__4 = j - 1) < 500 
 				&& 0 <= i__4 ? i__4 : s_rnge("cttyps", i__4, 
-				"ekqmgr_", (ftnlen)1551)] && cdscrs[(i__5 = k 
+				"ekqmgr_", (ftnlen)1941)] && cdscrs[(i__5 = k 
 				* 11 - 9) < 5500 && 0 <= i__5 ? i__5 : s_rnge(
-				"cdscrs", i__5, "ekqmgr_", (ftnlen)1551)] == 
+				"cdscrs", i__5, "ekqmgr_", (ftnlen)1941)] == 
 				ctlens[(i__6 = j - 1) < 500 && 0 <= i__6 ? 
 				i__6 : s_rnge("ctlens", i__6, "ekqmgr_", (
-				ftnlen)1551)] && cdscrs[(i__7 = k * 11 - 8) < 
+				ftnlen)1941)] && cdscrs[(i__7 = k * 11 - 8) < 
 				5500 && 0 <= i__7 ? i__7 : s_rnge("cdscrs", 
-				i__7, "ekqmgr_", (ftnlen)1551)] == ctsizs[(
+				i__7, "ekqmgr_", (ftnlen)1941)] == ctsizs[(
 				i__8 = j - 1) < 500 && 0 <= i__8 ? i__8 : 
 				s_rnge("ctsizs", i__8, "ekqmgr_", (ftnlen)
-				1551)] && indexd == ctindx[(i__9 = j - 1) < 
+				1941)] && indexd == ctindx[(i__9 = j - 1) < 
 				500 && 0 <= i__9 ? i__9 : s_rnge("ctindx", 
-				i__9, "ekqmgr_", (ftnlen)1551)] && nulsok == 
+				i__9, "ekqmgr_", (ftnlen)1941)] && nulsok == 
 				ctnull[(i__10 = j - 1) < 500 && 0 <= i__10 ? 
 				i__10 : s_rnge("ctnull", i__10, "ekqmgr_", (
-				ftnlen)1551)];
+				ftnlen)1941)];
 			if (attmch) {
 
 /*                       Great, the attributes match.  Actually, the */
@@ -2610,27 +2999,27 @@ L_eklef:
 				lnkan_(dtpool, &dtnew);
 				if (stdtpt[(i__1 = stnew - 1) < 200 && 0 <= 
 					i__1 ? i__1 : s_rnge("stdtpt", i__1, 
-					"ekqmgr_", (ftnlen)1589)] <= 0) {
+					"ekqmgr_", (ftnlen)1979)] <= 0) {
 				    stdtpt[(i__1 = stnew - 1) < 200 && 0 <= 
 					    i__1 ? i__1 : s_rnge("stdtpt", 
-					    i__1, "ekqmgr_", (ftnlen)1591)] = 
+					    i__1, "ekqmgr_", (ftnlen)1981)] = 
 					    dtnew;
 				} else {
 				    lnkilb_(&stdtpt[(i__1 = stnew - 1) < 200 
 					    && 0 <= i__1 ? i__1 : s_rnge(
 					    "stdtpt", i__1, "ekqmgr_", (
-					    ftnlen)1595)], &dtnew, dtpool);
+					    ftnlen)1985)], &dtnew, dtpool);
 				}
 
 /*                          Fill in the descriptor. */
 
 				movei_(&cdscrs[(i__1 = k * 11 - 11) < 5500 && 
 					0 <= i__1 ? i__1 : s_rnge("cdscrs", 
-					i__1, "ekqmgr_", (ftnlen)1602)], &
+					i__1, "ekqmgr_", (ftnlen)1992)], &
 					c__11, &dtdscs[(i__2 = dtnew * 11 - 
 					11) < 110000 && 0 <= i__2 ? i__2 : 
 					s_rnge("dtdscs", i__2, "ekqmgr_", (
-					ftnlen)1602)]);
+					ftnlen)1992)]);
 			    }
 
 /*                       We filled in a descriptor table entry, or */
@@ -2646,7 +3035,7 @@ L_eklef:
 
 			    s_copy(colnam, ctnams + (((i__1 = j - 1) < 500 && 
 				    0 <= i__1 ? i__1 : s_rnge("ctnams", i__1, 
-				    "ekqmgr_", (ftnlen)1620)) << 5), (ftnlen)
+				    "ekqmgr_", (ftnlen)2010)) << 5), (ftnlen)
 				    32, (ftnlen)32);
 			    s_copy(state, "ABORT", (ftnlen)80, (ftnlen)5);
 			    s_copy(problm, "MISMATCHED_COLUMN_ATTRIBUTES", (
@@ -2660,7 +3049,7 @@ L_eklef:
 
 			s_copy(colnam, ctnams + (((i__1 = j - 1) < 500 && 0 <=
 				 i__1 ? i__1 : s_rnge("ctnams", i__1, "ekqmg"
-				"r_", (ftnlen)1633)) << 5), (ftnlen)32, (
+				"r_", (ftnlen)2023)) << 5), (ftnlen)32, (
 				ftnlen)32);
 			s_copy(state, "ABORT", (ftnlen)80, (ftnlen)5);
 			s_copy(problm, "MISSING_COLUMN", (ftnlen)80, (ftnlen)
@@ -2709,14 +3098,14 @@ L_eklef:
 			lnkan_(ctpool, &ctnew);
 			if (tbctpt[(i__1 = tbcurr - 1) < 100 && 0 <= i__1 ? 
 				i__1 : s_rnge("tbctpt", i__1, "ekqmgr_", (
-				ftnlen)1684)] <= 0) {
+				ftnlen)2074)] <= 0) {
 			    tbctpt[(i__1 = tbcurr - 1) < 100 && 0 <= i__1 ? 
 				    i__1 : s_rnge("tbctpt", i__1, "ekqmgr_", (
-				    ftnlen)1686)] = ctnew;
+				    ftnlen)2076)] = ctnew;
 			} else {
 			    lnkilb_(&tbctpt[(i__1 = tbcurr - 1) < 100 && 0 <= 
 				    i__1 ? i__1 : s_rnge("tbctpt", i__1, 
-				    "ekqmgr_", (ftnlen)1690)], &ctnew, ctpool)
+				    "ekqmgr_", (ftnlen)2080)], &ctnew, ctpool)
 				    ;
 			}
 
@@ -2725,45 +3114,45 @@ L_eklef:
 
 			s_copy(ctnams + (((i__1 = ctnew - 1) < 500 && 0 <= 
 				i__1 ? i__1 : s_rnge("ctnams", i__1, "ekqmgr_"
-				, (ftnlen)1698)) << 5), cnams + (((i__2 = k - 
+				, (ftnlen)2088)) << 5), cnams + (((i__2 = k - 
 				1) < 500 && 0 <= i__2 ? i__2 : s_rnge("cnams",
-				 i__2, "ekqmgr_", (ftnlen)1698)) << 5), (
+				 i__2, "ekqmgr_", (ftnlen)2088)) << 5), (
 				ftnlen)32, (ftnlen)32);
 			ctclas[(i__1 = ctnew - 1) < 500 && 0 <= i__1 ? i__1 : 
 				s_rnge("ctclas", i__1, "ekqmgr_", (ftnlen)
-				1699)] = cdscrs[(i__2 = k * 11 - 11) < 5500 &&
+				2089)] = cdscrs[(i__2 = k * 11 - 11) < 5500 &&
 				 0 <= i__2 ? i__2 : s_rnge("cdscrs", i__2, 
-				"ekqmgr_", (ftnlen)1699)];
+				"ekqmgr_", (ftnlen)2089)];
 			cttyps[(i__1 = ctnew - 1) < 500 && 0 <= i__1 ? i__1 : 
 				s_rnge("cttyps", i__1, "ekqmgr_", (ftnlen)
-				1700)] = cdscrs[(i__2 = k * 11 - 10) < 5500 &&
+				2090)] = cdscrs[(i__2 = k * 11 - 10) < 5500 &&
 				 0 <= i__2 ? i__2 : s_rnge("cdscrs", i__2, 
-				"ekqmgr_", (ftnlen)1700)];
+				"ekqmgr_", (ftnlen)2090)];
 			ctlens[(i__1 = ctnew - 1) < 500 && 0 <= i__1 ? i__1 : 
 				s_rnge("ctlens", i__1, "ekqmgr_", (ftnlen)
-				1701)] = cdscrs[(i__2 = k * 11 - 9) < 5500 && 
+				2091)] = cdscrs[(i__2 = k * 11 - 9) < 5500 && 
 				0 <= i__2 ? i__2 : s_rnge("cdscrs", i__2, 
-				"ekqmgr_", (ftnlen)1701)];
+				"ekqmgr_", (ftnlen)2091)];
 			ctsizs[(i__1 = ctnew - 1) < 500 && 0 <= i__1 ? i__1 : 
 				s_rnge("ctsizs", i__1, "ekqmgr_", (ftnlen)
-				1702)] = cdscrs[(i__2 = k * 11 - 8) < 5500 && 
+				2092)] = cdscrs[(i__2 = k * 11 - 8) < 5500 && 
 				0 <= i__2 ? i__2 : s_rnge("cdscrs", i__2, 
-				"ekqmgr_", (ftnlen)1702)];
+				"ekqmgr_", (ftnlen)2092)];
 			ctindx[(i__1 = ctnew - 1) < 500 && 0 <= i__1 ? i__1 : 
 				s_rnge("ctindx", i__1, "ekqmgr_", (ftnlen)
-				1703)] = cdscrs[(i__2 = k * 11 - 6) < 5500 && 
+				2093)] = cdscrs[(i__2 = k * 11 - 6) < 5500 && 
 				0 <= i__2 ? i__2 : s_rnge("cdscrs", i__2, 
-				"ekqmgr_", (ftnlen)1703)] != -1;
+				"ekqmgr_", (ftnlen)2093)] != -1;
 			ctfixd[(i__1 = ctnew - 1) < 500 && 0 <= i__1 ? i__1 : 
 				s_rnge("ctfixd", i__1, "ekqmgr_", (ftnlen)
-				1704)] = cdscrs[(i__2 = k * 11 - 8) < 5500 && 
+				2094)] = cdscrs[(i__2 = k * 11 - 8) < 5500 && 
 				0 <= i__2 ? i__2 : s_rnge("cdscrs", i__2, 
-				"ekqmgr_", (ftnlen)1704)] != -1;
+				"ekqmgr_", (ftnlen)2094)] != -1;
 			ctnull[(i__1 = ctnew - 1) < 500 && 0 <= i__1 ? i__1 : 
 				s_rnge("ctnull", i__1, "ekqmgr_", (ftnlen)
-				1705)] = cdscrs[(i__2 = k * 11 - 4) < 5500 && 
+				2095)] = cdscrs[(i__2 = k * 11 - 4) < 5500 && 
 				0 <= i__2 ? i__2 : s_rnge("cdscrs", i__2, 
-				"ekqmgr_", (ftnlen)1705)] != -1;
+				"ekqmgr_", (ftnlen)2095)] != -1;
 
 /*                    Store the column descriptor for this column */
 /*                    in the descriptor table.  We'll need to */
@@ -2785,14 +3174,14 @@ L_eklef:
 			    lnkan_(dtpool, &dtnew);
 			    if (stdtpt[(i__1 = stnew - 1) < 200 && 0 <= i__1 ?
 				     i__1 : s_rnge("stdtpt", i__1, "ekqmgr_", 
-				    (ftnlen)1727)] <= 0) {
+				    (ftnlen)2117)] <= 0) {
 				stdtpt[(i__1 = stnew - 1) < 200 && 0 <= i__1 ?
 					 i__1 : s_rnge("stdtpt", i__1, "ekqm"
-					"gr_", (ftnlen)1729)] = dtnew;
+					"gr_", (ftnlen)2119)] = dtnew;
 			    } else {
 				lnkilb_(&stdtpt[(i__1 = stnew - 1) < 200 && 0 
 					<= i__1 ? i__1 : s_rnge("stdtpt", 
-					i__1, "ekqmgr_", (ftnlen)1733)], &
+					i__1, "ekqmgr_", (ftnlen)2123)], &
 					dtnew, dtpool);
 			    }
 
@@ -2800,10 +3189,10 @@ L_eklef:
 
 			    movei_(&cdscrs[(i__1 = k * 11 - 11) < 5500 && 0 <=
 				     i__1 ? i__1 : s_rnge("cdscrs", i__1, 
-				    "ekqmgr_", (ftnlen)1740)], &c__11, &
+				    "ekqmgr_", (ftnlen)2130)], &c__11, &
 				    dtdscs[(i__2 = dtnew * 11 - 11) < 110000 
 				    && 0 <= i__2 ? i__2 : s_rnge("dtdscs", 
-				    i__2, "ekqmgr_", (ftnlen)1740)]);
+				    i__2, "ekqmgr_", (ftnlen)2130)]);
 			}
 		    }
 
@@ -2898,10 +3287,10 @@ L_eklef:
 		    i__ = 1;
 		    while(i__ <= tbflsz[(i__1 = tbcurr - 1) < 100 && 0 <= 
 			    i__1 ? i__1 : s_rnge("tbflsz", i__1, "ekqmgr_", (
-			    ftnlen)1861)] && ! fnd) {
+			    ftnlen)2251)] && ! fnd) {
 			if (tbfils[(i__1 = i__ + tbcurr * 20 - 21) < 2000 && 
 				0 <= i__1 ? i__1 : s_rnge("tbfils", i__1, 
-				"ekqmgr_", (ftnlen)1864)] == *handle) {
+				"ekqmgr_", (ftnlen)2254)] == *handle) {
 
 /*                       This table is affected by unloading the file. */
 
@@ -2924,31 +3313,31 @@ L_eklef:
 
 			i__2 = tbflsz[(i__1 = tbcurr - 1) < 100 && 0 <= i__1 ?
 				 i__1 : s_rnge("tbflsz", i__1, "ekqmgr_", (
-				ftnlen)1890)] - 1;
+				ftnlen)2280)] - 1;
 			for (j = i__; j <= i__2; ++j) {
 			    tbfils[(i__1 = j + tbcurr * 20 - 21) < 2000 && 0 
 				    <= i__1 ? i__1 : s_rnge("tbfils", i__1, 
-				    "ekqmgr_", (ftnlen)1892)] = tbfils[(i__3 =
+				    "ekqmgr_", (ftnlen)2282)] = tbfils[(i__3 =
 				     j + 1 + tbcurr * 20 - 21) < 2000 && 0 <= 
 				    i__3 ? i__3 : s_rnge("tbfils", i__3, 
-				    "ekqmgr_", (ftnlen)1892)];
+				    "ekqmgr_", (ftnlen)2282)];
 			}
 			tbflsz[(i__2 = tbcurr - 1) < 100 && 0 <= i__2 ? i__2 :
 				 s_rnge("tbflsz", i__2, "ekqmgr_", (ftnlen)
-				1896)] = tbflsz[(i__1 = tbcurr - 1) < 100 && 
+				2286)] = tbflsz[(i__1 = tbcurr - 1) < 100 && 
 				0 <= i__1 ? i__1 : s_rnge("tbflsz", i__1, 
-				"ekqmgr_", (ftnlen)1896)] - 1;
+				"ekqmgr_", (ftnlen)2286)] - 1;
 
 /*                    Traverse the segment list for this table, looking */
 /*                    for segments in the specified EK. */
 
 			delseg = tbstpt[(i__2 = tbcurr - 1) < 100 && 0 <= 
 				i__2 ? i__2 : s_rnge("tbstpt", i__2, "ekqmgr_"
-				, (ftnlen)1902)];
+				, (ftnlen)2292)];
 			while(delseg > 0) {
 			    if (sthan[(i__2 = delseg - 1) < 200 && 0 <= i__2 ?
 				     i__2 : s_rnge("sthan", i__2, "ekqmgr_", (
-				    ftnlen)1906)] == *handle) {
+				    ftnlen)2296)] == *handle) {
 
 /*                          This segment is aboard the sinking ship.  Put */
 /*                          it out of its misery. */
@@ -2959,7 +3348,7 @@ L_eklef:
 
 				j = stdtpt[(i__2 = delseg - 1) < 200 && 0 <= 
 					i__2 ? i__2 : s_rnge("stdtpt", i__2, 
-					"ekqmgr_", (ftnlen)1915)];
+					"ekqmgr_", (ftnlen)2305)];
 				if (j > 0) {
 				    k = lnktl_(&j, dtpool);
 				    lnkfsl_(&j, &k, dtpool);
@@ -2973,10 +3362,10 @@ L_eklef:
 				if (delseg == tbstpt[(i__2 = tbcurr - 1) < 
 					100 && 0 <= i__2 ? i__2 : s_rnge(
 					"tbstpt", i__2, "ekqmgr_", (ftnlen)
-					1928)]) {
+					2318)]) {
 				    tbstpt[(i__2 = tbcurr - 1) < 100 && 0 <= 
 					    i__2 ? i__2 : s_rnge("tbstpt", 
-					    i__2, "ekqmgr_", (ftnlen)1930)] = 
+					    i__2, "ekqmgr_", (ftnlen)2320)] = 
 					    lnknxt_(&delseg, stpool);
 				}
 				next = lnknxt_(&delseg, stpool);
@@ -3008,7 +3397,7 @@ L_eklef:
 
 			if (tbstpt[(i__2 = tbcurr - 1) < 100 && 0 <= i__2 ? 
 				i__2 : s_rnge("tbstpt", i__2, "ekqmgr_", (
-				ftnlen)1969)] <= 0) {
+				ftnlen)2359)] <= 0) {
 
 /*                       There are no loaded segments left for this */
 /*                       table. */
@@ -3023,7 +3412,7 @@ L_eklef:
 
 			    j = tbctpt[(i__2 = tbcurr - 1) < 100 && 0 <= i__2 
 				    ? i__2 : s_rnge("tbctpt", i__2, "ekqmgr_",
-				     (ftnlen)1982)];
+				     (ftnlen)2372)];
 			    if (j > 0) {
 				k = lnktl_(&j, ctpool);
 				lnkfsl_(&j, &k, ctpool);
@@ -3157,7 +3546,7 @@ L_eklef:
 
     chkout_("EKLEF", (ftnlen)5);
     return 0;
-/* $Procedure     EKUEF  ( EK, unload event file ) */
+/* $Procedure EKUEF  ( EK, unload event file ) */
 
 L_ekuef:
 /* $ Abstract */
@@ -3206,18 +3595,19 @@ L_ekuef:
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     I   Handle of EK file. */
 
 /* $ Detailed_Input */
 
-/*     HANDLE         is a file handle returned by EKLEF. */
+/*     HANDLE   is a file handle returned by EKLEF. */
 
 /* $ Detailed_Output */
 
-/*     None.  See $Particulars for a description of the effect of this */
-/*     routine. */
+/*     None. */
+
+/*     See $Particulars for a description of the effect of this routine. */
 
 /* $ Parameters */
 
@@ -3229,31 +3619,156 @@ L_ekuef:
 
 /* $ Files */
 
-/*     See the description of the input argument HANDLE in */
-/*     $Detailed_Input. */
+/*     This routine unloads a binary EK file from the EK query system. */
 
 /* $ Particulars */
 
 /*     This routine removes information about an EK file from the */
 /*     EK system, freeing space to increase the number of other EK */
-/*     files that can be loaded.  The file is also unloaded from */
+/*     files that can be loaded. The file is also unloaded from */
 /*     the DAS system and closed. */
 
 /* $ Examples */
 
-/*     1)  Load 25 EK files sequentially, unloading the previous file */
-/*         before each new file is loaded.  Unloading files prevents */
-/*         them from being searched during query execution. */
+/*     The numerical results shown for this example may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
 
-/*            DO I = 1, 25 */
+/*     1) Load two EK files and perform a query on them. During query */
+/*        execution, all files will be searched. Unload the previous */
+/*        file before each new file is loaded. Unloading files prevents */
+/*        them from being searched during query execution. */
 
-/*               CALL EKLEF ( EK(I), HANDLE ) */
+/*        Use the EK kernel below to load the Cassini Science Plan */
+/*        SPICE E-Kernel File based upon the integrated science */
+/*        plan #78. */
 
-/*               [Perform queries] */
+/*           S78_CIMSSSUPa.bep */
 
-/*               CALL EKUEF ( HANDLE ) */
+/*        Use the EK kernel below to load the data based upon the */
+/*        integrated science plan #79. */
 
-/*            END DO */
+/*           S79_CIMSSSUPa.bep */
+
+
+/*        Example code begins here. */
+
+
+/*              PROGRAM EKUEF_EX1 */
+/*              IMPLICIT NONE */
+
+/*        C */
+/*        C     Include the EK Maximum length of an input query, */
+/*        C     MAXQRY. */
+/*        C */
+/*              INCLUDE 'ekqlimit.inc' */
+
+/*        C */
+/*        C     Local parameters. */
+/*        C */
+/*              INTEGER               EKNMLN */
+/*              PARAMETER           ( EKNMLN = 17 ) */
+
+/*              INTEGER               ERRLEN */
+/*              PARAMETER           ( ERRLEN = 1840 ) */
+
+/*        C */
+/*        C     Local variables */
+/*        C */
+/*              CHARACTER*(EKNMLN)    EKNAMS ( 2 ) */
+/*              CHARACTER*(ERRLEN)    ERRMSG */
+/*              CHARACTER*(MAXQRY)    QUERY */
+
+/*              INTEGER               HANDLE */
+/*              INTEGER               I */
+/*              INTEGER               N */
+/*              INTEGER               NMROWS */
+
+/*              LOGICAL               ERROR */
+
+/*        C */
+/*        C     Set up the array holding the EK file names. */
+/*        C */
+/*              DATA                  EKNAMS / 'S78_CIMSSSUPa.bep', */
+/*             .                               'S79_CIMSSSUPa.bep'  / */
+
+/*        C */
+/*        C     The EK files contain a table 'CASSINI_SP_OBSERVATION', */
+/*        C     that contains columns named: */
+/*        C */
+/*        C        NOTES, OBSERVATION_ID, OBSERVATION_TITLE, */
+/*        C        OBS_DESCRIPTION, SCIENCE_OBJECTIVE, SEQUENCE, */
+/*        C        SUBSYSTEM */
+/*        C */
+/*        C     Define a set of constraints to perform a query on all */
+/*        C     loaded EK files (the SELECT clause). */
+/*        C */
+/*              QUERY = 'Select SUBSYSTEM, SCIENCE_OBJECTIVE, ' */
+/*             .   //   'OBSERVATION_ID from CASSINI_SP_OBSERVATION ' */
+/*             .   //   'order by SUBSYSTEM' */
+
+/*        C */
+/*        C     Load the EK files. This call could be replaced by a call */
+/*        C     to FURNSH. */
+/*        C */
+/*              DO I = 1, 2 */
+
+/*                 CALL EKLEF ( EKNAMS(I), HANDLE ) */
+/*                 WRITE(*,'(2A)') 'Loading EK: ', EKNAMS(I) */
+
+/*        C */
+/*        C        Query the EK system for data rows matching the */
+/*        C        SELECT constraints. */
+/*        C */
+/*                 CALL EKFIND ( QUERY, NMROWS, ERROR, ERRMSG ) */
+
+/*        C */
+/*        C        Check whether an error occurred while processing the */
+/*        C        SELECT clause. If so, output the error message. */
+/*        C */
+/*                 IF ( ERROR ) THEN */
+
+/*                    WRITE(*,'(2A)') 'SELECT clause error: ', ERRMSG */
+
+/*                 ELSE */
+
+/*        C */
+/*        C           If no error, NMROWS contains the number of rows */
+/*        C           matching the constraints specified in the query */
+/*        C           string. */
+/*        C */
+/*                    WRITE(*,'(A,I3)') 'Number of matching rows: ', */
+/*             .                        NMROWS */
+
+/*                 END IF */
+
+/*        C */
+/*        C        Unload the current file. Unloading files prevents */
+/*        C        them from being searched during query execution. */
+/*        C */
+/*                 CALL EKUEF ( HANDLE ) */
+/*                 WRITE(*,'(2A)') 'Unloading EK: ', EKNAMS(I) */
+/*                 WRITE(*,*) */
+
+/*              END DO */
+
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*        Loading EK: S78_CIMSSSUPa.bep */
+/*        Number of matching rows:   4 */
+/*        Unloading EK: S78_CIMSSSUPa.bep */
+
+/*        Loading EK: S79_CIMSSSUPa.bep */
+/*        Number of matching rows:   5 */
+/*        Unloading EK: S79_CIMSSSUPa.bep */
+
 
 /* $ Restrictions */
 
@@ -3265,13 +3780,21 @@ L_ekuef:
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
 
 /* $ Version */
 
+/* -    SPICELIB Version 2.1.0, 06-JUL-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. Added complete */
+/*        code example */
+
 /* -    SPICELIB Version 2.0.0, 16-NOV-2001 (NJB) */
 
-/*        Bug fix:   When an already loaded kernel is opened with EKOPR, */
+/*        Bug fix: When an already loaded kernel is opened with EKOPR, */
 /*        it now has its link count reset to 1 via a call to EKCLS. */
 
 /* -    SPICELIB Version 1.0.1, 07-JUL-1996 (NJB) */
@@ -3320,7 +3843,7 @@ L_ekuef:
     fnd = FALSE_;
     while(i__ > 0 && ! fnd) {
 	if (*handle == fthan[(i__2 = i__ - 1) < 20 && 0 <= i__2 ? i__2 : 
-		s_rnge("fthan", i__2, "ekqmgr_", (ftnlen)2342)]) {
+		s_rnge("fthan", i__2, "ekqmgr_", (ftnlen)2867)]) {
 	    fnd = TRUE_;
 	} else {
 	    i__ = lnknxt_(&i__, ftpool);
@@ -3388,9 +3911,9 @@ L_ekuef:
 
 	i__ = 1;
 	while(i__ <= tbflsz[(i__2 = tbcurr - 1) < 100 && 0 <= i__2 ? i__2 : 
-		s_rnge("tbflsz", i__2, "ekqmgr_", (ftnlen)2422)] && ! fnd) {
+		s_rnge("tbflsz", i__2, "ekqmgr_", (ftnlen)2947)] && ! fnd) {
 	    if (tbfils[(i__2 = i__ + tbcurr * 20 - 21) < 2000 && 0 <= i__2 ? 
-		    i__2 : s_rnge("tbfils", i__2, "ekqmgr_", (ftnlen)2424)] ==
+		    i__2 : s_rnge("tbfils", i__2, "ekqmgr_", (ftnlen)2949)] ==
 		     *handle) {
 
 /*              This table is affected by unloading the file. */
@@ -3413,27 +3936,27 @@ L_ekuef:
 /*           this handle out of the list. */
 
 	    i__1 = tbflsz[(i__2 = tbcurr - 1) < 100 && 0 <= i__2 ? i__2 : 
-		    s_rnge("tbflsz", i__2, "ekqmgr_", (ftnlen)2450)] - 1;
+		    s_rnge("tbflsz", i__2, "ekqmgr_", (ftnlen)2975)] - 1;
 	    for (j = i__; j <= i__1; ++j) {
 		tbfils[(i__2 = j + tbcurr * 20 - 21) < 2000 && 0 <= i__2 ? 
-			i__2 : s_rnge("tbfils", i__2, "ekqmgr_", (ftnlen)2452)
+			i__2 : s_rnge("tbfils", i__2, "ekqmgr_", (ftnlen)2977)
 			] = tbfils[(i__3 = j + 1 + tbcurr * 20 - 21) < 2000 &&
 			 0 <= i__3 ? i__3 : s_rnge("tbfils", i__3, "ekqmgr_", 
-			(ftnlen)2452)];
+			(ftnlen)2977)];
 	    }
 	    tbflsz[(i__1 = tbcurr - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-		    "tbflsz", i__1, "ekqmgr_", (ftnlen)2456)] = tbflsz[(i__2 =
+		    "tbflsz", i__1, "ekqmgr_", (ftnlen)2981)] = tbflsz[(i__2 =
 		     tbcurr - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge("tbflsz", 
-		    i__2, "ekqmgr_", (ftnlen)2456)] - 1;
+		    i__2, "ekqmgr_", (ftnlen)2981)] - 1;
 
 /*           Traverse the segment list for this table, looking */
 /*           for segments in the specified EK. */
 
 	    seg = tbstpt[(i__1 = tbcurr - 1) < 100 && 0 <= i__1 ? i__1 : 
-		    s_rnge("tbstpt", i__1, "ekqmgr_", (ftnlen)2462)];
+		    s_rnge("tbstpt", i__1, "ekqmgr_", (ftnlen)2987)];
 	    while(seg > 0) {
 		if (sthan[(i__1 = seg - 1) < 200 && 0 <= i__1 ? i__1 : s_rnge(
-			"sthan", i__1, "ekqmgr_", (ftnlen)2466)] == *handle) {
+			"sthan", i__1, "ekqmgr_", (ftnlen)2991)] == *handle) {
 
 /*                 This segment is aboard the sinking ship.  Put it */
 /*                 out of its misery. */
@@ -3444,7 +3967,7 @@ L_ekuef:
 /*                 descriptor list is empty. */
 
 		    j = stdtpt[(i__1 = seg - 1) < 200 && 0 <= i__1 ? i__1 : 
-			    s_rnge("stdtpt", i__1, "ekqmgr_", (ftnlen)2476)];
+			    s_rnge("stdtpt", i__1, "ekqmgr_", (ftnlen)3001)];
 		    if (j > 0) {
 			k = lnktl_(&j, dtpool);
 			lnkfsl_(&j, &k, dtpool);
@@ -3456,10 +3979,10 @@ L_ekuef:
 
 		    if (seg == tbstpt[(i__1 = tbcurr - 1) < 100 && 0 <= i__1 ?
 			     i__1 : s_rnge("tbstpt", i__1, "ekqmgr_", (ftnlen)
-			    2488)]) {
+			    3013)]) {
 			tbstpt[(i__1 = tbcurr - 1) < 100 && 0 <= i__1 ? i__1 :
 				 s_rnge("tbstpt", i__1, "ekqmgr_", (ftnlen)
-				2490)] = lnknxt_(&seg, stpool);
+				3015)] = lnknxt_(&seg, stpool);
 		    }
 		    next = lnknxt_(&seg, stpool);
 		    lnkfsl_(&seg, &seg, stpool);
@@ -3480,7 +4003,7 @@ L_ekuef:
 /*           update the head-of-list pointer for the table list. */
 
 	    if (tbstpt[(i__1 = tbcurr - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-		    "tbstpt", i__1, "ekqmgr_", (ftnlen)2520)] <= 0) {
+		    "tbstpt", i__1, "ekqmgr_", (ftnlen)3045)] <= 0) {
 
 /*              There are no loaded segments left for this table. */
 
@@ -3492,7 +4015,7 @@ L_ekuef:
 /*              them in one shot. */
 
 		j = tbctpt[(i__1 = tbcurr - 1) < 100 && 0 <= i__1 ? i__1 : 
-			s_rnge("tbctpt", i__1, "ekqmgr_", (ftnlen)2531)];
+			s_rnge("tbctpt", i__1, "ekqmgr_", (ftnlen)3056)];
 		if (j > 0) {
 		    k = lnktl_(&j, ctpool);
 		    lnkfsl_(&j, &k, ctpool);
@@ -3543,7 +4066,7 @@ L_ekuef:
     ekcls_(handle);
     chkout_("EKUEF", (ftnlen)5);
     return 0;
-/* $Procedure     EKNTAB  ( EK, return number of loaded tables ) */
+/* $Procedure EKNTAB  ( EK, return number of loaded tables ) */
 
 L_ekntab:
 /* $ Abstract */
@@ -3590,7 +4113,7 @@ L_ekntab:
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     N          O   Number of loaded tables. */
 
@@ -3600,11 +4123,11 @@ L_ekntab:
 
 /* $ Detailed_Output */
 
-/*     N              is the number of loaded tables.  The count refers */
-/*                    to the number of logical tables; if multiple */
-/*                    segments contain data for the same table, these */
-/*                    segments collectively contribute only one table */
-/*                    to the count. */
+/*     N        is the number of loaded tables. The count refers */
+/*              to the number of logical tables; if multiple */
+/*              segments contain data for the same table, these */
+/*              segments collectively contribute only one table */
+/*              to the count. */
 
 /* $ Parameters */
 
@@ -3617,39 +4140,83 @@ L_ekntab:
 /* $ Files */
 
 /*     The returned count is based on the currently loaded EK files. */
-/*     These files must be loaded via the entry point EKLEF. */
 
 /* $ Particulars */
 
 /*     This routine is a utility that provides the caller with the */
-/*     number of loaded tables.  Callers of EKTNAM can use this count */
+/*     number of loaded tables. Callers of EKTNAM can use this count */
 /*     as the upper bound on set of table indices when looking up table */
 /*     names. */
 
 /* $ Examples */
 
-/*     1)  Suppose we have the following list of EK files and tables */
-/*         contained in those files: */
+/*     The numerical results shown for this example may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
 
-/*            File name        Table name */
-/*            ---------        ---------- */
+/*     1) Suppose we have several EK files. Load one at a time and */
+/*        display, right after, the number of loaded EK tables in the */
+/*        system. */
 
-/*            FILE_1.EK        TABLE_1 */
-/*                             TABLE_2 */
+/*        Use the EK kernel below to load the Cassini Science Plan */
+/*        SPICE E-Kernel File based upon integrated science plan. This */
+/*        kernel contains 3 tables. */
 
-/*            FILE_2.EK        TABLE_1 */
-/*                             TABLE_3 */
+/*           S79_CIMSSSUPa.bep */
 
-/*            FILE_3.EK        TABLE_2 */
-/*                             TABLE_3 */
-/*                             TABLE_4 */
+/*        Use the EK kernel below to load the Cassini Spacecraft */
+/*        Sequence Status SPICE E-Kernel File based upon integrated */
+/*        Predicted Events File. This kernel contains 1 table. */
+
+/*           S79_status_pf.bes */
 
 
-/*         Then after loading these files, the call */
+/*        Example code begins here. */
 
-/*            CALL EKNTAB ( N ) */
 
-/*         returns the value N = 4. */
+/*              PROGRAM EKNTAB_EX1 */
+/*              IMPLICIT NONE */
+
+/*        C */
+/*        C     Local variables */
+/*        C */
+/*              INTEGER               N */
+
+/*        C */
+/*        C     Load the first EK. */
+/*        C */
+/*              CALL FURNSH ( 'S79_CIMSSSUPa.bep' ) */
+
+/*        C */
+/*        C     Display the number of EK tables in the system after */
+/*        C     the first EK file is loaded. */
+/*        C */
+/*              CALL EKNTAB ( N ) */
+/*              WRITE(*,'(A,I3)') 'EK tables in the system (1 EK):', N */
+
+/*        C */
+/*        C     Load the second EK. */
+/*        C */
+/*              CALL FURNSH ( 'S79_status_pf.bes' ) */
+
+/*        C */
+/*        C     Display the number of EK tables in the system after */
+/*        C     the second EK file is loaded. */
+/*        C */
+/*              CALL EKNTAB ( N ) */
+/*              WRITE(*,'(A,I3)') 'EK tables in the system (2 EK):', N */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*        EK tables in the system (1 EK):  3 */
+/*        EK tables in the system (2 EK):  4 */
+
 
 /* $ Restrictions */
 
@@ -3661,13 +4228,24 @@ L_ekntab:
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
 
 /* $ Version */
 
+/* -    SPICELIB Version 2.1.0, 06-JUL-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. Added complete */
+/*        code example based on existing fragments. */
+
+/*        Removed the requirement of loading the files via EKELF from the */
+/*        $Files section. */
+
 /* -    SPICELIB Version 2.0.0, 16-NOV-2001 (NJB) */
 
-/*        Bug fix:   When an already loaded kernel is opened with EKOPR, */
+/*        Bug fix: When an already loaded kernel is opened with EKOPR, */
 /*        it now has its link count reset to 1 via a call to EKCLS. */
 
 /* -    SPICELIB Version 1.0.1, 07-JUL-1996 (NJB) */
@@ -3701,7 +4279,7 @@ L_ekntab:
 
     *n = 100 - lnknfn_(tbpool);
     return 0;
-/* $Procedure     EKTNAM  ( EK, return name of loaded table ) */
+/* $Procedure EKTNAM  ( EK, return name of loaded table ) */
 
 L_ektnam:
 /* $ Abstract */
@@ -3749,25 +4327,29 @@ L_ektnam:
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     N          I   Index of table. */
 /*     TABLE      O   Name of table. */
 
 /* $ Detailed_Input */
 
-/*     N              is the index of the table whose name is desired. */
-/*                    The value of N ranges from 1 to the number of */
-/*                    loaded tables, which count may be obtained from */
-/*                    EKNTAB. */
+/*     N        is the index of the table whose name is desired. */
+/*              The value of N ranges from 1 to the number of */
+/*              loaded tables, which count may be obtained from */
+/*              EKNTAB. */
 
 /* $ Detailed_Output */
 
-/*     TABLE          is the name of the Nth loaded table. */
+/*     TABLE    is the name of the N'th loaded table. If TABLE */
+/*              is too small to accommodate the name, the name will */
+/*              be truncated on the right. */
 
 /* $ Parameters */
 
-/*     None. */
+/*     TNAMSZ   is the maximum allowed table name length. See the */
+/*              include file ektnamsz.inc for the actual value of */
+/*              this parameter. */
 
 /* $ Exceptions */
 
@@ -3784,20 +4366,124 @@ L_ektnam:
 /* $ Particulars */
 
 /*     This routine is a utility that provides the caller with the */
-/*     name of a specified loaded table.  The index of a table with */
+/*     name of a specified loaded table. The index of a table with */
 /*     a given name depends on the kernels loaded and possibly on */
 /*     the order in which the files have been loaded. */
 
 /* $ Examples */
 
-/*     1)  Dump the names of the loaded tables. */
+/*     The numerical results shown for this example may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
 
-/*         CALL EKNTAB ( N ) */
+/*     1) Dump the names of all the loaded tables. */
 
-/*         DO I = 1, N */
-/*            CALL EKTNAM ( I, TABLE ) */
-/*            WRITE (*,*) TABLE */
-/*         END DO */
+/*        Use the meta-kernel shown below to load the required SPICE */
+/*        kernels. */
+
+
+/*           KPL/MK */
+
+/*           File name: ektnam_ex1.tm */
+
+/*           This meta-kernel is intended to support operation of SPICE */
+/*           example programs. The kernels shown here should not be */
+/*           assumed to contain adequate or correct versions of data */
+/*           required by SPICE-based user applications. */
+
+/*           In order for an application to use this meta-kernel, the */
+/*           kernels referenced here must be present in the user's */
+/*           current working directory. */
+
+/*           The names and contents of the kernels referenced */
+/*           by this meta-kernel are as follows: */
+
+/*              File name                 Contents */
+/*              ---------                 -------- */
+/*              S78_CIMSSSUPa.bep         Cassini Science Plan #78 */
+/*              S79_CIMSSSUPa.bep         Cassini Science Plan #79 */
+/*              S79_status_pf.bes         Cassini Spacecraft Sequence */
+/*                                        Status #79 */
+
+
+/*           \begindata */
+
+/*              KERNELS_TO_LOAD = ( 'S78_CIMSSSUPa.bep', */
+/*                                  'S79_CIMSSSUPa.bep', */
+/*                                  'S79_status_pf.bes'  ) */
+
+/*           \begintext */
+
+/*           End of meta-kernel */
+
+
+/*        Example code begins here. */
+
+
+/*              PROGRAM EKTNAM_EX1 */
+/*              IMPLICIT NONE */
+
+/*        C */
+/*        C     Include EK parameter declarations: */
+/*        C */
+/*        C        EK Table Name Size */
+/*        C */
+/*              INCLUDE 'ektnamsz.inc' */
+
+/*        C */
+/*        C     Local parameters. */
+/*        C */
+/*              CHARACTER*(*)         META */
+/*              PARAMETER           ( META   = 'ektnam_ex1.tm' ) */
+
+/*        C */
+/*        C     Local variables. */
+/*        C */
+/*              CHARACTER*(TNAMSZ)      TABNAM */
+
+/*              INTEGER                 NTAB */
+/*              INTEGER                 TAB */
+
+/*        C */
+/*        C     Load the EK files. Use a meta-kernel for convenience. */
+/*        C */
+/*              CALL FURNSH ( META ) */
+
+/*        C */
+/*        C     Get the number of loaded tables. The count refers to the */
+/*        C     number of logical tables; if multiple EKs contain data */
+/*        C     for the same table, these EKs collectively contribute */
+/*        C     only one table to the count. */
+/*        C */
+/*              CALL EKNTAB ( NTAB ) */
+
+/*              WRITE(*,'(A,I3)') 'Number of tables in EK subsystem:', */
+/*             .                   NTAB */
+
+/*              DO TAB = 1, NTAB */
+
+/*        C */
+/*        C        Get the name of the current table, and display it. */
+/*        C */
+/*                 CALL EKTNAM ( TAB, TABNAM ) */
+/*                 WRITE(*,'(2A)') '   TABLE = ', TABNAM */
+
+/*              END DO */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*        Number of tables in EK subsystem:  4 */
+/*           TABLE = CASSINI_SP_REQUEST */
+/*           TABLE = CASSINI_SP_OBSERVATION */
+/*           TABLE = CASSINI_SP_REQ_OBS */
+/*           TABLE = CASSINI_STATUS */
+
 
 /* $ Restrictions */
 
@@ -3809,13 +4495,23 @@ L_ektnam:
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
 
 /* $ Version */
 
+/* -    SPICELIB Version 2.1.0, 06-JUL-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. Added complete */
+/*        code example. */
+
+/*        Added description of TNAMSZ parameter. */
+
 /* -    SPICELIB Version 2.0.0, 16-NOV-2001 (NJB) */
 
-/*        Bug fix:   When an already loaded kernel is opened with EKOPR, */
+/*        Bug fix: When an already loaded kernel is opened with EKOPR, */
 /*        it now has its link count reset to 1 via a call to EKCLS. */
 
 /* -    SPICELIB Version 1.0.1, 07-JUL-1996 (NJB) */
@@ -3870,7 +4566,7 @@ L_ektnam:
 	if (i__ == *n) {
 	    fnd = TRUE_;
 	    s_copy(table, tbnams + (((i__1 = tbcurr - 1) < 100 && 0 <= i__1 ? 
-		    i__1 : s_rnge("tbnams", i__1, "ekqmgr_", (ftnlen)2956)) <<
+		    i__1 : s_rnge("tbnams", i__1, "ekqmgr_", (ftnlen)3657)) <<
 		     6), table_len, (ftnlen)64);
 	} else {
 	    tbcurr = lnknxt_(&tbcurr, tbpool);
@@ -3884,13 +4580,13 @@ L_ektnam:
     }
     chkout_("EKTNAM", (ftnlen)6);
     return 0;
-/* $Procedure     EKCCNT  ( EK, column count ) */
+/* $Procedure EKCCNT ( EK, column count ) */
 
 L_ekccnt:
 /* $ Abstract */
 
 /*     Return the number of distinct columns in a specified, currently */
-/*     loaded table */
+/*     loaded table. */
 
 /* $ Disclaimer */
 
@@ -3934,23 +4630,23 @@ L_ekccnt:
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     TABLE      I   Name of table. */
 /*     CCOUNT     O   Count of distinct, currently loaded columns. */
 
 /* $ Detailed_Input */
 
-/*     TABLE          is the name of a currently loaded table.  Case */
-/*                    is not significant in the table name. */
+/*     TABLE    is the name of a currently loaded table. Case */
+/*              is not significant in the table name. */
 
 /* $ Detailed_Output */
 
-/*     CCOUNT         is the number of distinct columns in TABLE. */
-/*                    Columns that have the same name but belong to */
-/*                    different segments that are considered to be */
-/*                    portions of the same column, if the segments */
-/*                    containing those columns belong to TABLE. */
+/*     CCOUNT   is the number of distinct columns in TABLE. */
+/*              Columns that have the same name but belong to */
+/*              different segments that are considered to be */
+/*              portions of the same column, if the segments */
+/*              containing those columns belong to TABLE. */
 
 /* $ Parameters */
 
@@ -3969,92 +4665,266 @@ L_ekccnt:
 /* $ Particulars */
 
 /*     This routine is a utility intended for use in conjunction with */
-/*     the entry point EKCII.  These routines can be used to find the */
+/*     the entry point EKCII. These routines can be used to find the */
 /*     names and attributes of the columns that are currently loaded. */
 
 /* $ Examples */
 
-/*     1)  Dump the names and attributes of the columns in each loaded */
-/*         table.  EKCCNT is used to obtain column counts. */
+/*     The numerical results shown for this example may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
 
-/*            C */
-/*            C     Get the number of loaded tables. */
-/*            C */
-/*                  CALL EKNTAB ( NTAB ) */
+/*     1) Examine an EK. Dump the names and attributes of the columns in */
+/*        each loaded table. EKCCNT is used to obtain column counts. */
 
-/*                  DO TAB = 1, NTAB */
-/*            C */
-/*            C        Get the name of the current table, and look up */
-/*            C        the column count for this table. */
-/*            C */
-/*                     CALL EKTNAM ( TAB,    TABNAM ) */
-/*                     CALL EKCCNT ( TABNAM, NCOLS  ) */
 
-/*                     WRITE (*,*) 'TABLE = ', TABNAM */
-/*                     WRITE (*,*) ' ' */
+/*        Example code begins here. */
 
-/*            C */
-/*            C        For each column in the current table, look up the */
-/*            C        column's attributes.  The attribute block */
-/*            C        index parameters are defined in the include file */
-/*            C        ekattdsc.inc. */
-/*            C */
-/*                     DO I = 1, NCOLS */
 
-/*                        CALL EKCII ( TABNAM, I, COLNAM, ATTDSC ) */
+/*              PROGRAM EKCCNT_EX1 */
+/*              IMPLICIT NONE */
 
-/*                        WRITE (*,*) 'COLUMN = ', COLNAM */
+/*        C */
+/*        C     Include EK parameter declarations: */
+/*        C */
+/*        C        ekattdsc.inc: EK Column Attribute Descriptor */
+/*        C                      Parameters */
+/*        C        ekcnamsz.inc: EK Column Name Size */
+/*        C        ektnamsz.inc: EK Table Name Size */
+/*        C        ektype.inc:   EK Data Types */
+/*        C */
+/*              INCLUDE 'ekattdsc.inc' */
+/*              INCLUDE 'ekcnamsz.inc' */
+/*              INCLUDE 'ektnamsz.inc' */
+/*              INCLUDE 'ektype.inc' */
 
-/*            C */
-/*            C           Write out the current column's data type. */
-/*            C */
-/*                        IF ( ATTDSC(ATTTYP) .EQ. CHR ) THEN */
-/*                           WRITE (*,*) 'TYPE   =  CHR' */
+/*        C */
+/*        C     Local parameters. */
+/*        C */
+/*              INTEGER                 FILEN */
+/*              PARAMETER             ( FILEN = 255 ) */
 
-/*                           IF ( ATTDSC(ATTLEN) .EQ. -1 ) THEN */
-/*                              WRITE (*,*) 'STRING LENGTH = VARIABLE.' */
-/*                           ELSE */
-/*                              WRITE (*,*) 'STRING LENGTH = ', */
-/*                 .                         ATTDSC(ATTLEN) */
-/*                           END IF */
+/*        C */
+/*        C     Local variables. */
+/*        C */
+/*              CHARACTER*(CNAMSZ)      COLNAM */
+/*              CHARACTER*(FILEN)       EKFILE */
+/*              CHARACTER*(TNAMSZ)      TABNAM */
 
-/*                        ELSE IF ( ATTDSC(ATTTYP) .EQ. DP ) THEN */
-/*                           WRITE (*,*) 'TYPE   =  DP' */
+/*              INTEGER                 ATTDSC ( ADSCSZ ) */
+/*              INTEGER                 I */
+/*              INTEGER                 NCOLS */
+/*              INTEGER                 NTAB */
+/*              INTEGER                 TAB */
 
-/*                        ELSE IF ( ATTDSC(ATTTYP) .EQ. INT ) THEN */
-/*                           WRITE (*,*) 'TYPE   =  INT' */
+/*        C */
+/*        C     Prompt for the EK file name. */
+/*        C */
+/*              CALL PROMPT ( 'Enter name of EK to examine > ', EKFILE ) */
 
-/*                        ELSE */
-/*                           WRITE (*,*) 'TYPE   =  TIME' */
-/*                        END IF */
+/*              CALL FURNSH ( EKFILE ) */
 
-/*            C */
-/*            C           Write out the current column's entry size. */
-/*            C */
-/*                        WRITE (*,*) 'SIZE   = ', ATTDSC(ATTSIZ) */
+/*        C */
+/*        C     Get the number of loaded tables. */
+/*        C */
+/*              CALL EKNTAB ( NTAB ) */
 
-/*            C */
-/*            C           Indicate whether the current column is indexed. */
-/*            C */
-/*                        IF ( ATTDSC(ATTIDX) .EQ. -1 ) THEN */
-/*                           WRITE (*,*) 'NOT INDEXED' */
-/*                        ELSE */
-/*                           WRITE (*,*) 'INDEXED' */
-/*                        END IF */
+/*              WRITE(*,*) 'Number of tables in EK:', NTAB */
 
-/*            C */
-/*            C           Indicate whether the current column allows */
-/*            C           null values. */
-/*            C */
-/*                        IF ( ATTDSC(ATTNFL) .EQ. -1 ) THEN */
-/*                           WRITE (*,*) 'NULL VALUES NOT ALLOWED' */
-/*                        ELSE */
-/*                           WRITE (*,*) 'NULL VALUES ALLOWED' */
-/*                        END IF */
+/*              DO TAB = 1, NTAB */
 
-/*                     END DO */
+/*        C */
+/*        C        Get the name of the current table, and look up */
+/*        C        the column count for this table. */
+/*        C */
+/*                 CALL EKTNAM ( TAB,    TABNAM ) */
+/*                 CALL EKCCNT ( TABNAM, NCOLS  ) */
 
-/*                  END DO */
+/*                 WRITE(*,*) '------------------------------' */
+/*             .           // '------------------------------' */
+/*                 WRITE(*,*) 'TABLE = ', TABNAM */
+/*                 WRITE(*,*) ' ' */
+
+/*        C */
+/*        C        For each column in the current table, look up the */
+/*        C        column's attributes.  The attribute block */
+/*        C        index parameters are defined in the include file */
+/*        C        ekattdsc.inc. */
+/*        C */
+/*                 DO I = 1, NCOLS */
+
+/*                    CALL EKCII ( TABNAM, I, COLNAM, ATTDSC ) */
+
+/*                    WRITE (*,*) 'COLUMN = ', COLNAM */
+
+/*        C */
+/*        C           Write out the current column's data type. */
+/*        C */
+/*                    IF ( ATTDSC(ATTTYP) .EQ. CHR ) THEN */
+
+/*                       WRITE (*,*) '   TYPE   =  CHR' */
+
+/*                       IF ( ATTDSC(ATTLEN) .EQ. -1 ) THEN */
+/*                          WRITE (*,*) '   STRING LENGTH = VARIABLE.' */
+/*                       ELSE */
+/*                          WRITE (*,'(A,I2)') '    STRING LENGTH = ', */
+/*             .                         ATTDSC(ATTLEN) */
+/*                       END IF */
+
+/*                    ELSE IF ( ATTDSC(ATTTYP) .EQ. DP ) THEN */
+/*                       WRITE (*,*) '   TYPE   =  DP' */
+
+/*                    ELSE IF ( ATTDSC(ATTTYP) .EQ. INT ) THEN */
+/*                       WRITE (*,*) '   TYPE   =  INT' */
+
+/*                    ELSE */
+/*                       WRITE (*,*) '   TYPE   =  TIME' */
+/*                    END IF */
+
+/*        C */
+/*        C           Write out the current column's entry size. */
+/*        C */
+/*                    WRITE (*,'(A,I2)') '    SIZE   = ', ATTDSC(ATTSIZ) */
+
+/*        C */
+/*        C           Indicate whether the current column is indexed. */
+/*        C */
+/*                    IF ( ATTDSC(ATTIDX) .EQ. -1 ) THEN */
+/*                       WRITE (*,*) '   NOT INDEXED' */
+/*                    ELSE */
+/*                       WRITE (*,*) '   INDEXED' */
+/*                    END IF */
+
+/*        C */
+/*        C           Indicate whether the current column allows */
+/*        C           null values. */
+/*        C */
+/*                    IF ( ATTDSC(ATTNFL) .EQ. -1 ) THEN */
+/*                       WRITE (*,*) '   NULL VALUES NOT ALLOWED' */
+/*                    ELSE */
+/*                       WRITE (*,*) '   NULL VALUES ALLOWED' */
+/*                    END IF */
+
+/*                 END DO */
+
+/*              END DO */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, using the EK named S79_CIMSSSUPa.bep to load the */
+/*        Cassini Science Plan SPICE E-Kernel File based upon the */
+/*        integrated science plan, the output was: */
+
+
+/*        Enter name of EK to examine > S79_CIMSSSUPa.bep */
+/*         Number of tables in EK:           3 */
+/*         ------------------------------------------------------------ */
+/*         TABLE = CASSINI_SP_REQUEST */
+
+/*         COLUMN = SUBSYSTEM */
+/*            TYPE   =  CHR */
+/*            STRING LENGTH = 32 */
+/*            SIZE   =  1 */
+/*            INDEXED */
+/*            NULL VALUES NOT ALLOWED */
+/*         COLUMN = REQUEST_ID */
+/*            TYPE   =  CHR */
+/*            STRING LENGTH = VARIABLE. */
+/*            SIZE   =  1 */
+/*            INDEXED */
+/*            NULL VALUES NOT ALLOWED */
+/*         COLUMN = REQUEST_TITLE */
+/*            TYPE   =  CHR */
+/*            STRING LENGTH = VARIABLE. */
+/*            SIZE   =  1 */
+/*            INDEXED */
+/*            NULL VALUES ALLOWED */
+/*         COLUMN = BEGIN_TIME */
+/*            TYPE   =  TIME */
+/*            SIZE   =  1 */
+/*            INDEXED */
+/*            NULL VALUES NOT ALLOWED */
+/*         COLUMN = END_TIME */
+/*            TYPE   =  TIME */
+/*            SIZE   =  1 */
+/*            INDEXED */
+/*            NULL VALUES NOT ALLOWED */
+/*         COLUMN = SEQUENCE */
+/*            TYPE   =  CHR */
+/*            STRING LENGTH = 32 */
+/*            SIZE   =  1 */
+/*            INDEXED */
+/*            NULL VALUES NOT ALLOWED */
+/*         COLUMN = POINTING_AGREEMENT */
+/*            TYPE   =  CHR */
+/*            STRING LENGTH = 80 */
+/*            SIZE   = -1 */
+/*            NOT INDEXED */
+/*            NULL VALUES ALLOWED */
+/*         COLUMN = PRIMARY_POINTING */
+/*            TYPE   =  CHR */
+/*            STRING LENGTH = VARIABLE. */
+/*            SIZE   =  1 */
+/*            INDEXED */
+/*            NULL VALUES ALLOWED */
+/*         COLUMN = SECONDARY_POINTING */
+/*            TYPE   =  CHR */
+/*            STRING LENGTH = VARIABLE. */
+/*            SIZE   =  1 */
+/*            INDEXED */
+/*            NULL VALUES ALLOWED */
+/*         COLUMN = REQ_DESCRIPTION */
+/*            TYPE   =  CHR */
+/*            STRING LENGTH = 80 */
+/*            SIZE   = -1 */
+/*            NOT INDEXED */
+/*            NULL VALUES ALLOWED */
+/*         ------------------------------------------------------------ */
+/*         TABLE = CASSINI_SP_OBSERVATION */
+
+/*         COLUMN = SUBSYSTEM */
+/*            TYPE   =  CHR */
+/*            STRING LENGTH = 32 */
+/*            SIZE   =  1 */
+/*            INDEXED */
+/*            NULL VALUES NOT ALLOWED */
+/*         COLUMN = OBSERVATION_ID */
+/*            TYPE   =  CHR */
+/*            STRING LENGTH = VARIABLE. */
+/*            SIZE   =  1 */
+/*            INDEXED */
+/*            NULL VALUES NOT ALLOWED */
+/*         COLUMN = OBSERVATION_TITLE */
+/*            TYPE   =  CHR */
+/*            STRING LENGTH = VARIABLE. */
+/*            SIZE   =  1 */
+/*            INDEXED */
+/*            NULL VALUES NOT ALLOWED */
+/*         COLUMN = SEQUENCE */
+/*            TYPE   =  CHR */
+/*            STRING LENGTH = 32 */
+/*            SIZE   =  1 */
+/*            INDEXED */
+/*            NULL VALUES NOT ALLOWED */
+/*         COLUMN = SCIENCE_OBJECTIVE */
+/*            TYPE   =  CHR */
+/*            STRING LENGTH = 80 */
+/*            SIZE   = -1 */
+/*            NOT INDEXED */
+/*            NULL VALUES ALLOWED */
+/*         COLUMN = OBS_DESCRIPTION */
+/*            TYPE   =  CHR */
+/*            STRING LENGTH = 80 */
+/*            SIZE   = -1 */
+
+/*        [...] */
+
+
+/*        Warning: incomplete output. Only 100 out of 129 lines have been */
+/*        provided. */
 
 
 /* $ Restrictions */
@@ -4067,13 +4937,21 @@ L_ekccnt:
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
 
 /* $ Version */
 
+/* -    SPICELIB Version 2.1.0, 06-JUL-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. Added complete */
+/*        code example based on existing code fragment. */
+
 /* -    SPICELIB Version 2.0.0, 16-NOV-2001 (NJB) */
 
-/*        Bug fix:   When an already loaded kernel is opened with EKOPR, */
+/*        Bug fix: When an already loaded kernel is opened with EKOPR, */
 /*        it now has its link count reset to 1 via a call to EKCLS. */
 
 /* -    SPICELIB Version 1.0.1, 07-JUL-1996 (NJB) */
@@ -4081,7 +4959,6 @@ L_ekccnt:
 /*        Misspelling of "conjunction" was fixed. */
 
 /* -    SPICELIB Version 1.0.0, 23-OCT-1995 (NJB) */
-
 
 /* -& */
 /* $ Index_Entries */
@@ -4124,7 +5001,7 @@ L_ekccnt:
     fnd = FALSE_;
     while(tbcurr > 0 && ! fnd) {
 	if (eqstr_(table, tbnams + (((i__1 = tbcurr - 1) < 100 && 0 <= i__1 ? 
-		i__1 : s_rnge("tbnams", i__1, "ekqmgr_", (ftnlen)3233)) << 6),
+		i__1 : s_rnge("tbnams", i__1, "ekqmgr_", (ftnlen)4116)) << 6),
 		 table_len, (ftnlen)64)) {
 	    fnd = TRUE_;
 	} else {
@@ -4144,7 +5021,7 @@ L_ekccnt:
 
 	*ccount = 0;
 	col = tbctpt[(i__1 = tbcurr - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-		"tbctpt", i__1, "ekqmgr_", (ftnlen)3256)];
+		"tbctpt", i__1, "ekqmgr_", (ftnlen)4139)];
 	while(col > 0) {
 	    ++(*ccount);
 	    col = lnknxt_(&col, ctpool);
@@ -4152,7 +5029,7 @@ L_ekccnt:
     }
     chkout_("EKCCNT", (ftnlen)6);
     return 0;
-/* $Procedure     EKCII  ( EK, column info by index ) */
+/* $Procedure EKCII  ( EK, column info by index ) */
 
 L_ekcii:
 /* $ Abstract */
@@ -4204,7 +5081,7 @@ L_ekcii:
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     TABLE      I   Name of table containing column. */
 /*     CINDEX     I   Index of column whose attributes are to be found. */
@@ -4213,72 +5090,71 @@ L_ekcii:
 
 /* $ Detailed_Input */
 
-/*     TABLE          is the name of a loaded EK table.  Case is not */
-/*                    significant. */
+/*     TABLE    is the name of a loaded EK table. Case is not */
+/*              significant. */
 
-/*     CINDEX         is the index, within TABLE's column attribute */
-/*                    table, of the column whose attributes are to be */
-/*                    found.  The indices of the column table entries */
-/*                    range from 1 to CCOUNT, where CCOUNT is the value */
-/*                    returned by the entry point EKCCNT. */
+/*     CINDEX   is the index, within TABLE's column attribute */
+/*              table, of the column whose attributes are to be */
+/*              found. The indices of the column table entries */
+/*              range from 1 to CCOUNT, where CCOUNT is the value */
+/*              returned by the entry point EKCCNT. */
 
 /* $ Detailed_Output */
 
-/*     COLUMN         is the name of the specified column. */
+/*     COLUMN   is the name of the specified column. */
 
-/*     ATTDSC         is a column attribute descriptor.  ATTDSC is an */
-/*                    integer array containing descriptive information */
-/*                    that applies uniformly to all loaded columns */
-/*                    having the name COLUMN.  The following parameter */
-/*                    values occur in ATTDSC: */
+/*     ATTDSC   is a column attribute descriptor. ATTDSC is an */
+/*              integer array containing descriptive information */
+/*              that applies uniformly to all loaded columns */
+/*              having the name COLUMN. The following parameter */
+/*              values occur in ATTDSC: */
 
-/*                       IFALSE:  -1 */
-/*                       ITRUE:    1 */
-/*                       CHR:      1 */
-/*                       DP:       2 */
-/*                       INT:      3 */
-/*                       TIME:     4 */
+/*                 IFALSE:  -1 */
+/*                 ITRUE:    1 */
+/*                 CHR:      1 */
+/*                 DP:       2 */
+/*                 INT:      3 */
+/*                 TIME:     4 */
 
-/*                    The meanings of the elements of ATTDSC are given */
-/*                    below.  The indices of the elements are */
-/*                    parameterized; the parameter values are defined */
-/*                    in the include file ekattdsc.inc. */
+/*              The meanings of the elements of ATTDSC are given */
+/*              below. The indices of the elements are */
+/*              parameterized; the parameter values are defined */
+/*              in the include file ekattdsc.inc. */
 
-/*                       ATTDSC(ATTCLS):   Column class code */
+/*                 ATTDSC(ATTCLS):   Column class code */
 
-/*                       ATTDSC(ATTTYP):   Data type code---CHR, DP, INT, */
-/*                                         or TIME */
+/*                 ATTDSC(ATTTYP):   Data type code---CHR, DP, INT, */
+/*                                   or TIME */
 
-/*                       ATTDSC(ATTLEN):   String length; applies to CHR */
-/*                                         type.  Value is IFALSE for */
-/*                                         variable-length strings. */
+/*                 ATTDSC(ATTLEN):   String length; applies to CHR */
+/*                                   type. Value is IFALSE for */
+/*                                   variable-length strings. */
 
-/*                       ATTDSC(ATTSIZ):   Column entry size; value is */
-/*                                         IFALSE for variable-size */
-/*                                         columns.  Here `size' refers */
-/*                                         to the number of array */
-/*                                         elements in a column entry. */
+/*                 ATTDSC(ATTSIZ):   Column entry size; value is */
+/*                                   IFALSE for variable-size */
+/*                                   columns. Here `size' refers */
+/*                                   to the number of array */
+/*                                   elements in a column entry. */
 
-/*                       ATTDSC(ATTIDX):   Index flag; value is ITRUE if */
-/*                                         column is indexed, IFALSE */
-/*                                         otherwise. */
+/*                 ATTDSC(ATTIDX):   Index flag; value is ITRUE if */
+/*                                   column is indexed, IFALSE */
+/*                                   otherwise. */
 
-/*                       ATTDSC(ATTNFL):   Null flag; value is ITRUE if */
-/*                                         column may contain null */
-/*                                         values, IFALSE otherwise. */
+/*                 ATTDSC(ATTNFL):   Null flag; value is ITRUE if */
+/*                                   column may contain null */
+/*                                   values, IFALSE otherwise. */
 
 /* $ Parameters */
 
-/*     ADSCSZ         is the size of column attribute descriptor. */
-/*                    (Defined in ekattdsc.inc.) */
+/*     ADSCSZ   is the size of column attribute descriptor. */
+/*              (Defined in ekattdsc.inc.) */
 
 /* $ Exceptions */
 
 /*     1)  If the specified table is not loaded, the error */
 /*         SPICE(TABLENOTLOADED) is signaled. */
 
-/*     2)  If the input argument CINDEX is less than one or greater */
-/*         than the number of columns in TABLE, the error */
+/*     2)  If the input argument CINDEX is out of range, the error */
 /*         SPICE(INVALIDINDEX) is signaled. */
 
 /* $ Files */
@@ -4293,87 +5169,236 @@ L_ekcii:
 
 /* $ Examples */
 
-/*     1)  Dump the names and attributes of the columns in each loaded */
-/*         table.  EKCII is used to obtain column attributes. */
+/*     The numerical results shown for this example may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
 
-/*            C */
-/*            C     Get the number of loaded tables. */
-/*            C */
-/*                  CALL EKNTAB ( NTAB ) */
+/*     1) Dump the names and attributes of the columns in each loaded */
+/*        table. */
 
-/*                  DO TAB = 1, NTAB */
-/*            C */
-/*            C        Get the name of the current table, and look up */
-/*            C        the column count for this table. */
-/*            C */
-/*                     CALL EKTNAM ( TAB,    TABNAM ) */
-/*                     CALL EKCCNT ( TABNAM, NCOLS  ) */
 
-/*                     WRITE (*,*) 'TABLE = ', TABNAM */
-/*                     WRITE (*,*) ' ' */
+/*        Example code begins here. */
 
-/*            C */
-/*            C        For each column in the current table, look up the */
-/*            C        column's attributes.  The attribute block */
-/*            C        index parameters are defined in the include file */
-/*            C        ekattdsc.inc. */
-/*            C */
-/*                     DO I = 1, NCOLS */
 
-/*                        CALL EKCII ( TABNAM, I, COLNAM, ATTDSC ) */
+/*              PROGRAM EKCII_EX1 */
+/*              IMPLICIT NONE */
 
-/*                        WRITE (*,*) 'COLUMN = ', COLNAM */
+/*        C */
+/*        C     Include EK parameter declarations: */
+/*        C */
+/*        C        ekattdsc.inc: EK Column Attribute Descriptor */
+/*        C                      Parameters */
+/*        C        ekcnamsz.inc: EK Column Name Size */
+/*        C        ektnamsz.inc: EK Table Name Size */
+/*        C        ektype.inc:   EK Data Types */
+/*        C */
+/*              INCLUDE 'ekattdsc.inc' */
+/*              INCLUDE 'ekcnamsz.inc' */
+/*              INCLUDE 'ektnamsz.inc' */
+/*              INCLUDE 'ektype.inc' */
 
-/*            C */
-/*            C           Write out the current column's data type. */
-/*            C */
-/*                        IF ( ATTDSC(ATTTYP) .EQ. CHR ) THEN */
-/*                           WRITE (*,*) 'TYPE   =  CHR' */
+/*        C */
+/*        C     Local constants. */
+/*        C */
+/*              INTEGER                 FILEN */
+/*              PARAMETER             ( FILEN = 255 ) */
 
-/*                           IF ( ATTDSC(ATTLEN) .EQ. -1 ) THEN */
-/*                              WRITE (*,*) 'STRING LENGTH = VARIABLE.' */
-/*                           ELSE */
-/*                              WRITE (*,*) 'STRING LENGTH = ', */
-/*                 .                         ATTDSC(ATTLEN) */
-/*                           END IF */
+/*        C */
+/*        C     Local variables. */
+/*        C */
+/*              CHARACTER*(CNAMSZ)      COLNAM */
+/*              CHARACTER*(FILEN)       EKFILE */
+/*              CHARACTER*(TNAMSZ)      TABNAM */
 
-/*                        ELSE IF ( ATTDSC(ATTTYP) .EQ. DP ) THEN */
-/*                           WRITE (*,*) 'TYPE   =  DP' */
+/*              INTEGER                 ATTDSC ( ADSCSZ ) */
+/*              INTEGER                 I */
+/*              INTEGER                 NCOLS */
+/*              INTEGER                 NTAB */
+/*              INTEGER                 TAB */
 
-/*                        ELSE IF ( ATTDSC(ATTTYP) .EQ. INT ) THEN */
-/*                           WRITE (*,*) 'TYPE   =  INT' */
+/*        C */
+/*        C     Prompt for the EK file name. */
+/*        C */
+/*              CALL PROMPT ( 'Enter name of EK to examine > ', EKFILE ) */
 
-/*                        ELSE */
-/*                           WRITE (*,*) 'TYPE   =  TIME' */
-/*                        END IF */
+/*              CALL FURNSH ( EKFILE ) */
 
-/*            C */
-/*            C           Write out the current column's entry size. */
-/*            C */
-/*                        WRITE (*,*) 'SIZE   = ', ATTDSC(ATTSIZ) */
+/*        C */
+/*        C     Get the number of loaded tables. */
+/*        C */
+/*              CALL EKNTAB ( NTAB ) */
 
-/*            C */
-/*            C           Indicate whether the current column is indexed. */
-/*            C */
-/*                        IF ( ATTDSC(ATTIDX) .EQ. -1 ) THEN */
-/*                           WRITE (*,*) 'NOT INDEXED' */
-/*                        ELSE */
-/*                           WRITE (*,*) 'INDEXED' */
-/*                        END IF */
+/*              WRITE(*,*) 'Number of tables in EK:', NTAB */
 
-/*            C */
-/*            C           Indicate whether the current column allows */
-/*            C           null values. */
-/*            C */
-/*                        IF ( ATTDSC(ATTNFL) .EQ. -1 ) THEN */
-/*                           WRITE (*,*) 'NULL VALUES NOT ALLOWED' */
-/*                        ELSE */
-/*                           WRITE (*,*) 'NULL VALUES ALLOWED' */
-/*                        END IF */
+/*              DO TAB = 1, NTAB */
 
-/*                     END DO */
+/*        C */
+/*        C        Get the name of the current table, and look up */
+/*        C        the column count for this table. */
+/*        C */
+/*                 CALL EKTNAM ( TAB,    TABNAM ) */
+/*                 CALL EKCCNT ( TABNAM, NCOLS  ) */
 
-/*                  END DO */
+/*                 WRITE(*,*) '------------------------------' */
+/*             .           // '------------------------------' */
+/*                 WRITE(*,*) 'TABLE = ', TABNAM */
+/*                 WRITE(*,*) ' ' */
+
+/*        C */
+/*        C        For each column in the current table, look up the */
+/*        C        column's attributes.  The attribute block */
+/*        C        index parameters are defined in the include file */
+/*        C        ekattdsc.inc. */
+/*        C */
+/*                 DO I = 1, NCOLS */
+
+/*                    CALL EKCII ( TABNAM, I, COLNAM, ATTDSC ) */
+
+/*                    WRITE (*,*) 'COLUMN = ', COLNAM */
+
+/*        C */
+/*        C           Write out the current column's data type. */
+/*        C */
+/*                    IF ( ATTDSC(ATTTYP) .EQ. CHR ) THEN */
+
+/*                       WRITE (*,*) '   TYPE   =  CHR' */
+
+/*                       IF ( ATTDSC(ATTLEN) .EQ. -1 ) THEN */
+/*                          WRITE (*,*) '   STRING LENGTH = VARIABLE.' */
+/*                       ELSE */
+/*                          WRITE (*,'(A,I2)') '    STRING LENGTH = ', */
+/*             .                         ATTDSC(ATTLEN) */
+/*                       END IF */
+
+/*                    ELSE IF ( ATTDSC(ATTTYP) .EQ. DP ) THEN */
+/*                       WRITE (*,*) '   TYPE   =  DP' */
+
+/*                    ELSE IF ( ATTDSC(ATTTYP) .EQ. INT ) THEN */
+/*                       WRITE (*,*) '   TYPE   =  INT' */
+
+/*                    ELSE */
+/*                       WRITE (*,*) '   TYPE   =  TIME' */
+/*                    END IF */
+
+/*        C */
+/*        C           Write out the current column's entry size. */
+/*        C */
+/*                    WRITE (*,'(A,I2)') '    SIZE   = ', ATTDSC(ATTSIZ) */
+
+/*        C */
+/*        C           Indicate whether the current column is indexed. */
+/*        C */
+/*                    IF ( ATTDSC(ATTIDX) .EQ. -1 ) THEN */
+/*                       WRITE (*,*) '   NOT INDEXED' */
+/*                    ELSE */
+/*                       WRITE (*,*) '   INDEXED' */
+/*                    END IF */
+
+/*        C */
+/*        C           Indicate whether the current column allows */
+/*        C           null values. */
+/*        C */
+/*                    IF ( ATTDSC(ATTNFL) .EQ. -1 ) THEN */
+/*                       WRITE (*,*) '   NULL VALUES NOT ALLOWED' */
+/*                    ELSE */
+/*                       WRITE (*,*) '   NULL VALUES ALLOWED' */
+/*                    END IF */
+
+/*                 END DO */
+
+/*              END DO */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, using the EK file named vo_sedr.bdb to load the */
+/*        Viking Orbiter Image SEDR Data, the output was: */
+
+
+/*        Enter name of EK to examine > vo_sedr.bdb */
+/*         Number of tables in EK:           1 */
+/*         ------------------------------------------------------------ */
+/*         TABLE = VIKING_SEDR_DATA */
+
+/*         COLUMN = IMAGE_ID */
+/*            TYPE   =  CHR */
+/*            STRING LENGTH =  6 */
+/*            SIZE   =  1 */
+/*            INDEXED */
+/*            NULL VALUES ALLOWED */
+/*         COLUMN = IMAGE_NUMBER */
+/*            TYPE   =  INT */
+/*            SIZE   =  1 */
+/*            INDEXED */
+/*            NULL VALUES ALLOWED */
+/*         COLUMN = SPACECRAFT_ID */
+/*            TYPE   =  CHR */
+/*            STRING LENGTH =  3 */
+/*            SIZE   =  1 */
+/*            INDEXED */
+/*            NULL VALUES ALLOWED */
+/*         COLUMN = IMAGE_TIME */
+/*            TYPE   =  TIME */
+/*            SIZE   =  1 */
+/*            INDEXED */
+/*            NULL VALUES ALLOWED */
+/*         COLUMN = INSTRUMENT_ID */
+/*            TYPE   =  CHR */
+/*            STRING LENGTH =  4 */
+/*            SIZE   =  1 */
+/*            INDEXED */
+/*            NULL VALUES ALLOWED */
+/*         COLUMN = GAIN_MODE_ID */
+/*            TYPE   =  CHR */
+/*            STRING LENGTH =  4 */
+/*            SIZE   =  1 */
+/*            NOT INDEXED */
+/*            NULL VALUES ALLOWED */
+/*         COLUMN = FLOOD_MODE_ID */
+/*            TYPE   =  CHR */
+/*            STRING LENGTH =  3 */
+/*            SIZE   =  1 */
+/*            NOT INDEXED */
+/*            NULL VALUES ALLOWED */
+/*         COLUMN = OFFSET_MODE_ID */
+/*            TYPE   =  CHR */
+/*            STRING LENGTH =  3 */
+/*            SIZE   =  1 */
+/*            NOT INDEXED */
+/*            NULL VALUES ALLOWED */
+/*         COLUMN = FILTER_ID */
+/*            TYPE   =  INT */
+/*            SIZE   =  1 */
+/*            INDEXED */
+/*            NULL VALUES ALLOWED */
+/*         COLUMN = EXPOSURE_DURATION */
+/*            TYPE   =  DP */
+/*            SIZE   =  1 */
+/*            INDEXED */
+/*            NULL VALUES ALLOWED */
+/*         COLUMN = PLATFORM_IN_MOTION */
+/*            TYPE   =  CHR */
+/*            STRING LENGTH =  3 */
+/*            SIZE   =  1 */
+/*            NOT INDEXED */
+/*            NULL VALUES ALLOWED */
+/*         COLUMN = PLATFORM_CONE */
+/*            TYPE   =  DP */
+/*            SIZE   =  1 */
+/*            NOT INDEXED */
+/*            NULL VALUES ALLOWED */
+/*         COLUMN = PLATFORM_CLOCK */
+/*            TYPE   =  DP */
+/*            SIZE   =  1 */
+/*            NOT INDEXED */
+/*            NULL VALUES ALLOWED */
+/*         COLUMN = PLATFORM_TWIST */
+/*            TYPE   =  DP */
+/*            SIZE   =  1 */
+/*            NOT INDEXED */
+/*            NULL VALUES ALLOWED */
 
 
 /* $ Restrictions */
@@ -4386,19 +5411,27 @@ L_ekcii:
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
-/*     B.V. Semenov   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     B.V. Semenov       (JPL) */
 
 /* $ Version */
 
+/* -    SPICELIB Version 2.1.0, 06-JUL-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited header to comply with NAIF standard. */
+/*        Added complete code example from existing code fragment. */
+
 /* -    SPICELIB Version 2.0.1, 10-FEB-2014 (BVS) */
 
-/*        Added description of ADSCSZ to the Parameters section of the */
+/*        Added description of ADSCSZ to the $Parameters section of the */
 /*        header. */
 
 /* -    SPICELIB Version 2.0.0, 16-NOV-2001 (NJB) */
 
-/*        Bug fix:   When an already loaded kernel is opened with EKOPR, */
+/*        Bug fix: When an already loaded kernel is opened with EKOPR, */
 /*        it now has its link count reset to 1 via a call to EKCLS. */
 
 /* -    SPICELIB Version 1.0.1, 07-JUL-1996 (NJB) */
@@ -4447,7 +5480,7 @@ L_ekcii:
     fnd = FALSE_;
     while(tbcurr > 0 && ! fnd) {
 	if (eqstr_(table, tbnams + (((i__1 = tbcurr - 1) < 100 && 0 <= i__1 ? 
-		i__1 : s_rnge("tbnams", i__1, "ekqmgr_", (ftnlen)3580)) << 6),
+		i__1 : s_rnge("tbnams", i__1, "ekqmgr_", (ftnlen)4620)) << 6),
 		 table_len, (ftnlen)64)) {
 	    fnd = TRUE_;
 	} else {
@@ -4466,7 +5499,7 @@ L_ekcii:
 
     i__ = 0;
     col = tbctpt[(i__1 = tbcurr - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge("tbc"
-	    "tpt", i__1, "ekqmgr_", (ftnlen)3604)];
+	    "tpt", i__1, "ekqmgr_", (ftnlen)4644)];
     while(col > 0 && i__ < *cindex) {
 	++i__;
 	if (i__ == *cindex) {
@@ -4475,24 +5508,24 @@ L_ekcii:
 /*           its attributes. */
 
 	    s_copy(column, ctnams + (((i__1 = col - 1) < 500 && 0 <= i__1 ? 
-		    i__1 : s_rnge("ctnams", i__1, "ekqmgr_", (ftnlen)3615)) <<
+		    i__1 : s_rnge("ctnams", i__1, "ekqmgr_", (ftnlen)4655)) <<
 		     5), column_len, (ftnlen)32);
 	    attdsc[0] = ctclas[(i__1 = col - 1) < 500 && 0 <= i__1 ? i__1 : 
-		    s_rnge("ctclas", i__1, "ekqmgr_", (ftnlen)3617)];
+		    s_rnge("ctclas", i__1, "ekqmgr_", (ftnlen)4657)];
 	    attdsc[1] = cttyps[(i__1 = col - 1) < 500 && 0 <= i__1 ? i__1 : 
-		    s_rnge("cttyps", i__1, "ekqmgr_", (ftnlen)3618)];
+		    s_rnge("cttyps", i__1, "ekqmgr_", (ftnlen)4658)];
 	    attdsc[2] = ctlens[(i__1 = col - 1) < 500 && 0 <= i__1 ? i__1 : 
-		    s_rnge("ctlens", i__1, "ekqmgr_", (ftnlen)3619)];
+		    s_rnge("ctlens", i__1, "ekqmgr_", (ftnlen)4659)];
 	    attdsc[3] = ctsizs[(i__1 = col - 1) < 500 && 0 <= i__1 ? i__1 : 
-		    s_rnge("ctsizs", i__1, "ekqmgr_", (ftnlen)3620)];
+		    s_rnge("ctsizs", i__1, "ekqmgr_", (ftnlen)4660)];
 	    if (ctindx[(i__1 = col - 1) < 500 && 0 <= i__1 ? i__1 : s_rnge(
-		    "ctindx", i__1, "ekqmgr_", (ftnlen)3622)]) {
+		    "ctindx", i__1, "ekqmgr_", (ftnlen)4662)]) {
 		attdsc[4] = 1;
 	    } else {
 		attdsc[4] = -1;
 	    }
 	    if (ctnull[(i__1 = col - 1) < 500 && 0 <= i__1 ? i__1 : s_rnge(
-		    "ctnull", i__1, "ekqmgr_", (ftnlen)3628)]) {
+		    "ctnull", i__1, "ekqmgr_", (ftnlen)4668)]) {
 		attdsc[5] = 1;
 	    } else {
 		attdsc[5] = -1;
@@ -4517,7 +5550,7 @@ L_ekcii:
     sigerr_("SPICE(INVALIDINDEX)", (ftnlen)19);
     chkout_("EKCII", (ftnlen)5);
     return 0;
-/* $Procedure     EKSRCH  ( EK, search for events ) */
+/* $Procedure EKSRCH ( EK, search for events ) */
 
 L_eksrch:
 /* $ Abstract */
@@ -4571,7 +5604,7 @@ L_eksrch:
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     EQRYI      I   Integer component of encoded query. */
 /*     EQRYC      I   Character component of encoded query. */
@@ -4584,32 +5617,29 @@ L_eksrch:
 
 /*     EQRYI, */
 /*     EQRYC, */
-/*     EQRYD          are, respectively, the integer, character, and */
-/*                    double precision portions of an encoded query. */
-/*                    The query must have been parsed and must have */
-/*                    its table and column names resolved.  Time values */
-/*                    must have been resolved.  The query is expected */
-/*                    to be semantically correct. */
+/*     EQRYD    are, respectively, the integer, character, and */
+/*              double precision portions of an encoded query. */
+/*              The query must have been parsed and must have */
+/*              its table and column names resolved. Time values */
+/*              must have been resolved. The query is expected */
+/*              to be semantically correct. */
 
 /* $ Detailed_Output */
 
-/*     NMROWS         is the number of rows matching the input query */
-/*                    constraints. */
+/*     NMROWS   is the number of rows matching the input query */
+/*              constraints. */
 
-/*     SEMERR         is a logical flag indicating whether a semantic */
-/*                    error was detected while attempting to respond to */
-/*                    the input query. */
+/*     SEMERR   is a logical flag indicating whether a semantic */
+/*              error was detected while attempting to respond to */
+/*              the input query. */
 
-/*     ERRMSG         is a descriptive error message that is set if a */
-/*                    semantic error is detected.  Otherwise, ERRMSG */
-/*                    is returned blank. */
-
-/*     See $Particulars for a description of the effect of this */
-/*     routine. */
+/*     ERRMSG   is a descriptive error message that is set if a */
+/*              semantic error is detected. Otherwise, ERRMSG */
+/*              is returned blank. */
 
 /* $ Parameters */
 
-/*     LBCELL         is the SPICELIB cell lower bound. */
+/*     LBCELL   is the SPICE cell lower bound. */
 
 /* $ Exceptions */
 
@@ -4641,8 +5671,8 @@ L_eksrch:
 
 /* $ Restrictions */
 
-/*     1) This routine should normally not be called directly from */
-/*        users' applications. */
+/*     1)  This routine should normally not be called directly from */
+/*         users' applications. */
 
 /* $ Literature_References */
 
@@ -4650,32 +5680,39 @@ L_eksrch:
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
-/*     B.V. Semenov   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     B.V. Semenov       (JPL) */
 
 /* $ Version */
 
+/* -    SPICELIB Version 2.1.0, 27-AUG-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
+
 /* -    SPICELIB Version 2.0.1, 10-FEB-2014 (BVS) */
 
-/*        Added description of LBCELL to the Parameters section of the */
+/*        Added description of LBCELL to the $Parameters section of the */
 /*        header. */
 
 /* -    SPICELIB Version 2.0.0, 16-NOV-2001 (NJB) */
 
-/*        Bug fix:   When an already loaded kernel is opened with EKOPR, */
+/*        Bug fix: When an already loaded kernel is opened with EKOPR, */
 /*        it now has its link count reset to 1 via a call to EKCLS. */
 
 /* -    SPICELIB Version 1.2.0, 21-JUL-1998 (NJB) */
 
-/*        ZZEKJSQZ call was added after the ZZEKJOIN call.  This change */
+/*        ZZEKJSQZ call was added after the ZZEKJOIN call. This change */
 /*        reduces the scratch area usage for intermediate results of */
-/*        joins.  It also prevents ZZEKJOIN from being handed a join */
+/*        joins. It also prevents ZZEKJOIN from being handed a join */
 /*        row set containing a segment vector having no corresponding */
 /*        row vectors. */
 
 /*        Removed a comment in the join loop indicating that non-join */
 /*        constraints involving comparisons of column entries in the */
-/*        table were being activated.  This comment was incorrect; the */
+/*        table were being activated. This comment was incorrect; the */
 /*        constraints in question were applied earlier. */
 
 /* -    SPICELIB Version 1.0.1, 07-JUL-1996 (NJB) */
@@ -4742,9 +5779,9 @@ L_eksrch:
     i__1 = ntab;
     for (i__ = 1; i__ <= i__1; ++i__) {
 	zzekqtab_(eqryi, eqryc, &i__, frmtab + (((i__2 = i__ - 1) < 10 && 0 <=
-		 i__2 ? i__2 : s_rnge("frmtab", i__2, "ekqmgr_", (ftnlen)3904)
+		 i__2 ? i__2 : s_rnge("frmtab", i__2, "ekqmgr_", (ftnlen)4949)
 		) << 6), frmals + (((i__3 = i__ - 1) < 10 && 0 <= i__3 ? i__3 
-		: s_rnge("frmals", i__3, "ekqmgr_", (ftnlen)3904)) << 6), 
+		: s_rnge("frmals", i__3, "ekqmgr_", (ftnlen)4949)) << 6), 
 		eqryc_len, (ftnlen)64, (ftnlen)64);
     }
 
@@ -4767,15 +5804,15 @@ L_eksrch:
 	fnd = FALSE_;
 	while(tbcurr > 0 && ! fnd) {
 	    if (s_cmp(tbnams + (((i__2 = tbcurr - 1) < 100 && 0 <= i__2 ? 
-		    i__2 : s_rnge("tbnams", i__2, "ekqmgr_", (ftnlen)3928)) <<
+		    i__2 : s_rnge("tbnams", i__2, "ekqmgr_", (ftnlen)4973)) <<
 		     6), frmtab + (((i__3 = i__ - 1) < 10 && 0 <= i__3 ? i__3 
-		    : s_rnge("frmtab", i__3, "ekqmgr_", (ftnlen)3928)) << 6), 
+		    : s_rnge("frmtab", i__3, "ekqmgr_", (ftnlen)4973)) << 6), 
 		    (ftnlen)64, (ftnlen)64) == 0) {
 
 /*              We've found the table list entry for the Ith table. */
 
 		appndc_(frmtab + (((i__2 = i__ - 1) < 10 && 0 <= i__2 ? i__2 :
-			 s_rnge("frmtab", i__2, "ekqmgr_", (ftnlen)3932)) << 
+			 s_rnge("frmtab", i__2, "ekqmgr_", (ftnlen)4977)) << 
 			6), tabvec, (ftnlen)64, (ftnlen)64);
 		appndi_(&tbcurr, tptvec);
 		fnd = TRUE_;
@@ -4786,7 +5823,7 @@ L_eksrch:
 	if (! fnd) {
 	    setmsg_("The table # is not currently loaded.", (ftnlen)36);
 	    errch_("#", frmtab + (((i__2 = i__ - 1) < 10 && 0 <= i__2 ? i__2 :
-		     s_rnge("frmtab", i__2, "ekqmgr_", (ftnlen)3943)) << 6), (
+		     s_rnge("frmtab", i__2, "ekqmgr_", (ftnlen)4988)) << 6), (
 		    ftnlen)1, (ftnlen)64);
 	    sigerr_("SPICE(INVALIDTABLENAME)", (ftnlen)23);
 	    chkout_("EKSRCH", (ftnlen)6);
@@ -4813,7 +5850,7 @@ L_eksrch:
     i__1 = nconj;
     for (i__ = 1; i__ <= i__1; ++i__) {
 	zzekqcnj_(eqryi, &i__, &sizes[(i__2 = i__ - 1) < 1000 && 0 <= i__2 ? 
-		i__2 : s_rnge("sizes", i__2, "ekqmgr_", (ftnlen)3972)]);
+		i__2 : s_rnge("sizes", i__2, "ekqmgr_", (ftnlen)5017)]);
     }
 
 /*     For each conjunction of constraints, we'll build a join row */
@@ -4845,7 +5882,7 @@ L_eksrch:
 	    cjsize = 0;
 	} else {
 	    cjsize = sizes[(i__2 = conj - 1) < 1000 && 0 <= i__2 ? i__2 : 
-		    s_rnge("sizes", i__2, "ekqmgr_", (ftnlen)4004)];
+		    s_rnge("sizes", i__2, "ekqmgr_", (ftnlen)5049)];
 	}
 	cjbeg = cjend + 1;
 	cjend += cjsize;
@@ -4854,26 +5891,26 @@ L_eksrch:
 	    i__14 = cjbeg + i__ - 1;
 	    zzekqcon_(eqryi, eqryc, eqryd, &i__14, &cnstyp[(i__3 = i__ - 1) < 
 		    1000 && 0 <= i__3 ? i__3 : s_rnge("cnstyp", i__3, "ekqmg"
-		    "r_", (ftnlen)4012)], ltname, &ltbidx[(i__4 = i__ - 1) < 
+		    "r_", (ftnlen)5057)], ltname, &ltbidx[(i__4 = i__ - 1) < 
 		    1000 && 0 <= i__4 ? i__4 : s_rnge("ltbidx", i__4, "ekqmg"
-		    "r_", (ftnlen)4012)], lcname, &lcidx[(i__5 = i__ - 1) < 
+		    "r_", (ftnlen)5057)], lcname, &lcidx[(i__5 = i__ - 1) < 
 		    1000 && 0 <= i__5 ? i__5 : s_rnge("lcidx", i__5, "ekqmgr_"
-		    , (ftnlen)4012)], &ops[(i__6 = i__ - 1) < 1000 && 0 <= 
-		    i__6 ? i__6 : s_rnge("ops", i__6, "ekqmgr_", (ftnlen)4012)
+		    , (ftnlen)5057)], &ops[(i__6 = i__ - 1) < 1000 && 0 <= 
+		    i__6 ? i__6 : s_rnge("ops", i__6, "ekqmgr_", (ftnlen)5057)
 		    ], rtname, &rtbidx[(i__7 = i__ - 1) < 1000 && 0 <= i__7 ? 
-		    i__7 : s_rnge("rtbidx", i__7, "ekqmgr_", (ftnlen)4012)], 
+		    i__7 : s_rnge("rtbidx", i__7, "ekqmgr_", (ftnlen)5057)], 
 		    rcname, &rcidx[(i__8 = i__ - 1) < 1000 && 0 <= i__8 ? 
-		    i__8 : s_rnge("rcidx", i__8, "ekqmgr_", (ftnlen)4012)], &
+		    i__8 : s_rnge("rcidx", i__8, "ekqmgr_", (ftnlen)5057)], &
 		    dtype[(i__9 = i__ - 1) < 1000 && 0 <= i__9 ? i__9 : 
-		    s_rnge("dtype", i__9, "ekqmgr_", (ftnlen)4012)], &cbegs[(
+		    s_rnge("dtype", i__9, "ekqmgr_", (ftnlen)5057)], &cbegs[(
 		    i__10 = i__ - 1) < 1000 && 0 <= i__10 ? i__10 : s_rnge(
-		    "cbegs", i__10, "ekqmgr_", (ftnlen)4012)], &cends[(i__11 =
+		    "cbegs", i__10, "ekqmgr_", (ftnlen)5057)], &cends[(i__11 =
 		     i__ - 1) < 1000 && 0 <= i__11 ? i__11 : s_rnge("cends", 
-		    i__11, "ekqmgr_", (ftnlen)4012)], &dvals[(i__12 = i__ - 1)
+		    i__11, "ekqmgr_", (ftnlen)5057)], &dvals[(i__12 = i__ - 1)
 		     < 1000 && 0 <= i__12 ? i__12 : s_rnge("dvals", i__12, 
-		    "ekqmgr_", (ftnlen)4012)], &ivals[(i__13 = i__ - 1) < 
+		    "ekqmgr_", (ftnlen)5057)], &ivals[(i__13 = i__ - 1) < 
 		    1000 && 0 <= i__13 ? i__13 : s_rnge("ivals", i__13, "ekq"
-		    "mgr_", (ftnlen)4012)], eqryc_len, (ftnlen)64, (ftnlen)32, 
+		    "mgr_", (ftnlen)5057)], eqryc_len, (ftnlen)64, (ftnlen)32, 
 		    (ftnlen)64, (ftnlen)32);
 	}
 	i__2 = ntab;
@@ -4886,23 +5923,23 @@ L_eksrch:
 /*           can fill in the table count right away; the count is 1. */
 
 	    zzekstop_(&rbas[(i__3 = t - 1) < 10 && 0 <= i__3 ? i__3 : s_rnge(
-		    "rbas", i__3, "ekqmgr_", (ftnlen)4030)]);
+		    "rbas", i__3, "ekqmgr_", (ftnlen)5075)]);
 	    for (i__ = 1; i__ <= 4; ++i__) {
 		zzekspsh_(&c__1, &c__0);
 	    }
 	    i__5 = rbas[(i__3 = t - 1) < 10 && 0 <= i__3 ? i__3 : s_rnge(
-		    "rbas", i__3, "ekqmgr_", (ftnlen)4036)] + 3;
+		    "rbas", i__3, "ekqmgr_", (ftnlen)5081)] + 3;
 	    i__6 = rbas[(i__4 = t - 1) < 10 && 0 <= i__4 ? i__4 : s_rnge(
-		    "rbas", i__4, "ekqmgr_", (ftnlen)4036)] + 3;
+		    "rbas", i__4, "ekqmgr_", (ftnlen)5081)] + 3;
 	    zzeksupd_(&i__5, &i__6, &c__1);
 
 /*           Count the loaded segments for the current table.  We'll */
 /*           leave enough room in the join row set for each segment. */
 
 	    tab = tptvec[(i__3 = t + 5) < 16 && 0 <= i__3 ? i__3 : s_rnge(
-		    "tptvec", i__3, "ekqmgr_", (ftnlen)4042)];
+		    "tptvec", i__3, "ekqmgr_", (ftnlen)5087)];
 	    i__ = tbstpt[(i__3 = tab - 1) < 100 && 0 <= i__3 ? i__3 : s_rnge(
-		    "tbstpt", i__3, "ekqmgr_", (ftnlen)4043)];
+		    "tbstpt", i__3, "ekqmgr_", (ftnlen)5088)];
 	    nsv = 0;
 	    while(i__ > 0) {
 		zzekspsh_(&c__1, &c__0);
@@ -4921,16 +5958,16 @@ L_eksrch:
 /*           join row set. */
 
 	    i__5 = rbas[(i__3 = t - 1) < 10 && 0 <= i__3 ? i__3 : s_rnge(
-		    "rbas", i__3, "ekqmgr_", (ftnlen)4066)] + 4;
+		    "rbas", i__3, "ekqmgr_", (ftnlen)5111)] + 4;
 	    i__6 = rbas[(i__4 = t - 1) < 10 && 0 <= i__4 ? i__4 : s_rnge(
-		    "rbas", i__4, "ekqmgr_", (ftnlen)4066)] + 4;
+		    "rbas", i__4, "ekqmgr_", (ftnlen)5111)] + 4;
 	    zzeksupd_(&i__5, &i__6, &nsv);
 
 /*           Find the matching rows in the segments belonging to the */
 /*           current table. */
 
 	    seg = tbstpt[(i__3 = tab - 1) < 100 && 0 <= i__3 ? i__3 : s_rnge(
-		    "tbstpt", i__3, "ekqmgr_", (ftnlen)4072)];
+		    "tbstpt", i__3, "ekqmgr_", (ftnlen)5117)];
 	    nseg = 0;
 	    rtotal = 0;
 	    while(seg > 0) {
@@ -4940,7 +5977,7 @@ L_eksrch:
 /*              just the segment's index in the segment table. */
 
 		sgvbas = rbas[(i__3 = t - 1) < 10 && 0 <= i__3 ? i__3 : 
-			s_rnge("rbas", i__3, "ekqmgr_", (ftnlen)4083)] + 4 + (
+			s_rnge("rbas", i__3, "ekqmgr_", (ftnlen)5128)] + 4 + (
 			nseg - 1);
 		i__3 = sgvbas + 1;
 		i__4 = sgvbas + 1;
@@ -4958,15 +5995,15 @@ L_eksrch:
 /*                 Each constraint is active to start with. */
 
 		    activc[(i__4 = i__ - 1) < 1000 && 0 <= i__4 ? i__4 : 
-			    s_rnge("activc", i__4, "ekqmgr_", (ftnlen)4098)] =
+			    s_rnge("activc", i__4, "ekqmgr_", (ftnlen)5143)] =
 			     cnstyp[(i__5 = i__ - 1) < 1000 && 0 <= i__5 ? 
 			    i__5 : s_rnge("cnstyp", i__5, "ekqmgr_", (ftnlen)
-			    4098)] == 1;
+			    5143)] == 1;
 		    activv[(i__4 = i__ - 1) < 1000 && 0 <= i__4 ? i__4 : 
-			    s_rnge("activv", i__4, "ekqmgr_", (ftnlen)4099)] =
+			    s_rnge("activv", i__4, "ekqmgr_", (ftnlen)5144)] =
 			     cnstyp[(i__5 = i__ - 1) < 1000 && 0 <= i__5 ? 
 			    i__5 : s_rnge("cnstyp", i__5, "ekqmgr_", (ftnlen)
-			    4099)] == 2;
+			    5144)] == 2;
 
 /*                 The parent table of the LHS column must be the Tth */
 /*                 table, or this constraint does not apply. */
@@ -4978,28 +6015,28 @@ L_eksrch:
 /*                 column on the left. */
 
 		    if (ltbidx[(i__4 = i__ - 1) < 1000 && 0 <= i__4 ? i__4 : 
-			    s_rnge("ltbidx", i__4, "ekqmgr_", (ftnlen)4111)] 
+			    s_rnge("ltbidx", i__4, "ekqmgr_", (ftnlen)5156)] 
 			    != t) {
 			activc[(i__4 = i__ - 1) < 1000 && 0 <= i__4 ? i__4 : 
 				s_rnge("activc", i__4, "ekqmgr_", (ftnlen)
-				4113)] = FALSE_;
+				5158)] = FALSE_;
 			activv[(i__4 = i__ - 1) < 1000 && 0 <= i__4 ? i__4 : 
 				s_rnge("activv", i__4, "ekqmgr_", (ftnlen)
-				4114)] = FALSE_;
+				5159)] = FALSE_;
 		    } else if (cnstyp[(i__4 = i__ - 1) < 1000 && 0 <= i__4 ? 
 			    i__4 : s_rnge("cnstyp", i__4, "ekqmgr_", (ftnlen)
-			    4117)] == 1) {
+			    5162)] == 1) {
 			if (ltbidx[(i__4 = i__ - 1) < 1000 && 0 <= i__4 ? 
 				i__4 : s_rnge("ltbidx", i__4, "ekqmgr_", (
-				ftnlen)4119)] != rtbidx[(i__5 = i__ - 1) < 
+				ftnlen)5164)] != rtbidx[(i__5 = i__ - 1) < 
 				1000 && 0 <= i__5 ? i__5 : s_rnge("rtbidx", 
-				i__5, "ekqmgr_", (ftnlen)4119)]) {
+				i__5, "ekqmgr_", (ftnlen)5164)]) {
 
 /*                       This is a join constraint; disable it. */
 
 			    activc[(i__4 = i__ - 1) < 1000 && 0 <= i__4 ? 
 				    i__4 : s_rnge("activc", i__4, "ekqmgr_", (
-				    ftnlen)4123)] = FALSE_;
+				    ftnlen)5168)] = FALSE_;
 			}
 		    }
 		}
@@ -5016,7 +6053,7 @@ L_eksrch:
 		i__3 = cjsize;
 		for (i__ = 1; i__ <= i__3; ++i__) {
 		    if (activv[(i__4 = i__ - 1) < 1000 && 0 <= i__4 ? i__4 : 
-			    s_rnge("activv", i__4, "ekqmgr_", (ftnlen)4147)]) 
+			    s_rnge("activv", i__4, "ekqmgr_", (ftnlen)5192)]) 
 			    {
 
 /*                     Look up the column descriptor for this */
@@ -5024,27 +6061,27 @@ L_eksrch:
 
 			j = stdtpt[(i__4 = seg - 1) < 200 && 0 <= i__4 ? i__4 
 				: s_rnge("stdtpt", i__4, "ekqmgr_", (ftnlen)
-				4152)];
+				5197)];
 			i__5 = lcidx[(i__4 = i__ - 1) < 1000 && 0 <= i__4 ? 
 				i__4 : s_rnge("lcidx", i__4, "ekqmgr_", (
-				ftnlen)4154)];
+				ftnlen)5199)];
 			for (k = 2; k <= i__5; ++k) {
 			    j = lnknxt_(&j, dtpool);
 			}
 			movei_(&dtdscs[(i__5 = j * 11 - 11) < 110000 && 0 <= 
 				i__5 ? i__5 : s_rnge("dtdscs", i__5, "ekqmgr_"
-				, (ftnlen)4158)], &c__11, &ldscrs[(i__4 = i__ 
+				, (ftnlen)5203)], &c__11, &ldscrs[(i__4 = i__ 
 				* 11 - 11) < 11000 && 0 <= i__4 ? i__4 : 
 				s_rnge("ldscrs", i__4, "ekqmgr_", (ftnlen)
-				4158)]);
+				5203)]);
 		    }
 		}
 		zzekkey_(&sthan[(i__3 = seg - 1) < 200 && 0 <= i__3 ? i__3 : 
-			s_rnge("sthan", i__3, "ekqmgr_", (ftnlen)4165)], &
+			s_rnge("sthan", i__3, "ekqmgr_", (ftnlen)5210)], &
 			stdscs[(i__5 = seg * 24 - 24) < 4800 && 0 <= i__5 ? 
-			i__5 : s_rnge("stdscs", i__5, "ekqmgr_", (ftnlen)4165)
+			i__5 : s_rnge("stdscs", i__5, "ekqmgr_", (ftnlen)5210)
 			], &stnrow[(i__4 = seg - 1) < 200 && 0 <= i__4 ? i__4 
-			: s_rnge("stnrow", i__4, "ekqmgr_", (ftnlen)4165)], &
+			: s_rnge("stnrow", i__4, "ekqmgr_", (ftnlen)5210)], &
 			cjsize, lcidx, ldscrs, ops, dtype, eqryc, cbegs, 
 			cends, dvals, ivals, activv, &key, keydsc, &begidx, &
 			endidx, &keyfnd, eqryc_len);
@@ -5065,7 +6102,7 @@ L_eksrch:
 		    begidx = 1;
 		    endidx = stnrow[(i__3 = seg - 1) < 200 && 0 <= i__3 ? 
 			    i__3 : s_rnge("stnrow", i__3, "ekqmgr_", (ftnlen)
-			    4193)];
+			    5238)];
 		}
 
 /*              Whether or not we have any matching rows, we'll need */
@@ -5086,14 +6123,14 @@ L_eksrch:
 		    nmatch = 0;
 		    zzekstop_(&rwvbas);
 		    i__6 = rbas[(i__3 = t - 1) < 10 && 0 <= i__3 ? i__3 : 
-			    s_rnge("rbas", i__3, "ekqmgr_", (ftnlen)4218)] + 
+			    s_rnge("rbas", i__3, "ekqmgr_", (ftnlen)5263)] + 
 			    ptroff;
 		    i__7 = rbas[(i__5 = t - 1) < 10 && 0 <= i__5 ? i__5 : 
-			    s_rnge("rbas", i__5, "ekqmgr_", (ftnlen)4218)] + 
+			    s_rnge("rbas", i__5, "ekqmgr_", (ftnlen)5263)] + 
 			    ptroff;
 		    i__8 = rwvbas - rbas[(i__4 = t - 1) < 10 && 0 <= i__4 ? 
 			    i__4 : s_rnge("rbas", i__4, "ekqmgr_", (ftnlen)
-			    4218)];
+			    5263)];
 		    zzeksupd_(&i__6, &i__7, &i__8);
 
 /*                 Count the active constraints.  While we're at it, */
@@ -5109,43 +6146,43 @@ L_eksrch:
 		    for (i__ = 1; i__ <= i__3; ++i__) {
 			if (activc[(i__5 = i__ - 1) < 1000 && 0 <= i__5 ? 
 				i__5 : s_rnge("activc", i__5, "ekqmgr_", (
-				ftnlen)4234)] || activv[(i__4 = i__ - 1) < 
+				ftnlen)5279)] || activv[(i__4 = i__ - 1) < 
 				1000 && 0 <= i__4 ? i__4 : s_rnge("activv", 
-				i__4, "ekqmgr_", (ftnlen)4234)]) {
+				i__4, "ekqmgr_", (ftnlen)5279)]) {
 			    ++nact;
 
 /*                       Look up the column descriptor for this */
 /*                       constraint. */
 			    j = stdtpt[(i__5 = seg - 1) < 200 && 0 <= i__5 ? 
 				    i__5 : s_rnge("stdtpt", i__5, "ekqmgr_", (
-				    ftnlen)4241)];
+				    ftnlen)5286)];
 			    i__4 = lcidx[(i__5 = i__ - 1) < 1000 && 0 <= i__5 
 				    ? i__5 : s_rnge("lcidx", i__5, "ekqmgr_", 
-				    (ftnlen)4243)];
+				    (ftnlen)5288)];
 			    for (k = 2; k <= i__4; ++k) {
 				j = lnknxt_(&j, dtpool);
 			    }
 			    movei_(&dtdscs[(i__4 = j * 11 - 11) < 110000 && 0 
 				    <= i__4 ? i__4 : s_rnge("dtdscs", i__4, 
-				    "ekqmgr_", (ftnlen)4247)], &c__11, &
+				    "ekqmgr_", (ftnlen)5292)], &c__11, &
 				    ldscrs[(i__5 = i__ * 11 - 11) < 11000 && 
 				    0 <= i__5 ? i__5 : s_rnge("ldscrs", i__5, 
-				    "ekqmgr_", (ftnlen)4247)]);
+				    "ekqmgr_", (ftnlen)5292)]);
 			    j = stdtpt[(i__4 = seg - 1) < 200 && 0 <= i__4 ? 
 				    i__4 : s_rnge("stdtpt", i__4, "ekqmgr_", (
-				    ftnlen)4250)];
+				    ftnlen)5295)];
 			    i__5 = rcidx[(i__4 = i__ - 1) < 1000 && 0 <= i__4 
 				    ? i__4 : s_rnge("rcidx", i__4, "ekqmgr_", 
-				    (ftnlen)4252)];
+				    (ftnlen)5297)];
 			    for (k = 2; k <= i__5; ++k) {
 				j = lnknxt_(&j, dtpool);
 			    }
 			    movei_(&dtdscs[(i__5 = j * 11 - 11) < 110000 && 0 
 				    <= i__5 ? i__5 : s_rnge("dtdscs", i__5, 
-				    "ekqmgr_", (ftnlen)4256)], &c__11, &
+				    "ekqmgr_", (ftnlen)5301)], &c__11, &
 				    rdscrs[(i__4 = i__ * 11 - 11) < 11000 && 
 				    0 <= i__4 ? i__4 : s_rnge("rdscrs", i__4, 
-				    "ekqmgr_", (ftnlen)4256)]);
+				    "ekqmgr_", (ftnlen)5301)]);
 			}
 		    }
 		    if (nact > 0) {
@@ -5160,7 +6197,7 @@ L_eksrch:
 			    if (indexd) {
 				zzekixlk_(&sthan[(i__5 = seg - 1) < 200 && 0 
 					<= i__5 ? i__5 : s_rnge("sthan", i__5,
-					 "ekqmgr_", (ftnlen)4275)], keydsc, &
+					 "ekqmgr_", (ftnlen)5320)], keydsc, &
 					r__, &rowidx);
 			    } else {
 
@@ -5168,10 +6205,10 @@ L_eksrch:
 
 				zzekrplk_(&sthan[(i__5 = seg - 1) < 200 && 0 
 					<= i__5 ? i__5 : s_rnge("sthan", i__5,
-					 "ekqmgr_", (ftnlen)4283)], &stdscs[(
+					 "ekqmgr_", (ftnlen)5328)], &stdscs[(
 					i__4 = seg * 24 - 24) < 4800 && 0 <= 
 					i__4 ? i__4 : s_rnge("stdscs", i__4, 
-					"ekqmgr_", (ftnlen)4283)], &r__, &
+					"ekqmgr_", (ftnlen)5328)], &r__, &
 					rowidx);
 			    }
 
@@ -5182,9 +6219,9 @@ L_eksrch:
 			    vmtch = zzekrmch_(&cjsize, activv, &sthan[(i__5 = 
 				    seg - 1) < 200 && 0 <= i__5 ? i__5 : 
 				    s_rnge("sthan", i__5, "ekqmgr_", (ftnlen)
-				    4294)], &stdscs[(i__4 = seg * 24 - 24) < 
+				    5339)], &stdscs[(i__4 = seg * 24 - 24) < 
 				    4800 && 0 <= i__4 ? i__4 : s_rnge("stdscs"
-				    , i__4, "ekqmgr_", (ftnlen)4294)], ldscrs,
+				    , i__4, "ekqmgr_", (ftnlen)5339)], ldscrs,
 				     &rowidx, lelts, ops, dtype, eqryc, cbegs,
 				     cends, dvals, ivals, eqryc_len);
 			    cmtch = TRUE_;
@@ -5200,28 +6237,28 @@ L_eksrch:
 				cmtch = cmtch && zzekvmch_(&c__1, &activc[(
 					i__4 = j - 1) < 1000 && 0 <= i__4 ? 
 					i__4 : s_rnge("activc", i__4, "ekqmg"
-					"r_", (ftnlen)4313)], &sthan[(i__6 = 
+					"r_", (ftnlen)5358)], &sthan[(i__6 = 
 					seg - 1) < 200 && 0 <= i__6 ? i__6 : 
 					s_rnge("sthan", i__6, "ekqmgr_", (
-					ftnlen)4313)], &stdscs[(i__7 = seg * 
+					ftnlen)5358)], &stdscs[(i__7 = seg * 
 					24 - 24) < 4800 && 0 <= i__7 ? i__7 : 
 					s_rnge("stdscs", i__7, "ekqmgr_", (
-					ftnlen)4313)], &ldscrs[(i__8 = j * 11 
+					ftnlen)5358)], &ldscrs[(i__8 = j * 11 
 					- 11) < 11000 && 0 <= i__8 ? i__8 : 
 					s_rnge("ldscrs", i__8, "ekqmgr_", (
-					ftnlen)4313)], &rowidx, &c__1, &ops[(
+					ftnlen)5358)], &rowidx, &c__1, &ops[(
 					i__9 = j - 1) < 1000 && 0 <= i__9 ? 
 					i__9 : s_rnge("ops", i__9, "ekqmgr_", 
-					(ftnlen)4313)], &sthan[(i__10 = seg - 
+					(ftnlen)5358)], &sthan[(i__10 = seg - 
 					1) < 200 && 0 <= i__10 ? i__10 : 
 					s_rnge("sthan", i__10, "ekqmgr_", (
-					ftnlen)4313)], &stdscs[(i__11 = seg * 
+					ftnlen)5358)], &stdscs[(i__11 = seg * 
 					24 - 24) < 4800 && 0 <= i__11 ? i__11 
 					: s_rnge("stdscs", i__11, "ekqmgr_", (
-					ftnlen)4313)], &rdscrs[(i__12 = j * 
+					ftnlen)5358)], &rdscrs[(i__12 = j * 
 					11 - 11) < 11000 && 0 <= i__12 ? 
 					i__12 : s_rnge("rdscrs", i__12, "ekq"
-					"mgr_", (ftnlen)4313)], &rowidx, &c__1)
+					"mgr_", (ftnlen)5358)], &rowidx, &c__1)
 					;
 			    }
 			    if (cmtch && vmtch) {
@@ -5237,7 +6274,7 @@ L_eksrch:
 				zzekspsh_(&c__1, &rowidx);
 				i__4 = sgvbas - rbas[(i__5 = t - 1) < 10 && 0 
 					<= i__5 ? i__5 : s_rnge("rbas", i__5, 
-					"ekqmgr_", (ftnlen)4342)];
+					"ekqmgr_", (ftnlen)5387)];
 				zzekspsh_(&c__1, &i__4);
 			    }
 			}
@@ -5258,7 +6295,7 @@ L_eksrch:
 
 				zzekixlk_(&sthan[(i__5 = seg - 1) < 200 && 0 
 					<= i__5 ? i__5 : s_rnge("sthan", i__5,
-					 "ekqmgr_", (ftnlen)4366)], keydsc, &
+					 "ekqmgr_", (ftnlen)5411)], keydsc, &
 					r__, &rowidx);
 			    } else {
 
@@ -5266,16 +6303,16 @@ L_eksrch:
 
 				zzekrplk_(&sthan[(i__5 = seg - 1) < 200 && 0 
 					<= i__5 ? i__5 : s_rnge("sthan", i__5,
-					 "ekqmgr_", (ftnlen)4374)], &stdscs[(
+					 "ekqmgr_", (ftnlen)5419)], &stdscs[(
 					i__4 = seg * 24 - 24) < 4800 && 0 <= 
 					i__4 ? i__4 : s_rnge("stdscs", i__4, 
-					"ekqmgr_", (ftnlen)4374)], &r__, &
+					"ekqmgr_", (ftnlen)5419)], &r__, &
 					rowidx);
 			    }
 			    zzekspsh_(&c__1, &rowidx);
 			    i__4 = sgvbas - rbas[(i__5 = t - 1) < 10 && 0 <= 
 				    i__5 ? i__5 : s_rnge("rbas", i__5, "ekqm"
-				    "gr_", (ftnlen)4382)];
+				    "gr_", (ftnlen)5427)];
 			    zzekspsh_(&c__1, &i__4);
 			}
 		    }
@@ -5284,10 +6321,10 @@ L_eksrch:
 /*                 set. */
 
 		    i__4 = rbas[(i__3 = t - 1) < 10 && 0 <= i__3 ? i__3 : 
-			    s_rnge("rbas", i__3, "ekqmgr_", (ftnlen)4392)] + 
+			    s_rnge("rbas", i__3, "ekqmgr_", (ftnlen)5437)] + 
 			    ptroff + 1;
 		    i__6 = rbas[(i__5 = t - 1) < 10 && 0 <= i__5 ? i__5 : 
-			    s_rnge("rbas", i__5, "ekqmgr_", (ftnlen)4392)] + 
+			    s_rnge("rbas", i__5, "ekqmgr_", (ftnlen)5437)] + 
 			    ptroff + 1;
 		    zzeksupd_(&i__4, &i__6, &nmatch);
 		}
@@ -5303,26 +6340,26 @@ L_eksrch:
 
 	    zzekstop_(&top);
 	    rsize[(i__3 = t - 1) < 200 && 0 <= i__3 ? i__3 : s_rnge("rsize", 
-		    i__3, "ekqmgr_", (ftnlen)4410)] = top - rbas[(i__5 = t - 
+		    i__3, "ekqmgr_", (ftnlen)5455)] = top - rbas[(i__5 = t - 
 		    1) < 10 && 0 <= i__5 ? i__5 : s_rnge("rbas", i__5, "ekqm"
-		    "gr_", (ftnlen)4410)];
+		    "gr_", (ftnlen)5455)];
 	    i__6 = rbas[(i__3 = t - 1) < 10 && 0 <= i__3 ? i__3 : s_rnge(
-		    "rbas", i__3, "ekqmgr_", (ftnlen)4412)] + 1;
+		    "rbas", i__3, "ekqmgr_", (ftnlen)5457)] + 1;
 	    i__7 = rbas[(i__5 = t - 1) < 10 && 0 <= i__5 ? i__5 : s_rnge(
-		    "rbas", i__5, "ekqmgr_", (ftnlen)4412)] + 1;
+		    "rbas", i__5, "ekqmgr_", (ftnlen)5457)] + 1;
 	    zzeksupd_(&i__6, &i__7, &rsize[(i__4 = t - 1) < 200 && 0 <= i__4 ?
-		     i__4 : s_rnge("rsize", i__4, "ekqmgr_", (ftnlen)4412)]);
+		     i__4 : s_rnge("rsize", i__4, "ekqmgr_", (ftnlen)5457)]);
 	    i__4 = rbas[(i__3 = t - 1) < 10 && 0 <= i__3 ? i__3 : s_rnge(
-		    "rbas", i__3, "ekqmgr_", (ftnlen)4413)] + 2;
+		    "rbas", i__3, "ekqmgr_", (ftnlen)5458)] + 2;
 	    i__6 = rbas[(i__5 = t - 1) < 10 && 0 <= i__5 ? i__5 : s_rnge(
-		    "rbas", i__5, "ekqmgr_", (ftnlen)4413)] + 2;
+		    "rbas", i__5, "ekqmgr_", (ftnlen)5458)] + 2;
 	    zzeksupd_(&i__4, &i__6, &rtotal);
 
 /*           Compress out any empty segment vectors from the join row */
 /*           set. */
 
 	    zzekjsqz_(&rbas[(i__3 = t - 1) < 10 && 0 <= i__3 ? i__3 : s_rnge(
-		    "rbas", i__3, "ekqmgr_", (ftnlen)4419)]);
+		    "rbas", i__3, "ekqmgr_", (ftnlen)5464)]);
 
 /*           At this point, we've filled in the entire join row set for */
 /*           table T. */
@@ -5346,19 +6383,19 @@ L_eksrch:
 	    i__3 = cjsize;
 	    for (i__ = 1; i__ <= i__3; ++i__) {
 		activc[(i__5 = i__ - 1) < 1000 && 0 <= i__5 ? i__5 : s_rnge(
-			"activc", i__5, "ekqmgr_", (ftnlen)4444)] = FALSE_;
+			"activc", i__5, "ekqmgr_", (ftnlen)5489)] = FALSE_;
 		if (cnstyp[(i__5 = i__ - 1) < 1000 && 0 <= i__5 ? i__5 : 
-			s_rnge("cnstyp", i__5, "ekqmgr_", (ftnlen)4446)] == 1)
+			s_rnge("cnstyp", i__5, "ekqmgr_", (ftnlen)5491)] == 1)
 			 {
 		    l = ltbidx[(i__5 = i__ - 1) < 1000 && 0 <= i__5 ? i__5 : 
-			    s_rnge("ltbidx", i__5, "ekqmgr_", (ftnlen)4448)];
+			    s_rnge("ltbidx", i__5, "ekqmgr_", (ftnlen)5493)];
 		    r__ = rtbidx[(i__5 = i__ - 1) < 1000 && 0 <= i__5 ? i__5 :
-			     s_rnge("rtbidx", i__5, "ekqmgr_", (ftnlen)4449)];
+			     s_rnge("rtbidx", i__5, "ekqmgr_", (ftnlen)5494)];
 		    if (l >= 1 && l <= t && r__ >= 1 && r__ <= t && l != r__ 
 			    && (r__ == t || l == t)) {
 			activc[(i__5 = i__ - 1) < 1000 && 0 <= i__5 ? i__5 : 
 				s_rnge("activc", i__5, "ekqmgr_", (ftnlen)
-				4459)] = TRUE_;
+				5504)] = TRUE_;
 		    }
 		}
 	    }
@@ -5373,7 +6410,7 @@ L_eksrch:
 		jbase1 = resbas;
 	    }
 	    jbase2 = rbas[(i__3 = t - 1) < 10 && 0 <= i__3 ? i__3 : s_rnge(
-		    "rbas", i__3, "ekqmgr_", (ftnlen)4478)];
+		    "rbas", i__3, "ekqmgr_", (ftnlen)5523)];
 	    zzekjoin_(&jbase1, &jbase2, &cjsize, activc, ltbidx, lcidx, lelts,
 		     ops, rtbidx, rcidx, relts, sthan, stdscs, stdtpt, dtpool,
 		     dtdscs, &resbas, &jsize);
@@ -5388,7 +6425,7 @@ L_eksrch:
 
 	++usize;
 	ubase[(i__2 = usize - 1) < 200 && 0 <= i__2 ? i__2 : s_rnge("ubase", 
-		i__2, "ekqmgr_", (ftnlen)4498)] = resbas;
+		i__2, "ekqmgr_", (ftnlen)5543)] = resbas;
 	i__2 = resbas + 2;
 	i__3 = resbas + 2;
 	zzeksrd_(&i__2, &i__3, &cjrows);
@@ -5427,15 +6464,15 @@ L_eksrch:
 /*        index within the parent table's column list. */
 
 	tab = tptvec[(i__2 = tabidx + 5) < 16 && 0 <= i__2 ? i__2 : s_rnge(
-		"tptvec", i__2, "ekqmgr_", (ftnlen)4542)];
+		"tptvec", i__2, "ekqmgr_", (ftnlen)5587)];
 	j = tbctpt[(i__2 = tab - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge("tbct"
-		"pt", i__2, "ekqmgr_", (ftnlen)4543)];
+		"pt", i__2, "ekqmgr_", (ftnlen)5588)];
 	col = 0;
 	fnd = FALSE_;
 	while(j > 0 && ! fnd) {
 	    ++col;
 	    if (s_cmp(ctnams + (((i__2 = j - 1) < 500 && 0 <= i__2 ? i__2 : 
-		    s_rnge("ctnams", i__2, "ekqmgr_", (ftnlen)4551)) << 5), 
+		    s_rnge("ctnams", i__2, "ekqmgr_", (ftnlen)5596)) << 5), 
 		    colnam, (ftnlen)32, (ftnlen)32) == 0) {
 		fnd = TRUE_;
 	    } else {
@@ -5451,11 +6488,11 @@ L_eksrch:
 	    return 0;
 	}
 	selctp[(i__2 = i__ - 1) < 50 && 0 <= i__2 ? i__2 : s_rnge("selctp", 
-		i__2, "ekqmgr_", (ftnlen)4568)] = j;
+		i__2, "ekqmgr_", (ftnlen)5613)] = j;
 	selcol[(i__2 = i__ - 1) < 50 && 0 <= i__2 ? i__2 : s_rnge("selcol", 
-		i__2, "ekqmgr_", (ftnlen)4569)] = col;
+		i__2, "ekqmgr_", (ftnlen)5614)] = col;
 	seltab[(i__2 = i__ - 1) < 50 && 0 <= i__2 ? i__2 : s_rnge("seltab", 
-		i__2, "ekqmgr_", (ftnlen)4570)] = tabidx;
+		i__2, "ekqmgr_", (ftnlen)5615)] = tabidx;
     }
 
 /*     Enable sorting of the matching row vectors, if necessary.  The */
@@ -5468,16 +6505,16 @@ L_eksrch:
 	for (i__ = 1; i__ <= i__1; ++i__) {
 	    zzekqord_(eqryi, eqryc, &i__, tabnam, &otabs[(i__2 = i__ - 1) < 
 		    10 && 0 <= i__2 ? i__2 : s_rnge("otabs", i__2, "ekqmgr_", 
-		    (ftnlen)4585)], colnam, &ocols[(i__3 = i__ - 1) < 10 && 0 
+		    (ftnlen)5630)], colnam, &ocols[(i__3 = i__ - 1) < 10 && 0 
 		    <= i__3 ? i__3 : s_rnge("ocols", i__3, "ekqmgr_", (ftnlen)
-		    4585)], &sense[(i__5 = i__ - 1) < 10 && 0 <= i__5 ? i__5 :
-		     s_rnge("sense", i__5, "ekqmgr_", (ftnlen)4585)], 
+		    5630)], &sense[(i__5 = i__ - 1) < 10 && 0 <= i__5 ? i__5 :
+		     s_rnge("sense", i__5, "ekqmgr_", (ftnlen)5630)], 
 		    eqryc_len, (ftnlen)64, (ftnlen)32);
 	}
     }
     chkout_("EKSRCH", (ftnlen)6);
     return 0;
-/* $Procedure     EKNELT  ( EK, get number of elements in column entry ) */
+/* $Procedure EKNELT  ( EK, get number of elements in column entry ) */
 
 L_eknelt:
 /* $ Abstract */
@@ -5526,7 +6563,7 @@ L_eknelt:
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     SELIDX     I   Index of parent column in SELECT clause. */
 /*     ROW        I   Row containing element. */
@@ -5534,26 +6571,26 @@ L_eknelt:
 
 /* $ Detailed_Input */
 
-/*     SELIDX         is the SELECT clause index of the column to */
-/*                    fetch from. */
+/*     SELIDX   is the SELECT clause index of the column to */
+/*              fetch from. */
 
-/*     ROW            is the index of the row containing the element. */
-/*                    This number refers to a member of the set of rows */
-/*                    matching a query.  ROW must be in the range */
+/*     ROW      is the index of the row containing the element. */
+/*              This number refers to a member of the set of rows */
+/*              matching a query. ROW must be in the range */
 
-/*                      1 : NMROWS */
+/*                 1 : NMROWS */
 
-/*                    where NMROWS is the matching row count returned */
-/*                    by EKSRCH. */
+/*              where NMROWS is the matching row count returned */
+/*              by EKSRCH. */
 
 /* $ Detailed_Output */
 
-/*     NELT           is the number of elements in the column entry */
-/*                    belonging to the specified column in the current */
-/*                    row. */
+/*     NELT     is the number of elements in the column entry */
+/*              belonging to the specified column in the current */
+/*              row. */
 
-/*                    Null entries in variable-size columns are */
-/*                    considered to have size 1. */
+/*              Null entries in variable-size columns are */
+/*              considered to have size 1. */
 
 /* $ Parameters */
 
@@ -5566,11 +6603,11 @@ L_eknelt:
 
 /*     2)  If SELIDX is outside of the range established by the */
 /*         last query passed to EKSRCH, the error SPICE(INVALIDINDEX) */
-/*         will be signaled. */
+/*         is signaled. */
 
 /*     3)  If ROW is outside of the range established by the */
 /*         last query passed to EKSRCH, the error SPICE(INVALIDINDEX) */
-/*         will be signaled. */
+/*         is signaled. */
 
 /* $ Files */
 
@@ -5580,140 +6617,372 @@ L_eknelt:
 /* $ Particulars */
 
 /*     This routine is meant to be used in conjunction with the EKQMGR */
-/*     fetch entry points EKGC, EKGD, and EKGI.  This routine */
+/*     fetch entry points EKGC, EKGD, and EKGI. This routine */
 /*     allows the caller of those routines to determine appropriate */
 /*     loop bounds to use to fetch each column entry in the current row. */
 
 /* $ Examples */
 
-/*     1)  Suppose the EK table TAB contains the following columns: */
+/*     The numerical results shown for this example may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
 
+/*     1) This example demonstrates how to fetch integer, double */
+/*        precision and character string values from a column when such */
+/*        column corresponds to either a variable-size array or to a */
+/*        static-size array. */
+
+/*        Create an EK that contains a table TAB that has the following */
+/*        columns: */
 
 /*            Column name   Data Type   Size */
 /*            -----------   ---------   ---- */
-/*            IARRAY        INT         10 */
+/*            IARRAY        INT         3 */
 /*            DARRAY        DP          VARIABLE */
 /*            CARRAY        CHR         VARIABLE */
 
-
-/*         Suppose the query */
+/*        Issue the following query */
 
 /*            QUERY = 'SELECT IARRAY, DARRAY, CARRAY FROM TAB' */
 
-/*         is issued to EKFIND via the call */
-
-/*            CALL EKFIND ( QUERY, NMROWS, ERROR, ERRMSG ) */
-
-/*         To fetch and dump column values from the rows that satisfy the */
-/*         query, the loop below could be used.  Note that we don't check */
-/*         the FOUND flags returned by the fetch routines since we know */
-/*         in advance how many elements are contained in each column */
-/*         entry we fetch. */
+/*        to fetch and dump column values from the rows that satisfy the */
+/*        query. */
 
 
-/*                  DO ROW = 1, NMROWS */
+/*        Example code begins here. */
 
-/*                     WRITE (*,*) ' ' */
-/*                     WRITE (*,*) 'ROW  = ', ROW */
-/*                     WRITE (*,*) ' ' */
 
-/*            C */
-/*            C        Fetch values from column IARRAY in the current */
-/*            C        row.  Since IARRAY was the first column selected, */
-/*            C        the selection index SELIDX is set to 1. */
-/*            C */
-/*                     SELIDX = 1 */
+/*              PROGRAM EKNELT_EX1 */
+/*              IMPLICIT NONE */
 
-/*                     ELTIDX = 1 */
-/*                     ISNULL = .FALSE. */
+/*        C */
+/*        C     Include the EK Column Name Size (CNAMSZ) */
+/*        C     and EK Query Limit Parameters (MAXQRY) */
+/*        C */
+/*              INCLUDE 'ekcnamsz.inc' */
+/*              INCLUDE 'ekqlimit.inc' */
 
-/*                     DO WHILE ( ( ELTIDX .LE. 10 ) .AND. .NOT. ISNULL ) */
-/*            C */
-/*            C           If the column entry is null, we'll be kicked */
-/*            C           out of this loop after the first iteration. */
-/*            C */
-/*                        CALL EKGI ( SELIDX,         ROW,     ELTIDX, */
-/*                                    IVALS(ELTIDX),  ISNULL,  FOUND   ) */
+/*        C */
+/*        C     SPICELIB functions */
+/*        C */
+/*              INTEGER               RTRIM */
 
-/*                        ELTIDX = ELTIDX + 1 */
+/*        C */
+/*        C     Local parameters */
+/*        C */
+/*              CHARACTER*(*)         EKNAME */
+/*              PARAMETER           ( EKNAME  = 'eknelt_ex1.bdb' ) */
 
-/*                     END DO */
+/*              CHARACTER*(*)         TABLE */
+/*              PARAMETER           ( TABLE   = 'TAB' ) */
 
-/*                     WRITE (*,*) ' ' */
-/*                     WRITE (*,*) 'COLUMN = IARRAY' */
-/*                     WRITE (*,*) ' ' */
+/*              INTEGER               CHRSLN */
+/*              PARAMETER           ( CHRSLN = 5   ) */
 
-/*                     IF ( ISNULL ) THEN */
-/*                        WRITE (*,*) '<Null>' */
-/*                     ELSE */
-/*                        WRITE (*,*) ( IVALS(I), I = 1, 10 ) */
-/*                     END IF */
+/*              INTEGER               COL1SZ */
+/*              PARAMETER           ( COL1SZ = 3   ) */
 
-/*            C */
-/*            C        Fetch values from column DARRAY in the current */
-/*            C        row.  Since DARRAY contains variable-size array */
-/*            C        elements, we call EKNELT to determine how many */
-/*            C        elements to fetch. */
-/*            C */
-/*                     SELIDX = 2 */
+/*              INTEGER               DECLEN */
+/*              PARAMETER           ( DECLEN = 200 ) */
 
-/*                     CALL EKNELT ( SELIDX, ROW, NELT ) */
+/*              INTEGER               ERRLEN */
+/*              PARAMETER           ( ERRLEN = 1840 ) */
 
-/*                     ELTIDX = 1 */
-/*                     ISNULL = .FALSE. */
+/*              INTEGER               MXC2SZ */
+/*              PARAMETER           ( MXC2SZ = 4   ) */
 
-/*                     DO WHILE (       ( ELTIDX .LE.  NELT   ) */
-/*                 .              .AND. (        .NOT. ISNULL )  ) */
+/*              INTEGER               MXC3SZ */
+/*              PARAMETER           ( MXC3SZ = 7   ) */
 
-/*                        CALL EKGD ( SELIDX,         ROW,     ELTIDX, */
-/*                                    DVALS(ELTIDX),  ISNULL,  FOUND   ) */
+/*              INTEGER               NAMLEN */
+/*              PARAMETER           ( NAMLEN = 40  ) */
 
-/*                        ELTIDX = ELTIDX + 1 */
+/*              INTEGER               NCOLS */
+/*              PARAMETER           ( NCOLS  = 3   ) */
 
-/*                     END DO */
+/*              INTEGER               NROWS */
+/*              PARAMETER           ( NROWS  = 4   ) */
 
-/*                     WRITE (*,*) ' ' */
-/*                     WRITE (*,*) 'COLUMN = DARRAY' */
-/*                     WRITE (*,*) ' ' */
+/*              INTEGER               STRSIZ */
+/*              PARAMETER           ( STRSIZ  = 30 ) */
 
-/*                     IF ( ISNULL ) THEN */
-/*                        WRITE (*,*) '<Null>' */
-/*                     ELSE */
-/*                        WRITE (*,*) ( DVALS(I), I = 1, NELT ) */
-/*                     END IF */
+/*        C */
+/*        C     Local variables */
+/*        C */
+/*              CHARACTER*(DECLEN)    CDECLS ( NCOLS  ) */
+/*              CHARACTER*(CNAMSZ)    CNAMES ( NCOLS  ) */
+/*              CHARACTER*(CHRSLN)    COL3   ( MXC3SZ ) */
+/*              CHARACTER*(STRSIZ)    CVALS  ( MXC3SZ ) */
+/*              CHARACTER*(ERRLEN)    ERRMSG */
+/*              CHARACTER*(NAMLEN)    IFNAME */
+/*              CHARACTER*(MAXQRY)    QUERY */
 
-/*            C */
-/*            C        Fetch values from column CARRAY in the current */
-/*            C        row. */
-/*            C */
-/*                     SELIDX = 3 */
-/*                     CALL EKNELT ( SELIDX, ROW, NELT ) */
+/*              DOUBLE PRECISION      COL2   ( MXC2SZ ) */
+/*              DOUBLE PRECISION      DVALS  ( MXC2SZ ) */
 
-/*                     ELTIDX = 1 */
-/*                     ISNULL = .FALSE. */
+/*              INTEGER               COL1   ( COL1SZ ) */
+/*              INTEGER               ELTIDX */
+/*              INTEGER               HANDLE */
+/*              INTEGER               I */
+/*              INTEGER               IVALS ( COL1SZ ) */
+/*              INTEGER               J */
+/*              INTEGER               NELT */
+/*              INTEGER               NMROWS */
+/*              INTEGER               NRESVC */
+/*              INTEGER               RECNO */
+/*              INTEGER               ROW */
+/*              INTEGER               SEGNO */
+/*              INTEGER               SELIDX */
 
-/*                     DO WHILE (       ( ELTIDX .LE.  NELT   ) */
-/*                 .              .AND. (        .NOT. ISNULL )  ) */
+/*              LOGICAL               ERROR */
+/*              LOGICAL               FOUND */
+/*              LOGICAL               ISNULL */
 
-/*                        CALL EKGC ( SELIDX,         ROW,     ELTIDX, */
-/*                                    CVALS(ELTIDX),  ISNULL,  FOUND   ) */
+/*        C */
+/*        C     Open a new EK file.  For simplicity, we will not */
+/*        C     reserve any space for the comment area, so the */
+/*        C     number of reserved comment characters is zero. */
+/*        C     The variable IFNAME is the internal file name. */
+/*        C */
+/*              NRESVC  =  0 */
+/*              IFNAME  =  'Test EK/Created 13-JUN-2019' */
 
-/*                        ELTIDX = ELTIDX + 1 */
+/*              CALL EKOPN ( EKNAME, IFNAME, NRESVC, HANDLE ) */
 
-/*                     END DO */
+/*        C */
+/*        C     Set up the column names and declarations */
+/*        C     for the TAB segment.  We'll index all of */
+/*        C     the columns. */
+/*        C */
+/*              CNAMES(1) = 'IARRAY' */
+/*              CDECLS(1) = 'DATATYPE = INTEGER, SIZE = 3' */
 
-/*                     WRITE (*,*) ' ' */
-/*                     WRITE (*,*) 'COLUMN = CARRAY' */
-/*                     WRITE (*,*) ' ' */
+/*              CNAMES(2) = 'DARRAY' */
+/*              CDECLS(2) = 'DATATYPE = DOUBLE PRECISION, ' // */
+/*             .            'SIZE = VARIABLE' */
 
-/*                     IF ( ISNULL ) THEN */
-/*                        WRITE (*,*) '<Null>' */
-/*                     ELSE */
-/*                        WRITE (*,*) ( CVALS(I), I = 1, NELT ) */
-/*                     END IF */
+/*              CNAMES(3) = 'CARRAY' */
+/*              CDECLS(3) = 'DATATYPE = CHARACTER*(5), ' // */
+/*             .            'SIZE = VARIABLE' */
 
-/*                  END DO */
+/*        C */
+/*        C     Start the segment. */
+/*        C */
+/*              CALL EKBSEG ( HANDLE, TABLE,  NCOLS, */
+/*             .              CNAMES, CDECLS, SEGNO ) */
 
+/*        C */
+/*        C     At the records to the table. */
+/*        C */
+/*              DO I = 1, NROWS */
+
+/*        C */
+/*        C        Append a new record to the EK. */
+/*        C */
+/*                 CALL EKAPPR ( HANDLE, SEGNO, RECNO ) */
+
+/*        C */
+/*        C        Add 3 items to IARRAY */
+/*        C */
+/*                 DO J = 1, COL1SZ */
+/*                    COL1(J) =  I + J*100.D0 */
+/*                 END DO */
+
+/*                 CALL EKACEI ( HANDLE,    SEGNO,  RECNO, */
+/*             .                 CNAMES(1), COL1SZ, COL1,  .FALSE. ) */
+
+/*        C */
+/*        C        Add I items to DARRAY */
+/*        C */
+/*                 DO J = 1, I */
+/*                    COL2(J) = J + I*200.D0 */
+/*                 END DO */
+
+/*                 CALL EKACED ( HANDLE,    SEGNO, RECNO, */
+/*             .                 CNAMES(2), I,     COL2,  .FALSE. ) */
+
+/*        C */
+/*        C        Add 3+I items to CARRAY */
+/*        C */
+/*                 DO J = 1, 3+I */
+/*                    CALL REPMI ( 'ST#', '#', J + I*100, COL3(J) ) */
+/*                 END DO */
+
+/*                 CALL EKACEC ( HANDLE,    SEGNO, RECNO, */
+/*             .                 CNAMES(3), I+3,   COL3,  .FALSE. ) */
+
+/*              END DO */
+
+/*        C */
+/*        C     Close the file. */
+/*        C */
+/*              CALL EKCLS ( HANDLE ) */
+
+/*        C */
+/*        C     Open the created file. Perform the query and show the */
+/*        C     results. */
+/*        C */
+/*              CALL FURNSH ( EKNAME ) */
+
+/*              QUERY = 'SELECT IARRAY, DARRAY, CARRAY FROM TAB' */
+
+/*        C */
+/*        C     Query the EK system for data rows matching the */
+/*        C     SELECT constraints. */
+/*        C */
+/*              CALL EKFIND ( QUERY, NMROWS, ERROR, ERRMSG ) */
+
+/*        C */
+/*        C     Check whether an error occurred while processing the */
+/*        C     SELECT clause. If so, output the error message. */
+/*        C */
+/*              IF ( ERROR ) THEN */
+
+/*                 WRITE(*,*) 'SELECT clause error: ', ERRMSG */
+
+/*              ELSE */
+
+/*                 DO ROW = 1, NMROWS */
+
+/*                    WRITE(*,*) ' ' */
+/*                    WRITE(*,'(A,I3)') 'ROW  = ', ROW */
+
+/*        C */
+/*        C           Fetch values from column IARRAY in the current */
+/*        C           row.  Since IARRAY was the first column selected, */
+/*        C           the selection index SELIDX is set to 1. */
+/*        C */
+/*                    SELIDX = 1 */
+/*                    ELTIDX = 1 */
+/*                    ISNULL = .FALSE. */
+
+/*                    DO WHILE (       ( ELTIDX .LE.  COL1SZ ) */
+/*             .                 .AND. (        .NOT. ISNULL )  ) */
+/*        C */
+/*        C              If the column entry is null, we'll be kicked */
+/*        C              out of this loop after the first iteration. */
+/*        C */
+/*                       CALL EKGI ( SELIDX,         ROW,     ELTIDX, */
+/*             .                     IVALS(ELTIDX),  ISNULL,  FOUND   ) */
+
+/*                       ELTIDX = ELTIDX + 1 */
+
+/*                    END DO */
+
+/*                    IF ( ISNULL ) THEN */
+
+/*                       WRITE(*,'(A)') '   COLUMN = IARRAY: <Null>' */
+
+/*                    ELSE */
+
+/*                       WRITE(*,'(A,3I6)') '   COLUMN = IARRAY:', */
+/*             .                            ( IVALS(I), I = 1, COL1SZ ) */
+
+/*                    END IF */
+
+/*        C */
+/*        C           Fetch values from column DARRAY in the current */
+/*        C           row.  Since DARRAY contains variable-size array */
+/*        C           elements, we call EKNELT to determine how many */
+/*        C           elements to fetch. */
+/*        C */
+/*                    SELIDX = 2 */
+/*                    CALL EKNELT ( SELIDX, ROW, NELT ) */
+
+/*                    ELTIDX = 1 */
+/*                    ISNULL = .FALSE. */
+
+/*                    DO WHILE (       ( ELTIDX .LE.  NELT   ) */
+/*             .                 .AND. (        .NOT. ISNULL )  ) */
+
+/*                       CALL EKGD ( SELIDX,         ROW,     ELTIDX, */
+/*             .                     DVALS(ELTIDX),  ISNULL,  FOUND   ) */
+
+/*                       ELTIDX = ELTIDX + 1 */
+
+/*                    END DO */
+
+/*                    IF ( ISNULL ) THEN */
+
+/*                       WRITE(*,'(A)') '   COLUMN = DARRAY: <Null>' */
+
+/*                    ELSE */
+
+/*                       WRITE(*,'(A,4F6.1)') '   COLUMN = DARRAY:', */
+/*             .                              ( DVALS(I), I = 1, NELT ) */
+
+/*                    END IF */
+
+/*        C */
+/*        C           Fetch values from column CARRAY in the current */
+/*        C           row. */
+/*        C */
+/*                    SELIDX = 3 */
+/*                    CALL EKNELT ( SELIDX, ROW, NELT ) */
+
+/*                    ELTIDX = 1 */
+/*                    ISNULL = .FALSE. */
+
+/*                    DO WHILE (       ( ELTIDX .LE.  NELT   ) */
+/*             .                 .AND. (        .NOT. ISNULL )  ) */
+
+/*                       CALL EKGC ( SELIDX,         ROW,     ELTIDX, */
+/*             .                     CVALS(ELTIDX),  ISNULL,  FOUND   ) */
+
+/*                       ELTIDX = ELTIDX + 1 */
+
+/*                    END DO */
+
+/*                    IF ( ISNULL ) THEN */
+
+/*                       WRITE(*,'(A)') '   COLUMN = CARRAY: <Null>' */
+
+/*                    ELSE */
+
+/*                       WRITE(*,'(8A)') '   COLUMN = CARRAY: ', */
+/*             .                     ( CVALS(I)(:RTRIM(CVALS(I))) //' ', */
+/*             .                                         I = 1, NELT   ) */
+
+/*                    END IF */
+
+/*                 END DO */
+
+/*        C */
+/*        C     We either parsed the SELECT clause or had an error. */
+/*        C */
+/*              END IF */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*        ROW  =   1 */
+/*           COLUMN = IARRAY:   101   201   301 */
+/*           COLUMN = DARRAY: 201.0 */
+/*           COLUMN = CARRAY: ST101 ST102 ST103 ST104 */
+
+/*        ROW  =   2 */
+/*           COLUMN = IARRAY:   102   202   302 */
+/*           COLUMN = DARRAY: 401.0 402.0 */
+/*           COLUMN = CARRAY: ST201 ST202 ST203 ST204 ST205 */
+
+/*        ROW  =   3 */
+/*           COLUMN = IARRAY:   103   203   303 */
+/*           COLUMN = DARRAY: 601.0 602.0 603.0 */
+/*           COLUMN = CARRAY: ST301 ST302 ST303 ST304 ST305 ST306 */
+
+/*        ROW  =   4 */
+/*           COLUMN = IARRAY:   104   204   304 */
+/*           COLUMN = DARRAY: 801.0 802.0 803.0 804.0 */
+/*           COLUMN = CARRAY: ST401 ST402 ST403 ST404 ST405 ST406 ST407 */
+
+
+/*        Note that after run completion, a new EK file exists in the */
+/*        output directory. */
 
 /* $ Restrictions */
 
@@ -5725,28 +6994,36 @@ L_eknelt:
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
 
 /* $ Version */
 
+/* -    SPICELIB Version 2.1.0, 06-JUL-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
+/*        Added complete code example from existing fragment. */
+
 /* -    SPICELIB Version 2.0.0, 16-NOV-2001 (NJB) */
 
-/*        Bug fix:   When an already loaded kernel is opened with EKOPR, */
+/*        Bug fix: When an already loaded kernel is opened with EKOPR, */
 /*        it now has its link count reset to 1 via a call to EKCLS. */
 
 /* -    SPICELIB Version 1.2.0, 12-FEB-1999 (NJB) */
 
-/*        Bug fix:  There was a error handling branch that called CHKOUT */
-/*        where CHKIN should have been called.  This has been fixed. */
+/*        Bug fix: There was a error handling branch that called CHKOUT */
+/*        where CHKIN should have been called. This has been fixed. */
 
 /* -    SPICELIB Version 1.1.0, 09-JUL-1996 (NJB) */
 
-/*        Bug fix:  EKNELT now initiates a sort operation if sorted */
+/*        Bug fix: EKNELT now initiates a sort operation if sorted */
 /*        outputs are required and EKNELT is called after query */
-/*        resolution but before the fetch routines.  Also, addressing */
+/*        resolution but before the fetch routines. Also, addressing */
 /*        for sorted query results has been fixed. */
 
-/*        Misspelling of "issued" was fixed.  Previous version line was */
+/*        Misspelling of "issued" was fixed. Previous version line was */
 /*        changed from "Beta" to "SPICELIB." */
 
 
@@ -5756,26 +7033,6 @@ L_eknelt:
 /* $ Index_Entries */
 
 /*     return the number of elements in a column entry */
-
-/* -& */
-/* $ Revisions */
-
-/* -    SPICELIB Version 1.2.0, 12-FEB-1999 (NJB) */
-
-/*        Bug fix:  There was a error handling branch that called CHKOUT */
-/*        where CHKIN should have been called.  This has been fixed. */
-
-/* -    SPICELIB Version 1.1.0, 09-JUL-1996 (NJB) */
-
-/*        Bug fix:  EKNELT now initiates a sort operation if sorted */
-/*        outputs are required and EKNELT is called after query */
-/*        resolution but before the fetch routines.  Also, addressing */
-/*        for sorted query results has been fixed.  The fix involved */
-/*        copying the sort invocation and addressing code from the */
-/*        fetch routines. */
-
-/*        Misspelling of "issued" was fixed.  Previous version line was */
-/*        changed from "Beta" to "SPICELIB." */
 
 /* -& */
 
@@ -5849,27 +7106,27 @@ L_eknelt:
     i__2 = sgvbas + ntab;
     zzeksrd_(&i__1, &i__2, segvec);
     tabidx = seltab[(i__1 = *selidx - 1) < 50 && 0 <= i__1 ? i__1 : s_rnge(
-	    "seltab", i__1, "ekqmgr_", (ftnlen)4983)];
+	    "seltab", i__1, "ekqmgr_", (ftnlen)6248)];
     rowidx = rowvec[(i__1 = tabidx - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge(
-	    "rowvec", i__1, "ekqmgr_", (ftnlen)4984)];
+	    "rowvec", i__1, "ekqmgr_", (ftnlen)6249)];
     seg = segvec[(i__1 = tabidx - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge("segv"
-	    "ec", i__1, "ekqmgr_", (ftnlen)4985)];
+	    "ec", i__1, "ekqmgr_", (ftnlen)6250)];
     col = selcol[(i__1 = *selidx - 1) < 50 && 0 <= i__1 ? i__1 : s_rnge("sel"
-	    "col", i__1, "ekqmgr_", (ftnlen)4986)];
+	    "col", i__1, "ekqmgr_", (ftnlen)6251)];
     colptr = stdtpt[(i__1 = seg - 1) < 200 && 0 <= i__1 ? i__1 : s_rnge("std"
-	    "tpt", i__1, "ekqmgr_", (ftnlen)4988)];
+	    "tpt", i__1, "ekqmgr_", (ftnlen)6253)];
     i__1 = col;
     for (i__ = 2; i__ <= i__1; ++i__) {
 	colptr = lnknxt_(&colptr, dtpool);
     }
     *nelt = zzekesiz_(&sthan[(i__1 = seg - 1) < 200 && 0 <= i__1 ? i__1 : 
-	    s_rnge("sthan", i__1, "ekqmgr_", (ftnlen)4994)], &stdscs[(i__2 = 
+	    s_rnge("sthan", i__1, "ekqmgr_", (ftnlen)6259)], &stdscs[(i__2 = 
 	    seg * 24 - 24) < 4800 && 0 <= i__2 ? i__2 : s_rnge("stdscs", i__2,
-	     "ekqmgr_", (ftnlen)4994)], &dtdscs[(i__3 = colptr * 11 - 11) < 
+	     "ekqmgr_", (ftnlen)6259)], &dtdscs[(i__3 = colptr * 11 - 11) < 
 	    110000 && 0 <= i__3 ? i__3 : s_rnge("dtdscs", i__3, "ekqmgr_", (
-	    ftnlen)4994)], &rowidx);
+	    ftnlen)6259)], &rowidx);
     return 0;
-/* $Procedure     EKGC  ( EK, get event data, character ) */
+/* $Procedure EKGC  ( EK, get event data, character ) */
 
 L_ekgc:
 /* $ Abstract */
@@ -5922,7 +7179,7 @@ L_ekgc:
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     SELIDX     I   Index of parent column in SELECT clause. */
 /*     ROW        I   Row to fetch from. */
@@ -5933,42 +7190,42 @@ L_ekgc:
 
 /* $ Detailed_Input */
 
-/*     SELIDX         is the SELECT clause index of the column to */
-/*                    fetch from. */
+/*     SELIDX   is the SELECT clause index of the column to */
+/*              fetch from. */
 
-/*     ROW            is the output row containing the entry to fetch */
-/*                    from. */
+/*     ROW      is the output row containing the entry to fetch */
+/*              from. */
 
-/*     ELMENT         is the index of the element of the column entry */
-/*                    to fetch.  The normal range of ELMENT is from 1 to */
-/*                    the size of the column's entry, but ELMENT is */
-/*                    allowed to exceed the number of elements in the */
-/*                    column entry; if it does, FOUND is returned .FALSE. */
-/*                    This allows the caller to read data from the column */
-/*                    entry in a loop without checking the number of */
-/*                    available elements first. */
+/*     ELMENT   is the index of the element of the column entry */
+/*              to fetch. The normal range of ELMENT is from 1 to */
+/*              the size of the column's entry, but ELMENT is */
+/*              allowed to exceed the number of elements in the */
+/*              column entry; if it does, FOUND is returned .FALSE. */
+/*              This allows the caller to read data from the column */
+/*              entry in a loop without checking the number of */
+/*              available elements first. */
 
-/*                    Null values in variable-sized columns are */
-/*                    considered to have size 1. */
+/*              Null values in variable-sized columns are */
+/*              considered to have size 1. */
 
 /* $ Detailed_Output */
 
-/*     CDATA          is the requested element of the specified column */
-/*                    entry.  If the entry is null, CDATA is undefined. */
+/*     CDATA    is the requested element of the specified column */
+/*              entry. If the entry is null, CDATA is undefined. */
 
-/*                    If CDATA is too short to accommodate the requested */
-/*                    column entry element, the element is truncated on */
-/*                    the right to fit CDATA.  If CDATA is longer than */
-/*                    the element, CDATA is returned blank-padded on */
-/*                    the right. */
+/*              If CDATA is too short to accommodate the requested */
+/*              column entry element, the element is truncated on */
+/*              the right to fit CDATA. If CDATA is longer than */
+/*              the element, CDATA is returned blank-padded on */
+/*              the right. */
 
-/*     NULL           is a logical flag indicating whether the entry */
-/*                    belonging to the specified column in the specified */
-/*                    row is null. */
+/*     NULL     is a logical flag indicating whether the entry */
+/*              belonging to the specified column in the specified */
+/*              row is null. */
 
-/*     FOUND          is a logical flag indicating whether the specified */
-/*                    element was found.  If the element does not exist, */
-/*                    FOUND is returned .FALSE. */
+/*     FOUND    is a logical flag indicating whether the specified */
+/*              element was found. If the element does not exist, */
+/*              FOUND is returned .FALSE. */
 
 /* $ Parameters */
 
@@ -5976,22 +7233,22 @@ L_ekgc:
 
 /* $ Exceptions */
 
-/*     1)  If the input argument ELMENT is less than 1, FOUND is returned */
-/*         .FALSE., and the error SPICE(INVALIDINDEX) is signaled. */
+/*     1)  If the input argument ELMENT is less than 1, the error */
+/*         SPICE(INVALIDINDEX) is signaled and FOUND is returned .FALSE. */
 /*         However, ELMENT is allowed to be greater than the number of */
 /*         elements in the specified column entry; this allows the caller */
 /*         to read data from the column entry in a loop without checking */
-/*         the number of available elements first.  If ELMENT is greater */
+/*         the number of available elements first. If ELMENT is greater */
 /*         than the number of available elements, FOUND is returned */
 /*         .FALSE. */
 
 /*     2)  If SELIDX is outside of the range established by the */
 /*         last query passed to EKSRCH, the error SPICE(INVALIDINDEX) */
-/*         will be signaled. */
+/*         is signaled and FOUND is returned .FALSE. */
 
-/*     3)  If the input argument ROW is less than 1 or greater than */
-/*         the number of rows matching the query, FOUND is returned */
-/*        .FALSE., and the error SPICE(INVALIDINDEX) is signaled. */
+/*     3)  If the input argument ROW is less than 1 or greater than the */
+/*         number of rows matching the query, the error */
+/*         SPICE(INVALIDINDEX) is signaled and FOUND is returned .FALSE. */
 
 /*     4)  If the specified column does not have character type, the */
 /*         error SPICE(INVALIDTYPE) is signaled. */
@@ -6014,173 +7271,507 @@ L_ekgc:
 
 /* $ Examples */
 
-/*     1)  Suppose the EK table TAB contains the following columns: */
+/*     The numerical results shown for these examples may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
 
-/*            Column name   Data Type   Size */
-/*            -----------   ---------   ---- */
-/*            CHR_COL_1     CHR         1 */
-/*            CHR_COL_2     CHR         VARIABLE */
-/*            CHR_COL_3     CHR         10 */
-
-
-/*         Suppose the query */
-
-/*            QUERY = 'SELECT CHR_COL_1 FROM TAB' */
-
-/*         is issued to EKFIND via the call */
-
-/*            CALL EKFIND ( QUERY, NMROWS, ERROR, ERRMSG ) */
-
-/*         To fetch and dump column values from the rows that satisfy the */
-/*         query, the loop below could be used.  Note that we don't check */
-/*         the FOUND flags returned by EKGC since we know that every */
-/*         entry in column CHR_COL_1 contains one element. */
-
-/*            C */
-/*            C     Since CHR_COL_1was the first column selected, */
-/*            C     the selection index SELIDX is set to 1. */
-/*            C     The column is scalar, so the element index ELTIDX */
-/*            C     is set to 1.  The variable NMROWS is the number of */
-/*            C     matching rows returned by EKFIND. */
-/*            C */
-
-/*                  SELIDX = 1 */
-/*                  ELTIDX = 1 */
-
-/*                  DO ROW = 1, NMROWS */
-
-/*                     WRITE (*,*) ' ' */
-/*                     WRITE (*,*) 'ROW  = ', ROW */
-/*                     WRITE (*,*) ' ' */
-
-/*            C */
-/*            C        Fetch values from column CHR_COL_1. */
-/*            C */
-/*                     CALL EKGC ( SELIDX,  ROW,     ELTIDX, */
-/*                                 CVAL,    ISNULL,  FOUND   ) */
-
-/*                     IF ( ISNULL ) THEN */
-/*                        WRITE (*,*) '<Null>' */
-/*                     ELSE */
-/*                        WRITE (*,*) CVAL */
-/*                     END IF */
-
-/*                  END DO */
+/*     1) Perform a query on an EK file that contains a database with */
+/*        the Supplementary Engineering Data Records of the Viking */
+/*        Project in order to retrieve the IMAGE_ID values (character */
+/*        strings) that correspond to the images with IMAGE_NUMBER */
+/*        smaller than a given value, ordered by IMAGE_NUMBER. */
 
 
+/*        Use the EK kernel below to load the information from the */
+/*        original Supplementary Engineering Data Record (SEDR) data */
+/*        set generated by the Viking Project. */
 
-/*     2)  Suppose the EK table TAB is as in example 1, and we issue */
-/*         the query */
+/*           vo_sedr.bdb */
+
+
+/*        Example code begins here. */
+
+
+/*              PROGRAM EKGC_EX1 */
+/*              IMPLICIT NONE */
+
+/*        C */
+/*        C     Include the EK Maximum length of an input query, */
+/*        C     MAXQRY, and the maximum length of literal string */
+/*        C     values, MAXSTR, from eklimit.inc. */
+/*        C */
+/*              INCLUDE 'ekqlimit.inc' */
+
+/*        C */
+/*        C     Local parameters */
+/*        C */
+/*              CHARACTER*(*)         EKNAME */
+/*              PARAMETER           ( EKNAME = 'vo_sedr.bdb' ) */
+
+/*              INTEGER               ERRLEN */
+/*              PARAMETER           ( ERRLEN = 1840 ) */
+
+/*        C */
+/*        C     Local variables */
+/*        C */
+/*              CHARACTER*(MAXSTR)    CDATA */
+/*              CHARACTER*(ERRLEN)    ERRMSG */
+/*              CHARACTER*(MAXQRY)    QUERY */
+
+/*              INTEGER               ELTIDX */
+/*              INTEGER               NMROWS */
+/*              INTEGER               ROWNO */
+/*              INTEGER               SELIDX */
+
+/*              LOGICAL               ERROR */
+/*              LOGICAL               FOUND */
+/*              LOGICAL               ISNULL */
+
+/*        C */
+/*        C     Open an EK file. */
+/*        C */
+/*              CALL FURNSH ( EKNAME ) */
+
+/*        C */
+/*        C     The table 'VIKING_SEDR_DATA' has a column 'IMAGE_ID' */
+/*        C     of scalar strings. */
+/*        C */
+/*        C     Define a set of constraints to perform a query on */
+/*        C     all loaded EK files (the SELECT clause). In this */
+/*        C     case select the column 'IMAGE_ID' from table */
+/*        C     'VIKING_SEDR_DATA' sorted by 'IMAGE_NUMBER'. */
+/*        C */
+/*              QUERY = 'Select IMAGE_ID from VIKING_SEDR_DATA ' */
+/*             .   //   'where IMAGE_NUMBER < 25860000 ' */
+/*             .   //   'order by IMAGE_NUMBER' */
+
+/*        C */
+/*        C     Query the EK system for data rows matching the */
+/*        C     SELECT constraints. */
+/*        C */
+/*              CALL EKFIND ( QUERY, NMROWS, ERROR, ERRMSG ) */
+
+/*        C */
+/*        C     Check whether an error occurred while processing the */
+/*        C     SELECT clause. If so, output the error message. */
+/*        C */
+/*              IF ( ERROR ) THEN */
+
+/*                 WRITE(*,*) 'SELECT clause error: ', ERRMSG */
+
+/*              ELSE */
+
+/*        C */
+/*        C        Fetch the character data. We know the query returned */
+/*        C        one column and the column contains only scalar data, */
+/*        C        so the index of all elements is 1. */
+/*        C */
+/*                 SELIDX = 1 */
+/*                 ELTIDX = 1 */
+
+/*        C */
+/*        C        Loop over each row found matching the query. */
+/*        C */
+/*                 DO ROWNO = 1, NMROWS */
+
+/*        C */
+/*        C           Use EKGC to retrieve the string from */
+/*        C */
+/*                    CALL EKGC ( SELIDX,  ROWNO,  ELTIDX, */
+/*             .                  CDATA,   ISNULL, FOUND   ) */
+
+/*                    IF ( ISNULL ) THEN */
+
+/*                       WRITE (*,'(A,I3,A)') 'Row ', ROWNO, */
+/*             .                  ': Character data: <Null>' */
+
+/*                    ELSE */
+
+/*                       WRITE (*,'(A,I3,2A)') 'Row ', ROWNO, */
+/*             .                  ': Character data: ', CDATA */
+/*                    END IF */
+
+/*                 END DO */
+
+/*              END IF */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*        Row   1: Character data: 168C09 */
+/*        Row   2: Character data: 168C10 */
+/*        Row   3: Character data: 168C11 */
+/*        Row   4: Character data: 168C12 */
+/*        Row   5: Character data: 169C01 */
+/*        Row   6: Character data: 169C02 */
+/*        Row   7: Character data: 169C03 */
+/*        Row   8: Character data: 169C04 */
+/*        Row   9: Character data: 169C05 */
+/*        Row  10: Character data: 169C09 */
+/*        Row  11: Character data: 169C11 */
+/*        Row  12: Character data: 169C19 */
+/*        Row  13: Character data: 169C23 */
+/*        Row  14: Character data: 169C25 */
+/*        Row  15: Character data: 169C26 */
+/*        Row  16: Character data: 169C30 */
+/*        Row  17: Character data: 169C32 */
+/*        Row  18: Character data: 169C33 */
+/*        Row  19: Character data: 169C37 */
+/*        Row  20: Character data: 169C39 */
+/*        Row  21: Character data: 169C40 */
+/*        Row  22: Character data: 169C44 */
+/*        Row  23: Character data: 169C46 */
+/*        Row  24: Character data: 169C47 */
+/*        Row  25: Character data: 169C51 */
+/*        Row  26: Character data: 169C53 */
+
+
+/*     2) This example demonstrates how to fetch string values from a */
+/*        column in three different cases: single values, variable-size */
+/*        arrays and static-size arrays. */
+
+/*        Create an EK that contains a table TAB that has the following */
+/*        columns: */
+
+/*           Column name   Data Type   Size */
+/*           -----------   ---------   ---- */
+/*           CHR_COL_1     CHR         1 */
+/*           CHR_COL_2     CHR         VARIABLE */
+/*           CHR_COL_3     CHR         3 */
+
+/*        Issue the following query */
 
 /*            QUERY = 'SELECT CHR_COL_1, CHR_COL_2, CHR_COL_3 FROM TAB' */
 
-/*         to EKFIND via the call */
-
-/*            CALL EKFIND ( QUERY, NMROWS, ERROR, ERRMSG ) */
-
-/*         To fetch and dump column values from the rows that satisfy the */
-/*         query, the loop below could be used.  Note that we don't check */
-/*         the FOUND flags returned by EKGC since we know in advance how */
-/*         many elements are contained in each column entry we fetch. */
+/*        to fetch and dump column values from the rows that satisfy the */
+/*        query. */
 
 
-/*                  DO ROW = 1, NMROWS */
-
-/*                     WRITE (*,*) ' ' */
-/*                     WRITE (*,*) 'ROW  = ', ROW */
-/*                     WRITE (*,*) ' ' */
-
-/*            C */
-/*            C        Fetch values from column CHR_COL_1.  Since */
-/*            C        CHR_COL_1 was the first column selected, the */
-/*            C        selection index SELIDX is set to 1. */
-/*            C */
-/*                     SELIDX = 1 */
-/*                     ELTIDX = 1 */
-/*                     CALL EKGC ( SELIDX,    ROW,     ELTIDX, */
-/*                                 CVALS(1),  ISNULL,  FOUND   ) */
-
-/*                     WRITE (*,*) ' ' */
-/*                     WRITE (*,*) 'COLUMN = CHR_COL_1' */
-/*                     WRITE (*,*) ' ' */
-
-/*                     IF ( ISNULL ) THEN */
-/*                        WRITE (*,*) '<Null>' */
-/*                     ELSE */
-/*                        WRITE (*,*) CVALS(1) */
-/*                     END IF */
-
-/*            C */
-/*            C        Fetch values from column CHR_COL_2 in the current */
-/*            C        row.  Since CHR_COL_2 contains variable-size array */
-/*            C        elements, we call EKNELT to determine how many */
-/*            C        elements to fetch. */
-/*            C */
-/*                     SELIDX = 2 */
-/*                     CALL EKNELT ( SELIDX, ROW, NELT ) */
-
-/*                     ELTIDX = 1 */
-/*                     ISNULL = .FALSE. */
-
-/*                     DO WHILE (       ( ELTIDX .LE.  NELT   ) */
-/*                 .              .AND. (        .NOT. ISNULL )  ) */
-
-/*                        CALL EKGC ( SELIDX,         ROW,     ELTIDX, */
-/*                                    CVALS(ELTIDX),  ISNULL,  FOUND   ) */
-
-/*                        ELTIDX = ELTIDX + 1 */
-
-/*            C */
-/*            C           If the column entry is null, we'll be kicked */
-/*            C           out of this loop after the first iteration. */
-/*            C */
-/*                     END DO */
-
-/*                     WRITE (*,*) ' ' */
-/*                     WRITE (*,*) 'COLUMN = CHR_COL_2' */
-/*                     WRITE (*,*) ' ' */
-
-/*                     IF ( ISNULL ) THEN */
-/*                        WRITE (*,*) '<Null>' */
-/*                     ELSE */
-/*                        WRITE (*,*) ( CVALS(I), I = 1, NELT ) */
-/*                     END IF */
-
-/*            C */
-/*            C        Fetch values from column CHR_COL_3 in the current */
-/*            C        row.  We need not call EKNELT since we know how */
-/*            C        many elements are in each column entry. */
-/*            C */
-/*                     SELIDX = 3 */
-/*                     ELTIDX = 1 */
-/*                     ISNULL = .FALSE. */
-
-/*                     DO WHILE (       ( ELTIDX .LE.  10    ) */
-/*                 .              .AND. (        .NOT. ISNULL )  ) */
-
-/*                        CALL EKGC ( SELIDX,         ROW,     ELTIDX, */
-/*                                    CVALS(ELTIDX),  ISNULL,  FOUND   ) */
-
-/*                        ELTIDX = ELTIDX + 1 */
-
-/*                     END DO */
-
-/*                     WRITE (*,*) ' ' */
-/*                     WRITE (*,*) 'COLUMN = CHR_COL_3' */
-/*                     WRITE (*,*) ' ' */
-
-/*                     IF ( ISNULL ) THEN */
-/*                        WRITE (*,*) '<Null>' */
-/*                     ELSE */
-/*                        WRITE (*,*) ( CVALS(I), I = 1, 10 ) */
-/*                     END IF */
-
-/*                  END DO */
+/*        Example code begins here. */
 
 
-/*     3)  See the $Examples section of the umbrella routine EKQMGR */
-/*         for an example in which the names and data types of the */
-/*         columns from which to fetch data are not known in advance. */
+/*              PROGRAM EKGC_EX2 */
+/*              IMPLICIT NONE */
+
+/*        C */
+/*        C     Include the EK Column Name Size (CNAMSZ) */
+/*        C     and EK Query Limit Parameters (MAXQRY) */
+/*        C */
+/*              INCLUDE 'ekcnamsz.inc' */
+/*              INCLUDE 'ekqlimit.inc' */
+
+/*        C */
+/*        C     SPICELIB functions */
+/*        C */
+/*              INTEGER               RTRIM */
+
+/*        C */
+/*        C     Local parameters */
+/*        C */
+/*              CHARACTER*(*)         EKNAME */
+/*              PARAMETER           ( EKNAME  = 'ekgc_ex2.bdb' ) */
+
+/*              CHARACTER*(*)         TABLE */
+/*              PARAMETER           ( TABLE   = 'TAB' ) */
+
+/*              INTEGER               CHRSLN */
+/*              PARAMETER           ( CHRSLN = 3   ) */
+
+/*              INTEGER               COL3SZ */
+/*              PARAMETER           ( COL3SZ = 3   ) */
+
+/*              INTEGER               DECLEN */
+/*              PARAMETER           ( DECLEN = 200 ) */
+
+/*              INTEGER               ERRLEN */
+/*              PARAMETER           ( ERRLEN = 1840 ) */
+
+/*              INTEGER               MXC2SZ */
+/*              PARAMETER           ( MXC2SZ = 8   ) */
+
+/*              INTEGER               NAMLEN */
+/*              PARAMETER           ( NAMLEN = 40  ) */
+
+/*              INTEGER               NCOLS */
+/*              PARAMETER           ( NCOLS  = 3   ) */
+
+/*              INTEGER               NROWS */
+/*              PARAMETER           ( NROWS  = 4   ) */
+
+/*              INTEGER               STRSIZ */
+/*              PARAMETER           ( STRSIZ  = 30 ) */
+
+/*        C */
+/*        C     Local variables */
+/*        C */
+/*              CHARACTER*(DECLEN)    CDECLS ( NCOLS  ) */
+/*              CHARACTER*(CNAMSZ)    CNAMES ( NCOLS  ) */
+/*              CHARACTER*(STRSIZ)    COL1 */
+/*              CHARACTER*(CHRSLN)    COL2   ( MXC2SZ ) */
+/*              CHARACTER*(CHRSLN)    COL3   ( COL3SZ ) */
+/*              CHARACTER*(STRSIZ)    CVALS  ( MXC2SZ ) */
+/*              CHARACTER*(ERRLEN)    ERRMSG */
+/*              CHARACTER*(NAMLEN)    IFNAME */
+/*              CHARACTER*(MAXQRY)    QUERY */
+
+/*              INTEGER               ELTIDX */
+/*              INTEGER               HANDLE */
+/*              INTEGER               I */
+/*              INTEGER               J */
+/*              INTEGER               NELT */
+/*              INTEGER               NMROWS */
+/*              INTEGER               NRESVC */
+/*              INTEGER               RECNO */
+/*              INTEGER               ROW */
+/*              INTEGER               SEGNO */
+/*              INTEGER               SELIDX */
+
+/*              LOGICAL               ERROR */
+/*              LOGICAL               FOUND */
+/*              LOGICAL               ISNULL */
+
+/*        C */
+/*        C     Open a new EK file.  For simplicity, we will not */
+/*        C     reserve any space for the comment area, so the */
+/*        C     number of reserved comment characters is zero. */
+/*        C     The variable IFNAME is the internal file name. */
+/*        C */
+/*              NRESVC  =  0 */
+/*              IFNAME  =  'Test EK/Created 13-JUN-2019' */
+
+/*              CALL EKOPN ( EKNAME, IFNAME, NRESVC, HANDLE ) */
+
+/*        C */
+/*        C     Set up the column names and declarations */
+/*        C     for the TAB segment.  We'll index all of */
+/*        C     the columns. */
+/*        C */
+/*              CNAMES(1) = 'CHR_COL_1' */
+/*              CDECLS(1) = 'DATATYPE = CHARACTER*(*), ' // */
+/*             .            'INDEXED  = TRUE' */
+
+/*              CNAMES(2) = 'CHR_COL_2' */
+/*              CDECLS(2) = 'DATATYPE = CHARACTER*(3), ' // */
+/*             .            'SIZE = VARIABLE' */
+
+/*              CNAMES(3) = 'CHR_COL_3' */
+/*              CDECLS(3) = 'DATATYPE = CHARACTER*(3), ' // */
+/*             .            'SIZE = 3' */
+
+/*        C */
+/*        C     Start the segment. */
+/*        C */
+/*              CALL EKBSEG ( HANDLE, TABLE,  NCOLS, */
+/*             .              CNAMES, CDECLS, SEGNO ) */
+
+/*        C */
+/*        C     At the records to the table. */
+/*        C */
+/*              DO I = 1, NROWS */
+
+/*        C */
+/*        C        Append a new record to the EK. */
+/*        C */
+/*                 CALL EKAPPR ( HANDLE, SEGNO, RECNO ) */
+
+/*        C */
+/*        C        Add CHR_COL_1 */
+/*        C */
+/*                 CALL REPMI ( 'Column #2 has $ elements.', */
+/*             .                '$', I*2, COL1              ) */
+
+/*                 CALL EKACEC ( HANDLE,    SEGNO, RECNO, */
+/*             .                 CNAMES(1), 1,     COL1, .FALSE. ) */
+
+/*        C */
+/*        C        Add I*2 items to CHR_COL_2 */
+/*        C */
+/*                 DO J = 1, I*2 */
+/*                    CALL INTSTR( J + I*100, COL2(J) ) */
+/*                 END DO */
+
+/*                 CALL EKACEC ( HANDLE,    SEGNO, RECNO, */
+/*             .                 CNAMES(2), I*2,   COL2, .FALSE. ) */
+
+/*        C */
+/*        C        Add 3 items to CHR_COL_3 */
+/*        C */
+/*                 DO J = 1, 3 */
+/*                    CALL INTSTR( I + J*100, COL3(J) ) */
+/*                 END DO */
+
+/*                 CALL EKACEC ( HANDLE,    SEGNO, RECNO, */
+/*             .                 CNAMES(3), 3,     COL3, .FALSE. ) */
+
+/*              END DO */
+
+/*        C */
+/*        C     Close the file. */
+/*        C */
+/*              CALL EKCLS ( HANDLE ) */
+
+/*        C */
+/*        C     Open the created file. Perform the query and show the */
+/*        C     results. */
+/*        C */
+/*              CALL FURNSH ( EKNAME ) */
+
+/*              QUERY = 'SELECT CHR_COL_1, CHR_COL_2, CHR_COL_3 FROM TAB' */
+
+/*        C */
+/*        C     Query the EK system for data rows matching the */
+/*        C     SELECT constraints. */
+/*        C */
+/*              CALL EKFIND ( QUERY, NMROWS, ERROR, ERRMSG ) */
+
+/*        C */
+/*        C     Check whether an error occurred while processing the */
+/*        C     SELECT clause. If so, output the error message. */
+/*        C */
+/*              IF ( ERROR ) THEN */
+
+/*                 WRITE(*,*) 'SELECT clause error: ', ERRMSG */
+
+/*              ELSE */
+
+/*                 DO ROW = 1, NMROWS */
+
+/*                    WRITE(*,*) ' ' */
+/*                    WRITE(*,'(A,I3)') 'ROW  = ', ROW */
+
+/*        C */
+/*        C           Fetch values from column CHR_COL_1.  Since */
+/*        C           CHR_COL_1 was the first column selected, the */
+/*        C           selection index SELIDX is set to 1. */
+/*        C */
+/*                    SELIDX = 1 */
+/*                    ELTIDX = 1 */
+/*                    CALL EKGC ( SELIDX,    ROW,     ELTIDX, */
+/*             .                  CVALS(1),  ISNULL,  FOUND   ) */
+
+/*                    IF ( ISNULL ) THEN */
+
+/*                       WRITE(*,*) '  COLUMN = CHR_COL_1: <Null>' */
+
+/*                    ELSE */
+
+/*                       WRITE(*,*) '  COLUMN = CHR_COL_1: ', CVALS(1) */
+
+/*                    END IF */
+
+/*        C */
+/*        C           Fetch values from column CHR_COL_2 in the current */
+/*        C           row.  Since CHR_COL_2 contains variable-size array */
+/*        C           elements, we call EKNELT to determine how many */
+/*        C           elements to fetch. */
+/*        C */
+/*                    SELIDX = 2 */
+/*                    CALL EKNELT ( SELIDX, ROW, NELT ) */
+
+/*                    ELTIDX = 1 */
+/*                    ISNULL = .FALSE. */
+
+/*                    DO WHILE (       ( ELTIDX .LE.  NELT   ) */
+/*             .                 .AND. (        .NOT. ISNULL )  ) */
+
+/*                       CALL EKGC ( SELIDX,         ROW,     ELTIDX, */
+/*             .                     CVALS(ELTIDX),  ISNULL,  FOUND   ) */
+
+/*                       ELTIDX = ELTIDX + 1 */
+
+/*        C */
+/*        C           If the column entry is null, we'll be kicked */
+/*        C           out of this loop after the first iteration. */
+/*        C */
+/*                    END DO */
+
+/*                    IF ( ISNULL ) THEN */
+
+/*                       WRITE(*,*) '  COLUMN = CHR_COL_2: <Null>' */
+
+/*                    ELSE */
+
+/*                        WRITE(*,*) '  COLUMN = CHR_COL_2: ', */
+/*             .                     ( CVALS(I)(:RTRIM(CVALS(I))) //' ', */
+/*             .                                           I = 1, NELT ) */
+
+/*                    END IF */
+
+/*        C */
+/*        C           Fetch values from column CHR_COL_3 in the current */
+/*        C           row.  We need not call EKNELT since we know how */
+/*        C           many elements are in each column entry. */
+/*        C */
+/*                    SELIDX = 3 */
+/*                    ELTIDX = 1 */
+/*                    ISNULL = .FALSE. */
+
+/*                    DO WHILE (       ( ELTIDX .LE.  COL3SZ ) */
+/*             .                 .AND. (        .NOT. ISNULL )  ) */
+
+/*                       CALL EKGC ( SELIDX,         ROW,     ELTIDX, */
+/*             .                     CVALS(ELTIDX),  ISNULL,  FOUND   ) */
+
+/*                       ELTIDX = ELTIDX + 1 */
+
+/*                    END DO */
+
+/*                    IF ( ISNULL ) THEN */
+/*                       WRITE(*,*) '  COLUMN = CHR_COL_3: <Null>' */
+/*                    ELSE */
+/*                        WRITE(*,*) '  COLUMN = CHR_COL_3: ', */
+/*             .                     ( CVALS(I)(:RTRIM(CVALS(I))) //' ', */
+/*             .                                         I = 1, COL3SZ ) */
+/*                    END IF */
+
+/*                 END DO */
+
+/*        C */
+/*        C     We either parsed the SELECT clause or had an error. */
+/*        C */
+/*              END IF */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*        ROW  =   1 */
+/*           COLUMN = CHR_COL_1: Column #2 has 2 elements. */
+/*           COLUMN = CHR_COL_2: 101 102 */
+/*           COLUMN = CHR_COL_3: 101 201 301 */
+
+/*        ROW  =   2 */
+/*           COLUMN = CHR_COL_1: Column #2 has 4 elements. */
+/*           COLUMN = CHR_COL_2: 201 202 203 204 */
+/*           COLUMN = CHR_COL_3: 102 202 302 */
+
+/*        ROW  =   3 */
+/*           COLUMN = CHR_COL_1: Column #2 has 6 elements. */
+/*           COLUMN = CHR_COL_2: 301 302 303 304 305 306 */
+/*           COLUMN = CHR_COL_3: 103 203 303 */
+
+/*        ROW  =   4 */
+/*           COLUMN = CHR_COL_1: Column #2 has 8 elements. */
+/*           COLUMN = CHR_COL_2: 401 402 403 404 405 406 407 408 */
+/*           COLUMN = CHR_COL_3: 104 204 304 */
+
+
+/*        Note that after run completion, a new EK file exists in the */
+/*        output directory. */
+
+
+/*     3) See $Examples in EKQMGR. */
+
+/*        In this example, the names and data types of the columns from */
+/*        which to fetch data are not known in advance. */
 
 /* $ Restrictions */
 
@@ -6192,19 +7783,27 @@ L_ekgc:
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
 
 /* $ Version */
 
+/* -    SPICELIB Version 2.1.0, 06-JUL-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
+/*        Added complete code examples from existing fragments. */
+
 /* -    SPICELIB Version 2.0.0, 16-NOV-2001 (NJB) */
 
-/*        Bug fix:   When an already loaded kernel is opened with EKOPR, */
+/*        Bug fix: When an already loaded kernel is opened with EKOPR, */
 /*        it now has its link count reset to 1 via a call to EKCLS. */
 
 /* -    SPICELIB Version 1.1.0, 07-JUL-1996 (NJB) */
 
 /*        Redundant CHKIN call removed from SELIDX error check. */
-/*        Misspelling of "issued" was fixed.  Previous version line */
+/*        Misspelling of "issued" was fixed. Previous version line */
 /*        was changed from "Beta" to "SPICELIB." */
 
 /* -    SPICELIB Version 1.0.0, 23-OCT-1995 (NJB) */
@@ -6213,15 +7812,6 @@ L_ekgc:
 /* $ Index_Entries */
 
 /*     fetch element from character column entry */
-
-/* -& */
-/* $ Revisions */
-
-/* -    SPICELIB Version 1.1.0, 07-JUL-1996 (NJB) */
-
-/*        Redundant CHKIN call removed from SELIDX error check. */
-/*        Misspelling of "issued" was fixed.  Previous version line */
-/*        was changed from "Beta" to "SPICELIB." */
 
 /* -& */
 
@@ -6285,26 +7875,26 @@ L_ekgc:
 /*     table's column list. */
 
     tabidx = seltab[(i__1 = *selidx - 1) < 50 && 0 <= i__1 ? i__1 : s_rnge(
-	    "seltab", i__1, "ekqmgr_", (ftnlen)5434)];
+	    "seltab", i__1, "ekqmgr_", (ftnlen)7032)];
     col = selcol[(i__1 = *selidx - 1) < 50 && 0 <= i__1 ? i__1 : s_rnge("sel"
-	    "col", i__1, "ekqmgr_", (ftnlen)5435)];
+	    "col", i__1, "ekqmgr_", (ftnlen)7033)];
     colptr = selctp[(i__1 = *selidx - 1) < 50 && 0 <= i__1 ? i__1 : s_rnge(
-	    "selctp", i__1, "ekqmgr_", (ftnlen)5436)];
+	    "selctp", i__1, "ekqmgr_", (ftnlen)7034)];
     tab = tptvec[(i__1 = tabidx + 5) < 16 && 0 <= i__1 ? i__1 : s_rnge("tptv"
-	    "ec", i__1, "ekqmgr_", (ftnlen)5437)];
+	    "ec", i__1, "ekqmgr_", (ftnlen)7035)];
 
 /*     Make sure the column has character type. */
 
     if (cttyps[(i__1 = colptr - 1) < 500 && 0 <= i__1 ? i__1 : s_rnge("cttyps"
-	    , i__1, "ekqmgr_", (ftnlen)5442)] != 1) {
+	    , i__1, "ekqmgr_", (ftnlen)7040)] != 1) {
 	setmsg_("Column # has data type #.", (ftnlen)25);
 	errch_("#", ctnams + (((i__1 = colptr - 1) < 500 && 0 <= i__1 ? i__1 :
-		 s_rnge("ctnams", i__1, "ekqmgr_", (ftnlen)5445)) << 5), (
+		 s_rnge("ctnams", i__1, "ekqmgr_", (ftnlen)7043)) << 5), (
 		ftnlen)1, (ftnlen)32);
 	errch_("#", chtype + (((i__2 = cttyps[(i__1 = colptr - 1) < 500 && 0 
 		<= i__1 ? i__1 : s_rnge("cttyps", i__1, "ekqmgr_", (ftnlen)
-		5446)] - 1) < 4 && 0 <= i__2 ? i__2 : s_rnge("chtype", i__2, 
-		"ekqmgr_", (ftnlen)5446)) << 2), (ftnlen)1, (ftnlen)4);
+		7044)] - 1) < 4 && 0 <= i__2 ? i__2 : s_rnge("chtype", i__2, 
+		"ekqmgr_", (ftnlen)7044)) << 2), (ftnlen)1, (ftnlen)4);
 	sigerr_("SPICE(INVALIDTYPE)", (ftnlen)18);
 	chkout_("EKGC", (ftnlen)4);
 	return 0;
@@ -6341,11 +7931,11 @@ L_ekgc:
 /*     Obtain the column descriptor for the column. */
 
     rowidx = rowvec[(i__1 = tabidx - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge(
-	    "rowvec", i__1, "ekqmgr_", (ftnlen)5484)];
+	    "rowvec", i__1, "ekqmgr_", (ftnlen)7082)];
     seg = segvec[(i__1 = tabidx - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge("segv"
-	    "ec", i__1, "ekqmgr_", (ftnlen)5485)];
+	    "ec", i__1, "ekqmgr_", (ftnlen)7083)];
     j = stdtpt[(i__1 = seg - 1) < 200 && 0 <= i__1 ? i__1 : s_rnge("stdtpt", 
-	    i__1, "ekqmgr_", (ftnlen)5487)];
+	    i__1, "ekqmgr_", (ftnlen)7085)];
     i__1 = col;
     for (i__ = 2; i__ <= i__1; ++i__) {
 	j = lnknxt_(&j, dtpool);
@@ -6354,14 +7944,14 @@ L_ekgc:
 /*     Look up the element. */
 
     zzekrsc_(&sthan[(i__1 = seg - 1) < 200 && 0 <= i__1 ? i__1 : s_rnge("sth"
-	    "an", i__1, "ekqmgr_", (ftnlen)5496)], &stdscs[(i__2 = seg * 24 - 
+	    "an", i__1, "ekqmgr_", (ftnlen)7094)], &stdscs[(i__2 = seg * 24 - 
 	    24) < 4800 && 0 <= i__2 ? i__2 : s_rnge("stdscs", i__2, "ekqmgr_",
-	     (ftnlen)5496)], &dtdscs[(i__3 = j * 11 - 11) < 110000 && 0 <= 
-	    i__3 ? i__3 : s_rnge("dtdscs", i__3, "ekqmgr_", (ftnlen)5496)], &
+	     (ftnlen)7094)], &dtdscs[(i__3 = j * 11 - 11) < 110000 && 0 <= 
+	    i__3 ? i__3 : s_rnge("dtdscs", i__3, "ekqmgr_", (ftnlen)7094)], &
 	    rowidx, elment, &cvlen, cdata, null, found, cdata_len);
     chkout_("EKGC", (ftnlen)4);
     return 0;
-/* $Procedure     EKGD  ( EK, get event data, double precision ) */
+/* $Procedure EKGD  ( EK, get event data, double precision ) */
 
 L_ekgd:
 /* $ Abstract */
@@ -6414,7 +8004,7 @@ L_ekgd:
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     SELIDX     I   Index of parent column in SELECT clause. */
 /*     ROW        I   Row to fetch from. */
@@ -6425,36 +8015,36 @@ L_ekgd:
 
 /* $ Detailed_Input */
 
-/*     SELIDX         is the SELECT clause index of the column to */
-/*                    fetch from. */
+/*     SELIDX   is the SELECT clause index of the column to */
+/*              fetch from. */
 
-/*     ROW            is the output row containing the entry to fetch */
-/*                    from. */
+/*     ROW      is the output row containing the entry to fetch */
+/*              from. */
 
-/*     ELMENT         is the index of the element of the column entry */
-/*                    to fetch.  The normal range of ELMENT is from 1 to */
-/*                    the size of the column's entry, but ELMENT is */
-/*                    allowed to exceed the number of elements in the */
-/*                    column entry; if it does, FOUND is returned .FALSE. */
-/*                    This allows the caller to read data from the column */
-/*                    entry in a loop without checking the number of */
-/*                    available elements first. */
+/*     ELMENT   is the index of the element of the column entry */
+/*              to fetch. The normal range of ELMENT is from 1 to */
+/*              the size of the column's entry, but ELMENT is */
+/*              allowed to exceed the number of elements in the */
+/*              column entry; if it does, FOUND is returned .FALSE. */
+/*              This allows the caller to read data from the column */
+/*              entry in a loop without checking the number of */
+/*              available elements first. */
 
-/*                    Null values in variable-sized columns are */
-/*                    considered to have size 1. */
+/*              Null values in variable-sized columns are */
+/*              considered to have size 1. */
 
 /* $ Detailed_Output */
 
-/*     DDATA          is the requested element of the specified column */
-/*                    entry.  If the entry is null, DDATA is undefined. */
+/*     DDATA    is the requested element of the specified column */
+/*              entry. If the entry is null, DDATA is undefined. */
 
-/*     NULL           is a logical flag indicating whether the entry */
-/*                    belonging to the specified column in the specified */
-/*                    row is null. */
+/*     NULL     is a logical flag indicating whether the entry */
+/*              belonging to the specified column in the specified */
+/*              row is null. */
 
-/*     FOUND          is a logical flag indicating whether the specified */
-/*                    element was found.  If the element does not exist, */
-/*                    FOUND is returned .FALSE. */
+/*     FOUND    is a logical flag indicating whether the specified */
+/*              element was found. If the element does not exist, */
+/*              FOUND is returned .FALSE. */
 
 /* $ Parameters */
 
@@ -6462,22 +8052,22 @@ L_ekgd:
 
 /* $ Exceptions */
 
-/*     1)  If the input argument ELMENT is less than 1, FOUND is returned */
-/*         .FALSE., and the error SPICE(INVALIDINDEX) is signaled. */
+/*     1)  If the input argument ELMENT is less than 1, the error */
+/*         SPICE(INVALIDINDEX) is signaled and FOUND is returned .FALSE. */
 /*         However, ELMENT is allowed to be greater than the number of */
 /*         elements in the specified column entry; this allows the caller */
 /*         to read data from the column entry in a loop without checking */
-/*         the number of available elements first.  If ELMENT is greater */
+/*         the number of available elements first. If ELMENT is greater */
 /*         than the number of available elements, FOUND is returned */
 /*         .FALSE. */
 
 /*     2)  If SELIDX is outside of the range established by the */
 /*         last query passed to EKSRCH, the error SPICE(INVALIDINDEX) */
-/*         will be signaled. */
+/*         is signaled and FOUND is returned .FALSE. */
 
-/*     3)  If the input argument ROW is less than 1 or greater than */
-/*         the number of rows matching the query, FOUND is returned */
-/*        .FALSE., and the error SPICE(INVALIDINDEX) is signaled. */
+/*     3)  If the input argument ROW is less than 1 or greater than the */
+/*         number of rows matching the query, the error */
+/*         SPICE(INVALIDINDEX) is signaled and FOUND is returned .FALSE. */
 
 /*     4)  If the specified column does not have DP or TIME type, the */
 /*         error SPICE(INVALIDTYPE) is signaled. */
@@ -6501,211 +8091,679 @@ L_ekgd:
 
 /* $ Examples */
 
-/*     1)  Suppose the EK table TAB contains the following columns: */
+/*     The numerical results shown for these examples may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
 
-/*            Column name   Data Type   Size */
-/*            -----------   ---------   ---- */
-/*            DP_COL_1      DP          1 */
-/*            DP_COL_2      DP          VARIABLE */
-/*            DP_COL_3      DP          10 */
-/*            TIME          TIME        1 */
-
-
-/*         Suppose the query */
-
-/*            QUERY = 'SELECT DP_COL_1 FROM TAB' */
-
-/*         is issued to EKFIND via the call */
-
-/*            CALL EKFIND ( QUERY, NMROWS, ERROR, ERRMSG ) */
-
-/*         To fetch and dump column values from the rows that satisfy the */
-/*         query, the loop below could be used.  Note that we don't check */
-/*         the FOUND flags returned by EKGD since we know that every */
-/*         entry in column DP_COL_1 contains one element. */
-
-/*            C */
-/*            C     Since DP_COL_1was the first column selected, */
-/*            C     the selection index SELIDX is set to 1. */
-/*            C     The column is scalar, so the element index ELTIDX */
-/*            C     is set to 1.  The variable NMROWS is the number of */
-/*            C     matching rows returned by EKFIND. */
-/*            C */
-
-/*                  SELIDX = 1 */
-/*                  ELTIDX = 1 */
-
-/*                  DO ROW = 1, NMROWS */
-
-/*                     WRITE (*,*) ' ' */
-/*                     WRITE (*,*) 'ROW  = ', ROW */
-/*                     WRITE (*,*) ' ' */
-
-/*            C */
-/*            C        Fetch values from column DP_COL_1. */
-/*            C */
-/*                     CALL EKGD ( SELIDX,  ROW,     ELTIDX, */
-/*                                 DVAL,    ISNULL,  FOUND   ) */
-
-/*                     IF ( ISNULL ) THEN */
-/*                        WRITE (*,*) '<Null>' */
-/*                     ELSE */
-/*                        WRITE (*,*) DVAL */
-/*                     END IF */
-
-/*                  END DO */
+/*     1) Perform a query on an EK file that contains a database with */
+/*        the Supplementary Engineering Data Records of the Viking */
+/*        Project in order to retrieve the PLATFORM_CLOCK values (double */
+/*        precision) that correspond to the images with IMAGE_NUMBER */
+/*        smaller than a given value, ordered by IMAGE_NUMBER. */
 
 
-/*     2)  Suppose the EK table TAB is as in example 1, and we issue */
-/*         the query */
+/*        Use the EK kernel below to load the information from the */
+/*        original Supplementary Engineering Data Record (SEDR) data */
+/*        set generated by the Viking Project. */
 
-/*            QUERY = 'SELECT TIME FROM TAB' */
-
-/*         to EKFIND via the call */
-
-/*            CALL EKFIND ( QUERY, NMROWS, ERROR, ERRMSG ) */
-
-/*         We wish to dump the time values as UTC calendar dates. */
-/*         The code fragment below carries out this task.  We assume */
-/*         a leapseconds kernel is loaded.  The variable UTC shown */
-/*         below should be declared as a character string. */
-
-/*                  SELIDX = 1 */
-/*                  ELTIDX = 1 */
-
-/*                  DO ROW = 1, NMROWS */
-
-/*                     WRITE (*,*) ' ' */
-/*                     WRITE (*,*) 'ROW  = ', ROW */
-/*                     WRITE (*,*) ' ' */
-
-/*            C */
-/*            C        Fetch values from column TIME. */
-/*            C */
-/*                     CALL EKGD ( SELIDX,  ROW,     ELTIDX, */
-/*                                 DVAL,    ISNULL,  FOUND   ) */
-
-/*                     IF ( ISNULL ) THEN */
-/*                        WRITE (*,*) '<Null>' */
-/*                     ELSE */
-/*                        CALL ET2UTC ( DVAL, 'C', 3, UTC ) */
-/*                        WRITE (*,*) UTC */
-/*                     END IF */
-
-/*                  END DO */
+/*           vo_sedr.bdb */
 
 
-/*     3)  Suppose the EK table TAB is as in example 1, and we issue */
-/*         the query */
+/*        Example code begins here. */
+
+
+/*              PROGRAM EKGD_EX1 */
+/*              IMPLICIT NONE */
+
+/*        C */
+/*        C     Include the EK Maximum length of an input query, */
+/*        C     MAXQRY, and the maximum length of literal string */
+/*        C     values, MAXSTR, from eklimit.inc. */
+/*        C */
+/*              INCLUDE 'ekqlimit.inc' */
+
+/*        C */
+/*        C     Local parameters */
+/*        C */
+/*              CHARACTER*(*)         EKNAME */
+/*              PARAMETER           ( EKNAME = 'vo_sedr.bdb' ) */
+
+/*              INTEGER               ERRLEN */
+/*              PARAMETER           ( ERRLEN = 1840 ) */
+
+/*        C */
+/*        C     Local variables */
+/*        C */
+/*              CHARACTER*(ERRLEN)    ERRMSG */
+/*              CHARACTER*(MAXQRY)    QUERY */
+
+/*              DOUBLE PRECISION      DDATA */
+
+/*              INTEGER               ELTIDX */
+/*              INTEGER               NMROWS */
+/*              INTEGER               ROWNO */
+/*              INTEGER               SELIDX */
+
+/*              LOGICAL               ERROR */
+/*              LOGICAL               FOUND */
+/*              LOGICAL               ISNULL */
+
+/*        C */
+/*        C     Open an EK file. */
+/*        C */
+/*              CALL FURNSH ( EKNAME ) */
+
+/*        C */
+/*        C     The table 'VIKING_SEDR_DATA' has a column */
+/*        C     'PLATFORM_CLOCK' of double precision values. */
+/*        C */
+/*        C     Define a set of constraints to perform a query on */
+/*        C     all loaded EK files (the SELECT clause). In this */
+/*        C     case select the column 'PLATFORM_CLOCK' from table */
+/*        C     'VIKING_SEDR_DATA' sorted by 'IMAGE_NUMBER'. */
+/*        C */
+/*              QUERY = 'Select PLATFORM_CLOCK from VIKING_SEDR_DATA ' */
+/*             .   //   'where IMAGE_NUMBER < 25860000 ' */
+/*             .   //   'order by IMAGE_NUMBER' */
+
+/*        C */
+/*        C     Query the EK system for data rows matching the */
+/*        C     SELECT constraints. */
+/*        C */
+/*              CALL EKFIND ( QUERY, NMROWS, ERROR, ERRMSG ) */
+
+/*        C */
+/*        C     Check whether an error occurred while processing the */
+/*        C     SELECT clause. If so, output the error message. */
+/*        C */
+/*              IF ( ERROR ) THEN */
+
+/*                 WRITE(*,*) 'SELECT clause error: ', ERRMSG */
+
+/*              ELSE */
+
+/*        C */
+/*        C        Fetch the character data. We know the query returned */
+/*        C        one column and the column contains only scalar data, */
+/*        C        so the index of all elements is 1. */
+/*        C */
+/*                 SELIDX = 1 */
+/*                 ELTIDX = 1 */
+
+/*        C */
+/*        C        Loop over each row found matching the query. */
+/*        C */
+/*                 DO ROWNO = 1, NMROWS */
+
+
+
+/*        C */
+/*        C           Use EKGD to retrieve the string from */
+/*        C */
+/*                    CALL EKGD ( SELIDX, ROWNO,  ELTIDX, */
+/*             .                  DDATA,  ISNULL, FOUND   ) */
+
+/*                    IF ( ISNULL ) THEN */
+
+/*                       WRITE (*,'(A,I3,A)') 'Row ', ROWNO, */
+/*             .                  ': Double precision data: <Null>' */
+
+/*                    ELSE */
+
+/*                       WRITE (*,'(A,I3,A,F10.6)') 'Row ', ROWNO, */
+/*             .                  ': Double precision data: ', DDATA */
+
+/*                    END IF */
+
+/*                 END DO */
+
+/*              END IF */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*        Row   1: Double precision data: 119.880000 */
+/*        Row   2: Double precision data: 119.270000 */
+/*        Row   3: Double precision data: 119.880000 */
+/*        Row   4: Double precision data: 119.270000 */
+/*        Row   5: Double precision data: 119.880000 */
+/*        Row   6: Double precision data: 119.270000 */
+/*        Row   7: Double precision data: 120.140000 */
+/*        Row   8: Double precision data: 119.520000 */
+/*        Row   9: Double precision data: 120.140000 */
+/*        Row  10: Double precision data: 120.140000 */
+/*        Row  11: Double precision data: 120.140000 */
+/*        Row  12: Double precision data: 221.920000 */
+/*        Row  13: Double precision data: 221.920000 */
+/*        Row  14: Double precision data: 221.920000 */
+/*        Row  15: Double precision data: 120.140000 */
+/*        Row  16: Double precision data: 120.140000 */
+/*        Row  17: Double precision data: 120.140000 */
+/*        Row  18: Double precision data: 120.220000 */
+/*        Row  19: Double precision data: 120.220000 */
+/*        Row  20: Double precision data: 120.220000 */
+/*        Row  21: Double precision data: 120.370000 */
+/*        Row  22: Double precision data: 120.370000 */
+/*        Row  23: Double precision data: 120.370000 */
+/*        Row  24: Double precision data: 120.290000 */
+/*        Row  25: Double precision data: 120.290000 */
+/*        Row  26: Double precision data: 120.290000 */
+
+
+/*     2) Perform a query on an EK file that contains a database with */
+/*        the Supplementary Engineering Data Records of the Viking */
+/*        Project in order to retrieve the IMAGE_TIME values (double */
+/*        precision time) that correspond to the images with */
+/*        IMAGE_NUMBER smaller than a given value, ordered by */
+/*        IMAGE_NUMBER. */
+
+
+/*        Use the EK kernel below to load the information from the */
+/*        original Supplementary Engineering Data Record (SEDR) data */
+/*        set generated by the Viking Project. */
+
+/*           vo_sedr.bdb */
+
+/*        Use the LSK kernel below to load the leap seconds and time */
+/*        constants required for the conversions. */
+
+/*           naif0012.tls */
+
+
+/*        Example code begins here. */
+
+
+/*              PROGRAM EKGD_EX2 */
+/*              IMPLICIT NONE */
+
+/*        C */
+/*        C     Include the EK Maximum length of an input query, */
+/*        C     MAXQRY, and the maximum length of literal string */
+/*        C     values, MAXSTR, from eklimit.inc. */
+/*        C */
+/*              INCLUDE 'ekqlimit.inc' */
+
+/*        C */
+/*        C     Local parameters */
+/*        C */
+/*              CHARACTER*(*)         EKNAME */
+/*              PARAMETER           ( EKNAME = 'vo_sedr.bdb' ) */
+
+/*              CHARACTER*(*)         LSKNAM */
+/*              PARAMETER           ( LSKNAM = 'naif0012.tls' ) */
+
+/*              INTEGER               ERRLEN */
+/*              PARAMETER           ( ERRLEN = 1840 ) */
+
+/*              INTEGER               TIMLEN */
+/*              PARAMETER           ( TIMLEN = 24   ) */
+
+/*        C */
+/*        C     Local variables */
+/*        C */
+/*              CHARACTER*(ERRLEN)    ERRMSG */
+/*              CHARACTER*(MAXQRY)    QUERY */
+/*              CHARACTER*(TIMLEN)    UTCSTR */
+
+/*              DOUBLE PRECISION      DDATA */
+
+/*              INTEGER               ELTIDX */
+/*              INTEGER               NMROWS */
+/*              INTEGER               ROWNO */
+/*              INTEGER               SELIDX */
+
+/*              LOGICAL               ERROR */
+/*              LOGICAL               FOUND */
+/*              LOGICAL               ISNULL */
+
+/*        C */
+/*        C     Load leapseconds file for time conversion. */
+/*        C */
+/*              CALL FURNSH ( LSKNAM ) */
+
+/*        C */
+/*        C     Open an EK file. */
+/*        C */
+/*              CALL FURNSH ( EKNAME ) */
+
+/*        C */
+/*        C     The table 'VIKING_SEDR_DATA' has a column */
+/*        C     'IMAGE_TIME' of time values (stored as double */
+/*        C     precision items). */
+/*        C */
+/*        C     Define a set of constraints to perform a query on */
+/*        C     all loaded EK files (the SELECT clause). In this */
+/*        C     case select the column 'IMAGE_TIME' from table */
+/*        C     'VIKING_SEDR_DATA' sorted by 'IMAGE_NUMBER'. */
+/*        C */
+/*              QUERY = 'Select IMAGE_TIME from VIKING_SEDR_DATA ' */
+/*             .   //   'where IMAGE_NUMBER < 25860000 ' */
+/*             .   //   'order by IMAGE_NUMBER' */
+
+/*        C */
+/*        C     Query the EK system for data rows matching the */
+/*        C     SELECT constraints. */
+/*        C */
+/*              CALL EKFIND ( QUERY, NMROWS, ERROR, ERRMSG ) */
+
+/*        C */
+/*        C     Check whether an error occurred while processing the */
+/*        C     SELECT clause. If so, output the error message. */
+/*        C */
+/*              IF ( ERROR ) THEN */
+
+/*                 WRITE(*,*) 'SELECT clause error: ', ERRMSG */
+
+/*              ELSE */
+
+/*        C */
+/*        C        Fetch the character data. We know the query returned */
+/*        C        one column and the column contains only scalar data, */
+/*        C        so the index of all elements is 1. */
+/*        C */
+/*                 SELIDX = 1 */
+/*                 ELTIDX = 1 */
+
+/*        C */
+/*        C        Loop over each row found matching the query. */
+/*        C */
+/*                 DO ROWNO = 1, NMROWS */
+
+/*        C */
+/*        C           Use EKGD to retrieve the string from */
+/*        C */
+/*                    CALL EKGD ( SELIDX, ROWNO,  ELTIDX, */
+/*             .                  DDATA,  ISNULL, FOUND   ) */
+
+/*                    IF ( ISNULL ) THEN */
+
+/*                       WRITE (*,'(A,I3,A)') 'Row ', ROWNO, */
+/*             .                              ': Time data: <Null>' */
+
+/*                    ELSE */
+
+/*                       CALL ET2UTC ( DDATA, 'C', 3, UTCSTR ) */
+
+/*                       WRITE (*,'(A,I3,2A)') 'Row ', ROWNO, */
+/*             .                               ': Time data:  ', UTCSTR */
+
+/*                    END IF */
+
+/*                 END DO */
+
+/*              END IF */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*        Row   1: Time data:  1976 JUN 16 16:50:55.925 */
+/*        Row   2: Time data:  1976 JUN 16 16:51:00.269 */
+/*        Row   3: Time data:  1976 JUN 16 20:56:53.051 */
+/*        Row   4: Time data:  1976 JUN 16 20:56:57.395 */
+/*        Row   5: Time data:  1976 JUN 17 01:02:50.177 */
+/*        Row   6: Time data:  1976 JUN 17 01:02:54.521 */
+/*        Row   7: Time data:  1976 JUN 17 05:08:56.263 */
+/*        Row   8: Time data:  1976 JUN 17 05:09:00.607 */
+/*        Row   9: Time data:  1976 JUN 17 06:30:28.424 */
+/*        Row  10: Time data:  1976 JUN 17 06:30:46.174 */
+/*        Row  11: Time data:  1976 JUN 17 06:30:55.168 */
+/*        Row  12: Time data:  1976 JUN 17 11:17:47.471 */
+/*        Row  13: Time data:  1976 JUN 17 11:18:05.221 */
+/*        Row  14: Time data:  1976 JUN 17 11:18:14.215 */
+/*        Row  15: Time data:  1976 JUN 17 13:20:23.634 */
+/*        Row  16: Time data:  1976 JUN 17 13:20:41.384 */
+/*        Row  17: Time data:  1976 JUN 17 13:20:50.378 */
+/*        Row  18: Time data:  1976 JUN 17 15:23:17.717 */
+/*        Row  19: Time data:  1976 JUN 17 15:23:35.467 */
+/*        Row  20: Time data:  1976 JUN 17 15:23:44.461 */
+/*        Row  21: Time data:  1976 JUN 17 17:26:20.760 */
+/*        Row  22: Time data:  1976 JUN 17 17:26:38.510 */
+/*        Row  23: Time data:  1976 JUN 17 17:26:47.504 */
+/*        Row  24: Time data:  1976 JUN 17 19:29:23.803 */
+/*        Row  25: Time data:  1976 JUN 17 19:29:41.553 */
+/*        Row  26: Time data:  1976 JUN 17 19:29:50.547 */
+
+
+/*     3) This example demonstrates how to fetch double precision values */
+/*        from a column in three different cases: single values, */
+/*        variable-size arrays and static-size arrays. */
+
+/*        Create an EK that contains a table TAB that has the following */
+/*        columns: */
+
+/*           Column name   Data Type   Size */
+/*           -----------   ---------   ---- */
+/*           DP_COL_1      DP          1 */
+/*           DP_COL_2      DP          VARIABLE */
+/*           DP_COL_3      DP          3 */
+
+/*        Issue the following query */
 
 /*            QUERY = 'SELECT DP_COL_1, DP_COL_2, DP_COL_3 FROM TAB' */
 
-/*         to EKFIND via the call */
-
-/*            CALL EKFIND ( QUERY, NMROWS, ERROR, ERRMSG ) */
-
-/*         To fetch and dump column values from the rows that satisfy the */
-/*         query, the loop below could be used.  Note that we don't check */
-/*         the FOUND flags returned by EKGD since we know in advance how */
-/*         many elements are contained in each column entry we fetch. */
-
-/*                  DO ROW = 1, NMROWS */
-
-/*                     WRITE (*,*) ' ' */
-/*                     WRITE (*,*) 'ROW  = ', ROW */
-/*                     WRITE (*,*) ' ' */
-
-/*            C */
-/*            C        Fetch values from column DP_COL_1.  Since */
-/*            C        DP_COL_1was the first column selected, the */
-/*            C        selection index SELIDX is set to 1. */
-/*            C */
-/*                     SELIDX = 1 */
-/*                     ELTIDX = 1 */
-/*                     CALL EKGD ( SELIDX,    ROW,     ELTIDX, */
-/*                                 DVALS(1),  ISNULL,  FOUND   ) */
-
-/*                     WRITE (*,*) ' ' */
-/*                     WRITE (*,*) 'COLUMN = DP_COL_1' */
-/*                     WRITE (*,*) ' ' */
-
-/*                     IF ( ISNULL ) THEN */
-/*                        WRITE (*,*) '<Null>' */
-/*                     ELSE */
-/*                        WRITE (*,*) DVALS(1) */
-/*                     END IF */
-
-/*            C */
-/*            C        Fetch values from column DP_COL_2 in the current */
-/*            C        row.  Since DP_COL_2 contains variable-size array */
-/*            C        elements, we call EKNELT to determine how many */
-/*            C        elements to fetch. */
-/*            C */
-/*                     SELIDX = 2 */
-/*                     CALL EKNELT ( SELIDX, ROW, NELT ) */
-
-/*                     ELTIDX = 1 */
-/*                     ISNULL = .FALSE. */
-
-/*                     DO WHILE (       ( ELTIDX .LE.  NELT   ) */
-/*                 .              .AND. (        .NOT. ISNULL )  ) */
-
-/*                        CALL EKGD ( SELIDX,         ROW,     ELTIDX, */
-/*                                    DVALS(ELTIDX),  ISNULL,  FOUND   ) */
-
-/*                        ELTIDX = ELTIDX + 1 */
-
-/*            C */
-/*            C           If the column entry is null, we'll be kicked */
-/*            C           out of this loop after the first iteration. */
-/*            C */
-/*                     END DO */
-
-/*                     WRITE (*,*) ' ' */
-/*                     WRITE (*,*) 'COLUMN = DP_COL_2' */
-/*                     WRITE (*,*) ' ' */
-
-/*                     IF ( ISNULL ) THEN */
-/*                        WRITE (*,*) '<Null>' */
-/*                     ELSE */
-/*                        WRITE (*,*) ( DVALS(I), I = 1, NELT ) */
-/*                     END IF */
-
-/*            C */
-/*            C        Fetch values from column DP_COL_3 in the current */
-/*            C        row.  We need not call EKNELT since we know how */
-/*            C        many elements are in each column entry. */
-/*            C */
-/*                     SELIDX = 3 */
-/*                     ELTIDX = 1 */
-/*                     ISNULL = .FALSE. */
-
-/*                     DO WHILE (       ( ELTIDX .LE.  10    ) */
-/*                 .              .AND. (        .NOT. ISNULL )  ) */
-
-/*                        CALL EKGD ( SELIDX,         ROW,     ELTIDX, */
-/*                                    DVALS(ELTIDX),  ISNULL,  FOUND   ) */
-
-/*                        ELTIDX = ELTIDX + 1 */
-
-/*                     END DO */
-
-/*                     WRITE (*,*) ' ' */
-/*                     WRITE (*,*) 'COLUMN = DP_COL_3' */
-/*                     WRITE (*,*) ' ' */
-
-/*                     IF ( ISNULL ) THEN */
-/*                        WRITE (*,*) '<Null>' */
-/*                     ELSE */
-/*                        WRITE (*,*) ( DVALS(I), I = 1, 10 ) */
-/*                     END IF */
-
-/*                  END DO */
+/*        to fetch and dump column values from the rows that satisfy the */
+/*        query. */
 
 
-/*     4)  See the $Examples section of the umbrella routine EKQMGR */
-/*         for an example in which the names and data types of the */
-/*         columns from which to fetch data are not known in advance. */
+/*        Example code begins here. */
+
+
+/*              PROGRAM EKGD_EX3 */
+/*              IMPLICIT NONE */
+
+/*        C */
+/*        C     Include the EK Column Name Size (CNAMSZ) */
+/*        C     and EK Query Limit Parameters (MAXQRY) */
+/*        C */
+/*              INCLUDE 'ekcnamsz.inc' */
+/*              INCLUDE 'ekqlimit.inc' */
+
+/*        C */
+/*        C     Local parameters */
+/*        C */
+/*              CHARACTER*(*)         EKNAME */
+/*              PARAMETER           ( EKNAME  = 'ekgd_ex3.bdb' ) */
+
+/*              CHARACTER*(*)         TABLE */
+/*              PARAMETER           ( TABLE   = 'TAB' ) */
+
+/*              INTEGER               COL3SZ */
+/*              PARAMETER           ( COL3SZ = 3   ) */
+
+/*              INTEGER               DECLEN */
+/*              PARAMETER           ( DECLEN = 200 ) */
+
+/*              INTEGER               ERRLEN */
+/*              PARAMETER           ( ERRLEN = 1840 ) */
+
+/*              INTEGER               MXC2SZ */
+/*              PARAMETER           ( MXC2SZ = 4   ) */
+
+/*              INTEGER               NAMLEN */
+/*              PARAMETER           ( NAMLEN = 40  ) */
+
+/*              INTEGER               NCOLS */
+/*              PARAMETER           ( NCOLS  = 3   ) */
+
+/*              INTEGER               NROWS */
+/*              PARAMETER           ( NROWS  = 4   ) */
+
+/*        C */
+/*        C     Local variables */
+/*        C */
+/*              CHARACTER*(DECLEN)    CDECLS ( NCOLS  ) */
+/*              CHARACTER*(CNAMSZ)    CNAMES ( NCOLS  ) */
+/*              CHARACTER*(ERRLEN)    ERRMSG */
+/*              CHARACTER*(NAMLEN)    IFNAME */
+/*              CHARACTER*(MAXQRY)    QUERY */
+
+/*              DOUBLE PRECISION      COL1 */
+/*              DOUBLE PRECISION      COL2   ( MXC2SZ ) */
+/*              DOUBLE PRECISION      COL3   ( COL3SZ ) */
+/*              DOUBLE PRECISION      DVALS  ( MXC2SZ ) */
+
+/*              INTEGER               ELTIDX */
+/*              INTEGER               HANDLE */
+/*              INTEGER               I */
+/*              INTEGER               J */
+/*              INTEGER               NELT */
+/*              INTEGER               NMROWS */
+/*              INTEGER               NRESVC */
+/*              INTEGER               RECNO */
+/*              INTEGER               ROW */
+/*              INTEGER               SEGNO */
+/*              INTEGER               SELIDX */
+
+/*              LOGICAL               ERROR */
+/*              LOGICAL               FOUND */
+/*              LOGICAL               ISNULL */
+
+/*        C */
+/*        C     Open a new EK file.  For simplicity, we will not */
+/*        C     reserve any space for the comment area, so the */
+/*        C     number of reserved comment characters is zero. */
+/*        C     The variable IFNAME is the internal file name. */
+/*        C */
+/*              NRESVC  =  0 */
+/*              IFNAME  =  'Test EK/Created 13-JUN-2019' */
+
+/*              CALL EKOPN ( EKNAME, IFNAME, NRESVC, HANDLE ) */
+
+/*        C */
+/*        C     Set up the column names and declarations */
+/*        C     for the TAB segment.  We'll index all of */
+/*        C     the columns. */
+/*        C */
+/*              CNAMES(1) = 'DP_COL_1' */
+/*              CDECLS(1) = 'DATATYPE = DOUBLE PRECISION, ' // */
+/*             .            'INDEXED  = TRUE' */
+
+/*              CNAMES(2) = 'DP_COL_2' */
+/*              CDECLS(2) = 'DATATYPE = DOUBLE PRECISION, ' // */
+/*             .            'SIZE = VARIABLE' */
+
+/*              CNAMES(3) = 'DP_COL_3' */
+/*              CDECLS(3) = 'DATATYPE = DOUBLE PRECISION, ' // */
+/*             .            'SIZE = 3' */
+
+/*        C */
+/*        C     Start the segment. */
+/*        C */
+/*              CALL EKBSEG ( HANDLE, TABLE,  NCOLS, */
+/*             .              CNAMES, CDECLS, SEGNO ) */
+
+/*        C */
+/*        C     At the records to the table. */
+/*        C */
+/*              DO I = 1, NROWS */
+
+/*        C */
+/*        C        Append a new record to the EK. */
+/*        C */
+/*                 CALL EKAPPR ( HANDLE, SEGNO, RECNO ) */
+
+/*        C */
+/*        C        Add DP_COL_1 */
+/*        C */
+/*                 COL1 = I * 100.D0 */
+
+/*                 CALL EKACED ( HANDLE,    SEGNO, RECNO, */
+/*             .                 CNAMES(1), 1,     COL1,  .FALSE. ) */
+
+/*        C */
+/*        C        Add I items to DP_COL_2 */
+/*        C */
+/*                 DO J = 1, I */
+/*                    COL2(J) = J + I*200.D0 */
+/*                 END DO */
+
+/*                 CALL EKACED ( HANDLE,    SEGNO, RECNO, */
+/*             .                 CNAMES(2), I,     COL2,  .FALSE. ) */
+
+/*        C */
+/*        C        Add 3 items to DP_COL_3 */
+/*        C */
+/*                 DO J = 1, 3 */
+/*                    COL3(J) =  I + J*100.D0 */
+/*                 END DO */
+
+/*                 CALL EKACED ( HANDLE,    SEGNO, RECNO, */
+/*             .                 CNAMES(3), 3,     COL3, .FALSE. ) */
+
+/*              END DO */
+
+/*        C */
+/*        C     Close the file. */
+/*        C */
+/*              CALL EKCLS ( HANDLE ) */
+
+/*        C */
+/*        C     Open the created file. Perform the query and show the */
+/*        C     results. */
+/*        C */
+/*              CALL FURNSH ( EKNAME ) */
+
+/*              QUERY = 'SELECT DP_COL_1, DP_COL_2, DP_COL_3 FROM TAB' */
+
+/*        C */
+/*        C     Query the EK system for data rows matching the */
+/*        C     SELECT constraints. */
+/*        C */
+/*              CALL EKFIND ( QUERY, NMROWS, ERROR, ERRMSG ) */
+
+/*        C */
+/*        C     Check whether an error occurred while processing the */
+/*        C     SELECT clause. If so, output the error message. */
+/*        C */
+/*              IF ( ERROR ) THEN */
+
+/*                 WRITE(*,*) 'SELECT clause error: ', ERRMSG */
+
+/*              ELSE */
+
+/*                 DO ROW = 1, NMROWS */
+
+/*                    WRITE(*,*) ' ' */
+/*                    WRITE(*,'(A,I3)') 'ROW  = ', ROW */
+
+/*        C */
+/*        C           Fetch values from column DP_COL_1.  Since */
+/*        C           DP_COL_1 was the first column selected, the */
+/*        C           selection index SELIDX is set to 1. */
+/*        C */
+/*                    SELIDX = 1 */
+/*                    ELTIDX = 1 */
+/*                    CALL EKGD ( SELIDX,    ROW,     ELTIDX, */
+/*             .                  DVALS(1),  ISNULL,  FOUND   ) */
+
+/*                    IF ( ISNULL ) THEN */
+
+/*                       WRITE(*,*) '  COLUMN = DP_COL_1: <Null>' */
+
+/*                    ELSE */
+
+/*                       WRITE(*,*) '  COLUMN = DP_COL_1:', DVALS(1) */
+
+/*                    END IF */
+
+/*        C */
+/*        C           Fetch values from column DP_COL_2 in the current */
+/*        C           row.  Since DP_COL_2 contains variable-size array */
+/*        C           elements, we call EKNELT to determine how many */
+/*        C           elements to fetch. */
+/*        C */
+/*                    SELIDX = 2 */
+/*                    CALL EKNELT ( SELIDX, ROW, NELT ) */
+
+/*                    ELTIDX = 1 */
+/*                    ISNULL = .FALSE. */
+
+/*                    DO WHILE (       ( ELTIDX .LE.  NELT   ) */
+/*             .                 .AND. (        .NOT. ISNULL )  ) */
+
+/*                       CALL EKGD ( SELIDX,         ROW,     ELTIDX, */
+/*             .                     DVALS(ELTIDX),  ISNULL,  FOUND   ) */
+
+/*                       ELTIDX = ELTIDX + 1 */
+
+/*        C */
+/*        C           If the column entry is null, we'll be kicked */
+/*        C           out of this loop after the first iteration. */
+/*        C */
+/*                    END DO */
+
+/*                    IF ( ISNULL ) THEN */
+
+/*                       WRITE(*,*) '  COLUMN = DP_COL_2: <Null>' */
+
+/*                    ELSE */
+
+/*                       WRITE(*,'(A,4F6.1)') '   COLUMN = DP_COL_2:', */
+/*             .                              ( DVALS(I), I = 1, NELT ) */
+
+/*                    END IF */
+
+/*        C */
+/*        C           Fetch values from column DP_COL_3 in the current */
+/*        C           row.  We need not call EKNELT since we know how */
+/*        C           many elements are in each column entry. */
+/*        C */
+/*                    SELIDX = 3 */
+/*                    ELTIDX = 1 */
+/*                    ISNULL = .FALSE. */
+
+/*                    DO WHILE (       ( ELTIDX .LE.  COL3SZ ) */
+/*             .                 .AND. (        .NOT. ISNULL )  ) */
+
+/*                       CALL EKGD ( SELIDX,         ROW,     ELTIDX, */
+/*             .                     DVALS(ELTIDX),  ISNULL,  FOUND   ) */
+
+/*                       ELTIDX = ELTIDX + 1 */
+
+/*                    END DO */
+
+/*                    IF ( ISNULL ) THEN */
+
+/*                       WRITE(*,*) '  COLUMN = DP_COL_3: <Null>' */
+
+/*                    ELSE */
+
+/*                       WRITE(*,'(A,3F6.1)') '   COLUMN = DP_COL_3:', */
+/*             .                              ( DVALS(I), I = 1, COL3SZ ) */
+
+/*                    END IF */
+
+/*                 END DO */
+
+/*        C */
+/*        C     We either parsed the SELECT clause or had an error. */
+/*        C */
+/*              END IF */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*        ROW  =   1 */
+/*           COLUMN = DP_COL_1:   100.00000000000000 */
+/*           COLUMN = DP_COL_2: 201.0 */
+/*           COLUMN = DP_COL_3: 101.0 201.0 301.0 */
+
+/*        ROW  =   2 */
+/*           COLUMN = DP_COL_1:   200.00000000000000 */
+/*           COLUMN = DP_COL_2: 401.0 402.0 */
+/*           COLUMN = DP_COL_3: 102.0 202.0 302.0 */
+
+/*        ROW  =   3 */
+/*           COLUMN = DP_COL_1:   300.00000000000000 */
+/*           COLUMN = DP_COL_2: 601.0 602.0 603.0 */
+/*           COLUMN = DP_COL_3: 103.0 203.0 303.0 */
+
+/*        ROW  =   4 */
+/*           COLUMN = DP_COL_1:   400.00000000000000 */
+/*           COLUMN = DP_COL_2: 801.0 802.0 803.0 804.0 */
+/*           COLUMN = DP_COL_3: 104.0 204.0 304.0 */
+
+
+/*        Note that after run completion, a new EK file exists in the */
+/*        output directory. */
+
+/*     4) See $Examples in EKQMGR. */
+
+/*        In this example, the names and data types of the columns from */
+/*        which to fetch data are not known in advance. */
 
 /* $ Restrictions */
 
@@ -6717,19 +8775,27 @@ L_ekgd:
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
 
 /* $ Version */
 
+/* -    SPICELIB Version 2.1.0, 06-JUL-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
+/*        Added complete code examples from existing fragments. */
+
 /* -    SPICELIB Version 2.0.0, 16-NOV-2001 (NJB) */
 
-/*        Bug fix:   When an already loaded kernel is opened with EKOPR, */
+/*        Bug fix: When an already loaded kernel is opened with EKOPR, */
 /*        it now has its link count reset to 1 via a call to EKCLS. */
 
 /* -    SPICELIB Version 1.1.0, 07-JUL-1996 (NJB) */
 
 /*        Redundant CHKIN call removed from SELIDX error check. */
-/*        Misspelling of "issued" was fixed.  Previous version line */
+/*        Misspelling of "issued" was fixed. Previous version line */
 /*        was changed from "Beta" to "SPICELIB." */
 
 /* -    SPICELIB Version 1.0.0, 23-OCT-1995 (NJB) */
@@ -6738,15 +8804,6 @@ L_ekgd:
 /* $ Index_Entries */
 
 /*     fetch element from double precision column entry */
-
-/* -& */
-/* $ Revisions */
-
-/* -    SPICELIB Version 1.1.0, 07-JUL-1996 (NJB) */
-
-/*        Redundant CHKIN call removed from SELIDX error check. */
-/*        Misspelling of "issued" was fixed.  Previous version line */
-/*        was changed from "Beta" to "SPICELIB." */
 
 /* -& */
 
@@ -6810,28 +8867,28 @@ L_ekgd:
 /*     table's column list. */
 
     tabidx = seltab[(i__1 = *selidx - 1) < 50 && 0 <= i__1 ? i__1 : s_rnge(
-	    "seltab", i__1, "ekqmgr_", (ftnlen)5978)];
+	    "seltab", i__1, "ekqmgr_", (ftnlen)8042)];
     col = selcol[(i__1 = *selidx - 1) < 50 && 0 <= i__1 ? i__1 : s_rnge("sel"
-	    "col", i__1, "ekqmgr_", (ftnlen)5979)];
+	    "col", i__1, "ekqmgr_", (ftnlen)8043)];
     colptr = selctp[(i__1 = *selidx - 1) < 50 && 0 <= i__1 ? i__1 : s_rnge(
-	    "selctp", i__1, "ekqmgr_", (ftnlen)5980)];
+	    "selctp", i__1, "ekqmgr_", (ftnlen)8044)];
     tab = tptvec[(i__1 = tabidx + 5) < 16 && 0 <= i__1 ? i__1 : s_rnge("tptv"
-	    "ec", i__1, "ekqmgr_", (ftnlen)5981)];
+	    "ec", i__1, "ekqmgr_", (ftnlen)8045)];
 
 /*     Make sure the column has double precision or `time' type. */
 
     if (cttyps[(i__1 = colptr - 1) < 500 && 0 <= i__1 ? i__1 : s_rnge("cttyps"
-	    , i__1, "ekqmgr_", (ftnlen)5986)] != 2 && cttyps[(i__2 = colptr - 
+	    , i__1, "ekqmgr_", (ftnlen)8050)] != 2 && cttyps[(i__2 = colptr - 
 	    1) < 500 && 0 <= i__2 ? i__2 : s_rnge("cttyps", i__2, "ekqmgr_", (
-	    ftnlen)5986)] != 4) {
+	    ftnlen)8050)] != 4) {
 	setmsg_("Column # has data type #.", (ftnlen)25);
 	errch_("#", ctnams + (((i__1 = colptr - 1) < 500 && 0 <= i__1 ? i__1 :
-		 s_rnge("ctnams", i__1, "ekqmgr_", (ftnlen)5990)) << 5), (
+		 s_rnge("ctnams", i__1, "ekqmgr_", (ftnlen)8054)) << 5), (
 		ftnlen)1, (ftnlen)32);
 	errch_("#", chtype + (((i__2 = cttyps[(i__1 = colptr - 1) < 500 && 0 
 		<= i__1 ? i__1 : s_rnge("cttyps", i__1, "ekqmgr_", (ftnlen)
-		5991)] - 1) < 4 && 0 <= i__2 ? i__2 : s_rnge("chtype", i__2, 
-		"ekqmgr_", (ftnlen)5991)) << 2), (ftnlen)1, (ftnlen)4);
+		8055)] - 1) < 4 && 0 <= i__2 ? i__2 : s_rnge("chtype", i__2, 
+		"ekqmgr_", (ftnlen)8055)) << 2), (ftnlen)1, (ftnlen)4);
 	sigerr_("SPICE(INVALIDTYPE)", (ftnlen)18);
 	chkout_("EKGD", (ftnlen)4);
 	return 0;
@@ -6868,11 +8925,11 @@ L_ekgd:
 /*     Obtain the column descriptor for the column. */
 
     rowidx = rowvec[(i__1 = tabidx - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge(
-	    "rowvec", i__1, "ekqmgr_", (ftnlen)6029)];
+	    "rowvec", i__1, "ekqmgr_", (ftnlen)8093)];
     seg = segvec[(i__1 = tabidx - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge("segv"
-	    "ec", i__1, "ekqmgr_", (ftnlen)6030)];
+	    "ec", i__1, "ekqmgr_", (ftnlen)8094)];
     j = stdtpt[(i__1 = seg - 1) < 200 && 0 <= i__1 ? i__1 : s_rnge("stdtpt", 
-	    i__1, "ekqmgr_", (ftnlen)6032)];
+	    i__1, "ekqmgr_", (ftnlen)8096)];
     i__1 = col;
     for (i__ = 2; i__ <= i__1; ++i__) {
 	j = lnknxt_(&j, dtpool);
@@ -6881,14 +8938,14 @@ L_ekgd:
 /*     Look up the element. */
 
     zzekrsd_(&sthan[(i__1 = seg - 1) < 200 && 0 <= i__1 ? i__1 : s_rnge("sth"
-	    "an", i__1, "ekqmgr_", (ftnlen)6041)], &stdscs[(i__2 = seg * 24 - 
+	    "an", i__1, "ekqmgr_", (ftnlen)8105)], &stdscs[(i__2 = seg * 24 - 
 	    24) < 4800 && 0 <= i__2 ? i__2 : s_rnge("stdscs", i__2, "ekqmgr_",
-	     (ftnlen)6041)], &dtdscs[(i__3 = j * 11 - 11) < 110000 && 0 <= 
-	    i__3 ? i__3 : s_rnge("dtdscs", i__3, "ekqmgr_", (ftnlen)6041)], &
+	     (ftnlen)8105)], &dtdscs[(i__3 = j * 11 - 11) < 110000 && 0 <= 
+	    i__3 ? i__3 : s_rnge("dtdscs", i__3, "ekqmgr_", (ftnlen)8105)], &
 	    rowidx, elment, ddata, null, found);
     chkout_("EKGD", (ftnlen)4);
     return 0;
-/* $Procedure     EKGI  ( EK, get event data, integer ) */
+/* $Procedure EKGI  ( EK, get event data, integer ) */
 
 L_ekgi:
 /* $ Abstract */
@@ -6941,7 +8998,7 @@ L_ekgi:
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     SELIDX     I   Index of parent column in SELECT clause. */
 /*     ROW        I   Row to fetch from. */
@@ -6952,36 +9009,36 @@ L_ekgi:
 
 /* $ Detailed_Input */
 
-/*     SELIDX         is the SELECT clause index of the column to */
-/*                    fetch from. */
+/*     SELIDX   is the SELECT clause index of the column to */
+/*              fetch from. */
 
-/*     ROW            is the output row containing the entry to fetch */
-/*                    from. */
+/*     ROW      is the output row containing the entry to fetch */
+/*              from. */
 
-/*     ELMENT         is the index of the element of the column entry */
-/*                    to fetch.  The normal range of ELMENT is from 1 to */
-/*                    the size of the column's entry, but ELMENT is */
-/*                    allowed to exceed the number of elements in the */
-/*                    column entry; if it does, FOUND is returned .FALSE. */
-/*                    This allows the caller to read data from the column */
-/*                    entry in a loop without checking the number of */
-/*                    available elements first. */
+/*     ELMENT   is the index of the element of the column entry */
+/*              to fetch. The normal range of ELMENT is from 1 to */
+/*              the size of the column's entry, but ELMENT is */
+/*              allowed to exceed the number of elements in the */
+/*              column entry; if it does, FOUND is returned .FALSE. */
+/*              This allows the caller to read data from the column */
+/*              entry in a loop without checking the number of */
+/*              available elements first. */
 
-/*                    Null values in variable-sized columns are */
-/*                    considered to have size 1. */
+/*              Null values in variable-sized columns are */
+/*              considered to have size 1. */
 
 /* $ Detailed_Output */
 
-/*     IDATA          is the requested element of the specified column */
-/*                    entry.  If the entry is null, IDATA is undefined. */
+/*     IDATA    is the requested element of the specified column */
+/*              entry. If the entry is null, IDATA is undefined. */
 
-/*     NULL           is a logical flag indicating whether the entry */
-/*                    belonging to the specified column in the specified */
-/*                    row is null. */
+/*     NULL     is a logical flag indicating whether the entry */
+/*              belonging to the specified column in the specified */
+/*              row is null. */
 
-/*     FOUND          is a logical flag indicating whether the specified */
-/*                    element was found.  If the element does not exist, */
-/*                    FOUND is returned .FALSE. */
+/*     FOUND    is a logical flag indicating whether the specified */
+/*              element was found. If the element does not exist, */
+/*              FOUND is returned .FALSE. */
 
 /* $ Parameters */
 
@@ -6989,22 +9046,22 @@ L_ekgi:
 
 /* $ Exceptions */
 
-/*     1)  If the input argument ELMENT is less than 1, FOUND is returned */
-/*         .FALSE., and the error SPICE(INVALIDINDEX) is signaled. */
+/*     1)  If the input argument ELMENT is less than 1, the error */
+/*         SPICE(INVALIDINDEX) is signaled and FOUND is returned .FALSE. */
 /*         However, ELMENT is allowed to be greater than the number of */
 /*         elements in the specified column entry; this allows the caller */
 /*         to read data from the column entry in a loop without checking */
-/*         the number of available elements first.  If ELMENT is greater */
+/*         the number of available elements first. If ELMENT is greater */
 /*         than the number of available elements, FOUND is returned */
 /*         .FALSE. */
 
 /*     2)  If SELIDX is outside of the range established by the */
 /*         last query passed to EKSRCH, the error SPICE(INVALIDINDEX) */
-/*         will be signaled. */
+/*         is signaled and FOUND is returned .FALSE. */
 
-/*     3)  If the input argument ROW is less than 1 or greater than */
-/*         the number of rows matching the query, FOUND is returned */
-/*        .FALSE., and the error SPICE(INVALIDINDEX) is signaled. */
+/*     3)  If the input argument ROW is less than 1 or greater than the */
+/*         number of rows matching the query, the error */
+/*         SPICE(INVALIDINDEX) is signaled and FOUND is returned .FALSE. */
 
 /*     4)  If the specified column does not have integer type, the */
 /*         error SPICE(INVALIDTYPE) is signaled. */
@@ -7027,173 +9084,496 @@ L_ekgi:
 
 /* $ Examples */
 
-/*     1)  Suppose the EK table TAB contains the following columns: */
+/*     The numerical results shown for these examples may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
 
-/*            Column name   Data Type   Size */
-/*            -----------   ---------   ---- */
-/*            INT_COL_1     INT         1 */
-/*            INT_COL_2     INT         VARIABLE */
-/*            INT_COL_3     INT         10 */
-
-
-/*         Suppose the query */
-
-/*            QUERY = 'SELECT INT_COL_1 FROM TAB' */
-
-/*         is issued to EKFIND via the call */
-
-/*            CALL EKFIND ( QUERY, NMROWS, ERROR, ERRMSG ) */
-
-/*         To fetch and dump column values from the rows that satisfy the */
-/*         query, the loop below could be used.  Note that we don't check */
-/*         the FOUND flags returned by EKGI since we know that every */
-/*         entry in column INT_COL_1 contains one element. */
-
-/*            C */
-/*            C     Since INT_COL_1was the first column selected, */
-/*            C     the selection index SELIDX is set to 1. */
-/*            C     The column is scalar, so the element index ELTIDX */
-/*            C     is set to 1.  The variable NMROWS is the number of */
-/*            C     matching rows returned by EKFIND. */
-/*            C */
-
-/*                  SELIDX = 1 */
-/*                  ELTIDX = 1 */
-
-/*                  DO ROW = 1, NMROWS */
-
-/*                     WRITE (*,*) ' ' */
-/*                     WRITE (*,*) 'ROW  = ', ROW */
-/*                     WRITE (*,*) ' ' */
-
-/*            C */
-/*            C        Fetch values from column INT_COL_1. */
-/*            C */
-/*                     CALL EKGI ( SELIDX,  ROW,     ELTIDX, */
-/*                                 IVAL,    ISNULL,  FOUND   ) */
-
-/*                     IF ( ISNULL ) THEN */
-/*                        WRITE (*,*) '<Null>' */
-/*                     ELSE */
-/*                        WRITE (*,*) IVAL */
-/*                     END IF */
-
-/*                  END DO */
+/*     1) Perform a query on an EK file that contains a database with */
+/*        the Supplementary Engineering Data Records of the Viking */
+/*        Project in order to retrieve the IMAGE_NUMBER values (integer */
+/*        numbers) that correspond to the images with IMAGE_NUMBER */
+/*        smaller than a given value, ordered by IMAGE_NUMBER. */
 
 
+/*        Use the EK kernel below to load the information from the */
+/*        original Supplementary Engineering Data Record (SEDR) data */
+/*        set generated by the Viking Project. */
 
-/*     2)  Suppose the EK table TAB is as in example 1, and we issue */
-/*         the query */
-
-/*            QUERY = 'SELECT INT_COL_1, INT_COL_2, INT_COL_3 FROM TAB' */
-
-/*         to EKFIND via the call */
-
-/*            CALL EKFIND ( QUERY, NMROWS, ERROR, ERRMSG ) */
-
-/*         To fetch and dump column values from the rows that satisfy the */
-/*         query, the loop below could be used.  Note that we don't check */
-/*         the FOUND flags returned by EKGI since we know in advance how */
-/*         many elements are contained in each column entry we fetch. */
+/*           vo_sedr.bdb */
 
 
-/*                  DO ROW = 1, NMROWS */
-
-/*                     WRITE (*,*) ' ' */
-/*                     WRITE (*,*) 'ROW  = ', ROW */
-/*                     WRITE (*,*) ' ' */
-
-/*            C */
-/*            C        Fetch values from column INT_COL_1.  Since */
-/*            C        INT_COL_1 was the first column selected, the */
-/*            C        selection index SELIDX is set to 1. */
-/*            C */
-/*                     SELIDX = 1 */
-/*                     ELTIDX = 1 */
-/*                     CALL EKGI ( SELIDX,    ROW,     ELTIDX, */
-/*                                 IVALS(1),  ISNULL,  FOUND   ) */
-
-/*                     WRITE (*,*) ' ' */
-/*                     WRITE (*,*) 'COLUMN = INT_COL_1' */
-/*                     WRITE (*,*) ' ' */
-
-/*                     IF ( ISNULL ) THEN */
-/*                        WRITE (*,*) '<Null>' */
-/*                     ELSE */
-/*                        WRITE (*,*) IVALS(1) */
-/*                     END IF */
-
-/*            C */
-/*            C        Fetch values from column INT_COL_2 in the current */
-/*            C        row.  Since INT_COL_2 contains variable-size array */
-/*            C        elements, we call EKNELT to determine how many */
-/*            C        elements to fetch. */
-/*            C */
-/*                     SELIDX = 2 */
-/*                     CALL EKNELT ( SELIDX, ROW, NELT ) */
-
-/*                     ELTIDX = 1 */
-/*                     ISNULL = .FALSE. */
-
-/*                     DO WHILE (       ( ELTIDX .LE.  NELT   ) */
-/*                 .              .AND. (        .NOT. ISNULL )  ) */
-
-/*                        CALL EKGI ( SELIDX,         ROW,     ELTIDX, */
-/*                                    IVALS(ELTIDX),  ISNULL,  FOUND   ) */
-
-/*                        ELTIDX = ELTIDX + 1 */
-
-/*            C */
-/*            C           If the column entry is null, we'll be kicked */
-/*            C           out of this loop after the first iteration. */
-/*            C */
-/*                     END DO */
-
-/*                     WRITE (*,*) ' ' */
-/*                     WRITE (*,*) 'COLUMN = INT_COL_2' */
-/*                     WRITE (*,*) ' ' */
-
-/*                     IF ( ISNULL ) THEN */
-/*                        WRITE (*,*) '<Null>' */
-/*                     ELSE */
-/*                        WRITE (*,*) ( IVALS(I), I = 1, NELT ) */
-/*                     END IF */
-
-/*            C */
-/*            C        Fetch values from column INT_COL_3 in the current */
-/*            C        row.  We need not call EKNELT since we know how */
-/*            C        many elements are in each column entry. */
-/*            C */
-/*                     SELIDX = 3 */
-/*                     ELTIDX = 1 */
-/*                     ISNULL = .FALSE. */
-
-/*                     DO WHILE (       ( ELTIDX .LE.  10    ) */
-/*                 .              .AND. (        .NOT. ISNULL )  ) */
-
-/*                        CALL EKGI ( SELIDX,         ROW,     ELTIDX, */
-/*                                    IVALS(ELTIDX),  ISNULL,  FOUND   ) */
-
-/*                        ELTIDX = ELTIDX + 1 */
-
-/*                     END DO */
-
-/*                     WRITE (*,*) ' ' */
-/*                     WRITE (*,*) 'COLUMN = INT_COL_3' */
-/*                     WRITE (*,*) ' ' */
-
-/*                     IF ( ISNULL ) THEN */
-/*                        WRITE (*,*) '<Null>' */
-/*                     ELSE */
-/*                        WRITE (*,*) ( IVALS(I), I = 1, 10 ) */
-/*                     END IF */
-
-/*                  END DO */
+/*        Example code begins here. */
 
 
-/*     3)  See the $Examples section of the umbrella routine EKQMGR */
-/*         for an example in which the names and data types of the */
-/*         columns from which to fetch data are not known in advance. */
+/*              PROGRAM EKGI_EX1 */
+/*              IMPLICIT NONE */
+
+/*        C */
+/*        C     Include the EK Maximum length of an input query, */
+/*        C     MAXQRY, and the maximum length of literal string */
+/*        C     values, MAXSTR, from eklimit.inc. */
+/*        C */
+/*              INCLUDE 'ekqlimit.inc' */
+
+/*        C */
+/*        C     Local parameters */
+/*        C */
+/*              CHARACTER*(*)         EKNAME */
+/*              PARAMETER           ( EKNAME = 'vo_sedr.bdb' ) */
+
+/*              INTEGER               ERRLEN */
+/*              PARAMETER           ( ERRLEN = 1840 ) */
+
+/*        C */
+/*        C     Local variables */
+/*        C */
+/*              CHARACTER*(ERRLEN)    ERRMSG */
+/*              CHARACTER*(MAXQRY)    QUERY */
+
+/*              INTEGER               ELTIDX */
+/*              INTEGER               IDATA */
+/*              INTEGER               NMROWS */
+/*              INTEGER               ROWNO */
+/*              INTEGER               SELIDX */
+
+/*              LOGICAL               ERROR */
+/*              LOGICAL               FOUND */
+/*              LOGICAL               ISNULL */
+
+/*        C */
+/*        C     Open an EK file. */
+/*        C */
+/*              CALL FURNSH ( EKNAME ) */
+
+/*        C */
+/*        C     The table 'VIKING_SEDR_DATA' has a column */
+/*        C     'IMAGE_NUMBER' of double precision values. */
+/*        C */
+/*        C     Define a set of constraints to perform a query on */
+/*        C     all loaded EK files (the SELECT clause). In this */
+/*        C     case select the column 'IMAGE_NUMBER' from table */
+/*        C     'VIKING_SEDR_DATA' sorted by 'IMAGE_NUMBER'. */
+/*        C */
+/*              QUERY = 'Select IMAGE_NUMBER from VIKING_SEDR_DATA ' */
+/*             .   //   'where IMAGE_NUMBER < 25860000 ' */
+/*             .   //   'order by IMAGE_NUMBER' */
+
+/*        C */
+/*        C     Query the EK system for data rows matching the */
+/*        C     SELECT constraints. */
+/*        C */
+/*              CALL EKFIND ( QUERY, NMROWS, ERROR, ERRMSG ) */
+
+/*        C */
+/*        C     Check whether an error occurred while processing the */
+/*        C     SELECT clause. If so, output the error message. */
+/*        C */
+/*              IF ( ERROR ) THEN */
+
+/*                 WRITE(*,*) 'SELECT clause error: ', ERRMSG */
+
+/*              ELSE */
+
+/*        C */
+/*        C        Fetch the character data. We know the query returned */
+/*        C        one column and the column contains only scalar data, */
+/*        C        so the index of all elements is 1. */
+/*        C */
+/*                 SELIDX = 1 */
+/*                 ELTIDX = 1 */
+
+/*        C */
+/*        C        Loop over each row found matching the query. */
+/*        C */
+/*                 DO ROWNO = 1, NMROWS */
+
+/*        C */
+/*        C           Use EKGD to retrieve the string from */
+/*        C */
+/*                    CALL EKGI ( SELIDX, ROWNO,  ELTIDX, */
+/*             .                  IDATA,  ISNULL, FOUND   ) */
+
+/*                    IF ( ISNULL ) THEN */
+
+/*                       WRITE (*,'(A,I3,A)') 'Row ', ROWNO, */
+/*             .                  ': Integer data: <Null>' */
+
+/*                    ELSE */
+
+/*                       WRITE (*,'(A,I3,A,I10)') 'Row ', ROWNO, */
+/*             .                  ': Integer data: ', IDATA */
+
+/*                    END IF */
+
+/*                 END DO */
+
+/*              END IF */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*        Row   1: Integer data:   25837050 */
+/*        Row   2: Integer data:   25837051 */
+/*        Row   3: Integer data:   25840344 */
+/*        Row   4: Integer data:   25840345 */
+/*        Row   5: Integer data:   25843638 */
+/*        Row   6: Integer data:   25843639 */
+/*        Row   7: Integer data:   25846934 */
+/*        Row   8: Integer data:   25846935 */
+/*        Row   9: Integer data:   25848026 */
+/*        Row  10: Integer data:   25848030 */
+/*        Row  11: Integer data:   25848032 */
+/*        Row  12: Integer data:   25851874 */
+/*        Row  13: Integer data:   25851878 */
+/*        Row  14: Integer data:   25851880 */
+/*        Row  15: Integer data:   25853516 */
+/*        Row  16: Integer data:   25853520 */
+/*        Row  17: Integer data:   25853522 */
+/*        Row  18: Integer data:   25855162 */
+/*        Row  19: Integer data:   25855166 */
+/*        Row  20: Integer data:   25855168 */
+/*        Row  21: Integer data:   25856810 */
+/*        Row  22: Integer data:   25856814 */
+/*        Row  23: Integer data:   25856816 */
+/*        Row  24: Integer data:   25858458 */
+/*        Row  25: Integer data:   25858462 */
+/*        Row  26: Integer data:   25858464 */
+
+
+/*     2) This example demonstrates how to fetch integer values */
+/*        from a column in three different cases: single values, */
+/*        variable-size arrays and static-size arrays. */
+
+/*        Create an EK that contains a table TAB that has the following */
+/*        columns: */
+
+/*           Column name   Data Type   Size */
+/*           -----------   ---------   ---- */
+/*           INT_COL_1     INT         1 */
+/*           INT_COL_2     INT         VARIABLE */
+/*           INT_COL_3     INT         3 */
+
+
+/*        Issue the following query */
+
+/*            QUERY = 'SELECT INT_COL_1, INT_COL2, INT_COL3 FROM TAB' */
+
+/*        to fetch and dump column values from the rows that satisfy the */
+/*        query. */
+
+
+/*        Example code begins here. */
+
+
+/*              PROGRAM EKGI_EX2 */
+/*              IMPLICIT NONE */
+
+/*        C */
+/*        C     Include the EK Column Name Size (CNAMSZ) */
+/*        C     and EK Query Limit Parameters (MAXQRY) */
+/*        C */
+/*              INCLUDE 'ekcnamsz.inc' */
+/*              INCLUDE 'ekqlimit.inc' */
+
+/*        C */
+/*        C     Local parameters */
+/*        C */
+/*              CHARACTER*(*)         EKNAME */
+/*              PARAMETER           ( EKNAME  = 'ekgi_ex2.bdb' ) */
+
+/*              CHARACTER*(*)         TABLE */
+/*              PARAMETER           ( TABLE   = 'TAB' ) */
+
+/*              INTEGER               COL3SZ */
+/*              PARAMETER           ( COL3SZ = 3   ) */
+
+/*              INTEGER               DECLEN */
+/*              PARAMETER           ( DECLEN = 200 ) */
+
+/*              INTEGER               ERRLEN */
+/*              PARAMETER           ( ERRLEN = 1840 ) */
+
+/*              INTEGER               MXC2SZ */
+/*              PARAMETER           ( MXC2SZ = 4   ) */
+
+/*              INTEGER               NAMLEN */
+/*              PARAMETER           ( NAMLEN = 40  ) */
+
+/*              INTEGER               NCOLS */
+/*              PARAMETER           ( NCOLS  = 3   ) */
+
+/*              INTEGER               NROWS */
+/*              PARAMETER           ( NROWS  = 4   ) */
+
+/*        C */
+/*        C     Local variables */
+/*        C */
+/*              CHARACTER*(DECLEN)    CDECLS ( NCOLS  ) */
+/*              CHARACTER*(CNAMSZ)    CNAMES ( NCOLS  ) */
+/*              CHARACTER*(ERRLEN)    ERRMSG */
+/*              CHARACTER*(NAMLEN)    IFNAME */
+/*              CHARACTER*(MAXQRY)    QUERY */
+
+/*              INTEGER               COL1 */
+/*              INTEGER               COL2   ( MXC2SZ ) */
+/*              INTEGER               COL3   ( COL3SZ ) */
+/*              INTEGER               ELTIDX */
+/*              INTEGER               HANDLE */
+/*              INTEGER               I */
+/*              INTEGER               IVALS  ( MXC2SZ ) */
+/*              INTEGER               J */
+/*              INTEGER               NELT */
+/*              INTEGER               NMROWS */
+/*              INTEGER               NRESVC */
+/*              INTEGER               RECNO */
+/*              INTEGER               ROW */
+/*              INTEGER               SEGNO */
+/*              INTEGER               SELIDX */
+
+/*              LOGICAL               ERROR */
+/*              LOGICAL               FOUND */
+/*              LOGICAL               ISNULL */
+
+/*        C */
+/*        C     Open a new EK file.  For simplicity, we will not */
+/*        C     reserve any space for the comment area, so the */
+/*        C     number of reserved comment characters is zero. */
+/*        C     The variable IFNAME is the internal file name. */
+/*        C */
+/*              NRESVC  =  0 */
+/*              IFNAME  =  'Test EK/Created 13-JUN-2019' */
+
+/*              CALL EKOPN ( EKNAME, IFNAME, NRESVC, HANDLE ) */
+
+/*        C */
+/*        C     Set up the column names and declarations */
+/*        C     for the TAB segment.  We'll index all of */
+/*        C     the columns. */
+/*        C */
+/*              CNAMES(1) = 'INT_COL_1' */
+/*              CDECLS(1) = 'DATATYPE = INTEGER, INDEXED  = TRUE' */
+
+/*              CNAMES(2) = 'INT_COL_2' */
+/*              CDECLS(2) = 'DATATYPE = INTEGER, SIZE = VARIABLE' */
+
+/*              CNAMES(3) = 'INT_COL_3' */
+/*              CDECLS(3) = 'DATATYPE = INTEGER, SIZE = 3' */
+
+/*        C */
+/*        C     Start the segment. */
+/*        C */
+/*              CALL EKBSEG ( HANDLE, TABLE,  NCOLS, */
+/*             .              CNAMES, CDECLS, SEGNO ) */
+
+/*        C */
+/*        C     At the records to the table. */
+/*        C */
+/*              DO I = 1, NROWS */
+
+/*        C */
+/*        C        Append a new record to the EK. */
+/*        C */
+/*                 CALL EKAPPR ( HANDLE, SEGNO, RECNO ) */
+
+/*        C */
+/*        C        Add INT_COL_1 */
+/*        C */
+/*                 COL1 = I * 100 */
+
+/*                 CALL EKACEI ( HANDLE,    SEGNO, RECNO, */
+/*             .                 CNAMES(1), 1,     COL1,  .FALSE. ) */
+
+/*        C */
+/*        C        Add I items to INT_COL_2 */
+/*        C */
+/*                 DO J = 1, I */
+/*                    COL2(J) = J + I*200 */
+/*                 END DO */
+
+/*                 CALL EKACEI ( HANDLE,    SEGNO, RECNO, */
+/*             .                 CNAMES(2), I,     COL2,  .FALSE. ) */
+
+/*        C */
+/*        C        Add 3 items to INT_COL_3 */
+/*        C */
+/*                 DO J = 1, 3 */
+/*                    COL3(J) =  I + J*100.D0 */
+/*                 END DO */
+
+/*                 CALL EKACEI ( HANDLE,    SEGNO, RECNO, */
+/*             .                 CNAMES(3), 3,     COL3, .FALSE. ) */
+
+/*              END DO */
+
+/*        C */
+/*        C     Close the file. */
+/*        C */
+/*              CALL EKCLS ( HANDLE ) */
+
+/*        C */
+/*        C     Open the created file. Perform the query and show the */
+/*        C     results. */
+/*        C */
+/*              CALL FURNSH ( EKNAME ) */
+
+/*              QUERY = 'SELECT INT_COL_1, INT_COL_2, INT_COL_3 ' */
+/*             .   //   'FROM TAB' */
+
+/*        C */
+/*        C     Query the EK system for data rows matching the */
+/*        C     SELECT constraints. */
+/*        C */
+/*              CALL EKFIND ( QUERY, NMROWS, ERROR, ERRMSG ) */
+
+/*        C */
+/*        C     Check whether an error occurred while processing the */
+/*        C     SELECT clause. If so, output the error message. */
+/*        C */
+/*              IF ( ERROR ) THEN */
+
+/*                 WRITE(*,*) 'SELECT clause error: ', ERRMSG */
+
+/*              ELSE */
+
+/*                 DO ROW = 1, NMROWS */
+
+/*                    WRITE(*,*) ' ' */
+/*                    WRITE(*,'(A,I3)') 'ROW  = ', ROW */
+
+/*        C */
+/*        C           Fetch values from column INT_COL_1.  Since */
+/*        C           INT_COL_1 was the first column selected, the */
+/*        C           selection index SELIDX is set to 1. */
+/*        C */
+/*                    SELIDX = 1 */
+/*                    ELTIDX = 1 */
+/*                    CALL EKGI ( SELIDX,    ROW,     ELTIDX, */
+/*             .                  IVALS(1),  ISNULL,  FOUND   ) */
+
+/*                    IF ( ISNULL ) THEN */
+
+/*                       WRITE(*,*) '  COLUMN = INT_COL_1: <Null>' */
+
+/*                    ELSE */
+
+/*                       WRITE(*,'(A,I6)') '   COLUMN = INT_COL_1:', */
+/*             .                           IVALS(1) */
+
+/*                    END IF */
+
+/*        C */
+/*        C           Fetch values from column INT_COL_2 in the current */
+/*        C           row.  Since INT_COL_2 contains variable-size array */
+/*        C           elements, we call EKNELT to determine how many */
+/*        C           elements to fetch. */
+/*        C */
+/*                    SELIDX = 2 */
+/*                    CALL EKNELT ( SELIDX, ROW, NELT ) */
+
+/*                    ELTIDX = 1 */
+/*                    ISNULL = .FALSE. */
+
+/*                    DO WHILE (       ( ELTIDX .LE.  NELT   ) */
+/*             .                 .AND. (        .NOT. ISNULL )  ) */
+
+/*                       CALL EKGI ( SELIDX,         ROW,     ELTIDX, */
+/*             .                     IVALS(ELTIDX),  ISNULL,  FOUND   ) */
+
+/*                       ELTIDX = ELTIDX + 1 */
+
+/*        C */
+/*        C           If the column entry is null, we'll be kicked */
+/*        C           out of this loop after the first iteration. */
+/*        C */
+/*                    END DO */
+
+/*                    IF ( ISNULL ) THEN */
+/*                       WRITE(*,*) '  COLUMN = INT_COL_2: <Null>' */
+/*                    ELSE */
+
+/*                       WRITE(*,'(A,4I6)') '   COLUMN = INT_COL_2:', */
+/*             .                            ( IVALS(I), I = 1, NELT ) */
+
+/*                    END IF */
+
+/*        C */
+/*        C           Fetch values from column INT_COL_3 in the current */
+/*        C           row.  We need not call EKNELT since we know how */
+/*        C           many elements are in each column entry. */
+/*        C */
+/*                    SELIDX = 3 */
+/*                    ELTIDX = 1 */
+/*                    ISNULL = .FALSE. */
+
+/*                    DO WHILE (       ( ELTIDX .LE.  COL3SZ ) */
+/*             .                 .AND. (        .NOT. ISNULL )  ) */
+
+/*                       CALL EKGI ( SELIDX,         ROW,     ELTIDX, */
+/*             .                     IVALS(ELTIDX),  ISNULL,  FOUND   ) */
+
+/*                       ELTIDX = ELTIDX + 1 */
+
+/*                    END DO */
+
+/*                    IF ( ISNULL ) THEN */
+
+/*                       WRITE(*,*) '  COLUMN = INT_COL_3: <Null>' */
+
+/*                    ELSE */
+
+/*                       WRITE(*,'(A,3I6)') '   COLUMN = INT_COL_3:', */
+/*             .                            ( IVALS(I), I = 1, COL3SZ ) */
+
+/*                    END IF */
+
+/*                 END DO */
+
+/*        C */
+/*        C     We either parsed the SELECT clause or had an error. */
+/*        C */
+/*              END IF */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*        ROW  =   1 */
+/*           COLUMN = INT_COL_1:   100 */
+/*           COLUMN = INT_COL_2:   201 */
+/*           COLUMN = INT_COL_3:   101   201   301 */
+
+/*        ROW  =   2 */
+/*           COLUMN = INT_COL_1:   200 */
+/*           COLUMN = INT_COL_2:   401   402 */
+/*           COLUMN = INT_COL_3:   102   202   302 */
+
+/*        ROW  =   3 */
+/*           COLUMN = INT_COL_1:   300 */
+/*           COLUMN = INT_COL_2:   601   602   603 */
+/*           COLUMN = INT_COL_3:   103   203   303 */
+
+/*        ROW  =   4 */
+/*           COLUMN = INT_COL_1:   400 */
+/*           COLUMN = INT_COL_2:   801   802   803   804 */
+/*           COLUMN = INT_COL_3:   104   204   304 */
+
+
+/*        Note that after run completion, a new EK file exists in the */
+/*        output directory. */
+
+
+/*     3) See $Examples in EKQMGR. */
+
+/*        In this example, the names and data types of the columns from */
+/*        which to fetch data are not known in advance. */
 
 /* $ Restrictions */
 
@@ -7205,25 +9585,34 @@ L_ekgi:
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
 
+/* -    SPICELIB Version 2.1.0, 06-JUL-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
+/*        Added complete code examples from existing fragments. */
+
 /* -    SPICELIB Version 2.0.1, 22-SEP-2004 (EDW) */
 
-/*        Edited 1.1.0 Version entry to not include */
+/*        Edited version 1.1.0 entry to not include */
 /*        the token used to mark the $Procedure section. */
 
 /* -    SPICELIB Version 2.0.0, 16-NOV-2001 (NJB) */
 
-/*        Bug fix:   When an already loaded kernel is opened with EKOPR, */
+/*        Bug fix: When an already loaded kernel is opened with EKOPR, */
 /*        it now has its link count reset to 1 via a call to EKCLS. */
 
 /* -    SPICELIB Version 1.1.0, 07-JUL-1996 (NJB) */
 
 /*        Redundant CHKIN call removed from SELIDX error check. */
-/*        Misspelling of "issued" was fixed.  Previous version line */
-/*        was changed from "Beta" to "SPICELIB."  Header $Procedure */
+/*        Misspelling of "issued" was fixed. Previous version line */
+/*        was changed from "Beta" to "SPICELIB." Header $Procedure */
 /*        line was corrected to indicate integer data type. */
 
 /* -    SPICELIB Version 1.0.0, 23-OCT-1995 (NJB) */
@@ -7232,21 +9621,6 @@ L_ekgi:
 /* $ Index_Entries */
 
 /*     fetch element from integer column entry */
-
-/* -& */
-/* $ Revisions */
-
-/* -    SPICELIB Version 1.1.1, 22-SEP-2004 (EDW) */
-
-/*        Edited 1.1.0 Version entry to not include */
-/*        the token used to mark the $Procedure section. */
-
-/* -    SPICELIB Version 1.1.0, 07-JUL-1996 (NJB) */
-
-/*        Redundant CHKIN call removed from SELIDX error check. */
-/*        Misspelling of "issued" was fixed.  Previous version line */
-/*        was changed from "Beta" to "SPICELIB."  Header $Procedure */
-/*        line was corrected to indicate integer data type. */
 
 /* -& */
 
@@ -7310,26 +9684,26 @@ L_ekgi:
 /*     table's column list. */
 
     tabidx = seltab[(i__1 = *selidx - 1) < 50 && 0 <= i__1 ? i__1 : s_rnge(
-	    "seltab", i__1, "ekqmgr_", (ftnlen)6494)];
+	    "seltab", i__1, "ekqmgr_", (ftnlen)8875)];
     col = selcol[(i__1 = *selidx - 1) < 50 && 0 <= i__1 ? i__1 : s_rnge("sel"
-	    "col", i__1, "ekqmgr_", (ftnlen)6495)];
+	    "col", i__1, "ekqmgr_", (ftnlen)8876)];
     colptr = selctp[(i__1 = *selidx - 1) < 50 && 0 <= i__1 ? i__1 : s_rnge(
-	    "selctp", i__1, "ekqmgr_", (ftnlen)6496)];
+	    "selctp", i__1, "ekqmgr_", (ftnlen)8877)];
     tab = tptvec[(i__1 = tabidx + 5) < 16 && 0 <= i__1 ? i__1 : s_rnge("tptv"
-	    "ec", i__1, "ekqmgr_", (ftnlen)6497)];
+	    "ec", i__1, "ekqmgr_", (ftnlen)8878)];
 
 /*     Make sure the column has integer type. */
 
     if (cttyps[(i__1 = colptr - 1) < 500 && 0 <= i__1 ? i__1 : s_rnge("cttyps"
-	    , i__1, "ekqmgr_", (ftnlen)6502)] != 3) {
+	    , i__1, "ekqmgr_", (ftnlen)8883)] != 3) {
 	setmsg_("Column # has data type #.", (ftnlen)25);
 	errch_("#", ctnams + (((i__1 = colptr - 1) < 500 && 0 <= i__1 ? i__1 :
-		 s_rnge("ctnams", i__1, "ekqmgr_", (ftnlen)6505)) << 5), (
+		 s_rnge("ctnams", i__1, "ekqmgr_", (ftnlen)8886)) << 5), (
 		ftnlen)1, (ftnlen)32);
 	errch_("#", chtype + (((i__2 = cttyps[(i__1 = colptr - 1) < 500 && 0 
 		<= i__1 ? i__1 : s_rnge("cttyps", i__1, "ekqmgr_", (ftnlen)
-		6506)] - 1) < 4 && 0 <= i__2 ? i__2 : s_rnge("chtype", i__2, 
-		"ekqmgr_", (ftnlen)6506)) << 2), (ftnlen)1, (ftnlen)4);
+		8887)] - 1) < 4 && 0 <= i__2 ? i__2 : s_rnge("chtype", i__2, 
+		"ekqmgr_", (ftnlen)8887)) << 2), (ftnlen)1, (ftnlen)4);
 	sigerr_("SPICE(INVALIDTYPE)", (ftnlen)18);
 	chkout_("EKGI", (ftnlen)4);
 	return 0;
@@ -7366,11 +9740,11 @@ L_ekgi:
 /*     Obtain the column descriptor for the column. */
 
     rowidx = rowvec[(i__1 = tabidx - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge(
-	    "rowvec", i__1, "ekqmgr_", (ftnlen)6544)];
+	    "rowvec", i__1, "ekqmgr_", (ftnlen)8925)];
     seg = segvec[(i__1 = tabidx - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge("segv"
-	    "ec", i__1, "ekqmgr_", (ftnlen)6545)];
+	    "ec", i__1, "ekqmgr_", (ftnlen)8926)];
     j = stdtpt[(i__1 = seg - 1) < 200 && 0 <= i__1 ? i__1 : s_rnge("stdtpt", 
-	    i__1, "ekqmgr_", (ftnlen)6547)];
+	    i__1, "ekqmgr_", (ftnlen)8928)];
     i__1 = col;
     for (i__ = 2; i__ <= i__1; ++i__) {
 	j = lnknxt_(&j, dtpool);
@@ -7379,10 +9753,10 @@ L_ekgi:
 /*     Look up the element. */
 
     zzekrsi_(&sthan[(i__1 = seg - 1) < 200 && 0 <= i__1 ? i__1 : s_rnge("sth"
-	    "an", i__1, "ekqmgr_", (ftnlen)6556)], &stdscs[(i__2 = seg * 24 - 
+	    "an", i__1, "ekqmgr_", (ftnlen)8937)], &stdscs[(i__2 = seg * 24 - 
 	    24) < 4800 && 0 <= i__2 ? i__2 : s_rnge("stdscs", i__2, "ekqmgr_",
-	     (ftnlen)6556)], &dtdscs[(i__3 = j * 11 - 11) < 110000 && 0 <= 
-	    i__3 ? i__3 : s_rnge("dtdscs", i__3, "ekqmgr_", (ftnlen)6556)], &
+	     (ftnlen)8937)], &dtdscs[(i__3 = j * 11 - 11) < 110000 && 0 <= 
+	    i__3 ? i__3 : s_rnge("dtdscs", i__3, "ekqmgr_", (ftnlen)8937)], &
 	    rowidx, elment, idata, null, found);
     chkout_("EKGI", (ftnlen)4);
     return 0;

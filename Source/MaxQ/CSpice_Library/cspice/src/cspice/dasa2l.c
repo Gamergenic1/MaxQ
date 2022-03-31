@@ -11,7 +11,7 @@ static integer c__1 = 1;
 static integer c__256 = 256;
 static integer c__2 = 2;
 
-/* $Procedure      DASA2L ( DAS, address to physical location ) */
+/* $Procedure DASA2L ( DAS, address to physical location ) */
 /* Subroutine */ int dasa2l_(integer *handle, integer *type__, integer *
 	addrss, integer *clbase, integer *clsize, integer *recno, integer *
 	wordno)
@@ -126,7 +126,7 @@ static integer c__2 = 2;
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     I   DAS file handle. */
 /*     TYPE       I   Data type specifier. */
@@ -140,71 +140,71 @@ static integer c__2 = 2;
 
 /* $ Detailed_Input */
 
-/*     HANDLE         is the file handle of an open DAS file. */
+/*     HANDLE   is the file handle of an open DAS file. */
 
-/*     TYPE           is a data type specifier. TYPE may be any of */
-/*                    the parameters */
+/*     TYPE     is a data type specifier. TYPE may be any of */
+/*              the parameters */
 
-/*                       CHAR */
-/*                       DP */
-/*                       INT */
+/*                 CHAR */
+/*                 DP */
+/*                 INT */
 
-/*                    which indicate `character', `double precision', */
-/*                    and `integer' respectively. */
+/*              which indicate `character', `double precision', */
+/*              and `integer' respectively. */
 
 
-/*     ADDRSS         is the address in a DAS of a word of data */
-/*                    type TYPE. For each data type (double precision, */
-/*                    integer, or character), addresses range */
-/*                    from 1 to the maximum current value for that type, */
-/*                    which is available from DAFRFR. */
+/*     ADDRSS   is the address in a DAS of a word of data */
+/*              type TYPE. For each data type (double precision, */
+/*              integer, or character), addresses range */
+/*              from 1 to the maximum current value for that type, */
+/*              which is available from DAFRFR. */
 
 /* $ Detailed_Output */
 
 /*     CLBASE, */
-/*     CLSIZE         are, respectively, the base record number and */
-/*                    size, in records, of the cluster containing the */
-/*                    word corresponding to ADDRSS. The cluster spans */
-/*                    records numbered CLBASE through CLBASE + */
-/*                    CLSIZE - 1. */
+/*     CLSIZE   are, respectively, the base record number and */
+/*              size, in records, of the cluster containing the */
+/*              word corresponding to ADDRSS. The cluster spans */
+/*              records numbered CLBASE through CLBASE + */
+/*              CLSIZE - 1. */
 
 /*     RECNO, */
-/*     WORD           are, respectively, the number of the physical */
-/*                    record and the number of the word within the */
-/*                    record that correspond to ADDRSS. Word numbers */
-/*                    start at 1 and go up to NC, ND, or NI in */
-/*                    character, double precision, or integer records */
-/*                    respectively. */
+/*     WORD     are, respectively, the number of the physical */
+/*              record and the number of the word within the */
+/*              record that correspond to ADDRSS. Word numbers */
+/*              start at 1 and go up to NC, ND, or NI in */
+/*              character, double precision, or integer records */
+/*              respectively. */
 
 /* $ Parameters */
 
 /*     CHAR, */
 /*     DP, */
-/*     INT            are data type specifiers which indicate */
-/*                    `character', `double precision', and `integer' */
-/*                    respectively. These parameters are used in */
-/*                    all DAS routines that require a data type */
-/*                    specifier as input. */
+/*     INT      are data type specifiers which indicate */
+/*              `character', `double precision', and `integer' */
+/*              respectively. These parameters are used in */
+/*              all DAS routines that require a data type */
+/*              specifier as input. */
 
 /* $ Exceptions */
 
-/*     1)  If TYPE is not recognized, the error SPICE(DASINVALIDTYPE) */
-/*         will be signaled. */
+/*     If any of the following exceptions occur, the output arguments may */
+/*     contain bogus information. */
 
-/*     2)  ADDRSS must be between 1 and LAST inclusive, where LAST */
-/*         is last address in the DAS for a word of the specified */
-/*         type. If ADDRSS is out of range, the error */
-/*         SPICE(DASNOSUCHADDRESS) will be signaled. */
+/*     1)  If TYPE is not recognized, the error SPICE(DASINVALIDTYPE) */
+/*         is signaled. */
+
+/*     2)  ADDRSS must be between 1 and LAST inclusive, where LAST is */
+/*         last address in the DAS for a word of the specified type. If */
+/*         ADDRSS is out of range, the error SPICE(DASNOSUCHADDRESS) is */
+/*         signaled. */
 
 /*     3)  If this routine doesn't find an expected cluster descriptor */
 /*         in a directory record, the error SPICE(BADDASDIRECTORY) is */
 /*         signaled. */
 
-/*     4)  If the input handle is invalid, the error will be diagnosed */
-/*         by routines called by this routine. */
-
-/*     If any of the above exceptions occur, the output arguments may */
-/*     contain bogus information. */
+/*     4)  If the input handle is invalid, an error is signaled by a */
+/*         routine in the call tree of this routine. */
 
 /* $ Files */
 
@@ -319,7 +319,6 @@ static integer c__2 = 2;
 
 /*                  END DO */
 
-
 /* $ Restrictions */
 
 /*     None. */
@@ -330,17 +329,23 @@ static integer c__2 = 2;
 
 /* $ Author_and_Institution */
 
-/*     K.R. Gehringer (JPL) */
-/*     N.J. Bachman   (JPL) */
-/*     W.L. Taber     (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
 
-/* -    SPICELIB Version 3.0.0 FEB-09-2015 (NJB) */
+/* -    SPICELIB Version 3.0.1, 12-AUG-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. Removed */
+/*        unnecessary entries from $Revisions section. */
+
+/* -    SPICELIB Version 3.0.0, 09-FEB-2015 (NJB) */
 
 /*        Updated to use DAF/DAS handle manager subsystem. */
 
-/* -    SPICELIB Version 2.0.0 APR-15-2014 (NJB) */
+/* -    SPICELIB Version 2.0.0, 15-APR-2014 (NJB) */
 
 /*        Previous update was 25-FEB-2014 */
 
@@ -373,18 +378,18 @@ static integer c__2 = 2;
 
 /*        The code was re-structured to improve clarity. */
 
-/* -    SPICELIB Version 1.2.1 20-NOV-2001 (NJB) */
+/* -    SPICELIB Version 1.2.1, 20-NOV-2001 (NJB) */
 
 /*        Comment fix: diagram showing directory record pointers */
 /*        incorrectly showed element 2 of the record as a backward */
 /*        pointer. The element is actually a forward pointer. */
 
-/* -    SPICELIB Version 1.2.0 03-JUL-1996 (NJB) */
+/* -    SPICELIB Version 1.2.0, 03-JUL-1996 (NJB) */
 
 /*        Bug fix: calculation to determine whether file is segregated */
 /*        has been fixed. */
 
-/* -    SPICELIB Version 1.1.1 19-DEC-1995 (NJB) */
+/* -    SPICELIB Version 1.1.1, 19-DEC-1995 (NJB) */
 
 /*        Corrected title of permuted index entry section. */
 
@@ -395,10 +400,10 @@ static integer c__2 = 2;
 
 /* -    SPICELIB Version 1.0.1, 26-OCT-1993 (KRG) */
 
-/*        Fixed a typo in the $ Brief_I/O section of the header. */
+/*        Fixed a typo in the $Brief_I/O section of the header. */
 
 /*        Removed references to specific DAS file open routines in the */
-/*        $ Detailed_Input section of the header. This was done in order */
+/*        $Detailed_Input section of the header. This was done in order */
 /*        to minimize documentation changes if the DAS open routines ever */
 /*        change. */
 
@@ -426,22 +431,6 @@ static integer c__2 = 2;
 /*        that data type in a DAS record. The correct product involves */
 /*        the number of records in the cluster and the number of words of */
 /*        that data type in a DAS record. */
-
-/* -    SPICELIB Version 1.1.0, 03-NOV-1995 (NJB) */
-
-/*        Re-written to optimize address calculations for segregated, */
-/*        read-only files. */
-
-/* -    SPICELIB Version 1.0.1, 26-OCT-1993 (KRG) */
-
-/*        Fixed a typo in the $ Brief_I/O section of the header. */
-
-/*        Removed references to specific DAS file open routines in the */
-/*        $ Detailed_Input section of the header. This was done in order */
-/*        to minimize documentation changes if the DAS open routines ever */
-/*        change. */
-
-/* -    SPICELIB Version 1.0.0, 11-NOV-1992 (NJB) (WLT) */
 
 /* -& */
 
@@ -718,7 +707,7 @@ static integer c__2 = 2;
 	}
 	if (known) {
 	    fast = tbfast[(i__1 = fidx - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge(
-		    "tbfast", i__1, "dasa2l_", (ftnlen)779)];
+		    "tbfast", i__1, "dasa2l_", (ftnlen)770)];
 	} else {
 
 /*           This file is not in our list. We'll buffer information */
@@ -733,37 +722,37 @@ static integer c__2 = 2;
 	    ub = min(nfiles,19);
 	    for (i__ = ub; i__ >= 1; --i__) {
 		tbhan[(i__1 = i__) < 20 && 0 <= i__1 ? i__1 : s_rnge("tbhan", 
-			i__1, "dasa2l_", (ftnlen)796)] = tbhan[(i__2 = i__ - 
+			i__1, "dasa2l_", (ftnlen)787)] = tbhan[(i__2 = i__ - 
 			1) < 20 && 0 <= i__2 ? i__2 : s_rnge("tbhan", i__2, 
-			"dasa2l_", (ftnlen)796)];
+			"dasa2l_", (ftnlen)787)];
 		tbrdon[(i__1 = i__) < 20 && 0 <= i__1 ? i__1 : s_rnge("tbrdon"
-			, i__1, "dasa2l_", (ftnlen)797)] = tbrdon[(i__2 = i__ 
+			, i__1, "dasa2l_", (ftnlen)788)] = tbrdon[(i__2 = i__ 
 			- 1) < 20 && 0 <= i__2 ? i__2 : s_rnge("tbrdon", i__2,
-			 "dasa2l_", (ftnlen)797)];
+			 "dasa2l_", (ftnlen)788)];
 		tbfast[(i__1 = i__) < 20 && 0 <= i__1 ? i__1 : s_rnge("tbfast"
-			, i__1, "dasa2l_", (ftnlen)798)] = tbfast[(i__2 = i__ 
+			, i__1, "dasa2l_", (ftnlen)789)] = tbfast[(i__2 = i__ 
 			- 1) < 20 && 0 <= i__2 ? i__2 : s_rnge("tbfast", i__2,
-			 "dasa2l_", (ftnlen)798)];
+			 "dasa2l_", (ftnlen)789)];
 		tbfwrd[(i__1 = i__) < 20 && 0 <= i__1 ? i__1 : s_rnge("tbfwrd"
-			, i__1, "dasa2l_", (ftnlen)799)] = tbfwrd[(i__2 = i__ 
+			, i__1, "dasa2l_", (ftnlen)790)] = tbfwrd[(i__2 = i__ 
 			- 1) < 20 && 0 <= i__2 ? i__2 : s_rnge("tbfwrd", i__2,
-			 "dasa2l_", (ftnlen)799)];
+			 "dasa2l_", (ftnlen)790)];
 		for (j = 1; j <= 3; ++j) {
 		    tbbase[(i__1 = j + (i__ + 1) * 3 - 4) < 60 && 0 <= i__1 ? 
 			    i__1 : s_rnge("tbbase", i__1, "dasa2l_", (ftnlen)
-			    802)] = tbbase[(i__2 = j + i__ * 3 - 4) < 60 && 0 
+			    793)] = tbbase[(i__2 = j + i__ * 3 - 4) < 60 && 0 
 			    <= i__2 ? i__2 : s_rnge("tbbase", i__2, "dasa2l_",
-			     (ftnlen)802)];
+			     (ftnlen)793)];
 		    tbsize[(i__1 = j + (i__ + 1) * 3 - 4) < 60 && 0 <= i__1 ? 
 			    i__1 : s_rnge("tbsize", i__1, "dasa2l_", (ftnlen)
-			    803)] = tbsize[(i__2 = j + i__ * 3 - 4) < 60 && 0 
+			    794)] = tbsize[(i__2 = j + i__ * 3 - 4) < 60 && 0 
 			    <= i__2 ? i__2 : s_rnge("tbsize", i__2, "dasa2l_",
-			     (ftnlen)803)];
+			     (ftnlen)794)];
 		    tbmxad[(i__1 = j + (i__ + 1) * 3 - 4) < 60 && 0 <= i__1 ? 
 			    i__1 : s_rnge("tbmxad", i__1, "dasa2l_", (ftnlen)
-			    804)] = tbmxad[(i__2 = j + i__ * 3 - 4) < 60 && 0 
+			    795)] = tbmxad[(i__2 = j + i__ * 3 - 4) < 60 && 0 
 			    <= i__2 ? i__2 : s_rnge("tbmxad", i__2, "dasa2l_",
-			     (ftnlen)804)];
+			     (ftnlen)795)];
 		}
 	    }
 
@@ -774,14 +763,14 @@ static integer c__2 = 2;
 	    nfiles = min(i__1,20);
 	    fidx = 1;
 	    tbhan[(i__1 = fidx - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge("tbhan",
-		     i__1, "dasa2l_", (ftnlen)813)] = *handle;
+		     i__1, "dasa2l_", (ftnlen)804)] = *handle;
 
 /*           Set FAST to .FALSE. until we find out whether the file */
 /*           is read-only and segregated. */
 
 	    fast = FALSE_;
 	    tbfast[(i__1 = fidx - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge("tbfa"
-		    "st", i__1, "dasa2l_", (ftnlen)819)] = fast;
+		    "st", i__1, "dasa2l_", (ftnlen)810)] = fast;
 
 /*           FIDX is now set whether or not the current file is known. */
 
@@ -799,14 +788,14 @@ static integer c__2 = 2;
 /*              on a subsequent search. */
 
 		tbhan[(i__1 = fidx - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge(
-			"tbhan", i__1, "dasa2l_", (ftnlen)837)] = 0;
+			"tbhan", i__1, "dasa2l_", (ftnlen)828)] = 0;
 		return 0;
 	    }
 
 /*           TBRDON(FIDX) indicates whether the file is read-only. */
 
 	    tbrdon[(i__1 = fidx - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge("tbrd"
-		    "on", i__1, "dasa2l_", (ftnlen)845)] = s_cmp(access, "READ"
+		    "on", i__1, "dasa2l_", (ftnlen)836)] = s_cmp(access, "READ"
 		    , (ftnlen)10, (ftnlen)4) == 0;
 	}
 
@@ -815,7 +804,7 @@ static integer c__2 = 2;
 /*        Get the file summary if it isn't known already. */
 
 	if (! (known && tbrdon[(i__1 = fidx - 1) < 20 && 0 <= i__1 ? i__1 : 
-		s_rnge("tbrdon", i__1, "dasa2l_", (ftnlen)854)])) {
+		s_rnge("tbrdon", i__1, "dasa2l_", (ftnlen)845)])) {
 
 /*           The file is new or it's writable; in either case the */
 /*           maximum addresses are unknown. Get the current address */
@@ -823,21 +812,21 @@ static integer c__2 = 2;
 
 	    dashfs_(handle, &nresvr, &nresvc, &ncomr, &ncomc, &free, &tbmxad[(
 		    i__1 = fidx * 3 - 3) < 60 && 0 <= i__1 ? i__1 : s_rnge(
-		    "tbmxad", i__1, "dasa2l_", (ftnlen)860)], lstrec, lstwrd);
+		    "tbmxad", i__1, "dasa2l_", (ftnlen)851)], lstrec, lstwrd);
 	    if (failed_()) {
 
 /*              Make sure the current table entry won't be found */
 /*              on a subsequent search. */
 
 		tbhan[(i__1 = fidx - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge(
-			"tbhan", i__1, "dasa2l_", (ftnlen)875)] = 0;
+			"tbhan", i__1, "dasa2l_", (ftnlen)866)] = 0;
 		return 0;
 	    }
 
 /*           Set the forward cluster pointer. */
 
 	    tbfwrd[(i__1 = fidx - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge("tbfw"
-		    "rd", i__1, "dasa2l_", (ftnlen)883)] = nresvr + ncomr + 2;
+		    "rd", i__1, "dasa2l_", (ftnlen)874)] = nresvr + ncomr + 2;
 	}
 
 /*        TBMXAD is set. */
@@ -846,7 +835,7 @@ static integer c__2 = 2;
 /*        whether the file is segregated */
 
 	if (! known && tbrdon[(i__1 = fidx - 1) < 20 && 0 <= i__1 ? i__1 : 
-		s_rnge("tbrdon", i__1, "dasa2l_", (ftnlen)893)]) {
+		s_rnge("tbrdon", i__1, "dasa2l_", (ftnlen)884)]) {
 
 /*           The file is read-only; we need to know whether it is */
 /*           segregated. If so, there are at most three cluster */
@@ -859,7 +848,7 @@ static integer c__2 = 2;
 /*           NREC is the record number of the first directory record. */
 
 	    nrec = tbfwrd[(i__1 = fidx - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge(
-		    "tbfwrd", i__1, "dasa2l_", (ftnlen)905)];
+		    "tbfwrd", i__1, "dasa2l_", (ftnlen)896)];
 	    dasrri_(handle, &nrec, &c__1, &c__256, dirrec);
 	    nxtrec = dirrec[1];
 	    if (nxtrec <= 0) {
@@ -875,7 +864,7 @@ static integer c__2 = 2;
 		for (i__ = 1; i__ <= 3; ++i__) {
 		    if (tbmxad[(i__1 = i__ + fidx * 3 - 4) < 60 && 0 <= i__1 ?
 			     i__1 : s_rnge("tbmxad", i__1, "dasa2l_", (ftnlen)
-			    924)] > 0) {
+			    915)] > 0) {
 			++ntypes;
 		    }
 		}
@@ -885,7 +874,7 @@ static integer c__2 = 2;
 
 		baserc = nrec + 1;
 		prvtyp = prev[(i__1 = dirrec[8] - 1) < 3 && 0 <= i__1 ? i__1 :
-			 s_rnge("prev", i__1, "dasa2l_", (ftnlen)935)];
+			 s_rnge("prev", i__1, "dasa2l_", (ftnlen)926)];
 		dscloc = 10;
 		segok = TRUE_;
 		while(dscloc <= ntypes + 9 && segok) {
@@ -893,35 +882,35 @@ static integer c__2 = 2;
 /*                 Find the type of the current descriptor. */
 
 		    if (dirrec[(i__1 = dscloc - 1) < 256 && 0 <= i__1 ? i__1 :
-			     s_rnge("dirrec", i__1, "dasa2l_", (ftnlen)944)] 
+			     s_rnge("dirrec", i__1, "dasa2l_", (ftnlen)935)] 
 			    > 0) {
 			curtyp = next[(i__1 = prvtyp - 1) < 3 && 0 <= i__1 ? 
 				i__1 : s_rnge("next", i__1, "dasa2l_", (
-				ftnlen)945)];
+				ftnlen)936)];
 		    } else {
 			curtyp = prev[(i__1 = prvtyp - 1) < 3 && 0 <= i__1 ? 
 				i__1 : s_rnge("prev", i__1, "dasa2l_", (
-				ftnlen)947)];
+				ftnlen)938)];
 		    }
 		    prvtyp = curtyp;
 		    tbbase[(i__1 = curtyp + fidx * 3 - 4) < 60 && 0 <= i__1 ? 
 			    i__1 : s_rnge("tbbase", i__1, "dasa2l_", (ftnlen)
-			    951)] = baserc;
+			    942)] = baserc;
 		    tbsize[(i__1 = curtyp + fidx * 3 - 4) < 60 && 0 <= i__1 ? 
 			    i__1 : s_rnge("tbsize", i__1, "dasa2l_", (ftnlen)
-			    952)] = (i__3 = dirrec[(i__2 = dscloc - 1) < 256 
+			    943)] = (i__3 = dirrec[(i__2 = dscloc - 1) < 256 
 			    && 0 <= i__2 ? i__2 : s_rnge("dirrec", i__2, 
-			    "dasa2l_", (ftnlen)952)], abs(i__3));
+			    "dasa2l_", (ftnlen)943)], abs(i__3));
 		    baserc += tbsize[(i__1 = curtyp + fidx * 3 - 4) < 60 && 0 
 			    <= i__1 ? i__1 : s_rnge("tbsize", i__1, "dasa2l_",
-			     (ftnlen)953)];
+			     (ftnlen)944)];
 		    segok = tbmxad[(i__1 = curtyp + fidx * 3 - 4) < 60 && 0 <=
 			     i__1 ? i__1 : s_rnge("tbmxad", i__1, "dasa2l_", (
-			    ftnlen)956)] <= tbsize[(i__2 = curtyp + fidx * 3 
+			    ftnlen)947)] <= tbsize[(i__2 = curtyp + fidx * 3 
 			    - 4) < 60 && 0 <= i__2 ? i__2 : s_rnge("tbsize", 
-			    i__2, "dasa2l_", (ftnlen)956)] * nw[(i__3 = 
+			    i__2, "dasa2l_", (ftnlen)947)] * nw[(i__3 = 
 			    curtyp - 1) < 3 && 0 <= i__3 ? i__3 : s_rnge(
-			    "nw", i__3, "dasa2l_", (ftnlen)956)];
+			    "nw", i__3, "dasa2l_", (ftnlen)947)];
 		    ++dscloc;
 
 /*                 This loop will terminate after at most 3 */
@@ -933,7 +922,7 @@ static integer c__2 = 2;
 
 		fast = segok;
 		tbfast[(i__1 = fidx - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge(
-			"tbfast", i__1, "dasa2l_", (ftnlen)970)] = fast;
+			"tbfast", i__1, "dasa2l_", (ftnlen)961)] = fast;
 
 /*              If the file is FAST, */
 
@@ -955,14 +944,14 @@ static integer c__2 = 2;
 /*     file. Check the input address against them. */
 
     mxaddr = tbmxad[(i__1 = *type__ + fidx * 3 - 4) < 60 && 0 <= i__1 ? i__1 :
-	     s_rnge("tbmxad", i__1, "dasa2l_", (ftnlen)992)];
+	     s_rnge("tbmxad", i__1, "dasa2l_", (ftnlen)983)];
     if (*addrss < 1 || *addrss > mxaddr) {
 
 /*        Make sure the current table entry won't be found on a */
 /*        subsequent search. */
 
 	tbhan[(i__1 = fidx - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge("tbhan", 
-		i__1, "dasa2l_", (ftnlen)999)] = 0;
+		i__1, "dasa2l_", (ftnlen)990)] = 0;
 	chkin_("DASA2L", (ftnlen)6);
 	setmsg_("ADDRSS was #; valid range for type # is # to #.  File was #",
 		 (ftnlen)59);
@@ -981,16 +970,16 @@ static integer c__2 = 2;
 /*     the cluster. */
 
     if (tbfast[(i__1 = fidx - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge("tbfast", 
-	    i__1, "dasa2l_", (ftnlen)1020)]) {
+	    i__1, "dasa2l_", (ftnlen)1011)]) {
 
 /*        The current file is "fast": read-only and segregated. */
 
 	*clbase = tbbase[(i__1 = *type__ + fidx * 3 - 4) < 60 && 0 <= i__1 ? 
-		i__1 : s_rnge("tbbase", i__1, "dasa2l_", (ftnlen)1024)];
+		i__1 : s_rnge("tbbase", i__1, "dasa2l_", (ftnlen)1015)];
 	*clsize = tbsize[(i__1 = *type__ + fidx * 3 - 4) < 60 && 0 <= i__1 ? 
-		i__1 : s_rnge("tbsize", i__1, "dasa2l_", (ftnlen)1025)];
+		i__1 : s_rnge("tbsize", i__1, "dasa2l_", (ftnlen)1016)];
 	hiaddr = *clsize * nw[(i__1 = *type__ - 1) < 3 && 0 <= i__1 ? i__1 : 
-		s_rnge("nw", i__1, "dasa2l_", (ftnlen)1026)];
+		s_rnge("nw", i__1, "dasa2l_", (ftnlen)1017)];
     } else {
 
 /*        If we're not looking at a "fast" file, find the cluster */
@@ -1007,12 +996,12 @@ static integer c__2 = 2;
 /*        we've already checked that the address is in range. */
 
 	nrec = tbfwrd[(i__1 = fidx - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge(
-		"tbfwrd", i__1, "dasa2l_", (ftnlen)1043)];
+		"tbfwrd", i__1, "dasa2l_", (ftnlen)1034)];
 	ndirs = 1;
 	i__3 = rngloc[(i__2 = *type__ - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge(
-		"rngloc", i__2, "dasa2l_", (ftnlen)1046)] + 1;
+		"rngloc", i__2, "dasa2l_", (ftnlen)1037)] + 1;
 	dasrri_(handle, &nrec, &rngloc[(i__1 = *type__ - 1) < 3 && 0 <= i__1 ?
-		 i__1 : s_rnge("rngloc", i__1, "dasa2l_", (ftnlen)1046)], &
+		 i__1 : s_rnge("rngloc", i__1, "dasa2l_", (ftnlen)1037)], &
 		i__3, range);
 	while(range[1] < *addrss) {
 
@@ -1025,17 +1014,17 @@ static integer c__2 = 2;
 	    nrec = nxtrec;
 	    ++ndirs;
 	    i__3 = rngloc[(i__2 = *type__ - 1) < 3 && 0 <= i__2 ? i__2 : 
-		    s_rnge("rngloc", i__2, "dasa2l_", (ftnlen)1065)] + 1;
+		    s_rnge("rngloc", i__2, "dasa2l_", (ftnlen)1056)] + 1;
 	    dasrri_(handle, &nrec, &rngloc[(i__1 = *type__ - 1) < 3 && 0 <= 
 		    i__1 ? i__1 : s_rnge("rngloc", i__1, "dasa2l_", (ftnlen)
-		    1065)], &i__3, range);
+		    1056)], &i__3, range);
 	    if (failed_()) {
 
 /*              Make sure the current table entry won't be found */
 /*              on a subsequent search. */
 
 		tbhan[(i__1 = fidx - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge(
-			"tbhan", i__1, "dasa2l_", (ftnlen)1076)] = 0;
+			"tbhan", i__1, "dasa2l_", (ftnlen)1067)] = 0;
 		return 0;
 	    }
 	}
@@ -1057,7 +1046,7 @@ static integer c__2 = 2;
 /*           subsequent search. */
 
 	    tbhan[(i__1 = fidx - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge("tbhan",
-		     i__1, "dasa2l_", (ftnlen)1102)] = 0;
+		     i__1, "dasa2l_", (ftnlen)1093)] = 0;
 	    return 0;
 	}
 
@@ -1073,9 +1062,9 @@ static integer c__2 = 2;
 /*        address of type TYPE described by the current directory. */
 
 	hiaddr = dirrec[(i__2 = rngloc[(i__1 = *type__ - 1) < 3 && 0 <= i__1 ?
-		 i__1 : s_rnge("rngloc", i__1, "dasa2l_", (ftnlen)1121)] - 1) 
+		 i__1 : s_rnge("rngloc", i__1, "dasa2l_", (ftnlen)1112)] - 1) 
 		< 256 && 0 <= i__2 ? i__2 : s_rnge("dirrec", i__2, "dasa2l_", 
-		(ftnlen)1121)] - 1;
+		(ftnlen)1112)] - 1;
 
 /*        Initialize the number of records described by the last seen */
 /*        type descriptor. This number, when added to CLBASE, should */
@@ -1093,7 +1082,7 @@ static integer c__2 = 2;
 /*        always be executed at least once. */
 
 	prvtyp = prev[(i__1 = dirrec[8] - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(
-		"prev", i__1, "dasa2l_", (ftnlen)1140)];
+		"prev", i__1, "dasa2l_", (ftnlen)1131)];
 	dscloc = 10;
 	while(hiaddr < *addrss) {
 	    if (dscloc > 256) {
@@ -1105,7 +1094,7 @@ static integer c__2 = 2;
 /*              on a subsequent search. */
 
 		tbhan[(i__1 = fidx - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge(
-			"tbhan", i__1, "dasa2l_", (ftnlen)1153)] = 0;
+			"tbhan", i__1, "dasa2l_", (ftnlen)1144)] = 0;
 		chkin_("DASA2L", (ftnlen)6);
 		setmsg_("Directory record # in DAS file with handle # is pro"
 			"bably corrupted. No high cluster address at or above"
@@ -1130,12 +1119,12 @@ static integer c__2 = 2;
 /*           Find the type of the current descriptor. */
 
 	    if (dirrec[(i__1 = dscloc - 1) < 256 && 0 <= i__1 ? i__1 : s_rnge(
-		    "dirrec", i__1, "dasa2l_", (ftnlen)1180)] > 0) {
+		    "dirrec", i__1, "dasa2l_", (ftnlen)1171)] > 0) {
 		curtyp = next[(i__1 = prvtyp - 1) < 3 && 0 <= i__1 ? i__1 : 
-			s_rnge("next", i__1, "dasa2l_", (ftnlen)1181)];
+			s_rnge("next", i__1, "dasa2l_", (ftnlen)1172)];
 	    } else {
 		curtyp = prev[(i__1 = prvtyp - 1) < 3 && 0 <= i__1 ? i__1 : 
-			s_rnge("prev", i__1, "dasa2l_", (ftnlen)1183)];
+			s_rnge("prev", i__1, "dasa2l_", (ftnlen)1174)];
 	    }
 
 /*           Forgetting to update PRVTYP is a Very Bad Thing (VBT). */
@@ -1147,9 +1136,9 @@ static integer c__2 = 2;
 
 	    if (curtyp == *type__) {
 		hiaddr += nw[(i__1 = *type__ - 1) < 3 && 0 <= i__1 ? i__1 : 
-			s_rnge("nw", i__1, "dasa2l_", (ftnlen)1196)] * (i__3 =
+			s_rnge("nw", i__1, "dasa2l_", (ftnlen)1187)] * (i__3 =
 			 dirrec[(i__2 = dscloc - 1) < 256 && 0 <= i__2 ? i__2 
-			: s_rnge("dirrec", i__2, "dasa2l_", (ftnlen)1196)], 
+			: s_rnge("dirrec", i__2, "dasa2l_", (ftnlen)1187)], 
 			abs(i__3));
 	    }
 
@@ -1157,7 +1146,7 @@ static integer c__2 = 2;
 /*           descriptor. Update the descriptor location. */
 
 	    *clsize = (i__2 = dirrec[(i__1 = dscloc - 1) < 256 && 0 <= i__1 ? 
-		    i__1 : s_rnge("dirrec", i__1, "dasa2l_", (ftnlen)1203)], 
+		    i__1 : s_rnge("dirrec", i__1, "dasa2l_", (ftnlen)1194)], 
 		    abs(i__2));
 	    ++dscloc;
 	}
@@ -1206,11 +1195,11 @@ static integer c__2 = 2;
 
     *recno = *clbase + *clsize - 1 - (hiaddr - *addrss) / nw[(i__1 = *type__ 
 	    - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("nw", i__1, "dasa2l_", (
-	    ftnlen)1251)];
+	    ftnlen)1242)];
     *wordno = *addrss - (*addrss - 1) / nw[(i__1 = *type__ - 1) < 3 && 0 <= 
-	    i__1 ? i__1 : s_rnge("nw", i__1, "dasa2l_", (ftnlen)1254)] * nw[(
+	    i__1 ? i__1 : s_rnge("nw", i__1, "dasa2l_", (ftnlen)1245)] * nw[(
 	    i__2 = *type__ - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge("nw", i__2, 
-	    "dasa2l_", (ftnlen)1254)];
+	    "dasa2l_", (ftnlen)1245)];
 
 /*     Update PRVHAN and set PRVOK to .TRUE. only if the call succeeded. */
 

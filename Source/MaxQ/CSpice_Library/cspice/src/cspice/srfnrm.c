@@ -596,7 +596,7 @@ static doublereal c_b45 = .5;
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     METHOD     I   Computation method. */
 /*     TARGET     I   Name of target body. */
@@ -609,173 +609,172 @@ static doublereal c_b45 = .5;
 
 /* $ Detailed_Input */
 
+/*     METHOD   is a short string providing parameters defining */
+/*              the computation method to be used. In the syntax */
+/*              descriptions below, items delimited by brackets */
+/*              are optional. */
 
-/*     METHOD      is a short string providing parameters defining */
-/*                 the computation method to be used. In the syntax */
-/*                 descriptions below, items delimited by brackets */
-/*                 are optional. */
+/*              METHOD may be assigned the following values: */
 
-/*                 METHOD may be assigned the following values: */
+/*                 'ELLIPSOID' */
 
-/*                    'ELLIPSOID' */
-
-/*                       The normal vector computation uses a triaxial */
-/*                       ellipsoid to model the surface of the target */
-/*                       body. The ellipsoid's radii must be available */
-/*                       in the kernel pool. */
-
-
-/*                    'DSK/UNPRIORITIZED[/SURFACES = <surface list>]' */
-
-/*                       The normal vector computation uses topographic */
-/*                       data to model the surface of the target body. */
-/*                       These data must be provided by loaded DSK */
-/*                       files. */
-
-/*                       The surface list specification is optional. The */
-/*                       syntax of the list is */
-
-/*                          <surface 1> [, <surface 2>...] */
-
-/*                       If present, it indicates that data only for the */
-/*                       listed surfaces are to be used; however, data */
-/*                       need not be available for all surfaces in the */
-/*                       list. If absent, loaded DSK data for any surface */
-/*                       associated with the target body are used. */
-
-/*                       The surface list may contain surface names or */
-/*                       surface ID codes. Names containing blanks must */
-/*                       be delimited by double quotes, for example */
-
-/*                          SURFACES = "Mars MEGDR 128 PIXEL/DEG" */
-
-/*                       If multiple surfaces are specified, their names */
-/*                       or IDs must be separated by commas. */
-
-/*                       See the Particulars section below for details */
-/*                       concerning use of DSK data. */
+/*                    The normal vector computation uses a triaxial */
+/*                    ellipsoid to model the surface of the target */
+/*                    body. The ellipsoid's radii must be available */
+/*                    in the kernel pool. */
 
 
-/*                 Neither case nor white space are significant in */
-/*                 METHOD, except within double-quoted strings. For */
-/*                 example, the string ' eLLipsoid ' is valid. */
+/*                 'DSK/UNPRIORITIZED[/SURFACES = <surface list>]' */
 
-/*                 Within double-quoted strings, blank characters are */
-/*                 significant, but multiple consecutive blanks are */
-/*                 considered equivalent to a single blank. Case is */
-/*                 not significant. So */
+/*                    The normal vector computation uses topographic */
+/*                    data to model the surface of the target body. */
+/*                    These data must be provided by loaded DSK */
+/*                    files. */
 
-/*                    "Mars MEGDR 128 PIXEL/DEG" */
+/*                    The surface list specification is optional. The */
+/*                    syntax of the list is */
 
-/*                 is equivalent to */
+/*                       <surface 1> [, <surface 2>...] */
 
-/*                    " mars megdr  128  pixel/deg " */
+/*                    If present, it indicates that data only for the */
+/*                    listed surfaces are to be used; however, data */
+/*                    need not be available for all surfaces in the */
+/*                    list. If absent, loaded DSK data for any surface */
+/*                    associated with the target body are used. */
 
-/*                 but not to */
+/*                    The surface list may contain surface names or */
+/*                    surface ID codes. Names containing blanks must */
+/*                    be delimited by double quotes, for example */
 
-/*                    "MARS MEGDR128PIXEL/DEG" */
+/*                       SURFACES = "Mars MEGDR 128 PIXEL/DEG" */
 
+/*                    If multiple surfaces are specified, their names */
+/*                    or IDs must be separated by commas. */
 
-/*     TARGET      is the name of the target body. TARGET is */
-/*                 case-insensitive, and leading and trailing blanks in */
-/*                 TARGET are not significant. Optionally, you may */
-/*                 supply a string containing the integer ID code for */
-/*                 the object. For example both 'MOON' and '301' are */
-/*                 legitimate strings that indicate the Moon is the */
-/*                 target body. */
-
-/*                 When the target body's surface is represented by a */
-/*                 tri-axial ellipsoid, this routine assumes that a */
-/*                 kernel variable representing the ellipsoid's radii is */
-/*                 present in the kernel pool. Normally the kernel */
-/*                 variable would be defined by loading a PCK file. */
+/*                    See the $Particulars section below for details */
+/*                    concerning use of DSK data. */
 
 
-/*     ET          is the epoch for which target surface data will be */
-/*                 selected, if the surface is modeled using DSK data. */
-/*                 In this case, only segments having time coverage that */
-/*                 includes the epoch ET will be used. */
+/*              Neither case nor white space are significant in */
+/*              METHOD, except within double-quoted strings. For */
+/*              example, the string ' eLLipsoid ' is valid. */
 
-/*                 ET is ignored if the target is modeled as an */
-/*                 ellipsoid. */
+/*              Within double-quoted strings, blank characters are */
+/*              significant, but multiple consecutive blanks are */
+/*              considered equivalent to a single blank. Case is */
+/*              not significant. So */
 
-/*                 ET is expressed as TDB seconds past J2000 TDB. */
+/*                 "Mars MEGDR 128 PIXEL/DEG" */
 
+/*              is equivalent to */
 
-/*     FIXREF      is the name of a body-fixed reference frame centered */
-/*                 on the target body. FIXREF may be any such frame */
-/*                 supported by the SPICE system, including built-in */
-/*                 frames (documented in the Frames Required Reading) */
-/*                 and frames defined by a loaded frame kernel (FK). The */
-/*                 string FIXREF is case-insensitive, and leading and */
-/*                 trailing blanks in FIXREF are not significant. */
+/*                 " mars megdr  128  pixel/deg " */
 
-/*                 The input surface points in the array SRFPTS are */
-/*                 expressed relative to this reference frame, as are */
-/*                 the normal vectors computed by this routine. */
+/*              but not to */
+
+/*                 "MARS MEGDR128PIXEL/DEG" */
 
 
-/*     NPTS        is the number of surface points in the array SRFPTS. */
+/*     TARGET   is the name of the target body. TARGET is */
+/*              case-insensitive, and leading and trailing blanks in */
+/*              TARGET are not significant. Optionally, you may */
+/*              supply a string containing the integer ID code for */
+/*              the object. For example both 'MOON' and '301' are */
+/*              legitimate strings that indicate the Moon is the */
+/*              target body. */
+
+/*              When the target body's surface is represented by a */
+/*              tri-axial ellipsoid, this routine assumes that a */
+/*              kernel variable representing the ellipsoid's radii is */
+/*              present in the kernel pool. Normally the kernel */
+/*              variable would be defined by loading a PCK file. */
 
 
-/*     SRFPTS      is an array of target body surface points. Elements */
+/*     ET       is the epoch for which target surface data will be */
+/*              selected, if the surface is modeled using DSK data. */
+/*              In this case, only segments having time coverage that */
+/*              includes the epoch ET will be used. */
 
-/*                    SRFPTS(1,I) */
-/*                    SRFPTS(2,I) */
-/*                    SRFPTS(3,I) */
+/*              ET is ignored if the target is modeled as an */
+/*              ellipsoid. */
 
-/*                 are the Cartesian coordinates, expressed in the */
-/*                 reference frame designated by FIXREF, of the Ith */
-/*                 surface point in the array. Each surface point */
-/*                 represents an offset from the center of that frame. */
+/*              ET is expressed as TDB seconds past J2000 TDB. */
 
-/*                 All surface points must actually be "on" the surface, */
-/*                 that is, the distance of each point from the surface */
-/*                 must be less than a small margin. See the Parameters */
-/*                 section below for a description of this margin. */
+
+/*     FIXREF   is the name of a body-fixed reference frame centered */
+/*              on the target body. FIXREF may be any such frame */
+/*              supported by the SPICE system, including built-in */
+/*              frames (documented in the Frames Required Reading) */
+/*              and frames defined by a loaded frame kernel (FK). The */
+/*              string FIXREF is case-insensitive, and leading and */
+/*              trailing blanks in FIXREF are not significant. */
+
+/*              The input surface points in the array SRFPTS are */
+/*              expressed relative to this reference frame, as are */
+/*              the normal vectors computed by this routine. */
+
+
+/*     NPTS     is the number of surface points in the array SRFPTS. */
+
+
+/*     SRFPTS   is an array of target body surface points. Elements */
+
+/*                 SRFPTS(1,I) */
+/*                 SRFPTS(2,I) */
+/*                 SRFPTS(3,I) */
+
+/*              are the Cartesian coordinates, expressed in the */
+/*              reference frame designated by FIXREF, of the Ith */
+/*              surface point in the array. Each surface point */
+/*              represents an offset from the center of that frame. */
+
+/*              All surface points must actually be "on" the surface, */
+/*              that is, the distance of each point from the surface */
+/*              must be less than a small margin. See the $Parameters */
+/*              section below for a description of this margin. */
 
 /* $ Detailed_Output */
 
-/*     NORMLS      is an array of unit length, outward normal vectors */
-/*                 corresponding to the points in SRFPTS. Elements */
+/*     NORMLS   is an array of unit length, outward normal vectors */
+/*              corresponding to the points in SRFPTS. Elements */
 
-/*                    NORMLS(1,I) */
-/*                    NORMLS(2,I) */
-/*                    NORMLS(3,I) */
+/*                 NORMLS(1,I) */
+/*                 NORMLS(2,I) */
+/*                 NORMLS(3,I) */
 
-/*                 are the Cartesian coordinates, expressed in the */
-/*                 reference frame designated by FIXREF, of the Ith */
-/*                 normal vector in the array. */
+/*              are the Cartesian coordinates, expressed in the */
+/*              reference frame designated by FIXREF, of the Ith */
+/*              normal vector in the array. */
 
 /* $ Parameters */
 
-/*     PTMEMM      is the default point-surface membership margin. This */
-/*                 margin limits the distance an input point can be from */
-/*                 a surface and still be considered to lie on that */
-/*                 surface. */
+/*     PTMEMM   is the default point-surface membership margin. This */
+/*              margin limits the distance an input point can be from */
+/*              a surface and still be considered to lie on that */
+/*              surface. */
 
-/*                 The details of the application of PTMEMM are */
-/*                 implementation-dependent. In the DSK case, roughly */
-/*                 speaking, a point-surface distance limit within a DSK */
-/*                 segment is set to */
+/*              The details of the application of PTMEMM are */
+/*              implementation-dependent. In the DSK case, roughly */
+/*              speaking, a point-surface distance limit within a DSK */
+/*              segment is set to */
 
-/*                    PTMEMM * MAXR */
+/*                 PTMEMM * MAXR */
 
-/*                 where MAXR is the radius of an outer bounding sphere */
-/*                 for the segment. */
+/*              where MAXR is the radius of an outer bounding sphere */
+/*              for the segment. */
 
-/*                 For shapes modeled as ellipsoids, the expression */
-/*                 above is applied to the maximum radius of the */
-/*                 ellipsoid. */
+/*              For shapes modeled as ellipsoids, the expression */
+/*              above is applied to the maximum radius of the */
+/*              ellipsoid. */
 
-/*                 See the include file */
+/*              See the include file */
 
-/*                    dsktol.inc */
+/*                 dsktol.inc */
 
-/*                 for the declaration of PTMEMM. */
+/*              for the declaration of PTMEMM. */
 
-/*                 This margin can be overridden. See dsktol.inc */
-/*                 and DSKSTL for details. */
+/*              This margin can be overridden. See dsktol.inc */
+/*              and DSKSTL for details. */
 
 /* $ Exceptions */
 
@@ -793,45 +792,45 @@ static doublereal c_b45 = .5;
 /*         the error SPICE(INVALIDFRAME) is signaled. */
 
 /*     4)  If data are not available to convert between the frame */
-/*         FIXREF and the frame of a DSK segment of interest, the error */
-/*         will be signaled by a routine in the call tree of this */
+/*         FIXREF and the frame of a DSK segment of interest, an error */
+/*         is signaled by a routine in the call tree of this */
 /*         routine. */
 
-/*     5)  If the input argument METHOD cannot be parsed, the error */
-/*         will be signaled either by this routine or by a routine in */
+/*     5)  If the input argument METHOD cannot be parsed, an error */
+/*         is signaled by either this routine or a routine in */
 /*         the call tree of this routine. */
 
 /*     6)  If the computation method specifies an ellipsoidal target */
 /*         model, and if triaxial radii of the target body have not been */
-/*         loaded into the kernel pool prior to calling SRFNRM, the */
-/*         error will be diagnosed and signaled by a routine in the call */
-/*         tree of this routine. */
+/*         loaded into the kernel pool prior to calling SRFNRM, an error */
+/*         is signaled by a routine in the call tree of this routine. */
 
-/*     7)  The target must be an extended body: if the computation */
-/*         method specifies an ellipsoidal target model, and if any of */
-/*         the radii of the target body are non-positive, the error will */
-/*         be signaled by routines in the call tree of this routine. */
+/*     7)  If the computation method specifies an ellipsoidal target */
+/*         model, and if any of the radii of the target body are */
+/*         non-positive, an error is signaled by a routine in the call */
+/*         tree of this routine. The target must be an extended body. */
 
 /*     8)  If METHOD specifies that the target surface is represented by */
 /*         DSK data, and no DSK files are loaded for the specified */
-/*         target, the error is signaled by a routine in the call tree */
+/*         target, an error is signaled by a routine in the call tree */
 /*         of this routine. */
 
 /*     9)  If METHOD specifies that the target surface is represented by */
 /*         DSK data, and data representing the portion of the surface */
 /*         corresponding to the surface points provided in SRFPTS are */
-/*         not available, an error will be signaled by a routine in the */
+/*         not available, an error is signaled by a routine in the */
 /*         call tree of this routine. */
 
-/*    10)  If an input surface point is not within a small tolerance */
+/*     10) If an input surface point is not within a small tolerance */
 /*         of the specified surface, the error SPICE(POINTNOTONSURFACE) */
-/*         is signaled. See the Parameters section for details. */
+/*         is signaled. See the $Parameters section for details. */
 
-/*    11)  If the target shape is "ellipsoid" and not all radii of the */
+/*     11) If the radii are not available in the kernel pool, an error is */
+/*         signaled by a routine in the call tree of this routine. */
+
+/*     12) If the target shape is "ellipsoid" and not all radii of the */
 /*         ellipsoid are strictly positive, the error */
-/*         SPICE(BADAXISLENGTH) will be signaled. If the radii are not */
-/*         available in the kernel pool, the error will be signaled */
-/*         by a routine in the call tree of this routine. */
+/*         SPICE(BADAXISLENGTH) is signaled. */
 
 /* $ Files */
 
@@ -840,62 +839,60 @@ static doublereal c_b45 = .5;
 
 /*     The following data are required: */
 
-/*        - Shape data for the target body: */
+/*     -  Shape data for the target body: */
 
-/*            PCK data: */
+/*          PCK data: */
 
-/*               If the target shape is modeled as an ellipsoid, */
-/*               triaxial radii for the target body must be loaded into */
-/*               the kernel pool. Typically this is done by loading a */
-/*               text PCK file via FURNSH. */
+/*             If the target shape is modeled as an ellipsoid, */
+/*             triaxial radii for the target body must be loaded into */
+/*             the kernel pool. Typically this is done by loading a */
+/*             text PCK file via FURNSH. */
 
-/*            DSK data: */
+/*          DSK data: */
 
-/*               If the target shape is modeled by DSK data, DSK files */
-/*               containing topographic data for the target body must be */
-/*               loaded. If a surface list is specified, data for at */
-/*               least one of the listed surfaces must be loaded. */
+/*             If the target shape is modeled by DSK data, DSK files */
+/*             containing topographic data for the target body must be */
+/*             loaded. If a surface list is specified, data for at */
+/*             least one of the listed surfaces must be loaded. */
 
-/*        - Target body orientation data: these may be provided in a */
-/*          text or binary PCK file. In some cases, target body */
-/*          orientation may be provided by one more more CK files. In */
-/*          either case, data are made available by loading the files */
-/*          via FURNSH. */
+/*     -  Target body orientation data: these may be provided in a */
+/*        text or binary PCK file. In some cases, target body */
+/*        orientation may be provided by one more more CK files. In */
+/*        either case, data are made available by loading the files */
+/*        via FURNSH. */
 
 /*     The following data may be required: */
 
-/*        - Frame data: if a frame definition is required to convert */
-/*          between the body-fixed frame of the target and the frame of */
-/*          a DSK segment providing topographic data, that definition */
-/*          must be available in the kernel pool. Typically the */
-/*          definition is supplied by loading a frame kernel via FURNSH. */
+/*     -  Frame data: if a frame definition is required to convert */
+/*        between the body-fixed frame of the target and the frame of */
+/*        a DSK segment providing topographic data, that definition */
+/*        must be available in the kernel pool. Typically the */
+/*        definition is supplied by loading a frame kernel via FURNSH. */
 
-/*        - Surface name-ID associations: if surface names are specified */
-/*          in METHOD, the association of these names with their */
-/*          corresponding surface ID codes must be established by */
-/*          assignments of the kernel variables */
+/*     -  Surface name-ID associations: if surface names are specified */
+/*        in METHOD, the association of these names with their */
+/*        corresponding surface ID codes must be established by */
+/*        assignments of the kernel variables */
 
-/*             NAIF_SURFACE_NAME */
-/*             NAIF_SURFACE_CODE */
-/*             NAIF_SURFACE_BODY */
+/*           NAIF_SURFACE_NAME */
+/*           NAIF_SURFACE_CODE */
+/*           NAIF_SURFACE_BODY */
 
-/*          Normally these associations are made by loading a text */
-/*          kernel containing the necessary assignments. An example of */
-/*          such a set of assignments is */
+/*        Normally these associations are made by loading a text */
+/*        kernel containing the necessary assignments. An example of */
+/*        such a set of assignments is */
 
-/*             NAIF_SURFACE_NAME += 'Mars MEGDR 128 PIXEL/DEG' */
-/*             NAIF_SURFACE_CODE += 1 */
-/*             NAIF_SURFACE_BODY += 499 */
+/*           NAIF_SURFACE_NAME += 'Mars MEGDR 128 PIXEL/DEG' */
+/*           NAIF_SURFACE_CODE += 1 */
+/*           NAIF_SURFACE_BODY += 499 */
 
-/*        - SCLK data: if the target body's orientation is provided by */
-/*          CK files, an associated SCLK kernel must be loaded. */
+/*     -  SCLK data: if the target body's orientation is provided by */
+/*        CK files, an associated SCLK kernel must be loaded. */
 
 /*     In all cases, kernel data are normally loaded once per program */
 /*     run, NOT every time this routine is called. */
 
-
 /* $ Particulars */
-
 
 /*     Using DSK data */
 /*     ============== */
@@ -1016,7 +1013,6 @@ static doublereal c_b45 = .5;
 
 /*           'DSK/UNPRIORITIZED/SURFACES = "Mars MEGDR 64 PIXEL/DEG", 3' */
 
-
 /* $ Examples */
 
 /*     The numerical results shown for this example may differ across */
@@ -1058,265 +1054,272 @@ static doublereal c_b45 = .5;
 /*                                               plate model */
 /*           \begindata */
 
-/*              PATH_SYMBOLS    = 'GEN' */
-/*              PATH_VALUES     = '/ftp/pub/naif/generic_kernels' */
-
-/*              KERNELS_TO_LOAD = ( '$GEN/pck/pck00010.tpc', */
-/*                                  '$GEN/dsk/phobos/phobos512.bds' ) */
+/*              KERNELS_TO_LOAD = ( 'pck00010.tpc', */
+/*                                  'phobos512.bds' ) */
 /*           \begintext */
+
+/*           End of meta-kernel */
 
 
 /*        Example code begins here. */
 
 
-/*             PROGRAM EX1 */
-/*             IMPLICIT NONE */
-/*       C */
-/*       C     SPICELIB functions */
-/*       C */
-/*             DOUBLE PRECISION      DPR */
-/*             DOUBLE PRECISION      RPD */
-/*       C */
-/*       C     Local parameters */
-/*       C */
-/*             CHARACTER*(*)         FMT1 */
-/*             PARAMETER           ( FMT1   = '(1X,A,F11.6)' ) */
+/*              PROGRAM SRFNRM_EX1 */
+/*              IMPLICIT NONE */
+/*        C */
+/*        C     SPICELIB functions */
+/*        C */
+/*              DOUBLE PRECISION      DPR */
+/*              DOUBLE PRECISION      RPD */
+/*        C */
+/*        C     Local parameters */
+/*        C */
+/*              CHARACTER*(*)         FMT1 */
+/*              PARAMETER           ( FMT1   = '(1X,A,F11.6)' ) */
 
-/*             CHARACTER*(*)         META */
-/*             PARAMETER           ( META   = 'srfnrm_ex1.tm' ) */
-
-
-/*             INTEGER               BDNMLN */
-/*             PARAMETER           ( BDNMLN = 36 ) */
-
-/*             INTEGER               FILSIZ */
-/*             PARAMETER           ( FILSIZ = 255 ) */
-
-/*             INTEGER               FRNMLN */
-/*             PARAMETER           ( FRNMLN = 32 ) */
-
-/*             INTEGER               LNSIZE */
-/*             PARAMETER           ( LNSIZE = 79 ) */
-
-/*             INTEGER               MAXN */
-/*             PARAMETER           ( MAXN   = 100000 ) */
-
-/*             INTEGER               MTHLEN */
-/*             PARAMETER           ( MTHLEN = 80 ) */
-/*       C */
-/*       C     Local variables */
-/*       C */
-/*             CHARACTER*(FRNMLN)    FIXREF */
-/*             CHARACTER*(MTHLEN)    METHOD ( 2 ) */
-/*             CHARACTER*(LNSIZE)    OUTLIN */
-/*             CHARACTER*(BDNMLN)    TARGET */
-
-/*             DOUBLE PRECISION      DLAT */
-/*             DOUBLE PRECISION      DLON */
-/*             DOUBLE PRECISION      ET */
-/*             DOUBLE PRECISION      GRID   ( 2, MAXN ) */
-/*             DOUBLE PRECISION      LAT */
-/*             DOUBLE PRECISION      LAT0 */
-/*             DOUBLE PRECISION      LON */
-/*             DOUBLE PRECISION      LON0 */
-/*             DOUBLE PRECISION      NORMLS ( 3, MAXN, 2 ) */
-/*             DOUBLE PRECISION      NRMLAT */
-/*             DOUBLE PRECISION      NRMLON */
-/*             DOUBLE PRECISION      NRMRAD */
-/*             DOUBLE PRECISION      SRFPTS ( 3, MAXN, 2 ) */
-/*             DOUBLE PRECISION      XLAT */
-/*             DOUBLE PRECISION      XLON */
-/*             DOUBLE PRECISION      XR */
-
-/*             INTEGER               I */
-/*             INTEGER               J */
-/*             INTEGER               N */
-/*             INTEGER               NLAT */
-/*             INTEGER               NLON */
-
-/*       C */
-/*       C     Saved variables */
-/*       C */
-/*             SAVE                  GRID */
-/*             SAVE                  NORMLS */
-/*             SAVE                  SRFPTS */
-
-/*       C */
-/*       C     Load kernels. */
-/*       C */
-/*             CALL FURNSH ( META ) */
-/*       C */
-/*       C     Set target, reference frame, and epoch. */
-/*       C */
-/*             TARGET = 'PHOBOS' */
-/*             FIXREF = 'IAU_PHOBOS' */
-/*             ET     = 0.D0 */
-/*       C */
-/*       C     Use both a reference ellipsoid and DSK data */
-/*       C     to represent the surface. */
-/*       C */
-/*             METHOD(1) = 'ELLIPSOID' */
-/*             METHOD(2) = 'DSK/UNPRIORITIZED' */
-/*       C */
-/*       C     Set the grid dimensions. */
-/*       C */
-/*             NLON   = 6 */
-/*             NLAT   = 3 */
-/*       C */
-/*       C     Derive evenly spaced grid separations and starting */
-/*       C     values in the longitude and latitude dimensions. */
-/*       C     Units are degrees. */
-/*       C */
-/*             LAT0 = 90.D0 */
-/*             LON0 =  0.D0 */
-
-/*             DLAT = 180.D0 / (NLAT + 1) */
-/*             DLON = 360.D0 /  NLON */
-
-/*       C */
-/*       C     Now generate the grid points.  We generate */
-/*       C     points along latitude bands, working from */
-/*       C     north to south.  The latitude range is selected */
-/*       C     to range from +45 to -45 degrees.  Longitude */
-/*       C     ranges from 0 to 300 degrees.  The increment */
-/*       C     is 45 degrees for latitude and 60 degrees for */
-/*       C     longitude. */
-/*       C */
-/*             N = 0 */
-
-/*             DO I = 1, NLAT */
-
-/*                LAT = RPD() * ( LAT0 - I*DLAT ) */
-
-/*                DO J = 1, NLON */
-
-/*                   N   = N + 1 */
-/*                   LON = RPD() * ( LON0 + (J-1)*DLON ) */
-
-/*                   GRID(1,N) = LON */
-/*                   GRID(2,N) = LAT */
-
-/*                END DO */
-
-/*             END DO */
-
-/*       C */
-/*       C     Find the surface points corresponding to the grid points. */
-/*       C */
-/*       C */
-/*       C     Compute outward normal vectors at the surface points, */
-/*       C     using both surface representations. */
-/*       C */
-/*             DO I = 1, 2 */
-
-/*                CALL LATSRF ( METHOD(I), TARGET, ET, */
-/*            .                 FIXREF,    N,      GRID,  SRFPTS(1,1,I) ) */
-
-/*                CALL SRFNRM ( METHOD(I), */
-/*            .                 TARGET,    ET,            FIXREF, */
-/*            .                 N,         SRFPTS(1,1,I), NORMLS(1,1,I) ) */
-/*             END DO */
-
-/*       C */
-/*       C     Print out the surface points in latitudinal */
-/*       C     coordinates and compare the derived lon/lat values */
-/*       C     to those of the input grid. */
-/*       C */
-/*             DO I = 1, N */
-/*       C */
-/*       C        Use RECRAD rather than RECLAT to produce */
-/*       C        non-negative longitudes. */
-/*       C */
-/*                CALL RECRAD ( SRFPTS(1,I,1), XR, XLON, XLAT ) */
-
-/*                WRITE (*,*) ' ' */
-
-/*                OUTLIN = ' Surface point for grid point #:' */
-/*                CALL REPMI  ( OUTLIN, '#', I, OUTLIN ) */
-/*                CALL TOSTDO ( OUTLIN ) */
-
-/*                WRITE (*,*)    '  Latitudinal Coordinates:' */
-/*                WRITE (*,FMT1) '    Longitude           (deg): ', */
-/*            .                  XLON*DPR() */
-/*                WRITE (*,FMT1) '    Latitude            (deg): ', */
-/*            .                  XLAT*DPR() */
-/*                WRITE (*,FMT1) '    Ellipsoid Radius     (km): ', */
-/*            .                  XR */
-
-/*                CALL RECRAD ( SRFPTS(1,I,2), XR, XLON, XLAT ) */
-
-/*                WRITE (*,FMT1) '    DSK Radius           (km): ', */
-/*            .                  XR */
-/*       C */
-/*       C        Convert the Ith normal vector to latitudinal */
-/*       C        coordinates. */
-/*       C */
-/*                CALL RECRAD ( NORMLS(1,I,1), NRMRAD, NRMLON, NRMLAT ) */
-
-/*                WRITE (*,*)    '  Ellipsoid normal vector direction:' */
-/*                WRITE (*,FMT1) '    Longitude           (deg): ', */
-/*            .                       NRMLON*DPR() */
-/*                WRITE (*,FMT1) '    Latitude            (deg): ', */
-/*            .                      NRMLAT*DPR() */
-
-/*                CALL RECRAD ( NORMLS(1,I,2), NRMRAD, NRMLON, NRMLAT ) */
-
-/*                WRITE (*,*)    '  DSK normal vector direction:' */
-/*                WRITE (*,FMT1) '    Longitude           (deg): ', */
-/*            .                  NRMLON*DPR() */
-/*                WRITE (*,FMT1) '    Latitude            (deg): ', */
-/*            .                  NRMLAT*DPR() */
-
-/*             END DO */
-/*             WRITE (*,*) ' ' */
-/*             END */
+/*              CHARACTER*(*)         META */
+/*              PARAMETER           ( META   = 'srfnrm_ex1.tm' ) */
 
 
-/*     When this program was executed on a PC/Linux/gfortran 64-bit */
-/*     platform, the output for the first 3 points */
-/*     (the rest of the output is not shown due to its large volume) */
-/*     was: */
+/*              INTEGER               BDNMLN */
+/*              PARAMETER           ( BDNMLN = 36 ) */
+
+/*              INTEGER               FILSIZ */
+/*              PARAMETER           ( FILSIZ = 255 ) */
+
+/*              INTEGER               FRNMLN */
+/*              PARAMETER           ( FRNMLN = 32 ) */
+
+/*              INTEGER               LNSIZE */
+/*              PARAMETER           ( LNSIZE = 79 ) */
+
+/*              INTEGER               MAXN */
+/*              PARAMETER           ( MAXN   = 100000 ) */
+
+/*              INTEGER               MTHLEN */
+/*              PARAMETER           ( MTHLEN = 80 ) */
+/*        C */
+/*        C     Local variables */
+/*        C */
+/*              CHARACTER*(FRNMLN)    FIXREF */
+/*              CHARACTER*(MTHLEN)    METHOD ( 2 ) */
+/*              CHARACTER*(LNSIZE)    OUTLIN */
+/*              CHARACTER*(BDNMLN)    TARGET */
+
+/*              DOUBLE PRECISION      DLAT */
+/*              DOUBLE PRECISION      DLON */
+/*              DOUBLE PRECISION      ET */
+/*              DOUBLE PRECISION      GRID   ( 2, MAXN ) */
+/*              DOUBLE PRECISION      LAT */
+/*              DOUBLE PRECISION      LAT0 */
+/*              DOUBLE PRECISION      LON */
+/*              DOUBLE PRECISION      LON0 */
+/*              DOUBLE PRECISION      NORMLS ( 3, MAXN, 2 ) */
+/*              DOUBLE PRECISION      NRMLAT */
+/*              DOUBLE PRECISION      NRMLON */
+/*              DOUBLE PRECISION      NRMRAD */
+/*              DOUBLE PRECISION      SRFPTS ( 3, MAXN, 2 ) */
+/*              DOUBLE PRECISION      XLAT */
+/*              DOUBLE PRECISION      XLON */
+/*              DOUBLE PRECISION      XR */
+
+/*              INTEGER               I */
+/*              INTEGER               J */
+/*              INTEGER               N */
+/*              INTEGER               NLAT */
+/*              INTEGER               NLON */
+
+/*        C */
+/*        C     Saved variables */
+/*        C */
+/*              SAVE                  GRID */
+/*              SAVE                  NORMLS */
+/*              SAVE                  SRFPTS */
+
+/*        C */
+/*        C     Load kernels. */
+/*        C */
+/*              CALL FURNSH ( META ) */
+/*        C */
+/*        C     Set target, reference frame, and epoch. */
+/*        C */
+/*              TARGET = 'PHOBOS' */
+/*              FIXREF = 'IAU_PHOBOS' */
+/*              ET     = 0.D0 */
+/*        C */
+/*        C     Use both a reference ellipsoid and DSK data */
+/*        C     to represent the surface. */
+/*        C */
+/*              METHOD(1) = 'ELLIPSOID' */
+/*              METHOD(2) = 'DSK/UNPRIORITIZED' */
+/*        C */
+/*        C     Set the grid dimensions. */
+/*        C */
+/*              NLON   = 6 */
+/*              NLAT   = 3 */
+/*        C */
+/*        C     Derive evenly spaced grid separations and starting */
+/*        C     values in the longitude and latitude dimensions. */
+/*        C     Units are degrees. */
+/*        C */
+/*              LAT0 = 90.D0 */
+/*              LON0 =  0.D0 */
+
+/*              DLAT = 180.D0 / (NLAT + 1) */
+/*              DLON = 360.D0 /  NLON */
+
+/*        C */
+/*        C     Now generate the grid points.  We generate */
+/*        C     points along latitude bands, working from */
+/*        C     north to south.  The latitude range is selected */
+/*        C     to range from +45 to -45 degrees.  Longitude */
+/*        C     ranges from 0 to 300 degrees.  The increment */
+/*        C     is 45 degrees for latitude and 60 degrees for */
+/*        C     longitude. */
+/*        C */
+/*              N = 0 */
+
+/*              DO I = 1, NLAT */
+
+/*                 LAT = RPD() * ( LAT0 - I*DLAT ) */
+
+/*                 DO J = 1, NLON */
+
+/*                    N   = N + 1 */
+/*                    LON = RPD() * ( LON0 + (J-1)*DLON ) */
+
+/*                    GRID(1,N) = LON */
+/*                    GRID(2,N) = LAT */
+
+/*                 END DO */
+
+/*              END DO */
+
+/*        C */
+/*        C     Find the surface points corresponding to the grid points. */
+/*        C */
+/*        C */
+/*        C     Compute outward normal vectors at the surface points, */
+/*        C     using both surface representations. */
+/*        C */
+/*              DO I = 1, 2 */
+
+/*                 CALL LATSRF ( METHOD(I),    TARGET, ET, */
+/*             .                 FIXREF,       N,      GRID, */
+/*             .                 SRFPTS(1,1,I)              ) */
+
+/*                 CALL SRFNRM ( METHOD(I),    TARGET, ET, */
+/*             .                 FIXREF,       N,      SRFPTS(1,1,I), */
+/*             .                 NORMLS(1,1,I)                      ) */
+/*              END DO */
 
 
-/*        Surface point for grid point 1: */
-/*          Latitudinal Coordinates: */
-/*            Longitude           (deg):    0.000000 */
-/*            Latitude            (deg):   45.000000 */
-/*            Ellipsoid Radius     (km):   10.542977 */
-/*            DSK Radius           (km):   10.156402 */
-/*          Ellipsoid normal vector direction: */
-/*            Longitude           (deg):    0.000000 */
-/*            Latitude            (deg):   63.895146 */
-/*          DSK normal vector direction: */
-/*            Longitude           (deg):  341.337568 */
-/*            Latitude            (deg):   62.610726 */
+/*              WRITE (*,*) 'Number of grid points: ', N */
 
-/*        Surface point for grid point 2: */
-/*          Latitudinal Coordinates: */
-/*            Longitude           (deg):   60.000000 */
-/*            Latitude            (deg):   45.000000 */
-/*            Ellipsoid Radius     (km):   10.172847 */
-/*            DSK Radius           (km):   10.131412 */
-/*          Ellipsoid normal vector direction: */
-/*            Longitude           (deg):   66.059787 */
-/*            Latitude            (deg):   58.877649 */
-/*          DSK normal vector direction: */
-/*            Longitude           (deg):   48.859884 */
-/*            Latitude            (deg):   56.924717 */
+/*        C */
+/*        C     Print out the surface points in latitudinal */
+/*        C     coordinates and compare the derived lon/lat values */
+/*        C     to those of the input grid for the first 3 points. */
+/*        C */
+/*              DO I = 1, 3 */
+/*        C */
+/*        C        Use RECRAD rather than RECLAT to produce */
+/*        C        non-negative longitudes. */
+/*        C */
+/*                 CALL RECRAD ( SRFPTS(1,I,1), XR, XLON, XLAT ) */
 
-/*        Surface point for grid point 3: */
-/*          Latitudinal Coordinates: */
-/*            Longitude           (deg):  120.000000 */
-/*            Latitude            (deg):   45.000000 */
-/*            Ellipsoid Radius     (km):   10.172847 */
-/*            DSK Radius           (km):   10.423766 */
-/*          Ellipsoid normal vector direction: */
-/*            Longitude           (deg):  113.940213 */
-/*            Latitude            (deg):   58.877649 */
-/*          DSK normal vector direction: */
-/*            Longitude           (deg):  118.553200 */
-/*            Latitude            (deg):   55.906774 */
+/*                 WRITE (*,*) ' ' */
 
+/*                 OUTLIN = ' Surface point for grid point #:' */
+/*                 CALL REPMI  ( OUTLIN, '#', I, OUTLIN ) */
+/*                 CALL TOSTDO ( OUTLIN ) */
+
+/*                 WRITE (*,*)    '  Latitudinal Coordinates:' */
+/*                 WRITE (*,FMT1) '    Longitude           (deg): ', */
+/*             .                  XLON*DPR() */
+/*                 WRITE (*,FMT1) '    Latitude            (deg): ', */
+/*             .                  XLAT*DPR() */
+/*                 WRITE (*,FMT1) '    Ellipsoid Radius     (km): ', */
+/*             .                  XR */
+
+/*                 CALL RECRAD ( SRFPTS(1,I,2), XR, XLON, XLAT ) */
+
+/*                 WRITE (*,FMT1) '    DSK Radius           (km): ', */
+/*             .                  XR */
+/*        C */
+/*        C        Convert the Ith normal vector to latitudinal */
+/*        C        coordinates. */
+/*        C */
+/*                 CALL RECRAD ( NORMLS(1,I,1), NRMRAD, NRMLON, NRMLAT ) */
+
+/*                 WRITE (*,*)    '  Ellipsoid normal vector direction:' */
+/*                 WRITE (*,FMT1) '    Longitude           (deg): ', */
+/*             .                       NRMLON*DPR() */
+/*                 WRITE (*,FMT1) '    Latitude            (deg): ', */
+/*             .                      NRMLAT*DPR() */
+
+/*                 CALL RECRAD ( NORMLS(1,I,2), NRMRAD, NRMLON, NRMLAT ) */
+
+/*                 WRITE (*,*)    '  DSK normal vector direction:' */
+/*                 WRITE (*,FMT1) '    Longitude           (deg): ', */
+/*             .                  NRMLON*DPR() */
+/*                 WRITE (*,FMT1) '    Latitude            (deg): ', */
+/*             .                  NRMLAT*DPR() */
+
+/*              END DO */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*         Number of grid points:           18 */
+
+/*         Surface point for grid point 1: */
+/*           Latitudinal Coordinates: */
+/*             Longitude           (deg):    0.000000 */
+/*             Latitude            (deg):   45.000000 */
+/*             Ellipsoid Radius     (km):   10.542977 */
+/*             DSK Radius           (km):   10.156402 */
+/*           Ellipsoid normal vector direction: */
+/*             Longitude           (deg):    0.000000 */
+/*             Latitude            (deg):   63.895146 */
+/*           DSK normal vector direction: */
+/*             Longitude           (deg):  341.337568 */
+/*             Latitude            (deg):   62.610726 */
+
+/*         Surface point for grid point 2: */
+/*           Latitudinal Coordinates: */
+/*             Longitude           (deg):   60.000000 */
+/*             Latitude            (deg):   45.000000 */
+/*             Ellipsoid Radius     (km):   10.172847 */
+/*             DSK Radius           (km):   10.131412 */
+/*           Ellipsoid normal vector direction: */
+/*             Longitude           (deg):   66.059787 */
+/*             Latitude            (deg):   58.877649 */
+/*           DSK normal vector direction: */
+/*             Longitude           (deg):   48.859884 */
+/*             Latitude            (deg):   56.924717 */
+
+/*         Surface point for grid point 3: */
+/*           Latitudinal Coordinates: */
+/*             Longitude           (deg):  120.000000 */
+/*             Latitude            (deg):   45.000000 */
+/*             Ellipsoid Radius     (km):   10.172847 */
+/*             DSK Radius           (km):   10.423766 */
+/*           Ellipsoid normal vector direction: */
+/*             Longitude           (deg):  113.940213 */
+/*             Latitude            (deg):   58.877649 */
+/*           DSK normal vector direction: */
+/*             Longitude           (deg):  118.553200 */
+/*             Latitude            (deg):   55.906774 */
+
+
+/*        Note that only the first 3 points of the grid are */
+/*        presented in the output (the rest of the points are not */
+/*        shown due to their large number). */
 
 /* $ Restrictions */
 
@@ -1328,9 +1331,16 @@ static doublereal c_b45 = .5;
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.0.1, 08-JUL-2020 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
+/*        Limited the number of grid points presented in the output of */
+/*        the code example to three. */
 
 /* -    SPICELIB Version 1.0.0, 22-FEB-2017 (NJB) */
 
@@ -1343,7 +1353,7 @@ static doublereal c_b45 = .5;
 
 /*     map Cartesian surface points to normal vectors */
 /*     compute normal vectors on topographic surface */
-/*     compute normal vectors on dsk surface */
+/*     compute normal vectors on DSK surface */
 
 /* -& */
 

@@ -9,7 +9,7 @@
 
 static integer c__1 = 1;
 
-/* $Procedure      EKNSEG ( EK, number of segments in file ) */
+/* $Procedure EKNSEG ( EK, number of segments in file ) */
 integer eknseg_(integer *handle)
 {
     /* System generated locals */
@@ -120,7 +120,7 @@ integer eknseg_(integer *handle)
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     I   EK file handle. */
 
@@ -129,13 +129,12 @@ integer eknseg_(integer *handle)
 
 /* $ Detailed_Input */
 
-/*     HANDLE         is the handle of an EK file opened for read */
-/*                    access. */
+/*     HANDLE   is the handle of an EK file opened for read access. */
 
 /* $ Detailed_Output */
 
-/*     The function returns the number of segments in the specified */
-/*     E-kernel. */
+/*     The function returns the number of segments in the EK identified */
+/*     by HANDLE. */
 
 /* $ Parameters */
 
@@ -143,11 +142,11 @@ integer eknseg_(integer *handle)
 
 /* $ Exceptions */
 
-/*     1)  If HANDLE is invalid, the error will be diagnosed by routines */
-/*         called by this routine.  EKNSEG will return the value zero. */
+/*     1)  If HANDLE is invalid, an error is signaled by a routine in the */
+/*         call tree of this routine. EKNSEG will return the value zero. */
 
 /*     2)  If an I/O error occurs while trying to read the EK, the error */
-/*         will be diagnosed by routines called by this routine. */
+/*         is signaled by a routine in the call tree of this routine. */
 /*         EKNSEG will return the value zero. */
 
 /* $ Files */
@@ -157,15 +156,71 @@ integer eknseg_(integer *handle)
 /* $ Particulars */
 
 /*     This routine is used to support the function of summarizing an */
-/*     EK file.  Given the number of segments in the file, a program */
+/*     EK file. Given the number of segments in the file, a program */
 /*     can use EKSSUM in a loop to summarize each of them. */
 
 /* $ Examples */
 
-/*     1)  Open an EK file and count the segments in it. */
+/*     The numerical results shown for this example may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
 
-/*            CALL EKOPR ( EKNAME, HANDLE ) */
-/*            N = EKNSEG  ( HANDLE ) */
+/*     1) Find the number of segments on an EK. */
+
+/*        Use the EK kernel below as test input file for loading the */
+/*        experiment database. This kernel contains the Deep */
+/*        Impact spacecraft sequence data based on the integrated */
+/*        Predicted Events File covering the whole primary mission. */
+
+/*           dif_seq_050112_050729.bes */
+
+
+/*        Example code begins here. */
+
+
+/*              PROGRAM EKNSEG_EX1 */
+/*              IMPLICIT NONE */
+
+/*        C */
+/*        C     SPICELIB functions */
+/*        C */
+/*              INTEGER               EKNSEG */
+
+/*        C */
+/*        C     Local variables. */
+/*        C */
+/*              INTEGER               HANDLE */
+/*              INTEGER               NSEG */
+
+/*        C */
+/*        C     Open the EK file, returning the file handle */
+/*        C     associated with the open file to the variable named */
+/*        C     HANDLE. */
+/*        C */
+/*              CALL EKOPR ( 'dif_seq_050112_050729.bes', HANDLE ) */
+
+
+/*        C */
+/*        C     Return the number of segments in the EK. */
+/*        C */
+/*              NSEG = EKNSEG( HANDLE ) */
+/*              WRITE(*,*) 'Number of segments = ', NSEG */
+
+/*        C */
+/*        C     Close the file. */
+/*        C */
+/*              CALL EKCLS ( HANDLE ) */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*         Number of segments =            2 */
+
 
 /* $ Restrictions */
 
@@ -177,11 +232,19 @@ integer eknseg_(integer *handle)
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
 
 /* $ Version */
 
-/* -    Beta Version 1.0.0, 26-SEP-1995 (NJB) */
+/* -    SPICELIB Version 1.1.0, 25-MAY-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
+/*        Added complete code example. */
+
+/* -    SPICELIB Version 1.0.0, 26-SEP-1995 (NJB) */
 
 /* -& */
 /* $ Index_Entries */

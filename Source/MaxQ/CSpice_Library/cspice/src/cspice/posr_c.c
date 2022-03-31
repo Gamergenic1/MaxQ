@@ -3,10 +3,10 @@
 -Procedure posr_c ( Position of substring, reverse search )
 
 -Abstract
- 
-   Find the first occurrence in a string of a substring, starting at 
-   a specified location, searching backward. 
- 
+
+   Find the first occurrence in a string of a substring, starting at
+   a specified location, searching backward.
+
 -Disclaimer
 
    THIS SOFTWARE AND ANY RELATED MATERIALS WERE CREATED BY THE
@@ -33,15 +33,15 @@
    ACTIONS OF RECIPIENT IN THE USE OF THE SOFTWARE.
 
 -Required_Reading
- 
-   SCANNING 
- 
+
+   SCANNING
+
 -Keywords
- 
-   CHARACTER 
-   SEARCH 
-   UTILITY 
- 
+
+   CHARACTER
+   SEARCH
+   UTILITY
+
 */
 
    #include "SpiceUsr.h"
@@ -57,123 +57,129 @@
 /*
 
 -Brief_I/O
- 
-   VARIABLE  I/O  DESCRIPTION 
-   --------  ---  -------------------------------------------------- 
-   str        I   Any character string. 
-   substr     I   Substring to locate in the character string. 
-   start      I   Position to begin looking for substr in str. 
- 
+
+   VARIABLE  I/O  DESCRIPTION
+   --------  ---  --------------------------------------------------
+   str        I   Any character string.
+   substr     I   Substring to locate in the character string.
+   start      I   Position to begin looking for substr in str.
+
    The function returns the index of the last occurrence of substr in
    str at or preceding index start.
- 
+
 -Detailed_Input
- 
-   str        is any character string. 
- 
-   substr     is a substring to look for in str.  Spaces in substr are
-              significant, including trailing blanks.
- 
-   start      is the position in str to begin looking for substr. start
-              may range from 0 to n-1, where n is the number of
-              characters in str.
- 
+
+   str         is any character string.
+
+   substr      is a substring to look for in str. Spaces in substr are
+               significant, including trailing blanks.
+
+   start       is the position in str to begin looking for substr. start
+               may range from 0 to n-1, where n is the number of
+               characters in str.
+
 -Detailed_Output
- 
-   The function returns the index of the beginning of the last 
-   substring of str that begins at or before index start and is equal 
-   to substr. If the substring cannot be found after start, the 
-   function is returns -1. 
- 
+
+   The function returns the index of the beginning of the last
+   substring of str that begins at or before index start and is equal
+   to substr. If the substring cannot be found after start, the
+   function is returns -1.
+
 -Parameters
- 
-   None. 
- 
+
+   None.
+
 -Exceptions
-  
-   1) The error SPICE(NULLPOINTER) is signaled if either of 
-      the input string pointers is null.
 
-   2) If start is less than 0, the search begins at the first 
-      character of the string. 
- 
-   3) If start is greater than or equal to the length of the string, 
-      posr_c returns -1. 
+   1)  If `start' is less than 0, posr_c returns -1.
 
-   4) The function returns -1 if either of the input strings is empty.
+   2)  If `start' is greater than strlen(str), the search begins
+       at the last character of the string.
+
+   3)  If any of the `str' or `substr' input string pointers is null,
+       the error SPICE(NULLPOINTER) is signaled. The function returns
+       the value -1.
+
+   4)  If any of the `str' or `substr' input strings has zero length,
+       the function returns the value -1. This case is not considered
+       an error.
 
 -Files
- 
-   None. 
- 
+
+   None.
+
 -Particulars
- 
-   posr_c is case sensitive. 
- 
+
+   posr_c is case sensitive.
+
    An entire family of related CSPICE routines
 
       cpos_c
       cposr_c
       ncpos_c
-      ncposr_c 
+      ncposr_c
       pos_c
-      posr_c 
+      posr_c
 
-   is described in the Required Reading. 
-  
+   is described in the Required Reading.
+
 -Examples
- 
+
    Let string == "AN ANT AND AN ELEPHANT        "
                   012345678901234567890123456789
 
-   Normal (Sequential) Searching: 
-   ------------------------------ 
+   Normal (Sequential) Searching:
+   ------------------------------
 
       posr_c ( STRING, "AN",  29 ) == 19
-      posr_c ( STRING, "AN",  18 ) == 11 
-      posr_c ( STRING, "AN",  10 ) ==  7 
-      posr_c ( STRING, "AN",   6 ) ==  3 
-      posr_c ( STRING, "AN",   2 ) ==  0 
+      posr_c ( STRING, "AN",  18 ) == 11
+      posr_c ( STRING, "AN",  10 ) ==  7
+      posr_c ( STRING, "AN",   6 ) ==  3
+      posr_c ( STRING, "AN",   2 ) ==  0
 
-   start out of bounds: 
-   -------------------- 
+   start out of bounds:
+   --------------------
 
       posr_c ( STRING, "AN", -6 ) == -1
-      posr_c ( STRING, "AN", -1 ) == -1 
-      posr_c ( STRING, "AN", 30 ) == 19 
-      posr_c ( STRING, "AN", 43 ) == 19 
+      posr_c ( STRING, "AN", -1 ) == -1
+      posr_c ( STRING, "AN", 30 ) == 19
+      posr_c ( STRING, "AN", 43 ) == 19
 
-   Significance of Spaces: 
-   ----------------------- 
+   Significance of Spaces:
+   -----------------------
 
       posr_c ( STRING, "AN",    29 ) ==  19
-      posr_c ( STRING, " AN",   29 ) ==  10 
+      posr_c ( STRING, " AN",   29 ) ==  10
       posr_c ( STRING, " AN ",  29 ) ==  10
-      posr_c ( STRING, " AN ",   9 ) ==  -1 
-      posr_c ( STRING, " AN  ", 29 ) ==  -1 
-
+      posr_c ( STRING, " AN ",   9 ) ==  -1
+      posr_c ( STRING, " AN  ", 29 ) ==  -1
 
 -Restrictions
- 
-   None. 
- 
+
+   None.
+
 -Literature_References
- 
-   None. 
- 
+
+   None.
+
 -Author_and_Institution
- 
-   N.J. Bachman    (JPL) 
-   W.L. Taber      (JPL) 
- 
+
+   N.J. Bachman        (JPL)
+   J. Diaz del Rio     (ODC Space)
+   W.L. Taber          (JPL)
+
 -Version
- 
+
+   -CSPICE Version 1.0.1, 04-AUG-2021 (JDR)
+
+       Edited the header to comply with NAIF standard.
+
    -CSPICE Version 1.0.0, 15-AUG-2002 (NJB) (WLT)
 
 -Index_Entries
- 
-   position of substring reverse search 
- 
+
+   position of substring reverse search
+
 -&
 */
 
@@ -198,16 +204,16 @@
 
 
    /*
-   Check for empty strings.  
+   Check for empty strings.
    */
    if (  ( strlen(str) == 0 ) || ( strlen(substr) == 0 )  )
    {
-     return ( -1 );     
+     return ( -1 );
    }
 
 
    /*
-   The rest can be handled by the f2c'd SPICELIB routine.  Adjust 
+   The rest can be handled by the f2c'd SPICELIB routine.  Adjust
    the start index to account for Fortran indexing.
    */
 
@@ -216,7 +222,7 @@
    retval  =  posr_ ( (char     *) str,
                       (char     *) substr,
                       (integer  *) &fstart,
-                      (ftnlen    ) strlen(str), 
+                      (ftnlen    ) strlen(str),
                       (ftnlen    ) strlen(substr)  );
 
    /*
@@ -224,5 +230,5 @@
    */
    return ( retval-1 );
 
-  
+
 } /* End posr_c */

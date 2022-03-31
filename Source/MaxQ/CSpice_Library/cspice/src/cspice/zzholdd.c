@@ -396,6 +396,11 @@ static integer c__4 = 4;
 
 /* $ Version */
 
+/* -   SPICELIB Version 1.2.0  07-OCT-2021 (EDW) */
+
+/*      Added explicit output argument assignments for */
+/*      return-on-entry case. */
+
 /* -   SPICELIB Version 1.1.0  03-DEC-2013 (EDW) */
 
 /*       Added ID and OK arguments to routine, generalizing use. */
@@ -421,6 +426,8 @@ static integer c__4 = 4;
 /*     Standard SPICE error handling. */
 
     if (return_()) {
+	*value = 0.;
+	*ok = FALSE_;
 	return 0;
     }
 
@@ -445,7 +452,7 @@ static integer c__4 = 4;
     if (init) {
 	for (i__ = 1; i__ <= 4; ++i__) {
 	    first[(i__1 = i__ - 1) < 4 && 0 <= i__1 ? i__1 : s_rnge("first", 
-		    i__1, "zzholdd_", (ftnlen)318)] = TRUE_;
+		    i__1, "zzholdd_", (ftnlen)325)] = TRUE_;
 	}
 	init = FALSE_;
     }
@@ -463,7 +470,7 @@ static integer c__4 = 4;
 /*            OK as false. */
 
 	if (first[(i__1 = *id - 1) < 4 && 0 <= i__1 ? i__1 : s_rnge("first", 
-		i__1, "zzholdd_", (ftnlen)341)]) {
+		i__1, "zzholdd_", (ftnlen)348)]) {
 	    *value = 0.;
 	    *ok = FALSE_;
 	} else {
@@ -471,7 +478,7 @@ static integer c__4 = 4;
 /*           Return the stored value. */
 
 	    *value = svalue[(i__1 = *id - 1) < 4 && 0 <= i__1 ? i__1 : s_rnge(
-		    "svalue", i__1, "zzholdd_", (ftnlen)351)];
+		    "svalue", i__1, "zzholdd_", (ftnlen)358)];
 	    *ok = TRUE_;
 	}
     } else if (*op == -2) {
@@ -480,18 +487,18 @@ static integer c__4 = 4;
 /*        so subsequent get calls will work. */
 
 	if (first[(i__1 = *id - 1) < 4 && 0 <= i__1 ? i__1 : s_rnge("first", 
-		i__1, "zzholdd_", (ftnlen)363)]) {
+		i__1, "zzholdd_", (ftnlen)370)]) {
 	    first[(i__1 = *id - 1) < 4 && 0 <= i__1 ? i__1 : s_rnge("first", 
-		    i__1, "zzholdd_", (ftnlen)365)] = FALSE_;
+		    i__1, "zzholdd_", (ftnlen)372)] = FALSE_;
 	}
 	svalue[(i__1 = *id - 1) < 4 && 0 <= i__1 ? i__1 : s_rnge("svalue", 
-		i__1, "zzholdd_", (ftnlen)369)] = *value;
+		i__1, "zzholdd_", (ftnlen)376)] = *value;
     } else if (*op == -3) {
 
 /*        Reset FIRST( ID ) forcing a put before a get. */
 
 	first[(i__1 = *id - 1) < 4 && 0 <= i__1 ? i__1 : s_rnge("first", i__1,
-		 "zzholdd_", (ftnlen)376)] = TRUE_;
+		 "zzholdd_", (ftnlen)383)] = TRUE_;
     } else {
 
 /*        Unknown value for 'OP'. Signal an error. */

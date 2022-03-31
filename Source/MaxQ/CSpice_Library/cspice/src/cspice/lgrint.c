@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      LGRINT ( Lagrange polynomial interpolation ) */
+/* $Procedure LGRINT ( Lagrange polynomial interpolation ) */
 doublereal lgrint_(integer *n, doublereal *xvals, doublereal *yvals, 
 	doublereal *work, doublereal *x)
 {
@@ -66,7 +66,7 @@ doublereal lgrint_(integer *n, doublereal *xvals, doublereal *yvals,
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     N          I   Number of points defining the polynomial. */
 /*     XVALS      I   Abscissa values. */
@@ -80,28 +80,25 @@ doublereal lgrint_(integer *n, doublereal *xvals, doublereal *yvals,
 
 /* $ Detailed_Input */
 
-/*     N              is the number of points defining the polynomial. */
-/*                    The arrays XVALS and YVALS contain N elements. */
-
+/*     N        is the number of points defining the polynomial. */
+/*              The arrays XVALS and YVALS contain N elements. */
 
 /*     XVALS, */
-/*     YVALS          are arrays of abscissa and ordinate values that */
-/*                    together define N ordered pairs.  The set of points */
+/*     YVALS    are arrays of abscissa and ordinate values that */
+/*              together define N ordered pairs. The set of points */
 
-/*                       ( XVALS(I), YVALS(I) ) */
+/*                 ( XVALS(I), YVALS(I) ) */
 
-/*                    define the Lagrange polynomial used for */
-/*                    interpolation.  The elements of XVALS must be */
-/*                    distinct and in increasing order. */
+/*              define the Lagrange polynomial used for */
+/*              interpolation. The elements of XVALS must be */
+/*              distinct and in increasing order. */
 
+/*     WORK     is a work space array of the same dimension as */
+/*              XVALS and YVALS. It is used by this routine as a */
+/*              scratch area to hold intermediate results. */
 
-/*     WORK           is a work space array of the same dimension as */
-/*                    XVALS and YVALS.  It is used by this routine as a */
-/*                    scratch area to hold intermediate results. */
-
-
-/*     X              is the abscissa value at which the interpolating */
-/*                    polynomial is to be evaluated. */
+/*     X        is the abscissa value at which the interpolating */
+/*              polynomial is to be evaluated. */
 
 /* $ Detailed_Output */
 
@@ -115,12 +112,12 @@ doublereal lgrint_(integer *n, doublereal *xvals, doublereal *yvals,
 
 /* $ Exceptions */
 
-/*     1)  If any two elements of the array XVALS are equal the error */
-/*         SPICE(DIVIDEBYZERO) will be signaled.  The function will */
-/*         return the value 0.D0. */
+/*     1)  If any two elements of the array XVALS are equal, the error */
+/*         SPICE(DIVIDEBYZERO) is signaled. The function will return the */
+/*         value 0.D0. */
 
 /*     2)  If N is less than 1, the error SPICE(INVALIDSIZE) is */
-/*         signaled.  The function will return the value 0.D0. */
+/*         signaled. The function will return the value 0.D0. */
 
 /*     3)  This routine does not attempt to ward off or diagnose */
 /*         arithmetic overflows. */
@@ -133,18 +130,18 @@ doublereal lgrint_(integer *n, doublereal *xvals, doublereal *yvals,
 
 /*     Given a set of N distinct abscissa values and corresponding */
 /*     ordinate values, there is a unique polynomial of degree N-1, often */
-/*     called the `Lagrange polynomial', that fits the graph defined by */
-/*     these values.  The Lagrange polynomial can be used to interpolate */
+/*     called the "Lagrange polynomial", that fits the graph defined by */
+/*     these values. The Lagrange polynomial can be used to interpolate */
 /*     the value of a function at a specified point, given a discrete */
 /*     set of values of the function. */
 
 /*     Users of this routine must choose the number of points to use */
-/*     in their interpolation method.  The authors of Reference [1] have */
+/*     in their interpolation method. The authors of Reference [1] have */
 /*     this to say on the topic: */
 
 /*        Unless there is solid evidence that the interpolating function */
-/*        is close in form to the true function f, it is a good idea to */
-/*        be cautious about high-order interpolation.  We */
+/*        is close in form to the true function F, it is a good idea to */
+/*        be cautious about high-order interpolation. We */
 /*        enthusiastically endorse interpolations with 3 or 4 points, we */
 /*        are perhaps tolerant of 5 or 6; but we rarely go higher than */
 /*        that unless there is quite rigorous monitoring of estimated */
@@ -155,62 +152,69 @@ doublereal lgrint_(integer *n, doublereal *xvals, doublereal *yvals,
 
 /*        ...the dangers of extrapolation cannot be overemphasized: */
 /*        An interpolating function, which is perforce an extrapolating */
-/*        function, will typically go berserk when the argument x is */
+/*        function, will typically go berserk when the argument X is */
 /*        outside the range of tabulated values by more than the typical */
 /*        spacing of tabulated points. */
 
 /* $ Examples */
 
-/*     1)  Fit a cubic polynomial through the points */
+/*     The numerical results shown for this example may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
 
-/*             ( -1, -2 ) */
-/*             (  0, -7 ) */
-/*             (  1, -8 ) */
-/*             (  3, 26 ) */
+/*     1) Fit a cubic polynomial through the points */
 
-/*         and evaluate this polynomial at x = 2. */
+/*            ( -1, -2 ) */
+/*            (  0, -7 ) */
+/*            (  1, -8 ) */
+/*            (  3, 26 ) */
 
+/*        and evaluate this polynomial at X = 2. */
 
-/*            PROGRAM TEST_LGRINT */
-
-/*            DOUBLE PRECISION      LGRINT */
-/*            DOUBLE PRECISION      ANSWER */
-/*            DOUBLE PRECISION      XVALS (4) */
-/*            DOUBLE PRECISION      YVALS (4) */
-/*            DOUBLE PRECISION      WORK  (4) */
-/*            INTEGER               N */
-
-/*            N         =   4 */
-
-/*            XVALS(1)  =  -1 */
-/*            XVALS(2)  =   0 */
-/*            XVALS(3)  =   1 */
-/*            XVALS(4)  =   3 */
-
-/*            YVALS(1)  =  -2 */
-/*            YVALS(2)  =  -7 */
-/*            YVALS(3)  =  -8 */
-/*            YVALS(4)  =  26 */
-
-/*            ANSWER    =   LGRINT ( N, XVALS, YVALS, WORK, 2.D0 ) */
-
-/*            WRITE (*,*) 'ANSWER = ', ANSWER */
-/*            END */
-
-
-/*        The returned value of ANSWER should be 1.D0, since the */
+/*        The returned value of LGRINT should be 1.D0, since the */
 /*        unique cubic polynomial that fits these points is */
 
 /*                     3      2 */
-/*           f(x)  =  x   + 2x   - 4x  - 7 */
+/*           F(X)  =  X  + 2*X  - 4*X - 7 */
 
 
-/*        We also could have invoked LGRINT with the reference */
+/*        Example code begins here. */
 
-/*            ANSWER    =   LGRINT ( N, XVALS, YVALS, YVALS, 2.D0 ) */
 
-/*        if we wished to; in this case YVALS would have been */
-/*        modified on output. */
+/*              PROGRAM LGRINT_EX1 */
+/*              IMPLICIT NONE */
+
+/*              DOUBLE PRECISION      LGRINT */
+/*              DOUBLE PRECISION      ANSWER */
+/*              DOUBLE PRECISION      XVALS (4) */
+/*              DOUBLE PRECISION      YVALS (4) */
+/*              DOUBLE PRECISION      WORK  (4) */
+/*              INTEGER               N */
+
+/*              N         =   4 */
+
+/*              XVALS(1)  =  -1.D0 */
+/*              XVALS(2)  =   0.D0 */
+/*              XVALS(3)  =   1.D0 */
+/*              XVALS(4)  =   3.D0 */
+
+/*              YVALS(1)  =  -2.D0 */
+/*              YVALS(2)  =  -7.D0 */
+/*              YVALS(3)  =  -8.D0 */
+/*              YVALS(4)  =  26.D0 */
+
+/*              ANSWER    =   LGRINT ( N, XVALS, YVALS, WORK, 2.D0 ) */
+
+/*              WRITE (*,*) 'ANSWER = ', ANSWER */
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*         ANSWER =    1.0000000000000000 */
 
 
 /* $ Restrictions */
@@ -219,15 +223,23 @@ doublereal lgrint_(integer *n, doublereal *xvals, doublereal *yvals,
 
 /* $ Literature_References */
 
-/*     [1]  "Numerical Recipes---The Art of Scientific Computing" by */
-/*           William H. Press, Brian P. Flannery, Saul A. Teukolsky, */
-/*           William T. Vetterling (see sections 3.0 and 3.1). */
+/*     [1]  W. Press, B. Flannery, S. Teukolsky and W. Vetterling, */
+/*          "Numerical Recipes -- The Art of Scientific Computing," */
+/*          chapters 3.0 and 3.1, Cambridge University Press, 1986. */
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 19-MAY-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Updated the header to comply with NAIF standard. */
+/*        Added "IMPLICIT NONE" to code example. */
 
 /* -    SPICELIB Version 1.0.1, 10-JAN-2014 (NJB) */
 
@@ -240,7 +252,6 @@ doublereal lgrint_(integer *n, doublereal *xvals, doublereal *yvals,
 /* -    SPICELIB Version 1.0.0, 16-AUG-1993 (NJB) */
 
 /* -& */
-
 /* $ Index_Entries */
 
 /*     interpolate function using Lagrange polynomial */

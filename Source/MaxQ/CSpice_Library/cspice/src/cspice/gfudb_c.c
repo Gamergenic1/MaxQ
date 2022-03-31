@@ -1,4 +1,5 @@
 /*
+
 -Procedure gfudb_c ( GF, user defined boolean )
 
 -Abstract
@@ -41,6 +42,7 @@
    GEOMETRY
    SEARCH
    WINDOW
+
 */
 
 
@@ -51,121 +53,160 @@
    #include "SpiceZad.h"
    #undef   gfudb_c
 
-   void gfudb_c (  void             ( * udfuns ) ( SpiceDouble       et,
-                                                   SpiceDouble     * value ),
+   void gfudb_c (  void            ( * udfuns ) ( SpiceDouble       et,
+                                                  SpiceDouble     * value ),
 
-                   void             ( * udfunb ) ( void ( * udfuns )
-                                                        ( SpiceDouble   et,
-                                                          SpiceDouble * value ),
+                   void            ( * udfunb ) ( void ( * udfuns )
+                                                       ( SpiceDouble   et,
+                                                         SpiceDouble * value ),
 
-                                                   SpiceDouble       et,
-                                                   SpiceBoolean    * xbool ),
+                                                  SpiceDouble       et,
+                                                  SpiceBoolean    * xbool ),
 
                    SpiceDouble          step,
                    SpiceCell          * cnfine,
                    SpiceCell          * result )
 
 /*
+
 -Brief_I/O
 
    VARIABLE  I/O  DESCRIPTION
    --------  ---  --------------------------------------------------
-   udfuns     I   Name of the routine that computes a scalar quantity of
-                  interest corresponding to an `et'.
+   SPICE_GF_CNVTOL
+              P   Convergence tolerance.
+   udfuns     I   Name of the routine that computes a scalar
+                  quantity corresponding to an `et'.
    udfunb     I   Name of the routine returning the boolean value
                   corresponding to an `et'.
-   step       I   Step size used for locating extrema and roots.
+   step       I   Constant step size in seconds for finding geometric
+                  events.
    cnfine    I-O  SPICE window to which the search is restricted.
    result     O   SPICE window containing results.
 
 -Detailed_Input
 
-   udfuns     the name of the external routine that returns the
-              value of the scalar quantity of interest at time `et'.
-              The calling sequence for "udfuns" is:
+   udfuns      is the routine that returns the value of the scalar
+               quantity of interest at time `et'. The prototype of
+               `udfuns' is:
 
-                 udfuns ( et, &value )
+                  void   ( * udfuns ) ( SpiceDouble       et,
+                                        SpiceDouble     * value )
 
-              where:
+               where:
 
-                 et      a double precision value representing
-                         ephemeris time, expressed as seconds past
-                         J2000 TDB at which to evaluate "udfuns."
-
-                 value   is the value of the geometric quantity
-                         at `et'.
-
-   udfunb     the user defined routine returning a boolean value
-              for an epoch ET. The calling sequence for "udfunb" is:
-
-                 udfunb ( udfuns, et, xbool )
-
-              where:
-
-                 udfuns   the name of the scalar function as defined above.
-
-                 et       a double precision value representing
+                  et      a double precision value representing
                           ephemeris time, expressed as seconds past
-                          J2000 TDB, at which to evaluate "udfunb."
+                          J2000 TDB at which to evaluate `udfuns'.
 
-                 xbool     the boolean value at `et'.
+                  value   is the value of the scalar quantity
+                          at `et'.
 
-              gfudb_c will correctly operate only for boolean
-              functions with true conditions defining non zero
-              measure time intervals.
+   udfunb      is the user defined routine returning a boolean value for
+               an epoch `et'. The prototype of `udfunb' is:
 
-              Note, "udfunb" need not call "udfuns." The use of "udfuns"
-              is determined by the needs of the calculation and
-              the user's design.
+                 void    ( * udfunb ) ( void          ( * udfuns )
+                                                    ( SpiceDouble   et,
+                                                      SpiceDouble * value ),
+                                        SpiceDouble       et,
+                                        SpiceBoolean    * xbool )
 
-   step       the double precision time step size to use in
-              the search.
+               where:
 
-              `step' must be shorter than any interval, within the
-              confinement window, over which the user defined boolean
-              function is met. In other words, `step' must be shorter
-              than the shortest time interval for which the boolean
-              function is true; `step' must also be shorter than the
-              shortest time interval between two boolean function true events
-              occurring within the confinement window (see below).
-              However, `step' must not be *too* short, or the search
-              will take an unreasonable amount of time.
+                  udfuns   the name of the scalar function as
+                           defined above.
 
-              The choice of `step' affects the completeness but not
-              the precision of solutions found by this routine; the
-              precision is controlled by the convergence tolerance.
-              See the discussion of the parameter SPICE_GF_CNVTOL for
-              details.
+                  et       a double precision value representing
+                           ephemeris time, expressed as seconds past
+                           J2000 TDB, at which to evaluate `udfunb'.
 
-              `step' has units of TDB seconds.
+                  xbool     the boolean value at `et'.
 
-   cnfine     a double precision SPICE window that confines the time
-              period over which the specified search is conducted.
-              cnfine may consist of a single interval or a collection
-              of intervals.
+               gfudb_c will correctly operate only for boolean functions
+               with true conditions defining non zero measure time
+               intervals.
 
-              In some cases the confinement window can be used to
-              greatly reduce the time period that must be searched
-              for the desired solution. See the Particulars section
-              below for further discussion.
+               Note, `udfunb' need not call `udfuns'. The use of `udfuns' is
+               determined by the needs of the calculation and the user's
+               design.
 
-              See the Examples section below for a code example
-              that shows how to create a confinement window.
+   step        is the step size to be used in the search. `step' must be
+               shorter than any interval, within the confinement window,
+               over which the user defined boolean function is met. In
+               other words, `step' must be shorter than the shortest time
+               interval for which the boolean function is true; `step'
+               must also be shorter than the shortest time interval
+               between two boolean function true events occurring within
+               the confinement window (see below). However, `step' must
+               not be *too* short, or the search will take an
+               unreasonable amount of time.
+
+               The choice of `step' affects the completeness but not
+               the precision of solutions found by this routine; the
+               precision is controlled by the convergence tolerance.
+               See the discussion of the parameter SPICE_GF_CNVTOL for
+               details.
+
+               `step' has units of TDB seconds.
+
+   cnfine      is a SPICE window that confines the time period over
+               which the specified search is conducted. `cnfine' may
+               consist of a single interval or a collection of
+               intervals.
+
+               In some cases the confinement window can be used to
+               greatly reduce the time period that must be searched
+               for the desired solution. See the -Particulars section
+               below for further discussion.
+
+               See the -Examples section below for a code example
+               that shows how to create a confinement window.
+
+               In some cases the observer's state may be computed at
+               times outside of `cnfine' by as much as 2 seconds. See
+               -Particulars for details.
+
+               `cnfine' must be declared as a double precision SpiceCell.
+
+               CSPICE provides the following macro, which declares and
+               initializes the cell
+
+                  SPICEDOUBLE_CELL        ( cnfine, CNFINESZ );
+
+               where CNFINESZ is the maximum capacity of `cnfine'.
 
 -Detailed_Output
 
-   cnfine     is the input confinement window, updated if necessary
-              so the control area of its data array indicates the
-              window's size and cardinality. The window data are
-              unchanged.
+   cnfine      is the input confinement window, updated if necessary so the
+               control area of its data array indicates the window's size
+               and cardinality. The window data are unchanged.
 
-   result     is a SPICE window representing the set of time
-              intervals, within the confinement period, when the
-              specified geometric event occurs.
+   result      is a SPICE window containing the time intervals within
+               the confinement window, during which the specified
+               boolean quantity is SPICETRUE.
 
-              If `result' is non-empty on input, its contents
-              will be discarded before gfuds_c conducts its
-              search.
+               `result' must be declared and initialized with sufficient
+               size to capture the full set of time intervals within the
+               search region on which the specified condition is satisfied.
+
+               If `result' is non-empty on input, its contents will be
+               discarded before gfudb_c conducts its search.
+
+               The endpoints of the time intervals comprising `result' are
+               interpreted as seconds past J2000 TDB.
+
+               If no times within the confinement window satisfy the
+               search criteria, `result' will be returned with a
+               cardinality of zero.
+
+               `result' must be declared as a double precision SpiceCell.
+
+               CSPICE provides the following macro, which declares and
+               initializes the cell
+
+                  SPICEDOUBLE_CELL        ( result, RESULTSZ );
+
+               where RESULTSZ is the maximum capacity of `result'.
 
 -Parameters
 
@@ -195,60 +236,63 @@
        to run unacceptably slowly and in some cases, find spurious
        roots.
 
-       This routine does not diagnose invalid step sizes, except
-       that if the step size is non-positive, an error is signaled
-       by a routine in the call tree of this routine.
+       This routine does not diagnose invalid step sizes, except that
+       if the step size is non-positive, an error is signaled by a
+       routine in the call tree of this routine.
 
    2)  Due to numerical errors, in particular,
 
-          - Truncation error in time values
-          - Finite tolerance value
-          - Errors in computed geometric quantities
+          - truncation error in time values
+          - finite tolerance value
+          - errors in computed geometric quantities
 
        it is *normal* for the condition of interest to not always be
        satisfied near the endpoints of the intervals comprising the
-       result window.
-
-       The result window may need to be contracted slightly by the
-       caller to achieve desired results. The SPICE window routine
-       wncond_c can be used to contract the result window.
+       `result' window. One technique to handle such a situation,
+       slightly contract `result' using the window routine wncond_c.
 
    3)  If an error (typically cell overflow) occurs while performing
-       window arithmetic, the error will be diagnosed by a routine
+       window arithmetic, the error is signaled by a routine
        in the call tree of this routine.
 
-   4)  If required ephemerides or other kernel data are not
+   4)  If the size of the SPICE window `result' is less than 2 or not
+       an even value, the error SPICE(INVALIDDIMENSION) is signaled
+       by a routine in the call tree of this routine.
+
+   5)  If `result' has insufficient capacity to contain the number of
+       intervals on which the specified condition is met, an error is
+       signaled by a routine in the call tree of this routine.
+
+   6)  If required ephemerides or other kernel data are not
        available, an error is signaled by a routine in the call tree
        of this routine.
 
-   5) If the output SPICE window `result' has insufficient capacity to
-      contain the number of intervals on which the specified geometric
-      condition is met, the error will be diagnosed by a routine in
-      the call tree of this routine. If the result window has size
-      less than 2, the error SPICE(INVALIDDIMENSION) will signal.
-
-   6) If either input cell has type other than SpiceDouble,
-      the error SPICE(TYPEMISMATCH) will signaled from a routine
-      in the call tree of this routine.
+   7)  If any the `cnfine' or `result' cell arguments has a type
+       other than SpiceDouble, the error SPICE(TYPEMISMATCH) is
+       signaled.
 
 -Files
 
    Appropriate kernels must be loaded by the calling program before
    this routine is called.
 
-   If the user defined function requires access to ephemeris data:
+   If the boolean function requires access to ephemeris data:
 
-      - SPK data: ephemeris data for any body over the
-        time period defined by the confinement window must be
-        loaded. If aberration corrections are used, the states of
-        target and observer relative to the solar system barycenter
-        must be calculable from the available ephemeris data.
-        Typically ephemeris data are made available by loading one
-        or more SPK files via furnsh_c.
+   -  SPK data: ephemeris data for any body over the
+      time period defined by the confinement window must be
+      loaded. If aberration corrections are used, the states of
+      target and observer relative to the solar system barycenter
+      must be calculable from the available ephemeris data.
+      Typically ephemeris data are made available by loading one
+      or more SPK files via furnsh_c.
 
-      - If non-inertial reference frames are used, then PCK
-        files, frame kernels, C-kernels, and SCLK kernels may be
-        needed.
+   -  If non-inertial reference frames are used, then PCK
+      files, frame kernels, C-kernels, and SCLK kernels may be
+      needed.
+
+   -  Certain computations can expand the time window over which
+      `udfuns' and `udfunb' require data; such data must be provided by
+      loaded kernels. See -Particulars for details.
 
    In all cases, kernel data are normally loaded once per program
    run, NOT every time this routine is called.
@@ -264,7 +308,6 @@
    solution process that are relevant to correct and efficient
    use of this routine in user applications.
 
-
    udfuns Default Template
    =======================
 
@@ -274,14 +317,12 @@
    scalar routine, udf_c, as a dummy argument for instances when
    the boolean function does not need to call the scalar function.
 
-
    The Search Process
    ==================
 
    The search for boolean events is treated as a search for state
    transitions: times are sought when the boolean function value
    changes from true to false or vice versa.
-
 
    Step Size
    =========
@@ -319,21 +360,22 @@
    narrow down the time interval within which the root must lie.
    This refinement process terminates when the location of the root
    has been determined to within an error margin called the
-   "convergence tolerance." The convergence tolerance used by this
-   routine is set via the parameter SPICE_GF_CNVTOL.
+   "convergence tolerance." The default convergence tolerance
+   used by this routine is set by the parameter SPICE_GF_CNVTOL (defined
+   in SpiceGF.h).
 
    The value of SPICE_GF_CNVTOL is set to a "tight" value so that the
-   tolerance doesn't limit the accuracy of solutions found by this
-   routine. In general the accuracy of input data will be the limiting
-   factor.
+   tolerance doesn't become the limiting factor in the accuracy of
+   solutions found by this routine. In general the accuracy of input
+   data will be the limiting factor.
 
    The user may change the convergence tolerance from the default
    SPICE_GF_CNVTOL value by calling the routine gfstol_c, e.g.
 
-      gfstol_c( tolerance value )
+      gfstol_c ( tolerance value );
 
    Call gfstol_c prior to calling this routine. All subsequent
-   searches will use the updated reference value.
+   searches will use the updated tolerance value.
 
    Setting the tolerance tighter than SPICE_GF_CNVTOL is unlikely to be
    useful, since the results are unlikely to be more accurate.
@@ -353,11 +395,37 @@
    a time window over which required data are known to be
    available.
 
-   In some cases, the confinement window can be used to make searches
-   more efficient. Sometimes it's possible to do an efficient search
-   to reduce the size of the time period over which a relatively
-   slow search of interest must be performed. See the "CASCADE"
-   example program in gf.req for a demonstration.
+   In some cases, the confinement window can be used to make
+   searches more efficient. Sometimes it's possible to do an
+   efficient search to reduce the size of the time period over
+   which a relatively slow search of interest must be performed.
+   See the "CASCADE" example program in gf.req for a demonstration.
+
+   Certain user-defined computations may expand the window over
+   which computations are performed. Here "expansion" of a window by
+   an amount "T" means that the left endpoint of each interval
+   comprising the window is shifted left by T, the right endpoint of
+   each interval is shifted right by T, and any overlapping
+   intervals are merged. Note that the input window `cnfine' itself is
+   not modified.
+
+   Computation of observer-target states by spkezr_c or spkez_c, using
+   stellar aberration corrections, requires the state of the
+   observer, relative to the solar system barycenter, to be computed
+   at times offset from the input time by +/- 1 second. If the input
+   time ET is used by `udfuns' or `udfunb' to compute such a state, the
+   window over which the observer state is computed is expanded by 1
+   second.
+
+   When light time corrections are used in the computation of
+   observer-target states, expansion of the search window also
+   affects the set of times at which the light time-corrected states
+   of the targets are computed.
+
+   In addition to possible expansion of the search window when
+   stellar aberration corrections are used, round-off error should
+   be taken into account when the need for data availability is
+   analyzed.
 
 -Examples
 
@@ -366,12 +434,18 @@
    input, the compiler and supporting libraries, and the machine
    specific arithmetic implementation.
 
-   Use the meta-kernel shown below to load the required SPICE
-   kernels.
+   1) Calculate the time intervals when the position of the moon relative
+      to the earth in the IAU_EARTH frame has a positive value in for
+      the Z position component, with also a positive value for the Vz
+      velocity component.
+
+      Use the meta-kernel shown below to load the required SPICE
+      kernels.
+
 
          KPL/MK
 
-         File name: standard.tm
+         File name: gfudb_ex1.tm
 
          This meta-kernel is intended to support operation of SPICE
          example programs. The kernels shown here should not be
@@ -382,6 +456,16 @@
          kernels referenced here must be present in the user's
          current working directory.
 
+         The names and contents of the kernels referenced
+         by this meta-kernel are as follows:
+
+            File name                     Contents
+            ---------                     --------
+            de418.bsp                     Planetary ephemeris
+            pck00008.tpc                  Planet orientation and
+                                          radii
+            naif0009.tls                  Leapseconds
+
 
          \begindata
 
@@ -391,20 +475,17 @@
 
          \begintext
 
-   Example(1):
+         End of meta-kernel
 
-   Calculate the time intervals when the position of the moon relative
-   to the earth in the IAU_EARTH frame has a positive value in for
-   the Z position component, with also a positive value for the Vz
-   velocity component.
 
+      Example code begins here.
+
+
+      /.
+         Program gfudb_ex1
+      ./
       #include <stdio.h>
-      #include <stdlib.h>
-      #include <string.h>
-
       #include "SpiceUsr.h"
-      #include "SpiceZfc.h"
-      #include "SpiceZad.h"
 
 
       #define       MAXWIN    20000
@@ -417,7 +498,7 @@
                  SpiceDouble et,
                  SpiceBoolean * xbool );
 
-      int main( int argc, char **argv )
+      int main( )
          {
 
          /.
@@ -434,7 +515,7 @@
          SpiceDouble       left;
          SpiceDouble       right;
          SpiceDouble       step;
-         SpiceDouble       ltime;
+         SpiceDouble       lt;
          SpiceDouble       state  [6];
 
          SpiceChar         begstr [ TIMLEN ];
@@ -443,19 +524,17 @@
          SpiceInt          count;
          SpiceInt          i;
 
-         printf( "Compile date %s, %s\n\n", __DATE__, __TIME__ );
-
          /.
          Load kernels.
          ./
-         furnsh_c( "standard.tm" );
+         furnsh_c( "gfudb_ex1.tm" );
 
          /.
          Store the time bounds of our search interval in the 'cnfine'
          confinement window.
          ./
          str2et_c ( "Jan 1 2011", &begtim );
-         str2et_c ( "Jan 1 2012", &endtim );
+         str2et_c ( "Apr 1 2011", &endtim );
 
          wninsd_c ( begtim, endtim, &cnfine );
 
@@ -499,13 +578,13 @@
 
                timout_c ( left, TIMFMT, TIMLEN, begstr );
                printf   ( "   Interval start: %s \n", begstr );
-               spkez_c  ( 301, left, "IAU_EARTH", "NONE", 399, state, &ltime);
+               spkez_c  ( 301, left, "IAU_EARTH", "NONE", 399, state, &lt);
                printf   ( "                Z= %.12g \n", state[2] );
                printf   ( "               Vz= %.12g \n", state[5] );
 
                timout_c ( right, TIMFMT, TIMLEN, endstr );
                printf   ( "   Interval end  : %s \n", endstr );
-               spkez_c  ( 301, right, "IAU_EARTH", "NONE", 399, state, &ltime);
+               spkez_c  ( 301, right, "IAU_EARTH", "NONE", 399, state, &lt);
                printf   ( "                Z= %.12g \n",   state[2] );
                printf   ( "               Vz= %.12g \n\n", state[5] );
                }
@@ -575,73 +654,51 @@
          return;
          }
 
-   The program outputs:
+
+      When this program was executed on a Mac/Intel/cc/64-bit
+      platform, the output was:
+
 
       Interval 0
-         Interval start: 2011-JAN-09 15:24:23.415
-                      Z= -3.67969050785e-08
-                     Vz= 0.396984084929
-         Interval end  : 2011-JAN-16 16:08:28.563
-                      Z= 156247.488202
-                     Vz= 3.76859567858e-13
+         Interval start: 2011-JAN-09 15:24:23.416
+                      Z= -1.12510406325e-07
+                     Vz= 0.396984084546
+         Interval end  : 2011-JAN-16 16:08:28.564
+                      Z= 156247.488042
+                     Vz= 4.0992339731e-13
 
       Interval 1
          Interval start: 2011-FEB-05 23:17:57.359
-                      Z= -3.98442807636e-08
-                     Vz= 0.396781283223
-         Interval end  : 2011-FEB-13 01:38:28.425
-                      Z= 157016.055162
-                     Vz= 3.2238816651e-13
+                      Z= -1.24675068491e-07
+                     Vz= 0.396781282843
+         Interval end  : 2011-FEB-13 01:38:28.426
+                      Z= 157016.055001
+                     Vz= 1.73745783386e-13
 
       Interval 2
-         Interval start: 2011-MAR-05 06:08:17.667
-                      Z= -1.16190221888e-08
-                     Vz= 0.393990253999
-         Interval end  : 2011-MAR-12 10:27:45.188
-                      Z= 157503.773934
-                     Vz= -3.41879302646e-13
-
-                        ...
-
-      Interval 11
-         Interval start: 2011-NOV-05 18:43:39.742
-                      Z= -1.80199890565e-08
-                     Vz= 0.373937629543
-         Interval end  : 2011-NOV-13 03:50:17.153
-                      Z= 153172.086618
-                     Vz= -3.62962481251e-13
-
-      Interval 12
-         Interval start: 2011-DEC-03 01:16:40.817
-                      Z= 1.30391470066e-07
-                     Vz= 0.374257845032
-         Interval end  : 2011-DEC-10 09:51:07.718
-                      Z= 152511.720377
-                     Vz= 2.11386680729e-13
-
-      Interval 13
-         Interval start: 2011-DEC-30 09:48:57.409
-                      Z= 9.79434844339e-09
-                     Vz= 0.377333201453
-         Interval end  : 2012-JAN-01 00:00:00.000
-                      Z= 50793.0833127
-                     Vz= 0.354549969268
+         Interval start: 2011-MAR-05 06:08:17.668
+                      Z= -7.77218360781e-08
+                     Vz= 0.393990253634
+         Interval end  : 2011-MAR-12 10:27:45.189
+                      Z= 157503.773777
+                     Vz= -2.97863513368e-13
 
 
-   Example(2):
+   2) Calculate the time intervals when the Z component of the earth
+      to moon position vector in the IAU_EARTH frame has value
+      between -1000 km and 1000 km (e.g. above and below the equatorial
+      plane).
 
-   Calculate the time intervals when the Z component of the earth
-   to moon position vector in the IAU_EARTH frame has value
-   between -1000 km and 1000 km (e.g. above and below the equatorial
-   plane).
+      Use the meta-kernel from the first example.
 
 
-      Code:
+      Example code begins here.
 
+
+      /.
+         Program gfudb_ex2
+      ./
       #include <stdio.h>
-      #include <stdlib.h>
-      #include <string.h>
-
       #include "SpiceUsr.h"
 
 
@@ -659,7 +716,7 @@
                  SpiceDouble    et,
                  SpiceBoolean * xbool );
 
-      int main( int argc, char **argv )
+      int main( )
          {
 
          /.
@@ -676,7 +733,7 @@
          SpiceDouble       left;
          SpiceDouble       right;
          SpiceDouble       step;
-         SpiceDouble       ltime;
+         SpiceDouble       lt;
          SpiceDouble       state  [6];
 
          SpiceChar         begstr [ TIMLEN ];
@@ -685,19 +742,17 @@
          SpiceInt          count;
          SpiceInt          i;
 
-         printf( "Compile date %s, %s\n\n", __DATE__, __TIME__ );
-
          /.
          Load kernels.
          ./
-         furnsh_c( "standard.tm" );
+         furnsh_c( "gfudb_ex1.tm" );
 
          /.
          Store the time bounds of our search interval in the 'cnfine'
          confinement window.
          ./
          str2et_c ( "Jan 1 2011", &begtim );
-         str2et_c ( "Jan 1 2012", &endtim );
+         str2et_c ( "Apr 1 2011", &endtim );
 
          wninsd_c ( begtim, endtim, &cnfine );
 
@@ -739,12 +794,12 @@
 
                timout_c ( left, TIMFMT, TIMLEN, begstr );
                printf   ( "   Interval start: %s \n", begstr );
-               spkez_c  ( 301, left, "IAU_EARTH", "NONE", 399, state, &ltime);
+               spkez_c  ( 301, left, "IAU_EARTH", "NONE", 399, state, &lt);
                printf   ( "                Z= %.12g \n", state[2] );
 
                timout_c ( right, TIMFMT, TIMLEN, endstr );
                printf   ( "   Interval end  : %s \n", endstr );
-               spkez_c  ( 301, right, "IAU_EARTH", "NONE", 399, state, &ltime);
+               spkez_c  ( 301, right, "IAU_EARTH", "NONE", 399, state, &lt);
                printf   ( "                Z= %.12g \n",   state[2] );
                }
 
@@ -838,49 +893,47 @@
          return;
          }
 
-   The program outputs:
+
+      When this program was executed on a Mac/Intel/cc/64-bit
+      platform, the output was:
+
 
       Interval 0
-         Interval start: 2011-JAN-09 14:42:24.484
-                      Z= -999.999999903
-         Interval end  : 2011-JAN-09 16:06:22.502
-                      Z= 1000.00000009
-      Interval 1
-         Interval start: 2011-JAN-23 04:07:44.455
-                      Z= 1000.00000012
-         Interval end  : 2011-JAN-23 05:23:06.243
-                      Z= -1000.00000011
-      Interval 2
-         Interval start: 2011-FEB-05 22:35:57.156
-                      Z= -999.999999975
-         Interval end  : 2011-FEB-05 23:59:57.748
-                      Z= 999.999999891
-
-                        ...
-
-      Interval 24
-         Interval start: 2011-DEC-03 00:32:08.820
-                      Z= -999.99999988
-         Interval end  : 2011-DEC-03 02:01:12.769
+         Interval start: 2011-JAN-09 14:42:24.485
+                      Z= -999.999999841
+         Interval end  : 2011-JAN-09 16:06:22.503
                       Z= 999.999999876
-      Interval 25
-         Interval start: 2011-DEC-17 10:17:24.039
-                      Z= 1000.00000008
-         Interval end  : 2011-DEC-17 11:40:37.223
-                      Z= -999.999999975
-      Interval 26
-         Interval start: 2011-DEC-30 09:04:47.275
-                      Z= -1000.00000005
-         Interval end  : 2011-DEC-30 10:33:07.670
-                      Z= 999.999999868
+      Interval 1
+         Interval start: 2011-JAN-23 04:07:44.456
+                      Z= 999.999999922
+         Interval end  : 2011-JAN-23 05:23:06.244
+                      Z= -1000.00000013
+      Interval 2
+         Interval start: 2011-FEB-05 22:35:57.157
+                      Z= -1000.0000001
+         Interval end  : 2011-FEB-05 23:59:57.749
+                      Z= 999.999999843
+      Interval 3
+         Interval start: 2011-FEB-19 14:11:28.294
+                      Z= 1000.0000001
+         Interval end  : 2011-FEB-19 15:26:01.719
+                      Z= -999.999999854
+      Interval 4
+         Interval start: 2011-MAR-05 05:25:59.562
+                      Z= -1000.00000003
+         Interval end  : 2011-MAR-05 06:50:35.862
+                      Z= 1000.00000009
+      Interval 5
+         Interval start: 2011-MAR-19 01:30:19.166
+                      Z= 999.99999983
+         Interval end  : 2011-MAR-19 02:45:21.112
+                      Z= -1000.00000001
 
-   Recall the default convergence tolerance for the GF system has
-   value 10^-6 seconds.
 
 -Restrictions
 
-   1) Any kernel files required by this routine must be loaded
-      before this routine is called.
+   1)  Any kernel files required by this routine must be loaded
+       before this routine is called.
 
 -Literature_References
 
@@ -888,16 +941,29 @@
 
 -Author_and_Institution
 
-   N.J. Bachman   (JPL)
-   E.D. Wright    (JPL)
+   N.J. Bachman        (JPL)
+   J. Diaz del Rio     (ODC Space)
+   E.D. Wright         (JPL)
 
 -Version
 
+   -CSPICE Version 1.0.2, 03-NOV-2021 (JDR) (NJB)
+
+       Updated header to describe use of expanded confinement window.
+
+       Edited the header to comply with NAIF standard.
+
+       Reduced the search interval to limit the length of the solutions.
+       Removed "Compile date" printout and unnecessary include files in both
+       examples.
+
+       Updated the description of "cnfine" and "result" arguments.
+
    -CSPICE Version 1.0.1, 28-JUN-2016 (EDW)
 
-      Edit to Example code, SpiceInts output as ints using 
-      explicit casting.
-      
+       Edit to Example code, SpiceInts output as ints using
+       explicit casting.
+
    -CSPICE Version 1.0.0, 23-OCT-2013 (EDW) (NJB)
 
 -Index_Entries
@@ -906,6 +972,7 @@
 
 -&
 */
+
    { /* Begin gfudb_c */
 
    /*

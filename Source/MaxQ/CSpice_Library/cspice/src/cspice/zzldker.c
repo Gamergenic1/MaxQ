@@ -179,6 +179,11 @@
 
 /* $ Version */
 
+/* -    SPICELIB Version 2.1.0, 17-OCT-2021 (BVS) */
+
+/*        Wrapped KERLIN and TERMIN declarations in FORTRAN environment */
+/*        block to silence declared-not-used complaints from f2c. */
+
 /* -    SPICELIB Version 2.0.0, 20-JAN-2016 (NJB) */
 
 /*        Added ability to load DSK files. */

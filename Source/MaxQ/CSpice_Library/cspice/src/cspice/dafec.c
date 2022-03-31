@@ -119,27 +119,27 @@ static integer c__5000 = 5000;
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
-/*      HANDLE    I   Handle of binary DAF opened with read access. */
-/*      BUFSIZ    I   Maximum size, in lines, of BUFFER. */
-/*      N         O   Number of extracted comment lines. */
-/*      BUFFER    O   Buffer where extracted comment lines are placed. */
-/*      DONE      O   Indicates whether all comments have been extracted. */
+/*     HANDLE     I   Handle of binary DAF opened with read access. */
+/*     BUFSIZ     I   Maximum size, in lines, of BUFFER. */
+/*     N          O   Number of extracted comment lines. */
+/*     BUFFER     O   Buffer where extracted comment lines are placed. */
+/*     DONE       O   Indicates whether all comments have been extracted. */
 
 /* $ Detailed_Input */
 
-/*     HANDLE   The file handle of a binary DAF which has been opened */
+/*     HANDLE   is the file handle of a binary DAF which has been opened */
 /*              with read access. */
 
-/*     BUFSIZ   The maximum number of comments that may be placed into */
+/*     BUFSIZ   is the maximum number of comments that may be placed into */
 /*              BUFFER. This would typically be the declared array size */
 /*              for the Fortran character string array passed into this */
 /*              routine. */
 
 /* $ Detailed_Output */
 
-/*     N        The number of comment lines extracted from the comment */
+/*     N        is the number of comment lines extracted from the comment */
 /*              area of the binary DAF attached to HANDLE. This number */
 /*              will be <= BUFSIZ on output. If N = BUFSIZ and DONE <> */
 /*              .TRUE., then there are more comments left to to extract. */
@@ -149,11 +149,11 @@ static integer c__5000 = 5000;
 /*              area, or comments remaining after the extraction process */
 /*              has begun, N > 0, always. */
 
-/*     BUFFER   A array of at most BUFSIZ comments which have been */
+/*     BUFFER   is an array of at most BUFSIZ comments which have been */
 /*              extracted from the comment area of the binary DAF */
 /*              attached to HANDLE. */
 
-/*     DONE     A logical flag indicating whether or not all of the */
+/*     DONE     is a logical flag indicating whether or not all of the */
 /*              comment lines from the comment area of the DAF have */
 /*              been read. This variable has the value .TRUE. after the */
 /*              last comment line has been read. It will have the value */
@@ -168,28 +168,28 @@ static integer c__5000 = 5000;
 
 /* $ Exceptions */
 
-/*     1)   If the size of the output line buffer is is not positive, */
-/*          the error SPICE(INVALIDARGUMENT) will be signaled. */
+/*     1)  If the size of the output line buffer is is not positive, */
+/*         the error SPICE(INVALIDARGUMENT) is signaled. */
 
-/*     3)   If a comment line in a DAF is longer than the length */
-/*          of a character string array element of BUFFER, the error */
-/*          SPICE(COMMENTTOOLONG) will be signaled. */
+/*     2)  If a comment line in a DAF is longer than the length */
+/*         of a character string array element of BUFFER, the error */
+/*         SPICE(COMMENTTOOLONG) is signaled. */
 
-/*     3)   If the end of the comments cannot be found, i.e., the end of */
-/*          comments marker is missing on the last comment record, the */
-/*          error SPICE(BADCOMMENTAREA) will be signaled. */
+/*     3)  If the end of the comments cannot be found, i.e., the end of */
+/*         comments marker is missing on the last comment record, the */
+/*         error SPICE(BADCOMMENTAREA) is signaled. */
 
-/*     4)   If the number of comment characters scanned exceeds the */
-/*          number of comment characters computed, the error */
-/*          SPICE(BADCOMMENTAREA) will be signaled. */
+/*     4)  If the number of comment characters scanned exceeds the */
+/*         number of comment characters computed, the error */
+/*         SPICE(BADCOMMENTAREA) is signaled. */
 
-/*     5)   If the binary DAF attached to HANDLE is not open for */
-/*          reading,an error will be signaled by a routine called by */
-/*          this routine. */
+/*     5)  If the binary DAF attached to HANDLE is not open for reading, */
+/*         an error is signaled by a routine in the call tree of this */
+/*         routine. */
 
 /* $ Files */
 
-/*     See argument HANDLE in $ Detailed_Input. */
+/*     See argument HANDLE in $Detailed_Input. */
 
 /* $ Particulars */
 
@@ -209,143 +209,432 @@ static integer c__5000 = 5000;
 /*     a binary DAF, placing them into a line buffer. If the line */
 /*     buffer is not large enough to hold the entire comment area, */
 /*     the portion read will be returned to the caller, and the DONE */
-/*     flag will be set to .FALSE.. This allows the comment area to be */
+/*     flag will be set to .FALSE. This allows the comment area to be */
 /*     read in ``chunks,'' a buffer at a time. After all of the comment */
-/*     lines have been read, the DONE flag will be set to .TRUE.. */
+/*     lines have been read, the DONE flag will be set to .TRUE. */
 
 /*     This routine can be used to ``simultaneously'' extract comments */
 /*     from the comment areas of multiple binary DAFs. See Example */
-/*     2 in the $ Examples section. */
+/*     2 in the $Examples section. */
 
 /* $ Examples */
 
-/*     Example 1 */
-/*     --------- */
+/*     The numerical results shown for these examples may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
 
-/*     The following example will extract the entire comment area of a */
-/*     binary DAF attached to HANDLE, displaying the comments on the */
-/*     terminal screen. */
+/*     1) The following example will extract a maximum of 30 lines */
+/*        from the comment area of a binary DAF, displaying the */
+/*        comments on the terminal screen. */
 
-/*     Let */
+/*        Although it would be possible to read the 30 lines in one */
+/*        go, for this example, use only a buffer size of 10, */
+/*        demonstrating the use of the DONE logical flag. */
 
-/*        BUFFER  have the following declaration: */
 
-/*           CHARACTER*(80)  BUFFER(25) */
+/*        Use the SPK kernel below as input DAF file for the program. */
 
-/*        HANDLE  be the handle of an open binary DAF file. */
+/*           earthstns_itrf93_201023.bsp */
 
-/*     then */
 
-/*        BUFSIZ = 25 */
-/*        DONE   = .FALSE. */
+/*        Example code begins here. */
 
-/*        DO WHILE ( .NOT. DONE ) */
 
-/*           CALL DAFEC( HANDLE, BUFSIZ, N, BUFFER, DONE ) */
+/*              PROGRAM DAFEC_EX1 */
+/*              IMPLICIT NONE */
 
-/*           DO I = 1, N */
+/*        C */
+/*        C     SPICELIB functions */
+/*        C */
+/*              INTEGER               RTRIM */
 
-/*              WRITE (*,*) BUFFER(I) */
+/*        C */
+/*        C     Local parameters */
+/*        C */
+/*              CHARACTER*(*)         KERNEL */
+/*              PARAMETER           ( KERNEL = */
+/*             .                         'earthstns_itrf93_201023.bsp' ) */
 
-/*           END DO */
+/*              INTEGER               BUFSIZ */
+/*              PARAMETER           ( BUFSIZ = 10 ) */
 
-/*        END DO */
+/*              INTEGER               LINLEN */
+/*              PARAMETER           ( LINLEN = 1000 ) */
 
-/*     Example 2 */
-/*     --------- */
+/*        C */
+/*        C     Local variables. */
+/*        C */
+/*              CHARACTER*(LINLEN)    BUFFER ( BUFSIZ ) */
 
-/*     The following example demonstrates the use of this routine to */
-/*     simultaneously read the comment areas of multiple DAFs. For each */
-/*     file, the comments will be displayed on the screen as they are */
-/*     extracted. */
+/*              INTEGER               HANDLE */
+/*              INTEGER               I */
+/*              INTEGER               J */
+/*              INTEGER               N */
 
-/*     Let */
+/*              LOGICAL               DONE */
 
-/*        BUFFER  have the following declaration: */
+/*        C */
+/*        C     Open a DAF for read. Return a HANDLE referring to the */
+/*        C     file. */
+/*        C */
+/*              CALL DAFOPR ( KERNEL, HANDLE ) */
 
-/*           CHARACTER*(80)  BUFFER(25) */
+/*        C */
+/*        C     Read a maximum of 30 lines of comments. */
+/*        C */
+/*              WRITE(*,'(A)') 'Comment area of input DAF file ' */
+/*             .            // '(max. 30 lines): ' */
+/*              WRITE(*,'(A)') '---------------------------------------' */
+/*             .            // '-----------------------' */
+/*              DO I = 0, 2 */
 
-/*        NUMFIL     be the number of binary DAFs that are to have their */
-/*                   comment areas displayed. */
+/*                 CALL DAFEC  ( HANDLE, BUFSIZ, N, BUFFER, DONE ) */
 
-/*        DAFNAM(I)  Be a list of filenames for the DAFs which are to */
-/*                   have their comment areas displayed. */
+/*        C */
+/*        C        Write the N lines to the terminal screen. */
+/*        C */
+/*                 DO J = 1, N */
 
-/*        HANDLE(I)  be a list of handles for the DAFs which are to have */
-/*                   their comment areas displayed. */
+/*                    WRITE (*,*) BUFFER(J)(:RTRIM(BUFFER(J))) */
 
-/*        DONE(I)    be a list of logical flags indicating whether */
-/*                   we are done extracting the comment area from the */
-/*                   DAF attached to HANDLE(I) */
+/*                 END DO */
 
-/*     then */
+/*              END DO */
 
-/*            BUFSIZ = 25 */
+/*              WRITE(*,'(A)') '---------------------------------------' */
+/*             .            // '-----------------------' */
 
-/*            DO I = 1, NUMFIL */
+/*        C */
+/*        C     Have all the comments been read? */
+/*        C */
+/*              IF ( .NOT. DONE ) THEN */
 
-/*               DONE(I)   = .FALSE. */
-/*               HANDLE(I) = 0 */
+/*                 WRITE(*,*) ' ' */
+/*                 WRITE(*,*) 'Warning: Not all comments have been read!' */
 
-/*            END DO */
-/*     C */
-/*     C      Open the DAFs. */
-/*     C */
-/*            DO I = 1, NUMFIL */
+/*              END IF */
 
-/*               CALL DAFOPR ( DAFNAM(I), HANDLE(I) ) */
+/*        C */
+/*        C     Safely close the DAF. */
+/*        C */
+/*              CALL DAFCLS ( HANDLE ) */
 
-/*            END DO */
-/*     C */
-/*     C      While there are still some comments left to read in at */
-/*     C      least one of the files, read them and display them. */
-/*     C */
-/*            DO WHILE ( .NOT. ALLTRU( DONE, NUMFIL ) ) */
+/*              END */
 
-/*               DO I = 1, NUMFIL */
 
-/*                  IF ( .NOT. DONE(I) ) THEN */
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
 
-/*                     WRITE (*,*) */
-/*                     WRITE (*,*) 'File: ', DAFNAM(I)(:RTRIM(DAFNAM(I))) */
-/*                     WRITE (*,*) */
-/*                     N = 0 */
 
-/*                     CALL DAFEC ( HANDLE(I), */
-/*           .                      BUFSIZ, */
-/*           .                      N, */
-/*           .                      BUFFER, */
-/*           .                      DONE(I) ) */
+/*        Comment area of input DAF file (max. 30 lines): */
+/*        -------------------------------------------------------------- */
 
-/*                     DO J = 1, N */
+/*            SPK for DSN Station Locations */
+/*            ========================================================*** */
 
-/*                        WRITE (*,*) BUFFER(J)(:RTRIM(BUFFER(J))) */
+/*            Original file name:                   earthstns_itrf93_2*** */
+/*            Creation date:                        2020 October 28 12:30 */
+/*            Created by:                           Nat Bachman  (NAIF*** */
 
-/*                     END DO */
 
-/*                  END IF */
+/*            Introduction */
+/*            ========================================================*** */
 
-/*               END DO */
+/*            This file provides geocentric states---locations and vel*** */
+/*            set of DSN stations cited in the list below under "Posit*** */
+/*            position vectors point from the earth's barycenter to th*** */
+/*            velocities are estimates of the derivatives with respect*** */
+/*            vectors; in this file, velocities are constant. Station *** */
+/*            magnitudes on the order of a few cm/year. */
 
-/*            END DO */
+/*            The states in this file are given relative to the terres*** */
+/*            frame ITRF93. */
+
+/*            This SPK file has a companion file */
+
+/*               earthstns_fx_201023.bsp */
+
+/*            which differs from this one only in that it uses the ref*** */
+/*            frame alias 'EARTH_FIXED'. See the comment area of that *** */
+/*            and the Frames Required Reading for details. */
+
+/*        -------------------------------------------------------------- */
+
+/*         Warning: Not all comments have been read! */
+
+
+/*        Warning: incomplete output. 12 lines extended past the right */
+/*        margin of the header and have been truncated. These lines are */
+/*        marked by "***" at the end of each line. */
+
+
+/*     2) The following example demonstrates the use of this routine to */
+/*        simultaneously read the comment areas of multiple DAFs. For */
+/*        each file, the comments will be displayed on the screen as */
+/*        they are extracted. */
+
+/*        Use the SPK kernel below as the first DAF file for the */
+/*        program. */
+
+/*           earthstns_itrf93_201023.bsp */
+
+
+/*        Use the CK kernel below as the second DAF file for the */
+/*        program. */
+
+/*           vo2_swu_ck2.bc */
+
+
+/*        Example code begins here. */
+
+
+/*              PROGRAM DAFEC_EX2 */
+/*              IMPLICIT NONE */
+
+/*        C */
+/*        C     SPICELIB functions */
+/*        C */
+/*              INTEGER               RTRIM */
+
+/*              LOGICAL               ALLTRU */
+
+/*        C */
+/*        C     Local parameters */
+/*        C */
+/*              INTEGER               BUFSIZ */
+/*              PARAMETER           ( BUFSIZ = 10   ) */
+
+/*              INTEGER               FNAMLN */
+/*              PARAMETER           ( FNAMLN = 255  ) */
+
+/*              INTEGER               LINLEN */
+/*              PARAMETER           ( LINLEN = 1000 ) */
+
+/*              INTEGER               NUMFIL */
+/*              PARAMETER           ( NUMFIL = 2    ) */
+
+/*        C */
+/*        C     Local variables. */
+/*        C */
+/*              CHARACTER*(FNAMLN)    DAFNAM ( NUMFIL ) */
+/*              CHARACTER*(LINLEN)    BUFFER ( BUFSIZ ) */
+
+/*              INTEGER               HANDLE ( NUMFIL ) */
+/*              INTEGER               I */
+/*              INTEGER               J */
+/*              INTEGER               N */
+
+/*              LOGICAL               DONE   ( NUMFIL ) */
+
+/*        C */
+/*        C     Set the DAF file names. */
+/*        C */
+/*              DATA                  DAFNAM / */
+/*             .                          'earthstns_itrf93_201023.bsp', */
+/*             .                          'vo2_swu_ck2.bc'          / */
+
+/*        C */
+/*        C     Set the initial values for DONE and HANDLE. */
+/*        C */
+/*              DO I = 1, NUMFIL */
+
+/*                 DONE(I)   = .FALSE. */
+/*                 HANDLE(I) = 0 */
+
+/*              END DO */
+
+/*        C */
+/*        C     Open the DAFs. */
+/*        C */
+/*              DO I = 1, NUMFIL */
+
+/*                 CALL DAFOPR ( DAFNAM(I), HANDLE(I) ) */
+
+/*              END DO */
+
+/*        C */
+/*        C     While there are still some comments left to read in at */
+/*        C     least one of the files, read them and display them. */
+/*        C */
+/*              DO WHILE ( .NOT. ALLTRU( DONE, NUMFIL ) ) */
+
+/*                 DO I = 1, NUMFIL */
+
+/*                    IF ( .NOT. DONE(I) ) THEN */
+
+/*                       WRITE (*,*) */
+/*                       WRITE (*,*) 'File: ', */
+/*             .                     DAFNAM(I)(:RTRIM(DAFNAM(I))) */
+/*                       WRITE (*,*) '---------------------------------' */
+/*             .                 //  '-----------------------------' */
+/*                       N = 0 */
+
+/*                       CALL DAFEC ( HANDLE(I), BUFSIZ, N, */
+/*             .                      BUFFER,    DONE(I)   ) */
+
+/*                       DO J = 1, N */
+
+/*                          WRITE (*,*) BUFFER(J)(:RTRIM(BUFFER(J))) */
+
+/*                       END DO */
+
+/*                    END IF */
+
+/*                 END DO */
+
+/*              END DO */
+
+/*        C */
+/*        C     Safely close the DAF files. */
+/*        C */
+/*              DO I = 1, NUMFIL */
+
+/*                 CALL DAFCLS ( HANDLE(I) ) */
+
+/*              END DO */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*         File: earthstns_itrf93_201023.bsp */
+/*         -------------------------------------------------------------- */
+
+/*            SPK for DSN Station Locations */
+/*            ========================================================*** */
+
+/*            Original file name:                   earthstns_itrf93_2*** */
+/*            Creation date:                        2020 October 28 12:30 */
+/*            Created by:                           Nat Bachman  (NAIF*** */
+
+
+/*            Introduction */
+
+/*         File: vo2_swu_ck2.bc */
+/*         -------------------------------------------------------------- */
+/*         \beginlabel */
+/*         PDS_VERSION_ID               = PDS3 */
+/*         RECORD_TYPE                  = FIXED_LENGTH */
+/*         RECORD_BYTES                 = 1024 */
+/*         ^SPICE_KERNEL                = "vo2_swu_ck2.bc" */
+/*         MISSION_NAME                 = VIKING */
+/*         SPACECRAFT_NAME              = "VIKING ORBITER 2" */
+/*         DATA_SET_ID                  = "VO1/VO2-M-SPICE-6-V1.0" */
+/*         KERNEL_TYPE_ID               = CK */
+/*         PRODUCT_ID                   = "vo2_swu_ck2.bc" */
+
+/*         File: earthstns_itrf93_201023.bsp */
+/*         -------------------------------------------------------------- */
+/*            ========================================================*** */
+
+/*            This file provides geocentric states---locations and vel*** */
+/*            set of DSN stations cited in the list below under "Posit*** */
+/*            position vectors point from the earth's barycenter to th*** */
+/*            velocities are estimates of the derivatives with respect*** */
+/*            vectors; in this file, velocities are constant. Station *** */
+/*            magnitudes on the order of a few cm/year. */
+
+/*            The states in this file are given relative to the terres*** */
+
+/*         File: vo2_swu_ck2.bc */
+/*         -------------------------------------------------------------- */
+/*         PRODUCT_CREATION_TIME        = 2008-12-03T14:03:35 */
+/*         PRODUCER_ID                  = "NAIF/JPL" */
+/*         MISSION_PHASE_NAME           = { */
+/*                                        PRIMARY_MISSION, */
+/*                                        EXTENDED_MISSION, */
+/*                                        CONTINUATION_MISSION */
+/*                                        } */
+/*         PRODUCT_VERSION_TYPE         = ACTUAL */
+/*         PLATFORM_OR_MOUNTING_NAME    = "SPACECRAFT BUS" */
+/*         START_TIME                   = 1977-01-09T18:33:12.707 */
+
+/*         File: earthstns_itrf93_201023.bsp */
+/*         -------------------------------------------------------------- */
+/*            frame ITRF93. */
+
+/*            This SPK file has a companion file */
+
+/*               earthstns_fx_201023.bsp */
+
+/*            which differs from this one only in that it uses the ref*** */
+/*            frame alias 'EARTH_FIXED'. See the comment area of that *** */
+/*            and the Frames Required Reading for details. */
+
+
+/*         File: vo2_swu_ck2.bc */
+/*         -------------------------------------------------------------- */
+/*         STOP_TIME                    = 1977-11-27T05:55:16.772 */
+/*         SPACECRAFT_CLOCK_START_COUNT = "1/0032380393.707" */
+/*         SPACECRAFT_CLOCK_STOP_COUNT  = "1/0060155717.772" */
+/*         TARGET_NAME                  = MARS */
+/*         INSTRUMENT_NAME              = "SCAN PLATFORM" */
+/*         NAIF_INSTRUMENT_ID           = -30000 */
+/*         SOURCE_PRODUCT_ID            = "N/A" */
+/*         NOTE                         = "See comments in the file fo*** */
+/*         OBJECT                       = SPICE_KERNEL */
+/*           INTERCHANGE_FORMAT         = BINARY */
+
+/*         File: earthstns_itrf93_201023.bsp */
+/*         -------------------------------------------------------------- */
+
+/*            Revision description */
+/*            -------------------- */
+
+/*            This kernel contains data from a single, current source:*** */
+
+/*            This kernel supersedes the kernels */
+
+/*               earthstns_itrf93_050714.bsp */
+/*               dss_53_prelim_itrf93_201018.bsp (data in this kernel *** */
+
+/*         File: vo2_swu_ck2.bc */
+/*         -------------------------------------------------------------- */
+/*           KERNEL_TYPE                = POINTING */
+/*           DESCRIPTION                = "VO2 instrument platform ori*** */
+/*         reconstructed during cartographic image registration by S. *** */
+/*         Type 2 CK file supersedes the less usable Type 1 CK vo2_swu*** */
+/*         END_OBJECT                   = SPICE_KERNEL */
+/*         \endlabel */
+
+/*        [...] */
+
+
+/*        Warning: incomplete output. Only 100 out of 1049 lines have */
+/*        been provided. 18 lines extended past the right margin of the */
+/*        header and have been truncated. These lines are marked by "***" */
+/*        at the end of each line. */
+
 
 /* $ Restrictions */
 
-/*     1) The comment area may consist only of printing ASCII characters, */
-/*        decimal values 32 - 126. */
+/*     1)  The comment area may consist only of printing ASCII */
+/*         characters, decimal values 32 - 126. */
 
-/*     2) There is NO maximum length imposed on the significant portion */
-/*        of a text line that may be placed into the comment area of a */
-/*        DAF. The maximum length of a line stored in the comment area */
-/*        should be kept reasonable, so that they may be easily */
-/*        extracted. A good value for this would be 1000 characters, as */
-/*        this can easily accomodate ``screen width'' lines as well as */
-/*        long lines which may contain some other form of information. */
+/*     2)  There is NO maximum length imposed on the significant portion */
+/*         of a text line that may be placed into the comment area of a */
+/*         DAF. The maximum length of a line stored in the comment area */
+/*         should be kept reasonable, so that they may be easily */
+/*         extracted. A good value for this would be 1000 characters, as */
+/*         this can easily accommodate ``screen width'' lines as well as */
+/*         long lines which may contain some other form of information. */
 
-/*     3) This routine is only used to read records on environments */
-/*        whose characters are a single byte in size.  Updates */
-/*        to this routine and routines in its call tree may be */
-/*        required to properly handle other cases. */
+/*     3)  This routine is only used to read records on environments */
+/*         whose characters are a single byte in size. Updates */
+/*         to this routine and routines in its call tree may be */
+/*         required to properly handle other cases. */
+
+/*     4)  This routine is intended to be used on DAF files whose comment */
+/*         area does not change while this routine is called to extract */
+/*         comments, between the start and end of the extraction process. */
+/*         If the comment area does change (gets updated, reduced, */
+/*         extended, or deleted) between calls to this routine on the */
+/*         same DAF file, the routine's outputs are undefined and */
+/*         subsequent calls to it are likely to trigger an exception. */
 
 /* $ Literature_References */
 
@@ -353,25 +642,35 @@ static integer c__5000 = 5000;
 
 /* $ Author_and_Institution */
 
-/*     K.R. Gehringer (JPL) */
-/*     F.S. Turner    (JPL) */
-/*     N.J. Bachman   (JPL) */
-/*     B.V. Semenov   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
+/*     B.V. Semenov       (JPL) */
+/*     F.S. Turner        (JPL) */
 
 /* $ Version */
 
-/* -    SPICELIB Version 1.1.0 12-APR-2012 (BVS) */
+/* -    SPICELIB Version 1.2.0, 25-NOV-2021 (JDR) (BVS) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. Removed */
+/*        unnecessary $Revisions section. */
+
+/*        Added complete code examples from existing code fragments. */
+
+/* -    SPICELIB Version 1.1.0, 12-APR-2012 (BVS) */
 
 /*        Increased FTSIZE (from 1000 to 5000). */
 
-/* -    SPICELIB Version 1.0.0 08-NOV-2006 (NJB) (KRG) (FST) */
+/* -    SPICELIB Version 1.0.0, 08-NOV-2006 (NJB) (KRG) (FST) */
 
 /*        Based on Support Version 2.0.0, 16-NOV-2001 (FST) */
 
 /* -& */
 /* $ Index_Entries */
 
-/*      extract comments from a DAF */
+/*     extract comments from a DAF */
 
 /* -& */
 
@@ -432,15 +731,15 @@ static integer c__5000 = 5000;
 	*(unsigned char *)eolmrk = '\0';
 	for (i__ = 1; i__ <= 5000; ++i__) {
 	    filchr[(i__1 = i__ - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("fil"
-		    "chr", i__1, "dafec_", (ftnlen)446)] = 0;
+		    "chr", i__1, "dafec_", (ftnlen)749)] = 0;
 	    filcnt[(i__1 = i__ - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("fil"
-		    "cnt", i__1, "dafec_", (ftnlen)447)] = 0;
+		    "cnt", i__1, "dafec_", (ftnlen)750)] = 0;
 	    filhan[(i__1 = i__ - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("fil"
-		    "han", i__1, "dafec_", (ftnlen)448)] = 0;
+		    "han", i__1, "dafec_", (ftnlen)751)] = 0;
 	    lstpos[(i__1 = i__ - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("lst"
-		    "pos", i__1, "dafec_", (ftnlen)449)] = 0;
+		    "pos", i__1, "dafec_", (ftnlen)752)] = 0;
 	    lstrec[(i__1 = i__ - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("lst"
-		    "rec", i__1, "dafec_", (ftnlen)450)] = 0;
+		    "rec", i__1, "dafec_", (ftnlen)753)] = 0;
 	}
     }
 
@@ -495,13 +794,13 @@ static integer c__5000 = 5000;
 /*        i.e., where we left off when we last read from that file. */
 
 	recno = lstrec[(i__1 = index - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-		"lstrec", i__1, "dafec_", (ftnlen)516)];
+		"lstrec", i__1, "dafec_", (ftnlen)819)];
 	curpos = lstpos[(i__1 = index - 1) < 5000 && 0 <= i__1 ? i__1 : 
-		s_rnge("lstpos", i__1, "dafec_", (ftnlen)517)];
+		s_rnge("lstpos", i__1, "dafec_", (ftnlen)820)];
 	nchars = filchr[(i__1 = index - 1) < 5000 && 0 <= i__1 ? i__1 : 
-		s_rnge("filchr", i__1, "dafec_", (ftnlen)518)];
+		s_rnge("filchr", i__1, "dafec_", (ftnlen)821)];
 	ncomc = filcnt[(i__1 = index - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-		"filcnt", i__1, "dafec_", (ftnlen)519)];
+		"filcnt", i__1, "dafec_", (ftnlen)822)];
     } else {
 
 /*        We have not yet read any comments from this file, so start at */
@@ -763,25 +1062,25 @@ L100003:
 		i__1 = nfiles - 1;
 		for (k = index; k <= i__1; ++k) {
 		    filchr[(i__2 = k - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge(
-			    "filchr", i__2, "dafec_", (ftnlen)811)] = filchr[(
-			    i__3 = k) < 5000 && 0 <= i__3 ? i__3 : s_rnge(
-			    "filchr", i__3, "dafec_", (ftnlen)811)];
+			    "filchr", i__2, "dafec_", (ftnlen)1114)] = filchr[
+			    (i__3 = k) < 5000 && 0 <= i__3 ? i__3 : s_rnge(
+			    "filchr", i__3, "dafec_", (ftnlen)1114)];
 		    filcnt[(i__2 = k - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge(
-			    "filcnt", i__2, "dafec_", (ftnlen)812)] = filcnt[(
-			    i__3 = k) < 5000 && 0 <= i__3 ? i__3 : s_rnge(
-			    "filcnt", i__3, "dafec_", (ftnlen)812)];
+			    "filcnt", i__2, "dafec_", (ftnlen)1115)] = filcnt[
+			    (i__3 = k) < 5000 && 0 <= i__3 ? i__3 : s_rnge(
+			    "filcnt", i__3, "dafec_", (ftnlen)1115)];
 		    filhan[(i__2 = k - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge(
-			    "filhan", i__2, "dafec_", (ftnlen)813)] = filhan[(
-			    i__3 = k) < 5000 && 0 <= i__3 ? i__3 : s_rnge(
-			    "filhan", i__3, "dafec_", (ftnlen)813)];
+			    "filhan", i__2, "dafec_", (ftnlen)1116)] = filhan[
+			    (i__3 = k) < 5000 && 0 <= i__3 ? i__3 : s_rnge(
+			    "filhan", i__3, "dafec_", (ftnlen)1116)];
 		    lstrec[(i__2 = k - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge(
-			    "lstrec", i__2, "dafec_", (ftnlen)814)] = lstrec[(
-			    i__3 = k) < 5000 && 0 <= i__3 ? i__3 : s_rnge(
-			    "lstrec", i__3, "dafec_", (ftnlen)814)];
+			    "lstrec", i__2, "dafec_", (ftnlen)1117)] = lstrec[
+			    (i__3 = k) < 5000 && 0 <= i__3 ? i__3 : s_rnge(
+			    "lstrec", i__3, "dafec_", (ftnlen)1117)];
 		    lstpos[(i__2 = k - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge(
-			    "lstpos", i__2, "dafec_", (ftnlen)815)] = lstpos[(
-			    i__3 = k) < 5000 && 0 <= i__3 ? i__3 : s_rnge(
-			    "lstpos", i__3, "dafec_", (ftnlen)815)];
+			    "lstpos", i__2, "dafec_", (ftnlen)1118)] = lstpos[
+			    (i__3 = k) < 5000 && 0 <= i__3 ? i__3 : s_rnge(
+			    "lstpos", i__3, "dafec_", (ftnlen)1118)];
 		}
 		--nfiles;
 	    }
@@ -818,15 +1117,15 @@ L100003:
 	    }
 	    ++nfiles;
 	    filchr[(i__1 = nfiles - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-		    "filchr", i__1, "dafec_", (ftnlen)859)] = nchars;
+		    "filchr", i__1, "dafec_", (ftnlen)1162)] = nchars;
 	    filcnt[(i__1 = nfiles - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-		    "filcnt", i__1, "dafec_", (ftnlen)860)] = ncomc;
+		    "filcnt", i__1, "dafec_", (ftnlen)1163)] = ncomc;
 	    filhan[(i__1 = nfiles - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-		    "filhan", i__1, "dafec_", (ftnlen)861)] = *handle;
+		    "filhan", i__1, "dafec_", (ftnlen)1164)] = *handle;
 	    lstrec[(i__1 = nfiles - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-		    "lstrec", i__1, "dafec_", (ftnlen)862)] = recno;
+		    "lstrec", i__1, "dafec_", (ftnlen)1165)] = recno;
 	    lstpos[(i__1 = nfiles - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-		    "lstpos", i__1, "dafec_", (ftnlen)863)] = curpos;
+		    "lstpos", i__1, "dafec_", (ftnlen)1166)] = curpos;
 	    lsthan = *handle;
 	} else {
 
@@ -834,11 +1133,11 @@ L100003:
 /*           so just update its information. */
 
 	    filchr[(i__1 = index - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-		    "filchr", i__1, "dafec_", (ftnlen)871)] = nchars;
+		    "filchr", i__1, "dafec_", (ftnlen)1174)] = nchars;
 	    lstrec[(i__1 = index - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-		    "lstrec", i__1, "dafec_", (ftnlen)872)] = recno;
+		    "lstrec", i__1, "dafec_", (ftnlen)1175)] = recno;
 	    lstpos[(i__1 = index - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-		    "lstpos", i__1, "dafec_", (ftnlen)873)] = curpos;
+		    "lstpos", i__1, "dafec_", (ftnlen)1176)] = curpos;
 	    lsthan = *handle;
 	}
     }

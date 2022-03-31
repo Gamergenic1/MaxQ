@@ -3,10 +3,10 @@
 -Procedure pl2nvp_c ( Plane to normal vector and point )
 
 -Abstract
- 
-   Return a unit normal vector and point that define a specified 
-   plane. 
- 
+
+   Return a unit normal vector and point that define a specified
+   plane.
+
 -Disclaimer
 
    THIS SOFTWARE AND ANY RELATED MATERIALS WERE CREATED BY THE
@@ -33,15 +33,15 @@
    ACTIONS OF RECIPIENT IN THE USE OF THE SOFTWARE.
 
 -Required_Reading
- 
-   PLANES 
- 
+
+   PLANES
+
 -Keywords
- 
-   GEOMETRY 
-   MATH 
-   PLANE 
- 
+
+   GEOMETRY
+   MATH
+   PLANE
+
 */
 
    #include "SpiceUsr.h"
@@ -51,107 +51,113 @@
 
    void pl2nvp_c ( ConstSpicePlane   * plane,
                    SpiceDouble         normal[3],
-                   SpiceDouble         point [3]  ) 
+                   SpiceDouble         point [3]  )
 
 /*
 
 -Brief_I/O
- 
-   Variable  I/O  Description 
-   --------  ---  -------------------------------------------------- 
-   plane      I   A CSPICE plane. 
-   normal, 
-   point      O   A unit normal vector and point that define plane. 
- 
+
+   VARIABLE  I/O  DESCRIPTION
+   --------  ---  --------------------------------------------------
+   plane      I   A SPICE plane.
+   normal,
+   point      O   A unit normal vector and point that define `plane'.
+
 -Detailed_Input
- 
-   plane          is a CSPICE plane. 
- 
+
+   plane       is a SPICE plane.
+
 -Detailed_Output
- 
-   normal, 
-   point          are, respectively, a unit normal vector and point 
-                  that define the geometric plane represented by 
-                  plane.  Let the symbol < a, b > indicate the inner 
-                  product of vectors a and b; then the geometric 
-                  plane is the set of vectors x in three-dimensional 
-                  space that satisfy 
- 
-                     < x - point, normal >  =  0. 
- 
-                  point is always the closest point in the input 
-                  plane to the origin.  point is always a 
-                  non-negative scalar multiple of normal. 
- 
+
+   normal,
+   point       are, respectively, a unit normal vector and point
+               that define the geometric plane represented by
+               `plane'. Let the symbol < a, b > indicate the inner
+               product of vectors `a' and `b'; then the geometric
+               plane is the set of vectors `x' in three-dimensional
+               space that satisfy
+
+                  < x - point, normal >  =  0.
+
+               `point' is always the closest point in the input
+               plane to the origin. `point' is always a
+               non-negative scalar multiple of `normal'.
+
 -Parameters
- 
-   None. 
- 
+
+   None.
+
 -Exceptions
- 
-   Error free. 
- 
-   1)  The input plane MUST have been created by one of the CSPICE 
-       routines 
- 
-          nvc2pl_c ( Normal vector and constant to plane ) 
-          nvp2pl_c ( Normal vector and point to plane    ) 
-          psv2pl_c ( Point and spanning vectors to plane ) 
- 
-       Otherwise, the results of this routine are unpredictable. 
- 
+
+   Error free.
+
+   1)  The input plane MUST have been created by one of the CSPICE
+       routines
+
+          nvc2pl_c ( Normal vector and constant to plane )
+          nvp2pl_c ( Normal vector and point to plane    )
+          psv2pl_c ( Point and spanning vectors to plane )
+
+       Otherwise, the results of this routine are unpredictable.
+
 -Files
- 
-   None. 
- 
+
+   None.
+
 -Particulars
- 
-   CSPICE geometry routines that deal with planes use the `plane' 
-   data type to represent input and output planes.  This data type 
-   makes the subroutine interfaces simpler and more uniform. 
- 
-   The CSPICE routines that produce CSPICE planes from data that 
-   define a plane are: 
- 
-      nvc2pl_c ( Normal vector and constant to plane ) 
-      nvp2pl_c ( Normal vector and point to plane    ) 
-      psv2pl_c ( Point and spanning vectors to plane ) 
- 
-   The CSPICE routines that convert CSPICE planes to data that 
-   define a plane are: 
- 
-      pl2nvc_c ( Plane to normal vector and constant ) 
-      pl2nvp_c ( Plane to normal vector and point    ) 
-      pl2psv_c ( Plane to point and spanning vectors ) 
- 
+
+   CSPICE geometry routines that deal with planes use the `plane'
+   data type to represent input and output planes. This data type
+   makes the routine interfaces simpler and more uniform.
+
+   The CSPICE routines that produce SPICE planes from data that
+   define a plane are:
+
+      nvc2pl_c ( Normal vector and constant to plane )
+      nvp2pl_c ( Normal vector and point to plane    )
+      psv2pl_c ( Point and spanning vectors to plane )
+
+   The CSPICE routines that convert SPICE planes to data that
+   define a plane are:
+
+      pl2nvc_c ( Plane to normal vector and constant )
+      pl2nvp_c ( Plane to normal vector and point    )
+      pl2psv_c ( Plane to point and spanning vectors )
+
 -Examples
- 
-   1)  Given a plane normal and constant, find a point in 
-       the plane.  point is the point we seek. 
- 
-          nvc2pl_c ( normal, const,  &plane );
-          pl2nvp_c ( &plane, normal, point  ); 
- 
+
+   1)  Given a plane normal and constant, find a point in
+       the plane. `point' is the point we seek.
+
+          nvc2pl_c (  normal, const, &plane  );
+          pl2nvp_c ( &plane, normal,  point  );
+
 -Restrictions
- 
-   None. 
- 
+
+   None.
+
 -Literature_References
- 
-   [1] `Calculus and Analytic Geometry', Thomas and Finney. 
- 
+
+   [1]  G. Thomas and R. Finney, "Calculus and Analytic Geometry,"
+        7th Edition, Addison Wesley, 1988.
+
 -Author_and_Institution
- 
-   N.J. Bachman   (JPL) 
- 
+
+   N.J. Bachman        (JPL)
+   J. Diaz del Rio     (ODC Space)
+
 -Version
- 
+
+   -CSPICE Version 1.0.1, 24-AUG-2021 (JDR)
+
+       Edited the header to comply with NAIF standard.
+
    -CSPICE Version 1.0.0, 05-MAR-1999 (NJB)
 
 -Index_Entries
- 
-   plane to normal vector and point 
- 
+
+   plane to normal vector and point
+
 -&
 */
 
@@ -162,8 +168,8 @@
    Return the stored normal vector.
    */
    MOVED ( plane->normal, 3, normal );
-   
-   
+
+
    /*
    Find the closest point in the plane to the origin.
    */

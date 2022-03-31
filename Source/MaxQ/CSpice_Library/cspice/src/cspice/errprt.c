@@ -11,7 +11,7 @@ static integer c__0 = 0;
 static integer c__10 = 10;
 static integer c__2 = 2;
 
-/* $Procedure      ERRPRT ( Get/Set Error Output Items ) */
+/* $Procedure ERRPRT ( Get/Set Error Output Items ) */
 /* Subroutine */ int errprt_(char *op, char *list, ftnlen op_len, ftnlen 
 	list_len)
 {
@@ -51,8 +51,8 @@ static integer c__2 = 2;
 
 /* $ Abstract */
 
-/*      Retrieve or set the list of error message items */
-/*      to be output when an error is detected. */
+/*     Retrieve or set the list of error message items */
+/*     to be output when an error is detected. */
 
 /* $ Disclaimer */
 
@@ -81,43 +81,43 @@ static integer c__2 = 2;
 
 /* $ Required_Reading */
 
-/*      ERROR */
+/*     ERROR */
 
 /* $ Keywords */
 
-/*      ERROR */
+/*     ERROR */
 
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*      VARIABLE  I/O  DESCRIPTION */
-/*      --------  ---  -------------------------------------------------- */
-/*      OP         I   The operation:  'GET' or 'SET'. */
-/*      LIST      I/O  Specification of error messages to be output. */
+/*     VARIABLE  I/O  DESCRIPTION */
+/*     --------  ---  -------------------------------------------------- */
+/*     OP         I   The operation:  'GET' or 'SET'. */
+/*     LIST      I-O  Specification of error messages to be output. */
 
 /* $ Detailed_Input */
 
-/*      OP      indicates the operation to be performed.  Possible */
+/*     OP       indicates the operation to be performed. Possible */
 /*              values are 'GET' and 'SET'. */
 
 /*              'SET' means, "the following list specifies the default */
-/*              selection of error messages to be output."  These are */
+/*              selection of error messages to be output." These are */
 /*              the messages that will be output to the default error */
 /*              output device (selected by ERRDEV) when an error is */
 /*              detected. */
 
 /*              'GET' means, "return the current list of error output */
-/*              items."  This is the exact list that was set by the */
+/*              items." This is the exact list that was set by the */
 /*              last call to this routine with the 'SET' option. */
 
-/*              The option can be specified in mixed case.  For example, */
+/*              The option can be specified in mixed case. For example, */
 /*              the following call will work: */
 
 /*              CALL ERRPRT ( 'SeT' , 'ALL' ) */
 
 
-/*      LIST    is a list of error message items.  The items */
-/*              are delimited by commas.  The items that can be */
+/*     LIST     is a list of error message items. The items */
+/*              are delimited by commas. The items that can be */
 /*              in the list are the words: */
 
 /*              1.  SHORT        ...indicates the short error message */
@@ -130,7 +130,7 @@ static integer c__2 = 2;
 /*                                  message */
 
 /*              A "list" is a character string containing some or */
-/*              all of the above words, delimited by commas.  Examples */
+/*              all of the above words, delimited by commas. Examples */
 /*              are: */
 
 /*              1.  'SHORT, EXPLAIN' */
@@ -141,9 +141,9 @@ static integer c__2 = 2;
 
 /*              Each word in the list can be thought of as */
 /*              "flipping a switch" to enable or disable the output */
-/*              of the message(s) indicated by the word.  The */
+/*              of the message(s) indicated by the word. The */
 /*              words are acted on in the order they occur in the */
-/*              list, starting with the leftmost word.  As examples, */
+/*              list, starting with the leftmost word. As examples, */
 /*              consider the sample lists above. */
 
 /*              The effect of the first list above, 'SHORT, EXPLAIN', */
@@ -161,13 +161,13 @@ static integer c__2 = 2;
 /*              all of the messages. */
 
 /*              The effect of the fifth list is to disable output of */
-/*              all of the messages.  The reason for this is that */
+/*              all of the messages. The reason for this is that */
 /*              the words in the list are responded to in order, */
 /*              from left to right, and "NONE" is the last word. */
 
 /*              If any words other than SHORT, LONG, EXPLAIN, ALL, */
 /*              DEFAULT, TRACEBACK or NONE appear in LIST, those words */
-/*              that are recognized are responded to.  The words */
+/*              that are recognized are responded to. The words */
 /*              that are not recognized are diagnosed as */
 /*              erroneous, and error messages are generated */
 /*              for each such unrecognized word. */
@@ -181,9 +181,9 @@ static integer c__2 = 2;
 
 /* $ Detailed_Output */
 
-/*      LIST    is a list of error message items.  The value of */
+/*     LIST     is a list of error message items. The value of */
 /*              LIST is that set by the last call to this routine */
-/*              using the 'SET' option.  See "Detailed Input" */
+/*              using the 'SET' option. See "Detailed Input" */
 /*              for a description of the possible values and */
 /*              meanings of LIST. */
 
@@ -191,10 +191,9 @@ static integer c__2 = 2;
 
 /*              Only the first 100 characters of LIST are saved */
 /*              when the list is set; any additional characters */
-/*              are truncated.  Therefore, the first 100 */
+/*              are truncated. Therefore, the first 100 */
 /*              characters, at most, of the saved value of LIST */
 /*              will be returned. */
-
 
 /* $ Parameters */
 
@@ -202,89 +201,95 @@ static integer c__2 = 2;
 
 /* $ Exceptions */
 
-/*      This routine detects invalid values of the argument, OP. */
-/*      Invalid words in LIST are also detected.  The short */
-/*      error messages corresponding to these errors are: */
+/*     1)  If an invalid value of the argument OP is supplied, the error */
+/*         SPICE(INVALIDOPERATION) is signaled. */
 
-/*      1.  'SPICE(INVALIDOPERATION)'    ... bad value of OP */
-/*      2.  'SPICE(INVALIDLISTITEM)'     ... bad value in LIST */
-
-
-/*      Also, this routine is part of the SPICELIB error */
-/*      handling mechanism. */
+/*     2)  If OP is 'SET' and an invalid word is detected within the list */
+/*         of error message items LIST, the error SPICE(INVALIDLISTITEM) */
+/*         is signaled. */
 
 /* $ Files */
 
-/*      None. */
+/*     None. */
 
 /* $ Particulars */
 
-/*      Please read the "required reading"! */
+/*     This routine is part of the SPICELIB error handling mechanism. */
 
-/*      This routine is intended to be used in conjunction with */
-/*      ERRDEV, which selects the default output device to which */
-/*      the error messages selected by this routine will be */
-/*      output. */
+/*     Please read the "required reading"! */
 
-/*      Additionally, the error response action must be */
-/*      something other than 'IGNORE' if the error messages */
-/*      are to be output.  Possible choices of the error */
-/*      response action are 'RETURN', 'REPORT', 'ABORT', 'DEFAULT', and */
-/*      'IGNORE'.  Use ERRACT to set the error response action. */
+/*     This routine is intended to be used in conjunction with */
+/*     ERRDEV, which selects the default output device to which */
+/*     the error messages selected by this routine will be */
+/*     output. */
+
+/*     Additionally, the error response action must be */
+/*     something other than 'IGNORE' if the error messages */
+/*     are to be output. Possible choices of the error */
+/*     response action are 'RETURN', 'REPORT', 'ABORT', 'DEFAULT', and */
+/*     'IGNORE'.  Use ERRACT to set the error response action. */
 
 
-/*      Only the first 100 characters of LIST are saved. */
+/*     Only the first 100 characters of LIST are saved. */
 
-/*      The default set of error messages that are output is the */
-/*      set specified by 'DEFAULT'; i.e., all of them, including */
-/*      the 'default' message. */
-
+/*     The default set of error messages that are output is the */
+/*     set specified by 'DEFAULT'; i.e., all of them, including */
+/*     the 'default' message. */
 
 /* $ Examples */
 
-/*      1.  In this example, we select as the output device */
-/*          the file, SPUD.DAT, and then select the error */
-/*          messages to be output.  We choose the short */
-/*          error message and the traceback.  Since a */
-/*          different set of messages may have been selected */
-/*          previously, we clear the old setting by putting */
-/*          the word, 'NONE', at the beginning of the list. */
+/*     1. In this example, we select as the output device */
+/*        the file, SPUD.DAT, and then select the error */
+/*        messages to be output. We choose the short */
+/*        error message and the traceback. Since a */
+/*        different set of messages may have been selected */
+/*        previously, we clear the old setting by putting */
+/*        the word, 'NONE', at the beginning of the list. */
 
-/*      C */
-/*      C      Set the error output device to SPUD.DAT: */
-/*      C */
+/*        C */
+/*        C      Set the error output device to SPUD.DAT: */
+/*        C */
 
-/*             CALL ERRDEV (  'SET',  'SPUD.DAT'  ) */
+/*               CALL ERRDEV (  'SET',  'SPUD.DAT'  ) */
 
-/*      C */
-/*      C      Choose error messages: */
-/*      C */
+/*        C */
+/*        C      Choose error messages: */
+/*        C */
 
-/*             CALL ERRPRT (  'SET',  'NONE, SHORT, TRACEBACK'  ) */
-
-
+/*               CALL ERRPRT (  'SET',  'NONE, SHORT, TRACEBACK'  ) */
 
 /* $ Restrictions */
 
-/*      The device to which the selected error messages will */
-/*      be written must be selected via ERRDEV; otherwise, */
-/*      messages will be written to the initial default device. */
+/*     1)  The device to which the selected error messages will be */
+/*         written must be selected via ERRDEV; otherwise, messages will */
+/*         be written to the initial default device. */
 
-/*      Only the first 100 characters of LIST are saved. */
+/*     2)  Only the first 100 characters of LIST are saved. */
 
 /* $ Literature_References */
 
-/*      None. */
+/*     None. */
 
 /* $ Author_and_Institution */
 
-/*      N.J. Bachman    (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
 
+/* -    SPICELIB Version 1.2.0, 19-APR-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. $Exceptions */
+/*        section has been completely updated to provide only the list */
+/*        of exceptions. Additional information provided there has been */
+/*        moved to $Particulars. */
+
 /* -    SPICELIB Version 1.1.0, 28-AUG-1999 (NJB) */
 
-/*        Output string is now built on the fly.  The routine previously */
+/*        Output string is now built on the fly. The routine previously */
 /*        returned a saved string which could fail to represent correctly */
 /*        the set of selected message types. */
 
@@ -305,21 +310,21 @@ static integer c__2 = 2;
 
 /* -    SPICELIB Version 1.1.0, 28-AUG-1999 (NJB) */
 
-/*        Output string is now built on the fly.  The routine previously */
+/*        Output string is now built on the fly. The routine previously */
 /*        returned a saved string which could fail to represent correctly */
 /*        the set of selected message types. */
 
 /* -    Beta Version 1.2.0, 16-FEB-1988 (NJB) */
 
 /*        Declaration of the unused variable TMPLST removed. */
-/*        Trace participation added.  This routine now checks in */
-/*        and checks out.  However, it does not test RETURN, */
+/*        Trace participation added. This routine now checks in */
+/*        and checks out. However, it does not test RETURN, */
 /*        because it should be able to execute in RETURN mode when */
 /*        an error condition exists. */
 
 /* -    Beta Version 1.1.0, 06-OCT-1988 (NJB) */
 
-/*        Superfluous references to LASTNB removed.  These references */
+/*        Superfluous references to LASTNB removed. These references */
 /*        were so many tonsils; they really had no function. */
 
 /* -& */
@@ -404,7 +409,7 @@ static integer c__2 = 2;
 	i__1 = numwrd;
 	for (i__ = 1; i__ <= i__1; ++i__) {
 	    ucase_(words + ((i__2 = i__ - 1) < 10 && 0 <= i__2 ? i__2 : 
-		    s_rnge("words", i__2, "errprt_", (ftnlen)434)) * 9, 
+		    s_rnge("words", i__2, "errprt_", (ftnlen)440)) * 9, 
 		    upword, (ftnlen)9, (ftnlen)9);
 	    if (s_cmp(upword, "SHORT", (ftnlen)9, (ftnlen)5) == 0) {
 		short__ = TRUE_;
@@ -441,7 +446,7 @@ static integer c__2 = 2;
 			"und in the error message list.  The word was:";
 		i__3[1] = 9, a__1[1] = words + ((i__2 = i__ - 1) < 10 && 0 <= 
 			i__2 ? i__2 : s_rnge("words", i__2, "errprt_", (
-			ftnlen)480)) * 9;
+			ftnlen)486)) * 9;
 		s_cat(ch__1, a__1, i__3, &c__2, (ftnlen)89);
 		setmsg_(ch__1, (ftnlen)89);
 		sigerr_("SPICE(INVALIDLISTITEM)", (ftnlen)22);

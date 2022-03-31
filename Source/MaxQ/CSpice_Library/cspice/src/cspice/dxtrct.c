@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      DXTRCT (Extract Double Precision Values From A String) */
+/* $Procedure DXTRCT (Extract Double Precision Values From A String) */
 /* Subroutine */ int dxtrct_(char *keywd, integer *maxwds, char *string, 
 	integer *nfound, integer *parsed, doublereal *values, ftnlen 
 	keywd_len, ftnlen string_len)
@@ -32,7 +32,7 @@
 /* $ Abstract */
 
 /*     Locate a keyword and succeeding numeric words within a string. */
-/*     Parse and store the numeric words.  Remove the keyword and */
+/*     Parse and store the numeric words. Remove the keyword and */
 /*     numeric words from the input string. */
 
 /* $ Disclaimer */
@@ -66,89 +66,98 @@
 
 /* $ Keywords */
 
-/*      PARSING,  WORD */
+/*     PARSING */
+/*     WORD */
 
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*      VARIABLE  I/O  DESCRIPTION */
-/*      --------  ---  -------------------------------------------------- */
-/*      KEYWD      I   Keyword used to mark start of a set of numbers. */
-/*      MAXWDS     I   Maximum number of numeric words that can be parsed */
-/*      STRING    I/O  String potentially containing KEYWD and numbers. */
-/*      NFOUND     O   Number of numeric words found following the KEYWD. */
-/*      PARSED     O   Number of numeric words translated and returned. */
-/*      VALUES     O   The double precision values for the numbers. */
+/*     VARIABLE  I/O  DESCRIPTION */
+/*     --------  ---  -------------------------------------------------- */
+/*     KEYWD      I   Keyword used to mark start of a set of numbers. */
+/*     MAXWDS     I   Maximum number of numeric words that can be parsed */
+/*     STRING    I-O  String potentially containing KEYWD and numbers. */
+/*     NFOUND     O   Number of numeric words found following the KEYWD. */
+/*     PARSED     O   Number of numeric words translated and returned. */
+/*     VALUES     O   The double precision values for the numbers. */
 
 /* $ Detailed_Input */
 
-/*      KEYWD      is a word used to mark the start of a set of numeric */
-/*                 words of interest. */
+/*     KEYWD    is a word used to mark the start of a set of numeric */
+/*              words of interest. */
 
-/*      MAXWDS     is the maximum number of numeric words that can be */
-/*                 parsed and returned. */
+/*     MAXWDS   is the maximum number of numeric words that can be */
+/*              parsed and returned. */
 
-/*      STRING     is a string potentially containing KEYWD and numbers. */
+/*     STRING   is a string potentially containing KEYWD and numbers. */
 
 /* $ Detailed_Output */
 
-/*      STRING     is the input string stripped of all parsed */
-/*                 numeric words.  If there was room available to parse */
-/*                 all of the numeric words associated with KEYWD, the */
-/*                 keyword that marked the beginning of the parsed */
-/*                 numbers in the original string will also be removed. */
+/*     STRING   is the input string stripped of all parsed */
+/*              numeric words. If there was room available to parse */
+/*              all of the numeric words associated with KEYWD, the */
+/*              keyword that marked the beginning of the parsed */
+/*              numbers in the original string will also be removed. */
 
-/*      NFOUND     is the number of numeric words that were found */
-/*                 following KEYWD but preceding the next non-numeric */
-/*                 word of the string.  If the KEYWD is not present in */
-/*                 the string, NFOUND is returned as -1.  If the keyword */
-/*                 is located but the next word in the string is */
-/*                 non-numeric NFOUND will be returned as 0. */
+/*     NFOUND   is the number of numeric words that were found */
+/*              following KEYWD but preceding the next non-numeric */
+/*              word of the string. If the KEYWD is not present in */
+/*              the string, NFOUND is returned as -1. If the keyword */
+/*              is located but the next word in the string is */
+/*              non-numeric NFOUND will be returned as 0. */
 
-/*      PARSED     is the number of numeric words that were actually */
-/*                 parsed and stored in the output array VALUES.  If no */
-/*                 values are parsed PARSED is returned as 0. */
+/*     PARSED   is the number of numeric words that were actually */
+/*              parsed and stored in the output array VALUES. If no */
+/*              values are parsed PARSED is returned as 0. */
 
-/*      VALUES     are the double precision values for the parsed */
-/*                 numeric words that follow the first occurance of the */
-/*                 keyword but precede the next non-numeric word. */
+/*     VALUES   are the double precision values for the parsed */
+/*              numeric words that follow the first occurrence of the */
+/*              keyword but precede the next non-numeric word. */
 
 /* $ Parameters */
 
 /*     None. */
 
+/* $ Exceptions */
+
+/*     Error free. */
+
+/* $ Files */
+
+/*     None. */
+
 /* $ Particulars */
 
-/*      Definitions: */
+/*     Definitions: */
 
-/*      A WORD        is a set of consecutive non-blank characters */
-/*                    delimited by blanks or the end of the string */
-/*                    that contains them. */
+/*        WORD           is a set of consecutive non-blank characters */
+/*                       delimited by blanks or the end of the string */
+/*                       that contains them. */
 
-/*      A NUMERIC WORD  a word that can be parsed by the */
-/*                      SPICELIB routine NPARSD without error.  All */
-/*                      FORTRAN numeric representations are numeric */
-/*                      words. In addition 'PI', 'Pi', 'pI', and 'pi' */
-/*                      are all recognized as having the value: */
+/*        NUMERIC WORD   a word that can be parsed by the */
+/*                       SPICELIB routine NPARSD without error. All */
+/*                       FORTRAN numeric representations are numeric */
+/*                       words. In addition 'PI', 'Pi', 'pI', and 'pi' */
+/*                       are all recognized as having the value: */
 
-/*                        3.1415926535897932384626D0 */
+/*                          3.1415926535897932384626D0 */
 
-/*                      See NPARSD FOR A a full description of legitimate */
-/*                      numeric words. */
+/*                       See NPARSD FOR A a full description of */
+/*                       legitimate numeric words. */
 
-/*      Given a string and a keyword this routine locates the first */
-/*      occurrance of the keyword in the string and returns the double */
-/*      precision representations of up to MAXWDS succeeding numeric */
-/*      words.  All parsed numeric words are removed from the string. */
-/*      If every numeric word following KEYWD but preceding the next */
-/*      non-numeric word is parsed,  KEYWD will also be removed from */
-/*      the string. */
+/*     Given a string and a keyword this routine locates the first */
+/*     occurrence of the keyword in the string and returns the double */
+/*     precision representations of up to MAXWDS succeeding numeric */
+/*     words. All parsed numeric words are removed from the string. */
+/*     If every numeric word following KEYWD but preceding the next */
+/*     non-numeric word is parsed,  KEYWD will also be removed from */
+/*     the string. */
 
-/*      If the keyword cannot be located in the string, the variable */
-/*      NFOUND will be returned as -1 and the string will be unchanged. */
+/*     If the keyword cannot be located in the string, the variable */
+/*     NFOUND will be returned as -1 and the string will be unchanged. */
 
-/*      In all other cases, some part of the string (possibly all of it) */
-/*      will be removed. */
+/*     In all other cases, some part of the string (possibly all of it) */
+/*     will be removed. */
 
 /* $ Examples */
 
@@ -200,38 +209,37 @@
 
 /* $ Restrictions */
 
-/*      None. */
-
-/* $ Exceptions */
-
-/*      Error free. */
-
-/* $ Files */
-
-/*      None. */
-
-/* $ Author_and_Institution */
-
-/*      H.A. Neilan     (JPL) */
-/*      W.L. Taber      (JPL) */
-/*      I.M. Underwood  (JPL) */
+/*     None. */
 
 /* $ Literature_References */
 
-/*      None. */
+/*     None. */
+
+/* $ Author_and_Institution */
+
+/*     J. Diaz del Rio    (ODC Space) */
+/*     H.A. Neilan        (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
 
-/* -     SPICELIB Version 1.1.1, 10-MAR-1992 (WLT) */
+/* -    SPICELIB Version 1.2.0, 05-JUN-2021 (JDR) */
 
-/*         Comment section for permuted index source lines was added */
-/*         following the header. */
+/*        Added IMPLICIT NONE statement. */
 
-/* -     SPICELIB Version 1.1.0, 23-MAY-1990 (HAN) */
+/*        Edited the header to comply with NAIF standard. */
 
-/*         The variable FOUND was changed to NFOUND. */
+/* -    SPICELIB Version 1.1.1, 10-MAR-1992 (WLT) */
 
-/* -     SPICELIB Version 1.0.0, 31-JAN-1990 (WLT) (IMU) */
+/*        Comment section for permuted index source lines was added */
+/*        following the header. */
+
+/* -    SPICELIB Version 1.1.0, 23-MAY-1990 (HAN) */
+
+/*        The variable FOUND was changed to NFOUND. */
+
+/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (WLT) (IMU) */
 
 /* -& */
 /* $ Index_Entries */

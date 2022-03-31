@@ -9,7 +9,7 @@
 
 static integer c__22 = 22;
 
-/* $Procedure      DASECU ( DAS extract comments to a logical unit ) */
+/* $Procedure DASECU ( DAS extract comments to a logical unit ) */
 /* Subroutine */ int dasecu_(integer *handle, integer *comlun, logical *
 	comnts)
 {
@@ -66,7 +66,7 @@ static integer c__22 = 22;
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*      HANDLE    I   Handle of a DAS file opened with read access. */
 /*      COMLUN    I   Logical unit of an opened text file. */
@@ -74,10 +74,10 @@ static integer c__22 = 22;
 
 /* $ Detailed_Input */
 
-/*     HANDLE   The file handle for a binary DAS file that has been */
+/*     HANDLE   is the file handle for a binary DAS file that has been */
 /*              opened with read access. */
 
-/*     COMLUN   The Fortran logical unit of a previously opened text */
+/*     COMLUN   is the Fortran logical unit of a previously opened text */
 /*              file to which the comments from a binary DAS file are */
 /*              to be written. */
 
@@ -87,7 +87,7 @@ static integer c__22 = 22;
 
 /* $ Detailed_Output */
 
-/*     COMNTS   A logical flag indicating whether or not any comments */
+/*     COMNTS   is a logical flag indicating whether or not any comments */
 /*              were found in the comment area of a DAS file. COMNTS will */
 /*              have the value .TRUE. if there were some comments, and */
 /*              the value .FALSE. otherwise. */
@@ -98,17 +98,17 @@ static integer c__22 = 22;
 
 /* $ Exceptions */
 
-/*     1)   If an error occurs while reading from the binary DAS file */
-/*          attached to HANDLE, a routine called by this routine will */
-/*          signal an error. */
+/*     1)  If an error occurs while reading from the binary DAS file */
+/*         attached to HANDLE, the error is signaled by a routine in the */
+/*         call tree of this routine. */
 
-/*     2)   If an error occurs while writing to the text file attached */
-/*          to COMLUN, a routine called by this routine will signal an */
-/*          error. */
+/*     2)  If an error occurs while writing to the text file attached to */
+/*         COMLUN, the error is signaled by a routine in the call tree of */
+/*         this routine. */
 
 /* $ Files */
 
-/*     See parameters COMLUN and HANDLE in the $ Detailed_Inputs section. */
+/*     See parameters COMLUN and HANDLE in the $Detailed_Inputs section. */
 
 /* $ Particulars */
 
@@ -120,30 +120,30 @@ static integer c__22 = 22;
 
 /* $ Examples */
 
-/*      Let */
+/*     Let */
 
-/*         HANDLE   be the DAS file handle of a previously opened binary */
-/*                  DAS file. */
+/*        HANDLE   be the DAS file handle of a previously opened binary */
+/*                 DAS file. */
 
-/*         COMLUN   be the Fortran logical unit of a previously opened */
-/*                  text file that is to accept the comments from the */
-/*                  DAS comment area. */
+/*        COMLUN   be the Fortran logical unit of a previously opened */
+/*                 text file that is to accept the comments from the */
+/*                 DAS comment area. */
 
-/*      The subroutine call */
+/*     The subroutine call */
 
-/*         CALL DASECU ( HANDLE, COMLUN, COMNTS ) */
+/*        CALL DASECU ( HANDLE, COMLUN, COMNTS ) */
 
-/*      will extract the comments from the comment area of the binary */
-/*      DAS file attached to HANDLE, if there are any, and write them */
-/*      to the logical unit COMLUN. Upun successfur completion, the */
-/*      value of COMNTS will be .TRUE. if there were some comments */
-/*      in the comment area and .FALSE. otherwise. */
+/*     will extract the comments from the comment area of the binary */
+/*     DAS file attached to HANDLE, if there are any, and write them */
+/*     to the logical unit COMLUN. Upon successful completion, the */
+/*     value of COMNTS will be .TRUE. if there were some comments */
+/*     in the comment area and .FALSE. otherwise. */
 
 /* $ Restrictions */
 
-/*     The maximum length of a single line comment in the comment area is */
-/*     specified by the parameter LINLEN defined below. Currently this */
-/*     value is 255 characters. */
+/*     1)  The maximum length of a single line comment in the comment */
+/*         area is specified by the parameter LINLEN defined below. */
+/*         Currently this value is 255 characters. */
 
 /* $ Literature_References */
 
@@ -151,16 +151,23 @@ static integer c__22 = 22;
 
 /* $ Author_and_Institution */
 
-/*     K.R. Gehringer (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
 
 /* $ Version */
 
-/* -    Beta Version 1.0.0, 5-JAN-1993 (KRG) */
+/* -    SPICELIB Version 1.1.0, 20-AUG-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
+
+/* -    SPICELIB Version 1.0.0, 05-JAN-1993 (KRG) */
 
 /* -& */
 /* $ Index_Entries */
 
-/*      extract comments from a DAS file to a logical unit */
+/*     extract comments from a DAS file to a logical unit */
 
 /* -& */
 

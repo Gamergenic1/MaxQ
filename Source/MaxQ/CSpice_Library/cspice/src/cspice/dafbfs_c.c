@@ -51,7 +51,7 @@
 
 -Brief_I/O
 
-   Variable  I/O  Description
+   VARIABLE  I/O  DESCRIPTION
    --------  ---  --------------------------------------------------
    handle     I   Handle of file to be searched.
 
@@ -70,12 +70,16 @@
 
 -Exceptions
 
-   1)  If the input handle is invalid, the error will be diagnosed
-       by routines called by this routine.
+   1)  If the input handle is invalid, an error is signaled by a
+       routine in the call tree of this routine.
+
+   2)  If the summary record of the first record in the DAF file cannot be
+       read, the error SPICE(RECORDNOTFOUND) is signaled by a routine in the
+       call tree of this routine.
 
 -Files
 
-   See argument handle.
+   See argument `handle'.
 
 -Particulars
 
@@ -102,7 +106,7 @@
    backward. It is possible to search multiple DAFs simultaneously.
 
    dafbfs_c (begin forward search) and daffna are used to search the
-   arrays in a DAF in forward order.  In applications that search a
+   arrays in a DAF in forward order. In applications that search a
    single DAF at a time, the normal usage is
 
       dafbfs_c ( handle );
@@ -120,7 +124,7 @@
 
 
    dafbbs_c (begin backward search) and daffpa_c are used to search the
-   arrays in a DAF in backward order.  In applications that search
+   arrays in a DAF in backward order. In applications that search
    a single DAF at a time, the normal usage is
 
       dafbbs_c ( handle );
@@ -140,10 +144,10 @@
    In applications that conduct multiple searches simultaneously,
    the above usage must be modified to specify the handle of the
    file to operate on, in any case where the file may not be the
-   last one specified by dafbfs_c or dafbbs_c.  The routine dafcs_c
-   (DAF, continue search) is used for this purpose.  Below, we
+   last one specified by dafbfs_c or dafbbs_c. The routine dafcs_c
+   (DAF, continue search) is used for this purpose. Below, we
    give an example of an interleaved search of two files specified
-   by the handles handl1 and handl2.  The directions of searches
+   by the handles handl1 and handl2. The directions of searches
    in different DAFs are independent; here we conduct a forward
    search on one file and a backward search on the other.
    Throughout, we use dafcs to specify which file to operate on,
@@ -168,7 +172,7 @@
             dafgn_c ( name   );
              .
              .
-            dafcs_c  ( &handl1 );
+            dafcs_c  ( handl1  );
             daffna_c ( &found1 );
          }
 
@@ -187,12 +191,12 @@
 
    At any time, the latest array found (whether by daffna_c or daffpa_c)
    is regarded as the "current" array for the file in which the
-   array was found.  The last DAF in which a search was started,
+   array was found. The last DAF in which a search was started,
    executed, or continued by any of dafbfs_c, dafbbs_c, daffna_c,
-   daffpa_c or dafcs_c is regarded as the "current" DAF.  The summary
+   daffpa_c or dafcs_c is regarded as the "current" DAF. The summary
    and name for the current array in the current DAF can be obtained
-   separately, as shown above, by calls to DAFGS (get summary) and
-   dafgn_c (get name).  The handle of the current DAF can also be
+   separately, as shown above, by calls to dafgs_c (get summary) and
+   dafgn_c (get name). The handle of the current DAF can also be
    obtained by calling dafgh_c (get handle).
 
    Once a search has been begun, it may be continued in either
@@ -202,18 +206,30 @@
 
 -Examples
 
-   Example (1):
+   The numerical results shown for these examples may differ across
+   platforms. The results depend on the SPICE kernels used as input,
+   the compiler and supporting libraries, and the machine specific
+   arithmetic implementation.
 
-      See Particulars.
+   1) See -Particulars.
 
-   Example (2):
+   2) Create a simple program to output the double precision and integer
+      values stored in an SPK's segments' descriptors. This function
+      opens a DAF for read, performs a forwards search for the DAF
+      arrays, prints the segment descriptor for each array found, then
+      closes the DAF.
 
-   Use a simple routine to output the double precision and integer
-   values stored in an SPK's segments descriptors. This function
-   opens a DAF for read, performs a forwards search for the DAF
-   arrays, prints segments description for each array found, then
-   closes the DAF.
+      Use the SPK kernel below as input DAF file for the program.
 
+         de421.bsp
+
+
+      Example code begins here.
+
+
+      /.
+         Program dafbfs_ex1
+      ./
       #include <stdio.h>
       #include "SpiceUsr.h"
 
@@ -288,58 +304,62 @@
          return ( 0 );
          }
 
-   The program outputs:
 
-       Doubles: -3169195200.000000 1696852800.000000 
+      When this program was executed on a Mac/Intel/cc/64-bit
+      platform, the output was:
+
+
+       Doubles: -3169195200.000000 1696852800.000000
       Integers: 1 0 1 2 641 310404
-      
-       Doubles: -3169195200.000000 1696852800.000000 
+
+       Doubles: -3169195200.000000 1696852800.000000
       Integers: 2 0 1 2 310405 423048
-      
-       Doubles: -3169195200.000000 1696852800.000000 
+
+       Doubles: -3169195200.000000 1696852800.000000
       Integers: 3 0 1 2 423049 567372
-      
-       Doubles: -3169195200.000000 1696852800.000000 
+
+       Doubles: -3169195200.000000 1696852800.000000
       Integers: 4 0 1 2 567373 628976
-      
-       Doubles: -3169195200.000000 1696852800.000000 
+
+       Doubles: -3169195200.000000 1696852800.000000
       Integers: 5 0 1 2 628977 674740
-      
-       Doubles: -3169195200.000000 1696852800.000000 
+
+       Doubles: -3169195200.000000 1696852800.000000
       Integers: 6 0 1 2 674741 715224
-      
-       Doubles: -3169195200.000000 1696852800.000000 
+
+       Doubles: -3169195200.000000 1696852800.000000
       Integers: 7 0 1 2 715225 750428
-      
-       Doubles: -3169195200.000000 1696852800.000000 
+
+       Doubles: -3169195200.000000 1696852800.000000
       Integers: 8 0 1 2 750429 785632
-      
-       Doubles: -3169195200.000000 1696852800.000000 
+
+       Doubles: -3169195200.000000 1696852800.000000
       Integers: 9 0 1 2 785633 820836
-      
-       Doubles: -3169195200.000000 1696852800.000000 
+
+       Doubles: -3169195200.000000 1696852800.000000
       Integers: 10 0 1 2 820837 944040
-      
-       Doubles: -3169195200.000000 1696852800.000000 
+
+       Doubles: -3169195200.000000 1696852800.000000
       Integers: 301 3 1 2 944041 1521324
-      
-       Doubles: -3169195200.000000 1696852800.000000 
+
+       Doubles: -3169195200.000000 1696852800.000000
       Integers: 399 3 1 2 1521325 2098608
-      
-       Doubles: -3169195200.000000 1696852800.000000 
+
+       Doubles: -3169195200.000000 1696852800.000000
       Integers: 199 1 1 2 2098609 2098620
-      
-       Doubles: -3169195200.000000 1696852800.000000 
+
+       Doubles: -3169195200.000000 1696852800.000000
       Integers: 299 2 1 2 2098621 2098632
-      
-       Doubles: -3169195200.000000 1696852800.000000 
+
+       Doubles: -3169195200.000000 1696852800.000000
       Integers: 499 4 1 2 2098633 2098644
 
-      Note, the final entries in the integer array contains the segment
+
+      Note, the final entries in the integer array contain the segment
       start/end indexes. The output indicates the search proceeded
       from the start of the file (low value index) towards the end
       (high value index).
-   
+
 -Restrictions
 
    None.
@@ -350,29 +370,36 @@
 
 -Author_and_Institution
 
-   N.J. Bachman    (JPL)
-   W.L. Taber      (JPL)
-   I.M. Underwood  (JPL)
+   N.J. Bachman        (JPL)
+   J. Diaz del Rio     (ODC Space)
+   W.L. Taber          (JPL)
+   I.M. Underwood      (JPL)
+   E.D. Wright         (JPL)
 
 -Version
 
+   -CSPICE Version 1.0.3, 25-AUG-2021 (JDR)
+
+       Edited the header to comply with NAIF standard. Added
+       entry #2 to -Exceptions section.
+
    -CSPICE Version 1.0.2, 28-JUN-2016 (EDW)
 
-      Edit to Example code, SpiceInts output as ints using 
-      explicit casting.
+       Edit to Example code, SpiceInts output as ints using
+       explicit casting.
 
    -CSPICE Version 1.0.1, 10-OCT-2012 (EDW)
 
-      Added a functional code example to the Examples section.
+       Added a functional code example to the -Examples section.
 
-      Removed the obsolete Reference citation to "NAIF
-      Document 167.0."
+       Removed the obsolete Reference citation to "NAIF
+       Document 167.0."
 
    -CSPICE Version 1.0.0, 31-JUL-1999 (NJB) (WLT) (IMU)
 
 -Index_Entries
 
-   begin daf forward search
+   begin DAF forward search
 
 -&
 */

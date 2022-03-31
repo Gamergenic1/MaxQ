@@ -3,9 +3,9 @@
 -Procedure vprjp_c ( Vector projection onto plane )
 
 -Abstract
- 
-   Project a vector onto a specified plane, orthogonally. 
- 
+
+   Project a vector onto a specified plane, orthogonally.
+
 -Disclaimer
 
    THIS SOFTWARE AND ANY RELATED MATERIALS WERE CREATED BY THE
@@ -32,16 +32,16 @@
    ACTIONS OF RECIPIENT IN THE USE OF THE SOFTWARE.
 
 -Required_Reading
- 
-   PLANES 
- 
+
+   PLANES
+
 -Keywords
- 
-   GEOMETRY 
-   MATH 
-   PLANE 
-   VECTOR 
- 
+
+   GEOMETRY
+   MATH
+   PLANE
+   VECTOR
+
 */
 
    #include "SpiceUsr.h"
@@ -50,85 +50,160 @@
 
    void vprjp_c ( ConstSpiceDouble    vin   [3],
                   ConstSpicePlane   * plane,
-                  SpiceDouble         vout  [3] ) 
+                  SpiceDouble         vout  [3] )
 
 /*
 
 -Brief_I/O
- 
-   Variable  I/O  Description 
-   --------  ---  -------------------------------------------------- 
-   vin        I   Vector to be projected. 
-   plane      I   A CSPICE plane onto which vin is projected. 
-   vout       O   Vector resulting from projection. 
- 
+
+   VARIABLE  I/O  DESCRIPTION
+   --------  ---  --------------------------------------------------
+   vin        I   Vector to be projected.
+   plane      I   A SPICE plane onto which `vin' is projected.
+   vout       O   Vector resulting from projection.
+
 -Detailed_Input
- 
-   vin            is a 3-vector that is to be orthogonally projected 
-                  onto a specified plane. 
- 
-   plane          is a CSPICE plane that represents the geometric 
-                  plane onto which vin is to be projected. 
- 
+
+   vin         is a 3-vector that is to be orthogonally projected
+               onto a specified plane.
+
+   plane       is a SPICE plane that represents the geometric
+               plane onto which `vin' is to be projected.
+
+               The normal vector component of a SPICE plane has
+               unit length.
+
 -Detailed_Output
- 
-   vout           is the vector resulting from the orthogonal 
-                  projection of vin onto plane.  vout is the closest 
-                  point in the specified plane to vin. 
- 
+
+   vout        is the vector resulting from the orthogonal
+               projection of `vin' onto `plane'. `vout' is the closest
+               point in the specified plane to `vin'.
+
 -Parameters
- 
-   None. 
- 
+
+   None.
+
 -Exceptions
- 
-   1)  Invalid input planes are diagnosed by the routine pl2nvc_c, 
-       which is called by this routine. 
- 
+
+   1)  If the normal vector of the input plane does not have unit
+       length (allowing for round-off error), the error
+       SPICE(NONUNITNORMAL) is signaled by a routine in the call tree
+       of this routine.
+
 -Files
- 
-   None. 
- 
+
+   None.
+
 -Particulars
- 
-   Projecting a vector v orthogonally onto a plane can be thought of 
-   as finding the closest vector in the plane to v.  This `closest 
-   vector' always exists; it may be coincident with the original 
-   vector. 
- 
-   Two related routines are vprjpi_c, which inverts an orthogonal 
-   projection of a vector onto a plane, and vproj_c, which projects 
-   a vector orthogonally onto another vector. 
- 
+
+   Projecting a vector `vin' orthogonally onto a plane can be thought
+   of as finding the closest vector in the plane to `vin'. This
+   "closest vector" always exists; it may be coincident with the
+   original vector.
+
+   Two related routines are vprjpi_c, which inverts an orthogonal
+   projection of a vector onto a plane, and vproj_c, which projects
+   a vector orthogonally onto another vector.
+
 -Examples
- 
-   1)   Find the closest point in the ring plane of a planet to a 
-        spacecraft located at positn (in body-fixed coordinates). 
-        Suppose the vector normal is normal to the ring plane, and 
-        that origin, which represents the body center, is in the 
-        ring plane.  Then we can make a `plane' with the code 
- 
-           nvp2pl_c ( normal, origin, &plane ); 
- 
-        can find the projection by making the call 
- 
-           vprjp_c ( positn, &plane, proj ); 
- 
+
+   The numerical results shown for this example may differ across
+   platforms. The results depend on the SPICE kernels used as
+   input, the compiler and supporting libraries, and the machine
+   specific arithmetic implementation.
+
+   1) Find the closest point in the ring plane of a planet to a
+      spacecraft located at a point (in body-fixed coordinates).
+
+
+      Example code begins here.
+
+
+      /.
+         Program vprjp_ex1
+      ./
+      #include <stdio.h>
+      #include "SpiceUsr.h"
+
+      int main( )
+      {
+         /.
+         Local variables.
+         ./
+         SpiceDouble          proj   [3];
+         SpicePlane           ringpl;
+
+         /.
+         Set the spacecraft location and define the normal
+         vector as the normal to the equatorial plane, and
+         the origin at the body/ring center.
+         ./
+         SpiceDouble          scpos  [3] = { -29703.16955,
+                                             879765.72163,
+                                             -137280.21757 };
+
+         SpiceDouble          norm   [3] = { 0.0, 0.0, 1.0 };
+
+         SpiceDouble          orig   [3] = { 0.0, 0.0, 0.0 };
+
+         /.
+         Create the plane structure.
+         ./
+         nvp2pl_c ( norm, orig, &ringpl );
+
+         /.
+         Project the position vector onto the ring plane.
+         ./
+         vprjp_c ( scpos, &ringpl, proj );
+
+         printf( "Projection of S/C position onto ring plane:\n" );
+         printf( "%17.5f %16.5f %16.5f\n", proj[0], proj[1], proj[2] );
+
+         return ( 0 );
+      }
+
+
+      When this program was executed on a Mac/Intel/cc/64-bit
+      platform, the output was:
+
+
+      Projection of S/C position onto ring plane:
+           -29703.16955     879765.72163          0.00000
+
+
 -Restrictions
- 
-   None. 
- 
+
+   1)  It is recommended that the input plane be created by one of
+       the CSPICE routines
+
+          nvc2pl_c ( Normal vector and constant to plane )
+          nvp2pl_c ( Normal vector and point to plane    )
+          psv2pl_c ( Point and spanning vectors to plane )
+
+       In any case the input plane must have a unit length normal
+       vector and a plane constant consistent with the normal
+       vector.
+
 -Literature_References
- 
-   [1] `Calculus and Analytic Geometry', Thomas and Finney. 
- 
+
+   [1]  G. Thomas and R. Finney, "Calculus and Analytic Geometry,"
+        7th Edition, Addison Wesley, 1988.
+
 -Author_and_Institution
- 
-   N.J. Bachman   (JPL) 
-   B.V. Semenov   (JPL)
- 
+
+   N.J. Bachman        (JPL)
+   J. Diaz del Rio     (ODC Space)
+   B.V. Semenov        (JPL)
+
 -Version
- 
+
+   -CSPICE Version 1.0.2, 24-AUG-2021 (JDR) (NJB)
+
+       Edited the header to comply with NAIF standard. Added complete
+       code example.
+
+       Added entry #1 to -Exceptions section, and entry #1 to -Restrictions.
+
    -CSPICE Version 1.0.1, 01-FEB-2017 (BVS)
 
        Typo fix: pnv2pl_c -> nvp2pl_c.
@@ -136,9 +211,9 @@
    -CSPICE Version 1.0.0, 05-MAR-1999 (NJB)
 
 -Index_Entries
- 
-   vector projection onto plane 
- 
+
+   vector projection onto plane
+
 -&
 */
 
@@ -156,11 +231,11 @@
    Participate in error tracing.
    */
 
-   if ( return_c() ) 
+   if ( return_c() )
    {
       return;
    }
-   
+
    chkin_c ( "vprjp_c" );
 
 
@@ -169,8 +244,8 @@
    for the plane.
    */
    pl2nvc_c ( plane, normal, &constant );
- 
-   
+
+
    /*
    Let the notation < a, b > indicate the inner product of vectors
    a and b.
@@ -188,15 +263,14 @@
 
    Subtracting this multiple of normal from vin yields vout.
    */
- 
+
    vlcom_c (  1.0,
               vin,
               constant - vdot_c ( vin, normal ),
               normal,
               vout                              );
- 
- 
+
+
    chkout_c ( "vprjp_c" );
 
 } /* End vprjp_c */
-

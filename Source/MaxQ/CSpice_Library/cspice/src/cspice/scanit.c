@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      SCANIT ( Scan a character string ) */
+/* $Procedure SCANIT ( Scan a character string ) */
 /* Subroutine */ int scanit_0_(int n__, char *string, integer *start, integer 
 	*room, integer *nmarks, char *marks, integer *mrklen, integer *pnters,
 	 integer *ntokns, integer *ident, integer *beg, integer *end, ftnlen 
@@ -72,21 +72,21 @@
 
 /* $ Keywords */
 
-/*     SEARCH */
 /*     PARSE */
+/*     SEARCH */
 
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     STRING     I   a string to be scanned. */
 /*     ROOM       I   space available for located substrings. */
-/*     NMARKS    I/O  number of recognizable substrings. */
-/*     MARKS     I/O  recognizable substrings. */
-/*     MRKLEN    I/O  an auxiliary array describing MARKS. */
-/*     PNTERS    I/O  an auxiliary array describing MARKS. */
-/*     START     I/O  position from which to commence/resume scanning. */
+/*     NMARKS    I-O  number of recognizable substrings. */
+/*     MARKS     I-O  recognizable substrings. */
+/*     MRKLEN    I-O  an auxiliary array describing MARKS. */
+/*     PNTERS    I-O  an auxiliary array describing MARKS. */
+/*     START     I-O  position from which to commence/resume scanning. */
 /*     NTOKNS     O   number of scanned substrings. */
 /*     BEG        O   beginnings of scanned substrings. */
 /*     END        O   endings of scanned substrings. */
@@ -94,85 +94,85 @@
 
 /* $ Detailed_Input */
 
-/*     STRING     is any character string that is to be scanned */
-/*                to locate recognized and unrecognized substrings. */
+/*     STRING   is any character string that is to be scanned */
+/*              to locate recognized and unrecognized substrings. */
 
-/*     ROOM       is the amount of space available for storing the */
-/*                results of scanning the string. */
+/*     ROOM     is the amount of space available for storing the */
+/*              results of scanning the string. */
 
-/*     NMARKS     is the number of marks that will be */
-/*                recognized substrings of STRING. */
+/*     NMARKS   is the number of marks that will be */
+/*              recognized substrings of STRING. */
 
-/*     MARKS      is an array of marks that will be recognized */
-/*                by the scanning routine.  The array must be */
-/*                processed by a call to SCANPR before it can */
-/*                be used by SCAN.  Further details are given */
-/*                in documentation for the individual entry points. */
+/*     MARKS    is an array of marks that will be recognized */
+/*              by the scanning routine. The array must be */
+/*              processed by a call to SCANPR before it can */
+/*              be used by SCAN. Further details are given */
+/*              in documentation for the individual entry points. */
 
-/*     MRKLEN     is an auxiliary array populated by SCANPR */
-/*                for use by SCAN.  It should be declared with */
-/*                length equal to the length of MARKS. */
+/*     MRKLEN   is an auxiliary array populated by SCANPR */
+/*              for use by SCAN. It should be declared with */
+/*              length equal to the length of MARKS. */
 
-/*     PNTERS     is an auxiliary array populated by SCANPR for */
-/*                use by SCAN.  It should be declared in the */
-/*                calling program as */
+/*     PNTERS   is an auxiliary array populated by SCANPR for */
+/*              use by SCAN. It should be declared in the */
+/*              calling program as */
 
-/*                   INTEGER  PNTERS ( RCHARS ) */
+/*                 INTEGER  PNTERS ( RCHARS ) */
 
-/*                RCHARS is given by the expression */
+/*              RCHARS is given by the expression */
 
-/*                  MAX - MIN + 5 */
+/*                MAX - MIN + 5 */
 
-/*                where */
+/*              where */
 
-/*                MAX is the maximum value of ICHAR(MARKS(I)(1:1)) */
-/*                    over the range I = 1, NMARKS */
+/*              MAX is the maximum value of ICHAR(MARKS(I)(1:1)) */
+/*                  over the range I = 1, NMARKS */
 
-/*                MIN is the minimum value of ICHAR(MARKS(I)(1:1)) */
-/*                    over the range I = 1, NMARKS */
+/*              MIN is the minimum value of ICHAR(MARKS(I)(1:1)) */
+/*                  over the range I = 1, NMARKS */
 
 /*               Further details are provided in the entry point */
 /*               SCANPR. */
 
-/*     START     is the position in the STRING from which scanning */
-/*               should commence. */
+/*     START    is the position in the STRING from which scanning */
+/*              should commence. */
 
 /* $ Detailed_Output */
 
-/*     NMARKS    is the number of marks in the array MARKS after it */
-/*               has been prepared for SCANPR. */
+/*     NMARKS   is the number of marks in the array MARKS after it */
+/*              has been prepared for SCANPR. */
 
-/*     MARKS     is an array of recognizable substrings that has */
-/*               been prepared for SCAN by SCANPR.  Note that MARKS */
-/*               will be sorted in increasing order. */
+/*     MARKS    is an array of recognizable substrings that has */
+/*              been prepared for SCAN by SCANPR. Note that MARKS */
+/*              will be sorted in increasing order. */
 
-/*     MRKLEN    is an auxiliary array, populated by SCANPR for */
-/*               use by SCAN. */
+/*     MRKLEN   is an auxiliary array, populated by SCANPR for */
+/*              use by SCAN. */
 
-/*     PNTERS    is an auxiliary array, populated by a call to */
-/*               SCANPR and is intended for use by SCAN. */
+/*     PNTERS   is an auxiliary array, populated by a call to */
+/*              SCANPR and is intended for use by SCAN. */
 
-/*     START     is the position from which scanning should continue */
-/*               in order to fully scan STRING (if sufficient memory was */
-/*               not provided in BEG, END, and IDENT on the current */
-/*               call to SCAN). */
+/*     START    is the position from which scanning should continue */
+/*              in order to fully scan STRING (if sufficient memory was */
+/*              not provided in BEG, END, and IDENT on the current */
+/*              call to SCAN). */
 
-/*     NTOKNS    is the number of substrings identified in the current */
-/*               scan of STRING. */
+/*     NTOKNS   is the number of substrings identified in the current */
+/*              scan of STRING. */
 
-/*     BEG       Beginnings of scanned substrings. */
-/*               This should be declared so that it is at least */
-/*               as large as ROOM. */
+/*     BEG      beginnings of scanned substrings. */
+/*              This should be declared so that it is at least */
+/*              as large as ROOM. */
 
-/*     END       Endings of scanned substrings. */
-/*               This should be declared so that it is at least */
-/*               as large as ROOM. */
+/*     END      endings of scanned substrings. */
+/*              This should be declared so that it is at least */
+/*              as large as ROOM. */
 
-/*     IDENT     Positions of scanned substring within array MARKS. */
-/*               If the substring STRING(BEG(I):END(I)) is not in the */
-/*               list of MARKS then IDENT(I) will have the value 0. */
-/*               This should be declared so that it is at least */
-/*               as large as ROOM. */
+/*     IDENT    positions of scanned substring within array MARKS. */
+/*              If the substring STRING(BEG(I):END(I)) is not in the */
+/*              list of MARKS then IDENT(I) will have the value 0. */
+/*              This should be declared so that it is at least */
+/*              as large as ROOM. */
 
 /* $ Parameters */
 
@@ -180,8 +180,8 @@
 
 /* $ Exceptions */
 
-/*     1) If this routine is called directly the error */
-/*        'SPICE(BOGUSENTRY)' will be signalled. */
+/*     1)  If this routine is called directly, the error */
+/*         SPICE(BOGUSENTRY) is signaled. */
 
 /* $ Files */
 
@@ -190,11 +190,11 @@
 /* $ Particulars */
 
 /*     This routine serves as an umbrella routine for the two entry */
-/*     points SCANPR and SCAN.  It can be used to locate keywords */
+/*     points SCANPR and SCAN. It can be used to locate keywords */
 /*     or delimited substrings within a string. */
 
 /*     The process of breaking a string into those substrings that */
-/*     have recognizable meaning, is called "scanning."  The substrings */
+/*     have recognizable meaning, is called "scanning." The substrings */
 /*     identified by the scanning process are called "tokens." */
 
 /*     Scanning has many applications including: */
@@ -274,8 +274,8 @@
 /*        END IF */
 
 /*     Notice that the call to SCANPR is nested inside an */
-/*     IF ( FIRST ) THEN ... END IF block.  In this and many applications */
-/*     the marks that will be used in the scan are fixed.  Since the */
+/*     IF ( FIRST ) THEN ... END IF block. In this and many applications */
+/*     the marks that will be used in the scan are fixed. Since the */
 /*     marks are not changing, you need to process MARKS and set up */
 /*     the auxiliary arrays MRKLEN and PNTERS only once (assuming that */
 /*     you SAVE the appropriate variables as has been done above). */
@@ -316,7 +316,7 @@
 /*        ( X + Y ) * ( 2*Z + SIN(W) ) ** 2 */
 
 /*     You would select '**', '*', '+', '-', '(', ')' and ' ' */
-/*     to be the markers.  Note that all of these begin with one */
+/*     to be the markers. Note that all of these begin with one */
 /*     of the characters in the string ' !"#$%&''()*+,-./' */
 /*     so that we can declare PNTERS to have length 20. */
 
@@ -380,7 +380,7 @@
 /*     END DO */
 
 /*     Now all of the substrings remaining point to grouping symbols, */
-/*     operators, functions, or variables.  Given that the individual */
+/*     operators, functions, or variables. Given that the individual */
 /*     "words" of the expression are now in hand, the meaning of the */
 /*     expression is much easier to determine. */
 
@@ -389,8 +389,9 @@
 
 /* $ Restrictions */
 
-/*     The array of MARKS, MRKLEN, and PNTERS must be properly formatted */
-/*     prior to calling SCAN.  This is accomplished by calling SCANPR. */
+/*     1)  The array of MARKS, MRKLEN, and PNTERS must be properly */
+/*         formatted prior to calling SCAN. This is accomplished by */
+/*         calling SCANPR. */
 
 /* $ Literature_References */
 
@@ -398,11 +399,18 @@
 
 /* $ Author_and_Institution */
 
-/*     W.L. Taber     (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
 
-/* -    Spicelib Version  1.0.0, 26-JUL-1996 (WLT) */
+/* -    SPICELIB Version 1.1.0, 26-OCT-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
+
+/* -    SPICELIB Version 1.0.0, 26-JUL-1996 (WLT) */
 
 /* -& */
 /* $ Index_Entries */
@@ -490,236 +498,237 @@ L_scanpr:
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
-/*     NMARKS    I/O  Number of recognizable substrings. */
-/*     MARKS     I/O  Recognizable substrings. */
+/*     NMARKS    I-O  Number of recognizable substrings. */
+/*     MARKS     I-O  Recognizable substrings. */
 /*     MRKLEN     O   auxiliary array describing MARKS. */
 /*     PNTERS     O   auxiliary array describing MARKS. */
 
 /* $ Detailed_Input */
 
-/*     NMARKS     is the number of recognized marks that will be */
-/*                recognized substrings of STRING. */
+/*     NMARKS   is the number of recognized marks that will be */
+/*              recognized substrings of STRING. */
 
-/*     MARKS      is an array of marks that will be recognized */
-/*                by the scanning routine.  Leading and trailing */
-/*                blanks are not significant.  (Except for the */
-/*                blank character ' ', itself.  After all, some */
-/*                part of it must be significant.)  Case of the */
-/*                entries in MARKS is significant. The MARKS */
-/*                'XX' and 'xx' are regarded as different MARKS. */
+/*     MARKS    is an array of marks that will be recognized */
+/*              by the scanning routine. Leading and trailing */
+/*              blanks are not significant. (Except for the */
+/*              blank character ' ', itself.  After all, some */
+/*              part of it must be significant.)  Case of the */
+/*              entries in MARKS is significant. The MARKS */
+/*              'XX' and 'xx' are regarded as different MARKS. */
 
 /* $ Detailed_Output */
 
-/*     NMARKS     is the number of marks in the array MARKS after it */
-/*                has been prepared for SCAN. */
+/*     NMARKS   is the number of marks in the array MARKS after it */
+/*              has been prepared for SCAN. */
 
-/*     MARKS      is an array of recognizable substrings. */
-/*                It has been prepared for use by SCAN */
-/*                so as to be compatible with the other arrays. */
-/*                It will be sorted in ascending order, left */
-/*                justified and contain no duplicate entries. */
+/*     MARKS    is an array of recognizable substrings. */
+/*              It has been prepared for use by SCAN */
+/*              so as to be compatible with the other arrays. */
+/*              It will be sorted in ascending order, left */
+/*              justified and contain no duplicate entries. */
 
-/*     MRKLEN     is an auxiliary array populated by SCANPR */
-/*                for use by SCAN that describes MARKS. */
+/*     MRKLEN   is an auxiliary array populated by SCANPR */
+/*              for use by SCAN that describes MARKS. */
 
-/*     PNTERS     is an auxiliary array populated by SCANPR for */
-/*                use by SCAN.  It should be declared in the */
-/*                calling program as */
+/*     PNTERS   is an auxiliary array populated by SCANPR for */
+/*              use by SCAN. It should be declared in the */
+/*              calling program as */
 
-/*                   INTEGER   PNTERS ( RCHARS ) */
+/*                 INTEGER   PNTERS ( RCHARS ) */
 
-/*                RCHARS is given by the expression */
+/*              RCHARS is given by the expression */
 
-/*                  MAX - MIN + 5 */
+/*                MAX - MIN + 5 */
 
-/*                where */
+/*              where */
 
-/*                MAX is the maximum value of ICHAR(MARKS(I)(1:1)) */
-/*                    over the range I = 1, NMARKS */
+/*              MAX is the maximum value of ICHAR(MARKS(I)(1:1)) */
+/*                  over the range I = 1, NMARKS */
 
-/*                MIN is the minimum value of ICHAR(MARKS(I)(1:1)) */
-/*                    over the range I = 1, NMARKS */
+/*              MIN is the minimum value of ICHAR(MARKS(I)(1:1)) */
+/*                  over the range I = 1, NMARKS */
 
-/*                Here are some typical values that may help you avoid */
-/*                going through the computations above.  (This assumes */
-/*                that ICHAR returns the ASCII code for a character.) */
+/*              Here are some typical values that may help you avoid */
+/*              going through the computations above. (This assumes */
+/*              that ICHAR returns the ASCII code for a character.) */
 
-/*                Scanning Situation           RCHAR */
-/*                ------------------          ------------------- */
-/*                If NMARKS = 1 */
-/*                or all MARKS                   5 */
-/*                begin with the same */
-/*                character. */
+/*              Scanning Situation           RCHAR */
+/*              ------------------          ------------------- */
+/*              If NMARKS = 1 */
+/*              or all MARKS                   5 */
+/*              begin with the same */
+/*              character. */
 
-/*                All MARKS begin with */
-/*                one of the characters          20 */
-/*                in the string */
-/*                ' !"#$%&''()*+,-./' */
+/*              All MARKS begin with */
+/*              one of the characters          20 */
+/*              in the string */
+/*              ' !"#$%&''()*+,-./' */
 
-/*                All MARKS begin with */
-/*                one of the characters          11 */
-/*                in the string */
-/*                ':;<=>?@' */
+/*              All MARKS begin with */
+/*              one of the characters          11 */
+/*              in the string */
+/*              ':;<=>?@' */
 
-/*                All MARKS begin with */
-/*                one of the characters          37 */
-/*                in the string */
-/*                ' !"#$%&''()*+,-./:;<=>?@' */
+/*              All MARKS begin with */
+/*              one of the characters          37 */
+/*              in the string */
+/*              ' !"#$%&''()*+,-./:;<=>?@' */
 
-/*                All MARKS begin with */
-/*                an upper case english letter   30 */
+/*              All MARKS begin with */
+/*              an upper case English letter   30 */
 
-/*                All MARKS begin with a */
-/*                decimal digit                  14 */
+/*              All MARKS begin with a */
+/*              decimal digit                  14 */
 
-/*                All Marks begin with a */
-/*                lower case english letter      30 */
+/*              All Marks begin with a */
+/*              lower case English letter      30 */
 
-/*                All Marks begin with */
-/*                a digit or upper case          47 */
-/*                character. */
+/*              All Marks begin with */
+/*              a digit or upper case          47 */
+/*              character. */
 
-/*                All Marks begin with a */
-/*                printing character or          100 */
-/*                a blank. */
+/*              All Marks begin with a */
+/*              printing character or          100 */
+/*              a blank. */
 
-/*                Anything might be a mark       132 */
+/*              Anything might be a mark       132 */
 
-/*                Finally, so you won't have to look it up elsewhere */
-/*                here are the ASCII codes for the printing */
-/*                characters and blanks. */
+/*              Finally, so you won't have to look it up elsewhere */
+/*              here are the ASCII codes for the printing */
+/*              characters and blanks. */
 
-/*                (Common Punctuations) Character     ASCII Code */
-/*                                      -----------   ---------- */
-/*                                      ' ' (space)     32 */
-/*                                      '!'             33 */
-/*                                      '"'             34 */
-/*                                      '#'             35 */
-/*                                      '$'             36 */
-/*                                      '%'             37 */
-/*                                      '&'             38 */
-/*                                      ''''            39 */
-/*                                      '('             40 */
-/*                                      ')'             41 */
-/*                                      '*'             42 */
-/*                                      '+'             43 */
-/*                                      ','             44 */
-/*                                      '-'             45 */
-/*                                      '.'             46 */
-/*                                      '/'             47 */
+/*              (Common Punctuations) Character     ASCII Code */
+/*                                    -----------   ---------- */
+/*                                    ' ' (space)     32 */
+/*                                    '!'             33 */
+/*                                    '"'             34 */
+/*                                    '#'             35 */
+/*                                    '$'             36 */
+/*                                    '%'             37 */
+/*                                    '&'             38 */
+/*                                    ''''            39 */
+/*                                    '('             40 */
+/*                                    ')'             41 */
+/*                                    '*'             42 */
+/*                                    '+'             43 */
+/*                                    ','             44 */
+/*                                    '-'             45 */
+/*                                    '.'             46 */
+/*                                    '/'             47 */
 
 
-/*                (Decimal Digits)      Character     ASCII Code */
-/*                                      -----------   ---------- */
-/*                                      '0'             48 */
-/*                                      '1'             49 */
-/*                                      '2'             50 */
-/*                                      '3'             51 */
-/*                                      '4'             52 */
-/*                                      '5'             53 */
-/*                                      '6'             54 */
-/*                                      '7'             55 */
-/*                                      '8'             56 */
-/*                                      '9'             57 */
+/*              (Decimal Digits)      Character     ASCII Code */
+/*                                    -----------   ---------- */
+/*                                    '0'             48 */
+/*                                    '1'             49 */
+/*                                    '2'             50 */
+/*                                    '3'             51 */
+/*                                    '4'             52 */
+/*                                    '5'             53 */
+/*                                    '6'             54 */
+/*                                    '7'             55 */
+/*                                    '8'             56 */
+/*                                    '9'             57 */
 
-/*                (More punctuation)    Character     ASCII Code */
-/*                                      -----------   ---------- */
-/*                                      ':'             58 */
-/*                                      ';'             59 */
-/*                                      '<'             60 */
-/*                                      '='             61 */
-/*                                      '>'             62 */
-/*                                      '?'             63 */
-/*                                      '@'             64 */
+/*              (More punctuation)    Character     ASCII Code */
+/*                                    -----------   ---------- */
+/*                                    ':'             58 */
+/*                                    ';'             59 */
+/*                                    '<'             60 */
+/*                                    '='             61 */
+/*                                    '>'             62 */
+/*                                    '?'             63 */
+/*                                    '@'             64 */
 
 /*              (Uppercase characters)  Character     ASCII Code */
-/*                                      -----------   ---------- */
-/*                                      'A'             65 */
-/*                                      'B'             66 */
-/*                                      'C'             67 */
-/*                                      'D'             68 */
-/*                                      'E'             69 */
-/*                                      'F'             70 */
-/*                                      'G'             71 */
-/*                                      'H'             72 */
-/*                                      'I'             73 */
-/*                                      'J'             74 */
-/*                                      'K'             75 */
-/*                                      'L'             76 */
-/*                                      'M'             77 */
-/*                                      'N'             78 */
-/*                                      'O'             79 */
-/*                                      'P'             80 */
-/*                                      'Q'             81 */
-/*                                      'R'             82 */
-/*                                      'S'             83 */
-/*                                      'T'             84 */
-/*                                      'U'             85 */
-/*                                      'V'             86 */
-/*                                      'W'             87 */
-/*                                      'X'             88 */
-/*                                      'Y'             89 */
-/*                                      'Z'             90 */
+/*                                    -----------   ---------- */
+/*                                    'A'             65 */
+/*                                    'B'             66 */
+/*                                    'C'             67 */
+/*                                    'D'             68 */
+/*                                    'E'             69 */
+/*                                    'F'             70 */
+/*                                    'G'             71 */
+/*                                    'H'             72 */
+/*                                    'I'             73 */
+/*                                    'J'             74 */
+/*                                    'K'             75 */
+/*                                    'L'             76 */
+/*                                    'M'             77 */
+/*                                    'N'             78 */
+/*                                    'O'             79 */
+/*                                    'P'             80 */
+/*                                    'Q'             81 */
+/*                                    'R'             82 */
+/*                                    'S'             83 */
+/*                                    'T'             84 */
+/*                                    'U'             85 */
+/*                                    'V'             86 */
+/*                                    'W'             87 */
+/*                                    'X'             88 */
+/*                                    'Y'             89 */
+/*                                    'Z'             90 */
 
-/*                (More punctuation)    Character     ASCII Code */
-/*                                      -----------   ---------- */
-/*                                      '['             91 */
-/*                                      '\'             92 */
-/*                                      ']'             93 */
-/*                                      '^'             94 */
-/*                                      '_'             95 */
-/*                                      '`'             96 */
+/*              (More punctuation)    Character     ASCII Code */
+/*                                    -----------   ---------- */
+/*                                    '['             91 */
+/*                                    '\'             92 */
+/*                                    ']'             93 */
+/*                                    '^'             94 */
+/*                                    '_'             95 */
+/*                                    '`'             96 */
 
 /*              (Lowercase characters)  Character     ASCII Code */
-/*                                      -----------   ---------- */
-/*                                      'a'             97 */
-/*                                      'b'             98 */
-/*                                      'c'             99 */
-/*                                      'd'            100 */
-/*                                      'e'            101 */
-/*                                      'f'            102 */
-/*                                      'g'            103 */
-/*                                      'h'            104 */
-/*                                      'i'            105 */
-/*                                      'j'            106 */
-/*                                      'k'            107 */
-/*                                      'l'            108 */
-/*                                      'm'            109 */
-/*                                      'n'            110 */
-/*                                      'o'            111 */
-/*                                      'p'            112 */
-/*                                      'q'            113 */
-/*                                      'r'            114 */
-/*                                      's'            115 */
-/*                                      't'            116 */
-/*                                      'u'            117 */
-/*                                      'v'            118 */
-/*                                      'w'            119 */
-/*                                      'x'            120 */
-/*                                      'y'            121 */
-/*                                      'z'            122 */
+/*                                    -----------   ---------- */
+/*                                    'a'             97 */
+/*                                    'b'             98 */
+/*                                    'c'             99 */
+/*                                    'd'            100 */
+/*                                    'e'            101 */
+/*                                    'f'            102 */
+/*                                    'g'            103 */
+/*                                    'h'            104 */
+/*                                    'i'            105 */
+/*                                    'j'            106 */
+/*                                    'k'            107 */
+/*                                    'l'            108 */
+/*                                    'm'            109 */
+/*                                    'n'            110 */
+/*                                    'o'            111 */
+/*                                    'p'            112 */
+/*                                    'q'            113 */
+/*                                    'r'            114 */
+/*                                    's'            115 */
+/*                                    't'            116 */
+/*                                    'u'            117 */
+/*                                    'v'            118 */
+/*                                    'w'            119 */
+/*                                    'x'            120 */
+/*                                    'y'            121 */
+/*                                    'z'            122 */
 
 /*              (More punctuation)      Character     ASCII Code */
-/*                                      -----------   ---------- */
-/*                                      '{'            123 */
-/*                                      '|'            124 */
-/*                                      '}'            125 */
-/*                                      '~'            126 */
+/*                                    -----------   ---------- */
+/*                                    '{'            123 */
+/*                                    '|'            124 */
+/*                                    '}'            125 */
+/*                                    '~'            126 */
+
 /* $ Parameters */
 
 /*     None. */
 
 /* $ Exceptions */
 
-/*     Error Free. */
+/*     Error free. */
 
-/*     1) A space is regarded as a special mark.  If MARKS(I) = ' ', */
-/*        then MARKS(I) will match any consecutive sequence of blanks. */
+/*     1)  A space is regarded as a special mark. If MARKS(I) = ' ', */
+/*         then MARKS(I) will match any consecutive sequence of blanks. */
 
-/*     2) If NMARKS is less than or equal to zero, SCAN will always */
-/*        find a single token, namely the entire string to be scanned. */
+/*     2)  If NMARKS is less than or equal to zero, SCAN will always */
+/*         find a single token, namely the entire string to be scanned. */
 
 /* $ Files */
 
@@ -734,7 +743,7 @@ L_scanpr:
 /*     and that from the programming point of view it is */
 /*     easiest to simply supply a list of MARKS to a "formatting" */
 /*     routine such as this so that the strings can then */
-/*     be efficiently scanned by the routine SCAN.  This formatting */
+/*     be efficiently scanned by the routine SCAN. This formatting */
 /*     is the function of this routine. */
 
 /* $ Examples */
@@ -791,8 +800,8 @@ L_scanpr:
 /*        END IF */
 
 /*     Notice that the call to SCANPR is nested inside an */
-/*     IF ( FIRST ) THEN ... END IF block.  In this and many applications */
-/*     the marks that will used in the scan are fixed.  Since the marks */
+/*     IF ( FIRST ) THEN ... END IF block. In this and many applications */
+/*     the marks that will used in the scan are fixed. Since the marks */
 /*     are not changing, you need to process MARKS and set up */
 /*     the auxiliary arrays MRKLEN and PNTERS only once (assuming that */
 /*     you SAVE the appropriate variables as has been done above). */
@@ -800,13 +809,12 @@ L_scanpr:
 /*     a small overhead required for preparing the data so that it */
 /*     can be used efficiently in scanning. */
 
-
 /* $ Restrictions */
 
-/*     MRKLEN and PNTERS must be declared to be at least as large */
-/*     as indicated above.  If not, this routine will write */
-/*     past the ends of these arrays.  Much unpleasantness may */
-/*     ensue in the attempt to debug such problems. */
+/*     1)  MRKLEN and PNTERS must be declared to be at least as large */
+/*         as indicated above. If not, this routine will write */
+/*         past the ends of these arrays. Much unpleasantness may */
+/*         ensue in the attempt to debug such problems. */
 
 /* $ Literature_References */
 
@@ -814,11 +822,18 @@ L_scanpr:
 
 /* $ Author_and_Institution */
 
-/*     W.L. Taber     (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
 
-/* -    Spicelib Version  1.0.0, 26-JUL-1996 (WLT) */
+/* -    SPICELIB Version 1.1.0, 26-OCT-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
+
+/* -    SPICELIB Version 1.0.0, 26-JUL-1996 (WLT) */
 
 /* -& */
 /* $ Index_Entries */
@@ -955,9 +970,9 @@ L_scanpr:
 L_scan:
 /* $ Abstract */
 
-/*     This routine scans a string returning the beginning and */
-/*     ends of recognized and unrecognized substrings.  The full */
-/*     collection of these substrings partitions the string. */
+/*     Scan a string and return the beginnings and ends of recognized */
+/*     and unrecognized substrings. The full collection of these */
+/*     substrings partitions the string. */
 
 /* $ Disclaimer */
 
@@ -1007,14 +1022,14 @@ L_scan:
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     STRING     I   string to be scanned. */
 /*     MARKS      I   recognizable substrings. */
 /*     MRKLEN     I   an auxiliary array describing MARKS. */
 /*     PNTERS     I   an auxiliary array describing MARKS. */
 /*     ROOM       I   space available for storing substring descriptions. */
-/*     START     I/O  position from which to begin/resume scanning. */
+/*     START     I-O  position from which to begin/resume scanning. */
 /*     NTOKNS     O   number of scanned substrings. */
 /*     BEG        O   beginnings of scanned substrings. */
 /*     END        O   endings of scanned substrings. */
@@ -1022,92 +1037,92 @@ L_scan:
 
 /* $ Detailed_Input */
 
-/*     STRING     is any character string that is to be scanned */
-/*                to locate recognized and unrecognized substrings. */
+/*     STRING   is any character string that is to be scanned */
+/*              to locate recognized and unrecognized substrings. */
 
-/*     MARKS      is an array of marks that will be recognized */
-/*                by the scanning routine.  This array must be prepared */
-/*                by calling the routine SCANPR. */
+/*     MARKS    is an array of marks that will be recognized */
+/*              by the scanning routine. This array must be prepared */
+/*              by calling the routine SCANPR. */
 
-/*                Note that the blank string is interpreted */
-/*                in a special way by SCAN.  If the blank character, */
-/*                ' ', is one of the MARKS, it will match any unbroken */
-/*                sequence of blanks in string.  Thus if ' ' is the only */
-/*                marks supplied and STRING is */
+/*              Note that the blank string is interpreted */
+/*              in a special way by SCAN. If the blank character, */
+/*              ' ', is one of the MARKS, it will match any unbroken */
+/*              sequence of blanks in string.  Thus if ' ' is the only */
+/*              marks supplied and STRING is */
 
-/*                   'A   lot of      space ' */
-/*                    ...................... */
+/*                 'A   lot of      space ' */
+/*                  ...................... */
 
-/*                Then scan will locate the following substrings */
+/*              Then scan will locate the following substrings */
 
-/*                'A'          STRING(1:1)    (unrecognized) */
-/*                '   '        STRING(2:4)    (recognized --- all blanks) */
-/*                'lot'        STRING(5:7)    (unrecognized) */
-/*                ' '          STRING(8:8)    (recognized --- a blank) */
-/*                'of'         STRING(9:10)   (unrecognized) */
-/*                '      '     STRING(11:16)  (recognized --- all blanks) */
-/*                'space'      STRING(17:21)  (unrecognized) */
-/*                ' '          STRING(22:22)  (recognized --- a blank) */
+/*              'A'          STRING(1:1)    (unrecognized) */
+/*              '   '        STRING(2:4)    (recognized --- all blanks) */
+/*              'lot'        STRING(5:7)    (unrecognized) */
+/*              ' '          STRING(8:8)    (recognized --- a blank) */
+/*              'of'         STRING(9:10)   (unrecognized) */
+/*              '      '     STRING(11:16)  (recognized --- all blanks) */
+/*              'space'      STRING(17:21)  (unrecognized) */
+/*              ' '          STRING(22:22)  (recognized --- a blank) */
 
-/*     MRKLEN     is an auxiliary array populated by SCANPR */
-/*                for use by SCAN.  It should be declared with */
-/*                length equal to the length of MARKS.  It must */
-/*                be prepared for use by the routine SCANPR. */
+/*     MRKLEN   is an auxiliary array populated by SCANPR */
+/*              for use by SCAN. It should be declared with */
+/*              length equal to the length of MARKS. It must */
+/*              be prepared for use by the routine SCANPR. */
 
-/*     PNTERS     is a specially structured array of integers that */
-/*                describes the array MARKS.  It is must be filled */
-/*                in by the routine SCANPR.  It should be declared */
-/*                by the calling program as shown here: */
+/*     PNTERS   is a specially structured array of integers that */
+/*              describes the array MARKS. It is must be filled */
+/*              in by the routine SCANPR. It should be declared */
+/*              by the calling program as shown here: */
 
-/*                   INTEGER  PNTERS ( RCHARS ) */
+/*                 INTEGER  PNTERS ( RCHARS ) */
 
-/*                RCHARS is given by the expression */
+/*              RCHARS is given by the expression */
 
-/*                  MAX - MIN + 5 */
+/*                MAX - MIN + 5 */
 
-/*                where */
+/*              where */
 
-/*                MAX is the maximum value of ICHAR(MARKS(I)(1:1)) */
-/*                    over the range I = 1, NMARKS */
+/*              MAX is the maximum value of ICHAR(MARKS(I)(1:1)) */
+/*                  over the range I = 1, NMARKS */
 
-/*                MIN is the minimum value of ICHAR(MARKS(I)(1:1)) */
-/*                    over the range I = 1, NMARKS */
+/*              MIN is the minimum value of ICHAR(MARKS(I)(1:1)) */
+/*                  over the range I = 1, NMARKS */
 
-/*                See SCANPR for a more detailed description of the */
-/*                declaration of PNTERS. */
+/*              See SCANPR for a more detailed description of the */
+/*              declaration of PNTERS. */
 
-/*     ROOM       is the amount of space available for storing the */
-/*                results of scanning the string. */
+/*     ROOM     is the amount of space available for storing the */
+/*              results of scanning the string. */
 
-/*     START     is the position from which scanning should commence. */
-/*               Values of START less than 1 are treated as 1. */
+/*     START    is the position from which scanning should commence. */
+/*              Values of START less than 1 are treated as 1. */
 
 /* $ Detailed_Output */
 
-/*     START     is the position from which scanning should continue */
-/*               in order to fully scan STRING (if sufficient memory was */
-/*               not provided in BEG, END, and IDENT on the current */
-/*               call to SCAN). */
+/*     START    is the position from which scanning should continue */
+/*              in order to fully scan STRING (if sufficient memory was */
+/*              not provided in BEG, END, and IDENT on the current */
+/*              call to SCAN). */
 
-/*     NTOKNS    is the number of substrings identified in the current */
-/*               scan of STRING. */
+/*     NTOKNS   is the number of substrings identified in the current */
+/*              scan of STRING. */
 
-/*     BEG       Beginnings of scanned substrings.  This should be */
-/*               declared so that it is at least as large as ROOM. */
+/*     BEG      beginnings of scanned substrings. This should be */
+/*              declared so that it is at least as large as ROOM. */
 
-/*     END       Endings of scanned substrings. This should be declared */
-/*               so that it is at least as large as ROOM. */
+/*     END      endings of scanned substrings. This should be declared */
+/*              so that it is at least as large as ROOM. */
 
-/*     IDENT     Positions of scanned substring within array MARKS. */
-/*               If the substring STRING(BEG(I):END(I)) is in the array */
-/*               MARKS, then MARKS(IDENT(I)) will equal */
-/*               STRING(BEG(I):END(I)). */
+/*     IDENT    positions of scanned substring within array MARKS. */
+/*              If the substring STRING(BEG(I):END(I)) is in the array */
+/*              MARKS, then MARKS(IDENT(I)) will equal */
+/*              STRING(BEG(I):END(I)). */
 
-/*               If the substring STRING(BEG(I):END(I)) is not in the */
-/*               list of MARKS then IDENT(I) will have the value 0. */
+/*              If the substring STRING(BEG(I):END(I)) is not in the */
+/*              list of MARKS then IDENT(I) will have the value 0. */
 
-/*               IDENT should be declared so that it can contain at least */
-/*               ROOM integers. */
+/*              IDENT should be declared so that it can contain at least */
+/*              ROOM integers. */
 
 /* $ Parameters */
 
@@ -1115,17 +1130,17 @@ L_scan:
 
 /* $ Exceptions */
 
-/*     Error Free. */
+/*     Error free. */
 
-/*     1) A space is regarded as a special mark.  If MARKS(I) = ' ', */
-/*        then MARKS(I) will match any consecutive sequence of blanks. */
+/*     1)  A space is regarded as a special mark. If MARKS(I) = ' ', */
+/*         then MARKS(I) will match any consecutive sequence of blanks. */
 
-/*     2) If START is less than 1 on input, it will be treated as */
-/*        if it were 1. */
+/*     2)  If START is less than 1 on input, it will be treated as */
+/*         if it were 1. */
 
-/*     3) If START is greater than the length of the string, no */
-/*        tokens will be found and the value of START will return */
-/*        unchanged. */
+/*     3)  If START is greater than the length of the string, no */
+/*         tokens will be found and the value of START will return */
+/*         unchanged. */
 
 /* $ Files */
 
@@ -1138,11 +1153,11 @@ L_scan:
 
 /*     For some applications the recognized substrings serve only as */
 /*     delimiters between the portions of the string */
-/*     that are of interest to your application.  For other */
+/*     that are of interest to your application. For other */
 /*     applications the recognized substrings are equally important as */
 /*     they may indicate operations that are to be performed on the */
-/*     unrecognized portions of the string.  However, the techniques */
-/*     required to scan the string are the same in both instances.  The */
+/*     unrecognized portions of the string. However, the techniques */
+/*     required to scan the string are the same in both instances. The */
 /*     examples below illustrate some common situations. */
 
 /* $ Examples */
@@ -1151,7 +1166,7 @@ L_scan:
 /*     ---------- */
 
 /*     Suppose you wished to write a routine that would return the words */
-/*     of a string.  The following routine shows how SCANPR and SCAN can */
+/*     of a string. The following routine shows how SCANPR and SCAN can */
 /*     be used to accomplish this task. */
 
 /*        SUBROUTINE GETWDS ( STRING, WDROOM, NWORDS, WORDS ) */
@@ -1234,7 +1249,7 @@ L_scan:
 
 
 /*           Scan the STRING again for any substrings that might */
-/*           remain.  Note that START is already pointing at the */
+/*           remain. Note that START is already pointing at the */
 /*           point in the string from which to resume scanning. */
 
 /*           CALL SCAN ( STRING, */
@@ -1256,7 +1271,7 @@ L_scan:
 /*        ( X + Y ) * ( 2*Z + SIN(W) ) ** 2 */
 
 /*     You would select '**', '*', '+', '-', '(', ')' and ' ' */
-/*     to be the markers.  Note that all of these begin with one */
+/*     to be the markers. Note that all of these begin with one */
 /*     of the characters in the string ' !"#$%&''()*+,-./' */
 /*     so that we can declare PNTERS to have length 20. */
 
@@ -1329,7 +1344,7 @@ L_scan:
 /*        END DO */
 
 /*        Now all of the substrings remaining point to grouping symbols, */
-/*        operators, functions, or variables.  Given that the individual */
+/*        operators, functions, or variables. Given that the individual */
 /*        "words" of the expression are now in hand, the meaning of the */
 /*        expression is much easier to determine. */
 
@@ -1338,8 +1353,8 @@ L_scan:
 
 /* $ Restrictions */
 
-/*     The arrays MARKS, MRKLEN, and PNTERS must be prepared by the */
-/*     routine SCANPR prior to supplying them for use by SCAN. */
+/*     1)  The arrays MARKS, MRKLEN, and PNTERS must be prepared by the */
+/*         routine SCANPR prior to supplying them for use by SCAN. */
 
 /* $ Literature_References */
 
@@ -1347,9 +1362,16 @@ L_scan:
 
 /* $ Author_and_Institution */
 
-/*     W.L. Taber     (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 26-OCT-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.0.0, 26-JUL-1996 (WLT) */
 

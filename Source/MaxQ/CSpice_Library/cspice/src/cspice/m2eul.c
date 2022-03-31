@@ -10,7 +10,7 @@
 static doublereal c_b15 = .1;
 static integer c__9 = 9;
 
-/* $Procedure      M2EUL ( Matrix to Euler angles ) */
+/* $Procedure M2EUL ( Matrix to Euler angles ) */
 /* Subroutine */ int m2eul_(doublereal *r__, integer *axis3, integer *axis2, 
 	integer *axis1, doublereal *angle3, doublereal *angle2, doublereal *
 	angle1)
@@ -89,7 +89,7 @@ static integer c__9 = 9;
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     R          I   A rotation matrix to be factored. */
 /*     AXIS3, */
@@ -101,66 +101,65 @@ static integer c__9 = 9;
 
 /* $ Detailed_Input */
 
-/*     R              is a 3x3 rotation matrix that is to be factored as */
-/*                    a product of three rotations about a specified */
-/*                    coordinate axes.  The angles of these rotations are */
-/*                    called `Euler angles'. */
+/*     R        is a 3x3 rotation matrix that is to be factored as */
+/*              a product of three rotations about a specified */
+/*              coordinate axes. The angles of these rotations are */
+/*              called "Euler angles." */
 
 /*     AXIS3, */
 /*     AXIS2, */
-/*     AXIS1          are the indices of the rotation axes of the */
-/*                    `factor' rotations, whose product is R.  R is */
-/*                    factored as */
+/*     AXIS1    are the indices of the rotation axes of the */
+/*              "factor" rotations, whose product is R. R is */
+/*              factored as */
 
-/*                       R = [ ANGLE3 ]     [ ANGLE2 ]     [ ANGLE1 ]   . */
-/*                                    AXIS3          AXIS2         AXIS1 */
+/*                 R = [ ANGLE3 ]      [ ANGLE2 ]      [ ANGLE1 ] */
+/*                               AXIS3           AXIS2           AXIS1 */
 
-/*                    The axis numbers must belong to the set {1, 2, 3}. */
-/*                    The second axis number MUST differ from the first */
-/*                    and third axis numbers. */
+/*              The axis numbers must belong to the set {1, 2, 3}. */
+/*              The second axis number MUST differ from the first */
+/*              and third axis numbers. */
 
-/*                    See the $ Particulars section below for details */
-/*                    concerning this notation. */
+/*              See the $Particulars section below for details */
+/*              concerning this notation. */
 
 /* $ Detailed_Output */
 
 /*     ANGLE3, */
 /*     ANGLE2, */
-/*     ANGLE1         are the Euler angles corresponding to the matrix */
-/*                    R and the axes specified by AXIS3, AXIS2, and */
-/*                    AXIS1.  These angles satisfy the equality */
+/*     ANGLE1   are the Euler angles corresponding to the matrix */
+/*              R and the axes specified by AXIS3, AXIS2, and */
+/*              AXIS1. These angles satisfy the equality */
 
-/*                       R = [ ANGLE3 ]     [ ANGLE2 ]     [ ANGLE1 ] */
-/*                                   AXIS3          AXIS2          AXIS1 */
-
-
-/*                    See the $ Particulars section below for details */
-/*                    concerning this notation. */
-
-/*                    The range of ANGLE3 and ANGLE1 is (-pi, pi]. */
-
-/*                    The range of ANGLE2 depends on the exact set of */
-/*                    axes used for the factorization.  For */
-/*                    factorizations in which the first and third axes */
-/*                    are the same, */
-
-/*                       R = [r]  [s]  [t] , */
-/*                              a    b    a */
-
-/*                    the range of ANGLE2 is [0, pi]. */
+/*                 R = [ ANGLE3 ]      [ ANGLE2 ]      [ ANGLE1 ] */
+/*                               AXIS3           AXIS2           AXIS1 */
 
 
-/*                    For factorizations in which the first and third */
-/*                    axes are different, */
+/*              See the $Particulars section below for details */
+/*              concerning this notation. */
 
-/*                       R = [r]  [s]  [t] , */
-/*                              a    b    c */
+/*              The range of ANGLE3 and ANGLE1 is (-pi, pi]. */
 
-/*                    the range of ANGLE2 is [-pi/2, pi/2]. */
+/*              The range of ANGLE2 depends on the exact set of */
+/*              axes used for the factorization. For */
+/*              factorizations in which the first and third axes */
+/*              are the same, */
 
-/*                    For rotations such that ANGLE3 and ANGLE1 are not */
-/*                    uniquely determined, ANGLE3 will always be set to */
-/*                    zero; ANGLE1 is then uniquely determined. */
+/*                 R = [r]  [s]  [t] , */
+/*                        a    b    a */
+
+/*              the range of ANGLE2 is [0, pi]. */
+
+/*              For factorizations in which the first and third */
+/*              axes are different, */
+
+/*                 R = [r]  [s]  [t] , */
+/*                        a    b    c */
+
+/*              the range of ANGLE2 is [-pi/2, pi/2]. */
+
+/*              For rotations such that ANGLE3 and ANGLE1 are not */
+/*              uniquely determined, ANGLE3 will always be set to */
+/*              zero; ANGLE1 is then uniquely determined. */
 
 /* $ Parameters */
 
@@ -168,22 +167,22 @@ static integer c__9 = 9;
 
 /* $ Exceptions */
 
-/*     1)   If any of AXIS3, AXIS2, or AXIS1 do not have values in */
+/*     1)  If any of AXIS3, AXIS2, or AXIS1 do not have values in */
 
-/*             { 1, 2, 3 }, */
+/*            { 1, 2, 3 } */
 
-/*          then the error SPICE(BADAXISNUMBERS) is signaled. */
+/*         the error SPICE(BADAXISNUMBERS) is signaled. */
 
-/*     2)   An arbitrary rotation matrix cannot be expressed using */
-/*          a sequence of Euler angles unless the second rotation axis */
-/*          differs from the other two.  If AXIS2 is equal to AXIS3 or */
-/*          AXIS1, then then error SPICE(BADAXISNUMBERS) is signaled. */
+/*     2)  If AXIS2 is equal to AXIS3 or AXIS1, the error */
+/*         SPICE(BADAXISNUMBERS) is signaled. An arbitrary rotation */
+/*         matrix cannot be expressed using a sequence of Euler angles */
+/*         unless the second rotation axis differs from the other two. */
 
-/*     3)   If the input matrix R is not a rotation matrix, the error */
-/*          SPICE(NOTAROTATION) is signaled. */
+/*     3)  If the input matrix R is not a rotation matrix, the error */
+/*         SPICE(NOTAROTATION) is signaled. */
 
-/*     4)   If ANGLE3 and ANGLE1 are not uniquely determined, ANGLE3 */
-/*          is set to zero, and ANGLE1 is determined. */
+/*     4)  If ANGLE3 and ANGLE1 are not uniquely determined, ANGLE3 */
+/*         is set to zero, and ANGLE1 is determined. */
 
 /* $ Files */
 
@@ -191,13 +190,13 @@ static integer c__9 = 9;
 
 /* $ Particulars */
 
-/*     A word about notation:  the symbol */
+/*     A word about notation: the symbol */
 
 /*        [ x ] */
 /*             i */
 
 /*     indicates a coordinate system rotation of x radians about the */
-/*     ith coordinate axis.  To be specific, the symbol */
+/*     ith coordinate axis. To be specific, the symbol */
 
 /*        [ x ] */
 /*             1 */
@@ -205,17 +204,17 @@ static integer c__9 = 9;
 /*     indicates a coordinate system rotation of x radians about the */
 /*     first, or x-, axis; the corresponding matrix is */
 
-/*        +-                    -+ */
+/*        .-                    -. */
 /*        |  1      0       0    | */
 /*        |                      | */
-/*        |  0    cos(x)  sin(x) |. */
+/*        |  0    cos(x)  sin(x) | */
 /*        |                      | */
 /*        |  0   -sin(x)  cos(x) | */
-/*        +-                    -+ */
+/*        `-                    -' */
 
 /*     Remember, this is a COORDINATE SYSTEM rotation by x radians; this */
 /*     matrix, when applied to a vector, rotates the vector by -x */
-/*     radians, not x radians.  Applying the matrix to a vector yields */
+/*     radians, not x radians. Applying the matrix to a vector yields */
 /*     the vector's representation relative to the rotated coordinate */
 /*     system. */
 
@@ -227,13 +226,13 @@ static integer c__9 = 9;
 
 /*     which symbolizes the matrix */
 
-/*        +-                    -+ */
+/*        .-                    -. */
 /*        | cos(x)   0   -sin(x) | */
 /*        |                      | */
-/*        |  0       1      0    |, */
+/*        |  0       1      0    | */
 /*        |                      | */
 /*        | sin(x)   0    cos(x) | */
-/*        +-                    -+ */
+/*        `-                    -' */
 
 /*     and the analogous rotation about the third, or z-, axis is */
 /*     represented by */
@@ -243,47 +242,47 @@ static integer c__9 = 9;
 
 /*     which symbolizes the matrix */
 
-/*        +-                    -+ */
+/*        .-                    -. */
 /*        |  cos(x)  sin(x)   0  | */
 /*        |                      | */
-/*        | -sin(x)  cos(x)   0  |. */
+/*        | -sin(x)  cos(x)   0  | */
 /*        |                      | */
 /*        |  0        0       1  | */
-/*        +-                    -+ */
+/*        `-                    -' */
 
 
 /*     The input matrix is assumed to be the product of three */
 /*     rotation matrices, each one of the form */
 
-/*        +-                    -+ */
+/*        .-                    -. */
 /*        |  1      0       0    | */
 /*        |                      | */
 /*        |  0    cos(r)  sin(r) |     (rotation of r radians about the */
 /*        |                      |      x-axis), */
 /*        |  0   -sin(r)  cos(r) | */
-/*        +-                    -+ */
+/*        `-                    -' */
 
 
-/*        +-                    -+ */
+/*        .-                    -. */
 /*        | cos(s)   0   -sin(s) | */
 /*        |                      | */
 /*        |  0       1      0    |     (rotation of s radians about the */
 /*        |                      |      y-axis), */
 /*        | sin(s)   0    cos(s) | */
-/*        +-                    -+ */
+/*        `-                    -' */
 
 /*     or */
 
-/*        +-                    -+ */
+/*        .-                    -. */
 /*        |  cos(t)  sin(t)   0  | */
 /*        |                      | */
 /*        | -sin(t)  cos(t)   0  |     (rotation of t radians about the */
 /*        |                      |      z-axis), */
 /*        |  0        0       1  | */
-/*        +-                    -+ */
+/*        `-                    -' */
 
 /*     where the second rotation axis is not equal to the first or */
-/*     third.  Any rotation matrix can be factored as a sequence of */
+/*     third. Any rotation matrix can be factored as a sequence of */
 /*     three such rotations, provided that this last criterion is met. */
 
 /*     This routine is related to the SPICELIB routine EUL2M, which */
@@ -314,152 +313,267 @@ static integer c__9 = 9;
 
 /* $ Examples */
 
-/*     1)  Conversion of instrument pointing from a matrix representation */
-/*         to Euler angles: */
+/*     The numerical results shown for these examples may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
 
-/*         Suppose we want to find camera pointing in alpha, delta, and */
-/*         kappa, given the inertial-to-camera coordinate transformation */
+/*     1) Conversion of instrument pointing from a matrix representation */
+/*        to Euler angles: */
 
-
-/*    +-                                                               -+ */
-/*    |  0.49127379678135830  0.50872620321864170  0.70699908539882417  | */
-/*    |                                                                 | */
-/*    | -0.50872620321864193 -0.49127379678135802  0.70699908539882428  | */
-/*    |                                                                 | */
-/*    |  0.70699908539882406 -0.70699908539882439  0.01745240643728360  | */
-/*    +-                                                               -+ */
+/*        Suppose we want to find camera pointing in alpha, delta, and */
+/*        kappa, given the inertial-to-camera coordinate transformation */
 
 
-/*         We want to find angles alpha, delta, kappa such that */
-
-/*            TICAM  =  [ kappa ]  [ pi/2 - delta ]  [ pi/2 + alpha ] . */
-/*                               3                 1                 3 */
-
-/*         We can use the following small program to do this computation: */
-
-
-/*            PROGRAM EX1 */
-/*            IMPLICIT NONE */
-
-/*            DOUBLE PRECISION      DPR */
-/*            DOUBLE PRECISION      HALFPI */
-/*            DOUBLE PRECISION      TWOPI */
-
-/*            DOUBLE PRECISION      ALPHA */
-/*            DOUBLE PRECISION      ANG1 */
-/*            DOUBLE PRECISION      ANG2 */
-/*            DOUBLE PRECISION      DELTA */
-/*            DOUBLE PRECISION      KAPPA */
-/*            DOUBLE PRECISION      TICAM  ( 3, 3 ) */
+/*        .-                                                         -. */
+/*        |  0.491273796781358  0.508726203218642  0.706999085398824  | */
+/*        |                                                           | */
+/*        | -0.508726203218642 -0.491273796781358  0.706999085398824  | */
+/*        |                                                           | */
+/*        |  0.706999085398824 -0.706999085398824  0.017452406437284  | */
+/*        `-                                                         -' */
 
 
-/*            DATA TICAM /  0.49127379678135830D0, */
-/*           .             -0.50872620321864193D0, */
-/*           .              0.70699908539882406D0, */
-/*           .              0.50872620321864170D0, */
-/*           .             -0.49127379678135802D0, */
-/*           .             -0.70699908539882439D0, */
-/*           .              0.70699908539882417D0, */
-/*           .              0.70699908539882428D0, */
-/*           .              0.01745240643728360D0  / */
+/*        Find angles alpha, delta, kappa such that */
+
+/*           TICAM  =  [ kappa ]  [ pi/2 - delta ]  [ pi/2 + alpha ] . */
+/*                              3                 1                 3 */
+
+/*        Example code begins here. */
 
 
-/*            CALL M2EUL ( TICAM, 3, 1, 3, KAPPA, ANG2, ANG1 ) */
+/*              PROGRAM M2EUL_EX1 */
+/*              IMPLICIT NONE */
 
-/*            DELTA = HALFPI() - ANG2 */
-/*            ALPHA = ANG1     - HALFPI() */
+/*        C */
+/*        C     SPICELIB functions */
+/*        C */
+/*              DOUBLE PRECISION      DPR */
+/*              DOUBLE PRECISION      HALFPI */
+/*              DOUBLE PRECISION      TWOPI */
 
-/*            IF ( KAPPA .LT. 0.D0 ) THEN */
-/*               KAPPA = KAPPA + TWOPI() */
-/*            END IF */
-
-/*            IF ( ALPHA .LT. 0.D0 ) THEN */
-/*               ALPHA = ALPHA + TWOPI() */
-/*            END IF */
-
-/*            WRITE (*,'(1X,A,F24.14)') 'Alpha (deg): ', DPR() * ALPHA */
-/*            WRITE (*,'(1X,A,F24.14)') 'Delta (deg): ', DPR() * DELTA */
-/*            WRITE (*,'(1X,A,F24.14)') 'Kappa (deg): ', DPR() * KAPPA */
-
-/*            END */
-
-
-/*         The program's output should be something like */
-
-/*            Alpha (deg):       315.00000000000000 */
-/*            Delta (deg):         1.00000000000000 */
-/*            Kappa (deg):        45.00000000000000 */
-
-/*         possibly formatted a little differently, or degraded slightly */
-/*         by round-off. */
+/*        C */
+/*        C     Local variables */
+/*        C */
+/*              DOUBLE PRECISION      ALPHA */
+/*              DOUBLE PRECISION      ANG1 */
+/*              DOUBLE PRECISION      ANG2 */
+/*              DOUBLE PRECISION      DELTA */
+/*              DOUBLE PRECISION      KAPPA */
+/*              DOUBLE PRECISION      TICAM  ( 3, 3 ) */
 
 
-/*     2)  Conversion of instrument pointing angles from a non-J2000, */
-/*         not necessarily inertial frame to J2000-relative RA, Dec, */
-/*         and Twist. */
+/*              DATA TICAM /  0.491273796781358D0, */
+/*             .             -0.508726203218642D0, */
+/*             .              0.706999085398824D0, */
+/*             .              0.508726203218642D0, */
+/*             .             -0.491273796781358D0, */
+/*             .             -0.706999085398824D0, */
+/*             .              0.706999085398824D0, */
+/*             .              0.706999085398824D0, */
+/*             .              0.017452406437284D0  / */
 
-/*         Suppose that we have pointing for some instrument expressed as */
 
-/*            [ gamma ]  [ beta ]  [ alpha ] */
-/*                     3         2          3 */
+/*              CALL M2EUL ( TICAM, 3, 1, 3, KAPPA, ANG2, ANG1 ) */
 
-/*         with respect to some coordinate system S.  For example, S */
-/*         could be a spacecraft-fixed system. */
+/*              DELTA = HALFPI() - ANG2 */
+/*              ALPHA = ANG1     - HALFPI() */
 
-/*         We will suppose that the transformation from J2000 */
-/*         coordinates to system S coordinates is given by the rotation */
-/*         matrix J2S. */
+/*              IF ( KAPPA .LT. 0.D0 ) THEN */
+/*                 KAPPA = KAPPA + TWOPI() */
+/*              END IF */
 
-/*         The rows of J2S are the unit basis vectors of system S, given */
-/*         in J2000 coordinates. */
+/*              IF ( ALPHA .LT. 0.D0 ) THEN */
+/*                 ALPHA = ALPHA + TWOPI() */
+/*              END IF */
 
-/*         We want to express the pointing with respect to the J2000 */
-/*         system as the sequence of rotations */
+/*              WRITE (*,'(A,F24.14)') 'Alpha (deg): ', DPR() * ALPHA */
+/*              WRITE (*,'(A,F24.14)') 'Delta (deg): ', DPR() * DELTA */
+/*              WRITE (*,'(A,F24.14)') 'Kappa (deg): ', DPR() * KAPPA */
 
-/*            [ kappa ]  [ pi/2 - delta ]  [ pi/2 + alpha ] . */
-/*                     3                 1                 3 */
+/*              END */
 
-/*         First, we use subroutine EUL2M to form the transformation */
-/*         from system S to instrument coordinates S2INST. */
 
-/*            CALL EUL2M ( GAMMA, BETA, ALPHA, 3, 2, 3, S2INST ) */
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
 
-/*         Next, we form the transformation from J2000 to instrument */
-/*         coordinates J2INST. */
 
-/*            CALL MXM ( S2INST, J2S, J2INST ) */
+/*        Alpha (deg):       315.00000000000000 */
+/*        Delta (deg):         1.00000000000003 */
+/*        Kappa (deg):        45.00000000000000 */
 
-/*         Finally, we express J2INST using the desired Euler angles, as */
-/*         in the first example: */
 
-/*            CALL M2EUL ( J2INST, 3, 1, 3, TWIST, ANG2, ANG3 ) */
+/*     2) Conversion of instrument pointing angles from a non-J2000, */
+/*        not necessarily inertial frame to J2000-relative RA, Dec, */
+/*        and Twist. */
 
-/*            RA   =  ANG3 - HALFPI() */
-/*            DEC  =  HALFPI() - ANG2 */
+/*        Suppose that we have orientation for the CASSINI Narrow Angle */
+/*        Camera (NAC) frame expressed as */
 
-/*         If we wish to make sure that RA, DEC, and TWIST are in */
-/*         the ranges [0, 2pi), [-pi/2, pi/2], and [0, 2pi) */
-/*         respectively, we may add the code */
+/*           [ gamma ]  [ beta ]  [ alpha ] */
+/*                    1         2          3 */
 
-/*            IF ( RA .LT. 0.D0 ) THEN */
-/*               RA = RA + TWOPI() */
-/*            END IF */
+/*        with respect to the CASSINI spacecraft frame. */
 
-/*            IF ( TWIST .LT. 0.D0 ) THEN */
-/*               TWIST = TWIST + TWOPI() */
-/*            END IF */
+/*        We want to express that orientation with respect to the J2000 */
+/*        frame as the sequence of rotations */
 
-/*         Note that DEC is already in the correct range, since ANG2 */
-/*         is in the range [0, pi] when the first and third input axes */
-/*         are equal. */
+/*           [ twist ]  [ dec ]  [ ra ] . */
+/*                    3        1       3 */
 
-/*         Now RA, DEC, and TWIST express the instrument pointing */
-/*         as RA, Dec, and Twist, relative to the J2000 system. */
+/*        Use the meta-kernel shown below to load the required SPICE */
+/*        kernels. */
 
-/*         A warning note:  more than one definition of RA, Dec, and */
-/*         Twist is extant.  Before using this example in an application, */
-/*         check that the definition given here is consistent with that */
-/*         used in your application. */
+
+/*           KPL/MK */
+
+/*           File name: m2eul_ex2.tm */
+
+/*           This meta-kernel is intended to support operation of SPICE */
+/*           example programs. The kernels shown here should not be */
+/*           assumed to contain adequate or correct versions of data */
+/*           required by SPICE-based user applications. */
+
+/*           In order for an application to use this meta-kernel, the */
+/*           kernels referenced here must be present in the user's */
+/*           current working directory. */
+
+/*           The names and contents of the kernels referenced */
+/*           by this meta-kernel are as follows: */
+
+/*              File name                      Contents */
+/*              ---------                      -------- */
+/*              naif0010.tls                   Leapseconds */
+/*              cas00145.tsc                   Cassini SCLK */
+/*              cas_v40.tf                     Cassini frames */
+/*              08052_08057ra.bc               Orientation for Cassini */
+
+/*           \begindata */
+
+/*              KERNELS_TO_LOAD = ( 'naif0010.tls' */
+/*                                  'cas00145.tsc' */
+/*                                  'cas_v40.tf' */
+/*                                  '08052_08057ra.bc') */
+
+/*           \begintext */
+
+/*           End of meta-kernel */
+
+
+/*        Example code begins here. */
+
+
+/*              PROGRAM M2EUL_EX2 */
+/*              IMPLICIT NONE */
+
+/*        C */
+/*        C     SPICELIB functions */
+/*        C */
+/*              DOUBLE PRECISION      DPR */
+/*              DOUBLE PRECISION      HALFPI */
+/*              DOUBLE PRECISION      RPD */
+/*              DOUBLE PRECISION      TWOPI */
+
+/*        C */
+/*        C     Local parameters */
+/*        C */
+/*              CHARACTER*(*)         META */
+/*              PARAMETER           ( META   =  'm2eul_ex2.tm' ) */
+
+/*              DOUBLE PRECISION      ALPHA */
+/*              PARAMETER           ( ALPHA =  89.9148D0   ) */
+
+/*              DOUBLE PRECISION      BETA */
+/*              PARAMETER           ( BETA  = -0.03300D0   ) */
+
+/*              DOUBLE PRECISION      GAMMA */
+/*              PARAMETER           ( GAMMA = -90.009796D0 ) */
+
+/*        C */
+/*        C     Local variables */
+/*        C */
+/*              DOUBLE PRECISION      RA */
+/*              DOUBLE PRECISION      ANG1 */
+/*              DOUBLE PRECISION      ANG2 */
+/*              DOUBLE PRECISION      DEC */
+/*              DOUBLE PRECISION      ET */
+/*              DOUBLE PRECISION      INST2J ( 3, 3 ) */
+/*              DOUBLE PRECISION      INST2S ( 3, 3 ) */
+/*              DOUBLE PRECISION      S2J    ( 3, 3 ) */
+/*              DOUBLE PRECISION      TWIST */
+
+/*        C */
+/*        C     Load the kernels. */
+/*        C */
+/*              CALL FURNSH ( META ) */
+
+/*        C */
+/*        C     First, we use subroutine EUL2M to form the */
+/*        C     transformation from instrument coordinates to */
+/*        C     CASSINI spacecraft frame. */
+/*        C */
+/*              CALL EUL2M ( GAMMA * RPD(), BETA * RPD(), ALPHA * RPD(), */
+/*             .             1,             2,            3,    INST2S ) */
+
+/*        C */
+/*        C     Now we compute the transformation from CASSINI */
+/*        C     spacecraft frame to J2000, at a given time. */
+/*        C */
+/*              CALL STR2ET ( '2008 Feb 25', ET ) */
+/*              CALL PXFORM ( 'CASSINI_SC_COORD', 'J2000', ET, S2J ) */
+
+/*        C */
+/*        C     Next, we form the transformation from instrument */
+/*        C     coordinates to J2000 frame. */
+/*        C */
+/*              CALL MXM ( S2J, INST2S, INST2J ) */
+
+/*        C */
+/*        C     Finally, we express INST2J using the desired Euler */
+/*        C     angles. */
+/*        C */
+/*              CALL M2EUL ( INST2J, 3, 1, 3, TWIST, ANG1, ANG2 ) */
+
+/*              RA   =  ANG2 - HALFPI() */
+/*              DEC  =  HALFPI() - ANG1 */
+
+/*        C */
+/*        C     If we wish to make sure that RA, DEC, and TWIST are in */
+/*        C     the ranges [0, 2pi), [-pi/2, pi/2], and [0, 2pi) */
+/*        C     respectively, we may add the code */
+/*        C */
+/*              IF ( RA .LT. 0.D0 ) THEN */
+/*                 RA = RA + TWOPI() */
+/*              END IF */
+
+/*              IF ( TWIST .LT. 0.D0 ) THEN */
+/*                 TWIST = TWIST + TWOPI() */
+/*              END IF */
+
+/*        C */
+/*        C     Now RA, DEC, and TWIST express the instrument pointing */
+/*        C     as RA, Dec, and Twist, relative to the J2000 system. */
+/*        C */
+/*              WRITE (*,'(A,F24.14)') 'RA    (deg): ', DPR() * RA */
+/*              WRITE (*,'(A,F24.14)') 'Dec   (deg): ', DPR() * DEC */
+/*              WRITE (*,'(A,F24.14)') 'Twist (deg): ', DPR() * TWIST */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*        RA    (deg):        83.77802387778848 */
+/*        Dec   (deg):       -14.92925498590898 */
+/*        Twist (deg):       294.55732942050986 */
+
+
+/*        Note:  more than one definition of RA, Dec, and Twist is */
+/*        extant. Before using this example in an application, check */
+/*        that the definition given here is consistent with that used */
+/*        in your application. */
 
 /* $ Restrictions */
 
@@ -471,21 +585,34 @@ static integer c__9 = 9;
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
 
+/* -    SPICELIB Version 1.3.0, 06-JUL-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. Removed */
+/*        unnecessary entries from $Revisions section. */
+
+/*        Added complete code examples from existing fragments. */
+
+/*        Removed erroneous comments about behavior of ATAN2. */
+
 /* -    SPICELIB Version 1.2.1, 21-DEC-2006 (NJB) */
 
-/*        Error corrected in header example:  input matrix */
-/*        previously did not match shown outputs.  Offending */
+/*        Error corrected in header example: input matrix */
+/*        previously did not match shown outputs. Offending */
 /*        example now includes complete program. */
 
 /* -    SPICELIB Version 1.2.0, 15-OCT-2005 (NJB) */
 
 /*        Updated to remove non-standard use of duplicate arguments */
-/*        in MXM and MTXM calls.  A short error message cited in */
-/*        the Exceptions section of the header failed to match */
+/*        in MXM and MTXM calls. A short error message cited in */
+/*        the $Exceptions section of the header failed to match */
 /*        the actual short message used; this has been corrected. */
 
 /* -    SPICELIB Version 1.1.2, 13-OCT-2004 (NJB) */
@@ -499,9 +626,9 @@ static integer c__9 = 9;
 
 /* -    SPICELIB Version 1.1.0, 02-NOV-1990 (NJB) */
 
-/*        Header upgraded to describe notation in more detail.  Argument */
+/*        Header upgraded to describe notation in more detail. Argument */
 /*        names were changed to describe the use of the arguments more */
-/*        accurately.  No change in functionality was made; the operation */
+/*        accurately. No change in functionality was made; the operation */
 /*        of the routine is identical to that of the previous version. */
 
 /* -    SPICELIB Version 1.0.0, 03-SEP-1990 (NJB) */
@@ -514,20 +641,13 @@ static integer c__9 = 9;
 /* -& */
 /* $ Revisions */
 
-/* -    SPICELIB Version 1.2.0, 26-AUG-2005 (NJB) */
-
-/*        Updated to remove non-standard use of duplicate arguments */
-/*        in MXM and MTXM calls.  A short error message cited in */
-/*        the Exceptions section of the header  failed to match */
-/*        the actual short message used; this has been corrected. */
-
 /* -    SPICELIB Version 1.1.0, 02-NOV-1990 (NJB) */
 
 /*        Argument names were changed to describe the use of the */
-/*        arguments more accurately.  The axis and angle numbers */
+/*        arguments more accurately. The axis and angle numbers */
 /*        now decrease, rather than increase, from left to right. */
 /*        The current names reflect the order of operator application */
-/*        when the Euler angle rotations are applied to a vector:  the */
+/*        when the Euler angle rotations are applied to a vector: the */
 /*        rightmost matrix */
 
 /*           [ ANGLE1 ] */
@@ -544,7 +664,7 @@ static integer c__9 = 9;
 /*                     AXIS3 */
 
 /*        Previously, the names reflected the order in which the Euler */
-/*        angle matrices appear on the page, from left to right.  This */
+/*        angle matrices appear on the page, from left to right. This */
 /*        naming convention was found to be a bit obtuse by a various */
 /*        users. */
 
@@ -552,12 +672,12 @@ static integer c__9 = 9;
 /*        routine is identical to that of the previous version. */
 
 /*        Also, the header was upgraded to describe the notation in more */
-/*        detail.  The symbol */
+/*        detail. The symbol */
 
 /*           [ x ] */
 /*                i */
 
-/*        is explained at mind-numbing length.  An example was added */
+/*        is explained at mind-numbing length. An example was added */
 /*        that shows a specific set of inputs and the resulting output */
 /*        matrix. */
 
@@ -573,7 +693,7 @@ static integer c__9 = 9;
 /*       Also, one `)' was changed to a `}'. */
 
 /*       The phrase `first and third' was changed to `first or third' */
-/*       in the $ Particulars section, where the criterion for the */
+/*       in the $Particulars section, where the criterion for the */
 /*       existence of an Euler angle factorization is stated. */
 
 /* -& */
@@ -652,9 +772,9 @@ static integer c__9 = 9;
 
     for (i__ = 1; i__ <= 3; ++i__) {
 	vhat_(&r__[(i__1 = i__ * 3 - 3) < 9 && 0 <= i__1 ? i__1 : s_rnge(
-		"r", i__1, "m2eul_", (ftnlen)667)], &tmprot[(i__2 = i__ * 3 - 
+		"r", i__1, "m2eul_", (ftnlen)788)], &tmprot[(i__2 = i__ * 3 - 
 		3) < 9 && 0 <= i__2 ? i__2 : s_rnge("tmprot", i__2, "m2eul_", 
-		(ftnlen)667)]);
+		(ftnlen)788)]);
     }
 
 /*     We now proceed to recover the promised Euler angles from */
@@ -730,7 +850,7 @@ static integer c__9 = 9;
 /*        1. */
 
 	if (*axis2 == next[(i__1 = *axis3 - 1) < 3 && 0 <= i__1 ? i__1 : 
-		s_rnge("next", i__1, "m2eul_", (ftnlen)746)]) {
+		s_rnge("next", i__1, "m2eul_", (ftnlen)867)]) {
 	    sign = 1.;
 	} else {
 	    sign = -1.;
@@ -744,11 +864,11 @@ static integer c__9 = 9;
 
 	cleard_(&c__9, change);
 	change[(i__1 = *axis3 + 5) < 9 && 0 <= i__1 ? i__1 : s_rnge("change", 
-		i__1, "m2eul_", (ftnlen)762)] = 1.;
+		i__1, "m2eul_", (ftnlen)883)] = 1.;
 	change[(i__1 = *axis2 - 1) < 9 && 0 <= i__1 ? i__1 : s_rnge("change", 
-		i__1, "m2eul_", (ftnlen)763)] = 1.;
+		i__1, "m2eul_", (ftnlen)884)] = 1.;
 	change[(i__1 = c__ + 2) < 9 && 0 <= i__1 ? i__1 : s_rnge("change", 
-		i__1, "m2eul_", (ftnlen)764)] = sign * 1.;
+		i__1, "m2eul_", (ftnlen)885)] = sign * 1.;
 
 /*        Transform TMPROT. */
 
@@ -809,9 +929,7 @@ static integer c__9 = 9;
 
 /*           SIN ( ANGLE2 )   >  0 */
 /*                            - */
-/*        in choosing the signs of the ATAN2 arguments correctly.  Note */
-/*        that ATAN2(x,y) = -ATAN2(-x,-y). */
-
+/*        in choosing the signs of the ATAN2 arguments correctly. */
 
 	if (degen) {
 	    *angle3 = 0.;
@@ -854,7 +972,7 @@ static integer c__9 = 9;
 /*        little mapping that takes 1 to 2, 2 to 3, and 3 to 1. */
 
 	if (*axis2 == next[(i__1 = *axis3 - 1) < 3 && 0 <= i__1 ? i__1 : 
-		s_rnge("next", i__1, "m2eul_", (ftnlen)883)]) {
+		s_rnge("next", i__1, "m2eul_", (ftnlen)1002)]) {
 	    sign = 1.;
 	} else {
 	    sign = -1.;
@@ -864,11 +982,11 @@ static integer c__9 = 9;
 
 	cleard_(&c__9, change);
 	change[(i__1 = *axis3 - 1) < 9 && 0 <= i__1 ? i__1 : s_rnge("change", 
-		i__1, "m2eul_", (ftnlen)894)] = 1.;
+		i__1, "m2eul_", (ftnlen)1013)] = 1.;
 	change[(i__1 = *axis2 + 2) < 9 && 0 <= i__1 ? i__1 : s_rnge("change", 
-		i__1, "m2eul_", (ftnlen)895)] = 1.;
+		i__1, "m2eul_", (ftnlen)1014)] = 1.;
 	change[(i__1 = *axis1 + 5) < 9 && 0 <= i__1 ? i__1 : s_rnge("change", 
-		i__1, "m2eul_", (ftnlen)896)] = sign * 1.;
+		i__1, "m2eul_", (ftnlen)1015)] = sign * 1.;
 
 /*        Transform TMPROT. */
 
@@ -931,9 +1049,7 @@ static integer c__9 = 9;
 
 /*           COS ( ANGLE2 )   >  0 */
 /*                            - */
-/*        in choosing the signs of the ATAN2 arguments correctly.  Note */
-/*        that ATAN2(x,y) = -ATAN2(-x,-y). */
-
+/*        in choosing the signs of the ATAN2 arguments correctly. */
 
 	if (degen) {
 	    *angle3 = 0.;

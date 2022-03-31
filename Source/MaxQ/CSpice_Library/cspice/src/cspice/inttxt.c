@@ -89,22 +89,22 @@ static integer c__0 = 0;
 
 /* $ Detailed_Input */
 
-/*     N         is any integer (less than 10**12 in absolute value). */
-/*               If N is less than 0, -N must be a legitimate number. */
+/*     N        is any integer (less than 10**12 in absolute value). */
+/*              If N is less than 0, -N must be a legitimate number. */
 
 /* $ Detailed_Output */
 
-/*     STRING    is the English cardinal equivalent of N.  STRING will */
-/*               contain only upper case letters. */
+/*     STRING   is the English cardinal equivalent of N. STRING will */
+/*              contain only upper case letters. */
 
-/*               The longest possible output string contains 145 */
-/*               characters. One such string is: */
+/*              The longest possible output string contains 145 */
+/*              characters. One such string is: */
 
-/*                  'NEGATIVE '                                  // */
-/*                  'SEVEN HUNDRED SEVENTY-SEVEN BILLION '       // */
-/*                  'SEVEN HUNDRED SEVENTY-SEVEN MILLION '       // */
-/*                  'SEVEN HUNDRED SEVENTY-SEVEN THOUSAND '      // */
-/*                  'SEVEN HUNDRED SEVENTY-SEVEN' */
+/*                 'NEGATIVE '                                  // */
+/*                 'SEVEN HUNDRED SEVENTY-SEVEN BILLION '       // */
+/*                 'SEVEN HUNDRED SEVENTY-SEVEN MILLION '       // */
+/*                 'SEVEN HUNDRED SEVENTY-SEVEN THOUSAND '      // */
+/*                 'SEVEN HUNDRED SEVENTY-SEVEN' */
 
 /* $ Parameters */
 
@@ -114,9 +114,9 @@ static integer c__0 = 0;
 
 /*     Error free. */
 
-/*     1) If the resulting text is longer than the output string, */
-/*        it will be truncated on the right, leaving only the most */
-/*        significant portion of the number. */
+/*     1)  If the resulting text is longer than the output string, */
+/*         it will be truncated on the right, leaving only the most */
+/*         significant portion of the number. */
 
 /* $ Files */
 
@@ -154,13 +154,13 @@ static integer c__0 = 0;
 
 /* $ Restrictions */
 
-/*      1) This routine assumes that N will always be less than */
+/*     1)  This routine assumes that N will always be less than */
 /*         a trillion (10**12) in absolute value. */
 
-/*      2) In the event that N is less than zero, this routine assumes */
+/*     2)  In the event that N is less than zero, this routine assumes */
 /*         that -N is a legitimate integer on the host machine. */
 
-/*      3) This routine assumes that an integer as large as 10**9 */
+/*     3)  This routine assumes that an integer as large as 10**9 */
 /*         (one billion) is representable on the host machine. */
 
 /* $ Literature_References */
@@ -169,9 +169,16 @@ static integer c__0 = 0;
 
 /* $ Author_and_Institution */
 
-/*     W.L. Taber     (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 12-AUG-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
 
@@ -257,14 +264,14 @@ static integer c__0 = 0;
 		y = x / 100;
 		x -= y * 100;
 		suffix_(number + ((i__1 = y - 1) < 19 && 0 <= i__1 ? i__1 : 
-			s_rnge("number", i__1, "inttxt_", (ftnlen)290)) * 9, &
+			s_rnge("number", i__1, "inttxt_", (ftnlen)297)) * 9, &
 			pad, string, (ftnlen)9, string_len);
 		suffix_("HUNDRED", &c__1, string, (ftnlen)7, string_len);
 	    } else if (x >= 20) {
 		y = x / 10;
 		x -= y * 10;
 		suffix_(tens + ((i__1 = y - 1) < 9 && 0 <= i__1 ? i__1 : 
-			s_rnge("tens", i__1, "inttxt_", (ftnlen)298)) * 9, &
+			s_rnge("tens", i__1, "inttxt_", (ftnlen)305)) * 9, &
 			pad, string, (ftnlen)9, string_len);
 		if (x != 0) {
 		    suffix_("-", &c__0, string, (ftnlen)1, string_len);
@@ -277,7 +284,7 @@ static integer c__0 = 0;
 		    space = 0;
 		}
 		suffix_(number + ((i__1 = y - 1) < 19 && 0 <= i__1 ? i__1 : 
-			s_rnge("number", i__1, "inttxt_", (ftnlen)314)) * 9, &
+			s_rnge("number", i__1, "inttxt_", (ftnlen)321)) * 9, &
 			space, string, (ftnlen)9, string_len);
 	    }
 	}

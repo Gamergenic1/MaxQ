@@ -122,20 +122,20 @@ static integer c__4 = 4;
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     XFRLUN     I   Logical unit of an open DAS transfer file. */
 /*     BINFIL     I   Name of the binary DAS file to be created. */
 
 /* $ Detailed_Input */
 
-/*     XFRLUN   The Fortran logical unit number of a previously opened */
+/*     XFRLUN   is the Fortran logical unit number of a previously opened */
 /*              DAS transfer file. */
 
 /*              The file pointer should be positioned ready to read */
 /*              the DAS file ID word. */
 
-/*     BINFIL   The name of the binary DAS file to be created. */
+/*     BINFIL   is the name of the binary DAS file to be created. */
 
 /* $ Detailed_Output */
 
@@ -147,24 +147,24 @@ static integer c__4 = 4;
 
 /* $ Exceptions */
 
-/*     1)   If the DAS transfer file cannot be read, the error */
-/*          SPICE(FILEREADFAILED) will be signaled. */
+/*     1)  If the DAS transfer file cannot be read, the error */
+/*         SPICE(FILEREADFAILED) is signaled. */
 
-/*     2)   If the specified file is not a DAS file, as indicated by the */
-/*          file's ID word, the error SPICE(NOTADASFILE) is signaled. */
+/*     2)  If the specified file is not a DAS file, as indicated by the */
+/*         file's ID word, the error SPICE(NOTADASFILE) is signaled. */
 
-/*     3)   If an error occurs while attempting to decode data in the */
-/*          DAS transfer file, the error SPICE(BADDASTRANSFERFILE) will */
-/*          be signaled. */
+/*     3)  If an error occurs while attempting to decode data in the DAS */
+/*         transfer file, the error SPICE(BADDASTRANSFERFILE) is */
+/*         signaled. */
 
-/*     4)   If the DAS file cannot be written, a DAS file access routine */
-/*          will signal an error with an appropriate error message. */
+/*     4)  If the DAS file cannot be written, an error is signaled by a */
+/*         routine in the call tree of this routine. */
 
-/*     5)   The binary DAS file opened by this routine, BINFIL, is only */
-/*          GUARANTEED to be closed upon successful completion of the */
-/*          text to binary conversion process. In the event of an error, */
-/*          the caller of this routine is required to close the binary */
-/*          DAS file BINFIL. */
+/*     5)  The binary DAS file opened by this routine, BINFIL, is only */
+/*         GUARANTEED to be closed upon successful completion of the */
+/*         text to binary conversion process. In the event of an error, */
+/*         the caller of this routine is required to close the binary */
+/*         DAS file BINFIL. */
 
 /* $ Files */
 
@@ -213,8 +213,8 @@ static integer c__4 = 4;
 
 /* $ Restrictions */
 
-/*     1) This routine assumes that it is positioned ready to read the */
-/*        DAS file ID word from the encoded text DAS file. */
+/*     1)  This routine assumes that it is positioned ready to read the */
+/*         DAS file ID word from the encoded text DAS file. */
 
 /* $ Literature_References */
 
@@ -222,9 +222,17 @@ static integer c__4 = 4;
 
 /* $ Author_and_Institution */
 
-/*     K.R. Gehringer  (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 3.3.0, 02-JUN-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 3.2.0, 05-FEB-2015 (NJB) */
 
@@ -254,7 +262,7 @@ static integer c__4 = 4;
 
 /*       Updated the routine to use the new format ID words which */
 /*       contain type as well as architecture information. */
-/* C */
+
 /*       Fixed a typo in the description of the DAS encoded text file: */
 /*       ncomc appeared where nresvc should have been. */
 
@@ -263,7 +271,7 @@ static integer c__4 = 4;
 /* -& */
 /* $ Index_Entries */
 
-/*     convert das transfer file to binary das */
+/*     convert DAS transfer file to binary DAS */
 
 /* -& */
 /* $ Revisions */

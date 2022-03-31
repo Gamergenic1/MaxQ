@@ -3,9 +3,10 @@
 -Procedure return_c ( Immediate Return Indicator )
 
 -Abstract
- 
-   True if CSPICE routines should return immediately upon entry. 
- 
+
+   Return SPICETRUE if CSPICE routines should return immediately upon
+   entry.
+
 -Disclaimer
 
    THIS SOFTWARE AND ANY RELATED MATERIALS WERE CREATED BY THE
@@ -32,13 +33,13 @@
    ACTIONS OF RECIPIENT IN THE USE OF THE SOFTWARE.
 
 -Required_Reading
- 
-    ERROR 
- 
+
+   ERROR
+
 -Keywords
- 
-    ERROR 
- 
+
+   ERROR
+
 */
 
    #include "SpiceUsr.h"
@@ -49,169 +50,176 @@
 /*
 
 -Brief_I/O
- 
-    VARIABLE  I/O  DESCRIPTION 
-    --------  ---  -------------------------------------------------- 
- 
-    The function returns the value, SPICETRUE, if and only if CSPICE 
-    routines should return immediately upon entry. 
- 
+
+   VARIABLE  I/O  DESCRIPTION
+   --------  ---  --------------------------------------------------
+
+   The function returns the value, SPICETRUE, if and only if CSPICE
+   routines should return immediately upon entry.
+
 -Detailed_Input
- 
-    None. 
- 
+
+   None.
+
 -Detailed_Output
- 
-    The function returns the value, SPICETRUE, if and only if CSPICE 
-    routines should return immediately upon entry.  The criterion 
-    for this is that the error response action is set to 
-    "RETURN", and an error condition exists. 
- 
+
+   The function returns the value, SPICETRUE, if and only if CSPICE
+   routines should return immediately upon entry. The criterion
+   for this is that the error response action is set to
+   "RETURN", and an error condition exists.
+
 -Parameters
- 
-   None. 
- 
+
+   None.
+
 -Exceptions
- 
-    This routine does not detect any errors. 
- 
-    However, this routine is part of the CSPICE error 
-    handling mechanism. 
- 
+
+   Error free.
+
+   1)  This routine does not detect any errors.
+
+       However, this routine is part of the CSPICE error
+       handling mechanism.
+
 -Files
- 
-    None. 
- 
+
+   None.
+
 -Particulars
- 
-    Please read the "required reading" first! 
- 
-    This routine can be referenced in non-toolkit code; in 
-    fact, its use is encouraged.  Its purpose is to signal 
-    to the routine calling it that the caller should 
-    return immediately.  The reference to return_c should 
-    be the first executable line of the calling program. 
- 
-    In "RETURN" mode, CSPICE routines 
-    that have external references, or that can 
-    detect errors, return immediately upon entry when an 
-    error condition exists.  They use return_c to determine 
-    when these conditions are met.  Non--toolkit routines 
-    can do the same. 
- 
-    Additionally, when an error is signalled in "RETURN" mode, 
-    no further errors can be signalled until the error condition 
-    is reset by a call to reset_c.  Calls to SIGERR simply have 
-    no effect.  Therefore, the error messages set in response 
-    to the FIRST error that was detected will be saved until 
-    reset_c is called.  These messages can be retrieved by 
-    calls to getmsg_c. 
- 
-    There are a number of advantages to using this mechanism. 
-    First, the likelihood of an error resulting in crash 
-    in a different routine is greatly reduced.  Second, 
-    a program does not have to test the error status 
-    (using a reference to failed_c) after each call to a toolkit 
-    routine, but rather can make one test of status at the end 
-    of a series of calls.  See "Examples" below. 
- 
-    See the subroutine erract_c for definitions of the error action  
-    codes. 
- 
+
+   Please read the "required reading" first!
+
+   This routine can be referenced in non-toolkit code; in
+   fact, its use is encouraged. Its purpose is to signal
+   to the routine calling it that the caller should
+   return immediately. The reference to return_c should
+   be the first executable line of the calling program.
+
+   In "RETURN" mode, CSPICE routines
+   that have external references, or that can
+   detect errors, return immediately upon entry when an
+   error condition exists. They use return_c to determine
+   when these conditions are met. Non--toolkit routines
+   can do the same.
+
+   Additionally, when an error is signaled in "RETURN" mode,
+   no further errors can be signaled until the error condition
+   is reset by a call to reset_c. Calls to SIGERR simply have
+   no effect. Therefore, the error messages set in response
+   to the FIRST error that was detected will be saved until
+   reset_c is called. These messages can be retrieved by
+   calls to getmsg_c.
+
+   There are a number of advantages to using this mechanism.
+   First, the likelihood of an error resulting in crash
+   in a different routine is greatly reduced. Second,
+   a program does not have to test the error status
+   (using a reference to failed_c) after each call to a toolkit
+   routine, but rather can make one test of status at the end
+   of a series of calls. See "Examples" below.
+
+   See the subroutine erract_c for definitions of the error action
+   codes.
+
 -Examples
- 
-    1.  In this example, we show how to place a reference 
-        to return_c in your code: 
- 
-       /. 
-              No executable lines precede this one. 
-          
-              Test whether to return before doing 
-              anything else. 
-       ./ 
- 
-              if ( return_c() )
-                 {
-                 return;                 
-                 }
- 
- 
-              [ rest of code goes here] 
- 
-                        . 
-                        . 
-                        . 
- 
- 
-    2.  Here's how one might code a sequence of calls 
-        to routines with code that follows the pattern 
-        given in example #1 above: 
- 
-                       . 
-                       . 
-                       . 
- 
-              [ code may go here ] 
- 
-       /. 
-              We call routines A, B, and C;  then we 
-              test for errors, using the CSPICE error 
-              status indicator, failed_c: 
-       ./ 
- 
-              A(); 
-              B();
-              C();
- 
-              if ( failed_c() )
-                 {
- 
-       /. 
-                 If we're here, an error occurred.  The 
-                 error might have been detected by A, B, C, 
-                 or by a routine called by one of them. 
-                 Get the explanation of the short error message 
-                 and output it using the routine, user_out_c 
-                 [user_out_c is a fictitious routine]: 
-       ./ 
- 
-                 getmsg_c ( "EXPLAIN", MSG );
- 
-                 user_out_c ( MSG );
- 
-                 } 
- 
-              [ rest of code goes here ] 
- 
-                         . 
-                         . 
-                         . 
+
+   1. In this example, we show how to place a reference
+       to return_c in your code:
+
+      /.
+             No executable lines precede this one.
+
+             Test whether to return before doing
+             anything else.
+      ./
+
+             if ( return_c() )
+                {
+                return;
+                }
+
+
+             [ rest of code goes here]
+
+                       .
+                       .
+                       .
+
+
+   2. Here's how one might code a sequence of calls
+       to routines with code that follows the pattern
+       given in example #1 above:
+
+                      .
+                      .
+                      .
+
+             [ code may go here ]
+
+      /.
+             We call routines A, B, and C;  then we
+             test for errors, using the CSPICE error
+             status indicator, failed_c:
+      ./
+
+             A();
+             B();
+             C();
+
+             if ( failed_c() )
+                {
+
+      /.
+                If we're here, an error occurred. The
+                error might have been detected by A, B, C,
+                or by a routine called by one of them.
+                Get the explanation of the short error message
+                and output it using the routine, user_out_c
+                [user_out_c is a fictitious routine]:
+      ./
+
+                getmsg_c ( "EXPLAIN", MSG );
+
+                user_out_c ( MSG );
+
+                }
+
+             [ rest of code goes here ]
+
+                        .
+                        .
+                        .
 
 -Restrictions
- 
-    This routine has no effect unless the error action is "RETURN"! 
- 
+
+   1)  This routine has no effect unless the error action is "RETURN"!
+
 -Literature_References
- 
-    None. 
- 
+
+   None.
+
 -Author_and_Institution
- 
-    N.J. Bachman    (JPL) 
-    K.R. Gehringer  (JPL) 
- 
+
+   N.J. Bachman        (JPL)
+   J. Diaz del Rio     (ODC Space)
+   E.D. Wright         (JPL)
+
 -Version
- 
+
+   -CSPICE Version 1.1.1, 01-NOV-2021 (JDR)
+
+       Edited the header to comply with NAIF standard.
+
    -CSPICE Version 1.1.0, 23-JUL-2001 (NJB)
-     
+
        Removed tab characters from source file.
 
-   -CSPICE Version 1.0.0, 08-FEB-1998   (EDW)
+   -CSPICE Version 1.0.0, 08-FEB-1998 (EDW)
 
 -Index_Entries
- 
-   immediate return indicator 
- 
+
+   immediate return indicator
+
 -&
 */
 
@@ -233,5 +241,3 @@
 
 
 } /* End return_c */
-
-

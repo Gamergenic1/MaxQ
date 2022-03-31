@@ -3,11 +3,11 @@
 -Procedure isrchc_c  ( Search in a character array )
 
 -Abstract
- 
-   Search for a given value within a character string array. Return 
-   the index of the first matching array entry, or -1 if the key 
-   value was not found. 
- 
+
+   Search for a given value within a character string array. Return
+   the index of the first matching array entry, or -1 if the key
+   value was not found.
+
 -Disclaimer
 
    THIS SOFTWARE AND ANY RELATED MATERIALS WERE CREATED BY THE
@@ -34,13 +34,14 @@
    ACTIONS OF RECIPIENT IN THE USE OF THE SOFTWARE.
 
 -Required_Reading
- 
-   None. 
- 
+
+   None.
+
 -Keywords
- 
-   ARRAY,  SEARCH 
- 
+
+   ARRAY
+   SEARCH
+
 */
 
    #include "SpiceUsr.h"
@@ -52,111 +53,122 @@
 
 
    SpiceInt isrchc_c ( ConstSpiceChar  * value,
-                       SpiceInt          ndim,   
-                       SpiceInt          lenvals,
-                       const void      * array   ) 
+                       SpiceInt          ndim,
+                       SpiceInt          arrlen,
+                       const void      * array   )
+
 /*
 
 -Brief_I/O
- 
-   VARIABLE  I/O              DESCRIPTION 
-   --------  ---  -------------------------------------------------- 
-   value      I   Key value to be found in array. 
-   ndim       I   Dimension of array. 
-   lenvals    I   String length.
-   array      I   Character string array to search. 
 
-   The function returns the index of the first matching array 
-   element or -1 if the value is not found. 
+   VARIABLE  I/O  DESCRIPTION
+   --------  ---  --------------------------------------------------
+   value      I   Key value to be found in array.
+   ndim       I   Dimension of array.
+   arrlen     I   String length.
+   array      I   Character string array to search.
+
+   The function returns the index of the first matching array
+   element or -1 if the value is not found.
 
 -Detailed_Input
- 
-   value       is the key value to be found in the array.  Trailing
-               blanks in this key are not significant:  string matches
+
+   value       is the key value to be found in the array. Trailing
+               blanks in this key are not significant: string matches
                found by this routine do not require trailing blanks in
                value to match those in the corresponding element of
                array.
 
-   ndim        is the dimension of the array. 
+               The input key `value' may have length zero.
 
-   lenvals     is the declared length of the strings in the input
-               string array, including null terminators.  The input   
-               array should be declared with dimension 
+   ndim        is the dimension of the array.
 
-                  [ndim][lenvals]
- 
-   array       is the array of character srings to be searched.  Trailing
+   arrlen      is the declared length of the strings in the input
+               string array, including null terminators. The input
+               array should be declared with dimension
+
+                  [ndim][arrlen]
+
+   array       is the array of character strings to be searched. Trailing
                blanks in the strings in this array are not significant.
- 
+
 -Detailed_Output
- 
-   The function returns the index of the first matching array 
-   element in array. If value is not found, isrchc_c returns -1. 
- 
+
+   The function returns the index of the first matching array
+   element in array. If value is not found, isrchc_c returns -1.
+
 -Parameters
- 
-   None. 
- 
--Exceptions
- 
-   1) If ndim < 1 the function value is -1.  This is not considered
-      an error.
 
-   2) If input key value pointer is null, the error SPICE(NULLPOINTER) will 
-      be signaled.  The function returns -1.
- 
-   3) The input key value may have length zero.  This case is not
-      considered an error.
-
-   4) If the input array pointer is null,  the error SPICE(NULLPOINTER) will 
-      be signaled.  The function returns -1.
-
-   5) If the input array string's length is less than 2, the error
-      SPICE(STRINGTOOSHORT) will be signaled.  The function returns -1.
- 
--Files
- 
    None.
- 
+
+-Exceptions
+
+   1)  If ndim < 1, the function value is -1.
+
+   2)  If the `value' input string pointer is null, the error
+       SPICE(NULLPOINTER) is signaled. The function returns the value
+       -1.
+
+   3)  If the `array' input array pointer is null, the error
+       SPICE(NULLPOINTER) is signaled. The function returns the value
+       -1.
+
+   4)  If the `array' input array strings have length less than two
+       characters, the error SPICE(STRINGTOOSHORT) is signaled. The
+       function returns the value -1.
+
+-Files
+
+   None.
+
 -Particulars
- 
-   None. 
- 
+
+   None.
+
 -Examples
- 
-   The following table shows the value of isrchc_c given the contents 
-   of array and value: 
- 
-      array                 value     isrchc_c 
-    -----------------       -----     -------- 
+
+   The following table shows the value of isrchc_c given the contents
+   of array and value:
+
+      array                 value     isrchc_c
+    -----------------       -----     --------
     "1", "0", "4", "2"       "4"          2
-    "1", "0", "4", "2"       "2"          3 
-    "1", "0", "4", "2"       "3"         -1 
- 
+    "1", "0", "4", "2"       "2"          3
+    "1", "0", "4", "2"       "3"         -1
+
 -Restrictions
- 
+
    1)  String comparisons performed by this routine are Fortran-style:
        trailing blanks in the input array or key value are ignored.
        This gives consistent behavior with CSPICE code generated by
        the f2c translator, as well as with the Fortran SPICE Toolkit.
-      
+
        Note that this behavior is not identical to that of the ANSI
        C library functions strcmp and strncmp.
-     
-   None. 
- 
+
 -Literature_References
- 
-   None 
- 
+
+   None.
+
 -Author_and_Institution
- 
-   N.J. Bachman    (JPL)
-   W.M. Owen       (JPL) 
- 
+
+   N.J. Bachman        (JPL)
+   J. Diaz del Rio     (ODC Space)
+   W.M. Owen           (JPL)
+
 -Version
- 
- 
+
+   -CSPICE Version 1.2.0, 03-AUG-2021 (JDR)
+
+       Changed the input argument name "lenvals" to "arrlen" for consistency
+       with other routines.
+
+       Edited the header to comply with NAIF standard.
+
+       Removed entry #3 from -Exceptions section and edited the description of
+       "value" in -Detailed_Input to indicate that empty string values are
+       allowed.
+
    -CSPICE Version 1.1.0, 07-MAR-2009 (NJB)
 
        This file now includes the header file f2cMang.h.
@@ -168,9 +180,9 @@
    -CSPICE Version 1.0.0, 22-JUL-2002 (NJB) (WMO)
 
 -Index_Entries
- 
-   search in a character array 
- 
+
+   search in a character array
+
 -&
 */
 
@@ -178,45 +190,45 @@
 
 
    /*
-   f2c library utility prototypes 
+   f2c library utility prototypes
    */
-   extern integer   s_cmp  (char *a, char *b, ftnlen la, ftnlen lb ); 
+   extern integer   s_cmp  (char *a, char *b, ftnlen la, ftnlen lb );
 
    /*
-   Local macros 
+   Local macros
    */
-   #define ARRAY( i )     (  ( (SpiceChar *)array ) + i*lenvals  )
+   #define ARRAY( i )     (  ( (SpiceChar *)array ) + i*arrlen  )
 
    /*
    Local variables
    */
    SpiceInt                i;
-   
+
 
    /*
    Use discovery check-in.
 
-   Return immediately if the array dimension is non-positive. 
+   Return immediately if the array dimension is non-positive.
    */
-   if ( ndim < 1 ) 
+   if ( ndim < 1 )
    {
       return ( -1 );
    }
 
 
    /*
-   Make sure the input pointer for the key value is non-null 
-   and that the length is adequate.  
+   Make sure the input pointer for the key value is non-null
+   and that the length is adequate.
    */
    CHKPTR_VAL ( CHK_DISCOVER, "isrchc_c", value, -1 );
 
-   
+
    /*
-   Make sure the input pointer for the string array is non-null 
-   and that the length lenvals is sufficient.  
+   Make sure the input pointer for the string array is non-null
+   and that the length `arrlen' is sufficient.
    */
-   CHKOSTR_VAL ( CHK_DISCOVER, "isrchc_c", array, lenvals, -1 );
-   
+   CHKOSTR_VAL ( CHK_DISCOVER, "isrchc_c", array, arrlen, -1 );
+
 
    for ( i = 0;  i < ndim;  i++ )
    {
@@ -230,10 +242,9 @@
    }
 
    /*
-   Indicate no match was found. 
+   Indicate no match was found.
    */
    return ( -1 );
 
 
 } /* End isrchc_c */
-

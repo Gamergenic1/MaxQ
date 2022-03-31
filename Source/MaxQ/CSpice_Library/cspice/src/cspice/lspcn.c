@@ -11,7 +11,7 @@ static integer c__10 = 10;
 static integer c__3 = 3;
 static integer c__2 = 2;
 
-/* $Procedure    LSPCN  ( Longitude of the sun, planetocentric ) */
+/* $Procedure LSPCN  ( Longitude of the sun, planetocentric ) */
 doublereal lspcn_(char *body, doublereal *et, char *abcorr, ftnlen body_len, 
 	ftnlen abcorr_len)
 {
@@ -162,7 +162,7 @@ doublereal lspcn_(char *body, doublereal *et, char *abcorr, ftnlen body_len,
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     BODY       I   Name of central body. */
 /*     ET         I   Epoch in seconds past J2000 TDB. */
@@ -173,44 +173,44 @@ doublereal lspcn_(char *body, doublereal *et, char *abcorr, ftnlen body_len,
 
 /* $ Detailed_Input */
 
-/*     BODY        is the name of the central body, typically a planet. */
+/*     BODY     is the name of the central body, typically a planet. */
 
-/*     ET          is the epoch at which the longitude of the sun (L_s) */
-/*                 is to be computed. ET is expressed as seconds past */
-/*                 J2000 TDB (Barycentric Dynamical Time). */
+/*     ET       is the epoch at which the longitude of the sun (L_s) */
+/*              is to be computed. ET is expressed as seconds past */
+/*              J2000 TDB (Barycentric Dynamical Time). */
 
-/*     ABCORR      indicates the aberration corrections to be applied */
-/*                 when computing the longitude of the sun.  ABCORR may */
-/*                 be any of the following. */
+/*     ABCORR   indicates the aberration corrections to be applied */
+/*              when computing the longitude of the sun. ABCORR may */
+/*              be any of the following. */
 
-/*                    'NONE'     Apply no correction. */
+/*                 'NONE'     Apply no correction. */
 
-/*                    'LT'       Correct the position of the sun, */
-/*                               relative to the central body, for */
-/*                               planetary (light time) aberration. */
+/*                 'LT'       Correct the position of the sun, */
+/*                            relative to the central body, for */
+/*                            planetary (light time) aberration. */
 
-/*                    'LT+S'     Correct the position of the sun, */
-/*                               relative to the central body, for */
-/*                               planetary and stellar aberrations. */
+/*                 'LT+S'     Correct the position of the sun, */
+/*                            relative to the central body, for */
+/*                            planetary and stellar aberrations. */
 
 /* $ Detailed_Output */
 
-/*     The function returns the planetocentric longitude of the sun, */
+/*     The function returns the planetocentric longitude of the Sun, */
 /*     often called "L_s," for the specified body at the specified time. */
-/*     This is the longitude of the body-sun vector in a right-handed */
+/*     This is the longitude of the body-Sun vector in a right-handed */
 /*     frame whose basis vectors are defined as follows: */
 
-/*        - The positive Z direction is given by the instantaneous */
-/*          angular velocity vector of the orbit of the body about */
-/*          the sun. */
+/*     -  The positive Z direction is given by the instantaneous */
+/*        angular velocity vector of the orbit of the body about */
+/*        the Sun. */
 
-/*        - The positive X direction is that of the cross product of the */
-/*          instantaneous north spin axis of the body with the positive */
-/*          Z direction. */
+/*     -  The positive X direction is that of the cross product of the */
+/*        instantaneous north spin axis of the body with the positive */
+/*        Z direction. */
 
-/*        - The positive Y direction is Z x X. */
+/*     -  The positive Y direction is Z x X. */
 
-/*     Units are radians; the range is 0 to 2*pi.  Longitudes are */
+/*     Units are radians; the range is 0 to 2*pi. Longitudes are */
 /*     positive to the east. */
 
 /* $ Parameters */
@@ -219,130 +219,160 @@ doublereal lspcn_(char *body, doublereal *et, char *abcorr, ftnlen body_len,
 
 /* $ Exceptions */
 
-/*     1) If the input body name cannot be translated to an ID code, */
-/*        and if the name is not a string representation of an integer */
-/*        (for example, '399'), the error SPICE(NOTRANSLATION) is */
-/*        signaled. */
+/*     1)  If the input body name cannot be translated to an ID code, */
+/*         and if the name is not a string representation of an integer */
+/*         (for example, '399'), the error SPICE(NOTRANSLATION) is */
+/*         signaled. */
 
-/*     2) If no SPK (ephemeris) file has been loaded prior to calling */
-/*        this routine, or if the SPK data has insufficient coverage, an */
-/*        error will be diagnosed and signaled by a routine in the call */
-/*        tree of this routine. */
+/*     2)  If no SPK (ephemeris) file has been loaded prior to calling */
+/*         this routine, or if the SPK data has insufficient coverage, an */
+/*         error is signaled by a routine in the call */
+/*         tree of this routine. */
 
-/*     3) If a PCK file containing rotational elements for the central */
-/*        body has not been loaded prior to calling this routine, an */
-/*        error will be diagnosed and signaled by a routine called by a */
-/*        routine in the call tree of this routine. */
+/*     3)  If a PCK file containing rotational elements for the central */
+/*         body has not been loaded prior to calling this routine, an */
+/*         error is signaled by a routine in the call tree of this */
+/*         routine. */
 
-/*     4) If the instantaneous angular velocity and spin axis of BODY */
-/*        are parallel, the error will be diagnosed and signaled by a */
-/*        routine in the call tree of this routine. */
+/*     4)  If the instantaneous angular velocity and spin axis of BODY */
+/*         are parallel, an error is signaled by a */
+/*         routine in the call tree of this routine. */
 
 /* $ Files */
 
-/*     1) An SPK file (or file) containing ephemeris data sufficient to */
+/*     Appropriate SPICE kernels must be loaded by the calling program */
+/*     before this routine is called. */
+
+/*     The following data are required: */
+
+/*     -  An SPK file (or files) containing ephemeris data sufficient to */
 /*        compute the geometric state of the central body relative to */
 /*        the sun at ET must be loaded before this routine is called. If */
 /*        light time correction is used, data must be available that */
 /*        enable computation of the state the sun relative to the solar */
-/*        system barycenter at the light-time corrected epoch.  If */
+/*        system barycenter at the light-time corrected epoch. If */
 /*        stellar aberration correction is used, data must be available */
 /*        that enable computation of the state the central body relative */
 /*        to the solar system barycenter at ET. */
 
-/*     2) A PCK file containing rotational elements for the central body */
+/*     -  A PCK file containing rotational elements for the central body */
 /*        must be loaded before this routine is called. */
 
 /* $ Particulars */
 
 /*     The direction of the vernal equinox for the central body is */
 /*     determined from the instantaneous equatorial and orbital planes */
-/*     of the central body.  This equinox definition is specified in */
-/*     reference [1].  The "instantaneous orbital plane" is interpreted */
+/*     of the central body. This equinox definition is specified in */
+/*     reference [1]. The "instantaneous orbital plane" is interpreted */
 /*     in this routine as the plane normal to the cross product of the */
 /*     position and velocity of the central body relative to the sun. */
 /*     The geometric state of the central body relative to the sun is */
 /*     used for this normal vector computation. The "instantaneous */
 /*     equatorial plane" is normal to the central body's north pole */
-/*     at the requested epoch.  The pole direction is determined from */
+/*     at the requested epoch. The pole direction is determined from */
 /*     rotational elements loaded via a PCK file. */
 
 /*     The result returned by this routine will depend on the */
-/*     ephemeris data and rotational elements used.  The result may */
+/*     ephemeris data and rotational elements used. The result may */
 /*     differ from that given in any particular version of the */
 /*     Astronomical Almanac, due to differences in these input data, */
 /*     and due to differences in precision of the computations. */
 
 /* $ Examples */
 
+/*     The numerical results shown for this example may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
+
 /*     1) A simple program that computes L_s for a body and time */
-/*        supplied interactively.  The geometric state of the sun is */
+/*        supplied interactively. The geometric state of the Sun is */
 /*        used. */
 
-
-/*            PROGRAM EX1 */
-/*            IMPLICIT NONE */
-
-/*            DOUBLE PRECISION      DPR */
-/*            DOUBLE PRECISION      LSPCN */
-
-/*            CHARACTER*(*)         ABCORR */
-/*            PARAMETER           ( ABCORR = 'NONE' ) */
-
-/*            INTEGER               FILSIZ */
-/*            PARAMETER           ( FILSIZ = 255 ) */
-
-/*            INTEGER               NAMLEN */
-/*            PARAMETER           ( NAMLEN = 36 ) */
-
-/*            INTEGER               TIMLEN */
-/*            PARAMETER           ( TIMLEN = 40 ) */
-
-/*            CHARACTER*(NAMLEN)    BODY */
-/*            CHARACTER*(FILSIZ)    LSK */
-/*            CHARACTER*(FILSIZ)    PCK */
-/*            CHARACTER*(FILSIZ)    SPK */
-/*            CHARACTER*(TIMLEN)    TIMSTR */
-
-/*            DOUBLE PRECISION      ET */
-/*            DOUBLE PRECISION      LON */
+/*        Example code begins here. */
 
 
-/*            CALL PROMPT ( 'Enter name of leapseconds kernel > ', LSK ) */
-/*            CALL PROMPT ( 'Enter name of PCK file           > ', PCK ) */
-/*            CALL PROMPT ( 'Enter name of SPK file           > ', SPK ) */
+/*              PROGRAM LSPCN_EX1 */
+/*              IMPLICIT NONE */
 
-/*            CALL FURNSH ( LSK ) */
-/*            CALL FURNSH ( PCK ) */
-/*            CALL FURNSH ( SPK ) */
+/*              DOUBLE PRECISION      DPR */
+/*              DOUBLE PRECISION      LSPCN */
 
-/*            WRITE (*,*) ' ' */
-/*            WRITE (*,*) 'Kernels have been loaded.' */
-/*            WRITE (*,*) ' ' */
+/*              CHARACTER*(*)         ABCORR */
+/*              PARAMETER           ( ABCORR = 'NONE' ) */
 
-/*            DO WHILE ( .TRUE. ) */
+/*              INTEGER               FILSIZ */
+/*              PARAMETER           ( FILSIZ = 255 ) */
 
-/*               CALL PROMPT ( 'Enter name of central body       > ', */
-/*           .                  BODY                                  ) */
-/*               CALL PROMPT ( 'Enter calendar, JD, or DOY time  > ', */
-/*           .                  TIMSTR                                ) */
+/*              INTEGER               NAMLEN */
+/*              PARAMETER           ( NAMLEN = 36 ) */
 
-/*               CALL STR2ET ( TIMSTR, ET ) */
+/*              INTEGER               TIMLEN */
+/*              PARAMETER           ( TIMLEN = 40 ) */
 
-/*      C */
-/*      C        Convert longitude to degrees. */
-/*      C */
-/*               LON = DPR() * LSPCN ( BODY, ET, ABCORR ) */
+/*              CHARACTER*(NAMLEN)    BODY */
+/*              CHARACTER*(FILSIZ)    LSK */
+/*              CHARACTER*(FILSIZ)    PCK */
+/*              CHARACTER*(FILSIZ)    SPK */
+/*              CHARACTER*(TIMLEN)    TIMSTR */
 
-/*               WRITE (*,*) ' ' */
-/*               WRITE (*,*) 'Central body              = ',  BODY */
-/*               WRITE (*,*) 'Time                      = ',  TIMSTR */
-/*               WRITE (*,*) 'Planetocentric L_s (deg.) = ',  LON */
-/*               WRITE (*,*) ' ' */
+/*              DOUBLE PRECISION      ET */
+/*              DOUBLE PRECISION      LON */
 
-/*            END DO */
 
-/*            END */
+/*              CALL PROMPT ( 'Enter name of LSK file > ', LSK ) */
+/*              CALL PROMPT ( 'Enter name of PCK file > ', PCK ) */
+/*              CALL PROMPT ( 'Enter name of SPK file > ', SPK ) */
+
+/*              CALL FURNSH ( LSK ) */
+/*              CALL FURNSH ( PCK ) */
+/*              CALL FURNSH ( SPK ) */
+
+/*              WRITE (*,*) ' ' */
+/*              WRITE (*,*) 'Kernels have been loaded.' */
+/*              WRITE (*,*) ' ' */
+
+/*              CALL PROMPT ( 'Enter name of central body       > ', */
+/*             .               BODY                                  ) */
+/*              CALL PROMPT ( 'Enter calendar, JD, or DOY time  > ', */
+/*             .               TIMSTR                                ) */
+
+/*              CALL STR2ET ( TIMSTR, ET ) */
+
+/*        C */
+/*        C     Convert longitude to degrees. */
+/*        C */
+/*              LON = DPR() * LSPCN ( BODY, ET, ABCORR ) */
+
+/*              WRITE (*,*) ' ' */
+/*              WRITE (*,*) 'Central body              = ',  BODY */
+/*              WRITE (*,*) 'Time                      = ',  TIMSTR */
+/*              WRITE (*,*) 'Planetocentric L_s (deg.) = ',  LON */
+/*              WRITE (*,*) ' ' */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, using the LSK file named naif0012.tls, the PCK file */
+/*        named pck00010.tpc, the SPK file named de421.bsp; the 'EARTH' */
+/*        as central body and the time string '2018 Mar 8  17:59 UTC', */
+/*        the output was: */
+
+
+/*        Enter name of LSK file > naif0012.tls */
+/*        Enter name of PCK file > pck00010.tpc */
+/*        Enter name of SPK file > de421.bsp */
+
+/*         Kernels have been loaded. */
+
+/*        Enter name of central body       > EARTH */
+/*        Enter calendar, JD, or DOY time  > 2018 Mar 8  17:59 UTC */
+
+/*         Central body              = EARTH */
+/*         Time                      = 2018 Mar 8  17:59 UTC */
+/*         Planetocentric L_s (deg.) =    348.11593978317080 */
+
 
 /* $ Restrictions */
 
@@ -350,15 +380,22 @@ doublereal lspcn_(char *body, doublereal *et, char *abcorr, ftnlen body_len,
 
 /* $ Literature_References */
 
-/*     [1] "The Astronomical Almanac for the Year 2005." U.S. Government */
-/*         Printing Office, Washington, D.C., 1984, page L9. */
+/*     [1]  "The Astronomical Almanac for the Year 2005," page L9, */
+/*          United States Naval Observatory, U.S. Government Printing */
+/*          Office, Washington, D.C., 2004. */
 
 /* $ Author_and_Institution */
 
 /*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
 /*     B.V. Semenov       (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.1, 25-AUG-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. Removed WHILE */
+/*        loop from example code, and added solution. */
 
 /* -    SPICELIB Version 1.1.0, 19-SEP-2013 (BVS) */
 
@@ -371,10 +408,19 @@ doublereal lspcn_(char *body, doublereal *et, char *abcorr, ftnlen body_len,
 /* -& */
 /* $ Index_Entries */
 
-/*     planetocentric longitude of sun */
+/*     planetocentric longitude of Sun */
 /*     compute L_s */
 /*     compute Ls */
 /*     compute L_sub_s */
+
+/* -& */
+/* $ Revisions */
+
+/* -    SPICELIB Version 1.1.0, 19-SEP-2013 (BVS) */
+
+/*        Updated to save the input body name and ZZBODTRN state */
+/*        counter and to do name-ID conversion only if the counter */
+/*        has changed. */
 
 /* -& */
 
@@ -440,8 +486,8 @@ doublereal lspcn_(char *body, doublereal *et, char *abcorr, ftnlen body_len,
     tipbod_("J2000", &idcode, et, tipm, (ftnlen)5);
     for (i__ = 1; i__ <= 3; ++i__) {
 	npole[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("npole", i__1,
-		 "lspcn_", (ftnlen)397)] = tipm[(i__2 = i__ * 3 - 1) < 9 && 0 
-		<= i__2 ? i__2 : s_rnge("tipm", i__2, "lspcn_", (ftnlen)397)];
+		 "lspcn_", (ftnlen)447)] = tipm[(i__2 = i__ * 3 - 1) < 9 && 0 
+		<= i__2 ? i__2 : s_rnge("tipm", i__2, "lspcn_", (ftnlen)447)];
     }
 
 /*     Get the geometric state of the body relative to the sun. */

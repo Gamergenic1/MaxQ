@@ -12,8 +12,10 @@
     integer s_cmp(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    extern /* Subroutine */ int chkin_(char *, ftnlen), dasham_(integer *, 
-	    char *, ftnlen), dasllc_(integer *), dascls_(integer *);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern logical failed_(void);
+    extern /* Subroutine */ int dasham_(integer *, char *, ftnlen), dasllc_(
+	    integer *), dascls_(integer *);
     char method[10];
     extern /* Subroutine */ int daswbr_(integer *), chkout_(char *, ftnlen);
     extern logical return_(void);
@@ -173,24 +175,24 @@
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     I   Handle assigned to the opened DSK file. */
 /*     OPTMIZ     I   Flag indicating whether to segregate the DSK. */
 
 /* $ Detailed_Input */
 
-/*     HANDLE      is the DAS file handle associated with the file. */
-/*                 The file may be open for read or write access. */
+/*     HANDLE   is the DAS file handle associated with the file. */
+/*              The file may be open for read or write access. */
 
-/*     OPTMIZ      is a logical flag indicating whether the DSK */
-/*                 should be segregated before it is closed. This */
-/*                 option applies only to files open for write */
-/*                 access. The value of OPTMIZ has no effect for */
-/*                 files opened for read access. */
+/*     OPTMIZ   is a logical flag indicating whether the DSK */
+/*              should be segregated before it is closed. This */
+/*              option applies only to files open for write */
+/*              access. The value of OPTMIZ has no effect for */
+/*              files opened for read access. */
 
-/*                 See the DAS Required Reading das.req for a */
-/*                 discussion of segregation of DAS files. */
+/*              See the DAS Required Reading das.req for a */
+/*              discussion of segregation of DAS files. */
 
 /* $ Detailed_Output */
 
@@ -202,8 +204,8 @@
 
 /* $ Exceptions */
 
-/*     1) If an error occurs when the file is closed, the error will be */
-/*        diagnosed by routines in the call tree of this routine. */
+/*     1)  If an error occurs when the file is closed, the error is */
+/*         signaled by a routine in the call tree of this routine. */
 
 /* $ Files */
 
@@ -243,9 +245,9 @@
 
 /* $ Restrictions */
 
-/*     1) This routine should not be called by user applications */
-/*        that have loaded a DSK file via FURNSH. Such applications */
-/*        should call the KEEPER entry points UNLOAD or KCLEAR instead. */
+/*     1)  This routine should not be called by user applications */
+/*         that have loaded a DSK file via FURNSH. Such applications */
+/*         should call the KEEPER entry points UNLOAD or KCLEAR instead. */
 
 /* $ Literature_References */
 
@@ -253,9 +255,16 @@
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 12-OCT-2021 (JDR) (NJB) */
+
+/*        Bug fix: now calls FAILED after call to DASHAM. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.0.0, 08-FEB-2017 (NJB) */
 
@@ -271,7 +280,7 @@
 /* -& */
 /* $ Index_Entries */
 
-/*     close a dsk file */
+/*     close a DSK file */
 
 /* -& */
 
@@ -304,6 +313,10 @@
 /*        to the file, if the file is open for write access. */
 
 	dasham_(handle, method, (ftnlen)10);
+	if (failed_()) {
+	    chkout_("DSKCLS", (ftnlen)6);
+	    return 0;
+	}
 	if (s_cmp(method, "WRITE ", (ftnlen)10, (ftnlen)6) == 0) {
 
 /*           Write out any buffered records belonging to the */

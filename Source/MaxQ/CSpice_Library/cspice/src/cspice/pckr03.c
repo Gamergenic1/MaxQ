@@ -65,7 +65,7 @@ static integer c__1 = 1;
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     I   File handle for a PCK file. */
 /*     DESCR      I   Descriptor for a type 03 PCK segment. */
@@ -74,19 +74,19 @@ static integer c__1 = 1;
 
 /* $ Detailed_Input */
 
-/*     HANDLE      is the file handle for a type 03 PCK segment. */
+/*     HANDLE   is the file handle for a type 03 PCK segment. */
 
-/*     DESCR       is the segment descriptor for a type 03 PCK segment. */
+/*     DESCR    is the segment descriptor for a type 03 PCK segment. */
 
-/*     ET          is a target epoch, for which a data record from */
-/*                 the specified segment is required. */
+/*     ET       is a target epoch, for which a data record from */
+/*              the specified segment is required. */
 
 /* $ Detailed_Output */
 
-/*     RECORD      is the record from the specified segment which, */
-/*                 when evaluated at epoch ET, will give the RA, DEC, */
-/*                 W and body fixed angular rates for the body associated */
-/*                 with the segment. */
+/*     RECORD   is the record from the specified segment which, */
+/*              when evaluated at epoch ET, will give the RA, DEC, */
+/*              W and body fixed angular rates for the body associated */
+/*              with the segment. */
 
 /* $ Parameters */
 
@@ -94,16 +94,16 @@ static integer c__1 = 1;
 
 /* $ Exceptions */
 
-/*     1) It is assumed that the descriptor and handle supplied are */
-/*        for a properly constructed type 03 segment. No checks are */
-/*        performed to ensure this. */
+/*     1)  It is assumed that the descriptor and handle supplied are */
+/*         for a properly constructed type 03 segment. No checks are */
+/*         performed to ensure this. */
 
-/*     2) If the input ET value is not within the range specified */
-/*        in the segment descriptor, the error SPICE(TIMEOUTOFBOUNDS) */
-/*        is signalled. */
+/*     2)  If the input ET value is not within the range specified */
+/*         in the segment descriptor, the error SPICE(TIMEOUTOFBOUNDS) */
+/*         is signaled. */
 
-/*     3) All other errors are diagnosed by routines in the call tree */
-/*        of this routine. */
+/*     3)  If any issue is detected while reading the PCK data, an error */
+/*         is signaled by a routine in the call tree of this routine. */
 
 /* $ Files */
 
@@ -123,9 +123,9 @@ static integer c__1 = 1;
 /* $ Examples */
 
 /*     The data returned by the PCKRnn routine is in its rawest form, */
-/*     taken directly from the segment.  As such, it will be meaningless */
+/*     taken directly from the segment. As such, it will be meaningless */
 /*     to a user unless he/she understands the structure of the data type */
-/*     completely.  Given that understanding, however, the PCKRnn */
+/*     completely. Given that understanding, however, the PCKRnn */
 /*     routines might be used to "dump" and check segment data for a */
 /*     particular epoch. */
 
@@ -152,9 +152,9 @@ static integer c__1 = 1;
 
 /* $ Restrictions */
 
-/*     1) It is assumed that the descriptor and handle supplied are */
-/*        for a properly constructed type 03 segment.  No checks are */
-/*        performed to ensure this. */
+/*     1)  It is assumed that the descriptor and handle supplied are */
+/*         for a properly constructed type 03 segment. No checks are */
+/*         performed to ensure this. */
 
 /* $ Literature_References */
 
@@ -162,20 +162,26 @@ static integer c__1 = 1;
 
 /* $ Author_and_Institution */
 
-/*     K.R. Gehringer  (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
 
+/* -    SPICELIB Version 1.0.2, 12-AUG-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
+
 /* -    SPICELIB Version 1.0.1, 03-JAN-2014 (EDW) */
 
-/*        Minor edits to Procedure; clean trailing whitespace. */
+/*        Minor edits to $Procedure; clean trailing whitespace. */
 
 /* -    SPICELIB Version 1.0.0, 20-SEP-1995 (KRG) */
 
 /* -& */
 /* $ Index_Entries */
 
-/*     read record from type_03 pck segment */
+/*     read record from type_03 PCK segment */
 
 /* -& */
 

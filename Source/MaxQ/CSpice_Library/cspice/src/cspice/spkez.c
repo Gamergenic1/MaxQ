@@ -116,8 +116,8 @@ static integer c__6 = 6;
 /* $ Abstract */
 
 /*     The parameters below form an enumerated list of the recognized */
-/*     frame types.  They are: INERTL, PCK, CK, TK, DYN.  The meanings */
-/*     are outlined below. */
+/*     frame types. They are: INERTL, PCK, CK, TK, DYN, SWTCH, and ALL. */
+/*     The meanings are outlined below. */
 
 /* $ Disclaimer */
 
@@ -167,6 +167,11 @@ static integer c__6 = 6;
 /*                 definition depends on parameters supplied via a */
 /*                 frame kernel. */
 
+/*     SWTCH       is a "switch" frame. These frames have orientation */
+/*                 defined by their alignment with base frames selected */
+/*                 from a prioritized list. The base frames optionally */
+/*                 have associated time intervals of applicability. */
+
 /*     ALL         indicates any of the above classes. This parameter */
 /*                 is used in APIs that fetch information about frames */
 /*                 of a specified class. */
@@ -175,6 +180,7 @@ static integer c__6 = 6;
 /* $ Author_and_Institution */
 
 /*     N.J. Bachman    (JPL) */
+/*     B.V. Semenov    (JPL) */
 /*     W.L. Taber      (JPL) */
 
 /* $ Literature_References */
@@ -182,6 +188,11 @@ static integer c__6 = 6;
 /*     None. */
 
 /* $ Version */
+
+/* -    SPICELIB Version 5.0.0, 08-OCT-2020 (NJB) (BVS) */
+
+/*       The parameter SWTCH was added to support the switch */
+/*       frame class. */
 
 /* -    SPICELIB Version 4.0.0, 08-MAY-2012 (NJB) */
 
@@ -368,7 +379,7 @@ static integer c__6 = 6;
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     TARG       I   Target body. */
 /*     ET         I   Observer epoch. */
@@ -380,173 +391,172 @@ static integer c__6 = 6;
 
 /* $ Detailed_Input */
 
-/*     TARG        is the NAIF ID code for a target body. The target */
-/*                 and observer define a state vector whose position */
-/*                 component points from the observer to the target. */
+/*     TARG     is the NAIF ID code for a target body. The target */
+/*              and observer define a state vector whose position */
+/*              component points from the observer to the target. */
 
-/*     ET          is the ephemeris time, expressed as seconds past J2000 */
-/*                 TDB, at which the state of the target body relative to */
-/*                 the observer is to be computed. ET refers to time at */
-/*                 the observer's location. */
+/*     ET       is the ephemeris time, expressed as seconds past J2000 */
+/*              TDB, at which the state of the target body relative to */
+/*              the observer is to be computed. ET refers to time at */
+/*              the observer's location. */
 
-/*     REF         is the name of the reference frame relative to which */
-/*                 the output state vector should be expressed. This may */
-/*                 be any frame supported by the SPICE system, including */
-/*                 built-in frames (documented in the Frames Required */
-/*                 Reading) and frames defined by a loaded frame kernel */
-/*                 (FK). */
+/*     REF      is the name of the reference frame relative to which */
+/*              the output state vector should be expressed. This may */
+/*              be any frame supported by the SPICE system, including */
+/*              built-in frames (documented in the Frames Required */
+/*              Reading) and frames defined by a loaded frame kernel */
+/*              (FK). */
 
-/*                 When REF designates a non-inertial frame, the */
-/*                 orientation of the frame is evaluated at an epoch */
-/*                 dependent on the selected aberration correction. */
-/*                 See the description of the output state vector STARG */
-/*                 for details. */
+/*              When REF designates a non-inertial frame, the */
+/*              orientation of the frame is evaluated at an epoch */
+/*              dependent on the selected aberration correction. */
+/*              See the description of the output state vector STARG */
+/*              for details. */
 
-/*     ABCORR      indicates the aberration corrections to be applied */
-/*                 to the state of the target body to account for one-way */
-/*                 light time and stellar aberration. See the discussion */
-/*                 in the Particulars section for recommendations on */
-/*                 how to choose aberration corrections. */
+/*     ABCORR   indicates the aberration corrections to be applied */
+/*              to the state of the target body to account for one-way */
+/*              light time and stellar aberration. See the discussion */
+/*              in the $Particulars section for recommendations on */
+/*              how to choose aberration corrections. */
 
-/*                 ABCORR may be any of the following: */
+/*              ABCORR may be any of the following: */
 
-/*                    'NONE'     Apply no correction. Return the */
-/*                               geometric state of the target body */
-/*                               relative to the observer. */
+/*                 'NONE'     Apply no correction. Return the */
+/*                            geometric state of the target body */
+/*                            relative to the observer. */
 
-/*                 The following values of ABCORR apply to the */
-/*                 "reception" case in which photons depart from the */
-/*                 target's location at the light-time corrected epoch */
-/*                 ET-LT and *arrive* at the observer's location at ET: */
+/*              The following values of ABCORR apply to the */
+/*              "reception" case in which photons depart from the */
+/*              target's location at the light-time corrected epoch */
+/*              ET-LT and *arrive* at the observer's location at ET: */
 
-/*                    'LT'       Correct for one-way light time (also */
-/*                               called "planetary aberration") using a */
-/*                               Newtonian formulation. This correction */
-/*                               yields the state of the target at the */
-/*                               moment it emitted photons arriving at */
-/*                               the observer at ET. */
+/*                 'LT'       Correct for one-way light time (also */
+/*                            called "planetary aberration") using a */
+/*                            Newtonian formulation. This correction */
+/*                            yields the state of the target at the */
+/*                            moment it emitted photons arriving at */
+/*                            the observer at ET. */
 
-/*                               The light time correction uses an */
-/*                               iterative solution of the light time */
-/*                               equation (see Particulars for details). */
-/*                               The solution invoked by the 'LT' option */
-/*                               uses one iteration. */
+/*                            The light time correction uses an */
+/*                            iterative solution of the light time */
+/*                            equation (see $Particulars for details). */
+/*                            The solution invoked by the 'LT' option */
+/*                            uses one iteration. */
 
-/*                    'LT+S'     Correct for one-way light time and */
-/*                               stellar aberration using a Newtonian */
-/*                               formulation. This option modifies the */
-/*                               state obtained with the 'LT' option to */
-/*                               account for the observer's velocity */
-/*                               relative to the solar system */
-/*                               barycenter. The result is the apparent */
-/*                               state of the target---the position and */
-/*                               velocity of the target as seen by the */
-/*                               observer. */
+/*                 'LT+S'     Correct for one-way light time and */
+/*                            stellar aberration using a Newtonian */
+/*                            formulation. This option modifies the */
+/*                            state obtained with the 'LT' option to */
+/*                            account for the observer's velocity */
+/*                            relative to the solar system */
+/*                            barycenter. The result is the apparent */
+/*                            state of the target---the position and */
+/*                            velocity of the target as seen by the */
+/*                            observer. */
 
-/*                    'CN'       Converged Newtonian light time */
-/*                               correction. In solving the light time */
-/*                               equation, the 'CN' correction iterates */
-/*                               until the solution converges (three */
-/*                               iterations on all supported platforms). */
-/*                               Whether the 'CN+S' solution is */
-/*                               substantially more accurate than the */
-/*                               'LT' solution depends on the geometry */
-/*                               of the participating objects and on the */
-/*                               accuracy of the input data. In all */
-/*                               cases this routine will execute more */
-/*                               slowly when a converged solution is */
-/*                               computed. See the Particulars section */
-/*                               below for a discussion of precision of */
-/*                               light time corrections. */
+/*                 'CN'       Converged Newtonian light time */
+/*                            correction. In solving the light time */
+/*                            equation, the 'CN' correction iterates */
+/*                            until the solution converges (three */
+/*                            iterations on all supported platforms). */
+/*                            Whether the 'CN+S' solution is */
+/*                            substantially more accurate than the */
+/*                            'LT' solution depends on the geometry */
+/*                            of the participating objects and on the */
+/*                            accuracy of the input data. In all */
+/*                            cases this routine will execute more */
+/*                            slowly when a converged solution is */
+/*                            computed. See the $Particulars section */
+/*                            below for a discussion of precision of */
+/*                            light time corrections. */
 
-/*                    'CN+S'     Converged Newtonian light time */
-/*                               correction and stellar aberration */
-/*                               correction. */
-
-
-/*                 The following values of ABCORR apply to the */
-/*                 "transmission" case in which photons *depart* from */
-/*                 the observer's location at ET and arrive at the */
-/*                 target's location at the light-time corrected epoch */
-/*                 ET+LT: */
-
-/*                    'XLT'      "Transmission" case:  correct for */
-/*                               one-way light time using a Newtonian */
-/*                               formulation. This correction yields the */
-/*                               state of the target at the moment it */
-/*                               receives photons emitted from the */
-/*                               observer's location at ET. */
-
-/*                    'XLT+S'    "Transmission" case:  correct for */
-/*                               one-way light time and stellar */
-/*                               aberration using a Newtonian */
-/*                               formulation  This option modifies the */
-/*                               state obtained with the 'XLT' option to */
-/*                               account for the observer's velocity */
-/*                               relative to the solar system */
-/*                               barycenter. The position component of */
-/*                               the computed target state indicates the */
-/*                               direction that photons emitted from the */
-/*                               observer's location must be "aimed" to */
-/*                               hit the target. */
-
-/*                    'XCN'      "Transmission" case:  converged */
-/*                               Newtonian light time correction. */
-
-/*                    'XCN+S'    "Transmission" case:  converged */
-/*                               Newtonian light time correction and */
-/*                               stellar aberration correction. */
+/*                 'CN+S'     Converged Newtonian light time */
+/*                            correction and stellar aberration */
+/*                            correction. */
 
 
-/*                 Neither special nor general relativistic effects are */
-/*                 accounted for in the aberration corrections applied */
-/*                 by this routine. */
+/*              The following values of ABCORR apply to the */
+/*              "transmission" case in which photons *depart* from */
+/*              the observer's location at ET and arrive at the */
+/*              target's location at the light-time corrected epoch */
+/*              ET+LT: */
 
-/*                 Case and blanks are not significant in the string */
-/*                 ABCORR. */
+/*                 'XLT'      "Transmission" case: correct for */
+/*                            one-way light time using a Newtonian */
+/*                            formulation. This correction yields the */
+/*                            state of the target at the moment it */
+/*                            receives photons emitted from the */
+/*                            observer's location at ET. */
 
-/*     OBS         is the NAIF ID code for an observing body. */
+/*                 'XLT+S'    "Transmission" case: correct for */
+/*                            one-way light time and stellar */
+/*                            aberration using a Newtonian */
+/*                            formulation  This option modifies the */
+/*                            state obtained with the 'XLT' option to */
+/*                            account for the observer's velocity */
+/*                            relative to the solar system */
+/*                            barycenter. The position component of */
+/*                            the computed target state indicates the */
+/*                            direction that photons emitted from the */
+/*                            observer's location must be "aimed" to */
+/*                            hit the target. */
 
+/*                 'XCN'      "Transmission" case: converged */
+/*                            Newtonian light time correction. */
+
+/*                 'XCN+S'    "Transmission" case: converged */
+/*                            Newtonian light time correction and */
+/*                            stellar aberration correction. */
+
+
+/*              Neither special nor general relativistic effects are */
+/*              accounted for in the aberration corrections applied */
+/*              by this routine. */
+
+/*              Case and blanks are not significant in the string */
+/*              ABCORR. */
+
+/*     OBS      is the NAIF ID code for an observing body. */
 
 /* $ Detailed_Output */
 
-/*     STARG       is a Cartesian state vector representing the position */
-/*                 and velocity of the target body relative to the */
-/*                 specified observer. STARG is corrected for the */
-/*                 specified aberrations, and is expressed with respect */
-/*                 to the reference frame specified by REF. The first */
-/*                 three components of STARG represent the x-, y- and */
-/*                 z-components of the target's position; the last three */
-/*                 components form the corresponding velocity vector. */
+/*     STARG    is a Cartesian state vector representing the position */
+/*              and velocity of the target body relative to the */
+/*              specified observer. STARG is corrected for the */
+/*              specified aberrations, and is expressed with respect */
+/*              to the reference frame specified by REF. The first */
+/*              three components of STARG represent the x-, y- and */
+/*              z-components of the target's position; the last three */
+/*              components form the corresponding velocity vector. */
 
-/*                 The position component of STARG points from the */
-/*                 observer's location at ET to the aberration-corrected */
-/*                 location of the target. Note that the sense of the */
-/*                 position vector is independent of the direction of */
-/*                 radiation travel implied by the aberration */
-/*                 correction. */
+/*              The position component of STARG points from the */
+/*              observer's location at ET to the aberration-corrected */
+/*              location of the target. Note that the sense of the */
+/*              position vector is independent of the direction of */
+/*              radiation travel implied by the aberration */
+/*              correction. */
 
-/*                 The velocity component of STARG is the derivative */
-/*                 with respect to time of the position component of */
-/*                 STARG. */
+/*              The velocity component of STARG is the derivative */
+/*              with respect to time of the position component of */
+/*              STARG. */
 
-/*                 Units are always km and km/sec. */
+/*              Units are always km and km/sec. */
 
-/*                 Non-inertial frames are treated as follows: letting */
-/*                 LTCENT be the one-way light time between the observer */
-/*                 and the central body associated with the frame, the */
-/*                 orientation of the frame is evaluated at ET-LTCENT, */
-/*                 ET+LTCENT, or ET depending on whether the requested */
-/*                 aberration correction is, respectively, for received */
-/*                 radiation, transmitted radiation, or is omitted. */
-/*                 LTCENT is computed using the method indicated by */
-/*                 ABCORR. */
+/*              Non-inertial frames are treated as follows: letting */
+/*              LTCENT be the one-way light time between the observer */
+/*              and the central body associated with the frame, the */
+/*              orientation of the frame is evaluated at ET-LTCENT, */
+/*              ET+LTCENT, or ET depending on whether the requested */
+/*              aberration correction is, respectively, for received */
+/*              radiation, transmitted radiation, or is omitted. */
+/*              LTCENT is computed using the method indicated by */
+/*              ABCORR. */
 
-/*     LT          is the one-way light time between the observer and */
-/*                 target in seconds. If the target state is corrected */
-/*                 for aberrations, then LT is the one-way light time */
-/*                 between the observer and the light time corrected */
-/*                 target location. */
+/*     LT       is the one-way light time between the observer and */
+/*              target in seconds. If the target state is corrected */
+/*              for aberrations, then LT is the one-way light time */
+/*              between the observer and the light time corrected */
+/*              target location. */
 
 /* $ Parameters */
 
@@ -554,19 +564,20 @@ static integer c__6 = 6;
 
 /* $ Exceptions */
 
-/*     1) If the reference frame REF is not a recognized reference */
-/*        frame the error 'SPICE(UNKNOWNFRAME)' is signaled. */
+/*     1)  If the reference frame REF is not a recognized reference */
+/*         frame, the error SPICE(UNKNOWNFRAME) is signaled. */
 
-/*     2) If the loaded kernels provide insufficient data to */
-/*        compute the requested state vector, the deficiency will */
-/*        be diagnosed by a routine in the call tree of this routine. */
+/*     2)  If the loaded kernels provide insufficient data to compute the */
+/*         requested state vector, an error is signaled by a routine in */
+/*         the call tree of this routine. */
 
-/*     3) If an error occurs while reading an SPK or other kernel file, */
-/*        the error  will be diagnosed by a routine in the call tree */
-/*        of this routine. */
+/*     3)  If an error occurs while reading an SPK or other kernel file, */
+/*         the error  is signaled by a routine in the call tree */
+/*         of this routine. */
 
-/*     4) If any of the required attributes of the reference frame REF */
-/*        cannot be determined, 'SPICE(UNKNOWNFRAME2)' is signaled. */
+/*     4)  If any of the required attributes of the reference frame REF */
+/*         cannot be determined, the error SPICE(UNKNOWNFRAME2) is */
+/*         signaled. */
 
 /* $ Files */
 
@@ -600,7 +611,7 @@ static integer c__6 = 6;
 /*     wishes to know where to point a remote sensing instrument, such */
 /*     as an optical camera or radio antenna, in order to observe or */
 /*     otherwise receive radiation from a target. This pointing problem */
-/*     is complicated by the finite speed of light:  one needs to point */
+/*     is complicated by the finite speed of light: one needs to point */
 /*     to where the target appears to be as opposed to where it actually */
 /*     is at the epoch of observation. We use the adjectives */
 /*     "geometric," "uncorrected," or "true" to refer to an actual */
@@ -610,7 +621,7 @@ static integer c__6 = 6;
 /*     terms "apparent," "corrected," "aberration corrected," or "light */
 /*     time and stellar aberration corrected." The SPICE Toolkit can */
 /*     correct for two phenomena affecting the apparent location of an */
-/*     object:  one-way light time (also called "planetary aberration") */
+/*     object: one-way light time (also called "planetary aberration") */
 /*     and stellar aberration. */
 
 /*     One-way light time */
@@ -631,18 +642,18 @@ static integer c__6 = 6;
 /*     ------------------ */
 
 /*     The velocity of the observer also affects the apparent location */
-/*     of a target:  photons arriving at the observer are subject to a */
+/*     of a target: photons arriving at the observer are subject to a */
 /*     "raindrop effect" whereby their velocity relative to the observer */
 /*     is, using a Newtonian approximation, the photons' velocity */
 /*     relative to the solar system barycenter minus the velocity of the */
 /*     observer relative to the solar system barycenter. This effect is */
-/*     called "stellar aberration."  Stellar aberration is independent */
+/*     called "stellar aberration." Stellar aberration is independent */
 /*     of the velocity of the target. The stellar aberration formula */
 /*     used by this routine does not include (the much smaller) */
 /*     relativistic effects. */
 
 /*     Stellar aberration corrections are applied after light time */
-/*     corrections:  the light time corrected target position vector is */
+/*     corrections: the light time corrected target position vector is */
 /*     used as an input to the stellar aberration correction. */
 
 /*     When light time and stellar aberration corrections are both */
@@ -662,7 +673,7 @@ static integer c__6 = 6;
 /*     location as it will be when photons emitted from the observer's */
 /*     location at ET arrive at the target. The transmission stellar */
 /*     aberration correction is the inverse of the traditional stellar */
-/*     aberration correction:  it indicates the direction in which */
+/*     aberration correction: it indicates the direction in which */
 /*     radiation should be emitted so that, using a Newtonian */
 /*     approximation, the sum of the velocity of the radiation relative */
 /*     to the observer and of the observer's velocity, relative to the */
@@ -993,7 +1004,6 @@ static integer c__6 = 6;
 /*     corrections we suggest you consult the astronomical almanac (page */
 /*     B36) for a discussion of how to carry out these corrections. */
 
-
 /* $ Examples */
 
 /*     1)  Load a planetary ephemeris SPK; then look up a series of */
@@ -1081,35 +1091,38 @@ static integer c__6 = 6;
 
 /*               END */
 
-
 /* $ Restrictions */
 
 /*     None. */
 
 /* $ Literature_References */
 
-/*     SPK Required Reading. */
+/*     None. */
 
 /* $ Author_and_Institution */
 
-/*     C.H. Acton      (JPL) */
-/*     W.L. Taber      (JPL) */
-/*     N.J. Bachman    (JPL) */
-/*     J.E. McLean     (JPL) */
-/*     H.A. Neilan     (JPL) */
-/*     B.V. Semenov    (JPL) */
-/*     M.J. Spencer    (JPL) */
-/*     I.M. Underwood  (JPL) */
+/*     C.H. Acton         (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     J.E. McLean        (JPL) */
+/*     H.A. Neilan        (JPL) */
+/*     B.V. Semenov       (JPL) */
+/*     M.J. Spencer       (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 5.1.1, 16-AUG-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 5.1.0, 03-JUL-2014 (NJB) (BVS) */
 
 /*        Discussion of light time corrections was updated. Assertions */
 /*        that converged light time corrections are unlikely to be */
 /*        useful were removed. */
-
-/* -    Last update was 23-SEP-2013 (NJB) (BVS) */
 
 /*        Bug fix: replaced calls to ZZPRSCOR with calls to */
 /*        ZZVALCOR. The latter routine rejects all aberration */
@@ -1175,7 +1188,7 @@ static integer c__6 = 6;
 
 /*        The routine was upgraded to support non-inertial frames. */
 
-/* -    SPICELIB Version 2.1.1, 5-AUG-1994 (HAN) (MJS) */
+/* -    SPICELIB Version 2.1.1, 05-AUG-1994 (HAN) (MJS) */
 
 /*        Added code so that routine accepts lower case, mixed case */
 /*        and upper case versions of the string ABCORR. */
@@ -1200,7 +1213,7 @@ static integer c__6 = 6;
 /* -& */
 /* $ Index_Entries */
 
-/*     easy reader for spk file */
+/*     easy reader for SPK file */
 /*     get state relative observer corrected for aberrations */
 /*     read ephemeris data */
 /*     read trajectory data */
@@ -1208,7 +1221,7 @@ static integer c__6 = 6;
 /* -& */
 /* $ Revisions */
 
-/* -    SPICELIB Version 5.0.0, 22-JUL-2007 (NJB) */
+/* -    SPICELIB Version 5.0.0, 27-DEC-2007 (NJB) */
 
 /*        Routine was upgraded to more accurately compute aberration- */
 /*        corrected velocity, and in particular, make it more consistent */
@@ -1285,17 +1298,15 @@ static integer c__6 = 6;
 /*        sufficient data is loaded, SPKEZ can always */
 /*        compute the state. */
 
-/*        For example, suppose the file GLL.BSP contains */
-/*        segments of SPK data for the Galileo spacecraft */
-/*        (body -77) relative to the Jupiter Barycenter */
-/*        (body 5) over a period of time. If SPKEZ Version */
-/*        1.0.0 was called to compute the geometric state of */
-/*        -77 relative to 5 (or vice versa), a routine that */
-/*        SPKEZ calls, SPKSSB, would signal an error stating */
-/*        that there is insufficient data for computing the */
-/*        state of body 5 (relative to 0). Version 1.0.0 */
-/*        of SPKEZ could not compute the requested state even */
-/*        though sufficient data had been loaded. */
+/*        For example, suppose the file GLL.BSP contains segments of SPK */
+/*        data for the Galileo spacecraft (body -77) relative to the */
+/*        Jupiter Barycenter (body 5) over a period of time. If the */
+/*        previous version of SPKEZ was called to compute the geometric */
+/*        state of -77 relative to 5 (or vice versa), a routine that */
+/*        SPKEZ calls, SPKSSB, would signal an error stating that there */
+/*        is insufficient data for computing the state of body 5 */
+/*        (relative to 0). Version 1.0.0 of SPKEZ could not compute the */
+/*        requested state even though sufficient data had been loaded. */
 
 /*        It is necessary to compute the states of each */
 /*        of the target and observing bodies relative to */
@@ -1311,10 +1322,10 @@ static integer c__6 = 6;
 /*        no aberration corrections are requested. */
 
 /*        The other cosmetic changes include the removal of a reference */
-/*        to the SPK User's Guide in Literature_References because */
+/*        to the SPK User's Guide in $Literature_References because */
 /*        the User's Guide is the same as SPK Required Reading. */
 
-/*        Also, the item in Restrictions previously said */
+/*        Also, the item in $Restrictions previously said */
 
 /*           1) The ephemeris files to be used by SPKEZ must be loaded */
 /*              by SPKLEF before SPKSSB is called. */
@@ -1324,8 +1335,8 @@ static integer c__6 = 6;
 /*        The location of the position and velocity information in the */
 /*        output state vector argument STARG is now spelled out. */
 
-/*        Finally, the Particulars section was updated. In Version */
-/*        1.0.0 it said that calling SPKEZ was equivalent to calling */
+/*        Finally, the $Particulars section was updated. In the previous */
+/*        version, it said that calling SPKEZ was equivalent to calling */
 /*        SPKSSB and SPKAPP. */
 
 /* -& */
@@ -1540,7 +1551,7 @@ static integer c__6 = 6;
 	for (i__ = 1; i__ <= 3; ++i__) {
 	    d__1 = ltsign * dltctr + 1.;
 	    vsclip_(&d__1, &xform[(i__1 = i__ * 6 - 3) < 36 && 0 <= i__1 ? 
-		    i__1 : s_rnge("xform", i__1, "spkez_", (ftnlen)1329)]);
+		    i__1 : s_rnge("xform", i__1, "spkez_", (ftnlen)1331)]);
 	}
 
 /*        Now apply the frame transformation XFORM to produce the */

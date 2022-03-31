@@ -8,8 +8,8 @@
 /* Table of constant values */
 
 static integer c__0 = 0;
-static integer c__127 = 127;
-static integer c__128 = 128;
+static integer c__145 = 145;
+static integer c__146 = 146;
 
 /* $Procedure BLTFRM ( Built-in frame IDs ) */
 /* Subroutine */ int bltfrm_(integer *frmcls, integer *idset)
@@ -25,20 +25,20 @@ static integer c__128 = 128;
     integer s_rnge(char *, integer, char *, integer);
 
     /* Local variables */
-    static integer i__, j, fcode[127];
+    static integer i__, j, fcode[145];
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     extern integer sizei_(integer *);
     extern logical failed_(void);
-    static integer bidids[128], to, fclsid[127], bididx[128];
+    static integer bidids[146], to, fclsid[145], bididx[146];
     extern /* Subroutine */ int scardi_(integer *, integer *);
-    static char frname[32*127];
-    static integer bidpol[134], fclass[127], corder[127], center[127], bnmidx[
-	    128], bidlst[128];
+    static char frname[32*145];
+    static integer bidpol[152], fclass[145], corder[145], center[145], bnmidx[
+	    146], bidlst[146];
     extern /* Subroutine */ int orderi_(integer *, integer *, integer *);
-    static integer bnmpol[134];
-    static char bnmnms[32*128];
+    static integer bnmpol[152];
+    static char bnmnms[32*146];
     extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    static integer ctrord[127], bnmlst[128];
+    static integer ctrord[145], bnmlst[146];
     extern /* Subroutine */ int chkout_(char *, ftnlen), zzfdat_(integer *, 
 	    integer *, char *, integer *, integer *, integer *, integer *, 
 	    integer *, integer *, integer *, char *, integer *, integer *, 
@@ -93,8 +93,8 @@ static integer c__128 = 128;
 /* $ Abstract */
 
 /*     The parameters below form an enumerated list of the recognized */
-/*     frame types.  They are: INERTL, PCK, CK, TK, DYN.  The meanings */
-/*     are outlined below. */
+/*     frame types. They are: INERTL, PCK, CK, TK, DYN, SWTCH, and ALL. */
+/*     The meanings are outlined below. */
 
 /* $ Disclaimer */
 
@@ -144,6 +144,11 @@ static integer c__128 = 128;
 /*                 definition depends on parameters supplied via a */
 /*                 frame kernel. */
 
+/*     SWTCH       is a "switch" frame. These frames have orientation */
+/*                 defined by their alignment with base frames selected */
+/*                 from a prioritized list. The base frames optionally */
+/*                 have associated time intervals of applicability. */
+
 /*     ALL         indicates any of the above classes. This parameter */
 /*                 is used in APIs that fetch information about frames */
 /*                 of a specified class. */
@@ -152,6 +157,7 @@ static integer c__128 = 128;
 /* $ Author_and_Institution */
 
 /*     N.J. Bachman    (JPL) */
+/*     B.V. Semenov    (JPL) */
 /*     W.L. Taber      (JPL) */
 
 /* $ Literature_References */
@@ -159,6 +165,11 @@ static integer c__128 = 128;
 /*     None. */
 
 /* $ Version */
+
+/* -    SPICELIB Version 5.0.0, 08-OCT-2020 (NJB) (BVS) */
+
+/*       The parameter SWTCH was added to support the switch */
+/*       frame class. */
 
 /* -    SPICELIB Version 4.0.0, 08-MAY-2012 (NJB) */
 
@@ -309,17 +320,41 @@ static integer c__128 = 128;
 
 /* $ Version */
 
+/* -    SPICELIB Version 1.7.0, 26-AUG-2021 (BVS) */
+
+/*        Increased the number of non-inertial frames from 106 to 124 */
+/*        in order to accommodate the following PCK based frames: */
+
+/*           IAU_52_EUROPA */
+/*           IAU_NIX */
+/*           IAU_HYDRA */
+/*           IAU_RYUGU */
+/*           IAU_ARROKOTH */
+/*           IAU_DIDYMOS_BARYCENTER */
+/*           IAU_DIDYMOS */
+/*           IAU_DIMORPHOS */
+/*           IAU_DONALDJOHANSON */
+/*           IAU_EURYBATES */
+/*           IAU_EURYBATES_BARYCENTER */
+/*           IAU_QUETA */
+/*           IAU_POLYMELE */
+/*           IAU_LEUCUS */
+/*           IAU_ORUS */
+/*           IAU_PATROCLUS_BARYCENTER */
+/*           IAU_PATROCLUS */
+/*           IAU_MENOETIUS */
+
 /* -    SPICELIB Version 1.6.0, 30-OCT-2014 (BVS) */
 
 /*        Increased the number of non-inertial frames from 105 to 106 */
-/*        in order to accomodate the following PCK based frame: */
+/*        in order to accommodate the following PCK based frame: */
 
 /*           IAU_BENNU */
 
 /* -    SPICELIB Version 1.5.0, 11-OCT-2011 (BVS) */
 
 /*        Increased the number of non-inertial frames from 100 to 105 */
-/*        in order to accomodate the following PCK based frames: */
+/*        in order to accommodate the following PCK based frames: */
 
 /*           IAU_CERES */
 /*           IAU_PALLAS */
@@ -330,7 +365,7 @@ static integer c__128 = 128;
 /* -    SPICELIB Version 1.4.0, 11-MAY-2010 (BVS) */
 
 /*        Increased the number of non-inertial frames from 96 to 100 */
-/*        in order to accomodate the following PCK based frames: */
+/*        in order to accommodate the following PCK based frames: */
 
 /*           IAU_BORRELLY */
 /*           IAU_TEMPEL_1 */
@@ -340,7 +375,7 @@ static integer c__128 = 128;
 /* -    SPICELIB Version 1.3.0, 12-DEC-2002 (BVS) */
 
 /*        Increased the number of non-inertial frames from 85 to 96 */
-/*        in order to accomodate the following PCK based frames: */
+/*        in order to accommodate the following PCK based frames: */
 
 /*           IAU_CALLIRRHOE */
 /*           IAU_THEMISTO */
@@ -357,7 +392,7 @@ static integer c__128 = 128;
 /* -    SPICELIB Version 1.2.0, 02-AUG-2002 (FST) */
 
 /*        Increased the number of non-inertial frames from 81 to 85 */
-/*        in order to accomodate the following PCK based frames: */
+/*        in order to accommodate the following PCK based frames: */
 
 /*           IAU_PAN */
 /*           IAU_GASPRA */
@@ -367,7 +402,7 @@ static integer c__128 = 128;
 /* -    SPICELIB Version 1.1.0, 20-FEB-1997 (WLT) */
 
 /*        Increased the number of non-inertial frames from 79 to 81 */
-/*        in order to accomodate the following earth rotation */
+/*        in order to accommodate the following earth rotation */
 /*        models: */
 
 /*           ITRF93 */
@@ -385,30 +420,37 @@ static integer c__128 = 128;
 
 /* $ Detailed_Input */
 
-/*     FRMCLS         is an integer code specifying the frame class or */
-/*                    classes for which built-in frame ID codes are */
-/*                    requested. FRMCLS may designate a single class or */
-/*                    "all classes." */
+/*     FRMCLS   is an integer code specifying the frame class or */
+/*              classes for which built-in frame ID codes are */
+/*              requested. FRMCLS may designate a single class or */
+/*              "all classes." */
 
-/*                    The include file frmtyp.inc declares parameters */
-/*                    identifying frame classes. The supported values */
-/*                    and corresponding meanings of FRMCLS are */
+/*              The include file frmtyp.inc declares parameters */
+/*              identifying frame classes. The supported values */
+/*              and corresponding meanings of FRMCLS are */
 
-/*                       Parameter      Value    Meaning */
-/*                       =========      =====    ================= */
-/*                       ALL              -1     All frame classes */
-/*                       INERTL            1     Built-in inertial */
-/*                       PCK               2     PCK-based frame */
-/*                       CK                3     CK-based frame */
-/*                       TK                4     Fixed offset ("text */
-/*                                               kernel") frame */
-/*                       DYN               5     Dynamic frame */
+/*                 Parameter      Value    Meaning */
+/*                 =========      =====    ================= */
+/*                 ALL              -1     All frame classes */
+/*                 INERTL            1     Built-in inertial */
+/*                 PCK               2     PCK-based frame */
+/*                 CK                3     CK-based frame */
+/*                 TK                4     Fixed offset ("text */
+/*                                         kernel") frame */
+/*                 DYN               5     Dynamic frame */
+/*                 SWTCH             6     Switch frame */
 
 /* $ Detailed_Output */
 
-/*     IDSET          is a SPICE set containing the ID codes of all */
-/*                    built-in reference frames of the specified class */
-/*                    or classes. */
+/*     IDSET    is a SPICE set containing the ID codes of all */
+/*              built-in reference frames of the specified class */
+/*              or classes. */
+
+/*              If IDSET is non-empty on input, its contents will be */
+/*              discarded. */
+
+/*              IDSET must be initialized by the caller via the */
+/*              SPICELIB routine SSIZEI. */
 
 /* $ Parameters */
 
@@ -416,11 +458,11 @@ static integer c__128 = 128;
 
 /* $ Exceptions */
 
-/*     1) If the input frame class argument is not defined in */
-/*        frmtyp.inc, the error SPICE(BADFRAMECLASS) is signaled. */
+/*     1)  If the input frame class argument is not defined in */
+/*         frmtyp.inc, the error SPICE(BADFRAMECLASS) is signaled. */
 
-/*     2) If the size of IDSET is too small to hold the requested */
-/*        frame ID set, the error SPICE(SETTOOSMALL) is signaled. */
+/*     2)  If the size of IDSET is too small to hold the requested */
+/*         frame ID set, the error SPICE(SETTOOSMALL) is signaled. */
 
 /* $ Files */
 
@@ -437,16 +479,19 @@ static integer c__128 = 128;
 
 /* $ Examples */
 
+/*     The numerical results shown for this example may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
+
 /*     1) Display the IDs and names of all SPICE built-in frames. */
 /*        Group the outputs by frame class. Also fetch and display */
 /*        the entire set of IDs and names using the parameter ALL. */
 
+/*        Example code begins here. */
 
-/*        Program source code: */
 
-
-/*              PROGRAM EX1 */
-
+/*              PROGRAM BLTFRM_EX1 */
 /*              IMPLICIT NONE */
 
 /*              INCLUDE 'ninert.inc' */
@@ -476,10 +521,18 @@ static integer c__128 = 128;
 /*        C */
 /*              CHARACTER*(FRNMLN)    FRNAME */
 /*              CHARACTER*(LNSIZE)    OUTLIN */
+/*              CHARACTER*(LNSIZE)    VERSN */
 
 /*              INTEGER               I */
 /*              INTEGER               IDSET ( LBCELL : NFRAME ) */
+/*              INTEGER               NFRMS */
 /*              INTEGER               J */
+
+/*        C */
+/*        C     Get the Toolkit version number and display it. */
+/*        C */
+/*              CALL TKVRSN ( 'TOOLKIT', VERSN ) */
+/*              CALL TOSTDO ( 'Toolkit version: ' // VERSN ) */
 
 /*        C */
 /*        C     Initialize the frame set. */
@@ -489,9 +542,9 @@ static integer c__128 = 128;
 /*        C */
 /*        C     Fetch and display the frames of each class. */
 /*        C */
-/*              DO I = 1, 6 */
+/*              DO I = 1, 7 */
 
-/*                 IF ( I .LT. 6 ) THEN */
+/*                 IF ( I .LT. 7 ) THEN */
 /*        C */
 /*        C           Fetch the frames of class I. */
 /*        C */
@@ -516,7 +569,13 @@ static integer c__128 = 128;
 /*                 CALL TOSTDO ( OUTLIN ) */
 /*                 CALL TOSTDO ( '   Frame IDs and names' ) */
 
-/*                 DO J = 1, CARDI(IDSET) */
+/*        C */
+/*        C        Display the NAIF ID and name of a maximum of 5 frames */
+/*        C        per family. */
+/*        C */
+/*                 NFRMS = MIN( 5, CARDI(IDSET) ) */
+
+/*                 DO J = 1, NFRMS */
 /*                    CALL FRMNAM ( IDSET(J), FRNAME ) */
 /*                    WRITE (*,*) IDSET(J), '  ', FRNAME */
 /*                 END DO */
@@ -526,14 +585,11 @@ static integer c__128 = 128;
 /*              END */
 
 
-/*     The output from the program, when the program was linked */
-/*     against the N0064 SPICE Toolkit, is shown below. Note that */
-/*     the set of built-in frames, particularly the non-inertial */
-/*     ones, will grow over time, so the output shown here may */
-/*     be out of sync with that produced by a current SPICE Toolkit. */
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
 
-/*     The output shown here has been abbreviated. */
 
+/*        Toolkit version: N0067 */
 
 /*        Number of frames of class 1: 21 */
 /*           Frame IDs and names */
@@ -542,32 +598,14 @@ static integer c__128 = 128;
 /*                   3   FK4 */
 /*                   4   DE-118 */
 /*                   5   DE-96 */
-/*                   6   DE-102 */
-/*                   7   DE-108 */
-/*                   8   DE-111 */
-/*                   9   DE-114 */
-/*                  10   DE-122 */
-/*                  11   DE-125 */
-/*                  12   DE-130 */
-/*                  13   GALACTIC */
-/*                  14   DE-200 */
-/*                  15   DE-202 */
-/*                  16   MARSIAU */
-/*                  17   ECLIPJ2000 */
-/*                  18   ECLIPB1950 */
-/*                  19   DE-140 */
-/*                  20   DE-142 */
-/*                  21   DE-143 */
 
-/*        Number of frames of class 2: 99 */
+/*        Number of frames of class 2: 105 */
 /*           Frame IDs and names */
 /*               10001   IAU_MERCURY_BARYCENTER */
 /*               10002   IAU_VENUS_BARYCENTER */
-
-/*                   ... */
-
-/*               10100   IAU_ITOKAWA */
-/*               13000   ITRF93 */
+/*               10003   IAU_EARTH_BARYCENTER */
+/*               10004   IAU_MARS_BARYCENTER */
+/*               10005   IAU_JUPITER_BARYCENTER */
 
 /*        Number of frames of class 3: 0 */
 /*           Frame IDs and names */
@@ -579,16 +617,23 @@ static integer c__128 = 128;
 /*        Number of frames of class 5: 0 */
 /*           Frame IDs and names */
 
-/*        Number of built-in frames: 121 */
+/*        Number of frames of class 6: 0 */
+/*           Frame IDs and names */
+
+/*        Number of built-in frames: 127 */
 /*           Frame IDs and names */
 /*                   1   J2000 */
 /*                   2   B1950 */
+/*                   3   FK4 */
+/*                   4   DE-118 */
+/*                   5   DE-96 */
 
-/*                   ... */
 
-/*               10100   IAU_ITOKAWA */
-/*               13000   ITRF93 */
-
+/*        Note that the set of built-in frames, particularly the */
+/*        non-inertial ones, will grow over time, so the output */
+/*        shown here may be out of sync with that produced by a */
+/*        current SPICE Toolkit. Only the first 5 frames of each */
+/*        family are presented in the output. */
 
 /* $ Restrictions */
 
@@ -600,10 +645,23 @@ static integer c__128 = 128;
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     B.V. Semenov    (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     B.V. Semenov       (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 2.0.0, 08-AUG-2021 (JDR) (NJB) */
+
+/*        Updated to account for switch frame class. */
+
+/*        Edited the header to comply with NAIF standard. Updated */
+/*        code example to limit the number of frames presented in the */
+/*        output. */
+
+/*        Extended IDSET description to indicate that the set must */
+/*        be declared and initialized before calling this routine and */
+/*        that its contents will be discarded. */
 
 /* -    SPICELIB Version 1.1.0, 09-AUG-2013 (BVS) */
 
@@ -614,7 +672,7 @@ static integer c__128 = 128;
 /* -& */
 /* $ Index_Entries */
 
-/*     fetch names of built-in reference frames */
+/*     fetch IDs of built-in reference frames */
 
 /* -& */
 
@@ -652,7 +710,7 @@ static integer c__128 = 128;
 /*     built-in frames. */
 
     if (pass1) {
-	zzfdat_(&c__127, &c__128, frname, fcode, center, fclass, fclsid, 
+	zzfdat_(&c__145, &c__146, frname, fcode, center, fclass, fclsid, 
 		ctrord, bnmlst, bnmpol, bnmnms, bnmidx, bidlst, bidpol, 
 		bidids, bididx, (ftnlen)32, (ftnlen)32);
 	if (failed_()) {
@@ -666,7 +724,7 @@ static integer c__128 = 128;
 
 /*     This block of code must be kept in sync with frmtyp.inc. */
 
-    if (*frmcls > 5 || *frmcls == 0 || *frmcls < -1) {
+    if (*frmcls > 6 || *frmcls == 0 || *frmcls < -1) {
 	setmsg_("Frame class specifier FRMCLS was #; this value is not suppo"
 		"rted.", (ftnlen)64);
 	errint_("#", frmcls, (ftnlen)1);
@@ -678,12 +736,12 @@ static integer c__128 = 128;
 /*     Make sure the set is large enough to hold all of */
 /*     the IDs of the built-in frames. */
 
-    if (sizei_(idset) < 127) {
+    if (sizei_(idset) < 145) {
 	setmsg_("Frame ID set argument IDSET has size #; required size is at"
 		" least #.", (ftnlen)68);
 	i__1 = sizei_(idset);
 	errint_("#", &i__1, (ftnlen)1);
-	errint_("#", &c__127, (ftnlen)1);
+	errint_("#", &c__145, (ftnlen)1);
 	sigerr_("SPICE(SETTOOSMALL)", (ftnlen)18);
 	chkout_("BLTFRM", (ftnlen)6);
 	return 0;
@@ -693,25 +751,25 @@ static integer c__128 = 128;
 /*     to the output set. First, generate an order vector for */
 /*     the ID codes. */
 
-    orderi_(fcode, &c__127, corder);
+    orderi_(fcode, &c__145, corder);
     to = 0;
-    for (i__ = 1; i__ <= 127; ++i__) {
+    for (i__ = 1; i__ <= 145; ++i__) {
 
 /*        Get the index J in the parallel data arrays of */
 /*        the Ith frame, ordered by ID code. */
 
-	j = corder[(i__1 = i__ - 1) < 127 && 0 <= i__1 ? i__1 : s_rnge("cord"
-		"er", i__1, "bltfrm_", (ftnlen)451)];
-	if (fclass[(i__1 = j - 1) < 127 && 0 <= i__1 ? i__1 : s_rnge("fclass",
-		 i__1, "bltfrm_", (ftnlen)453)] == *frmcls || *frmcls == -1) {
+	j = corder[(i__1 = i__ - 1) < 145 && 0 <= i__1 ? i__1 : s_rnge("cord"
+		"er", i__1, "bltfrm_", (ftnlen)476)];
+	if (fclass[(i__1 = j - 1) < 145 && 0 <= i__1 ? i__1 : s_rnge("fclass",
+		 i__1, "bltfrm_", (ftnlen)478)] == *frmcls || *frmcls == -1) {
 
 /*           The frame at index J belongs to the */
 /*           requested class. Append the frame's ID */
 /*           code to the set. */
 
 	    ++to;
-	    idset[to + 5] = fcode[(i__1 = j - 1) < 127 && 0 <= i__1 ? i__1 : 
-		    s_rnge("fcode", i__1, "bltfrm_", (ftnlen)461)];
+	    idset[to + 5] = fcode[(i__1 = j - 1) < 145 && 0 <= i__1 ? i__1 : 
+		    s_rnge("fcode", i__1, "bltfrm_", (ftnlen)486)];
 	}
     }
 

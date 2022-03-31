@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      CKE06 ( C-Kernel, evaluate, type 6 ) */
+/* $Procedure CKE06 ( C-Kernel, evaluate, type 6 ) */
 /* Subroutine */ int cke06_(logical *needav, doublereal *record, doublereal *
 	cmat, doublereal *av, doublereal *clkout)
 {
@@ -365,9 +365,9 @@
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
-/*     NEEDAV     I   True if angular velocity is requested. */
+/*     NEEDAV     I   .TRUE. if angular velocity is requested. */
 /*     RECORD    I-O  Data type 6 record. */
 /*     CMAT       O   C-matrix. */
 /*     AV         O   Angular velocity vector. */
@@ -375,91 +375,90 @@
 
 /* $ Detailed_Input */
 
-/*     NEEDAV      is true if angular velocity is requested. */
+/*     NEEDAV   is .TRUE. if angular velocity is requested. */
 
-/*     RECORD      is a record from a type 6 CK segment which, when */
-/*                 evaluated at the epoch contained in its first */
-/*                 element, will give the attitude and angular velocity */
-/*                 of a spacecraft structure or instrument relative to a */
-/*                 base reference frame. */
+/*     RECORD   is a record from a type 6 CK segment which, when */
+/*              evaluated at the epoch contained in its first */
+/*              element, will give the attitude and angular velocity */
+/*              of a spacecraft structure or instrument relative to a */
+/*              base reference frame. */
 
-/*                 The structure of the record is as follows: */
+/*              The structure of the record is as follows: */
 
-/*                    +----------------------+ */
-/*                    | evaluation epoch     | */
-/*                    +----------------------+ */
-/*                    | subtype code         | */
-/*                    +----------------------+ */
-/*                    | number of packets (n)| */
-/*                    +----------------------+ */
-/*                    | nominal SCLK rate    | */
-/*                    +----------------------+ */
-/*                    | packet 1             | */
-/*                    +----------------------+ */
-/*                    | packet 2             | */
-/*                    +----------------------+ */
-/*                             . */
-/*                             . */
-/*                             . */
-/*                    +----------------------+ */
-/*                    | packet n             | */
-/*                    +----------------------+ */
-/*                    | epochs 1--n          | */
-/*                    +----------------------+ */
+/*                 +----------------------+ */
+/*                 | evaluation epoch     | */
+/*                 +----------------------+ */
+/*                 | subtype code         | */
+/*                 +----------------------+ */
+/*                 | number of packets (n)| */
+/*                 +----------------------+ */
+/*                 | nominal SCLK rate    | */
+/*                 +----------------------+ */
+/*                 | packet 1             | */
+/*                 +----------------------+ */
+/*                 | packet 2             | */
+/*                 +----------------------+ */
+/*                          . */
+/*                          . */
+/*                          . */
+/*                 +----------------------+ */
+/*                 | packet n             | */
+/*                 +----------------------+ */
+/*                 | epochs 1--n          | */
+/*                 +----------------------+ */
 
 /*                See the CK Required Reading or the include file */
 /*                ck06.inc for details on CK type 6 packet contents. */
 
-
 /* $ Detailed_Output */
 
-/*     RECORD     has been modified due to its use as a workspace array. */
-/*                The contents are undefined. */
+/*     RECORD   has been modified due to its use as a workspace array. */
+/*              The contents are undefined. */
 
 
-/*     CMAT       is a rotation matrix that transforms the components */
-/*                of a vector expressed in the base frame given in */
-/*                the segment to components expressed in the instrument */
-/*                fixed frame at the returned time. */
+/*     CMAT     is a rotation matrix that transforms the components */
+/*              of a vector expressed in the base frame given in */
+/*              the segment to components expressed in the instrument */
+/*              fixed frame at the returned time. */
 
-/*                Thus, if a vector v has components x, y, z in the */
-/*                base frame, then v has components x', y', z' in the */
-/*                instrument fixed frame where: */
+/*              Thus, if a vector v has components x, y, z in the */
+/*              base frame, then v has components x', y', z' in the */
+/*              instrument fixed frame where: */
 
-/*                     [ x' ]     [          ] [ x ] */
-/*                     | y' |  =  |   CMAT   | | y | */
-/*                     [ z' ]     [          ] [ z ] */
+/*                   [ x' ]     [          ] [ x ] */
+/*                   | y' |  =  |   CMAT   | | y | */
+/*                   [ z' ]     [          ] [ z ] */
 
-/*                If the x', y', z' components are known, use the */
-/*                transpose of the C-matrix to determine x, y, z as */
-/*                follows. */
+/*              If the x', y', z' components are known, use the */
+/*              transpose of the C-matrix to determine x, y, z as */
+/*              follows. */
 
-/*                     [ x ]      [          ]T    [ x' ] */
-/*                     | y |  =   |   CMAT   |     | y' | */
-/*                     [ z ]      [          ]     [ z' ] */
-/*                              (Transpose of CMAT) */
+/*                   [ x ]      [          ]T    [ x' ] */
+/*                   | y |  =   |   CMAT   |     | y' | */
+/*                   [ z ]      [          ]     [ z' ] */
+/*                            (Transpose of CMAT) */
 
 
-/*     AV         is the angular velocity vector of the instrument fixed */
-/*                frame defined by CMAT.  The angular velocity is */
-/*                returned only if NEEDAV is true. */
+/*     AV       is the angular velocity vector of the instrument fixed */
+/*              frame defined by CMAT. The angular velocity is */
+/*              returned only if NEEDAV is .TRUE. */
 
-/*                The direction of the angular velocity vector gives */
-/*                the right-handed axis about which the instrument fixed */
-/*                reference frame is rotating. The magnitude of AV is */
-/*                the magnitude of the instantaneous velocity of the */
-/*                rotation, in radians per second. */
+/*              The direction of the angular velocity vector gives */
+/*              the right-handed axis about which the instrument fixed */
+/*              reference frame is rotating. The magnitude of AV is */
+/*              the magnitude of the instantaneous velocity of the */
+/*              rotation, in radians per second. */
 
-/*                The angular velocity vector is returned in component */
-/*                form */
+/*              The angular velocity vector is returned in component */
+/*              form */
 
-/*                         AV = [ AV1  , AV2  , AV3  ] */
+/*                       AV = [ AV1  , AV2  , AV3  ] */
 
-/*                which is in terms of the base coordinate frame */
-/*                specified in the segment descriptor. */
+/*              which is in terms of the base coordinate frame */
+/*              specified in the segment descriptor. */
 
-/*     CLKOUT     is the encoded SCLK associated with the returned */
-/*                C-matrix and angular velocity vector. */
+/*     CLKOUT   is the encoded SCLK associated with the returned */
+/*              C-matrix and angular velocity vector. */
 
 /* $ Parameters */
 
@@ -467,8 +466,8 @@
 
 /* $ Exceptions */
 
-/*     1)  If the input record contains an unrecognized subtype code, */
-/*         the error is diagnosed by a routine in the call tree of this */
+/*     1)  If the input record contains an unrecognized subtype code, an */
+/*         error is signaled by a routine in the call tree of this */
 /*         routine. */
 
 /*     2)  If the record subtype is one for which quaternion derivatives */
@@ -620,7 +619,7 @@
 /*         created. */
 
 /*     2)  With the exception of the check described in item 2 of */
-/*         the Exceptions section above, the input data are assumed to */
+/*         the $Exceptions section above, the input data are assumed to */
 /*         be suitable for the interpolation method specified by the */
 /*         input record's subtype and packet count (which implies an */
 /*         interpolating polynomial degree). */
@@ -631,10 +630,15 @@
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
-/*     B.V. Semenov   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     B.V. Semenov       (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.0.1, 12-AUG-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.0.0, 14-MAR-2014 (NJB) (BVS) */
 
@@ -642,11 +646,6 @@
 /* $ Index_Entries */
 
 /*     evaluate type_6 ck_segment */
-
-/* -& */
-/* $ Revisions */
-
-/*     None. */
 
 /* -& */
 

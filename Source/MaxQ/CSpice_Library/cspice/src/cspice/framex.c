@@ -8,7 +8,8 @@
 /* Table of constant values */
 
 static integer c__5209 = 5209;
-static integer c__127 = 127;
+static integer c__145 = 145;
+static integer c__149 = 149;
 static integer c__0 = 0;
 static integer c__1 = 1;
 static integer c__8 = 8;
@@ -16,7 +17,7 @@ static integer c__100 = 100;
 
 /* $Procedure FRAMEX ( FRAMe EXpert ) */
 /* Subroutine */ int framex_0_(int n__, char *cname, char *frname, integer *
-	frcode, integer *cent, integer *class__, integer *clssid, logical *
+	frcode, integer *cent, integer *frclss, integer *clssid, logical *
 	found, ftnlen cname_len, ftnlen frname_len)
 {
     /* Initialized data */
@@ -32,10 +33,10 @@ static integer c__100 = 100;
     /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    static char name__[32*127], line[80*8];
+    static char name__[32*145], line[80*8];
     static integer item;
     static logical lnew;
-    static integer type__[127];
+    static integer type__[145];
     extern /* Subroutine */ int zzhscadd_(integer *, integer *, char *, char *
 	    , integer *, logical *, ftnlen, ftnlen), zzhsiadd_(integer *, 
 	    integer *, integer *, integer *, integer *, logical *), zzhscchk_(
@@ -65,22 +66,23 @@ static integer c__100 = 100;
 	    integer *, logical *, ftnlen);
     static integer id;
     extern logical failed_(void);
-    static integer idcode[127], bidids[127];
+    static integer idcode[145], bidids[149];
     static char lcname[36];
-    static integer bididx[127];
+    static integer bididx[149];
     static char lcfram[32];
     extern integer bschoi_(integer *, integer *, integer *, integer *);
-    static integer kidids[5209], kclsid[5209], kvclid, bidpol[133], centrd[
-	    127], center[127];
+    static integer kidids[5209], kclsid[5209], kvclid, bidpol[155], centrd[
+	    145], center[145];
     static char kvbuff[32*100];
     static integer kidpol[5215], knmids[5209], kclass[5209], kidlst[5209], 
-	    bnmpol[133], typeid[127], values[8], knmpol[5215];
-    static logical lupdte;
+	    bnmpol[155], typeid[145], values[8], knmpol[5215];
     static char knmnms[32*5209], dattyp[1], lookup[32];
-    static integer kvclss, pulctr[2], knmlst[5209], bnmlst[127];
+    static integer kvclss, pulctr[2], knmlst[5209];
+    static logical lupdte;
     extern logical return_(void);
-    static char bnmnms[32*127];
-    static integer bnmidx[127], bidlst[127];
+    static integer bnmlst[149];
+    static char bnmnms[32*149];
+    static integer bnmidx[149], bidlst[149];
     extern /* Subroutine */ int setmsg_(char *, ftnlen), sigerr_(char *, 
 	    ftnlen), chkout_(char *, ftnlen), zzfdat_(integer *, integer *, 
 	    char *, integer *, integer *, integer *, integer *, integer *, 
@@ -265,17 +267,41 @@ static integer c__100 = 100;
 
 /* $ Version */
 
+/* -    SPICELIB Version 1.7.0, 26-AUG-2021 (BVS) */
+
+/*        Increased the number of non-inertial frames from 106 to 124 */
+/*        in order to accommodate the following PCK based frames: */
+
+/*           IAU_52_EUROPA */
+/*           IAU_NIX */
+/*           IAU_HYDRA */
+/*           IAU_RYUGU */
+/*           IAU_ARROKOTH */
+/*           IAU_DIDYMOS_BARYCENTER */
+/*           IAU_DIDYMOS */
+/*           IAU_DIMORPHOS */
+/*           IAU_DONALDJOHANSON */
+/*           IAU_EURYBATES */
+/*           IAU_EURYBATES_BARYCENTER */
+/*           IAU_QUETA */
+/*           IAU_POLYMELE */
+/*           IAU_LEUCUS */
+/*           IAU_ORUS */
+/*           IAU_PATROCLUS_BARYCENTER */
+/*           IAU_PATROCLUS */
+/*           IAU_MENOETIUS */
+
 /* -    SPICELIB Version 1.6.0, 30-OCT-2014 (BVS) */
 
 /*        Increased the number of non-inertial frames from 105 to 106 */
-/*        in order to accomodate the following PCK based frame: */
+/*        in order to accommodate the following PCK based frame: */
 
 /*           IAU_BENNU */
 
 /* -    SPICELIB Version 1.5.0, 11-OCT-2011 (BVS) */
 
 /*        Increased the number of non-inertial frames from 100 to 105 */
-/*        in order to accomodate the following PCK based frames: */
+/*        in order to accommodate the following PCK based frames: */
 
 /*           IAU_CERES */
 /*           IAU_PALLAS */
@@ -286,7 +312,7 @@ static integer c__100 = 100;
 /* -    SPICELIB Version 1.4.0, 11-MAY-2010 (BVS) */
 
 /*        Increased the number of non-inertial frames from 96 to 100 */
-/*        in order to accomodate the following PCK based frames: */
+/*        in order to accommodate the following PCK based frames: */
 
 /*           IAU_BORRELLY */
 /*           IAU_TEMPEL_1 */
@@ -296,7 +322,7 @@ static integer c__100 = 100;
 /* -    SPICELIB Version 1.3.0, 12-DEC-2002 (BVS) */
 
 /*        Increased the number of non-inertial frames from 85 to 96 */
-/*        in order to accomodate the following PCK based frames: */
+/*        in order to accommodate the following PCK based frames: */
 
 /*           IAU_CALLIRRHOE */
 /*           IAU_THEMISTO */
@@ -313,7 +339,7 @@ static integer c__100 = 100;
 /* -    SPICELIB Version 1.2.0, 02-AUG-2002 (FST) */
 
 /*        Increased the number of non-inertial frames from 81 to 85 */
-/*        in order to accomodate the following PCK based frames: */
+/*        in order to accommodate the following PCK based frames: */
 
 /*           IAU_PAN */
 /*           IAU_GASPRA */
@@ -323,7 +349,7 @@ static integer c__100 = 100;
 /* -    SPICELIB Version 1.1.0, 20-FEB-1997 (WLT) */
 
 /*        Increased the number of non-inertial frames from 79 to 81 */
-/*        in order to accomodate the following earth rotation */
+/*        in order to accommodate the following earth rotation */
 /*        models: */
 
 /*           ITRF93 */
@@ -335,8 +361,8 @@ static integer c__100 = 100;
 /* $ Abstract */
 
 /*     The parameters below form an enumerated list of the recognized */
-/*     frame types.  They are: INERTL, PCK, CK, TK, DYN.  The meanings */
-/*     are outlined below. */
+/*     frame types. They are: INERTL, PCK, CK, TK, DYN, SWTCH, and ALL. */
+/*     The meanings are outlined below. */
 
 /* $ Disclaimer */
 
@@ -386,6 +412,11 @@ static integer c__100 = 100;
 /*                 definition depends on parameters supplied via a */
 /*                 frame kernel. */
 
+/*     SWTCH       is a "switch" frame. These frames have orientation */
+/*                 defined by their alignment with base frames selected */
+/*                 from a prioritized list. The base frames optionally */
+/*                 have associated time intervals of applicability. */
+
 /*     ALL         indicates any of the above classes. This parameter */
 /*                 is used in APIs that fetch information about frames */
 /*                 of a specified class. */
@@ -394,6 +425,7 @@ static integer c__100 = 100;
 /* $ Author_and_Institution */
 
 /*     N.J. Bachman    (JPL) */
+/*     B.V. Semenov    (JPL) */
 /*     W.L. Taber      (JPL) */
 
 /* $ Literature_References */
@@ -401,6 +433,11 @@ static integer c__100 = 100;
 /*     None. */
 
 /* $ Version */
+
+/* -    SPICELIB Version 5.0.0, 08-OCT-2020 (NJB) (BVS) */
+
+/*       The parameter SWTCH was added to support the switch */
+/*       frame class. */
 
 /* -    SPICELIB Version 4.0.0, 08-MAY-2012 (NJB) */
 
@@ -479,13 +516,12 @@ static integer c__100 = 100;
 /*     VARIABLE  I/O  ENTRY POINT */
 /*     --------  ---  -------------------------------------------------- */
 /*     CNAME      I   CNMFRM */
-/*     FRNAME    I/O  NAMFRM, FRMNAM, CCIFRM */
-/*     FRCODE    I/O  NAMFRM, FRMNAM, FRINFO, CIDFRM, CCIFRM */
-/*     CENT      I/O  FRINFO, CIDFRM, CCIFRM */
-/*     CLASS     I/O  FRINFO, CCIFRM */
-/*     CLSSID    I/O  FRINFO, CCIFRM */
+/*     FRNAME    I-O  NAMFRM, FRMNAM, CCIFRM */
+/*     FRCODE    I-O  NAMFRM, FRMNAM, FRINFO, CIDFRM, CCIFRM */
+/*     CENT      I-O  FRINFO, CIDFRM, CCIFRM */
+/*     FRCLSS    I-O  FRINFO, CCIFRM */
+/*     CLSSID    I-O  FRINFO, CCIFRM */
 /*     FOUND      O   FRINFO */
-
 
 /* $ Detailed_Input */
 
@@ -501,8 +537,8 @@ static integer c__100 = 100;
 
 /* $ Exceptions */
 
-/*     1) If this routine is called directly the error */
-/*       'SPICE(BOGUSENTRY)' will be signaled. */
+/*     1)  If this routine is called directly, the error */
+/*         SPICE(BOGUSENTRY) is signaled. */
 
 /* $ Files */
 
@@ -546,8 +582,8 @@ static integer c__100 = 100;
 
 /*        First convert names to frame ID codes. */
 
-/*        CHARACTER*(26)        NAME1 */
-/*        CHARACTER*(26)        NAME2 */
+/*        CHARACTER*(32)        NAME1 */
+/*        CHARACTER*(32)        NAME2 */
 
 /*        INTEGER               FRAME1 */
 /*        INTEGER               FRAME2 */
@@ -569,7 +605,7 @@ static integer c__100 = 100;
 
 /*        Next we determine the center of the second frame */
 
-/*        CALL FRINFO ( FRAME2, CENT, CLASS, CLSSID, FOUND ) */
+/*        CALL FRINFO ( FRAME2, CENT, FRCLSS, CLSSID, FOUND ) */
 
 /*        Determine the light time to the center of the second frame. */
 
@@ -590,24 +626,40 @@ static integer c__100 = 100;
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     B.V. Semenov    (JPL) */
-/*     W.L. Taber      (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
 
+/* -    SPICELIB Version 5.3.0, 26-AUG-2021 (JDR) */
+
+/*        Changed the argument name CLASS to FRCLSS in FRINFO and CCIFRM */
+/*        entry points for consistency with other routines. */
+
+/*        Edited the header of the umbrella routine and all its entry */
+/*        points to comply with NAIF standard. Updated the $Examples */
+/*        section of CCIFRM entry point. */
+
+/*        Updated frame name length from 26 to 32 in example code. */
+
+/*        Increased MAXBFR from 127 to 149 to accommodate additional */
+/*        built-in PCK based frames. */
+
 /* -    SPICELIB Version 5.2.1, 02-FEB-2017 (BVS) */
 
-/*        Shortened one of permutted index entries in CCIFRM. */
+/*        Shortened one of permuted index entries in CCIFRM. */
 
 /* -    SPICELIB Version 5.2.0, 08-AUG-2012 (BVS) */
 
 /*        The routine was updated to be more efficient by using hashes */
 /*        instead kernel POOL look-ups for kernel POOL frames and by */
-/*        using hases instead of ordered array searches for built-in */
+/*        using hashes instead of ordered array searches for built-in */
 /*        frames. */
 
-/*        Bux fix: CCIFRM entry point logic was corrected to examine the */
+/*        Bug fix: CCIFRM entry point logic was corrected to examine the */
 /*        built-in frames before looking at the kernel POOL frames. */
 
 /* -    SPICELIB Version 5.1.1, 09-FEB-2011 (NJB) */
@@ -620,7 +672,7 @@ static integer c__100 = 100;
 
 /* -    SPICELIB Version 5.0.1, 17-MAR-2009 (EDW) */
 
-/*        Entry point NAMFRM: Typo correction in Required_Reading, */
+/*        Entry point NAMFRM: Typo correction in $Required_Reading, */
 /*        changed FRAME to FRAMES. */
 
 /* -    SPICELIB Version 5.0.0, 05-NOV-2007 (NJB) */
@@ -683,8 +735,8 @@ static integer c__100 = 100;
 
 /* -    SPICELIB Version 1.1.0, 14-OCT-1996 (WLT) */
 
-/*       The values NINERT and NNINRT are included instead of */
-/*       being declared locally. */
+/*        The values NINERT and NNINRT are included instead of */
+/*        being declared locally. */
 
 /* -    SPICELIB Version 1.0.0, 18-SEP-1995 (WLT) */
 
@@ -743,7 +795,7 @@ static integer c__100 = 100;
 
 
 /*     ID-based hash for kernel pool frames. KIDLST, KIDPOL, and KIDIDS */
-/*     provide the index in the kernel frame attiribut arrays KNAME, */
+/*     provide the index in the kernel frame attribute arrays KNAME, */
 /*     KCENT, KCLASS, and KCLSID at which the attributes of the frame */
 /*     with a given ID are stored. */
 
@@ -756,18 +808,19 @@ static integer c__100 = 100;
 /*     it should be set manually to the first prime number greater than */
 /*     or equal to NCOUNT. */
 
-/*     For the current NCOUNT equal to 126, such number is 127. */
+/*     For the current N0067 NCOUNT equal to 145 (21 inertial + 124 */
+/*     non-inertial), such number is 149. */
 
 
 /*     Name-based hash for built-in frames. BNMLST, BNMPOL, and BNMNMS */
 /*     provide the index in BNMIDX which stores the index for the frame */
-/*     attributes in the built-in frame attiributes arrays IDCODE, NAME, */
+/*     attributes in the built-in frame attributes arrays IDCODE, NAME, */
 /*     CENTER, TYPE, and TYPEID. */
 
 
 /*     ID-based hash for built-in frames. BIDLST, BIDPOL, and BIDIDS */
 /*     provide an index in BIDIDX which stores the index for the frame */
-/*     attributes in the built-in frame attiributes arrays IDCODE, NAME, */
+/*     attributes in the built-in frame attributes arrays IDCODE, NAME, */
 /*     CENTER, TYPE, and TYPEID. */
 
 
@@ -851,22 +904,22 @@ L_namfrm:
 
 /* $ Detailed_Input */
 
-/*     FRNAME      is a character string that stands for some */
-/*                 reference frame (either inertial or non-inertial). */
+/*     FRNAME   is a character string that stands for some */
+/*              reference frame (either inertial or non-inertial). */
 
-/*                 Leading blanks in FRNAME are ignored. And the */
-/*                 case of the letters in FRNAME are insignificant. */
+/*              Leading blanks in FRNAME are ignored. And the */
+/*              case of the letters in FRNAME are insignificant. */
 
-/*                 Note that all legitimate frame names contain */
-/*                 26 or fewer characters. */
+/*              Note that all legitimate frame names contain */
+/*              26 or fewer characters. */
 
 /* $ Detailed_Output */
 
-/*     FRCODE      is the SPICE integer code used for internal */
-/*                 representation of the named reference frame. */
+/*     FRCODE   is the SPICE integer code used for internal */
+/*              representation of the named reference frame. */
 
-/*                 If the name input through FRNAME is not recognized */
-/*                 FRCODE will be returned with a value of zero. */
+/*              If the name input through FRNAME is not recognized */
+/*              FRCODE will be returned with a value of zero. */
 
 /* $ Parameters */
 
@@ -874,8 +927,8 @@ L_namfrm:
 
 /* $ Exceptions */
 
-/*     1) If the input name is not recognized, FRCODE will be */
-/*        returned with a value of 0. */
+/*     1)  If the input name is not recognized, FRCODE will be */
+/*         returned with a value of 0. */
 
 /* $ Files */
 
@@ -932,22 +985,27 @@ L_namfrm:
 
 /* $ Author_and_Institution */
 
-/*     W.L. Taber      (JPL) */
-/*     B.V. Semenov    (JPL) */
-/*     E.D. Wright     (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 3.1.1, 02-AUG-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 3.1.0, 08-AUG-2012 (BVS) */
 
 /*        The routine was updated to be more efficient by using hashes */
 /*        instead kernel POOL look-ups for kernel POOL frames and by */
-/*        using hases instead of ordered array searches for built-in */
+/*        using hashes instead of ordered array searches for built-in */
 /*        frames. */
 
 /* -    SPICELIB Version 3.0.2, 17-MAR-2009 (EDW) */
 
-/*        Typo correction in Required_Reading, changed FRAME to FRAMES. */
+/*        Typo correction in $Required_Reading, changed FRAME to FRAMES. */
 
 /* -    SPICELIB Version 3.0.1, 25-JUN-1999 (WLT) */
 
@@ -972,8 +1030,8 @@ L_namfrm:
 
 /* -    SPICELIB Version 1.1.0, 14-OCT-1996 (WLT) */
 
-/*       The values NINERT and NNINRT are included instead of */
-/*       being declared locally. */
+/*        The values NINERT and NNINRT are included instead of */
+/*        being declared locally. */
 
 /* -    SPICELIB Version 1.0.0, 18-SEP-1995 (WLT) */
 
@@ -1015,7 +1073,7 @@ L_namfrm:
 
 /*        Initialize built-in frame tables and hashes. */
 
-	zzfdat_(&c__127, &c__127, name__, idcode, center, type__, typeid, 
+	zzfdat_(&c__145, &c__149, name__, idcode, center, type__, typeid, 
 		centrd, bnmlst, bnmpol, bnmnms, bnmidx, bidlst, bidpol, 
 		bidids, bididx, (ftnlen)32, (ftnlen)32);
 	if (failed_()) {
@@ -1032,16 +1090,16 @@ L_namfrm:
     ucase_(pname, pname, (ftnlen)32, (ftnlen)32);
     zzhscchk_(bnmlst, bnmpol, bnmnms, pname, &item, (ftnlen)32, (ftnlen)32);
     if (item != 0) {
-	item = bnmidx[(i__1 = item - 1) < 127 && 0 <= i__1 ? i__1 : s_rnge(
-		"bnmidx", i__1, "framex_", (ftnlen)736)];
+	item = bnmidx[(i__1 = item - 1) < 149 && 0 <= i__1 ? i__1 : s_rnge(
+		"bnmidx", i__1, "framex_", (ftnlen)761)];
     }
 
 /*     If the name is in our hash, we can just look up its ID code in */
 /*     the parallel array. */
 
     if (item > 0) {
-	*frcode = idcode[(i__1 = item - 1) < 127 && 0 <= i__1 ? i__1 : s_rnge(
-		"idcode", i__1, "framex_", (ftnlen)745)];
+	*frcode = idcode[(i__1 = item - 1) < 145 && 0 <= i__1 ? i__1 : s_rnge(
+		"idcode", i__1, "framex_", (ftnlen)770)];
     } else {
 
 /*        See if this frame is in the kernel pool frame name-based hash. */
@@ -1059,7 +1117,7 @@ L_namfrm:
 		32);
 	if (item != 0) {
 	    *frcode = knmids[(i__1 = item - 1) < 5209 && 0 <= i__1 ? i__1 : 
-		    s_rnge("knmids", i__1, "framex_", (ftnlen)767)];
+		    s_rnge("knmids", i__1, "framex_", (ftnlen)792)];
 	} else {
 
 /*           The name wasn't in the hash, see if we can find this frame */
@@ -1082,7 +1140,7 @@ L_namfrm:
 			ftnlen)32, (ftnlen)32);
 		if (! failed_() && item != 0) {
 		    knmids[(i__1 = item - 1) < 5209 && 0 <= i__1 ? i__1 : 
-			    s_rnge("knmids", i__1, "framex_", (ftnlen)797)] = 
+			    s_rnge("knmids", i__1, "framex_", (ftnlen)822)] = 
 			    *frcode;
 		}
 	    } else {
@@ -1148,24 +1206,22 @@ L_frmnam:
 
 /* $ Detailed_Input */
 
-/*     FRCODE      is an integer code for a reference frame. */
+/*     FRCODE   is an integer code for a reference frame. */
 
 /* $ Detailed_Output */
 
-/*     FRNAME      is the name associated with the reference frame. */
-/*                 It will be returned left justified. */
+/*     FRNAME   is the name associated with the reference frame. It will */
+/*              be returned left justified. */
 
-/*                 If FRCODE is not recognized as the name of a */
-/*                 known reference frame FRNAME will be returned */
-/*                 as a blank. */
+/*              If FRCODE is not recognized as the name of a known */
+/*              reference frame, FRNAME will be returned as a blank. */
 
-/*                 If FRNAME is not sufficiently long to hold the */
-/*                 name, it will be truncated on the right. */
+/*              If FRNAME is not sufficiently long to hold the name, it */
+/*              will be truncated on the right. */
 
-/*                 All reference frame names are 26 or fewer characters */
-/*                 in length. Thus declaring FRNAME to be CHARACTER*(26) */
-/*                 will ensure that the returned name will not be */
-/*                 truncated. */
+/*              All reference frame names are 26 or fewer characters in */
+/*              length. Thus declaring FRNAME to be CHARACTER*(26) will */
+/*              ensure that the returned name will not be truncated. */
 
 /* $ Parameters */
 
@@ -1173,12 +1229,11 @@ L_frmnam:
 
 /* $ Exceptions */
 
-/*     1) If FRCODE is not recognized as the name of a */
-/*        known reference frame FRNAME will be returned */
-/*        as a blank. */
+/*     1)  If FRCODE is not recognized as the name of a known reference */
+/*         frame, FRNAME will be returned as a blank. */
 
-/*     2) If FRNAME is not sufficiently long to hold the */
-/*        name, it will be truncated on the right. */
+/*     2)  If FRNAME is not sufficiently long to hold the name, it will */
+/*         be truncated on the right. */
 
 /* $ Files */
 
@@ -1219,7 +1274,7 @@ L_frmnam:
 /*     disposal. You can capture the frame name using this routine */
 /*     as shown here. */
 
-/*        CHARACTER*(26)        FRNAME */
+/*        CHARACTER*(32)        FRNAME */
 
 /*        CALL FRMNAM ( FRCODE, FRNAME ) */
 
@@ -1241,16 +1296,23 @@ L_frmnam:
 
 /* $ Author_and_Institution */
 
-/*     W.L. Taber      (JPL) */
-/*     B.V. Semenov    (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 3.1.1, 02-AUG-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. Updated maximum */
+/*        frame name length in detailed description of FRNAME argument */
+/*        and changed frame name length from 26 to 32 in example code. */
 
 /* -    SPICELIB Version 3.1.0, 08-AUG-2012 (BVS) */
 
 /*        The routine was updated to be more efficient by using hashes */
 /*        instead kernel POOL look-ups for kernel POOL frames and by */
-/*        using hases instead of ordered array searches for built-in */
+/*        using hashes instead of ordered array searches for built-in */
 /*        frames. */
 
 /* -    SPICELIB Version 3.0.1, 25-JUN-1999 (WLT) */
@@ -1276,8 +1338,8 @@ L_frmnam:
 
 /* -    SPICELIB Version 1.1.0, 14-OCT-1996 (WLT) */
 
-/*       The values NINERT and NNINRT are included instead of */
-/*       being declared locally. */
+/*        The values NINERT and NNINRT are included instead of */
+/*        being declared locally. */
 
 /* -    SPICELIB Version 1.0.0, 18-SEP-1995 (WLT) */
 
@@ -1318,7 +1380,7 @@ L_frmnam:
 
 /*        Initialize built-in frame tables and hashes. */
 
-	zzfdat_(&c__127, &c__127, name__, idcode, center, type__, typeid, 
+	zzfdat_(&c__145, &c__149, name__, idcode, center, type__, typeid, 
 		centrd, bnmlst, bnmpol, bnmnms, bnmidx, bidlst, bidpol, 
 		bidids, bididx, (ftnlen)32, (ftnlen)32);
 	if (failed_()) {
@@ -1329,12 +1391,12 @@ L_frmnam:
     }
     zzhsichk_(bidlst, bidpol, bidids, frcode, &item);
     if (item != 0) {
-	item = bididx[(i__1 = item - 1) < 127 && 0 <= i__1 ? i__1 : s_rnge(
-		"bididx", i__1, "framex_", (ftnlen)1068)];
+	item = bididx[(i__1 = item - 1) < 149 && 0 <= i__1 ? i__1 : s_rnge(
+		"bididx", i__1, "framex_", (ftnlen)1099)];
     }
     if (item != 0) {
-	s_copy(frname, name__ + (((i__1 = item - 1) < 127 && 0 <= i__1 ? i__1 
-		: s_rnge("name", i__1, "framex_", (ftnlen)1073)) << 5), 
+	s_copy(frname, name__ + (((i__1 = item - 1) < 145 && 0 <= i__1 ? i__1 
+		: s_rnge("name", i__1, "framex_", (ftnlen)1104)) << 5), 
 		frname_len, (ftnlen)32);
     } else {
 
@@ -1352,7 +1414,7 @@ L_frmnam:
 	zzhsichk_(kidlst, kidpol, kidids, frcode, &item);
 	if (item != 0) {
 	    s_copy(frname, kname + (((i__1 = item - 1) < 5209 && 0 <= i__1 ? 
-		    i__1 : s_rnge("kname", i__1, "framex_", (ftnlen)1095)) << 
+		    i__1 : s_rnge("kname", i__1, "framex_", (ftnlen)1126)) << 
 		    5), frname_len, (ftnlen)32);
 	} else {
 
@@ -1422,9 +1484,10 @@ L_frinfo:
 /* $ Declarations */
 
 /*     IMPLICIT NONE */
+
 /*     INTEGER               FRCODE */
 /*     INTEGER               CENT */
-/*     INTEGER               CLASS */
+/*     INTEGER               FRCLSS */
 /*     INTEGER               CLSSID */
 /*     LOGICAL               FOUND */
 
@@ -1434,28 +1497,28 @@ L_frinfo:
 /*     --------  ---  -------------------------------------------------- */
 /*     FRCODE     I   the ID code for some frame */
 /*     CENT       O   the center of the frame */
-/*     CLASS      O   the class (type) of the frame */
+/*     FRCLSS     O   the class (type) of the frame */
 /*     CLSSID     O   the ID code for the frame within its class. */
-/*     FOUND      O   TRUE if the requested information is available. */
+/*     FOUND      O   .TRUE. if the requested information is available. */
 
 /* $ Detailed_Input */
 
-/*     FRCODE      is the ID code for some reference frame. */
+/*     FRCODE   is the ID code for some reference frame. */
 
 /* $ Detailed_Output */
 
-/*     CENT        is the body ID code for the center of the reference */
-/*                 frame (if such an ID code is appropriate). */
+/*     CENT     is the body ID code for the center of the reference */
+/*              frame (if such an ID code is appropriate). */
 
-/*     CLASS       is the class or type of the frame. This identifies */
-/*                 which subsystem will be used to perform frame */
-/*                 transformations. */
+/*     FRCLSS   is the class or type of the frame. This identifies */
+/*              which subsystem will be used to perform frame */
+/*              transformations. */
 
-/*     CLSSID      is the ID code used for the frame within its class. */
-/*                 This may be different from the frame ID code. */
+/*     CLSSID   is the ID code used for the frame within its class. */
+/*              This may be different from the frame ID code. */
 
-/*     FOUND       is TRUE if CENT, CLASS and CCODE are available. */
-/*                 Otherwise, FOUND is returned with the value FALSE. */
+/*     FOUND    is .TRUE. if CENT, FRCLSS and CCODE are available. */
+/*              Otherwise, FOUND is returned with the value .FALSE. */
 
 /* $ Parameters */
 
@@ -1463,21 +1526,21 @@ L_frinfo:
 
 /* $ Exceptions */
 
-/*     1) If a frame definition is encountered that does not define */
-/*        a central body for the frame, the error will be diagnosed */
-/*        by routines in the call tree of this routine. */
+/*     1)  If a frame definition is encountered that does not define a */
+/*         central body for the frame, an error is signaled by a routine */
+/*         in the call tree of this routine. */
 
-/*     2) If a frame definition is encountered that does not define */
-/*        a class for the frame, the error will be diagnosed by routines */
-/*        in the call tree of this routine. */
+/*     2)  If a frame definition is encountered that does not define */
+/*         a class for the frame, an error is signaled by a routine */
+/*         in the call tree of this routine. */
 
-/*     3) If a frame definition is encountered that does not define */
-/*        a class ID for the frame, the error will be diagnosed by */
-/*        routines in the call tree of this routine. */
+/*     3)  If a frame definition is encountered that does not define a */
+/*         class ID for the frame, an error is signaled by a routine in */
+/*         the call tree of this routine. */
 
-/*     4) If a kernel variable defining a frame name is found, but */
-/*        that variable has dimension greater than 1, the error */
-/*        SPICE(INVALIDDIMENSION) will be signaled. */
+/*     4)  If a kernel variable defining a frame name is found, but */
+/*         that variable has dimension greater than 1, the error */
+/*         SPICE(INVALIDDIMENSION) is signaled. */
 
 /* $ Files */
 
@@ -1500,22 +1563,65 @@ L_frinfo:
 
 /* $ Examples */
 
-/*     Suppose that you needed to determine the center of some */
-/*     reference frame. The following code fragment illustrates */
-/*     how to use this routine to determine this information. */
+/*     The numerical results shown for this example may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
 
-/*        CALL FRINFO ( FRCODE, CENT, CLASS, CLSSID, FOUND ) */
+/*     1) Given a frame ID, retrieve the SPICE body ID associated with */
+/*        the frame's center, the frame class (or type of the frame), */
+/*        and the ID used for the frame within its class. */
 
-/*        IF ( FOUND ) THEN */
+/*          Example code begins here. */
 
-/*           WRITE (*,*) 'The center of reference frame ', FRCODE */
-/*           WRITE (*,*) 'has body ID code : ', CENT */
 
-/*        ELSE */
+/*                PROGRAM FRINFO_EX1 */
+/*                IMPLICIT NONE */
 
-/*           WRITE (*,*) 'There is insufficient data for frame ', FRCODE */
+/*          C */
+/*          C     Local parameters. */
+/*          C */
+/*                INTEGER               FRCODE */
+/*                PARAMETER           ( FRCODE = 13000 ) */
 
-/*        END IF */
+/*          C */
+/*          C     Local variables. */
+/*          C */
+/*                INTEGER               CENTER */
+/*                INTEGER               CLSSID */
+/*                INTEGER               FRCLSS */
+
+/*                LOGICAL               FOUND */
+
+/*          C */
+/*          C     Retrieve the information for frame ID 13000. */
+/*          C */
+/*                CALL FRINFO ( FRCODE, CENTER, FRCLSS, CLSSID, FOUND ) */
+
+/*                IF ( FOUND ) THEN */
+
+/*                   WRITE(*,'(A,I6)') 'Frame center  : ', CENTER */
+/*                   WRITE(*,'(A,I6)') 'Frame class   : ', FRCLSS */
+/*                   WRITE(*,'(A,I6)') 'Frame class ID: ', CLSSID */
+
+/*                ELSE */
+
+/*                   WRITE (*,'(A,I6)') 'There is insufficient data ' */
+/*               .                   // 'for frame ', FRCODE */
+
+/*                END IF */
+
+/*                END */
+
+
+/*          When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*          platform, the output was: */
+
+
+/*        Frame center  :    399 */
+/*        Frame class   :      2 */
+/*        Frame class ID:   3000 */
+
 
 /* $ Restrictions */
 
@@ -1527,17 +1633,26 @@ L_frinfo:
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     B.V. Semenov    (JPL) */
-/*     W.L. Taber      (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 4.2.0, 02-AUG-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
+/*        Added complete code example from existing fragments. */
+
+/*        Changed the output argument name CLASS to FRCLSS for */
+/*        consistency with other routines. */
 
 /* -    SPICELIB Version 4.1.0, 08-AUG-2012 (BVS) */
 
 /*        The routine was updated to be more efficient by using hashes */
 /*        instead kernel POOL look-ups for kernel POOL frames and by */
-/*        using hases instead of ordered array searches for built-in */
+/*        using hashes instead of ordered array searches for built-in */
 /*        frames. */
 
 /* -    SPICELIB Version 4.0.0, 12-SEP-2005 (NJB) */
@@ -1591,8 +1706,8 @@ L_frinfo:
 
 /* -    SPICELIB Version 1.1.0, 14-OCT-1996 (WLT) */
 
-/*       The values NINERT and NNINRT are included instead of */
-/*       being declared locally. */
+/*        The values NINERT and NNINRT are included instead of */
+/*        being declared locally. */
 
 /* -    SPICELIB Version 1.0.0, 18-SEP-1995 (WLT) */
 
@@ -1613,7 +1728,7 @@ L_frinfo:
 
     if (*frcode == 1) {
 	*cent = 0;
-	*class__ = 1;
+	*frclss = 1;
 	*clssid = 1;
 	*found = TRUE_;
 	return 0;
@@ -1635,7 +1750,7 @@ L_frinfo:
 
 /*        Initialize built-in frame tables and hashes. */
 
-	zzfdat_(&c__127, &c__127, name__, idcode, center, type__, typeid, 
+	zzfdat_(&c__145, &c__149, name__, idcode, center, type__, typeid, 
 		centrd, bnmlst, bnmpol, bnmnms, bnmidx, bidlst, bidpol, 
 		bidids, bididx, (ftnlen)32, (ftnlen)32);
 	if (failed_()) {
@@ -1654,20 +1769,20 @@ L_frinfo:
 
     zzhsichk_(bidlst, bidpol, bidids, frcode, &item);
     if (item != 0) {
-	item = bididx[(i__1 = item - 1) < 127 && 0 <= i__1 ? i__1 : s_rnge(
-		"bididx", i__1, "framex_", (ftnlen)1424)];
+	item = bididx[(i__1 = item - 1) < 149 && 0 <= i__1 ? i__1 : s_rnge(
+		"bididx", i__1, "framex_", (ftnlen)1510)];
     }
 
 /*     If the name is in our hash, we can just look up its ID code in */
 /*     the parallel array. */
 
     if (item > 0) {
-	*cent = center[(i__1 = item - 1) < 127 && 0 <= i__1 ? i__1 : s_rnge(
-		"center", i__1, "framex_", (ftnlen)1433)];
-	*class__ = type__[(i__1 = item - 1) < 127 && 0 <= i__1 ? i__1 : 
-		s_rnge("type", i__1, "framex_", (ftnlen)1434)];
-	*clssid = typeid[(i__1 = item - 1) < 127 && 0 <= i__1 ? i__1 : s_rnge(
-		"typeid", i__1, "framex_", (ftnlen)1435)];
+	*cent = center[(i__1 = item - 1) < 145 && 0 <= i__1 ? i__1 : s_rnge(
+		"center", i__1, "framex_", (ftnlen)1519)];
+	*frclss = type__[(i__1 = item - 1) < 145 && 0 <= i__1 ? i__1 : s_rnge(
+		"type", i__1, "framex_", (ftnlen)1520)];
+	*clssid = typeid[(i__1 = item - 1) < 145 && 0 <= i__1 ? i__1 : s_rnge(
+		"typeid", i__1, "framex_", (ftnlen)1521)];
 	*found = TRUE_;
     } else {
 
@@ -1685,11 +1800,11 @@ L_frinfo:
 	zzhsichk_(kidlst, kidpol, kidids, frcode, &item);
 	if (item != 0) {
 	    *cent = kcent[(i__1 = item - 1) < 5209 && 0 <= i__1 ? i__1 : 
-		    s_rnge("kcent", i__1, "framex_", (ftnlen)1458)];
-	    *class__ = kclass[(i__1 = item - 1) < 5209 && 0 <= i__1 ? i__1 : 
-		    s_rnge("kclass", i__1, "framex_", (ftnlen)1459)];
+		    s_rnge("kcent", i__1, "framex_", (ftnlen)1544)];
+	    *frclss = kclass[(i__1 = item - 1) < 5209 && 0 <= i__1 ? i__1 : 
+		    s_rnge("kclass", i__1, "framex_", (ftnlen)1545)];
 	    *clssid = kclsid[(i__1 = item - 1) < 5209 && 0 <= i__1 ? i__1 : 
-		    s_rnge("kclsid", i__1, "framex_", (ftnlen)1460)];
+		    s_rnge("kclsid", i__1, "framex_", (ftnlen)1546)];
 	    *found = TRUE_;
 	} else {
 
@@ -1736,7 +1851,7 @@ L_frinfo:
 
 		zzdynvai_(lcfram, frcode, "CLASS", &c__1, &n, values, (ftnlen)
 			32, (ftnlen)5);
-		*class__ = values[0];
+		*frclss = values[0];
 		zzdynvai_(lcfram, frcode, "CLASS_ID", &c__1, &n, values, (
 			ftnlen)32, (ftnlen)8);
 		*clssid = values[0];
@@ -1752,15 +1867,15 @@ L_frinfo:
 		if (! failed_() && item != 0) {
 		    s_copy(kname + (((i__1 = item - 1) < 5209 && 0 <= i__1 ? 
 			    i__1 : s_rnge("kname", i__1, "framex_", (ftnlen)
-			    1534)) << 5), lcfram, (ftnlen)32, (ftnlen)32);
+			    1620)) << 5), lcfram, (ftnlen)32, (ftnlen)32);
 		    kcent[(i__1 = item - 1) < 5209 && 0 <= i__1 ? i__1 : 
-			    s_rnge("kcent", i__1, "framex_", (ftnlen)1535)] = 
+			    s_rnge("kcent", i__1, "framex_", (ftnlen)1621)] = 
 			    *cent;
 		    kclass[(i__1 = item - 1) < 5209 && 0 <= i__1 ? i__1 : 
-			    s_rnge("kclass", i__1, "framex_", (ftnlen)1536)] =
-			     *class__;
+			    s_rnge("kclass", i__1, "framex_", (ftnlen)1622)] =
+			     *frclss;
 		    kclsid[(i__1 = item - 1) < 5209 && 0 <= i__1 ? i__1 : 
-			    s_rnge("kclsid", i__1, "framex_", (ftnlen)1537)] =
+			    s_rnge("kclsid", i__1, "framex_", (ftnlen)1623)] =
 			     *clssid;
 
 /*                 Also, try to add this frame to the name-based hash. */
@@ -1770,7 +1885,7 @@ L_frinfo:
 		    if (! failed_() && item != 0) {
 			knmids[(i__1 = item - 1) < 5209 && 0 <= i__1 ? i__1 : 
 				s_rnge("knmids", i__1, "framex_", (ftnlen)
-				1547)] = *frcode;
+				1633)] = *frcode;
 		    }
 		}
 	    }
@@ -1783,7 +1898,7 @@ L_frinfo:
 
 	if (! (*found) && *frcode >= 13000 && *frcode < 14000) {
 	    *cent = 399;
-	    *class__ = 2;
+	    *frclss = 2;
 	    *clssid = *frcode - 10000;
 	    *found = TRUE_;
 	}
@@ -1845,43 +1960,43 @@ L_cidfrm:
 /*     CENT       I   an object to associate a frame with. */
 /*     FRCODE     O   the ID code of the frame associated with CENT */
 /*     FRNAME     O   the name of the frame with ID FRCODE */
-/*     FOUND      O   TRUE if the requested information is available. */
+/*     FOUND      O   .TRUE. if the requested information is available. */
 
 /* $ Detailed_Input */
 
-/*     CENT        is the ID code for object for which there is a */
-/*                 preferred reference frame. */
+/*     CENT     is the ID code for object for which there is a */
+/*              preferred reference frame. */
 
 /* $ Detailed_Output */
 
-/*     FRCODE      is the frame ID code to associate with the object */
-/*                 specified by CENT. */
+/*     FRCODE   is the frame ID code to associate with the object */
+/*              specified by CENT. */
 
-/*     FRNAME      is the name of the frame that should be associated */
-/*                 with the object specified by CNAME. FRNAME should be */
-/*                 declared as CHARACTER*(26) to ensure that it can */
-/*                 contain the full name of the frame. If FRNAME does */
-/*                 not have enough room to hold the full name of the */
-/*                 frame, the name will be truncated on the right. */
+/*     FRNAME   is the name of the frame that should be associated */
+/*              with the object specified by CENT. FRNAME should be */
+/*              declared as CHARACTER*(32) to ensure that it can */
+/*              contain the full name of the frame. If FRNAME does */
+/*              not have enough room to hold the full name of the */
+/*              frame, the name will be truncated on the right. */
 
-/*     FOUND       is TRUE if the appropriate frame ID code and frame */
-/*                 name can be determined. Otherwise FOUND is returned */
-/*                 with the value FALSE. */
+/*     FOUND    is .TRUE. if the appropriate frame ID code and frame */
+/*              name can be determined. Otherwise FOUND is returned */
+/*              with the value .FALSE. */
 
 /* $ Parameters */
 
-/*      None. */
+/*     None. */
 
 /* $ Exceptions */
 
-/*     1) If FRNAME is not have room to contain the frame name, the name */
-/*        will be truncated on the right. ( Declaring FRNAME to be */
-/*        CHARACTER*(26) will ensure that the name will not be */
-/*        truncated. */
+/*     1)  If FRNAME does not have enough room to contain the frame name, */
+/*         the name will be truncated on the right. (Declaring FRNAME to */
+/*         be CHARACTER*(32) will ensure that the name will not be */
+/*         truncated). */
 
 /* $ Files */
 
-/*      None. */
+/*     None. */
 
 /* $ Particulars */
 
@@ -1930,17 +2045,25 @@ L_cidfrm:
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     B.V. Semenov    (JPL) */
-/*     W.L. Taber      (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 3.2.1, 13-AUG-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
+
+/*        Updated maximum frame name length from 26 to 32 in */
+/*        $Detailed_Output and $Exceptions section. */
 
 /* -    SPICELIB Version 3.2.0, 08-AUG-2012 (BVS) */
 
 /*        The routine was updated to be more efficient by using hashes */
 /*        instead kernel POOL look-ups for kernel POOL frames and by */
-/*        using hases instead of ordered array searches for built-in */
+/*        using hashes instead of ordered array searches for built-in */
 /*        frames. */
 
 /* -    SPICELIB Version 3.1.1, 09-FEB-2011 (NJB) */
@@ -1971,8 +2094,8 @@ L_cidfrm:
 
 /* -    SPICELIB Version 1.1.0, 14-OCT-1996 (WLT) */
 
-/*       The values NINERT and NNINRT are included instead of */
-/*       being declared locally. */
+/*        The values NINERT and NNINRT are included instead of */
+/*        being declared locally. */
 
 /* -    SPICELIB Version 1.0.0, 18-SEP-1995 (WLT) */
 
@@ -2005,7 +2128,7 @@ L_cidfrm:
 
 /*        Initialize built-in frame tables and hashes. */
 
-	zzfdat_(&c__127, &c__127, name__, idcode, center, type__, typeid, 
+	zzfdat_(&c__145, &c__149, name__, idcode, center, type__, typeid, 
 		centrd, bnmlst, bnmpol, bnmnms, bnmidx, bidlst, bidpol, 
 		bidids, bididx, (ftnlen)32, (ftnlen)32);
 	if (failed_()) {
@@ -2060,13 +2183,13 @@ L_cidfrm:
 	    zzhscchk_(bnmlst, bnmpol, bnmnms, pname, &item, (ftnlen)32, (
 		    ftnlen)32);
 	    if (item != 0) {
-		item = bnmidx[(i__1 = item - 1) < 127 && 0 <= i__1 ? i__1 : 
-			s_rnge("bnmidx", i__1, "framex_", (ftnlen)1867)];
+		item = bnmidx[(i__1 = item - 1) < 149 && 0 <= i__1 ? i__1 : 
+			s_rnge("bnmidx", i__1, "framex_", (ftnlen)1963)];
 	    }
 	    if (item > 0) {
 		s_copy(frname, pname, frname_len, (ftnlen)32);
-		*frcode = idcode[(i__1 = item - 1) < 127 && 0 <= i__1 ? i__1 :
-			 s_rnge("idcode", i__1, "framex_", (ftnlen)1873)];
+		*frcode = idcode[(i__1 = item - 1) < 145 && 0 <= i__1 ? i__1 :
+			 s_rnge("idcode", i__1, "framex_", (ftnlen)1969)];
 		*found = TRUE_;
 	    } else {
 
@@ -2087,7 +2210,7 @@ L_cidfrm:
 		    s_copy(frname, pname, frname_len, (ftnlen)32);
 		    *frcode = knmids[(i__1 = item - 1) < 5209 && 0 <= i__1 ? 
 			    i__1 : s_rnge("knmids", i__1, "framex_", (ftnlen)
-			    1897)];
+			    1993)];
 		    *found = TRUE_;
 		} else {
 
@@ -2118,7 +2241,7 @@ L_cidfrm:
 			if (! failed_() && item != 0) {
 			    knmids[(i__1 = item - 1) < 5209 && 0 <= i__1 ? 
 				    i__1 : s_rnge("knmids", i__1, "framex_", (
-				    ftnlen)1934)] = *frcode;
+				    ftnlen)2030)] = *frcode;
 			}
 		    } else {
 			*frcode = 0;
@@ -2145,16 +2268,16 @@ L_cidfrm:
 
 	    zzhsichk_(bidlst, bidpol, bidids, values, &item);
 	    if (item != 0) {
-		item = bididx[(i__1 = item - 1) < 127 && 0 <= i__1 ? i__1 : 
-			s_rnge("bididx", i__1, "framex_", (ftnlen)1971)];
+		item = bididx[(i__1 = item - 1) < 149 && 0 <= i__1 ? i__1 : 
+			s_rnge("bididx", i__1, "framex_", (ftnlen)2067)];
 	    }
 	    if (item != 0) {
 
 /*              Just look up the name and set the frame code. */
 
-		s_copy(frname, name__ + (((i__1 = item - 1) < 127 && 0 <= 
+		s_copy(frname, name__ + (((i__1 = item - 1) < 145 && 0 <= 
 			i__1 ? i__1 : s_rnge("name", i__1, "framex_", (ftnlen)
-			1978)) << 5), frname_len, (ftnlen)32);
+			2074)) << 5), frname_len, (ftnlen)32);
 		*frcode = values[0];
 		*found = TRUE_;
 	    } else {
@@ -2174,7 +2297,7 @@ L_cidfrm:
 		if (item != 0) {
 		    s_copy(frname, kname + (((i__1 = item - 1) < 5209 && 0 <= 
 			    i__1 ? i__1 : s_rnge("kname", i__1, "framex_", (
-			    ftnlen)2002)) << 5), frname_len, (ftnlen)32);
+			    ftnlen)2098)) << 5), frname_len, (ftnlen)32);
 		    *frcode = values[0];
 		    *found = TRUE_;
 		} else {
@@ -2229,16 +2352,16 @@ L_cidfrm:
 /*     Determine the location of the requested item in the array */
 /*     of centers. */
 
-    item = bschoi_(cent, &c__127, center, centrd);
+    item = bschoi_(cent, &c__145, center, centrd);
 
 /*     If the name is in our list, we can just look up its ID code and */
 /*     name in the parallel array. */
 
     if (item > 0) {
-	*frcode = idcode[(i__1 = item - 1) < 127 && 0 <= i__1 ? i__1 : s_rnge(
-		"idcode", i__1, "framex_", (ftnlen)2078)];
-	s_copy(frname, name__ + (((i__1 = item - 1) < 127 && 0 <= i__1 ? i__1 
-		: s_rnge("name", i__1, "framex_", (ftnlen)2079)) << 5), 
+	*frcode = idcode[(i__1 = item - 1) < 145 && 0 <= i__1 ? i__1 : s_rnge(
+		"idcode", i__1, "framex_", (ftnlen)2174)];
+	s_copy(frname, name__ + (((i__1 = item - 1) < 145 && 0 <= i__1 ? i__1 
+		: s_rnge("name", i__1, "framex_", (ftnlen)2175)) << 5), 
 		frname_len, (ftnlen)32);
 	*found = TRUE_;
     } else {
@@ -2307,43 +2430,43 @@ L_cnmfrm:
 /*     CNAME      I   name of the object to find a frame for */
 /*     FRCODE     O   the ID code of the frame associated with CNAME */
 /*     FRNAME     O   the name of the frame with ID FRCODE */
-/*     FOUND      O   TRUE if the requested information is available. */
+/*     FOUND      O   .TRUE. if the requested information is available. */
 
 /* $ Detailed_Input */
 
-/*     CNAME       is the name for object for which there is a */
-/*                 preferred reference frame */
+/*     CNAME    is the name for object for which there is a */
+/*              preferred reference frame */
 
 /* $ Detailed_Output */
 
-/*     FRCODE      is the frame ID code to associate with a the object */
-/*                 specified by CNAME. */
+/*     FRCODE   is the frame ID code to associate with a the object */
+/*              specified by CNAME. */
 
-/*     FRNAME      is the name of the frame that should be associated */
-/*                 with the object specified by CNAME. FRNAME should be */
-/*                 declared as CHARACTER*(26) to ensure that it can */
-/*                 contain the full name of the frame. If FRNAME does */
-/*                 not have enough room to hold the full name of the */
-/*                 frame, the name will be truncated on the right. */
+/*     FRNAME   is the name of the frame that should be associated */
+/*              with the object specified by CNAME. FRNAME should be */
+/*              declared as CHARACTER*(32) to ensure that it can */
+/*              contain the full name of the frame. If FRNAME does */
+/*              not have enough room to hold the full name of the */
+/*              frame, the name will be truncated on the right. */
 
-/*     FOUND       is TRUE if the appropriate frame ID code and frame */
-/*                 name can be determined. Otherwise FOUND is returned */
-/*                 with the value FALSE. */
+/*     FOUND    is .TRUE. if the appropriate frame ID code and frame */
+/*              name can be determined. Otherwise FOUND is returned */
+/*              with the value .FALSE. */
 
 /* $ Parameters */
 
-/*      None. */
+/*     None. */
 
 /* $ Exceptions */
 
-/*     1) If FRNAME is not have room to contain the frame name, the name */
-/*        will be truncated on the right. ( Declaring FRNAME to be */
-/*        CHARACTER*(26) will ensure that the name will not be */
-/*        truncated. */
+/*     1)  If FRNAME does not have enough room to contain the frame name, */
+/*         the name will be truncated on the right. (Declaring FRNAME to */
+/*         be CHARACTER*(32) will ensure that the name will not be */
+/*         truncated). */
 
 /* $ Files */
 
-/*      None. */
+/*     None. */
 
 /* $ Particulars */
 
@@ -2392,17 +2515,25 @@ L_cnmfrm:
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     B.V. Semenov    (JPL) */
-/*     W.L. Taber      (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 3.2.1, 02-AUG-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
+
+/*        Updated maximum frame name length from 26 to 32 in */
+/*        $Detailed_Output and $Exceptions section. */
 
 /* -    SPICELIB Version 3.2.0, 08-AUG-2012 (BVS) */
 
 /*        The routine was updated to be more efficient by using hashes */
 /*        instead kernel POOL look-ups for kernel POOL frames and by */
-/*        using hases instead of ordered array searches for built-in */
+/*        using hashes instead of ordered array searches for built-in */
 /*        frames. */
 
 /* -    SPICELIB Version 3.1.0, 28-NOV-2002 (NJB) */
@@ -2436,8 +2567,8 @@ L_cnmfrm:
 
 /* -    SPICELIB Version 1.1.0, 14-OCT-1996 (WLT) */
 
-/*       The values NINERT and NNINRT are included instead of */
-/*       being declared locally. */
+/*        The values NINERT and NNINRT are included instead of */
+/*        being declared locally. */
 
 /* -    SPICELIB Version 1.0.0, 18-SEP-1995 (WLT) */
 
@@ -2470,7 +2601,7 @@ L_cnmfrm:
 
 /*        Initialize built-in frame tables and hashes. */
 
-	zzfdat_(&c__127, &c__127, name__, idcode, center, type__, typeid, 
+	zzfdat_(&c__145, &c__149, name__, idcode, center, type__, typeid, 
 		centrd, bnmlst, bnmpol, bnmnms, bnmidx, bidlst, bidpol, 
 		bidids, bididx, (ftnlen)32, (ftnlen)32);
 	if (failed_()) {
@@ -2526,13 +2657,13 @@ L_cnmfrm:
 	    zzhscchk_(bnmlst, bnmpol, bnmnms, pname, &item, (ftnlen)32, (
 		    ftnlen)32);
 	    if (item != 0) {
-		item = bnmidx[(i__1 = item - 1) < 127 && 0 <= i__1 ? i__1 : 
-			s_rnge("bnmidx", i__1, "framex_", (ftnlen)2389)];
+		item = bnmidx[(i__1 = item - 1) < 149 && 0 <= i__1 ? i__1 : 
+			s_rnge("bnmidx", i__1, "framex_", (ftnlen)2495)];
 	    }
 	    if (item > 0) {
 		s_copy(frname, pname, frname_len, (ftnlen)32);
-		*frcode = idcode[(i__1 = item - 1) < 127 && 0 <= i__1 ? i__1 :
-			 s_rnge("idcode", i__1, "framex_", (ftnlen)2395)];
+		*frcode = idcode[(i__1 = item - 1) < 145 && 0 <= i__1 ? i__1 :
+			 s_rnge("idcode", i__1, "framex_", (ftnlen)2501)];
 		*found = TRUE_;
 	    } else {
 
@@ -2553,7 +2684,7 @@ L_cnmfrm:
 		    s_copy(frname, pname, frname_len, (ftnlen)32);
 		    *frcode = knmids[(i__1 = item - 1) < 5209 && 0 <= i__1 ? 
 			    i__1 : s_rnge("knmids", i__1, "framex_", (ftnlen)
-			    2419)];
+			    2525)];
 		    *found = TRUE_;
 		} else {
 
@@ -2584,7 +2715,7 @@ L_cnmfrm:
 			if (! failed_() && item != 0) {
 			    knmids[(i__1 = item - 1) < 5209 && 0 <= i__1 ? 
 				    i__1 : s_rnge("knmids", i__1, "framex_", (
-				    ftnlen)2456)] = *frcode;
+				    ftnlen)2562)] = *frcode;
 			}
 		    } else {
 			*frcode = 0;
@@ -2611,16 +2742,16 @@ L_cnmfrm:
 
 	    zzhsichk_(bidlst, bidpol, bidids, values, &item);
 	    if (item != 0) {
-		item = bididx[(i__1 = item - 1) < 127 && 0 <= i__1 ? i__1 : 
-			s_rnge("bididx", i__1, "framex_", (ftnlen)2493)];
+		item = bididx[(i__1 = item - 1) < 149 && 0 <= i__1 ? i__1 : 
+			s_rnge("bididx", i__1, "framex_", (ftnlen)2599)];
 	    }
 	    if (item != 0) {
 
 /*              Just look up the name and set the frame code. */
 
-		s_copy(frname, name__ + (((i__1 = item - 1) < 127 && 0 <= 
+		s_copy(frname, name__ + (((i__1 = item - 1) < 145 && 0 <= 
 			i__1 ? i__1 : s_rnge("name", i__1, "framex_", (ftnlen)
-			2500)) << 5), frname_len, (ftnlen)32);
+			2606)) << 5), frname_len, (ftnlen)32);
 		*frcode = values[0];
 		*found = TRUE_;
 	    } else {
@@ -2640,7 +2771,7 @@ L_cnmfrm:
 		if (item != 0) {
 		    s_copy(frname, kname + (((i__1 = item - 1) < 5209 && 0 <= 
 			    i__1 ? i__1 : s_rnge("kname", i__1, "framex_", (
-			    ftnlen)2524)) << 5), frname_len, (ftnlen)32);
+			    ftnlen)2630)) << 5), frname_len, (ftnlen)32);
 		    *frcode = values[0];
 		    *found = TRUE_;
 		} else {
@@ -2693,16 +2824,16 @@ L_cnmfrm:
 
     zzhscchk_(bnmlst, bnmpol, bnmnms, frname, &item, (ftnlen)32, frname_len);
     if (item != 0) {
-	item = bnmidx[(i__1 = item - 1) < 127 && 0 <= i__1 ? i__1 : s_rnge(
-		"bnmidx", i__1, "framex_", (ftnlen)2587)];
+	item = bnmidx[(i__1 = item - 1) < 149 && 0 <= i__1 ? i__1 : s_rnge(
+		"bnmidx", i__1, "framex_", (ftnlen)2693)];
     }
 
 /*     If the name is in our hash, we can just look up its ID code and */
 /*     name in the parallel array. */
 
     if (item > 0) {
-	*frcode = idcode[(i__1 = item - 1) < 127 && 0 <= i__1 ? i__1 : s_rnge(
-		"idcode", i__1, "framex_", (ftnlen)2596)];
+	*frcode = idcode[(i__1 = item - 1) < 145 && 0 <= i__1 ? i__1 : s_rnge(
+		"idcode", i__1, "framex_", (ftnlen)2702)];
 	*found = TRUE_;
     } else {
 
@@ -2757,7 +2888,7 @@ L_ccifrm:
 
 /* $ Declarations */
 
-/*     INTEGER               CLASS */
+/*     INTEGER               FRCLSS */
 /*     INTEGER               CLSSID */
 /*     INTEGER               FRCODE */
 /*     CHARACTER*(*)         FRNAME */
@@ -2768,39 +2899,39 @@ L_ccifrm:
 
 /*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
-/*     CLASS      I   Class of frame. */
+/*     FRCLSS     I   Class of frame. */
 /*     CLSSID     I   Class ID of frame. */
-/*     FRCODE     O   ID code of the frame identified by CLASS, CLSSID. */
-/*     FRNAME     O   Name of the frame identified by CLASS, CLSSID. */
-/*     CENT       O   Center of the frame identified by CLASS, CLSSID. */
-/*     FOUND      O   TRUE if the requested information is available. */
+/*     FRCODE     O   ID code of the frame identified by FRCLSS, CLSSID. */
+/*     FRNAME     O   Name of the frame identified by FRCLSS, CLSSID. */
+/*     CENT       O   Center of the frame identified by FRCLSS, CLSSID. */
+/*     FOUND      O   .TRUE. if the requested information is available. */
 
 /* $ Detailed_Input */
 
-/*     CLASS       is the class or type of the frame. This identifies */
-/*                 which subsystem will be used to perform frame */
-/*                 transformations. */
+/*     FRCLSS   is the class or type of the frame. This identifies */
+/*              which subsystem will be used to perform frame */
+/*              transformations. */
 
-/*     CLSSID      is the ID code used for the frame within its class. */
-/*                 This may be different from the frame ID code. */
+/*     CLSSID   is the ID code used for the frame within its class. */
+/*              This may be different from the frame ID code. */
 
 /* $ Detailed_Output */
 
-/*     FRCODE      is the frame ID code for the reference frame */
-/*                 identified by CLASS and CLSSID. */
+/*     FRCODE   is the frame ID code for the reference frame */
+/*              identified by FRCLSS and CLSSID. */
 
-/*     FRNAME      is the name of the frame identified by CLASS and */
-/*                 CLSSID. FRNAME should be declared as CHARACTER*(26) */
-/*                 to ensure that it can contain the full name of the */
-/*                 frame. If FRNAME does not have enough room to hold */
-/*                 the full name of the frame, the name will be */
-/*                 truncated on the right. */
+/*     FRNAME   is the name of the frame identified by FRCLSS and */
+/*              CLSSID. FRNAME should be declared as CHARACTER*(32) */
+/*              to ensure that it can contain the full name of the */
+/*              frame. If FRNAME does not have enough room to hold */
+/*              the full name of the frame, the name will be */
+/*              truncated on the right. */
 
-/*     CENT        is the body ID code for the center of the reference */
-/*                 frame identified by CLASS and CLSSID. */
+/*     CENT     is the body ID code for the center of the reference */
+/*              frame identified by FRCLSS and CLSSID. */
 
-/*     FOUND       is .TRUE. if FRCODE, FRNAME, and CENT are available. */
-/*                 Otherwise, FOUND is returned with the value .FALSE. */
+/*     FOUND    is .TRUE. if FRCODE, FRNAME, and CENT are available. */
+/*              Otherwise, FOUND is returned with the value .FALSE. */
 
 /* $ Parameters */
 
@@ -2808,38 +2939,38 @@ L_ccifrm:
 
 /* $ Exceptions */
 
-/*     1) This routine assumes that the first frame found with matching */
-/*        class and class ID is the correct one. SPICE's frame system */
-/*        does not diagnose the situation where there are multiple, */
-/*        distinct frames with matching classes and class ID codes, but */
-/*        this situation could occur if such conflicting frame */
-/*        specifications are loaded via one or more frame kernels. The */
-/*        user is responsible for avoiding such frame specification */
-/*        conflicts. */
+/*     1)  This routine assumes that the first frame found with matching */
+/*         class and class ID is the correct one. SPICE's frame system */
+/*         does not diagnose the situation where there are multiple, */
+/*         distinct frames with matching classes and class ID codes, but */
+/*         this situation could occur if such conflicting frame */
+/*         specifications are loaded via one or more frame kernels. The */
+/*         user is responsible for avoiding such frame specification */
+/*         conflicts. */
 
-/*     2) If FRNAME does not have room to contain the frame name, the */
-/*        name will be truncated on the right. ( Declaring FRNAME to be */
-/*        CHARACTER*(26) will ensure that the name will not be */
-/*        truncated. */
+/*     2)  If FRNAME does not have room to contain the frame name, the */
+/*         name will be truncated on the right. (Declaring FRNAME to be */
+/*         CHARACTER*(32) will ensure that the name will not be */
+/*         truncated). */
 
-/*     3) If a frame class assignment is found that associates a */
-/*        string (as opposed to numeric) value with a frame class */
-/*        keyword, the error SPICE(INVALIDFRAMEDEF) will be signaled. */
+/*     3)  If a frame class assignment is found that associates a */
+/*         string (as opposed to numeric) value with a frame class */
+/*         keyword, the error SPICE(INVALIDFRAMEDEF) is signaled. */
 
-/*     4) If a frame class assignment is found that matches the input */
-/*        class, but a corresponding class ID assignment is not */
-/*        found in the kernel pool, the error SPICE(INVALIDFRAMEDEF) */
-/*        will be signaled. */
+/*     4)  If a frame class assignment is found that matches the input */
+/*         class, but a corresponding class ID assignment is not */
+/*         found in the kernel pool, the error SPICE(INVALIDFRAMEDEF) */
+/*         is signaled. */
 
-/*     5) If a frame specification is found in the kernel pool with */
-/*        matching frame class and class ID, but either the frame name */
-/*        or frame ID code are not found, the error */
-/*        SPICE(INVALIDFRAMEDEF) will be signaled. */
+/*     5)  If a frame specification is found in the kernel pool with */
+/*         matching frame class and class ID, but either the frame name */
+/*         or frame ID code are not found, the error */
+/*         SPICE(INVALIDFRAMEDEF) is signaled. */
 
-/*     6) If a frame specification is found in the kernel pool with */
-/*        matching frame class and class ID, but the frame center */
-/*        is not found, the error will be diagnosed by routines */
-/*        in the call tree of this routine. */
+/*     6)  If a frame specification is found in the kernel pool with */
+/*         matching frame class and class ID, but the frame center */
+/*         is not found, an error is signaled by a routine */
+/*         in the call tree of this routine. */
 
 /* $ Files */
 
@@ -2858,26 +2989,109 @@ L_ccifrm:
 
 /* $ Examples */
 
-/*     Suppose that you want to find the name of a frame associated */
-/*     with a PCK class ID, such as that found in a binary PCK. */
-/*     One could use the following code fragment: */
+/*     The numerical results shown for this example may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
 
-/*        CALL CCIFRM ( 2, CLSSID, FRCODE, FRNAME, CENT, FOUND ) */
+/*     1) The following code example demonstrates how to find the frame */
+/*        information about a frame by its ID using FRINFO and */
+/*        by its class and class ID using CCIFRM. */
 
-/*        IF ( .NOT. FOUND ) THEN */
 
-/*           WRITE (*,*) 'The PCK frame for class ID ', CLSSID */
-/*           WRITE (*,*) 'could not be identified.' */
-/*           STOP */
+/*        Example code begins here. */
 
-/*        END IF */
 
-/*        WRITE (*,*) 'The PCK frame having class ID ', CLSSID, ' is ' */
-/*        WRITE (*,*) FRNAME */
+/*              PROGRAM CCIFRM_EX1 */
+/*              IMPLICIT NONE */
+
+/*        C */
+/*        C     Local parameters. */
+/*        C */
+/*              INTEGER               FRNLEN */
+/*              PARAMETER           ( FRNLEN = 32 ) */
+
+/*        C */
+/*        C     Local variables. */
+/*        C */
+/*              CHARACTER*(FRNLEN)    FRNAME */
+
+/*              INTEGER               CENTR1 */
+/*              INTEGER               CENTR2 */
+/*              INTEGER               CLSS */
+/*              INTEGER               CLSSID */
+/*              INTEGER               FRCOD1 */
+/*              INTEGER               FRCOD2 */
+
+/*              LOGICAL               FOUND */
+
+/*        C */
+/*        C     Find the frame code associated with ITRF93 */
+/*        C */
+/*              FRNAME = 'ITRF93' */
+/*              CALL NAMFRM ( FRNAME, FRCOD1 ) */
+
+/*        C */
+/*        C     Get the frame information. */
+/*        C */
+/*              CALL FRINFO ( FRCOD1, CENTR1, CLSS, CLSSID, FOUND ) */
+
+/*              IF ( .NOT. FOUND ) THEN */
+
+/*                    WRITE(*,*) 'No info found for frame ', FRCOD1 */
+/*                    STOP */
+
+/*              END IF */
+
+/*              WRITE(*,'(A)')    'Frame ITRF93 info:' */
+/*              WRITE(*,'(A,I6)') '   Frame Code: ', FRCOD1 */
+/*              WRITE(*,'(A,I6)') '   Center ID : ', CENTR1 */
+/*              WRITE(*,'(A,I6)') '   Class     : ', CLSS */
+/*              WRITE(*,'(A,I6)') '   Class ID  : ', CLSSID */
+
+/*        C */
+/*        C     Return the frame name, frame ID, and center associated */
+/*        C     with the frame CLSS and CLSSID. */
+/*        C */
+/*              CALL CCIFRM ( CLSS,   CLSSID, FRCOD2, */
+/*             .              FRNAME, CENTR2, FOUND  ) */
+
+/*              IF ( .NOT. FOUND ) THEN */
+
+/*                    WRITE(*,*) 'No info found for type ', CLSS, */
+/*             .                 ' frame ', CLSSID */
+/*                    STOP */
+
+/*              END IF */
+
+
+/*              WRITE(*,'(A,I3,A,I6,A)') 'Type', CLSS, ' frame', CLSSID, */
+/*             .                         ' info:' */
+/*              WRITE(*,'(2A)')   '   Frame name: ', FRNAME */
+/*              WRITE(*,'(A,I6)') '   Frame Code: ', FRCOD2 */
+/*              WRITE(*,'(A,I6)') '   Center ID : ', CENTR2 */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*        Frame ITRF93 info: */
+/*           Frame Code:  13000 */
+/*           Center ID :    399 */
+/*           Class     :      2 */
+/*           Class ID  :   3000 */
+/*        Type  2 frame  3000 info: */
+/*           Frame name: ITRF93 */
+/*           Frame Code:  13000 */
+/*           Center ID :    399 */
+
 
 /* $ Restrictions */
 
-/*     See item (1) in the Exceptions section above. */
+/*     1)  See item (1) in the $Exceptions section above. */
 
 /* $ Literature_References */
 
@@ -2885,23 +3099,35 @@ L_ccifrm:
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     B.V. Semenov    (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     B.V. Semenov       (JPL) */
 
 /* $ Version */
 
+/* -    SPICELIB Version 1.2.0, 01-OCT-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
+/*        Added complete code example from existing fragments. */
+
+/*        Changed the input argument name CLASS to FRCLSS for */
+/*        consistency with other routines. */
+
+/*        Updated maximum frame name length from 26 to 32 in */
+/*        $Detailed_Output and $Exceptions section. */
+
 /* -    SPICELIB Version 1.1.1, 02-FEB-2017 (BVS) */
 
-/*        Shortened one of permutted index entries. */
+/*        Shortened one of permuted index entries. */
 
 /* -    SPICELIB Version 1.1.0, 08-AUG-2012 (BVS) */
 
 /*        The routine was updated to be more efficient by using hashes */
 /*        instead kernel POOL look-ups for kernel POOL frames and by */
-/*        using hases instead of ordered array searches for built-in */
+/*        using hashes instead of ordered array searches for built-in */
 /*        frames. */
 
-/*        Bux fix: CCIFRM logic was corrected to examine the built-in */
+/*        Bug fix: CCIFRM logic was corrected to examine the built-in */
 /*        frames before looking at the kernel POOL frames. */
 
 /* -    SPICELIB Version 1.0.0, 05-NOV-2007 (NJB) */
@@ -2937,7 +3163,7 @@ L_ccifrm:
 
 /*        Initialize built-in frame tables and hashes. */
 
-	zzfdat_(&c__127, &c__127, name__, idcode, center, type__, typeid, 
+	zzfdat_(&c__145, &c__149, name__, idcode, center, type__, typeid, 
 		centrd, bnmlst, bnmpol, bnmnms, bnmidx, bidlst, bidpol, 
 		bidids, bididx, (ftnlen)32, (ftnlen)32);
 	if (failed_()) {
@@ -2955,21 +3181,21 @@ L_ccifrm:
 /*     with the input class and class ID. Unfortunately, this is a */
 /*     linear search. */
 
-    for (i__ = 1; i__ <= 127; ++i__) {
-	if (type__[(i__1 = i__ - 1) < 127 && 0 <= i__1 ? i__1 : s_rnge("type",
-		 i__1, "framex_", (ftnlen)2871)] == *class__ && typeid[(i__2 =
-		 i__ - 1) < 127 && 0 <= i__2 ? i__2 : s_rnge("typeid", i__2, 
-		"framex_", (ftnlen)2871)] == *clssid) {
+    for (i__ = 1; i__ <= 145; ++i__) {
+	if (type__[(i__1 = i__ - 1) < 145 && 0 <= i__1 ? i__1 : s_rnge("type",
+		 i__1, "framex_", (ftnlen)3073)] == *frclss && typeid[(i__2 = 
+		i__ - 1) < 145 && 0 <= i__2 ? i__2 : s_rnge("typeid", i__2, 
+		"framex_", (ftnlen)3073)] == *clssid) {
 
 /*           We have a match. Assign the output arguments and return. */
 
-	    s_copy(frname, name__ + (((i__1 = i__ - 1) < 127 && 0 <= i__1 ? 
-		    i__1 : s_rnge("name", i__1, "framex_", (ftnlen)2876)) << 
+	    s_copy(frname, name__ + (((i__1 = i__ - 1) < 145 && 0 <= i__1 ? 
+		    i__1 : s_rnge("name", i__1, "framex_", (ftnlen)3078)) << 
 		    5), frname_len, (ftnlen)32);
-	    *frcode = idcode[(i__1 = i__ - 1) < 127 && 0 <= i__1 ? i__1 : 
-		    s_rnge("idcode", i__1, "framex_", (ftnlen)2877)];
-	    *cent = center[(i__1 = i__ - 1) < 127 && 0 <= i__1 ? i__1 : 
-		    s_rnge("center", i__1, "framex_", (ftnlen)2878)];
+	    *frcode = idcode[(i__1 = i__ - 1) < 145 && 0 <= i__1 ? i__1 : 
+		    s_rnge("idcode", i__1, "framex_", (ftnlen)3079)];
+	    *cent = center[(i__1 = i__ - 1) < 145 && 0 <= i__1 ? i__1 : 
+		    s_rnge("center", i__1, "framex_", (ftnlen)3080)];
 	    *found = TRUE_;
 	    chkout_("CCIFRM", (ftnlen)6);
 	    return 0;
@@ -2997,7 +3223,7 @@ L_ccifrm:
 	i__1 = n;
 	for (i__ = 1; i__ <= i__1; ++i__) {
 	    gipool_(kvbuff + (((i__2 = i__ - 1) < 100 && 0 <= i__2 ? i__2 : 
-		    s_rnge("kvbuff", i__2, "framex_", (ftnlen)2910)) << 5), &
+		    s_rnge("kvbuff", i__2, "framex_", (ftnlen)3112)) << 5), &
 		    c__1, &c__1, &n, &kvclss, &fnd, (ftnlen)32);
 	    if (failed_()) {
 		chkout_("CCIFRM", (ftnlen)6);
@@ -3008,19 +3234,19 @@ L_ccifrm:
 			"rame class keyword is # but integer class was not as"
 			"sociated with this keyword.", (ftnlen)130);
 		errch_("#", kvbuff + (((i__2 = i__ - 1) < 100 && 0 <= i__2 ? 
-			i__2 : s_rnge("kvbuff", i__2, "framex_", (ftnlen)2923)
+			i__2 : s_rnge("kvbuff", i__2, "framex_", (ftnlen)3125)
 			) << 5), (ftnlen)1, (ftnlen)32);
 		sigerr_("SPICE(INVALIDFRAMEDEF)", (ftnlen)22);
 		chkout_("CCIFRM", (ftnlen)6);
 		return 0;
 	    }
-	    if (kvclss == *class__) {
+	    if (kvclss == *frclss) {
 
 /*              Get the class ID for the current frame. */
 
 		s_copy(look2, kvbuff + (((i__2 = i__ - 1) < 100 && 0 <= i__2 ?
 			 i__2 : s_rnge("kvbuff", i__2, "framex_", (ftnlen)
-			2934)) << 5), (ftnlen)32, (ftnlen)32);
+			3136)) << 5), (ftnlen)32, (ftnlen)32);
 		suffix_("_ID", &c__0, look2, (ftnlen)3, (ftnlen)32);
 		gipool_(look2, &c__1, &c__1, &n, &kvclid, &fnd, (ftnlen)32);
 		if (failed_()) {
@@ -3034,7 +3260,7 @@ L_ccifrm:
 			    132);
 		    errch_("#", kvbuff + (((i__2 = i__ - 1) < 100 && 0 <= 
 			    i__2 ? i__2 : s_rnge("kvbuff", i__2, "framex_", (
-			    ftnlen)2952)) << 5), (ftnlen)1, (ftnlen)32);
+			    ftnlen)3154)) << 5), (ftnlen)1, (ftnlen)32);
 		    sigerr_("SPICE(INVALIDFRAMEDEF)", (ftnlen)22);
 		    chkout_("CCIFRM", (ftnlen)6);
 		    return 0;
@@ -3055,7 +3281,7 @@ L_ccifrm:
 
 		    repmc_(kvbuff + (((i__2 = i__ - 1) < 100 && 0 <= i__2 ? 
 			    i__2 : s_rnge("kvbuff", i__2, "framex_", (ftnlen)
-			    2973)) << 5), "_CLASS", "_NAME", look2, (ftnlen)
+			    3175)) << 5), "_CLASS", "_NAME", look2, (ftnlen)
 			    32, (ftnlen)6, (ftnlen)5, (ftnlen)32);
 		    gcpool_(look2, &c__1, &c__1, &n, frname, &fnd, (ftnlen)32,
 			     frname_len);
@@ -3066,7 +3292,7 @@ L_ccifrm:
 				ftnlen)126);
 			errch_("#", kvbuff + (((i__2 = i__ - 1) < 100 && 0 <= 
 				i__2 ? i__2 : s_rnge("kvbuff", i__2, "framex_"
-				, (ftnlen)2983)) << 5), (ftnlen)1, (ftnlen)32)
+				, (ftnlen)3185)) << 5), (ftnlen)1, (ftnlen)32)
 				;
 			sigerr_("SPICE(INVALIDFRAMEDEF)", (ftnlen)22);
 			chkout_("CCIFRM", (ftnlen)6);
@@ -3111,7 +3337,7 @@ L_ccifrm:
 		    }
 
 /*                 Exit here, whether or not we looked up the frame's */
-/*                 center succesfully. */
+/*                 center successfully. */
 
 		    chkout_("CCIFRM", (ftnlen)6);
 		    return 0;
@@ -3138,10 +3364,10 @@ L_ccifrm:
 } /* framex_ */
 
 /* Subroutine */ int framex_(char *cname, char *frname, integer *frcode, 
-	integer *cent, integer *class__, integer *clssid, logical *found, 
+	integer *cent, integer *frclss, integer *clssid, logical *found, 
 	ftnlen cname_len, ftnlen frname_len)
 {
-    return framex_0_(0, cname, frname, frcode, cent, class__, clssid, found, 
+    return framex_0_(0, cname, frname, frcode, cent, frclss, clssid, found, 
 	    cname_len, frname_len);
     }
 
@@ -3157,10 +3383,10 @@ L_ccifrm:
 	     (integer *)0, (logical *)0, (ftnint)0, frname_len);
     }
 
-/* Subroutine */ int frinfo_(integer *frcode, integer *cent, integer *class__,
-	 integer *clssid, logical *found)
+/* Subroutine */ int frinfo_(integer *frcode, integer *cent, integer *frclss, 
+	integer *clssid, logical *found)
 {
-    return framex_0_(3, (char *)0, (char *)0, frcode, cent, class__, clssid, 
+    return framex_0_(3, (char *)0, (char *)0, frcode, cent, frclss, clssid, 
 	    found, (ftnint)0, (ftnint)0);
     }
 
@@ -3178,11 +3404,11 @@ L_ccifrm:
 	    integer *)0, found, cname_len, frname_len);
     }
 
-/* Subroutine */ int ccifrm_(integer *class__, integer *clssid, integer *
+/* Subroutine */ int ccifrm_(integer *frclss, integer *clssid, integer *
 	frcode, char *frname, integer *cent, logical *found, ftnlen 
 	frname_len)
 {
-    return framex_0_(6, (char *)0, frname, frcode, cent, class__, clssid, 
+    return framex_0_(6, (char *)0, frname, frcode, cent, frclss, clssid, 
 	    found, (ftnint)0, frname_len);
     }
 

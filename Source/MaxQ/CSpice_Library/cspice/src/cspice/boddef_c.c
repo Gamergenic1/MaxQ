@@ -54,7 +54,7 @@
 
 -Brief_I/O
 
-   Variable  I/O  Description
+   VARIABLE  I/O  DESCRIPTION
    --------  ---  --------------------------------------------------
    name       I   Common name of some body.
    code       I   Integer code for that body.
@@ -75,10 +75,10 @@
                the boddef_c call, but creates an equivalence class
                based on 'name for comparisons in bodn2c_c. This class
                ignores leading/trailing whitespace, compresses
-               interior whitespace to a single space, and ignores 
+               interior whitespace to a single space, and ignores
                character case.
 
-               The following strings belong to the same equivalence 
+               The following strings belong to the same equivalence
                class:
 
                        "JUPITER BARYCENTER"
@@ -92,25 +92,25 @@
 
                When ignoring trailing blanks, NAME must be short
                enough to fit into the space defined by parameter
-               MAXL.The value may be found in the C file 
-               zzbodtrn.c. Due to the way in which f2c converts 
+               MAXL.The value may be found in the C file
+               zzbodtrn.c. Due to the way in which f2c converts
                FORTRAN code to C, you must examine the dimensions
                assigned to the variables:
- 
+
                    defnam
                    defnor
                    kernam
                    kernor
 
-                to obtain the MAXL value. These variables have a 
+                to obtain the MAXL value. These variables have a
                 declaration of the form:
 
                    static char variable_name[MAXL*array_length]
-                
+
                   (note MAXL is this first value).
 
                The maximum allowed length of a name is in any case
-               at least 32 characters. 
+               at least 32 characters.
 
    code        is the integer ID code for assignment to body 'name'.
 
@@ -124,13 +124,25 @@
 
 -Exceptions
 
-   1) An attempt to associate more than one code with a given name
-      will cause an error to be signaled by a routine called by this
-      routine.
+   1)  If improper inputs are supplied, or if there is insufficient
+       room to store the requested addition, an error is signaled by
+       a routine in the call tree of this routine.
 
-   2) Names too long to be stored will be truncated on the right.
-      Names of length not exceeding 32 characters will not be
-      truncated.
+   2)  If the length of `name' exceeds the maximum allowed length for a
+       body name, the name stored in the kernel pool will be
+       truncated on the right.
+
+   3)  If a name-code definition inserted into this routine seems to
+       have no effect, it is possible that the contents of the
+       definition are masked by the higher precedence kernel pool
+       assignments. See the -Particulars section of this document
+       for more information.
+
+   4)  If the `name' input string pointer is null, the error
+       SPICE(NULLPOINTER) is signaled.
+
+   5)  If the `name' input string has zero length, the error
+       SPICE(EMPTYSTRING) is signaled.
 
 -Files
 
@@ -146,8 +158,8 @@
       bodc2n_c      Body code to name
       boddef_c      Body name/code definition
 
-   bods2c_c, bodc2s_c, bodn2c_c, and bodc2n_c perform translations between 
-   body names and their corresponding integer ID codes which are 
+   bods2c_c, bodc2s_c, bodn2c_c, and bodc2n_c perform translations between
+   body names and their corresponding integer ID codes which are
    used in SPICE files and routines.
 
    bods2c_c is a slightly more general version of bodn2c_c: support
@@ -159,7 +171,7 @@
    the name assigned in the body ID to name mapping or a string
    representation of the CODE value if no mapping exists.
 
-   boddef_c assigns a body name to ID mapping. The mapping has priority 
+   boddef_c assigns a body name to ID mapping. The mapping has priority
    in name-to-ID and ID-to-name translations.
 
    Refer to NAIF_IDs for the list of name/code associations built into
@@ -175,10 +187,10 @@
 
    'code' may already have a name as defined by a previous
    call to boddef_c or as part of the set of default
-   definitions.  That previous definition will remain,
+   definitions. That previous definition will remain,
    and a translation of that name will still give the
    same 'code'.  However, future translations of 'code' will
-   give the new 'name' instead of the previous one.  This
+   give the new 'name' instead of the previous one. This
    feature is useful for assigning a more familiar or
    abbreviated name to a body. For example, in addition
    to the default name for body 5, "JUPITER BARYCENTER",
@@ -237,39 +249,46 @@
 
 -Author_and_Institution
 
-   N.J. Bachman    (JPL)
-   K.R. Gehringer  (JPL)
-   B.V. Semenov    (JPL)
+   N.J. Bachman        (JPL)
+   J. Diaz del Rio     (ODC Space)
+   K.R. Gehringer      (JPL)
+   B.V. Semenov        (JPL)
+   E.D. Wright         (JPL)
 
 -Version
 
-   -CSPICE Version 2.2.2, 16-MAY-2009 (EDW) 
+   -CSPICE Version 2.2.3, 08-JUL-2021 (JDR)
 
-       Edit to Particulars section to document the bodc2s_c routine.
+       Edited the header to comply with NAIF standard. Added entry #3 to
+       -Exceptions section.
+
+   -CSPICE Version 2.2.2, 16-MAY-2009 (EDW)
+
+       Edit to -Particulars section to document the bodc2s_c routine.
 
    -CSPICE Version 2.2.1, 27-FEB-2008 (BVS)
 
-       Corrected the contents of the Required_Reading section of 
+       Corrected the contents of the -Required_Reading section of
        the header.
 
    -CSPICE Version 2.2.0, 23-JAN-2004 (EDW)
 
-      Rewrote header for clarity with regards to the
-      current capabilities of the kernel subsystem.
+       Rewrote header for clarity with regards to the
+       current capabilities of the kernel subsystem.
 
    -CSPICE Version 2.1.0, 17-NOV-2003 (EDW)
 
-      Updated header to describe the maximum allowed length
-      for 'name' and its effect on this module.
+       Updated header to describe the maximum allowed length
+       for 'name' and its effect on this module.
 
-      Updated header with information on new functionality.
-      The code-to-name retrieval routines now return the exact
-      string as defined in the last code/name mapping (case
-      and space).
+       Updated header with information on new functionality.
+       The code-to-name retrieval routines now return the exact
+       string as defined in the last code/name mapping (case
+       and space).
 
    -CSPICE Version 2.0.1, 08-FEB-1998 (EDW)
 
-      Corrected and clarified header entries.
+       Corrected and clarified header entries.
 
    -CSPICE Version 2.0.0, 06-JAN-1998 (NJB)
 
@@ -277,12 +296,12 @@
        ConstSpiceChar *.
 
        References to C2F_CreateStr_Sig were removed; code was
-       cleaned up accordingly.  String checks are now done using
+       cleaned up accordingly. String checks are now done using
        the macro CHKFSTR.
 
-   -CSPICE Version 1.0.0, 25-OCT-1997 (NJB)
+   -CSPICE Version 1.0.0, 25-OCT-1997 (NJB) (KRG)
 
-      Based on SPICELIB Version 1.0.0, 23-JAN-1996 (KRG)
+       Based on SPICELIB Version 1.0.0, 23-JAN-1996 (KRG)
 
 -Index_Entries
 

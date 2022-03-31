@@ -3,11 +3,11 @@
 -Procedure bsrchd_c ( Binary search for a double precision value )
 
 -Abstract
- 
-   Do a binary search for a key value within a double precision array, 
-   assumed to be in increasing order. Return the index of the matching 
-   array entry, or -1 if the key value is not found. 
- 
+
+   Do a binary search for a given value within a double precision
+   array, assumed to be in nondecreasing order. Return the index of
+   the matching array entry, or -1 if the key value is not found.
+
 -Disclaimer
 
    THIS SOFTWARE AND ANY RELATED MATERIALS WERE CREATED BY THE
@@ -34,14 +34,14 @@
    ACTIONS OF RECIPIENT IN THE USE OF THE SOFTWARE.
 
 -Required_Reading
- 
-   None. 
- 
+
+   None.
+
 -Keywords
- 
+
    ARRAY
-   SEARCH 
- 
+   SEARCH
+
 */
 
    #include "SpiceUsr.h"
@@ -51,98 +51,107 @@
 
    SpiceInt bsrchd_c ( SpiceDouble          value,
                        SpiceInt             ndim,
-                       ConstSpiceDouble   * array ) 
+                       ConstSpiceDouble   * array )
+
 /*
 
 -Brief_I/O
- 
-   VARIABLE  I/O  DESCRIPTION 
-   --------  ---  -------------------------------------------------- 
-   value      I   Value to find in array. 
-   ndim       I   Dimension of array. 
-   array      I   Array to be searched. 
+
+   VARIABLE  I/O  DESCRIPTION
+   --------  ---  --------------------------------------------------
+   value      I   Value to find in `array'.
+   ndim       I   Dimension of `array'.
+   array      I   Array to be searched.
 
    The function returns the index of the input key value in the
    input array, or -1 if the value is not found.
 
 -Detailed_Input
- 
-   value       is the value to be found in the input array. 
 
-   ndim        is the number of elements in the input array. 
+   value       is the double precision value to be found in the input
+               array.
 
-   array       is the array to be searched. The elements in the
-               array are assumed to sorted in increasing order. 
+   ndim        is the number of elements in the input array.
+
+   array       is the double precision array to be searched. The
+               elements in `array' are assumed to sorted in increasing
+               order.
 
 -Detailed_Output
- 
-   The function returns the index of the input value in the input array. 
-   Indices range from zero to ndim-1.
 
-   If the input array does not contain the specified value, the function 
-   returns -1. 
- 
-   If the input array contains more than one occurrence of the specified
-   value, the returned index may point to any of the occurrences. 
- 
+   The function returns the index of the specified value in the input
+   array. Indices range from 0 to ndim-1.
+
+   If the input array does not contain the specified value, the
+   function returns -1.
+
+   If the input array contains more than one occurrence of the
+   specified value, the returned index may point to any of the
+   occurrences.
+
 -Parameters
- 
-   None. 
- 
--Exceptions
- 
-   Error free. 
 
-   If ndim < 1 the value of the function is -1. 
+   None.
+
+-Exceptions
+
+   Error free.
+
+   1)  If ndim < 1, the value of the function is -1.
 
 -Files
- 
-   None. 
+
+   None.
 
 -Particulars
- 
+
    A binary search is performed on the input array. If an element of
    the array is found to match the input value, the index of that
    element is returned. If no matching element is found, -1 is
    returned.
 
 -Examples
- 
-   Let array contain the following elements: 
+
+   Let `array' contain the following elements:
 
       -11.0
         0.0
        22.0
       750.0
 
-   Then 
+   Then
 
       bsrchd_c ( -11.0, 4, array )   ==  0
-      bsrchd_c (  22.0, 4, array )   ==  2 
-      bsrchd_c ( 751.0, 4, array )   == -1 
+      bsrchd_c (  22.0, 4, array )   ==  2
+      bsrchd_c ( 751.0, 4, array )   == -1
 
 -Restrictions
- 
-   array is assumed to be sorted in increasing order. If this 
-   condition is not met, the results of bsrchd_c are unpredictable. 
- 
--Author_and_Institution
- 
-   N.J. Bachman    (JPL)
-   I.M. Underwood  (JPL) 
- 
+
+   1)  `array' is assumed to be sorted in increasing order. If this
+       condition is not met, the results of bsrchd_c are unpredictable.
+
 -Literature_References
- 
-   None. 
- 
+
+   None.
+
+-Author_and_Institution
+
+   N.J. Bachman        (JPL)
+   J. Diaz del Rio     (ODC Space)
+   I.M. Underwood      (JPL)
+
 -Version
- 
+
+   -CSPICE Version 1.0.1, 01-NOV-2021 (JDR)
+
+       Edited the header to comply with NAIF standard.
+
    -CSPICE Version 1.0.0, 22-AUG-2002 (NJB) (IMU)
 
 -Index_Entries
- 
-   binary search for a double precision value 
- 
+
+   binary search for a double precision value
+
 -&
 */
 
@@ -155,7 +164,6 @@
 
    return (   bsrchd_ ( (doublereal *) &value,
                         (integer    *) &ndim,
-                        (doublereal *) array  )   - 1  ); 
+                        (doublereal *) array  )   - 1  );
 
 } /* End bsrchd_c */
-

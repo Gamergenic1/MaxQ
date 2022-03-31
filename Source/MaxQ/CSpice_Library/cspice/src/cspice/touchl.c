@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      TOUCHL ( Touch a variable ) */
+/* $Procedure TOUCHL ( Touch a variable ) */
 logical touchl_(logical *log__)
 {
     /* System generated locals */
@@ -42,24 +42,24 @@ logical touchl_(logical *log__)
 
 /* $ Required_Reading */
 
-/*      None. */
+/*     None. */
 
 /* $ Keywords */
 
-/*       UTILITY */
+/*     UTILITY */
 
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*      VARIABLE  I/O  DESCRIPTION */
-/*      --------  ---  -------------------------------------------------- */
-/*      LOG        I   any logical */
+/*     VARIABLE  I/O  DESCRIPTION */
+/*     --------  ---  -------------------------------------------------- */
+/*     LOG        I   any logical */
 
-/*       The function returns the value of LOG. */
+/*      The function returns the value of LOG. */
 
 /* $ Detailed_Input */
 
-/*     LOG         is any logical */
+/*     LOG      is any logical */
 
 /* $ Detailed_Output */
 
@@ -67,24 +67,23 @@ logical touchl_(logical *log__)
 
 /* $ Parameters */
 
-/*      None. */
-
-/* $ Files */
-
-/*      None. */
+/*     None. */
 
 /* $ Exceptions */
 
 /*     Error free. */
 
+/* $ Files */
+
+/*     None. */
 
 /* $ Particulars */
 
 /*     This is a utility routine so that formal arguments to a routine */
 /*     that are never used can be given the appearance of being used */
-/*     to a compiler.  In this way it is possible to leave "hooks" in */
+/*     to a compiler. In this way it is possible to leave "hooks" in */
 /*     a calling sequence even if those variables are for the moment */
-/*     unused.  Similarly, variables declared for future use can be left */
+/*     unused. Similarly, variables declared for future use can be left */
 /*     in place so that they don't need to be commented out */
 
 /* $ Examples */
@@ -92,7 +91,7 @@ logical touchl_(logical *log__)
 /*     Suppose that a routine takes as an argument a */
 /*     fortran structure implemented as a set of parallel arrays. */
 /*     But that one of the arrays is not needed for the purposes of */
-/*     the routine.  This routine allows you to touch that array */
+/*     the routine. This routine allows you to touch that array */
 /*     without changing it. */
 
 
@@ -107,7 +106,7 @@ logical touchl_(logical *log__)
 
 /*        Even though we don't need to do anything with the values */
 /*        array, it's passed for the sake of uniformity in calling */
-/*        sequences.  Touch the VALUES array so that the compiler */
+/*        sequences. Touch the VALUES array so that the compiler */
 /*        will think it's been used. */
 
 /*        VALUES(1) = TOUCHL ( VALUES(1) ) */
@@ -119,25 +118,27 @@ logical touchl_(logical *log__)
 /*        END IF */
 /*        RETURN */
 
-
-
 /* $ Restrictions */
 
-/*     If you use this routine, it would be a very good idea to */
-/*     write down why you are using it in the calling routine. */
-
-/* $ Author_and_Institution */
-
-/*      W.L. Taber      (JPL) */
+/*     1)  If you use this routine, it would be a very good idea to */
+/*         write down why you are using it in the calling routine. */
 
 /* $ Literature_References */
 
-/*      None. */
+/*     None. */
+
+/* $ Author_and_Institution */
+
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
 
-/* -    SPICELIB Version 1.0.0, 6-MAy-1994 (WLT) */
+/* -    SPICELIB Version 1.0.1, 16-AUG-2021 (JDR) */
 
+/*        Edited the header to comply with NAIF standard. */
+
+/* -    SPICELIB Version 1.0.0, 06-MAY-1994 (WLT) */
 
 /* -& */
 /* $ Index_Entries */

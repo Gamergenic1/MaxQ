@@ -75,7 +75,7 @@ static doublereal c_b2 = 360.;
 
 /*     Calculates nutation angles delta psi and delta epsilon,  and */
 /*     their rates of change, referred to the ecliptic of date, from */
-/*     the wahr series (Table 1,'Proposal to the IAU Working Group */
+/*     the Wahr series (Table 1,'Proposal to the IAU Working Group */
 /*     on Nutation', John M. Wahr and Martin L. Smith 1979) */
 
 /* $ Disclaimer */
@@ -141,13 +141,13 @@ static doublereal c_b2 = 360.;
 
 /*     None. */
 
-/* $ Files */
-
-/*     None. */
-
 /* $ Exceptions */
 
 /*     Error free. */
+
+/* $ Files */
+
+/*     None. */
 
 /* $ Particulars */
 
@@ -163,17 +163,21 @@ static doublereal c_b2 = 360.;
 
 /*     None. */
 
-/* $ Author_and_Institution */
-
-/*     W.L. Taber      (JPL) */
-
 /* $ Literature_References */
 
 /*     Explanatory Supplement to the Astronomical Almanac edited */
 /*     by P. Kenneth Siedelmann. (1992) (University Science */
 /*     Books, Mill Valley CA) pp. 111-116 */
 
+/* $ Author_and_Institution */
+
+/*     W.L. Taber      (JPL) */
+
 /* $ Version */
+
+/* -    SPICELIB Version 1.0.1, 02-OCT-2021 (NJB) */
+
+/*        Corrected typos in comments. Reordered header sections. */
 
 /* -    SPICELIB Version 1.0.0, 15-JUL-1997 (WLT) */
 
@@ -235,7 +239,7 @@ static doublereal c_b2 = 360.;
 /*     on page 114 of the Explanatory supplement from revolutions, */
 /*     degrees, minutes and seconds / century, century**2 and century**3 */
 /*     to degrees, degrees/day, degrees/(0.0001 days)**2 and */
-/*     degress/(0.0001 days)**3. */
+/*     degrees/(0.0001 days)**3. */
 
 
 /*     The next set of parameters is an enumeration of the various */
@@ -394,20 +398,20 @@ static doublereal c_b2 = 360.;
 
     for (j = 1; j <= 5; ++j) {
 	angle[(i__1 = j - 1) < 5 && 0 <= i__1 ? i__1 : s_rnge("angle", i__1, 
-		"zzwahr_", (ftnlen)570)] = d_mod(&angle[(i__2 = j - 1) < 5 && 
+		"zzwahr_", (ftnlen)574)] = d_mod(&angle[(i__2 = j - 1) < 5 && 
 		0 <= i__2 ? i__2 : s_rnge("angle", i__2, "zzwahr_", (ftnlen)
-		570)], &c_b2);
+		574)], &c_b2);
 	angrt[(i__1 = j - 1) < 5 && 0 <= i__1 ? i__1 : s_rnge("angrt", i__1, 
-		"zzwahr_", (ftnlen)571)] = d_mod(&angrt[(i__2 = j - 1) < 5 && 
+		"zzwahr_", (ftnlen)575)] = d_mod(&angrt[(i__2 = j - 1) < 5 && 
 		0 <= i__2 ? i__2 : s_rnge("angrt", i__2, "zzwahr_", (ftnlen)
-		571)], &c_b2);
+		575)], &c_b2);
 	angle[(i__1 = j - 1) < 5 && 0 <= i__1 ? i__1 : s_rnge("angle", i__1, 
-		"zzwahr_", (ftnlen)573)] = angle[(i__2 = j - 1) < 5 && 0 <= 
-		i__2 ? i__2 : s_rnge("angle", i__2, "zzwahr_", (ftnlen)573)] /
+		"zzwahr_", (ftnlen)577)] = angle[(i__2 = j - 1) < 5 && 0 <= 
+		i__2 ? i__2 : s_rnge("angle", i__2, "zzwahr_", (ftnlen)577)] /
 		 radian;
 	angrt[(i__1 = j - 1) < 5 && 0 <= i__1 ? i__1 : s_rnge("angrt", i__1, 
-		"zzwahr_", (ftnlen)574)] = angrt[(i__2 = j - 1) < 5 && 0 <= 
-		i__2 ? i__2 : s_rnge("angrt", i__2, "zzwahr_", (ftnlen)574)] /
+		"zzwahr_", (ftnlen)578)] = angrt[(i__2 = j - 1) < 5 && 0 <= 
+		i__2 ? i__2 : s_rnge("angrt", i__2, "zzwahr_", (ftnlen)578)] /
 		 radian;
     }
 
@@ -415,7 +419,7 @@ static doublereal c_b2 = 360.;
 
     for (j = 1; j <= 4; ++j) {
 	dvnut[(i__1 = j - 1) < 4 && 0 <= i__1 ? i__1 : s_rnge("dvnut", i__1, 
-		"zzwahr_", (ftnlen)580)] = 0.;
+		"zzwahr_", (ftnlen)584)] = 0.;
     }
 
 /*     Now we accumulate the various terms of Delta Psi and Delta */
@@ -427,31 +431,31 @@ static doublereal c_b2 = 360.;
 	argrt = 0.;
 	for (j = 1; j <= 5; ++j) {
 	    if (matrix[(i__1 = j + i__ * 9 - 10) < 954 && 0 <= i__1 ? i__1 : 
-		    s_rnge("matrix", i__1, "zzwahr_", (ftnlen)593)] != 0) {
+		    s_rnge("matrix", i__1, "zzwahr_", (ftnlen)597)] != 0) {
 		arg += matrix[(i__1 = j + i__ * 9 - 10) < 954 && 0 <= i__1 ? 
-			i__1 : s_rnge("matrix", i__1, "zzwahr_", (ftnlen)594)]
+			i__1 : s_rnge("matrix", i__1, "zzwahr_", (ftnlen)598)]
 			 * angle[(i__2 = j - 1) < 5 && 0 <= i__2 ? i__2 : 
-			s_rnge("angle", i__2, "zzwahr_", (ftnlen)594)];
+			s_rnge("angle", i__2, "zzwahr_", (ftnlen)598)];
 		argrt += matrix[(i__1 = j + i__ * 9 - 10) < 954 && 0 <= i__1 ?
-			 i__1 : s_rnge("matrix", i__1, "zzwahr_", (ftnlen)595)
+			 i__1 : s_rnge("matrix", i__1, "zzwahr_", (ftnlen)599)
 			] * angrt[(i__2 = j - 1) < 5 && 0 <= i__2 ? i__2 : 
-			s_rnge("angrt", i__2, "zzwahr_", (ftnlen)595)];
+			s_rnge("angrt", i__2, "zzwahr_", (ftnlen)599)];
 		arg = d_mod(&arg, &dtwopi);
 	    }
 	}
 	cl = (doublereal) matrix[(i__1 = i__ * 9 - 4) < 954 && 0 <= i__1 ? 
-		i__1 : s_rnge("matrix", i__1, "zzwahr_", (ftnlen)600)];
+		i__1 : s_rnge("matrix", i__1, "zzwahr_", (ftnlen)604)];
 	if (matrix[(i__1 = i__ * 9 - 3) < 954 && 0 <= i__1 ? i__1 : s_rnge(
-		"matrix", i__1, "zzwahr_", (ftnlen)602)] != 0) {
+		"matrix", i__1, "zzwahr_", (ftnlen)606)] != 0) {
 	    cl += matrix[(i__1 = i__ * 9 - 3) < 954 && 0 <= i__1 ? i__1 : 
-		    s_rnge("matrix", i__1, "zzwahr_", (ftnlen)603)] * t;
+		    s_rnge("matrix", i__1, "zzwahr_", (ftnlen)607)] * t;
 	}
 	ce = (doublereal) matrix[(i__1 = i__ * 9 - 2) < 954 && 0 <= i__1 ? 
-		i__1 : s_rnge("matrix", i__1, "zzwahr_", (ftnlen)606)];
+		i__1 : s_rnge("matrix", i__1, "zzwahr_", (ftnlen)610)];
 	if (matrix[(i__1 = i__ * 9 - 1) < 954 && 0 <= i__1 ? i__1 : s_rnge(
-		"matrix", i__1, "zzwahr_", (ftnlen)608)] != 0) {
+		"matrix", i__1, "zzwahr_", (ftnlen)612)] != 0) {
 	    ce += matrix[(i__1 = i__ * 9 - 1) < 954 && 0 <= i__1 ? i__1 : 
-		    s_rnge("matrix", i__1, "zzwahr_", (ftnlen)609)] * t;
+		    s_rnge("matrix", i__1, "zzwahr_", (ftnlen)613)] * t;
 	}
 	cosang = cos(arg);
 	sinang = sin(arg);

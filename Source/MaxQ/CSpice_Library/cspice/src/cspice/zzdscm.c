@@ -101,7 +101,7 @@
 
 /* $ Detailed_Input */
 
-/*    EPOCH       Epcoh of TLE set as Julian day value. */
+/*    EPOCH       Epoch of TLE set as Julian day value. */
 
 /*    EP          Eccentricity */
 
@@ -177,7 +177,7 @@
 
 /*    SL4         Internal SGD4 parameter. */
 
-/*    S1          S coeffcients */
+/*    S1          S coefficients */
 
 /*    S2             ... */
 
@@ -251,7 +251,7 @@
 
 /*    NM          Mean motion */
 
-/*    Z1          Z coeffcients */
+/*    Z1          Z coefficients */
 
 /*    Z2             ... */
 
@@ -339,6 +339,10 @@
 /*     E. D. Wright    (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.0.1, 01-OCT-2021 (NJB) */
+
+/*        Corrected typos in comments. */
 
 /* -    SPICELIB Version 1.0.0, 11-NOV-2014 (EDW) */
 

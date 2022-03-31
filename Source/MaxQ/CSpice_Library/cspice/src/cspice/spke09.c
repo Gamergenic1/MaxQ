@@ -9,7 +9,7 @@
 
 static integer c__6 = 6;
 
-/* $Procedure      SPKE09 ( S/P Kernel, evaluate, type 9 ) */
+/* $Procedure SPKE09 ( S/P Kernel, evaluate, type 9 ) */
 /* Subroutine */ int spke09_(doublereal *et, doublereal *record, doublereal *
 	state)
 {
@@ -139,7 +139,7 @@ static integer c__6 = 6;
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     ET         I   Target epoch. */
 /*     RECORD    I-O  Data record. */
@@ -147,44 +147,44 @@ static integer c__6 = 6;
 
 /* $ Detailed_Input */
 
-/*     ET          is a target epoch, at which a state vector is to */
-/*                 be computed. */
+/*     ET       is a target epoch, at which a state vector is to */
+/*              be computed. */
 
-/*     RECORD      is a data record which, when evaluated at epoch ET, */
-/*                 will give the state (position and velocity) of some */
-/*                 body, relative to some center, in some inertial */
-/*                 reference frame.  Normally, the caller of this routine */
-/*                 will obtain RECORD by calling SPKR09. */
+/*     RECORD   is a data record which, when evaluated at epoch ET, */
+/*              will give the state (position and velocity) of some */
+/*              body, relative to some center, in some inertial */
+/*              reference frame. Normally, the caller of this routine */
+/*              will obtain RECORD by calling SPKR09. */
 
-/*                 The structure of the record is as follows: */
+/*              The structure of the record is as follows: */
 
-/*                    +----------------------+ */
-/*                    | number of states (n) | */
-/*                    +----------------------+ */
-/*                    | state 1 (6 elts.)    | */
-/*                    +----------------------+ */
-/*                    | state 2 (6 elts.)    | */
-/*                    +----------------------+ */
-/*                                . */
-/*                                . */
-/*                                . */
-/*                    +----------------------+ */
-/*                    | state n (6 elts.)    | */
-/*                    +----------------------+ */
-/*                    | epochs 1--n          | */
-/*                    +----------------------+ */
+/*                 +----------------------+ */
+/*                 | number of states (n) | */
+/*                 +----------------------+ */
+/*                 | state 1 (6 elts.)    | */
+/*                 +----------------------+ */
+/*                 | state 2 (6 elts.)    | */
+/*                 +----------------------+ */
+/*                             . */
+/*                             . */
+/*                             . */
+/*                 +----------------------+ */
+/*                 | state n (6 elts.)    | */
+/*                 +----------------------+ */
+/*                 | epochs 1--n          | */
+/*                 +----------------------+ */
 
 /* $ Detailed_Output */
 
-/*     RECORD      is the input record, modified by use as a work area. */
-/*                 On output, RECORD no longer contains useful */
-/*                 information. */
+/*     RECORD   is the input record, modified by use as a work area. */
+/*              On output, RECORD no longer contains useful */
+/*              information. */
 
-/*     STATE       is the state. In order, the elements are */
+/*     STATE    is the state. In order, the elements are */
 
-/*                    X, Y, Z, X', Y', and Z' */
+/*                 X, Y, Z, X', Y', and Z' */
 
-/*                 Units are km and km/sec. */
+/*              Units are km and km/sec. */
 
 /* $ Parameters */
 
@@ -193,7 +193,7 @@ static integer c__6 = 6;
 /* $ Exceptions */
 
 /*     1)  The caller of this routine must ensure that the input record */
-/*         is appropriate for the supplied ET value.  Otherwise, */
+/*         is appropriate for the supplied ET value. Otherwise, */
 /*         arithmetic overflow may result. */
 
 /* $ Files */
@@ -213,9 +213,9 @@ static integer c__6 = 6;
 /*     SPK files. */
 
 /*     The data returned by the SPKRnn routine is in its rawest form, */
-/*     taken directly from the segment.  As such, it will be meaningless */
+/*     taken directly from the segment. As such, it will be meaningless */
 /*     to a user unless he/she understands the structure of the data type */
-/*     completely.  Given that understanding, however, the SPKRnn */
+/*     completely. Given that understanding, however, the SPKRnn */
 /*     routines might be used to examine raw segment data before */
 /*     evaluating it with the SPKEnn routines. */
 
@@ -255,10 +255,17 @@ static integer c__6 = 6;
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
-/*     R.E. Thurman   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     R.E. Thurman       (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.2.0, 12-AUG-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.1.0, 31-AUG-2005 (NJB) */
 
@@ -270,7 +277,7 @@ static integer c__6 = 6;
 /* -& */
 /* $ Index_Entries */
 
-/*     evaluate type_9 spk segment */
+/*     evaluate type_9 SPK segment */
 
 /* -& */
 /* $ Revisions */
@@ -321,7 +328,7 @@ static integer c__6 = 6;
     for (i__ = 1; i__ <= 6; ++i__) {
 	ystart = n * (i__ - 1) + 2;
 	state[(i__1 = i__ - 1) < 6 && 0 <= i__1 ? i__1 : s_rnge("state", i__1,
-		 "spke09_", (ftnlen)261)] = lgrint_(&n, &record[xstart - 1], &
+		 "spke09_", (ftnlen)273)] = lgrint_(&n, &record[xstart - 1], &
 		record[ystart - 1], locrec, et);
     }
     return 0;

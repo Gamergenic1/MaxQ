@@ -445,7 +445,7 @@ static integer c__6 = 6;
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     I   File handle. */
 /*     DESCR      I   Segment descriptor. */
@@ -458,89 +458,87 @@ static integer c__6 = 6;
 /* $ Detailed_Input */
 
 /*     HANDLE, */
-/*     DESCR       are the file handle and segment descriptor for a CK */
-/*                 segment of type 6. */
+/*     DESCR    are the file handle and segment descriptor for a CK */
+/*              segment of type 6. */
 
-/*     SCLKDP      is an encoded spacecraft clock time indicating the */
-/*                 epoch for which pointing is desired. */
+/*     SCLKDP   is an encoded spacecraft clock time indicating the */
+/*              epoch for which pointing is desired. */
 
-/*     TOL         is a time tolerance, measured in the same units as */
-/*                 encoded spacecraft clock. */
+/*     TOL      is a time tolerance, measured in the same units as */
+/*              encoded spacecraft clock. */
 
-/*                 When SCLKDP falls between the start time of one of */
-/*                 the mini-segment intervals and the last time tag of */
-/*                 that interval, the tolerance has no effect because */
-/*                 pointing will be returned at the request time. */
+/*              When SCLKDP falls between the start time of one of */
+/*              the mini-segment intervals and the last time tag of */
+/*              that interval, the tolerance has no effect because */
+/*              pointing will be returned at the request time. */
 
-/*                 However, if the request time falls within a coverage */
-/*                 gap in one of the intervals, or outside of any */
-/*                 interval, then the tolerance is used to determine if */
-/*                 pointing should be returned at the closest epoch for */
-/*                 which pointing is available. This epoch is either an */
-/*                 interval's start time or the smaller of an interval's */
-/*                 end time and its last time tag. */
+/*              However, if the request time falls within a coverage */
+/*              gap in one of the intervals, or outside of any */
+/*              interval, then the tolerance is used to determine if */
+/*              pointing should be returned at the closest epoch for */
+/*              which pointing is available. This epoch is either an */
+/*              interval's start time or the smaller of an interval's */
+/*              end time and its last time tag. */
 
 
-/*     NEEDAV      is true if angular velocity is requested. If the */
-/*                 input segment descriptor indicates angular velocity */
-/*                 is absent, the error SPICE(NOAVDATA) is signaled. */
+/*     NEEDAV   is .TRUE. if angular velocity is requested. If the */
+/*              input segment descriptor indicates angular velocity */
+/*              is absent, the error SPICE(NOAVDATA) is signaled. */
 
-/*                 Note: although all subtypes of type 6 records either */
-/*                 contain or compute angular velocity, a CK creator may */
-/*                 choose to indicate that the provided angular velocity */
-/*                 data are not valid; this can be done by setting the */
-/*                 segment descriptor angular velocity flag to .FALSE. */
-
+/*              Note: although all subtypes of type 6 records either */
+/*              contain or compute angular velocity, a CK creator may */
+/*              choose to indicate that the provided angular velocity */
+/*              data are not valid; this can be done by setting the */
+/*              segment descriptor angular velocity flag to .FALSE. */
 
 /* $ Detailed_Output */
 
-/*     RECORD      is a set of data from the specified segment which, */
-/*                 when evaluated at epoch SCLKDP, will give the */
-/*                 attitude and angular velocity of some body, relative */
-/*                 to the reference frame indicated by DESCR. */
+/*     RECORD   is a set of data from the specified segment which, */
+/*              when evaluated at epoch SCLKDP, will give the */
+/*              attitude and angular velocity of some body, relative */
+/*              to the reference frame indicated by DESCR. */
 
-/*                 The structure of the record is as follows: */
+/*              The structure of the record is as follows: */
 
-/*                    +----------------------+ */
-/*                    | evaluation epoch     | */
-/*                    +----------------------+ */
-/*                    | subtype code         | */
-/*                    +----------------------+ */
-/*                    | number of packets (n)| */
-/*                    +----------------------+ */
-/*                    | nominal SCLK rate    | */
-/*                    +----------------------+ */
-/*                    | packet 1             | */
-/*                    +----------------------+ */
-/*                    | packet 2             | */
-/*                    +----------------------+ */
-/*                                . */
-/*                                . */
-/*                                . */
-/*                    +----------------------+ */
-/*                    | packet n             | */
-/*                    +----------------------+ */
-/*                    | epochs 1--n          | */
-/*                    +----------------------+ */
+/*                 +----------------------+ */
+/*                 | evaluation epoch     | */
+/*                 +----------------------+ */
+/*                 | subtype code         | */
+/*                 +----------------------+ */
+/*                 | number of packets (n)| */
+/*                 +----------------------+ */
+/*                 | nominal SCLK rate    | */
+/*                 +----------------------+ */
+/*                 | packet 1             | */
+/*                 +----------------------+ */
+/*                 | packet 2             | */
+/*                 +----------------------+ */
+/*                             . */
+/*                             . */
+/*                             . */
+/*                 +----------------------+ */
+/*                 | packet n             | */
+/*                 +----------------------+ */
+/*                 | epochs 1--n          | */
+/*                 +----------------------+ */
 
-/*                 The packet size is a function of the subtype code. */
-/*                 All packets in a record have the same size. */
+/*              The packet size is a function of the subtype code. */
+/*              All packets in a record have the same size. */
 
 
-/*     FOUND       is a logical flag indicating whether data were found. */
-/*                 If NEEDAV is .FALSE., data will be found if the */
-/*                 request time is within TOL ticks of a time for which */
-/*                 the segment provides data. If NEEDAV is .TRUE., the */
-/*                 segment's angular velocity flag must also be set in */
-/*                 order for data to be found. */
+/*     FOUND    is a logical flag indicating whether data were found. */
+/*              If NEEDAV is .FALSE., data will be found if the */
+/*              request time is within TOL ticks of a time for which */
+/*              the segment provides data. If NEEDAV is .TRUE., the */
+/*              segment's angular velocity flag must also be set in */
+/*              order for data to be found. */
 
-/*                 A type 6 segment provides data for times that are */
-/*                 between its descriptor time bounds and that are */
-/*                 within the coverage region of a mini-segment */
-/*                 interval. The coverage region of a mini-segment */
-/*                 interval extends from its start time to the lesser of */
-/*                 its stop time and its last time tag. */
-
+/*              A type 6 segment provides data for times that are */
+/*              between its descriptor time bounds and that are */
+/*              within the coverage region of a mini-segment */
+/*              interval. The coverage region of a mini-segment */
+/*              interval extends from its start time to the lesser of */
+/*              its stop time and its last time tag. */
 
 /* $ Parameters */
 
@@ -554,8 +552,9 @@ static integer c__6 = 6;
 /*     read is assumed to be valid in most respects. The few exceptions */
 /*     that are handled here are listed below. */
 
-/*     1)  If the input HANDLE does not designate a loaded CK file, the */
-/*         error will be diagnosed by routines called by this routine. */
+/*     1)  If the input HANDLE does not designate a loaded CK file, an */
+/*         error is signaled by a routine in the call tree of this */
+/*         routine. */
 
 /*     2)  If the segment specified by DESCR is not of data type 6, the */
 /*         error SPICE(WRONGCKTYPE) is signaled. */
@@ -578,12 +577,12 @@ static integer c__6 = 6;
 /*         signaled. */
 
 /*     8)  If an error occurs while trying to read data from a C-kernel, */
-/*         the error is diagnosed by routines in the call tree of this */
+/*         the error is signaled by a routine in the call tree of this */
 /*         routine. */
 
 /*     9)  If the input segment descriptor indicates that angular */
 /*         velocity data are not present, and if the input flag NEEDAV */
-/*         is set to .TRUE., then the error SPICE(NOAVDATA) is signaled. */
+/*         is set to .TRUE., the error SPICE(NOAVDATA) is signaled. */
 
 /* $ Files */
 
@@ -597,17 +596,21 @@ static integer c__6 = 6;
 /* $ Examples */
 
 /*     The data returned by the CKRnn routine is in its rawest form, */
-/*     taken directly from the segment.  As such, it will be meaningless */
+/*     taken directly from the segment. As such, it will be meaningless */
 /*     to a user unless he/she understands the structure of the data type */
-/*     completely.  Given that understanding, however, the CKRxx */
+/*     completely. Given that understanding, however, the CKRxx */
 /*     routines might be used to "dump" and check segment data for a */
 /*     particular epoch. */
 
+/*     The search performed here does not mimic the behavior of the CK */
+/*     reader APIs CKGP and CKGPAV, which continue searching when an */
+/*     applicable segment doesn't satisfy a pointing request. See the CK */
+/*     Required reading for details. */
 
 /*     C */
 /*     C     Get a segment applicable to a specified body and epoch. */
 /*     C */
-/*     C     CALL CKBSS ( INST,   SCLKDP, TOL,   NEEDAV ) */
+/*           CALL CKBSS ( INST,   SCLKDP, TOL,   NEEDAV ) */
 /*           CALL CKSNS ( HANDLE, DESCR,  SEGID, SFND   ) */
 
 /*           IF ( .NOT. SFND ) THEN */
@@ -651,22 +654,27 @@ static integer c__6 = 6;
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     B.V. Semenov    (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     B.V. Semenov       (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.0.1, 06-JUL-2021 (NJB) (JDR) */
+
+/*        Corrected code example: removed comment character preceding */
+/*        CKBSS call. Added note regarding difference between this */
+/*        search and those performed by the CK reader APIs CKGP and */
+/*        CKGPAV. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.0.0, 14-MAR-2014 (NJB) (BVS) */
 
 /* -& */
 /* $ Index_Entries */
 
-/*     read record from type_6 ck segment */
-
-/* -& */
-/* $ Revisions */
-
-/*     None. */
+/*     read record from type_6 CK segment */
 
 /* -& */
 
@@ -1092,7 +1100,7 @@ static integer c__6 = 6;
 
 		while(remain > 0 && buffer[(i__1 = nread - 1) < 101 && 0 <= 
 			i__1 ? i__1 : s_rnge("buffer", i__1, "ckr06_", (
-			ftnlen)916)] <= t) {
+			ftnlen)926)] <= t) {
 		    bufbas += nread;
 		    nread = min(remain,101);
 
@@ -1224,7 +1232,7 @@ static integer c__6 = 6;
 
 		while(remain > 0 && buffer[(i__1 = nread - 1) < 101 && 0 <= 
 			i__1 ? i__1 : s_rnge("buffer", i__1, "ckr06_", (
-			ftnlen)1062)] < t) {
+			ftnlen)1072)] < t) {
 		    bufbas += nread;
 		    nread = min(remain,101);
 
@@ -1577,9 +1585,9 @@ static integer c__6 = 6;
 	    return 0;
 	}
 	pktsiz = pktszs[(i__1 = subtyp) < 4 && 0 <= i__1 ? i__1 : s_rnge(
-		"pktszs", i__1, "ckr06_", (ftnlen)1457)];
+		"pktszs", i__1, "ckr06_", (ftnlen)1467)];
 	maxwnd = mxwnsz[(i__1 = subtyp) < 4 && 0 <= i__1 ? i__1 : s_rnge(
-		"mxwnsz", i__1, "ckr06_", (ftnlen)1458)];
+		"mxwnsz", i__1, "ckr06_", (ftnlen)1468)];
 
 /*        Check the window size. */
 
@@ -1708,7 +1716,7 @@ static integer c__6 = 6;
 	    return 0;
 	}
 	while(buffer[(i__1 = nread - 1) < 101 && 0 <= i__1 ? i__1 : s_rnge(
-		"buffer", i__1, "ckr06_", (ftnlen)1604)] < t && remain > 0) {
+		"buffer", i__1, "ckr06_", (ftnlen)1614)] < t && remain > 0) {
 	    bufbas += nread;
 	    nread = min(remain,100);
 	    remain -= nread;

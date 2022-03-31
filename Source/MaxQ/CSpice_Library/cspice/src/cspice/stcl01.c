@@ -9,7 +9,7 @@
 
 static integer c__2 = 2;
 
-/* $Procedure   STCL01 ( STAR catalog type 1, load catalog file ) */
+/* $Procedure STCL01 ( STAR catalog type 1, load catalog file ) */
 /* Subroutine */ int stcl01_(char *catfnm, char *tabnam, integer *handle, 
 	ftnlen catfnm_len, ftnlen tabnam_len)
 {
@@ -73,26 +73,26 @@ static integer c__2 = 2;
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
-/*     CATFNM      I   Catalog file name. */
-/*     TABNAM      O   Catalog table name. */
-/*     HANDLE      O   Catalog file handle. */
+/*     CATFNM     I   Catalog file name. */
+/*     TABNAM     O   Catalog table name. */
+/*     HANDLE     O   Catalog file handle. */
 
 /* $ Detailed_Input */
 
-/*     CATFNM      is the name of the catalog file. */
+/*     CATFNM   is the name of the catalog file. */
 
 /* $ Detailed_Output */
 
-/*     TABNAM      is the name of the table loaded from the catalog */
-/*                 file. This name must be provided as an input argument */
-/*                 to STCF01 catalog search routine. Multiple catalogs */
-/*                 contaning the table TABNAM may be loaded. Sets of */
-/*                 columns, column names and attribites must be */
-/*                 identical through all these files. */
+/*     TABNAM   is the name of the table loaded from the catalog */
+/*              file. This name must be provided as an input argument */
+/*              to STCF01 catalog search routine. Multiple catalogs */
+/*              containing the table TABNAM may be loaded. Sets of */
+/*              columns, column names and attributes must be */
+/*              identical through all these files. */
 
-/*     HANDLE      is the integer handle of the catalog file. */
+/*     HANDLE   is the integer handle of the catalog file. */
 
 /* $ Parameters */
 
@@ -100,17 +100,19 @@ static integer c__2 = 2;
 
 /* $ Exceptions */
 
-/*     1)  If the indicated file cannot be opened, the error will be */
-/*         diagnosed by routines called by this routine. */
+/*     1)  If the indicated file cannot be opened, an error is signaled */
+/*         by a routine in the call tree of this routine. */
 
-/*     2)  If the indicated file has the wrong architecture version, the */
-/*         error will be diagnosed by routines called by this routine. */
+/*     2)  If the indicated file has the wrong architecture version, an */
+/*         error is signaled by a routine in the call tree of this */
+/*         routine. */
 
 /*     3)  If an I/O error occurs while reading the indicated file, the */
-/*         error will be diagnosed by routines called by this routine. */
+/*         error is signaled by a routine in the call tree of this */
+/*         routine. */
 
-/*     4)  If the catalog file is not a type 1 star catalog file */
-/*         then the error 'SPICE(BADCATALOGFILE)' is signalled. */
+/*     4)  If the catalog file is not a type 1 star catalog file, the */
+/*         error SPICE(BADCATALOGFILE) is signaled. */
 
 /* $ Files */
 
@@ -121,7 +123,7 @@ static integer c__2 = 2;
 /*     segments. This table MUST include the following columns: */
 
 /*        column name                data type          units */
-/*     ------------------------------------------------------- */
+/*        ---------------------------------------------------- */
 /*        RA                   DOUBLE PRECISION        DEGREES */
 /*        DEC                  DOUBLE PRECISION        DEGREES */
 /*        RA_SIGMA             DOUBLE PRECISION        DEGREES */
@@ -187,9 +189,17 @@ static integer c__2 = 2;
 
 /* $ Author_and_Institution */
 
-/*     B.V. Semenov    (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.2.0, 20-AUG-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.1.0, 18-JUN-1999 (WLT) */
 

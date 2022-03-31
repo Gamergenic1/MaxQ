@@ -10,8 +10,8 @@
 static integer c__2 = 2;
 static integer c__6 = 6;
 
-/* $Procedure      CKOBJ ( CK objects ) */
-/* Subroutine */ int ckobj_(char *ck, integer *ids, ftnlen ck_len)
+/* $Procedure CKOBJ ( CK objects ) */
+/* Subroutine */ int ckobj_(char *ckfnm, integer *ids, ftnlen ckfnm_len)
 {
     /* Builtin functions */
     integer s_cmp(char *, char *, ftnlen, ftnlen);
@@ -81,37 +81,35 @@ static integer c__6 = 6;
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
-/*     CK         I   Name of CK file. */
-/*     IDS       I/O  Set of ID codes of objects in CK file. */
+/*     CKFNM      I   Name of CK file. */
+/*     IDS       I-O  Set of ID codes of objects in CK file. */
 
 /* $ Detailed_Input */
 
-/*     CK             is the name of a C-kernel. */
+/*     CKFNM    is the name of a C-kernel. */
 
-/*     IDS            is an initialized SPICELIB set data structure. */
-/*                    IDS optionally may contain a set of ID codes on */
-/*                    input; on output, the data already present in */
-/*                    IDS will be combined with ID code set found for the */
-/*                    file CK. */
+/*     IDS      is an initialized SPICE set data structure. IDS */
+/*              optionally may contain a set of ID codes on input; on */
+/*              output, the data already present in IDS will be combined */
+/*              with ID code set found for the file CKFNM. */
 
-/*                    If IDS contains no data on input, its size and */
-/*                    cardinality still must be initialized. */
+/*              If IDS contains no data on input, its size and */
+/*              cardinality still must be initialized. */
 
 /* $ Detailed_Output */
 
-/*     IDS            is a SPICELIB set data structure which contains */
-/*                    the union of its contents upon input with the set */
-/*                    of ID codes of each object for which pointing data */
-/*                    are present in the indicated CK file. The elements */
-/*                    of SPICELIB sets are unique; hence each ID code in */
-/*                    IDS appears only once, even if the CK file */
-/*                    contains multiple segments for that ID code. */
+/*     IDS      is a SPICE set data structure which contains the union */
+/*              of its contents upon input with the set of ID codes of */
+/*              each object for which pointing data are present in the */
+/*              indicated CK file. The elements of SPICE sets are */
+/*              unique; hence each ID code in IDS appears only once, even */
+/*              if the CK file contains multiple segments for that ID */
+/*              code. */
 
-/*                    See the Examples section below for a complete */
-/*                    example program showing how to retrieve the ID */
-/*                    codes from IDS. */
+/*              See the $Examples section below for a complete example */
+/*              program showing how to retrieve the ID codes from IDS. */
 
 /* $ Parameters */
 
@@ -123,18 +121,18 @@ static integer c__6 = 6;
 /*         SPICE(INVALIDFORMAT) is signaled. */
 
 /*     2)  If the input file is not a transfer file but has architecture */
-/*         other than DAF, the error SPICE(BADARCHTYPE) is signaled. */
+/*         other than DAF, the error SPICE(INVALIDARCHTYPE) is signaled. */
 
 /*     3)  If the input file is a binary DAF file of type other than */
-/*         CK, the error SPICE(BADFILETYPE) is signaled. */
+/*         CK, the error SPICE(INVALIDFILETYPE) is signaled. */
 
-/*     4)  If the CK file cannot be opened or read, the error will */
-/*         be diagnosed by routines called by this routine. */
+/*     4)  If the CK file cannot be opened or read, an error is signaled */
+/*         by a routine in the call tree of this routine. */
 
 /*     5)  If the size of the output set argument IDS is insufficient to */
 /*         contain the actual number of ID codes of objects covered by */
-/*         the indicated CK file, the error will be diagnosed by */
-/*         routines called by this routine. */
+/*         the indicated CK file, an error is signaled by a routine in */
+/*         the call tree of this routine. */
 
 /* $ Files */
 
@@ -148,17 +146,26 @@ static integer c__6 = 6;
 
 /* $ Examples */
 
-/*     1)  Display the interval-level coverage for each object in a */
-/*         specified CK file. Use tolerance of zero ticks. Do not */
-/*         request angular velocity. Express the results in the TDB time */
-/*         system. */
-
-/*         Find the set of objects in the file. Loop over the contents */
-/*         of the ID code set:  find the coverage for each item in the */
-/*         set and display the coverage. */
+/*     The numerical results shown for this example may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
 
 
-/*              PROGRAM CKCVR */
+/*     1) Display the interval-level coverage for each object in a */
+/*        specified CK file. Use tolerance of zero ticks. Do not */
+/*        request angular velocity. Express the results in the TDB time */
+/*        system. */
+
+/*        Find the set of objects in the file. Loop over the contents */
+/*        of the ID code set: find the coverage for each item in the */
+/*        set and display the coverage. */
+
+
+/*        Example code begins here. */
+
+
+/*              PROGRAM CKOBJ_EX1 */
 /*              IMPLICIT NONE */
 
 /*        C */
@@ -194,7 +201,7 @@ static integer c__6 = 6;
 /*        C */
 /*        C     Local variables */
 /*        C */
-/*              CHARACTER*(FILSIZ)    CK */
+/*              CHARACTER*(FILSIZ)    CKFNM */
 /*              CHARACTER*(FILSIZ)    LSK */
 /*              CHARACTER*(FILSIZ)    SCLK */
 /*              CHARACTER*(TIMLEN)    TIMSTR */
@@ -210,8 +217,9 @@ static integer c__6 = 6;
 
 /*        C */
 /*        C     Load a leapseconds kernel and SCLK kernel for output */
-/*        C     time conversion.  Note that we assume a single spacecraft */
-/*        C     clock is associated with all of the objects in the CK. */
+/*        C     time conversion.  Note that we assume a single */
+/*        C     spacecraft clock is associated with all of the objects */
+/*        C     in the CK. */
 /*        C */
 /*              CALL PROMPT ( 'Name of leapseconds kernel > ', LSK  ) */
 /*              CALL FURNSH ( LSK ) */
@@ -222,7 +230,7 @@ static integer c__6 = 6;
 /*        C */
 /*        C     Get name of CK file. */
 /*        C */
-/*              CALL PROMPT ( 'Name of CK file            > ', CK ) */
+/*              CALL PROMPT ( 'Name of CK file            > ', CKFNM ) */
 
 /*        C */
 /*        C     Initialize the set IDS. */
@@ -237,7 +245,7 @@ static integer c__6 = 6;
 /*        C */
 /*        C     Find the set of objects in the CK file. */
 /*        C */
-/*              CALL CKOBJ ( CK, IDS ) */
+/*              CALL CKOBJ ( CKFNM, IDS ) */
 
 /*        C */
 /*        C     We want to display the coverage for each object.  Loop */
@@ -251,7 +259,7 @@ static integer c__6 = 6;
 /*        C        so we don't include data for the previous object. */
 /*        C */
 /*                 CALL SCARDD ( 0,   COVER ) */
-/*                 CALL CKCOV  ( CK,          IDS(I),  .FALSE., */
+/*                 CALL CKCOV  ( CKFNM,       IDS(I),  .FALSE., */
 /*             .                 'INTERVAL',  0.D0,    'TDB',    COVER ) */
 
 /*        C */
@@ -263,7 +271,7 @@ static integer c__6 = 6;
 /*        C */
 /*        C        Display a simple banner. */
 /*        C */
-/*                 WRITE (*,*) '========================================' */
+/*                 WRITE (*,*) '=======================================' */
 /*                 WRITE (*,*) 'Coverage for object ', IDS(I) */
 
 /*        C */
@@ -296,17 +304,66 @@ static integer c__6 = 6;
 
 /*                 END DO */
 
-/*                 WRITE (*,*) '========================================' */
+/*                 WRITE (*,*) '=======================================' */
 
 /*              END DO */
 
 /*              END */
 
 
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, using the LSK file named naif0010.tls, the SCLK file */
+/*        named cas00145.tsc and the CK file named 08052_08057ra.bc, the */
+/*        output was: */
+
+
+/*        Name of leapseconds kernel > naif0010.tls */
+/*        Name of SCLK kernel        > cas00145.tsc */
+/*        Name of CK file            > 08052_08057ra.bc */
+/*         ======================================= */
+/*         Coverage for object       -82000 */
+
+/*         Interval:            1 */
+/*         Start:    2008 FEB 21 00:01:07.771186 (TDB) */
+/*         Stop:     2008 FEB 23 22:53:30.001738 (TDB) */
+
+
+/*         Interval:            2 */
+/*         Start:    2008 FEB 23 22:58:13.999732 (TDB) */
+/*         Stop:     2008 FEB 24 02:22:25.913175 (TDB) */
+
+
+/*         Interval:            3 */
+/*         Start:    2008 FEB 24 02:27:49.910886 (TDB) */
+/*         Stop:     2008 FEB 24 19:46:33.470587 (TDB) */
+
+
+/*         Interval:            4 */
+/*         Start:    2008 FEB 24 19:49:33.469315 (TDB) */
+/*         Stop:     2008 FEB 25 04:25:21.250677 (TDB) */
+
+
+/*         Interval:            5 */
+/*         Start:    2008 FEB 25 04:29:33.248897 (TDB) */
+/*         Stop:     2008 FEB 25 15:23:44.971594 (TDB) */
+
+
+/*         Interval:            6 */
+/*         Start:    2008 FEB 25 15:24:12.971396 (TDB) */
+/*         Stop:     2008 FEB 25 20:25:04.843864 (TDB) */
+
+
+/*         Interval:            7 */
+/*         Start:    2008 FEB 25 20:25:48.843553 (TDB) */
+/*         Stop:     2008 FEB 26 00:01:04.752306 (TDB) */
+
+/*         ======================================= */
+
+
 /* $ Restrictions */
 
-/*     1) If an error occurs while this routine is updating the set */
-/*        IDS, the set may be corrupted. */
+/*     1)  If an error occurs while this routine is updating the set */
+/*         IDS, the set may be corrupted. */
 
 /* $ Literature_References */
 
@@ -314,13 +371,25 @@ static integer c__6 = 6;
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
 
 /* $ Version */
 
+/* -    SPICELIB Version 1.1.0, 08-OCT-2021 (JDR) (NJB) */
+
+/*        Changed input argument name "CK" to "CKFNM" for consistency */
+/*        with other routines. */
+
+/*        Bug fix: added call to FAILED after call to GETFAT. */
+
+/*        Edited the header comments to comply with NAIF standard. Added */
+/*        solution using CASSINI data. Corrected short error message in */
+/*        entries #2 and #3 in $Exceptions section. */
+
 /* -    SPICELIB Version 1.0.1, 30-NOV-2007 (NJB) */
 
-/*        Corrected bug in program in header Examples section: program */
+/*        Corrected bug in program in header $Examples section: program */
 /*        now empties the coverage window prior to collecting data for */
 /*        the current object. Deleted declaration of unused parameter */
 /*        NAMLEN in example program. Updated example to use WNCARD */
@@ -331,7 +400,7 @@ static integer c__6 = 6;
 /* -& */
 /* $ Index_Entries */
 
-/*     find id codes of objects in ck file */
+/*     find id codes of objects in CK file */
 
 /* -& */
 
@@ -353,13 +422,17 @@ static integer c__6 = 6;
 
 /*     See whether GETFAT thinks we've got a CK file. */
 
-    getfat_(ck, arch, kertyp, ck_len, (ftnlen)80, (ftnlen)80);
+    getfat_(ckfnm, arch, kertyp, ckfnm_len, (ftnlen)80, (ftnlen)80);
+    if (failed_()) {
+	chkout_("CKOBJ", (ftnlen)5);
+	return 0;
+    }
     if (s_cmp(arch, "XFR", (ftnlen)80, (ftnlen)3) == 0) {
 	setmsg_("Input file # has architecture #. The file must be a binary "
 		"CK file to be readable by this routine.  If the input file i"
 		"s an CK file in transfer format, run TOBIN on the file to co"
 		"nvert it to binary format.", (ftnlen)205);
-	errch_("#", ck, (ftnlen)1, ck_len);
+	errch_("#", ckfnm, (ftnlen)1, ckfnm_len);
 	errch_("#", arch, (ftnlen)1, (ftnlen)80);
 	sigerr_("SPICE(INVALIDFORMAT)", (ftnlen)20);
 	chkout_("CKOBJ", (ftnlen)5);
@@ -371,7 +444,7 @@ static integer c__6 = 6;
 		" CK file, the problem may be due to the file being an old no"
 		"n-native file lacking binary file format information. It's a"
 		"lso possible the file has been corrupted.", (ftnlen)340);
-	errch_("#", ck, (ftnlen)1, ck_len);
+	errch_("#", ckfnm, (ftnlen)1, ckfnm_len);
 	errch_("#", arch, (ftnlen)1, (ftnlen)80);
 	sigerr_("SPICE(INVALIDARCHTYPE)", (ftnlen)22);
 	chkout_("CKOBJ", (ftnlen)5);
@@ -383,7 +456,7 @@ static integer c__6 = 6;
 		" being an old non-native file lacking binary file format inf"
 		"ormation. It's also possible the file has been corrupted.", (
 		ftnlen)296);
-	errch_("#", ck, (ftnlen)1, ck_len);
+	errch_("#", ckfnm, (ftnlen)1, ckfnm_len);
 	errch_("#", kertyp, (ftnlen)1, (ftnlen)80);
 	sigerr_("SPICE(INVALIDFILETYPE)", (ftnlen)22);
 	chkout_("CKOBJ", (ftnlen)5);
@@ -392,7 +465,7 @@ static integer c__6 = 6;
 
 /*     Open the file for reading. */
 
-    dafopr_(ck, &handle, ck_len);
+    dafopr_(ckfnm, &handle, ckfnm_len);
     if (failed_()) {
 	chkout_("CKOBJ", (ftnlen)5);
 	return 0;

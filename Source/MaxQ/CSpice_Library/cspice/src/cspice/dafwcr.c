@@ -76,7 +76,7 @@ static integer c__1 = 1;
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     I   Handle of DAF. */
 /*     RECNO      I   Record number of character record. */
@@ -84,14 +84,14 @@ static integer c__1 = 1;
 
 /* $ Detailed_Input */
 
-/*     HANDLE      is the handle associated with a DAF. */
+/*     HANDLE   is the handle associated with a DAF. */
 
-/*     RECNO       is the record number of a character record within */
-/*                 the file. If the record does not already exist, it */
-/*                 is created. Otherwise its contents are overwritten. */
+/*     RECNO    is the record number of a character record within */
+/*              the file. If the record does not already exist, it */
+/*              is created. Otherwise its contents are overwritten. */
 
-/*     CREC        contains the first 1000 characters of the specified */
-/*                 record. */
+/*     CREC     contains the first 1000 characters of the specified */
+/*              record. */
 
 /* $ Detailed_Output */
 
@@ -99,22 +99,22 @@ static integer c__1 = 1;
 
 /* $ Parameters */
 
-/*      None. */
-
-/* $ Files */
-
 /*     None. */
 
 /* $ Exceptions */
 
-/*     1) If the specified file is not open for write access, an error */
-/*        is signaled by routines in the call tree of this routine. */
+/*     1)  If the specified file is not open for write access, an error */
+/*         is signaled by a routine in the call tree of this routine. */
 
-/*     2) If the declared length of CREC is not 1000 characters, */
-/*        the error SPICE(DAFBADRECLEN) is signaled. */
+/*     2)  If the declared length of CREC is not 1000 characters, */
+/*         the error SPICE(DAFBADRECLEN) is signaled. */
 
-/*     2) If the specified record cannot (for some reason) be written, */
-/*        the error SPICE(DAFWRITEFAIL) is signaled. */
+/*     3)  If the specified record cannot (for some reason) be written, */
+/*         the error SPICE(DAFWRITEFAIL) is signaled. */
+
+/* $ Files */
+
+/*     None. */
 
 /* $ Particulars */
 
@@ -138,19 +138,30 @@ static integer c__1 = 1;
 
 /* $ Literature_References */
 
-/*     NAIF Document 167.0, "Double Precision Array Files (DAF) */
-/*     Specification and User's Guide" */
+/*     None. */
 
 /* $ Author_and_Institution */
 
-/*     I.M. Underwood  (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     H.A. Neilan        (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     F.S. Turner        (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 2.1.0, 14-APR-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. Moved DAF */
+/*        required reading from $Literature_References to */
+/*        $Required_Reading section. */
 
 /* -    SPICELIB Version 2.0.0, 27-NOV-2001 (FST) */
 
 /*        Updated this routine to utilize new handle manager */
-/*        interfaces.  Replaced the check of the input handle's */
+/*        interfaces. Replaced the check of the input handle's */
 /*        sign with the appropriate call to DAFSIH. */
 
 /* -    SPICELIB Version 1.0.2, 10-MAR-1992 (WLT) */
@@ -167,7 +178,7 @@ static integer c__1 = 1;
 /* -& */
 /* $ Index_Entries */
 
-/*     write daf character record */
+/*     write DAF character record */
 
 /* -& */
 /* $ Revisions */
@@ -176,9 +187,9 @@ static integer c__1 = 1;
 
 /*        The call to DAFHLU has been replaced with a call to */
 /*        ZZDDHHLU, the handle manager interface for retrieving */
-/*        a logical unit.  DAFHLU is no longer used, since it */
+/*        a logical unit. DAFHLU is no longer used, since it */
 /*        locks the unit returned to its HANDLE, tying up resources */
-/*        in the handle manager.  A call to DAFSIH was inserted to */
+/*        in the handle manager. A call to DAFSIH was inserted to */
 /*        make certain that HANDLE is present in DAFAH's file table, */
 /*        rather than simply checking the sign of HANDLE. */
 

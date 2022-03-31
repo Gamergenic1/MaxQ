@@ -75,7 +75,7 @@ static integer c__5 = 5;
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     I   File handle. */
 /*     DESCR      I   Segment descriptor. */
@@ -85,17 +85,17 @@ static integer c__5 = 5;
 /* $ Detailed_Input */
 
 /*     HANDLE, */
-/*     DESCR       are the file handle and segment descriptor for */
-/*                 a PCK segment of type 2. */
+/*     DESCR    are the file handle and segment descriptor for */
+/*              a PCK segment of type 2. */
 
-/*     ET          is a target epoch, for which a data record from */
-/*                 a specific segment is required. */
+/*     ET       is a target epoch, for which a data record from */
+/*              a specific segment is required. */
 
 /* $ Detailed_Output */
 
-/*     RECORD      is the record from the specified segment which, */
-/*                 when evaluated at epoch ET, will give the Euler */
-/*                 angles (orientation) of some body. */
+/*     RECORD   is the record from the specified segment which, */
+/*              when evaluated at epoch ET, will give the Euler */
+/*              angles (orientation) of some body. */
 
 /* $ Parameters */
 
@@ -117,31 +117,205 @@ static integer c__5 = 5;
 
 /* $ Examples */
 
-/*     The data returned  is in its rawest form, taken directly from */
-/*     the segment.  As such, it will be meaningless to a user unless */
-/*     he/she understands the structure of the data type completely. */
-/*     Given that understanding, however, the PCKRxx routines might be */
-/*     used to "dump" and check segment data for a particular epoch. */
+/*     The numerical results shown for this example may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
+
+/*     1) Dump the record of a type 2 PCK which, when evaluated at */
+/*        a given epoch, will give the Euler angles (orientation) of */
+/*        the Moon body-fixed frame with class ID 31004 with respect */
+/*        to J2000. */
+
+/*        Note that the data returned is in its rawest form, taken */
+/*        directly from the segment. As such, it will be meaningless to */
+/*        a user unless he/she understands the structure of the data */
+/*        type completely. Given that understanding, however, the PCKR02 */
+/*        routine might be used to "dump" and check segment data for a */
+/*        particular epoch. */
+
+/*        Use the PCK kernel below to obtain the record. */
+
+/*           moon_pa_de418_1950-2050.bpc */
 
 
-/*     C */
-/*     C     Get a segment applicable to a specified body and epoch. */
-/*     C */
-/*           CALL PCKSFS ( BODY, ET, HANDLE, DESCR, IDENT, FOUND ) */
+/*        Example code begins here. */
 
-/*     C */
-/*     C     Look at parts of the descriptor. */
-/*     C */
-/*           CALL DAFUS ( DESCR, ND, NI, DCD, ICD ) */
-/*           REF    = ICD( NR ) */
-/*           TYPE   = ICD( NT ) */
 
-/*           IF ( TYPE .EQ. 2 ) THEN */
-/*              CALL PCKR02 ( HANDLE, DESCR, ET, RECORD ) */
-/*                  . */
-/*                  .  Look at the RECORD data. */
-/*                  . */
-/*           END IF */
+/*              PROGRAM PCKR02_EX1 */
+/*              IMPLICIT NONE */
+
+/*        C */
+/*        C     Local parameters */
+/*        C */
+/*              INTEGER               BODY */
+/*              PARAMETER           ( BODY   = 31004 ) */
+
+/*              INTEGER               DESCSZ */
+/*              PARAMETER           ( DESCSZ = 5     ) */
+
+/*              INTEGER               IDSIZE */
+/*              PARAMETER           ( IDSIZE = 40    ) */
+
+/*        C */
+/*        C     Set the maximum record size: */
+/*        C */
+/*        C        RSIZE = 2 + 3 * (PDEG +1) */
+/*        C */
+/*        C     Assume a maximum polynomial degree of 25, and */
+/*        C     knowing that PCKR02 returns RSIZE as first element */
+/*        C     of the output record... */
+/*        C */
+/*              INTEGER               RECRSZ */
+/*              PARAMETER           ( RECRSZ = 81    ) */
+
+/*        C */
+/*        C     Local variables */
+/*        C */
+/*              CHARACTER*(IDSIZE)    SEGID */
+
+/*              DOUBLE PRECISION      BEGET */
+/*              DOUBLE PRECISION      DESCR  ( DESCSZ ) */
+/*              DOUBLE PRECISION      ENDET */
+/*              DOUBLE PRECISION      ET */
+/*              DOUBLE PRECISION      RECORD ( RECRSZ ) */
+
+/*              INTEGER               BADDR */
+/*              INTEGER               BODYID */
+/*              INTEGER               EADDR */
+/*              INTEGER               FRAMID */
+/*              INTEGER               HANDLE */
+/*              INTEGER               I */
+/*              INTEGER               INDEX */
+/*              INTEGER               PCKHDL */
+/*              INTEGER               PCKTYP */
+/*              INTEGER               PDEG */
+/*              INTEGER               RSIZE */
+
+/*              LOGICAL               FOUND */
+
+/*        C */
+/*        C     Load the PCK file. */
+/*        C */
+/*              CALL PCKLOF ( 'moon_pa_de418_1950-2050.bpc', PCKHDL ) */
+
+/*        C */
+/*        C     Set the epoch. Use ephemeris time of J2000 epoch. */
+/*        C */
+/*              ET = 0.D0 */
+
+/*        C */
+/*        C     Get a segment applicable to a specified body and epoch. */
+/*        C */
+/*              CALL PCKSFS ( BODY, ET, HANDLE, DESCR, SEGID, FOUND ) */
+
+/*              IF ( FOUND ) THEN */
+
+/*        C */
+/*        C        Unpack the segment. */
+/*        C */
+/*                 CALL PCKUDS ( DESCR, BODYID, FRAMID, PCKTYP, */
+/*             .                 BEGET, ENDET,  BADDR,  EADDR  ) */
+
+
+/*                 IF ( PCKTYP .EQ. 2 ) THEN */
+
+/*                    CALL PCKR02 ( HANDLE, DESCR, ET, RECORD ) */
+
+/*                    RSIZE = RECORD(1) */
+/*                    PDEG  = ( RSIZE - 2 ) / 3 - 1 */
+
+/*        C */
+/*        C           Output the data. */
+/*        C */
+/*                    WRITE(*,*) 'Record size      : ', RSIZE */
+/*                    WRITE(*,*) 'Polynomial degree: ', PDEG */
+
+/*                    WRITE(*,*) 'Record data      :' */
+/*                    WRITE(*,*) '   Interval midpoint: ', RECORD(2) */
+/*                    WRITE(*,*) '   Interval radius  : ', RECORD(3) */
+
+/*                    INDEX = 4 */
+/*                    WRITE(*,*) '   RA coefficients  : ' */
+/*                    DO I = 0, PDEG */
+/*                       WRITE(*,*) '      ', RECORD(INDEX+I) */
+/*                    END DO */
+
+/*                    INDEX = 4 + ( PDEG + 1 ) */
+/*                    WRITE(*,*) '   DEC coefficients : ' */
+/*                    DO I = 0, PDEG */
+/*                       WRITE(*,*) '      ', RECORD(INDEX+I) */
+/*                    END DO */
+
+/*                    INDEX = 4 + 2 * ( PDEG + 1 ) */
+/*                    WRITE(*,*) '   W coefficients   : ' */
+/*                    DO I = 0, PDEG */
+/*                       WRITE(*,*) '      ', RECORD(INDEX+I) */
+/*                    END DO */
+
+/*                 ELSE */
+
+/*                    WRITE(*,*) 'PCK is not type 2' */
+
+/*                 END IF */
+
+/*              ELSE */
+
+/*                 WRITE(*,*) '   ***** SEGMENT NOT FOUND *****' */
+
+/*              END IF */
+
+/*        C */
+/*        C     Unload the PCK file. */
+/*        C */
+/*              CALL PCKUOF ( PCKHDL ) */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*         Record size      :           32 */
+/*         Polynomial degree:            9 */
+/*         Record data      : */
+/*            Interval midpoint:    302400.00000000000 */
+/*            Interval radius  :    345600.00000000000 */
+/*            RA coefficients  : */
+/*                 -5.4242086033301107E-002 */
+/*                 -5.2241405162792561E-005 */
+/*                  8.9751456289930307E-005 */
+/*                 -1.5288696963234620E-005 */
+/*                  1.3218870864581395E-006 */
+/*                  5.9822156790328180E-007 */
+/*                 -6.5967702052551211E-008 */
+/*                 -9.9084309118396298E-009 */
+/*                  4.9276055963541578E-010 */
+/*                  1.1612267413829385E-010 */
+/*            DEC coefficients : */
+/*                 0.42498898565916610 */
+/*                  1.3999219324235620E-004 */
+/*                 -1.8855140511098865E-005 */
+/*                 -2.1964684808526649E-006 */
+/*                  1.4229817868138752E-006 */
+/*                 -1.6991716166847001E-007 */
+/*                 -3.4824688140649506E-008 */
+/*                  2.9208428745895990E-009 */
+/*                  4.4217757657060300E-010 */
+/*                 -3.9211207055305402E-012 */
+/*            W coefficients   : */
+/*                  2565.0633504619473 */
+/*                 0.92003769451305328 */
+/*                 -8.0503797901914501E-005 */
+/*                  1.1960860244433900E-005 */
+/*                 -1.2237900518372542E-006 */
+/*                 -5.3651349407824562E-007 */
+/*                  6.0843372260403005E-008 */
+/*                  9.0211287487688797E-009 */
+/*                 -4.6460429330339309E-010 */
+/*                 -1.0446918704281774E-010 */
+
 
 /* $ Restrictions */
 
@@ -153,13 +327,20 @@ static integer c__5 = 5;
 
 /* $ Author_and_Institution */
 
-/*     K.S. Zukor  (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     E.D. Wright        (JPL) */
+/*     K.S. Zukor         (JPL) */
 
 /* $ Version */
 
+/* -    SPICELIB Version 1.1.2, 06-JUL-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
+/*        Added complete code example from existing fragment. */
+
 /* -    SPICELIB Version 1.1.1, 03-JAN-2014 (EDW) */
 
-/*        Minor edits to Procedure; clean trailing whitespace. */
+/*        Minor edits to $Procedure; clean trailing whitespace. */
 
 /* -    SPICELIB Version 1.1.0, 07-SEP-2001 (EDW) */
 
@@ -171,7 +352,15 @@ static integer c__5 = 5;
 /* -& */
 /* $ Index_Entries */
 
-/*     read record from type_2 pck segment */
+/*     read record from type_2 PCK segment */
+
+/* -& */
+/* $ Revisions */
+
+/* -    SPICELIB Version 1.1.0, 07-SEP-2001 (EDW) */
+
+/*        Replaced DAFRDA call with DAFGDA. */
+/*        Added IMPLICIT NONE. */
 
 /* -& */
 

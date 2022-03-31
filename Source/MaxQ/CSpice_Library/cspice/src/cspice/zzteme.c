@@ -12,7 +12,8 @@ static integer c__3 = 3;
 static integer c__1 = 1;
 
 /* $Procedure ZZTEME ( J2000 to TEME at epoch ) */
-/* Subroutine */ int zzteme_(doublereal *et, doublereal *mt)
+/* Subroutine */ int zzteme_(doublereal *et, doublereal *j2tm, doublereal *
+	tm2j)
 {
     doublereal xj2000[6], zj2000[6];
     extern /* Subroutine */ int mxvg_(doublereal *, doublereal *, integer *, 
@@ -22,8 +23,7 @@ static integer c__1 = 1;
     extern /* Subroutine */ int chkin_(char *, ftnlen), zztwovxf_(doublereal *
 	    , integer *, doublereal *, integer *, doublereal *), moved_(
 	    doublereal *, integer *, doublereal *);
-    doublereal xtemp[36]	/* was [6][6] */, m1[36]	/* was [6][6] 
-	    */, m2[36]	/* was [6][6] */;
+    doublereal m1[36]	/* was [6][6] */, m2[36]	/* was [6][6] */;
     extern /* Subroutine */ int chkout_(char *, ftnlen);
     extern logical return_(void);
     extern /* Subroutine */ int invstm_(doublereal *, doublereal *), 
@@ -32,7 +32,7 @@ static integer c__1 = 1;
 
 /* $ Abstract */
 
-/*     J2000 to TEME, probably. */
+/*     J2000 to TEME, and TEME to J2000, probably. */
 
 /* $ Disclaimer */
 
@@ -73,7 +73,8 @@ static integer c__1 = 1;
 /*     Variable  I/O  Description */
 /*     --------  ---  -------------------------------------------------- */
 /*     ET         I   Epoch of the state transformation operator. */
-/*     MT         O   The state transformation operator. */
+/*     J2TM       O   The state transformation operator J2000 to TEME. */
+/*     TM2J       O   The state transformation operator TEME to J2000. */
 
 /* $ Detailed_Input */
 
@@ -83,8 +84,11 @@ static integer c__1 = 1;
 
 /* $ Detailed_Output */
 
-/*     MT         the 6x6 operator that transforms cartesian states from */
-/*                the J2000 to TEME reference frames. */
+/*     J2TM       the 6x6 operator that transforms cartesian states from */
+/*                the J2000 to TEME reference frame. */
+
+/*     TM2J       the 6x6 operator that transforms cartesian states from */
+/*                the TEME to J2000 reference frame. */
 
 /* $ Parameters */
 
@@ -124,12 +128,17 @@ static integer c__1 = 1;
 
 /* $ Version */
 
+/* -    SPICELIB Version 2.0.0, 10-OCT-2021 (EDW) */
+
+/*        Routine now returns TEME to J2000 mapping operator. */
+
 /* -    SPICELIB Version 1.0.0, 06-MAR-2012 (NJB) (SCK) (EDW) */
 
 /* -& */
 /* $ Index_Entries */
 
-/*   tranformation J2000 frame to pseudo TEME */
+/*   transformation J2000 frame to pseudo TEME */
+/*   transformation pseudo TEME to J2000 */
 
 /* -& */
 
@@ -161,11 +170,11 @@ static integer c__1 = 1;
 
     mxvg_(m1inv, z__, &c__6, &c__6, zj2000);
 
-/*     Compute the TEME to J2000 state transformation; */
-/*     invert this to produce the output matrix. */
+/*     Compute the TEME to J2000 state transformation, and the */
+/*     inverse. */
 
-    zztwovxf_(zj2000, &c__3, xj2000, &c__1, xtemp);
-    invstm_(xtemp, mt);
+    zztwovxf_(zj2000, &c__3, xj2000, &c__1, tm2j);
+    invstm_(tm2j, j2tm);
     chkout_("ZZTEME", (ftnlen)6);
     return 0;
 } /* zzteme_ */

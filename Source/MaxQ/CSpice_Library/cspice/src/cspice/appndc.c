@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      APPNDC ( Append an item to a character cell ) */
+/* $Procedure APPNDC ( Append an item to a character cell ) */
 /* Subroutine */ int appndc_(char *item, char *cell, ftnlen item_len, ftnlen 
 	cell_len)
 {
@@ -25,7 +25,7 @@
 
 /* $ Abstract */
 
-/*      Append an item to a character cell. */
+/*     Append an item to a character cell. */
 
 /* $ Disclaimer */
 
@@ -66,33 +66,41 @@
 /*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     ITEM       I   The item to append. */
-/*     CELL      I/O  The cell to which ITEM will be appended. */
+/*     CELL      I-O  The cell to which ITEM will be appended. */
 
 /* $ Detailed_Input */
 
-/*     ITEM       is a character string which is to be appended to CELL. */
+/*     ITEM     is a character string which is to be appended to CELL. */
 
-/*     CELL       is a character cell to which ITEM will be appended. */
+/*     CELL     is a character SPICE cell to which ITEM will be */
+/*              appended. */
 
 /* $ Detailed_Output */
 
-/*     CELL       is a character cell in which the last element is ITEM. */
+/*     CELL     is the input cell with ITEM appended. ITEM is the last */
+/*              member of CELL. */
 
 /* $ Parameters */
-
-/*      None. */
-
-/* $ Files */
 
 /*     None. */
 
 /* $ Exceptions */
 
-/*     1) If the cell is not large enough to accommodate the addition */
-/*        of a new element, the error SPICE(CELLTOOSMALL) is signalled. */
+/*     1)  If the input cell has invalid cardinality, an error is */
+/*         signaled by a routine in the call tree of this routine. */
 
-/*     2) If the length of the item is longer than the length of the */
-/*        cell, ITEM is truncated on the right. */
+/*     2)  If the input cell has invalid size, an error is signaled by a */
+/*         routine in the call tree of this routine. */
+
+/*     3)  If the cell is not large enough to accommodate the addition */
+/*         of a new element, the error SPICE(CELLTOOSMALL) is signaled. */
+
+/*     4)  If the length of the item is longer than the length of the */
+/*         cell, ITEM is truncated on the right. */
+
+/* $ Files */
+
+/*     None. */
 
 /* $ Particulars */
 
@@ -100,30 +108,30 @@
 
 /* $ Examples */
 
-/*      In the following example, the item 'PLUTO' is appended to */
-/*      the character cell PLANETS. */
+/*     In the following example, the item 'PLUTO' is appended to */
+/*     the character cell PLANETS. */
 
-/*      Before appending 'PLUTO', the cell contains: */
+/*     Before appending 'PLUTO', the cell contains: */
 
-/*      PLANETS (1) = 'MERCURY' */
-/*      PLANETS (2) = 'VENUS' */
-/*      PLANETS (3) = 'EARTH' */
-/*      PLANTES (4) = 'MARS' */
-/*      PLANETS (5) = 'JUPITER' */
-/*      PLANETS (6) = 'SATURN' */
-/*      PLANETS (7) = 'URANUS' */
-/*      PLANETS (8) = 'NEPTUNE' */
+/*     PLANETS (1) = 'MERCURY' */
+/*     PLANETS (2) = 'VENUS' */
+/*     PLANETS (3) = 'EARTH' */
+/*     PLANTES (4) = 'MARS' */
+/*     PLANETS (5) = 'JUPITER' */
+/*     PLANETS (6) = 'SATURN' */
+/*     PLANETS (7) = 'URANUS' */
+/*     PLANETS (8) = 'NEPTUNE' */
 
-/*      The call */
+/*     The call */
 
 /*        CALL APPNDC ( 'PLUTO', PLANETS ) */
 
-/*      appends the element 'PLUTO' at the location PLANETS (9), and the */
-/*      cardinality is updated. */
+/*     appends the element 'PLUTO' at the location PLANETS (9), and the */
+/*     cardinality is updated. */
 
-/*      If the cell is not big enough to accomodate the addition of */
-/*      the item, an error is signalled. In this case, the cell is not */
-/*      altered. */
+/*     If the cell is not big enough to accommodate the addition of */
+/*     the item, an error is signaled. In this case, the cell is not */
+/*     altered. */
 
 /* $ Restrictions */
 
@@ -135,9 +143,20 @@
 
 /* $ Author_and_Institution */
 
-/*     H.A. Neilan     (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     H.A. Neilan        (JPL) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 27-AUG-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
+
+/*        Improved the documentation of CELL in $Detailed_Input and */
+/*        $Detailed_Output. Added entries #1 and #2 to $Exceptions. */
 
 /* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
 
@@ -167,9 +186,9 @@
 	chkin_("APPNDC", (ftnlen)6);
     }
 
-/*     Check to see if the cell can accomodate the addition of a */
+/*     Check to see if the cell can accommodate the addition of a */
 /*     new item. If there is room, append the item to the cell and */
-/*     reset the cardinality. If the cell cannot accomodate the */
+/*     reset the cardinality. If the cell cannot accommodate the */
 /*     addition of a new item, signal an error. */
 
     nwcard = cardc_(cell, cell_len) + 1;
@@ -177,8 +196,8 @@
 	s_copy(cell + (nwcard + 5) * cell_len, item, cell_len, item_len);
 	scardc_(&nwcard, cell, cell_len);
     } else {
-	setmsg_("The cell cannot accomodate the addition of the item *.", (
-		ftnlen)54);
+	setmsg_("The cell cannot accommodate the addition of the item *.", (
+		ftnlen)55);
 	errch_("*", item, (ftnlen)1, item_len);
 	sigerr_("SPICE(CELLTOOSMALL)", (ftnlen)19);
     }

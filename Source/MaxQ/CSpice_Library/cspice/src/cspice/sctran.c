@@ -9,7 +9,7 @@
 
 static integer c__1 = 1;
 
-/* $Procedure  SCTRAN  ( SCLK name/ID code translation ) */
+/* $Procedure SCTRAN  ( SCLK name/ID code translation ) */
 /* Subroutine */ int sctran_0_(int n__, char *clknam, integer *clkid, logical 
 	*found, ftnlen clknam_len)
 {
@@ -77,7 +77,7 @@ static integer c__1 = 1;
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Entry */
+/*     VARIABLE  I/O  ENTRY POINTS */
 /*     --------  ---  -------------------------------------------------- */
 /*     CLKNAM    I-O  SCID2N, SCN2ID */
 /*     CLKID     I-O  SCID2N, SCN2ID */
@@ -94,19 +94,17 @@ static integer c__1 = 1;
 
 /* $ Parameters */
 
-/*     MAXLEN         is the maximum allowed length, in characters, of a */
-/*                    string containing the name of a spacecraft clock. */
+/*     MAXLEN   is the maximum allowed length, in characters, of a */
+/*              string containing the name of a spacecraft clock. */
 
 /* $ Exceptions */
 
-/*     1)  This is an umbrella subroutine that contains declarations */
-/*         for its entry points.  This routine should never be called */
-/*         directly.  If it is, the error SPICE(BOGUSENTRY) will be */
-/*         signaled. */
-
-
 /*     See the entry points for a discussion of exceptions specific to */
 /*     those routines. */
+
+/*     1)  This is an umbrella subroutine that contains declarations */
+/*         for its entry points. This routine should never be called */
+/*         directly. If it is, the error SPICE(BOGUSENTRY) is signaled. */
 
 /* $ Files */
 
@@ -120,7 +118,7 @@ static integer c__1 = 1;
 /*     required by user interface functions. */
 
 /*     The set of supported clocks is identical to the set of spacecraft */
-/*     supported by BODTRN.  The mapping may be extended by calling */
+/*     supported by BODTRN. The mapping may be extended by calling */
 /*     BODDEF. */
 
 /* $ Examples */
@@ -137,20 +135,25 @@ static integer c__1 = 1;
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
 
 /* $ Version */
 
+/* -    SPICELIB Version 1.2.1, 12-AUG-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
+
 /* -    SPICELIB Version 1.2.0, 29-OCT-2001 (NJB) */
 
-/*        Bug fix:  modified algorithm to handle case where string */
+/*        Bug fix: modified algorithm to handle case where string */
 /*        "SCLK" appears in SCLK name. */
 
 /* -    SPICELIB Version 1.1.0, 25-FEB-2000 (NJB) */
 
 /*        Updated to use BODTRN for SCLK name/code mapping. */
 
-/* -    Beta Version 1.0.0, 17-NOV-1995 (NJB) */
+/* -    SPICELIB Version 1.0.0, 17-NOV-1995 (NJB) */
 
 /* -& */
 /* $ Index_Entries */
@@ -160,9 +163,9 @@ static integer c__1 = 1;
 /* -& */
 /* $ Revisions */
 
-/* -    SPICELIB Version 1.2.0, 12-AUG-2001 (NJB) */
+/* -    SPICELIB Version 1.2.0, 29-OCT-2001 (NJB) */
 
-/*        Bug fix:  modified algorithm to handle case where string */
+/*        Bug fix: modified algorithm to handle case where string */
 /*        "SCLK" appears in SCLK name.  SCN2ID now uses POSR to locate */
 /*        the substring "SCLK" in the input string. */
 
@@ -189,7 +192,7 @@ static integer c__1 = 1;
     sigerr_("SPICE(BOGUSENTRY)", (ftnlen)17);
     chkout_("SCTRAN", (ftnlen)6);
     return 0;
-/* $Procedure  SCN2ID  ( SCLK name to ID code ) */
+/* $Procedure SCN2ID  ( SCLK name to ID code ) */
 
 L_scn2id:
 /* $ Abstract */
@@ -235,13 +238,15 @@ L_scn2id:
 
 /* $ Declarations */
 
+/*     IMPLICIT NONE */
+
 /*     CHARACTER*(*)         CLKNAM */
 /*     INTEGER               CLKID */
 /*     LOGICAL               FOUND */
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     CLKNAM     I   String giving spacecraft clock name. */
 /*     CLKID      O   NAIF integer code of spacecraft clock. */
@@ -249,30 +254,30 @@ L_scn2id:
 
 /* $ Detailed_Input */
 
-/*     CLKNAM         is a short string identifying the spacecraft */
-/*                    clock of interest.  The form of the string */
-/*                    is: */
+/*     CLKNAM   is a short string identifying the spacecraft */
+/*              clock of interest. The form of the string */
+/*              is: */
 
-/*                       <spacecraft name or acronym> SCLK */
+/*                 <spacecraft name or acronym> SCLK */
 
-/*                    for example */
+/*              for example */
 
-/*                       VGR1 SCLK */
-/*                       VOYAGER 1 SCLK */
-/*                       GLL SCLK */
-/*                       GALILEO ORBITER SCLK */
+/*                 VGR1 SCLK */
+/*                 VOYAGER 1 SCLK */
+/*                 GLL SCLK */
+/*                 GALILEO ORBITER SCLK */
 
-/*                    Case and white space (including embedded white */
-/*                    space) are not significant. */
+/*              Case and white space (including embedded white */
+/*              space) are not significant. */
 
 /* $ Detailed_Output */
 
-/*     CLKID         is the NAIF integer code associated with the */
-/*                   input clock.  CLKID is defined only if the */
-/*                   output flag FOUND is returned .TRUE. */
+/*     CLKID    is the NAIF integer code associated with the */
+/*              input clock. CLKID is defined only if the */
+/*              output flag FOUND is returned .TRUE. */
 
-/*     FOUND         is a logical flag indicating whether the input */
-/*                   string specified a clock known to this routine. */
+/*     FOUND    is a logical flag indicating whether the input */
+/*              string specified a clock known to this routine. */
 
 /* $ Parameters */
 
@@ -286,18 +291,18 @@ L_scn2id:
 /*         CLKID is not modified. */
 
 /*     2)  If the input name is recognized but does not refer to a */
-/*         spacecraft, no error is signaled.  For example, the string */
+/*         spacecraft, no error is signaled. For example, the string */
 /*         'JUPITER BARYCENTER SCLK' maps to the code 5. */
 
 /* $ Files */
 
-/*      None. */
+/*     None. */
 
 /* $ Particulars */
 
-/*      SCN2ID provides a means of mapping human-readable clock names */
-/*      to integer codes used by the SPICELIB SCLK routines to */
-/*      identify spacecraft clocks. */
+/*     SCN2ID provides a means of mapping human-readable clock names */
+/*     to integer codes used by the SPICELIB SCLK routines to */
+/*     identify spacecraft clocks. */
 
 /* $ Examples */
 
@@ -320,21 +325,25 @@ L_scn2id:
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
 
 /* $ Version */
 
+/* -    SPICELIB Version 1.2.1, 12-AUG-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
+
 /* -    SPICELIB Version 1.2.0, 12-AUG-2001 (NJB) */
 
-/*        Bug fix:  modified algorithm to handle case where string */
+/*        Bug fix: modified algorithm to handle case where string */
 /*        "SCLK" appears in SCLK name. */
 
 /* -    SPICELIB Version 1.1.0, 25-FEB-2000 (NJB) */
 
 /*        Updated to use BODTRN for SCLK name/code mapping. */
 
-/* -    Beta Version 1.0.0, 17-NOV-1995 (NJB) */
-
+/* -    SPICELIB Version 1.0.0, 17-NOV-1995 (NJB) */
 
 /* -& */
 /* $ Index_Entries */
@@ -344,9 +353,9 @@ L_scn2id:
 /* -& */
 /* $ Revisions */
 
-/* -    SPICELIB Version 1.2.0, 29-OCT-2001 (NJB) */
+/* -    SPICELIB Version 1.2.0, 12-AUG-2001 (NJB) */
 
-/*        Bug fix:  modified algorithm to handle case where string */
+/*        Bug fix: modified algorithm to handle case where string */
 /*        "SCLK" appears in SCLK name.  SCN2ID now uses POSR to locate */
 /*        the substring "SCLK" in the input string. */
 
@@ -366,7 +375,7 @@ L_scn2id:
     }
     bodn2c_(tmpnam, clkid, found, (ftnlen)32);
     return 0;
-/* $Procedure  SCID2N  ( SCLK ID code to name ) */
+/* $Procedure SCID2N  ( SCLK ID code to name ) */
 
 L_scid2n:
 /* $ Abstract */
@@ -413,13 +422,15 @@ L_scid2n:
 
 /* $ Declarations */
 
+/*     IMPLICIT NONE */
+
 /*     INTEGER               CLKID */
 /*     CHARACTER*(*)         CLKNAM */
 /*     LOGICAL               FOUND */
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     CLKID      I   NAIF integer code of spacecraft clock. */
 /*     CLKNAM     O   String giving spacecraft clock name. */
@@ -427,26 +438,26 @@ L_scid2n:
 
 /* $ Detailed_Input */
 
-/*     CLKID          is the NAIF integer code of a spacecraft clock of */
-/*                    interest. */
+/*     CLKID    is the NAIF integer code of a spacecraft clock of */
+/*              interest. */
 
 /* $ Detailed_Output */
 
-/*     CLKNAM         is a short, human-readable string identifying */
-/*                    the specified spacecraft clock.  The returned */
-/*                    string has the form */
+/*     CLKNAM   is a short, human-readable string identifying */
+/*              the specified spacecraft clock. The returned */
+/*              string has the form */
 
-/*                       <spacecraft name or acronym> SCLK */
+/*                 <spacecraft name or acronym> SCLK */
 
-/*                    where the spacecraft name is the same string */
-/*                    returned by BODC2N when CLKID is supplied as the */
-/*                    input code. */
+/*              where the spacecraft name is the same string */
+/*              returned by BODC2N when CLKID is supplied as the */
+/*              input code. */
 
-/*                    CLKNAM is defined only if the output flag FOUND is */
-/*                    returned .TRUE. */
+/*              CLKNAM is defined only if the output flag FOUND is */
+/*              returned .TRUE. */
 
-/*     FOUND          is a logical flag indicating whether the input */
-/*                    code specified a clock known to this routine. */
+/*     FOUND    is a logical flag indicating whether the input */
+/*              code specified a clock known to this routine. */
 
 /* $ Parameters */
 
@@ -460,7 +471,7 @@ L_scid2n:
 /*         CLKNAM is not modified. */
 
 /*     2)  If the input code is recognized but does not refer to a */
-/*         spacecraft, no error is signaled.  For example, the code */
+/*         spacecraft, no error is signaled. For example, the code */
 /*         5 maps to the string 'JUPITER BARYCENTER SCLK'. */
 
 /* $ Files */
@@ -470,7 +481,7 @@ L_scid2n:
 /* $ Particulars */
 
 /*     This routine converts a NAIF spacecraft clock code to a human- */
-/*     readable string.  This function is useful for constructing */
+/*     readable string. This function is useful for constructing */
 /*     messages. */
 
 /* $ Examples */
@@ -494,16 +505,20 @@ L_scid2n:
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
 
 /* $ Version */
 
-/* -    SPICELIB Version 1.1.0, 25-FEB-2000 (NJB) */
+/* -    SPICELIB Version 1.0.1, 12-AUG-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
+
+/* -    SPICELIB Version 1.0.0, 25-FEB-2000 (NJB) */
 
 /*        Updated to use BODTRN for SCLK name/code mapping. */
 
-/* -    Beta Version 1.0.0, 17-NOV-1995 (NJB) */
-
+/* -    SPICELIB Version 1.0.0, 17-NOV-1995 (NJB) */
 
 /* -& */
 /* $ Index_Entries */

@@ -124,20 +124,20 @@ static integer c__3 = 3;
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     XFRLUN     I   Logical unit of an open DAF transfer file. */
 /*     BINFIL     I   Name of a binary DAF file to be created. */
 
 /* $ Detailed_Input */
 
-/*     XFRLUN      The Fortran logical unit number of a previously opened */
-/*                 DAF transfer file has been. */
+/*     XFRLUN   is the Fortran logical unit number of a previously opened */
+/*              DAF transfer file has been. */
 
-/*                 The file pointer should be positioned ready to read */
-/*                 the file ID word. */
+/*              The file pointer should be positioned ready to read */
+/*              the file ID word. */
 
-/*     BINFIL      The name of the binary DAF file to be created. */
+/*     BINFIL   is the name of the binary DAF file to be created. */
 
 /* $ Detailed_Output */
 
@@ -147,30 +147,30 @@ static integer c__3 = 3;
 
 /*     None. */
 
+/* $ Exceptions */
+
+/*     1)  If the DAF transfer file cannot be read, the error */
+/*         SPICE(FILEREADFAILED) is signaled. */
+
+/*     2)  If the architecture of the file is not DAF, as specified by */
+/*         the ID word, the error SPICE(NOTADAFFILE) is signaled. */
+
+/*     3)  If an error occurs while attempting to decode data in the DAF */
+/*         transfer file, the error SPICE(BADDAFTRANSFERFILE) is */
+/*         signaled. */
+
+/*     4)  If the DAF file cannot be written, an error is signaled by a */
+/*         routine in the call tree of this routine. */
+
+/*     5)  The binary DAF file opened by this routine, BINFIL, is only */
+/*         GUARANTEED to be closed upon successful completion of the */
+/*         transfer file to binary file conversion process. In the event */
+/*         of an error, the caller of this routine is required to close */
+/*         the binary DAF file BINFIL. */
+
 /* $ Files */
 
 /*     See arguments XFRLUN, BINFIL. */
-
-/* $ Exceptions */
-
-/*     1)   If the DAF transfer file cannot be read, the error */
-/*          SPICE(FILEREADFAILED) will be signalled. */
-
-/*     2)   If the architecture of the file is not DAF, as specified by */
-/*          the ID word, the error SPICE(NOTADAFFILE) will be signalled. */
-
-/*     3)   If an error occurs while attempting to decode data in the */
-/*          DAF transfer file, the error SPICE(BADDAFTRANSFERFILE) will */
-/*          be signalled. */
-
-/*     4)   If the DAF file cannot be written, a DAF file access routine */
-/*          will signal an error with an appropriate error message. */
-
-/*     5)   The binary DAF file opened by this routine, BINFIL, is only */
-/*          GUARANTEED to be closed upon successful completion of the */
-/*          transfer file to binary file conversion process. In the event */
-/*          of an error, the caller of this routine is required to close */
-/*          the binary DAF file BINFIL. */
 
 /* $ Particulars */
 
@@ -219,8 +219,8 @@ static integer c__3 = 3;
 
 /* $ Restrictions */
 
-/*     1) This routine assumes that it is positioned ready to read the */
-/*        file ID word from the DAF transfer file. */
+/*     1)  This routine assumes that it is positioned ready to read the */
+/*         file ID word from the DAF transfer file. */
 
 /* $ Literature_References */
 
@@ -228,9 +228,17 @@ static integer c__3 = 3;
 
 /* $ Author_and_Institution */
 
-/*     K.R. Gehringer  (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 3.1.0, 13-AUG-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 3.0.1, 22-AUG-2001 (EDW) */
 
@@ -270,7 +278,7 @@ static integer c__3 = 3;
 /* -& */
 /* $ Index_Entries */
 
-/*     convert daf transfer file to binary */
+/*     convert DAF transfer file to binary */
 
 /* -& */
 /* $ Revisions */
@@ -315,8 +323,6 @@ static integer c__3 = 3;
 /*        low level routines which encode and write the data were */
 /*        modified to fix a problem. See the routines WRENCD and WRENCI */
 /*        for details of the modification. */
-
-/* -    SPICELIB Version 1.0.0, 29-OCT-1992 (KRG) */
 
 /* -& */
 
@@ -724,7 +730,7 @@ L100003:
 	    }
 
 /*           If we got to here, we have successfully processed the */
-/*           entir data portion of the DAF transfer file, so there is */
+/*           entire data portion of the DAF transfer file, so there is */
 /*           no more data. */
 
 	    more = FALSE_;

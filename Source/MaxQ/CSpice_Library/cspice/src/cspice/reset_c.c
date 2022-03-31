@@ -71,10 +71,12 @@
 
 -Exceptions
 
-   This routine does not detect any errors.
+   Error free.
 
-   However, this routine is part of the CSPICE error
-   handling mechanism.
+   1)  This routine does not detect any errors.
+
+       However, this routine is part of the CSPICE error
+       handling mechanism.
 
 -Files
 
@@ -99,18 +101,18 @@
 
    This routine should be called in cases where one wishes
    to attempt to continue processing after detection of an
-   error, and the "RETURN" error action is being used.  When
+   error, and the "RETURN" error action is being used. When
    the error response action is set to "RETURN", routines
    that have external references, or that can
    detect errors, return immediately upon entry when an
-   error condition exists.  This prevents a program from
+   error condition exists. This prevents a program from
    crashing, but does not allow for a recovery attempt.
 
    If one does wish to attempt to recover,
    in general the procedure is to test for an error
    condition, and if one exists, respond to the error
    (by outputting diagnostic messages, for example).  Next,
-   a call to reset_c can be made.  After resetting the
+   a call to reset_c can be made. After resetting the
    error status, the normal execution thread can be resumed.
 
    It is also appropriate to call this routine when the error
@@ -119,7 +121,7 @@
 
 -Examples
 
-   1.  In this example, we try to read a line from the file,
+   1. In this example, we try to read a line from the file,
        SPUD.DAT, using the toolkit routine, rdtext_c.
        When failed_c indicates an error, we grab the short
        error message and its explanation, using getmsg_c (see),
@@ -154,10 +156,10 @@
 
 -Restrictions
 
-   It can be dangerous to call this routine without
-   RESPONDING to the error condition first; by calling
-   reset_c, you are wiping out the CSPICE's knowledge of
-   the error.
+   1)  It can be dangerous to call this routine without
+       RESPONDING to the error condition first; by calling
+       reset_c, you are wiping out the CSPICE's knowledge of
+       the error.
 
 -Literature_References
 
@@ -165,16 +167,21 @@
 
 -Author_and_Institution
 
-   N.J. Bachman    (JPL)
-   K.R. Gehringer  (JPL)
+   J. Diaz del Rio     (ODC Space)
+   K.R. Gehringer      (JPL)
+   E.D. Wright         (JPL)
 
 -Version
 
+   -CSPICE Version 1.0.2, 02-JUN-2021 (JDR)
+
+       Edited the header to comply with NAIF standard.
+
    -CSPICE Version 1.0.1, 25-MAR-1998 (EDW)
 
-      Minor corrections to header.
+       Minor corrections to header.
 
-   -CSPICE Version 1.0.0, 08-FEB-1998 (EDW)
+   -CSPICE Version 1.0.0, 08-FEB-1998 (EDW) (KRG)
 
 -Index_Entries
 
@@ -183,13 +190,11 @@
 -&
 */
 
-
 { /* Begin rest_c */
 
    /*
    Call the f2c'd Fortran routine.
    */
-
    reset_();
 
 

@@ -38,8 +38,8 @@
 
 -Keywords
 
-   VECTOR
    DERIVATIVE
+   VECTOR
 
 */
 
@@ -62,21 +62,17 @@
 
 -Detailed_Input
 
-   s1      Any state vector.  The components are in order
-           (x, y, z, dx/dt, dy/dt, dz/dt )
+   s1          is any state vector. The components are in order
+               (x, y, z, dx/dt, dy/dt, dz/dt )
 
-   s2      Any state vector.
+   s2          is any state vector.
 
 -Detailed_Output
 
    The function returns the derivative of the dot product of the
-   position portions of the two state vectors s1 and s2.
+   position portions of the two state vectors `s1' and `s2'.
 
 -Parameters
-
-   None.
-
--Files
 
    None.
 
@@ -84,11 +80,15 @@
 
    Error free.
 
+-Files
+
+   None.
+
 -Particulars
 
-   Given two state vectors s1 and s2 made up of position and
+   Given two state vectors `s1' and `s2' made up of position and
    velocity components (p1,v1) and (p2,v2) respectively,
-   dvdot_c calculates the derivative of the dot product of p1 and p2,
+   dvdot_c calculates the derivative of the dot product of `p1' and `p2',
    i.e. the time derivative
 
          d
@@ -99,50 +99,111 @@
 
 -Examples
 
-   Suppose that given two state vectors (s1 and s2)whose position
-   components are unit vectors, and that we need to compute the
-   rate of change of the angle between the two vectors.
+   The numerical results shown for this example may differ across
+   platforms. The results depend on the SPICE kernels used as
+   input, the compiler and supporting libraries, and the machine
+   specific arithmetic implementation.
 
-   We know that the Cosine of the angle (theta) between the vectors is
-   given by
+   1) Suppose that given two state vectors whose position components
+      are unit vectors, and that we need to compute the rate of
+      change of the angle between the two vectors.
 
-      cosine(theta) = vdot_c(s1,s2)
+      Example code begins here.
 
-   Thus by the chain rule, the derivative of the angle is given
-   by:
 
-      sine(theta) dtheta/dt = dvdot_c(s1,s2)
+      /.
+         Program dvdot_ex1
+      ./
+      #include <math.h>
+      #include <stdio.h>
+      #include "SpiceUsr.h"
 
-   Thus for values of theta away from zero we can compute
+      int main( )
+      {
 
-   dtheta/dt as
+         /.
+         Local variables.
+         ./
+         SpiceDouble          dtheta;
 
-   dtheta = dvdot_c(s1,s2) / sqrt ( 1 - vdot_c(s1,s2)**2 )
+         /.
+         Define the two state vectors whose position
+         components are unit vectors.
+         ./
+         SpiceDouble          s1     [6] = {
+                                      7.2459e-01,  6.6274e-01,  1.8910e-01,
+                                     -1.5990e-06,  1.6551e-06,  7.4873e-07 };
 
-   Note if the position components of s1 and s2 are parallel, the
-   derivative of the  angle between the positions does not
-   exist.  Any code that computes the derivative of the angle
-   between two position vectors should account for the case
-   when the position components are parallel.
+         SpiceDouble          s2     [6] = {
+                                      8.4841e-01, -4.7790e-01, -2.2764e-01,
+                                      1.0951e-07,  1.0695e-07,  4.8468e-08 };
+
+         /.
+         We know that the Cosine of the angle `theta' between them
+         is given by
+
+            cos(theta) = vdot_c(s1,s2)
+
+         Thus by the chain rule, the derivative of the angle is
+         given by:
+
+            sin(theta) dtheta/dt = dvdot_c(s1,s2)
+
+         Thus for values of `theta' away from zero we can compute
+         dtheta/dt as:
+         ./
+         dtheta = dvdot_c(s1,s2) / sqrt( 1 - pow( vdot_c(s1,s2 ), 2 ) );
+
+         printf( "Rate of change of angle between S1 and S2: %17.12f\n",
+                                                                  dtheta );
+
+         return ( 0 );
+      }
+
+
+      When this program was executed on a Mac/Intel/cc/64-bit
+      platform, the output was:
+
+
+      Rate of change of angle between S1 and S2:   -0.000002232415
+
+
+      Note that if the position components of `s1' and `s2' are parallel,
+      the derivative of the  angle between the positions does not
+      exist. Any code that computes the derivative of the angle
+      between two position vectors should account for the case
+      when the position components are parallel.
 
 -Restrictions
 
-   The user is responsible for determining that the states s1 and
-   s2 are not so large as to cause numeric overflow.  In most cases
-   this won't present a problem.
+   1)  The user is responsible for determining that the states `s1' and
+       `s2' are not so large as to cause numeric overflow. In most
+       cases this won't present a problem.
 
--Author_and_Institution
-
-   W.L. Taber      (JPL)
-   E.D. Wright     (JPL)
+   2)  An implicit assumption exists that `s1' and `s2' are specified in
+       the same reference frame. If this is not the case, the
+       numerical result has no meaning.
 
 -Literature_References
 
    None.
 
+-Author_and_Institution
+
+   J. Diaz del Rio     (ODC Space)
+   W.L. Taber          (JPL)
+   E.D. Wright         (JPL)
+
 -Version
 
-   -CSPICE Version 1.0.0, 7-JUL-1999
+   -CSPICE Version 1.0.1, 26-MAY-2021 (JDR)
+
+       Edited the header to comply with NAIF standard. Added complete
+       code examples. Added entry #2 to -Restrictions section.
+
+       Re-ordered header sections.
+
+   -CSPICE Version 1.0.0, 07-JUL-1999 (EDW) (WLT)
 
 -Index_Entries
 

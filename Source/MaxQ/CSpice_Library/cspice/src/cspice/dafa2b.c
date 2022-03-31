@@ -26,8 +26,8 @@
 
 /* $ Abstract */
 
-/*     Deprecated. The routine DAFTB supersedes this routine. */
-/*     NAIF supports this routine only to provide backward */
+/*     Deprecated: This routine has been superseded by the SPICELIB */
+/*     routine DAFTB. NAIF supports this routine only to provide backward */
 /*     compatibility. */
 
 /*     Convert an ASCII (text) DAF to an equivalent binary DAF. */
@@ -68,7 +68,7 @@
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     ASCII      I   Name of an existing ASCII (text) DAF. */
 /*     BINARY     I   Name of a binary DAF to be created. */
@@ -76,15 +76,15 @@
 
 /* $ Detailed_Input */
 
-/*     ASCII       is the name of an existing ASCII (text) DAF. */
+/*     ASCII    is the name of an existing ASCII (text) DAF. */
 
-/*     BINARY      is the name of the binary DAF to be created. */
-/*                 The binary DAF contains the same data as the */
-/*                 ASCII DAF, but in a form more suitable for use */
-/*                 by application programs. */
+/*     BINARY   is the name of the binary DAF to be created. */
+/*              The binary DAF contains the same data as the */
+/*              ASCII DAF, but in a form more suitable for use */
+/*              by application programs. */
 
-/*     RESV        is the number of records to be reserved in the */
-/*                 binary DAF. */
+/*     RESV     is the number of records to be reserved in the */
+/*              binary DAF. */
 
 /* $ Detailed_Output */
 
@@ -96,10 +96,13 @@
 
 /* $ Exceptions */
 
-/*     None. */
+/*     1)  If an error occurs while converting the input ASCII text DAF */
+/*         file to binary format, the error is signaled by a routine in */
+/*         the call tree of this routine. */
 
-/*     Errors are detected and signalled by routines called by this */
-/*     routine. */
+/*     2)  If an error occurs while writing data to the output binary DAF */
+/*         file, the error is signaled by a routine in the call tree of */
+/*         this routine. */
 
 /* $ Files */
 
@@ -147,27 +150,39 @@
 
 /* $ Restrictions */
 
-/*     DAFA2B cannot be executed while any other DAF is open */
-/*     for writing. */
+/*     1)  DAFA2B cannot be executed while any other DAF is open */
+/*         for writing. */
 
 /* $ Literature_References */
 
-/*     NAIF Document 167.0, "Double Precision Array Files (DAF) */
-/*     Specification and User's Guide" */
+/*     None. */
 
 /* $ Author_and_Institution */
 
-/*     K.R. Gehringer  (JPL) */
-/*     I.M. Underwood  (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
+/*     H.A. Neilan        (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
 
+/* -    SPICELIB Version 2.1.0, 26-OCT-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. Updated */
+/*        $Exceptions section to better describe the issues detected by */
+/*        this routine. Moved DAF required reading from */
+/*        $Literature_References to $Required_Reading section. */
+
 /* -    SPICELIB Version 2.0.1, 26-JUL-2012 (EDW) */
 
-/*        Edited Abstract section to use "Deprecated" keyword */
+/*        Edited $Abstract section to use "Deprecated" keyword */
 /*        and state replacement routine. */
 
-/*        Eliminated unneeded Revisions section. */
+/*        Eliminated unneeded $Revisions section. */
 
 /* -    SPICELIB Version 2.0.0, 30-SEP-1993 (KRG) */
 
@@ -176,12 +191,12 @@
 /*        binary and opening a text file. It now simply calls the */
 /*        routine DAFT2B after opening the text file. */
 
-/*        Added a statement to the $ Particulars section to the effect */
+/*        Added a statement to the $Particulars section to the effect */
 /*        that this routine has been made obsolete by the introduction of */
 /*        the routine DAFTB, and that the use of the new routine is */
 /*        strongly recommended for new software development. */
 
-/*        Modified the $ Abstract section to reflect the fact that this */
+/*        Modified the $Abstract section to reflect the fact that this */
 /*        routine is obsolete. */
 
 /* -    SPICELIB Version 1.0.2, 10-MAR-1992 (WLT) */
@@ -198,7 +213,7 @@
 /* -& */
 /* $ Index_Entries */
 
-/*     ascii daf to binary */
+/*     DEPRECATED ascii DAF to binary */
 
 /* -& */
 

@@ -48,14 +48,14 @@
 
 /* $ Keywords */
 
-/*     MATH */
 /*     GEOMETRY */
+/*     MATH */
 /*     TOPOGRAPHY */
 
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     IVERTS     I   Vertices of the plate to be expanded. */
 /*     DELTA      I   Fraction by which the plate is to be expanded. */
@@ -63,48 +63,47 @@
 
 /* $ Detailed_Input */
 
-/*     IVERTS     is an array containing three vertices of a triangular */
-/*                plate. Each vertex is a three-dimensional vector. The */
-/*                elements */
+/*     IVERTS   is an array containing three vertices of a triangular */
+/*              plate. Each vertex is a three-dimensional vector. The */
+/*              elements */
 
-/*                   IVERTS(J,I), J = 1, 3 */
+/*                 IVERTS(J,I), J = 1, 3 */
 
-/*                are, respectively, the X, Y, and Z components of the */
-/*                Ith vertex. */
+/*              are, respectively, the X, Y, and Z components of the */
+/*              Ith vertex. */
 
 
-/*     DELTA      is a fraction by which the plate is to be scaled. */
-/*                Scaling is done so that the scaled plate has the */
-/*                following properties: */
+/*     DELTA    is a fraction by which the plate is to be scaled. */
+/*              Scaling is done so that the scaled plate has the */
+/*              following properties: */
 
-/*                   -  it is co-planar with the input plate */
+/*                 -  it is co-planar with the input plate */
 
-/*                   -  its centroid coincides with that of the input */
-/*                      plate */
+/*                 -  its centroid coincides with that of the input */
+/*                    plate */
 
-/*                   -  its sides remain parallel to the corresponding */
-/*                      sides of the input plate */
+/*                 -  its sides remain parallel to the corresponding */
+/*                    sides of the input plate */
 
-/*                   -  the distance of each vertex from the centroid is */
-/*                      (1+DELTA) times the corresponding distance for */
-/*                      the input plate */
+/*                 -  the distance of each vertex from the centroid is */
+/*                    (1+DELTA) times the corresponding distance for */
+/*                    the input plate */
 
 /* $ Detailed_Output */
 
-/*     OVERTS     is an array containing three vertices of the triangular */
-/*                plate resulting from scaling the input plate. */
+/*     OVERTS   is an array containing three vertices of the triangular */
+/*              plate resulting from scaling the input plate. */
 
-/*                If CTROID is the centroid (the average of the vertices) */
-/*                of the input plate, then the Ith vertex of OVERTS */
+/*              If CTROID is the centroid (the average of the vertices) */
+/*              of the input plate, then the Ith vertex of OVERTS */
 
-/*                   OVERTS(J,I), J = 1, 3 */
+/*                 OVERTS(J,I), J = 1, 3 */
 
-/*                is equal to */
+/*              is equal to */
 
-/*                   CTROID(J) + (1+DELTA)*( IVERTS(J,I) - CTROID(J) ), */
+/*                 CTROID(J) + (1+DELTA)*( IVERTS(J,I) - CTROID(J) ), */
 
-/*                   J = 1, 3 */
-
+/*                 J = 1, 3 */
 
 /* $ Parameters */
 
@@ -128,7 +127,7 @@
 
 /* $ Examples */
 
-/*     The numerical results shown for these examples may differ across */
+/*     The numerical results shown for this example may differ across */
 /*     platforms. The results depend on the SPICE kernels used as input */
 /*     (if any), the compiler and supporting libraries, and the machine */
 /*     specific arithmetic implementation. */
@@ -143,7 +142,7 @@
 /*        Example code begins here. */
 
 
-/*              PROGRAM EX1 */
+/*              PROGRAM PLTEXP_EX1 */
 /*              IMPLICIT NONE */
 
 /*              DOUBLE PRECISION      DELTA */
@@ -166,44 +165,43 @@
 /*              WRITE (*,*) ' ' */
 /*              WRITE (*,*) 'Vertices of input plate: ' */
 
-/*              WRITE (*, '(1X,A,3(3E20.12))' ) ' I1 = ', */
+/*              WRITE (*, '(1X,A,3E18.10)' ) ' I1 = ', */
 /*             .          (IVERTS(I,1), I = 1, 3) */
-/*              WRITE (*, '(1X,A,3(3E20.12))' ) ' I2 = ', */
+/*              WRITE (*, '(1X,A,3E18.10)' ) ' I2 = ', */
 /*             .          (IVERTS(I,2), I = 1, 3) */
-/*              WRITE (*, '(1X,A,3(3E20.12))' ) ' I3 = ', */
+/*              WRITE (*, '(1X,A,3E18.10)' ) ' I3 = ', */
 /*             .          (IVERTS(I,3), I = 1, 3) */
 
 /*              WRITE (*,*) ' ' */
 /*              WRITE (*,*) 'Vertices of output plate: ' */
 
-/*              WRITE (*, '(1X,A,3(3E20.12))' ) ' O1 = ', */
+/*              WRITE (*, '(1X,A,3E18.10)' ) ' O1 = ', */
 /*             .          (OVERTS(I,1), I = 1, 3) */
-/*              WRITE (*, '(1X,A,3(3E20.12))' ) ' O2 = ', */
+/*              WRITE (*, '(1X,A,3E18.10)' ) ' O2 = ', */
 /*             .          (OVERTS(I,2), I = 1, 3) */
-/*              WRITE (*, '(1X,A,3(3E20.12))' ) ' O3 = ', */
+/*              WRITE (*, '(1X,A,3E18.10)' ) ' O3 = ', */
 /*             .          (OVERTS(I,3), I = 1, 3) */
 /*              WRITE (*,*) ' ' */
 /*              END */
 
 
-/*     When this program was executed on a PC/Linux/gfortran/64-bit */
-/*     platform, the output was: */
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
 
 
-/*     Vertices of input plate: */
-/*      I1 =   0.866025403784E+00 -0.500000000000E+00  0.700000000000E+01 */
-/*      I2 =   0.000000000000E+00  0.100000000000E+01  0.700000000000E+01 */
-/*      I3 =  -0.866025403784E+00 -0.500000000000E+00  0.700000000000E+01 */
+/*         Vertices of input plate: */
+/*          I1 =   0.8660254038E+00 -0.5000000000E+00  0.7000000000E+01 */
+/*          I2 =   0.0000000000E+00  0.1000000000E+01  0.7000000000E+01 */
+/*          I3 =  -0.8660254038E+00 -0.5000000000E+00  0.7000000000E+01 */
 
-/*     Vertices of output plate: */
-/*      O1 =   0.173205080757E+01 -0.100000000000E+01  0.700000000000E+01 */
-/*      O2 =   0.000000000000E+00  0.200000000000E+01  0.700000000000E+01 */
-/*      O3 =  -0.173205080757E+01 -0.100000000000E+01  0.700000000000E+01 */
+/*         Vertices of output plate: */
+/*          O1 =   0.1732050808E+01 -0.1000000000E+01  0.7000000000E+01 */
+/*          O2 =   0.0000000000E+00  0.2000000000E+01  0.7000000000E+01 */
+/*          O3 =  -0.1732050808E+01 -0.1000000000E+01  0.7000000000E+01 */
 
 
-/*     Note that the height of the plate is unchanged, but the vectors */
-/*     from the centroid to the vertices have doubled in length. */
-
+/*        Note that the height of the plate is unchanged, but the vectors */
+/*        from the centroid to the vertices have doubled in length. */
 
 /* $ Restrictions */
 
@@ -215,9 +213,17 @@
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.0.1, 08-JUL-2020 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
+
+/*        Edits to code example output format for the solution to fit */
+/*        within the $Examples section without modifications. */
 
 /* -    SPICELIB Version 1.0.0, 29-FEB-2016 (NJB) */
 

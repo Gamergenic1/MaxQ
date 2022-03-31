@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      LNKINI ( LNK, initialize ) */
+/* $Procedure LNKINI ( LNK, initialize ) */
 /* Subroutine */ int lnkini_(integer *size, integer *pool)
 {
     /* System generated locals */
@@ -48,7 +48,7 @@
 
 /* $ Required_Reading */
 
-/*     LNK */
+/*     None. */
 
 /* $ Keywords */
 
@@ -57,7 +57,7 @@
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     SIZE       I   Number of nodes in the pool. */
 /*     POOL      I-O  An array that is a linked pool on output. */
@@ -65,35 +65,35 @@
 
 /* $ Detailed_Input */
 
-/*     SIZE           is the number of nodes in the pool. */
+/*     SIZE     is the number of nodes in the pool. */
 
-/*     POOL           is an integer array that will contain the linked */
-/*                    pool on output. */
+/*     POOL     is an integer array that will contain the linked */
+/*              pool on output. */
 
 /* $ Detailed_Output */
 
-/*     POOL           is an initialized doubly linked list pool. */
-/*                    The status of the pool is as follows: */
+/*     POOL     is an initialized doubly linked list pool. */
+/*              The status of the pool is as follows: */
 
-/*                      --  All nodes in the pool are on the free list. */
+/*                --  All nodes in the pool are on the free list. */
 
-/*                      --  The free pointer indicates the first node. */
+/*                --  The free pointer indicates the first node. */
 
-/*                      --  The total node count is set to the input */
-/*                          value, SIZE. */
+/*                --  The total node count is set to the input */
+/*                    value, SIZE. */
 
-/*                      --  The free node count is the input value, SIZE. */
+/*                --  The free node count is the input value, SIZE. */
 
 /* $ Parameters */
 
-/*     LBPOOL        is the lower bound of the column indices of the POOL */
-/*                   array.  The columns indexed LBPOOL to 0 are reserved */
-/*                   as a control area for the pool. */
+/*     LBPOOL   is the lower bound of the column indices of the POOL */
+/*              array. The columns indexed LBPOOL to 0 are reserved */
+/*              as a control area for the pool. */
 
 /* $ Exceptions */
 
 /*     1)  If the requested number of nodes is nonpositive, the error */
-/*         SPICE(INVALIDCOUNT) is signalled. */
+/*         SPICE(INVALIDCOUNT) is signaled. */
 
 /* $ Files */
 
@@ -102,7 +102,7 @@
 /* $ Particulars */
 
 /*     LNKINI must be called once to initialize a doubly linked list */
-/*     pool before the pool is used.  LNKINI can be called at any time */
+/*     pool before the pool is used. LNKINI can be called at any time */
 /*     to re-initialize a doubly linked list pool. */
 
 /*     The functions */
@@ -116,7 +116,7 @@
 /* $ Examples */
 
 /*     1)  Let POOL be a doubly linked list pool with a maximum of */
-/*         100 nodes.  POOL should be declared as follows: */
+/*         100 nodes. POOL should be declared as follows: */
 
 /*            INTEGER               LBPOOL */
 /*            PARAMETER           ( LBPOOL = -5 ) */
@@ -131,7 +131,6 @@
 
 /*            CALL LNKINI ( PLSIZE, POOL ) */
 
-
 /* $ Restrictions */
 
 /*     None. */
@@ -142,10 +141,15 @@
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
-/*     W.L. Taber     (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.0.1, 24-NOV-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.0.0, 19-DEC-1995 (NJB) (WLT) */
 

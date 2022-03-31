@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      ERRFNM ( Insert filename into long error message text ) */
+/* $Procedure ERRFNM ( Insert filename into long error message text ) */
 /* Subroutine */ int errfnm_(char *marker, integer *unit, ftnlen marker_len)
 {
     /* System generated locals */
@@ -64,7 +64,7 @@
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     MARKER     I   A substring in the error message that is to be */
 /*                    replaced. */
@@ -73,15 +73,15 @@
 
 /* $ Detailed_Input */
 
-/*     MARKER     is a character string which marks a position in */
-/*                the long error message where a character string */
-/*                is to be substituted.  Leading and trailing blanks */
-/*                in MARKER are not significant. */
+/*     MARKER   is a character string which marks a position in */
+/*              the long error message where a character string */
+/*              is to be substituted. Leading and trailing blanks */
+/*              in MARKER are not significant. */
 
-/*                Case IS significant;  'XX' is considered to be */
-/*                a different marker from 'xx'. */
+/*              Case IS significant;  'XX' is considered to be */
+/*              a different marker from 'xx'. */
 
-/*     UNIT       is the logical unit number attached to a file. */
+/*     UNIT     is the logical unit number attached to a file. */
 
 /* $ Detailed_Output */
 
@@ -89,22 +89,22 @@
 
 /* $ Parameters */
 
-/*     FILEN      is the maximum file name length that can be */
-/*                accommodated by this routine. */
+/*     FILEN    is the maximum file name length that can be */
+/*              accommodated by this routine. */
 
 /* $ Exceptions */
 
 /*     Error free. */
 
-/*     1) If the logical unit number is not attached to a file, the */
-/*        string inserted into the long error message is: */
+/*     1)  If the logical unit number is not attached to a file, the */
+/*         string inserted into the long error message is: */
 
-/*        '<unavailable from the system>' */
+/*         '<unavailable from the system>' */
 
-/*     2) If the FORTRAN INQUIRE statement fails to execute properly, */
-/*        the string inserted into the long error message is: */
+/*     2)  If the FORTRAN INQUIRE statement fails to execute properly, */
+/*         the string inserted into the long error message is: */
 
-/*        '<unavailable from the system>' */
+/*         '<unavailable from the system>' */
 
 /* $ Files */
 
@@ -194,7 +194,7 @@
 
 /* $ Restrictions */
 
-/*     The filename length is restricted by the parameter FILEN. */
+/*     1)  The filename length is restricted by the parameter FILEN. */
 
 /* $ Literature_References */
 
@@ -202,9 +202,17 @@
 
 /* $ Author_and_Institution */
 
-/*     H.A. Neilan    (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     H.A. Neilan        (JPL) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 02-JUN-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
 

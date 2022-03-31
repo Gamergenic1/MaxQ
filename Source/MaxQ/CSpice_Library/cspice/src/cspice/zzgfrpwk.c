@@ -15,7 +15,7 @@ static doublereal c_b20 = 100.;
 
 /* $Procedure    ZZGFRPWK ( Geometry finder report work done on a task ) */
 /* Subroutine */ int zzgfrpwk_0_(int n__, integer *unit, doublereal *total, 
-	doublereal *freq, integer *tcheck, char *begin, char *end, doublereal 
+	doublereal *wait, integer *tcheck, char *begin, char *end, doublereal 
 	*incr, ftnlen begin_len, ftnlen end_len)
 {
     /* Initialized data */
@@ -246,7 +246,7 @@ static doublereal c_b20 = 100.;
 /*     --------  ---  -------------------------------------------------- */
 /*     UNIT      I-O  ZZGFWKUN, ZZGFWKMO */
 /*     TOTAL     I-O  ZZGFTSWK, ZZGFWKAD, ZZGFWKMO */
-/*     FREQ      I-O  ZZGFTSWK, ZZGFWKAD, ZZGFWKMO */
+/*     WAIT      I-O  ZZGFTSWK, ZZGFWKAD, ZZGFWKMO */
 /*     TCHECK    I-O  ZZGFTSWK, ZZGFWKAD, ZZGFWKMO */
 /*     BEGIN     I-O  ZZGFTSWK, ZZGFWKAD, ZZGFWKMO */
 /*     END       I-O  ZZGFTSWK, ZZGFWKAD, ZZGFWKMO */
@@ -340,11 +340,11 @@ static doublereal c_b20 = 100.;
 /*     C     3 seconds. (The third argument in ZZGFTSWK is explained */
 /*     C     in the header for ZZGFTSWK.) */
 /*     C */
-/*           FREQUENCY = 3.0D0 */
-/*           BEGIN     = 'Current work status: ' */
-/*           END       = 'completed. ' */
+/*           WAIT   = 3.0D0 */
+/*           BEGIN  = 'Current work status: ' */
+/*           END    = 'completed. ' */
 
-/*           CALL ZZGFTSWK ( TOTAL, FREQUENCY, 1, BEGIN, END ) */
+/*           CALL ZZGFTSWK ( TOTAL, WAIT, 1, BEGIN, END ) */
 
 /*           DO WHILE ( THERE_IS_MORE_WORK_TO_DO ) */
 
@@ -379,6 +379,12 @@ static doublereal c_b20 = 100.;
 /*     I.M. Underwood (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0 05-NOV-2021 (NJB) */
+
+/*        Changed name of argument FREQ to WAIT. Updated entry points */
+/*        affected by this change. Deleted description of argument */
+/*        UNIT from header of entry point ZZGFTSWK. */
 
 /* -    SPICELIB Version 1.0.0 17-FEB-2009 (NJB) (LSE) (WLT) (IMU) */
 
@@ -458,7 +464,7 @@ L_zzgftswk:
 /* $ Declarations */
 
 /*     DOUBLE PRECISION      TOTAL */
-/*     DOUBLE PRECISION      FREQ */
+/*     DOUBLE PRECISION      WAIT */
 /*     INTEGER               TCHECK */
 /*     CHARACTER*(*)         BEGIN */
 /*     CHARACTER*(*)         END */
@@ -468,52 +474,52 @@ L_zzgftswk:
 /*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     TOTAL      I   A measure of the total amount of work to be done. */
-/*     FREQ       I   How often the work progress should be reported. */
+/*     WAIT       I   Minimum wait time between reports. */
 /*     TCHECK     I   How often to sample the system clock. */
 /*     BEGIN      I   First part of the output message. */
 /*     END        I   Last part of the output message. */
 
 /* $ Detailed_Input */
 
-/*     UNIT       is a logical unit connected to the output stream */
-/*                to which the progress report should be sent. */
-/*                Normally UNIT is set to the standard output unit, */
-/*                which can be obtained by calling the SPICELIB */
-/*                routine STDIO. Unit can be a logical unit connected */
-/*                to a file; this feature supports testing. */
-
 /*     TOTAL      is a measure of the total amount of work to be done */
 /*                by the routine(s) that will be using this facility. */
 /*                It is expected (but not required) that TOTAL is a */
 /*                positive number. */
 
-/*     FREQ       is the how often the work progress should be reported */
-/*                in seconds.  If FREQ = 5 then a work progress report */
-/*                will be sent to the output device approximately every */
-/*                5 seconds.  Since writing to the output device takes */
-/*                time, the smaller FREQ is set, the greater the overhead */
-/*                taken up by the work reporter will be. ( A value of 2 */
+/*     WAIT       is the minimum duration between reports in seconds. If */
+/*                WAIT = 5 then a work progress report will be sent to */
+/*                the output device no more frequently than every 5 */
+/*                seconds.  Since writing to the output device takes */
+/*                time, the smaller WAIT is, the greater the overhead */
+/*                taken up by the work reporter will be. (A value of 2 */
 /*                or greater should not burden your application */
-/*                appreciably ) */
+/*                appreciably.) */
+
+/*                Regardless of the value of WAIT, the number of calls */
+/*                to ZZGFWKIN between reports will not be less than that */
+/*                specified by the argument TCHECK. See the description */
+/*                below. */
 
 /*     TCHECK     is an integer used to the tell the reporter how often */
-/*                to sample the system clock.  If TCHECK = 7, then on */
-/*                every seventh call to ZZGFWKIN, the system clock will */
-/*                be sampled to determine if FREQ seconds have elapsed */
-/*                since the last report time.  Sampling the system clock */
-/*                takes time. Not a lot of time, but it does take time. */
-/*                If ZZGFWKIN is being called from a loop that does not */
-/*                take a lot of time for each pass, the sampling of */
-/*                the system clock can become a significant overhead */
-/*                cost in itself.  On the VAX the sampling of the */
-/*                system clock used here takes about 37 double precision */
-/*                multiplies.  If thousands of multiplies take place */
-/*                between calls to ZZGFWKIN, the sampling time is */
-/*                insignificant.  On the other hand, if only a hundred or */
-/*                so multiplies occur between calls to ZZGFWKIN, the */
-/*                sampling of the system clock can become a significant */
-/*                fraction of your overhead.  TCHECK allows you to */
-/*                tailor the work reporter to your application. */
+/*                to sample the system clock; TCHECK specifies the */
+/*                number of calls to ZZGFWKIN between system clock */
+/*                samples. If TCHECK = 7, then on every seventh call to */
+/*                ZZGFWKIN, the system clock will be sampled to */
+/*                determine if WAIT seconds have elapsed since the last */
+/*                report time.  Sampling the system clock takes time. */
+/*                Not a lot of time, but it does take time. If ZZGFWKIN */
+/*                is being called from a loop that does not take a lot */
+/*                of time for each pass, the sampling of the system */
+/*                clock can become a significant overhead cost in */
+/*                itself.  On the VAX the sampling of the system clock */
+/*                used here takes about 37 double precision multiplies. */
+/*                If thousands of multiplies take place between calls to */
+/*                ZZGFWKIN, the sampling time is insignificant.  On the */
+/*                other hand, if only a hundred or so multiplies occur */
+/*                between calls to ZZGFWKIN, the sampling of the system */
+/*                clock can become a significant fraction of your */
+/*                overhead.  TCHECK allows you to tailor the work */
+/*                reporter to your application. */
 
 /*                If a non-positive value for TCHECK is entered, a value */
 /*                of 1 will be used instead of the input value. */
@@ -573,6 +579,12 @@ L_zzgftswk:
 
 /* $ Version */
 
+/* -    SPICELIB Version 1.1.0 05-NOV-2021 (NJB) */
+
+/*        Changed name of argument FREQ to WAIT. Updated header to */
+/*        clarify roles of WAIT and TCHECK. Deleted description of */
+/*        UNIT from $Detailed_Input header section. */
+
 /* -    SPICELIB Version 1.0.0 17-FEB-2009 (NJB) (LSE) (WLT) (IMU) */
 
 /* -& */
@@ -603,7 +615,7 @@ L_zzgftswk:
 
     entire = *total;
 /* Computing MIN */
-    d__1 = 3600., d__2 = max(0.,*freq);
+    d__1 = 3600., d__2 = max(0.,*wait);
     step = min(d__1,d__2);
     check = max(1,*tcheck);
     s_copy(start, begin, (ftnlen)55, begin_len);
@@ -843,7 +855,7 @@ L_zzgfwkad:
 
 /* $ Declarations */
 
-/*     DOUBLE PRECISION      FREQ */
+/*     DOUBLE PRECISION      WAIT */
 /*     INTEGER               TCHECK */
 /*     CHARACTER*(*)         BEGIN */
 /*     CHARACTER*(*)         END */
@@ -853,39 +865,46 @@ L_zzgfwkad:
 /*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     TOTAL      I   A measure of the total amount of work to be done. */
-/*     FREQ       I   How often the work progress should be reported. */
+/*     WAIT       I   Minimum wait time between reports. */
 /*     BEGIN      I   First part of the output message. */
 /*     END        I   Last part of the output message. */
 
 /* $ Detailed_Input */
 
-/*     FREQ       is the how often the work progress should be reported */
-/*                in seconds.  If FREQ = 5 then a work progress report */
-/*                will be sent to the output device approximately every */
-/*                5 seconds.  Since writing to the output device takes */
-/*                time, the smaller FREQ is set, the greater the overhead */
-/*                taken up by the work reporter will be. ( A value of 2 */
+/*     WAIT       is the minimum duration between reports in seconds. If */
+/*                WAIT = 5 then a work progress report will be sent to */
+/*                the output device no more frequently than every 5 */
+/*                seconds.  Since writing to the output device takes */
+/*                time, the smaller WAIT is, the greater the overhead */
+/*                taken up by the work reporter will be. (A value of 2 */
 /*                or greater should not burden your application */
-/*                appreciably ) */
+/*                appreciably.) */
+
+/*                Regardless of the value of WAIT, the number of calls */
+/*                to ZZGFWKIN between reports will not be less than that */
+/*                specified by the argument TCHECK. See the description */
+/*                below. */
 
 /*     TCHECK     is an integer used to the tell the reporter how often */
-/*                to sample the system clock.  If TCHECK = 7, then on */
-/*                every seventh call to ZZGFWKIN, the system clock will */
-/*                be sampled to determine if FREQ seconds have elapsed */
-/*                since the last report time.  Sampling the system clock */
-/*                takes time. Not a lot of time, but it does take time. */
-/*                If ZZGFWKIN is being called from a loop that does not */
-/*                take a lot of time for each pass, the sampling of */
-/*                the system clock can become a significant overhead */
-/*                cost in itself.  On the VAX the sampling of the */
-/*                system clock used here takes about 37 double precision */
-/*                multiplies.  If thousands of multiplies take place */
-/*                between calls to ZZGFWKIN, the sampling time is */
-/*                insignificant.  On the other hand, if only a hundred or */
-/*                so multiplies occur between calls to ZZGFWKIN, the */
-/*                sampling of the system clock can become a significant */
-/*                fraction of your overhead.  TCHECK allows you to */
-/*                tailor the work reporter to your application. */
+/*                to sample the system clock; TCHECK specifies the */
+/*                number of calls to ZZGFWKIN between system clock */
+/*                samples. If TCHECK = 7, then on every seventh call to */
+/*                ZZGFWKIN, the system clock will be sampled to */
+/*                determine if WAIT seconds have elapsed since the last */
+/*                report time.  Sampling the system clock takes time. */
+/*                Not a lot of time, but it does take time. If ZZGFWKIN */
+/*                is being called from a loop that does not take a lot */
+/*                of time for each pass, the sampling of the system */
+/*                clock can become a significant overhead cost in */
+/*                itself.  On the VAX the sampling of the system clock */
+/*                used here takes about 37 double precision multiplies. */
+/*                If thousands of multiplies take place between calls to */
+/*                ZZGFWKIN, the sampling time is insignificant.  On the */
+/*                other hand, if only a hundred or so multiplies occur */
+/*                between calls to ZZGFWKIN, the sampling of the system */
+/*                clock can become a significant fraction of your */
+/*                overhead.  TCHECK allows you to tailor the work */
+/*                reporter to your application. */
 
 /*                If a non-positive value for TCHECK is entered, a value */
 /*                of 1 will be used instead of the input value. */
@@ -918,8 +937,8 @@ L_zzgfwkad:
 
 /*     1) If TCHECK is less than 1, the value 1 is stored. */
 
-/*     2) If FREQ is less than 0.1, the value 0.1 is stored. */
-/*        If FREQ is greater than 3600, the value 3600 is stored. */
+/*     2) If WAIT is less than 0.D0, the value 0.D0 is stored. */
+/*        If WAIT is greater than 3600, the value 3600 is stored. */
 
 /* $ Files */
 
@@ -957,6 +976,13 @@ L_zzgfwkad:
 
 /* $ Version */
 
+/* -    SPICELIB Version 1.1.0 21-FEB-2021 (NJB) */
+
+/*        Changed name of argument FREQ to WAIT. Updated header to */
+/*        clarify roles of WAIT and TCHECK. Corrected Exceptions */
+/*        section's description of handling of WAIT values less than */
+/*        zero. */
+
 /* -    SPICELIB Version 1.0.0 17-FEB-2009 (NJB) (LSE) (WLT) (IMU) */
 
 /* -& */
@@ -966,7 +992,7 @@ L_zzgfwkad:
 
 /* -& */
 /* Computing MIN */
-    d__1 = 3600., d__2 = max(0.,*freq);
+    d__1 = 3600., d__2 = max(0.,*wait);
     step = min(d__1,d__2);
     check = max(1,*tcheck);
     s_copy(start, begin, (ftnlen)55, begin_len);
@@ -1142,7 +1168,7 @@ L_zzgfwkmo:
 
 /*     INTEGER               UNIT */
 /*     DOUBLE PRECISION      TOTAL */
-/*     DOUBLE PRECISION      FREQ */
+/*     DOUBLE PRECISION      WAIT */
 /*     INTEGER               TCHECK */
 /*     CHARACTER*(*)         BEGIN */
 /*     CHARACTER*(*)         END */
@@ -1154,7 +1180,7 @@ L_zzgfwkmo:
 /*     --------  ---  -------------------------------------------------- */
 /*     UNIT       O   Output logical unit. */
 /*     TOTAL      O   A measure of the total amount of work to be done. */
-/*     FREQ       O   How often the work progress should be reported. */
+/*     WAIT       O   Minimum wait time between reports. */
 /*     TCHECK     O   Number of calls between system time check. */
 /*     BEGIN      O   First part of the output message. */
 /*     END        O   Last part of the output message. */
@@ -1168,7 +1194,7 @@ L_zzgfwkmo:
 
 /*     UNIT, */
 /*     TOTAL, */
-/*     FREQ, */
+/*     WAIT, */
 /*     TCHECK, */
 /*     BEGIN, */
 /*     END, */
@@ -1218,6 +1244,11 @@ L_zzgfwkmo:
 
 /* $ Version */
 
+/* -    SPICELIB Version 1.1.0 21-FEB-2021 (NJB) */
+
+/*        Changed name of argument FREQ to WAIT. Updated Brief_I/O */
+/*        description of this argument. */
+
 /* -    SPICELIB Version 1.0.0 17-FEB-2009 (NJB) */
 
 /* -& */
@@ -1228,7 +1259,7 @@ L_zzgfwkmo:
 /* -& */
     *unit = svunit;
     *total = entire;
-    *freq = step;
+    *wait = step;
     *tcheck = check;
     s_copy(begin, start, begin_len, (ftnlen)55);
     s_copy(end, finish, end_len, (ftnlen)13);
@@ -1237,17 +1268,17 @@ L_zzgfwkmo:
 } /* zzgfrpwk_ */
 
 /* Subroutine */ int zzgfrpwk_(integer *unit, doublereal *total, doublereal *
-	freq, integer *tcheck, char *begin, char *end, doublereal *incr, 
+	wait, integer *tcheck, char *begin, char *end, doublereal *incr, 
 	ftnlen begin_len, ftnlen end_len)
 {
-    return zzgfrpwk_0_(0, unit, total, freq, tcheck, begin, end, incr, 
+    return zzgfrpwk_0_(0, unit, total, wait, tcheck, begin, end, incr, 
 	    begin_len, end_len);
     }
 
-/* Subroutine */ int zzgftswk_(doublereal *total, doublereal *freq, integer *
+/* Subroutine */ int zzgftswk_(doublereal *total, doublereal *wait, integer *
 	tcheck, char *begin, char *end, ftnlen begin_len, ftnlen end_len)
 {
-    return zzgfrpwk_0_(1, (integer *)0, total, freq, tcheck, begin, end, (
+    return zzgfrpwk_0_(1, (integer *)0, total, wait, tcheck, begin, end, (
 	    doublereal *)0, begin_len, end_len);
     }
 
@@ -1257,10 +1288,10 @@ L_zzgfwkmo:
 	    integer *)0, (char *)0, (char *)0, incr, (ftnint)0, (ftnint)0);
     }
 
-/* Subroutine */ int zzgfwkad_(doublereal *freq, integer *tcheck, char *begin,
+/* Subroutine */ int zzgfwkad_(doublereal *wait, integer *tcheck, char *begin,
 	 char *end, ftnlen begin_len, ftnlen end_len)
 {
-    return zzgfrpwk_0_(3, (integer *)0, (doublereal *)0, freq, tcheck, begin, 
+    return zzgfrpwk_0_(3, (integer *)0, (doublereal *)0, wait, tcheck, begin, 
 	    end, (doublereal *)0, begin_len, end_len);
     }
 
@@ -1271,10 +1302,10 @@ L_zzgfwkmo:
     }
 
 /* Subroutine */ int zzgfwkmo_(integer *unit, doublereal *total, doublereal *
-	freq, integer *tcheck, char *begin, char *end, doublereal *incr, 
+	wait, integer *tcheck, char *begin, char *end, doublereal *incr, 
 	ftnlen begin_len, ftnlen end_len)
 {
-    return zzgfrpwk_0_(5, unit, total, freq, tcheck, begin, end, incr, 
+    return zzgfrpwk_0_(5, unit, total, wait, tcheck, begin, end, incr, 
 	    begin_len, end_len);
     }
 

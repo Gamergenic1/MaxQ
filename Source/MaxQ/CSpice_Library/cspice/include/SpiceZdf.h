@@ -99,6 +99,18 @@
       
 -Version
 
+   -CSPICE Version 6.3.0, 28-NOV-2021 (BVS)
+
+       Updated for:
+       
+          MAC-OSX-M1-64BIT-CLANG_C
+          
+       environment. Added the corresponding tag:
+       
+          CSPICE_MAC_OSX_M1_64BIT_CLANG
+
+       tag to the #ifdefs set.
+        
    -CSPICE Version 6.2.0, 10-MAR-2014 (BVS)
 
        Updated for:
@@ -180,6 +192,7 @@
          || defined(CSPICE_SUN_SOLARIS_64BIT_NATIVE)    \
          || defined(CSPICE_SUN_SOLARIS_64BIT_GCC )      \
          || defined(CSPICE_MAC_OSX_INTEL_64BIT_GCC )    \
+         || defined(CSPICE_MAC_OSX_M1_64BIT_CLANG )     \
          || defined(CSPICE_SUN_SOLARIS_INTEL_64BIT_CC ) \
          || defined(CSPICE_PC_CYGWIN_64BIT_GCC )        \
          || defined(CSPICE_PC_LINUX_64BIT_GCC    )  )
@@ -199,6 +212,7 @@
          || defined(CSPICE_SUN_SOLARIS_64BIT_NATIVE)    \
          || defined(CSPICE_SUN_SOLARIS_64BIT_GCC )      \
          || defined(CSPICE_MAC_OSX_INTEL_64BIT_GCC )    \
+         || defined(CSPICE_MAC_OSX_M1_64BIT_CLANG )     \
          || defined(CSPICE_SUN_SOLARIS_INTEL_64BIT_CC ) \
          || defined(CSPICE_PC_CYGWIN_64BIT_GCC )        \
          || defined(CSPICE_PC_LINUX_64BIT_GCC    )  )

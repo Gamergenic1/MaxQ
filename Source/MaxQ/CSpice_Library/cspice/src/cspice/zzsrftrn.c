@@ -401,6 +401,10 @@ static integer c__0 = 0;
 
 /* $ Version */
 
+/* -    SPICELIB Version 1.0.1, 05-NOV-2021 (NJB) */
+
+/*        Corrected I/O descriptions in header of entry point ZZSRFC2N. */
+
 /* -    SPICELIB Version 1.0.0, 01-APR-2016 (NJB) (EDW) (BVS) */
 
 /* -& */
@@ -905,7 +909,7 @@ L_zzsrfn2c:
 
     lookat = zzhash2_(sqshnm, &snmpol[5], (ftnlen)36);
     node = snmhls[(i__1 = lookat - 1) < 2003 && 0 <= i__1 ? i__1 : s_rnge(
-	    "snmhls", i__1, "zzsrftrn_", (ftnlen)738)];
+	    "snmhls", i__1, "zzsrftrn_", (ftnlen)742)];
     *found = FALSE_;
     if (node > 0) {
 
@@ -916,16 +920,16 @@ L_zzsrfn2c:
 	while(node > 0 && ! (*found)) {
 	    *found = s_cmp(nsrfnm, nornam + ((i__2 = snmidx[(i__1 = node - 1) 
 		    < 2003 && 0 <= i__1 ? i__1 : s_rnge("snmidx", i__1, "zzs"
-		    "rftrn_", (ftnlen)750)] - 1) < 2000 && 0 <= i__2 ? i__2 : 
-		    s_rnge("nornam", i__2, "zzsrftrn_", (ftnlen)750)) * 36, (
+		    "rftrn_", (ftnlen)754)] - 1) < 2000 && 0 <= i__2 ? i__2 : 
+		    s_rnge("nornam", i__2, "zzsrftrn_", (ftnlen)754)) * 36, (
 		    ftnlen)36, (ftnlen)36) == 0 && *bodyid == kerbid[(i__4 = 
 		    snmidx[(i__3 = node - 1) < 2003 && 0 <= i__3 ? i__3 : 
-		    s_rnge("snmidx", i__3, "zzsrftrn_", (ftnlen)750)] - 1) < 
+		    s_rnge("snmidx", i__3, "zzsrftrn_", (ftnlen)754)] - 1) < 
 		    2000 && 0 <= i__4 ? i__4 : s_rnge("kerbid", i__4, "zzsrf"
-		    "trn_", (ftnlen)750)];
+		    "trn_", (ftnlen)754)];
 	    itemat = node;
 	    node = snmpol[(i__1 = node + 5) < 2009 && 0 <= i__1 ? i__1 : 
-		    s_rnge("snmpol", i__1, "zzsrftrn_", (ftnlen)754)];
+		    s_rnge("snmpol", i__1, "zzsrftrn_", (ftnlen)758)];
 	}
 
 /*        ITEMAT is the value of the last node checked, or */
@@ -934,9 +938,9 @@ L_zzsrfn2c:
     }
     if (*found) {
 	*surfid = kersid[(i__2 = snmidx[(i__1 = itemat - 1) < 2003 && 0 <= 
-		i__1 ? i__1 : s_rnge("snmidx", i__1, "zzsrftrn_", (ftnlen)765)
+		i__1 ? i__1 : s_rnge("snmidx", i__1, "zzsrftrn_", (ftnlen)769)
 		] - 1) < 2000 && 0 <= i__2 ? i__2 : s_rnge("kersid", i__2, 
-		"zzsrftrn_", (ftnlen)765)];
+		"zzsrftrn_", (ftnlen)769)];
     }
     chkout_("ZZSRFN2C", (ftnlen)8);
     return 0;
@@ -1000,9 +1004,9 @@ L_zzsrfc2n:
 
 /*     Variable  I/O  Description */
 /*     --------  ---  -------------------------------------------------- */
-/*     SRFNAM     I   Surface name. */
+/*     SURFID     I   Surface ID code. */
 /*     BODYID     I   Body ID code. */
-/*     SURFID     O   Surface ID code. */
+/*     SRFNAM     O   Surface name. */
 /*     FOUND      O   Found flag. */
 
 /* $ Detailed_Input */
@@ -1014,12 +1018,12 @@ L_zzsrfc2n:
 
 /* $ Detailed_Output */
 
-/*     SRFNAM     is the name of the surface corresponding to the */
-/*                input surface ID code and body ID code. */
+/*     SRFNAM     is the name of the surface corresponding to the input */
+/*                surface ID code and body ID code. */
 
-/*                If multiple assignments for the input surface */
-/*                name and body ID are present in the kernel pool, */
-/*                the latest one is used to determine SRFNAM. */
+/*                If multiple assignments for the input surface ID and */
+/*                body ID are present in the kernel pool, the latest one */
+/*                is used to determine SRFNAM. */
 
 /*     FOUND      is a logical flag that is .TRUE. if the inputs */
 /*                were mapped to a surface name and .FALSE. */
@@ -1100,6 +1104,11 @@ L_zzsrfc2n:
 
 /* $ Version */
 
+/* -    SPICELIB Version 1.0.1, 05-NOV-2021 (NJB) */
+
+/*        Corrected errors in the $Brief_I/O and $Detailed_Output */
+/*        sections of the header. */
+
 /* -    SPICELIB Version 1.0.0, 01-APR-2016 (NJB) (EDW) (BVS) */
 
 /* -& */
@@ -1179,7 +1188,7 @@ L_zzsrfc2n:
 
     lookat = zzhashi_(surfid, &sidpol[5]);
     node = sidhls[(i__1 = lookat - 1) < 2003 && 0 <= i__1 ? i__1 : s_rnge(
-	    "sidhls", i__1, "zzsrftrn_", (ftnlen)1034)];
+	    "sidhls", i__1, "zzsrftrn_", (ftnlen)1043)];
     *found = FALSE_;
     if (node > 0) {
 
@@ -1190,15 +1199,15 @@ L_zzsrfc2n:
 	while(node > 0 && ! (*found)) {
 	    *found = *surfid == kersid[(i__2 = sididx[(i__1 = node - 1) < 
 		    2003 && 0 <= i__1 ? i__1 : s_rnge("sididx", i__1, "zzsrf"
-		    "trn_", (ftnlen)1046)] - 1) < 2000 && 0 <= i__2 ? i__2 : 
-		    s_rnge("kersid", i__2, "zzsrftrn_", (ftnlen)1046)] && *
+		    "trn_", (ftnlen)1055)] - 1) < 2000 && 0 <= i__2 ? i__2 : 
+		    s_rnge("kersid", i__2, "zzsrftrn_", (ftnlen)1055)] && *
 		    bodyid == kerbid[(i__4 = sididx[(i__3 = node - 1) < 2003 
 		    && 0 <= i__3 ? i__3 : s_rnge("sididx", i__3, "zzsrftrn_", 
-		    (ftnlen)1046)] - 1) < 2000 && 0 <= i__4 ? i__4 : s_rnge(
-		    "kerbid", i__4, "zzsrftrn_", (ftnlen)1046)];
+		    (ftnlen)1055)] - 1) < 2000 && 0 <= i__4 ? i__4 : s_rnge(
+		    "kerbid", i__4, "zzsrftrn_", (ftnlen)1055)];
 	    itemat = node;
 	    node = sidpol[(i__1 = node + 5) < 2009 && 0 <= i__1 ? i__1 : 
-		    s_rnge("sidpol", i__1, "zzsrftrn_", (ftnlen)1050)];
+		    s_rnge("sidpol", i__1, "zzsrftrn_", (ftnlen)1059)];
 	}
 
 /*        ITEMAT is the value of the last node checked, or */
@@ -1208,8 +1217,8 @@ L_zzsrfc2n:
     if (*found) {
 	s_copy(srfnam, kernam + ((i__2 = sididx[(i__1 = itemat - 1) < 2003 && 
 		0 <= i__1 ? i__1 : s_rnge("sididx", i__1, "zzsrftrn_", (
-		ftnlen)1061)] - 1) < 2000 && 0 <= i__2 ? i__2 : s_rnge("kern"
-		"am", i__2, "zzsrftrn_", (ftnlen)1061)) * 36, srfnam_len, (
+		ftnlen)1070)] - 1) < 2000 && 0 <= i__2 ? i__2 : s_rnge("kern"
+		"am", i__2, "zzsrftrn_", (ftnlen)1070)) * 36, srfnam_len, (
 		ftnlen)36);
     }
     chkout_("ZZSRFC2N", (ftnlen)8);

@@ -7,6 +7,9 @@
 
 /* Table of constant values */
 
+static integer c__100 = 100;
+static integer c__256 = 256;
+static integer c__24 = 24;
 static integer c__1 = 1;
 static integer c__2 = 2;
 static integer c__3 = 3;
@@ -36,11 +39,11 @@ static integer c__126 = 126;
     extern logical return_(void);
     integer addrss, colidx, colord[100], pagloc, remain, rpsize, segdsc[24], 
 	    stkbas, stkhan, stkseg;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
-	    integer *, ftnlen), sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), dasrdi_(integer *, integer *, integer *, integer *), 
-	    cleari_(integer *, integer *), dasudi_(integer *, integer *, 
-	    integer *, integer *);
+    extern /* Subroutine */ int cleari_(integer *, integer *), setmsg_(char *,
+	     ftnlen), errint_(char *, integer *, ftnlen), sigerr_(char *, 
+	    ftnlen), chkout_(char *, ftnlen), dasrdi_(integer *, integer *, 
+	    integer *, integer *), dasudi_(integer *, integer *, integer *, 
+	    integer *);
     integer col, loc, nrp, row;
     extern /* Subroutine */ int zzeksrd_(integer *, integer *, integer *);
 
@@ -671,7 +674,7 @@ static integer c__126 = 126;
 
 /*     2)  If an attempt is made to finish a segment other than the */
 /*         one last initialized by EKIFLD, the error SPICE(WRONGSEGMENT) */
-/*         is signalled. */
+/*         is signaled. */
 
 /*     3)  If an I/O error occurs while reading or writing the indicated */
 /*         file, the error will be diagnosed by routines called by this */
@@ -710,6 +713,12 @@ static integer c__126 = 126;
 
 /* $ Version */
 
+/* -    SPICELIB Version 1.1.0, 11-OCT-2021 (NJB) */
+
+/*        All local arrays are now completely initialized. */
+
+/*        Corrected typos in comments. */
+
 /* -    Beta Version 1.0.0, 08-NOV-1995 (NJB) */
 
 /* -& */
@@ -727,9 +736,15 @@ static integer c__126 = 126;
 
     if (return_()) {
 	return 0;
-    } else {
-	chkin_("ZZEKFF01", (ftnlen)8);
     }
+    chkin_("ZZEKFF01", (ftnlen)8);
+
+/*     Initialize all arrays. */
+
+    cleari_(&c__100, adrbuf);
+    cleari_(&c__100, colord);
+    cleari_(&c__256, ipage);
+    cleari_(&c__24, segdsc);
 
 /*     Dig the handle and segment number out of the EK stack.  If the */
 /*     stacked values don't match the inputs HANDLE and SEGNO, we've */
@@ -772,7 +787,7 @@ static integer c__126 = 126;
 	loc = (i__ - 1) * (nrows + 1) + 3;
 	zzeksrd_(&loc, &loc, &colidx);
 	colord[(i__2 = colidx - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge("colord"
-		, i__2, "zzekff01_", (ftnlen)240)] = i__;
+		, i__2, "zzekff01_", (ftnlen)254)] = i__;
     }
 
 /*     We'll need to create a record pointer structure for each row */
@@ -812,9 +827,9 @@ static integer c__126 = 126;
 
 	    base = (j - 1) * rpsize;
 	    ipage[(i__3 = base) < 256 && 0 <= i__3 ? i__3 : s_rnge("ipage", 
-		    i__3, "zzekff01_", (ftnlen)285)] = 1;
+		    i__3, "zzekff01_", (ftnlen)299)] = 1;
 	    ipage[(i__3 = base + 1) < 256 && 0 <= i__3 ? i__3 : s_rnge("ipage"
-		    , i__3, "zzekff01_", (ftnlen)286)] = -1;
+		    , i__3, "zzekff01_", (ftnlen)300)] = -1;
 	}
 
 /*        For each column, take NR addresses off the stack and */
@@ -830,7 +845,7 @@ static integer c__126 = 126;
 /*           for each column are stored contiguously. */
 
 	    j = colord[(i__3 = col - 1) < 100 && 0 <= i__3 ? i__3 : s_rnge(
-		    "colord", i__3, "zzekff01_", (ftnlen)302)];
+		    "colord", i__3, "zzekff01_", (ftnlen)316)];
 	    stkbas = (j - 1) * (nrows + 1) + 3;
 	    loc = stkbas + recno;
 	    i__3 = loc + 1;
@@ -841,9 +856,9 @@ static integer c__126 = 126;
 		base = (row - 1) * rpsize;
 		pagloc = base + 2 + col;
 		ipage[(i__4 = pagloc - 1) < 256 && 0 <= i__4 ? i__4 : s_rnge(
-			"ipage", i__4, "zzekff01_", (ftnlen)312)] = adrbuf[(
+			"ipage", i__4, "zzekff01_", (ftnlen)326)] = adrbuf[(
 			i__5 = row - 1) < 100 && 0 <= i__5 ? i__5 : s_rnge(
-			"adrbuf", i__5, "zzekff01_", (ftnlen)312)];
+			"adrbuf", i__5, "zzekff01_", (ftnlen)326)];
 	    }
 	}
 

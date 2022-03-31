@@ -9,10 +9,10 @@
 
 static integer c__1 = 1;
 
-/* $Procedure      STPOOL ( String from pool ) */
+/* $Procedure STPOOL ( String from pool ) */
 /* Subroutine */ int stpool_(char *item, integer *nth, char *contin, char *
-	string, integer *size, logical *found, ftnlen item_len, ftnlen 
-	contin_len, ftnlen string_len)
+	nthstr, integer *size, logical *found, ftnlen item_len, ftnlen 
+	contin_len, ftnlen nthstr_len)
 {
     /* Builtin functions */
     /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
@@ -36,9 +36,9 @@ static integer c__1 = 1;
 
 /* $ Abstract */
 
-/*     Retrieve the NTH string from the kernel pool variable, */
-/*     where the string may be continued across several components */
-/*     of the kernel pool variable. */
+/*     Retrieve the Nth string from a kernel pool variable, where the */
+/*     string may be continued across several components of the kernel */
+/*     pool variable. */
 
 /* $ Disclaimer */
 
@@ -67,121 +67,121 @@ static integer c__1 = 1;
 
 /* $ Required_Reading */
 
-/*      None. */
+/*     None. */
 
 /* $ Keywords */
 
-/*      POOL */
+/*     POOL */
 
 /* $ Declarations */
 /* $ Brief_I/O */
 
 /*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
-/*     ITEM       I   name of the kernel pool variable */
-/*     NTH        I   index of the full component to retrieve */
-/*     CONTIN     I   character sequence used to indicate continuation */
-/*     STRING     O   a full string concatenated across continuations */
-/*     SIZE       O   the number of character in the full string value */
-/*     FOUND      O   flag indicating success or failure of request */
+/*     ITEM       I   Name of the kernel pool variable. */
+/*     NTH        I   Index of the full string to retrieve. */
+/*     CONTIN     I   Character sequence used to indicate continuation. */
+/*     NTHSTR     O   A full string concatenated across continuations. */
+/*     SIZE       O   The number of characters in the full string value. */
+/*     FOUND      O   Flag indicating success or failure of request. */
 
 /* $ Detailed_Input */
 
-/*     ITEM       is the name of a kernel pool variable for which */
-/*                the caller wants to retrieve a full (potentially */
-/*                continued) string component. */
+/*     ITEM     is the name of a kernel pool variable for which */
+/*              the caller wants to retrieve a full (potentially */
+/*              continued) string component. */
 
+/*     NTH      is the number of the string to retrieve from the kernel */
+/*              pool. The range of NTH is 1 to the number of full strings */
+/*              that are present. */
 
-/*     NTH        is the number of the component to retrieve from */
-/*                the kernel pool. */
+/*     CONTIN   is a sequence of characters which (if they appear as the */
+/*              last non-blank sequence of characters in a component of a */
+/*              value of a kernel pool variable) act as a continuation */
+/*              marker: the marker indicates that the string associated */
+/*              with the component is continued into the next literal */
+/*              component of the kernel pool variable. */
 
-/*     CONTIN     is a sequence of characters which (if they appear as */
-/*                the last non-blank sequence of characters in a */
-/*                component of a value of a kernel pool variable) */
-/*                indicate that the string associated with the */
-/*                component is continued into the next literal */
-/*                component of the kernel pool variable. */
-
-/*                If CONTIN is blank, all of the components of ITEM */
-/*                will be retrieved as a single string. */
+/*              If CONTIN is blank, all of the components of ITEM will be */
+/*              retrieved as a single string. */
 
 /* $ Detailed_Output */
 
-/*     STRING     is the NTH full string associated with the kernel */
-/*                pool variable specified by ITEM. */
+/*     NTHSTR   is the NTH full string associated with the kernel pool */
+/*              variable specified by ITEM. */
 
-/*                Note that if STRING is not sufficiently long to hold */
-/*                the fully continued string, the value will be */
-/*                truncated.  You can determine if STRING has been */
-/*                truncated by examining the variable SIZE. */
+/*              Note that if NTHSTR is not sufficiently long to hold the */
+/*              fully continued string, the value will be truncated. You */
+/*              can determine if NTHSTR has been truncated by examining */
+/*              the variable SIZE. */
 
-/*     SIZE       is the index of last non-blank character of */
-/*                continued string as it is represented in the */
-/*                kernel pool.  This is the actual number of characters */
-/*                needed to hold the requested string.  If STRING */
-/*                contains a truncated portion of the full string, */
-/*                RTRIM(STRING) will be less than SIZE. */
+/*     SIZE     is the index of last non-blank character of the continued */
+/*              string as it is represented in the kernel pool. This is */
+/*              the actual number of characters needed to hold the */
+/*              requested string. If NTHSTR contains a truncated portion */
+/*              of the full string, RTRIM(NTHSTR) will be less than SIZE. */
 
-/*                If the value of STRING should be a blank, then */
-/*                SIZE will be set to 1. */
+/*              If the value of NTHSTR should be a blank, then SIZE will */
+/*              be set to 1. */
 
-/*     FOUND      is a logical variable indicating success of the */
-/*                request to retrieve the NTH string associated */
-/*                with ITEM.  If an NTH string exists, */
+/*     FOUND    is a logical variable indicating success of the request */
+/*              to retrieve the NTH string associated with ITEM. If an */
+/*              Nth string exists, FOUND will be set to .TRUE.; */
+/*              otherwise FOUND will be set to .FALSE. */
 
 /* $ Parameters */
 
 /*     None. */
 
+/* $ Exceptions */
+
+/*     1)  If the variable specified by ITEM is not present in the */
+/*         kernel pool or is present but is not character valued, */
+/*         NTHSTR will be returned as a blank, SIZE will be */
+/*         returned with the value 0 and FOUND will be set to .FALSE. In */
+/*         particular if NTH is less than 1, NTHSTR will be returned as a */
+/*         blank, SIZE will be zero and FOUND will be .FALSE. */
+
+/*     2)  If the variable specified has a blank string associated */
+/*         with its NTH full string, NTHSTR will be blank, SIZE */
+/*         will be 1 and FOUND will be set to .TRUE. */
+
+/*     3)  If NTHSTR is not long enough to hold all of the characters */
+/*         associated with the NTH string, it will be truncated on the */
+/*         right. */
+
+/*     4)  If the continuation character is a blank, every component */
+/*         of the variable specified by ITEM will be inserted into */
+/*         the output string. */
+
+/*     5)  If the continuation character is blank, then a blank component */
+/*         of a variable is treated as a component with no letters. */
+/*         For example: */
+
+/*            STRINGS = ( 'This is a variable' */
+/*                        'with a blank' */
+/*                        ' ' */
+/*                        'component.' ) */
+
+/*         Is equivalent to */
+
+
+/*            STRINGS = ( 'This is a variable' */
+/*                        'with a blank' */
+/*                        'component.' ) */
+
+/*         from the point of view of STPOOL if CONTIN is set to the */
+/*         blank character. */
+
 /* $ Files */
 
 /*     None. */
-
-/* $ Exceptions */
-
-/*     1) If the variable specified by ITEM is not present in the */
-/*        kernel pool or is present but is not character valued, */
-/*        STRING will be returned as a blank, SIZE will be */
-/*        returned with the value 0 and FOUND will be set to .FALSE. In */
-/*        particular if NTH is less than 1, STRING will be returned as a */
-/*        blank, SIZE will be zero and FOUND will be FALSE. */
-
-/*     2) If the variable specified has a blank string associated */
-/*        with its NTH full string, STRING will be blank, SIZE */
-/*        will be 1 and FOUND will be set to .TRUE. */
-
-/*     3) If STRING is not long enough to hold all of the characters */
-/*        associated with the NTH string, it will be truncated on the */
-/*        right. */
-
-/*     4) If the continuation character is a blank, every component */
-/*        of the variable specified by ITEM will be inserted into */
-/*        the output string. */
-
-/*     5) If the continuation character is blank, then a blank component */
-/*        of a variable is treated as a component with no letters. */
-/*        For example: */
-
-/*           STRINGS = ( 'This is a variable' */
-/*                       'with a blank' */
-/*                       ' ' */
-/*                       'component.' ) */
-
-/*        Is equivalent to */
-
-
-/*           STRINGS = ( 'This is a variable' */
-/*                       'with a blank' */
-/*                       'component.' ) */
-
-/*        from the point of view of STPOOL if CONTIN is set to the */
-/*        blank character. */
 
 /* $ Particulars */
 
 /*     The SPICE Kernel Pool provides a very convenient interface */
 /*     for supplying both numeric and textual data to user application */
-/*     programs.  However, any particular component of a character */
+/*     programs. However, any particular component of a character */
 /*     valued component of a kernel pool variable is limited to 80 */
 /*     or fewer characters in length. */
 
@@ -194,15 +194,15 @@ static integer c__1 = 1;
 
 /*     For example, you may decide to use the sequence '//' to indicate */
 /*     that a string should be continued to the next component of */
-/*     a kernel pool variable.   Then set up the */
+/*     a kernel pool variable. Then set up the */
 /*     kernel pool variable as shown below */
 
-/*     LONG_STRINGS = ( 'This is part of the first component //' */
-/*                      'that needs more than one line when //' */
-/*                      'inserting it into the kernel pool.' */
-/*                      'This is the second string that is split //' */
-/*                      'up as several components of a kernel pool //' */
-/*                      'variable.' ) */
+/*        LONG_STRINGS = ( 'This is part of the first component //' */
+/*                         'that needs more than one line when //' */
+/*                         'inserting it into the kernel pool.' */
+/*                         'This is the second string that is split //' */
+/*                         'up as several components of a kernel pool //' */
+/*                         'variable.' ) */
 
 /*     When loaded into the kernel pool, the variable LONG_STRINGS */
 /*     will have six literal components: */
@@ -221,24 +221,24 @@ static integer c__1 = 1;
 /*     However, using the routine STPOOL you can view the variable */
 /*     LONG_STRINGS as having two long components. */
 
-/*        STRING (1) = 'This is part of the first component that ' */
-/*    .   //           'needs more than one line when inserting ' */
-/*    .   //           'it into the kernel pool. ' */
+/*        STRGNA = 'This is part of the first component that ' */
+/*       . //      'needs more than one line when inserting ' */
+/*       . //      'it into the kernel pool. ' */
 
-/*        STRING (2) = 'This is the second string that is split ' */
-/*    .   //           'up as several components of a kernel pool ' */
-/*    .   //           'variable. ' */
+/*        STRGNB = 'This is the second string that is split ' */
+/*       . //      'up as several components of a kernel pool ' */
+/*       . //      'variable. ' */
 
 
 /*     These string components would be retrieved by the following two */
 /*     calls. */
 
-/*        CALL STPOOL ( 'LONG_STRINGS, 1, '//', STRING(1), SIZE, FOUND ) */
-/*        CALL STPOOL ( 'LONG_STRINGS, 2, '//', STRING(2), SIZE, FOUND ) */
+/*        CALL STPOOL ( 'LONG_STRINGS', 1, '//', STRGNA, SIZE, FOUND ) */
+/*        CALL STPOOL ( 'LONG_STRINGS', 2, '//', STRGNB, SIZE, FOUND ) */
 
 /* $ Examples */
 
-/*     Example 1.  Retrieving file names. */
+/*     Example 1. Retrieving file names. */
 
 /*     Suppose a you have used the kernel pool as a mechanism for */
 /*     specifying SPK files to load at startup but that the full */
@@ -277,10 +277,13 @@ static integer c__1 = 1;
 /*        CALL SPKLEF ( FILE, HANDLE ) */
 /*        I = I + 1 */
 /*        CALL STPOOL ( 'SPK_FILES', I, '*', FILE, SIZE, FOUND ) */
+
 /*     END DO */
 
 /*     IF ( FOUND .AND. RTRIM(FILE) .NE. SIZE ) THEN */
+
 /*        WRITE (*,*) 'The ', I, '''th file name was too long.' */
+
 /*     END IF */
 
 
@@ -288,9 +291,9 @@ static integer c__1 = 1;
 
 
 /*     Occasionally, it may be useful to retrieve the entire */
-/*     contents of a kernel pool variable as a single string.  To */
+/*     contents of a kernel pool variable as a single string. To */
 /*     do this you can use the blank character as the */
-/*     continuation character.  For example if you place the */
+/*     continuation character. For example if you place the */
 /*     following assignment in a text kernel */
 
 /*         COMMENT = (  'This is a long note ' */
@@ -305,8 +308,8 @@ static integer c__1 = 1;
 /*     The result will be that COMMNT will have the following value. */
 
 /*        COMMNT = 'This is a long note about the intended use of ' */
-/*    .   //       'this text kernel that can be retrieved at run ' */
-/*    .   //       'time. ' */
+/*       . //      'this text kernel that can be retrieved at run ' */
+/*       . //      'time. ' */
 
 /*     Note that the leading blanks of each component of COMMENT are */
 /*     significant, trailing blanks are not significant. */
@@ -323,30 +326,35 @@ static integer c__1 = 1;
 
 
 /*        COMMNT = 'This is a long noteabout the intendeduse of ' */
-/*    .   //       'this text kernel thatcan be retrieved at run ' */
-/*    .   //       'time. ' */
+/*       . //      'this text kernel thatcan be retrieved at run ' */
+/*       . //      'time. ' */
 
 
 /*     resulted in several words being run together as shown below. */
-
-
 
 /* $ Restrictions */
 
 /*     None. */
 
-/* $ Author_and_Institution */
-
-/*     W.L. Taber      (JPL) */
-
 /* $ Literature_References */
 
 /*     None. */
 
+/* $ Author_and_Institution */
+
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
+
 /* $ Version */
 
-/* -    SPICELIB Version 1.0.0, 11-JUL-1997 (WLT) */
+/* -    SPICELIB Version 1.1.0, 26-OCT-2021 (JDR) */
 
+/*        Changed the output argument name "STRING" to "NTHSTR" for */
+/*        consistency with other routines. */
+
+/*        Edited the header to comply with NAIF standard. */
+
+/* -    SPICELIB Version 1.0.0, 11-JUL-1997 (WLT) */
 
 /* -& */
 /* $ Index_Entries */
@@ -364,12 +372,12 @@ static integer c__1 = 1;
     }
     if (*nth < 1) {
 	*found = FALSE_;
-	s_copy(string, " ", string_len, (ftnlen)1);
+	s_copy(nthstr, " ", nthstr_len, (ftnlen)1);
 	*size = 0;
 	return 0;
     }
     chkin_("STPOOL", (ftnlen)6);
-    room = i_len(string, string_len);
+    room = i_len(nthstr, nthstr_len);
     csize = rtrim_(contin, contin_len);
     putat = 1;
 
@@ -383,7 +391,7 @@ static integer c__1 = 1;
 	gcpool_(item, &comp, &c__1, &n, part, &gotit, item_len, (ftnlen)80);
 	gotit = n > 0;
 	if (! gotit) {
-	    s_copy(string, " ", string_len, (ftnlen)1);
+	    s_copy(nthstr, " ", nthstr_len, (ftnlen)1);
 	    *size = 0;
 	    *found = FALSE_;
 	    chkout_("STPOOL", (ftnlen)6);
@@ -406,7 +414,7 @@ static integer c__1 = 1;
 /*     one is not continued. */
 
     more = TRUE_;
-    s_copy(string, " ", string_len, (ftnlen)1);
+    s_copy(nthstr, " ", nthstr_len, (ftnlen)1);
     n = 0;
     while(more) {
 	gcpool_(item, &comp, &c__1, &n, part, &more, item_len, (ftnlen)80);
@@ -417,7 +425,7 @@ static integer c__1 = 1;
 	    cfirst = clast - csize + 1;
 	    if (cfirst < 0) {
 		if (putat <= room) {
-		    s_copy(string + (putat - 1), part, string_len - (putat - 
+		    s_copy(nthstr + (putat - 1), part, nthstr_len - (putat - 
 			    1), clast);
 		}
 		putat += clast;
@@ -425,14 +433,14 @@ static integer c__1 = 1;
 	    } else if (s_cmp(part + (cfirst - 1), contin, clast - (cfirst - 1)
 		    , contin_len) != 0) {
 		if (putat <= room) {
-		    s_copy(string + (putat - 1), part, string_len - (putat - 
+		    s_copy(nthstr + (putat - 1), part, nthstr_len - (putat - 
 			    1), clast);
 		}
 		putat += clast;
 		more = FALSE_;
 	    } else if (cfirst > 1) {
 		if (putat <= room) {
-		    s_copy(string + (putat - 1), part, string_len - (putat - 
+		    s_copy(nthstr + (putat - 1), part, nthstr_len - (putat - 
 			    1), cfirst - 1);
 		}
 		putat = putat + cfirst - 1;

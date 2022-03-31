@@ -14,8 +14,8 @@ static integer c__9 = 9;
 static integer c__4 = 4;
 static integer c__0 = 0;
 static integer c__10000 = 10000;
-static doublereal c_b100 = 1.;
-static doublereal c_b130 = 2.;
+static doublereal c_b86 = 1.;
+static doublereal c_b116 = 2.;
 
 /* $Procedure ZZGFFVU ( GF, instrument FOV utilities ) */
 /* Subroutine */ int zzgffvu_0_(int n__, char *inst, char *tshape, doublereal 
@@ -49,15 +49,16 @@ static doublereal c_b130 = 2.;
 	    doublereal *);
     extern /* Subroutine */ int vsub_(doublereal *, doublereal *, doublereal *
 	    ), vequ_(doublereal *, doublereal *), mtxv_(doublereal *, 
-	    doublereal *, doublereal *), zzcorepc_(char *, doublereal *, 
-	    doublereal *, doublereal *, ftnlen);
+	    doublereal *, doublereal *), zzgftreb_(integer *, doublereal *), 
+	    zzcorepc_(char *, doublereal *, doublereal *, doublereal *, 
+	    ftnlen);
     doublereal pnt2d[3];
     extern /* Subroutine */ int zzvalcor_(char *, logical *, ftnlen), 
 	    zzfovaxi_(char *, integer *, doublereal *, doublereal *, ftnlen);
     integer i__;
     extern /* Subroutine */ int zzprscor_(char *, logical *, ftnlen);
     doublereal l;
-    integer n, w;
+    integer w;
     doublereal x[3], y[3], z__[3];
     extern /* Subroutine */ int frame_(doublereal *, doublereal *, doublereal 
 	    *), chkin_(char *, ftnlen), zzelvupy_(doublereal *, doublereal *, 
@@ -82,23 +83,22 @@ static doublereal c_b130 = 2.;
 	    nvc2pl_(doublereal *, doublereal *, doublereal *);
     doublereal vtemp2[3];
     extern logical failed_(void);
-    extern /* Subroutine */ int cleard_(integer *, doublereal *), edlimb_(
-	    doublereal *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *);
+    extern /* Subroutine */ int cleard_(integer *, doublereal *);
+    doublereal escale;
+    extern /* Subroutine */ int edlimb_(doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *);
     doublereal lt;
-    extern /* Subroutine */ int bodvcd_(integer *, char *, integer *, integer 
-	    *, doublereal *, ftnlen);
     integer framid;
     extern doublereal halfpi_(void);
+    doublereal ellrad[3];
     extern /* Subroutine */ int stelab_(doublereal *, doublereal *, 
 	    doublereal *);
-    doublereal fovrad[3];
-    static char svinam[36];
+    doublereal fvlimb[9];
     extern logical return_(void);
-    static char svifrm[32], svishp[9], svtfrm[32], svtnam[36], svtshp[9], 
-	    svcorr[5];
-    doublereal ctrext, ettarg, fvlimb[9], insmat[9]	/* was [3][3] */, 
-	    obspos[3], semipt[6]	/* was [3][2] */;
+    static char svifrm[32], svinam[36], svishp[9], svtfrm[32], svtnam[36], 
+	    svtshp[9], svcorr[5];
+    doublereal ctrext, ettarg, insmat[9]	/* was [3][3] */, obspos[3], 
+	    semipt[6]	/* was [3][2] */;
     static doublereal svarad, svbnds[30000]	/* was [3][10000] */, svedct[
 	    3], svfaxi[3], svfovm[9]	/* was [3][3] */, svfpol[20000]	/* 
 	    was [2][10000] */, svfsmx[9]	/* was [3][3] */, svfvct[3], 
@@ -108,7 +108,7 @@ static doublereal c_b130 = 2.;
     integer clssid, frcent, frclss, ocstat;
     static integer svinst, svnvrt, svtarg;
     logical attblk[15];
-    static logical svuray, svustl, svxmit, svxtrg;
+    static logical svetrg, svuray, svustl, svxmit;
     extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
 	    ftnlen), setmsg_(char *, ftnlen), namfrm_(char *, integer *, 
 	    ftnlen);
@@ -117,16 +117,18 @@ static doublereal c_b130 = 2.;
 	    integer *, logical *), errint_(char *, integer *, ftnlen), 
 	    cmprss_(char *, integer *, char *, char *, ftnlen, ftnlen, ftnlen)
 	    , getfov_(integer *, integer *, char *, char *, doublereal *, 
-	    integer *, doublereal *, ftnlen, ftnlen), inrypl_(doublereal *, 
-	    doublereal *, doublereal *, integer *, doublereal *), spkezp_(
-	    integer *, doublereal *, char *, char *, integer *, doublereal *, 
-	    doublereal *, ftnlen, ftnlen);
+	    integer *, doublereal *, ftnlen, ftnlen), vhatip_(doublereal *), 
+	    inrypl_(doublereal *, doublereal *, doublereal *, integer *, 
+	    doublereal *);
     extern doublereal dpr_(void);
     doublereal sep;
-    extern /* Subroutine */ int pxform_(char *, char *, doublereal *, 
-	    doublereal *, ftnlen, ftnlen), vminus_(doublereal *, doublereal *)
-	    , spkssb_(integer *, doublereal *, char *, doublereal *, ftnlen), 
-	    stlabx_(doublereal *, doublereal *, doublereal *);
+    extern /* Subroutine */ int vsclip_(doublereal *, doublereal *), spkezp_(
+	    integer *, doublereal *, char *, char *, integer *, doublereal *, 
+	    doublereal *, ftnlen, ftnlen), pxform_(char *, char *, doublereal 
+	    *, doublereal *, ftnlen, ftnlen), vminus_(doublereal *, 
+	    doublereal *), spkssb_(integer *, doublereal *, char *, 
+	    doublereal *, ftnlen), stlabx_(doublereal *, doublereal *, 
+	    doublereal *);
     doublereal pos[3];
     extern /* Subroutine */ int mxm_(doublereal *, doublereal *, doublereal *)
 	    , mxv_(doublereal *, doublereal *, doublereal *);
@@ -173,7 +175,6 @@ static doublereal c_b130 = 2.;
 
 /*     CK */
 /*     GF */
-/*     IK */
 /*     NAIF_IDS */
 /*     PCK */
 /*     SCLK */
@@ -696,6 +697,22 @@ static doublereal c_b130 = 2.;
 
 /* $ Version */
 
+/* -    SPICELIB Version 1.2.0, 24-NOV-2021 (NJB) (EDW) */
+
+/*        Body radii accessed from kernel pool using ZZGFTREB. */
+
+/*        Bug fix: boresight is now scaled to unit length. */
+
+/*        Bug fix: in the case of a circular or elliptical FOV, where */
+/*        the target shape is an ellipsoid, this routine creates an */
+/*        ellipsoid such that its limb coincides with the FOV. */
+/*        Previously this ellipsoid was allowed to be very large when */
+/*        the FOV itself was large. Now the sum of the maximum ellipsoid */
+/*        radius plus the distance between the ellipsoid center and the */
+/*        observer is limited to FVEMAX km. See entry point ZZGFFVIN for */
+/*        details. These changes were made on 09-JUN-2017. Minor updates */
+/*        were made on the date given by the version line. */
+
 /* -    SPICELIB Version 1.1.0, 04-JUN-2013 (EDW) */
 
 /*        Edit to ZZGFFVIN: */
@@ -1138,6 +1155,24 @@ L_zzgffvin:
 
 /* $ Version */
 
+/* -    SPICELIB version 1.3.0, 25-AUG-2021 (EDW) */
+
+/*        Body radii accessed from kernel pool using ZZGFTREB. */
+
+/* -    SPICELIB Version 1.2.0, 01-NOV-2020 (NJB) */
+
+/*        Bug fix: boresight is now scaled to unit length. */
+
+/*        Bug fix: in the case of a circular or elliptical FOV, where */
+/*        the target shape is an ellipsoid, this routine creates an */
+/*        ellipsoid such that its limb coincides with the FOV. */
+/*        Previously this ellipsoid was allowed to be very large when */
+/*        the FOV itself was large. Now the sum of the maximum ellipsoid */
+/*        radius plus the distance between the ellipsoid center and the */
+/*        observer is limited to FVEMAX km. These changes were made on */
+/*        09-JUN-2017. Minor updates were made on the date given by the */
+/*        version line. */
+
 /* -    SPICELIB Version 1.1.0, 04-JUN-2013 (EDW) */
 
 /*        ABCORR now stripped of all spaces before saving. */
@@ -1154,7 +1189,20 @@ L_zzgffvin:
 /* -& */
 /* $ Revisions */
 
-/*     None. */
+/* -    SPICELIB Version 1.2.0, 29-OCT-2020 (NJB) */
+
+/*        Bug fix: in the case of a circular or elliptical FOV, where */
+/*        the target shape is an ellipsoid, this routine creates an */
+/*        ellipsoid such that its limb coincides with the FOV. Previously */
+/*        this ellipsoid was allowed to be very large when the FOV itself */
+/*        was large. Now the sum of the maximum ellipsoid radius plus */
+/*        the distance between the ellipsoid center and the observer is */
+/*        limited to FVEMAX km. */
+
+/*        Renamed local LOGICAL variable SVXTRG (save extended target) */
+/*        to SVETRG (save ellipsoidal target), since it does not apply */
+/*        to DSK targets. Note that DSK targets currently are not */
+/*        supported. */
 
 /* -& */
 
@@ -1224,10 +1272,10 @@ L_zzgffvin:
 
     svuray = s_cmp(svtshp, "RAY", (ftnlen)9, (ftnlen)3) == 0;
 
-/*     Indicate whether we have an extended target. SVXTRG is .TRUE. */
+/*     Indicate whether we have an ellipsoidal target. SVETRG is .TRUE. */
 /*     if and only we have one. */
 
-    svxtrg = s_cmp(svtshp, "ELLIPSOID", (ftnlen)9, (ftnlen)9) == 0;
+    svetrg = s_cmp(svtshp, "ELLIPSOID", (ftnlen)9, (ftnlen)9) == 0;
 
 /*     If the target is an ephemeris object, obtain its ID code. */
 /*     Save the target object's name, if applicable. */
@@ -1265,7 +1313,7 @@ L_zzgffvin:
 /*     Process the target frame. The target frame is defined except */
 /*     when the target is an ephemeris object modeled as a point. */
 
-    if (svuray || svxtrg) {
+    if (svuray || svetrg) {
 
 /*        We'll use the target frame argument. Look up the target */
 /*        frame's ID code. But first, check for a blank frame name, */
@@ -1310,9 +1358,10 @@ L_zzgffvin:
 	    chkout_("ZZGFFVIN", (ftnlen)8);
 	    return 0;
 	}
-	if (svxtrg) {
+	if (svetrg) {
 
-/*           We have an extended target. Check the target frame's center. */
+/*           We have an ellipsoidal target. Check the target frame's */
+/*           center. */
 
 	    if (frcent != svtarg) {
 
@@ -1388,40 +1437,12 @@ L_zzgffvin:
 
 /*     Process the target body's radii, if applicable. */
 
-    if (svxtrg) {
+    if (svetrg) {
 
 /*        Fetch and check the radii. */
 
-	bodvcd_(&svtarg, "RADII", &c__3, &n, svtrad, (ftnlen)5);
+	zzgftreb_(&svtarg, svtrad);
 	if (failed_()) {
-	    chkout_("ZZGFFVIN", (ftnlen)8);
-	    return 0;
-	}
-
-/*        Check the count of the radii. */
-
-	if (n != 3) {
-	    setmsg_("Target # should have 3 radii but actually has #. This m"
-		    "ay be due to an error in a PCK file used to provide the "
-		    "radii.", (ftnlen)117);
-	    errch_("#", target, (ftnlen)1, target_len);
-	    errint_("#", &n, (ftnlen)1);
-	    sigerr_("SPICE(INVALIDDIMENSION)", (ftnlen)23);
-	    chkout_("ZZGFFVIN", (ftnlen)8);
-	    return 0;
-	}
-
-/*        Check to make sure the current target has 3 positive */
-/*        semi-axis lengths. */
-
-	if (svtrad[0] <= 0. || svtrad[1] <= 0. || svtrad[2] <= 0.) {
-	    setmsg_("One or more semi-axis lengths of the target body # are "
-		    "non-positive: 1 = #, 2 = #, 3 = #. ", (ftnlen)90);
-	    errch_("#", target, (ftnlen)1, target_len);
-	    errdp_("#", svtrad, (ftnlen)1);
-	    errdp_("#", &svtrad[1], (ftnlen)1);
-	    errdp_("#", &svtrad[2], (ftnlen)1);
-	    sigerr_("SPICE(BADAXISLENGTH)", (ftnlen)20);
 	    chkout_("ZZGFFVIN", (ftnlen)8);
 	    return 0;
 	}
@@ -1430,8 +1451,8 @@ L_zzgffvin:
 
     } else {
 
-/*        We don't have an extended target body: zero out radius values */
-/*        for this target. */
+/*        We don't have an ellipsoidal target body: zero out radius */
+/*        values for this target. */
 
 	cleard_(&c__3, svtrad);
     }
@@ -1480,7 +1501,11 @@ L_zzgffvin:
 	return 0;
     }
 
-/*     Make sure the intrument shape specifier is left-justified */
+/*     Scale boresight vector to unit length. */
+
+    vhatip_(bsite);
+
+/*     Make sure the instrument shape specifier is left-justified */
 /*     and in upper case. */
 
     ljust_(svishp, svishp, (ftnlen)9, (ftnlen)9);
@@ -1520,7 +1545,7 @@ L_zzgffvin:
 /* Computing MAX */
 	d__1 = svarad, d__2 = vsep_(&svbnds[(i__2 = i__ * 3 - 3) < 30000 && 0 
 		<= i__2 ? i__2 : s_rnge("svbnds", i__2, "zzgffvu_", (ftnlen)
-		1267)], svfaxi);
+		1282)], svfaxi);
 	svarad = max(d__1,d__2);
     }
 
@@ -1554,7 +1579,7 @@ L_zzgffvin:
 /*     the observer. The plane is normal to the FOV axis, at distance 1 */
 /*     unit from the observer. */
 
-    nvc2pl_(svfaxi, &c_b100, svplan);
+    nvc2pl_(svfaxi, &c_b86, svplan);
 
 /*     Find the point on the plane closest to the origin. This is */
 /*     the center of the FOV. */
@@ -1563,10 +1588,12 @@ L_zzgffvin:
 
 /*     If applicable, perform the computations required for an */
 /*     elliptical FOV, where the target representation is arbitrary, or */
-/*     a circular FOV when the target is an extended object. */
+/*     a circular FOV when the target is an ellipsoid. Note that */
+/*     these computations are not needed for the combination of a */
+/*     circular FOV and a point or ray target. */
 
     if (s_cmp(svishp, "ELLIPSE", (ftnlen)9, (ftnlen)7) == 0 || s_cmp(svishp, 
-	    "CIRCLE", (ftnlen)9, (ftnlen)6) == 0 && svxtrg) {
+	    "CIRCLE", (ftnlen)9, (ftnlen)6) == 0 && svetrg) {
 
 /*        Also compute the center, semi-axis vectors, and semi-axis */
 /*        lengths of the FOV. If the FOV is circular, we create an */
@@ -1586,10 +1613,10 @@ L_zzgffvin:
 
 	for (i__ = 1; i__ <= 2; ++i__) {
 	    inrypl_(svorig, &svbnds[(i__1 = i__ * 3 - 3) < 30000 && 0 <= i__1 
-		    ? i__1 : s_rnge("svbnds", i__1, "zzgffvu_", (ftnlen)1339)]
+		    ? i__1 : s_rnge("svbnds", i__1, "zzgffvu_", (ftnlen)1355)]
 		    , svplan, &nxpts, &semipt[(i__2 = i__ * 3 - 3) < 6 && 0 <=
 		     i__2 ? i__2 : s_rnge("semipt", i__2, "zzgffvu_", (ftnlen)
-		    1339)]);
+		    1355)]);
 	    if (nxpts != 1) {
 		setmsg_("Error creating FOV semi-axis vectors, NXPTS = #. Th"
 			"is may indicate an error in the IK parameters for #.",
@@ -1604,15 +1631,15 @@ L_zzgffvin:
 /*           Compute and find the length of each semi-axis vector. */
 
 	    vsub_(&semipt[(i__1 = i__ * 3 - 3) < 6 && 0 <= i__1 ? i__1 : 
-		    s_rnge("semipt", i__1, "zzgffvu_", (ftnlen)1359)], svfvct,
+		    s_rnge("semipt", i__1, "zzgffvu_", (ftnlen)1375)], svfvct,
 		     &svsemi[(i__2 = i__ * 3 - 3) < 6 && 0 <= i__2 ? i__2 : 
-		    s_rnge("svsemi", i__2, "zzgffvu_", (ftnlen)1359)]);
+		    s_rnge("svsemi", i__2, "zzgffvu_", (ftnlen)1375)]);
 	    svxmag[(i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge("svxmag",
-		     i__1, "zzgffvu_", (ftnlen)1361)] = vnorm_(&svsemi[(i__2 =
+		     i__1, "zzgffvu_", (ftnlen)1377)] = vnorm_(&svsemi[(i__2 =
 		     i__ * 3 - 3) < 6 && 0 <= i__2 ? i__2 : s_rnge("svsemi", 
-		    i__2, "zzgffvu_", (ftnlen)1361)]);
+		    i__2, "zzgffvu_", (ftnlen)1377)]);
 	    if (svxmag[(i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge(
-		    "svxmag", i__1, "zzgffvu_", (ftnlen)1363)] == 0.) {
+		    "svxmag", i__1, "zzgffvu_", (ftnlen)1379)] == 0.) {
 		setmsg_("FOV semi-axis #* for @ has zero length.", (ftnlen)39)
 			;
 		errint_("*", &i__, (ftnlen)1);
@@ -1630,17 +1657,25 @@ L_zzgffvin:
 /*     target's visibility. */
 
     if ((s_cmp(svishp, "CIRCLE", (ftnlen)9, (ftnlen)6) == 0 || s_cmp(svishp, 
-	    "ELLIPSE", (ftnlen)9, (ftnlen)7) == 0) && svxtrg) {
+	    "ELLIPSE", (ftnlen)9, (ftnlen)7) == 0) && svetrg) {
 
-/*        Create an ellipsoid whose semi-axes are consistent with */
-/*        ellipse in SVPLAN defined by SEMIPT. To start out, select the */
-/*        center of the ellipsoid. We place the center along the */
-/*        direction defined by the FOV axis, at a distance beyond */
-/*        SVPLAN (that is, on the side of the plane opposite the */
-/*        observer), such that a sphere centered at this point would */
-/*        have a limb consisting of a circle of radius SVXMAG(1). If */
-/*        CTREXT is the distance of the ellipsoid center from SVFVCT, */
-/*        then the limb geometry requires */
+
+/*        Create an ellipsoid whose semi-axes are consistent with the */
+/*        ellipse in SVPLAN defined by SEMIPT. Caution: after we */
+/*        create this ellipsoid, we'll scale and shift it so it doesn't */
+/*        extend too far from the observer. */
+
+/*        Recall the origin is that of the instrument frame. The plane */
+/*        SVPLAN is normal to the FOV axis and has distance 1 km from */
+/*        the origin. */
+
+/*        To start out, select the center of the ellipsoid. We place the */
+/*        center along the direction defined by the FOV axis, at a */
+/*        distance beyond SVPLAN (that is, on the side of the plane */
+/*        opposite the observer), such that a sphere centered at this */
+/*        point would have a limb consisting of a circle of radius */
+/*        SVXMAG(1). If CTREXT is the distance of the ellipsoid center */
+/*        from SVFVCT, then the limb geometry requires */
 
 /*           CTREXT / SVXMAG(1) = SVXMAG(1) / 1 */
 
@@ -1666,20 +1701,22 @@ L_zzgffvin:
 /*        in the direction from SVFVCT toward SEMIPT(*,1) will have this */
 /*        length. */
 
-	fovrad[2] = svxmag[0] * sqrt(pow_dd(svxmag, &c_b130) + 1.);
-	fovrad[0] = fovrad[2];
+	ellrad[2] = svxmag[0] * sqrt(pow_dd(svxmag, &c_b116) + 1.);
+	ellrad[0] = ellrad[2];
 
 /*        Compute the corresponding columns of the FOV semi-axis matrix. */
 
-/*        The ellipsoid's third axis points along the FOV axis: */
+/*        The ellipsoid's third axis points along the FOV axis. Note */
+/*        that SVFVCT is a unit vector pointing in the desired */
+/*        direction. */
 
-	vscl_(&fovrad[2], svfvct, &svfsmx[6]);
+	vscl_(&ellrad[2], svfvct, &svfsmx[6]);
 
 /*        The first ellipsoid semi-axis is associated with SEMIPT(*,1) */
-/*        and also has length FOVRAD(3): */
+/*        and also has length ELLRAD(3): */
 
 	vhat_(svsemi, vtemp);
-	vscl_(fovrad, vtemp, svfsmx);
+	vscl_(ellrad, vtemp, svfsmx);
 
 /*        The ellipsoid's second semi-axis points from SVFVCT toward */
 /*        SEMIPT(*,2). The ratio of its length to that of the other */
@@ -1687,15 +1724,29 @@ L_zzgffvin:
 /*        semi-axis to that of its first. Note that we've already ruled */
 /*        out divide-by-zero errors here. */
 
-	fovrad[1] = svxmag[1] / svxmag[0] * fovrad[2];
+	ellrad[1] = svxmag[1] / svxmag[0] * ellrad[2];
 
 /*        We define the third axis using a cross product to */
 /*        ensure we produce a matrix with positive determinant. */
 
 	ucrss_(&svfsmx[6], svfsmx, vtemp);
-	vscl_(&fovrad[1], vtemp, &svfsmx[3]);
+	vscl_(&ellrad[1], vtemp, &svfsmx[3]);
+
+/*        Scale the ellipsoid and the distance of its center from */
+/*        the observer so that the ellipsoid is of reasonable size */
+/*        and doesn't extend too far from the observer. Caution: this */
+/*        modification means the ellipsoid no longer intersects the FOV */
+/*        plane at the FOV boundary. The ellipsoid is still usable with */
+/*        ZZOCCED, which is the ellipsoid's raison d'etre. */
+
+	escale = 1e-5 / (vnorm_(svedct) + max(ellrad[0],ellrad[1]));
+	for (i__ = 1; i__ <= 3; ++i__) {
+	    vsclip_(&escale, &svfsmx[(i__1 = i__ * 3 - 3) < 9 && 0 <= i__1 ? 
+		    i__1 : s_rnge("svfsmx", i__1, "zzgffvu_", (ftnlen)1491)]);
+	}
+	vsclip_(&escale, svedct);
     }
-    if (s_cmp(svishp, "CIRCLE", (ftnlen)9, (ftnlen)6) == 0 && ! svxtrg) {
+    if (s_cmp(svishp, "CIRCLE", (ftnlen)9, (ftnlen)6) == 0 && ! svetrg) {
 
 /*        We have a circular FOV and a point or ray target model. */
 /*        In this case, our FOV inclusion test is simple as can */
@@ -1705,7 +1756,7 @@ L_zzgffvin:
 
 	svarad = vsep_(svfaxi, svbnds);
     } else if ((s_cmp(svishp, "RECTANGLE", (ftnlen)9, (ftnlen)9) == 0 || 
-	    s_cmp(svishp, "POLYGON", (ftnlen)9, (ftnlen)7) == 0) && ! svxtrg) 
+	    s_cmp(svishp, "POLYGON", (ftnlen)9, (ftnlen)7) == 0) && ! svetrg) 
 	    {
 
 /*        We have a rectangular or polygonal FOV and a ray or point */
@@ -1725,17 +1776,17 @@ L_zzgffvin:
 	frame_(z__, x, y);
 	for (i__ = 1; i__ <= 3; ++i__) {
 	    svfovm[(i__1 = i__ * 3 - 3) < 9 && 0 <= i__1 ? i__1 : s_rnge(
-		    "svfovm", i__1, "zzgffvu_", (ftnlen)1490)] = x[(i__2 = 
+		    "svfovm", i__1, "zzgffvu_", (ftnlen)1532)] = x[(i__2 = 
 		    i__ - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge("x", i__2, 
-		    "zzgffvu_", (ftnlen)1490)];
+		    "zzgffvu_", (ftnlen)1532)];
 	    svfovm[(i__1 = i__ * 3 - 2) < 9 && 0 <= i__1 ? i__1 : s_rnge(
-		    "svfovm", i__1, "zzgffvu_", (ftnlen)1491)] = y[(i__2 = 
+		    "svfovm", i__1, "zzgffvu_", (ftnlen)1533)] = y[(i__2 = 
 		    i__ - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge("y", i__2, 
-		    "zzgffvu_", (ftnlen)1491)];
+		    "zzgffvu_", (ftnlen)1533)];
 	    svfovm[(i__1 = i__ * 3 - 1) < 9 && 0 <= i__1 ? i__1 : s_rnge(
-		    "svfovm", i__1, "zzgffvu_", (ftnlen)1492)] = z__[(i__2 = 
+		    "svfovm", i__1, "zzgffvu_", (ftnlen)1534)] = z__[(i__2 = 
 		    i__ - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge("z", i__2, 
-		    "zzgffvu_", (ftnlen)1492)];
+		    "zzgffvu_", (ftnlen)1534)];
 	}
 
 /*        Compute the intersections of the FOV boundary vectors with the */
@@ -1747,7 +1798,7 @@ L_zzgffvin:
 	i__1 = svnvrt;
 	for (i__ = 1; i__ <= i__1; ++i__) {
 	    inrypl_(svorig, &svbnds[(i__2 = i__ * 3 - 3) < 30000 && 0 <= i__2 
-		    ? i__2 : s_rnge("svbnds", i__2, "zzgffvu_", (ftnlen)1504)]
+		    ? i__2 : s_rnge("svbnds", i__2, "zzgffvu_", (ftnlen)1546)]
 		    , svplan, &nxpts, xpt);
 	    if (nxpts != 1) {
 		setmsg_("Error finding FOV plane intercept of FOV boundary v"
@@ -1763,10 +1814,10 @@ L_zzgffvin:
 	    vsub_(xpt, svfvct, vtemp);
 	    mxv_(svfovm, vtemp, vtemp2);
 	    svfpol[(i__2 = (i__ << 1) - 2) < 20000 && 0 <= i__2 ? i__2 : 
-		    s_rnge("svfpol", i__2, "zzgffvu_", (ftnlen)1525)] = 
+		    s_rnge("svfpol", i__2, "zzgffvu_", (ftnlen)1567)] = 
 		    vtemp2[0];
 	    svfpol[(i__2 = (i__ << 1) - 1) < 20000 && 0 <= i__2 ? i__2 : 
-		    s_rnge("svfpol", i__2, "zzgffvu_", (ftnlen)1526)] = 
+		    s_rnge("svfpol", i__2, "zzgffvu_", (ftnlen)1568)] = 
 		    vtemp2[1];
 	}
     }
@@ -1867,6 +1918,14 @@ L_zzgffvst:
 /*     5) If the target shape is not recognized, the error will be */
 /*        diagnosed by routines in the call tree of this routine. */
 
+/*     6)  If a body RADII vector has other than exactly thee elements, */
+/*         the error SPICE(INVALIDCOUNT) is signaled by a routine in */
+/*         the call tree of this routine. */
+
+/*     7)  If a body RADII vector has any element less-than or */
+/*         equal to zero, the error SPICE(BADAXISLENGTH) is signaled by */
+/*         a routine in the call tree of this routine. */
+
 /* $ Files */
 
 /*     See the Files header section of the umbrella routine ZZGFFVU. */
@@ -1917,10 +1976,10 @@ L_zzgffvst:
 /*     The algorithm for the state determination depends on the */
 /*     target model and the FOV shape. */
 
-    if (svxtrg) {
+    if (svetrg) {
 
-/*        The target is an ephemeris object modeled as an extended */
-/*        body. There are two branches here: one for a rectangular/ */
+/*        The target is an ephemeris object modeled as an ellipsoid. */
+/*        There are two branches here: one for a rectangular/ */
 /*        polygonal FOV and one for a circular/elliptical FOV. */
 
 /*        Start by finding the observer-target position vector in the */
@@ -1978,9 +2037,9 @@ L_zzgffvst:
 	    vequ_(vtemp, m1);
 	    for (i__ = 1; i__ <= 3; ++i__) {
 		mxv_(insmat, &m1[(i__1 = i__ * 3 - 3) < 9 && 0 <= i__1 ? i__1 
-			: s_rnge("m1", i__1, "zzgffvu_", (ftnlen)1757)], &m2[(
+			: s_rnge("m1", i__1, "zzgffvu_", (ftnlen)1807)], &m2[(
 			i__2 = i__ * 3 - 3) < 9 && 0 <= i__2 ? i__2 : s_rnge(
-			"m2", i__2, "zzgffvu_", (ftnlen)1757)]);
+			"m2", i__2, "zzgffvu_", (ftnlen)1807)]);
 	    }
 	    cgv2el_(m2, &m2[3], &m2[6], fvlimb);
 
@@ -2013,11 +2072,11 @@ L_zzgffvst:
 
 	    for (i__ = 1; i__ <= 3; ++i__) {
 		vscl_(&svtrad[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : 
-			s_rnge("svtrad", i__1, "zzgffvu_", (ftnlen)1795)], &
+			s_rnge("svtrad", i__1, "zzgffvu_", (ftnlen)1845)], &
 			insmat[(i__2 = i__ * 3 - 3) < 9 && 0 <= i__2 ? i__2 : 
-			s_rnge("insmat", i__2, "zzgffvu_", (ftnlen)1795)], &
+			s_rnge("insmat", i__2, "zzgffvu_", (ftnlen)1845)], &
 			trgsmx[(i__3 = i__ * 3 - 3) < 9 && 0 <= i__3 ? i__3 : 
-			s_rnge("trgsmx", i__3, "zzgffvu_", (ftnlen)1795)]);
+			s_rnge("trgsmx", i__3, "zzgffvu_", (ftnlen)1845)]);
 	    }
 	    ocstat = zzocced_(svorig, svedct, svfsmx, trgctr, trgsmx);
 
@@ -2214,16 +2273,16 @@ L_zzgffvst:
 		    for (i__ = 1; i__ <= 2; ++i__) {
 			coord[(i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : 
 				s_rnge("coord", i__1, "zzgffvu_", (ftnlen)
-				2024)] = vdot_(fovpt, &svsemi[(i__2 = i__ * 3 
+				2074)] = vdot_(fovpt, &svsemi[(i__2 = i__ * 3 
 				- 3) < 6 && 0 <= i__2 ? i__2 : s_rnge("svsemi"
-				, i__2, "zzgffvu_", (ftnlen)2024)]) / svxmag[(
+				, i__2, "zzgffvu_", (ftnlen)2074)]) / svxmag[(
 				i__3 = i__ - 1) < 2 && 0 <= i__3 ? i__3 : 
 				s_rnge("svxmag", i__3, "zzgffvu_", (ftnlen)
-				2024)];
+				2074)];
 		    }
 		    d__1 = coord[0] / svxmag[0];
 		    d__2 = coord[1] / svxmag[1];
-		    l = pow_dd(&d__1, &c_b130) + pow_dd(&d__2, &c_b130);
+		    l = pow_dd(&d__1, &c_b116) + pow_dd(&d__2, &c_b116);
 
 /*                 The target is visible if FOVPT is inside the FOV */
 /*                 ellipse; this condition is indicated by L <= 1. */

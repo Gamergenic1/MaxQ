@@ -12,7 +12,7 @@ static integer c__3 = 3;
 static integer c__1 = 1;
 static integer c__0 = 0;
 
-/* $Procedure      TRCPKG ( Trace package ) */
+/* $Procedure TRCPKG ( Trace package ) */
 /* Subroutine */ int trcpkg_0_(int n__, integer *depth, integer *index, char *
 	module, char *trace, char *name__, ftnlen module_len, ftnlen 
 	trace_len, ftnlen name_len)
@@ -96,16 +96,14 @@ static integer c__0 = 0;
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     VARIABLE  I/O  ENTRY */
+/*     VARIABLE  I/O  ENTRY POINTS */
 /*     --------  ---  -------------------------------------------------- */
-
 /*     DEPTH      O   TRCDEP */
 /*     DEPTH      O   TRCMXD */
 /*     INDEX      I   TRCNAM */
 /*     NAME       O   TRCNAM */
 /*     MODULE     I   CHKIN, CHKOUT */
 /*     TRACE      O   QCKTRC */
-
 /*     FILEN      P */
 /*     NAMLEN     P */
 /*     MAXMOD     P */
@@ -120,13 +118,13 @@ static integer c__0 = 0;
 
 /* $ Parameters */
 
-/*     FILEN          is the maximum length of a file name. */
+/*     FILEN    is the maximum length of a file name. */
 
-/*     NAMLEN         is the maximum length of the significant */
-/*                    portion of a module name. */
+/*     NAMLEN   is the maximum length of the significant */
+/*              portion of a module name. */
 
-/*     MAXMOD         is the maximum storage depth for names in the */
-/*                    traceback stack. */
+/*     MAXMOD   is the maximum storage depth for names in the */
+/*              traceback stack. */
 
 /* $ Exceptions */
 
@@ -141,17 +139,17 @@ static integer c__0 = 0;
 
 /*     The entry points declared in this routine are: */
 
-/*     CHKIN */
-/*     CHKOUT */
-/*     TRCDEP */
-/*     TRCMXD */
-/*     TRCNAM */
-/*     QCKTRC */
-/*     FREEZE */
-/*     TRCOFF */
+/*       CHKIN */
+/*       CHKOUT */
+/*       TRCDEP */
+/*       TRCMXD */
+/*       TRCNAM */
+/*       QCKTRC */
+/*       FREEZE */
+/*       TRCOFF */
 
 /*     This routine serves as an umbrella that allows the entry */
-/*     points to share data.  TRCPKG should never be called directly. */
+/*     points to share data. TRCPKG should never be called directly. */
 
 /*     See the subroutine ERRACT for descriptions of the error actions */
 /*     and codes. */
@@ -171,12 +169,25 @@ static integer c__0 = 0;
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     K.R. Gehringer  (JPL) */
-/*     H.A. Neilan     (JPL) */
-/*     B.V. Semenov    (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
+/*     H.A. Neilan        (JPL) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 4.28.0, 28-NOV-2021 (BVS) */
+
+/*        Updated for MAC-OSX-M1-64BIT-CLANG_C. */
+
+/* -    SPICELIB Version 4.27.0, 03-JUN-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. Added entry in */
+/*        $Index_Entries. */
 
 /* -    SPICELIB Version 4.26.0, 10-MAR-2014 (BVS) */
 
@@ -292,23 +303,23 @@ static integer c__0 = 0;
 /* -    SPICELIB Version 4.0.4, 08-OCT-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitly given.  New */
+/*        environments are now explicitly given. New */
 /*        environments are WIN-NT */
 
 /* -    SPICELIB Version 4.0.3, 24-SEP-1999 (NJB) */
 
-/*        CSPICE environments were added.  Some typos were corrected. */
+/*        CSPICE environments were added. Some typos were corrected. */
 
 /* -    SPICELIB Version 4.0.2, 28-JUL-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitly given.  New */
+/*        environments are now explicitly given. New */
 /*        environments are PC-DIGITAL, SGI-O32 and SGI-N32. */
 
 /* -    SPICELIB Version 4.0.1, 18-MAR-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitly given.  Previously, */
+/*        environments are now explicitly given. Previously, */
 /*        environments such as SUN-SUNOS and SUN-SOLARIS were implied */
 /*        by the environment label SUN. */
 
@@ -316,9 +327,9 @@ static integer c__0 = 0;
 
 /*        Module was updated for the PC-LINUX platform. */
 
-/*        Bug fix:  the previous version of entry point CHKOUT failed to */
+/*        Bug fix: the previous version of entry point CHKOUT failed to */
 /*        make a correct module name comparison when the input name */
-/*        exceeded NAMLEN characters in length.  Now only the initial */
+/*        exceeded NAMLEN characters in length. Now only the initial */
 /*        NAMLEN non-blank characters (at most) of the input name are */
 /*        used in the comparison. */
 
@@ -338,10 +349,10 @@ static integer c__0 = 0;
 
 /* -    SPICELIB Version 2.0.0, 11-NOV-1993 (HAN) */
 
-/*         Module was updated to include the values for FILEN and */
-/*         NAMLEN for the Silicon Graphics, DEC Alpha-OSF/1, and */
-/*         NeXT platforms. The previous value of 256 for Unix */
-/*         platforms was changed to 255. */
+/*        Module was updated to include the values for FILEN and */
+/*        NAMLEN for the Silicon Graphics, DEC Alpha-OSF/1, and */
+/*        NeXT platforms. The previous value of 256 for Unix */
+/*        platforms was changed to 255. */
 
 /* -    SPICELIB Version 1.3.0, 23-OCT-1992 (NJB) */
 
@@ -349,7 +360,7 @@ static integer c__0 = 0;
 /*        itself is exercised only if a bug is present inserted the */
 /*        wrong variable into an error message. */
 
-/* -     SPICELIB Version 1.2.0, 12-OCT-1992 (HAN) */
+/* -    SPICELIB Version 1.2.0, 12-OCT-1992 (HAN) */
 
 /*        Module was updated to include the values of the parameters */
 /*        for the Hewlett Packard UX 9000/750 environment. */
@@ -362,14 +373,14 @@ static integer c__0 = 0;
 /* -    SPICELIB Version 1.1.0, 18-JUN-1990 (NJB) */
 
 /*        Added declarations for trace disabling. Re-organized */
-/*        declarations.  Updated comments. */
+/*        declarations. Updated comments. */
 
 /* -    SPICELIB Version 1.0.0, 31-JAN-1990 (NJB) */
 
 /* -& */
 /* $ Index_Entries */
 
-/*     None. */
+/*     error trace subsystem */
 
 /* -& */
 /* $ Revisions */
@@ -378,9 +389,9 @@ static integer c__0 = 0;
 
 /*        Module was updated for the PC-LINUX platform. */
 
-/*        Bug fix:  the previous version of entry point CHKOUT failed to */
+/*        Bug fix: the previous version of entry point CHKOUT failed to */
 /*        make a correct module name comparison when the input name */
-/*        exceeded NAMLEN characters in length.  Now only the initial */
+/*        exceeded NAMLEN characters in length. Now only the initial */
 /*        NAMLEN non-blank characters (at most) of the input name are */
 /*        used in the comparison. */
 
@@ -400,10 +411,10 @@ static integer c__0 = 0;
 
 /* -    SPICELIB Version 2.0.0, 11-NOV-1993 (HAN) */
 
-/*         Module was updated to include the values for FILEN and */
-/*         NAMLEN for the Silicon Graphics, DEC Alpha-OSF/1, and */
-/*         NeXT platforms. The previous value of 256 for Unix */
-/*         platforms was changed to 255. */
+/*        Module was updated to include the values for FILEN and */
+/*        NAMLEN for the Silicon Graphics, DEC Alpha-OSF/1, and */
+/*        NeXT platforms. The previous value of 256 for Unix */
+/*        platforms was changed to 255. */
 
 /* -    SPICELIB Version 1.3.0, 23-OCT-1992 (NJB) */
 
@@ -420,14 +431,13 @@ static integer c__0 = 0;
 /*        create the source file for a specific environment given a */
 /*        master source file. */
 
-
 /* -    SPICELIB Version 1.1.0, 18-JUN-1990 (NJB) */
 
 /*        Added declarations for trace disabling. Re-organized */
-/*        declarations.  Updated comments to reflect inclusion */
-/*        of the new entry point TRCOFF.  Also updated the header */
+/*        declarations. Updated comments to reflect inclusion */
+/*        of the new entry point TRCOFF. Also updated the header */
 /*        to make the style more parallel to other SPICELIB */
-/*        umbrella routines.  Updated the description line and */
+/*        umbrella routines. Updated the description line and */
 /*        abstract, in particular. */
 
 /* -    Beta Version 1.0.1, 08-FEB-1989 (NJB) */
@@ -477,7 +487,7 @@ static integer c__0 = 0;
     wrline_("SCREEN", "TRCPKG: You have called an entry that performs no run"
 	    "-time function. ", (ftnlen)6, (ftnlen)69);
     return 0;
-/* $Procedure      CHKIN ( Module Check In ) */
+/* $Procedure CHKIN ( Module Check In ) */
 
 L_chkin:
 /* $ Abstract */
@@ -520,6 +530,8 @@ L_chkin:
 
 /* $ Declarations */
 
+/*     IMPLICIT NONE */
+
 /*     CHARACTER*(*)          MODULE */
 
 /* $ Brief_I/O */
@@ -531,16 +543,16 @@ L_chkin:
 
 /* $ Detailed_Input */
 
-/*     MODULE         is the name of the routine calling CHKIN.  The */
-/*                    named routine is supposed to be `checking in' */
-/*                    when it calls CHKIN; that is, the call should be */
-/*                    the first executable statement following the */
-/*                    reference to the function RETURN (which should be */
-/*                    the first executable statement). */
+/*     MODULE   is the name of the routine calling CHKIN. The */
+/*              named routine is supposed to be `checking in' */
+/*              when it calls CHKIN; that is, the call should be */
+/*              the first executable statement following the */
+/*              reference to the function RETURN (which should be */
+/*              the first executable statement). */
 
-/*                    Only the first NAMLEN non-blank characters in */
-/*                    a module name are stored for use in a traceback */
-/*                    by this subroutine. */
+/*              Only the first NAMLEN non-blank characters in */
+/*              a module name are stored for use in a traceback */
+/*              by this subroutine. */
 
 /* $ Detailed_Output */
 
@@ -548,14 +560,13 @@ L_chkin:
 
 /* $ Parameters */
 
-/*     FILEN          is the maximum file name length that can be */
-/*                    accommodated by this routine. */
+/*     FILEN    is the maximum file name length that can be */
+/*              accommodated by this routine. */
 
 /* $ Exceptions */
 
 /*     CHKIN does not signal errors; rather it writes error messages, */
 /*     so as to avoid recursion. */
-
 
 /*     1)  If the traceback storage area overflows, the short error */
 /*         message SPICE(TRACEBACKOVERFLOW) is written to the error */
@@ -573,11 +584,11 @@ L_chkin:
 /*     This routine is part of the SPICELIB error handling mechanism. */
 
 /*     Conceptually, the effect of this routine is to `push' the */
-/*     supplied module name onto a stack.  The routine CHKOUT performs */
+/*     supplied module name onto a stack. The routine CHKOUT performs */
 /*     the inverse, or `pop', operation. */
 
 /*     Every routine that participates in the traceback scheme should */
-/*     have a call to CHKIN as the second executable statement.  The */
+/*     have a call to CHKIN as the second executable statement. The */
 /*     first executable statements should be: */
 
 /*        IF ( RETURN() ) THEN */
@@ -595,7 +606,7 @@ L_chkin:
 
 
 /*     All SPICELIB routines should call CHKIN and CHKOUT, unless they */
-/*     are classified as `error free'.  Programs linked with SPICELIB */
+/*     are classified as `error free'. Programs linked with SPICELIB */
 /*     may also use CHKIN and CHKOUT. */
 
 /*     Routines that don't call CHKIN and CHKOUT won't appear in the */
@@ -605,8 +616,8 @@ L_chkin:
 /*     trace mechanism will become very confused. */
 
 /*     It is possible to disable check-ins (and check-outs) by calling */
-/*     the entry point TRCOFF.  CHKIN and CHKOUT will return immediately */
-/*     upon entry after TRCOFF has been called.  It is not possible to */
+/*     the entry point TRCOFF. CHKIN and CHKOUT will return immediately */
+/*     upon entry after TRCOFF has been called. It is not possible to */
 /*     re-enable check-ins and check-outs after calling TRCOFF. Routines */
 /*     that don't call CHKIN and CHKOUT won't appear in the traceback. */
 
@@ -616,10 +627,10 @@ L_chkin:
 
 /* $ Restrictions */
 
-/*     Routines that call this routine must call CHKOUT immediately */
-/*     prior to any RETURN or END statement. */
+/*     1)  Routines that call this routine must call CHKOUT immediately */
+/*         prior to any RETURN or END statement. */
 
-/*     Module names are assumed to have no embedded blanks. */
+/*     2)  Module names are assumed to have no embedded blanks. */
 
 /* $ Literature_References */
 
@@ -627,11 +638,19 @@ L_chkin:
 
 /* $ Author_and_Institution */
 
-/*     K.R. Gehringer  (JPL) */
-/*     N.J. Bachman    (JPL) */
-/*     B.V. Semenov    (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 4.2.0, 03-JUN-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 4.1.0, 29-JUL-2013 (BVS) */
 
@@ -646,23 +665,23 @@ L_chkin:
 /* -    SPICELIB Version 4.0.4, 08-OCT-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitly given.  New */
+/*        environments are now explicitly given. New */
 /*        environments are WIN-NT */
 
 /* -    SPICELIB Version 4.0.3, 24-SEP-1999 (NJB) */
 
-/*        CSPICE environments were added.  Some typos were corrected. */
+/*        CSPICE environments were added. Some typos were corrected. */
 
 /* -    SPICELIB Version 4.0.2, 28-JUL-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitly given.  New */
+/*        environments are now explicitly given. New */
 /*        environments are PC-DIGITAL, SGI-O32 and SGI-N32. */
 
 /* -    SPICELIB Version 4.0.1, 18-MAR-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitly given.  Previously, */
+/*        environments are now explicitly given. Previously, */
 /*        environments such as SUN-SUNOS and SUN-SOLARIS were implied */
 /*        by the environment label SUN. */
 
@@ -670,9 +689,9 @@ L_chkin:
 
 /*        Module was updated for the PC-LINUX platform. */
 
-/*        Bug fix:  the previous version of entry point CHKOUT failed to */
+/*        Bug fix: the previous version of entry point CHKOUT failed to */
 /*        make a correct module name comparison when the input name */
-/*        exceeded NAMLEN characters in length.  Now only the initial */
+/*        exceeded NAMLEN characters in length. Now only the initial */
 /*        NAMLEN non-blank characters (at most) of the input name are */
 /*        used in the comparison. */
 
@@ -694,12 +713,12 @@ L_chkin:
 /*        Comment section for permuted index source lines was added */
 /*        following the header. */
 
-/* -    SPICELIB Version 2.0.0, 15-JUN-1990  (NJB) */
+/* -    SPICELIB Version 2.0.0, 15-JUN-1990 (NJB) */
 
-/*        Disabling of check-ins implemented.  Many parts of the */
-/*        header have be re-written.  Weird spacing ameliorated. */
+/*        Disabling of check-ins implemented. Many parts of the */
+/*        header have be re-written. Weird spacing ameliorated. */
 
-/* -    SPICELIB Version 1.0.0, 31-JAN-1990  (NJB) */
+/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (NJB) */
 
 /* -& */
 /* $ Index_Entries */
@@ -713,9 +732,9 @@ L_chkin:
 
 /*        Module was updated for the PC-LINUX platform. */
 
-/*        Bug fix:  the previous version of entry point CHKOUT failed to */
+/*        Bug fix: the previous version of entry point CHKOUT failed to */
 /*        make a correct module name comparison when the input name */
-/*        exceeded NAMLEN characters in length.  Now only the initial */
+/*        exceeded NAMLEN characters in length. Now only the initial */
 /*        NAMLEN non-blank characters (at most) of the input name are */
 /*        used in the comparison. */
 
@@ -734,17 +753,17 @@ L_chkin:
 
 /* -    SPICELIB Version 2.0.0, 15-JUN-1990  (NJB) */
 
-/*        Disabling of check-ins implemented.  Many parts of the */
-/*        header have be re-written.  Weird spacing ameliorated. */
+/*        Disabling of check-ins implemented. Many parts of the */
+/*        header have be re-written. Weird spacing ameliorated. */
 
 /* -    Beta Version 1.1.1, 10-FEB-1988  (NJB) */
 
-/*        Parameter declarations documented.  Parameters section added, */
+/*        Parameter declarations documented. $Parameters section added, */
 /*        and parameter declarations listed in `Brief I/O'. */
 
 /* -    Beta Version 1.1.0, 27-OCT-1988  (NJB) */
 
-/*        Cosmetic improvement to code.  Condensed a continued */
+/*        Cosmetic improvement to code. Condensed a continued */
 /*        statement into one line. */
 
 /* -& */
@@ -775,7 +794,7 @@ L_chkin:
 	if (modcnt < 100) {
 	    ++modcnt;
 	    s_copy(stack + (((i__1 = modcnt - 1) < 100 && 0 <= i__1 ? i__1 : 
-		    s_rnge("stack", i__1, "trcpkg_", (ftnlen)785)) << 5), 
+		    s_rnge("stack", i__1, "trcpkg_", (ftnlen)812)) << 5), 
 		    module + (first - 1), (ftnlen)32, module_len - (first - 1)
 		    );
 	} else {
@@ -803,7 +822,7 @@ L_chkin:
 /*     We're done now, so return. */
 
     return 0;
-/* $Procedure      CHKOUT ( Module Check Out ) */
+/* $Procedure CHKOUT ( Module Check Out ) */
 
 L_chkout:
 /* $ Abstract */
@@ -846,6 +865,8 @@ L_chkout:
 
 /* $ Declarations */
 
+/*     IMPLICIT NONE */
+
 /*     CHARACTER*(*)        MODULE */
 
 /* $ Brief_I/O */
@@ -858,14 +879,14 @@ L_chkout:
 
 /* $ Detailed_Input */
 
-/*     MODULE         is the name of the routine calling CHKOUT.  The */
-/*                    named routine is supposed to be `checking out' */
-/*                    when it calls CHKOUT; that is, the call should be */
-/*                    the last executable statement preceding any exit */
-/*                    from the routine. */
+/*     MODULE   is the name of the routine calling CHKOUT. The */
+/*              named routine is supposed to be `checking out' */
+/*              when it calls CHKOUT; that is, the call should be */
+/*              the last executable statement preceding any exit */
+/*              from the routine. */
 
-/*                    Only the first NAMLEN non-blank characters in */
-/*                    a module name are used when checking out. */
+/*              Only the first NAMLEN non-blank characters in */
+/*              a module name are used when checking out. */
 
 /* $ Detailed_Output */
 
@@ -873,11 +894,11 @@ L_chkout:
 
 /* $ Parameters */
 
-/*     FILEN          is the maximum file name length that can be */
-/*                    accommodated by this routine. */
+/*     FILEN    is the maximum file name length that can be */
+/*              accommodated by this routine. */
 
-/*     NAMLEN         is the maximum module name length that can be */
-/*                    accommodated by this routine. */
+/*     NAMLEN   is the maximum module name length that can be */
+/*              accommodated by this routine. */
 
 /* $ Exceptions */
 
@@ -900,7 +921,7 @@ L_chkout:
 /*     This routine is part of the SPICELIB error handling mechanism. */
 
 /*     Conceptually, the effect of this routine is to `pop' a module */
-/*     name from a stack.  The routine CHKIN performs the inverse, or */
+/*     name from a stack. The routine CHKIN performs the inverse, or */
 /*     `push' operation. */
 
 /*     Every routine that participates in the traceback scheme should */
@@ -921,7 +942,7 @@ L_chkout:
 /*        CALL CHKOUT  ( module ) */
 
 /*     All SPICELIB routines should call CHKIN and CHKOUT, unless they */
-/*     are classified as `error free'.  Programs linked with SPICELIB */
+/*     are classified as `error free'. Programs linked with SPICELIB */
 /*     may also use CHKIN and CHKOUT. */
 
 /*     Routines that don't call CHKIN and CHKOUT won't appear in the */
@@ -931,8 +952,8 @@ L_chkout:
 /*     trace mechanism will become very confused. */
 
 /*     It is possible to disable check-ins (and check-outs) by calling */
-/*     the entry point TRCOFF.  CHKIN and CHKOUT will return immediately */
-/*     upon entry after TRCOFF has been called.  It is not possible to */
+/*     the entry point TRCOFF. CHKIN and CHKOUT will return immediately */
+/*     upon entry after TRCOFF has been called. It is not possible to */
 /*     re-enable check-ins and check-outs after calling TRCOFF. Routines */
 /*     that don't call CHKIN and CHKOUT won't appear in the traceback. */
 
@@ -960,8 +981,8 @@ L_chkout:
 
 /* $ Restrictions */
 
-/*     Routines that call this routine must call CHKIN as the second */
-/*     executable statement. (The first is a call to RETURN). */
+/*     1)  Routines that call this routine must call CHKIN as the second */
+/*         executable statement. (The first is a call to RETURN). */
 
 /* $ Literature_References */
 
@@ -969,11 +990,19 @@ L_chkout:
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     K.R. Gehringer  (JPL) */
-/*     B.V. Semenov    (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 4.2.0, 03-JUN-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 4.1.0, 29-JUL-2013 (BVS) */
 
@@ -988,23 +1017,23 @@ L_chkout:
 /* -    SPICELIB Version 4.0.4, 08-OCT-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitly given.  New */
+/*        environments are now explicitly given. New */
 /*        environments are WIN-NT */
 
 /* -    SPICELIB Version 4.0.3, 24-SEP-1999 (NJB) */
 
-/*        CSPICE environments were added.  Some typos were corrected. */
+/*        CSPICE environments were added. Some typos were corrected. */
 
 /* -    SPICELIB Version 4.0.2, 28-JUL-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitly given.  New */
+/*        environments are now explicitly given. New */
 /*        environments are PC-DIGITAL, SGI-O32 and SGI-N32. */
 
 /* -    SPICELIB Version 4.0.1, 18-MAR-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitly given.  Previously, */
+/*        environments are now explicitly given. Previously, */
 /*        environments such as SUN-SUNOS and SUN-SOLARIS were implied */
 /*        by the environment label SUN. */
 
@@ -1012,9 +1041,9 @@ L_chkout:
 
 /*        Module was updated for the PC-LINUX platform. */
 
-/*        Bug fix:  The previous version failed to make a correct */
+/*        Bug fix: The previous version failed to make a correct */
 /*        module name comparison when the input name exceeded NAMLEN */
-/*        characters in length.  Now only the initial NAMLEN non-blank */
+/*        characters in length. Now only the initial NAMLEN non-blank */
 /*        characters (at most) of the input name are used in the */
 /*        comparison. */
 
@@ -1034,9 +1063,9 @@ L_chkout:
 
 /* -    SPICELIB Version 2.0.0, 15-JUN-1990 (NJB) */
 
-/*        Disabling of check-ins implemented.  Many parts of the */
-/*        header have be re-written.  Weird spacing ameliorated. */
-/*        Removed a bug check.  Short error messages made more */
+/*        Disabling of check-ins implemented. Many parts of the */
+/*        header have be re-written. Weird spacing ameliorated. */
+/*        Removed a bug check. Short error messages made more */
 /*        specific. */
 
 /* -    SPICELIB Version 1.0.0, 31-JAN-1990 (NJB) */
@@ -1053,9 +1082,9 @@ L_chkout:
 
 /*        Module was updated for the PC-LINUX platform. */
 
-/*        Bug fix:  The previous version failed to make a correct */
+/*        Bug fix: The previous version failed to make a correct */
 /*        module name comparison when the input name exceeded NAMLEN */
-/*        characters in length.  Now only the initial NAMLEN non-blank */
+/*        characters in length. Now only the initial NAMLEN non-blank */
 /*        characters (at most) of the input name are used in the */
 /*        comparison. */
 
@@ -1070,23 +1099,23 @@ L_chkout:
 
 /* -    SPICELIB Version 2.0.0, 15-JUN-1990 (NJB) */
 
-/*        Disabling of check-ins implemented.  Many parts of the */
-/*        header have be re-written.  Weird spacing ameliorated. */
-/*        Removed a bug check.  Short error messages changed from */
+/*        Disabling of check-ins implemented. Many parts of the */
+/*        header have be re-written. Weird spacing ameliorated. */
+/*        Removed a bug check. Short error messages changed from */
 /*        SPICE(INVALIDCHECKOUT) to SPICE(NAMESDONOTMATCH) and */
 /*        SPICE(TRACESTACKEMPTY). */
 
 /* -    Beta Version 1.1.1, 10-FEB-1988 (NJB) */
 
-/*        Parameter declarations documented.  Parameters section added, */
+/*        Parameter declarations documented. $Parameters section added, */
 /*        and parameter declarations listed in `Brief I/O'. */
 
 /* -    Beta Version 1.1.0, 27-OCT-1988 (NJB) */
 
-/*        Cosmetic improvement to code.  Removed a blank line */
+/*        Cosmetic improvement to code. Removed a blank line */
 /*        separating the first line of a statement from the next */
 /*        continuation line, and condensed and re-organized */
-/*        the statement.  Note:  the precompiler failed to properly */
+/*        the statement. Note:  the precompiler failed to properly */
 /*        convert the original statement into standard FORTRAN. */
 
 /* -& */
@@ -1121,7 +1150,7 @@ L_chkout:
 	    i__1 = i_len(module, module_len), i__2 = first + 31;
 	    l = min(i__1,i__2);
 	    if (s_cmp(stack + (((i__1 = modcnt - 1) < 100 && 0 <= i__1 ? i__1 
-		    : s_rnge("stack", i__1, "trcpkg_", (ftnlen)1144)) << 5), 
+		    : s_rnge("stack", i__1, "trcpkg_", (ftnlen)1184)) << 5), 
 		    module + (first - 1), (ftnlen)32, l - (first - 1)) != 0) {
 		s_copy(tmpnam, module + (first - 1), (ftnlen)80, module_len - 
 			(first - 1));
@@ -1134,15 +1163,15 @@ L_chkout:
 		i__3[2] = 17, a__1[2] = "; popped name is ";
 		i__3[3] = rtrim_(stack + (((i__2 = modcnt - 1) < 100 && 0 <= 
 			i__2 ? i__2 : s_rnge("stack", i__2, "trcpkg_", (
-			ftnlen)1149)) << 5), (ftnlen)32), a__1[3] = stack + ((
+			ftnlen)1189)) << 5), (ftnlen)32), a__1[3] = stack + ((
 			(i__1 = modcnt - 1) < 100 && 0 <= i__1 ? i__1 : 
-			s_rnge("stack", i__1, "trcpkg_", (ftnlen)1149)) << 5);
+			s_rnge("stack", i__1, "trcpkg_", (ftnlen)1189)) << 5);
 		i__3[4] = 1, a__1[4] = ".";
 		s_cat(ch__1, a__1, i__3, &c__5, (ftnlen)149);
 		wrline_(device, ch__1, (ftnlen)128, rtrim_(tmpnam, (ftnlen)80)
 			 + 36 + rtrim_(stack + (((i__2 = modcnt - 1) < 100 && 
 			0 <= i__2 ? i__2 : s_rnge("stack", i__2, "trcpkg_", (
-			ftnlen)1149)) << 5), (ftnlen)32) + 1);
+			ftnlen)1189)) << 5), (ftnlen)32) + 1);
 	    }
 	    --modcnt;
 	} else {
@@ -1162,7 +1191,7 @@ L_chkout:
 /*     Return to the caller. */
 
     return 0;
-/* $Procedure      TRCDEP ( Traceback depth ) */
+/* $Procedure TRCDEP ( Traceback depth ) */
 
 L_trcdep:
 /* $ Abstract */
@@ -1204,13 +1233,14 @@ L_trcdep:
 
 /* $ Declarations */
 
+/*     IMPLICIT NONE */
+
 /*     INTEGER               DEPTH */
 
 /* $ Brief_I/O */
 
 /*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  --------------------------------------------------- */
-
 /*     DEPTH      O   The number of modules in the traceback. */
 
 /* $ Detailed_Input */
@@ -1219,28 +1249,28 @@ L_trcdep:
 
 /* $ Detailed_Output */
 
-/*     DEPTH          Indicates the number of module names in the */
-/*                    traceback representation. */
+/*     DEPTH    is the number of module names in the traceback */
+/*              representation. */
 
-/*                    The module names represent modules in a call chain, */
-/*                    with the first name being the top-level module, */
-/*                    and the name with index DEPTH being the lowest */
-/*                    level module. */
+/*              The module names represent modules in a call chain, */
+/*              with the first name being the top-level module, */
+/*              and the name with index DEPTH being the lowest */
+/*              level module. */
 
-/*                    The meaning of the traceback depends on the state */
-/*                    of the error handling mechanism.  There are two */
-/*                    cases: */
+/*              The meaning of the traceback depends on the state */
+/*              of the error handling mechanism. There are two */
+/*              cases: */
 
-/*                       1.  In 'RETURN' mode, when an error is */
-/*                           signaled, the traceback at that point is */
-/*                           saved.  TRCDEP, TRCNAM, and QCKTRC will */
-/*                           return values pertaining to the saved */
-/*                           traceback. */
+/*                 1. In 'RETURN' mode, when an error is */
+/*                     signaled, the traceback at that point is */
+/*                     saved.  TRCDEP, TRCNAM, and QCKTRC will */
+/*                     return values pertaining to the saved */
+/*                     traceback. */
 
-/*                       2.  In all other modes, the traceback represents */
-/*                           the CURRENT call chain.  TRCDEP, TRCNAM, */
-/*                           and QCKTRC will return values pertaining to */
-/*                           the current trace representation. */
+/*                 2. In all other modes, the traceback represents */
+/*                     the CURRENT call chain.  TRCDEP, TRCNAM, */
+/*                     and QCKTRC will return values pertaining to */
+/*                     the current trace representation. */
 
 /* $ Parameters */
 
@@ -1265,7 +1295,7 @@ L_trcdep:
 /*         we have detected an error condition (see FAILED). */
 
 /*         In this example, we assume that the error has already been */
-/*         detected, and that we wish to create a traceback report.  We */
+/*         detected, and that we wish to create a traceback report. We */
 /*         assume the existence of two user-supplied routines: */
 
 /*            USER_TRACE_FORMAT   --   creates a traceback report in the */
@@ -1308,10 +1338,19 @@ L_trcdep:
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     K.R. Gehringer  (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 4.1.0, 03-JUN-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 4.0.5, 17-JUL-2002 (BVS) */
 
@@ -1320,23 +1359,23 @@ L_trcdep:
 /* -    SPICELIB Version 4.0.4, 08-OCT-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitly given.  New */
+/*        environments are now explicitly given. New */
 /*        environments are WIN-NT */
 
 /* -    SPICELIB Version 4.0.3, 24-SEP-1999 (NJB) */
 
-/*        CSPICE environments were added.  Some typos were corrected. */
+/*        CSPICE environments were added. Some typos were corrected. */
 
 /* -    SPICELIB Version 4.0.2, 28-JUL-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitly given.  New */
+/*        environments are now explicitly given. New */
 /*        environments are PC-DIGITAL, SGI-O32 and SGI-N32. */
 
 /* -    SPICELIB Version 4.0.1, 18-MAR-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitly given.  Previously, */
+/*        environments are now explicitly given. Previously, */
 /*        environments such as SUN-SUNOS and SUN-SOLARIS were implied */
 /*        by the environment label SUN. */
 
@@ -1359,11 +1398,11 @@ L_trcdep:
 /*        Comment section for permuted index source lines was added */
 /*        following the header. */
 
-/* -    SPICELIB Version 1.0.1, 15-JUN-1990  (NJB) */
+/* -    SPICELIB Version 1.0.1, 15-JUN-1990 (NJB) */
 
-/*        Some comments updated.  Some cosmetic changes too. */
+/*        Some comments updated. Some cosmetic changes too. */
 
-/* -    SPICELIB Version 1.0.0, 31-JAN-1990  (NJB) */
+/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (NJB) */
 
 /* -& */
 /* $ Index_Entries */
@@ -1389,7 +1428,8 @@ L_trcdep:
 
 /* -    SPICELIB Version 1.0.1, 15-JUN-1990  (NJB) */
 
-/*        Some comments updated.  Some cosmetic changes too. */
+/*        Some comments updated. Some cosmetic changes too. */
+
 /* -& */
 
 /*     Find the error handling mode. */
@@ -1409,7 +1449,7 @@ L_trcdep:
 /*     Return to the caller. */
 
     return 0;
-/* $Procedure      TRCMXD ( Maximum traceback depth encountered. ) */
+/* $Procedure TRCMXD ( Maximum traceback depth encountered. ) */
 
 L_trcmxd:
 /* $ Abstract */
@@ -1452,13 +1492,14 @@ L_trcmxd:
 
 /* $ Declarations */
 
+/*     IMPLICIT NONE */
+
 /*     INTEGER               DEPTH */
 
 /* $ Brief_I/O */
 
 /*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  --------------------------------------------------- */
-
 /*     DEPTH      O   The maximum number of modules encountered. */
 
 /* $ Detailed_Input */
@@ -1467,10 +1508,9 @@ L_trcmxd:
 
 /* $ Detailed_Output */
 
-/*     DEPTH          Indicates the maximum number of module */
-/*                    names encountered in the traceback stack. */
-/*                    This would be the longest call chain that */
-/*                    occurred during the run of a program. */
+/*     DEPTH    is the maximum number of module names encountered in the */
+/*              traceback stack. This would be the longest call chain */
+/*              that occurred during the run of a program. */
 
 /* $ Parameters */
 
@@ -1519,9 +1559,19 @@ L_trcmxd:
 
 /* $ Author_and_Institution */
 
-/*     K.R. Gehringer  (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 4.1.0, 03-JUN-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 4.0.5, 17-JUL-2002 (BVS) */
 
@@ -1530,27 +1580,27 @@ L_trcmxd:
 /* -    SPICELIB Version 4.0.4, 08-OCT-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitly given.  New */
+/*        environments are now explicitly given. New */
 /*        environments are WIN-NT */
 
 /* -    SPICELIB Version 4.0.3, 24-SEP-1999 (NJB) */
 
-/*        CSPICE environments were added.  Some typos were corrected. */
+/*        CSPICE environments were added. Some typos were corrected. */
 
 /* -    SPICELIB Version 4.0.2, 28-JUL-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitly given.  New */
+/*        environments are now explicitly given. New */
 /*        environments are PC-DIGITAL, SGI-O32 and SGI-N32. */
 
 /* -    SPICELIB Version 4.0.1, 18-MAR-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitly given.  Previously, */
+/*        environments are now explicitly given. Previously, */
 /*        environments such as SUN-SUNOS and SUN-SOLARIS were implied */
 /*        by the environment label SUN. */
 
-/* -    SPICELIB Version 1.0.0, 12-MAR-1996  (KRG) */
+/* -    SPICELIB Version 1.0.0, 12-MAR-1996 (KRG) */
 
 /* -& */
 /* $ Index_Entries */
@@ -1564,13 +1614,13 @@ L_trcmxd:
 
     *depth = maxdep;
     return 0;
-/* $Procedure      TRCNAM ( Get Module Name from Traceback ) */
+/* $Procedure TRCNAM ( Get Module Name from Traceback ) */
 
 L_trcnam:
 /* $ Abstract */
 
 /*     Return the name of the module having the specified position in */
-/*     the trace representation.  The first module to check in is at */
+/*     the trace representation. The first module to check in is at */
 /*     position 1. */
 
 /* $ Disclaimer */
@@ -1608,6 +1658,8 @@ L_trcnam:
 
 /* $ Declarations */
 
+/*     IMPLICIT NONE */
+
 /*     INTEGER               INDEX */
 /*     CHARACTER*(*)         NAME */
 
@@ -1615,43 +1667,42 @@ L_trcnam:
 
 /*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
-
 /*     INDEX      I   The position of the requested module name. */
 /*     NAME       O   The name in the #INDEX position in the traceback. */
 /*     FILEN      P   Maximum file name length. */
 
 /* $ Detailed_Input */
 
-/*     INDEX          is the position in the traceback of the requested */
-/*                    module name.  The first module to check in is in */
-/*                    the first position; the last to check in the */
-/*                    position indicated by the argument, DEPTH, */
-/*                    returned by TRCDEP.  Note that the first module to */
-/*                    check in is at the top of the traced call chain. */
+/*     INDEX    is the position in the traceback of the requested */
+/*              module name. The first module to check in is in */
+/*              the first position; the last to check in the */
+/*              position indicated by the argument, DEPTH, */
+/*              returned by TRCDEP. Note that the first module to */
+/*              check in is at the top of the traced call chain. */
 
 /* $ Detailed_Output */
 
-/*     NAME           is the name of the module in the position within */
-/*                    the traceback indicated by INDEX. */
+/*     NAME     is the name of the module in the position within */
+/*              the traceback indicated by INDEX. */
 
-/*                    The meaning of the traceback depends on the state */
-/*                    of the error handling mechanism.  There are two */
-/*                    cases: */
+/*              The meaning of the traceback depends on the state */
+/*              of the error handling mechanism. There are two */
+/*              cases: */
 
-/*                       1.  In 'RETURN' mode, when an error is */
-/*                           signaled, the traceback at that point is */
-/*                           saved.  TRCDEP, TRCNAM, and QCKTRC will */
-/*                           return values pertaining to the saved */
-/*                           traceback. */
+/*                 1. In 'RETURN' mode, when an error is */
+/*                     signaled, the traceback at that point is */
+/*                     saved.  TRCDEP, TRCNAM, and QCKTRC will */
+/*                     return values pertaining to the saved */
+/*                     traceback. */
 
-/*                       2.  In all other modes, the traceback represents */
-/*                           the CURRENT call chain.  TRCDEP, TRCNAM, */
-/*                           and QCKTRC will return values pertaining to */
-/*                           the current trace representation. */
+/*                 2. In all other modes, the traceback represents */
+/*                     the CURRENT call chain.  TRCDEP, TRCNAM, */
+/*                     and QCKTRC will return values pertaining to */
+/*                     the current trace representation. */
 
 /* $ Parameters */
 
-/*      FILEN   is the maximum file name length that can be */
+/*     FILEN    is the maximum file name length that can be */
 /*              accommodated by this routine. */
 
 /* $ Exceptions */
@@ -1662,8 +1713,8 @@ L_trcnam:
 /*     signaling errors. */
 
 /*     1)  This routine detects the condition of INDEX being out of */
-/*         range.  The short error message set in that case is */
-/*        'SPICE(INVALIDINDEX)'. */
+/*         range. The short error message set in that case is */
+/*         SPICE(INVALIDINDEX). */
 
 /* $ Files */
 
@@ -1680,7 +1731,7 @@ L_trcnam:
 /*         we have detected an error condition (see FAILED). */
 
 /*         In this example, we assume that the error has already been */
-/*         detected, and that we wish to create a traceback report.  We */
+/*         detected, and that we wish to create a traceback report. We */
 /*         assume the existence of two user-supplied routines: */
 
 /*            USER_TRACE_FORMAT   --   creates a traceback report in the */
@@ -1723,10 +1774,19 @@ L_trcnam:
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     K.R. Gehringer  (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 4.1.0, 03-JUN-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 4.0.5, 17-JUL-2002 (BVS) */
 
@@ -1735,23 +1795,23 @@ L_trcnam:
 /* -    SPICELIB Version 4.0.4, 08-OCT-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitly given.  New */
+/*        environments are now explicitly given. New */
 /*        environments are WIN-NT */
 
 /* -    SPICELIB Version 4.0.3, 24-SEP-1999 (NJB) */
 
-/*        CSPICE environments were added.  Some typos were corrected. */
+/*        CSPICE environments were added. Some typos were corrected. */
 
 /* -    SPICELIB Version 4.0.2, 28-JUL-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitly given.  New */
+/*        environments are now explicitly given. New */
 /*        environments are PC-DIGITAL, SGI-O32 and SGI-N32. */
 
 /* -    SPICELIB Version 4.0.1, 18-MAR-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitly given.  Previously, */
+/*        environments are now explicitly given. Previously, */
 /*        environments such as SUN-SUNOS and SUN-SOLARIS were implied */
 /*        by the environment label SUN. */
 
@@ -1768,7 +1828,7 @@ L_trcnam:
 
 /*           2)  If INDEX is in range, but no module name is found */
 /*               at the indicated location in the trace representation, */
-/*               the error message 'SPICE(INVALIDINDEX)' is set. */
+/*               the error message SPICE(INVALIDINDEX) is set. */
 
 /*        has been removed. The only way in which a module name cannot */
 /*        be found for a specified index is if we have overflowed the */
@@ -1785,12 +1845,12 @@ L_trcnam:
 /*        Comment section for permuted index source lines was added */
 /*        following the header. */
 
-/* -    SPICELIB Version 1.1.0, 15-JUN-1990  (NJB) */
+/* -    SPICELIB Version 1.1.0, 15-JUN-1990 (NJB) */
 
 /*        Error messages streamlined. Some comments updated. */
 /*        Some cosmetic changes too. */
 
-/* -    SPICELIB Version 1.0.0, 31-JAN-1990  (NJB) */
+/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (NJB) */
 
 /* -& */
 /* $ Index_Entries */
@@ -1813,7 +1873,7 @@ L_trcnam:
 
 /*           2)  If INDEX is in range, but no module name is found */
 /*               at the indicated location in the trace representation, */
-/*               the error message 'SPICE(INVALIDINDEX)' is set. */
+/*               the error message SPICE(INVALIDINDEX) is set. */
 
 /*        has been removed. The only way in which a module name cannot */
 /*        be found for a specified index is if we have overflowed the */
@@ -1832,19 +1892,20 @@ L_trcnam:
 
 /* -    Beta Version 1.1.1, 10-FEB-1988  (NJB) */
 
-/*        Parameter declarations documented.  Parameters section added, */
+/*        Parameter declarations documented. $Parameters section added, */
 /*        and parameter declarations listed in `Brief I/O'. */
 
 /* -    Beta Version 1.1.0, 27-OCT-1988  (NJB) */
 
 /*        Added test for failure to remove name from trace */
-/*        representation.  If LOC equals 0 on return from */
+/*        representation. If LOC equals 0 on return from */
 /*        NTHWD, the error SPICE(INVALIDINDEX) is reported. */
 /*        SIGERR is not called; that would be overly recursive. */
 
-/*        Cosmetic changes to header and code were made.  Indentation */
+/*        Cosmetic changes to header and code were made. Indentation */
 /*        of some header items was changed, and some blank lines */
 /*        were removed from the code. */
+
 /* -& */
 
 /*     Get the error handling mode. */
@@ -1883,7 +1944,7 @@ L_trcnam:
 
 	if (*index <= 100) {
 	    s_copy(name__, frozen + (((i__1 = *index - 1) < 100 && 0 <= i__1 ?
-		     i__1 : s_rnge("frozen", i__1, "trcpkg_", (ftnlen)1919)) 
+		     i__1 : s_rnge("frozen", i__1, "trcpkg_", (ftnlen)1998)) 
 		    << 5), name_len, (ftnlen)32);
 	} else {
 	    s_copy(name__, "<Overflow No Name Available>", name_len, (ftnlen)
@@ -1919,7 +1980,7 @@ L_trcnam:
 
 	if (*index <= 100) {
 	    s_copy(name__, stack + (((i__1 = *index - 1) < 100 && 0 <= i__1 ? 
-		    i__1 : s_rnge("stack", i__1, "trcpkg_", (ftnlen)1949)) << 
+		    i__1 : s_rnge("stack", i__1, "trcpkg_", (ftnlen)2028)) << 
 		    5), name_len, (ftnlen)32);
 	} else {
 	    s_copy(name__, "<Overflow No Name Available>", name_len, (ftnlen)
@@ -1927,7 +1988,7 @@ L_trcnam:
 	}
     }
     return 0;
-/* $Procedure      QCKTRC ( Get Quick Traceback ) */
+/* $Procedure QCKTRC ( Get Quick Traceback ) */
 
 L_qcktrc:
 /* $ Abstract */
@@ -1969,13 +2030,14 @@ L_qcktrc:
 
 /* $ Declarations */
 
+/*     IMPLICIT NONE */
+
 /*     CHARACTER*(*)         TRACE */
 
 /* $ Brief_I/O */
 
 /*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
-
 /*     TRACE      O   A traceback report. */
 /*     NAMLEN     P   Maximum module name length. */
 /*     FILEN      P   Maximum file name length. */
@@ -1986,45 +2048,45 @@ L_qcktrc:
 
 /* $ Detailed_Output */
 
-/*     TRACE          is a list of module names, delimited by the */
-/*                    string, ' -->'.  An example would be */
+/*     TRACE    is a list of module names, delimited by the */
+/*              string, ' -->'.  An example would be */
 
-/*                       'SPUD -->SPAM -->FOOBAR'. */
+/*                 'SPUD -->SPAM -->FOOBAR'. */
 
-/*                    In general, the meaning of the trace is as */
-/*                    follows: */
+/*              In general, the meaning of the trace is as */
+/*              follows: */
 
-/*                    The first name in the list is the name of the first */
-/*                    module to check in (that hasn't yet checked out). */
-/*                    The last name is the name of the module at the end */
-/*                    of the call chain; this is the last module that */
-/*                    checked in. */
+/*              The first name in the list is the name of the first */
+/*              module to check in (that hasn't yet checked out). */
+/*              The last name is the name of the module at the end */
+/*              of the call chain; this is the last module that */
+/*              checked in. */
 
-/*                    The meaning of the traceback depends on the state */
-/*                    of the error handling mechanism.  There are two */
-/*                    cases: */
+/*              The meaning of the traceback depends on the state */
+/*              of the error handling mechanism.  There are two */
+/*              cases: */
 
-/*                       1.  In 'RETURN' mode, when an error is */
-/*                           signaled, the traceback at that point is */
-/*                           saved.  TRCDEP, TRCNAM, and QCKTRC will */
-/*                           return values pertaining to the saved */
-/*                           traceback. */
+/*                 1.  In 'RETURN' mode, when an error is */
+/*                     signaled, the traceback at that point is */
+/*                     saved.  TRCDEP, TRCNAM, and QCKTRC will */
+/*                     return values pertaining to the saved */
+/*                     traceback. */
 
-/*                       2.  In all other modes, the traceback represents */
-/*                           the CURRENT call chain.  TRCDEP, TRCNAM, */
-/*                           and QCKTRC will return values pertaining to */
-/*                           the current trace representation. */
+/*                 2. In all other modes, the traceback represents */
+/*                     the CURRENT call chain.  TRCDEP, TRCNAM, */
+/*                     and QCKTRC will return values pertaining to */
+/*                     the current trace representation. */
 
-/*                    Any module names exceeding NAMLEN characters in */
-/*                    length are truncated on the right. */
+/*              Any module names exceeding NAMLEN characters in */
+/*              length are truncated on the right. */
 
 /* $ Parameters */
 
-/*     FILEN          is the maximum file name length that can be */
-/*                    accommodated by this routine. */
+/*     FILEN    is the maximum file name length that can be */
+/*              accommodated by this routine. */
 
-/*     NAMLEN         is the maximum module name length that can be */
-/*                    accommodated by this routine. */
+/*     NAMLEN   is the maximum module name length that can be */
+/*              accommodated by this routine. */
 
 /* $ Exceptions */
 
@@ -2063,7 +2125,8 @@ L_qcktrc:
 
 /* $ Restrictions */
 
-/*     It is assumed no module names exceed NAMLEN characters in length. */
+/*     1)  It is assumed no module names exceed NAMLEN characters in */
+/*         length. */
 
 /* $ Literature_References */
 
@@ -2071,10 +2134,19 @@ L_qcktrc:
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     K.R. Gehringer  (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 4.1.0, 03-JUN-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 4.0.5, 17-JUL-2002 (BVS) */
 
@@ -2083,23 +2155,23 @@ L_qcktrc:
 /* -    SPICELIB Version 4.0.4, 08-OCT-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitly given.  New */
+/*        environments are now explicitly given. New */
 /*        environments are WIN-NT */
 
 /* -    SPICELIB Version 4.0.3, 24-SEP-1999 (NJB) */
 
-/*        CSPICE environments were added.  Some typos were corrected. */
+/*        CSPICE environments were added. Some typos were corrected. */
 
 /* -    SPICELIB Version 4.0.2, 28-JUL-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitly given.  New */
+/*        environments are now explicitly given. New */
 /*        environments are PC-DIGITAL, SGI-O32 and SGI-N32. */
 
 /* -    SPICELIB Version 4.0.1, 18-MAR-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitly given.  Previously, */
+/*        environments are now explicitly given. Previously, */
 /*        environments such as SUN-SUNOS and SUN-SOLARIS were implied */
 /*        by the environment label SUN. */
 
@@ -2128,12 +2200,12 @@ L_qcktrc:
 /*        Comment section for permuted index source lines was added */
 /*        following the header. */
 
-/* -    SPICELIB Version 1.1.0, 15-JUN-1990  (NJB) */
+/* -    SPICELIB Version 1.1.0, 15-JUN-1990 (NJB) */
 
 /*        Error messages streamlined. Some comments updated. */
 /*        Some cosmetic changes too. */
 
-/* -    SPICELIB Version 1.0.0, 31-JAN-1990  (NJB) */
+/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (NJB) */
 
 /* -& */
 /* $ Index_Entries */
@@ -2161,7 +2233,7 @@ L_qcktrc:
 
 /*        Bug fix made to routine QCKTRC:  a section of code which */
 /*        itself is exercised only if a bug is present inserted the */
-/*        wrong variable into an error message.  The variable in */
+/*        wrong variable into an error message. The variable in */
 /*        question was the input argument INDEX; the correct variable */
 /*        to insert in the message is the local variable POS. */
 
@@ -2173,18 +2245,19 @@ L_qcktrc:
 
 /* -    Beta Version 1.1.1, 10-FEB-1988  (NJB) */
 
-/*        Parameter declarations documented.  Parameters section added, */
+/*        Parameter declarations documented. $Parameters section added, */
 /*        and parameter declarations listed in `Brief I/O'. */
 
 /* -    Beta Version 1.1.0, 06-OCT-1988  (NJB) */
 
 /*        Added test for failure to remove name from trace */
-/*        representation.  If LOC equals 0 on return from */
+/*        representation. If LOC equals 0 on return from */
 /*        NTHWD, the error SPICE(INVALIDINDEX) is reported. */
 /*        SIGERR is not called; that would be overly recursive. */
 
-/*        Also, some cosmetic changes to code were made.  Some */
+/*        Also, some cosmetic changes to code were made. Some */
 /*        unnecessary continuation lines were removed. */
+
 /* -& */
 
 /*     Be sure that the output string is empty. */
@@ -2205,11 +2278,11 @@ L_qcktrc:
 	    if (i__ > 1) {
 		suffix_("-->", &c__1, trace, (ftnlen)3, trace_len);
 		suffix_(frozen + (((i__2 = i__ - 1) < 100 && 0 <= i__2 ? i__2 
-			: s_rnge("frozen", i__2, "trcpkg_", (ftnlen)2241)) << 
+			: s_rnge("frozen", i__2, "trcpkg_", (ftnlen)2335)) << 
 			5), &c__1, trace, (ftnlen)32, trace_len);
 	    } else {
 		suffix_(frozen + (((i__2 = i__ - 1) < 100 && 0 <= i__2 ? i__2 
-			: s_rnge("frozen", i__2, "trcpkg_", (ftnlen)2243)) << 
+			: s_rnge("frozen", i__2, "trcpkg_", (ftnlen)2337)) << 
 			5), &c__0, trace, (ftnlen)32, trace_len);
 	    }
 	}
@@ -2232,11 +2305,11 @@ L_qcktrc:
 	    if (i__ > 1) {
 		suffix_("-->", &c__1, trace, (ftnlen)3, trace_len);
 		suffix_(stack + (((i__2 = i__ - 1) < 100 && 0 <= i__2 ? i__2 :
-			 s_rnge("stack", i__2, "trcpkg_", (ftnlen)2268)) << 5)
+			 s_rnge("stack", i__2, "trcpkg_", (ftnlen)2362)) << 5)
 			, &c__1, trace, (ftnlen)32, trace_len);
 	    } else {
 		suffix_(stack + (((i__2 = i__ - 1) < 100 && 0 <= i__2 ? i__2 :
-			 s_rnge("stack", i__2, "trcpkg_", (ftnlen)2270)) << 5)
+			 s_rnge("stack", i__2, "trcpkg_", (ftnlen)2364)) << 5)
 			, &c__0, trace, (ftnlen)32, trace_len);
 	    }
 	}
@@ -2255,12 +2328,12 @@ L_qcktrc:
 	}
     }
     return 0;
-/* $Procedure   FREEZE   ( Get frozen copy of traceback ) */
+/* $Procedure FREEZE ( Get frozen copy of traceback ) */
 
 L_freeze:
 /* $ Abstract */
 
-/*     Make a copy of the current traceback.  This copy is frozen, i.e. */
+/*     Make a copy of the current traceback. This copy is frozen, i.e. */
 /*     unchanged, until the next call to FREEZE. DO NOT CALL THIS */
 /*     ROUTINE. */
 
@@ -2299,12 +2372,9 @@ L_freeze:
 
 /* $ Declarations */
 
-/*     None. */
+/*     IMPLICIT NONE */
 
 /* $ Brief_I/O */
-
-/*     VARIABLE  I/O  DESCRIPTION */
-/*     --------  ---  -------------------------------------------------- */
 
 /*     None. */
 
@@ -2322,7 +2392,7 @@ L_freeze:
 
 /* $ Exceptions */
 
-/*     None. */
+/*     Error free. */
 
 /* $ Files */
 
@@ -2335,7 +2405,7 @@ L_freeze:
 /*     When the error response action is 'RETURN', and an error is */
 /*     signaled, a copy of the traceback is saved for later retrieval */
 /*     by the application program.  This is called the `frozen' version */
-/*     of the traceback.  FREEZE is used to create this frozen version. */
+/*     of the traceback. FREEZE is used to create this frozen version. */
 
 /*     This routine is called by the SPICELIB routines SIGERR and RESET. */
 
@@ -2349,7 +2419,7 @@ L_freeze:
 
 /* $ Restrictions */
 
-/*     For SPICELIB error handling only. */
+/*     1)  For SPICELIB error handling only. */
 
 /* $ Literature_References */
 
@@ -2357,10 +2427,20 @@ L_freeze:
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     K.R. Gehringer  (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 4.1.0, 03-JUN-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. Added entry to */
+/*        $Index_Entries. */
 
 /* -    SPICELIB Version 4.0.5, 17-JUL-2002 (BVS) */
 
@@ -2369,23 +2449,23 @@ L_freeze:
 /* -    SPICELIB Version 4.0.4, 08-OCT-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitly given.  New */
+/*        environments are now explicitly given. New */
 /*        environments are WIN-NT */
 
 /* -    SPICELIB Version 4.0.3, 24-SEP-1999 (NJB) */
 
-/*        CSPICE environments were added.  Some typos were corrected. */
+/*        CSPICE environments were added. Some typos were corrected. */
 
 /* -    SPICELIB Version 4.0.2, 28-JUL-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitly given.  New */
+/*        environments are now explicitly given. New */
 /*        environments are PC-DIGITAL, SGI-O32 and SGI-N32. */
 
 /* -    SPICELIB Version 4.0.1, 18-MAR-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitly given.  Previously, */
+/*        environments are now explicitly given. Previously, */
 /*        environments such as SUN-SUNOS and SUN-SOLARIS were implied */
 /*        by the environment label SUN. */
 
@@ -2403,16 +2483,16 @@ L_freeze:
 /*        Comment section for permuted index source lines was added */
 /*        following the header. */
 
-/* -    SPICELIB Version 1.0.1, 15-JUN-1990  (NJB) */
+/* -    SPICELIB Version 1.0.1, 15-JUN-1990 (NJB) */
 
-/*       Some comments changed. Cosmetic changes too. */
+/*        Some comments changed. Cosmetic changes too. */
 
-/* -    SPICELIB Version 1.0.0, 31-JAN-1990  (NJB) */
+/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (NJB) */
 
 /* -& */
 /* $ Index_Entries */
 
-/*     None. */
+/*     get frozen copy of traceback */
 
 /* -& */
 /* $ Revisions */
@@ -2445,13 +2525,13 @@ L_freeze:
     i__1 = modcnt;
     for (i__ = 1; i__ <= i__1; ++i__) {
 	s_copy(frozen + (((i__2 = i__ - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge(
-		"frozen", i__2, "trcpkg_", (ftnlen)2488)) << 5), stack + (((
+		"frozen", i__2, "trcpkg_", (ftnlen)2592)) << 5), stack + (((
 		i__5 = i__ - 1) < 100 && 0 <= i__5 ? i__5 : s_rnge("stack", 
-		i__5, "trcpkg_", (ftnlen)2488)) << 5), (ftnlen)32, (ftnlen)32)
+		i__5, "trcpkg_", (ftnlen)2592)) << 5), (ftnlen)32, (ftnlen)32)
 		;
     }
     return 0;
-/* $Procedure  TRCOFF  ( Turn tracing off ) */
+/* $Procedure TRCOFF ( Turn tracing off ) */
 
 L_trcoff:
 /* $ Abstract */
@@ -2493,12 +2573,9 @@ L_trcoff:
 
 /* $ Declarations */
 
-/*     None. */
+/*     IMPLICIT NONE */
 
 /* $ Brief_I/O */
-
-/*     VARIABLE  I/O  DESCRIPTION */
-/*     --------  ---  -------------------------------------------------- */
 
 /*     None. */
 
@@ -2524,7 +2601,7 @@ L_trcoff:
 
 /* $ Particulars */
 
-/*     This routine disables tracing.  Checking in or out does not modify */
+/*     This routine disables tracing. Checking in or out does not modify */
 /*     the current traceback any further after TRCOFF is called. The */
 /*     routines TRCNAM, TRCDEP, and QCKTRC will return information */
 /*     based on the traceback at the point where TRCOFF is called. */
@@ -2564,10 +2641,19 @@ L_trcoff:
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
-/*     K.R. Gehringer  (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 4.1.0, 03-JUN-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 4.0.5, 17-JUL-2002 (BVS) */
 
@@ -2576,23 +2662,23 @@ L_trcoff:
 /* -    SPICELIB Version 4.0.4, 08-OCT-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitly given.  New */
+/*        environments are now explicitly given. New */
 /*        environments are WIN-NT */
 
 /* -    SPICELIB Version 4.0.3, 24-SEP-1999 (NJB) */
 
-/*        CSPICE environments were added.  Some typos were corrected. */
+/*        CSPICE environments were added. Some typos were corrected. */
 
 /* -    SPICELIB Version 4.0.2, 28-JUL-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitly given.  New */
+/*        environments are now explicitly given. New */
 /*        environments are PC-DIGITAL, SGI-O32 and SGI-N32. */
 
 /* -    SPICELIB Version 4.0.1, 18-MAR-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitly given.  Previously, */
+/*        environments are now explicitly given. Previously, */
 /*        environments such as SUN-SUNOS and SUN-SOLARIS were implied */
 /*        by the environment label SUN. */
 

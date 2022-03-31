@@ -1,16 +1,16 @@
 /*
- 
+
 -Procedure llgrid_pl02 ( Lon/lat grid using DSK type 2 plate model )
- 
+
 -Abstract
- 
+
    Deprecated: This routine has been superseded by the CSPICE routine
    latsrf_c. This routine is supported for purposes of backward
    compatibility only.
 
    Given the planetocentric longitude and latitude values of a set of
    surface points on a specified target body, compute the corresponding
-   rectangular coordinates of those points.  The target body's
+   rectangular coordinates of those points. The target body's
    surface is represented by a triangular plate model contained in a
    type 2 DSK segment.
 
@@ -40,18 +40,18 @@
    ACTIONS OF RECIPIENT IN THE USE OF THE SOFTWARE.
 
 -Required_Reading
- 
+
    FRAMES
    PCK
    SPK
    TIME
- 
+
 -Keywords
- 
+
    GEOMETRY
- 
+
 */
- 
+
    #include "SpiceUsr.h"
    #include "SpiceZfc.h"
    #include "SpiceZmc.h"
@@ -59,41 +59,42 @@
 
    void llgrid_pl02 ( SpiceInt               handle,
                       ConstSpiceDLADescr   * dladsc,
-                      SpiceInt               npoints,
-                      ConstSpiceDouble       grid     [][2],
-                      SpiceDouble            spoints  [][3],
-                      SpiceInt               plateIDs []     )
+                      SpiceInt               npts,
+                      ConstSpiceDouble       grid   [][2],
+                      SpiceDouble            srfpts [][3],
+                      SpiceInt               pltids []     )
+
 /*
- 
+
 -Brief_I/O
- 
-   Variable  I/O  Description
+
+   VARIABLE  I/O  DESCRIPTION
    --------  ---  --------------------------------------------------
    handle     I   DSK handle.
-   dlasdc     I   DLA descriptor of target body segment.
-   npoints    I   Number of grid coordinate pairs.
+   dladsc     I   DLA descriptor of target body segment.
+   npts       I   Number of grid coordinate pairs.
    grid       I   Lon/lat values of surface points (radians).
-   spoints    O   Rectangular coordinates of surface points.
-   plateIDs   O   DSK plate IDs of surface points.
- 
+   srfpts     O   Rectangular coordinates of surface points.
+   pltids     O   DSK plate IDs of surface points.
+
 -Detailed_Input
- 
+
    handle      is the DAS file handle of a DSK file open for read
-               access.  This kernel must contain a type 2 segment
+               access. This kernel must contain a type 2 segment
                that provides a plate model representing the entire
                surface of the target body.
 
    dladsc      is the DLA descriptor of a DSK segment representing
                the surface of a target body.
- 
-   npoints     is the number of longitude/latitude pairs in the array
+
+   npts        is the number of longitude/latitude pairs in the array
                of grid points `grid'.
 
    grid        is an array of planetocentric longitude/latitude pairs
                to be mapped to surface points on the target body.
                `grid' should be declared by the caller
 
-                   SpiceDouble grid [npoints][2];
+                   SpiceDouble grid [npts][2];
 
                Elements
 
@@ -104,97 +105,93 @@
                latitude of the ith grid point.
 
                Units are radians.
- 
+
 -Detailed_Output
 
-   spoints     is an array containing the rectangular (Cartesian)
+   srfpts      is an array containing the rectangular (Cartesian)
                coordinates of the surface points on the target body,
                expressed relative to the body-fixed reference frame of
                the target body, corresponding to the input grid points.
 
-               `spoints' should be declared by the caller
+               `srfpts' should be declared by the caller
 
-                   SpiceDouble spoints [npoints][3];
+                  SpiceDouble srfpts [npts][3];
 
- 
-   plateIDs    is an array of integer ID codes of the plates on which
-               the surface points are located.  The ith plate ID
+   pltids      is an array of integer ID codes of the plates on which
+               the surface points are located. The ith plate ID
                corresponds to the ith surface point. These ID codes can
                be use to look up data associated with the plate, such
                as the plate's vertices or outward normal vector.
- 
-               `plateIDs' should be declared by the caller
 
-                  SpiceInt plateIDs [npoints];
+               `pltids' should be declared by the caller
+
+                  SpiceInt pltids [npts];
 
 -Parameters
- 
+
    None.
- 
+
 -Exceptions
- 
+
    If any of the listed errors occur, the output arguments are
    left unchanged.
- 
- 
-   1) If a DSK providing a DSK type 2 plate model has not been
-      loaded prior to calling llgrid_pl02, the error will be
-      diagnosed and signaled by a routine in the call tree of this
-      routine.
 
-   2) If the segment associated with the input DLA descriptor is not
-      of data type 2, the error SPICE(WRONGDATATYPE) is signaled.
+   1)  If a DSK providing a DSK type 2 plate model has not been
+       loaded prior to calling llgrid_pl02, an error is signaled by a
+       routine in the call tree of this routine.
 
-   3) If a surface point cannot be computed because the ray corresponding
-      to a longitude/latitude pair fails to intersect the target
-      surface as defined by the plate model, the error
-      SPICE(NOINTERCEPT) is signaled.
+   2)  If the segment associated with the input DLA descriptor is not
+       of data type 2, the error SPICE(WRONGDATATYPE) is signaled.
 
+   3)  If a surface point cannot be computed because the ray corresponding
+       to a longitude/latitude pair fails to intersect the target
+       surface as defined by the plate model, the error
+       SPICE(NOINTERCEPT) is signaled.
 
 -Files
- 
+
    The following data are required:
- 
-      - DSK data:  a DSK file containing a plate model representing the
-        target body's surface must be loaded. This kernel must contain
-        a type 2 segment that contains data for the entire surface of
-        the target body.
- 
+
+   -  DSK data:  a DSK file containing a plate model representing the
+      target body's surface must be loaded. This kernel must contain
+      a type 2 segment that contains data for the entire surface of
+      the target body.
+
    In all cases, kernel data are normally loaded once per program
    run, NOT every time this routine is called.
- 
+
 -Particulars
- 
+
    See the headers of the CSPICE routines
 
       reclat_c
       latrec_c
 
-   for detailed definitions of Planetocentric coordinates. 
+   for detailed definitions of Planetocentric coordinates.
 
 -Examples
- 
+
    The numerical results shown for this example may differ across
    platforms. The results depend on the SPICE kernels used as input,
    the compiler and supporting libraries, and the machine specific
    arithmetic implementation.
- 
-   In the following example program, the file
 
-      phobos.3.3.bds
-
-   is a DSK file containing a type 2 segment that provides a plate model 
-   representation of the surface of Phobos. 
-
-   Find the surface points on a target body corresponding to a given
-   planetocentric longitude/latitude grid.  In order to duplicate
-   the example output, the kernel name
-
-      phobos.3.3.bds
-
-   should be supplied at the prompt.
+   1) Find the surface points on a target body corresponding to a given
+      planetocentric longitude/latitude grid.
 
 
+      Use the DSK kernel below to provide the plate model representation
+      of the surface of Phobos.
+
+         phobos_3_3.bds
+
+
+      Example code begins here.
+
+
+      /.
+         Program llgrid_pl02_ex1
+      ./
       #include <stdio.h>
       #include <math.h>
       #include "SpiceUsr.h"
@@ -204,11 +201,11 @@
          /.
          Local parameters
          ./
-         #define  FILSIZ         256 
+         #define  FILSIZ         256
          #define  NAMLEN         33
          #define  NLAT           9
-         #define  NLON           9 
-         #define  MAXGRID        ( NLAT * NLON ) 
+         #define  NLON           9
+         #define  MAXGRID        ( NLAT * NLON )
          #define  TOL            ( 1.e-12 )
 
          /.
@@ -223,7 +220,7 @@
          SpiceDouble             grid     [ MAXGRID ][2];
          SpiceDouble             lat;
          SpiceDouble             lon;
-         SpiceDouble             spoints  [ MAXGRID ][3];
+         SpiceDouble             srfpts  [ MAXGRID ][3];
          SpiceDouble             xlat;
          SpiceDouble             xlon;
          SpiceDouble             xr;
@@ -232,8 +229,8 @@
          SpiceInt                i;
          SpiceInt                j;
          SpiceInt                n;
-         SpiceInt                npoints;
-         SpiceInt                plateIDs [ MAXGRID ];
+         SpiceInt                npts;
+         SpiceInt                pltids [ MAXGRID ];
 
 
 
@@ -299,30 +296,30 @@
                ++n;
             }
          }
-         npoints = n - 1;
+         npts = n - 1;
 
          /.
-         Find the surface points corresponding to the grid points. 
+         Find the surface points corresponding to the grid points.
          ./
-         llgrid_pl02 ( handle,   
-                       &dladsc, 
-                       npoints,  
-                       (ConstSpiceDouble (*)[2])grid,    
-                       spoints, 
-                       plateIDs                        );
+         llgrid_pl02 ( handle,
+                       &dladsc,
+                       npts,
+                       (ConstSpiceDouble (*)[2])grid,
+                       srfpts,
+                       pltids                        );
 
          /.
          Print out the surface points in latitudinal
          coordinates and compare the derived lon/lat values
          to those of the input grid.
          ./
-         for ( i = 0;  i < npoints;  i++  )
+         for ( i = 0;  i < npts;  i++  )
          {
             /.
             Use recrad_c rather than reclat_c to produce
             non-negative longitudes.
             ./
-            recrad_c ( spoints[i], &xr, &xlon, &xlat );
+            recrad_c ( srfpts[i], &xr, &xlon, &xlat );
 
             printf ( "\n"
                      "Intercept for grid point %d:\n"
@@ -338,8 +335,8 @@
                      "   Latitude  (deg): %f\n"
                      "\n",
                      (int)i,
-                     (int)plateIDs[i],
-                     spoints[i][0], spoints[i][1], spoints[i][2],
+                     (int)pltids[i],
+                     srfpts[i][0], srfpts[i][1], srfpts[i][2],
                      xlon * dpr_c(),
                      xlat * dpr_c(),
                      xr,
@@ -354,7 +351,7 @@
             lon = grid[i][0];
             lat = grid[i][1];
 
-            if ( fabs(xlat-lat) > TOL ) 
+            if ( fabs(xlat-lat) > TOL )
             {
                sigerr_c ( "Latitude error!" );
             }
@@ -382,18 +379,18 @@
       }
 
 
-   When this program was executed on a PC/Linux/gcc platform, 
-   the output for the first 3 points (the rest of the output 
-   is not shown due to its large volume) was:
+      When this program was executed on a Mac/Intel/cc/64-bit
+      platform, using the DSK file named phobos_3_3.bds, the output
+      was:
 
 
-      Enter DSK name    > phobos.3.3.bds
+      Enter DSK name    > phobos_3_3.bds
 
       Intercept for grid point 0:
          Plate ID:                 306238
-         Cartesian Coordinates:    (1.520878e+00 -7.129713e-16 8.625327e+00)
+         Cartesian Coordinates:    (1.520878e+00 0.000000e+00 8.625327e+00)
          Latitudinal Coordinates:
-         Longitude (deg): 360.000000
+         Longitude (deg): 0.000000
          Latitude  (deg): 80.000000
          Radius     (km): 8.758387
 
@@ -427,38 +424,114 @@
          Longitude (deg): 80.000000
          Latitude  (deg): 80.000000
 
- 
+
+      Intercept for grid point 3:
+         Plate ID:                 327994
+         Cartesian Coordinates:    (-8.108241e-01 1.404388e+00 9.196823e+00)
+         Latitudinal Coordinates:
+         Longitude (deg): 120.000000
+         Latitude  (deg): 80.000000
+         Radius     (km): 9.338699
+
+      Original grid coordinates:
+         Longitude (deg): 120.000000
+         Latitude  (deg): 80.000000
+
+
+      Intercept for grid point 4:
+         Plate ID:                 329431
+         Cartesian Coordinates:    (-1.478202e+00 5.380215e-01 8.921321e+00)
+         Latitudinal Coordinates:
+         Longitude (deg): 160.000000
+         Latitude  (deg): 80.000000
+         Radius     (km): 9.058947
+
+      Original grid coordinates:
+         Longitude (deg): 160.000000
+         Latitude  (deg): 80.000000
+
+
+      Intercept for grid point 5:
+         Plate ID:                 196042
+         Cartesian Coordinates:    (-1.498548e+00 -5.454267e-01 9.044113e+00)
+         Latitudinal Coordinates:
+         Longitude (deg): 200.000000
+         Latitude  (deg): 80.000000
+         Radius     (km): 9.183633
+
+      Original grid coordinates:
+         Longitude (deg): 200.000000
+         Latitude  (deg): 80.000000
+
+
+      Intercept for grid point 6:
+         Plate ID:                 235899
+         Cartesian Coordinates:    (-7.824045e-01 -1.355164e+00 8.874473e+00)
+         Latitudinal Coordinates:
+         Longitude (deg): 240.000000
+         Latitude  (deg): 80.000000
+         Radius     (km): 9.011376
+
+      Original grid coordinates:
+         Longitude (deg): 240.000000
+         Latitude  (deg): 80.000000
+
+
+      Intercept for grid point 7:
+         Plate ID:                 266998
+         Cartesian Coordinates:    (2.645121e-01 -1.500123e+00 8.638862e+00)
+         Latitudinal Coordinates:
+         Longitude (deg): 280.000000
+         Latitude  (deg): 80.000000
+         Radius     (km): 8.772130
+
+      [...]
+
+
+      Warning: incomplete output. Only 100 out of 1041 lines have
+      been provided.
 
 
 -Restrictions
- 
-   1) This routine assumes that the origin of the body-fixed reference 
-      frame associated with the target body is located in the interior
-      of that body.
 
-   2) The results returned by this routine may not be meaningful
-      if the target surface has multiple surface points associated
-      with some (longitude, latitude) coordinates.
- 
+   1)  This routine assumes that the origin of the body-fixed reference
+       frame associated with the target body is located in the interior
+       of that body.
+
+   2)  The results returned by this routine may not be meaningful
+       if the target surface has multiple surface points associated
+       with some (longitude, latitude) coordinates.
+
 -Literature_References
- 
+
    None.
- 
+
 -Author_and_Institution
 
-   N.J. Bachman   (JPL)
- 
+   N.J. Bachman        (JPL)
+   J. Diaz del Rio     (ODC Space)
+   B.V. Semenov        (JPL)
+
 -Version
- 
-   -CSPICE Version 2.0.0, 23-JUL-2016 (NJB) 
- 
+
+   -CSPICE Version 2.1.0, 26-OCT-2021 (JDR)
+
+       Changed argument names "npoints", "spoints" and "plateIDs" to
+       "npts", "srfpts" and "pltids" for consistency with other routines.
+
+       Edited the header to comply with NAIF standard.
+
+       Index lines now state that this routine is deprecated.
+
+   -CSPICE Version 2.0.0, 23-JUL-2016 (NJB) (BVS)
+
        Added failed_c calls.
 
        Include file references have been updated. Now calls
        zzdsksgr_ instead of dsksgr_. Integer output format
        in example program has been updated.
 
-   -Beta Version 1.3.0, 30-APR-2014 (NJB) (BVS)
+    Beta Version 1.3.0, 30-APR-2014 (NJB) (BVS)
 
        Now includes dsk_proto.h.
 
@@ -466,55 +539,55 @@
 
        Changed FRAME to FRAMES in the Required_Reading section.
 
-   -Beta Version 1.2.0, 14-MAY-2010 (NJB)
+    Beta Version 1.2.0, 14-MAY-2010 (NJB)
 
        Updated for compatibility with new DSK design.
        DSK name was updated in example program.
- 
-   -Beta Version 1.1.0, 09-FEB-2007 (NJB)
 
-       Bug fix:  type of local variable fDLADescr was changed to SpiceInt.
+    Beta Version 1.1.0, 09-FEB-2007 (NJB)
 
-   -Beta Version 1.0.0, 06-NOV-2006 (NJB)
- 
+       Bug fix: type of local variable fDLADescr was changed to SpiceInt.
+
+    Beta Version 1.0.0, 06-NOV-2006 (NJB)
+
 -Index_Entries
- 
-   map latitudinal grid to DSK type 2 plate model surface
- 
+
+   DEPRECATED map latitudinal grid to DSK type 2 plate model
+
 -&
 */
- 
+
 { /* Begin llgrid_pl02 */
- 
+
 
    /*
-   Prototypes 
+   Prototypes
    */
 
 
    /*
-   Local parameters 
+   Local parameters
    */
    #define CTRIDX          1
    #define TYPIDX          3
 
    /*
-   Local variables 
+   Local variables
    */
    SpiceBoolean            found;
-   
+
    SpiceDouble             fDSKDescr  [ SPICE_DSK_DSCSIZ ];
    SpiceDouble             maxrad;
    SpiceDouble             raydir     [3];
    SpiceDouble             scale;
    SpiceDouble             vertex     [3];
 
-   SpiceInt                centerID;   
+   SpiceInt                centerID;
    SpiceInt                dataType;
    SpiceInt                fDLADescr  [ SPICE_DLA_DSCSIZ ];
    SpiceInt                i;
 
- 
+
    /*
    Participate in error tracing.
    */
@@ -559,13 +632,13 @@
    }
 
    /*
-   Extract object ID and DSK data type from the descriptor. 
+   Extract object ID and DSK data type from the descriptor.
    */
    centerID = (SpiceInt)fDSKDescr[CTRIDX];
    dataType = (SpiceInt)fDSKDescr[TYPIDX];
 
 
-   if ( dataType != 2 ) 
+   if ( dataType != 2 )
    {
       setmsg_c ( "Input segment has DSK data type #.  A segment of "
                  "type 2 is required."                               );
@@ -578,7 +651,7 @@
    /*
    We're done with error checks on our inputs.
 
-   Get the maximum radius value associated with the target body.  
+   Get the maximum radius value associated with the target body.
    We'll use this later to compute a numerically safe ray vertex.
    */
    maxrad = zzdsksgr_ ( fDSKDescr );
@@ -588,8 +661,8 @@
       chkout_c ( "llgrid_pl02" );
       return;
    }
-   
-   for ( i = 0;  i < npoints;  i++  )
+
+   for ( i = 0;  i < npts;  i++  )
    {
       /*
       Find the outward unit vector corresponding to the ith lon/lat pair.
@@ -602,7 +675,7 @@
       /*
       To avoid numerical problems, we pick a vertex that is guaranteed
       to be a reasonable distance away from the target's surface.
-      */ 
+      */
       scale = maxd_c ( 2,  1.0,  2.0*maxrad );
 
       vscl_c ( scale, vertex, vertex );
@@ -612,8 +685,8 @@
       Find the surface intercept defined by the vertex, ray direction,
       and surface plate model.
       */
-      dskx02_c ( handle,       dladsc,      vertex,  raydir, 
-                 plateIDs+i,   spoints[i],  &found          );
+      dskx02_c ( handle,   dladsc,      vertex,  raydir,
+                 pltids+i, srfpts[i],  &found           );
 
       if ( failed_c() )
       {
@@ -622,11 +695,11 @@
       }
 
       if ( !found  )
-      { 
+      {
          setmsg_c ( "Ray from vertex number # having longitude # "
                     "and latitude # (radians) to center "
                     "of target # did not intersect the surface  "
-                    "defined by the input handle and descriptor."  );    
+                    "defined by the input handle and descriptor."  );
          errint_c ( "#", i                                         );
          errdp_c  ( "#", grid[i][0]                                );
          errdp_c  ( "#", grid[i][1]                                );
@@ -639,9 +712,9 @@
 
 
    /*
-   At this point, `spoints' and `plateIDs' are set.
+   At this point, `srfpts' and `pltids' are set.
    */
 
    chkout_c ( "llgrid_pl02" );
- 
+
 } /* End llgrid_pl02 */

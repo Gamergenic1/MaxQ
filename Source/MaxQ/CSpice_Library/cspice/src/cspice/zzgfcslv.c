@@ -1111,9 +1111,13 @@ static doublereal c_b36 = 0.;
 
 /* $ Version */
 
+/* -    SPICELIB Version 1.3.0, 03-OCT-2021 (NJB) */
+
+/*        Variable CNAMES is now saved. Corrected typos in comments. */
+
 /* -    SPICELIB Version 1.2.0, 04-APR-2011 (EDW) */
 
-/*        Replaced use of rooutines ZZGFREL with ZZGFRELX, and */
+/*        Replaced use of routines ZZGFREL with ZZGFRELX, and */
 /*        ZZGFSOLV with ZZGFSOLVX. ZZGFCOIN argument list edited */
 /*        to remove the unneeded argument REFVAL. */
 
@@ -1233,7 +1237,7 @@ static doublereal c_b36 = 0.;
     for (i__ = 1; i__ <= i__1; ++i__) {
 	ssized_(mw, &work[(i__2 = i__ * work_dim1 - 5 - work_offset) < 
 		work_dim1 * work_dim2 && 0 <= i__2 ? i__2 : s_rnge("work", 
-		i__2, "zzgfcslv_", (ftnlen)969)]);
+		i__2, "zzgfcslv_", (ftnlen)974)]);
     }
 
 /*     Initialize the result window. */
@@ -1284,7 +1288,7 @@ static doublereal c_b36 = 0.;
 
 	ssized_(mw, &work[(i__1 = work_dim1 * 13 - 5 - work_offset) < 
 		work_dim1 * work_dim2 && 0 <= i__1 ? i__1 : s_rnge("work", 
-		i__1, "zzgfcslv_", (ftnlen)1022)]);
+		i__1, "zzgfcslv_", (ftnlen)1027)]);
 
 /*        Search each interval of the confinement window. */
 
@@ -1296,7 +1300,7 @@ static doublereal c_b36 = 0.;
 		    finish, tol, rpt, (U_fp)udrepu, &work[(i__2 = work_dim1 * 
 		    13 - 5 - work_offset) < work_dim1 * work_dim2 && 0 <= 
 		    i__2 ? i__2 : s_rnge("work", i__2, "zzgfcslv_", (ftnlen)
-		    1031)]);
+		    1036)]);
 	    if (failed_()) {
 		chkout_("ZZGFCSLV", (ftnlen)8);
 		return 0;
@@ -1326,14 +1330,14 @@ static doublereal c_b36 = 0.;
 	excon = *tol + 1.;
 	wncond_(&excon, &excon, &work[(i__1 = work_dim1 * 13 - 5 - 
 		work_offset) < work_dim1 * work_dim2 && 0 <= i__1 ? i__1 : 
-		s_rnge("work", i__1, "zzgfcslv_", (ftnlen)1069)]);
+		s_rnge("work", i__1, "zzgfcslv_", (ftnlen)1074)]);
     } else {
 
 /*        Simply copy the confinement window to the workspace. */
 
 	copyd_(cnfine, &work[(i__1 = work_dim1 * 13 - 5 - work_offset) < 
 		work_dim1 * work_dim2 && 0 <= i__1 ? i__1 : s_rnge("work", 
-		i__1, "zzgfcslv_", (ftnlen)1075)]);
+		i__1, "zzgfcslv_", (ftnlen)1080)]);
     }
 
 /*     If progress reporting is enabled, set the report prefix array */
@@ -1342,7 +1346,7 @@ static doublereal c_b36 = 0.;
     if (*rpt) {
 
 /*        We'll use the logical flag LOCALX to indicate a local extremum */
-/*        operator and the flag NOADJX to indicate an absolut extremum */
+/*        operator and the flag NOADJX to indicate an absolute extremum */
 /*        operator with zero adjustment. */
 
 	localx = s_cmp(uop, "LOCMIN", (ftnlen)6, (ftnlen)6) == 0 || s_cmp(uop,
@@ -1363,9 +1367,9 @@ static doublereal c_b36 = 0.;
 	i__1 = npass;
 	for (i__ = 1; i__ <= i__1; ++i__) {
 	    repmi_(rptpre + ((i__2 = i__ - 1) < 3 && 0 <= i__2 ? i__2 : 
-		    s_rnge("rptpre", i__2, "zzgfcslv_", (ftnlen)1110)) * 55, 
+		    s_rnge("rptpre", i__2, "zzgfcslv_", (ftnlen)1115)) * 55, 
 		    "#", &npass, prebuf + ((i__3 = i__ - 1) < 3 && 0 <= i__3 ?
-		     i__3 : s_rnge("prebuf", i__3, "zzgfcslv_", (ftnlen)1110))
+		     i__3 : s_rnge("prebuf", i__3, "zzgfcslv_", (ftnlen)1115))
 		     * 55, (ftnlen)55, (ftnlen)1, (ftnlen)55);
 	}
     }
@@ -1391,7 +1395,7 @@ static doublereal c_b36 = 0.;
 		U_fp)udrefn, rpt, (S_fp)udrepi, (U_fp)udrepu, (S_fp)udrepf, 
 		bail, (L_fp)udbail, mw, nw, work, &work[(i__1 = work_dim1 * 
 		13 - 5 - work_offset) < work_dim1 * work_dim2 && 0 <= i__1 ? 
-		i__1 : s_rnge("work", i__1, "zzgfcslv_", (ftnlen)1133)], 
+		i__1 : s_rnge("work", i__1, "zzgfcslv_", (ftnlen)1138)], 
 		result, vecdef_len, method_len, target_len, ref_len, 
 		abcorr_len, obsrvr_len, dref_len, crdsys_len, crdnam_len, 
 		relate_len);
@@ -1411,7 +1415,7 @@ static doublereal c_b36 = 0.;
 		zzgfudlt_, (U_fp)zzgfcog_, relate, refval, tol, adjust, &work[
 		(i__1 = work_dim1 * 13 - 5 - work_offset) < work_dim1 * 
 		work_dim2 && 0 <= i__1 ? i__1 : s_rnge("work", i__1, "zzgfcs"
-		"lv_", (ftnlen)1154)], mw, nw, work, rpt, (S_fp)udrepi, (U_fp)
+		"lv_", (ftnlen)1159)], mw, nw, work, rpt, (S_fp)udrepi, (U_fp)
 		udrepu, (S_fp)udrepf, prebuf, rptsuf, bail, (L_fp)udbail, 
 		result, relate_len, (ftnlen)55, (ftnlen)13);
     }

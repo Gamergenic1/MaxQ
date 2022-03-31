@@ -400,9 +400,21 @@ static integer c__1 = 1;
 
 /* $ Author_and_Institution */
 
-/*     B.V. Semenov    (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     B.V. Semenov       (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 14-OCT-2021 (JDR) (BVS) (NJB) */
+
+/*        Changed entry point ZZHSIINI to not check RETURN() */
+/*        on entry. That entry point now initializes the hash */
+/*        as long as the size parameter is greater than zero. */
+
+/*        Fixed short error message in umbrella routine. */
+
+/*        Bug fix: fixed routine name in CHKIN/CHKOUT calls */
+/*        in the ZZHSICHK entry (ZZHSIADD -> ZZHSICHK). */
 
 /* -    SPICELIB Version 1.0.0, 01-AUG-2013 (BVS) */
 
@@ -447,7 +459,7 @@ static integer c__1 = 1;
 
 /*     Signal bogus entry error and check out. */
 
-    sigerr_("BOGUSENTRY", (ftnlen)10);
+    sigerr_("SPICE(BOGUSENTRY)", (ftnlen)17);
     chkout_("ZZHSI", (ftnlen)5);
     return 0;
 /* $Procedure ZZHSIINI ( Private---Initialize Add-only Integer Hash ) */
@@ -567,6 +579,12 @@ L_zzhsiini:
 
 /* $ Version */
 
+/* -    SPICELIB Version 1.1.0, 07-OCT-2020 (JDR) (BVS) (NJB) */
+
+/*        This entry point no longer checks RETURN() on entry. It */
+/*        initializes the hash as long as the size parameter is greater */
+/*        than zero. */
+
 /* -    SPICELIB Version 1.0.0, 01-AUG-2013 (BVS) */
 
 /* -& */
@@ -578,10 +596,21 @@ L_zzhsiini:
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
-	return 0;
-    }
     chkin_("ZZHSIINI", (ftnlen)8);
+    if (*hashsz > 0) {
+
+/*        Wipe out head node pointer list. */
+
+	i__1 = *hashsz;
+	for (i__ = 1; i__ <= i__1; ++i__) {
+	    hedlst[i__ - 1] = 0;
+	}
+
+/*        Reset control area. */
+
+	collst[5] = *hashsz;
+	collst[4] = 1;
+    }
 
 /*     The requested number of nodes must be valid. ZZHASHI will check */
 /*     that. */
@@ -591,18 +620,6 @@ L_zzhsiini:
 	chkout_("ZZHSIINI", (ftnlen)8);
 	return 0;
     }
-
-/*     Wipe out head node pointer list. */
-
-    i__1 = *hashsz;
-    for (i__ = 1; i__ <= i__1; ++i__) {
-	hedlst[i__ - 1] = 0;
-    }
-
-/*     Reset control area. */
-
-    collst[5] = *hashsz;
-    collst[4] = 1;
     chkout_("ZZHSIINI", (ftnlen)8);
     return 0;
 /* $Procedure ZZHSIADD ( Private---Add an Item to Add-only Integer Hash ) */
@@ -987,6 +1004,11 @@ L_zzhsichk:
 
 /* $ Version */
 
+/* -    SPICELIB Version 1.1.0, 14-OCT-2021 (BVS) */
+
+/*        Bug fix: fixed routine name in CHKIN/CHKOUT calls */
+/*        (ZZHSIADD -> ZZHSICHK). */
+
 /* -    SPICELIB Version 1.0.0, 01-AUG-2013 (BVS) */
 
 /* -& */
@@ -1005,11 +1027,11 @@ L_zzhsichk:
 /*     Use simple division hash function to get index of the head node. */
 
     if (collst[5] < 1) {
-	chkin_("ZZHSIADD", (ftnlen)8);
+	chkin_("ZZHSICHK", (ftnlen)8);
 	setmsg_("Uninitialized hash. Size was #.", (ftnlen)31);
 	errint_("#", &collst[5], (ftnlen)1);
 	sigerr_("SPICE(UNINITIALIZEDHASH)", (ftnlen)24);
-	chkout_("ZZHSIADD", (ftnlen)8);
+	chkout_("ZZHSICHK", (ftnlen)8);
 	return 0;
     }
     lookat = zzhashi_(item, &collst[5]);

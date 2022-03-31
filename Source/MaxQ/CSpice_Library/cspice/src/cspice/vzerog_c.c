@@ -1,10 +1,10 @@
 /*
 
--Procedure vzerog_c ( Is a vector the zero vector?---general dim. )
+-Procedure vzerog_c ( Is a vector the zero vector? -- general dim. )
 
 -Abstract
 
-   Indicate whether a general-dimensional vector is the zero vector.
+   Indicate whether an n-dimensional vector is the zero vector.
 
 -Disclaimer
 
@@ -51,22 +51,23 @@
 
 -Brief_I/O
 
-   Variable  I/O  Description
+   VARIABLE  I/O  DESCRIPTION
    --------  ---  --------------------------------------------------
    v          I   Vector to be tested.
-   ndim       I   Dimension of v.
+   ndim       I   Dimension of `v'.
 
-   The function returns the value SPICETRUE if and only if v is the
+   The function returns the value SPICETRUE if and only if `v' is the
    zero vector.
 
 -Detailed_Input
 
    v,
-   ndim           are, respectively, a vector and its dimension.
+   ndim        are, respectively, an n-dimensional vector and its
+               dimension.
 
 -Detailed_Output
 
-   The function returns the value SPICETRUE if and only if v is the
+   The function returns the value SPICETRUE if and only if `v' is the
    zero vector.
 
 -Parameters
@@ -77,9 +78,9 @@
 
    Error free.
 
-   1)   When ndim is non-positive, this function returns the value
-        SPICEFALSE  (A vector of non-positive dimension cannot be the
-        zero vector.)
+   1)  When `ndim' is non-positive, this function returns the value
+       SPICEFALSE (A vector of non-positive dimension cannot be the
+       zero vector.)
 
 -Files
 
@@ -95,7 +96,7 @@
 
       vzerog_c ( v, ndim );
 
-   has several advantages:  the latter expresses the test more
+   has several advantages: the latter expresses the test more
    clearly, looks better, and doesn't go through the work of scaling,
    squaring, taking a square root, and re-scaling (all of which
    vnormg_c must do) just to find out that a vector is non-zero.
@@ -105,38 +106,165 @@
 
 -Examples
 
-   1)  When testing whether a vector is the zero vector, one
-       normally constructs tests like
+   The numerical results shown for these examples may differ across
+   platforms. The results depend on the SPICE kernels used as
+   input, the compiler and supporting libraries, and the machine
+   specific arithmetic implementation.
 
-          if (  vnormg_c ( v, ndim )  ==  0.  )
-             {
-                      .
-                      .
-                      .
+   1) Given a set of n-dimensional vectors, check which ones are
+      the zero vector.
 
-       These can be replaced with the code
 
-          if (  vzerog_c ( v, ndim )  )
-             {
-                      .
-                      .
-                      .
+      Example code begins here.
 
-   2)  Make sure that a `unit' quaternion is non-zero before
-       converting it to a rotation matrix.
 
-          if (  vzerog_c ( q, 4 )  )
-             {
+      /.
+         Program vzerog_ex1
+      ./
+      #include <stdio.h>
+      #include "SpiceUsr.h"
 
-             [ handle error ]
+      int main( )
+      {
 
-          else
-             {
-             vhatg_c ( q, 4, q )
-             q2m_c   ( q, m )
-                      .
-                      .
-                      .
+         /.
+         Local parameters.
+         ./
+         #define NDIM         4
+         #define SETSIZ       2
+
+         /.
+         Local variables.
+         ./
+         SpiceInt             i;
+
+         /.
+         Define the vector set.
+         ./
+         SpiceDouble          v      [SETSIZ][NDIM] = {
+                                   {0.0,  0.0,  0.0,  2.e-7},
+                                   {0.0,  0.0,  0.0,  0.0  } };
+
+         /.
+         Check each n-dimensional vector within the set.
+         ./
+         for ( i = 0; i < SETSIZ; i++ )
+         {
+
+            /.
+            Check if the i'th vector is the zero vector.
+            ./
+            printf( "\n" );
+            printf( "Input vector:  %10.7f %10.7f %10.7f %10.7f\n",
+                                 v[i][0], v[i][1], v[i][2], v[i][3] );
+
+            if ( vzerog_c ( v[i], NDIM ) )
+            {
+               printf( "   The zero vector.\n" );
+            }
+            else
+            {
+               printf( "   Not all elements of the vector are zero.\n" );
+            }
+
+         }
+
+         return ( 0 );
+      }
+
+
+      When this program was executed on a Mac/Intel/cc/64-bit
+      platform, the output was:
+
+
+      Input vector:   0.0000000  0.0000000  0.0000000  0.0000002
+         Not all elements of the vector are zero.
+
+      Input vector:   0.0000000  0.0000000  0.0000000  0.0000000
+         The zero vector.
+
+
+   2) Define a unit quaternion and confirm that it is non-zero
+      before converting it to a rotation matrix.
+
+
+      Example code begins here.
+
+
+      /.
+         Program vzerog_ex2
+      ./
+      #include <math.h>
+      #include <stdio.h>
+      #include "SpiceUsr.h"
+
+      int main( )
+      {
+
+         /.
+         Local variables.
+         ./
+         SpiceDouble          q      [4];
+         SpiceDouble          m      [3][3];
+         SpiceDouble          s;
+
+         SpiceInt             i;
+
+         /.
+         Define a unit quaternion.
+         ./
+         s = sqrt( 2.0 ) / 2.0;
+
+         q[0] = s;
+         q[1] = 0.0;
+         q[2] = 0.0;
+         q[3] = -s;
+
+         printf( "Quaternion : %11.7f %11.7f %11.7f %11.7f\n",
+                                        q[0], q[1], q[2], q[3] );
+
+         /.
+         Confirm that it is non-zero and
+         ./
+         if ( vzerog_c ( q, 4 ) )
+         {
+            printf( "   Quaternion is the zero vector.\n" );
+         }
+         else
+         {
+
+            /.
+            Confirm q satisfies ||q|| = 1.
+            ./
+            printf( "Norm       : %11.7f\n", vnormg_c ( q, 4 ) );
+
+            /.
+            Convert the quaternion to a matrix form.
+            ./
+            q2m_c ( q, m );
+
+            printf( "Matrix form:\n" );
+            for ( i = 0; i < 3; i++ )
+            {
+               printf( "%12.7f %11.7f %11.7f\n", m[i][0], m[i][1], m[i][2] );
+            }
+         }
+
+         return ( 0 );
+      }
+
+
+      When this program was executed on a Mac/Intel/cc/64-bit
+      platform, the output was:
+
+
+      Quaternion :   0.7071068   0.0000000   0.0000000  -0.7071068
+      Norm       :   1.0000000
+      Matrix form:
+         0.0000000   1.0000000   0.0000000
+        -1.0000000   0.0000000  -0.0000000
+        -0.0000000   0.0000000   1.0000000
+
 
 -Restrictions
 
@@ -148,13 +276,19 @@
 
 -Author_and_Institution
 
-   N.J. Bachman    (JPL)
-   I.M. Underwood  (JPL)
-   E.D. Wright     (JPL)
+   N.J. Bachman        (JPL)
+   J. Diaz del Rio     (ODC Space)
+   I.M. Underwood      (JPL)
+   E.D. Wright         (JPL)
 
 -Version
 
-   -CSPICE Version 1.0.0, 29-JUN-1999
+   -CSPICE Version 1.0.1, 05-AUG-2021 (JDR)
+
+       Edited the header to comply with NAIF standard. Added complete
+       code example based on existing example.
+
+   -CSPICE Version 1.0.0, 29-JUN-1999 (EDW) (NJB) (IMU)
 
 -Index_Entries
 

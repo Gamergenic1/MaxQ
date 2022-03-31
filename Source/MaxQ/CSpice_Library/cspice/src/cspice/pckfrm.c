@@ -11,7 +11,7 @@ static integer c__2 = 2;
 static integer c__6 = 6;
 
 /* $Procedure PCKFRM ( PCK, get reference frame class ID set ) */
-/* Subroutine */ int pckfrm_(char *pck, integer *ids, ftnlen pck_len)
+/* Subroutine */ int pckfrm_(char *pckfnm, integer *ids, ftnlen pckfnm_len)
 {
     /* Builtin functions */
     integer s_cmp(char *, char *, ftnlen, ftnlen);
@@ -81,37 +81,35 @@ static integer c__6 = 6;
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
-/*     PCK        I   Name of PCK file. */
-/*     IDS       I/O  Set of frame class ID codes of frames in PCK file. */
+/*     PCKFNM     I   Name of PCK file. */
+/*     IDS       I-O  Set of frame class ID codes of frames in PCK file. */
 
 /* $ Detailed_Input */
 
-/*     PCK            is the name of a binary PCK file. */
+/*     PCKFNM   is the name of a binary PCK file. */
 
-/*     IDS            is an initialized SPICELIB set data structure. IDS */
-/*                    optionally may contain a set of ID codes on input; */
-/*                    on output, the data already present in IDS will be */
-/*                    combined with ID code set found for the file PCK. */
+/*     IDS      is an initialized SPICE set data structure. IDS */
+/*              optionally may contain a set of ID codes on input; on */
+/*              output, the data already present in IDS will be combined */
+/*              with ID code set found for the file PCKFNM. */
 
-/*                    If IDS contains no data on input, its size and */
-/*                    cardinality still must be initialized. */
+/*              If IDS contains no data on input, its size and */
+/*              cardinality still must be initialized. */
 
 /* $ Detailed_Output */
 
-/*     IDS            is a SPICELIB set data structure which contains */
-/*                    the union of its contents upon input with the set */
-/*                    of reference frame class ID codes of each frame */
-/*                    for which data are present in the indicated PCK */
-/*                    file. The elements of SPICELIB sets are unique; */
-/*                    hence each ID code in IDS appears only once, even */
-/*                    if the PCK file contains multiple segments for */
-/*                    that ID code. */
+/*     IDS      is a SPICE set data structure which contains the union */
+/*              of its contents upon input with the set of reference */
+/*              frame class ID codes of each frame for which data are */
+/*              present in the indicated PCK file. The elements of */
+/*              SPICE sets are unique; hence each ID code in IDS */
+/*              appears only once, even if the PCK file contains multiple */
+/*              segments for that ID code. */
 
-/*                    See the Examples section below for a complete */
-/*                    example program showing how to retrieve the ID */
-/*                    codes from IDS. */
+/*              See the $Examples section below for a complete example */
+/*              program showing how to retrieve the ID codes from IDS. */
 
 /* $ Parameters */
 
@@ -123,18 +121,18 @@ static integer c__6 = 6;
 /*         SPICE(INVALIDFORMAT) is signaled. */
 
 /*     2)  If the input file is not a transfer file but has architecture */
-/*         other than DAF, the error SPICE(BADARCHTYPE) is signaled. */
+/*         other than DAF, the error SPICE(INVALIDARCHTYPE) is signaled. */
 
-/*     3)  If the input file is a binary DAF file of type other than */
-/*         PCK, the error SPICE(BADFILETYPE) is signaled. */
+/*     3)  If the input file is a binary DAF file of type other than PCK, */
+/*         the error SPICE(INVALIDFILETYPE) is signaled. */
 
-/*     4)  If the PCK file cannot be opened or read, the error will */
-/*         be diagnosed by routines called by this routine. */
+/*     4)  If the PCK file cannot be opened or read, an error is signaled */
+/*         by a routine in the call tree of this routine. */
 
 /*     5)  If the size of the output set argument IDS is insufficient to */
-/*         contain the actual number of ID codes of frames covered by */
-/*         the indicated PCK file, the error will be diagnosed by */
-/*         routines called by this routine. */
+/*         contain the actual number of ID codes of frames covered by the */
+/*         indicated PCK file, an error is signaled by a routine in the */
+/*         call tree of this routine. */
 
 /* $ Files */
 
@@ -148,13 +146,21 @@ static integer c__6 = 6;
 
 /* $ Examples */
 
-/*     1)  Display the coverage for each frame in a specified PCK file. */
-/*         Find the set of frames in the file.  Loop over the contents */
-/*         of the ID code set:  find the coverage for each item in the */
-/*         set and display the coverage. */
+/*     The numerical results shown for this example may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
+
+/*     1) Display the coverage for each frame in a specified PCK file. */
+/*        Find the set of frames in the file. Loop over the contents */
+/*        of the ID code set: find the coverage for each item in the */
+/*        set and display the coverage. */
 
 
-/*              PROGRAM IDCOV */
+/*        Example code begins here. */
+
+
+/*              PROGRAM PCKFRM_EX1 */
 /*              IMPLICIT NONE */
 
 /*        C */
@@ -191,7 +197,7 @@ static integer c__6 = 6;
 /*        C     Local variables */
 /*        C */
 /*              CHARACTER*(FILSIZ)    LSK */
-/*              CHARACTER*(FILSIZ)    PCK */
+/*              CHARACTER*(FILSIZ)    PCKFNM */
 /*              CHARACTER*(TIMLEN)    TIMSTR */
 
 /*              DOUBLE PRECISION      B */
@@ -214,7 +220,7 @@ static integer c__6 = 6;
 /*        C */
 /*        C     Get name of PCK file. */
 /*        C */
-/*              CALL PROMPT ( 'Name of PCK file           > ', PCK ) */
+/*              CALL PROMPT ( 'Name of PCK file           > ', PCKFNM ) */
 
 /*        C */
 /*        C     Initialize the set IDS. */
@@ -229,7 +235,7 @@ static integer c__6 = 6;
 /*        C */
 /*        C     Find the set of frames in the PCK file. */
 /*        C */
-/*              CALL PCKFRM ( PCK, IDS ) */
+/*              CALL PCKFRM ( PCKFNM, IDS ) */
 
 /*        C */
 /*        C     We want to display the coverage for each frame.  Loop */
@@ -242,8 +248,8 @@ static integer c__6 = 6;
 /*        C        Empty the coverage window each time so */
 /*        C        we don't include data for the previous frame. */
 /*        C */
-/*                 CALL SCARDD ( 0,   COVER ) */
-/*                 CALL PCKCOV ( PCK, IDS(I), COVER ) */
+/*                 CALL SCARDD ( 0,      COVER ) */
+/*                 CALL PCKCOV ( PCKFNM, IDS(I), COVER ) */
 
 /*        C */
 /*        C        Get the number of intervals in the coverage */
@@ -293,10 +299,28 @@ static integer c__6 = 6;
 
 /*              END */
 
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, using the LSK file named naif0012.tls, and the PCK */
+/*        file named earth_720101_070426.bpc, the output was: */
+
+
+/*        Name of leapseconds kernel > naif0012.tls */
+/*        Name of PCK file           > earth_720101_070426.bpc */
+/*         ======================================== */
+/*         Coverage for reference frame         3000 */
+
+/*         Interval:            1 */
+/*         Start:    1962 JAN 20 00:00:41.184 (TDB) */
+/*         Stop:     2007 APR 26 00:01:05.185 (TDB) */
+
+/*         ======================================== */
+
+
 /* $ Restrictions */
 
-/*     1) If an error occurs while this routine is updating the set */
-/*        IDS, the set may be corrupted. */
+/*     1)  If an error occurs while this routine is updating the set */
+/*         IDS, the set may be corrupted. */
 
 /* $ Literature_References */
 
@@ -304,20 +328,35 @@ static integer c__6 = 6;
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
 
+/* -    SPICELIB Version 1.1.0, 08-OCT-2021 (JDR) (NJB) */
+
+/*        Changed input argument name "PCK" to "PCKFNM" for consistency */
+/*        with other routines. */
+
+/*        Bug fix: added call to FAILED after call to GETFAT. */
+
+/*        Edited the header to comply with NAIF standard. */
+/*        Added example's solution. */
+
+/*        Corrected short error message in entries #2 and #3 in */
+/*        $Exceptions section. */
+
 /* -    SPICELIB Version 1.0.1, 03-JAN-2014 (EDW) */
 
-/*        Minor edits to Procedure; clean trailing whitespace. */
+/*        Minor edits to $Procedure; clean trailing whitespace. */
 
 /* -    SPICELIB Version 1.0.0, 01-DEC-2007 (NJB) */
 
 /* -& */
 /* $ Index_Entries */
 
-/*     find frame class id codes of frames in binary pck file */
+/*     find frame class id codes of frames in binary PCK file */
 
 /* -& */
 
@@ -339,13 +378,17 @@ static integer c__6 = 6;
 
 /*     See whether GETFAT thinks we've got a PCK file. */
 
-    getfat_(pck, arch, kertyp, pck_len, (ftnlen)80, (ftnlen)80);
+    getfat_(pckfnm, arch, kertyp, pckfnm_len, (ftnlen)80, (ftnlen)80);
+    if (failed_()) {
+	chkout_("PCKFRM", (ftnlen)6);
+	return 0;
+    }
     if (s_cmp(arch, "XFR", (ftnlen)80, (ftnlen)3) == 0) {
 	setmsg_("Input file # has architecture #. The file must be a binary "
 		"PCK file to be readable by this routine.  If the input file "
 		"is an PCK file in transfer format, run TOBIN on the file to "
 		"convert it to binary format.", (ftnlen)207);
-	errch_("#", pck, (ftnlen)1, pck_len);
+	errch_("#", pckfnm, (ftnlen)1, pckfnm_len);
 	errch_("#", arch, (ftnlen)1, (ftnlen)80);
 	sigerr_("SPICE(INVALIDFORMAT)", (ftnlen)20);
 	chkout_("PCKFRM", (ftnlen)6);
@@ -357,7 +400,7 @@ static integer c__6 = 6;
 		"ry PCK file, the problem may be due to the file being an old"
 		" non-native file lacking binary file format information. It'"
 		"s also possible the file has been corrupted.", (ftnlen)343);
-	errch_("#", pck, (ftnlen)1, pck_len);
+	errch_("#", pckfnm, (ftnlen)1, pckfnm_len);
 	errch_("#", arch, (ftnlen)1, (ftnlen)80);
 	sigerr_("SPICE(INVALIDARCHTYPE)", (ftnlen)22);
 	chkout_("PCKFRM", (ftnlen)6);
@@ -369,7 +412,7 @@ static integer c__6 = 6;
 		"le being an old non-native file lacking binary file format i"
 		"nformation. It's also possible the file has been corrupted.", 
 		(ftnlen)298);
-	errch_("#", pck, (ftnlen)1, pck_len);
+	errch_("#", pckfnm, (ftnlen)1, pckfnm_len);
 	errch_("#", kertyp, (ftnlen)1, (ftnlen)80);
 	sigerr_("SPICE(INVALIDFILETYPE)", (ftnlen)22);
 	chkout_("PCKFRM", (ftnlen)6);
@@ -378,7 +421,7 @@ static integer c__6 = 6;
 
 /*     Open the file for reading. */
 
-    dafopr_(pck, &handle, pck_len);
+    dafopr_(pckfnm, &handle, pckfnm_len);
     if (failed_()) {
 	chkout_("PCKFRM", (ftnlen)6);
 	return 0;

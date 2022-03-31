@@ -169,83 +169,75 @@ static doublereal c_b34 = 0.;
 
 /* $ Detailed_Input */
 
-/*     BODY       Name of the body with which the planetographic */
-/*                coordinate system is associated. */
+/*     BODY     is the name of the body with which the planetographic */
+/*              coordinate system is associated. */
 
-/*                BODY is used by this routine to look up from the */
-/*                kernel pool the prime meridian rate coefficient giving */
-/*                the body's spin sense.  See the Files and Particulars */
-/*                header sections below for details. */
+/*              BODY is used by this routine to look up from the kernel */
+/*              pool the prime meridian rate coefficient giving the */
+/*              body's spin sense. See the $Files and $Particulars header */
+/*              sections below for details. */
 
+/*     RECTAN   are the rectangular coordinates of a point. Units are */
+/*              arbitrary, except that the input RE must be expressed in */
+/*              the same units. */
 
-/*     RECTAN     The rectangular coordinates of a point.  Units */
-/*                are arbitrary, except that the input RE must be */
-/*                expressed in the same units. */
+/*     RE       is the equatorial radius of a reference spheroid. This */
+/*              spheroid is a volume of revolution: its horizontal cross */
+/*              sections are circular. The shape of the spheroid is */
+/*              defined by an equatorial radius RE and a polar radius RP. */
+/*              Units of RE must match those of RECTAN. */
 
+/*     F        is the flattening coefficient = */
 
-/*     RE         Equatorial radius of a reference spheroid.  This */
-/*                spheroid is a volume of revolution:  its horizontal */
-/*                cross sections are circular.  The shape of the */
-/*                spheroid is defined by an equatorial radius RE and a */
-/*                polar radius RP.  Units of RE must match those of */
-/*                RECTAN. */
+/*                 (RE-RP) / RE */
 
-
-/*     F          Flattening coefficient = */
-
-/*                   (RE-RP) / RE */
-
-/*                where RP is the polar radius of the spheroid, and the */
-/*                units of RP match those of RE. */
+/*              where RP is the polar radius of the spheroid, and the */
+/*              units of RP match those of RE. */
 
 /* $ Detailed_Output */
 
-/*     LON        Planetographic longitude of the input point.  This is */
-/*                the angle between the prime meridian and the meridian */
-/*                containing RECTAN.  For bodies having prograde (aka */
-/*                direct) rotation, the direction of increasing */
-/*                longitude is positive west:  from the +X axis of the */
-/*                rectangular coordinate system toward the -Y axis. */
-/*                For bodies having retrograde rotation, the direction */
-/*                of increasing longitude is positive east:  from the +X */
-/*                axis toward the +Y axis. */
+/*     LON      is the planetographic longitude of the input point. This */
+/*              is the angle between the prime meridian and the meridian */
+/*              containing RECTAN. For bodies having prograde (aka */
+/*              direct) rotation, the direction of increasing longitude */
+/*              is positive west: from the +X axis of the rectangular */
+/*              coordinate system toward the -Y axis. For bodies having */
+/*              retrograde rotation, the direction of increasing */
+/*              longitude is positive east: from the +X axis toward the */
+/*              +Y axis. */
 
-/*                The earth, moon, and sun are exceptions: */
-/*                planetographic longitude is measured positive east for */
-/*                these bodies. */
+/*              The earth, moon, and sun are exceptions: planetographic */
+/*              longitude is measured positive east for these bodies. */
 
-/*                The default interpretation of longitude by this */
-/*                and the other planetographic coordinate conversion */
-/*                routines can be overridden; see the discussion in */
-/*                Particulars below for details. */
+/*              The default interpretation of longitude by this and the */
+/*              other planetographic coordinate conversion routines can */
+/*              be overridden; see the discussion in $Particulars below */
+/*              for details. */
 
-/*                LON is output in radians.  The nominal range of LON is */
-/*                given by: */
+/*              LON is output in radians. The nominal range of LON is */
+/*              given by: */
 
-/*                   0  <  LON  <  2*pi */
-/*                      - */
+/*                 0  <  LON  <  2*pi */
+/*                    - */
 
-/*                However, round-off error could cause LON to equal 2*pi. */
+/*              However, round-off error could cause LON to equal 2*pi. */
 
+/*     LAT      is the planetographic latitude of the input point. For a */
+/*              point P on the reference spheroid, this is the angle */
+/*              between the XY plane and the outward normal vector at P. */
+/*              For a point P not on the reference spheroid, the */
+/*              planetographic latitude is that of the closest point to P */
+/*              on the spheroid. */
 
-/*     LAT        Planetographic latitude of the input point.  For a */
-/*                point P on the reference spheroid, this is the angle */
-/*                between the XY plane and the outward normal vector at */
-/*                P. For a point P not on the reference spheroid, the */
-/*                planetographic latitude is that of the closest point */
-/*                to P on the spheroid. */
+/*              LAT is output in radians. The range of LAT is given by: */
 
-/*                LAT is output in radians. The range of LAT is given */
-/*                by: */
+/*                 -pi/2  <  LAT  <  pi/2 */
+/*                        -       - */
 
-/*                   -pi/2  <  LAT  <  pi/2 */
-/*                          -       - */
+/*     ALT      is the altitude of point above the reference spheroid. */
 
-
-/*     ALT        Altitude of point above the reference spheroid. */
-
-/*                The units associated with ALT are those associated */
-/*                with the input RECTAN and RE. */
+/*              The units associated with ALT are those associated with */
+/*              the input RECTAN and RE. */
 
 /* $ Parameters */
 
@@ -253,49 +245,49 @@ static doublereal c_b34 = 0.;
 
 /* $ Exceptions */
 
-/*     1) If the body name BODY cannot be mapped to a NAIF ID code, */
-/*        and if BODY is not a string representation of an integer, */
-/*        the error SPICE(IDCODENOTFOUND) will be signaled. */
+/*     1)  If the body name BODY cannot be mapped to a NAIF ID code, */
+/*         and if BODY is not a string representation of an integer, */
+/*         the error SPICE(IDCODENOTFOUND) is signaled. */
 
-/*     2) If the kernel variable */
+/*     2)  If the kernel variable */
 
-/*           BODY<ID code>_PGR_POSITIVE_LON */
+/*            BODY<ID code>_PGR_POSITIVE_LON */
 
-/*        is present in the kernel pool but has a value other than one */
-/*        of */
+/*         is present in the kernel pool but has a value other than one */
+/*         of */
 
-/*            'EAST' */
-/*            'WEST' */
+/*             'EAST' */
+/*             'WEST' */
 
-/*        the error SPICE(INVALIDOPTION) will be signaled.  Case */
-/*        and blanks are ignored when these values are interpreted. */
+/*         the error SPICE(INVALIDOPTION) is signaled. Case */
+/*         and blanks are ignored when these values are interpreted. */
 
-/*     3) If polynomial coefficients for the prime meridian of BODY */
-/*        are not available in the kernel pool, and if the kernel */
-/*        variable BODY<ID code>_PGR_POSITIVE_LON is not present in */
-/*        the kernel pool, the error SPICE(MISSINGDATA) will be signaled. */
+/*     3)  If polynomial coefficients for the prime meridian of BODY */
+/*         are not available in the kernel pool, and if the kernel */
+/*         variable BODY<ID code>_PGR_POSITIVE_LON is not present in */
+/*         the kernel pool, the error SPICE(MISSINGDATA) is signaled. */
 
-/*     4) If the equatorial radius is non-positive, the error */
-/*        SPICE(VALUEOUTOFRANGE) is signaled. */
+/*     4)  If the equatorial radius is non-positive, the error */
+/*         SPICE(VALUEOUTOFRANGE) is signaled. */
 
-/*     5) If the flattening coefficient is greater than or equal to one, */
-/*        the error SPICE(VALUEOUTOFRANGE) is signaled. */
+/*     5)  If the flattening coefficient is greater than or equal to one, */
+/*         the error SPICE(VALUEOUTOFRANGE) is signaled. */
 
-/*     6) For points inside the reference ellipsoid, the nearest point */
-/*        on the ellipsoid to RECTAN may not be unique, so latitude may */
-/*        not be well-defined. */
+/*     6)  For points inside the reference ellipsoid, the nearest point */
+/*         on the ellipsoid to RECTAN may not be unique, so latitude may */
+/*         not be well-defined. */
 
 /* $ Files */
 
 /*     This routine expects a kernel variable giving BODY's prime */
 /*     meridian angle as a function of time to be available in the */
-/*     kernel pool.  Normally this item is provided by loading a PCK */
-/*     file.  The required kernel variable is named */
+/*     kernel pool. Normally this item is provided by loading a PCK */
+/*     file. The required kernel variable is named */
 
 /*        BODY<body ID>_PM */
 
 /*     where <body ID> represents a string containing the NAIF integer */
-/*     ID code for BODY.  For example, if BODY is 'JUPITER', then */
+/*     ID code for BODY. For example, if BODY is 'JUPITER', then */
 /*     the name of the kernel variable containing the prime meridian */
 /*     angle coefficients is */
 
@@ -308,7 +300,7 @@ static doublereal c_b34 = 0.;
 /*     also is normally defined via loading a text kernel. When this */
 /*     variable is present in the kernel pool, the prime meridian */
 /*     coefficients for BODY are not required by this routine. See the */
-/*     Particulars section below for details. */
+/*     $Particulars section for details. */
 
 /* $ Particulars */
 
@@ -323,22 +315,22 @@ static doublereal c_b34 = 0.;
 /*     The planetographic definition of latitude is identical to the */
 /*     planetodetic (also called "geodetic" in SPICE documentation) */
 /*     definition. In the planetographic coordinate system, latitude is */
-/*     defined using a reference spheroid.  The spheroid is */
+/*     defined using a reference spheroid. The spheroid is */
 /*     characterized by an equatorial radius and a polar radius. For a */
 /*     point P on the spheroid, latitude is defined as the angle between */
-/*     the X-Y plane and the outward surface normal at P.  For a point P */
+/*     the X-Y plane and the outward surface normal at P. For a point P */
 /*     off the spheroid, latitude is defined as the latitude of the */
-/*     nearest point to P on the spheroid.  Note if P is an interior */
+/*     nearest point to P on the spheroid. Note if P is an interior */
 /*     point, for example, if P is at the center of the spheroid, there */
 /*     may not be a unique nearest point to P. */
 
 /*     In the planetographic coordinate system, longitude is defined */
-/*     using the spin sense of the body.  Longitude is positive to the */
+/*     using the spin sense of the body. Longitude is positive to the */
 /*     west if the spin is prograde and positive to the east if the spin */
-/*     is retrograde.  The spin sense is given by the sign of the first */
+/*     is retrograde. The spin sense is given by the sign of the first */
 /*     degree term of the time-dependent polynomial for the body's prime */
 /*     meridian Euler angle "W":  the spin is retrograde if this term is */
-/*     negative and prograde otherwise.  For the sun, planets, most */
+/*     negative and prograde otherwise. For the sun, planets, most */
 /*     natural satellites, and selected asteroids, the polynomial */
 /*     expression for W may be found in a SPICE PCK kernel. */
 
@@ -379,11 +371,10 @@ static doublereal c_b34 = 0.;
 
 /* $ Examples */
 
-
-/*     Numerical results shown for this example may differ between */
-/*     platforms as the results depend on the SPICE kernels used as */
-/*     input and the machine specific arithmetic implementation. */
-
+/*     The numerical results shown for these examples may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
 
 /*     1) Find the planetographic coordinates of the point having Mars */
 /*        rectangular coordinates: */
@@ -395,111 +386,119 @@ static doublereal c_b34 = 0.;
 /*        (These input values have been chosen to create "simple" output */
 /*        values.) */
 
+/*        Use the PCK kernel below to load the required triaxial */
+/*        ellipsoidal shape model and orientation data for Mars. */
 
-/*                 PROGRAM EX1 */
-/*                 IMPLICIT NONE */
-/*           C */
-/*           C     SPICELIB functions */
-/*           C */
-/*                 DOUBLE PRECISION      RPD */
-/*           C */
-/*           C     Local variables */
-/*           C */
-/*                 DOUBLE PRECISION      ALT */
-/*                 DOUBLE PRECISION      F */
-/*                 DOUBLE PRECISION      LAT */
-/*                 DOUBLE PRECISION      LON */
-/*                 DOUBLE PRECISION      RADII  ( 3 ) */
-/*                 DOUBLE PRECISION      RE */
-/*                 DOUBLE PRECISION      RECTAN ( 3 ) */
-/*                 DOUBLE PRECISION      RP */
-
-/*                 INTEGER               N */
-/*           C */
-/*           C     Load a PCK file containing a triaxial */
-/*           C     ellipsoidal shape model and orientation */
-/*           C     data for Mars. */
-/*           C */
-/*                 CALL FURNSH ( 'pck00008.tpc' ) */
-
-/*           C */
-/*           C     Look up the radii for Mars.  Although we */
-/*           C     omit it here, we could first call BADKPV */
-/*           C     to make sure the variable BODY499_RADII */
-/*           C     has three elements and numeric data type. */
-/*           C     If the variable is not present in the kernel */
-/*           C     pool, BODVRD will signal an error. */
-/*           C */
-/*                 CALL BODVRD ( 'MARS', 'RADII', 3, N, RADII ) */
-
-/*           C */
-/*           C     Compute flattening coefficient. */
-/*           C */
-/*                 RE  =  RADII(1) */
-/*                 RP  =  RADII(3) */
-/*                 F   =  ( RE - RP ) / RE */
-
-/*           C */
-/*           C     Do the conversion. */
-/*           C */
-/*                 RECTAN(1) =      0.D0 */
-/*                 RECTAN(2) =  -2620.678914818178D0 */
-/*                 RECTAN(3) =   2592.408908856967D0 */
-
-/*                 CALL RECPGR ( 'MARS', RECTAN, RE, F, LON, LAT, ALT ) */
-
-/*                 WRITE (*,*) ' ' */
-/*                 WRITE (*,*) 'Rectangular coordinates:' */
-/*                 WRITE (*,*) ' ' */
-/*                 WRITE (*,*) '  X (km)                 = ', RECTAN(1) */
-/*                 WRITE (*,*) '  Y (km)                 = ', RECTAN(2) */
-/*                 WRITE (*,*) '  Z (km)                 = ', RECTAN(3) */
-/*                 WRITE (*,*) ' ' */
-/*                 WRITE (*,*) 'Ellipsoid shape parameters: ' */
-/*                 WRITE (*,*) ' ' */
-/*                 WRITE (*,*) '  Equatorial radius (km) = ', RE */
-/*                 WRITE (*,*) '  Polar radius      (km) = ', RP */
-/*                 WRITE (*,*) '  Flattening coefficient = ', F */
-/*                 WRITE (*,*) ' ' */
-/*                 WRITE (*,*) 'Planetographic coordinates:' */
-/*                 WRITE (*,*) ' ' */
-/*                 WRITE (*,*) '  Longitude (deg)        = ', LON / RPD() */
-/*                 WRITE (*,*) '  Latitude  (deg)        = ', LAT / RPD() */
-/*                 WRITE (*,*) '  Altitude  (km)         = ', ALT */
-/*                 WRITE (*,*) ' ' */
-
-/*                 END */
+/*           pck00008.tpc */
 
 
-/*        Output from this program should be similar to the following */
-/*        (rounding and formatting will differ across platforms): */
+/*        Example code begins here. */
 
-/*           Rectangular coordinates: */
 
-/*             X (km)                 =   0. */
-/*             Y (km)                 =  -2620.67891 */
-/*             Z (km)                 =   2592.40891 */
+/*              PROGRAM RECPGR_EX1 */
+/*              IMPLICIT NONE */
+/*        C */
+/*        C     SPICELIB functions */
+/*        C */
+/*              DOUBLE PRECISION      RPD */
+/*        C */
+/*        C     Local variables */
+/*        C */
+/*              DOUBLE PRECISION      ALT */
+/*              DOUBLE PRECISION      F */
+/*              DOUBLE PRECISION      LAT */
+/*              DOUBLE PRECISION      LON */
+/*              DOUBLE PRECISION      RADII  ( 3 ) */
+/*              DOUBLE PRECISION      RE */
+/*              DOUBLE PRECISION      RECTAN ( 3 ) */
+/*              DOUBLE PRECISION      RP */
 
-/*           Ellipsoid shape parameters: */
+/*              INTEGER               N */
+/*        C */
+/*        C     Load a PCK file containing a triaxial */
+/*        C     ellipsoidal shape model and orientation */
+/*        C     data for Mars. */
+/*        C */
+/*              CALL FURNSH ( 'pck00008.tpc' ) */
 
-/*             Equatorial radius (km) =   3396.19 */
-/*             Polar radius      (km) =   3376.2 */
-/*             Flattening coefficient =   0.00588600756 */
+/*        C */
+/*        C     Look up the radii for Mars.  Although we */
+/*        C     omit it here, we could first call BADKPV */
+/*        C     to make sure the variable BODY499_RADII */
+/*        C     has three elements and numeric data type. */
+/*        C     If the variable is not present in the kernel */
+/*        C     pool, BODVRD will signal an error. */
+/*        C */
+/*              CALL BODVRD ( 'MARS', 'RADII', 3, N, RADII ) */
 
-/*           Planetographic coordinates: */
+/*        C */
+/*        C     Compute flattening coefficient. */
+/*        C */
+/*              RE  =  RADII(1) */
+/*              RP  =  RADII(3) */
+/*              F   =  ( RE - RP ) / RE */
 
-/*             Longitude (deg)        =   90. */
-/*             Latitude  (deg)        =   45. */
-/*             Altitude  (km)         =   300. */
+/*        C */
+/*        C     Do the conversion. */
+/*        C */
+/*              RECTAN(1) =      0.D0 */
+/*              RECTAN(2) =  -2620.678914818178D0 */
+/*              RECTAN(3) =   2592.408908856967D0 */
 
+/*              CALL RECPGR ( 'MARS', RECTAN, RE, F, LON, LAT, ALT ) */
+
+/*              WRITE (*,*) ' ' */
+/*              WRITE (*,*) 'Rectangular coordinates:' */
+/*              WRITE (*,*) ' ' */
+/*              WRITE (*,*) '  X (km)                 = ', RECTAN(1) */
+/*              WRITE (*,*) '  Y (km)                 = ', RECTAN(2) */
+/*              WRITE (*,*) '  Z (km)                 = ', RECTAN(3) */
+/*              WRITE (*,*) ' ' */
+/*              WRITE (*,*) 'Ellipsoid shape parameters: ' */
+/*              WRITE (*,*) ' ' */
+/*              WRITE (*,*) '  Equatorial radius (km) = ', RE */
+/*              WRITE (*,*) '  Polar radius      (km) = ', RP */
+/*              WRITE (*,*) '  Flattening coefficient = ', F */
+/*              WRITE (*,*) ' ' */
+/*              WRITE (*,*) 'Planetographic coordinates:' */
+/*              WRITE (*,*) ' ' */
+/*              WRITE (*,*) '  Longitude (deg)        = ', LON / RPD() */
+/*              WRITE (*,*) '  Latitude  (deg)        = ', LAT / RPD() */
+/*              WRITE (*,*) '  Altitude  (km)         = ', ALT */
+/*              WRITE (*,*) ' ' */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*         Rectangular coordinates: */
+
+/*           X (km)                 =    0.0000000000000000 */
+/*           Y (km)                 =   -2620.6789148181779 */
+/*           Z (km)                 =    2592.4089088569672 */
+
+/*         Ellipsoid shape parameters: */
+
+/*           Equatorial radius (km) =    3396.1900000000001 */
+/*           Polar radius      (km) =    3376.1999999999998 */
+/*           Flattening coefficient =    5.8860075555255261E-003 */
+
+/*         Planetographic coordinates: */
+
+/*           Longitude (deg)        =    90.000000000000000 */
+/*           Latitude  (deg)        =    45.000000000000014 */
+/*           Altitude  (km)         =    300.00000000000057 */
 
 
 /*     2) Below is a table showing a variety of rectangular coordinates */
-/*        and the corresponding Mars planetographic coordinates.  The */
+/*        and the corresponding Mars planetographic coordinates. The */
 /*        values are computed using the reference spheroid having radii */
 
-/*           Equatorial radius:    3397 */
-/*           Polar radius:         3375 */
+/*           Equatorial radius:    3396.190 */
+/*           Polar radius:         3376.200 */
 
 /*        Note:  the values shown above may not be current or suitable */
 /*               for your application. */
@@ -508,42 +507,41 @@ static doublereal c_b34 = 0.;
 /*        Corresponding rectangular and planetographic coordinates are */
 /*        listed to three decimal places. */
 
-/*    RECTAN(1)    RECTAN(2)   RECTAN(3)    LON        LAT         ALT */
-/*    ------------------------------------------------------------------ */
-/*     3397.000      0.000      0.000       0.000      0.000       0.000 */
-/*    -3397.000      0.000      0.000     180.000      0.000       0.000 */
-/*    -3407.000      0.000      0.000     180.000      0.000      10.000 */
-/*    -3387.000      0.000      0.000     180.000      0.000     -10.000 */
-/*        0.000  -3397.000      0.000      90.000      0.000       0.000 */
-/*        0.000   3397.000      0.000     270.000      0.000       0.000 */
-/*        0.000      0.000   3375.000       0.000     90.000       0.000 */
-/*        0.000      0.000  -3375.000       0.000    -90.000       0.000 */
-/*        0.000      0.000      0.000       0.000     90.000   -3375.000 */
+
+/*        RECTAN(1)  RECTAN(2)  RECTAN(3)       LON       LAT        ALT */
+/*        -------------------------------------------------------------- */
+/*         3396.190      0.000      0.000     0.000     0.000      0.000 */
+/*        -3396.190      0.000      0.000   180.000     0.000      0.000 */
+/*        -3406.190      0.000      0.000   180.000     0.000     10.000 */
+/*        -3386.190      0.000      0.000   180.000     0.000    -10.000 */
+/*            0.000  -3396.190      0.000    90.000     0.000      0.000 */
+/*            0.000   3396.190      0.000   270.000     0.000      0.000 */
+/*            0.000      0.000   3376.200     0.000    90.000      0.000 */
+/*            0.000      0.000  -3376.200     0.000   -90.000      0.000 */
+/*            0.000      0.000      0.000     0.000    90.000  -3376.200 */
 
 
+/*     3) Below we show the analogous relationships for the earth, */
+/*        using the reference ellipsoid radii */
 
-/*     3)  Below we show the analogous relationships for the earth, */
-/*         using the reference ellipsoid radii */
+/*           Equatorial radius:    6378.140 */
+/*           Polar radius:         6356.750 */
 
-/*            Equatorial radius:    6378.140 */
-/*            Polar radius:         6356.750 */
-
-/*         Note the change in longitudes for points on the +/- Y axis */
-/*         for the earth vs the Mars values. */
+/*        Note the change in longitudes for points on the +/- Y axis */
+/*        for the earth vs the Mars values. */
 
 
-/*    RECTAN(1)    RECTAN(2)   RECTAN(3)    LON        LAT         ALT */
-/*    ----------------------------------  ------------------------------- */
-/*     6378.140      0.000      0.000       0.000      0.000       0.000 */
-/*    -6378.140      0.000      0.000     180.000      0.000       0.000 */
-/*    -6388.140      0.000      0.000     180.000      0.000      10.000 */
-/*    -6368.140      0.000      0.000     180.000      0.000     -10.000 */
-/*        0.000  -6378.140      0.000     270.000      0.000       0.000 */
-/*        0.000   6378.140      0.000      90.000      0.000       0.000 */
-/*        0.000      0.000   6356.750       0.000     90.000       0.000 */
-/*        0.000      0.000  -6356.750       0.000    -90.000       0.000 */
-/*        0.000      0.000      0.000       0.000     90.000   -6356.750 */
-
+/*        RECTAN(1)  RECTAN(2)  RECTAN(3)     LON       LAT        ALT */
+/*        -------------------------------------------------------------- */
+/*         6378.140      0.000      0.000     0.000     0.000      0.000 */
+/*        -6378.140      0.000      0.000   180.000     0.000      0.000 */
+/*        -6388.140      0.000      0.000   180.000     0.000     10.000 */
+/*        -6368.140      0.000      0.000   180.000     0.000    -10.000 */
+/*            0.000  -6378.140      0.000   270.000     0.000      0.000 */
+/*            0.000   6378.140      0.000    90.000     0.000      0.000 */
+/*            0.000      0.000   6356.750     0.000    90.000      0.000 */
+/*            0.000      0.000  -6356.750     0.000   -90.000      0.000 */
+/*            0.000      0.000      0.000     0.000    90.000  -6356.750 */
 
 /* $ Restrictions */
 
@@ -555,13 +553,19 @@ static doublereal c_b34 = 0.;
 
 /* $ Author_and_Institution */
 
-/*     C.H. Acton      (JPL) */
-/*     N.J. Bachman    (JPL) */
-/*     H.A. Neilan     (JPL) */
-/*     B.V. Semenov    (JPL) */
-/*     W.L. Taber      (JPL) */
+/*     C.H. Acton         (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     H.A. Neilan        (JPL) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.1, 06-JUL-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.1.0, 21-SEP-2013 (BVS) */
 

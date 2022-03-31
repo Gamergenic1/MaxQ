@@ -7,14 +7,14 @@
 
 /* Table of constant values */
 
-static integer c__3 = 3;
+static integer c__5 = 5;
 static integer c__4 = 4;
-static integer c__7 = 7;
+static integer c__9 = 9;
 static integer c__1 = 1;
 static integer c__2 = 2;
-static integer c__14 = 14;
+static integer c__7 = 7;
 
-/* $Procedure      UNITIM ( Uniform time scale transformation ) */
+/* $Procedure UNITIM ( Uniform time scale transformation ) */
 doublereal unitim_(doublereal *epoch, char *insys, char *outsys, ftnlen 
 	insys_len, ftnlen outsys_len)
 {
@@ -28,10 +28,10 @@ doublereal unitim_(doublereal *epoch, char *insys, char *outsys, ftnlen
 	    "/EB       " "DELTET/M        ";
 
     /* System generated locals */
-    address a__1[14];
-    integer i__1[14], i__2;
+    address a__1[7];
+    integer i__1[7], i__2;
     doublereal ret_val;
-    char ch__1[714];
+    char ch__1[466];
 
     /* Builtin functions */
     /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen), s_cat(char *,
@@ -50,7 +50,7 @@ doublereal unitim_(doublereal *epoch, char *insys, char *outsys, ftnlen
     integer n;
     extern logical elemc_(char *, char *, ftnlen, ftnlen);
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    static char recog[8*13];
+    static char recog[8*15];
     logical intdb;
     extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen), 
 	    errch_(char *, char *, ftnlen, ftnlen);
@@ -77,7 +77,7 @@ doublereal unitim_(doublereal *epoch, char *insys, char *outsys, ftnlen
     logical outtdt;
     extern /* Subroutine */ int swpool_(char *, integer *, char *, ftnlen, 
 	    ftnlen);
-    static char typtdt[8*9];
+    static char typtdt[8*11];
     extern doublereal j2000_(void);
     static doublereal dta;
     doublereal tdb;
@@ -87,8 +87,8 @@ doublereal unitim_(doublereal *epoch, char *insys, char *outsys, ftnlen
 
 /* $ Abstract */
 
-/*     Transform time from one uniform scale to another.  The uniform */
-/*     time scales are TAI, TDT, TDB, ET, JED, JDTDB, JDTDT. */
+/*     Transform time from one uniform scale to another. The uniform */
+/*     time scales are TAI, GPS, TT, TDT, TDB, ET, JED, JDTDB, JDTDT. */
 
 /* $ Disclaimer */
 
@@ -121,8 +121,8 @@ doublereal unitim_(doublereal *epoch, char *insys, char *outsys, ftnlen
 
 /* $ Keywords */
 
-/*     TIME */
 /*     CONVERSION */
+/*     TIME */
 /*     UTILITY */
 
 /* $ Declarations */
@@ -181,7 +181,7 @@ doublereal unitim_(doublereal *epoch, char *insys, char *outsys, ftnlen
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     EPOCH      I   An epoch. */
 /*     INSYS      I   The time scale associated with the input EPOCH. */
@@ -192,27 +192,29 @@ doublereal unitim_(doublereal *epoch, char *insys, char *outsys, ftnlen
 
 /* $ Detailed_Input */
 
-/*     EPOCH      is an epoch relative to the INSYS time scale. */
+/*     EPOCH    is an epoch relative to the INSYS time scale. */
 
-/*     INSYS      is a time scale.  Acceptable values are: */
+/*     INSYS    is a time scale. Acceptable values are: */
 
-/*                'TAI'     International Atomic Time. */
-/*                'TDB'     Barycentric Dynamical Time. */
-/*                'TDT'     Terrestrial Dynamical Time. */
-/*                'ET'      Ephemeris time (in the SPICE system, this is */
-/*                          equivalent to TDB). */
-/*                'JDTDB'   Julian Date relative to TDB. */
-/*                'JDTDT'   Julian Date relative to TDT. */
-/*                'JED'     Julian Ephemeris date (in the SPICE system */
-/*                          this is equivalent to JDTDB). */
+/*                 'TAI'     International Atomic Time. */
+/*                 'TDB'     Barycentric Dynamical Time. */
+/*                 'TDT'     Terrestrial Dynamical Time. */
+/*                 'TT'      Terrestrial Time, identical to TDT. */
+/*                 'ET'      Ephemeris time (in the SPICE system, this is */
+/*                           equivalent to TDB). */
+/*                 'JDTDB'   Julian Date relative to TDB. */
+/*                 'JDTDT'   Julian Date relative to TDT. */
+/*                 'JED'     Julian Ephemeris date (in the SPICE system */
+/*                           this is equivalent to JDTDB). */
+/*                 'GPS'     Global Positioning System Time. */
 
-/*                The routine is not sensitive to the case of the */
-/*                characters in INSYS;  'tai' 'Tai' and 'TAI' are */
-/*                all equivalent from the point of view of this routine. */
+/*              The routine is not sensitive to the case of the */
+/*              characters in INSYS; 'tai' 'Tai' and 'TAI' are all */
+/*              equivalent from the point of view of this routine. */
 
-/*     OUTSYS     is the time scale to which EPOCH should be converted. */
-/*                Acceptable values are the same as for INSYS.  The */
-/*                routine is not sensitive to the case of OUTSYS. */
+/*     OUTSYS   is the time scale to which EPOCH should be converted. */
+/*              Acceptable values are the same as for INSYS. The */
+/*              routine is not sensitive to the case of OUTSYS. */
 
 /* $ Detailed_Output */
 
@@ -225,20 +227,20 @@ doublereal unitim_(doublereal *epoch, char *insys, char *outsys, ftnlen
 
 /* $ Exceptions */
 
-/*     1) The kernel pool must contain the variables: */
+/*     1)  The kernel pool must contain the variables: */
 
-/*           'DELTET/DELTA_T_A' */
-/*           'DELTET/K' */
-/*           'DELTET/EB' */
-/*           'DELTET/M' */
+/*            'DELTET/DELTA_T_A' */
+/*            'DELTET/K' */
+/*            'DELTET/EB' */
+/*            'DELTET/M' */
 
-/*        If these are not present, the error 'SPICE(MISSINGTIMEINFO)' */
-/*        will be signalled.  (These variables are typically inserted */
-/*        into the kernel pool by loading a leapseconds kernel with */
-/*        the SPICE routine FURNSH.) */
+/*         If these are not present, the error SPICE(MISSINGTIMEINFO) is */
+/*         signaled. (These variables are typically inserted into the */
+/*         kernel pool by loading a leapseconds kernel with the SPICE */
+/*         routine FURNSH.) */
 
-/*     2) If the names of either the input or output time types are */
-/*        unrecognized, the error 'SPICE(BADTIMETYPE)' will be signalled. */
+/*     2)  If the names of either the input or output time types are */
+/*         unrecognized, the error SPICE(BADTIMETYPE) is signaled. */
 
 /* $ Files */
 
@@ -248,16 +250,15 @@ doublereal unitim_(doublereal *epoch, char *insys, char *outsys, ftnlen
 
 /*     We use the term uniform time scale to refer to those */
 /*     representations of time that are numeric (each epoch is */
-/*     represented by a number) and additive.  A numeric time */
-/*     system is additive if given the representations, E1 and E2, */
-/*     of any pair of successive epochs, the time elapsed between */
-/*     the epochs is given by E2 - E1. */
+/*     represented by a number) and additive. A numeric time system is */
+/*     additive if given the representations, E1 and E2, of any pair of */
+/*     successive epochs, the time elapsed between the epochs is given by */
+/*     E2 - E1. */
 
-/*     Given an epoch in one of the uniform time scales */
-/*     specified by INSYS, the function returns the equivalent */
-/*     representation in the scale specified by OUTSYS.  A list */
-/*     of the recognized uniform time scales is given in the */
-/*     detailed input for INSYS. */
+/*     Given an epoch in one of the uniform time scales specified by */
+/*     INSYS, the function returns the equivalent representation in the */
+/*     scale specified by OUTSYS. A list of the recognized uniform time */
+/*     scales is given in the detailed input for INSYS. */
 
 /* $ Examples */
 
@@ -269,9 +270,9 @@ doublereal unitim_(doublereal *epoch, char *insys, char *outsys, ftnlen
 
 /* $ Restrictions */
 
-/*     The appropriate variable must be loaded into the SPICE kernel pool */
-/*     (normally by loading a leapseconds kernel with FURNSH) prior to */
-/*     calling this routine. */
+/*     1)  The appropriate variable must be loaded into the SPICE kernel */
+/*         pool (normally by loading a leapseconds kernel with FURNSH) */
+/*         prior to calling this routine. */
 
 /* $ Literature_References */
 
@@ -279,11 +280,27 @@ doublereal unitim_(doublereal *epoch, char *insys, char *outsys, ftnlen
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
-/*     H.A. Neilan    (JPL) */
-/*     W.L. Taber     (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     H.A. Neilan        (JPL) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.5.0, 05-SEP-2020 (EDW) (JDR) */
+
+/*        Added time system name 'TT' (Terrestrial Time) as alternate */
+/*        assignment of 'TDT' (Terrestrial Dynamical Time). */
+
+/*        Included GPS time system mapping. */
+
+/*        Edited the header to comply with NAIF standard. */
+
+/*        Removed references to FURNSH, CLPOOL, KCLEAR, UNLOAD, and */
+/*        Required Reading documents and tutorials from the "variables */
+/*        not present" long error message. */
 
 /* -    SPICELIB Version 1.4.0, 09-SEP-2013 (BVS) */
 
@@ -310,7 +327,7 @@ doublereal unitim_(doublereal *epoch, char *insys, char *outsys, ftnlen
 
 /* -    SPICELIB Version 1.1.0, 17-MAY-1994 (HAN) */
 
-/*        If the value of the function RETURN is TRUE upon execution of */
+/*        If the value of the function RETURN is .TRUE. upon execution of */
 /*        this module, this function is assigned a default value of */
 /*        either 0, 0.0D0, .FALSE., or blank depending on the type of */
 /*        the function. */
@@ -363,6 +380,9 @@ doublereal unitim_(doublereal *epoch, char *insys, char *outsys, ftnlen
 /*     NRECOG is the total number of recognized types. */
 
 
+/*     Constant shift between GPS time system and TAI time system. */
+
+
 /*     Local variables */
 
 
@@ -397,13 +417,15 @@ doublereal unitim_(doublereal *epoch, char *insys, char *outsys, ftnlen
 	s_copy(typtdt + 48, "JDTDT", (ftnlen)8, (ftnlen)5);
 	s_copy(typtdt + 56, "TAI", (ftnlen)8, (ftnlen)3);
 	s_copy(typtdt + 64, "TDT", (ftnlen)8, (ftnlen)3);
+	s_copy(typtdt + 72, "GPS", (ftnlen)8, (ftnlen)3);
+	s_copy(typtdt + 80, "TT", (ftnlen)8, (ftnlen)2);
 	s_copy(typtdb + 48, "ET", (ftnlen)8, (ftnlen)2);
 	s_copy(typtdb + 56, "JDTDB", (ftnlen)8, (ftnlen)5);
 	s_copy(typtdb + 64, "JED", (ftnlen)8, (ftnlen)3);
 	s_copy(typtdb + 72, "TDB", (ftnlen)8, (ftnlen)3);
-	validc_(&c__3, &c__3, typtdt, (ftnlen)8);
+	validc_(&c__5, &c__5, typtdt, (ftnlen)8);
 	validc_(&c__4, &c__4, typtdb, (ftnlen)8);
-	ssizec_(&c__7, recog, (ftnlen)8);
+	ssizec_(&c__9, recog, (ftnlen)8);
 	unionc_(typtdt, typtdb, recog, (ftnlen)8, (ftnlen)8, (ftnlen)8);
 
 /*        Initialize the local POOL counter to user value. */
@@ -448,12 +470,12 @@ doublereal unitim_(doublereal *epoch, char *insys, char *outsys, ftnlen
 
 	    swpool_("UNITIM", &c__4, vars__, (ftnlen)6, (ftnlen)16);
 /* Writing concatenation */
-	    i__1[0] = 281, a__1[0] = "The following, needed to convert betwe"
-		    "en the input uniform time scales, were not found in the "
-		    "kernel pool: # Your program may have failed to load a le"
-		    "apseconds kernel.  Other possible causes of this problem"
-		    " include loading an invalid leapseconds kernel---one tha"
-		    "t lacks an initial ";
+	    i__1[0] = 290, a__1[0] = "The following variables, needed to con"
+		    "vert between the input uniform time scales, were not fou"
+		    "nd in the kernel pool: # Your program may have failed to"
+		    " load a leapseconds kernel. Other possible causes of thi"
+		    "s problem include loading an invalid leapseconds kernel-"
+		    "--one that lacks an initial ";
 	    i__1[1] = 1, a__1[1] = bslash;
 	    i__1[2] = 10, a__1[2] = "begindata ";
 	    i__1[3] = 41, a__1[3] = "marker or final newline character, or i"
@@ -462,25 +484,16 @@ doublereal unitim_(doublereal *epoch, char *insys, char *outsys, ftnlen
 		    "ous";
 	    i__1[5] = 42, a__1[5] = "ly loaded kernel pool variables via cal"
 		    "ls ";
-	    i__1[6] = 30, a__1[6] = "to UNLOAD, KCLEAR, or CLPOOL. ";
-	    i__1[7] = 41, a__1[7] = "Use the SPICE routine FURNSH (in Fortra"
-		    "n ";
-	    i__1[8] = 38, a__1[8] = "Toolkits, FURNSH is an entry point of ";
-	    i__1[9] = 38, a__1[9] = "KEEPER) to load a leapseconds kernel; ";
-	    i__1[10] = 36, a__1[10] = "make sure the kernel is up to date. ";
-	    i__1[11] = 41, a__1[11] = "See the Kernel and Time Required Read"
-		    "ing ";
-	    i__1[12] = 39, a__1[12] = "or the \"Intro to Kernels\" and \"LSK"
-		    " and ";
-	    i__1[13] = 34, a__1[13] = "SCLK\" SPICE Tutorials for details.";
-	    s_cat(ch__1, a__1, i__1, &c__14, (ftnlen)714);
-	    setmsg_(ch__1, (ftnlen)714);
+	    i__1[6] = 40, a__1[6] = "to routines that clear the kernel pool. "
+		    ;
+	    s_cat(ch__1, a__1, i__1, &c__7, (ftnlen)466);
+	    setmsg_(ch__1, (ftnlen)466);
 	    for (i__ = 1; i__ <= 4; ++i__) {
 		if (! found[(i__2 = i__ - 1) < 4 && 0 <= i__2 ? i__2 : s_rnge(
-			"found", i__2, "unitim_", (ftnlen)465)]) {
+			"found", i__2, "unitim_", (ftnlen)485)]) {
 		    errch_("#", missed + ((i__2 = i__ - 1) < 4 && 0 <= i__2 ? 
 			    i__2 : s_rnge("missed", i__2, "unitim_", (ftnlen)
-			    466)) * 20, (ftnlen)1, (ftnlen)20);
+			    486)) * 20, (ftnlen)1, (ftnlen)20);
 		}
 	    }
 	    errch_(", #", ".", (ftnlen)3, (ftnlen)1);
@@ -510,9 +523,9 @@ doublereal unitim_(doublereal *epoch, char *insys, char *outsys, ftnlen
 /*     First make sure both types are recognized. */
 
     if (! setc_(types, "<", recog, (ftnlen)8, (ftnlen)1, (ftnlen)8)) {
-	setmsg_("The time types recognized by UNITIM are: TAI, TDT, JDTDT, T"
-		"DB, ET, JED, JDTDB.  At least one of the inputs (#, #) was n"
-		"ot in the list of recognized types. ", (ftnlen)155);
+	setmsg_("The time types recognized by UNITIM are: TAI, GPS, TT, TDT,"
+		" JDTDT, TDB, ET, JED, JDTDB. At least one of the inputs (#, "
+		"#) was not in the list of recognized types. ", (ftnlen)163);
 	errch_("#", myin, (ftnlen)1, (ftnlen)8);
 	errch_("#", myout, (ftnlen)1, (ftnlen)8);
 	sigerr_("SPICE(BADTIMETYPE)", (ftnlen)18);
@@ -540,13 +553,15 @@ doublereal unitim_(doublereal *epoch, char *insys, char *outsys, ftnlen
 /*     The two types, TDT and TDB, will be used as the fundamental */
 /*     base used in conversions. */
 
-/*        TAI and JDTDT will be converted to TDT */
+/*        TAI, GPS, and JDTDT will be converted to TDT */
 /*        JED and JDTDB will be converted to TDB. */
-/*        (ET is already TDB.) */
+/*        ET means TDB; TT means TDT. */
 
 
     if (s_cmp(myin, "TAI", (ftnlen)8, (ftnlen)3) == 0) {
 	mytime += dta;
+    } else if (s_cmp(myin, "GPS", (ftnlen)8, (ftnlen)3) == 0) {
+	mytime += dta + 19.;
     } else if (s_cmp(myin, "JDTDT", (ftnlen)8, (ftnlen)5) == 0) {
 	mytime = (mytime - jd2000) * secspd;
     } else if (s_cmp(myin, "JED", (ftnlen)8, (ftnlen)3) == 0) {
@@ -701,6 +716,8 @@ doublereal unitim_(doublereal *epoch, char *insys, char *outsys, ftnlen
 
     if (s_cmp(myout, "TAI", (ftnlen)8, (ftnlen)3) == 0) {
 	mytime -= dta;
+    } else if (s_cmp(myout, "GPS", (ftnlen)8, (ftnlen)3) == 0) {
+	mytime -= dta + 19.;
     } else if (s_cmp(myout, "JDTDT", (ftnlen)8, (ftnlen)5) == 0) {
 	mytime = mytime / secspd + jd2000;
     } else if (s_cmp(myout, "JED", (ftnlen)8, (ftnlen)3) == 0) {

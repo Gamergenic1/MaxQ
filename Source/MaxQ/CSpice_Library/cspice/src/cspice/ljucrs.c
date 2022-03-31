@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      LJUCRS ( Left-justify, Uppercase, Compress ) */
+/* $Procedure LJUCRS ( Left-justify, Uppercase, Compress ) */
 /* Subroutine */ int ljucrs_(integer *n, char *input, char *output, ftnlen 
 	input_len, ftnlen output_len)
 {
@@ -76,22 +76,22 @@
 
 /* $ Detailed_Input */
 
-/*      N           is the maximum number of consecutive occurrences */
-/*                  of space that will be allowed to remain in the */
-/*                  output string. */
+/*     N        is the maximum number of consecutive occurrences */
+/*              of space that will be allowed to remain in the */
+/*              output string. */
 
-/*      INPUT       is the input string. */
+/*     INPUT    is the input string. */
 
 /* $ Detailed_Output */
 
-/*      OUTPUT      is the output string. This is the input string that */
-/*                  left-justified and with all occurrences of more than */
-/*                  N consecutive spaces removed. */
+/*     OUTPUT   is the output string. This is the input string that */
+/*              left-justified and with all occurrences of more than */
+/*              N consecutive spaces removed. */
 
-/*                  If OUTPUT is not large enough to hold the */
-/*                  compressed string, it is truncated on the right. */
+/*              If OUTPUT is not large enough to hold the */
+/*              compressed string, it is truncated on the right. */
 
-/*                  OUTPUT may overwrite INPUT. */
+/*              OUTPUT may overwrite INPUT. */
 
 /* $ Parameters */
 
@@ -129,9 +129,16 @@
 
 /* $ Author_and_Institution */
 
-/*     B.V. Semenov    (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     B.V. Semenov       (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 12-AUG-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.0.0, 29-JUL-2013 (BVS) */
 

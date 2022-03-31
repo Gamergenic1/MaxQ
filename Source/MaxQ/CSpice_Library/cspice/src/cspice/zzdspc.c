@@ -87,7 +87,7 @@
 
 /* $ Detailed_Input */
 
-/*     D2201      D coeffcients */
+/*     D2201      D coefficients */
 
 /*     D2211         ... */
 
@@ -133,7 +133,7 @@
 
 /*     TC         Internal SGD4 parameter. */
 
-/*     GSTO       Grenwich Sidereal Time */
+/*     GSTO       Greenwich Sidereal Time */
 
 /*     XFACT      Internal SGD4 parameter. */
 
@@ -242,6 +242,10 @@
 /*     E. D. Wright    (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.0.1, 01-OCT-2021 (NJB) */
+
+/*        Corrected typos in comments. */
 
 /* -    SPICELIB Version 1.0.0, OCT-14-2014 (EDW) */
 

@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      SHARPR ( Sharpen a rotation ) */
+/* $Procedure SHARPR ( Sharpen a rotation ) */
 /* Subroutine */ int sharpr_(doublereal *rot)
 {
     extern /* Subroutine */ int ucrss_(doublereal *, doublereal *, doublereal 
@@ -13,9 +13,10 @@
 
 /* $ Abstract */
 
-/*     Given a matrix that is "nearly" a rotation, adjust the columns */
-/*     (from left to right in the usual printed presentation of a matrix) */
-/*     so that the columns are numerically unit length and orthogonal. */
+/*     Adjust the columns of a matrix that is "nearly" a rotation */
+/*     so that they are numerically unit length and orthogonal, */
+/*     going from left to right in the usual printed presentation */
+/*     of a matrix. */
 
 /* $ Disclaimer */
 
@@ -55,21 +56,17 @@
 
 /*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
-/*     ROT       I/O  The rotation matrix to be sharpened. */
+/*     ROT       I-O  The rotation matrix to be sharpened. */
 
 /* $ Detailed_Input */
 
-/*     ROT       a 3x3 matrix that is nearly a rotation matrix. */
+/*     ROT      is a 3x3 matrix that is nearly a rotation matrix. */
 
 /* $ Detailed_Output */
 
-/*     ROT       the input after sharpening the columns. */
+/*     ROT      is the input after sharpening the columns. */
 
 /* $ Parameters */
-
-/*     None. */
-
-/* $ Files */
 
 /*     None. */
 
@@ -77,20 +74,24 @@
 
 /*     Error free. */
 
-/*     1) This routine is not meant to be used on singular or near- */
-/*        singular matrices (in other words, matrices with determinant */
-/*        close to zero). */
+/*     1)  This routine is not meant to be used on singular or near- */
+/*         singular matrices (in other words, matrices with determinant */
+/*         close to zero). */
 
-/*        If the input matrix is singular, the output matrix may not */
-/*        be a rotation matrix.  In any case, the results should be */
-/*        considered unreliable in this case. */
+/*         If the input matrix is singular, the output matrix may not */
+/*         be a rotation matrix. In any case, the results should be */
+/*         considered unreliable in this case. */
 
-/*        No error handling is done for invalid input matrices. */
+/*         No error handling is done for invalid input matrices. */
+
+/* $ Files */
+
+/*     None. */
 
 /* $ Particulars */
 
 /*     This routine "sharpens" the orthogonality of a potential */
-/*     rotation matrix.  It is intended for use in those situations */
+/*     rotation matrix. It is intended for use in those situations */
 /*     in which you have a rotation matrix that may be derived */
 /*     from single precision inputs or that may have experienced */
 /*     round off errors in its construction. */
@@ -98,10 +99,10 @@
 /* $ Examples */
 
 /*     Suppose that you have a rotation matrix that needs to be */
-/*     converted to a quaternion.  The SPICE matrix to quaternion */
+/*     converted to a quaternion. The SPICE matrix to quaternion */
 /*     conversion routine M2Q performs error checks on the input */
 /*     matrix and signals an error if it does not meet the checks */
-/*     for a quaternion.  By calling this routine you can ensure that */
+/*     for a quaternion. By calling this routine you can ensure that */
 /*     your rotation matrix (provided it's non-singular) will pass */
 /*     the restrictions imposed by M2Q. */
 
@@ -110,39 +111,36 @@
 
 /* $ Restrictions */
 
-/*     See the Exceptions section above. */
-
-/* $ Author_and_Institution */
-
-/*     N.J. Bachman    (JPL) */
-/*     W.L. Taber      (JPL) */
+/*     1)  See the $Exceptions section above. */
 
 /* $ Literature_References */
 
 /*     None. */
 
+/* $ Author_and_Institution */
+
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
+
 /* $ Version */
 
-/* -    SPICELIB Version 1.1.0, 13-OCT-2005 (NJB) */
+/* -    SPICELIB Version 1.1.1, 26-OCT-2021 (JDR) */
 
-/*        Updated to remove non-standard use of duplicate arguments */
-/*        in VHAT call.  Some header updates were made. */
-
-/* -    SPICELIB Version 1.0.0, 16-SEP-1999 (WLT) */
-
-
-/* -& */
-/* $ Index_Entries */
-
-/*     Sharpen the orhogonality of the columns of a rotation */
-
-/* -& */
-/* $ Revisions */
+/*        Edited the header to comply with NAIF standard. Removed */
+/*        unnecessary $Revisions section. */
 
 /* -    SPICELIB Version 1.1.0, 13-OCT-2005 (NJB) */
 
 /*        Updated to remove non-standard use of duplicate arguments */
 /*        in VHAT call. Some header updates were made. */
+
+/* -    SPICELIB Version 1.0.0, 16-SEP-1999 (WLT) */
+
+/* -& */
+/* $ Index_Entries */
+
+/*     Sharpen the orthogonality of the columns of a rotation */
 
 /* -& */
 

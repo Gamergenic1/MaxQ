@@ -11,7 +11,7 @@ static integer c__1 = 1;
 static doublereal c_b67 = 0.;
 static doublereal c_b68 = 1.;
 
-/* $Procedure  XDDA  ( list voxels intersected by a ray ) */
+/* $Procedure XDDA  ( list voxels intersected by a ray ) */
 /* Subroutine */ int xdda_(doublereal *vertex, doublereal *raydir, integer *
 	grdext, integer *maxnvx, integer *nvx, integer *voxlst)
 {
@@ -49,8 +49,8 @@ static doublereal c_b68 = 1.;
 
 /* $ Abstract */
 
-/*     Given a ray and a voxel grid, return a list of voxels the ray */
-/*     intersects. */
+/*     Return a list of voxels that a given ray intersects in a given */
+/*     voxel grid. */
 
 /* $ Disclaimer */
 
@@ -103,65 +103,65 @@ static doublereal c_b68 = 1.;
 
 /* $ Detailed_Input */
 
-/*     VERTEX     Voxel grid coordinates of ray's vertex. These */
-/*                coordinates are zero-based, double precision */
-/*                offsets from the grid's origin. The units of */
-/*                the coordinates are voxels, that is, */
-/*                voxel edge lengths. */
+/*     VERTEX   is the voxel grid coordinates of ray's vertex. These */
+/*              coordinates are zero-based, double precision offsets from */
+/*              the grid's origin. The units of the coordinates are */
+/*              voxels, that is, voxel edge lengths. */
 
-/*     RAYDIR     Direction vector of ray from VERTEX. */
+/*     RAYDIR   is the direction vector of ray from VERTEX. */
 
-/*     GRDEXT     The integer 3-vector containing the voxel grid */
-/*                extents. These are the dimensions of the voxel grid in */
-/*                voxel units, in the X, Y, and Z directions */
-/*                respectively. */
+/*     GRDEXT   is the integer 3-vector containing the voxel grid */
+/*              extents. These are the dimensions of the voxel grid in */
+/*              voxel units, in the X, Y, and Z directions respectively. */
 
-/*     MAXNVX     The maximum number of voxel coordinate sets that */
-/*                can be stored in VOXLST. */
+/*     MAXNVX   is the maximum number of voxel coordinate sets that can */
+/*              be stored in VOXLST. */
 
 /* $ Detailed_Output */
 
-/*     NVX        Number of voxel coordinate sets contained in VOXLST. */
+/*     NVX      is the number of voxel coordinate sets contained in */
+/*              VOXLST. */
 
-/*     VOXLST     List of coordinate sets of voxels intersected by ray. */
-/*                Elements */
+/*     VOXLST   is the list of coordinate sets of voxels intersected by */
+/*              ray. Elements */
 
-/*                   VOXLST(J,I), J = 1, 3 */
+/*                 VOXLST(J,I), J = 1, 3 */
 
-/*                are the coordinates of the Ith voxel in the list. */
-/*                These coordinates are 1-based integer values. */
+/*              are the coordinates of the Ith voxel in the list. These */
+/*              coordinates are 1-based integer values. */
 
-/*                The voxels in the output list are ordered by */
-/*                increasing distance from the ray's vertex. */
+/*              The voxels in the output list are ordered by increasing */
+/*              distance from the ray's vertex. */
 
 /* $ Parameters */
 
-/*     GRDTOL     is a tolerance value used to determine whether */
-/*                VERTEX is too far from the voxel grid. The Ith */
-/*                component of VERTEX must not differ from the */
-/*                Ith coordinate of the nearest grid point by more */
-/*                than */
+/*     GRDTOL   is a tolerance value used to determine whether */
+/*              VERTEX is too far from the voxel grid. The Ith */
+/*              component of VERTEX must not differ from the */
+/*              Ith coordinate of the nearest grid point by more */
+/*              than */
 
-/*                    GRDTOL * EXTENT(I) */
+/*                  GRDTOL * EXTENT(I) */
 
 /* $ Exceptions */
 
-/*     1)  The error SPICE(ZEROVECTOR) is signaled if the input RAYDIR */
-/*         has all zero components. */
+/*     1)  If the input RAYDIR has all zero components, the error */
+/*         SPICE(ZEROVECTOR) is signaled. */
 
-/*     2)  The error SPICE(INVALIDSIZE) is signaled if the maximum */
-/*         output list size MAXNVX is non-positive. */
+/*     2)  If the maximum output list size MAXNVX is non-positive, the */
+/*         error SPICE(INVALIDSIZE) is signaled. */
 
-/*     3)  The error SPICE(BADDIMENSIONS) is signaled if any element of */
-/*         the grid extents array GRDEXT is non-positive. */
+/*     3)  If any element of the grid extents array GRDEXT is */
+/*         non-positive, the error SPICE(BADDIMENSIONS) is signaled. */
 
-/*     4)  The error SPICE(VERTEXNOTINGRID) is signaled if the ray's */
-/*         vertex is inside, or within a small distance from, the voxel */
-/*         grid. See the description of the parameter GRDTOL. */
+/*     4)  If the ray's vertex is neither inside, nor within a small */
+/*         distance from, the voxel grid, the error */
+/*         SPICE(VERTEXNOTINGRID) is signaled. See the description of the */
+/*         parameter GRDTOL. */
 
-/*     5)  The error SPICE(ARRAYTOOSMALL) is signaled if the value of */
-/*         the NVX counter (number of intersected voxels) exceeds the */
-/*         size of the VOXLST input vector. */
+/*     5)  If the value of the NVX counter (number of intersected voxels) */
+/*         exceeds the size of the VOXLST input vector, the error */
+/*         SPICE(ARRAYTOOSMALL) is signaled. */
 
 /* $ Files */
 
@@ -186,82 +186,97 @@ static doublereal c_b68 = 1.;
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     J.A. Bytof      (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J.A. Bytof         (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     B.V. Semenov       (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 3.1.1, 26-OCT-2021 (NJB) (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
+
+/*        Typo correction: the description of the error denoted */
+/*        by the short message SPICE(VERTEXNOTINGRID) had been */
+/*        the negative of what was intended. */
 
 /* -    SPICELIB Version 3.1.0, 02-FEB-2016 (NJB) */
 
 /*        Updated to call ZZINGRD rather than INGRD. */
 /*        Minor updates were made to header I/O sections. */
 
-/* -    DSKLIB Version 3.0.0, 11-JUL-2014 (NJB) */
+/* -    SPICELIB Version 3.0.0, 11-JUL-2014 (NJB) (EDW) (BVS) (JAB) */
 
-/*        Bug fix: a correction was made to the computation of */
-/*        the vertex offset from the bounding planes of the */
-/*        voxel containing the vertex. */
+/*        Previously released as DSKLIB: */
 
-/*        Minor edits were made to comments. */
+/*        DSKLIB Version 3.0.0, 11-JUL-2014 (NJB) */
 
-/*     Last update was 05-JUN-2014 (NJB) */
+/*           Bug fix: a correction was made to the computation of */
+/*           the vertex offset from the bounding planes of the */
+/*           voxel containing the vertex. */
 
-/*        Bug fix: the use of the MOD function led to a 1-voxel */
-/*        size error when the input ray's vertex was on the */
-/*        voxel grid boundary. */
+/*           Minor edits were made to comments. */
 
-/*        An error check for invalid grid dimensions was added. */
+/*        Last update was 05-JUN-2014 (NJB) */
 
-/*        Code to prevent arithmetic overflow was added. */
+/*           Bug fix: the use of the MOD function led to a 1-voxel */
+/*           size error when the input ray's vertex was on the */
+/*           voxel grid boundary. */
 
-/*        Code was added to prevent the values AX2ERR and AX3ERR from */
-/*        ever becoming negative when the components of the ray's */
-/*        direction vector in the corresponding directions are zero or */
-/*        too small for a voxel step in those directions to occur. */
+/*           An error check for invalid grid dimensions was added. */
 
-/*        Renamed the routine's arguments, except for NVX. */
+/*           Code to prevent arithmetic overflow was added. */
 
-/*        Detailed output descriptions were updated to refer to */
-/*        voxel coordinates rather than IDs. References to sorting */
-/*        were deleted. */
+/*           Code was added to prevent the values AX2ERR and AX3ERR from */
+/*           ever becoming negative when the components of the ray's */
+/*           direction vector in the corresponding directions are zero or */
+/*           too small for a voxel step in those directions to occur. */
 
-/*        In-line comments now explain the routine's algorithm. */
-/*        Old comments that are no longer applicable were deleted. */
+/*           Renamed the routine's arguments, except for NVX. */
 
-/* -    DSKLIB Version 2.1.0, 26-JUL-2010 (NJB) */
+/*           Detailed output descriptions were updated to refer to */
+/*           voxel coordinates rather than IDs. References to sorting */
+/*           were deleted. */
 
-/*        Bug fix: voxel space coordinates of input */
-/*        vertex are now bracketed within the voxel */
-/*        grid. */
+/*           In-line comments now explain the routine's algorithm. */
+/*           Old comments that are no longer applicable were deleted. */
 
-/*        This prevents round-off errors from occurring */
-/*        when the vertex is slightly outside the grid, */
-/*        but may not be appropriate for all applications. */
-/*        Therefore it may make sense to make this a */
-/*        private routine. */
+/*        DSKLIB Version 2.1.0, 26-JUL-2010 (NJB) */
 
-/* -    DSKLIB Version 2.0.0, 20-APR-2010 (NJB) */
+/*           Bug fix: voxel space coordinates of input */
+/*           vertex are now bracketed within the voxel */
+/*           grid. */
 
-/*        Removed commented out lines declaring and calling VOX2ID. */
+/*           This prevents round-off errors from occurring */
+/*           when the vertex is slightly outside the grid, */
+/*           but may not be appropriate for all applications. */
+/*           Therefore it may make sense to make this a */
+/*           private routine. */
 
-/* -    DSKLIB Version 1.1.0, 08-OCT-2009 (NJB) */
+/*        DSKLIB Version 2.0.0, 20-APR-2010 (NJB) */
 
-/*        Updated header. */
+/*           Removed commented out lines declaring and calling VOX2ID. */
 
-/*        Bug fix: driving axis for intercept computation is */
-/*        now determined by largest component of ray direction vector. */
-/*        This fix was made long before this header update. */
+/*        DSKLIB Version 1.1.0, 08-OCT-2009 (NJB) */
 
-/* -    DSKLIB Version 1.1.0, 19-OCT-2004 (EDW) */
+/*           Updated header. */
 
-/*        Added logic to remove duplicate voxel IDs from */
-/*        the return list. Extended programing comments. */
+/*           Bug fix: driving axis for intercept computation is */
+/*           now determined by largest component of ray direction vector. */
+/*           This fix was made long before this header update. */
 
-/* -    DSKLIB Version 1.0.1, 26-AUG-2002 (BVS) */
+/*        DSKLIB Version 1.1.0, 19-OCT-2004 (EDW) */
 
-/*        Replaced WRITE with normal error reporting calls. */
+/*           Added logic to remove duplicate voxel IDs from */
+/*           the return list. Extended programming comments. */
 
-/* -    DSKLIB Version 1.0.0, 03-FEB-1999 (JAB) */
+/*        DSKLIB Version 1.0.1, 26-AUG-2002 (BVS) */
+
+/*           Replaced WRITE with normal error reporting calls. */
+
+/*        DSKLIB Version 1.0.0, 03-FEB-1999 (JAB) */
 
 /* -& */
 /* $ Index_Entries */
@@ -405,12 +420,12 @@ static doublereal c_b68 = 1.;
 
     for (i__ = 1; i__ <= 3; ++i__) {
 	if (vertex[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("vertex",
-		 i__1, "xdda_", (ftnlen)416)] < grdext[(i__2 = i__ - 1) < 3 &&
+		 i__1, "xdda_", (ftnlen)433)] < grdext[(i__2 = i__ - 1) < 3 &&
 		 0 <= i__2 ? i__2 : s_rnge("grdext", i__2, "xdda_", (ftnlen)
-		416)] * -1e-12 || vertex[(i__3 = i__ - 1) < 3 && 0 <= i__3 ? 
-		i__3 : s_rnge("vertex", i__3, "xdda_", (ftnlen)416)] > grdext[
+		433)] * -1e-12 || vertex[(i__3 = i__ - 1) < 3 && 0 <= i__3 ? 
+		i__3 : s_rnge("vertex", i__3, "xdda_", (ftnlen)433)] > grdext[
 		(i__4 = i__ - 1) < 3 && 0 <= i__4 ? i__4 : s_rnge("grdext", 
-		i__4, "xdda_", (ftnlen)416)] * 1.0000000000010001) {
+		i__4, "xdda_", (ftnlen)433)] * 1.0000000000010001) {
 	    chkin_("XDDA", (ftnlen)4);
 	    setmsg_("Vertex # # # is outside of voxel grid defined by extent"
 		    "s # # #.", (ftnlen)63);
@@ -444,10 +459,10 @@ static doublereal c_b68 = 1.;
     maxcmp = abs(raydir[0]);
     for (i__ = 2; i__ <= 3; ++i__) {
 	if ((d__1 = raydir[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(
-		"raydir", i__1, "xdda_", (ftnlen)459)], abs(d__1)) > maxcmp) {
+		"raydir", i__1, "xdda_", (ftnlen)476)], abs(d__1)) > maxcmp) {
 	    iaxis[0] = i__;
 	    maxcmp = (d__1 = raydir[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 :
-		     s_rnge("raydir", i__1, "xdda_", (ftnlen)461)], abs(d__1))
+		     s_rnge("raydir", i__1, "xdda_", (ftnlen)478)], abs(d__1))
 		    ;
 	}
     }
@@ -458,9 +473,9 @@ static doublereal c_b68 = 1.;
 /*     the cross product of the first and second. */
 
     iaxis[1] = next[(i__1 = iaxis[0] - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(
-	    "next", i__1, "xdda_", (ftnlen)472)];
+	    "next", i__1, "xdda_", (ftnlen)489)];
     iaxis[2] = next[(i__1 = iaxis[1] - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(
-	    "next", i__1, "xdda_", (ftnlen)473)];
+	    "next", i__1, "xdda_", (ftnlen)490)];
 
 /*     Which voxel contains the vertex? Truncate the vertex */
 /*     coordinates to integers. Add 1 to each coord to compensate */
@@ -468,25 +483,25 @@ static doublereal c_b68 = 1.;
 
     for (i__ = 1; i__ <= 3; ++i__) {
 	intvtx[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("intvtx", 
-		i__1, "xdda_", (ftnlen)482)] = (integer) vertex[(i__3 = iaxis[
+		i__1, "xdda_", (ftnlen)499)] = (integer) vertex[(i__3 = iaxis[
 		(i__2 = i__ - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge("iaxis", 
-		i__2, "xdda_", (ftnlen)482)] - 1) < 3 && 0 <= i__3 ? i__3 : 
-		s_rnge("vertex", i__3, "xdda_", (ftnlen)482)];
+		i__2, "xdda_", (ftnlen)499)] - 1) < 3 && 0 <= i__3 ? i__3 : 
+		s_rnge("vertex", i__3, "xdda_", (ftnlen)499)];
 	icoord[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("icoord", 
-		i__1, "xdda_", (ftnlen)484)] = intvtx[(i__2 = i__ - 1) < 3 && 
+		i__1, "xdda_", (ftnlen)501)] = intvtx[(i__2 = i__ - 1) < 3 && 
 		0 <= i__2 ? i__2 : s_rnge("intvtx", i__2, "xdda_", (ftnlen)
-		484)] + 1;
+		501)] + 1;
 	icoord[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("icoord", 
-		i__1, "xdda_", (ftnlen)486)] = brckti_(&icoord[(i__2 = i__ - 
+		i__1, "xdda_", (ftnlen)503)] = brckti_(&icoord[(i__2 = i__ - 
 		1) < 3 && 0 <= i__2 ? i__2 : s_rnge("icoord", i__2, "xdda_", (
-		ftnlen)486)], &c__1, &grdext[(i__4 = iaxis[(i__3 = i__ - 1) < 
+		ftnlen)503)], &c__1, &grdext[(i__4 = iaxis[(i__3 = i__ - 1) < 
 		3 && 0 <= i__3 ? i__3 : s_rnge("iaxis", i__3, "xdda_", (
-		ftnlen)486)] - 1) < 3 && 0 <= i__4 ? i__4 : s_rnge("grdext", 
-		i__4, "xdda_", (ftnlen)486)]);
+		ftnlen)503)] - 1) < 3 && 0 <= i__4 ? i__4 : s_rnge("grdext", 
+		i__4, "xdda_", (ftnlen)503)]);
 	voxlst[iaxis[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("iaxis"
-		, i__1, "xdda_", (ftnlen)488)] - 1] = icoord[(i__2 = i__ - 1) 
+		, i__1, "xdda_", (ftnlen)505)] - 1] = icoord[(i__2 = i__ - 1) 
 		< 3 && 0 <= i__2 ? i__2 : s_rnge("icoord", i__2, "xdda_", (
-		ftnlen)488)];
+		ftnlen)505)];
     }
 
 /*     Initialize the counter for number of voxels the ray intercepts. */
@@ -507,12 +522,12 @@ static doublereal c_b68 = 1.;
 
     for (i__ = 1; i__ <= 3; ++i__) {
 	d__1 = vertex[(i__3 = iaxis[(i__2 = i__ - 1) < 3 && 0 <= i__2 ? i__2 :
-		 s_rnge("iaxis", i__2, "xdda_", (ftnlen)513)] - 1) < 3 && 0 <=
-		 i__3 ? i__3 : s_rnge("vertex", i__3, "xdda_", (ftnlen)513)] 
+		 s_rnge("iaxis", i__2, "xdda_", (ftnlen)530)] - 1) < 3 && 0 <=
+		 i__3 ? i__3 : s_rnge("vertex", i__3, "xdda_", (ftnlen)530)] 
 		- (icoord[(i__4 = i__ - 1) < 3 && 0 <= i__4 ? i__4 : s_rnge(
-		"icoord", i__4, "xdda_", (ftnlen)513)] - 1);
+		"icoord", i__4, "xdda_", (ftnlen)530)] - 1);
 	vtxoff[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("vtxoff", 
-		i__1, "xdda_", (ftnlen)513)] = brcktd_(&d__1, &c_b67, &c_b68);
+		i__1, "xdda_", (ftnlen)530)] = brcktd_(&d__1, &c_b67, &c_b68);
     }
 
 /*     Compute the lower limit on the magnitudes of RAYDIR( IAXIS(2) ) */
@@ -520,9 +535,9 @@ static doublereal c_b68 = 1.;
 /*     of the direction vector as non-zero. */
 
     limit = 1e-20 / grdext[(i__1 = iaxis[0] - 1) < 3 && 0 <= i__1 ? i__1 : 
-	    s_rnge("grdext", i__1, "xdda_", (ftnlen)523)] * (d__1 = raydir[(
+	    s_rnge("grdext", i__1, "xdda_", (ftnlen)540)] * (d__1 = raydir[(
 	    i__2 = iaxis[0] - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge("raydir", 
-	    i__2, "xdda_", (ftnlen)523)], abs(d__1));
+	    i__2, "xdda_", (ftnlen)540)], abs(d__1));
 
 /*     If the magnitude of RAYDIR( IAXIS(J) ), J = 2 or 3, is below */
 /*     LIMIT, then the ray can pass through the entire grid in the */
@@ -543,18 +558,18 @@ static doublereal c_b68 = 1.;
 /*     for the non-primary axis IAXIS(2). */
 
     if ((d__1 = raydir[(i__1 = iaxis[1] - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(
-	    "raydir", i__1, "xdda_", (ftnlen)544)], abs(d__1)) > limit) {
+	    "raydir", i__1, "xdda_", (ftnlen)561)], abs(d__1)) > limit) {
 
 /*        For any line segment along the ray, S12 is the ratio of the */
 /*        magnitudes of the projections of the segment in the primary */
 /*        and the IAXIS(2) directions. */
 
 	s12 = (d__1 = raydir[(i__1 = iaxis[0] - 1) < 3 && 0 <= i__1 ? i__1 : 
-		s_rnge("raydir", i__1, "xdda_", (ftnlen)550)] / raydir[(i__2 =
+		s_rnge("raydir", i__1, "xdda_", (ftnlen)567)] / raydir[(i__2 =
 		 iaxis[1] - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge("raydir", 
-		i__2, "xdda_", (ftnlen)550)], abs(d__1));
+		i__2, "xdda_", (ftnlen)567)], abs(d__1));
 	if (raydir[(i__1 = iaxis[0] - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(
-		"raydir", i__1, "xdda_", (ftnlen)553)] > 0.) {
+		"raydir", i__1, "xdda_", (ftnlen)570)] > 0.) {
 
 /*           The primary component of the ray's direction is positive. */
 /*           The distance to the next boundary plane in the primary */
@@ -563,7 +578,7 @@ static doublereal c_b68 = 1.;
 /*              1.D0 - VTXOFF( IAXIS(1) ) */
 
 	    if (raydir[(i__1 = iaxis[1] - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(
-		    "raydir", i__1, "xdda_", (ftnlen)561)] > 0.) {
+		    "raydir", i__1, "xdda_", (ftnlen)578)] > 0.) {
 
 /*              The IAXIS(2) component of the ray's direction is */
 /*              positive. The distance to the next boundary plane for */
@@ -606,7 +621,7 @@ static doublereal c_b68 = 1.;
 
 /*              VTXOFF( IAXIS(1) ) */
 	    if (raydir[(i__1 = iaxis[1] - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(
-		    "raydir", i__1, "xdda_", (ftnlen)607)] > 0.) {
+		    "raydir", i__1, "xdda_", (ftnlen)624)] > 0.) {
 
 /*              The IAXIS(2) component of the ray's direction is */
 /*              positive. The distance to the next boundary plane for */
@@ -646,27 +661,27 @@ static doublereal c_b68 = 1.;
 /*     See the comments above. */
 
     if ((d__1 = raydir[(i__1 = iaxis[2] - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(
-	    "raydir", i__1, "xdda_", (ftnlen)654)], abs(d__1)) > limit) {
+	    "raydir", i__1, "xdda_", (ftnlen)671)], abs(d__1)) > limit) {
 
 /*        For any line segment along the ray, S13 is the ratio of the */
 /*        magnitudes of the projections of the segment in the primary */
 /*        and the IAXIS(3) directions. */
 
 	s13 = (d__1 = raydir[(i__1 = iaxis[0] - 1) < 3 && 0 <= i__1 ? i__1 : 
-		s_rnge("raydir", i__1, "xdda_", (ftnlen)660)] / raydir[(i__2 =
+		s_rnge("raydir", i__1, "xdda_", (ftnlen)677)] / raydir[(i__2 =
 		 iaxis[2] - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge("raydir", 
-		i__2, "xdda_", (ftnlen)660)], abs(d__1));
+		i__2, "xdda_", (ftnlen)677)], abs(d__1));
 	if (raydir[(i__1 = iaxis[0] - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(
-		"raydir", i__1, "xdda_", (ftnlen)662)] > 0.) {
+		"raydir", i__1, "xdda_", (ftnlen)679)] > 0.) {
 	    if (raydir[(i__1 = iaxis[2] - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(
-		    "raydir", i__1, "xdda_", (ftnlen)664)] > 0.) {
+		    "raydir", i__1, "xdda_", (ftnlen)681)] > 0.) {
 		ax3err = s13 * (1. - vtxoff[2]) + vtxoff[0] - 1.;
 	    } else {
 		ax3err = s13 * vtxoff[2] + vtxoff[0] - 1.;
 	    }
 	} else {
 	    if (raydir[(i__1 = iaxis[2] - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(
-		    "raydir", i__1, "xdda_", (ftnlen)672)] > 0.) {
+		    "raydir", i__1, "xdda_", (ftnlen)689)] > 0.) {
 		ax3err = s13 * (1. - vtxoff[2]) - vtxoff[0];
 	    } else {
 		ax3err = s13 * vtxoff[2] - vtxoff[0];
@@ -686,29 +701,29 @@ static doublereal c_b68 = 1.;
 
     for (i__ = 1; i__ <= 3; ++i__) {
 	if (raydir[(i__2 = iaxis[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : 
-		s_rnge("iaxis", i__1, "xdda_", (ftnlen)695)] - 1) < 3 && 0 <= 
-		i__2 ? i__2 : s_rnge("raydir", i__2, "xdda_", (ftnlen)695)] > 
+		s_rnge("iaxis", i__1, "xdda_", (ftnlen)712)] - 1) < 3 && 0 <= 
+		i__2 ? i__2 : s_rnge("raydir", i__2, "xdda_", (ftnlen)712)] > 
 		limit) {
 
 /*           Positive component direction, positive step. */
 
 	    step[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("step", 
-		    i__1, "xdda_", (ftnlen)699)] = 1;
+		    i__1, "xdda_", (ftnlen)716)] = 1;
 	} else if (raydir[(i__2 = iaxis[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? 
-		i__1 : s_rnge("iaxis", i__1, "xdda_", (ftnlen)701)] - 1) < 3 
+		i__1 : s_rnge("iaxis", i__1, "xdda_", (ftnlen)718)] - 1) < 3 
 		&& 0 <= i__2 ? i__2 : s_rnge("raydir", i__2, "xdda_", (ftnlen)
-		701)] < -limit) {
+		718)] < -limit) {
 
 /*           Negative component direction, negative step. */
 
 	    step[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("step", 
-		    i__1, "xdda_", (ftnlen)705)] = -1;
+		    i__1, "xdda_", (ftnlen)722)] = -1;
 	} else {
 
 /*           No component in this direction, no step. */
 
 	    step[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("step", 
-		    i__1, "xdda_", (ftnlen)711)] = 0;
+		    i__1, "xdda_", (ftnlen)728)] = 0;
 	}
     }
 
@@ -767,9 +782,9 @@ static doublereal c_b68 = 1.;
 
 	for (i__ = 1; i__ <= 3; ++i__) {
 	    voxlst[iaxis[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(
-		    "iaxis", i__1, "xdda_", (ftnlen)784)] + *nvx * 3 - 4] = 
+		    "iaxis", i__1, "xdda_", (ftnlen)801)] + *nvx * 3 - 4] = 
 		    icoord[(i__2 = i__ - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge(
-		    "icoord", i__2, "xdda_", (ftnlen)784)];
+		    "icoord", i__2, "xdda_", (ftnlen)801)];
 	}
     }
 

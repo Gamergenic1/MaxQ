@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      LNKAN  ( LNK, allocate node ) */
+/* $Procedure LNKAN  ( LNK, allocate node ) */
 /* Subroutine */ int lnkan_(integer *pool, integer *new__)
 {
     extern /* Subroutine */ int chkin_(char *, ftnlen), sigerr_(char *, 
@@ -42,7 +42,7 @@
 
 /* $ Required_Reading */
 
-/*     LNK */
+/*     None. */
 
 /* $ Keywords */
 
@@ -51,7 +51,7 @@
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     POOL      I-O  A doubly linked list pool. */
 /*     NEW        O   Number of new node that was allocated. */
@@ -59,32 +59,32 @@
 
 /* $ Detailed_Input */
 
-/*     POOL           is a doubly linked list pool. */
+/*     POOL     is a doubly linked list pool. */
 
 /* $ Detailed_Output */
 
-/*     POOL           is the input pool, with the following */
-/*                    modifications: */
+/*     POOL     is the input pool, with the following */
+/*              modifications: */
 
-/*                       -- NEW is an allocated node:  both the forward */
-/*                          and backward pointers of NEW are -NEW. */
+/*                 -- NEW is an allocated node: both the forward */
+/*                    and backward pointers of NEW are -NEW. */
 
-/*                       -- The node that was the successor of NEW on */
-/*                          input is the head of the free list on output. */
+/*                 -- The node that was the successor of NEW on */
+/*                    input is the head of the free list on output. */
 
 
-/*     NEW            is the number of the newly allocated node. */
+/*     NEW      is the number of the newly allocated node. */
 
 /* $ Parameters */
 
-/*     LBPOOL        is the lower bound of the column indices of the POOL */
-/*                   array.  The columns indexed LBPOOL to 0 are reserved */
-/*                   as a control area for the pool. */
+/*     LBPOOL   is the lower bound of the column indices of the POOL */
+/*              array. The columns indexed LBPOOL to 0 are reserved */
+/*              as a control area for the pool. */
 
 /* $ Exceptions */
 
 /*     1)  If no free nodes are available for allocation, the error */
-/*         SPICE(NOFREENODES) is signalled. */
+/*         SPICE(NOFREENODES) is signaled. */
 
 /* $ Files */
 
@@ -93,7 +93,7 @@
 /* $ Particulars */
 
 /*     In a doubly linked list pool, an `allocated node' is one that has */
-/*     been removed from the free list.  An allocated node may be linked */
+/*     been removed from the free list. An allocated node may be linked */
 /*     to other nodes or may be unlinked; in the latter case, both the */
 /*     forward and backward pointers of the node will be the negative of */
 /*     the node number. */
@@ -103,7 +103,7 @@
 
 /* $ Examples */
 
-/*     1)  Let POOL be a doubly linked list pool.  To build a new list */
+/*     1)  Let POOL be a doubly linked list pool. To build a new list */
 /*         of ten nodes, the code fragment below can be used: */
 
 /*            C */
@@ -127,7 +127,7 @@
 
 /*            C */
 /*            C     Make sure we have 10 free nodes available. */
-/*            C     Signal an error if not.  Use LNKNFN to obtain */
+/*            C     Signal an error if not. Use LNKNFN to obtain */
 /*            C     the number of free nodes. */
 /*            C */
 /*                  IF ( LNKNFN(POOL) .LT. 10 ) THEN */
@@ -147,9 +147,9 @@
 
 /* $ Restrictions */
 
-/*     Linked list pools must be initialized via the routine */
-/*     LNKINI.  Failure to initialize a linked list pool */
-/*     will almost certainly lead to confusing results. */
+/*     1)  Linked list pools must be initialized via the routine */
+/*         LNKINI. Failure to initialize a linked list pool */
+/*         will almost certainly lead to confusing results. */
 
 /* $ Literature_References */
 
@@ -157,10 +157,15 @@
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
-/*     W.L. Taber     (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.0.1, 24-NOV-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.0.0, 19-DEC-1995 (NJB) (WLT) */
 

@@ -5,9 +5,9 @@
 
 #include "f2c.h"
 
-/* $Procedure      RECLAT ( Rectangular to latitudinal coordinates ) */
+/* $Procedure RECLAT ( Rectangular to latitudinal coordinates ) */
 /* Subroutine */ int reclat_(doublereal *rectan, doublereal *radius, 
-	doublereal *long__, doublereal *lat)
+	doublereal *lon, doublereal *lat)
 {
     /* System generated locals */
     doublereal d__1, d__2;
@@ -53,7 +53,8 @@
 
 /* $ Keywords */
 
-/*     CONVERSION,  COORDINATES */
+/*     CONVERSION */
+/*     COORDINATES */
 
 /* $ Declarations */
 /* $ Brief_I/O */
@@ -62,37 +63,50 @@
 /*     --------  ---  -------------------------------------------------- */
 /*     RECTAN     I   Rectangular coordinates of the point. */
 /*     RADIUS     O   Distance of a point from the origin. */
-/*     LONG       O   Longitude of point in radians. */
+/*     LON        O   Longitude of point in radians. */
 /*     LAT        O   Latitude of point in radians. */
 
 /* $ Detailed_Input */
 
-/*     RECTAN     The rectangular coordinates of a point. */
+/*     RECTAN   are the rectangular coordinates of a point. */
 
 /* $ Detailed_Output */
 
-/*     RADIUS     Distance of a point from the origin. */
+/*     RADIUS   is the distance of a point from the origin. */
 
-/*                The units associated with RADIUS are those */
-/*                associated with the input RECTAN. */
+/*              The units associated with RADIUS are those */
+/*              associated with the input RECTAN. */
 
-/*     LONG       Longitude of the input point.  This is the angle */
-/*                between the prime meridian and the meridian */
-/*                containing the point.  The direction of increasing */
-/*                longitude is from the +X axis towards the +Y axis. */
+/*     LON      is the longitude of the input point. This is the */
+/*              angle between the prime meridian and the meridian */
+/*              containing the point. The direction of increasing */
+/*              longitude is from the +X axis towards the +Y axis. */
 
-/*                LONG is output in radians.  The range of LONG is */
-/*                [ -pi, pi]. */
+/*              LON is output in radians. The range of LON is */
+/*              [ -pi, pi]. */
 
+/*     LAT      is the latitude of the input point. This is the angle */
+/*              from the XY plane of the ray from the origin through */
+/*              the point. */
 
-/*     LAT        Latitude of the input point.  This is the angle from */
-/*                the XY plane of the ray from the origin through the */
-/*                point. */
-
-/*                LAT is output in radians.  The range of LAT is */
-/*                [-pi/2, pi/2]. */
+/*              LAT is output in radians. The range of LAT is */
+/*              [-pi/2, pi/2]. */
 
 /* $ Parameters */
+
+/*     None. */
+
+/* $ Exceptions */
+
+/*     Error free. */
+
+/*     1)  If the X and Y components of RECTAN are both zero, the */
+/*         longitude is set to zero. */
+
+/*     2)  If RECTAN is the zero vector, longitude and latitude are */
+/*         both set to zero. */
+
+/* $ Files */
 
 /*     None. */
 
@@ -106,76 +120,278 @@
 /*     above the equator of a sphere centered at the central reference */
 /*     point. */
 
-/* $ Exceptions */
-
-/*     Error free. */
-
-/*     1) If the X and Y components of RECTAN are both zero, the */
-/*        longitude is set to zero. */
-
-/*     2) If RECTAN is the zero vector, longitude and latitude are */
-/*        both set to zero. */
-
-/* $ Files */
-
-/*     None. */
-
 /* $ Examples */
 
-/*     Below are two tables. */
+/*     The numerical results shown for these examples may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
 
-/*     Listed in the first table (under X(1), X(2) and X(3) ) are a */
-/*     number of points whose rectangular coordinates are */
-/*     taken from the set {-1, 0, 1}. */
+/*     1) Compute the latitudinal coordinates of the position of the */
+/*        Moon as seen from the Earth, and convert them to rectangular */
+/*        coordinates. */
 
-/*     The results of the code fragment */
+/*        Use the meta-kernel shown below to load the required SPICE */
+/*        kernels. */
 
-/*              CALL RECLAT ( X, R, LONG, LAT ) */
+
+/*           KPL/MK */
+
+/*           File name: reclat_ex1.tm */
+
+/*           This meta-kernel is intended to support operation of SPICE */
+/*           example programs. The kernels shown here should not be */
+/*           assumed to contain adequate or correct versions of data */
+/*           required by SPICE-based user applications. */
+
+/*           In order for an application to use this meta-kernel, the */
+/*           kernels referenced here must be present in the user's */
+/*           current working directory. */
+
+/*           The names and contents of the kernels referenced */
+/*           by this meta-kernel are as follows: */
+
+/*              File name                     Contents */
+/*              ---------                     -------- */
+/*              de421.bsp                     Planetary ephemeris */
+/*              naif0012.tls                  Leapseconds */
+
+
+/*           \begindata */
+
+/*              KERNELS_TO_LOAD = ( 'de421.bsp', */
+/*                                  'naif0012.tls'  ) */
+
+/*           \begintext */
+
+/*           End of meta-kernel */
+
+
+/*        Example code begins here. */
+
+
+/*              PROGRAM RECLAT_EX1 */
+/*              IMPLICIT NONE */
+
 /*        C */
-/*        C     Use the SPICELIB routine CONVRT to convert the angular */
-/*        C     quantities to degrees */
+/*        C     SPICELIB functions */
 /*        C */
-/*              CALL CONVRT ( LAT,  'RADIANS', 'DEGREES', LAT  ) */
-/*              CALL CONVRT ( LONG, 'RADIANS', 'DEGREES', LONG ) */
+/*              DOUBLE PRECISION      DPR */
 
-/*     are listed to 4 decimal places in the second parallel table under */
-/*     R (radius), LONG (longitude), and  LAT (latitude). */
+/*        C */
+/*        C     Local parameters */
+/*        C */
+/*              CHARACTER*(*)         FMT1 */
+/*              PARAMETER           ( FMT1 = '(A,F20.8)' ) */
+
+/*        C */
+/*        C     Local variables */
+/*        C */
+/*              DOUBLE PRECISION      ET */
+/*              DOUBLE PRECISION      LAT */
+/*              DOUBLE PRECISION      LON */
+/*              DOUBLE PRECISION      LT */
+/*              DOUBLE PRECISION      POS    ( 3 ) */
+/*              DOUBLE PRECISION      RADIUS */
+/*              DOUBLE PRECISION      RECTAN ( 3 ) */
+
+/*        C */
+/*        C     Load SPK and LSK kernels, use a meta kernel for */
+/*        C     convenience. */
+/*        C */
+/*              CALL FURNSH ( 'reclat_ex1.tm' ) */
+
+/*        C */
+/*        C     Look up the geometric state of the Moon as seen from */
+/*        C     the Earth at 2017 Mar 20, relative to the J2000 */
+/*        C     reference frame. */
+/*        C */
+/*              CALL STR2ET ( '2017 Mar 20', ET ) */
+
+/*              CALL SPKPOS ( 'Moon',  ET,  'J2000', 'NONE', */
+/*             .              'Earth', POS, LT               ) */
+
+/*        C */
+/*        C     Convert the position vector POS to latitudinal */
+/*        C     coordinates. */
+/*        C */
+/*              CALL RECLAT ( POS, RADIUS, LON, LAT ) */
+
+/*        C */
+/*        C     Convert the latitudinal to rectangular coordinates. */
+/*        C */
+
+/*              CALL LATREC ( RADIUS, LON, LAT, RECTAN ) */
+
+/*              WRITE(*,*) ' ' */
+/*              WRITE(*,*) 'Original rectangular coordinates:' */
+/*              WRITE(*,*) ' ' */
+/*              WRITE(*,FMT1) '  X          (km): ', POS(1) */
+/*              WRITE(*,FMT1) '  Y          (km): ', POS(2) */
+/*              WRITE(*,FMT1) '  Z          (km): ', POS(3) */
+/*              WRITE(*,*) ' ' */
+/*              WRITE(*,*) 'Latitudinal coordinates:' */
+/*              WRITE(*,*) ' ' */
+/*              WRITE(*,FMT1) '  Radius     (km): ', RADIUS */
+/*              WRITE(*,FMT1) '  Longitude (deg): ', LON*DPR() */
+/*              WRITE(*,FMT1) '  Latitude  (deg): ', LAT*DPR() */
+/*              WRITE(*,*) ' ' */
+/*              WRITE(*,*) 'Rectangular coordinates from LATREC:' */
+/*              WRITE(*,*) ' ' */
+/*              WRITE(*,FMT1) '  X          (km): ', RECTAN(1) */
+/*              WRITE(*,FMT1) '  Y          (km): ', RECTAN(2) */
+/*              WRITE(*,FMT1) '  Z          (km): ', RECTAN(3) */
+/*              WRITE(*,*) ' ' */
+
+/*              END */
 
 
-/*       X(1)       X(2)     X(3)        R         LONG      LAT */
-/*       --------------------------      -------------------------- */
-/*       0.0000     0.0000   0.0000      0.0000    0.0000    0.0000 */
-/*       1.0000     0.0000   0.0000      1.0000    0.0000    0.0000 */
-/*       0.0000     1.0000   0.0000      1.0000   90.0000    0.0000 */
-/*       0.0000     0.0000   1.0000      1.0000    0.0000   90.0000 */
-/*      -1.0000     0.0000   0.0000      1.0000  180.0000    0.0000 */
-/*       0.0000    -1.0000   0.0000      1.0000  -90.0000    0.0000 */
-/*       0.0000     0.0000  -1.0000      1.0000    0.0000  -90.0000 */
-/*       1.0000     1.0000   0.0000      1.4142   45.0000    0.0000 */
-/*       1.0000     0.0000   1.0000      1.4142    0.0000   45.0000 */
-/*       0.0000     1.0000   1.0000      1.4142   90.0000   45.0000 */
-/*       1.0000     1.0000   1.0000      1.7320   45.0000   35.2643 */
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*         Original rectangular coordinates: */
+
+/*          X          (km):      -55658.44323296 */
+/*          Y          (km):     -379226.32931475 */
+/*          Z          (km):     -126505.93063865 */
+
+/*         Latitudinal coordinates: */
+
+/*          Radius     (km):      403626.33912495 */
+/*          Longitude (deg):         -98.34959789 */
+/*          Latitude  (deg):         -18.26566077 */
+
+/*         Rectangular coordinates from LATREC: */
+
+/*          X          (km):      -55658.44323296 */
+/*          Y          (km):     -379226.32931475 */
+/*          Z          (km):     -126505.93063865 */
+
+
+/*     2) Create a table showing a variety of rectangular coordinates */
+/*        and the corresponding latitudinal coordinates. */
+
+/*        Corresponding rectangular and latitudinal coordinates are */
+/*        listed to three decimal places. Output angles are in degrees. */
+
+
+/*        Example code begins here. */
+
+
+/*              PROGRAM RECLAT_EX2 */
+/*              IMPLICIT NONE */
+
+/*        C */
+/*        C     SPICELIB functions */
+/*        C */
+/*              DOUBLE PRECISION      DPR */
+
+/*        C */
+/*        C     Local parameters. */
+/*        C */
+/*              INTEGER               NREC */
+/*              PARAMETER           ( NREC = 11 ) */
+
+/*        C */
+/*        C     Local variables. */
+/*        C */
+/*              DOUBLE PRECISION      LAT */
+/*              DOUBLE PRECISION      LON */
+/*              DOUBLE PRECISION      RADIUS */
+/*              DOUBLE PRECISION      RECTAN ( 3, NREC ) */
+
+/*              INTEGER               I */
+/*              INTEGER               J */
+
+/*        C */
+/*        C     Define the input rectangular coordinates. */
+/*        C */
+/*              DATA                 RECTAN / */
+/*             .                  0.D0,         0.D0,         0.D0, */
+/*             .                  1.D0,         0.D0,         0.D0, */
+/*             .                  0.D0,         1.D0,         0.D0, */
+/*             .                  0.D0,         0.D0,         1.D0, */
+/*             .                 -1.D0,         0.D0,         0.D0, */
+/*             .                  0.D0,        -1.D0,         0.D0, */
+/*             .                  0.D0,         0.D0,        -1.D0, */
+/*             .                  1.D0,         1.D0,         0.D0, */
+/*             .                  1.D0,         0.D0,         1.D0, */
+/*             .                  0.D0,         1.D0,         1.D0, */
+/*             .                  1.D0,         1.D0,         1.D0  / */
+
+/*        C */
+/*        C     Print the banner. */
+/*        C */
+/*              WRITE(*,*) ' RECT(1)  RECT(2)  RECT(3) ' */
+/*             . //        '  RADIUS    LON      LAT   ' */
+/*              WRITE(*,*) ' -------  -------  ------- ' */
+/*             . //        ' -------  -------  ------- ' */
+
+/*        C */
+/*        C     Do the conversion. Output angles in degrees. */
+/*        C */
+/*              DO I = 1, NREC */
+
+/*                 CALL RECLAT( RECTAN(1,I), RADIUS, LON, LAT ) */
+
+/*                 WRITE (*,'(6F9.3)') ( RECTAN(J,I), J=1,3 ), */
+/*             .              RADIUS, LON * DPR(), LAT * DPR() */
+
+/*              END DO */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*          RECT(1)  RECT(2)  RECT(3)   RADIUS    LON      LAT */
+/*          -------  -------  -------  -------  -------  ------- */
+/*            0.000    0.000    0.000    0.000    0.000    0.000 */
+/*            1.000    0.000    0.000    1.000    0.000    0.000 */
+/*            0.000    1.000    0.000    1.000   90.000    0.000 */
+/*            0.000    0.000    1.000    1.000    0.000   90.000 */
+/*           -1.000    0.000    0.000    1.000  180.000    0.000 */
+/*            0.000   -1.000    0.000    1.000  -90.000    0.000 */
+/*            0.000    0.000   -1.000    1.000    0.000  -90.000 */
+/*            1.000    1.000    0.000    1.414   45.000    0.000 */
+/*            1.000    0.000    1.000    1.414    0.000   45.000 */
+/*            0.000    1.000    1.000    1.414   90.000   45.000 */
+/*            1.000    1.000    1.000    1.732   45.000   35.264 */
 
 
 /* $ Restrictions */
 
 /*     None. */
 
-/* $ Author_and_Institution */
-
-/*     C.H. Acton      (JPL) */
-/*     N.J. Bachman    (JPL) */
-/*     W.L. Taber      (JPL) */
-
 /* $ Literature_References */
 
 /*     None. */
 
+/* $ Author_and_Institution */
+
+/*     C.H. Acton         (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
+
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 05-JUL-2021 (JDR) */
+
+/*        Changed the output argument name LONG to LON for consistency */
+/*        with other routines. */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. Removed */
+/*        unnecessary $Revisions section. Added complete code examples. */
 
 /* -    SPICELIB Version 1.0.2, 30-JUL-2003 (NJB) (CHA) */
 
-/*        Various header changes were made to improve clarity.  Some */
+/*        Various header changes were made to improve clarity. Some */
 /*        minor header corrections were made. */
 
 /* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
@@ -191,13 +407,9 @@
 /*     rectangular to latitudinal coordinates */
 
 /* -& */
-/* $ Revisions */
 
-/* -     Beta Version 1.0.1, 1-Feb-1989 (WLT) */
+/*     Local variables. */
 
-/*      Example section of header upgraded. */
-
-/* -& */
 
 /*     Store rectangular coordinates in temporary variables */
 
@@ -214,14 +426,14 @@
 	x = rectan[0];
 	y = rectan[1];
 	if (x == 0. && y == 0.) {
-	    *long__ = 0.;
+	    *lon = 0.;
 	} else {
-	    *long__ = atan2(y, x);
+	    *lon = atan2(y, x);
 	}
     } else {
 	*radius = 0.;
 	*lat = 0.;
-	*long__ = 0.;
+	*lon = 0.;
     }
     return 0;
 } /* reclat_ */

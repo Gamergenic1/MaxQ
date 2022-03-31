@@ -9,7 +9,7 @@
 
 static integer c__3 = 3;
 
-/* $Procedure      SAELGV ( Semi-axes of ellipse from generating vectors ) */
+/* $Procedure SAELGV ( Semi-axes of ellipse from generating vectors ) */
 /* Subroutine */ int saelgv_(doublereal *vec1, doublereal *vec2, doublereal *
 	smajor, doublereal *sminor)
 {
@@ -84,7 +84,7 @@ static integer c__3 = 3;
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     VEC1, */
 /*     VEC2       I   Two vectors used to generate an ellipse. */
@@ -94,25 +94,25 @@ static integer c__3 = 3;
 /* $ Detailed_Input */
 
 /*     VEC1, */
-/*     VEC2           are two vectors that define an ellipse. */
-/*                    The ellipse is the set of points in 3-space */
+/*     VEC2     are two vectors that define an ellipse. */
+/*              The ellipse is the set of points in 3-space */
 
-/*                       CENTER  +  cos(theta) VEC1  +  sin(theta) VEC2 */
+/*                 CENTER  +  cos(theta) VEC1  +  sin(theta) VEC2 */
 
-/*                    where theta is in the interval ( -pi, pi ] and */
-/*                    CENTER is an arbitrary point at which the ellipse */
-/*                    is centered.  An ellipse's semi-axes are */
-/*                    independent of its center, so the vector CENTER */
-/*                    shown above is not an input to this routine. */
+/*              where theta is in the interval ( -pi, pi ] and */
+/*              CENTER is an arbitrary point at which the ellipse */
+/*              is centered. An ellipse's semi-axes are */
+/*              independent of its center, so the vector CENTER */
+/*              shown above is not an input to this routine. */
 
-/*                    VEC2 and VEC1 need not be linearly independent; */
-/*                    degenerate input ellipses are allowed. */
+/*              VEC2 and VEC1 need not be linearly independent; */
+/*              degenerate input ellipses are allowed. */
 
 /* $ Detailed_Output */
 
-/*     SMAJOR */
-/*     SMINOR         are semi-major and semi-minor axes of the ellipse, */
-/*                    respectively. */
+/*     SMAJOR, */
+/*     SMINOR   are semi-major and semi-minor axes of the ellipse, */
+/*              respectively. */
 
 /* $ Parameters */
 
@@ -121,7 +121,7 @@ static integer c__3 = 3;
 /* $ Exceptions */
 
 /*     1)  If one or more semi-axes of the ellipse is found to be the */
-/*         zero vector, the input ellipse is degenerate.  This case is */
+/*         zero vector, the input ellipse is degenerate. This case is */
 /*         not treated as an error; the calling program must determine */
 /*         whether the semi-axes are suitable for the program's intended */
 /*         use. */
@@ -133,7 +133,7 @@ static integer c__3 = 3;
 /* $ Particulars */
 
 /*     Two linearly independent but not necessarily orthogonal vectors */
-/*     VEC1 and VEC2 can define an ellipse centered at the origin:  the */
+/*     VEC1 and VEC2 can define an ellipse centered at the origin: the */
 /*     ellipse is the set of points in 3-space */
 
 /*        CENTER  +  cos(theta) VEC1  +  sin(theta) VEC2 */
@@ -143,15 +143,15 @@ static integer c__3 = 3;
 
 /*     This routine finds vectors that constitute semi-axes of an */
 /*     ellipse that is defined, except for the location of its center, */
-/*     by VEC1 and VEC2.  The semi-major axis is a vector of largest */
+/*     by VEC1 and VEC2. The semi-major axis is a vector of largest */
 /*     possible magnitude in the set */
 
 /*        cos(theta) VEC1  +  sin(theta) VEC2 */
 
 /*     There are two such vectors; they are additive inverses of each */
 /*     other. The semi-minor axis is an analogous vector of smallest */
-/*     possible magnitude.  The semi-major and semi-minor axes are */
-/*     orthogonal to each other.  If SMAJOR and SMINOR are choices of */
+/*     possible magnitude. The semi-major and semi-minor axes are */
+/*     orthogonal to each other. If SMAJOR and SMINOR are choices of */
 /*     semi-major and semi-minor axes, then the input ellipse can also */
 /*     be represented as the set of points */
 
@@ -193,7 +193,7 @@ static integer c__3 = 3;
 
 /*     2)   This example is taken from the code of the SPICELIB routine */
 /*          PJELPL, which finds the orthogonal projection of an ellipse */
-/*          onto a plane.  The code listed below is the portion used to */
+/*          onto a plane. The code listed below is the portion used to */
 /*          find the semi-axes of the projected ellipse. */
 
 /*             C */
@@ -217,16 +217,23 @@ static integer c__3 = 3;
 
 /* $ Literature_References */
 
-/*     [1]  Calculus, Vol. II.  Tom Apostol.  John Wiley & Sons, 1969. */
-/*          See Chapter 5, `Eigenvalues of Operators Acting on Euclidean */
-/*          Spaces'. */
+/*     [1]  T. Apostol, "Calculus, Vol. II," chapter 5, "Eigenvalues of */
+/*          Operators Acting on Euclidean Spaces," John Wiley & Sons, */
+/*          1969. */
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
-/*     W.L. Taber     (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.2.0, 28-MAY-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.1.1, 22-APR-2010 (NJB) */
 
@@ -249,14 +256,6 @@ static integer c__3 = 3;
 /* $ Index_Entries */
 
 /*     semi-axes of ellipse from generating vectors */
-
-/* -& */
-/* $ Revisions */
-
-/* -    SPICELIB Version 1.1.0, 02-SEP-2005 (NJB) */
-
-/*        Updated to remove non-standard use of duplicate arguments */
-/*        in VSCL calls. */
 
 /* -& */
 

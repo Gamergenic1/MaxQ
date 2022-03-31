@@ -240,7 +240,7 @@ static doublereal c_b35 = 1.;
 /*     (or total) shadow. */
 
 /*     In this routine, we use the term "umbral terminator" to denote */
-/*     the curve ususally called the "terminator":  this curve is the */
+/*     the curve usually called the "terminator":  this curve is the */
 /*     boundary of the portion of the surface that lies in total shadow. */
 /*     We use the term "penumbral terminator" to denote the boundary of */
 /*     the completely illuminated portion of the surface. */
@@ -274,6 +274,10 @@ static doublereal c_b35 = 1.;
 /*     N.J. Bachman    (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.1, 02-OCT-2021 (NJB) */
+
+/*        Corrected typo in comments. */
 
 /* -    SPICELIB Version 1.1.0, 24-APR-2012 (NJB) */
 
@@ -553,13 +557,13 @@ static doublereal c_b35 = 1.;
 	    vpack_(&d__1, &d__2, &d__3, e);
 	    vscl_(&lambda, e, &trmpts[(i__2 = i__ * 3 - 3) < trmpts_dim2 * 3 
 		    && 0 <= i__2 ? i__2 : s_rnge("trmpts", i__2, "zzedterm_", 
-		    (ftnlen)582)]);
+		    (ftnlen)586)]);
 
 /*           Make a new estimate of the plane rotation required to touch */
 /*           the target. */
 
 	    vsub_(&trmpts[(i__2 = i__ * 3 - 3) < trmpts_dim2 * 3 && 0 <= i__2 
-		    ? i__2 : s_rnge("trmpts", i__2, "zzedterm_", (ftnlen)588)]
+		    ? i__2 : s_rnge("trmpts", i__2, "zzedterm_", (ftnlen)592)]
 		    , vtx, offset);
 
 /*           Let ANGERR be an estimate of the magnitude of angular error */

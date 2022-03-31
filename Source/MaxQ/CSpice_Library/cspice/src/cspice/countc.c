@@ -75,82 +75,83 @@ integer countc_(integer *unit, integer *bline, integer *eline, char *line,
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     UNIT       I   Logical unit connected to text file. */
 /*     BLINE      I   Beginning line number. */
 /*     ELINE      I   Ending line number. */
-/*     LINE      I,O  Workspace. */
+/*     LINE      I-O  Workspace. */
 
-/*     COUNTC returns the number of characters. */
+/*     The function returns the number of characters in a group of lines */
+/*     in a text file. */
 
 /* $ Detailed_Input */
 
-/*     UNIT        is a logical unit that has been connected to a */
-/*                 text file by the calling program.  Use the routine */
-/*                 TXTOPR to open the file for read access and get its */
-/*                 logical unit.  A text file is a formatted, */
-/*                 sequential file that contains only printable */
-/*                 characters:  ASCII 32-126. */
+/*     UNIT     is a logical unit that has been connected to a */
+/*              text file by the calling program. Use the routine */
+/*              TXTOPR to open the file for read access and get its */
+/*              logical unit. A text file is a formatted, */
+/*              sequential file that contains only printable */
+/*              characters:  ASCII 32-126. */
 
 /*     BLINE, */
-/*     ELINE       are line numbers in the text file.  BLINE is */
-/*                 the line where the count will begin, and ELINE */
-/*                 is the line where the count will end.  The */
-/*                 number of characters in the beginning and ending */
-/*                 lines are included in the total count. */
+/*     ELINE    are line numbers in the text file. BLINE is */
+/*              the line where the count will begin, and ELINE */
+/*              is the line where the count will end. The */
+/*              number of characters in the beginning and ending */
+/*              lines are included in the total count. */
 
-/*                 By convention, line 1 is the first line of the file. */
+/*              By convention, line 1 is the first line of the file. */
 
-/*     LINE        on input, is an arbitrary character string whose */
-/*                 contents are ignored. LINE is used to read lines */
-/*                 from the file connected to UNIT; its function */
-/*                 is to determine the maximum length of the lines */
-/*                 that can be read from the file. Lines longer */
-/*                 than the declared length of LINE are truncated */
-/*                 as they are read. */
+/*     LINE     on input, is an arbitrary character string whose */
+/*              contents are ignored. LINE is used to read lines */
+/*              from the file connected to UNIT; its function */
+/*              is to determine the maximum length of the lines */
+/*              that can be read from the file. Lines longer */
+/*              than the declared length of LINE are truncated */
+/*              as they are read. */
 
 /* $ Detailed_Output */
 
-/*      LINE       on output, is undefined. */
+/*     LINE     on output, is undefined. */
 
-/*     The function, COUNTC,  returns the number of characters in the */
-/*     group of lines in the file beginning with BLINE and ending with */
-/*     ELINE.  Trailing blanks on a line are not included in the count. */
+/*     The function returns the number of characters in the group of */
+/*     lines in the text file beginning with BLINE and ending with ELINE. */
+/*     Trailing blanks on a line are not included in the count. */
 
 /* $ Parameters */
 
-/*      None. */
+/*     None. */
 
 /* $ Exceptions */
 
-/*      1) If an error occurs while reading from the input file, */
-/*         the error SPICE(FILEREADFAILED) is signalled. */
+/*     1)  If an error occurs while reading from the input file, */
+/*         the error SPICE(FILEREADFAILED) is signaled. */
 
-/*      2) If a non-printing ASCII character is encountered during */
-/*         the count, the error SPICE(INVALIDTEXT) is signalled. */
+/*     2)  If a non-printing ASCII character is encountered during */
+/*         the count, the error SPICE(INVALIDTEXT) is signaled. */
 
-/*      3) If BLINE is greater than ELINE or if the file does not */
+/*     3)  If BLINE is greater than ELINE or if the file does not */
 /*         contain both of this lines, the error SPICE(CANNOTFINDGRP) */
-/*         is signalled. */
+/*         is signaled. */
 
 /* $ Files */
 
-/*     See argument UNIT.  COUNTC rewinds the text file connected to */
-/*     UNIT and then steps through the file.  The next read statement */
+/*     See argument UNIT. COUNTC rewinds the text file connected to */
+/*     UNIT and then steps through the file. The next read statement */
 /*     after calling COUNTC would return the line after ELINE. */
 
 /* $ Particulars */
 
 /*     This routine counts characters in a group of lines in a text */
-/*     file.  Using COUNTC, you can determine in advance how much space */
+/*     file. Using COUNTC, you can determine in advance how much space */
 /*     is required to store those characters. */
 
 /* $ Examples */
 
 /*     The following code fragment opens an existing text file for */
 /*     read access and counts the characters that it contains in */
-/*     the first five lines.  We'll assume that the longest line */
+/*     the first five lines. We'll assume that the longest line */
 /*     in the file is 80 characters. */
 
 /*        INTEGER               COUNTC */
@@ -172,15 +173,23 @@ integer countc_(integer *unit, integer *bline, integer *eline, char *line,
 
 /* $ Author_and_Institution */
 
-/*     J.E. McLean    (JPL) */
-/*     H.A. Neilan    (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     J.E. McLean        (JPL) */
+/*     H.A. Neilan        (JPL) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
 
+/* -    SPICELIB Version 1.2.0, 18-MAR-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
+
 /* -    SPICELIB Version 1.1.0, 17-MAY-1994 (HAN) */
 
-/*       Set the default function value to either 0, 0.0D0, .FALSE., */
-/*       or blank depending on the type of the function. */
+/*        Set the default function value to either 0, 0.0D0, .FALSE., */
+/*        or blank depending on the type of the function. */
 
 /* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
 

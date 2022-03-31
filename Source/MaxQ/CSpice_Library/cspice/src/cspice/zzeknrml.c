@@ -920,7 +920,7 @@ static integer c__0 = 0;
 
 /*     No matter how ridiculous the query passed to ZZEKNRML, the */
 /*     routine diagnoses errors via the output arguments ERROR and */
-/*     PRSERR.  No errors are signalled.  The possible error messages */
+/*     PRSERR.  No errors are signaled.  The possible error messages */
 /*     returned by this routine are: */
 
 
@@ -1090,6 +1090,10 @@ static integer c__0 = 0;
 
 /* $ Version */
 
+/* -    SPICELIB Version 3.0.1, 02-OCT-2021 (NJB) */
+
+/*        Corrected typos in comments. */
+
 /* -    Beta Version 3.0.0, 17-NOV-1995 (NJB) */
 
 /*        Significantly re-written for architecture 3. */
@@ -1131,7 +1135,7 @@ static integer c__0 = 0;
 /*     are AND, OR, and NOT. */
 
 
-/*     NRELOP is the number of arithmetic and character comparision */
+/*     NRELOP is the number of arithmetic and character comparison */
 /*     operators. */
 
 
@@ -1264,7 +1268,7 @@ static integer c__0 = 0;
     whrend = *ntoken;
     for (i__ = 1; i__ <= 3; ++i__) {
 	zzektloc_(&c__1, &endkw[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : 
-		s_rnge("endkw", i__1, "zzeknrml_", (ftnlen)728)], ntoken, 
+		s_rnge("endkw", i__1, "zzeknrml_", (ftnlen)732)], ntoken, 
 		tokens, values, &endloc, &fnd);
 	if (fnd) {
 	    if (endloc < whrend && endloc > whrbeg) {
@@ -1307,13 +1311,13 @@ static integer c__0 = 0;
 /*        token index, by default. */
 
 	mtexpr[(i__1 = node - 1) < 500 && 0 <= i__1 ? i__1 : s_rnge("mtexpr", 
-		i__1, "zzeknrml_", (ftnlen)784)] = i__;
+		i__1, "zzeknrml_", (ftnlen)788)] = i__;
 	if (tokens[i__ - 1] == 6) {
 	    mtcode[(i__1 = node - 1) < 500 && 0 <= i__1 ? i__1 : s_rnge("mtc"
-		    "ode", i__1, "zzeknrml_", (ftnlen)789)] = -2;
+		    "ode", i__1, "zzeknrml_", (ftnlen)793)] = -2;
 	} else if (tokens[i__ - 1] == 7) {
 	    mtcode[(i__1 = node - 1) < 500 && 0 <= i__1 ? i__1 : s_rnge("mtc"
-		    "ode", i__1, "zzeknrml_", (ftnlen)794)] = -1;
+		    "ode", i__1, "zzeknrml_", (ftnlen)798)] = -1;
 	} else if (tokens[i__ - 1] == 3 || tokens[i__ - 1] == 4) {
 
 /*           Numeric values must be added to the encoded query.  We */
@@ -1324,9 +1328,9 @@ static integer c__0 = 0;
 /*           number of tokens in the query. */
 
 	    mtcode[(i__1 = node - 1) < 500 && 0 <= i__1 ? i__1 : s_rnge("mtc"
-		    "ode", i__1, "zzeknrml_", (ftnlen)807)] = -8;
+		    "ode", i__1, "zzeknrml_", (ftnlen)811)] = -8;
 	    lnkan_(dspool, &mtexpr[(i__1 = node - 1) < 500 && 0 <= i__1 ? 
-		    i__1 : s_rnge("mtexpr", i__1, "zzeknrml_", (ftnlen)809)]);
+		    i__1 : s_rnge("mtexpr", i__1, "zzeknrml_", (ftnlen)813)]);
 	    if (tokens[i__ - 1] == 3) {
 		type__ = 3;
 	    } else {
@@ -1335,40 +1339,40 @@ static integer c__0 = 0;
 	    zzekinqn_(&numvls[values[i__ - 1] - 1], &type__, &lxbegs[i__ - 1],
 		     &lxends[i__ - 1], eqryi, eqryd, &dscbuf[(i__2 = mtexpr[(
 		    i__1 = node - 1) < 500 && 0 <= i__1 ? i__1 : s_rnge("mte"
-		    "xpr", i__1, "zzeknrml_", (ftnlen)817)] * 7 - 7) < 35000 &&
+		    "xpr", i__1, "zzeknrml_", (ftnlen)821)] * 7 - 7) < 35000 &&
 		     0 <= i__2 ? i__2 : s_rnge("dscbuf", i__2, "zzeknrml_", (
-		    ftnlen)817)]);
+		    ftnlen)821)]);
 
 /*           Set the descriptor to indicate that it represents a value. */
 
 	    dscbuf[(i__2 = mtexpr[(i__1 = node - 1) < 500 && 0 <= i__1 ? i__1 
-		    : s_rnge("mtexpr", i__1, "zzeknrml_", (ftnlen)828)] * 7 - 
+		    : s_rnge("mtexpr", i__1, "zzeknrml_", (ftnlen)832)] * 7 - 
 		    1) < 35000 && 0 <= i__2 ? i__2 : s_rnge("dscbuf", i__2, 
-		    "zzeknrml_", (ftnlen)828)] = -8;
+		    "zzeknrml_", (ftnlen)832)] = -8;
 	} else if (tokens[i__ - 1] == 5) {
 
 /*           The treatment of strings is analogous to that of numbers. */
 
 	    mtcode[(i__1 = node - 1) < 500 && 0 <= i__1 ? i__1 : s_rnge("mtc"
-		    "ode", i__1, "zzeknrml_", (ftnlen)835)] = -8;
+		    "ode", i__1, "zzeknrml_", (ftnlen)839)] = -8;
 	    lnkan_(dspool, &mtexpr[(i__1 = node - 1) < 500 && 0 <= i__1 ? 
-		    i__1 : s_rnge("mtexpr", i__1, "zzeknrml_", (ftnlen)837)]);
+		    i__1 : s_rnge("mtexpr", i__1, "zzeknrml_", (ftnlen)841)]);
 	    b = chbegs[values[i__ - 1] - 1];
 	    e = chends[values[i__ - 1] - 1];
 	    i__3 = e - b + 1;
 	    zzekinqc_(chrbuf + (b - 1), &i__3, &lxbegs[i__ - 1], &lxends[i__ 
 		    - 1], eqryi, eqryc, &dscbuf[(i__2 = mtexpr[(i__1 = node - 
 		    1) < 500 && 0 <= i__1 ? i__1 : s_rnge("mtexpr", i__1, 
-		    "zzeknrml_", (ftnlen)842)] * 7 - 7) < 35000 && 0 <= i__2 ?
-		     i__2 : s_rnge("dscbuf", i__2, "zzeknrml_", (ftnlen)842)],
+		    "zzeknrml_", (ftnlen)846)] * 7 - 7) < 35000 && 0 <= i__2 ?
+		     i__2 : s_rnge("dscbuf", i__2, "zzeknrml_", (ftnlen)846)],
 		     e - (b - 1), eqryc_len);
 
 /*           Set the descriptor to indicate that it represents a value. */
 
 	    dscbuf[(i__2 = mtexpr[(i__1 = node - 1) < 500 && 0 <= i__1 ? i__1 
-		    : s_rnge("mtexpr", i__1, "zzeknrml_", (ftnlen)853)] * 7 - 
+		    : s_rnge("mtexpr", i__1, "zzeknrml_", (ftnlen)857)] * 7 - 
 		    1) < 35000 && 0 <= i__2 ? i__2 : s_rnge("dscbuf", i__2, 
-		    "zzeknrml_", (ftnlen)853)] = -8;
+		    "zzeknrml_", (ftnlen)857)] = -8;
 	} else if (tokens[i__ - 1] == 2) {
 
 /*           Identifiers must be added to the encoded query.  We */
@@ -1377,29 +1381,29 @@ static integer c__0 = 0;
 /*           identifier points to the descriptor. */
 
 	    mtcode[(i__1 = node - 1) < 500 && 0 <= i__1 ? i__1 : s_rnge("mtc"
-		    "ode", i__1, "zzeknrml_", (ftnlen)863)] = -7;
+		    "ode", i__1, "zzeknrml_", (ftnlen)867)] = -7;
 	    lnkan_(dspool, &mtexpr[(i__1 = node - 1) < 500 && 0 <= i__1 ? 
-		    i__1 : s_rnge("mtexpr", i__1, "zzeknrml_", (ftnlen)865)]);
+		    i__1 : s_rnge("mtexpr", i__1, "zzeknrml_", (ftnlen)869)]);
 	    b = chbegs[values[i__ - 1] - 1];
 	    e = chends[values[i__ - 1] - 1];
 	    i__3 = e - b + 1;
 	    zzekinqc_(chrbuf + (b - 1), &i__3, &lxbegs[i__ - 1], &lxends[i__ 
 		    - 1], eqryi, eqryc, &dscbuf[(i__2 = mtexpr[(i__1 = node - 
 		    1) < 500 && 0 <= i__1 ? i__1 : s_rnge("mtexpr", i__1, 
-		    "zzeknrml_", (ftnlen)870)] * 7 - 7) < 35000 && 0 <= i__2 ?
-		     i__2 : s_rnge("dscbuf", i__2, "zzeknrml_", (ftnlen)870)],
+		    "zzeknrml_", (ftnlen)874)] * 7 - 7) < 35000 && 0 <= i__2 ?
+		     i__2 : s_rnge("dscbuf", i__2, "zzeknrml_", (ftnlen)874)],
 		     e - (b - 1), eqryc_len);
 
 /*           Set the descriptor to indicate that it represents an */
 /*           identifier. */
 
 	    dscbuf[(i__2 = mtexpr[(i__1 = node - 1) < 500 && 0 <= i__1 ? i__1 
-		    : s_rnge("mtexpr", i__1, "zzeknrml_", (ftnlen)882)] * 7 - 
+		    : s_rnge("mtexpr", i__1, "zzeknrml_", (ftnlen)886)] * 7 - 
 		    1) < 35000 && 0 <= i__2 ? i__2 : s_rnge("dscbuf", i__2, 
-		    "zzeknrml_", (ftnlen)882)] = -7;
+		    "zzeknrml_", (ftnlen)886)] = -7;
 	} else if (tokens[i__ - 1] == 9) {
 	    mtcode[(i__1 = node - 1) < 500 && 0 <= i__1 ? i__1 : s_rnge("mtc"
-		    "ode", i__1, "zzeknrml_", (ftnlen)887)] = -9;
+		    "ode", i__1, "zzeknrml_", (ftnlen)891)] = -9;
 	} else if (tokens[i__ - 1] == 1) {
 
 /*           We have a keyword.  Identify it and locate the corresponding */
@@ -1413,11 +1417,11 @@ static integer c__0 = 0;
 /*               or NOT BETWEEN sequence. */
 
 		if (logcde[(i__1 = j - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(
-			"logcde", i__1, "zzeknrml_", (ftnlen)904)] != -12) {
+			"logcde", i__1, "zzeknrml_", (ftnlen)908)] != -12) {
 		    mtcode[(i__1 = node - 1) < 500 && 0 <= i__1 ? i__1 : 
-			    s_rnge("mtcode", i__1, "zzeknrml_", (ftnlen)906)] 
+			    s_rnge("mtcode", i__1, "zzeknrml_", (ftnlen)910)] 
 			    = logcde[(i__2 = j - 1) < 3 && 0 <= i__2 ? i__2 : 
-			    s_rnge("logcde", i__2, "zzeknrml_", (ftnlen)906)];
+			    s_rnge("logcde", i__2, "zzeknrml_", (ftnlen)910)];
 		} else {
 		    if (i__ <= whrend) {
 			if (tokens[i__] == 1 && values[i__] == 18) {
@@ -1427,7 +1431,7 @@ static integer c__0 = 0;
 
 			    mtcode[(i__1 = node - 1) < 500 && 0 <= i__1 ? 
 				    i__1 : s_rnge("mtcode", i__1, "zzeknrml_",
-				     (ftnlen)918)] = 8;
+				     (ftnlen)922)] = 8;
 			    ++i__;
 			} else if (tokens[i__] == 1 && values[i__] == 5) {
 
@@ -1436,27 +1440,27 @@ static integer c__0 = 0;
 
 			    mtcode[(i__1 = node - 1) < 500 && 0 <= i__1 ? 
 				    i__1 : s_rnge("mtcode", i__1, "zzeknrml_",
-				     (ftnlen)927)] = -4;
+				     (ftnlen)931)] = -4;
 			    ++i__;
 			} else {
 			    mtcode[(i__1 = node - 1) < 500 && 0 <= i__1 ? 
 				    i__1 : s_rnge("mtcode", i__1, "zzeknrml_",
-				     (ftnlen)931)] = -12;
+				     (ftnlen)935)] = -12;
 			}
 		    } else {
 			mtcode[(i__1 = node - 1) < 500 && 0 <= i__1 ? i__1 : 
 				s_rnge("mtcode", i__1, "zzeknrml_", (ftnlen)
-				935)] = -12;
+				939)] = -12;
 		    }
 		}
 	    } else if (k > 0) {
 		mtcode[(i__1 = node - 1) < 500 && 0 <= i__1 ? i__1 : s_rnge(
-			"mtcode", i__1, "zzeknrml_", (ftnlen)942)] = cmpcde[(
+			"mtcode", i__1, "zzeknrml_", (ftnlen)946)] = cmpcde[(
 			i__2 = k - 1) < 8 && 0 <= i__2 ? i__2 : s_rnge("cmpc"
-			"de", i__2, "zzeknrml_", (ftnlen)942)];
+			"de", i__2, "zzeknrml_", (ftnlen)946)];
 	    } else if (values[i__ - 1] == 5) {
 		mtcode[(i__1 = node - 1) < 500 && 0 <= i__1 ? i__1 : s_rnge(
-			"mtcode", i__1, "zzeknrml_", (ftnlen)946)] = -3;
+			"mtcode", i__1, "zzeknrml_", (ftnlen)950)] = -3;
 	    } else if (values[i__ - 1] == 16) {
 
 /*              The token IS translates to EQ; the token sequence */
@@ -1471,16 +1475,16 @@ static integer c__0 = 0;
 
 			mtcode[(i__1 = node - 1) < 500 && 0 <= i__1 ? i__1 : 
 				s_rnge("mtcode", i__1, "zzeknrml_", (ftnlen)
-				963)] = 6;
+				967)] = 6;
 			++i__;
 		    } else {
 			mtcode[(i__1 = node - 1) < 500 && 0 <= i__1 ? i__1 : 
 				s_rnge("mtcode", i__1, "zzeknrml_", (ftnlen)
-				966)] = 1;
+				970)] = 1;
 		    }
 		} else {
 		    mtcode[(i__1 = node - 1) < 500 && 0 <= i__1 ? i__1 : 
-			    s_rnge("mtcode", i__1, "zzeknrml_", (ftnlen)970)] 
+			    s_rnge("mtcode", i__1, "zzeknrml_", (ftnlen)974)] 
 			    = 1;
 		}
 	    } else if (values[i__ - 1] == 24) {
@@ -1488,9 +1492,9 @@ static integer c__0 = 0;
 /*              The expression pointer for null values is NIL. */
 
 		mtcode[(i__1 = node - 1) < 500 && 0 <= i__1 ? i__1 : s_rnge(
-			"mtcode", i__1, "zzeknrml_", (ftnlen)978)] = -8;
+			"mtcode", i__1, "zzeknrml_", (ftnlen)982)] = -8;
 		mtexpr[(i__1 = node - 1) < 500 && 0 <= i__1 ? i__1 : s_rnge(
-			"mtexpr", i__1, "zzeknrml_", (ftnlen)979)] = 0;
+			"mtexpr", i__1, "zzeknrml_", (ftnlen)983)] = 0;
 	    } else {
 
 /*              Sorry, that was the last chance for valid keywords. */
@@ -1541,9 +1545,9 @@ static integer c__0 = 0;
     node = metahd;
     while(node > 0) {
 	if (mtcode[(i__1 = node - 1) < 500 && 0 <= i__1 ? i__1 : s_rnge("mtc"
-		"ode", i__1, "zzeknrml_", (ftnlen)1032)] == -6 || mtcode[(i__2 
+		"ode", i__1, "zzeknrml_", (ftnlen)1036)] == -6 || mtcode[(i__2 
 		= node - 1) < 500 && 0 <= i__2 ? i__2 : s_rnge("mtcode", i__2,
-		 "zzeknrml_", (ftnlen)1032)] == -8) {
+		 "zzeknrml_", (ftnlen)1036)] == -8) {
 
 /*           If the current metatoken is bracketed by parentheses, */
 /*           remove them and update the metatoken count accordingly. */
@@ -1552,10 +1556,10 @@ static integer c__0 = 0;
 	    next = lnknxt_(&node, mtpool);
 	    if (prev > 0 && next > 0) {
 		if (mtcode[(i__1 = prev - 1) < 500 && 0 <= i__1 ? i__1 : 
-			s_rnge("mtcode", i__1, "zzeknrml_", (ftnlen)1043)] == 
+			s_rnge("mtcode", i__1, "zzeknrml_", (ftnlen)1047)] == 
 			-2 && mtcode[(i__2 = next - 1) < 500 && 0 <= i__2 ? 
 			i__2 : s_rnge("mtcode", i__2, "zzeknrml_", (ftnlen)
-			1043)] == -1) {
+			1047)] == -1) {
 		    lnkfsl_(&prev, &prev, mtpool);
 		    lnkfsl_(&next, &next, mtpool);
 		    metahd = lnkhl_(&node, mtpool);
@@ -1604,7 +1608,7 @@ static integer c__0 = 0;
 /*     logical expressions.  Each logical expression will be represented */
 /*     by a data structure that organizes the expression in a way that */
 /*     we'll refer to as `normalized':  the expression will be */
-/*     represented as a disjuction of conjunctions, for example */
+/*     represented as a disjunction of conjunctions, for example */
 
 /*        ( A AND B AND C ) OR ( D AND E ) OR ( F ) OR ( G AND H AND I ) */
 
@@ -1621,9 +1625,9 @@ static integer c__0 = 0;
     } else {
 	level = 1;
 	mstart[(i__1 = level - 1) < 500 && 0 <= i__1 ? i__1 : s_rnge("mstart",
-		 i__1, "zzeknrml_", (ftnlen)1121)] = metahd;
+		 i__1, "zzeknrml_", (ftnlen)1125)] = metahd;
 	popcnd[(i__1 = level - 1) < 500 && 0 <= i__1 ? i__1 : s_rnge("popcnd",
-		 i__1, "zzeknrml_", (ftnlen)1122)] = 0;
+		 i__1, "zzeknrml_", (ftnlen)1126)] = 0;
 	state = 2;
     }
     while(state != 4) {
@@ -1651,7 +1655,7 @@ static integer c__0 = 0;
 /*           be 0. */
 
 	    first = mstart[(i__1 = level - 1) < 500 && 0 <= i__1 ? i__1 : 
-		    s_rnge("mstart", i__1, "zzeknrml_", (ftnlen)1155)];
+		    s_rnge("mstart", i__1, "zzeknrml_", (ftnlen)1159)];
 	    if (first > 0) {
 		second = lnknxt_(&first, mtpool);
 	    } else {
@@ -1683,7 +1687,7 @@ static integer c__0 = 0;
 /*           take different actions depending on its type. */
 
 	    if (mtcode[(i__1 = first - 1) < 500 && 0 <= i__1 ? i__1 : s_rnge(
-		    "mtcode", i__1, "zzeknrml_", (ftnlen)1195)] == -7) {
+		    "mtcode", i__1, "zzeknrml_", (ftnlen)1199)] == -7) {
 
 /*              This is a simple case to deal with:  in valid queries, */
 /*              we have either the sequence */
@@ -1709,10 +1713,10 @@ static integer c__0 = 0;
 /*                 We can look at the following two tokens. */
 
 		    if (mtcode[(i__1 = second - 1) < 500 && 0 <= i__1 ? i__1 :
-			     s_rnge("mtcode", i__1, "zzeknrml_", (ftnlen)1220)
+			     s_rnge("mtcode", i__1, "zzeknrml_", (ftnlen)1224)
 			    ] == -9 && mtcode[(i__2 = third - 1) < 500 && 0 <=
 			     i__2 ? i__2 : s_rnge("mtcode", i__2, "zzeknrml_",
-			     (ftnlen)1220)] == -7) {
+			     (ftnlen)1224)] == -7) {
 			qual = TRUE_;
 		    } else {
 			qual = FALSE_;
@@ -1731,16 +1735,16 @@ static integer c__0 = 0;
 
 		    tabptr = mtexpr[(i__1 = first - 1) < 500 && 0 <= i__1 ? 
 			    i__1 : s_rnge("mtexpr", i__1, "zzeknrml_", (
-			    ftnlen)1243)];
+			    ftnlen)1247)];
 		    colptr = mtexpr[(i__1 = third - 1) < 500 && 0 <= i__1 ? 
 			    i__1 : s_rnge("mtexpr", i__1, "zzeknrml_", (
-			    ftnlen)1244)];
+			    ftnlen)1248)];
 		    lnkila_(&tabptr, &colptr, dspool);
 
 /*                 Reduce the expression to a <name> metatoken. */
 
 		    mtcode[(i__1 = first - 1) < 500 && 0 <= i__1 ? i__1 : 
-			    s_rnge("mtcode", i__1, "zzeknrml_", (ftnlen)1251)]
+			    s_rnge("mtcode", i__1, "zzeknrml_", (ftnlen)1255)]
 			     = -6;
 		    lnkfsl_(&second, &third, mtpool);
 		    nmeta += -2;
@@ -1754,26 +1758,26 @@ static integer c__0 = 0;
 		    lnkan_(dspool, &tabptr);
 		    cleari_(&c__7, &dscbuf[(i__1 = tabptr * 7 - 7) < 35000 && 
 			    0 <= i__1 ? i__1 : s_rnge("dscbuf", i__1, "zzekn"
-			    "rml_", (ftnlen)1266)]);
+			    "rml_", (ftnlen)1270)]);
 		    dscbuf[(i__1 = tabptr * 7 - 7) < 35000 && 0 <= i__1 ? 
 			    i__1 : s_rnge("dscbuf", i__1, "zzeknrml_", (
-			    ftnlen)1267)] = 1;
+			    ftnlen)1271)] = 1;
 		    dscbuf[(i__1 = tabptr * 7 - 1) < 35000 && 0 <= i__1 ? 
 			    i__1 : s_rnge("dscbuf", i__1, "zzeknrml_", (
-			    ftnlen)1268)] = -7;
+			    ftnlen)1272)] = -7;
 		    colptr = mtexpr[(i__1 = first - 1) < 500 && 0 <= i__1 ? 
 			    i__1 : s_rnge("mtexpr", i__1, "zzeknrml_", (
-			    ftnlen)1270)];
+			    ftnlen)1274)];
 		    lnkila_(&tabptr, &colptr, dspool);
 
 /*                 Reduce the expression to a <name> metatoken. */
 /*                 The reduction doesn't change the number of metatokens. */
 
 		    mtexpr[(i__1 = first - 1) < 500 && 0 <= i__1 ? i__1 : 
-			    s_rnge("mtexpr", i__1, "zzeknrml_", (ftnlen)1278)]
+			    s_rnge("mtexpr", i__1, "zzeknrml_", (ftnlen)1282)]
 			     = tabptr;
 		    mtcode[(i__1 = first - 1) < 500 && 0 <= i__1 ? i__1 : 
-			    s_rnge("mtcode", i__1, "zzeknrml_", (ftnlen)1279)]
+			    s_rnge("mtcode", i__1, "zzeknrml_", (ftnlen)1283)]
 			     = -6;
 		}
 
@@ -1781,7 +1785,7 @@ static integer c__0 = 0;
 
 		state = 3;
 	    } else if (mtcode[(i__1 = first - 1) < 500 && 0 <= i__1 ? i__1 : 
-		    s_rnge("mtcode", i__1, "zzeknrml_", (ftnlen)1290)] == -8) 
+		    s_rnge("mtcode", i__1, "zzeknrml_", (ftnlen)1294)] == -8) 
 		    {
 
 /*              If the query is valid, the sequence of meta-tokens */
@@ -1804,10 +1808,10 @@ static integer c__0 = 0;
 /*              Null values are not allowed in BETWEEN expressions. */
 
 		if (mtexpr[(i__1 = first - 1) < 500 && 0 <= i__1 ? i__1 : 
-			s_rnge("mtexpr", i__1, "zzeknrml_", (ftnlen)1314)] == 
+			s_rnge("mtexpr", i__1, "zzeknrml_", (ftnlen)1318)] == 
 			0 || mtexpr[(i__2 = third - 1) < 500 && 0 <= i__2 ? 
 			i__2 : s_rnge("mtexpr", i__2, "zzeknrml_", (ftnlen)
-			1314)] == 0) {
+			1318)] == 0) {
 		    *error = TRUE_;
 		    s_copy(prserr, "NULL values are not allowed in BETWEEN o"
 			    "r NOT BETWEEN clauses.", prserr_len, (ftnlen)62);
@@ -1815,7 +1819,7 @@ static integer c__0 = 0;
 		    return 0;
 		}
 		if (mtcode[(i__1 = third - 1) < 500 && 0 <= i__1 ? i__1 : 
-			s_rnge("mtcode", i__1, "zzeknrml_", (ftnlen)1326)] == 
+			s_rnge("mtcode", i__1, "zzeknrml_", (ftnlen)1330)] == 
 			-7) {
 
 /*                 We'll need to reduce the IDENT before proceeding. */
@@ -1825,11 +1829,11 @@ static integer c__0 = 0;
 		    state = 0;
 		} else if (mtcode[(i__1 = second - 1) < 500 && 0 <= i__1 ? 
 			i__1 : s_rnge("mtcode", i__1, "zzeknrml_", (ftnlen)
-			1335)] == -10 && (mtcode[(i__2 = third - 1) < 500 && 
+			1339)] == -10 && (mtcode[(i__2 = third - 1) < 500 && 
 			0 <= i__2 ? i__2 : s_rnge("mtcode", i__2, "zzeknrml_",
-			 (ftnlen)1335)] == -6 || mtcode[(i__3 = third - 1) < 
+			 (ftnlen)1339)] == -6 || mtcode[(i__3 = third - 1) < 
 			500 && 0 <= i__3 ? i__3 : s_rnge("mtcode", i__3, 
-			"zzeknrml_", (ftnlen)1335)] == -8)) {
+			"zzeknrml_", (ftnlen)1339)] == -8)) {
 
 /*                 This sequence of tokens, when seen in the PARSE */
 /*                 state, is a set of value bounds for a BETWEEN or */
@@ -1851,11 +1855,11 @@ static integer c__0 = 0;
 
 		    lnkilb_(&mtexpr[(i__1 = first - 1) < 500 && 0 <= i__1 ? 
 			    i__1 : s_rnge("mtexpr", i__1, "zzeknrml_", (
-			    ftnlen)1358)], &mtexpr[(i__2 = third - 1) < 500 &&
+			    ftnlen)1362)], &mtexpr[(i__2 = third - 1) < 500 &&
 			     0 <= i__2 ? i__2 : s_rnge("mtexpr", i__2, "zzek"
-			    "nrml_", (ftnlen)1358)], dspool);
+			    "nrml_", (ftnlen)1362)], dspool);
 		    mtcode[(i__1 = first - 1) < 500 && 0 <= i__1 ? i__1 : 
-			    s_rnge("mtcode", i__1, "zzeknrml_", (ftnlen)1360)]
+			    s_rnge("mtcode", i__1, "zzeknrml_", (ftnlen)1364)]
 			     = -5;
 		    lnkfsl_(&second, &third, mtpool);
 		    nmeta += -2;
@@ -1865,7 +1869,7 @@ static integer c__0 = 0;
 		    state = 3;
 		} else if (mtcode[(i__1 = second - 1) < 500 && 0 <= i__1 ? 
 			i__1 : s_rnge("mtcode", i__1, "zzeknrml_", (ftnlen)
-			1372)] > 0) {
+			1376)] > 0) {
 
 /*                 The third meta-token is in the wrong place at the */
 /*                 wrong time. */
@@ -1887,7 +1891,7 @@ static integer c__0 = 0;
 		    return 0;
 		}
 	    } else if (mtcode[(i__1 = first - 1) < 500 && 0 <= i__1 ? i__1 : 
-		    s_rnge("mtcode", i__1, "zzeknrml_", (ftnlen)1402)] == -6) 
+		    s_rnge("mtcode", i__1, "zzeknrml_", (ftnlen)1406)] == -6) 
 		    {
 
 /*              If the query is valid, the sequence of meta-tokens */
@@ -1928,7 +1932,7 @@ static integer c__0 = 0;
 		    return 0;
 		}
 		if (mtcode[(i__1 = third - 1) < 500 && 0 <= i__1 ? i__1 : 
-			s_rnge("mtcode", i__1, "zzeknrml_", (ftnlen)1445)] == 
+			s_rnge("mtcode", i__1, "zzeknrml_", (ftnlen)1449)] == 
 			-7) {
 
 /*                 We'll need to reduce the IDENT before proceeding. */
@@ -1938,11 +1942,11 @@ static integer c__0 = 0;
 		    state = 0;
 		} else if (mtcode[(i__1 = second - 1) < 500 && 0 <= i__1 ? 
 			i__1 : s_rnge("mtcode", i__1, "zzeknrml_", (ftnlen)
-			1454)] == -10 && (mtcode[(i__2 = third - 1) < 500 && 
+			1458)] == -10 && (mtcode[(i__2 = third - 1) < 500 && 
 			0 <= i__2 ? i__2 : s_rnge("mtcode", i__2, "zzeknrml_",
-			 (ftnlen)1454)] == -6 || mtcode[(i__3 = third - 1) < 
+			 (ftnlen)1458)] == -6 || mtcode[(i__3 = third - 1) < 
 			500 && 0 <= i__3 ? i__3 : s_rnge("mtcode", i__3, 
-			"zzeknrml_", (ftnlen)1454)] == -8)) {
+			"zzeknrml_", (ftnlen)1458)] == -8)) {
 
 /*                 This sequence of tokens, when seen in the PARSE */
 /*                 state, is a set of value bounds for a BETWEEN or */
@@ -1963,10 +1967,10 @@ static integer c__0 = 0;
 /*                 Null values are not allowed in BETWEEN expressions. */
 
 		    if (mtexpr[(i__1 = first - 1) < 500 && 0 <= i__1 ? i__1 : 
-			    s_rnge("mtexpr", i__1, "zzeknrml_", (ftnlen)1477)]
+			    s_rnge("mtexpr", i__1, "zzeknrml_", (ftnlen)1481)]
 			     == 0 || mtexpr[(i__2 = third - 1) < 500 && 0 <= 
 			    i__2 ? i__2 : s_rnge("mtexpr", i__2, "zzeknrml_", 
-			    (ftnlen)1477)] == 0) {
+			    (ftnlen)1481)] == 0) {
 			*error = TRUE_;
 			s_copy(prserr, "NULL values are not allowed in BETWE"
 				"EN or NOT BETWEEN clauses.", prserr_len, (
@@ -1979,11 +1983,11 @@ static integer c__0 = 0;
 
 		    lnkilb_(&mtexpr[(i__1 = first - 1) < 500 && 0 <= i__1 ? 
 			    i__1 : s_rnge("mtexpr", i__1, "zzeknrml_", (
-			    ftnlen)1491)], &mtexpr[(i__2 = third - 1) < 500 &&
+			    ftnlen)1495)], &mtexpr[(i__2 = third - 1) < 500 &&
 			     0 <= i__2 ? i__2 : s_rnge("mtexpr", i__2, "zzek"
-			    "nrml_", (ftnlen)1491)], dspool);
+			    "nrml_", (ftnlen)1495)], dspool);
 		    mtcode[(i__1 = first - 1) < 500 && 0 <= i__1 ? i__1 : 
-			    s_rnge("mtcode", i__1, "zzeknrml_", (ftnlen)1493)]
+			    s_rnge("mtcode", i__1, "zzeknrml_", (ftnlen)1497)]
 			     = -5;
 		    lnkfsl_(&second, &third, mtpool);
 		    nmeta += -2;
@@ -1993,11 +1997,11 @@ static integer c__0 = 0;
 		    state = 3;
 		} else if (mtcode[(i__1 = second - 1) < 500 && 0 <= i__1 ? 
 			i__1 : s_rnge("mtcode", i__1, "zzeknrml_", (ftnlen)
-			1506)] > 0 && (mtcode[(i__2 = third - 1) < 500 && 0 <=
+			1510)] > 0 && (mtcode[(i__2 = third - 1) < 500 && 0 <=
 			 i__2 ? i__2 : s_rnge("mtcode", i__2, "zzeknrml_", (
-			ftnlen)1506)] == -6 || mtcode[(i__3 = third - 1) < 
+			ftnlen)1510)] == -6 || mtcode[(i__3 = third - 1) < 
 			500 && 0 <= i__3 ? i__3 : s_rnge("mtcode", i__3, 
-			"zzeknrml_", (ftnlen)1506)] == -8)) {
+			"zzeknrml_", (ftnlen)1510)] == -8)) {
 
 /*                 Positive meta-token codes denote comparison */
 /*                 operators. */
@@ -2017,20 +2021,20 @@ static integer c__0 = 0;
 		    }
 		    lnkan_(rlpool, &newrel);
 		    rels[(i__1 = newrel * 3 - 3) < 15000 && 0 <= i__1 ? i__1 :
-			     s_rnge("rels", i__1, "zzeknrml_", (ftnlen)1529)] 
+			     s_rnge("rels", i__1, "zzeknrml_", (ftnlen)1533)] 
 			    = mtexpr[(i__2 = first - 1) < 500 && 0 <= i__2 ? 
 			    i__2 : s_rnge("mtexpr", i__2, "zzeknrml_", (
-			    ftnlen)1529)];
+			    ftnlen)1533)];
 		    rels[(i__1 = newrel * 3 - 2) < 15000 && 0 <= i__1 ? i__1 :
-			     s_rnge("rels", i__1, "zzeknrml_", (ftnlen)1530)] 
+			     s_rnge("rels", i__1, "zzeknrml_", (ftnlen)1534)] 
 			    = mtcode[(i__2 = second - 1) < 500 && 0 <= i__2 ? 
 			    i__2 : s_rnge("mtcode", i__2, "zzeknrml_", (
-			    ftnlen)1530)];
+			    ftnlen)1534)];
 		    rels[(i__1 = newrel * 3 - 1) < 15000 && 0 <= i__1 ? i__1 :
-			     s_rnge("rels", i__1, "zzeknrml_", (ftnlen)1531)] 
+			     s_rnge("rels", i__1, "zzeknrml_", (ftnlen)1535)] 
 			    = mtexpr[(i__2 = third - 1) < 500 && 0 <= i__2 ? 
 			    i__2 : s_rnge("mtexpr", i__2, "zzeknrml_", (
-			    ftnlen)1531)];
+			    ftnlen)1535)];
 		    lnkfsl_(&second, &third, mtpool);
 		    nmeta += -2;
 
@@ -2047,7 +2051,7 @@ static integer c__0 = 0;
 		    }
 		    lnkan_(cjpool, &newcj);
 		    cjptrs[(i__1 = newcj - 1) < 5000 && 0 <= i__1 ? i__1 : 
-			    s_rnge("cjptrs", i__1, "zzeknrml_", (ftnlen)1552)]
+			    s_rnge("cjptrs", i__1, "zzeknrml_", (ftnlen)1556)]
 			     = newrel;
 
 /*                 Now allocate an entry in the disjunction pool */
@@ -2063,7 +2067,7 @@ static integer c__0 = 0;
 		    }
 		    lnkan_(djpool, &newdj);
 		    djptrs[(i__1 = newdj - 1) < 5000 && 0 <= i__1 ? i__1 : 
-			    s_rnge("djptrs", i__1, "zzeknrml_", (ftnlen)1568)]
+			    s_rnge("djptrs", i__1, "zzeknrml_", (ftnlen)1572)]
 			     = newcj;
 
 /*                 Change the type of the first meta-token to EXPR and */
@@ -2071,10 +2075,10 @@ static integer c__0 = 0;
 /*                 the other two meta-tokens. */
 
 		    mtcode[(i__1 = first - 1) < 500 && 0 <= i__1 ? i__1 : 
-			    s_rnge("mtcode", i__1, "zzeknrml_", (ftnlen)1575)]
+			    s_rnge("mtcode", i__1, "zzeknrml_", (ftnlen)1579)]
 			     = -13;
 		    mtexpr[(i__1 = first - 1) < 500 && 0 <= i__1 ? i__1 : 
-			    s_rnge("mtexpr", i__1, "zzeknrml_", (ftnlen)1576)]
+			    s_rnge("mtexpr", i__1, "zzeknrml_", (ftnlen)1580)]
 			     = newdj;
 
 /*                 Decide the next state. */
@@ -2082,9 +2086,9 @@ static integer c__0 = 0;
 		    state = 3;
 		} else if (mtcode[(i__1 = second - 1) < 500 && 0 <= i__1 ? 
 			i__1 : s_rnge("mtcode", i__1, "zzeknrml_", (ftnlen)
-			1584)] == -3 || mtcode[(i__2 = second - 1) < 500 && 0 
+			1588)] == -3 || mtcode[(i__2 = second - 1) < 500 && 0 
 			<= i__2 ? i__2 : s_rnge("mtcode", i__2, "zzeknrml_", (
-			ftnlen)1584)] == -4) {
+			ftnlen)1588)] == -4) {
 
 /*                 If the command is syntactically correct, the */
 /*                 meta-token sequence should be one of: */
@@ -2098,10 +2102,10 @@ static integer c__0 = 0;
 
 
 		    if (mtcode[(i__1 = second - 1) < 500 && 0 <= i__1 ? i__1 :
-			     s_rnge("mtcode", i__1, "zzeknrml_", (ftnlen)1598)
+			     s_rnge("mtcode", i__1, "zzeknrml_", (ftnlen)1602)
 			    ] == -3 && mtcode[(i__2 = third - 1) < 500 && 0 <=
 			     i__2 ? i__2 : s_rnge("mtcode", i__2, "zzeknrml_",
-			     (ftnlen)1598)] == -5) {
+			     (ftnlen)1602)] == -5) {
 
 /*                    It's a BETWEEN comparison.  We treat this as a */
 /*                    disjunction of conjunctions of comparison */
@@ -2120,7 +2124,7 @@ static integer c__0 = 0;
 			    if (i__ == 1 || i__ == 3) {
 				k = mtexpr[(i__1 = third - 1) < 500 && 0 <= 
 					i__1 ? i__1 : s_rnge("mtexpr", i__1, 
-					"zzeknrml_", (ftnlen)1618)];
+					"zzeknrml_", (ftnlen)1622)];
 			    } else {
 
 /*                          We need the descriptor pointer for the RHS */
@@ -2131,10 +2135,10 @@ static integer c__0 = 0;
 
 				k = mtexpr[(i__1 = third - 1) < 500 && 0 <= 
 					i__1 ? i__1 : s_rnge("mtexpr", i__1, 
-					"zzeknrml_", (ftnlen)1628)];
+					"zzeknrml_", (ftnlen)1632)];
 				if (dscbuf[(i__1 = k * 7 - 1) < 35000 && 0 <= 
 					i__1 ? i__1 : s_rnge("dscbuf", i__1, 
-					"zzeknrml_", (ftnlen)1630)] == -7) {
+					"zzeknrml_", (ftnlen)1634)] == -7) {
 				    skip = 1;
 				} else {
 				    skip = 0;
@@ -2153,35 +2157,35 @@ static integer c__0 = 0;
 			    }
 			    lnkan_(rlpool, &rel[(i__1 = i__ - 1) < 4 && 0 <= 
 				    i__1 ? i__1 : s_rnge("rel", i__1, "zzekn"
-				    "rml_", (ftnlen)1650)]);
+				    "rml_", (ftnlen)1654)]);
 			    rels[(i__2 = rel[(i__1 = i__ - 1) < 4 && 0 <= 
 				    i__1 ? i__1 : s_rnge("rel", i__1, "zzekn"
-				    "rml_", (ftnlen)1653)] * 3 - 3) < 15000 && 
+				    "rml_", (ftnlen)1657)] * 3 - 3) < 15000 && 
 				    0 <= i__2 ? i__2 : s_rnge("rels", i__2, 
-				    "zzeknrml_", (ftnlen)1653)] = mtexpr[(
+				    "zzeknrml_", (ftnlen)1657)] = mtexpr[(
 				    i__3 = first - 1) < 500 && 0 <= i__3 ? 
 				    i__3 : s_rnge("mtexpr", i__3, "zzeknrml_",
-				     (ftnlen)1653)];
+				     (ftnlen)1657)];
 			    if (i__ == 1 || i__ == 4) {
 				rels[(i__2 = rel[(i__1 = i__ - 1) < 4 && 0 <= 
 					i__1 ? i__1 : s_rnge("rel", i__1, 
-					"zzeknrml_", (ftnlen)1656)] * 3 - 2) <
+					"zzeknrml_", (ftnlen)1660)] * 3 - 2) <
 					 15000 && 0 <= i__2 ? i__2 : s_rnge(
 					"rels", i__2, "zzeknrml_", (ftnlen)
-					1656)] = 2;
+					1660)] = 2;
 			    } else {
 				rels[(i__2 = rel[(i__1 = i__ - 1) < 4 && 0 <= 
 					i__1 ? i__1 : s_rnge("rel", i__1, 
-					"zzeknrml_", (ftnlen)1658)] * 3 - 2) <
+					"zzeknrml_", (ftnlen)1662)] * 3 - 2) <
 					 15000 && 0 <= i__2 ? i__2 : s_rnge(
 					"rels", i__2, "zzeknrml_", (ftnlen)
-					1658)] = 4;
+					1662)] = 4;
 			    }
 			    rels[(i__2 = rel[(i__1 = i__ - 1) < 4 && 0 <= 
 				    i__1 ? i__1 : s_rnge("rel", i__1, "zzekn"
-				    "rml_", (ftnlen)1661)] * 3 - 1) < 15000 && 
+				    "rml_", (ftnlen)1665)] * 3 - 1) < 15000 && 
 				    0 <= i__2 ? i__2 : s_rnge("rels", i__2, 
-				    "zzeknrml_", (ftnlen)1661)] = k;
+				    "zzeknrml_", (ftnlen)1665)] = k;
 			    if (lnknfn_(cjpool) < 1) {
 				*error = TRUE_;
 				s_copy(prserr, "Conjunction table is full.", 
@@ -2191,14 +2195,14 @@ static integer c__0 = 0;
 			    }
 			    lnkan_(cjpool, &cj[(i__1 = i__ - 1) < 4 && 0 <= 
 				    i__1 ? i__1 : s_rnge("cj", i__1, "zzeknr"
-				    "ml_", (ftnlen)1671)]);
+				    "ml_", (ftnlen)1675)]);
 			    cjptrs[(i__2 = cj[(i__1 = i__ - 1) < 4 && 0 <= 
 				    i__1 ? i__1 : s_rnge("cj", i__1, "zzeknr"
-				    "ml_", (ftnlen)1673)] - 1) < 5000 && 0 <= 
+				    "ml_", (ftnlen)1677)] - 1) < 5000 && 0 <= 
 				    i__2 ? i__2 : s_rnge("cjptrs", i__2, 
-				    "zzeknrml_", (ftnlen)1673)] = rel[(i__3 = 
+				    "zzeknrml_", (ftnlen)1677)] = rel[(i__3 = 
 				    i__ - 1) < 4 && 0 <= i__3 ? i__3 : s_rnge(
-				    "rel", i__3, "zzeknrml_", (ftnlen)1673)];
+				    "rel", i__3, "zzeknrml_", (ftnlen)1677)];
 			}
 
 /*                    Link the conjunction nodes to form the two */
@@ -2220,15 +2224,15 @@ static integer c__0 = 0;
 			    }
 			    lnkan_(djpool, &dj[(i__1 = i__ - 1) < 2 && 0 <= 
 				    i__1 ? i__1 : s_rnge("dj", i__1, "zzeknr"
-				    "ml_", (ftnlen)1697)]);
+				    "ml_", (ftnlen)1701)]);
 			    djptrs[(i__2 = dj[(i__1 = i__ - 1) < 2 && 0 <= 
 				    i__1 ? i__1 : s_rnge("dj", i__1, "zzeknr"
-				    "ml_", (ftnlen)1698)] - 1) < 5000 && 0 <= 
+				    "ml_", (ftnlen)1702)] - 1) < 5000 && 0 <= 
 				    i__2 ? i__2 : s_rnge("djptrs", i__2, 
-				    "zzeknrml_", (ftnlen)1698)] = cj[(i__3 = (
+				    "zzeknrml_", (ftnlen)1702)] = cj[(i__3 = (
 				    i__ << 1) - 2) < 4 && 0 <= i__3 ? i__3 : 
 				    s_rnge("cj", i__3, "zzeknrml_", (ftnlen)
-				    1698)];
+				    1702)];
 			}
 
 /*                    Finally, link the disjunction pool entries, and */
@@ -2238,10 +2242,10 @@ static integer c__0 = 0;
 			lnkila_(dj, &dj[1], djpool);
 			mtcode[(i__1 = first - 1) < 500 && 0 <= i__1 ? i__1 : 
 				s_rnge("mtcode", i__1, "zzeknrml_", (ftnlen)
-				1709)] = -13;
+				1713)] = -13;
 			mtexpr[(i__1 = first - 1) < 500 && 0 <= i__1 ? i__1 : 
 				s_rnge("mtexpr", i__1, "zzeknrml_", (ftnlen)
-				1710)] = dj[0];
+				1714)] = dj[0];
 			lnkfsl_(&second, &third, mtpool);
 			nmeta += -2;
 
@@ -2250,9 +2254,9 @@ static integer c__0 = 0;
 			state = 3;
 		    } else if (mtcode[(i__1 = second - 1) < 500 && 0 <= i__1 ?
 			     i__1 : s_rnge("mtcode", i__1, "zzeknrml_", (
-			    ftnlen)1721)] == -4 && mtcode[(i__2 = third - 1) <
+			    ftnlen)1725)] == -4 && mtcode[(i__2 = third - 1) <
 			     500 && 0 <= i__2 ? i__2 : s_rnge("mtcode", i__2, 
-			    "zzeknrml_", (ftnlen)1721)] == -5) {
+			    "zzeknrml_", (ftnlen)1725)] == -5) {
 
 /*                    It's a NOT BETWEEN comparison.  We treat */
 /*                    this as a disjunction of conjunctions of comparison */
@@ -2275,7 +2279,7 @@ static integer c__0 = 0;
 			    if (i__ == 1 || i__ == 3) {
 				k = mtexpr[(i__1 = third - 1) < 500 && 0 <= 
 					i__1 ? i__1 : s_rnge("mtexpr", i__1, 
-					"zzeknrml_", (ftnlen)1745)];
+					"zzeknrml_", (ftnlen)1749)];
 			    } else {
 
 /*                          We need the descriptor pointer for the RHS */
@@ -2286,10 +2290,10 @@ static integer c__0 = 0;
 
 				k = mtexpr[(i__1 = third - 1) < 500 && 0 <= 
 					i__1 ? i__1 : s_rnge("mtexpr", i__1, 
-					"zzeknrml_", (ftnlen)1755)];
+					"zzeknrml_", (ftnlen)1759)];
 				if (dscbuf[(i__1 = k * 7 - 1) < 35000 && 0 <= 
 					i__1 ? i__1 : s_rnge("dscbuf", i__1, 
-					"zzeknrml_", (ftnlen)1757)] == -7) {
+					"zzeknrml_", (ftnlen)1761)] == -7) {
 				    skip = 1;
 				} else {
 				    skip = 0;
@@ -2308,35 +2312,35 @@ static integer c__0 = 0;
 			    }
 			    lnkan_(rlpool, &rel[(i__1 = i__ - 1) < 4 && 0 <= 
 				    i__1 ? i__1 : s_rnge("rel", i__1, "zzekn"
-				    "rml_", (ftnlen)1777)]);
+				    "rml_", (ftnlen)1781)]);
 			    rels[(i__2 = rel[(i__1 = i__ - 1) < 4 && 0 <= 
 				    i__1 ? i__1 : s_rnge("rel", i__1, "zzekn"
-				    "rml_", (ftnlen)1780)] * 3 - 3) < 15000 && 
+				    "rml_", (ftnlen)1784)] * 3 - 3) < 15000 && 
 				    0 <= i__2 ? i__2 : s_rnge("rels", i__2, 
-				    "zzeknrml_", (ftnlen)1780)] = mtexpr[(
+				    "zzeknrml_", (ftnlen)1784)] = mtexpr[(
 				    i__3 = first - 1) < 500 && 0 <= i__3 ? 
 				    i__3 : s_rnge("mtexpr", i__3, "zzeknrml_",
-				     (ftnlen)1780)];
+				     (ftnlen)1784)];
 			    if (i__ <= 2) {
 				rels[(i__2 = rel[(i__1 = i__ - 1) < 4 && 0 <= 
 					i__1 ? i__1 : s_rnge("rel", i__1, 
-					"zzeknrml_", (ftnlen)1783)] * 3 - 2) <
+					"zzeknrml_", (ftnlen)1787)] * 3 - 2) <
 					 15000 && 0 <= i__2 ? i__2 : s_rnge(
 					"rels", i__2, "zzeknrml_", (ftnlen)
-					1783)] = 5;
+					1787)] = 5;
 			    } else {
 				rels[(i__2 = rel[(i__1 = i__ - 1) < 4 && 0 <= 
 					i__1 ? i__1 : s_rnge("rel", i__1, 
-					"zzeknrml_", (ftnlen)1785)] * 3 - 2) <
+					"zzeknrml_", (ftnlen)1789)] * 3 - 2) <
 					 15000 && 0 <= i__2 ? i__2 : s_rnge(
 					"rels", i__2, "zzeknrml_", (ftnlen)
-					1785)] = 3;
+					1789)] = 3;
 			    }
 			    rels[(i__2 = rel[(i__1 = i__ - 1) < 4 && 0 <= 
 				    i__1 ? i__1 : s_rnge("rel", i__1, "zzekn"
-				    "rml_", (ftnlen)1788)] * 3 - 1) < 15000 && 
+				    "rml_", (ftnlen)1792)] * 3 - 1) < 15000 && 
 				    0 <= i__2 ? i__2 : s_rnge("rels", i__2, 
-				    "zzeknrml_", (ftnlen)1788)] = k;
+				    "zzeknrml_", (ftnlen)1792)] = k;
 			    if (lnknfn_(cjpool) < 1) {
 				*error = TRUE_;
 				s_copy(prserr, "Conjunction table is full.", 
@@ -2346,14 +2350,14 @@ static integer c__0 = 0;
 			    }
 			    lnkan_(cjpool, &cj[(i__1 = i__ - 1) < 4 && 0 <= 
 				    i__1 ? i__1 : s_rnge("cj", i__1, "zzeknr"
-				    "ml_", (ftnlen)1798)]);
+				    "ml_", (ftnlen)1802)]);
 			    cjptrs[(i__2 = cj[(i__1 = i__ - 1) < 4 && 0 <= 
 				    i__1 ? i__1 : s_rnge("cj", i__1, "zzeknr"
-				    "ml_", (ftnlen)1800)] - 1) < 5000 && 0 <= 
+				    "ml_", (ftnlen)1804)] - 1) < 5000 && 0 <= 
 				    i__2 ? i__2 : s_rnge("cjptrs", i__2, 
-				    "zzeknrml_", (ftnlen)1800)] = rel[(i__3 = 
+				    "zzeknrml_", (ftnlen)1804)] = rel[(i__3 = 
 				    i__ - 1) < 4 && 0 <= i__3 ? i__3 : s_rnge(
-				    "rel", i__3, "zzeknrml_", (ftnlen)1800)];
+				    "rel", i__3, "zzeknrml_", (ftnlen)1804)];
 			}
 
 /*                    Link the conjunction nodes to form the two */
@@ -2375,15 +2379,15 @@ static integer c__0 = 0;
 			    }
 			    lnkan_(djpool, &dj[(i__1 = i__ - 1) < 2 && 0 <= 
 				    i__1 ? i__1 : s_rnge("dj", i__1, "zzeknr"
-				    "ml_", (ftnlen)1824)]);
+				    "ml_", (ftnlen)1828)]);
 			    djptrs[(i__2 = dj[(i__1 = i__ - 1) < 2 && 0 <= 
 				    i__1 ? i__1 : s_rnge("dj", i__1, "zzeknr"
-				    "ml_", (ftnlen)1825)] - 1) < 5000 && 0 <= 
+				    "ml_", (ftnlen)1829)] - 1) < 5000 && 0 <= 
 				    i__2 ? i__2 : s_rnge("djptrs", i__2, 
-				    "zzeknrml_", (ftnlen)1825)] = cj[(i__3 = (
+				    "zzeknrml_", (ftnlen)1829)] = cj[(i__3 = (
 				    i__ << 1) - 2) < 4 && 0 <= i__3 ? i__3 : 
 				    s_rnge("cj", i__3, "zzeknrml_", (ftnlen)
-				    1825)];
+				    1829)];
 			}
 
 /*                    Finally, link the disjunction pool entries, and */
@@ -2393,10 +2397,10 @@ static integer c__0 = 0;
 			lnkila_(dj, &dj[1], djpool);
 			mtcode[(i__1 = first - 1) < 500 && 0 <= i__1 ? i__1 : 
 				s_rnge("mtcode", i__1, "zzeknrml_", (ftnlen)
-				1836)] = -13;
+				1840)] = -13;
 			mtexpr[(i__1 = first - 1) < 500 && 0 <= i__1 ? i__1 : 
 				s_rnge("mtexpr", i__1, "zzeknrml_", (ftnlen)
-				1837)] = dj[0];
+				1841)] = dj[0];
 			lnkfsl_(&second, &third, mtpool);
 			nmeta += -2;
 
@@ -2405,9 +2409,9 @@ static integer c__0 = 0;
 			state = 3;
 		    } else if (mtcode[(i__1 = third - 1) < 500 && 0 <= i__1 ? 
 			    i__1 : s_rnge("mtcode", i__1, "zzeknrml_", (
-			    ftnlen)1847)] == -6 || mtcode[(i__2 = third - 1) <
+			    ftnlen)1851)] == -6 || mtcode[(i__2 = third - 1) <
 			     500 && 0 <= i__2 ? i__2 : s_rnge("mtcode", i__2, 
-			    "zzeknrml_", (ftnlen)1847)] == -8) {
+			    "zzeknrml_", (ftnlen)1851)] == -8) {
 
 /*                    If the third meta-token is anything other than */
 /*                    <BETWEEN expr>, we'll have to parse the portion of */
@@ -2426,7 +2430,7 @@ static integer c__0 = 0;
 		    }
 		} else if (mtcode[(i__1 = second - 1) < 500 && 0 <= i__1 ? 
 			i__1 : s_rnge("mtcode", i__1, "zzeknrml_", (ftnlen)
-			1870)] > 0) {
+			1874)] > 0) {
 
 /*                 The third meta-token is in the wrong place at the */
 /*                 wrong time. */
@@ -2448,7 +2452,7 @@ static integer c__0 = 0;
 		    return 0;
 		}
 	    } else if (mtcode[(i__1 = first - 1) < 500 && 0 <= i__1 ? i__1 : 
-		    s_rnge("mtcode", i__1, "zzeknrml_", (ftnlen)1899)] == -13)
+		    s_rnge("mtcode", i__1, "zzeknrml_", (ftnlen)1903)] == -13)
 		     {
 
 /*              If the query is valid, the sequence of meta-tokens */
@@ -2483,14 +2487,14 @@ static integer c__0 = 0;
 		    state = 4;
 		} else if (mtcode[(i__1 = second - 1) < 500 && 0 <= i__1 ? 
 			i__1 : s_rnge("mtcode", i__1, "zzeknrml_", (ftnlen)
-			1935)] == -1) {
+			1939)] == -1) {
 
 /*                 We've reached the end of a `parenthesized' */
 /*                 expression. */
 
 		    if (level > 1 && popcnd[(i__1 = level - 1) < 500 && 0 <= 
 			    i__1 ? i__1 : s_rnge("popcnd", i__1, "zzeknrml_", 
-			    (ftnlen)1940)] == 2) {
+			    (ftnlen)1944)] == 2) {
 
 /*                    Time to pop the state. */
 
@@ -2521,17 +2525,17 @@ static integer c__0 = 0;
 
 		} else if (mtcode[(i__1 = third - 1) < 500 && 0 <= i__1 ? 
 			i__1 : s_rnge("mtcode", i__1, "zzeknrml_", (ftnlen)
-			1975)] == -7 || mtcode[(i__2 = third - 1) < 500 && 0 
+			1979)] == -7 || mtcode[(i__2 = third - 1) < 500 && 0 
 			<= i__2 ? i__2 : s_rnge("mtcode", i__2, "zzeknrml_", (
-			ftnlen)1975)] == -6 || mtcode[(i__3 = third - 1) < 
+			ftnlen)1979)] == -6 || mtcode[(i__3 = third - 1) < 
 			500 && 0 <= i__3 ? i__3 : s_rnge("mtcode", i__3, 
-			"zzeknrml_", (ftnlen)1975)] == -12) {
+			"zzeknrml_", (ftnlen)1979)] == -12) {
 		    start = third;
 		    retcnd = 1;
 		    state = 0;
 		} else if (mtcode[(i__1 = third - 1) < 500 && 0 <= i__1 ? 
 			i__1 : s_rnge("mtcode", i__1, "zzeknrml_", (ftnlen)
-			1984)] == -2) {
+			1988)] == -2) {
 
 /*                 We'll have to push our state before continuing. */
 
@@ -2543,11 +2547,11 @@ static integer c__0 = 0;
 
 		} else if (mtcode[(i__1 = first - 1) < 500 && 0 <= i__1 ? 
 			i__1 : s_rnge("mtcode", i__1, "zzeknrml_", (ftnlen)
-			1995)] == -13 && mtcode[(i__2 = second - 1) < 500 && 
+			1999)] == -13 && mtcode[(i__2 = second - 1) < 500 && 
 			0 <= i__2 ? i__2 : s_rnge("mtcode", i__2, "zzeknrml_",
-			 (ftnlen)1995)] == -11 && mtcode[(i__3 = third - 1) < 
+			 (ftnlen)1999)] == -11 && mtcode[(i__3 = third - 1) < 
 			500 && 0 <= i__3 ? i__3 : s_rnge("mtcode", i__3, 
-			"zzeknrml_", (ftnlen)1995)] == -13) {
+			"zzeknrml_", (ftnlen)1999)] == -13) {
 
 /*                 We have a disjunction of two normalized */
 /*                 expressions.  We're not ready to perform a */
@@ -2559,7 +2563,7 @@ static integer c__0 = 0;
 		    if (fourth > 0) {
 			if (mtcode[(i__1 = fourth - 1) < 500 && 0 <= i__1 ? 
 				i__1 : s_rnge("mtcode", i__1, "zzeknrml_", (
-				ftnlen)2009)] == -10) {
+				ftnlen)2013)] == -10) {
 
 /*                       The third token is already spoken for: */
 /*                       the expression involving the operator */
@@ -2577,10 +2581,10 @@ static integer c__0 = 0;
 
 			dj[0] = mtexpr[(i__1 = first - 1) < 500 && 0 <= i__1 ?
 				 i__1 : s_rnge("mtexpr", i__1, "zzeknrml_", (
-				ftnlen)2028)];
+				ftnlen)2032)];
 			dj[1] = mtexpr[(i__1 = third - 1) < 500 && 0 <= i__1 ?
 				 i__1 : s_rnge("mtexpr", i__1, "zzeknrml_", (
-				ftnlen)2029)];
+				ftnlen)2033)];
 			lnkilb_(dj, &dj[1], djpool);
 
 /*                    The first meta-token will point to the resulting */
@@ -2618,11 +2622,11 @@ static integer c__0 = 0;
 
 		} else if (mtcode[(i__1 = first - 1) < 500 && 0 <= i__1 ? 
 			i__1 : s_rnge("mtcode", i__1, "zzeknrml_", (ftnlen)
-			2070)] == -13 && mtcode[(i__2 = second - 1) < 500 && 
+			2074)] == -13 && mtcode[(i__2 = second - 1) < 500 && 
 			0 <= i__2 ? i__2 : s_rnge("mtcode", i__2, "zzeknrml_",
-			 (ftnlen)2070)] == -10 && mtcode[(i__3 = third - 1) < 
+			 (ftnlen)2074)] == -10 && mtcode[(i__3 = third - 1) < 
 			500 && 0 <= i__3 ? i__3 : s_rnge("mtcode", i__3, 
-			"zzeknrml_", (ftnlen)2070)] == -13) {
+			"zzeknrml_", (ftnlen)2074)] == -13) {
 
 /*                 We have the conjunction of two normalized */
 /*                 expressions.  This case requires application of */
@@ -2671,12 +2675,12 @@ static integer c__0 = 0;
 
 		    dj[0] = mtexpr[(i__1 = first - 1) < 500 && 0 <= i__1 ? 
 			    i__1 : s_rnge("mtexpr", i__1, "zzeknrml_", (
-			    ftnlen)2119)];
+			    ftnlen)2123)];
 		    djtail = 0;
 		    while(dj[0] > 0) {
 			dj[1] = mtexpr[(i__1 = third - 1) < 500 && 0 <= i__1 ?
 				 i__1 : s_rnge("mtexpr", i__1, "zzeknrml_", (
-				ftnlen)2124)];
+				ftnlen)2128)];
 			while(dj[1] > 0) {
 
 /*                       Allocate a new disjunction table entry, */
@@ -2698,7 +2702,7 @@ static integer c__0 = 0;
 
 			    cj[0] = djptrs[(i__1 = dj[0] - 1) < 5000 && 0 <= 
 				    i__1 ? i__1 : s_rnge("djptrs", i__1, 
-				    "zzeknrml_", (ftnlen)2146)];
+				    "zzeknrml_", (ftnlen)2150)];
 			    tail = 0;
 			    while(cj[0] > 0) {
 				if (lnknfn_(cjpool) < 1) {
@@ -2713,16 +2717,16 @@ static integer c__0 = 0;
 				tail = newcj;
 				cjptrs[(i__1 = tail - 1) < 5000 && 0 <= i__1 ?
 					 i__1 : s_rnge("cjptrs", i__1, "zzek"
-					"nrml_", (ftnlen)2161)] = cjptrs[(i__2 
+					"nrml_", (ftnlen)2165)] = cjptrs[(i__2 
 					= cj[0] - 1) < 5000 && 0 <= i__2 ? 
 					i__2 : s_rnge("cjptrs", i__2, "zzekn"
-					"rml_", (ftnlen)2161)];
+					"rml_", (ftnlen)2165)];
 				cj[0] = lnknxt_(cj, cjpool);
 			    }
 			    head1 = lnkhl_(&tail, cjpool);
 			    cj[1] = djptrs[(i__1 = dj[1] - 1) < 5000 && 0 <= 
 				    i__1 ? i__1 : s_rnge("djptrs", i__1, 
-				    "zzeknrml_", (ftnlen)2170)];
+				    "zzeknrml_", (ftnlen)2174)];
 			    tail = 0;
 			    while(cj[1] > 0) {
 				if (lnknfn_(cjpool) < 1) {
@@ -2737,10 +2741,10 @@ static integer c__0 = 0;
 				tail = newcj;
 				cjptrs[(i__1 = tail - 1) < 5000 && 0 <= i__1 ?
 					 i__1 : s_rnge("cjptrs", i__1, "zzek"
-					"nrml_", (ftnlen)2185)] = cjptrs[(i__2 
+					"nrml_", (ftnlen)2189)] = cjptrs[(i__2 
 					= cj[1] - 1) < 5000 && 0 <= i__2 ? 
 					i__2 : s_rnge("cjptrs", i__2, "zzekn"
-					"rml_", (ftnlen)2185)];
+					"rml_", (ftnlen)2189)];
 				cj[1] = lnknxt_(&cj[1], cjpool);
 			    }
 			    head2 = lnkhl_(&tail, cjpool);
@@ -2751,7 +2755,7 @@ static integer c__0 = 0;
 			    lnkilb_(&head1, &head2, cjpool);
 			    djptrs[(i__1 = newdj - 1) < 5000 && 0 <= i__1 ? 
 				    i__1 : s_rnge("djptrs", i__1, "zzeknrml_",
-				     (ftnlen)2199)] = head1;
+				     (ftnlen)2203)] = head1;
 
 /*                       Link NEWDJ in at the tail of the disjunction */
 /*                       list. */
@@ -2774,19 +2778,19 @@ static integer c__0 = 0;
 
 		    lnkilb_(&mtexpr[(i__1 = first - 1) < 500 && 0 <= i__1 ? 
 			    i__1 : s_rnge("mtexpr", i__1, "zzeknrml_", (
-			    ftnlen)2226)], &mtexpr[(i__2 = third - 1) < 500 &&
+			    ftnlen)2230)], &mtexpr[(i__2 = third - 1) < 500 &&
 			     0 <= i__2 ? i__2 : s_rnge("mtexpr", i__2, "zzek"
-			    "nrml_", (ftnlen)2226)], djpool);
+			    "nrml_", (ftnlen)2230)], djpool);
 		    djnode = mtexpr[(i__1 = first - 1) < 500 && 0 <= i__1 ? 
 			    i__1 : s_rnge("mtexpr", i__1, "zzeknrml_", (
-			    ftnlen)2228)];
+			    ftnlen)2232)];
 		    while(djnode > 0) {
 
 /*                    Free the conjunction list pointed to by DJNODE. */
 
 			cjnode = djptrs[(i__1 = djnode - 1) < 5000 && 0 <= 
 				i__1 ? i__1 : s_rnge("djptrs", i__1, "zzeknr"
-				"ml_", (ftnlen)2234)];
+				"ml_", (ftnlen)2238)];
 			i__1 = lnktl_(&cjnode, cjpool);
 			lnkfsl_(&cjnode, &i__1, cjpool);
 			djnode = lnknxt_(&djnode, djpool);
@@ -2797,17 +2801,17 @@ static integer c__0 = 0;
 
 		    i__3 = lnktl_(&mtexpr[(i__2 = first - 1) < 500 && 0 <= 
 			    i__2 ? i__2 : s_rnge("mtexpr", i__2, "zzeknrml_", 
-			    (ftnlen)2247)], djpool);
+			    (ftnlen)2251)], djpool);
 		    lnkfsl_(&mtexpr[(i__1 = first - 1) < 500 && 0 <= i__1 ? 
 			    i__1 : s_rnge("mtexpr", i__1, "zzeknrml_", (
-			    ftnlen)2247)], &i__3, djpool);
+			    ftnlen)2251)], &i__3, djpool);
 
 /*                 NEWDJ is the tail node of the list of disjunctions */
 /*                 we've just finished.  The first meta-token should */
 /*                 point to the head of this disjunction list. */
 
 		    mtexpr[(i__1 = first - 1) < 500 && 0 <= i__1 ? i__1 : 
-			    s_rnge("mtexpr", i__1, "zzeknrml_", (ftnlen)2256)]
+			    s_rnge("mtexpr", i__1, "zzeknrml_", (ftnlen)2260)]
 			     = lnkhl_(&newdj, djpool);
 
 /*                 We no longer need the other two meta-tokens. */
@@ -2830,7 +2834,7 @@ static integer c__0 = 0;
 		    return 0;
 		}
 	    } else if (mtcode[(i__1 = first - 1) < 500 && 0 <= i__1 ? i__1 : 
-		    s_rnge("mtcode", i__1, "zzeknrml_", (ftnlen)2284)] == -12)
+		    s_rnge("mtcode", i__1, "zzeknrml_", (ftnlen)2288)] == -12)
 		     {
 
 /*              There are four valid token sequences that we could */
@@ -2850,7 +2854,7 @@ static integer c__0 = 0;
 		    return 0;
 		} else if (mtcode[(i__1 = second - 1) < 500 && 0 <= i__1 ? 
 			i__1 : s_rnge("mtcode", i__1, "zzeknrml_", (ftnlen)
-			2303)] == -2) {
+			2307)] == -2) {
 
 /*                 We'll have to push our state before continuing. */
 
@@ -2859,17 +2863,17 @@ static integer c__0 = 0;
 		    state = 0;
 		} else if (mtcode[(i__1 = second - 1) < 500 && 0 <= i__1 ? 
 			i__1 : s_rnge("mtcode", i__1, "zzeknrml_", (ftnlen)
-			2312)] == -12 || mtcode[(i__2 = second - 1) < 500 && 
+			2316)] == -12 || mtcode[(i__2 = second - 1) < 500 && 
 			0 <= i__2 ? i__2 : s_rnge("mtcode", i__2, "zzeknrml_",
-			 (ftnlen)2312)] == -7 || mtcode[(i__3 = second - 1) < 
+			 (ftnlen)2316)] == -7 || mtcode[(i__3 = second - 1) < 
 			500 && 0 <= i__3 ? i__3 : s_rnge("mtcode", i__3, 
-			"zzeknrml_", (ftnlen)2312)] == -6) {
+			"zzeknrml_", (ftnlen)2316)] == -6) {
 		    start = second;
 		    retcnd = 1;
 		    state = 0;
 		} else if (mtcode[(i__1 = second - 1) < 500 && 0 <= i__1 ? 
 			i__1 : s_rnge("mtcode", i__1, "zzeknrml_", (ftnlen)
-			2321)] == -13) {
+			2325)] == -13) {
 
 /*                 We have the negation of a normalized expression. Since */
 /*                 the NOT operator has higher precedence than any other, */
@@ -2917,10 +2921,10 @@ static integer c__0 = 0;
 
 		    djnode = mtexpr[(i__1 = second - 1) < 500 && 0 <= i__1 ? 
 			    i__1 : s_rnge("mtexpr", i__1, "zzeknrml_", (
-			    ftnlen)2367)];
+			    ftnlen)2371)];
 		    cjnode = djptrs[(i__1 = djnode - 1) < 5000 && 0 <= i__1 ? 
 			    i__1 : s_rnge("djptrs", i__1, "zzeknrml_", (
-			    ftnlen)2369)];
+			    ftnlen)2373)];
 		    tail = 0;
 		    while(cjnode > 0) {
 
@@ -2946,12 +2950,12 @@ static integer c__0 = 0;
 			lnkan_(cjpool, &newcj);
 			cjptrs[(i__1 = newcj - 1) < 5000 && 0 <= i__1 ? i__1 :
 				 s_rnge("cjptrs", i__1, "zzeknrml_", (ftnlen)
-				2396)] = cjptrs[(i__2 = cjnode - 1) < 5000 && 
+				2400)] = cjptrs[(i__2 = cjnode - 1) < 5000 && 
 				0 <= i__2 ? i__2 : s_rnge("cjptrs", i__2, 
-				"zzeknrml_", (ftnlen)2396)];
+				"zzeknrml_", (ftnlen)2400)];
 			djptrs[(i__1 = newdj - 1) < 5000 && 0 <= i__1 ? i__1 :
 				 s_rnge("djptrs", i__1, "zzeknrml_", (ftnlen)
-				2397)] = newcj;
+				2401)] = newcj;
 
 /*                    Now link the new singleton disjunction list in */
 /*                    at the tail of the disjunction list that */
@@ -2988,7 +2992,7 @@ static integer c__0 = 0;
 			while(dj[0] > 0) {
 			    cj[1] = djptrs[(i__1 = djnode - 1) < 5000 && 0 <= 
 				    i__1 ? i__1 : s_rnge("djptrs", i__1, 
-				    "zzeknrml_", (ftnlen)2439)];
+				    "zzeknrml_", (ftnlen)2443)];
 			    while(cj[1] > 0) {
 
 /*                          Make a copy of the conjunction list pointed */
@@ -2996,7 +3000,7 @@ static integer c__0 = 0;
 
 				cjnode = djptrs[(i__1 = dj[0] - 1) < 5000 && 
 					0 <= i__1 ? i__1 : s_rnge("djptrs", 
-					i__1, "zzeknrml_", (ftnlen)2446)];
+					i__1, "zzeknrml_", (ftnlen)2450)];
 				tail = 0;
 				while(cjnode > 0) {
 				    if (lnknfn_(cjpool) < 1) {
@@ -3011,11 +3015,11 @@ static integer c__0 = 0;
 				    lnkila_(&tail, &newcj, cjpool);
 				    cjptrs[(i__1 = newcj - 1) < 5000 && 0 <= 
 					    i__1 ? i__1 : s_rnge("cjptrs", 
-					    i__1, "zzeknrml_", (ftnlen)2461)] 
+					    i__1, "zzeknrml_", (ftnlen)2465)] 
 					    = cjptrs[(i__2 = cjnode - 1) < 
 					    5000 && 0 <= i__2 ? i__2 : s_rnge(
 					    "cjptrs", i__2, "zzeknrml_", (
-					    ftnlen)2461)];
+					    ftnlen)2465)];
 				    tail = newcj;
 				    cjnode = lnknxt_(&cjnode, cjpool);
 				}
@@ -3037,10 +3041,10 @@ static integer c__0 = 0;
 				lnkan_(cjpool, &newcj);
 				cjptrs[(i__1 = newcj - 1) < 5000 && 0 <= i__1 
 					? i__1 : s_rnge("cjptrs", i__1, "zze"
-					"knrml_", (ftnlen)2484)] = cjptrs[(
+					"knrml_", (ftnlen)2488)] = cjptrs[(
 					i__2 = cj[1] - 1) < 5000 && 0 <= i__2 
 					? i__2 : s_rnge("cjptrs", i__2, "zze"
-					"knrml_", (ftnlen)2484)];
+					"knrml_", (ftnlen)2488)];
 				if (lnknfn_(djpool) < 1) {
 				    *error = TRUE_;
 				    s_copy(prserr, "Disjunction table is ful"
@@ -3055,7 +3059,7 @@ static integer c__0 = 0;
 				lnkilb_(cj, &newcj, cjpool);
 				djptrs[(i__1 = newdj - 1) < 5000 && 0 <= i__1 
 					? i__1 : s_rnge("djptrs", i__1, "zze"
-					"knrml_", (ftnlen)2500)] = cj[0];
+					"knrml_", (ftnlen)2504)] = cj[0];
 				lnkila_(&djtail, &newdj, djpool);
 				djtail = newdj;
 				cj[1] = lnknxt_(&cj[1], cjpool);
@@ -3071,7 +3075,7 @@ static integer c__0 = 0;
 			while(dj[0] > 0) {
 			    cj[0] = djptrs[(i__1 = dj[0] - 1) < 5000 && 0 <= 
 				    i__1 ? i__1 : s_rnge("djptrs", i__1, 
-				    "zzeknrml_", (ftnlen)2522)];
+				    "zzeknrml_", (ftnlen)2526)];
 			    cj[1] = lnktl_(cj, cjpool);
 			    lnkfsl_(cj, &cj[1], cjpool);
 			    dj[0] = lnknxt_(dj, djpool);
@@ -3099,15 +3103,15 @@ static integer c__0 = 0;
 		    ssizei_(&c__5000, relset);
 		    djnode = mtexpr[(i__1 = second - 1) < 500 && 0 <= i__1 ? 
 			    i__1 : s_rnge("mtexpr", i__1, "zzeknrml_", (
-			    ftnlen)2557)];
+			    ftnlen)2561)];
 		    while(djnode > 0) {
 			cjnode = djptrs[(i__1 = djnode - 1) < 5000 && 0 <= 
 				i__1 ? i__1 : s_rnge("djptrs", i__1, "zzeknr"
-				"ml_", (ftnlen)2562)];
+				"ml_", (ftnlen)2566)];
 			while(cjnode > 0) {
 			    relptr = cjptrs[(i__1 = cjnode - 1) < 5000 && 0 <=
 				     i__1 ? i__1 : s_rnge("cjptrs", i__1, 
-				    "zzeknrml_", (ftnlen)2566)];
+				    "zzeknrml_", (ftnlen)2570)];
 			    insrti_(&relptr, relset);
 			    cjnode = lnknxt_(&cjnode, cjpool);
 			}
@@ -3117,15 +3121,15 @@ static integer c__0 = 0;
 		    for (i__ = 1; i__ <= i__1; ++i__) {
 			relptr = relset[(i__2 = i__ + 5) < 5006 && 0 <= i__2 ?
 				 i__2 : s_rnge("relset", i__2, "zzeknrml_", (
-				ftnlen)2580)];
+				ftnlen)2584)];
 			j = isrchi_(&rels[(i__2 = relptr * 3 - 2) < 15000 && 
 				0 <= i__2 ? i__2 : s_rnge("rels", i__2, "zze"
-				"knrml_", (ftnlen)2581)], &c__8, cmpcde);
+				"knrml_", (ftnlen)2585)], &c__8, cmpcde);
 			rels[(i__2 = relptr * 3 - 2) < 15000 && 0 <= i__2 ? 
 				i__2 : s_rnge("rels", i__2, "zzeknrml_", (
-				ftnlen)2584)] = cmpneg[(i__3 = j - 1) < 8 && 
+				ftnlen)2588)] = cmpneg[(i__3 = j - 1) < 8 && 
 				0 <= i__3 ? i__3 : s_rnge("cmpneg", i__3, 
-				"zzeknrml_", (ftnlen)2584)];
+				"zzeknrml_", (ftnlen)2588)];
 		    }
 
 /*                 Set the pointer of the first meta-token to point */
@@ -3133,10 +3137,10 @@ static integer c__0 = 0;
 /*                 meta-token's code to <expr>. */
 
 		    mtexpr[(i__1 = first - 1) < 500 && 0 <= i__1 ? i__1 : 
-			    s_rnge("mtexpr", i__1, "zzeknrml_", (ftnlen)2593)]
+			    s_rnge("mtexpr", i__1, "zzeknrml_", (ftnlen)2597)]
 			     = exprhd;
 		    mtcode[(i__1 = first - 1) < 500 && 0 <= i__1 ? i__1 : 
-			    s_rnge("mtcode", i__1, "zzeknrml_", (ftnlen)2594)]
+			    s_rnge("mtcode", i__1, "zzeknrml_", (ftnlen)2598)]
 			     = -13;
 
 /*                 Get rid of the second meta-token, and determine the */
@@ -3159,7 +3163,7 @@ static integer c__0 = 0;
 /*              This is the end of the NOT case. */
 
 	    } else if (mtcode[(i__1 = first - 1) < 500 && 0 <= i__1 ? i__1 : 
-		    s_rnge("mtcode", i__1, "zzeknrml_", (ftnlen)2621)] == -2) 
+		    s_rnge("mtcode", i__1, "zzeknrml_", (ftnlen)2625)] == -2) 
 		    {
 
 /*              We're looking at the start of a `parenthesized' */
@@ -3192,11 +3196,11 @@ static integer c__0 = 0;
 
 	    state = 3;
 	    if (popcnd[(i__1 = level - 1) < 500 && 0 <= i__1 ? i__1 : s_rnge(
-		    "popcnd", i__1, "zzeknrml_", (ftnlen)2657)] == 1) {
+		    "popcnd", i__1, "zzeknrml_", (ftnlen)2661)] == 1) {
 		state = 1;
 	    } else {
 		mstart[(i__1 = level - 1) < 500 && 0 <= i__1 ? i__1 : s_rnge(
-			"mstart", i__1, "zzeknrml_", (ftnlen)2660)] = first;
+			"mstart", i__1, "zzeknrml_", (ftnlen)2664)] = first;
 		state = 2;
 	    }
 	} else if (state == 0) {
@@ -3211,9 +3215,9 @@ static integer c__0 = 0;
 		state = 4;
 	    } else {
 		mstart[(i__1 = level - 1) < 500 && 0 <= i__1 ? i__1 : s_rnge(
-			"mstart", i__1, "zzeknrml_", (ftnlen)2678)] = start;
+			"mstart", i__1, "zzeknrml_", (ftnlen)2682)] = start;
 		popcnd[(i__1 = level - 1) < 500 && 0 <= i__1 ? i__1 : s_rnge(
-			"popcnd", i__1, "zzeknrml_", (ftnlen)2679)] = retcnd;
+			"popcnd", i__1, "zzeknrml_", (ftnlen)2683)] = retcnd;
 		state = 2;
 	    }
 	} else if (state == 1) {
@@ -3222,7 +3226,7 @@ static integer c__0 = 0;
 
 	    if (level > 1) {
 		if (popcnd[(i__1 = level - 1) < 500 && 0 <= i__1 ? i__1 : 
-			s_rnge("popcnd", i__1, "zzeknrml_", (ftnlen)2690)] == 
+			s_rnge("popcnd", i__1, "zzeknrml_", (ftnlen)2694)] == 
 			2) {
 
 /*                 If we're popping the state because we encountered a */
@@ -3240,11 +3244,11 @@ static integer c__0 = 0;
 
 		    prev = lnkprv_(&first, mtpool);
 		    if (mstart[(i__1 = level - 2) < 500 && 0 <= i__1 ? i__1 : 
-			    s_rnge("mstart", i__1, "zzeknrml_", (ftnlen)2707)]
+			    s_rnge("mstart", i__1, "zzeknrml_", (ftnlen)2711)]
 			     == prev) {
 			mstart[(i__1 = level - 2) < 500 && 0 <= i__1 ? i__1 : 
 				s_rnge("mstart", i__1, "zzeknrml_", (ftnlen)
-				2708)] = first;
+				2712)] = first;
 		    }
 		    if (metahd == prev) {
 			metahd = first;
@@ -3276,29 +3280,29 @@ static integer c__0 = 0;
 /*     conjunctions, and we'll add a list of conjunction sizes. */
 
     djnode = mtexpr[(i__1 = first - 1) < 500 && 0 <= i__1 ? i__1 : s_rnge(
-	    "mtexpr", i__1, "zzeknrml_", (ftnlen)2750)];
+	    "mtexpr", i__1, "zzeknrml_", (ftnlen)2754)];
     nconj = 0;
     nrels = 0;
     while(djnode > 0) {
 	++nconj;
 	sizes[(i__1 = nconj - 1) < 1000 && 0 <= i__1 ? i__1 : s_rnge("sizes", 
-		i__1, "zzeknrml_", (ftnlen)2757)] = 0;
+		i__1, "zzeknrml_", (ftnlen)2761)] = 0;
 	cjnode = djptrs[(i__1 = djnode - 1) < 5000 && 0 <= i__1 ? i__1 : 
-		s_rnge("djptrs", i__1, "zzeknrml_", (ftnlen)2758)];
+		s_rnge("djptrs", i__1, "zzeknrml_", (ftnlen)2762)];
 	while(cjnode > 0) {
 	    ++nrels;
 	    sizes[(i__1 = nconj - 1) < 1000 && 0 <= i__1 ? i__1 : s_rnge(
-		    "sizes", i__1, "zzeknrml_", (ftnlen)2763)] = sizes[(i__2 =
+		    "sizes", i__1, "zzeknrml_", (ftnlen)2767)] = sizes[(i__2 =
 		     nconj - 1) < 1000 && 0 <= i__2 ? i__2 : s_rnge("sizes", 
-		    i__2, "zzeknrml_", (ftnlen)2763)] + 1;
+		    i__2, "zzeknrml_", (ftnlen)2767)] + 1;
 	    relptr = cjptrs[(i__1 = cjnode - 1) < 5000 && 0 <= i__1 ? i__1 : 
-		    s_rnge("cjptrs", i__1, "zzeknrml_", (ftnlen)2764)];
+		    s_rnge("cjptrs", i__1, "zzeknrml_", (ftnlen)2768)];
 	    tabptr = rels[(i__1 = relptr * 3 - 3) < 15000 && 0 <= i__1 ? i__1 
-		    : s_rnge("rels", i__1, "zzeknrml_", (ftnlen)2766)];
+		    : s_rnge("rels", i__1, "zzeknrml_", (ftnlen)2770)];
 	    op = rels[(i__1 = relptr * 3 - 2) < 15000 && 0 <= i__1 ? i__1 : 
-		    s_rnge("rels", i__1, "zzeknrml_", (ftnlen)2767)];
+		    s_rnge("rels", i__1, "zzeknrml_", (ftnlen)2771)];
 	    rhsptr = rels[(i__1 = relptr * 3 - 1) < 15000 && 0 <= i__1 ? i__1 
-		    : s_rnge("rels", i__1, "zzeknrml_", (ftnlen)2768)];
+		    : s_rnge("rels", i__1, "zzeknrml_", (ftnlen)2772)];
 
 /*           Add a constraint descriptor to the encoded query.  The */
 /*           structure of these descriptors is documented in the include */
@@ -3317,13 +3321,13 @@ static integer c__0 = 0;
 	    for (i__ = 1; i__ <= 6; ++i__) {
 		appndi_(&dscbuf[(i__1 = i__ + tabptr * 7 - 8) < 35000 && 0 <= 
 			i__1 ? i__1 : s_rnge("dscbuf", i__1, "zzeknrml_", (
-			ftnlen)2787)], eqryi);
+			ftnlen)2791)], eqryi);
 	    }
 	    colptr = lnknxt_(&tabptr, dspool);
 	    for (i__ = 1; i__ <= 6; ++i__) {
 		appndi_(&dscbuf[(i__1 = i__ + colptr * 7 - 8) < 35000 && 0 <= 
 			i__1 ? i__1 : s_rnge("dscbuf", i__1, "zzeknrml_", (
-			ftnlen)2793)], eqryi);
+			ftnlen)2797)], eqryi);
 	    }
 
 /*           What happens next depends on whether the query has a null */
@@ -3372,7 +3376,7 @@ static integer c__0 = 0;
 		appndi_(&op, eqryi);
 		if (dscbuf[(i__1 = rhsptr * 7 - 1) < 35000 && 0 <= i__1 ? 
 			i__1 : s_rnge("dscbuf", i__1, "zzeknrml_", (ftnlen)
-			2851)] == -8) {
+			2855)] == -8) {
 
 /*                 The RHS contains a value.  Append the descriptor */
 /*                 for the value, then pad the constraint descriptor. */
@@ -3380,7 +3384,7 @@ static integer c__0 = 0;
 		    for (i__ = 1; i__ <= 6; ++i__) {
 			appndi_(&dscbuf[(i__1 = i__ + rhsptr * 7 - 8) < 35000 
 				&& 0 <= i__1 ? i__1 : s_rnge("dscbuf", i__1, 
-				"zzeknrml_", (ftnlen)2857)], eqryi);
+				"zzeknrml_", (ftnlen)2861)], eqryi);
 		    }
 		    for (i__ = 1; i__ <= 6; ++i__) {
 			appndi_(&c__0, eqryi);
@@ -3398,13 +3402,13 @@ static integer c__0 = 0;
 		    for (i__ = 1; i__ <= 6; ++i__) {
 			appndi_(&dscbuf[(i__1 = i__ + rhsptr * 7 - 8) < 35000 
 				&& 0 <= i__1 ? i__1 : s_rnge("dscbuf", i__1, 
-				"zzeknrml_", (ftnlen)2877)], eqryi);
+				"zzeknrml_", (ftnlen)2881)], eqryi);
 		    }
 		    colptr = lnknxt_(&rhsptr, dspool);
 		    for (i__ = 1; i__ <= 6; ++i__) {
 			appndi_(&dscbuf[(i__1 = i__ + colptr * 7 - 8) < 35000 
 				&& 0 <= i__1 ? i__1 : s_rnge("dscbuf", i__1, 
-				"zzeknrml_", (ftnlen)2883)], eqryi);
+				"zzeknrml_", (ftnlen)2887)], eqryi);
 		    }
 
 /*                 Set the descriptor's type by updating the reserved */
@@ -3436,7 +3440,7 @@ static integer c__0 = 0;
     i__1 = nconj;
     for (i__ = 1; i__ <= i__1; ++i__) {
 	appndi_(&sizes[(i__2 = i__ - 1) < 1000 && 0 <= i__2 ? i__2 : s_rnge(
-		"sizes", i__2, "zzeknrml_", (ftnlen)2920)], eqryi);
+		"sizes", i__2, "zzeknrml_", (ftnlen)2924)], eqryi);
     }
     chkout_("ZZEKNRML", (ftnlen)8);
     return 0;

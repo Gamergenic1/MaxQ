@@ -128,6 +128,10 @@ static integer c__0 = 0;
 
 /* $ Version */
 
+/* -    SPICELIB Version 2.6.0, 28-NOV-2021 (BVS) */
+
+/*        Updated for MAC-OSX-M1-64BIT-CLANG_C. */
+
 /* -    SPICELIB Version 2.5.0, 10-MAR-2014 (BVS) */
 
 /*        Updated for SUN-SOLARIS-64BIT-INTEL. */
@@ -338,7 +342,7 @@ static integer c__0 = 0;
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     MARKER     I   A substring in the long error message to be */
 /*                    replaced. */
@@ -347,17 +351,17 @@ static integer c__0 = 0;
 
 /* $ Detailed_Input */
 
-/*     MARKER     is a character string that marks a position in */
-/*                the long error message where a file name is to be */
-/*                substituted.  Leading and trailing blanks in MARKER */
-/*                are not significant. */
+/*     MARKER   is a character string that marks a position in */
+/*              the long error message where a file name is to be */
+/*              substituted. Leading and trailing blanks in MARKER */
+/*              are not significant. */
 
-/*                Case IS significant;  'XX' is considered to be */
-/*                a different marker from 'xx'. */
+/*              Case IS significant; 'XX' is considered to be */
+/*              a different marker from 'xx'. */
 
-/*     HANDLE     is the DAF/DAS handle associated with the file of */
-/*                interest.  HANDLE must be associated with a currently */
-/*                loaded DAF or DAS file. */
+/*     HANDLE   is the DAF/DAS handle associated with the file of */
+/*              interest. HANDLE must be associated with a currently */
+/*              loaded DAF or DAS file. */
 
 /* $ Detailed_Output */
 
@@ -365,27 +369,26 @@ static integer c__0 = 0;
 
 /* $ Parameters */
 
-/*     FILEN      is the maximum file name length that can be */
-/*                accommodated by this routine.  Currently this */
-/*                parameter is defined in the include file */
-/*                zzddhman.inc. */
+/*     FILEN    is the maximum file name length that can be */
+/*              accommodated by this routine. Currently this */
+/*              parameter is defined in the include file */
+/*              zzddhman.inc. */
 
 /* $ Exceptions */
 
 /*     Error free. */
 
+/*     1)  If HANDLE refers to a scratch DAS file, the string inserted */
+/*         into the long error message is */
 
-/*     1) If HANDLE refers to a scratch DAS file, the string inserted */
-/*        into the long error message is */
+/*            'DAS SCRATCH FILE' */
 
-/*           'DAS SCRATCH FILE' */
+/*     2)  If HANDLE is not associated with a loaded DAF or DAS file, */
+/*         the string inserted into the long error message is: */
 
-/*     2) If HANDLE is not associated with a loaded DAF or DAS file, */
-/*        the string inserted into the long error message is: */
+/*            '<No name found for handle #>' */
 
-/*           '<No name found for handle #>' */
-
-/*        where the handle number is substituted for the marker '#'. */
+/*         where the handle number is substituted for the marker '#'. */
 
 /* $ Files */
 
@@ -412,8 +415,8 @@ static integer c__0 = 0;
 
 /* $ Restrictions */
 
-/*     1) The supported filename length is limited by the parameter */
-/*        FILEN. */
+/*     1)  The supported filename length is limited by the parameter */
+/*         FILEN. */
 
 /* $ Literature_References */
 
@@ -421,9 +424,14 @@ static integer c__0 = 0;
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.0.2, 02-JUN-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.0.1, 05-FEB-2015 (NJB) */
 

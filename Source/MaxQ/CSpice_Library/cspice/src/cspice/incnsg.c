@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      INCNSG ( Intersection of cone and line segment ) */
+/* $Procedure INCNSG ( Intersection of cone and line segment ) */
 /* Subroutine */ int incnsg_(doublereal *apex, doublereal *axis, doublereal *
 	angle, doublereal *endpt1, doublereal *endpt2, integer *nxpts, 
 	doublereal *xpt1, doublereal *xpt2)
@@ -128,7 +128,7 @@
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     APEX       I   Apex of cone. */
 /*     AXIS       I   Axis of cone. */
@@ -141,48 +141,48 @@
 
 /* $ Detailed_Input */
 
-/*     APEX       is the apex (tip) of the cone. In this routine's */
-/*                documentation, we'll consider the cone to be a */
-/*                semi-infinite pyramid with circular cross-section. In */
-/*                some contexts, this object is called one "nappe" of */
-/*                the complete cone. */
+/*     APEX     is the apex (tip) of the cone. In this routine's */
+/*              documentation, we'll consider the cone to be a */
+/*              semi-infinite pyramid with circular cross-section. In */
+/*              some contexts, this object is called one "nappe" of */
+/*              the complete cone. */
 
-/*     AXIS       is an axis vector of the cone. */
+/*     AXIS     is an axis vector of the cone. */
 
-/*     ANGLE      is the angular separation from AXIS of the rays */
-/*                comprising the cone. Let the notation */
+/*     ANGLE    is the angular separation from AXIS of the rays */
+/*              comprising the cone. Let the notation */
 
-/*                   < A, B > */
+/*                 < A, B > */
 
-/*                denote the dot product of vectors A and B, and let */
+/*              denote the dot product of vectors A and B, and let */
 
-/*                   ||A|| */
+/*                 ||A|| */
 
-/*                denote the norm of vector A. Then the cone is the set */
-/*                of points */
+/*              denote the norm of vector A. Then the cone is the set */
+/*              of points */
 
-/*                             X-APEX       AXIS */
-/*                   { X:  < ----------,  -------- >  =  cos(ANGLE) } */
-/*                           ||X-APEX||   ||AXIS|| */
+/*                           X-APEX       AXIS */
+/*                 { X:  < ----------,  -------- >  =  cos(ANGLE) } */
+/*                         ||X-APEX||   ||AXIS|| */
 
 
 /*     ENDPT1, */
-/*     ENDPT2     are endpoints of a line segment. These points */
-/*                must be distinct. */
+/*     ENDPT2   are endpoints of a line segment. These points */
+/*              must be distinct. */
 
 /* $ Detailed_Output */
 
-/*     NXPTS      is the number of points of intersection of the input */
-/*                line segment and cone. */
+/*     NXPTS    is the number of points of intersection of the input */
+/*              line segment and cone. */
 
-/*     XPT1       is the point of intersection of the segment and cone */
-/*                that is closest to ENDPT1, if an intersection exists. */
-/*                If there are no intersections, XPT1 is undefined. */
+/*     XPT1     is the point of intersection of the segment and cone */
+/*              that is closest to ENDPT1, if an intersection exists. */
+/*              If there are no intersections, XPT1 is undefined. */
 
-/*     XPT2       is the point of intersection of the segment and cone */
-/*                that is farthest from ENDPT1, if two points of */
-/*                intersection exist. If there are not two */
-/*                intersections, XPT2 is undefined. */
+/*     XPT2     is the point of intersection of the segment and cone */
+/*              that is farthest from ENDPT1, if two points of */
+/*              intersection exist. If there are not two */
+/*              intersections, XPT2 is undefined. */
 
 /* $ Parameters */
 
@@ -191,13 +191,13 @@
 /* $ Exceptions */
 
 /*     1)  If AXIS is the zero vector, the error SPICE(ZEROVECTOR) */
-/*         will be signaled. */
+/*         is signaled. */
 
 /*     2)  If ANGLE is less than zero, the error SPICE(INVALIDANGLE) */
-/*         will be signaled. */
+/*         is signaled. */
 
 /*     3)  If ENDPT1 and ENDPT2 coincide, the error */
-/*         SPICE(ENDPOINTSMATCH) will be signaled. */
+/*         SPICE(ENDPOINTSMATCH) is signaled. */
 
 /* $ Files */
 
@@ -212,7 +212,7 @@
 
 /* $ Examples */
 
-/*     The numerical results shown for these examples may differ across */
+/*     The numerical results shown for this example may differ across */
 /*     platforms. The results depend on the SPICE kernels used as input */
 /*     (if any), the compiler and supporting libraries, and the machine */
 /*     specific arithmetic implementation. */
@@ -236,7 +236,7 @@
 /*        Example code begins here. */
 
 
-/*              PROGRAM EX1 */
+/*              PROGRAM INCNSG_EX1 */
 /*              IMPLICIT NONE */
 /*        C */
 /*        C     SPICELIB functions */
@@ -301,8 +301,8 @@
 /*              END */
 
 
-/*     When this program was executed on a PC/Linux/gfortran/64-bit */
-/*     platform, the output was: */
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
 
 
 /*        Apex:           0.00000000   0.00000000   0.00000000 */
@@ -331,11 +331,16 @@
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
 
 /* $ Version */
 
-/* -    SPICELIB Version 1.0.0 26-OCT-2016 (NJB) */
+/* -    SPICELIB Version 1.0.1, 06-JUL-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
+
+/* -    SPICELIB Version 1.0.0, 26-OCT-2016 (NJB) */
 
 /* -& */
 /* $ Index_Entries */
@@ -739,17 +744,17 @@
 	    frame_(uaxis, x, y);
 	    for (i__ = 1; i__ <= 3; ++i__) {
 		xform[(i__1 = i__ * 3 - 3) < 9 && 0 <= i__1 ? i__1 : s_rnge(
-			"xform", i__1, "incnsg_", (ftnlen)831)] = x[(i__2 = 
+			"xform", i__1, "incnsg_", (ftnlen)837)] = x[(i__2 = 
 			i__ - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge("x", i__2, 
-			"incnsg_", (ftnlen)831)];
+			"incnsg_", (ftnlen)837)];
 		xform[(i__1 = i__ * 3 - 2) < 9 && 0 <= i__1 ? i__1 : s_rnge(
-			"xform", i__1, "incnsg_", (ftnlen)832)] = y[(i__2 = 
+			"xform", i__1, "incnsg_", (ftnlen)838)] = y[(i__2 = 
 			i__ - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge("y", i__2, 
-			"incnsg_", (ftnlen)832)];
+			"incnsg_", (ftnlen)838)];
 		xform[(i__1 = i__ * 3 - 1) < 9 && 0 <= i__1 ? i__1 : s_rnge(
-			"xform", i__1, "incnsg_", (ftnlen)833)] = uaxis[(i__2 
+			"xform", i__1, "incnsg_", (ftnlen)839)] = uaxis[(i__2 
 			= i__ - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge("uaxis", 
-			i__2, "incnsg_", (ftnlen)833)];
+			i__2, "incnsg_", (ftnlen)839)];
 	    }
 	    mxv_(xform, off1, xoff1);
 	    mxv_(xform, off2, xoff2);

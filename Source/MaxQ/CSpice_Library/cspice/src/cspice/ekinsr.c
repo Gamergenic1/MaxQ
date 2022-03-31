@@ -14,7 +14,7 @@ static integer c__3 = 3;
 static logical c_false = FALSE_;
 static integer c__1 = 1;
 
-/* $Procedure      EKINSR ( EK, insert record into segment ) */
+/* $Procedure EKINSR ( EK, insert record into segment ) */
 /* Subroutine */ int ekinsr_(integer *handle, integer *segno, integer *recno)
 {
     /* System generated locals */
@@ -697,7 +697,7 @@ static integer c__1 = 1;
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     I   File handle. */
 /*     SEGNO      I   Segment number. */
@@ -705,24 +705,24 @@ static integer c__1 = 1;
 
 /* $ Detailed_Input */
 
-/*     HANDLE         is a file handle of an EK open for write access. */
+/*     HANDLE   is a file handle of an EK open for write access. */
 
-/*     SEGNO          is the number of the segment to which the record */
-/*                    is to be added. */
+/*     SEGNO    is the number of the segment to which the record */
+/*              is to be added. */
 
-/*     RECNO          is the index of the new record.  RECNO must be */
-/*                    in the range 1 : (NREC+1), where NREC is the */
-/*                    number of records in the segment prior to the */
-/*                    insertion.  If RECNO is equal to NREC+1, the */
-/*                    new record is appended.  Otherwise, the new */
-/*                    record has the ordinal position specified by */
-/*                    RECNO, and the records previously occupying */
-/*                    positions RECNO : NREC have their indexes */
-/*                    incremented by 1. */
+/*     RECNO    is the index of the new record. RECNO must be */
+/*              in the range 1 : (NREC+1), where NREC is the */
+/*              number of records in the segment prior to the */
+/*              insertion. If RECNO is equal to NREC+1, the */
+/*              new record is appended. Otherwise, the new */
+/*              record has the ordinal position specified by */
+/*              RECNO, and the records previously occupying */
+/*              positions RECNO : NREC have their indexes */
+/*              incremented by 1. */
 
 /* $ Detailed_Output */
 
-/*     None.  See the $Particulars section for a description of the */
+/*     None. See the $Particulars section for a description of the */
 /*     effect of this routine. */
 
 /* $ Parameters */
@@ -731,49 +731,49 @@ static integer c__1 = 1;
 
 /* $ Exceptions */
 
-/*     1)  If HANDLE is invalid, the error will be diagnosed by routines */
-/*         called by this routine.  The file will not be modified. */
+/*     1)  If HANDLE is invalid, an error is signaled by a routine in the */
+/*         call tree of this routine. The file will not be modified. */
 
 /*     2)  If SEGNO is out of range, the error SPICE(INVALIDINDEX) */
-/*         will be signalled.  The file will not be modified. */
+/*         is signaled. The file will not be modified. */
 
 /*     3)  If RECNO is out of range, the error SPICE(INVALIDINDEX) */
-/*         will be signalled.  The file will not be modified. */
+/*         is signaled. The file will not be modified. */
 
 /*     4)  If an I/O error occurs while reading or writing the indicated */
-/*         file, the error will be diagnosed by routines called by this */
-/*         routine.  The file may be corrupted. */
+/*         file, the error is signaled by a routine in the call tree of */
+/*         this routine. The file may be corrupted. */
 
 /* $ Files */
 
-/*     See the EK Required Reading for a discussion of the EK file */
+/*     See the EK Required Reading ek.req for a discussion of the EK file */
 /*     format. */
 
 /* $ Particulars */
 
-/*     This routine operates by side effects:  It adds a new, empty */
+/*     This routine operates by side effects: It adds a new, empty */
 /*     record structure to an EK segment at a specified ordinal position. */
 
 /*     After a record has been inserted into a segment by this routine, */
 /*     the record must be populated with data using the EKACEx */
-/*     routines.  EKs are valid only when all of their column entries */
+/*     routines. EKs are valid only when all of their column entries */
 /*     are initialized. */
 
 /*     To append a record to a segment, use the routine EKAPPR. */
 
 /*     This routine cannot be used with the "fast write" suite of */
-/*     routines.  See the EK Required Reading for a discussion of the */
-/*     fast writers. */
+/*     routines. See the EK Required Reading ek.req for a discussion of */
+/*     the fast writers. */
 
 /*     When a record is inserted into an EK file that is not shadowed, */
-/*     the status of the record starts out set to OLD.  The status */
+/*     the status of the record starts out set to OLD. The status */
 /*     does not change when data is added to the record. */
 
 /*     If the target EK is shadowed, the new record will be given the */
-/*     status NEW.  Updating column values in the record does not change */
-/*     its status.  When changes are committed, the status is set to OLD. */
+/*     status NEW. Updating column values in the record does not change */
+/*     its status. When changes are committed, the status is set to OLD. */
 /*     If a rollback is performed before changes are committed, the */
-/*     record is deleted.  Closing the target file without committing */
+/*     record is deleted. Closing the target file without committing */
 /*     changes implies a rollback. */
 
 /* $ Examples */
@@ -782,7 +782,7 @@ static integer c__1 = 1;
 /*         specified ordinal position. */
 
 /*         Suppose we have an E-kernel named ORDER_DB.EK which contains */
-/*         records of orders for data products.  The E-kernel has a */
+/*         records of orders for data products. The E-kernel has a */
 /*         table called DATAORDERS that consists of the set of columns */
 /*         listed below: */
 
@@ -798,7 +798,7 @@ static integer c__1 = 1;
 /*               COST            DOUBLE PRECISION */
 
 /*         The order database also has a table of items that have been */
-/*         ordered.  The columns of this table are shown below: */
+/*         ordered. The columns of this table are shown below: */
 
 /*            DATAITEMS */
 
@@ -861,9 +861,9 @@ static integer c__1 = 1;
 
 /*            C */
 /*            C     Note that the names of the routines called */
-/*            C     correspond to the data types of the columns:  the */
+/*            C     correspond to the data types of the columns: the */
 /*            C     last letter of the routine name is C, I, or D, */
-/*            C     depending on the data type.  Time values are */
+/*            C     depending on the data type. Time values are */
 /*            C     converted to ET for storage. */
 /*            C */
 /*                  CALL EKACEI ( HANDLE, SEGNO,  RECNO, 'ORDER_ID', */
@@ -901,13 +901,20 @@ static integer c__1 = 1;
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
 
 /* $ Version */
 
-/* -    SPICELIB Version 1.0.1, 09-JAN-2002 (NJB) */
+/* -    SPICELIB Version 1.1.0, 25-AUG-2021 (JDR) */
 
-/*        Documentation change:  instances of the phrase "fast load" */
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
+
+/* -    SPICELIB Version 1.0.0, 09-JAN-2002 (NJB) */
+
+/*        Documentation change: instances of the phrase "fast load" */
 /*        were replaced with "fast write." */
 
 /* -    Beta Version 1.0.0, 19-DEC-1995 (NJB) */

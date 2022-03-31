@@ -3,10 +3,10 @@
 -Procedure matchi_c ( Match string against wildcard template )
 
 -Abstract
- 
-    Determine whether a string is matched by a template containing 
-    wild cards.  The pattern comparison is case-insensitive.
- 
+
+   Determine whether a string is matched by a template containing
+   wild cards. The pattern comparison is case-insensitive.
+
 -Disclaimer
 
    THIS SOFTWARE AND ANY RELATED MATERIALS WERE CREATED BY THE
@@ -33,13 +33,14 @@
    ACTIONS OF RECIPIENT IN THE USE OF THE SOFTWARE.
 
 -Required_Reading
- 
-    None. 
- 
+
+   None.
+
 -Keywords
- 
-    CHARACTER,  COMPARE 
- 
+
+   CHARACTER
+   COMPARE
+
 */
 
    #include "SpiceUsr.h"
@@ -51,125 +52,131 @@
                            ConstSpiceChar      * templ,
                            SpiceChar             wstr,
                            SpiceChar             wchr   )
+
 /*
 
 -Brief_I/O
- 
-    VARIABLE  I/O  DESCRIPTION 
-    --------  ---  -------------------------------------------------- 
-    string     I   String to be tested. 
-    templ      I   Template (with wild cards) to test against string. 
-    wstr       I   Wild string token. 
-    wchr       I   Wild character token. 
-    
-    The function returns the value SPICETRUE if string matches templ,
-    SPICEFALSE if not.
- 
+
+   VARIABLE  I/O  DESCRIPTION
+   --------  ---  --------------------------------------------------
+   string     I   String to be tested.
+   templ      I   Template (with wild cards) to test against string.
+   wstr       I   Wild string token.
+   wchr       I   Wild character token.
+
+   The function returns the value SPICETRUE if string matches templ,
+   SPICEFALSE if not.
+
 -Detailed_Input
- 
-    string      is the input character string to be tested for 
-                a match against the input template. Leading and 
-                trailing blanks are ignored. 
- 
-    templ       is the input template to be tested for a match 
-                against the input string. TEMPL may contain wild 
-                cards. Leading and trailing blanks are ignored. 
- 
-    wstr        is the wild string token used in the input template. 
-                The wild string token may represent from zero to 
-                any number of characters. 
- 
-    wchr        is the wild character token used in the input 
-                template. The wild character token represents 
-                exactly one character. 
- 
+
+   string      is the input character string to be tested for
+               a match against the input template. Leading and
+               trailing blanks are ignored.
+
+   templ       is the input template to be tested for a match
+               against the input string. TEMPL may contain wild
+               cards. Leading and trailing blanks are ignored.
+
+   wstr        is the wild string token used in the input template.
+               The wild string token may represent from zero to
+               any number of characters.
+
+   wchr        is the wild character token used in the input
+               template. The wild character token represents
+               exactly one character.
+
 -Detailed_Output
- 
-    The function returns SPICETRUE when the input string matches the
-    input template, and SPICEFALSE otherwise. The string and template
-    match whenever the template can expand (through replacement of its
-    wild cards) to become the input string.
- 
+
+   The function returns SPICETRUE when the input string matches the
+   input template, and SPICEFALSE otherwise. The string and template
+   match whenever the template can expand (through replacement of its
+   wild cards) to become the input string.
+
 -Parameters
- 
-   None. 
- 
+
+   None.
+
+-Exceptions
+
+   1)  If any of the `string' or `templ' input string pointers is
+       null, the error SPICE(NULLPOINTER) is signaled. The function
+       returns the value SPICEFALSE.
+
+   2)  If any of the `string' or `templ' input strings has zero
+       length, the error SPICE(EMPTYSTRING) is signaled. The function
+       returns the value SPICEFALSE.
+
+-Files
+
+   None.
+
 -Particulars
- 
-   matchi_c ignores leading and trailing blanks in both the string 
-   and the template. All of the following are equivalent:  they 
-   all return SPICETRUE. 
+
+   matchi_c ignores leading and trailing blanks in both the string
+   and the template. All of the following are equivalent: they
+   all return SPICETRUE.
 
       #include "SpiceUsr.h"
             .
             .
             .
-      matchi_c ( "ALCATRAZ",       "A*Z",      '*', '%' ); 
-      matchi_c ( "  ALCATRAZ  ",   "a*z",      '*', '%' ); 
-      matchi_c ( "alcatraz",       "  A*Z  ",  '*', '%' ); 
-      matchi_c ( "  ALCATRAZ  ",   "  A*Z  ",  '*', '%' ); 
+      matchi_c ( "ALCATRAZ",       "A*Z",      '*', '%' );
+      matchi_c ( "  ALCATRAZ  ",   "a*z",      '*', '%' );
+      matchi_c ( "alcatraz",       "  A*Z  ",  '*', '%' );
+      matchi_c ( "  ALCATRAZ  ",   "  A*Z  ",  '*', '%' );
 
-   matchi_c is case-insensitive:  uppercase characters match 
-   lowercase characters, and vice versa.  Wild characters match 
-   characters of both cases. 
+   matchi_c is case-insensitive:  uppercase characters match
+   lowercase characters, and vice versa. Wild characters match
+   characters of both cases.
 
--Exceptions
- 
-   1) If either the input string pointer is null, the error 
-      SPICE(NULLPOINTER) will be signaled.  The function will
-      return SPICEFALSE.
-      
-   2) If either input string has length zero, the error 
-      SPICE(EMPTYSTRING) will be signaled.  The function will
-      return SPICEFALSE.
-      
 -Examples
- 
-   Let 
-         string  = "  ABCDEFGHIJKLMNOPQRSTUVWXYZ  " 
-         wstr    = '*' 
-         wchr    = '%' 
 
-   Then 
-         if TEMPL is  "*A*"        matchi_c is SPICETRUE 
-                      "A%D*"                     SPICEFALSE 
-                      "A%C*"                   SPICETRUE 
-                      "%A*"                      SPICEFALSE 
-                      "%%CD*Z"                 SPICETRUE 
-                      "%%CD"                     SPICEFALSE 
-                      "A*MN*Y*Z"               SPICETRUE 
-                      "A*MN*Y*%Z"                SPICEFALSE 
+   Let
+         string  = "  ABCDEFGHIJKLMNOPQRSTUVWXYZ  "
+         wstr    = '*'
+         wchr    = '%'
+
+   Then
+         if TEMPL is  "*A*"        matchi_c is SPICETRUE
+                      "A%D*"                     SPICEFALSE
+                      "A%C*"                   SPICETRUE
+                      "%A*"                      SPICEFALSE
+                      "%%CD*Z"                 SPICETRUE
+                      "%%CD"                     SPICEFALSE
+                      "A*MN*Y*Z"               SPICETRUE
+                      "A*MN*Y*%Z"                SPICEFALSE
                       "*BCD*Z*"                SPICETRUE
                       "*bdc*z*"                  SPICEFALSE
-                      " *bcD*Z*  "             SPICETRUE 
- 
+                      " *bcD*Z*  "             SPICETRUE
+
 -Restrictions
- 
-   None. 
- 
--Files
- 
-    None. 
- 
+
+   None.
+
 -Literature_References
- 
-    None. 
- 
+
+   None.
+
 -Author_and_Institution
- 
-    N.J. Bachman    (JPL)
-    W.L. Taber      (JPL) 
-    I.M. Underwood  (JPL) 
- 
+
+   N.J. Bachman        (JPL)
+   J. Diaz del Rio     (ODC Space)
+   W.L. Taber          (JPL)
+   I.M. Underwood      (JPL)
+
 -Version
- 
+
+   -CSPICE Version 1.0.1, 04-AUG-2021 (JDR)
+
+       Edited the header to comply with NAIF standard.
+
    -CSPICE Version 1.0.0, 17-AUG-1999 (NJB) (WLT) (IMU)
 
 -Index_Entries
- 
-   match string against wildcard template 
-   test whether a string matches a wildcard template 
- 
+
+   match string against wildcard template
+   test whether a string matches a wildcard template
+
 -&
 */
 
@@ -190,7 +197,7 @@
    /*
    Call the f2c'd routine if we got this far.
    */
-   
+
    return (   matchi_ (  ( char    * ) string,
                          ( char    * ) templ,
                          ( char    * ) &wstr,
@@ -199,6 +206,6 @@
                          ( ftnlen    ) strlen(templ),
                          ( ftnlen    ) 1,
                          ( ftnlen    ) 1              )   );
-                        
+
 
 } /* End matchi_c */

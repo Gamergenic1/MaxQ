@@ -3,51 +3,51 @@
 -Procedure dskxv_c ( DSK, ray-surface intercept, vectorized )
 
 -Abstract
- 
-   Compute ray-surface intercepts for a set of rays, using data 
-   provided by multiple loaded DSK segments. 
- 
+
+   Compute ray-surface intercepts for a set of rays, using data
+   provided by multiple loaded DSK segments.
+
 -Disclaimer
- 
-   THIS SOFTWARE AND ANY RELATED MATERIALS WERE CREATED BY THE 
-   CALIFORNIA INSTITUTE OF TECHNOLOGY (CALTECH) UNDER A U.S. 
-   GOVERNMENT CONTRACT WITH THE NATIONAL AERONAUTICS AND SPACE 
-   ADMINISTRATION (NASA). THE SOFTWARE IS TECHNOLOGY AND SOFTWARE 
-   PUBLICLY AVAILABLE UNDER U.S. EXPORT LAWS AND IS PROVIDED "AS-IS" 
-   TO THE RECIPIENT WITHOUT WARRANTY OF ANY KIND, INCLUDING ANY 
-   WARRANTIES OF PERFORMANCE OR MERCHANTABILITY OR FITNESS FOR A 
-   PARTICULAR USE OR PURPOSE (AS SET FORTH IN UNITED STATES UCC 
-   SECTIONS 2312-2313) OR FOR ANY PURPOSE WHATSOEVER, FOR THE 
-   SOFTWARE AND RELATED MATERIALS, HOWEVER USED. 
- 
-   IN NO EVENT SHALL CALTECH, ITS JET PROPULSION LABORATORY, OR NASA 
-   BE LIABLE FOR ANY DAMAGES AND/OR COSTS, INCLUDING, BUT NOT 
-   LIMITED TO, INCIDENTAL OR CONSEQUENTIAL DAMAGES OF ANY KIND, 
-   INCLUDING ECONOMIC DAMAGE OR INJURY TO PROPERTY AND LOST PROFITS, 
-   REGARDLESS OF WHETHER CALTECH, JPL, OR NASA BE ADVISED, HAVE 
-   REASON TO KNOW, OR, IN FACT, SHALL KNOW OF THE POSSIBILITY. 
- 
-   RECIPIENT BEARS ALL RISK RELATING TO QUALITY AND PERFORMANCE OF 
-   THE SOFTWARE AND ANY RELATED MATERIALS, AND AGREES TO INDEMNIFY 
-   CALTECH AND NASA FOR ALL THIRD-PARTY CLAIMS RESULTING FROM THE 
-   ACTIONS OF RECIPIENT IN THE USE OF THE SOFTWARE. 
- 
+
+   THIS SOFTWARE AND ANY RELATED MATERIALS WERE CREATED BY THE
+   CALIFORNIA INSTITUTE OF TECHNOLOGY (CALTECH) UNDER A U.S.
+   GOVERNMENT CONTRACT WITH THE NATIONAL AERONAUTICS AND SPACE
+   ADMINISTRATION (NASA). THE SOFTWARE IS TECHNOLOGY AND SOFTWARE
+   PUBLICLY AVAILABLE UNDER U.S. EXPORT LAWS AND IS PROVIDED "AS-IS"
+   TO THE RECIPIENT WITHOUT WARRANTY OF ANY KIND, INCLUDING ANY
+   WARRANTIES OF PERFORMANCE OR MERCHANTABILITY OR FITNESS FOR A
+   PARTICULAR USE OR PURPOSE (AS SET FORTH IN UNITED STATES UCC
+   SECTIONS 2312-2313) OR FOR ANY PURPOSE WHATSOEVER, FOR THE
+   SOFTWARE AND RELATED MATERIALS, HOWEVER USED.
+
+   IN NO EVENT SHALL CALTECH, ITS JET PROPULSION LABORATORY, OR NASA
+   BE LIABLE FOR ANY DAMAGES AND/OR COSTS, INCLUDING, BUT NOT
+   LIMITED TO, INCIDENTAL OR CONSEQUENTIAL DAMAGES OF ANY KIND,
+   INCLUDING ECONOMIC DAMAGE OR INJURY TO PROPERTY AND LOST PROFITS,
+   REGARDLESS OF WHETHER CALTECH, JPL, OR NASA BE ADVISED, HAVE
+   REASON TO KNOW, OR, IN FACT, SHALL KNOW OF THE POSSIBILITY.
+
+   RECIPIENT BEARS ALL RISK RELATING TO QUALITY AND PERFORMANCE OF
+   THE SOFTWARE AND ANY RELATED MATERIALS, AND AGREES TO INDEMNIFY
+   CALTECH AND NASA FOR ALL THIRD-PARTY CLAIMS RESULTING FROM THE
+   ACTIONS OF RECIPIENT IN THE USE OF THE SOFTWARE.
+
 -Required_Reading
- 
-   CK 
-   DSK 
-   FRAMES 
-   PCK 
-   SPK 
-   TIME 
- 
+
+   CK
+   DSK
+   FRAMES
+   PCK
+   SPK
+   TIME
+
 -Keywords
- 
-   GEOMETRY 
-   INTERCEPT 
-   SURFACE 
-   TOPOGRAPHY 
- 
+
+   GEOMETRY
+   INTERCEPT
+   SURFACE
+   TOPOGRAPHY
+
 */
 
    #include "SpiceUsr.h"
@@ -69,398 +69,418 @@
                   ConstSpiceDouble     dirarr[][3],
                   SpiceDouble          xptarr[][3],
                   SpiceBoolean         fndarr[]     )
+
 /*
 
 -Brief_I/O
- 
-   VARIABLE  I/O  DESCRIPTION 
-   --------  ---  -------------------------------------------------- 
-   pri        I   Data prioritization flag.  
-   target     I   Target body name. 
-   nsurf      I   Number of surface IDs in list. 
-   srflst     I   Surface ID list. 
-   et         I   Epoch, expressed as seconds past J2000 TDB. 
-   fixref     I   Name of target body-fixed reference frame. 
-   nrays      I   Number of rays. 
-   vtxarr     I   Array of vertices of rays. 
-   dirarr     I   Array of direction vectors of rays. 
-   xptarr     O   Intercept point array. 
-   fndarr     O   Found flag array. 
- 
--Detailed_Input
- 
-   pri        is a logical flag indicating whether to perform 
-              a prioritized or unprioritized DSK segment search. 
-              In an unprioritized search, no segment masks another: 
-              data from all specified segments are used to   
-              define the surface of interest. 
- 
-              The search is unprioritized if and only if `pri'  
-              is set to SPICEFALSE. In the N0066 SPICE Toolkit, this 
-              is the only allowed value. 
- 
- 
-   target     is the name of the target body on which a surface 
-              intercept is sought. 
- 
- 
-   nsurf, 
-   srflst     are, respectively, a count of surface ID codes in a 
-              list and an containing the list. Only DSK segments for 
-              for the body designated by `target' and having surface 
-              IDs in this list will considered in the intercept 
-              computation. If the list is empty, all DSK segments 
-              for `target' will be considered. 
- 
- 
-   et         is the epoch of the intersection computation, 
-              expressed as seconds past J2000 TDB. This epoch is 
-              used only for DSK segment selection. Segments used 
-              the intercept computation must include `et' in their 
-              time coverage intervals. 
- 
- 
-   fixref     is the name of a body-fixed, body-centered reference 
-              frame associated with the target. The input ray vectors 
-              are specified in this frame, as is the output intercept 
-              point. 
-     
-              The frame designated by `fixref' must have a fixed 
-              orientation relative to the frame of any DSK segment 
-              used in the computation. 
- 
 
-   nrays, 
-   vtxarr,  
-   dirarr     are, respectively, a count of rays, an array containing 
-              the vertices of rays, and an array containing the 
-              direction vectors of the rays. 
- 
-              The ray's vertices are considered to represent offsets 
-              from the center of the target body. 
- 
-              The rays' vertices and direction vectors are 
-              represented in the reference frame designated by 
-              `fixref'. 
-    
+   VARIABLE  I/O  DESCRIPTION
+   --------  ---  --------------------------------------------------
+   pri        I   Data prioritization flag.
+   target     I   Target body name.
+   nsurf      I   Number of surface IDs in list.
+   srflst     I   Surface ID list.
+   et         I   Epoch, expressed as seconds past J2000 TDB.
+   fixref     I   Name of target body-fixed reference frame.
+   nrays      I   Number of rays.
+   vtxarr     I   Array of vertices of rays.
+   dirarr     I   Array of direction vectors of rays.
+   xptarr     O   Intercept point array.
+   fndarr     O   Found flag array.
+
+-Detailed_Input
+
+   pri         is a logical flag indicating whether to perform
+               a prioritized or unprioritized DSK segment search.
+               In an unprioritized search, no segment masks another:
+               data from all specified segments are used to
+               define the surface of interest.
+
+               The search is unprioritized if and only if `pri'
+               is set to SPICEFALSE. In the N0066 SPICE Toolkit, this
+               is the only allowed value.
+
+   target      is the name of the target body on which a surface
+               intercept is sought.
+
+   nsurf,
+   srflst      are, respectively, a count of surface ID codes in a
+               list and the containing list. Only DSK segments for
+               the body designated by `target' and having surface
+               IDs in this list will considered in the intercept
+               computation. If the list is empty, all DSK segments
+               for `target' will be considered.
+
+   et          is the epoch of the intersection computation,
+               expressed as seconds past J2000 TDB. This epoch is
+               used only for DSK segment selection. Segments used
+               the intercept computation must include `et' in their
+               time coverage intervals.
+
+   fixref      is the name of a body-fixed, body-centered reference
+               frame associated with the target. The input ray vectors
+               are specified in this frame, as is the output intercept
+               point.
+
+               The frame designated by `fixref' must have a fixed
+               orientation relative to the frame of any DSK segment
+               used in the computation.
+
+   nrays,
+   vtxarr,
+   dirarr      are, respectively, a count of rays, an array containing
+               the vertices of rays, and an array containing the
+               direction vectors of the rays.
+
+               The ray's vertices are considered to represent offsets
+               from the center of the target body.
+
+               The rays' vertices and direction vectors are
+               represented in the reference frame designated by
+               `fixref'.
+
 -Detailed_Output
- 
- 
-   xptarr     is an array containing the intercepts of the input 
-              rays on the surface specified by the inputs 
- 
-                 pri 
-                 target 
-                 nsurf 
-                 srflst 
-                 et 
- 
-              The ith element of `xptarr' is the intercept 
-              corresponding to the ith ray, if such an intercept 
-              exists. If a ray intersects the surface at multiple 
-              points, the intercept closest to the ray's vertex is 
-              selected. 
- 
-              The ith element of `xptarr' is defined if and only if the 
-              ith element of `fndarr' is SPICETRUE.
- 
-              Units are km. 
- 
- 
-   fndarr     is an array of logical flags indicating whether the 
-              input rays intersect the surface. The ith element of 
-              `fndarr' is set to SPICETRUE if and only if an intercept 
-              was found for the ith ray. 
- 
- 
+
+   xptarr      is an array containing the intercepts of the input
+               rays on the surface specified by the inputs
+
+                  pri
+                  target
+                  nsurf
+                  srflst
+                  et
+
+               The ith element of `xptarr' is the intercept
+               corresponding to the ith ray, if such an intercept
+               exists. If a ray intersects the surface at multiple
+               points, the intercept closest to the ray's vertex is
+               selected.
+
+               The ith element of `xptarr' is defined if and only if the
+               ith element of `fndarr' is SPICETRUE.
+
+               Units are km.
+
+   fndarr      is an array of logical flags indicating whether the
+               input rays intersect the surface. The ith element of
+               `fndarr' is set to SPICETRUE if and only if an intercept
+               was found for the ith ray.
+
 -Parameters
- 
-   See the include file 
- 
+
+   See the header file
+
       SpiceDtl.h
- 
-   for the values of tolerance parameters used by default by the 
-   ray-surface intercept algorithm. These are discussed in in the 
-   Particulars section below. 
- 
+
+   for the values of tolerance parameters used by default by the
+   ray-surface intercept algorithm.
+
+   These parameters are discussed in the -Particulars section
+   below.
+
+   See the header file
+
+      SpiceDLA.h
+
+   for declarations of DLA descriptor sizes and documentation of the
+   contents of DLA descriptors.
+
+   See the header file
+
+      SpiceDSK.h
+
+   for declarations of DSK descriptor sizes and documentation of the
+   contents of DSK descriptors.
+
 -Exceptions
- 
-   1)  If the input prioritization flag `pri' is set to SPICETRUE, 
-       the error SPICE(NOPRIORITIZATION) is signaled. 
-    
-   2)  If the input body name `target' cannot be mapped to an 
-       ID code, the error SPICE(IDCODENOTFOUND) is signaled. 
- 
-   3)  If the input frame name `fixref' cannot be mapped to an 
-       ID code, the error SPICE(IDCODENOTFOUND) is signaled. 
- 
-   4)  If the frame center associated with `fixref' cannot be 
-       retrieved, the error SPICE(NOFRAMEINFO) is signaled. 
- 
-   5)  If the frame center associated with `fixref' is not 
-       the target body, the error SPICE(INVALIDFRAME) is signaled. 
- 
-   6)  If `nrays' is less than 1, the error SPICE(INVALIDCOUNT)
+
+   1)  If the input prioritization flag `pri' is set to SPICETRUE, the
+       error SPICE(BADPRIORITYSPEC) is signaled by a routine in the
+       call tree of this routine.
+
+   2)  If `nrays' is less than 1, the error SPICE(INVALIDCOUNT)
        is signaled.
 
-   7)  Any errors that occur during the intercept computation
-       will be signaled by routines in the call tree of this
-       routine.
+   3)  If `nsurf' is less than 0, the error SPICE(INVALIDCOUNT)
+       is signaled by a routine in the call tree of this routine.
 
-   8)  If any input string argument pointer is null, the error
-       SPICE(NULLPOINTER) will be signaled.
+   4)  If the input body name `target' cannot be mapped to an ID code,
+       the error SPICE(IDCODENOTFOUND) is signaled by a routine in
+       the call tree of this routine.
 
-   9)  If any input string argument is empty, the error
-       SPICE(EMPTYSTRING) will be signaled.
-   
+   5)  If the input frame name `fixref' cannot be mapped to an ID code,
+       the error SPICE(IDCODENOTFOUND) is signaled by a routine in
+       the call tree of this routine.
+
+   6)  If the frame center associated with `fixref' cannot be
+       retrieved, the error SPICE(NOFRAMEINFO) is signaled by a
+       routine in the call tree of this routine.
+
+   7)  If the frame center associated with `fixref' is not the target
+       body, the error SPICE(INVALIDFRAME) is signaled by a routine
+       in the call tree of this routine.
+
+   8)  If an error occurs during the intercept computation, the error
+       is signaled by a routine in the call tree of this routine.
+
+   9)  If any of the `target' or `fixref' input string pointers is
+       null, the error SPICE(NULLPOINTER) is signaled.
+
+   10) If any of the `target' or `fixref' input strings has zero
+       length, the error SPICE(EMPTYSTRING) is signaled.
+
+   11) If memory cannot be allocated to create the temporary variable
+       required for the execution of the underlying Fortran routine,
+       the error SPICE(MALLOCFAILED) is signaled.
+
 -Files
-   
-   Appropriate kernels must be loaded by the calling program before 
-   this routine is called. 
- 
-   The following data are required: 
- 
-      - SPK data: ephemeris data for the positions of the centers 
-        of DSK reference frames relative to the target body are 
-        required if those frames are not centered at the target 
-        body center. 
- 
-        Typically ephemeris data are made available by loading one 
-        or more SPK files via furnsh_c. 
- 
-      - DSK data: DSK files containing topographic data for the 
-        target body must be loaded. If a surface list is specified, 
-        data for at least one of the listed surfaces must be loaded. 
- 
-      - Frame data: if a frame definition is required to convert 
-        DSK segment data to the body-fixed frame designated by 
-        `fixref', the target, that definition must be available in the 
-        kernel pool. Typically the definitions of frames not already 
-        built-in to SPICE are supplied by loading a frame kernel. 
- 
-      - CK data: if the frame to which `fixref' refers is a CK frame, 
-        and if any DSK segments used in the computation have a 
-        different frame, at least one CK file will be needed to 
-        permit transformation of vectors between that frame and both 
-        the J2000 and the target body-fixed frames. 
- 
-      - SCLK data: if a CK file is needed, an associated SCLK 
-        kernel is required to enable conversion between encoded SCLK 
-        (used to time-tag CK data) and barycentric dynamical time 
-        (TDB). 
- 
-   In all cases, kernel data are normally loaded once per program 
-   run, NOT every time this routine is called.  
- 
- 
+
+   Appropriate kernels must be loaded by the calling program before
+   this routine is called.
+
+   The following data are required:
+
+   -  SPK data: ephemeris data for the positions of the centers
+      of DSK reference frames relative to the target body are
+      required if those frames are not centered at the target
+      body center.
+
+      Typically ephemeris data are made available by loading one
+      or more SPK files via furnsh_c.
+
+   -  DSK data: DSK files containing topographic data for the
+      target body must be loaded. If a surface list is specified,
+      data for at least one of the listed surfaces must be loaded.
+
+   -  Frame data: if a frame definition is required to convert
+      DSK segment data to the body-fixed frame designated by
+      `fixref', the target, that definition must be available in the
+      kernel pool. Typically the definitions of frames not already
+      built-in to SPICE are supplied by loading a frame kernel.
+
+   -  CK data: if the frame to which `fixref' refers is a CK frame,
+      and if any DSK segments used in the computation have a
+      different frame, at least one CK file will be needed to
+      permit transformation of vectors between that frame and both
+      the J2000 and the target body-fixed frames.
+
+   -  SCLK data: if a CK file is needed, an associated SCLK
+      kernel is required to enable conversion between encoded SCLK
+      (used to time-tag CK data) and barycentric dynamical time
+      (TDB).
+
+   In all cases, kernel data are normally loaded once per program
+   run, NOT every time this routine is called.
+
 -Particulars
- 
-   This routine is suitable for efficient ray-surface intercept 
-   computations in which the relative observer-target geometry is 
-   constant but the rays vary. 
- 
-   For cases in which it is necessary to know the source of the 
-   data defining the surface on which an intercept was found, 
-   use the CSPICE routine dskxsi_c.  
- 
-   For cases in which a ray's vertex is not explicitly known but is 
-   defined by relative observer-target geometry, the CSPICE 
-   ray-surface intercept routine sincpt_c should be used. 
- 
-   This routine works with multiple DSK files. It places no 
-   restrictions on the data types or coordinate systems of the DSK 
-   segments used in the computation. DSK segments using different 
-   reference frames may be used in a single computation. The only 
-   restriction is that any pair of reference frames used directly or 
-   indirectly are related by a constant rotation. 
- 
- 
-   Using DSK data 
-   ============== 
- 
-      DSK loading and unloading 
-      ------------------------- 
- 
-      DSK files providing data used by this routine are loaded by 
-      calling furnsh_c and can be unloaded by calling unload_c or 
-      kclear_c. See the documentation of furnsh_c for limits on numbers 
-      of loaded DSK files. 
- 
-      For run-time efficiency, it's desirable to avoid frequent 
-      loading and unloading of DSK files. When there is a reason to 
-      use multiple versions of data for a given target body---for 
-      example, if topographic data at varying resolutions are to be 
-      used---the surface list can be used to select DSK data to be 
-      used for a given computation. It is not necessary to unload 
-      the data that are not to be used. This recommendation presumes 
-      that DSKs containing different versions of surface data for a 
-      given body have different surface ID codes. 
- 
- 
-      DSK data priority 
-      ----------------- 
- 
-      A DSK coverage overlap occurs when two segments in loaded DSK 
-      files cover part or all of the same domain---for example, a 
-      given longitude-latitude rectangle---and when the time 
-      intervals of the segments overlap as well. 
- 
-      When DSK data selection is prioritized, in case of a coverage 
-      overlap, if the two competing segments are in different DSK 
-      files, the segment in the DSK file loaded last takes 
-      precedence. If the two segments are in the same file, the 
-      segment located closer to the end of the file takes 
-      precedence. 
- 
-      When DSK data selection is unprioritized, data from competing 
-      segments are combined. For example, if two competing segments 
-      both represent a surface as sets of triangular plates, the 
-      union of those sets of plates is considered to represent the 
-      surface.  
- 
-      Currently only unprioritized data selection is supported. 
-      Because prioritized data selection may be the default behavior 
-      in a later version of the routine, the presence of the `pri' 
-      argument is required. 
- 
- 
-      Round-off errors and mitigating algorithms 
-      ------------------------------------------ 
- 
-      When topographic data are used to represent the surface of a 
-      target body, round-off errors can produce some results that 
-      may seem surprising. 
- 
-      Note that, since the surface in question might have mountains, 
-      valleys, and cliffs, the points of intersection found for 
-      nearly identical sets of inputs may be quite far apart from 
-      each other: for example, a ray that hits a mountain side in a 
-      nearly tangent fashion may, on a different host computer, be 
-      found to miss the mountain and hit a valley floor much farther 
-      from the observer, or even miss the target altogether. 
-       
-      Round-off errors can affect segment selection: for example, a 
-      ray that is expected to intersect the target body's surface 
-      near the boundary between two segments might hit either 
-      segment, or neither of them; the result may be 
-      platform-dependent. 
- 
-      A similar situation exists when a surface is modeled by a set 
-      of triangular plates, and the ray is expected to intersect the 
-      surface near a plate boundary. 
-       
-      To avoid having the routine fail to find an intersection when 
-      one clearly should exist, this routine uses two "greedy" 
-      algorithms: 
-      
-         1) If the ray passes sufficiently close to any of the  
-            boundary surfaces of a segment (for example, surfaces of 
-            maximum and minimum longitude or latitude), that segment 
-            is tested for an intersection of the ray with the 
-            surface represented by the segment's data. 
- 
-            This choice prevents all of the segments from being 
-            missed when at least one should be hit, but it could, on 
-            rare occasions, cause an intersection to be found in a 
-            segment other than the one that would be found if higher 
-            precision arithmetic were used. 
-             
-         2) For type 2 segments, which represent surfaces as  
-            sets of triangular plates, each plate is expanded very 
-            slightly before a ray-plate intersection test is 
-            performed. The default plate expansion factor is  
- 
-               1 + XFRACT 
- 
-            where XFRACT is declared in  
- 
+
+   This routine is suitable for efficient ray-surface intercept
+   computations in which the relative observer-target geometry is
+   constant but the rays vary.
+
+   For cases in which it is necessary to know the source of the
+   data defining the surface on which an intercept was found,
+   use the CSPICE routine dskxsi_c.
+
+   For cases in which a ray's vertex is not explicitly known but is
+   defined by relative observer-target geometry, the CSPICE
+   ray-surface intercept routine sincpt_c should be used.
+
+   This routine works with multiple DSK files. It places no
+   restrictions on the data types or coordinate systems of the DSK
+   segments used in the computation. DSK segments using different
+   reference frames may be used in a single computation. The only
+   restriction is that any pair of reference frames used directly or
+   indirectly are related by a constant rotation.
+
+
+   Using DSK data
+   ==============
+
+      DSK loading and unloading
+      -------------------------
+
+      DSK files providing data used by this routine are loaded by
+      calling furnsh_c and can be unloaded by calling unload_c or
+      kclear_c. See the documentation of furnsh_c for limits on numbers
+      of loaded DSK files.
+
+      For run-time efficiency, it's desirable to avoid frequent
+      loading and unloading of DSK files. When there is a reason to
+      use multiple versions of data for a given target body---for
+      example, if topographic data at varying resolutions are to be
+      used---the surface list can be used to select DSK data to be
+      used for a given computation. It is not necessary to unload
+      the data that are not to be used. This recommendation presumes
+      that DSKs containing different versions of surface data for a
+      given body have different surface ID codes.
+
+
+      DSK data priority
+      -----------------
+
+      A DSK coverage overlap occurs when two segments in loaded DSK
+      files cover part or all of the same domain---for example, a
+      given longitude-latitude rectangle---and when the time
+      intervals of the segments overlap as well.
+
+      When DSK data selection is prioritized, in case of a coverage
+      overlap, if the two competing segments are in different DSK
+      files, the segment in the DSK file loaded last takes
+      precedence. If the two segments are in the same file, the
+      segment located closer to the end of the file takes
+      precedence.
+
+      When DSK data selection is unprioritized, data from competing
+      segments are combined. For example, if two competing segments
+      both represent a surface as sets of triangular plates, the
+      union of those sets of plates is considered to represent the
+      surface.
+
+      Currently only unprioritized data selection is supported.
+      Because prioritized data selection may be the default behavior
+      in a later version of the routine, the presence of the `pri'
+      argument is required.
+
+
+      Round-off errors and mitigating algorithms
+      ------------------------------------------
+
+      When topographic data are used to represent the surface of a
+      target body, round-off errors can produce some results that
+      may seem surprising.
+
+      Note that, since the surface in question might have mountains,
+      valleys, and cliffs, the points of intersection found for
+      nearly identical sets of inputs may be quite far apart from
+      each other: for example, a ray that hits a mountain side in a
+      nearly tangent fashion may, on a different host computer, be
+      found to miss the mountain and hit a valley floor much farther
+      from the observer, or even miss the target altogether.
+
+      Round-off errors can affect segment selection: for example, a
+      ray that is expected to intersect the target body's surface
+      near the boundary between two segments might hit either
+      segment, or neither of them; the result may be
+      platform-dependent.
+
+      A similar situation exists when a surface is modeled by a set
+      of triangular plates, and the ray is expected to intersect the
+      surface near a plate boundary.
+
+      To avoid having the routine fail to find an intersection when
+      one clearly should exist, this routine uses two "greedy"
+      algorithms:
+
+         1) If the ray passes sufficiently close to any of the
+            boundary surfaces of a segment (for example, surfaces of
+            maximum and minimum longitude or latitude), that segment
+            is tested for an intersection of the ray with the
+            surface represented by the segment's data.
+
+            This choice prevents all of the segments from being
+            missed when at least one should be hit, but it could, on
+            rare occasions, cause an intersection to be found in a
+            segment other than the one that would be found if higher
+            precision arithmetic were used.
+
+         2) For type 2 segments, which represent surfaces as
+            sets of triangular plates, each plate is expanded very
+            slightly before a ray-plate intersection test is
+            performed. The default plate expansion factor is
+
+               1 + SPICE_DSK_XFRACT
+
+            where SPICE_DSK_XFRACT is declared in
+
                SpiceDtl.h
- 
-            For example, given a value for XFRACT of 1.e-10, the 
-            sides of the plate are lengthened by 1/10 of a micron 
-            per km. The expansion keeps the centroid of the plate 
-            fixed. 
- 
-            Plate expansion prevents all plates from being missed 
-            in cases where clearly at least one should be hit. 
- 
-            As with the greedy segment selection algorithm, plate 
-            expansion can occasionally cause an intercept to be 
-            found on a different plate than would be found if higher 
-            precision arithmetic were used. It also can occasionally 
-            cause an intersection to be found when the ray misses 
-            the target by a very small distance.  
- 
+
+            For example, given a value for SPICE_DSK_XFRACT of 1.e-10, the
+            sides of the plate are lengthened by 1/10 of a micron
+            per km. The expansion keeps the centroid of the plate
+            fixed.
+
+            Plate expansion prevents all plates from being missed
+            in cases where clearly at least one should be hit.
+
+            As with the greedy segment selection algorithm, plate
+            expansion can occasionally cause an intercept to be
+            found on a different plate than would be found if higher
+            precision arithmetic were used. It also can occasionally
+            cause an intersection to be found when the ray misses
+            the target by a very small distance.
+
 -Examples
- 
-   The numerical results shown for these examples may differ across 
-   platforms. The results depend on the SPICE kernels used as 
-   input, the compiler and supporting libraries, and the machine  
-   specific arithmetic implementation.  
-     
-   1) Compute surface intercepts of rays emanating from a set of 
-      vertices distributed on a longitude-latitude grid. All 
-      vertices are outside the target body, and all rays point 
-      toward the target's center. 
- 
-      Check intercepts against expected values. Indicate the 
-      number of errors, the number of computations, and the 
-      number of intercepts found. 
- 
-      Use the meta-kernel shown below to load example SPICE 
-      kernels. 
 
-          KPL/MK
+   The numerical results shown for this example may differ across
+   platforms. The results depend on the SPICE kernels used as
+   input, the compiler and supporting libraries, and the machine
+   specific arithmetic implementation.
 
-          File: dskxv_ex1.tm
+   1) Compute surface intercepts of rays emanating from a set of
+      vertices distributed on a longitude-latitude grid. All
+      vertices are outside the target body, and all rays point
+      toward the target's center.
 
-          This meta-kernel is intended to support operation of SPICE
-          example programs. The kernels shown here should not be
-          assumed to contain adequate or correct versions of data
-          required by SPICE-based user applications.
+      Check intercepts against expected values. Indicate the
+      number of errors, the number of computations, and the
+      number of intercepts found.
 
-          In order for an application to use this meta-kernel, the
-          kernels referenced here must be present in the user's
-          current working directory.
 
-          The names and contents of the kernels referenced
-          by this meta-kernel are as follows:
+      Use the meta-kernel shown below to load example SPICE
+      kernels.
 
-             File name                        Contents
-             ---------                        --------
-             phobos512.bds                    DSK based on
-                                              Gaskell ICQ Q=512
-                                              plate model
-          \begindata
 
-             PATH_SYMBOLS    = 'GEN'
-             PATH_VALUES     = '/ftp/pub/naif/generic_kernels'
+         KPL/MK
 
-             KERNELS_TO_LOAD = ( '$GEN/dsk/phobos/phobos512.bds' )
+         File: dskxv_ex1.tm
 
-          \begintext
+         This meta-kernel is intended to support operation of SPICE
+         example programs. The kernels shown here should not be
+         assumed to contain adequate or correct versions of data
+         required by SPICE-based user applications.
 
- 
-   Example code begins here. 
- 
+         In order for an application to use this meta-kernel, the
+         kernels referenced here must be present in the user's
+         current working directory.
+
+         The names and contents of the kernels referenced
+         by this meta-kernel are as follows:
+
+            File name                        Contents
+            ---------                        --------
+            phobos512.bds                    DSK based on
+                                             Gaskell ICQ Q=512
+                                             plate model
+         \begindata
+
+            KERNELS_TO_LOAD = ( 'phobos512.bds' )
+
+         \begintext
+
+         End of meta-kernel
+
+
+      Example code begins here.
+
+
       /.
-      Multi-segment, vectorized spear program.
+         Program dskxv_ex1
 
-      This program expects all loaded DSKs
-      to represent the same body and surface.
+         Multi-segment, vectorized spear program.
 
-      Syntax: vspear <meta-kernel>
+         This program expects all loaded DSKs
+         to represent the same body and surface.
       ./
-
       #include <stdio.h>
       #include <stdlib.h>
       #include "SpiceUsr.h"
 
-      int main( int argc,  char **argv )
+      int main( )
       {
          /.
-         Local constants 
-         ./ 
+         Local constants
+         ./
          #define  DTOL           1.0e-14
          #define  FILSIZ         256
          #define  FRNMLN         33
@@ -477,9 +497,10 @@
          SpiceBoolean            found;
 
          SpiceChar               dsk1   [FILSIZ];
-         SpiceChar               fixref [FRNMLN];
-         SpiceChar               source [FILSIZ];
          SpiceChar               filtyp [TYPLEN];
+         SpiceChar               fixref [FRNMLN];
+         SpiceChar               meta   [FILSIZ];
+         SpiceChar               source [FILSIZ];
          SpiceChar               target [BDNMLN];
 
          SpiceDLADescr           dladsc;
@@ -517,29 +538,26 @@
          SpiceInt                surfid;
 
 
-         chkin_c ( "vspear" );
+         chkin_c ( "vspear"  );
 
          /.
-         Get meta-kernel name from the command line. 
+         Prompt for the name of the meta-kernel.
          ./
-         if ( argc != 2 )
-         {
-            printf ( "Command syntax:  spearv <meta-kernel>\n" );
-            exit(1);
-         }
+         prompt_c ( "Enter meta-kernel name >  ", FILSIZ, meta );
 
          /.
-         Load the meta-kernel. 
+         Load the meta-kernel.
          ./
-         furnsh_c ( argv[1] );
+         furnsh_c ( meta );
 
          /.
          Get a handle for one of the loaded DSKs,
          then find the first segment and extract
-         the body and surface IDs. 
+         the body and surface IDs.
          ./
          kdata_c ( 0,    "DSK",  FILSIZ, TYPLEN,  FILSIZ,
                    dsk1, filtyp, source, &handle, &found );
+
          if ( !found )
          {
             sigerr_c ( "SPICE(NOINFO)" );
@@ -596,8 +614,7 @@
          to the Z axis will cause all segments converging
          at the pole of interest to be tested for an
          intersection.
-         ./     
-
+         ./
          polmrg =    0.5;
          latstp =    1.0;
          lonstp =    2.0;
@@ -611,7 +628,12 @@
          nrays  =    0;
 
          /.
-         Generate rays. 
+         Set the epoch for interval selection.
+         ./
+         et     = 0.0;
+
+         /.
+         Generate rays.
          ./
          while ( lon < 180.0 )
          {
@@ -637,13 +659,13 @@
                   }
                }
 
-               latrec_c ( r,             lon*rpd_c(), 
+               latrec_c ( r,             lon*rpd_c(),
                           lat*rpd_c(),   vtxarr[nrays] );
 
                vminus_c ( vtxarr[nrays], dirarr[nrays] );
 
                ++ nrays;
-               ++ nlstep;      
+               ++ nlstep;
             }
 
             lon   += lonstp;
@@ -652,7 +674,7 @@
          }
 
          /.
-         Assign surface ID list. 
+         Assign surface ID list.
 
          Note that, if we knew that all files had the desired
          surface ID, we could set `nsurf' to 0 and omit the
@@ -661,28 +683,28 @@
          nsurf     = 1;
          srflst[0] = surfid;
 
-         printf ( "Computing intercepts...\n" );
+         printf ( "\nComputing intercepts...\n" );
 
          dskxv_c ( SPICEFALSE,  target,  nsurf,  srflst,
                    et,          fixref,  nrays,  vtxarr,
                    dirarr,      xptarr,  fndarr         );
 
-         printf ( "Done.\n" );
+         printf ( "Done.\n\n" );
 
          /.
-         Check results. 
+         Check results.
          ./
          for ( i = 0;  i < nrays;  i++ )
          {
             if ( fndarr[i] )
             {
                /.
-               Record that a new intercept was found. 
+               Record that a new intercept was found.
                ./
                ++ nhits;
 
                /.
-               Compute the latitude and longitude of         
+               Compute the latitude and longitude of
                the intercept. Make sure these agree
                well with those of the vertex.
                ./
@@ -733,56 +755,78 @@
          printf( "nderr = %d\n", (int)nderr );
 
          return ( 0 );
-      }  
+      }
 
 
-   When this program was executed on a PC/Linux/gcc 64-bit  
-   platform, the output was: 
+      When this program was executed on a Mac/Intel/cc/64-bit
+      platform, using as input the meta-kernel dskxv_ex1.tm, the
+      output was:
 
+
+      Enter meta-kernel name >  dskxv_ex1.tm
 
       Computing intercepts...
       Done.
+
       nrays = 32580
       nhits = 32580
       nderr = 0
 
- 
+
 -Restrictions
- 
-   1)  The frame designated by `fixref' must have a fixed 
-       orientation relative to the frame of any DSK segment 
-       used in the computation. This routine has no  
-       practical way of ensuring that this condition is met; 
-       so this responsibility is delegated to the calling 
-       application. 
-     
+
+   1)  The frame designated by `fixref' must have a fixed
+       orientation relative to the frame of any DSK segment
+       used in the computation. This routine has no
+       practical way of ensuring that this condition is met;
+       so this responsibility is delegated to the calling
+       application.
+
 -Literature_References
- 
-   None. 
- 
+
+   None.
+
 -Author_and_Institution
- 
-   N.J. Bachman    (JPL) 
- 
+
+   N.J. Bachman        (JPL)
+   J. Diaz del Rio     (ODC Space)
+   E.D. Wright         (JPL)
+
 -Version
- 
+
+   -CSPICE Version 1.1.0, 10-AUG-2021 (JDR) (EDW)
+
+       Added use of ALLOC_CHECK_INTRA to check net null effect on
+       alloc count.
+
+       Edited the header to comply with NAIF standard.
+
+       Updated code example to prompt for input meta-kernel name and
+       set input time to zero.
+
+       Updated -Exceptions section, adding missing exceptions and correcting
+       the short message in Exception #1.
+
    -CSPICE Version 1.0.0, 26-FEB-2016 (NJB)
 
 -Index_Entries
- 
-   vectorized ray-surface intercept  
-   vectorized ray-dsk intercept  
+
+   vectorized ray-surface intercept
+   vectorized ray-DSK intercept
+
 -&
 */
 
 { /* Begin dskxv_c */
 
- 
+
    /*
    Local variables
    */
    SpiceInt                arrSize;
    SpiceInt                i;
+
+   int                     nowalloc;
 
    logical               * foundFlags;
    logical                 priFlag;
@@ -799,14 +843,14 @@
       fixref
 
    Make sure each pointer is non-null and each string contains
-   at least one data character: that is, one character 
+   at least one data character: that is, one character
    preceding the null terminator.
    */
    CHKFSTR ( CHK_STANDARD, "dskxv_c", target );
    CHKFSTR ( CHK_STANDARD, "dskxv_c", fixref );
 
    /*
-   Check `nrays' here, since it must be valid in order to 
+   Check `nrays' here, since it must be valid in order to
    allocate memory.
    */
    if ( nrays < 1 )
@@ -819,27 +863,29 @@
       return;
    }
 
+   nowalloc = alloc_count();
+
    arrSize = sizeof(logical) * nrays;
-   
+
    /*
    Allocate an array of type logical to receive flags
-   returned by f2c'd routine. 
+   returned by f2c'd routine.
    */
    foundFlags = (logical *) alloc_SpiceMemory( (size_t)arrSize );
 
-   if ( !foundFlags ) 
+   if ( !foundFlags )
    {
       setmsg_c ( "Attempt to allocate # bytes of memory for "
                  "the foundFlags array failed."               );
       errint_c ( "#", arrSize                                 );
       sigerr_c ( "SPICE(MALLOCFAILED)"                        );
       chkout_c ( "dskxv_c"                                    );
-      return;       
+      return;
    }
 
    /*
    The input prioritization flag must be converted to type
-   logical for the following call. 
+   logical for the following call.
    */
    priFlag = (logical)pri;
 
@@ -856,21 +902,21 @@
             (logical     *) foundFlags,
             (ftnlen       ) strlen(target),
             (ftnlen       ) strlen(fixref)  );
-            
+
    if ( failed_c() )
    {
       /*
       Always deallocate the flags array, even if the
       above call failed.
       */
-      free_SpiceMemory( (void *)foundFlags ); 
+      free_SpiceMemory( (void *)foundFlags );
 
       chkout_c ( "dskxv_c" );
       return;
    }
 
    /*
-   Transfer the logical flag values to the output 
+   Transfer the logical flag values to the output
    SpiceBoolean array.
    */
    for ( i = 0;  i < nrays;  i++  )
@@ -881,8 +927,9 @@
    /*
    Deallocate the flags array.
    */
-   free_SpiceMemory( (void *)foundFlags ); 
+   free_SpiceMemory( (void *)foundFlags );
 
+   ALLOC_CHECK_INTRA(nowalloc);
 
    chkout_c ( "dskxv_c" );
 

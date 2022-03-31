@@ -12,7 +12,7 @@ static integer c__1 = 1;
 static integer c__0 = 0;
 static integer c__8 = 8;
 
-/* $Procedure      TPARTV ( Time string ---parse to a time vector) */
+/* $Procedure TPARTV ( Time string ---parse to a time vector) */
 /* Subroutine */ int tpartv_(char *string, doublereal *tvec, integer *ntvec, 
 	char *type__, char *modify, logical *mods, logical *yabbrv, logical *
 	succes, char *pictur, char *error, ftnlen string_len, ftnlen type_len,
@@ -78,11 +78,10 @@ static integer c__8 = 8;
 
 /* $ Abstract */
 
-/*     This routine returns the components of a time supplied */
-/*     as a string and returns a vector of the components of */
-/*     that string together with an array of modifiers that may */
-/*     have been supplied with the string that may alter */
-/*     the interpretation of the components. */
+/*     Parse the components of a time string and return a vector of the */
+/*     components of that string. Also return an array of any modifiers */
+/*     present in the input string; these may alter the interpretation */
+/*     of the components. */
 
 /* $ Disclaimer */
 
@@ -111,11 +110,11 @@ static integer c__8 = 8;
 
 /* $ Required_Reading */
 
-/*      None. */
+/*     None. */
 
 /* $ Keywords */
 
-/*      TIME */
+/*     TIME */
 
 /* $ Declarations */
 /* $ Brief_I/O */
@@ -137,20 +136,20 @@ static integer c__8 = 8;
 
 /* $ Detailed_Input */
 
-/*     STRING     is a character string that represents some */
-/*                julian or calendar epoch. */
+/*     STRING   is a character string that represents some */
+/*              julian or calendar epoch. */
 
 /* $ Detailed_Output */
 
-/*     TVEC       is a vector of double precision numbers that represent */
-/*                the input string.  The number and meaning of the */
-/*                components of TVEC depend upon the input string.  This */
-/*                meaning can be determined from the output variable */
-/*                TYPE. */
+/*     TVEC     is a vector of double precision numbers that represent */
+/*              the input string. The number and meaning of the */
+/*              components of TVEC depend upon the input string. This */
+/*              meaning can be determined from the output variable */
+/*              TYPE. */
 
-/*                TYPE      NTVEC     TVEC Components */
-/*                ------------------------------------------------------- */
-/*                YMD       3 to 6    TVEC(1) is the calendar year */
+/*                 TYPE     NTVEC     TVEC Components */
+/*                 ----------------------------------------------------- */
+/*                 YMD      3 to 6    TVEC(1) is the calendar year */
 /*                                    TVEC(2) is the numeric value of the */
 /*                                            month (1-12) */
 /*                                    TVEC(3) is the day of the month */
@@ -158,379 +157,390 @@ static integer c__8 = 8;
 /*                                    TVEC(5) is the minute of the hour */
 /*                                    TVEC(6) is the second of the minute */
 
-/*                YD        2 to 5    TVEC(1) is the calendar year */
+/*                 YD       2 to 5    TVEC(1) is the calendar year */
 /*                                    TVEC(2) is the day of the year */
 /*                                    TVEC(3) is the hour of the day */
 /*                                    TVEC(4) is the minute of the hour */
 /*                                    TVEC(5) is the second of the minute */
 
-/*                JD        1         TVEC(1) is the julian date */
+/*                 JD       1         TVEC(1) is the julian date */
 
-/*                Note that the values of TVEC are not forced into the */
-/*                normal ranges used in daily conversation.  TPARTV */
-/*                simply reports what's found in the string and does */
-/*                not pass judgement on the "correctness" of these */
-/*                components. */
+/*              Note that the values of TVEC are not forced into the */
+/*              normal ranges used in daily conversation.  TPARTV */
+/*              simply reports what's found in the string and does */
+/*              not pass judgement on the "correctness" of these */
+/*              components. */
 
-/*     NTVEC     is the actual number of components that were present */
-/*               in the string.  For example a user might have */
-/*               supplied only year, month and day of an epoch. */
-/*               In such a case NTVEC will be set to 3.  The components */
-/*               actually supplied will be 1 through NTVEC.  Values */
-/*               not supplied are set to zero. */
+/*     NTVEC    is the actual number of components that were present */
+/*              in the string. For example a user might have */
+/*              supplied only year, month and day of an epoch. */
+/*              In such a case NTVEC will be set to 3. The components */
+/*              actually supplied will be 1 through NTVEC. Values */
+/*              not supplied are set to zero. */
 
-/*     TYPE      is the type of time string supplied.  This is a function */
-/*               of whether the string contains year, month and day, */
-/*               day of year, or julian date. */
+/*     TYPE     is the type of time string supplied. This is a function */
+/*              of whether the string contains year, month and day, */
+/*              day of year, or julian date. */
 
-/*     MODIFY    is an array of character strings that indicate */
-/*               whether a modifier to the calendar string was supplied. */
-/*               If a particular modifier was not supplied, the */
-/*               value of that component of MODIFY will be set to */
-/*               a blank.  Modifiers are used to change the meaning */
-/*               of time strings. */
+/*     MODIFY   is an array of character strings that indicate */
+/*              whether a modifier to the calendar string was supplied. */
+/*              If a particular modifier was not supplied, the */
+/*              value of that component of MODIFY will be set to */
+/*              a blank. Modifiers are used to change the meaning */
+/*              of time strings. */
 
-/*               For example 12:12:29 Jan 1, 1996  means 12 hours past */
-/*               midnight on Jan 1, 1996 in the UTC time system. But */
-/*               if we modify the string to be: */
+/*              For example 12:12:29 Jan 1, 1996  means 12 hours past */
+/*              midnight on Jan 1, 1996 in the UTC time system. But */
+/*              if we modify the string to be: */
 
-/*                  12:12:29 A.M. Jan 1, Tuesday PDT 1996 B.C. */
+/*                 12:12:29 A.M. Jan 1, Tuesday PDT 1996 B.C. */
 
-/*               the string takes on an entirely different meaning. */
+/*              the string takes on an entirely different meaning. */
 
-/*               Five different modifiers are recognized by TPARTV: */
-/*               the era associated with the epoch, day of week of */
-/*               the epoch, time zone of an epoch,  AM/PM used in */
-/*               daily time usage, and the system (UTC, TDB, or TDT). */
+/*              Five different modifiers are recognized by TPARTV: */
+/*              the era associated with the epoch, day of week of */
+/*              the epoch, time zone of an epoch,  AM/PM used in */
+/*              daily time usage, and the system (UTC, TDB, TT, or TDT). */
 
-/*               Again whether or not modifiers are compatible with the */
-/*               time and date components or with each other is not */
-/*               determined by TPARTV.  TPARTV simply reports what is */
-/*               present in the string, leaving the task of deciding */
-/*               the meaning of the string to the calling routine. */
+/*              Again whether or not modifiers are compatible with the */
+/*              time and date components or with each other is not */
+/*              determined by TPARTV. TPARTV simply reports what is */
+/*              present in the string, leaving the task of deciding */
+/*              the meaning of the string to the calling routine. */
 
-/*               The components of MODIFY, their meaning and possible */
-/*               values are given below. */
+/*              The components of MODIFY, their meaning and possible */
+/*              values are given below. */
 
-/*               Component   Meaning   Possible Non-blank Modifier Values */
-/*               ---------   -------   ---------------------------------- */
-/*               1           ERA       'A.D.', 'B.C.' */
-/*               2           Weekday   'SUN',  'MON', ... etc. */
-/*               3           Time Zone 'UTC+i:i', 'UTC-i:i' */
-/*               4           AM/PM     'A.M.', 'P.M.' */
-/*               5           System    'UTC',  'TDB', 'TDT' */
+/*                                        Possible */
+/*                 Component   Meaning    Non-blank Modifier Values */
+/*                 ---------   ---------  ------------------------- */
+/*                 1           ERA        'A.D.', 'B.C.' */
+/*                 2           Weekday    'SUN', 'MON', ... etc. */
+/*                 3           Time Zone  'UTC+i:i', 'UTC-i:i' */
+/*                 4           AM/PM      'A.M.', 'P.M.' */
+/*                 5           System     'UTC', 'TDB', 'TT', 'TDT' */
 
-/*               TPARTV recognizes the standard abbreviations of */
-/*               all continental U.S. time zones. */
+/*              TPARTV recognizes the standard abbreviations of */
+/*              all continental U.S. time zones. */
 
-/*                  PDT --- Pacific  Daylight Time  (UTC-07:00) */
-/*                  PST --- Pacific  Standard Time  (UTC-08:00) */
-/*                  MDT --- Mountain Daylight Time  (UTC-06:00) */
-/*                  MST --- Mountain Standard Time  (UTC-07:00) */
-/*                  CDT --- Central  Daylight Time  (UTC-05:00) */
-/*                  CST --- Central  Standard Time  (UTC-06:00) */
-/*                  EDT --- Eastern  Daylight Time  (UTC-04:00) */
-/*                  EST --- Eastern  Standard Time  (UTC-05:00) */
+/*                 PDT --- Pacific  Daylight Time  (UTC-07:00) */
+/*                 PST --- Pacific  Standard Time  (UTC-08:00) */
+/*                 MDT --- Mountain Daylight Time  (UTC-06:00) */
+/*                 MST --- Mountain Standard Time  (UTC-07:00) */
+/*                 CDT --- Central  Daylight Time  (UTC-05:00) */
+/*                 CST --- Central  Standard Time  (UTC-06:00) */
+/*                 EDT --- Eastern  Daylight Time  (UTC-04:00) */
+/*                 EST --- Eastern  Standard Time  (UTC-05:00) */
 
-/*               In addition it recognizes offsets from UTC expressed */
-/*               as UTC+/-HR:MN.  Note that through out SPICELIB */
-/*               the minutes component of the UTC offset are always */
-/*               regarded as positive offsets from the hour offset. */
+/*              In addition it recognizes offsets from UTC expressed */
+/*              as UTC+/-HR:MN. Note that through out SPICELIB */
+/*              the minutes component of the UTC offset are always */
+/*              regarded as positive offsets from the hour offset. */
 
-/*               All Time zones are returned in MODIFY as UTC offsets */
-/*               as indicated in the table above. */
+/*              All Time zones are returned in MODIFY as UTC offsets */
+/*              as indicated in the table above. */
 
-/*     MODS      is TRUE if some non-blank modifier was supplied. */
+/*     MODS     is .TRUE. if some non-blank modifier was supplied. */
 
-/*     YABBRV    is TRUE if a year was supplied in the abbreviated */
-/*               form 'YR  where YR is a two digit integer. */
+/*     YABBRV   is .TRUE. if a year was supplied in the abbreviated */
+/*              form 'YR  where YR is a two digit integer. */
 
-/*     SUCCES    is TRUE if the string was successfully parsed. */
-/*               Otherwise it is set to FALSE and a diagnostic */
-/*               is supplied in the argument ERROR. */
+/*     SUCCES   is .TRUE. if the string was successfully parsed. */
+/*              Otherwise it is set to .FALSE. and a diagnostic */
+/*              is supplied in the argument ERROR. */
 
-/*     PICTUR    is a string that gives a format picture that can */
-/*               be used by the routine TIMOUT to construct a time */
-/*               string of the same form as the input time string. */
+/*     PICTUR   is a string that gives a format picture that can */
+/*              be used by the routine TIMOUT to construct a time */
+/*              string of the same form as the input time string. */
 
-/*               If some component of the input string could not be */
-/*               identified, PICTUR is returned as a blank.  However, */
-/*               if all components of the input string could be */
-/*               identified and the string is simply ambiguous, PICTUR */
-/*               will contain a format picture that corresponds to */
-/*               the ambiguous input.  Consequently, you must check */
-/*               the value of PICTUR to determine if TPARTV has */
-/*               been able to construct a format picture. */
+/*              If some component of the input string could not be */
+/*              identified, PICTUR is returned as a blank. However, */
+/*              if all components of the input string could be */
+/*              identified and the string is simply ambiguous, PICTUR */
+/*              will contain a format picture that corresponds to */
+/*              the ambiguous input. Consequently, you must check */
+/*              the value of PICTUR to determine if TPARTV has */
+/*              been able to construct a format picture. */
 
-/*     ERROR     is blank if the string was successfully parsed. */
-/*               Otherwise a human readable diagnostic is returned */
-/*               in ERROR. */
+/*     ERROR    is blank if the string was successfully parsed. */
+/*              Otherwise a human readable diagnostic is returned */
+/*              in ERROR. */
 
 /* $ Parameters */
 
 /*     None. */
 
+/* $ Exceptions */
+
+/*     Error free. */
+
+/*     1)  All problems detected by this routine are reported via the */
+/*         variables SUCCES and ERROR. */
+
 /* $ Files */
 
 /*     None. */
 
-/* $ Exceptions */
-
-/*     Error Free. */
-
-/*     1) All problems are diagnosed via the variables SUCCES and */
-/*        ERROR. */
-
 /* $ Particulars */
 
-/*      This routine parses in input string that represents some */
-/*      epoch in some time system.  In addition it constructs a */
-/*      format picture that describes the position and meaning */
-/*      of the various components of the string. */
+/*     This routine parses in input string that represents some */
+/*     epoch in some time system. In addition it constructs a */
+/*     format picture that describes the position and meaning */
+/*     of the various components of the string. */
 
-/*      This routine is intended to be used in close conjunction with */
-/*      the routines TTRANS and TIMOUT. */
+/*     This routine is intended to be used in close conjunction with */
+/*     the routines TTRANS and TIMOUT. */
 
-/*      The string is parsed by first determining its recognizable */
-/*      substrings (integers, punctuation marks, names of months, */
-/*      names of weekdays, time systems, time zones, etc.)  These */
-/*      recognizable substrings are called the tokens of the input */
-/*      string.  The meaning of some tokens are immediately determined. */
-/*      For example named months, weekdays, time systems have clear */
-/*      meanings.  However, the meanings of numeric components must */
-/*      be deciphered from their magnitudes and location in */
-/*      the string relative to the immediately recognized components */
-/*      of the input string. */
+/*     The string is parsed by first determining its recognizable */
+/*     substrings (integers, punctuation marks, names of months, */
+/*     names of weekdays, time systems, time zones, etc.) These */
+/*     recognizable substrings are called the tokens of the input */
+/*     string. The meaning of some tokens are immediately determined. */
+/*     For example named months, weekdays, time systems have clear */
+/*     meanings. However, the meanings of numeric components must */
+/*     be deciphered from their magnitudes and location in */
+/*     the string relative to the immediately recognized components */
+/*     of the input string. */
 
-/*      To determine the meaning of the numeric tokens in the input */
-/*      string, a set of "productions rules" and transformations are */
-/*      applied to the full set of tokens in the string.  These */
-/*      transformations are repeated until the meaning of every token */
-/*      has been determined or until further transformations yield */
-/*      no new clues into the meaning of the numeric tokens. */
+/*     To determine the meaning of the numeric tokens in the input */
+/*     string, a set of "productions rules" and transformations are */
+/*     applied to the full set of tokens in the string. These */
+/*     transformations are repeated until the meaning of every token */
+/*     has been determined or until further transformations yield */
+/*     no new clues into the meaning of the numeric tokens. */
 
-/*      1)  Unless the substring JD or jd is present the string is */
-/*          assumed to be a calendar format (day-month-year or year and */
-/*          day of year).  If the substring JD or jd is present, the */
-/*          string is assumed to represent a julian date. */
+/*     1)  Unless the substring 'JD' or 'jd' is present, the string is */
+/*         assumed to be a calendar format (day-month-year or year and */
+/*         day of year). If the substring JD or jd is present, the */
+/*         string is assumed to represent a Julian date. */
 
-/*      2)  If the julian date specifier is not present, any integer */
-/*          greater than 999 is regarded as being a year specification. */
+/*     2)  If the Julian date specifier is not present, any integer */
+/*         greater than 999 is regarded as being a year specification. */
 
-/*      3)  A dash '-' can represent a minus sign only if it is precedes */
-/*          the first digit in the string and the string contains */
-/*          the julian date specifier (JD).  (No negative years, */
-/*          months, days, etc are allowed). */
+/*     3)  A dash '-' can represent a minus sign only if it precedes */
+/*         the first digit in the string and the string contains */
+/*         the Julian date specifier (JD). (No negative years, */
+/*         months, days, etc. are allowed). */
 
-/*      4)  Numeric components of a time string must be separated */
-/*          by a character that is not a digit or decimal point. */
-/*          Only one decimal component is allowed.  For example */
-/*          1994219.12819 is sometimes interpreted as the */
-/*          219th day of 1994 + 0.12819 days.  TPARTV does not */
-/*          support such strings. */
+/*     4)  Numeric components of a time string must be separated */
+/*         by a character that is not a digit or decimal point. */
+/*         Only one decimal component is allowed. For example */
+/*         1994219.12819 is sometimes interpreted as the */
+/*         219th day of 1994 + 0.12819 days. TPARTV does not */
+/*         support such strings. */
 
-/*          No exponential components are allowed.  For example you */
-/*          can't input 1993 Jun 23 23:00:01.202E-4 you have */
-/*          to explicitly list all zeros that follow the decimal */
-/*          point: i.e.  1993 Jun 23 23:00:00.0001202 */
+/*     5)  No exponential components are allowed. For example you */
+/*         can't specify the Julian date of J2000 as 2.451545E6. */
+/*         You also can't input 1993 Jun 23 23:00:01.202E-4 and have */
+/*         to explicitly list all zeros that follow the decimal */
+/*         point: i.e. 1993 Jun 23 23:00:00.0001202. */
 
-/*      5)  The single colon (:) when used to separate numeric */
-/*          components of a string is interpreted as separating */
-/*          Hours, Minutes, and Seconds of time. */
+/*     6)  The single colon (:) when used to separate numeric */
+/*         components of a string is interpreted as separating */
+/*         Hours, Minutes, and Seconds of time. */
 
-/*      6)  If a double slash (//) or double colon (::) follows */
-/*          a pair of integers, those integers are assumed  to */
-/*          represent the year and day of year. */
+/*     7)  If a double slash (//) or double colon (::) follows */
+/*         a pair of integers, those integers are assumed  to */
+/*         represent the year and day of year. */
 
-/*      7)  A quote followed by an integer less than 100 is regarded */
-/*          as an abbreviated year.  For example: '93 would be regarded */
-/*          as the 93rd year of the reference century.  See TEXPYR */
-/*          for further discussion of abbreviated years. */
+/*     8)  A quote followed by an integer less than 100 is regarded */
+/*         as an abbreviated year. For example: '93 would be regarded */
+/*         as the 93rd year of the reference century. See the SPICELIB */
+/*         routine TEXPYR for further discussion of abbreviated years. */
 
-/*       8) An integer followed by 'B.C.' or 'A.D.' is regarded as */
-/*          a year in the era associated with that abbreviation. */
+/*     9)  An integer followed by 'B.C.' or 'A.D.' is regarded as */
+/*         a year in the era associated with that abbreviation. */
 
-/*       9) All dates are regarded as belonging to the extended */
-/*          Gregorian Calendar (the Gregorian calendar is the calendar */
-/*          currently used by western society).  See the routine JUL2GR */
-/*          for  converting from Julian Calendar to the */
-/*          Gregorian Calendar. */
-/*          western society). */
+/*     10) All dates are regarded as belonging to the extended */
+/*         Gregorian Calendar (the Gregorian calendar is the calendar */
+/*         currently used by western society). See the SPICELIB routine */
+/*         JUL2GR for converting from Julian Calendar to the Gregorian */
+/*         Calendar. */
 
-/*      10) If the ISO date-time separator (T) is present in the string */
-/*          ISO allowed token patterns are examined for a match */
-/*          with the current token list.  If no match is found the */
-/*          search is abandoned and appropriate diagnostic messages */
-/*          are generated. */
+/*     11) If the ISO date-time separator (T) is present in the string */
+/*         ISO allowed token patterns are examined for a match */
+/*         with the current token list. If no match is found the */
+/*         search is abandoned and appropriate diagnostic messages */
+/*         are generated. Historically the interpretation of ISO */
+/*         formatted time strings deviates from the ISO standard in */
+/*         allowing two digit years and expanding years in the 0 to 99 */
+/*         range the same way as is done for non ISO formatted strings. */
+/*         Due to this interpretation it is impossible to specify */
+/*         times in years in the 0 A.D. to 99 A.D. range using ISO */
+/*         formatted strings on the input. */
 
-/*      11) If two delimiters are found in succession in the time */
-/*          string, the time string is diagnosed as an erroneous */
-/*          string.  ( Delimiters are comma, white space, dash, slash, */
-/*          period, day of year mark ) */
+/*     12) If two delimiters are found in succession in the time */
+/*         string, the time string is diagnosed as an erroneous string. */
+/*         (Delimiters are comma, white space, dash, slash, period, or */
+/*         day of year mark. The day of year mark is a pair of forward */
+/*         slashes or a pair of colons.) */
 
-/*          Note the delimiters do not have to be the same. The pair */
-/*          of characters ",-" counts as two successive delimiters. */
+/*         Note the delimiters do not have to be the same. The pair */
+/*         of characters ",-" counts as two successive delimiters. */
 
-/*      12) White space, commas serve only to delimit tokens in the */
-/*          input string.  They do not affect the meaning of any */
-/*          of the tokens. */
+/*     13) White space and commas serve only to delimit tokens in the */
+/*         input string. They do not affect the meaning of any */
+/*         of the tokens. */
 
-/*      13) When the size of the integer components does not clearly */
-/*          specify a year the following patterns are assumed */
+/*     14) If an integer is greater than 1000 (and the 'JD' label */
+/*         is not present, the integer is regarded as a year. */
 
-/*          Calendar Format */
+/*     15) When the size of the integer components does not clearly */
+/*         specify a year the following patterns are assumed */
 
-/*              Year Month Day */
-/*              Month Day Year */
-/*              Year Day Month */
+/*         Calendar Format */
 
-/*              Where Month is the name of a month, not its numeric */
-/*              value. */
+/*            Year Month Day */
+/*            Month Day Year */
+/*            Year Day Month */
 
-/*              When integer components are separated by slashes (/) */
-/*              as in 3/4/5.  Month, Day, Year is assumed (2005 March 4) */
+/*            where Month is the name of a month, not its numeric */
+/*            value. */
 
-/*           Day of Year Format. */
+/*            When integer components are separated by slashes (/) */
+/*            as in 3/4/5. Month, Day, Year is assumed (2005 March 4) */
 
-/*              If a day of year marker is present (// or ::) the */
-/*              pattern */
+/*         Day of Year Format. */
 
-/*              I-I// or I-I:: (where I stands for and integer) */
-/*              is interpreted as Year Day-of-Year. However, I-I/ is */
-/*              regarded as ambiguous. */
+/*            If a day of year marker is present (// or ::) the */
+/*            pattern */
 
+/*              I-I// or I-I:: (where I stands for an integer) */
 
-/*      The table below gives a list of abbreviations used to */
-/*      classify tokens. */
+/*            is interpreted as Year Day-of-Year. However, I-I/ is */
+/*            regarded as ambiguous. */
 
-/*                 /   ---  slash punctuation mark */
-/*                 H   ---  hour */
-/*                 M   ---  Minute */
-/*                 S   ---  Second */
-/*                 Y   ---  year */
-/*                 d   ---  day of year marker */
-/*                 i   ---  unsigned integer */
-/*                 m   ---  month */
-/*                 n   ---  unsigned decimal number */
-/*                 y   ---  day of year */
-/*                 -   ---  dash punctuation mark */
-/*                 D   ---  day of month */
-/*                 :   ---  colon punctuation mark */
+/*     The table below gives a list of abbreviations used to */
+/*     classify tokens. */
 
-/*       Given these abbreviations the following (rather lengthy) */
-/*       table gives the set of built in token patterns that */
-/*       are recognized and the associated interpretation of that */
-/*       pattern. */
+/*                /   ---  slash punctuation mark */
+/*                H   ---  hour */
+/*                M   ---  Minute */
+/*                S   ---  Second */
+/*                Y   ---  year */
+/*                d   ---  day of year marker */
+/*                i   ---  unsigned integer */
+/*                m   ---  month */
+/*                n   ---  unsigned decimal number */
+/*                y   ---  day of year */
+/*                -   ---  dash punctuation mark */
+/*                D   ---  day of month */
+/*                :   ---  colon punctuation mark */
 
-/*        Pattern         Meaning         Pattern         Meaning */
-/*        ------------------------        ------------------------- */
-/*        Y-i-it......... YmD             i/i/ii:i:n..... mDYHMS */
-/*        Y-i-iti........ YmDH            i/i/ii:n....... mDYHM */
-/*        Y-i-iti:i...... YmDHM           i/i/ii:n....... mDYHM */
-/*        Y-i-iti:i:i.... YmDHMS          i:i:ii-i-Y..... HMSmDY */
-/*        Y-i-iti:i:n.... YmDHMS          i:i:ii/i/Y..... HMSmDY */
-/*        Y-i-iti:n...... YmDHM           i:i:ii/i/i..... HMSmDY */
-/*        Y-i-itn........ YmDH            i:i:iimY....... HMSDmY */
-/*        Y-i/........... Yy              i:i:imiY....... HMSmDY */
-/*        Y-i/i:i........ YyHM            i:i:ni-i-Y..... HMSmDY */
-/*        Y-i/i:i:i...... YyHMS           i:i:ni/i/Y..... HMSmDY */
-/*        Y-i/i:i:n...... YyHMS           i:i:ni/i/i..... HMSmDY */
-/*        Y-i/i:n........ YyHM            i:i:nimY....... HMSDmY */
-/*        Y-id........... Yy              i:i:nmiY....... HMSmDY */
-/*        Y-idi:i........ YyHM            i:ii-i-Y....... HMmDY */
-/*        Y-idi:i:i...... YyHMS           i:ii/i/Y....... HMmDY */
-/*        Y-idi:i:n...... YyHMS           i:ii/i/i....... HMmDY */
-/*        Y-idi:n........ YyHM            i:iimY......... HMDmY */
-/*        Y-it........... Yy              i:imiY......... HMmDY */
-/*        Y-iti.......... YyH             i:ni-i-Y....... HMmDY */
-/*        Y-iti:i........ YyHM            i:ni/i/Y....... HMmDY */
-/*        Y-iti:i:i...... YyHMS           i:ni/i/i....... HMmDY */
-/*        Y-iti:i:n...... YyHMS           i:nimY......... HMDmY */
-/*        Y-iti:n........ YyHM            i:nmiY......... HMmDY */
-/*        Y-itn.......... YyH             iYd............ yY */
-/*        Yid............ Yy              iYdi:i......... yYHM */
-/*        Yidi:i......... YyHM            iYdi:i:i....... yYHMS */
-/*        Yidi:i:i....... YyHMS           iYdi:i:n....... yYHMS */
-/*        Yidi:i:n....... YyHMS           iYdi:n......... yYHM */
-/*        Yidi:n......... YyHM            iiY............ mDY */
-/*        Yii............ YmD             iiYi........... mDYH */
-/*        Yiii........... YmDH            iiYi:i......... mDYHM */
-/*        Yiii:i......... YmDHM           iiYi:i:i....... mDYHMS */
-/*        Yiii:i:i....... YmDHMS          iiYi:i:n....... mDYHMS */
-/*        Yiii:i:n....... YmDHMS          iiYi:n......... mDYHM */
-/*        Yiii:n......... YmDHM           iiYn........... mDYH */
-/*        Yiiii.......... YmDHM           iid............ Yy */
-/*        Yiiiii......... YmDHMS          iidi:i......... YyHM */
-/*        Yiiiin......... YmDHMS          iidi:i:i....... YyHMS */
-/*        Yiiin.......... YmDHM           iidi:i:n....... YyHMS */
-/*        Yiin........... YmDH            iidi:n......... YyHM */
-/*        Yim............ YDm             iim............ YDm */
-/*        Yimi........... YDmH            iimi........... YDmH */
-/*        Yimi:i......... YDmHM           iimi:i......... YDmHM */
-/*        Yimi:i:i....... YDmHMS          iimi:i:i....... YDmHMS */
-/*        Yimi:i:n....... YDmHMS          iimi:i:n....... YDmHMS */
-/*        Yimi:n......... YDmHM           iimi:n......... YDmHM */
-/*        Yimn........... YDmH            iimii.......... YDmHM */
-/*        Yin............ YmD             iimiii......... YDmHMS */
-/*        Ymi............ YmD             iimiin......... YDmHMS */
-/*        Ymii........... YmDH            iimin.......... YDmHM */
-/*        Ymii:i......... YmDHM           iimn........... YDmH */
-/*        Ymii:i:i....... YmDHMS          imY............ DmY */
-/*        Ymii:i:n....... YmDHMS          imYi........... DmYH */
-/*        Ymii:n......... YmDHM           imYi:i......... DmYHM */
-/*        Ymin........... YmDH            imYi:i:i....... DmYHMS */
-/*        Ymn............ YmD             imYi:i:n....... DmYHMS */
-/*        Ynm............ YDm             imYi:n......... DmYHM */
-/*        i-Y/........... yY              imYn........... DmYH */
-/*        i-Y/i:i........ yYHM            imi............ YmD */
-/*        i-Y/i:i:i...... yYHMS           imi:i:iY....... DmHMSY */
-/*        i-Y/i:i:n...... yYHMS           imi:i:nY....... DmHMSY */
-/*        i-Y/i:n........ yYHM            imi:iY......... DmHMY */
-/*        i-Yd........... yY              imi:nY......... DmHMY */
-/*        i-Ydi:i........ yYHM            imii........... YmDH */
-/*        i-Ydi:i:i...... yYHMS           imii:i......... YmDHM */
-/*        i-Ydi:i:n...... yYHMS           imii:i:i....... YmDHMS */
-/*        i-Ydi:n........ yYHM            imii:i:n....... YmDHMS */
-/*        i-i-Y.......... mDY             imii:n......... YmDHM */
-/*        i-i-Yi:i....... mDYHM           imiii.......... YmDHM */
-/*        i-i-Yi:i:i..... mDYHMS          imiiii......... YmDHMS */
-/*        i-i-Yi:i:n..... mDYHMS          imiiin......... YmDHMS */
-/*        i-i-Yi:n....... mDYHM           imiin.......... YmDHM */
-/*        i-i-it......... YmD             imin........... YmDH */
-/*        i-i-iti........ YmDH            imn............ YmD */
-/*        i-i-iti:i...... YmDHM           inY............ mDY */
-/*        i-i-iti:i:i.... YmDHMS          inm............ YDm */
-/*        i-i-iti:i:n.... YmDHMS          miY............ mDY */
-/*        i-i-iti:n...... YmDHM           miYi........... mDYH */
-/*        i-i-itn........ YmDH            miYi:i......... mDYHM */
-/*        i-i/i:i........ YyHM            miYi:i:i....... mDYHMS */
-/*        i-i/i:i:i...... YyHMS           miYi:i:n....... mDYHMS */
-/*        i-i/i:i:n...... YyHMS           miYi:n......... mDYHM */
-/*        i-i/i:n........ YyHM            miYn........... mDYH */
-/*        i-idi:i........ YyHM            mii............ mDY */
-/*        i-idi:i:i...... YyHMS           mii:i:iY....... mDHMSY */
-/*        i-idi:i:n...... YyHMS           mii:i:nY....... mDHMSY */
-/*        i-idi:n........ YyHM            mii:iY......... mDHMY */
-/*        i-it........... Yy              mii:nY......... mDHMY */
-/*        i-iti.......... YyH             miii........... mDYH */
-/*        i-iti:i........ YyHM            miii:i......... mDYHM */
-/*        i-iti:i:i...... YyHMS           miii:i:i....... mDYHMS */
-/*        i-iti:i:n...... YyHMS           miii:i:n....... mDYHMS */
-/*        i-iti:n........ YyHM            miii:n......... mDYHM */
-/*        i-itn.......... YyH             miiii.......... mDYHM */
-/*        i/i/Y.......... mDY             miiiii......... mDYHMS */
-/*        i/i/Y/i:n...... mDYHM           miiiin......... mDYHMS */
-/*        i/i/Yi:i....... mDYHM           miiin.......... mDYHM */
-/*        i/i/Yi:i:i..... mDYHMS          miin........... mDYH */
-/*        i/i/Yi:i:n..... mDYHMS          mnY............ mDY */
-/*        i/i/i.......... mDY             mni............ mDY */
-/*        i/i/ii:i....... mDYHM           nmY............ DmY */
-/*        i/i/ii:i:i..... mDYHMS */
+/*      Given these abbreviations the following (rather lengthy) */
+/*      table gives the set of built in token patterns that */
+/*      are recognized and the associated interpretation of that */
+/*      pattern. */
+
+/*         Pattern         Meaning         Pattern         Meaning */
+/*         ------------------------        ------------------------- */
+/*         Y-i-it......... YmD             i/i/ii:i:n..... mDYHMS */
+/*         Y-i-iti........ YmDH            i/i/ii:n....... mDYHM */
+/*         Y-i-iti:i...... YmDHM           i/i/ii:n....... mDYHM */
+/*         Y-i-iti:i:i.... YmDHMS          i:i:ii-i-Y..... HMSmDY */
+/*         Y-i-iti:i:n.... YmDHMS          i:i:ii/i/Y..... HMSmDY */
+/*         Y-i-iti:n...... YmDHM           i:i:ii/i/i..... HMSmDY */
+/*         Y-i-itn........ YmDH            i:i:iimY....... HMSDmY */
+/*         Y-i/........... Yy              i:i:imiY....... HMSmDY */
+/*         Y-i/i:i........ YyHM            i:i:ni-i-Y..... HMSmDY */
+/*         Y-i/i:i:i...... YyHMS           i:i:ni/i/Y..... HMSmDY */
+/*         Y-i/i:i:n...... YyHMS           i:i:ni/i/i..... HMSmDY */
+/*         Y-i/i:n........ YyHM            i:i:nimY....... HMSDmY */
+/*         Y-id........... Yy              i:i:nmiY....... HMSmDY */
+/*         Y-idi:i........ YyHM            i:ii-i-Y....... HMmDY */
+/*         Y-idi:i:i...... YyHMS           i:ii/i/Y....... HMmDY */
+/*         Y-idi:i:n...... YyHMS           i:ii/i/i....... HMmDY */
+/*         Y-idi:n........ YyHM            i:iimY......... HMDmY */
+/*         Y-it........... Yy              i:imiY......... HMmDY */
+/*         Y-iti.......... YyH             i:ni-i-Y....... HMmDY */
+/*         Y-iti:i........ YyHM            i:ni/i/Y....... HMmDY */
+/*         Y-iti:i:i...... YyHMS           i:ni/i/i....... HMmDY */
+/*         Y-iti:i:n...... YyHMS           i:nimY......... HMDmY */
+/*         Y-iti:n........ YyHM            i:nmiY......... HMmDY */
+/*         Y-itn.......... YyH             iYd............ yY */
+/*         Yid............ Yy              iYdi:i......... yYHM */
+/*         Yidi:i......... YyHM            iYdi:i:i....... yYHMS */
+/*         Yidi:i:i....... YyHMS           iYdi:i:n....... yYHMS */
+/*         Yidi:i:n....... YyHMS           iYdi:n......... yYHM */
+/*         Yidi:n......... YyHM            iiY............ mDY */
+/*         Yii............ YmD             iiYi........... mDYH */
+/*         Yiii........... YmDH            iiYi:i......... mDYHM */
+/*         Yiii:i......... YmDHM           iiYi:i:i....... mDYHMS */
+/*         Yiii:i:i....... YmDHMS          iiYi:i:n....... mDYHMS */
+/*         Yiii:i:n....... YmDHMS          iiYi:n......... mDYHM */
+/*         Yiii:n......... YmDHM           iiYn........... mDYH */
+/*         Yiiii.......... YmDHM           iid............ Yy */
+/*         Yiiiii......... YmDHMS          iidi:i......... YyHM */
+/*         Yiiiin......... YmDHMS          iidi:i:i....... YyHMS */
+/*         Yiiin.......... YmDHM           iidi:i:n....... YyHMS */
+/*         Yiin........... YmDH            iidi:n......... YyHM */
+/*         Yim............ YDm             iim............ YDm */
+/*         Yimi........... YDmH            iimi........... YDmH */
+/*         Yimi:i......... YDmHM           iimi:i......... YDmHM */
+/*         Yimi:i:i....... YDmHMS          iimi:i:i....... YDmHMS */
+/*         Yimi:i:n....... YDmHMS          iimi:i:n....... YDmHMS */
+/*         Yimi:n......... YDmHM           iimi:n......... YDmHM */
+/*         Yimn........... YDmH            iimii.......... YDmHM */
+/*         Yin............ YmD             iimiii......... YDmHMS */
+/*         Ymi............ YmD             iimiin......... YDmHMS */
+/*         Ymii........... YmDH            iimin.......... YDmHM */
+/*         Ymii:i......... YmDHM           iimn........... YDmH */
+/*         Ymii:i:i....... YmDHMS          imY............ DmY */
+/*         Ymii:i:n....... YmDHMS          imYi........... DmYH */
+/*         Ymii:n......... YmDHM           imYi:i......... DmYHM */
+/*         Ymin........... YmDH            imYi:i:i....... DmYHMS */
+/*         Ymn............ YmD             imYi:i:n....... DmYHMS */
+/*         Ynm............ YDm             imYi:n......... DmYHM */
+/*         i-Y/........... yY              imYn........... DmYH */
+/*         i-Y/i:i........ yYHM            imi............ YmD */
+/*         i-Y/i:i:i...... yYHMS           imi:i:iY....... DmHMSY */
+/*         i-Y/i:i:n...... yYHMS           imi:i:nY....... DmHMSY */
+/*         i-Y/i:n........ yYHM            imi:iY......... DmHMY */
+/*         i-Yd........... yY              imi:nY......... DmHMY */
+/*         i-Ydi:i........ yYHM            imii........... YmDH */
+/*         i-Ydi:i:i...... yYHMS           imii:i......... YmDHM */
+/*         i-Ydi:i:n...... yYHMS           imii:i:i....... YmDHMS */
+/*         i-Ydi:n........ yYHM            imii:i:n....... YmDHMS */
+/*         i-i-Y.......... mDY             imii:n......... YmDHM */
+/*         i-i-Yi:i....... mDYHM           imiii.......... YmDHM */
+/*         i-i-Yi:i:i..... mDYHMS          imiiii......... YmDHMS */
+/*         i-i-Yi:i:n..... mDYHMS          imiiin......... YmDHMS */
+/*         i-i-Yi:n....... mDYHM           imiin.......... YmDHM */
+/*         i-i-it......... YmD             imin........... YmDH */
+/*         i-i-iti........ YmDH            imn............ YmD */
+/*         i-i-iti:i...... YmDHM           inY............ mDY */
+/*         i-i-iti:i:i.... YmDHMS          inm............ YDm */
+/*         i-i-iti:i:n.... YmDHMS          miY............ mDY */
+/*         i-i-iti:n...... YmDHM           miYi........... mDYH */
+/*         i-i-itn........ YmDH            miYi:i......... mDYHM */
+/*         i-i/i:i........ YyHM            miYi:i:i....... mDYHMS */
+/*         i-i/i:i:i...... YyHMS           miYi:i:n....... mDYHMS */
+/*         i-i/i:i:n...... YyHMS           miYi:n......... mDYHM */
+/*         i-i/i:n........ YyHM            miYn........... mDYH */
+/*         i-idi:i........ YyHM            mii............ mDY */
+/*         i-idi:i:i...... YyHMS           mii:i:iY....... mDHMSY */
+/*         i-idi:i:n...... YyHMS           mii:i:nY....... mDHMSY */
+/*         i-idi:n........ YyHM            mii:iY......... mDHMY */
+/*         i-it........... Yy              mii:nY......... mDHMY */
+/*         i-iti.......... YyH             miii........... mDYH */
+/*         i-iti:i........ YyHM            miii:i......... mDYHM */
+/*         i-iti:i:i...... YyHMS           miii:i:i....... mDYHMS */
+/*         i-iti:i:n...... YyHMS           miii:i:n....... mDYHMS */
+/*         i-iti:n........ YyHM            miii:n......... mDYHM */
+/*         i-itn.......... YyH             miiii.......... mDYHM */
+/*         i/i/Y.......... mDY             miiiii......... mDYHMS */
+/*         i/i/Y/i:n...... mDYHM           miiiin......... mDYHMS */
+/*         i/i/Yi:i....... mDYHM           miiin.......... mDYHM */
+/*         i/i/Yi:i:i..... mDYHMS          miin........... mDYH */
+/*         i/i/Yi:i:n..... mDYHMS          mnY............ mDY */
+/*         i/i/i.......... mDY             mni............ mDY */
+/*         i/i/ii:i....... mDYHM           nmY............ DmY */
+/*         i/i/ii:i:i..... mDYHMS */
 
 /* $ Examples */
 
 /*     Suppose you need to convert various time strings to ephemeris */
-/*     seconds past J2000.  The following pair of calls shows */
+/*     seconds past J2000. The following pair of calls shows */
 /*     how you would use this routine together with the routines */
 /*     TCHECK and TTRANS to perform this task. */
 
@@ -576,15 +586,28 @@ static integer c__8 = 8;
 
 /*     None. */
 
-/* $ Author_and_Institution */
-
-/*     W.L. Taber      (JPL) */
-
 /* $ Literature_References */
 
 /*     None. */
 
+/* $ Author_and_Institution */
+
+/*     J. Diaz del Rio    (ODC Space) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     E.D. Wright        (JPL) */
+
 /* $ Version */
+
+/* -    SPICELIB Version 3.2.0, 23-DEC-2021 (EDW) (BVS) (JDR) */
+
+/*        ISO format logic recognizes/evaluates ISO time strings */
+/*        with or without trailing 'Z'. */
+
+/*        Reordered header sections. Edited the header to comply with */
+/*        NAIF standard. */
+
+/*        Updated $Exceptions entry #1 wording. */
 
 /* -    SPICELIB Version 3.1.0, 15-AUG-2002 (WLT) */
 
@@ -605,10 +628,9 @@ static integer c__8 = 8;
 /*        the built-in list. */
 
 /*        In addition the set of built-in patterns was increased */
-/*        from 185 to 203.  See ZZTPATS for more details. */
+/*        from 185 to 203. See ZZTPATS for more details. */
 
 /* -    SPICELIB Version 1.0.0, 10-AUG-1996 (WLT) */
-
 
 /* -& */
 /* $ Index_Entries */
@@ -702,7 +724,7 @@ static integer c__8 = 8;
 /*           j        stands for julian date */
 /*           m        stands for a month */
 /*           o        stands for the symbol UTC- */
-/*           s  ---   stands for a time system (UTC, TDT, TDB) */
+/*           s  ---   stands for a time system (UTC, TDB, TT, TDT) */
 /*           t        stands the ISO date-T-time separator. */
 /*           w  ---   stands for the day of the week. */
 /*           i        stands for a sequence of digits */
@@ -716,7 +738,7 @@ static integer c__8 = 8;
 /*           y       stands for the day of the year */
 /*           H       stands for hours */
 /*           M       stands for minutes */
-/*           S       stands for seconds. */
+/*           S       stands for seconds */
 
 
 /*     We will use the following logical functions to modify */
@@ -924,12 +946,19 @@ static integer c__8 = 8;
 	use = bsrchc_(rep, &nknown, known, (ftnlen)12, (ftnlen)12);
 	if (use != 0) {
 	    resolv = zzrept_(known + ((i__1 = use - 1) < 300 && 0 <= i__1 ? 
-		    i__1 : s_rnge("known", i__1, "tpartv_", (ftnlen)1011)) * 
+		    i__1 : s_rnge("known", i__1, "tpartv_", (ftnlen)1036)) * 
 		    12, meanng + ((i__2 = use - 1) < 300 && 0 <= i__2 ? i__2 :
-		     s_rnge("meanng", i__2, "tpartv_", (ftnlen)1011)) * 12, &
+		     s_rnge("meanng", i__2, "tpartv_", (ftnlen)1036)) * 12, &
 		    l2r, (ftnlen)12, (ftnlen)12);
 	    *succes = zzunpck_(string, yabbrv, tvec, ntvec, type__, pictur, 
 		    error, string_len, type_len, pictur_len, error_len);
+
+/*           If you tag an ISO as A.D., other logic in the Time */
+/*           subsystem will not intepret the two digit year value as a */
+/*           two digit abbreviation. */
+
+/*            MODIFY(ERA) = 'A.D.' */
+
 	    if (i_indx(pictur, ".#", pictur_len, (ftnlen)2) != 0) {
 		suffix_("::RND", &c__1, pictur, (ftnlen)5, pictur_len);
 	    }
@@ -996,12 +1025,12 @@ static integer c__8 = 8;
     if (*mods) {
 	for (i__ = 1; i__ <= 5; ++i__) {
 	    if (begs[(i__1 = i__ - 1) < 5 && 0 <= i__1 ? i__1 : s_rnge("begs",
-		     i__1, "tpartv_", (ftnlen)1093)] != 0) {
+		     i__1, "tpartv_", (ftnlen)1127)] != 0) {
 		i__1 = begs[(i__2 = i__ - 1) < 5 && 0 <= i__2 ? i__2 : s_rnge(
-			"begs", i__2, "tpartv_", (ftnlen)1094)] - 1;
+			"begs", i__2, "tpartv_", (ftnlen)1128)] - 1;
 		ucase_(string + i__1, modify + (i__ - 1) * modify_len, ends[(
 			i__3 = i__ - 1) < 5 && 0 <= i__3 ? i__3 : s_rnge(
-			"ends", i__3, "tpartv_", (ftnlen)1094)] - i__1, 
+			"ends", i__3, "tpartv_", (ftnlen)1128)] - i__1, 
 			modify_len);
 	    }
 	}
@@ -1028,7 +1057,7 @@ static integer c__8 = 8;
 	    if (mapto != 0) {
 		s_copy(modify + (modify_len << 1), offset + ((i__1 = mapto - 
 			1) < 8 && 0 <= i__1 ? i__1 : s_rnge("offset", i__1, 
-			"tpartv_", (ftnlen)1121)) * 6, modify_len, (ftnlen)6);
+			"tpartv_", (ftnlen)1155)) * 6, modify_len, (ftnlen)6);
 	    }
 	}
     }
@@ -1039,9 +1068,9 @@ static integer c__8 = 8;
     use = bsrchc_(rep, &nknown, known, (ftnlen)12, (ftnlen)12);
     if (use > 0) {
 	resolv = zzrept_(known + ((i__1 = use - 1) < 300 && 0 <= i__1 ? i__1 :
-		 s_rnge("known", i__1, "tpartv_", (ftnlen)1136)) * 12, meanng 
+		 s_rnge("known", i__1, "tpartv_", (ftnlen)1170)) * 12, meanng 
 		+ ((i__2 = use - 1) < 300 && 0 <= i__2 ? i__2 : s_rnge("mean"
-		"ng", i__2, "tpartv_", (ftnlen)1136)) * 12, &l2r, (ftnlen)12, (
+		"ng", i__2, "tpartv_", (ftnlen)1170)) * 12, &l2r, (ftnlen)12, (
 		ftnlen)12);
 	*succes = zzunpck_(string, yabbrv, tvec, ntvec, type__, pictur, error,
 		 string_len, type_len, pictur_len, error_len);
@@ -1121,14 +1150,14 @@ static integer c__8 = 8;
     *(unsigned char *)&delim[2] = '/';
     for (i__ = 1; i__ <= 3; ++i__) {
 	resolv = zzremt_(delim + ((i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : 
-		s_rnge("delim", i__1, "tpartv_", (ftnlen)1227)), (ftnlen)1);
+		s_rnge("delim", i__1, "tpartv_", (ftnlen)1261)), (ftnlen)1);
 	resolv = zzgrep_(rep, (ftnlen)12);
 	use = bsrchc_(rep, &nknown, known, (ftnlen)12, (ftnlen)12);
 	if (use > 0) {
 	    resolv = zzrept_(known + ((i__1 = use - 1) < 300 && 0 <= i__1 ? 
-		    i__1 : s_rnge("known", i__1, "tpartv_", (ftnlen)1234)) * 
+		    i__1 : s_rnge("known", i__1, "tpartv_", (ftnlen)1268)) * 
 		    12, meanng + ((i__2 = use - 1) < 300 && 0 <= i__2 ? i__2 :
-		     s_rnge("meanng", i__2, "tpartv_", (ftnlen)1234)) * 12, &
+		     s_rnge("meanng", i__2, "tpartv_", (ftnlen)1268)) * 12, &
 		    l2r, (ftnlen)12, (ftnlen)12);
 	    *succes = zzunpck_(string, yabbrv, tvec, ntvec, type__, pictur, 
 		    error, string_len, type_len, pictur_len, error_len);

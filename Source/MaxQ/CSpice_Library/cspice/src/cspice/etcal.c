@@ -12,8 +12,8 @@ static integer c__1 = 1;
 static integer c__12 = 12;
 static integer c__6 = 6;
 
-/* $Procedure            ETCAL ( Convert ET to Calendar format ) */
-/* Subroutine */ int etcal_(doublereal *et, char *string, ftnlen string_len)
+/* $Procedure ETCAL ( Convert ET to Calendar format ) */
+/* Subroutine */ int etcal_(doublereal *et, char *calstr, ftnlen calstr_len)
 {
     /* Initialized data */
 
@@ -71,7 +71,6 @@ static integer c__6 = 6;
 
 /* $ Abstract */
 
-
 /*     Convert from an ephemeris epoch measured in seconds past */
 /*     the epoch of J2000 to a calendar string format using a */
 /*     formal calendar free of leapseconds. */
@@ -103,7 +102,7 @@ static integer c__6 = 6;
 
 /* $ Required_Reading */
 
-/*     None. */
+/*     TIME */
 
 /* $ Keywords */
 
@@ -112,10 +111,10 @@ static integer c__6 = 6;
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     ET         I   Ephemeris time measured in seconds past J2000. */
-/*     STRING     O   A standard calendar representation of ET. */
+/*     CALSTR     O   A standard calendar representation of ET. */
 
 /* $ Detailed_Input */
 
@@ -124,14 +123,14 @@ static integer c__6 = 6;
 
 /* $ Detailed_Output */
 
-/*     STRING   is a calendar string representing the input ephemeris */
-/*              epoch.  This string is based upon extending the */
+/*     CALSTR   is a calendar string representing the input ephemeris */
+/*              epoch. This string is based upon extending the */
 /*              Gregorian Calendar backward and forward indefinitely */
 /*              keeping the same rules for determining leap years. */
 /*              Moreover, there is no accounting for leapseconds. */
 
 /*              To be sure that all of the date can be stored in */
-/*              STRING, it should be declared to have length at */
+/*              CALSTR, it should be declared to have length at */
 /*              least 48 characters. */
 
 /*              The string will have the following format */
@@ -142,8 +141,8 @@ static integer c__6 = 6;
 
 /*                 year --- is the year */
 /*                 era  --- is the chronological era associated with */
-/*                          the date.  For years after 999 A.D. */
-/*                          the era is omitted.  For years */
+/*                          the date. For years after 999 A.D. */
+/*                          the era is omitted. For years */
 /*                          between 1 A.D. and 999 A.D. (inclusive) */
 /*                          era is the string 'A.D.' For epochs */
 /*                          before 1 A.D. Jan 1 00:00:00, era is */
@@ -169,11 +168,10 @@ static integer c__6 = 6;
 /*                          leading zeros are added to mn if the */
 /*                          numeric value is less than 10. */
 /*                 sc.sss   is the second of the minute to 3 decimal */
-/*                          places ( 0 to 59.999).  Leading zeros */
+/*                          places ( 0 to 59.999). Leading zeros */
 /*                          are added if the numeric value is less */
-/*                          than 10.  Seconds are truncated, not */
+/*                          than 10. Seconds are truncated, not */
 /*                          rounded. */
-
 
 /* $ Parameters */
 
@@ -183,17 +181,17 @@ static integer c__6 = 6;
 
 /*     Error free. */
 
-/*     1) If the input ET is so large that the corresponding */
-/*        number of days since 1 A.D. Jan 1, 00:00:00 is */
-/*        within 1 of overflowing or underflowing an integer, */
-/*        ET will not be converted to the correct string */
-/*        representation rather, the string returned will */
-/*        state that the epoch was before or after the day */
-/*        that is INTMIN +1 or INTMAX - 1 days after */
-/*        1 A.D. Jan 1, 00:00:00. */
+/*     1)  If the input ET is so large that the corresponding */
+/*         number of days since 1 A.D. Jan 1, 00:00:00 is */
+/*         within 1 of overflowing or underflowing an integer, */
+/*         ET will not be converted to the correct string */
+/*         representation rather, the string returned will */
+/*         state that the epoch was before or after the day */
+/*         that is INTMIN +1 or INTMAX - 1 days after */
+/*         1 A.D. Jan 1, 00:00:00. */
 
-/*     2) If the output string is not sufficiently long to hold */
-/*        the full date, it will be truncated on the right. */
+/*     2)  If the output string is not sufficiently long to hold */
+/*         the full date, it will be truncated on the right. */
 
 /* $ Files */
 
@@ -203,9 +201,9 @@ static integer c__6 = 6;
 
 /*     This is an error free routine for converting ephemeris epochs */
 /*     represented as seconds past the J2000 epoch to formal */
-/*     calendar strings based upon the Gregorian Calendar.  This formal */
+/*     calendar strings based upon the Gregorian Calendar. This formal */
 /*     time is often useful when one needs a human recognizable */
-/*     form of an ephemeris epoch.  There is no accounting for leap */
+/*     form of an ephemeris epoch. There is no accounting for leap */
 /*     seconds in the output times produced. */
 
 /*     Note: The calendar epochs produced are not the same as the */
@@ -218,83 +216,90 @@ static integer c__6 = 6;
 /*     times without employing leapseconds to produce exact UTC */
 /*     epochs. */
 
-
 /* $ Examples */
 
 /*     Suppose you wish to  report that no data is */
-/*     available at a particular ephemeris epoch ET.  The following */
-/*     code shows how you might accomplish this task. */
+/*     available at a particular ephemeris epoch ET. The following */
+/*     code shows how you might accomplish this task: */
 
-/*     CALL DPSTRF ( ET,  6, 'F', ETSTR  ) */
-/*     CALL ETCAL  ( ET,          STRING ) */
+/*           CALL DPSTRF ( ET,  6, 'F', ETSTR  ) */
+/*           CALL ETCAL  ( ET,          CALSTR ) */
 
-/*     E1 = RTRIM   (             STRING ) */
-/*     E2 = RTRIM   (             ETSTR  ) */
+/*           E1 = RTRIM   (             CALSTR ) */
+/*           E2 = RTRIM   (             ETSTR  ) */
 
-/*     WRITE (*,*) 'There is no data available for the body ' */
-/*     WRITE (*,*) 'at requested time: ' */
-/*     WRITE (*,*) '   ', STRING(1:E1), ' (', ETSTR(1:E2), ')' */
-
+/*           WRITE (*,*) 'There is no data available for the body ' */
+/*           WRITE (*,*) 'at requested time: ' */
+/*           WRITE (*,*) '   ', CALSTR(1:E1), ' (', ETSTR(1:E2), ')' */
 
 /* $ Restrictions */
 
-/*     One must keep in mind when using this routine that */
-/*     ancient times are not based upon the Gregorian */
-/*     calendar.  For example the 0 point of the Julian */
-/*     Date system is 4713 B.C. Jan 1, 12:00:00 on the Julian */
-/*     Calendar.  If one formalized the Gregorian calendar */
-/*     and extended it indefinitely, the zero point of the Julian */
-/*     date system corresponds to 4714 B.C. NOV 24 12:00:00 on */
-/*     the Gregorian calendar.  There are several reasons for this. */
-/*     Leap years in the Julian calendar occur every */
-/*     4 years (including *all* centuries).  Moreover,  the */
-/*     Gregorian calendar "effectively" begins on 15 Oct, 1582 A.D. */
-/*     which is 5 Oct, 1582 A.D. in the Julian Calendar. */
+/*     1)  One must keep in mind when using this routine that */
+/*         ancient times are not based upon the Gregorian */
+/*         calendar. For example the 0 point of the Julian */
+/*         Date system is 4713 B.C. Jan 1, 12:00:00 on the Julian */
+/*         Calendar. If one formalized the Gregorian calendar */
+/*         and extended it indefinitely, the zero point of the Julian */
+/*         date system corresponds to 4714 B.C. NOV 24 12:00:00 on */
+/*         the Gregorian calendar. There are several reasons for this. */
+/*         Leap years in the Julian calendar occur every */
+/*         4 years (including *all* centuries). Moreover,  the */
+/*         Gregorian calendar "effectively" begins on 15 Oct, 1582 A.D. */
+/*         which is 5 Oct, 1582 A.D. in the Julian Calendar. */
 
-/*     Therefore you must be careful in your interpretation */
-/*     of ancient dates produced by this routine. */
+/*         Therefore you must be careful in your interpretation */
+/*         of ancient dates produced by this routine. */
 
 /* $ Literature_References */
 
-/*     1. "From Sundial to Atomic Clocks---Understanding Time and */
-/*         Frequency" by James Jespersen and Jane Fitz-Randolph */
-/*         Dover Publications, Inc. New York (1982). */
+/*     [1]  J. Jespersen and J. Fitz-Randolph, "From Sundials to Atomic */
+/*          Clocks, Understanding Time and Frequency," Dover */
+/*          Publications, Inc. New York, 1982. */
 
 /* $ Author_and_Institution */
 
-/*     W.L. Taber      (JPL) */
-/*     K.R. Gehringer  (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
 
-/* -     SPICELIB Version 2.2.0, 05-MAR-1998 (WLT) */
+/* -    SPICELIB Version 2.3.0, 17-JUN-2021 (JDR) */
 
-/*         The documentation concerning the appearance of the output */
-/*         time string was corrected so that it does not suggest */
-/*         a comma is inserted after the day of the month.  The */
-/*         comma was removed from the output string in Version 2.0.0 */
-/*         (see the note below) but the documentation was not upgraded */
-/*         accordingly. */
+/*        Added IMPLICIT NONE statement. Changed output argument name */
+/*        STRING to CALSTR for consistency with other routines. */
 
-/* -     SPICELIB Version 2.1.0, 20-MAY-1996 (WLT) */
+/*        Edited the header to comply with NAIF standard. Removed */
+/*        unnecessary $Revisions section. Added TIME required reading. */
 
-/*         Two arrays that were initialized but never used were */
-/*         removed. */
+/* -    SPICELIB Version 2.2.0, 05-MAR-1998 (WLT) */
 
-/* -     SPICELIB Version 2.0.0, 16-AUG-1995 (KRG) */
+/*        The documentation concerning the appearance of the output */
+/*        time string was corrected so that it does not suggest */
+/*        a comma is inserted after the day of the month. The */
+/*        comma was removed from the output string in Version 2.0.0 */
+/*        (see the note below) but the documentation was not upgraded */
+/*        accordingly. */
 
-/*         If the day number was less than 10, the spacing was off for */
-/*         the rest of the time by one space, that for the "tens" digit. */
-/*         This has been fixed by using a leading zero when the number of */
-/*         days is < 10. */
+/* -    SPICELIB Version 2.1.0, 20-MAY-1996 (WLT) */
 
-/*         Also, the comma that appeared between the month/day/year */
-/*         and the hour:minute:seconds tokens has been removed. This was */
-/*         done in order to make the calendar date format of ETCAL */
-/*         consistent with the calendar date format of ET2UTC. */
+/*        Two arrays that were initialized but never used were */
+/*        removed. */
+
+/* -    SPICELIB Version 2.0.0, 16-AUG-1995 (KRG) */
+
+/*        If the day number was less than 10, the spacing was off for */
+/*        the rest of the time by one space, that for the "tens" digit. */
+/*        This has been fixed by using a leading zero when the number of */
+/*        days is < 10. */
+
+/*        Also, the comma that appeared between the month/day/year */
+/*        and the hour:minute:seconds tokens has been removed. This was */
+/*        done in order to make the calendar date format of ETCAL */
+/*        consistent with the calendar date format of ET2UTC. */
 
 
-/* -     SPICELIB Version 1.0.0, 14-DEC-1993 (WLT) */
+/* -    SPICELIB Version 1.0.0, 14-DEC-1993 (WLT) */
 
 /* -& */
 /* $ Index_Entries */
@@ -302,30 +307,8 @@ static integer c__6 = 6;
 /*     Convert ephemeris time to a formal calendar date */
 
 /* -& */
-/* $ Revisions */
 
-/* -     SPICELIB Version 2.1.0, 20-MAY-1996 (WLT) */
-
-/*         Two arrays that were initialized but never used were */
-/*         removed. */
-
-/* -     SPICELIB Version 2.0.0, 16-AUG-1995 (KRG) */
-
-/*         If the day number was less than 10, the spacing was off for */
-/*         the rest of the time by one space, that for the "tens" digit. */
-/*         This has been fixed byusing a leading zero when the number of */
-/*         days is < 10. */
-
-/*         Also, the comma that appeared between the month/day/year */
-/*         and the hour:minute:seconds tokens has been removed. This was */
-/*         done in order to make the calendar date format of ETCAL */
-/*         consistent with the calendar date format of ET2UTC. */
-
-/* -     SPICELIB Version 1.0.0, 14-DEC-1993 (WLT) */
-
-/* -& */
-
-/*     Spicelib Functions. */
+/*     SPICELIB Functions. */
 
 
 /*     We declare the variables that contain the number of days in */
@@ -349,7 +332,7 @@ static integer c__6 = 6;
 
 
 /*     We will construct our string using the local variable DATE */
-/*     and transfer the results to the output STRING when we are */
+/*     and transfer the results to the output CALSTR when we are */
 /*     done. */
 
 
@@ -394,8 +377,8 @@ static integer c__6 = 6;
 	dn2000 = (c__2000 - 1) * 365 + (c__2000 - 1) / 4 - (c__2000 - 1) / 
 		100 + (c__2000 - 1) / 400 + (dpjan0[(i__1 = c__1 - 1) < 12 && 
 		0 <= i__1 ? i__1 : s_rnge("dpjan0", i__1, "etcal_", (ftnlen)
-		571)] + extra[(i__2 = c__1 - 1) < 12 && 0 <= i__2 ? i__2 : 
-		s_rnge("extra", i__2, "etcal_", (ftnlen)571)] * ((c__2000 / 4 
+		555)] + extra[(i__2 = c__1 - 1) < 12 && 0 <= i__2 ? i__2 : 
+		s_rnge("extra", i__2, "etcal_", (ftnlen)555)] * ((c__2000 / 4 
 		<< 2) / c__2000 - c__2000 / 100 * 100 / c__2000 + c__2000 / 
 		400 * 400 / c__2000) + c__1) - 1;
 	dmxint = (doublereal) intmax_();
@@ -507,11 +490,11 @@ static integer c__6 = 6;
 	    year == 0) {
 	month = lstlti_(&dofyr, &c__12, dpjan0);
 	day = dofyr - dpjan0[(i__1 = month - 1) < 12 && 0 <= i__1 ? i__1 : 
-		s_rnge("dpjan0", i__1, "etcal_", (ftnlen)698)];
+		s_rnge("dpjan0", i__1, "etcal_", (ftnlen)682)];
     } else {
 	month = lstlti_(&dofyr, &c__12, dpbegl);
 	day = dofyr - dpbegl[(i__1 = month - 1) < 12 && 0 <= i__1 ? i__1 : 
-		s_rnge("dpbegl", i__1, "etcal_", (ftnlen)701)];
+		s_rnge("dpbegl", i__1, "etcal_", (ftnlen)685)];
     }
 
 /*     If we had to adjust the year to make it positive, we now */
@@ -612,7 +595,7 @@ static integer c__6 = 6;
     i__3[1] = 16, a__1[1] = ystr;
     i__3[2] = 16, a__1[2] = era;
     i__3[3] = 3, a__1[3] = months + ((i__1 = month - 1) < 12 && 0 <= i__1 ? 
-	    i__1 : s_rnge("months", i__1, "etcal_", (ftnlen)810)) * 3;
+	    i__1 : s_rnge("months", i__1, "etcal_", (ftnlen)794)) * 3;
     i__3[4] = 1, a__1[4] = " ";
     i__3[5] = 3, a__1[5] = dstr;
     i__3[6] = 1, a__1[6] = " ";
@@ -624,7 +607,7 @@ static integer c__6 = 6;
     s_cat(date, a__1, i__3, &c__12, (ftnlen)180);
     cmprss_(" ", &c__1, date, date, (ftnlen)1, (ftnlen)180, (ftnlen)180);
     ljust_(date, date, (ftnlen)180, (ftnlen)180);
-    s_copy(string, date, string_len, (ftnlen)180);
+    s_copy(calstr, date, calstr_len, (ftnlen)180);
     return 0;
 } /* etcal_ */
 

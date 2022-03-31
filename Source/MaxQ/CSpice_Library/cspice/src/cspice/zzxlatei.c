@@ -147,6 +147,10 @@ static integer c__4 = 4;
 
 /* $ Version */
 
+/* -    SPICELIB Version 2.6.0, 28-NOV-2021 (BVS) */
+
+/*        Updated for MAC-OSX-M1-64BIT-CLANG_C. */
+
 /* -    SPICELIB Version 2.5.0, 10-MAR-2014 (BVS) */
 
 /*        Updated for SUN-SOLARIS-64BIT-INTEL. */
@@ -459,9 +463,17 @@ static integer c__4 = 4;
 
 /* $ Version */
 
+/* -    SPICELIB Version 1.27.0, 28-NOV-2021 (BVS) */
+
+/*        Updated for MAC-OSX-M1-64BIT-CLANG_C. */
+
+/* -    SPICELIB Version 1.26.1, 01-OCT-2021 (NJB) */
+
+/*        Fixed typo in comments. */
+
 /* -    SPICELIB Version 1.26.0, 15-NOV-2015 (EDW) */
 
-/*        Recast J = 4*(-1+I) + 1 as J = -3+4*I to accomodate */
+/*        Recast J = 4*(-1+I) + 1 as J = -3+4*I to accommodate */
 /*        f2c processing. */
 
 /* -    SPICELIB Version 1.25.0, 10-MAR-2014 (BVS) */
@@ -620,7 +632,7 @@ static integer c__4 = 4;
 	for (i__ = 1; i__ <= 4; ++i__) {
 	    zzddhgsd_("BFF", &i__, strbff + (((i__1 = i__ - 1) < 4 && 0 <= 
 		    i__1 ? i__1 : s_rnge("strbff", i__1, "zzxlatei_", (ftnlen)
-		    366)) << 3), (ftnlen)3, (ftnlen)8);
+		    374)) << 3), (ftnlen)3, (ftnlen)8);
 	}
 
 /*        Fetch the native binary file format. */
@@ -695,10 +707,10 @@ static integer c__4 = 4;
 			"ur.", (ftnlen)158);
 		errch_("#", strbff + (((i__1 = *inbff - 1) < 4 && 0 <= i__1 ? 
 			i__1 : s_rnge("strbff", i__1, "zzxlatei_", (ftnlen)
-			461)) << 3), (ftnlen)1, (ftnlen)8);
+			469)) << 3), (ftnlen)1, (ftnlen)8);
 		errch_("#", strbff + (((i__1 = natbff - 1) < 4 && 0 <= i__1 ? 
 			i__1 : s_rnge("strbff", i__1, "zzxlatei_", (ftnlen)
-			462)) << 3), (ftnlen)1, (ftnlen)8);
+			470)) << 3), (ftnlen)1, (ftnlen)8);
 		sigerr_("SPICE(BUG)", (ftnlen)10);
 		chkout_("ZZXLATEI", (ftnlen)8);
 		return 0;
@@ -715,10 +727,10 @@ static integer c__4 = 4;
 		errint_("#", &numint, (ftnlen)1);
 		errch_("#", strbff + (((i__1 = *inbff - 1) < 4 && 0 <= i__1 ? 
 			i__1 : s_rnge("strbff", i__1, "zzxlatei_", (ftnlen)
-			481)) << 3), (ftnlen)1, (ftnlen)8);
+			489)) << 3), (ftnlen)1, (ftnlen)8);
 		errch_("#", strbff + (((i__1 = natbff - 1) < 4 && 0 <= i__1 ? 
 			i__1 : s_rnge("strbff", i__1, "zzxlatei_", (ftnlen)
-			482)) << 3), (ftnlen)1, (ftnlen)8);
+			490)) << 3), (ftnlen)1, (ftnlen)8);
 		errint_("#", space, (ftnlen)1);
 		sigerr_("SPICE(BUG)", (ftnlen)10);
 		chkout_("ZZXLATEI", (ftnlen)8);
@@ -787,10 +799,10 @@ static integer c__4 = 4;
 		    "to #.  This error should never occur and is indicative o"
 		    "f a bug.  Contact NAIF.", (ftnlen)134);
 	    errch_("#", strbff + (((i__1 = *inbff - 1) < 4 && 0 <= i__1 ? 
-		    i__1 : s_rnge("strbff", i__1, "zzxlatei_", (ftnlen)552)) 
+		    i__1 : s_rnge("strbff", i__1, "zzxlatei_", (ftnlen)560)) 
 		    << 3), (ftnlen)1, (ftnlen)8);
 	    errch_("#", strbff + (((i__1 = natbff - 1) < 4 && 0 <= i__1 ? 
-		    i__1 : s_rnge("strbff", i__1, "zzxlatei_", (ftnlen)553)) 
+		    i__1 : s_rnge("strbff", i__1, "zzxlatei_", (ftnlen)561)) 
 		    << 3), (ftnlen)1, (ftnlen)8);
 	    sigerr_("SPICE(BUG)", (ftnlen)10);
 	    chkout_("ZZXLATEI", (ftnlen)8);
@@ -813,10 +825,10 @@ static integer c__4 = 4;
 			"ur.", (ftnlen)158);
 		errch_("#", strbff + (((i__1 = *inbff - 1) < 4 && 0 <= i__1 ? 
 			i__1 : s_rnge("strbff", i__1, "zzxlatei_", (ftnlen)
-			580)) << 3), (ftnlen)1, (ftnlen)8);
+			588)) << 3), (ftnlen)1, (ftnlen)8);
 		errch_("#", strbff + (((i__1 = natbff - 1) < 4 && 0 <= i__1 ? 
 			i__1 : s_rnge("strbff", i__1, "zzxlatei_", (ftnlen)
-			581)) << 3), (ftnlen)1, (ftnlen)8);
+			589)) << 3), (ftnlen)1, (ftnlen)8);
 		sigerr_("SPICE(BUG)", (ftnlen)10);
 		chkout_("ZZXLATEI", (ftnlen)8);
 		return 0;
@@ -833,10 +845,10 @@ static integer c__4 = 4;
 		errint_("#", &numint, (ftnlen)1);
 		errch_("#", strbff + (((i__1 = *inbff - 1) < 4 && 0 <= i__1 ? 
 			i__1 : s_rnge("strbff", i__1, "zzxlatei_", (ftnlen)
-			600)) << 3), (ftnlen)1, (ftnlen)8);
+			608)) << 3), (ftnlen)1, (ftnlen)8);
 		errch_("#", strbff + (((i__1 = natbff - 1) < 4 && 0 <= i__1 ? 
 			i__1 : s_rnge("strbff", i__1, "zzxlatei_", (ftnlen)
-			601)) << 3), (ftnlen)1, (ftnlen)8);
+			609)) << 3), (ftnlen)1, (ftnlen)8);
 		errint_("#", space, (ftnlen)1);
 		sigerr_("SPICE(BUG)", (ftnlen)10);
 		chkout_("ZZXLATEI", (ftnlen)8);
@@ -905,10 +917,10 @@ static integer c__4 = 4;
 		    "to #.  This error should never occur and is indicative o"
 		    "f a bug.  Contact NAIF.", (ftnlen)134);
 	    errch_("#", strbff + (((i__1 = *inbff - 1) < 4 && 0 <= i__1 ? 
-		    i__1 : s_rnge("strbff", i__1, "zzxlatei_", (ftnlen)671)) 
+		    i__1 : s_rnge("strbff", i__1, "zzxlatei_", (ftnlen)679)) 
 		    << 3), (ftnlen)1, (ftnlen)8);
 	    errch_("#", strbff + (((i__1 = natbff - 1) < 4 && 0 <= i__1 ? 
-		    i__1 : s_rnge("strbff", i__1, "zzxlatei_", (ftnlen)672)) 
+		    i__1 : s_rnge("strbff", i__1, "zzxlatei_", (ftnlen)680)) 
 		    << 3), (ftnlen)1, (ftnlen)8);
 	    sigerr_("SPICE(BUG)", (ftnlen)10);
 	    chkout_("ZZXLATEI", (ftnlen)8);
@@ -924,7 +936,7 @@ static integer c__4 = 4;
 		"not currently supported for translation of integers from non"
 		"-native formats.", (ftnlen)135);
 	errch_("#", strbff + (((i__1 = natbff - 1) < 4 && 0 <= i__1 ? i__1 : 
-		s_rnge("strbff", i__1, "zzxlatei_", (ftnlen)690)) << 3), (
+		s_rnge("strbff", i__1, "zzxlatei_", (ftnlen)698)) << 3), (
 		ftnlen)1, (ftnlen)8);
 	sigerr_("SPICE(BUG)", (ftnlen)10);
 	chkout_("ZZXLATEI", (ftnlen)8);

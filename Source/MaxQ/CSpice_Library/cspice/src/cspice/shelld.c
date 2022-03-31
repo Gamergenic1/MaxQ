@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      SHELLD ( Shell sort a double precision array ) */
+/* $Procedure SHELLD ( Shell sort a double precision array ) */
 /* Subroutine */ int shelld_(integer *ndim, doublereal *array)
 {
     /* System generated locals */
@@ -18,7 +18,7 @@
 
 /* $ Abstract */
 
-/*      Sort a double precision array using the Shell Sort algorithm. */
+/*     Sort a double precision array using the Shell Sort algorithm. */
 
 /* $ Disclaimer */
 
@@ -51,85 +51,98 @@
 
 /* $ Keywords */
 
-/*      ARRAY,  SORT */
+/*     ARRAY */
+/*     SORT */
 
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*      VARIABLE  I/O  DESCRIPTION */
-/*      --------  ---  -------------------------------------------------- */
-/*      NDIM       I   Dimension of the array. */
-/*      ARRAY     I/O  The array. */
+/*     VARIABLE  I/O  DESCRIPTION */
+/*     --------  ---  -------------------------------------------------- */
+/*     NDIM       I   Dimension of the array. */
+/*     ARRAY     I-O  The array. */
 
 /* $ Detailed_Input */
 
-/*      NDIM        is the number of elements in the array to be sorted. */
+/*     NDIM     is the number of elements in the array to be sorted. */
 
-/*      ARRAY       on input, is the array to be sorted. */
+/*     ARRAY    on input, is the array to be sorted. */
 
 /* $ Detailed_Output */
 
-/*      ARRAY       on output, contains the same elements, sorted */
-/*                  in increasing order. The actual sorting is done */
-/*                  in place in ARRAY. */
+/*     ARRAY    on output, contains the same elements, sorted */
+/*              in increasing order. The actual sorting is done */
+/*              in place in ARRAY. */
 
 /* $ Parameters */
 
 /*     None. */
 
-/* $ Particulars */
-
-/*      The Shell Sort Algorithm is well known. */
-
-/* $ Examples */
-
-/*      Let ARRAY contain the following elements: */
-
-/*            99.D0 */
-/*            33.D0 */
-/*            55.D0 */
-/*            44.D0 */
-/*           -77.D0 */
-/*            66.D0 */
-
-/*      Then after a call to SHELLD, the array would be ordered as */
-/*      follows: */
-
-/*           -77.D0 */
-/*            33.D0 */
-/*            44.D0 */
-/*            55.D0 */
-/*            66.D0 */
-/*            99.D0 */
-
-/* $ Restrictions */
-
-/*      None. */
-
 /* $ Exceptions */
 
-/*      Error free. */
+/*     Error free. */
+
+/*     1)  If NDIM < 2, this routine does not modify the array. */
 
 /* $ Files */
 
-/*      None. */
+/*     None. */
 
-/* $ Author_and_Institution */
+/* $ Particulars */
 
-/*      I.M. Underwood  (JPL) */
+/*     The Shell Sort Algorithm is well known. */
+
+/* $ Examples */
+
+/*     Let ARRAY contain the following elements: */
+
+/*           99.D0 */
+/*           33.D0 */
+/*           55.D0 */
+/*           44.D0 */
+/*          -77.D0 */
+/*           66.D0 */
+
+/*     Then after a call to SHELLD, the array would be ordered as */
+/*     follows: */
+
+/*          -77.D0 */
+/*           33.D0 */
+/*           44.D0 */
+/*           55.D0 */
+/*           66.D0 */
+/*           99.D0 */
+
+/* $ Restrictions */
+
+/*     None. */
 
 /* $ Literature_References */
 
-/*      None. */
+/*     None. */
+
+/* $ Author_and_Institution */
+
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
 
-/* -     SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+/* -    SPICELIB Version 1.1.0, 02-JUN-2021 (JDR) */
 
-/*         Comment section for permuted index source lines was added */
-/*         following the header. */
+/*        Added IMPLICIT NONE statement. */
 
-/* -     SPICELIB Version 1.0.0, 31-JAN-1990 (IMU) */
+/*        Edited the header to comply with NAIF standard. */
+
+/*        Added entry #1 in $Exceptions section. */
+
+/* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+
+/*        Comment section for permuted index source lines was added */
+/*        following the header. */
+
+/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (IMU) */
 
 /* -& */
 /* $ Index_Entries */

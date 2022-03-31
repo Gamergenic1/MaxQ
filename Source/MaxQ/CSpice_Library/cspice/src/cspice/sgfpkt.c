@@ -15,7 +15,7 @@ static integer c__11 = 11;
 static integer c__8 = 8;
 static integer c__9 = 9;
 
-/* $Procedure      SGFPKT ( Generic Segment: Fetch data packets ) */
+/* $Procedure SGFPKT ( Generic Segment: Fetch data packets ) */
 /* Subroutine */ int sgfpkt_(integer *handle, doublereal *descr, integer *
 	first, integer *last, doublereal *values, integer *ends)
 {
@@ -44,9 +44,9 @@ static integer c__9 = 9;
 
 /* $ Abstract */
 
-/*     Given the descriptor for a generic segment in a DAF file */
-/*     associated with HANDLE, fetch the data packets indexed from FIRST */
-/*     to LAST from the packet partition of the generic segment. */
+/*     Fetch the data packets indexed from FIRST to LAST from the */
+/*     packet partition of a generic segment. The segment is */
+/*     identified by a DAF file handle and segment descriptor. */
 
 /* $ Disclaimer */
 
@@ -75,94 +75,93 @@ static integer c__9 = 9;
 
 /* $ Required_Reading */
 
-/*      DAF Required Reading */
+/*     DAF */
 
 /* $ Keywords */
 
-/*      GENERIC SEGMENTS */
+/*     GENERIC SEGMENTS */
 
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*      VARIABLE  I/O  DESCRIPTION */
-/*      --------  ---  -------------------------------------------------- */
-/*      HANDLE     I   The file handle attached to an open DAF. */
-/*      DESCR      I   The descriptor associated with a generic segment. */
-/*      FIRST      I   The index of the first data packet to fetch. */
-/*      LAST       I   The index of the last data packet to fetch. */
-/*      VALUES     O   The data packets that have been fetched. */
-/*      ENDS       O   An array of pointers to the ends of the packets. */
+/*     VARIABLE  I/O  DESCRIPTION */
+/*     --------  ---  -------------------------------------------------- */
+/*     HANDLE     I   The file handle attached to an open DAF. */
+/*     DESCR      I   The descriptor associated with a generic segment. */
+/*     FIRST      I   The index of the first data packet to fetch. */
+/*     LAST       I   The index of the last data packet to fetch. */
+/*     VALUES     O   The data packets that have been fetched. */
+/*     ENDS       O   An array of pointers to the ends of the packets. */
 
 /* $ Detailed_Input */
 
-/*      HANDLE     is the handle of a DAF opened for reading that */
-/*                 contains the segment described by DESCR. */
+/*     HANDLE   is the handle of a DAF opened for reading that */
+/*              contains the segment described by DESCR. */
 
-/*      DESCR      is the descriptor of the segment with the desired */
-/*                 constant values. This must be the descriptor for a */
-/*                 generic segment in the DAF associated with HANDLE. */
+/*     DESCR    is the descriptor of the segment with the desired */
+/*              constant values. This must be the descriptor for a */
+/*              generic segment in the DAF associated with HANDLE. */
 
-/*      FIRST      is the index of the first value to fetch from the */
-/*                 constants section of the DAF segment described */
-/*                 by DESCR. */
+/*     FIRST    is the index of the first value to fetch from the */
+/*              constants section of the DAF segment described */
+/*              by DESCR. */
 
-/*      LAST       is the index of the last value to fetch from the */
-/*                 constants section of the DAF segment described */
-/*                 by DESCR */
+/*     LAST     is the index of the last value to fetch from the */
+/*              constants section of the DAF segment described */
+/*              by DESCR */
 
 /* $ Detailed_Output */
 
-/*     VALUES      is the array of values constructed by concatenating */
-/*                 requested packets one after the other into */
-/*                 an array.  Pictorially we can represent VALUES */
-/*                 as: */
+/*     VALUES   is the array of values constructed by concatenating */
+/*              requested packets one after the other into */
+/*              an array. Pictorially we can represent VALUES */
+/*              as: */
 
-/*                    +--------------------------+ */
-/*                    | first requested packet   | */
-/*                    +--------------------------+ */
-/*                    | second requested packet  | */
-/*                    +--------------------------+ */
-/*                               . */
-/*                               . */
-/*                               . */
-/*                    +--------------------------+ */
-/*                    | first requested packet   | */
-/*                    +--------------------------+ */
+/*                 +--------------------------+ */
+/*                 | first requested packet   | */
+/*                 +--------------------------+ */
+/*                 | second requested packet  | */
+/*                 +--------------------------+ */
+/*                            . */
+/*                            . */
+/*                            . */
+/*                 +--------------------------+ */
+/*                 | first requested packet   | */
+/*                 +--------------------------+ */
 
-/*     ENDS        is an array of pointers to the ends of the */
-/*                 fetched packets.  ENDS(1) gives the index */
-/*                 of the last item of the first packet fetched. */
-/*                 ENDS(2) gives the index of the last item of */
-/*                 the second packet fetched, etc. */
+/*     ENDS     is an array of pointers to the ends of the */
+/*              fetched packets.  ENDS(1) gives the index */
+/*              of the last item of the first packet fetched. */
+/*              ENDS(2) gives the index of the last item of */
+/*              the second packet fetched, etc. */
 
 /* $ Parameters */
 
 /*     This subroutine makes use of parameters defined in the file */
 /*     'sgparam.inc'. */
 
-/* $ Files */
-
-/*      See the description of HANDLE above. */
-
 /* $ Exceptions */
 
-/*     1) The error SPICE(REQUESTOUTOFBOUNDS) will be signalled */
-/*        if FIRST is less than 1 or LAST is greater than the */
-/*        number of packets. */
+/*     1)  If FIRST is less than 1 or LAST is greater than the number of */
+/*         packets, the error SPICE(REQUESTOUTOFBOUNDS) is signaled. */
 
-/*     2) The error SPICE(REQUESTOUTOFORDER) will be signalled */
-/*        if LAST is less than FIRST. */
+/*     2)  If LAST is less than FIRST, the error SPICE(REQUESTOUTOFORDER) */
+/*         is signaled. */
 
-/*     3) The error SPICE(UNKNOWNPACKETDIR) will be signalled if */
-/*        the packet directory structure is unrecognized.  The most */
-/*        likely cause of this error is that an upgrade to your */
-/*        version of the SPICE toolkit is needed. */
+/*     3)  If the packet directory structure is unrecognized, the error */
+/*         SPICE(UNKNOWNPACKETDIR) is signaled. The most likely cause of */
+/*         this error is that an upgrade to your version of the SPICE */
+/*         toolkit is needed. */
+
+/* $ Files */
+
+/*     See the description of HANDLE above. */
 
 /* $ Particulars */
 
 /*     This routine fetches requested packets from a generic */
-/*     DAF segment.  The two arrays returned have the following */
-/*     relationship to one another.  The first packet returned */
+/*     DAF segment. The two arrays returned have the following */
+/*     relationship to one another. The first packet returned */
 /*     resides in VALUES between indexes 1 and ENDS(1).  If a */
 /*     second packet is returned it resides in VALUES between */
 /*     indices ENDS(1)+1 and ENDS(2).  This relations ship is */
@@ -197,19 +196,26 @@ static integer c__9 = 9;
 
 /* $ Restrictions */
 
-/*      The segment described by DESCR must be a generic segment, */
-/*      otherwise the results of this routine are not predictable. */
-
-/* $ Author_and_Institution */
-
-/*     K.R. Gehringer  (JPL) */
-/*     W.L. Taber      (JPL) */
+/*     1)  The segment described by DESCR must be a generic segment, */
+/*         otherwise the results of this routine are not predictable. */
 
 /* $ Literature_References */
 
-/*      None. */
+/*     None. */
+
+/* $ Author_and_Institution */
+
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.2.1, 26-OCT-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.2.0, 07-SEP-2001 (EDW) */
 

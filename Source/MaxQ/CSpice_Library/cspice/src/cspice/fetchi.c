@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure            FETCHI ( Fetch from an integer set ) */
+/* $Procedure FETCHI ( Fetch from an integer set ) */
 integer fetchi_(integer *nth, integer *set)
 {
     /* System generated locals */
@@ -20,8 +20,8 @@ integer fetchi_(integer *nth, integer *set)
 
 /* $ Abstract */
 
-/*      Return the location within the set array of the NTH element */
-/*      within the order imposed by the values of the elements. */
+/*     Return the location within the set array of the NTH element */
+/*     within the order imposed by the values of the elements. */
 
 /* $ Disclaimer */
 
@@ -50,143 +50,149 @@ integer fetchi_(integer *nth, integer *set)
 
 /* $ Required_Reading */
 
-/*      None. */
+/*     None. */
 
 /* $ Keywords */
 
-/*      SETS */
+/*     SETS */
 
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*      VARIABLE  I/O  DESCRIPTION */
-/*      --------  ---  -------------------------------------------------- */
-/*      NTH        I   Index of a particular element. */
-/*      SET        I   Input set. */
+/*     VARIABLE  I/O  DESCRIPTION */
+/*     --------  ---  -------------------------------------------------- */
+/*     NTH        I   Index of a particular element. */
+/*     SET        I   Input set. */
 
-/*      The function returns the location of the NTH element in the set. */
+/*     The function returns the location of the NTH element in the set. */
 
 /* $ Detailed_Input */
 
-/*      NTH         is an index to an element of a set.  If the set is to */
-/*                  be conceived as sorted in increasing order, then the */
-/*                  NTH element of a set is well defined. */
+/*     NTH      is an index to an element of a set. If the set is to */
+/*              be conceived as sorted in increasing order, then the */
+/*              NTH element of a set is well defined. */
 
-/*      SET         is a set. */
-
+/*     SET      is a set. */
 
 /* $ Detailed_Output */
 
-/*      The function returns the location within the set array of the NTH */
-/*      element within the order imposed by the values of the elements, */
+/*     The function returns the location within the set array of the NTH */
+/*     element within the order imposed by the values of the elements, */
 
-/*         ... -1 < 0 < 1 < 2 < 3 ... */
+/*        ... -1 < 0 < 1 < 2 < 3 ... */
 
-/*      Thus, a set may be traversed in order: */
+/*     Thus, a set may be traversed in order: */
 
-/*         SET( FETCHI ( 1 ) ) */
-/*         SET( FETCHI ( 2 ) ) */
-/*          . */
-/*          . */
-/*         SET( FETCHI ( CARDI ( SET ) ) ) */
+/*        SET( FETCHI ( 1 ) ) */
+/*        SET( FETCHI ( 2 ) ) */
+/*         . */
+/*         . */
+/*        SET( FETCHI ( CARDI ( SET ) ) ) */
 
 /* $ Parameters */
 
 /*     None. */
 
-/* $ Particulars */
-
-/*      Within a set, the elements may be stored in arbitrary order. */
-/*      The elements of a set may be retrieved by stepping through the */
-/*      set array: */
-
-/*         SET( 1 ) */
-/*         SET( 2 ) */
-/*          . */
-/*          . */
-/*         SET( CARDI ( SET ) ) */
-
-/*      Likewise, the elements may be retreived in the order imposed by */
-/*      their values: */
-
-/*         SET( FETCHI ( 1, SET ) ) */
-/*         SET( FETCHI ( 2, SET ) ) */
-/*          . */
-/*          . */
-/*         SET( FETCHI ( CARDI ( SET ), SET ) ) */
-
-/*      In general, FETCHI ( I, SET ) is not equal to I. */
-
-/* $ Examples */
-
-/*      Let SET contain the following elements. */
-
-/*          8 */
-/*         32 */
-/*          2 */
-/*         16 */
-/*          4 */
-
-/*      Then the code fragment */
-
-/*         DO I = 1, CARDI ( SET ) */
-/*            WRITE (*,*) SET(FETCHI(I,SET)) */
-/*         END DO */
-
-/*      always produces the following output. */
-
-/*          2 */
-/*          4 */
-/*          8 */
-/*         16 */
-/*         32 */
-
-/*      The code fragment */
-
-/*         DO I = 1, CARDI ( SET ) */
-/*            WRITE (*,*) SET(I) */
-/*         END DO */
-
-/*      produces the same elements in unspecified order. */
-
-/* $ Restrictions */
-
-/*      None. */
-
 /* $ Exceptions */
 
-/*      1) If the element does not exist, the error SPICE(INVALIDINDEX) */
-/*         is signalled, and the value of FETCHI is zero. */
+/*     1)  If the element does not exist, the error SPICE(INVALIDINDEX) */
+/*         is signaled, and the value of FETCHI is zero. */
 
 /* $ Files */
 
-/*      None. */
+/*     None. */
+
+/* $ Particulars */
+
+/*     Within a set, the elements may be stored in arbitrary order. */
+/*     The elements of a set may be retrieved by stepping through the */
+/*     set array: */
+
+/*        SET( 1 ) */
+/*        SET( 2 ) */
+/*         . */
+/*         . */
+/*        SET( CARDI ( SET ) ) */
+
+/*     Likewise, the elements may be retrieved in the order imposed by */
+/*     their values: */
+
+/*        SET( FETCHI ( 1, SET ) ) */
+/*        SET( FETCHI ( 2, SET ) ) */
+/*         . */
+/*         . */
+/*        SET( FETCHI ( CARDI ( SET ), SET ) ) */
+
+/*     In general, FETCHI ( I, SET ) is not equal to I. */
+
+/* $ Examples */
+
+/*     Let SET contain the following elements. */
+
+/*         8 */
+/*        32 */
+/*         2 */
+/*        16 */
+/*         4 */
+
+/*     Then the code fragment */
+
+/*        DO I = 1, CARDI ( SET ) */
+/*           WRITE (*,*) SET(FETCHI(I,SET)) */
+/*        END DO */
+
+/*     always produces the following output. */
+
+/*         2 */
+/*         4 */
+/*         8 */
+/*        16 */
+/*        32 */
+
+/*     The code fragment */
+
+/*        DO I = 1, CARDI ( SET ) */
+/*           WRITE (*,*) SET(I) */
+/*        END DO */
+
+/*     produces the same elements in unspecified order. */
+
+/* $ Restrictions */
+
+/*     None. */
 
 /* $ Literature_References */
 
-/*      None. */
+/*     None. */
 
 /* $ Author_and_Institution */
 
-/*      H.A. Neilan     (JPL) */
-/*      W.L. Taber      (JPL) */
-/*      I.M. Underwood  (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     H.A. Neilan        (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
 
-/* -     SPICELIB Version 1.1.0, 17-MAY-1994 (HAN) */
+/* -    SPICELIB Version 1.2.0, 20-AUG-2021 (JDR) */
 
-/*        If the value of the function RETURN is TRUE upon execution of */
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
+
+/* -    SPICELIB Version 1.1.0, 17-MAY-1994 (HAN) */
+
+/*        If the value of the function RETURN is .TRUE. upon execution of */
 /*        this module, this function is assigned a default value of */
 /*        either 0, 0.0D0, .FALSE., or blank depending on the type of */
 /*        the function. */
 
-/* -     SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+/* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
 
 /*         Comment section for permuted index source lines was added */
 /*         following the header. */
 
-/* -     SPICELIB Version 1.0.0, 31-JAN-1990 (WLT) (IMU) */
+/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (WLT) (IMU) */
 
 /* -& */
 /* $ Index_Entries */

@@ -11,7 +11,7 @@ static logical c_false = FALSE_;
 static integer c__3 = 3;
 static integer c__256 = 256;
 
-/* $Procedure      DASRCR ( DAS, remove comment records ) */
+/* $Procedure DASRCR ( DAS, remove comment records ) */
 /* Subroutine */ int dasrcr_(integer *handle, integer *n)
 {
     /* Initialized data */
@@ -105,25 +105,25 @@ static integer c__256 = 256;
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     I   A DAS file handle. */
 /*     N          I   Number of comment records to remove. */
 
 /* $ Detailed_Input */
 
-/*     HANDLE         is the handle of an existing DAS file opened for */
-/*                    comment area modification by DASOPC. */
+/*     HANDLE   is the handle of an existing DAS file opened for */
+/*              comment area modification by DASOPC. */
 
-/*     N              is the number of records to remove from the end of */
-/*                    the comment area.  of the specified file.  If NCOMR */
-/*                    is the number of comment records present in the */
-/*                    file on input, then on output the number of comment */
-/*                    records will be MAX ( 0,  NCOMR - N ). */
+/*     N        is the number of records to remove from the end of */
+/*              the comment area. of the specified file. If NCOMR */
+/*              is the number of comment records present in the */
+/*              file on input, then on output the number of comment */
+/*              records will be MAX ( 0,  NCOMR - N ). */
 
 /* $ Detailed_Output */
 
-/*     None.  See $Particulars for a description of the effect of this */
+/*     None. See $Particulars for a description of the effect of this */
 /*     routine. */
 
 /* $ Parameters */
@@ -132,11 +132,11 @@ static integer c__256 = 256;
 
 /* $ Exceptions */
 
-/*     1)  If the input handle is invalid, the error will be diagnosed by */
-/*         routines called by this routine. */
+/*     1)  If the input handle is invalid, an error is signaled by a */
+/*         routine in the call tree of this routine. */
 
 /*     2)  If an I/O error occurs during the removal process, the error */
-/*         will be diagnosed by routines called by this routine.  The */
+/*         is signaled by a routine in the call tree of this routine. The */
 /*         DAS file will probably be corrupted in this case. */
 
 /* $ Files */
@@ -157,7 +157,7 @@ static integer c__256 = 256;
 
 /*     The disk space occupied by the specified DAS file will not */
 /*     decrease as a result of calling this routine, but the number of */
-/*     records occupied by meaningful data will decrease.  The useful */
+/*     records occupied by meaningful data will decrease. The useful */
 /*     records in the file can be copied by DAS routines to create a */
 /*     new, smaller file which contains only the meaningful data. */
 
@@ -175,29 +175,27 @@ static integer c__256 = 256;
 
 /* $ Examples */
 
+/*     C */
+/*     C     Open an existing DAS file for modification of */
+/*     C     the comment area. We'll presume that the file */
+/*     C     contains 20 comment records. */
+/*     C */
+/*           CALL DASOPC ( DAS, HANDLE ) */
 
-/*            C */
-/*            C     Open an existing DAS file for modification of */
-/*            C     the comment area.  We'll presume that the file */
-/*            C     contains 20 comment records. */
-/*            C */
-/*                  CALL DASOPC ( DAS, HANDLE ) */
+/*     C */
+/*     C     Remove the last 10 comment records from the file. */
+/*     C */
+/*           CALL DASRCR ( HANDLE, 10  ) */
 
-/*            C */
-/*            C     Remove the last 10 comment records from the file. */
-/*            C */
-/*                  CALL DASRCR ( HANDLE, 10  ) */
-
-/*            C */
-/*            C     Close the file. */
-/*            C */
-/*                  CALL DASCLS ( HANDLE ) */
-
+/*     C */
+/*     C     Close the file. */
+/*     C */
+/*           CALL DASCLS ( HANDLE ) */
 
 /* $ Restrictions */
 
-/*     1) The DAS file must have a binary file format native to the host */
-/*        system. */
+/*     1)  The DAS file must have a binary file format native to the host */
+/*         system. */
 
 /* $ Literature_References */
 
@@ -205,10 +203,17 @@ static integer c__256 = 256;
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
-/*     W.L. Taber     (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.3.0, 02-JUN-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.2.0, 05-FEB-2015 (NJB) */
 
@@ -316,11 +321,11 @@ static integer c__256 = 256;
     lword = 0;
     for (i__ = 1; i__ <= 3; ++i__) {
 	if (lastrc[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("lastrc",
-		 i__1, "dasrcr_", (ftnlen)353)] == lrec && lastwd[(i__2 = i__ 
+		 i__1, "dasrcr_", (ftnlen)361)] == lrec && lastwd[(i__2 = i__ 
 		- 1) < 3 && 0 <= i__2 ? i__2 : s_rnge("lastwd", i__2, "dasrc"
-		"r_", (ftnlen)353)] > lword) {
+		"r_", (ftnlen)361)] > lword) {
 	    lword = lastwd[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(
-		    "lastwd", i__1, "dasrcr_", (ftnlen)356)];
+		    "lastwd", i__1, "dasrcr_", (ftnlen)364)];
 	}
     }
 
@@ -388,22 +393,22 @@ static integer c__256 = 256;
 /*                 ordering of types. */
 
 		    if (dirrec[(i__1 = pos - 1) < 256 && 0 <= i__1 ? i__1 : 
-			    s_rnge("dirrec", i__1, "dasrcr_", (ftnlen)431)] > 
+			    s_rnge("dirrec", i__1, "dasrcr_", (ftnlen)439)] > 
 			    0) {
 			type__ = next[(i__1 = type__ - 1) < 3 && 0 <= i__1 ? 
 				i__1 : s_rnge("next", i__1, "dasrcr_", (
-				ftnlen)432)];
+				ftnlen)440)];
 		    } else {
 			type__ = prev[(i__1 = type__ - 1) < 3 && 0 <= i__1 ? 
 				i__1 : s_rnge("prev", i__1, "dasrcr_", (
-				ftnlen)434)];
+				ftnlen)442)];
 		    }
 
 /*                 Update the cluster base record number. */
 
 		    base += (i__2 = dirrec[(i__1 = pos - 2) < 256 && 0 <= 
 			    i__1 ? i__1 : s_rnge("dirrec", i__1, "dasrcr_", (
-			    ftnlen)440)], abs(i__2));
+			    ftnlen)448)], abs(i__2));
 		}
 
 /*              BASE and TYPE now are correctly set for the current */
@@ -411,7 +416,7 @@ static integer c__256 = 256;
 
 		i__3 = base + (i__2 = dirrec[(i__1 = pos - 1) < 256 && 0 <= 
 			i__1 ? i__1 : s_rnge("dirrec", i__1, "dasrcr_", (
-			ftnlen)448)], abs(i__2)) - 1;
+			ftnlen)456)], abs(i__2)) - 1;
 		for (i__ = base; i__ <= i__3; ++i__) {
 		    if (type__ == 1) {
 			dasioc_("READ", &unit, &i__, recc, (ftnlen)4, (ftnlen)
@@ -455,11 +460,11 @@ static integer c__256 = 256;
     free -= nshift;
     for (i__ = 1; i__ <= 3; ++i__) {
 	if (lastrc[(i__3 = i__ - 1) < 3 && 0 <= i__3 ? i__3 : s_rnge("lastrc",
-		 i__3, "dasrcr_", (ftnlen)501)] != 0) {
+		 i__3, "dasrcr_", (ftnlen)509)] != 0) {
 	    lastrc[(i__3 = i__ - 1) < 3 && 0 <= i__3 ? i__3 : s_rnge("lastrc",
-		     i__3, "dasrcr_", (ftnlen)502)] = lastrc[(i__1 = i__ - 1) 
+		     i__3, "dasrcr_", (ftnlen)510)] = lastrc[(i__1 = i__ - 1) 
 		    < 3 && 0 <= i__1 ? i__1 : s_rnge("lastrc", i__1, "dasrcr_"
-		    , (ftnlen)502)] - nshift;
+		    , (ftnlen)510)] - nshift;
 	}
     }
     dasufs_(handle, &nresvr, &nresvc, &ncomr, &ncomc, &free, lastla, lastrc, 

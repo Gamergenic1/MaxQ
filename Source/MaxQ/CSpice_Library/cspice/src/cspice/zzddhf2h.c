@@ -145,6 +145,10 @@
 
 /* $ Version */
 
+/* -    SPICELIB Version 2.6.0, 28-NOV-2021 (BVS) */
+
+/*        Updated for MAC-OSX-M1-64BIT-CLANG_C. */
+
 /* -    SPICELIB Version 2.5.0, 10-MAR-2014 (BVS) */
 
 /*        Updated for SUN-SOLARIS-64BIT-INTEL. */
@@ -475,7 +479,7 @@
 
 /* $ Exceptions */
 
-/*     1) If any of the INQUIRE statments this routine performs fail, */
+/*     1) If any of the INQUIRE statements this routine performs fail, */
 /*        the error SPICE(INQUIREFAILED) is signaled. FOUND is set to */
 /*        FALSE and HANDLE to 0. */
 
@@ -517,6 +521,10 @@
 /*     B.V. Semenov    (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 3.0.1, 02-OCT-2021 (NJB) */
+
+/*        Corrected typos in comments. */
 
 /* -    SPICELIB Version 3.0.0, 26-APR-2012 (BVS) */
 
@@ -619,14 +627,14 @@
     }
 
 /*     First, set some of the output arguments.  Remember, some */
-/*     systems consider non-existant files as open.  Compensate for */
+/*     systems consider non-existent files as open.  Compensate for */
 /*     this unusual behavior. */
 
     *exists = locexs;
     *opened = locopn && *exists;
 
 /*     Now check to see if the file exists.  If it does not, then */
-/*     set FOUND to false and HANDLE to 0 as non-existant files */
+/*     set FOUND to false and HANDLE to 0 as non-existent files */
 /*     can not possibly be present in the file table. */
 
     if (! (*exists)) {

@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      SPKR12 ( Read SPK record from segment, type 12 ) */
+/* $Procedure SPKR12 ( Read SPK record from segment, type 12 ) */
 /* Subroutine */ int spkr12_(integer *handle, doublereal *descr, doublereal *
 	et, doublereal *record)
 {
@@ -54,7 +54,7 @@
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     I   Handle of the open SPK file. */
 /*     DESCR      I   Descriptor of the segment with the desired record. */
@@ -63,43 +63,42 @@
 
 /* $ Detailed_Input */
 
-/*     HANDLE         is the handle of the open SPK file which contains */
-/*                    the segment of interest. */
+/*     HANDLE   is the handle of the open SPK file which contains */
+/*              the segment of interest. */
 
-/*     DESCR          is the descriptor for a type 12 SPK segment that */
-/*                    contains the record of interest. */
+/*     DESCR    is the descriptor for a type 12 SPK segment that */
+/*              contains the record of interest. */
 
-/*     ET             is the target epoch used to determine the */
-/*                    particular record to be obtained from the SPK */
-/*                    segment. */
+/*     ET       is the target epoch used to determine the */
+/*              particular record to be obtained from the SPK */
+/*              segment. */
 
 /* $ Detailed_Output */
 
-/*     RECORD         is the record from the specified segment which, */
-/*                    when evaluated at epoch ET, will give the state */
-/*                    (position and velocity) of some body, relative */
-/*                    to some center, in some inertial reference frame. */
+/*     RECORD   is the record from the specified segment which, */
+/*              when evaluated at epoch ET, will give the state */
+/*              (position and velocity) of some body, relative */
+/*              to some center, in some inertial reference frame. */
 
-/*                    The structure of the record is as follows: */
+/*              The structure of the record is as follows: */
 
-/*                       +----------------------+ */
-/*                       | number of states (n) | */
-/*                       +----------------------+ */
-/*                       | start epoch          | */
-/*                       +----------------------+ */
-/*                       | step size            | */
-/*                       +----------------------+ */
-/*                       | state 1 (6 elts.)    | */
-/*                       +----------------------+ */
-/*                       | state 2 (6 elts.)    | */
-/*                       +----------------------+ */
-/*                                   . */
-/*                                   . */
-/*                                   . */
-/*                       +----------------------+ */
-/*                       | state n (6 elts.)    | */
-/*                       +----------------------+ */
-
+/*                 +----------------------+ */
+/*                 | number of states (n) | */
+/*                 +----------------------+ */
+/*                 | start epoch          | */
+/*                 +----------------------+ */
+/*                 | step size            | */
+/*                 +----------------------+ */
+/*                 | state 1 (6 elts.)    | */
+/*                 +----------------------+ */
+/*                 | state 2 (6 elts.)    | */
+/*                 +----------------------+ */
+/*                             . */
+/*                             . */
+/*                             . */
+/*                 +----------------------+ */
+/*                 | state n (6 elts.)    | */
+/*                 +----------------------+ */
 
 /* $ Parameters */
 
@@ -107,8 +106,8 @@
 
 /* $ Exceptions */
 
-/*     1) All errors are diagnosed by routines in the call tree */
-/*        of this routine. */
+/*     1)  If an error occurs while looking up SPK data, the error is */
+/*         signaled by a routine in the call tree of this routine. */
 
 /* $ Files */
 
@@ -127,9 +126,9 @@
 /* $ Examples */
 
 /*     The data returned by the SPKRnn routine is in a raw form, taken */
-/*     directly from the segment.  As such, it will be not be directly */
+/*     directly from the segment. As such, it will be not be directly */
 /*     useful to a user unless they have a complete understanding of the */
-/*     structure of the data type.  Given that understanding, however, */
+/*     structure of the data type. Given that understanding, however, */
 /*     the SPKRnn routines could be used to "dump" and check segment data */
 /*     for a particular epoch, as in the example which follows. */
 
@@ -156,28 +155,34 @@
 
 /* $ Restrictions */
 
-/*     This subroutine should not be called directly by a casual user. It */
-/*     is intended for use by the subroutine SPKPVN, and certain tests */
-/*     for error conditions are not performed here, as SPKPVN will have */
-/*     already performed them. */
+/*     1)  This subroutine should not be called directly by a casual */
+/*         user. It is intended for use by the subroutine SPKPVN, and */
+/*         certain tests for error conditions are not performed here, as */
+/*         SPKPVN will have already performed them. */
 
 /* $ Literature_References */
 
-/*     NAIF Document 168.0, "S- and P- Kernel (SPK) Specification and */
-/*     User's Guide" */
+/*     None. */
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.0.1, 14-APR-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. Updated */
+/*        $Exceptions section. Moved SPK required reading from */
+/*        $Literature_References to $Required_Reading section. */
 
 /* -    SPICELIB Version 1.0.0, 25-FEB-2000 (NJB) */
 
 /* -& */
 /* $ Index_Entries */
 
-/*     read record from type_12 spk segment */
+/*     read record from type_12 SPK segment */
 
 /* -& */
 

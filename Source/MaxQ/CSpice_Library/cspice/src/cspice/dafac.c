@@ -112,21 +112,21 @@ static integer c__1 = 1;
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
-/*      HANDLE    I    handle of a DAF opened with write access. */
-/*      N         I    Number of comments to put into the comment area. */
-/*      BUFFER    I    Buffer of comments to put into the comment area. */
+/*     HANDLE     I   Handle of a DAF opened with write access. */
+/*     N          I   Number of comments to put into the comment area. */
+/*     BUFFER     I   Buffer of comments to put into the comment area. */
 
 /* $ Detailed_Input */
 
-/*     HANDLE   The file handle of a binary DAF which has been opened */
+/*     HANDLE   is the file handle of a binary DAF which has been opened */
 /*              with write access. */
 
-/*     N        The number of comments in BUFFER that are to be added to */
-/*              the comment area of the binary DAF attached to HANDLE. */
+/*     N        is the number of comments in BUFFER that are to be added */
+/*              to the comment area of the binary DAF attached to HANDLE. */
 
-/*     BUFFER   A buffer containing comments which are to be added */
+/*     BUFFER   is a buffer containing comments which are to be added */
 /*              to the comment area of the binary DAF attached to HANDLE. */
 
 /* $ Detailed_Output */
@@ -139,24 +139,23 @@ static integer c__1 = 1;
 
 /* $ Exceptions */
 
-/*     1)   If the number of comments to be added is not positive, the */
-/*          error SPICE(INVALIDARGUMENT) will be signalled. */
+/*     1)  If the number of comments to be added is not positive, the */
+/*         error SPICE(INVALIDARGUMENT) is signaled. */
 
-/*     2)   If a non printing ASCII character is encountered in the */
-/*          comments, the error SPICE(ILLEGALCHARACTER) will be */
-/*          signalled. */
+/*     2)  If a non printing ASCII character is encountered in the */
+/*         comments, the error SPICE(ILLEGALCHARACTER) is signaled. */
 
-/*     3)   If the binary DAF file attached to HANDLE is not open with */
-/*          write access an error will be signalled by a routine called */
-/*          by this routine. */
+/*     3)  If the binary DAF file attached to HANDLE is not open with */
+/*         write access, an error is signaled by a routine in the call */
+/*         tree of this routine. */
 
-/*     4)   If the end of the comments cannot be found, i.e., the end of */
-/*          comments marker is missing on the last comment record, the */
-/*          error SPICE(BADCOMMENTAREA) will be signalled. */
+/*     4)  If the end of the comments cannot be found, i.e., the end of */
+/*         comments marker is missing on the last comment record, the */
+/*         error SPICE(BADCOMMENTAREA) is signaled. */
 
 /* $ Files */
 
-/*     See argument HANDLE in $ Detailed_Input. */
+/*     See argument HANDLE in $Detailed_Input. */
 
 /* $ Particulars */
 
@@ -188,34 +187,203 @@ static integer c__1 = 1;
 
 /* $ Examples */
 
-/*     Let */
+/*     The numerical results shown for this example may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
 
-/*           HANDLE   be the handle for a DAF which has been opened with */
-/*                    write access. */
+/*     1) This example demonstrates how to append new comments to the */
+/*        comment area of a DAF file. */
 
-/*           N        be the number of lines of text to be added to the */
-/*                    comment area of the binary DAF attached to HANDLE. */
+/*        Use the SPK kernel below as input DAF file for the program. */
 
-/*           BUFFER   is a list of text lines to be added to the comment */
-/*                    area of the binary DAF attached to HANDLE. */
+/*           earthstns_itrf93_201023.bsp */
 
-/*     The call */
 
-/*           CALL DAFAC ( HANDLE, N, BUFFER ) */
+/*        Example code begins here. */
 
-/*     will append the first N line(s) in BUFFER to the comment area */
-/*     of the binary DAF attached to HANDLE. */
+
+/*              PROGRAM DAFAC_EX1 */
+/*              IMPLICIT NONE */
+
+/*        C */
+/*        C     SPICELIB functions */
+/*        C */
+/*              INTEGER               RTRIM */
+
+/*        C */
+/*        C     Local parameters */
+/*        C */
+/*              CHARACTER*(*)         KERNEL */
+/*              PARAMETER           ( KERNEL = */
+/*             .                         'earthstns_itrf93_201023.bsp' ) */
+
+/*              INTEGER               BUFSIZ */
+/*              PARAMETER           ( BUFSIZ = 25 ) */
+
+/*              INTEGER               CMTSIZ */
+/*              PARAMETER           ( CMTSIZ = 7  ) */
+
+/*              INTEGER               LINLEN */
+/*              PARAMETER           ( LINLEN = 1000 ) */
+
+/*        C */
+/*        C     Local variables. */
+/*        C */
+/*              CHARACTER*(LINLEN)    BUFFER ( BUFSIZ ) */
+/*              CHARACTER*(LINLEN)    NEWCMT ( CMTSIZ ) */
+
+/*              INTEGER               HANDLE */
+/*              INTEGER               I */
+/*              INTEGER               N */
+
+/*              LOGICAL               DONE */
+
+/*        C */
+/*        C     Set the new comments to be added to the DAF file. */
+/*        C */
+/*              DATA                  NEWCMT / */
+/*             .  '================== NEW COMMENTS ==================', */
+/*             .  '', */
+/*             .  '   New comments can be appended to the end of the', */
+/*             .  '   comment area of a DAF file, with a single', */
+/*             .  '   operation.', */
+/*             .  '', */
+/*             .  '================ END NEW COMMENTS ================' / */
+
+
+/*        C */
+/*        C     Open a DAF for write. Return a HANDLE referring to the */
+/*        C     file. */
+/*        C */
+/*              CALL DAFOPW ( KERNEL, HANDLE ) */
+
+/*        C */
+/*        C     Print the end of comment area from the DAF file. */
+/*        C     (Maximum 15 lines.) */
+/*        C */
+/*              DONE = .FALSE. */
+
+/*              DO WHILE ( .NOT. DONE ) */
+
+/*                 CALL DAFEC  ( HANDLE, 15, N, BUFFER, DONE ) */
+
+/*                 IF ( DONE ) THEN */
+
+/*                    WRITE(*,'(A)') 'End of comment area of input ' */
+/*             .                  // 'DAF file (max. 15 lines): ' */
+/*                    WRITE(*,'(A)') '-------------------------------' */
+/*             .                  // '-------------------------------' */
+
+/*                    DO I = 1, N */
+
+/*                       WRITE (*,*) BUFFER(I)(:RTRIM(BUFFER(I))) */
+
+/*                    END DO */
+
+/*                    WRITE(*,'(A)') '-------------------------------' */
+/*             .                  // '-------------------------------' */
+
+/*                 END IF */
+
+/*              END DO */
+
+/*        C */
+/*        C     Append the new comments to the DAF file. */
+/*        C */
+/*              CALL DAFAC ( HANDLE, CMTSIZ, NEWCMT ) */
+
+/*        C */
+/*        C     Safely close the DAF. */
+/*        C */
+/*              CALL DAFCLS ( HANDLE ) */
+
+/*        C */
+/*        C     Check if the comments have indeed appended. */
+/*        C */
+/*        C     Open a DAF for read. */
+/*        C */
+/*              CALL DAFOPR ( KERNEL, HANDLE ) */
+/*              DONE = .FALSE. */
+
+/*              DO WHILE ( .NOT. DONE ) */
+
+/*                 CALL DAFEC  ( HANDLE, BUFSIZ, N, BUFFER, DONE ) */
+
+/*                 IF ( DONE ) THEN */
+
+/*                    WRITE(*,'(A)') 'End of comment area of input ' */
+/*             .                  // 'DAF file (max. 25 lines): ' */
+/*                    WRITE(*,'(A)') '-------------------------------' */
+/*             .                  // '-------------------------------' */
+
+/*                    DO I = 1, N */
+
+/*                       WRITE (*,*) BUFFER(I)(:RTRIM(BUFFER(I))) */
+
+/*                    END DO */
+
+/*                    WRITE(*,'(A)') '-------------------------------' */
+/*             .                  // '-------------------------------' */
+
+/*                 END IF */
+
+/*              END DO */
+
+/*        C */
+/*        C     Safely close the DAF. */
+/*        C */
+/*              CALL DAFCLS ( HANDLE ) */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*        End of comment area of input DAF file (max. 15 lines): */
+/*        -------------------------------------------------------------- */
+/*            DSS-65_DXYZ       =    (    -0.0100          0.0242     *** */
+/*            DSS-65_TOPO_EPOCH =       @2020-OCT-23/00:00 */
+/*            DSS-65_UP         =       'Z' */
+/*            DSS-65_NORTH      =       'X' */
+
+/*         \begintext */
+/*        -------------------------------------------------------------- */
+/*        End of comment area of input DAF file (max. 25 lines): */
+/*        -------------------------------------------------------------- */
+/*            DSS-65_DXYZ       =    (    -0.0100          0.0242     *** */
+/*            DSS-65_TOPO_EPOCH =       @2020-OCT-23/00:00 */
+/*            DSS-65_UP         =       'Z' */
+/*            DSS-65_NORTH      =       'X' */
+
+/*         \begintext */
+/*         ================== NEW COMMENTS ================== */
+
+/*            New comments can be appended to the end of the */
+/*            comment area of a DAF file, with a single */
+/*            operation. */
+
+/*         ================ END NEW COMMENTS ================ */
+/*        -------------------------------------------------------------- */
+
+
+/*        Warning: incomplete output. 2 lines extended past the right */
+/*        margin of the header and have been truncated. These lines are */
+/*        marked by "***" at the end of each line. */
+
 
 /* $ Restrictions */
 
-/*     1) This routine uses constants that are specific to the ASCII */
-/*        character sequence. The results of using this routine with */
-/*        a different character sequence are unpredictable. */
+/*     1)  This routine uses constants that are specific to the ASCII */
+/*         character sequence. The results of using this routine with */
+/*         a different character sequence are unpredictable. */
 
-/*     2) This routine is only used to extract records on environments */
-/*        whose characters are a single byte in size.  Updates to this */
-/*        routine and routines in its call tree may be required to */
-/*        properly handle other cases. */
+/*     2)  This routine is only used to extract records on environments */
+/*         whose characters are a single byte in size. Updates to this */
+/*         routine and routines in its call tree may be required to */
+/*         properly handle other cases. */
 
 /* $ Literature_References */
 
@@ -223,27 +391,36 @@ static integer c__1 = 1;
 
 /* $ Author_and_Institution */
 
-/*     K.R. Gehringer (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
+/*     F.S. Turner        (JPL) */
 
 /* $ Version */
 
-/* -    Support Version 2.0.0, 16-NOV-2001 (FST) */
+/* -    SPICELIB Version 2.1.0, 25-NOV-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
+/*        Added complete code examples from existing code fragments. */
+
+/* -    SPICELIB Version 2.0.0, 16-NOV-2001 (FST) */
 
 /*        Updated this routine to utilize the new handle manager */
 /*        interfaces. */
 
-/* -    Beta Version 1.0.0, 26-JUL-1994 (KRG) */
+/* -    SPICELIB Version 1.0.0, 26-JUL-1994 (KRG) */
 
 /* -& */
 /* $ Index_Entries */
 
-/*     add comments to a binary daf file */
-/*     append comments to a daf file comment area */
+/*     add comments to a binary DAF file */
+/*     append comments to a DAF file comment area */
 
 /* -& */
 /* $ Revisions */
 
-/* -    Support Version 2.0.0, 16-NOV-2001 (FST) */
+/* -    SPICELIB Version 2.0.0, 16-NOV-2001 (FST) */
 
 /*        The call to DAFHLU has been replaced with a call to ZZDDHHLU, */
 /*        the handle manager interface for retrieving a logical unit. */
@@ -528,7 +705,7 @@ L100001:
 
 /*        If there are no comments in the comment area, then we need */
 /*        to skip the file record. The first available comment record */
-/*        is therecord immediately after the file record, so we set */
+/*        is the record immediately after the file record, so we set */
 /*        RECNO accordingly. We also initialize the current position in */
 /*        the comment record, and the comment record itself. */
 

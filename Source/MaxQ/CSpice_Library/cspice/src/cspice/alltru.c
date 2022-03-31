@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      ALLTRU ( All entries true? ) */
+/* $Procedure ALLTRU ( All entries true? ) */
 logical alltru_(logical *logcls, integer *n)
 {
     /* System generated locals */
@@ -55,7 +55,7 @@ logical alltru_(logical *logcls, integer *n)
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     LOGCLS     I   An array of logicals. */
 /*     N          I   Number of elements in the array LOGCLS. */
@@ -65,9 +65,9 @@ logical alltru_(logical *logcls, integer *n)
 
 /* $ Detailed_Input */
 
-/*     LOGCLS     is an array of logicals. */
+/*     LOGCLS   is an array of logicals. */
 
-/*     N          is the number of elements in the array LOGCLS */
+/*     N        is the number of elements in the array LOGCLS */
 
 /* $ Detailed_Output */
 
@@ -82,7 +82,7 @@ logical alltru_(logical *logcls, integer *n)
 
 /*     Error free. */
 
-/*     If N is less than 1, the function returns a value of .TRUE. */
+/*     1)  If N is less than 1, the function returns a value of .TRUE. */
 
 /* $ Files */
 
@@ -121,9 +121,16 @@ logical alltru_(logical *logcls, integer *n)
 
 /* $ Author_and_Institution */
 
-/*     W.L. Taber     (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 12-AUG-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
 

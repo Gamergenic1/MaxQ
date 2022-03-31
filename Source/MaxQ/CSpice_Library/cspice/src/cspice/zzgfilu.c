@@ -10,7 +10,7 @@
 static integer c__0 = 0;
 static integer c__3 = 3;
 
-/* $Procedure      ZZGFILU ( GF, illumination angle utilities ) */
+/* $Procedure ZZGFILU ( GF, illumination angle utilities ) */
 /* Subroutine */ int zzgfilu_0_(int n__, char *method, char *angtyp, char *
 	target, char *illum, char *fixref, char *abcorr, char *obsrvr, 
 	doublereal *spoint, doublereal *et, U_fp udfunc, logical *decres, 
@@ -238,7 +238,7 @@ static integer c__3 = 3;
 
 /* $ Brief_I/O */
 
-/*     VARIABLE  I/O  Entry points */
+/*     VARIABLE  I/O  ENTRY POINTS */
 /*     --------  ---  -------------------------------------------------- */
 /*     METHOD     I   ZZGFILIN */
 /*     ANGTYP     I   ZZGFILIN */
@@ -250,7 +250,6 @@ static integer c__3 = 3;
 /*     SPOINT     I   ZZGFILIN */
 /*     ET         I   ZZGFILLT, ZZGFILGQ */
 /*     UDFUNC     I   ZZGFILDC */
-/*     REF        I   ZZGFILIN */
 /*     DECRES     O   ZZGFILDC */
 /*     ANGLE      O   ZZGFILGQ */
 
@@ -268,7 +267,7 @@ static integer c__3 = 3;
 
 /* $ Exceptions */
 
-/*     See individual entry points. */
+/*     1)  See individual entry points. */
 
 /* $ Files */
 
@@ -277,18 +276,18 @@ static integer c__3 = 3;
 
 /*     The following data are required: */
 
-/*        - SPK data: ephemeris data for target, observer, and */
-/*          illumination source, for the times at which state or */
-/*          positions are computed, must be loaded. If aberration */
-/*          corrections are used, the states of target and observer */
-/*          relative to the solar system barycenter must be calculable */
-/*          from the available ephemeris data. Typically ephemeris data */
-/*          are made available by loading one or more SPK files via */
-/*          FURNSH. */
+/*     -  SPK data: ephemeris data for target, observer, and */
+/*        illumination source, for the times at which state or */
+/*        positions are computed, must be loaded. If aberration */
+/*        corrections are used, the states of target and observer */
+/*        relative to the solar system barycenter must be calculable */
+/*        from the available ephemeris data. Typically ephemeris data */
+/*        are made available by loading one or more SPK files via */
+/*        FURNSH. */
 
-/*        - If non-inertial reference frames are used, then PCK */
-/*          files, frame kernels, C-kernels, and SCLK kernels may be */
-/*          needed. */
+/*     -  If non-inertial reference frames are used, then PCK */
+/*        files, frame kernels, C-kernels, and SCLK kernels may be */
+/*        needed. */
 
 /*     In all cases, kernel data are normally loaded once per program */
 /*     run, NOT every time this routine is called. */
@@ -317,11 +316,11 @@ static integer c__3 = 3;
 
 /* $ Restrictions */
 
-/*     This is a SPICELIB private routine; it should not be called by */
-/*     user applications. */
+/*     1)  This is a SPICELIB private routine; it should not be called by */
+/*         user applications. */
 
-/*     ZZGFILIN must be called prior to use of any of the other */
-/*     entry points. */
+/*     2)  ZZGFILIN must be called prior to use of any of the other */
+/*         entry points. */
 
 /* $ Literature_References */
 
@@ -329,12 +328,21 @@ static integer c__3 = 3;
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
-/*     E.D. Wright    (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
 
-/* -    SPICELIB version 1.1.0 08-MAR-2017 (NJB) */
+/* -    SPICELIB Version 1.1.1, 30-MAY-2021 (NJB) (JDR) */
+
+/*        Edited the umbrella routine and all its entry points' headers */
+/*        to comply with NAIF standard. */
+
+/*        Updated header of entry point ZZGFILIN: added missing */
+/*        argument documentation. */
+
+/* -    SPICELIB Version 1.1.0, 08-MAR-2017 (NJB) */
 
 /*        Bug fixes: added FAILED checks in entry points ZZGFILIN, */
 /*        ZZGFILDC, and ZZGFILGQ. */
@@ -342,7 +350,7 @@ static integer c__3 = 3;
 /*        Removed unused declaration of parameter SUN. */
 
 
-/* -    SPICELIB Version 1.0.0 23-MAY-2012 (NJB) (EDW) */
+/* -    SPICELIB Version 1.0.0, 23-MAY-2012 (NJB) (EDW) */
 
 /* -& */
 /* $ Index_Entries */
@@ -387,7 +395,7 @@ static integer c__3 = 3;
     sigerr_("SPICE(BOGUSENTRY)", (ftnlen)17);
     chkout_("ZZGFILU", (ftnlen)7);
     return 0;
-/* $Procedure  ZZGFILIN ( GF, illumination angle utility initialization ) */
+/* $Procedure ZZGFILIN ( GF, illumination angle utility initialization ) */
 
 L_zzgfilin:
 /* $ Abstract */
@@ -435,60 +443,126 @@ L_zzgfilin:
 
 /* $ Declarations */
 
+/*      CHARACTER*(*)         METHOD */
+/*      CHARACTER*(*)         ANGTYP */
 /*      CHARACTER*(*)         TARGET */
 /*      CHARACTER*(*)         ILLUM */
+/*      CHARACTER*(*)         FIXREF */
 /*      CHARACTER*(*)         ABCORR */
 /*      CHARACTER*(*)         OBSRVR */
+/*      DOUBLE PRECISION      SPOINT ( 3 ) */
 
 /* $ Brief_I/O */
 
 /*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
+/*     METHOD     I   Computation method. */
+/*     ANGTYP     I   Type of illumination angle. */
 /*     TARGET     I   Target body name. */
-/*     TARGET     I   Illumination source name. */
+/*     ILLUM      I   Illumination source name. */
+/*     FIXREF     I   Body-fixed, body-centered target body frame. */
 /*     ABCORR     I   Aberration correction specifier. */
 /*     OBSRVR     I   Observer name. */
+/*     SPOINT     I   Body-fixed coordinates of a target surface point. */
 
 /* $ Detailed_Input */
 
-/*     TARGET     is the name of a target body. Optionally, you may */
-/*                supply the integer ID code for the object as */
-/*                an integer string. For example both 'MOON' and */
-/*                '301' are legitimate strings that indicate the */
-/*                moon is the target body. */
+/*     METHOD   is a short string providing parameters defining */
+/*              the computation method to be used. Parameters */
+/*              include, but are not limited to, the shape model */
+/*              used to represent the surface of the target body. */
 
-/*                The target and observer define a position vector */
-/*                which points from the observer to the target. */
+/*              The only choice currently supported is */
 
-/*                Case and leading or trailing blanks are not */
-/*                significant in the string TARGET. */
+/*                 'Ellipsoid'        The illumination angle */
+/*                                    computation uses a triaxial */
+/*                                    ellipsoid to model the surface */
+/*                                    of the target body. The */
+/*                                    ellipsoid's radii must be */
+/*                                    available in the kernel pool. */
 
-
-/*     ILLUM      is the name of the illumination source. This source */
-/*                may be any ephemeris object. Case, blanks, and */
-/*                numeric values are treated in the same way as for the */
-/*                input TARGET. */
-
-
-/*     ABCORR     indicates the aberration corrections to be applied */
-/*                when computing the target's position and orientation. */
-/*                Any value accepted by SPKEZR may be used. */
-
-/*                See the header of the SPICE routine SPKEZR for a */
-/*                detailed description of the aberration correction */
-/*                options. */
-
-/*                Case and embedded blanks are not significant in */
-/*                ABCORR. */
+/*              Neither case nor blanks are significant in METHOD. */
+/*              For example, the string ' eLLipsoid ' is valid. */
 
 
-/*     OBSRVR     is the name of the body from which the occultation is */
-/*                observed. Optionally, you may supply the integer NAIF */
-/*                ID code for the body as a string. */
+/*     ANGTYP   is a string specifying the type of illumination */
+/*              angle for which a search is to be performed. The */
+/*              possible values of ANGTYP are */
 
-/*                Case and leading or trailing blanks are not */
-/*                significant in the string OBSRVR. */
+/*                 'PHASE' */
+/*                 'INCIDENCE' */
+/*                 'EMISSION' */
 
+/*              When the illumination source is the sun, the */
+/*              incidence angle is commonly called the "solar */
+/*              incidence angle." */
+
+/*              See the $Particulars section below for a detailed */
+/*              description of these angles. */
+
+/*              Neither case nor white space are significant in */
+/*              ANGTYP. For example, the string ' Incidence ' is */
+/*              valid. */
+
+
+/*     TARGET   is the name of a target body. Optionally, you may */
+/*              supply the integer ID code for the object as */
+/*              an integer string. For example both 'MOON' and */
+/*              '301' are legitimate strings that indicate the */
+/*              moon is the target body. */
+
+/*              The target and observer define a position vector */
+/*              which points from the observer to the target. */
+
+/*              Case and leading or trailing blanks are not */
+/*              significant in the string TARGET. */
+
+
+/*     ILLUM    is the name of the illumination source. This source */
+/*              may be any ephemeris object. Case, blanks, and */
+/*              numeric values are treated in the same way as for the */
+/*              input TARGET. */
+
+/*     FIXREF   is the name of the body-fixed, body-centered */
+/*              reference frame associated with the target body. The */
+/*              input surface point SPOINT is expressed relative to */
+/*              this reference frame, and this frame is used to */
+/*              define the orientation of the target body as a */
+/*              function of time. */
+
+/*              The string FIXREF is case-insensitive, and leading */
+/*              and trailing blanks in FIXREF are not significant. */
+
+/*     ABCORR   indicates the aberration corrections to be applied */
+/*              when computing the target's position and orientation. */
+/*              Any value accepted by SPKEZR may be used. */
+
+/*              See the header of the SPICE routine SPKEZR for a */
+/*              detailed description of the aberration correction */
+/*              options. */
+
+/*              Case and embedded blanks are not significant in */
+/*              ABCORR. */
+
+
+/*     OBSRVR   is the name of the body from which the occultation is */
+/*              observed. Optionally, you may supply the integer NAIF */
+/*              ID code for the body as a string. */
+
+/*              Case and leading or trailing blanks are not */
+/*              significant in the string OBSRVR. */
+
+
+/*     SPOINT   is a surface point on the target body, expressed in */
+/*              Cartesian coordinates, relative to the body-fixed */
+/*              target frame designated by FIXREF. */
+
+/*              SPOINT need not be visible from the observer's */
+/*              location in order for the constraint specified by */
+/*              RELATE and REFVAL (see descriptions below) to be */
+/*              satisfied. */
+
+/*              The components of SPOINT have units of km. */
 
 /* $ Detailed_Output */
 
@@ -505,18 +579,18 @@ L_zzgfilin:
 /*         SPICE(IDCODENOTFOUND) is signaled. */
 
 /*     2)  If  target body coincides with the observer body OBSRVR or */
-/*         the illumination source SOURCE, error */
-/*         SPICE(BODIESNOTDISTINCT) will be signaled. */
+/*         the illumination source SOURCE, error, */
+/*         the error SPICE(BODIESNOTDISTINCT) is signaled. */
 
 /*     3)  If transmission-style aberration corrections are requested, */
 /*         the error SPICE(NOTSUPPORTED) is signaled. */
 
-/*     4)  If the aberration correction string is invalid, the error */
-/*         will be diagnosed by a routine in the call tree of this */
+/*     4)  If the aberration correction string is invalid, an error */
+/*         is signaled by a routine in the call tree of this */
 /*         routine. */
 
 /*     5)  If the illumination angle type is not recognized, the error */
-/*         SPICE(NOTSUPPORTED) will be signaled. */
+/*         SPICE(NOTSUPPORTED) is signaled. */
 
 /*     6)  If the input target body-fixed frame FIXREF is not */
 /*         recognized, the error SPICE(UNKNOWNFRAME) is signaled. A */
@@ -529,7 +603,6 @@ L_zzgfilin:
 
 /*     8)  If the input argument METHOD is not recognized, the error */
 /*         SPICE(INVALIDMETHOD) is signaled. */
-
 
 /* $ Files */
 
@@ -546,8 +619,8 @@ L_zzgfilin:
 
 /* $ Restrictions */
 
-/*     This is a SPICELIB private routine; it should not be called by */
-/*     user applications. */
+/*     1)  This is a SPICELIB private routine; it should not be called by */
+/*         user applications. */
 
 /* $ Literature_References */
 
@@ -555,17 +628,24 @@ L_zzgfilin:
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
-/*     E.D. Wright    (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
 
-/* -    SPICELIB version 1.1.0 08-MAR-2017 (NJB) */
+/* -    SPICELIB Version 1.1.1, 30-MAY-2021 (NJB) (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
+
+/*        Updated header: added missing argument documentation. */
+
+/* -    SPICELIB Version 1.1.0, 08-MAR-2017 (NJB) */
 
 /*        Bug fixes: now checks FAILED after each BODS2C call */
 /*        and after the BODVRD call. */
 
-/* -    SPICELIB Version 1.0.0 23-MAY-2012 (NJB) (EDW) */
+/* -    SPICELIB Version 1.0.0, 23-MAY-2012 (NJB) (EDW) */
 
 /* -& */
 /* $ Index_Entries */
@@ -833,26 +913,25 @@ L_zzgfildc:
 
 /* $ Detailed_Input */
 
-/*     UDFUNC     is a placeholder subroutine argument. This argument is */
-/*                provided for compatibility with ZZGFSOLVX. It is not */
-/*                used by the entry points of this package. */
+/*     UDFUNC   is a placeholder subroutine argument. This argument is */
+/*              provided for compatibility with ZZGFSOLVX. It is not */
+/*              used by the entry points of this package. */
 
-/*     ET         is the time, expressed as seconds past J2000 TDB, at */
-/*                which to determine whether or not the illumination */
-/*                angle between the observer and target is decreasing. */
+/*     ET       is the time, expressed as seconds past J2000 TDB, at */
+/*              which to determine whether or not the illumination */
+/*              angle between the observer and target is decreasing. */
 
 /* $ Detailed_Output */
 
-/*     DECRES     is a logical flag that indicates whether the */
-/*                observer-target illumination angle is decreasing at */
-/*                ET. The observer, target, and aberration correction */
-/*                used to compute the illumination angle are defined by */
-/*                the latest call to the initialization entry point */
-/*                ZZGFILIN. */
+/*     DECRES   is a logical flag that indicates whether the */
+/*              observer-target illumination angle is decreasing at */
+/*              ET. The observer, target, and aberration correction */
+/*              used to compute the illumination angle are defined by */
+/*              the latest call to the initialization entry point */
+/*              ZZGFILIN. */
 
-/*                DECRES is .TRUE. if and only if the observer-target */
-/*                illumination angle is decreasing at ET. */
-
+/*              DECRES is .TRUE. if and only if the observer-target */
+/*              illumination angle is decreasing at ET. */
 
 /* $ Parameters */
 
@@ -860,10 +939,9 @@ L_zzgfildc:
 
 /* $ Exceptions */
 
-/*     1) If the state of the target relative to the observer */
-/*        at ET can not be found due to an SPK lookup failure, */
-/*        the error will be diagnosed by routines in the call */
-/*        tree of this routine. */
+/*     1)  If the state of the target relative to the observer at ET can */
+/*         not be found due to an SPK lookup failure, an error is */
+/*         signaled by a routine in the call tree of this routine. */
 
 /* $ Files */
 
@@ -882,8 +960,8 @@ L_zzgfildc:
 
 /* $ Restrictions */
 
-/*     This is a SPICELIB private routine; it should not be called by */
-/*     user applications. */
+/*     1)  This is a SPICELIB private routine; it should not be called by */
+/*         user applications. */
 
 /* $ Literature_References */
 
@@ -891,16 +969,21 @@ L_zzgfildc:
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
-/*     E.D. Wright    (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
 
-/* -    SPICELIB version 1.1.0 08-MAR-2017 (NJB) */
+/* -    SPICELIB Version 1.1.1, 29-MAY-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
+
+/* -    SPICELIB Version 1.1.0, 08-MAR-2017 (NJB) */
 
 /*        Bug fix: now checks FAILED after ZZILUSTA call. */
 
-/* -    SPICELIB Version 1.0.0 23-MAY-2012 (NJB) (EDW) */
+/* -    SPICELIB Version 1.0.0, 23-MAY-2012 (NJB) (EDW) */
 
 /* -& */
 /* $ Index_Entries */
@@ -987,9 +1070,9 @@ L_zzgfilgq:
 
 /* $ Keywords */
 
-/*     ILLUMINATION ANGLE */
 /*     EPHEMERIS */
 /*     GEOMETRY */
+/*     ILLUMINATION ANGLE */
 /*     SEARCH */
 
 /* $ Declarations */
@@ -1006,18 +1089,18 @@ L_zzgfilgq:
 
 /* $ Detailed_Input */
 
-/*     ET         is the time, expressed as seconds past J2000 TDB, at */
-/*                which the illumination angle is to be computed. */
+/*     ET       is the time, expressed as seconds past J2000 TDB, at */
+/*              which the illumination angle is to be computed. */
 
 /* $ Detailed_Output */
 
-/*     ANGLE      is the illumination angle as seen by the observer at */
-/*                time ET. The observer, target, and aberration */
-/*                correction used to compute the illumination angle are */
-/*                defined by the latest call to the initialization entry */
-/*                point ZZGFILIN. */
+/*     ANGLE    is the illumination angle as seen by the observer at */
+/*              time ET. The observer, target, and aberration */
+/*              correction used to compute the illumination angle are */
+/*              defined by the latest call to the initialization entry */
+/*              point ZZGFILIN. */
 
-/*                Units are radians. */
+/*              Units are radians. */
 
 /* $ Parameters */
 
@@ -1025,10 +1108,9 @@ L_zzgfilgq:
 
 /* $ Exceptions */
 
-/*     1) If the position of the target relative to the observer */
-/*        at ET can not be found due to an SPK lookup failure, */
-/*        the error will be diagnosed by routines in the call */
-/*        tree of this routine. */
+/*     1)  If the position of the target relative to the observer at ET */
+/*         can not be found due to an SPK lookup failure, an error is */
+/*         signaled by a routine in the call tree of this routine. */
 
 /* $ Files */
 
@@ -1047,8 +1129,8 @@ L_zzgfilgq:
 
 /* $ Restrictions */
 
-/*     This is a SPICELIB private routine; it should not be called by */
-/*     user applications. */
+/*     1)  This is a SPICELIB private routine; it should not be called by */
+/*         user applications. */
 
 /* $ Literature_References */
 
@@ -1056,16 +1138,21 @@ L_zzgfilgq:
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
-/*     E.D. Wright    (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
 
-/* -    SPICELIB version 1.1.0 08-MAR-2017 (NJB) */
+/* -    SPICELIB Version 1.1.1, 29-MAY-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
+
+/* -    SPICELIB Version 1.1.0, 08-MAR-2017 (NJB) */
 
 /*        Bug fix: now checks FAILED after ILLUMG call. */
 
-/* -    SPICELIB version 1.0.0 23-MAY-2012 (NJB) (EDW) */
+/* -    SPICELIB Version 1.0.0, 23-MAY-2012 (NJB) (EDW) */
 
 /* -& */
 /* $ Index_Entries */
@@ -1085,7 +1172,7 @@ L_zzgfilgq:
 	return 0;
     }
     *angle = angles[(i__1 = svaidx - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(
-	    "angles", i__1, "zzgfilu_", (ftnlen)1098)];
+	    "angles", i__1, "zzgfilu_", (ftnlen)1191)];
     chkout_("ZZGFILGQ", (ftnlen)8);
     return 0;
 } /* zzgfilu_ */

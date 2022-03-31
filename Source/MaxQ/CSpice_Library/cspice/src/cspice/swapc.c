@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      SWAPC ( Swap character values ) */
+/* $Procedure SWAPC ( Swap character values ) */
 /* Subroutine */ int swapc_(char *a, char *b, ftnlen a_len, ftnlen b_len)
 {
     /* System generated locals */
@@ -22,7 +22,7 @@
 
 /* $ Abstract */
 
-/*      Swap the contents of two character strings. */
+/*     Swap the contents of two character strings. */
 
 /* $ Disclaimer */
 
@@ -55,58 +55,31 @@
 
 /* $ Keywords */
 
-/*      UTILITY */
+/*     UTILITY */
 
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*      VARIABLE  I/O  DESCRIPTION */
-/*      --------  ---  -------------------------------------------------- */
-/*      A         I/O  First string. */
-/*      B         I/O  Second string. */
+/*     VARIABLE  I/O  DESCRIPTION */
+/*     --------  ---  -------------------------------------------------- */
+/*     A         I-O  First string. */
+/*     B         I-O  Second string. */
 
 /* $ Detailed_Input */
 
-/*      A, */
-/*      B           are two character strings, the contents of which */
-/*                  are to be swapped (exchanged). */
+/*     A, */
+/*     B        are two character strings, the contents of which */
+/*              are to be swapped (exchanged). */
 
 /* $ Detailed_Output */
 
-/*      A, */
-/*      B           are the same two character strings, after their */
-/*                  contents have been exchanged. */
+/*     A, */
+/*     B        are the same two character strings, after their */
+/*              contents have been exchanged. */
 
 /* $ Parameters */
 
 /*     None. */
-
-/* $ Particulars */
-
-/*      This is just shorthand notation for the code fragment */
-
-/*            TEMP = A */
-/*            A    = B */
-/*            B    = TEMP */
-
-/*      The characters in the string are swapped one at a time, so */
-/*      no intermediate string (TEMP) is needed. This means that the */
-/*      strings may be of any length. */
-
-/* $ Examples */
-
-/*      Let */
-/*            A = 11.D0 */
-/*            B = 22.D0 */
-
-/*      Then after calling SWAPD (A,B), */
-
-/*            A = 22.D0 */
-/*            B = 11.D0 */
-
-/* $ Restrictions */
-
-/*      None. */
 
 /* $ Exceptions */
 
@@ -114,17 +87,52 @@
 
 /* $ Files */
 
-/*      None. */
+/*     None. */
 
-/* $ Author_and_Institution */
+/* $ Particulars */
 
-/*      I.M. Underwood  (JPL) */
+/*     This is just shorthand notation for the code fragment */
+
+/*           TEMP = A */
+/*           A    = B */
+/*           B    = TEMP */
+
+/*     The characters in the string are swapped one at a time, so */
+/*     no intermediate string (TEMP) is needed. This means that the */
+/*     strings may be of any length. */
+
+/* $ Examples */
+
+/*     Let */
+/*           A = 11.D0 */
+/*           B = 22.D0 */
+
+/*     Then after calling SWAPD (A,B), */
+
+/*           A = 22.D0 */
+/*           B = 11.D0 */
+
+/* $ Restrictions */
+
+/*     None. */
 
 /* $ Literature_References */
 
-/*      None. */
+/*     None. */
+
+/* $ Author_and_Institution */
+
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 18-MAR-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
 

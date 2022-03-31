@@ -9,8 +9,8 @@
 
 static integer c__0 = 0;
 
-/* $Procedure      WNVALD ( Validate a DP window ) */
-/* Subroutine */ int wnvald_(integer *size, integer *n, doublereal *a)
+/* $Procedure WNVALD ( Validate a DP window ) */
+/* Subroutine */ int wnvald_(integer *size, integer *n, doublereal *window)
 {
     doublereal left;
     integer i__;
@@ -67,29 +67,45 @@ static integer c__0 = 0;
 /*     --------  ---  -------------------------------------------------- */
 /*     SIZE       I   Size of window. */
 /*     N          I   Original number of endpoints. */
-/*     A         I,O  Input, output window. */
+/*     WINDOW    I-O  Input, output window. */
 
 /* $ Detailed_Input */
 
-/*     SIZE        is the size of the window to be validated. This */
-/*                 is the maximum number of endpoints that the cell */
-/*                 used to implement the window is capable of holding */
-/*                 at any one time. */
+/*     SIZE     is the size of the window to be validated. This is the */
+/*              maximum number of endpoints that the cell used to */
+/*              implement the window is capable of holding at any one */
+/*              time. */
 
-/*     N           is the original number of endpoints in the input */
-/*                 cell. */
+/*     N        is the original number of endpoints in the input cell. */
 
-/*     A           on input, is a (possibly uninitialized) cell array */
-/*                 SIZE containing N endpoints of (possibly unordered */
-/*                 and non-disjoint) intervals. */
+/*     WINDOW   on input is a (possibly uninitialized) cell array of */
+/*              maximum size SIZE containing N endpoints of (possibly */
+/*              unordered and non-disjoint) intervals. */
 
 /* $ Detailed_Output */
 
-/*     A           on output, is a window containing the union of the */
-/*                 intervals in the input cell. */
+/*     WINDOW   on output is a validated window, in which any overlapping */
+/*              input intervals have been merged and the resulting set of */
+/*              intervals is arranged in increasing order. */
 
+/*              WINDOW is ready for use with any of the window routines. */
 
 /* $ Parameters */
+
+/*     None. */
+
+/* $ Exceptions */
+
+/*     1)  If the original number of endpoints N is odd, the error */
+/*         SPICE(UNMATCHENDPTS) is signaled. */
+
+/*     2)  If the original number of endpoints of the window exceeds its */
+/*         size, the error SPICE(WINDOWTOOSMALL) is signaled. */
+
+/*     3)  If the left endpoint is greater than the right endpoint, the */
+/*         error SPICE(BADENDPOINTS) is signaled. */
+
+/* $ Files */
 
 /*     None. */
 
@@ -98,9 +114,9 @@ static integer c__0 = 0;
 /*     This routine takes as input a cell array containing pairs of */
 /*     endpoints and validates it to form a window. */
 
-/*     On input, A is a cell of size SIZE containing N endpoints. */
+/*     On input, WINDOW is a cell of size SIZE containing N endpoints. */
 /*     During validation, the intervals are ordered, and overlapping */
-/*     intervals are merged. On output, the cardinality of A is */
+/*     intervals are merged. On output, the cardinality of WINDOW is */
 /*     the number of endpoints remaining, and it is ready for use with */
 /*     any of the window routines. */
 
@@ -113,61 +129,95 @@ static integer c__0 = 0;
 
 /* $ Examples */
 
-/*     The following small program */
+/*     The numerical results shown for this example may differ across */
+/*     platforms. The results depend on the SPICE kernels used as input, */
+/*     the compiler and supporting libraries, and the machine specific */
+/*     arithmetic implementation. */
 
-/*            INTEGER               CARDD */
-/*            INTEGER               SIZED */
+/*     1) Define an array containing a set of unordered and possibly */
+/*        overlapping intervals, and validate the array as a SPICE */
+/*        window. */
 
-/*            DOUBLE PRECISION      WINDOW  ( LBCELL:20 ) */
 
-/*            DATA                  WINDOW  /  0,  0, */
-/*           .                                10, 12, */
-/*                                             2,  7, */
-/*                                            13, 15, */
-/*                                             1,  5, */
-/*                                            23, 29,   8*0 / */
+/*        Example code begins here. */
 
-/*            CALL WNVALD ( 20, 10, WINDOW ) */
 
-/*            WRITE (6,*) 'Current intervals: ', CARDD ( WINDOW ) / 2 */
-/*            WRITE (6,*) 'Maximum intervals: ', SIZED ( WINDOW ) / 2 */
-/*            WRITE (6,*) */
-/*            WRITE (6,*) 'Intervals:' */
-/*            WRITE (6,*) */
+/*              PROGRAM WNVALD_EX1 */
+/*              IMPLICIT NONE */
 
-/*            DO I = 1, CARDD ( WINDOW ), 2 */
-/*               WRITE (6,*) WINDOW(I), WINDOW(I+1) */
-/*            END DO */
+/*        C */
+/*        C     SPICELIB functions. */
+/*        C */
+/*              INTEGER               CARDD */
+/*              INTEGER               SIZED */
 
-/*            END */
+/*        C */
+/*        C     Local parameters. */
+/*        C */
+/*              INTEGER               LBCELL */
+/*              PARAMETER           ( LBCELL = -5 ) */
 
-/*     produces the following output (possibly formatted differently). */
+/*              INTEGER               WINSIZ */
+/*              PARAMETER           ( WINSIZ = 20 ) */
 
-/*            Current intervals:        5 */
-/*            Maximum intervals:       10 */
+/*              INTEGER               DATSIZ */
+/*              PARAMETER           ( DATSIZ = 16 ) */
 
-/*            Intervals: */
+/*        C */
+/*        C     Local variables */
+/*        C */
+/*              DOUBLE PRECISION      WINDOW  ( LBCELL : WINSIZ ) */
+/*              DOUBLE PRECISION      WINDAT  ( DATSIZ ) */
 
-/*             0.000000000000000     0.000000000000000 */
-/*             1.000000000000000     7.000000000000000 */
-/*             10.00000000000000     12.00000000000000 */
-/*             13.00000000000000     15.00000000000000 */
-/*             23.00000000000000     29.00000000000000 */
+/*              INTEGER               I */
 
-/* $ Exceptions */
 
-/*     1. If the number of endpoints N is odd, the error */
-/*        SPICE(UNMATCHENDPTS) is signalled. */
+/*              DATA                  WINDAT  /  0,  0, */
+/*             .                                10, 12, */
+/*             .                                 2,  7, */
+/*             .                                13, 15, */
+/*             .                                 1,  5, */
+/*             .                                23, 29,  4*0 / */
 
-/*     2. If the number of end points of the window exceeds its size, the */
-/*        error SPICE(WINDOWTOOSMALL) is signalled. */
 
-/*     3. If the left endpoint is greater than the right endpoint, the */
-/*        error SPICE(BADENDPOINTS) is signalled. */
+/*        C */
+/*        C     Insert the data into the SPICE cell array. */
+/*        C */
+/*              CALL MOVED ( WINDAT, WINSIZ, WINDOW(1) ) */
 
-/* $ Files */
+/*        C */
+/*        C     Validate the input WINDOW array as a SPICE window. */
+/*        C */
+/*              CALL WNVALD ( WINSIZ, DATSIZ, WINDOW ) */
 
-/*     None. */
+/*              WRITE (*,*) 'Current intervals: ', CARDD ( WINDOW ) / 2 */
+/*              WRITE (*,*) 'Maximum intervals: ', SIZED ( WINDOW ) / 2 */
+/*              WRITE (*,*) */
+/*              WRITE (*,*) 'Intervals:' */
+/*              WRITE (*,*) */
+
+/*              DO I = 1, CARDD ( WINDOW ), 2 */
+/*                 WRITE (*,*) WINDOW(I), WINDOW(I+1) */
+/*              END DO */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*         Current intervals:            5 */
+/*         Maximum intervals:           10 */
+
+/*         Intervals: */
+
+/*           0.0000000000000000        0.0000000000000000 */
+/*           1.0000000000000000        7.0000000000000000 */
+/*           10.000000000000000        12.000000000000000 */
+/*           13.000000000000000        15.000000000000000 */
+/*           23.000000000000000        29.000000000000000 */
+
 
 /* $ Restrictions */
 
@@ -179,12 +229,28 @@ static integer c__0 = 0;
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     H.A. Neilan     (JPL) */
-/*     W.L. Taber      (JPL) */
-/*     I.M. Underwood  (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     H.A. Neilan        (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.2.0, 16-MAR-2021 (JDR) */
+
+/*        Changed argument name A to WINDOW for consistency with other */
+/*        routines. */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply to NAIF standard. Created complete */
+/*        code example from code fragment and added example's problem */
+/*        statement. */
+
+/*        Improved description of argument WINDOW in $Detailed_Output. */
+
+/*        Removed unnecessary $Revisions section. */
 
 /* -    SPICELIB Version 1.1.1, 30-JUL-2002 (NJB) */
 
@@ -208,21 +274,6 @@ static integer c__0 = 0;
 
 /*     validate a d.p. window */
 
-/* -& */
-/* $ Revisions */
-
-/* -    SPICELIB Version 1.1.0, 14-AUG-1995 (HAN) */
-
-/*        Fixed a character string that continued over two lines. */
-/*        The "//" characters were missing. The Alpha/OpenVMS compiler */
-/*        issued a warning regarding this incorrect statement syntax. */
-
-/* -    Beta Version 1.1.0, 17-FEB-1989 (HAN) (NJB) */
-
-/*        Contents of the Required_Reading section was */
-/*        changed from "None." to "WINDOWS".  Also, the */
-/*        declaration of the unused function FAILED was */
-/*        removed. */
 /* -& */
 
 /*     SPICELIB functions */
@@ -261,12 +312,12 @@ static integer c__0 = 0;
 /*     the corresponding left endpoint. This is a boo-boo, and should be */
 /*     reported. */
 
-    ssized_(size, a);
-    scardd_(&c__0, a);
+    ssized_(size, window);
+    scardd_(&c__0, window);
     i__ = 1;
     while(i__ < *n) {
-	left = a[i__ + 5];
-	right = a[i__ + 6];
+	left = window[i__ + 5];
+	right = window[i__ + 6];
 	if (left > right) {
 	    setmsg_("WNVALD: Left endpoint may not exceed right endpoint.", (
 		    ftnlen)52);
@@ -274,7 +325,7 @@ static integer c__0 = 0;
 	    chkout_("WNVALD", (ftnlen)6);
 	    return 0;
 	}
-	wninsd_(&left, &right, a);
+	wninsd_(&left, &right, window);
 	i__ += 2;
     }
     chkout_("WNVALD", (ftnlen)6);

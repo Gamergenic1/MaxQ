@@ -260,10 +260,19 @@
 
 /* $ Author_and_Institution */
 
-/*     E.D. Wright      (JPL) */
-/*     W.L. Taber       (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 2.2.0, 14-OCT-2021 (NJB) */
+
+/*        Bug fix: fixed routine name in CHKIN/CHKOUT calls (NRDDP */
+/*        -> ZZNRDDP). */
+
+/*        Fixed typos in comments. */
 
 /* -    SPICELIB Version 2.1.0, 03-JUL-2016 (EDW) */
 
@@ -271,7 +280,7 @@
 /*        indicates the negative inclination modification as a mistake. */
 /*        That code was removed. */
 
-/*        Eliminated bug in ZZDPINIT that allowed NaN contaimination */
+/*        Eliminated bug in ZZDPINIT that allowed NaN contamination */
 /*        for zero inclination orbits. */
 
 /* -    SPICELIB Version 2.0.0, 20-JAN-2012 (EDW) */
@@ -345,17 +354,17 @@
     if (return_()) {
 	return 0;
     } else {
-	chkin_("NRDDP", (ftnlen)5);
+	chkin_("ZZNRDDP", (ftnlen)7);
     }
 
 /*     This routine should never be called. If this routine is called, */
-/*     an error is signalled. */
+/*     an error is signaled. */
 
     setmsg_("NRDDP: You called an entry which performs no run-time function."
 	    " This may indicate a bug. Please check the documentation for the"
 	    " subroutine ZZNRDDP.", (ftnlen)147);
     sigerr_("SPICE(EVILBOGUSENTRY)", (ftnlen)21);
-    chkout_("NRDDP", (ftnlen)5);
+    chkout_("ZZNRDDP", (ftnlen)7);
     return 0;
 /* $Procedure ZZDPINIT (Initialize deep space algorithm and variables ) */
 
@@ -493,9 +502,13 @@ L_zzdpinit:
 
 /* $ Version */
 
+/* -    SPICELIB Version 2.1.1, 01-OCT-2021 (NJB) */
+
+/*        Fixed typo in comments. */
+
 /* -    SPICELIB Version 2.1.0, 27-JUN-2016 (EDW) */
 
-/*        Eliminated bug that allowed NaN contaimination for zero */
+/*        Eliminated bug that allowed NaN contamination for zero */
 /*        inclination orbits. New code avoids calculating 1/SINIQ for */
 /*        SINIQ = 0. */
 
@@ -750,7 +763,7 @@ L_zzdpinit:
 	sgh = s4 * zn * (z31 + z33 - 6.);
 	sh = -zn * s2 * (z21 + z23);
 
-/*        Check for, and adust SH, at inclinations near 0 and 180 degs. */
+/*        Check for, and adjust SH, at inclinations near 0 and 180 degs. */
 
 	if (xqncl < .052359877 || xqncl > pi_() - .052359877) {
 	    sh = 0.;

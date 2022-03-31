@@ -9,7 +9,7 @@
 
 static integer c__0 = 0;
 
-/* $Procedure      LNKILB ( LNK, insert list before node ) */
+/* $Procedure LNKILB ( LNK, insert list before node ) */
 /* Subroutine */ int lnkilb_(integer *list, integer *next, integer *pool)
 {
     integer head, tail, prev;
@@ -49,7 +49,7 @@ static integer c__0 = 0;
 
 /* $ Required_Reading */
 
-/*     LNK */
+/*     None. */
 
 /* $ Keywords */
 
@@ -58,7 +58,7 @@ static integer c__0 = 0;
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     LIST       I   Node in the list to be inserted. */
 /*     NEXT       I   Node before which a new list is to be inserted. */
@@ -67,69 +67,69 @@ static integer c__0 = 0;
 
 /* $ Detailed_Input */
 
-/*     LIST           is a node in the list to be inserted.  The entire */
-/*                    list containing LIST is to be inserted into the */
-/*                    list containing NEXT.  The inserted list will be */
-/*                    located between NEXT and its predecessor, if any. */
+/*     LIST     is a node in the list to be inserted. The entire */
+/*              list containing LIST is to be inserted into the */
+/*              list containing NEXT. The inserted list will be */
+/*              located between NEXT and its predecessor, if any. */
 
-/*     NEXT           is a node in a list.  NEXT is permitted to be */
-/*                    nil, in which case POOL is not modified. */
+/*     NEXT     is a node in a list. NEXT is permitted to be */
+/*              nil, in which case POOL is not modified. */
 
-/*     POOL           is a doubly linked list pool. */
+/*     POOL     is a doubly linked list pool. */
 
 /* $ Detailed_Output */
 
-/*     POOL           is the input pool, with the following */
-/*                    modifications: */
+/*     POOL     is the input pool, with the following */
+/*              modifications: */
 
-/*                       Let HEAD and TAIL be the head and tail nodes of */
-/*                       the list containing LIST.  Then on output */
+/*                 Let HEAD and TAIL be the head and tail nodes of */
+/*                 the list containing LIST. Then on output */
 
-/*                          -- The successor of TAIL is NEXT. */
+/*                    -- The successor of TAIL is NEXT. */
 
-/*                          -- The predecessor of NEXT is TAIL. */
+/*                    -- The predecessor of NEXT is TAIL. */
 
 
-/*                       Let PREV be the node that on input was the */
-/*                       predecessor of NEXT; if PREV exists, then on */
-/*                       output */
+/*                 Let PREV be the node that on input was the */
+/*                 predecessor of NEXT; if PREV exists, then on */
+/*                 output */
 
-/*                          -- The successor of PREV is HEAD. */
+/*                    -- The successor of PREV is HEAD. */
 
-/*                          -- The predecessor of HEAD is PREV. */
+/*                    -- The predecessor of HEAD is PREV. */
 
-/*                       If PREV is nil, the backward pointer of the */
-/*                       inserted sublist is set to the negative of */
-/*                       the tail of the list containing NEXT. */
+/*                 If PREV is nil, the backward pointer of the */
+/*                 inserted sublist is set to the negative of */
+/*                 the tail of the list containing NEXT. */
 
 /* $ Parameters */
 
-/*     LBPOOL        is the lower bound of the column indices of the POOL */
-/*                   array.  The columns indexed LBPOOL to 0 are reserved */
-/*                   as a control area for the pool. */
+/*     LBPOOL   is the lower bound of the column indices of the POOL */
+/*              array. The columns indexed LBPOOL to 0 are reserved */
+/*              as a control area for the pool. */
 
 /* $ Exceptions */
 
+/*     For efficiency, discovery check-in is used in this routine. */
+
 /*     1)  If LIST is not a valid node number, the error */
-/*         SPICE(INVALIDNODE) will be signalled.  POOL will not be */
+/*         SPICE(INVALIDNODE) is signaled. POOL will not be */
 /*         modified. */
 
 /*     2)  If NEXT is positive but is not a valid node number, the error */
-/*         SPICE(INVALIDNODE) will be signalled.  POOL will not be */
+/*         SPICE(INVALIDNODE) is signaled. POOL will not be */
 /*         modified. */
 
 /*     3)  It is not an error for NEXT to be non-positive; if it is, */
 /*         the call to this routine does not affect the pool. */
 
-/*     4)  If either of LIST or NEXT are valid node numbers but are */
-/*         not allocated, the error SPICE(UNALLOCATEDNODE) will be */
-/*         signalled.  POOL will not be modified. */
+/*     4)  If either of LIST or NEXT are valid node numbers but are not */
+/*         allocated, the error SPICE(UNALLOCATEDNODE) is signaled. POOL */
+/*         will not be modified. */
 
 /*     5)  If LIST belongs to the same list as does NEXT, this routine */
-/*         may fail in mysterious ways.  For efficiency, this error */
+/*         may fail in mysterious ways. For efficiency, this error */
 /*         condition is not checked. */
-
-/*     For efficiency, discovery check-in is used in this routine. */
 
 /* $ Files */
 
@@ -138,8 +138,8 @@ static integer c__0 = 0;
 /* $ Particulars */
 
 /*     This routine is used for augmenting lists by inserting other */
-/*     lists into them.  The case of insertion of a single allocated */
-/*     node is not special:  this is insertion of a singleton list. */
+/*     lists into them. The case of insertion of a single allocated */
+/*     node is not special: this is insertion of a singleton list. */
 
 /*     To insert a list into a list AFTER a specified element, use the */
 /*     routine LNKILA. */
@@ -176,13 +176,15 @@ static integer c__0 = 0;
 /*             5 <--> 4 <--> 3 <--> 2 <--> 1 */
 
 /*         Note that the first call to LNKILB does not cause an error */
-/*         to be signalled, even though HEAD is 0 at that point. */
+/*         to be signaled, even though HEAD is 0 at that point. */
 
 /* $ Restrictions */
 
-/*     Linked list pools must be initialized via the routine */
-/*     LNKINI.  Failure to initialize a linked list pool */
-/*     will almost certainly lead to confusing results. */
+/*     1)  Linked list pools must be initialized via the routine */
+/*         LNKINI. Failure to initialize a linked list pool */
+/*         will almost certainly lead to confusing results. */
+
+/*     2)  For efficiency, discovery check-in is used in this routine. */
 
 /* $ Literature_References */
 
@@ -190,10 +192,17 @@ static integer c__0 = 0;
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
-/*     W.L. Taber     (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.0.1, 24-NOV-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
+
+/*        Added note about efficiency in $Restrictions section. */
 
 /* -    SPICELIB Version 1.0.0, 19-DEC-1995 (NJB) (WLT) */
 

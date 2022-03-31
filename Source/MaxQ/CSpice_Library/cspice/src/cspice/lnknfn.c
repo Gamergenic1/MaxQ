@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      LNKNFN ( LNK, number of free nodes ) */
+/* $Procedure LNKNFN ( LNK, number of free nodes ) */
 integer lnknfn_(integer *pool)
 {
     /* System generated locals */
@@ -42,7 +42,7 @@ integer lnknfn_(integer *pool)
 
 /* $ Required_Reading */
 
-/*     LNK */
+/*     None. */
 
 /* $ Keywords */
 
@@ -51,7 +51,7 @@ integer lnknfn_(integer *pool)
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     POOL       I   A doubly linked list pool. */
 /*     LBPOOL     P   Lower bound of pool column indices. */
@@ -60,9 +60,9 @@ integer lnknfn_(integer *pool)
 
 /* $ Detailed_Input */
 
-/*     SIZE           is the number of nodes in the pool. */
+/*     SIZE     is the number of nodes in the pool. */
 
-/*     POOL           is a doubly linked list pool. */
+/*     POOL     is a doubly linked list pool. */
 
 /* $ Detailed_Output */
 
@@ -70,9 +70,9 @@ integer lnknfn_(integer *pool)
 
 /* $ Parameters */
 
-/*     LBPOOL        is the lower bound of the column indices of the POOL */
-/*                   array.  The columns indexed LBPOOL to 0 are reserved */
-/*                   as a control area for the pool. */
+/*     LBPOOL   is the lower bound of the column indices of the POOL */
+/*              array. The columns indexed LBPOOL to 0 are reserved */
+/*              as a control area for the pool. */
 
 /* $ Exceptions */
 
@@ -91,7 +91,7 @@ integer lnknfn_(integer *pool)
 /*     Routines that allocate nodes can use this routine to determine */
 /*     how many nodes can be allocated safely---an attempt to allocate */
 /*     a node when no free nodes are available causes a SPICELIB error */
-/*     to be signalled. */
+/*     to be signaled. */
 
 /* $ Examples */
 
@@ -108,12 +108,11 @@ integer lnknfn_(integer *pool)
 
 /*         will assign the value 1 to NFREE. */
 
-
 /* $ Restrictions */
 
-/*     Linked list pools must be initialized via the routine */
-/*     LNKINI.  Failure to initialize a linked list pool */
-/*     will almost certainly lead to confusing results. */
+/*     1)  Linked list pools must be initialized via the routine */
+/*         LNKINI. Failure to initialize a linked list pool */
+/*         will almost certainly lead to confusing results. */
 
 /* $ Literature_References */
 
@@ -121,10 +120,15 @@ integer lnknfn_(integer *pool)
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
-/*     W.L. Taber     (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.0.1, 24-NOV-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.0.0, 19-DEC-1995 (NJB) (WLT) */
 

@@ -494,11 +494,13 @@ static integer c__1 = 1;
 
 /* $ Detailed_Output */
 
-/*     None.    The data are stored in the PCK segment in the DAF */
-/*              attached to HANDLE. */
+/*     None. */
 
-/*              See the $ Particulars section for details about the */
-/*              structure of a type 03 PCK segment. */
+/*     The data are stored in the PCK segment in the DAF */
+/*     attached to HANDLE. */
+
+/*     See the $Particulars section for details about the */
+/*     structure of a type 03 PCK segment. */
 
 /* $ Parameters */
 
@@ -507,20 +509,22 @@ static integer c__1 = 1;
 
 /* $ Exceptions */
 
-/*     1) If the degree of the Chebyshev Polynomial to be used for this */
-/*        segment is negative, the error SPICE(INVALIDARGUMENT) will */
-/*        be signalled. */
+/*     1)  If the degree of the Chebyshev Polynomial to be used for this */
+/*         segment is negative, the error SPICE(INVALIDARGUMENT) is */
+/*         signaled. */
 
-/*     2) Errors in the structure or content of the inputs other than the */
-/*        degree of the Chebyshev Polynomial are diagnosed by routines */
-/*        called by this one. */
+/*     2)  If there is any error in the structure or content of the */
+/*         inputs other than the degree of the Chebyshev Polynomial, the */
+/*         error is signaled by a routine in the call tree of this */
+/*         routine. */
 
-/*     3) File access errors are diagnosed by routines in the call tree */
-/*        of this routine. */
+/*     3)  If a file access error occurs while this routine begins a new */
+/*         type 03 segment, the error is signaled by a routine in the */
+/*         call tree of this routine. */
 
 /* $ Files */
 
-/*      None. */
+/*     None. */
 
 /* $ Particulars */
 
@@ -649,7 +653,7 @@ static integer c__1 = 1;
 /*     Example 2: */
 
 /*        In this example we want to add type O3 PCK records, as */
-/*        described above in the $ Particulars section, to the segment */
+/*        described above in the $Particulars section, to the segment */
 /*        being written as they are generated. The ability to write the */
 /*        records in this way is useful if computer memory is limited. It */
 /*        may also be convenient from a programming perspective to write */
@@ -725,39 +729,44 @@ static integer c__1 = 1;
 
 /* $ Restrictions */
 
-/*     The binary PCK file must be open with write access. */
+/*     1)  The binary PCK file must be open with write access. */
 
-/*     Only one segment may be written to a particular PCK file at a */
-/*     time. All of the data for the segment must be written and the */
-/*     segment must be ended before another segment may be started in */
-/*     the file. */
+/*     2)  Only one segment may be written to a particular PCK file at a */
+/*         time. All of the data for the segment must be written and the */
+/*         segment must be ended before another segment may be started in */
+/*         the file. */
 
 /* $ Literature_References */
 
-/*      None. */
+/*     None. */
 
 /* $ Author_and_Institution */
 
-/*      K.R. Gehringer      (JPL) */
-/*      E.D. Wright         (JPL) */
-/*      B.V. Semenov        (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
+/*     B.V. Semenov       (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
 
+/* -    SPICELIB Version 1.0.2, 03-JUN-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
+
 /* -    SPICELIB Version 1.0.1, 10-FEB-2014 (EDW) (BVS) */
 
-/*        Minor edits to Procedure; clean trailing whitespace. */
+/*        Minor edits to $Procedure; clean trailing whitespace. */
 /*        Corrected order of header sections to conform to NAIF */
 /*        standard. */
 
-/*        Removed comments from the Declarations section. */
+/*        Removed comments from the $Declarations section. */
 
 /* -    SPICELIB Version 1.0.0, 06-MAR-1995 (KRG) */
 
 /* -& */
 /* $ Index_Entries */
 
-/*     begin writing a type_03 pck segment */
+/*     begin writing a type_03 PCK segment */
 
 /* -& */
 

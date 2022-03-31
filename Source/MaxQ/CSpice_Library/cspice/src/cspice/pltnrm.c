@@ -58,7 +58,7 @@
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     V1, */
 /*     V2, */
@@ -69,17 +69,16 @@
 
 /*     V1, */
 /*     V2, */
-/*     V3             are vertices of a triangular plate. */
+/*     V3       are vertices of a triangular plate. */
 
 /* $ Detailed_Output */
 
-/*     NORMAL         is an outward normal vector of the plate defined by */
-/*                    the input vertices. The order of the vertices is */
-/*                    used to determine the choice of normal direction: */
-/*                    the normal vector is */
+/*     NORMAL   is an outward normal vector of the plate defined by */
+/*              the input vertices. The order of the vertices is */
+/*              used to determine the choice of normal direction: */
+/*              the normal vector is */
 
-/*                       ( V2 - V1 ) x ( V3 - V2 ) */
-
+/*                 ( V2 - V1 ) x ( V3 - V2 ) */
 
 /* $ Parameters */
 
@@ -87,8 +86,8 @@
 
 /* $ Exceptions */
 
-/*     1) The input plate may be degenerate: it may be a line segment */
-/*        or a point. These are not considered to be erroneous inputs. */
+/*     1)  The input plate may be degenerate: it may be a line segment */
+/*         or a point. These are not considered to be erroneous inputs. */
 
 /* $ Files */
 
@@ -102,6 +101,10 @@
 
 /* $ Examples */
 
+/*     The numerical results shown for this example may differ across */
+/*     platforms. The results depend on the SPICE kernels used as input */
+/*     (if any), the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
 
 /*     1) Compute an upward normal of an equilateral triangle lying */
 /*        in the X-Y plane and centered at the origin. */
@@ -109,34 +112,35 @@
 /*        Example code begins here. */
 
 
-/*           PROGRAM EX1 */
-/*           IMPLICIT NONE */
+/*              PROGRAM PLTNRM_EX1 */
+/*              IMPLICIT NONE */
 
-/*           DOUBLE PRECISION      NORMAL ( 3 ) */
-/*           DOUBLE PRECISION      S */
-/*           DOUBLE PRECISION      V1     ( 3 ) */
-/*           DOUBLE PRECISION      V2     ( 3 ) */
-/*           DOUBLE PRECISION      V3     ( 3 ) */
-
-
-/*           S = SQRT(3.D0)/2 */
-
-/*           CALL VPACK (    S,  -0.5D0,  0.D0, V1 ) */
-/*           CALL VPACK ( 0.D0,    1.D0,  0.D0, V2 ) */
-/*           CALL VPACK (   -S,  -0.5D0,  0.D0, V3 ) */
+/*              DOUBLE PRECISION      NORMAL ( 3 ) */
+/*              DOUBLE PRECISION      S */
+/*              DOUBLE PRECISION      V1     ( 3 ) */
+/*              DOUBLE PRECISION      V2     ( 3 ) */
+/*              DOUBLE PRECISION      V3     ( 3 ) */
 
 
-/*           CALL PLTNRM ( V1, V2, V3, NORMAL ) */
+/*              S = SQRT(3.D0)/2 */
 
-/*           WRITE (*, '(1X,A,3(3E20.12))' ) 'NORMAL = ', NORMAL */
-
-/*           END */
-
-/*        When run on a PC/Linux/gfortran/64-bit platform, the output */
-/*        from this program was: */
+/*              CALL VPACK (    S,  -0.5D0,  0.D0, V1 ) */
+/*              CALL VPACK ( 0.D0,    1.D0,  0.D0, V2 ) */
+/*              CALL VPACK (   -S,  -0.5D0,  0.D0, V3 ) */
 
 
-/*  NORMAL =   0.000000000000E+00  0.000000000000E+00  0.259807621135E+01 */
+/*              CALL PLTNRM ( V1, V2, V3, NORMAL ) */
+
+/*              WRITE (*, '(A,3F18.14)' ) 'NORMAL = ', NORMAL */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*        NORMAL =   0.00000000000000  0.00000000000000  2.59807621135332 */
 
 
 /* $ Restrictions */
@@ -149,9 +153,16 @@
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.0.1, 08-JUL-2020 (JDR) */
+
+/*        Edited the header to comply with NAIF standard.. */
+/*        Changed code example output format for the solution to fit */
+/*        within the $Examples section without modifications. */
 
 /* -    SPICELIB Version 1.0.0, 26-JAN-2016 (NJB) */
 

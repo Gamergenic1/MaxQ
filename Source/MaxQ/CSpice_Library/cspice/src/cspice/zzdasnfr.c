@@ -206,16 +206,16 @@ static integer c__1 = 1;
 
 /*     See include file zzftprms.inc. */
 
+/* $ Exceptions */
+
+/*     1) If any errors occur from the WRITE to the logical unit LUN, */
+/*        the error SPICE(DASWRITEFAIL) is signaled.  Before returning */
+/*        to the caller, the file attached to LUN is closed and deleted. */
+
 /* $ Files */
 
 /*     This routine writes to the first record of the DAS whose */
 /*     logical unit is LUN. */
-
-/* $ Exceptions */
-
-/*     1) If any errors occur from the WRITE to the logical unit LUN, */
-/*        the error SPICE(DASWRITEFAIL) is signaled.  Before returing */
-/*        to the caller, the file attached to LUN is closed and deleted. */
 
 /* $ Particulars */
 
@@ -239,15 +239,19 @@ static integer c__1 = 1;
 /*        else the computations to null pad the gaps in the file */
 /*        record may overstep record boundaries. */
 
-/* $ Author_and_Institution */
-
-/*     F.S. Turner     (JPL) */
-
 /* $ Literature_References */
 
 /*     None. */
 
+/* $ Author_and_Institution */
+
+/*     F.S. Turner     (JPL) */
+
 /* $ Version */
+
+/* -    SPICELIB Version 1.0.1, 03-OCT-2021 (NJB) */
+
+/*        Reordered header sections. Corrected typo in comments. */
 
 /* -    SPICELIB Version 1.0.0, 11-DEC-2001 (FST) */
 

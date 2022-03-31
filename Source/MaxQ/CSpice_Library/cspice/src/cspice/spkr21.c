@@ -12,7 +12,7 @@ static integer c__6 = 6;
 static integer c__25 = 25;
 static integer c__100 = 100;
 
-/* $Procedure      SPKR21 ( Read SPK record from segment, type 21 ) */
+/* $Procedure SPKR21 ( Read SPK record from segment, type 21 ) */
 /* Subroutine */ int spkr21_(integer *handle, doublereal *descr, doublereal *
 	et, doublereal *record)
 {
@@ -155,7 +155,7 @@ static integer c__100 = 100;
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     I   File handle. */
 /*     DESCR      I   Segment descriptor. */
@@ -165,48 +165,48 @@ static integer c__100 = 100;
 /* $ Detailed_Input */
 
 /*     HANDLE, */
-/*     DESCR       are the file handle and segment descriptor for */
-/*                 a SPK segment of type 21. */
+/*     DESCR    are the file handle and segment descriptor for */
+/*              a SPK segment of type 21. */
 
-/*     ET          is an epoch for which a data record from a specific */
-/*                 segment is required. The epoch is represented as */
-/*                 seconds past J2000 TDB. */
+/*     ET       is an epoch for which a data record from a specific */
+/*              segment is required. The epoch is represented as */
+/*              seconds past J2000 TDB. */
 
 /* $ Detailed_Output */
 
-/*     RECORD      is a data record which, when evaluated at epoch ET, */
-/*                 will give the state (position and velocity) of an */
-/*                 ephemeris object, relative to its center of motion, */
-/*                 in an inertial reference frame. */
+/*     RECORD   is a data record which, when evaluated at epoch ET, */
+/*              will give the state (position and velocity) of an */
+/*              ephemeris object, relative to its center of motion, */
+/*              in an inertial reference frame. */
 
-/*                 The contents of RECORD are as follows: */
+/*              The contents of RECORD are as follows: */
 
-/*                    RECORD(1):         The difference table size per */
-/*                                       Cartesian component. Call this */
-/*                                       size MAXDIM; then the difference */
-/*                                       line (MDA) size DLSIZE is */
+/*                 RECORD(1):         The difference table size per */
+/*                                    Cartesian component. Call this */
+/*                                    size MAXDIM; then the difference */
+/*                                    line (MDA) size DLSIZE is */
 
-/*                                         ( 4 * MAXDIM ) + 11 */
+/*                                      ( 4 * MAXDIM ) + 11 */
 
-/*                    RECORD(2) */
-/*                       ... */
-/*                    RECORD(1+DLSIZE):  An extended difference line. */
-/*                                       The contents are: */
+/*                 RECORD(2) */
+/*                    ... */
+/*                 RECORD(1+DLSIZE):  An extended difference line. */
+/*                                    The contents are: */
 
-/*                       Dimension  Description */
-/*                       ---------  ---------------------------------- */
-/*                       1          Reference epoch of difference line */
-/*                       MAXDIM     Stepsize function vector */
-/*                       1          Reference position vector,  x */
-/*                       1          Reference velocity vector,  x */
-/*                       1          Reference position vector,  y */
-/*                       1          Reference velocity vector,  y */
-/*                       1          Reference position vector,  z */
-/*                       1          Reference velocity vector,  z */
-/*                       MAXDIM,3   Modified divided difference */
-/*                                  arrays (MDAs) */
-/*                       1          Maximum integration order plus 1 */
-/*                       3          Integration order array */
+/*                    Dimension  Description */
+/*                    ---------  ---------------------------------- */
+/*                    1          Reference epoch of difference line */
+/*                    MAXDIM     Stepsize function vector */
+/*                    1          Reference position vector,  x */
+/*                    1          Reference velocity vector,  x */
+/*                    1          Reference position vector,  y */
+/*                    1          Reference velocity vector,  y */
+/*                    1          Reference position vector,  z */
+/*                    1          Reference velocity vector,  z */
+/*                    MAXDIM,3   Modified divided difference */
+/*                               arrays (MDAs) */
+/*                    1          Maximum integration order plus 1 */
+/*                    3          Integration order array */
 
 /* $ Parameters */
 
@@ -214,11 +214,11 @@ static integer c__100 = 100;
 
 /* $ Exceptions */
 
-/*     1) If the maximum table size of the input record exceeds */
-/*        MAXTRM, the error SPICE(DIFFLINETOOLARGE) is signaled. */
+/*     1)  If the maximum table size of the input record exceeds */
+/*         MAXTRM, the error SPICE(DIFFLINETOOLARGE) is signaled. */
 
-/*     2) Any errors that occur while reading SPK data will be */
-/*        diagnosed by routines in the call tree of this routine. */
+/*     2)  If an error occurs while looking up SPK data, the error is */
+/*         signaled by a routine in the call tree of this routine. */
 
 /* $ Files */
 
@@ -232,9 +232,9 @@ static integer c__100 = 100;
 /* $ Examples */
 
 /*     The data returned by the SPKRnn routine is in its rawest form, */
-/*     taken directly from the segment.  As such, it will be meaningless */
+/*     taken directly from the segment. As such, it will be meaningless */
 /*     to a user unless he/she understands the structure of the data type */
-/*     completely.  Given that understanding, however, the SPKRxx */
+/*     completely. Given that understanding, however, the SPKRxx */
 /*     routines might be used to "dump" and check segment data for a */
 /*     particular epoch. */
 
@@ -265,23 +265,30 @@ static integer c__100 = 100;
 
 /* $ Literature_References */
 
-/*     NAIF Document 168.0, "S- and P- Kernel (SPK) Specification and */
-/*     User's Guide" */
+/*     None. */
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     I.M. Underwood  (JPL) */
-/*     E.D. Wright     (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     F.T. Krogh         (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.0.1, 14-APR-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. Moved SPK */
+/*        required reading from $Literature_References to */
+/*        $Required_Reading section. */
 
 /* -    SPICELIB Version 1.0.0, 16-JAN-2014 (NJB) (FTK) (WLT) (IMU) */
 
 /* -& */
 /* $ Index_Entries */
 
-/*     read record from type_21 spk segment */
+/*     read record from type_21 SPK segment */
 
 /* -& */
 

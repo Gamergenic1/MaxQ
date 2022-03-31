@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure  CHBIGR ( Chebyshev expansion integral ) */
+/* $Procedure CHBIGR ( Chebyshev expansion integral ) */
 /* Subroutine */ int chbigr_(integer *degp, doublereal *cp, doublereal *x2s, 
 	doublereal *x, doublereal *p, doublereal *itgrlp)
 {
@@ -24,9 +24,9 @@
 /* $ Abstract */
 
 /*     Evaluate an indefinite integral of a Chebyshev expansion at a */
-/*     specified point X. The constant of integration is selected to */
-/*     make the integral zero when X equals the abscissa value X2S(1). */
-/*     Return the value of the input expansion at X as well. */
+/*     specified point X and return the value of the input expansion at */
+/*     X as well. The constant of integration is selected to make the */
+/*     integral zero when X equals the abscissa value X2S(1). */
 
 /* $ Disclaimer */
 
@@ -67,7 +67,7 @@
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     DEGP       I   Degree of input Chebyshev expansion. */
 /*     CP         I   Chebyshev coefficients of input expansion. */
@@ -78,61 +78,61 @@
 
 /* $ Detailed_Input */
 
-/*     DEGP       is the degree of the input Chebyshev expansion. */
+/*     DEGP     is the degree of the input Chebyshev expansion. */
 
-/*     CP         is an array containing the coefficients of the input */
-/*                Chebyshev expansion. The coefficient of the Ith */
-/*                Chebyshev polynomial is contained in element CP(I+1), */
-/*                for I = 1 : DEGP+1. */
+/*     CP       is an array containing the coefficients of the input */
+/*              Chebyshev expansion. The coefficient of the I'th */
+/*              Chebyshev polynomial is contained in element CP(I+1), */
+/*              for I = 0 : DEGP. */
 
-/*     X2S        is an array containing the "transformation parameters" */
-/*                of the domain of the expansion. Element X2S(1) */
-/*                contains the midpoint of the interval on which the */
-/*                input expansion is defined; X2S(2) is one-half of the */
-/*                length of this interval; this value is called the */
-/*                interval's "radius." */
+/*     X2S      is an array containing the "transformation parameters" */
+/*              of the domain of the expansion. Element X2S(1) */
+/*              contains the midpoint of the interval on which the */
+/*              input expansion is defined; X2S(2) is one-half of the */
+/*              length of this interval; this value is called the */
+/*              interval's "radius." */
 
-/*                The input expansion defines a function f(X) on the */
-/*                interval */
+/*              The input expansion defines a function f(X) on the */
+/*              interval */
 
-/*                   [ X2S(1)-X2S(2),  X2S(1)+X2S(2) ] */
+/*                 [ X2S(1)-X2S(2),  X2S(1)+X2S(2) ] */
 
-/*                as follows: */
+/*              as follows: */
 
-/*                   Define S = ( X - X2S(1) ) / X2S(2) */
-
-
-/*                                  DEGP+1 */
-/*                                  __ */
-/*                                  \ */
-/*                   f(X) = g(S)  = /  CP(k)  T   (S) */
-/*                                  --         k-1 */
-/*                                  k=1 */
+/*                 Define S = ( X - X2S(1) ) / X2S(2) */
 
 
-/*     X          is the abscissa value at which the function defined by */
-/*                the input expansion and its integral are to be */
-/*                evaluated. Normally X should lie in the closed */
-/*                interval */
+/*                                   DEGP+1 */
+/*                                   __ */
+/*                                   \ */
+/*                    f(X) = g(S)  = /  CP(k)  T   (S) */
+/*                                   --         k-1 */
+/*                                   k=1 */
 
-/*                   [ X2S(1)-X2S(2),  X2S(1)+X2S(2) ] */
 
-/*                See the Restrictions section below. */
+/*     X        is the abscissa value at which the function defined by */
+/*              the input expansion and its integral are to be */
+/*              evaluated. Normally X should lie in the closed */
+/*              interval */
+
+/*                 [ X2S(1)-X2S(2),  X2S(1)+X2S(2) ] */
+
+/*              See the $Restrictions section below. */
 
 /* $ Detailed_Output */
 
 /*     P, */
-/*     ITGRLP     Define S and f(X) as above in the description of the */
-/*                input argument X2S. Then P is f(X), and ITGRLP is */
-/*                an indefinite integral of f(X), evaluated at X. */
+/*     ITGRLP   define S and f(X) as above in the description of the */
+/*              input argument X2S. Then P is f(X), and ITGRLP is */
+/*              an indefinite integral of f(X), evaluated at X. */
 
-/*                The indefinite integral satisfies */
+/*              The indefinite integral satisfies */
 
-/*                   d(ITGRLP)/dX     = f(X) */
+/*                 d(ITGRLP)/dX     = f(X) */
 
-/*                and */
+/*              and */
 
-/*                   ITGRLP( X2S(1) ) = 0 */
+/*                 ITGRLP( X2S(1) ) = 0 */
 
 /* $ Parameters */
 
@@ -191,7 +191,7 @@
 
 /*     Note that numerical problems may result from applying this */
 /*     routine to abscissa values outside of the interval defined */
-/*     by the input parameters X2S(*). See the Restrictions section. */
+/*     by the input parameters X2S(*). See the $Restrictions section. */
 
 /*     To evaluate Chebyshev expansions and their derivatives, use the */
 /*     SPICELIB routines CHBINT or CHBDER. */
@@ -206,32 +206,33 @@
 /*     input, the compiler and supporting libraries, and the machine */
 /*     specific arithmetic implementation. */
 
-/*     1)  Let the domain of a polynomial to be evaluated be the */
-/*         closed interval */
+/*     1) Let the domain of a polynomial to be evaluated be the */
+/*        closed interval */
 
-/*            [20, 30] */
+/*           [20, 30] */
 
-/*         Let the input expansion represent the polynomial */
+/*        Let the input expansion represent the polynomial */
 
 /*                             6 */
-/*            f(X)  = g(S) = 5S */
+/*           f(X)  = g(S) = 5*S */
 
-/*         where */
+/*        where */
 
-/*            S     = (X - 20)/10 */
+/*           S     = (X - 20)/10 */
 
-/*         Let F(X) be an indefinite integral of f(X) such that */
+/*        Let F(X) be an indefinite integral of f(X) such that */
 
-/*            F(20) = 0 */
+/*           F(20) = 0 */
 
-/*         Evaluate */
+/*        Evaluate */
 
-/*            f(30) and F(30) */
+/*           f(30) and F(30) */
 
 
 /*        Example code begins here. */
 
-/*              PROGRAM EX1 */
+
+/*              PROGRAM CHBIGR_EX1 */
 /*              IMPLICIT NONE */
 /*        C */
 /*        C     Local variables */
@@ -249,6 +250,7 @@
 /*        C */
 /*              X2S(1) = 20.D0 */
 /*              X2S(2) = 10.D0 */
+
 /*        C */
 /*        C     Assign the expansion coefficients. */
 /*        C */
@@ -256,7 +258,7 @@
 
 /*              CP(1) = 0.D0 */
 /*              CP(2) = 3.75D0 */
-/*              CP(3) = 0D0 */
+/*              CP(3) = 0.D0 */
 /*              CP(4) = 1.875D0 */
 /*              CP(5) = 0.D0 */
 /*              CP(6) = 0.375D0 */
@@ -294,7 +296,7 @@
 /*        C */
 /*        C     The value of the expansion at X should be */
 /*        C */
-/*        C        f(20) = g(1) = 6 */
+/*        C        f(30) = g(1) = 6 */
 /*        C */
 /*              WRITE (*,*) 'ITGRLP = ', ITGRLP */
 /*              WRITE (*,*) 'P      = ', P */
@@ -302,11 +304,12 @@
 /*              END */
 
 
-/*     When this program was executed on a PC/Linux/gfortran platform, */
-/*     the output was: */
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
 
-/*        ITGRLP =   10.0000000000000000 */
-/*        P      =    6.0000000000000000 */
+
+/*         ITGRLP =    10.000000000000000 */
+/*         P      =    6.0000000000000000 */
 
 
 /* $ Restrictions */
@@ -332,20 +335,30 @@
 
 /* $ Literature_References */
 
-/*     1)  "Numerical Recipes -- The Art of Scientific Computing" by */
-/*         William H. Press, Brian P. Flannery, Saul A. Teukolsky, */
-/*         Willam T. Vetterling. (See Clenshaw's Recurrence Formula.) */
+/*     [1]  W. Press, B. Flannery, S. Teukolsky and W. Vetterling, */
+/*          "Numerical Recipes -- The Art of Scientific Computing," */
+/*          chapter 5.4, "Recurrence Relations and Clenshaw's Recurrence */
+/*          Formula," p 161, Cambridge University Press, 1986. */
 
-/*     2)  Chebyshev polynomials. (2013, September 28). In Wikipedia, */
-/*         The Free Encyclopedia. Retrieved 01:23, November 23, 2013, */
-/*         from http://en.wikipedia.org/w/index.php?title= */
-/*         Chebyshev_polynomials&oldid=574881046 */
+/*     [2]  "Chebyshev polynomials," Wikipedia, The Free Encyclopedia. */
+/*          Retrieved 01:23, November 23, 2013, from */
+/*          http://en.wikipedia.org/w/index.php?title= */
+/*          Chebyshev_polynomials&oldid=574881046 */
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.0.1, 12-AUG-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
+/*        Corrected error in $Detailed_Input description of CP. */
+
+/*        Fixed range of Chebyshev coefficients of input expansion in */
+/*        the description of argument CP in $Detailed_Input. */
 
 /* -    SPICELIB Version 1.0.0, 03-DEC-2013 (NJB) */
 

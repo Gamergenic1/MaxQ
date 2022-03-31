@@ -9,7 +9,7 @@
 
 static integer c__1 = 1;
 
-/* $Procedure      READLN ( Read a text line from a logical unit ) */
+/* $Procedure READLN ( Read a text line from a logical unit ) */
 /* Subroutine */ int readln_(integer *unit, char *line, logical *eof, ftnlen 
 	line_len)
 {
@@ -28,8 +28,8 @@ static integer c__1 = 1;
 
 /* $ Abstract */
 
-/*     This routine will read a single line of text from the Fortran */
-/*     logical unit UNIT, reporting the end of file if it occurs. */
+/*     Read a single line of text from the Fortran logical unit UNIT, */
+/*     reporting the end of file if it occurs. */
 
 /* $ Disclaimer */
 
@@ -63,30 +63,29 @@ static integer c__1 = 1;
 /* $ Keywords */
 
 /*     ASCII */
-/*     TEXT */
 /*     FILES */
+/*     TEXT */
 
 /* $ Declarations */
 
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
-/*      UNIT      I    The Fortran unit number to use for input. */
-/*      LINE      O    The line read from the file. */
-/*      EOF       O    A logical flag indicating the end of file. */
+/*     UNIT       I   The Fortran unit number to use for input. */
+/*     LINE       O   The line read from the file. */
+/*     EOF        O   A logical flag indicating the end of file. */
 
 /* $ Detailed_Input */
 
-/*     UNIT     The Fortran unit number for the input. This may */
+/*     UNIT     is the Fortran unit number for the input. This may */
 /*              be either the unit number for the terminal, or the */
 /*              unit number of a previously opened text file. */
 
 /* $ Detailed_Output */
 
-/*     LINE     On output, this will contain the next text line */
-/*              encountered when reading from UNIT. */
+/*     LINE     is the next text line encountered when reading from UNIT. */
 
 /*              If the length of the character string LINE is shorter */
 /*              than the length of the current line in the text file, the */
@@ -98,10 +97,9 @@ static integer c__1 = 1;
 /*              attempt to read from UNIT, the value of this variable */
 /*              is not guaranteed. */
 
-/*     EOF      On output, this variable will be set to .TRUE. if the */
-/*              end of file ( IOSTAT < 0 ) is encountered during the */
-/*              attempt to read from unit UNIT. Otherwise, this */
-/*              variable will be set to .FALSE.. */
+/*     EOF      is .TRUE. if the end of file ( IOSTAT < 0 ) is */
+/*              encountered during the attempt to read from unit UNIT. */
+/*              Otherwise, this variable will be set to .FALSE. */
 
 /* $ Parameters */
 
@@ -109,12 +107,11 @@ static integer c__1 = 1;
 
 /* $ Exceptions */
 
-/*     1)   If an error occurs while attempting to read from the text */
-/*          file attached to UNIT, the error SPICE(FILEREADFAILED) will */
-/*          be signalled. */
-
 /*     This routine only checks in with the error handler in the event */
 /*     that an error occurred. (Discovery check in) */
+
+/*     1)  If an error occurs while attempting to read from the text file */
+/*         attached to UNIT, the error SPICE(FILEREADFAILED) is signaled. */
 
 /* $ Files */
 
@@ -122,25 +119,25 @@ static integer c__1 = 1;
 
 /* $ Particulars */
 
-/*      This routine will read a single line, a text record, from the */
-/*      logical unit UNIT. UNIT may be the terminal, or it may be a */
-/*      logical unit number obtained from a Fortran OPEN or INQUIRE */
-/*      statement. This routine will set a logical flag, EOF, on output */
-/*      if the end of the file is encountered during the read attempt. */
+/*     This routine will read a single line, a text record, from the */
+/*     logical unit UNIT. UNIT may be the terminal, or it may be a */
+/*     logical unit number obtained from a Fortran OPEN or INQUIRE */
+/*     statement. This routine will set a logical flag, EOF, on output */
+/*     if the end of the file is encountered during the read attempt. */
 
 /* $ Examples */
 
-/*      CALL READLN ( UNIT, LINE, EOF ) */
+/*     CALL READLN ( UNIT, LINE, EOF ) */
 
-/*      IF ( EOF ) THEN */
-/*         < The end of file, deal with it appropriately > */
-/*      END IF */
+/*     IF ( EOF ) THEN */
+/*        < The end of file, deal with it appropriately > */
+/*     END IF */
 
-/*      You now have a line of text from unit UNIT. */
+/*     You now have a line of text from unit UNIT. */
 
 /* $ Restrictions */
 
-/*      None. */
+/*     None. */
 
 /* $ Literature_References */
 
@@ -148,24 +145,24 @@ static integer c__1 = 1;
 
 /* $ Author_and_Institution */
 
-/*     K.R. Gehringer (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
 
 /* $ Version */
 
-/* -    SPICELIB     1.0.0, 20-DEC-1995 (KRG) */
+/* -    SPICELIB Version 1.1.0, 12-AUG-2021 (JDR) */
 
-/*        The routine graduated */
+/*        Added IMPLICIT NONE statement. */
 
-/* -    Beta Version 1.0.1, 22-NOV-1994 (KRG) */
+/*        Edited the header to comply with NAIF standard. Removed */
+/*        unnecessary $Version history entries for Beta versions. */
 
-/*        Cleaned up the comments a little bit. No code changes. */
-
-/* -    Beta Version 1.0.0, 17-DEC-1992 (KRG) */
+/* -    SPICELIB Version 1.0.0, 20-DEC-1995 (KRG) */
 
 /* -& */
 /* $ Index_Entries */
 
-/*      read a text line from a logical unit */
+/*     read a text line from a logical unit */
 
 /* -& */
 

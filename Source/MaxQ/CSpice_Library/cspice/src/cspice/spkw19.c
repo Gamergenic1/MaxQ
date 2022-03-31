@@ -13,7 +13,7 @@ static integer c__2 = 2;
 static integer c__6 = 6;
 static integer c__1 = 1;
 
-/* $Procedure      SPKW19 ( Write SPK segment, type 19 ) */
+/* $Procedure SPKW19 ( Write SPK segment, type 19 ) */
 /* Subroutine */ int spkw19_(integer *handle, integer *body, integer *center, 
 	char *frame, doublereal *first, doublereal *last, char *segid, 
 	integer *nintvl, integer *npkts, integer *subtps, integer *degres, 
@@ -282,7 +282,7 @@ static integer c__1 = 1;
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     I   Handle of an SPK file open for writing. */
 /*     BODY       I   NAIF ID code for an ephemeris object. */
@@ -304,208 +304,194 @@ static integer c__1 = 1;
 
 /* $ Detailed_Input */
 
-/*     HANDLE         is the handle of an SPK file that has been opened */
-/*                    for writing. */
+/*     HANDLE   is the handle of an SPK file that has been opened */
+/*              for writing. */
 
+/*     BODY     is the NAIF integer code for an ephemeris object */
+/*              whose state relative to another body is described */
+/*              by the segment to be created. */
 
-/*     BODY           is the NAIF integer code for an ephemeris object */
-/*                    whose state relative to another body is described */
-/*                    by the segment to be created. */
+/*     CENTER   is the NAIF integer code for the center of motion */
+/*              of the object identified by BODY. */
 
-
-/*     CENTER         is the NAIF integer code for the center of motion */
-/*                    of the object identified by BODY. */
-
-
-/*     FRAME          is the NAIF name for a reference frame */
-/*                    relative to which the state information for BODY */
-/*                    is specified. */
+/*     FRAME    is the NAIF name for a reference frame */
+/*              relative to which the state information for BODY */
+/*              is specified. */
 
 /*     FIRST, */
-/*     LAST           are, respectively, the bounds of the time interval */
-/*                    over which the segment defines the state of BODY. */
+/*     LAST     are, respectively, the bounds of the time interval */
+/*              over which the segment defines the state of BODY. */
 
-/*                    FIRST must be greater than or equal to the first */
-/*                    interpolation interval start time; LAST must be */
-/*                    less than or equal to the last interpolation */
-/*                    interval stop time. See the description of IVLBDS */
-/*                    below. */
+/*              FIRST must be greater than or equal to the first */
+/*              interpolation interval start time; LAST must be */
+/*              less than or equal to the last interpolation */
+/*              interval stop time. See the description of IVLBDS */
+/*              below. */
 
+/*     SEGID    is the segment identifier. An SPK segment */
+/*              identifier may contain up to 40 characters. */
 
-/*     SEGID          is the segment identifier. An SPK segment */
-/*                    identifier may contain up to 40 characters. */
+/*     NINTVL   is the number of interpolation intervals */
+/*              associated with the input data. The interpolation */
+/*              intervals are associated with data sets referred */
+/*              to as "mini-segments." */
 
+/*              The input data comprising each mini-segment are: */
 
-/*     NINTVL         is the number of interpolation intervals */
-/*                    associated with the input data. The interpolation */
-/*                    intervals are associated with data sets referred */
-/*                    to as "mini-segments." */
+/*                 - a packet count */
+/*                 - a type 19 subtype */
+/*                 - an interpolating polynomial degree */
+/*                 - a sequence of type 19 data packets */
+/*                 - a sequence of packet epochs */
 
-/*                    The input data comprising each mini-segment are: */
+/*              These inputs are described below. */
 
-/*                       - a packet count */
-/*                       - a type 19 subtype */
-/*                       - an interpolating polynomial degree */
-/*                       - a sequence of type 19 data packets */
-/*                       - a sequence of packet epochs */
+/*     NPKTS    is an array of packet counts. The Ith element of */
+/*              NPKTS is the packet count of the Ith interpolation */
+/*              interval/mini-segment. */
 
-/*                    These inputs are described below. */
+/*              NPKTS has dimension NINTVL. */
 
+/*     SUBTPS   is an array of type 19 subtypes. The Ith element */
+/*              of SUBTPS is the subtype of the packets associated */
+/*              with the Ith interpolation interval/mini-segment. */
 
-/*     NPKTS          is an array of packet counts. The Ith element of */
-/*                    NPKTS is the packet count of the Ith interpolation */
-/*                    interval/mini-segment. */
+/*              SUBTPS has dimension NINTVL. */
 
-/*                    NPKTS has dimension NINTVL. */
+/*     DEGRES   is an array of interpolating polynomial degrees. */
+/*              The Ith element of DEGRES is the polynomial degree */
+/*              of the packets associated with the Ith */
+/*              interpolation interval/mini-segment. */
 
+/*              For subtype 0, interpolation degrees must be */
+/*              equivalent to 3 mod 4, that is, they must be in */
+/*              the set */
 
-/*     SUBTPS         is an array of type 19 subtypes. The Ith element */
-/*                    of SUBTPS is the subtype of the packets associated */
-/*                    with the Ith interpolation interval/mini-segment. */
+/*                 { 3, 7, 11, ..., MAXDEG } */
 
-/*                    SUBTPS has dimension NINTVL. */
+/*              For subtype 1, interpolation degrees must be odd */
+/*              and must be in the range 1:MAXDEG. */
 
+/*              DEGRES has dimension NINTVL. */
 
-/*     DEGRES         is an array of interpolating polynomial degrees. */
-/*                    The Ith element of DEGRES is the polynomial degree */
-/*                    of the packets associated with the Ith */
-/*                    interpolation interval/mini-segment. */
+/*     PACKTS   is an array containing data packets for all input */
+/*              mini-segments. The packets for a given */
+/*              mini-segment are stored contiguously in increasing */
+/*              time order. The order of the sets of packets for */
+/*              different mini-segments is the same as the order */
+/*              of their corresponding interpolation intervals. */
 
-/*                    For subtype 0, interpolation degrees must be */
-/*                    equivalent to 3 mod 4, that is, they must be in */
-/*                    the set */
+/*              Each packet represents geometric states of BODY */
+/*              relative to CENTER, specified relative to FRAME. */
+/*              The packet structure depends on the segment */
+/*              subtype as follows: */
 
-/*                       { 3, 7, 11, ..., MAXDEG } */
+/*                 Type 0 (indicated by code S19TP0): */
 
-/*                    For subtype 1, interpolation degrees must be odd */
-/*                    and must be in the range 1:MAXDEG. */
+/*                     x,  y,  z,  dx/dt,  dy/dt,  dz/dt, */
+/*                     vx, vy, vz, dvx/dt, dvy/dt, dvz/dt */
 
-/*                    DEGRES has dimension NINTVL. */
+/*                 where x, y, z represent Cartesian position */
+/*                 components and  vx, vy, vz represent Cartesian */
+/*                 velocity components. Note well: vx, vy, and */
+/*                 vz *are not necessarily equal* to the time */
+/*                 derivatives of x, y, and z. This packet */
+/*                 structure mimics that of the Rosetta/MEX orbit */
+/*                 file. */
 
+/*                 Type 1 (indicated by code S19TP1): */
 
-/*     PACKTS         is an array containing data packets for all input */
-/*                    mini-segments. The packets for a given */
-/*                    mini-segment are stored contiguously in increasing */
-/*                    time order. The order of the sets of packets for */
-/*                    different mini-segments is the same as the order */
-/*                    of their corresponding interpolation intervals. */
+/*                     x,  y,  z,  dx/dt,  dy/dt,  dz/dt */
 
-/*                    Each packet represents geometric states of BODY */
-/*                    relative to CENTER, specified relative to FRAME. */
-/*                    The packet structure depends on the segment */
-/*                    subtype as follows: */
-
-/*                       Type 0 (indicated by code S19TP0): */
-
-/*                           x,  y,  z,  dx/dt,  dy/dt,  dz/dt, */
-/*                           vx, vy, vz, dvx/dt, dvy/dt, dvz/dt */
-
-/*                       where x, y, z represent Cartesian position */
-/*                       components and  vx, vy, vz represent Cartesian */
-/*                       velocity components.  Note well:  vx, vy, and */
-/*                       vz *are not necessarily equal* to the time */
-/*                       derivatives of x, y, and z. This packet */
-/*                       structure mimics that of the Rosetta/MEX orbit */
-/*                       file. */
-
-/*                       Type 1 (indicated by code S19TP1): */
-
-/*                           x,  y,  z,  dx/dt,  dy/dt,  dz/dt */
-
-/*                       where x, y, z represent Cartesian position */
-/*                       components and  vx, vy, vz represent Cartesian */
-/*                       velocity components. */
+/*                 where x, y, z represent Cartesian position */
+/*                 components and  vx, vy, vz represent Cartesian */
+/*                 velocity components. */
 
 
-/*                       Type 2 (indicated by code S19TP2): */
+/*                 Type 2 (indicated by code S19TP2): */
 
-/*                           Data are identical to type 1; only the */
-/*                           interpolation algorithm is different. */
+/*                     Data are identical to type 1; only the */
+/*                     interpolation algorithm is different. */
 
-/*                    Position units are kilometers, velocity units */
-/*                    are kilometers per second, and acceleration units */
-/*                    are kilometers per second per second. */
+/*              Position units are kilometers, velocity units */
+/*              are kilometers per second, and acceleration units */
+/*              are kilometers per second per second. */
 
+/*     EPOCHS   is an array containing epochs for all input */
+/*              mini-segments. Each epoch is expressed as seconds */
+/*              past J2000 TDB. The epochs have a one-to-one */
+/*              relationship with the packets in the input packet */
+/*              array. */
 
-/*     EPOCHS         is an array containing epochs for all input */
-/*                    mini-segments. Each epoch is expressed as seconds */
-/*                    past J2000 TDB. The epochs have a one-to-one */
-/*                    relationship with the packets in the input packet */
-/*                    array. */
+/*              The epochs for a given mini-segment are stored */
+/*              contiguously in increasing order. The order of the */
+/*              sets of epochs for different mini-segments is the */
+/*              same as the order of their corresponding */
+/*              interpolation intervals. */
 
-/*                    The epochs for a given mini-segment are stored */
-/*                    contiguously in increasing order. The order of the */
-/*                    sets of epochs for different mini-segments is the */
-/*                    same as the order of their corresponding */
-/*                    interpolation intervals. */
+/*              For each mini-segment, "padding" is allowed: the */
+/*              sequence of epochs for that mini-segment may start */
+/*              before the corresponding interpolation interval */
+/*              start time and end after the corresponding */
+/*              interpolation interval stop time. Padding is used */
+/*              to control behavior of interpolating polynomials */
+/*              near interpolation interval boundaries. */
 
-/*                    For each mini-segment, "padding" is allowed: the */
-/*                    sequence of epochs for that mini-segment may start */
-/*                    before the corresponding interpolation interval */
-/*                    start time and end after the corresponding */
-/*                    interpolation interval stop time. Padding is used */
-/*                    to control behavior of interpolating polynomials */
-/*                    near interpolation interval boundaries. */
+/*              Due to possible use of padding, the elements of */
+/*              EPOCHS, taken as a whole, may not be in increasing */
+/*              order. */
 
-/*                    Due to possible use of padding, the elements of */
-/*                    EPOCHS, taken as a whole, may not be in increasing */
-/*                    order. */
+/*     IVLBDS   is an array of interpolation interval boundary */
+/*              times. This array is an ordered list of the */
+/*              interpolation interval start times, to which the */
+/*              the end time for the last interval is appended. */
 
+/*              The Ith interpolation interval is the time */
+/*              coverage interval of the Ith mini-segment (see the */
+/*              description of NPKTS above). */
 
-/*     IVLBDS         is an array of interpolation interval boundary */
-/*                    times. This array is an ordered list of the */
-/*                    interpolation interval start times, to which the */
-/*                    the end time for the last interval is appended. */
+/*              For each mini-segment, the corresponding */
+/*              interpolation interval's start time is greater */
+/*              than or equal to the mini-segment's first epoch, */
+/*              and the interval's stop time is less than or equal */
+/*              to the mini-segment's last epoch. */
 
-/*                    The Ith interpolation interval is the time */
-/*                    coverage interval of the Ith mini-segment (see the */
-/*                    description of NPKTS above). */
+/*              For each interpolation interval other than the */
+/*              last, the interval's coverage stop time coincides */
+/*              with the coverage start time of the next interval. */
+/*              There are no coverage gaps, and coverage overlap */
+/*              for adjacent intervals consists of a single epoch. */
 
-/*                    For each mini-segment, the corresponding */
-/*                    interpolation interval's start time is greater */
-/*                    than or equal to the mini-segment's first epoch, */
-/*                    and the interval's stop time is less than or equal */
-/*                    to the mini-segment's last epoch. */
+/*              IVLBDS has dimension NINTVL+1. */
 
-/*                    For each interpolation interval other than the */
-/*                    last, the interval's coverage stop time coincides */
-/*                    with the coverage start time of the next interval. */
-/*                    There are no coverage gaps, and coverage overlap */
-/*                    for adjacent intervals consists of a single epoch. */
-
-/*                    IVLBDS has dimension NINTVL+1. */
-
-
-/*     SELLST         is a logical flag indicating to the SPK type 19 */
-/*                    segment reader SPKR19 how to select the */
-/*                    interpolation interval when a request time */
-/*                    coincides with a time boundary shared by two */
-/*                    interpolation intervals. When SELLST ("select */
-/*                    last") is .TRUE., the later interval is selected; */
-/*                    otherwise the earlier interval is selected. */
-
+/*     SELLST   is a logical flag indicating to the SPK type 19 */
+/*              segment reader SPKR19 how to select the */
+/*              interpolation interval when a request time */
+/*              coincides with a time boundary shared by two */
+/*              interpolation intervals. When SELLST ("select */
+/*              last") is .TRUE., the later interval is selected; */
+/*              otherwise the earlier interval is selected. */
 
 /* $ Detailed_Output */
 
-/*     None.  See $Particulars for a description of the effect of this */
+/*     None. See $Particulars for a description of the effect of this */
 /*     routine. */
 
 /* $ Parameters */
 
-/*     MAXDEG         is the maximum allowed degree of the interpolating */
-/*                    polynomial. */
+/*     MAXDEG   is the maximum allowed degree of the interpolating */
+/*              polynomial. */
 
-/*                    See the INCLUDE file spk19.inc for the value of */
-/*                    MAXDEG. */
+/*              See the INCLUDE file spk19.inc for the value of */
+/*              MAXDEG. */
 
 /* $ Exceptions */
 
-/*     If any of the following exceptions occur, this routine will return */
-/*     without creating a new segment. */
+/*     If any of the following exceptions occur, this routine will */
+/*     return without creating a new segment. */
 
-
-/*     1)  If FIRST is greater than LAST then the error */
-/*         SPICE(BADDESCRTIMES) will be signaled. */
+/*     1)  If FIRST is greater than LAST, the error */
+/*         SPICE(BADDESCRTIMES) is signaled. */
 
 /*     2)  If FRAME is not a recognized name, the error */
 /*         SPICE(INVALIDREFFRAME) is signaled. */
@@ -520,38 +506,38 @@ static integer c__1 = 1;
 /*         is signaled. */
 
 /*     6)  If the elements of the array IVLBDS are not in strictly */
-/*         increasing order, the error SPICE(BOUNDSOUTOFORDER) will be */
+/*         increasing order, the error SPICE(BOUNDSOUTOFORDER) is */
 /*         signaled. */
 
 /*     7)  If the first interval start time IVLBDS(1) is greater than */
 /*         FIRST, or if the last interval end time IVLBDS(N+1) is less */
-/*         than LAST, the error SPICE(COVERAGEGAP) will be signaled. */
+/*         than LAST, the error SPICE(COVERAGEGAP) is signaled. */
 
 /*     8)  If any packet count in the array NPKTS is not at least 2, the */
-/*         error SPICE(TOOFEWPACKETS) will be signaled. */
+/*         error SPICE(TOOFEWPACKETS) is signaled. */
 
 /*     9)  If any subtype code in the array SUBTPS is not recognized, */
-/*         the error SPICE(INVALIDSUBTYPE) will be signaled. */
+/*         the error SPICE(INVALIDSUBTYPE) is signaled. */
 
-/*    10)  If any interpolation degree in the array DEGRES */
+/*     10) If any interpolation degree in the array DEGRES */
 /*         is not at least 1 or is greater than MAXDEG, the */
 /*         error SPICE(INVALIDDEGREE) is signaled. */
 
-/*    11)  If the window size implied by any element of the array DEGRES */
+/*     11) If the window size implied by any element of the array DEGRES */
 /*         is odd, the error SPICE(BADWINDOWSIZE) is signaled. */
 
-/*    12)  If the elements of the array EPOCHS corresponding to a given */
+/*     12) If the elements of the array EPOCHS corresponding to a given */
 /*         mini-segment are not in strictly increasing order, the error */
-/*         SPICE(TIMESOUTOFORDER) will be signaled. */
+/*         SPICE(TIMESOUTOFORDER) is signaled. */
 
-/*    13)  If the first epoch of a mini-segment exceeds the start */
+/*     13) If the first epoch of a mini-segment exceeds the start */
 /*         time of the associated interpolation interval, or if the */
 /*         last epoch of the mini-segment precedes the end time of the */
 /*         interpolation interval, the error SPICE(BOUNDSDISAGREE) */
 /*         is signaled. */
 
-/*    14)  Any error that occurs while writing the output segment will */
-/*         be diagnosed by routines in the call tree of this routine. */
+/*     14) If an error occurs while writing the output segment, the error */
+/*         is signaled by a routine in the call tree of this routine. */
 
 /* $ Files */
 
@@ -587,7 +573,6 @@ static integer c__1 = 1;
 /*             .              NPKTS,   SUBTPS,  DEGRES,  PACKTS, */
 /*             .              EPOCHS,  IVLBDS,  SELLST           ) */
 
-
 /* $ Restrictions */
 
 /*     None. */
@@ -598,10 +583,15 @@ static integer c__1 = 1;
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
-/*     B.V. Semenov   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     B.V. Semenov       (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 2.0.1, 03-JUN-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 2.0.0, 21-DEC-2015 (NJB) */
 
@@ -612,7 +602,7 @@ static integer c__1 = 1;
 /* -& */
 /* $ Index_Entries */
 
-/*     write spk type_19 ephemeris data segment */
+/*     write SPK type_19 ephemeris data segment */
 
 /* -& */
 
@@ -800,7 +790,7 @@ static integer c__1 = 1;
 	    return 0;
 	}
 	pktsiz = pktszs[(i__2 = subtyp) < 3 && 0 <= i__2 ? i__2 : s_rnge(
-		"pktszs", i__2, "spkw19_", (ftnlen)699)];
+		"pktszs", i__2, "spkw19_", (ftnlen)688)];
 	if (subtyp == 0) {
 	    winsiz = (degres[i__ - 1] + 1) / 2;
 	} else if (subtyp == 1) {
@@ -1014,7 +1004,7 @@ static integer c__1 = 1;
 
 	subtyp = subtps[i__ - 1];
 	pktsiz = pktszs[(i__2 = subtyp) < 3 && 0 <= i__2 ? i__2 : s_rnge(
-		"pktszs", i__2, "spkw19_", (ftnlen)952)];
+		"pktszs", i__2, "spkw19_", (ftnlen)941)];
 	if (subtyp == 0) {
 	    winsiz = (degres[i__ - 1] + 1) / 2;
 	} else if (subtyp == 1) {
@@ -1110,7 +1100,7 @@ static integer c__1 = 1;
 /*        Set the packet size, which is a function of the subtype. */
 
 	pktsiz = pktszs[(i__2 = subtps[i__ - 1]) < 3 && 0 <= i__2 ? i__2 : 
-		s_rnge("pktszs", i__2, "spkw19_", (ftnlen)1065)];
+		s_rnge("pktszs", i__2, "spkw19_", (ftnlen)1054)];
 
 /*        In order to compute the end pointer of the current */
 /*        mini-segment, we must compute the size, in terms */

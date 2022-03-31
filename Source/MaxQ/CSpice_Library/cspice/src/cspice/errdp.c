@@ -11,7 +11,7 @@ static integer c__14 = 14;
 static integer c__3 = 3;
 static integer c__2 = 2;
 
-/* $Procedure      ERRDP  ( Insert D.P. Number into Error Message Text ) */
+/* $Procedure ERRDP  ( Insert D.P. Number into Error Message Text ) */
 /* Subroutine */ int errdp_(char *marker, doublereal *dpnum, ftnlen 
 	marker_len)
 {
@@ -72,7 +72,8 @@ static integer c__2 = 2;
 
 /* $ Keywords */
 
-/*     ERROR, CONVERSION */
+/*     CONVERSION */
+/*     ERROR */
 
 /* $ Declarations */
 /* $ Disclaimer */
@@ -132,23 +133,22 @@ static integer c__2 = 2;
 
 /* $ Detailed_Input */
 
+/*     MARKER   is a character string which marks a position in */
+/*              the long error message where a character string */
+/*              representing an double precision number is to be */
+/*              substituted. Leading and trailing blanks in MARKER */
+/*              are not significant. */
 
-/*     MARKER     is a character string which marks a position in */
-/*                the long error message where a character string */
-/*                representing an double precision number is to be */
-/*                substituted.  Leading and trailing blanks in MARKER */
-/*                are not significant. */
+/*              Case IS significant;  'XX' is considered to be */
+/*              a different marker from 'xx'. */
 
-/*                Case IS significant;  'XX' is considered to be */
-/*                a different marker from 'xx'. */
-
-/*     DPNUM      is an double precision number whose character */
-/*                representation will be substituted for the first */
-/*                occurrence of MARKER in the long error message. */
-/*                This occurrence of the substring indicated by MARKER */
-/*                will be removed, and replaced by a character string, */
-/*                with no leading or trailing blanks, representing */
-/*                DPNUM. */
+/*     DPNUM    is an double precision number whose character */
+/*              representation will be substituted for the first */
+/*              occurrence of MARKER in the long error message. */
+/*              This occurrence of the substring indicated by MARKER */
+/*              will be removed, and replaced by a character string, */
+/*              with no leading or trailing blanks, representing */
+/*              DPNUM. */
 
 /* $ Detailed_Output */
 
@@ -156,15 +156,15 @@ static integer c__2 = 2;
 
 /* $ Parameters */
 
-/*     LMSGLN  is the maximum length of the long error message.  See */
-/*             the include file errhnd.inc for the value of LMSGLN. */
+/*     LMSGLN   is the maximum length of the long error message. See */
+/*              the include file errhnd.inc for the value of LMSGLN. */
 
 /* $ Exceptions */
 
-/*     This routine does not detect any errors. */
+/*     1)  This routine does not detect any errors. */
 
-/*     However, this routine is part of the SPICELIB error */
-/*     handling mechanism. */
+/*         However, this routine is part of the SPICELIB error */
+/*         handling mechanism. */
 
 /* $ Files */
 
@@ -173,65 +173,104 @@ static integer c__2 = 2;
 /* $ Particulars */
 
 /*     The effect of this routine is to update the current long */
-/*     error message.  If no marker is found, (e.g., in the */
+/*     error message. If no marker is found, (e.g., in the */
 /*     case that the long error message is blank), the routine */
-/*     has no effect.  If multiple instances of the marker */
+/*     has no effect. If multiple instances of the marker */
 /*     designated by MARKER are found, only the first one is */
 /*     replaced. */
 
 /*     If the character string resulting from the substitution */
 /*     exceeds the maximum length of the long error message, the */
-/*     characters on the right are lost.  No error is signalled. */
+/*     characters on the right are lost. No error is signaled. */
 
 /*     This routine has no effect if changes to the long message */
 /*     are not allowed. */
 
 /* $ Examples */
 
+/*     The numerical results shown for this example may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
 
-/*      1.   In this example, the marker is:   # */
+/*     1) Create a user-defined error message, including both the */
+/*        short and long messages, providing the value of two double */
+/*        precision variables within the long message, and signal the */
+/*        error. */
 
 
-/*           The current long error message is: */
-
-/*              'Invalid operation value.  The value was #'. */
+/*        Example code begins here. */
 
 
-/*           After the call, */
+/*              PROGRAM ERRDP_EX1 */
+/*              IMPLICIT NONE */
 
+/*        C */
+/*        C     Set long error message, with two different MARKER */
+/*        C     strings where the value of the double precision */
+/*        C     variables will go.  Our markers are '#' and 'XX'. */
+/*        C */
+/*              CALL SETMSG ( 'LONG MESSAGE.  Invalid operation value. ' */
+/*             .         //   '  The value was #.  Left endpoint ' */
+/*             .         //   'exceeded right endpoint.  The left ' */
+/*             .         //   'endpoint was:  XX.  The right endpoint ' */
+/*             .         //   'was:  XX.' ) */
 
+/*        C */
+/*        C     Insert a double precision where the # is now. */
+/*        C */
 /*              CALL ERRDP ( '#',  5.D0  ) */
 
-/*           The long error message becomes: */
+/*        C */
+/*        C     Insert another double precision number in the long */
+/*        C     message where the first XX is now. */
+/*        C */
+/*              CALL ERRDP ( 'XX', 73.4567D0 ) */
 
-/*           'Invalid operation value.  The value was 5.0'. */
+/*        C */
+/*        C     Signal the error. */
+/*        C */
+/*              CALL SIGERR ( 'SPICE(USERDEFINED)' ) */
 
-
-
-
-/*      2.   In this example, the marker is:   XX */
-
-
-/*           The current long error message is: */
-
-/*              'Left endpoint exceeded right endpoint.  The left'// */
-/*              'endpoint was:  XX.  The right endpoint was:  XX.' */
+/*              END */
 
 
-/*           After the call, */
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
 
-/*              CALL ERRDP ( 'XX',  5.D0  ) */
 
-/*           The long error message becomes: */
+/*        ============================================================*** */
 
-/*              'Left endpoint exceeded right endpoint.  The left'// */
-/*              'endpoint was:  5.0.  The right endpoint was:  XX.' */
+/*        Toolkit version: N0066 */
 
+/*        SPICE(USERDEFINED) -- */
+
+/*        LONG MESSAGE. Invalid operation value. The value was */
+/*        5.0000000000000E+00. Left endpoint exceeded right endpoint. *** */
+/*        endpoint was: 7.3456700000000E+01. The right endpoint was: XX. */
+
+/*        Oh, by the way:  The SPICELIB error handling actions are USER- */
+/*        TAILORABLE.  You can choose whether the Toolkit aborts or co*** */
+/*        when errors occur, which error messages to output, and where*** */
+/*        the output.  Please read the ERROR "Required Reading" file, *** */
+/*        the routines ERRACT, ERRDEV, and ERRPRT. */
+
+/*        ============================================================*** */
+
+
+/*        Warning: incomplete output. 6 lines extended past the right */
+/*        margin of the header and have been truncated. These lines are */
+/*        marked by "***" at the end of each line. */
+
+
+/*        Note that the execution of this program produces the error */
+/*        SPICE(USERDEFINED), which follows the NAIF standard as */
+/*        described in the ERROR required reading. */
 
 /* $ Restrictions */
 
-/*     The caller must ensure that the message length, after sub- */
-/*     stitution is performed, doesn't exceed LMSGLN characters. */
+/*     1)  The caller must ensure that the message length, after sub- */
+/*         stitution is performed, doesn't exceed LMSGLN characters. */
 
 /* $ Literature_References */
 
@@ -239,9 +278,20 @@ static integer c__2 = 2;
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 2.3.0, 13-AUG-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. Removed */
+/*        unnecessary $Revisions section. Added complete code example */
+/*        based on existing fragments. */
 
 /* -    SPICELIB Version 2.2.1, 08-JAN-2014 (BVS) */
 
@@ -249,16 +299,16 @@ static integer c__2 = 2;
 
 /* -    SPICELIB Version 2.2.0, 29-JUL-2005 (NJB) */
 
-/*        Bug fix:  increased length of internal string DPSTRG to */
+/*        Bug fix: increased length of internal string DPSTRG to */
 /*        handle 3-digit exponents. */
 
 /* -    SPICELIB Version 2.1.0, 29-JUL-1997 (NJB) */
 
-/*        Bug fix:  extraneous leading blank has been removed from */
+/*        Bug fix: extraneous leading blank has been removed from */
 /*        numeric string substituted for marker. */
 
 /*        Maximum length of the long error message is now represented */
-/*        by the parameter LMSGLN.  Miscellaneous format changes to the */
+/*        by the parameter LMSGLN. Miscellaneous format changes to the */
 /*        header, code and in-line comments were made. */
 
 /* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
@@ -266,24 +316,12 @@ static integer c__2 = 2;
 /*        Comment section for permuted index source lines was added */
 /*        following the header. */
 
-/* -    SPICELIB Version 1.0.0, 31-JAN-1990  (NJB) */
+/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (NJB) */
 
 /* -& */
 /* $ Index_Entries */
 
 /*     insert d.p. number into error message text */
-
-/* -& */
-/* $ Revisions */
-
-/* -    SPICELIB Version 2.1.0, 29-JUL-1997 (NJB) */
-
-/*        Bug fix:  extraneous leading blank has been removed from */
-/*        numeric string substituted for marker. */
-
-/*        Maximum length of the long error message is now represented */
-/*        by the parameter LMSGLN.  Miscellaneous format changes to the */
-/*        header, code and in-line comments were made. */
 
 /* -& */
 

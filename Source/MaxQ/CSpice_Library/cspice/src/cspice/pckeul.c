@@ -33,12 +33,12 @@ static integer c__5 = 5;
 
 /* $ Abstract */
 
-/*      This routine is obsolete.  It supports only the type 02 binary */
-/*      PCK format.  It is maintained only for backward compatibility */
+/*     This routine is obsolete. It supports only the type 02 binary */
+/*     PCK format. It is maintained only for backward compatibility */
 
-/*      Return Euler angles and their derivatives and their reference */
-/*      frame, given an input time and body and reference frame from */
-/*      a PCK binary file. */
+/*     Return Euler angles and their derivatives and their reference */
+/*     frame, given an input time and body and reference frame from */
+/*     a PCK binary file. */
 
 /* $ Disclaimer */
 
@@ -67,67 +67,67 @@ static integer c__5 = 5;
 
 /* $ Required_Reading */
 
-/*      NAIF_IDS */
+/*     NAIF_IDS */
 /*     ROTATION */
-/*      TIME */
-/*      PCK */
+/*     TIME */
+/*     PCK */
 
 /* $ Keywords */
 
-/*      TRANSFORMATION */
-/*      ROTATION */
+/*     ROTATION */
+/*     TRANSFORMATION */
 
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*      VARIABLE  I/O  DESCRIPTION */
-/*      --------  ---  -------------------------------------------------- */
-/*      BODY       I   ID code of body */
-/*      ET         I   Epoch of transformation */
-/*      FOUND      O   True if ET, BODY found in a PCK file */
-/*      REF        O   Name of inertial ref. frame of state */
-/*      EULANG     O   Euler angles and their derivatives. */
+/*     VARIABLE  I/O  DESCRIPTION */
+/*     --------  ---  -------------------------------------------------- */
+/*     BODY       I   ID code of body */
+/*     ET         I   Epoch of transformation */
+/*     FOUND      O   .TRUE. if ET, BODY found in a PCK file */
+/*     REF        O   Name of inertial ref. frame of state */
+/*     EULANG     O   Euler angles and their derivatives. */
 
 /* $ Detailed_Input */
 
-/*      BODY        is the integer ID code of the body for which the */
-/*                  state transformation matrix is requested. Bodies */
-/*                  are numbered according to the standard NAIF */
-/*                  numbering scheme.  The numbering scheme is */
-/*                  explained in the NAIF_IDS required reading file. */
+/*     BODY     is the integer ID code of the body for which the */
+/*              state transformation matrix is requested. Bodies */
+/*              are numbered according to the standard NAIF */
+/*              numbering scheme. The numbering scheme is */
+/*              explained in the NAIF_IDS required reading file. */
 
-/*      ET          is the epoch at which the state transformation */
-/*                  matrix is requested. */
+/*     ET       is the epoch at which the state transformation */
+/*              matrix is requested. */
 
 /* $ Detailed_Output */
 
-/*      FOUND       if the Euler angles for the requested time */
-/*                  and body are found in a PCK binary file, */
-/*                  FOUND is true.  Otherwise, it's false. */
+/*     FOUND    if the Euler angles for the requested time */
+/*              and body are found in a PCK binary file, */
+/*              FOUND is .TRUE. Otherwise, it's false. */
 
-/*      REF         is the name of an inertial ref. frame. */
-/*                  (See the routine CHGIRF for a full list of names.) */
+/*     REF      is the name of an inertial ref. frame. */
+/*              (See the routine CHGIRF for a full list of names.) */
 
-/*      EULANG      the Euler angles and their derivatives at */
-/*                  time ET. The rotation matrix is */
-/*                  [ EULANG(3) ]  [EULANG(2)] [EULANG(1)] */
-/*                               3            1           3 */
+/*     EULANG   is the Euler angles and their derivatives at */
+/*              time ET. The rotation matrix is */
+/*              [ EULANG(3) ]  [EULANG(2)] [EULANG(1)] */
+/*                           3            1           3 */
 
-/*                  and   dEULANG(1)/dt = EULANG(4) */
-/*                        dEULANG(2)/dt = EULANG(5) */
-/*                        dEULANG(3)/dt = EULANG(6) */
+/*              and   dEULANG(1)/dt = EULANG(4) */
+/*                    dEULANG(2)/dt = EULANG(5) */
+/*                    dEULANG(3)/dt = EULANG(6) */
 
 /* $ Parameters */
 
-/*      None. */
+/*     None. */
 
 /* $ Exceptions */
 
-/*      None. */
+/*     None. */
 
 /* $ Files */
 
-/*      None. */
+/*     None. */
 
 /* $ Particulars */
 
@@ -152,32 +152,40 @@ static integer c__5 = 5;
 
 /* $ Restrictions */
 
-/*      A binary PCK kernel must be loaded with PCKLOF before */
-/*      calling this routine. */
+/*     1)  A binary PCK kernel must be loaded with PCKLOF before */
+/*         calling this routine. */
 
 /* $ Literature_References */
 
-/*      None. */
+/*     None. */
 
 /* $ Author_and_Institution */
 
-/*      K. S. Zukor   (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     E.D. Wright        (JPL) */
+/*     K.S. Zukor         (JPL) */
 
 /* $ Version */
 
+/* -    SPICELIB Version 2.1.0, 20-AUG-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
+
 /* -    SPICELIB Version 2.0.1, 03-JAN-2014 (EDW) */
 
-/*        Minor edits to Procedure; clean trailing whitespace. */
-/*        Removed unneeded Revisions section. */
+/*        Minor edits to $Procedure; clean trailing whitespace. */
+/*        Removed unneeded $Revisions section. */
 
 /* -    SPICELIB Version 2.0.0, 21-MAR-1995 (KSZ) */
 
-/*        PCKEUL modified to check in.  PCKMAT takes */
-/*        over for PCKEUL in many cases.  REF now a character. */
+/*        PCKEUL modified to check in. PCKMAT takes */
+/*        over for PCKEUL in many cases. REF now a character. */
 
 /* -    SPICELIB Version 1.1.0, 18-OCT-1994 (KSZ) */
 
-/*        Fixed bug which incorrecly modded DW by two pi. */
+/*        Fixed bug which incorrectly modded DW by two pi. */
 
 /* -    SPICELIB Version 1.0.0, 11-MAR-1994 (KSZ) */
 

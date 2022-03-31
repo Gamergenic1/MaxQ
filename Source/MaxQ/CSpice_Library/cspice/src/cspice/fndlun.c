@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      FNDLUN ( Find a free logical unit ) */
+/* $Procedure FNDLUN ( Find a free logical unit ) */
 /* Subroutine */ int fndlun_0_(int n__, integer *unit)
 {
     /* Initialized data */
@@ -78,23 +78,23 @@
 
 /* $ Detailed_Output */
 
-/*     UNIT        is the number of a free logical unit (also called */
-/*                 an "external unit").  A "free" logical unit is one */
-/*                 that is not reserved and is not currently connected to */
-/*                 and open file. If no free units are available, the */
-/*                 value of UNIT is 0. */
+/*     UNIT     is the number of a free logical unit (also called */
+/*              an "external unit"). A "free" logical unit is one */
+/*              that is not reserved and is not currently connected to */
+/*              and open file. If no free units are available, the */
+/*              value of UNIT is 0. */
 
 /* $ Parameters */
 
-/*     MINLUN      is the minimum logical unit number. The Fortran */
-/*                 standard states that unit numbers must be zero or */
-/*                 positive.  However, the value 0 is reserved as a */
-/*                 status code for this routine, so MINLUN must be */
-/*                 assigned a value greater than 0. */
+/*     MINLUN   is the minimum logical unit number. The Fortran */
+/*              standard states that unit numbers must be zero or */
+/*              positive. However, the value 0 is reserved as a */
+/*              status code for this routine, so MINLUN must be */
+/*              assigned a value greater than 0. */
 
-/*     MAXLUN      is the maximum logical unit number allowed by the */
-/*                 VAX Fortran compiler. This may differ for other */
-/*                 machines. */
+/*     MAXLUN   is the maximum logical unit number allowed by the */
+/*              VAX Fortran compiler. This may differ for other */
+/*              machines. */
 
 /*     Listed below are the values for several machines: */
 
@@ -144,13 +144,12 @@
 
 /* $ Exceptions */
 
-/*         Error free. */
-
+/*     Error free. */
 
 /*     1)  If no logical units are available, UNIT is set equal */
 /*         to 0. */
 
-/*     2)  This routine performs a Fortran INQUIRE operation.  If */
+/*     2)  This routine performs a Fortran INQUIRE operation. If */
 /*         the INQUIRE fails, UNIT is set equal to the negative */
 /*         of the INQUIRE iostat ( UNIT will thus have a negative */
 /*         value). */
@@ -162,16 +161,16 @@
 /* $ Particulars */
 
 /*     FNDLUN returns the number of the first (unreserved) unit not */
-/*     currently connected to a file.  It thus frees the user from */
+/*     currently connected to a file. It thus frees the user from */
 /*     having to maintain an accounting of which units are open, which */
 /*     are closed, and which are available. */
 
 /*     This routine is related to the routines GETLUN, RESLUN, and */
-/*     FRELUN.  Together, these routines support coordinated usage of */
+/*     FRELUN. Together, these routines support coordinated usage of */
 /*     Fortran logical units.  FNDLUN (Find a free logical unit) and */
 /*     GETLUN (Get a free logical unit) both have the function of */
 /*     returning a logical unit number that is not reserved or already */
-/*     in use.  The principal difference between the functionality of */
+/*     in use. The principal difference between the functionality of */
 /*     these routines is that GETLUN both returns a status code and */
 /*     signals an error if a free unit is not found, while FNDLUN */
 /*     merely returns a status code. */
@@ -181,8 +180,8 @@
 /*     previously reserved via calls to RESLUN. */
 
 /*     On the VAX, SUN, PC, and HP logical units 5-7 are reserved by */
-/*     default.  On the Macintosh logical units 5,6 and 9 are reserved */
-/*     by default.  Other units may be reserved by calling RESLUN. Once */
+/*     default. On the Macintosh logical units 5,6 and 9 are reserved */
+/*     by default. Other units may be reserved by calling RESLUN. Once */
 /*     reserved, units (except ones reserved by default) may be */
 /*     unreserved by calling FRELUN. */
 
@@ -191,13 +190,13 @@
 /*     refer to FRELUN. */
 
 /*     A unit returned by FNDLUN does NOT automatically become a */
-/*     reserved unit.  If the user wishes to reserve a unit found by */
+/*     reserved unit. If the user wishes to reserve a unit found by */
 /*     FNDLUN, the call to FNDLUN must be followed by a call to RESLUN. */
 
 /*     Note that although 0 is a valid logical unit number on some */
 /*     systems, a value of 0 returned by FNDLUN indicates that no free */
 /*     logical unit was available, rather than that logical unit 0 is */
-/*     available.  Similarly, negative values returned by FNDLUN are */
+/*     available. Similarly, negative values returned by FNDLUN are */
 /*     status codes, not logical unit numbers. */
 
 /* $ Examples */
@@ -212,43 +211,55 @@
 
 /* $ Restrictions */
 
-/*     This routine never returns logical unit numbers that are less */
-/*     than or equal to 0. */
+/*     1)  This routine never returns logical unit numbers that are less */
+/*         than or equal to 0. */
 
 /* $ Literature_References */
 
-/*     1.  "Programming in VAX FORTRAN", Digital Equipment Corporation, */
-/*         September 1984, Section 11.1.1, page 11-2. */
+/*     [1]  "Programming in VAX FORTRAN", Digital Equipment Corporation, */
+/*          Section 11.1.1, p.11-2, September 1984. */
 
-/*     2.  "Microsoft FORTRAN Reference", Microsoft Corporation */
-/*         1989, Section 3.2.2, page 61. */
+/*     [2]  "Microsoft FORTRAN Reference", Microsoft Corporation */
+/*          Section 3.2.2, p.61, 1989, */
 
-/*     3.  "Sun FORTRAN Programmer's Guide", Sun Microsystems, */
-/*         Revision A of 6 May 1988, Section 7.2, page 73. */
+/*     [3]  "Sun FORTRAN Programmer's Guide", Sun Microsystems, */
+/*          Revision A, Section 7.2, p.73, 6 May 1988 */
 
-/*     4.  "Language Systems FORTRAN Reference Manual", Version 2.1, */
-/*         page 193. */
+/*     [4]  "Language Systems FORTRAN Reference Manual", Version 2.1, */
+/*          page 193. */
 
-/*     5.  "Lahey F77L EM/32 Programmers Reference Manual", version 4.0, */
-/*         page 94. */
+/*     [5]  "Lahey F77L EM/32 Programmers Reference Manual", version 4.0, */
+/*          page 94. */
 
-/*     6.  "FORTRAN/9000 Reference HP 9000 Series 700 Computers", */
-/*         First Edition, June 1991, Hewlett Packard Company, pages 6-2 */
-/*         and 6-4. */
+/*     [6]  "FORTRAN/9000 Reference HP 9000 Series 700 Computers", First */
+/*          Edition, Hewlett Packard Company, pp.6-2 and 6-4, June 1991. */
 
-/*     7.  Silicon Graphics "Fortran 77 Programmer's Guide", */
-/*         Document number 007-0711-030, page 1-20. */
+/*     [7]  Silicon Graphics "Fortran 77 Programmer's Guide", */
+/*          Document number 007-0711-030, page 1-20. */
 
-/*     8.  "Language Reference Manual", Absoft Fortran V3.2, 1993, */
-/*         page 7-4, section 7.3.1 (for the NeXT). */
+/*     [8]  "Language Reference Manual", Absoft Fortran V3.2, section */
+/*          7.3.1 (for the NeXT), p.7-4, 1993. */
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     H.A. Neilan     (JPL) */
-/*     M.J. Spencer    (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     H.A. Neilan        (JPL) */
+/*     B.V. Semenov       (JPL) */
+/*     M.J. Spencer       (JPL) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 6.28.0, 28-NOV-2021 (BVS) */
+
+/*        Updated for MAC-OSX-M1-64BIT-CLANG_C. */
+
+/* -    SPICELIB Version 6.27.0, 17-JUN-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 6.26.0, 10-MAR-2014 (BVS) */
 
@@ -363,23 +374,23 @@
 /* -    SPICELIB Version 6.0.4, 08-OCT-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitely given.  New */
+/*        environments are now explicitly given. New */
 /*        environments are WIN-NT */
 
 /* -    SPICELIB Version 6.0.3, 24-SEP-1999 (NJB) */
 
-/*        CSPICE environments were added.  Some typos were corrected. */
+/*        CSPICE environments were added. Some typos were corrected. */
 
 /* -    SPICELIB Version 6.0.2, 28-JUL-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitely given.  New */
+/*        environments are now explicitly given. New */
 /*        environments are PC-DIGITAL, SGI-O32 and SGI-N32. */
 
 /* -    SPICELIB Version 6.0.1, 18-MAR-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitely given.  Previously, */
+/*        environments are now explicitly given. Previously, */
 /*        environments such as SUN-SUNOS and SUN-SOLARIS were implied */
 /*        by the environment label SUN. */
 
@@ -387,53 +398,53 @@
 
 /*        References to the PC-LINUX environment were added. */
 
-/* -     SPICELIB Version 5.0.0, 9-NOV-1993 (HAN) */
+/* -    SPICELIB Version 5.0.0, 09-NOV-1993 (HAN) */
 
 /*         Module was updated to include the logical unit values */
 /*         for the Silicon Graphics, DEC Alpha-OSF/1, and */
 /*         NeXT platforms. */
 
-/* -     SPICELIB Version 4.0.0, 6-OCT-1992 (HAN) */
+/* -    SPICELIB Version 4.0.0, 06-OCT-1992 (HAN) */
 
 /*         Module was updated to include the logical unit values for */
 /*         the Hewlett Packard UX 9000/750 environment. */
 
-/* -     SPICELIB Version 3.0.0, 20-MAR-1992 (MJS) */
+/* -    SPICELIB Version 3.0.0, 20-MAR-1992 (MJS) */
 
 /*         IOSTAT check now placed directly after the INQUIRE */
 /*         statement. */
 
-/* -     SPICELIB Version 2.2.1, 10-MAR-1992 (WLT) */
+/* -    SPICELIB Version 2.2.1, 10-MAR-1992 (WLT) */
 
 /*         Comment section for permuted index source lines was added */
 /*         following the header. */
 
-/* -     SPICELIB Version 2.2.0, 13-NOV-1991 (MJS) */
+/* -    SPICELIB Version 2.2.0, 13-NOV-1991 (MJS) */
 
 /*         Module was updated to include the value of MAXLUN */
 /*         for the Lahey F77L EM/32 environment (PC). */
 
-/* -     SPICELIB Version 2.1.0, 15-MAY-1991 (MJS) */
+/* -    SPICELIB Version 2.1.0, 15-MAY-1991 (MJS) */
 
 /*         Module was updated to allow portability to the Macintosh */
 /*         environment. */
 
-/* -     SPICELIB Version 2.0.0, 26-MAR-1991 (MJS) (NJB) */
+/* -    SPICELIB Version 2.0.0, 26-MAR-1991 (MJS) (NJB) */
 
 /*         The array RESNUM now contains the default reserved */
 /*         logical units. All the elements of the array RESVD */
-/*         were initialized.  The value of MAXLUN for the IBM PC */
-/*         was changed from 32767 to 99.  Some header comments */
+/*         were initialized. The value of MAXLUN for the IBM PC */
+/*         was changed from 32767 to 99. Some header comments */
 /*         were clarified. */
 
-/* -     SPICELIB Version 1.0.1, 20-MAR-1990 (HAN) */
+/* -    SPICELIB Version 1.0.1, 20-MAR-1990 (HAN) */
 
-/*         Parameters section was updated to include the values */
+/*         $Parameters section was updated to include the values */
 /*         of MINLUN and MAXLUN for several machines. Sources of */
 /*         these values are listed in the Literature References */
 /*         section. */
 
-/* -     SPICELIB Version 1.0.0, 31-JAN-1990  (NJB) */
+/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (NJB) */
 
 /* -& */
 /* $ Index_Entries */
@@ -447,53 +458,53 @@
 
 /*        References to the PC-LINUX environment were added. */
 
-/* -     SPICELIB Version 5.0.0, 9-NOV-1993 (HAN) */
+/* -    SPICELIB Version 5.0.0, 09-NOV-1993 (HAN) */
 
-/*         Module was updated to include the logical unit values */
-/*         for the Silicon Graphics, DEC Alpha-OSF/1, and */
-/*         NeXT platforms. */
+/*        Module was updated to include the logical unit values */
+/*        for the Silicon Graphics, DEC Alpha-OSF/1, and */
+/*        NeXT platforms. */
 
-/*         The values used for the DEC Alpha worked in all of the */
-/*         porting tests, but NAIF has no documentation for this */
-/*         platform. */
+/*        The values used for the DEC Alpha worked in all of the */
+/*        porting tests, but NAIF has no documentation for this */
+/*        platform. */
 
-/* -     SPICELIB Version 1.4.0, 6-OCT-1992 (HAN) */
+/* -    SPICELIB Version 1.4.0, 06-OCT-1992 (HAN) */
 
-/*         Module was updated to include the logical unit values for */
-/*         the Hewlett Packard UX 9000/750 environment. */
+/*        Module was updated to include the logical unit values for */
+/*        the Hewlett Packard UX 9000/750 environment. */
 
-/*         The code was also reformatted so that a utility program can */
-/*         create the source file for a specific environment given a */
-/*         master source file. */
+/*        The code was also reformatted so that a utility program can */
+/*        create the source file for a specific environment given a */
+/*        master source file. */
 
-/* -     SPICELIB Version 3.0.0, 20-MAR-1992 (MJS) */
+/* -    SPICELIB Version 3.0.0, 20-MAR-1992 (MJS) */
 
-/*         IOSTAT check now placed directly after the INQUIRE */
-/*         statement. Previously, IOSTAT could have been checked */
-/*         without first being assigned a value. */
+/*        IOSTAT check now placed directly after the INQUIRE */
+/*        statement. Previously, IOSTAT could have been checked */
+/*        without first being assigned a value. */
 
-/* -     SPICELIB Version 2.1.0, 15-MAY-1991 (MJS) */
+/* -    SPICELIB Version 2.1.0, 15-MAY-1991 (MJS) */
 
-/*         Module was updated to allow portability to the Macintosh */
-/*         environment. Literature References section was updated. */
-/*         Some header comments were clarified. */
+/*        Module was updated to allow portability to the Macintosh */
+/*        environment. Literature References section was updated. */
+/*        Some header comments were clarified. */
 
-/* -     SPICELIB Version 2.0.0, 26-MAR-1991 (MJS) (NJB) */
+/* -    SPICELIB Version 2.0.0, 26-MAR-1991 (MJS) (NJB) */
 
-/*         The default reserved logical units are now declared in the */
-/*         array RESNUM. All the elements of the array RESVD were */
-/*         initialized. These two changes allow FNDLUN to be ported */
-/*         to other platforms more easily. The value of MAXLUN for the */
-/*         IBM PC was decreased from 32767 to 99. */
+/*        The default reserved logical units are now declared in the */
+/*        array RESNUM. All the elements of the array RESVD were */
+/*        initialized. These two changes allow FNDLUN to be ported */
+/*        to other platforms more easily. The value of MAXLUN for the */
+/*        IBM PC was decreased from 32767 to 99. */
 
-/*         Some cosmetic changes to variable declarations were made. */
-/*         Also, some header comments were added to make the header's */
-/*         discussion clearer. */
+/*        Some cosmetic changes to variable declarations were made. */
+/*        Also, some header comments were added to make the header's */
+/*        discussion clearer. */
 
-/* -     Beta Version 1.1.0, 09-MAR-1989  (HAN) */
+/* -    Beta Version 1.1.0, 09-MAR-1989  (HAN) */
 
-/*         Declaration of the variable RETURN was removed from the code. */
-/*         The variable was declared, but not used. */
+/*        Declaration of the variable RETURN was removed from the code. */
+/*        The variable was declared, but not used. */
 
 /* -& */
 
@@ -523,13 +534,13 @@
     if (first) {
 	for (i__ = 1; i__ <= 99; ++i__) {
 	    resvd[(i__1 = i__ - 1) < 99 && 0 <= i__1 ? i__1 : s_rnge("resvd", 
-		    i__1, "fndlun_", (ftnlen)533)] = FALSE_;
+		    i__1, "fndlun_", (ftnlen)547)] = FALSE_;
 	}
 	for (i__ = 1; i__ <= 3; ++i__) {
 	    resvd[(i__2 = resnum[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : 
-		    s_rnge("resnum", i__1, "fndlun_", (ftnlen)537)] - 1) < 99 
+		    s_rnge("resnum", i__1, "fndlun_", (ftnlen)551)] - 1) < 99 
 		    && 0 <= i__2 ? i__2 : s_rnge("resvd", i__2, "fndlun_", (
-		    ftnlen)537)] = TRUE_;
+		    ftnlen)551)] = TRUE_;
 	}
 	first = FALSE_;
     }
@@ -540,7 +551,7 @@
 
     for (i__ = last + 1; i__ <= 99; ++i__) {
 	if (resvd[(i__1 = i__ - 1) < 99 && 0 <= i__1 ? i__1 : s_rnge("resvd", 
-		i__1, "fndlun_", (ftnlen)551)]) {
+		i__1, "fndlun_", (ftnlen)565)]) {
 	    opened = TRUE_;
 	} else {
 	    ioin__1.inerr = 1;
@@ -580,7 +591,7 @@
     i__1 = last;
     for (i__ = 1; i__ <= i__1; ++i__) {
 	if (resvd[(i__2 = i__ - 1) < 99 && 0 <= i__2 ? i__2 : s_rnge("resvd", 
-		i__2, "fndlun_", (ftnlen)578)]) {
+		i__2, "fndlun_", (ftnlen)592)]) {
 	    opened = TRUE_;
 	} else {
 	    ioin__1.inerr = 1;
@@ -671,14 +682,14 @@ L_reslun:
 
 /* $ Detailed_Input */
 
-/*     UNIT      is the number of the logical unit to be reserved. */
-/*               Once reserved, the unit number will not be returned */
-/*               by the routines FNDLUN or GETLUN, even if it is not */
-/*               connected to a file. */
+/*     UNIT     is the number of the logical unit to be reserved. */
+/*              Once reserved, the unit number will not be returned */
+/*              by the routines FNDLUN or GETLUN, even if it is not */
+/*              connected to a file. */
 
-/*               On the VAX, SUN, PC, and HP logical units 5-7 are */
-/*               reserved by default.  On the Macintosh logical units */
-/*               5,6 and 9 are reserved by default. */
+/*              On the VAX, SUN, PC, and HP logical units 5-7 are */
+/*              reserved by default. On the Macintosh logical units */
+/*              5,6 and 9 are reserved by default. */
 
 /* $ Detailed_Output */
 
@@ -700,7 +711,7 @@ L_reslun:
 
 /*     FNDLUN maintains an array of logical flags, one for each positive */
 /*     unit number offered by the system. RESLUN sets the value of the */
-/*     flag for UNIT to TRUE. */
+/*     flag for UNIT to .TRUE. */
 
 /*     Once reserved, units (except units reserved by default) may be */
 /*     unreserved by calling FRELUN. */
@@ -724,17 +735,49 @@ L_reslun:
 
 /* $ Literature_References */
 
-/*     See the module FNDLUN. */
+/*     [1]  "Programming in VAX FORTRAN", Digital Equipment Corporation, */
+/*          Section 11.1.1, p.11-2, September 1984. */
+
+/*     [2]  "Microsoft FORTRAN Reference", Microsoft Corporation */
+/*          Section 3.2.2, p.61, 1989, */
+
+/*     [3]  "Sun FORTRAN Programmer's Guide", Sun Microsystems, */
+/*          Revision A, Section 7.2, p.73, 6 May 1988 */
+
+/*     [4]  "Language Systems FORTRAN Reference Manual", Version 2.1, */
+/*          page 193. */
+
+/*     [5]  "Lahey F77L EM/32 Programmers Reference Manual", version 4.0, */
+/*          page 94. */
+
+/*     [6]  "FORTRAN/9000 Reference HP 9000 Series 700 Computers", First */
+/*          Edition, Hewlett Packard Company, pp.6-2 and 6-4, June 1991. */
+
+/*     [7]  Silicon Graphics "Fortran 77 Programmer's Guide", */
+/*          Document number 007-0711-030, page 1-20. */
+
+/*     [8]  "Language Reference Manual", Absoft Fortran V3.2, section */
+/*          7.3.1 (for the NeXT), p.7-4, 1993. */
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     C.A. Curzon     (JPL) */
-/*     H.A. Neilan     (JPL) */
-/*     M.J  Spencer    (JPL) */
-/*     I.M. Underwood  (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     C.A. Curzon        (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     H.A. Neilan        (JPL) */
+/*     B.V. Semenov       (JPL) */
+/*     M.J. Spencer       (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 6.1.0, 17-JUN-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. Added */
+/*        $Literature_References. */
 
 /* -    SPICELIB Version 6.0.5, 17-JUL-2002 (BVS) */
 
@@ -743,33 +786,33 @@ L_reslun:
 /* -    SPICELIB Version 6.0.4, 08-OCT-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitely given.  New */
+/*        environments are now explicitly given. New */
 /*        environments are WIN-NT */
 
 /* -    SPICELIB Version 6.0.2, 28-JUL-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitely given.  New */
+/*        environments are now explicitly given. New */
 /*        environments are PC-DIGITAL, SGI-O32 and SGI-N32. */
 
 /* -    SPICELIB Version 6.0.1, 18-MAR-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitely given.  Previously, */
+/*        environments are now explicitly given. Previously, */
 /*        environments such as SUN-SUNOS and SUN-SOLARIS were implied */
 /*        by the environment label SUN. */
 
-/* -     SPICELIB Version 2.0.0, 16-MAR-1992 (MJS) */
+/* -    SPICELIB Version 2.0.0, 16-MAR-1992 (MJS) */
 
-/*         RESVD is now initialized on entry to this routine if */
-/*         it hasn't been done previously. */
+/*        RESVD is now initialized on entry to this routine if */
+/*        it hasn't been done previously. */
 
-/* -     SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+/* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
 
-/*         Comment section for permuted index source lines was added */
-/*         following the header. */
+/*        Comment section for permuted index source lines was added */
+/*        following the header. */
 
-/* -     SPICELIB Version 1.0.0, 31-JAN-1990 (CAC) (IMU) */
+/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (CAC) (IMU) (HAN) (NJB) */
 
 /* -& */
 /* $ Index_Entries */
@@ -779,22 +822,22 @@ L_reslun:
 /* -& */
 /* $ Revisions */
 
-/* -     SPICELIB Version 2.0.0, 16-MAR-1992 (MJS) */
+/* -    SPICELIB Version 2.0.0, 16-MAR-1992 (MJS) */
 
-/*         RESVD is now initialized on entry to this routine if */
-/*         it hasn't been done previously. Prior to this fix, any actions */
-/*         taken by RESLUN or FRELUN before FNDLUN was called would have */
-/*         been discarded. FIRST is now checked on entry to all entry */
-/*         points. */
+/*        RESVD is now initialized on entry to this routine if */
+/*        it hasn't been done previously. Prior to this fix, any actions */
+/*        taken by RESLUN or FRELUN before FNDLUN was called would have */
+/*        been discarded. FIRST is now checked on entry to all entry */
+/*        points. */
 
-/* -     Beta Version 1.1.0, 27-FEB-1989 (HAN) (NJB) */
+/* -    Beta Version 1.1.0, 27-FEB-1989 (HAN) (NJB) */
 
-/*         This routine is now an entry point of FNDLUN rather than */
-/*         GETLUN.  The code of this entry point itself has not changed */
-/*         however. References to the routine FNDLUN were added to the */
-/*         header.  The restrictions section was updated to read "none." */
-/*         This module was declared "error free", which means */
-/*         that it will never participate in error handling. */
+/*        This routine is now an entry point of FNDLUN rather than */
+/*        GETLUN. The code of this entry point itself has not changed */
+/*        however. References to the routine FNDLUN were added to the */
+/*        header. The $Restrictions section was updated to read "none." */
+/*        This module was declared "error free", which means */
+/*        that it will never participate in error handling. */
 
 /* -& */
 
@@ -803,13 +846,13 @@ L_reslun:
     if (first) {
 	for (i__ = 1; i__ <= 99; ++i__) {
 	    resvd[(i__1 = i__ - 1) < 99 && 0 <= i__1 ? i__1 : s_rnge("resvd", 
-		    i__1, "fndlun_", (ftnlen)801)] = FALSE_;
+		    i__1, "fndlun_", (ftnlen)848)] = FALSE_;
 	}
 	for (i__ = 1; i__ <= 3; ++i__) {
 	    resvd[(i__2 = resnum[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : 
-		    s_rnge("resnum", i__1, "fndlun_", (ftnlen)805)] - 1) < 99 
+		    s_rnge("resnum", i__1, "fndlun_", (ftnlen)852)] - 1) < 99 
 		    && 0 <= i__2 ? i__2 : s_rnge("resvd", i__2, "fndlun_", (
-		    ftnlen)805)] = TRUE_;
+		    ftnlen)852)] = TRUE_;
 	}
 	first = FALSE_;
     }
@@ -819,7 +862,7 @@ L_reslun:
 
     if (*unit >= 1 && *unit <= 99) {
 	resvd[(i__1 = *unit - 1) < 99 && 0 <= i__1 ? i__1 : s_rnge("resvd", 
-		i__1, "fndlun_", (ftnlen)817)] = TRUE_;
+		i__1, "fndlun_", (ftnlen)864)] = TRUE_;
     }
     return 0;
 /* $Procedure FRELUN ( Free a reserved logical unit ) */
@@ -827,7 +870,7 @@ L_reslun:
 L_frelun:
 /* $ Abstract */
 
-/*     Unreserve a logical unit number reserved by RESLUN. */
+/*     Free a logical unit number reserved by RESLUN. */
 
 /* $ Disclaimer */
 
@@ -874,15 +917,15 @@ L_frelun:
 
 /* $ Detailed_Input */
 
-/*     UNIT      is the number of the logical unit to be unreserved. */
-/*               Once unreserved, the unit number may be returned by */
-/*               the routines GETLUN or FNDLUN whenever not connected to */
-/*               a file. */
+/*     UNIT     is the number of the logical unit to be unreserved. */
+/*              Once unreserved, the unit number may be returned by */
+/*              the routines GETLUN or FNDLUN whenever not connected to */
+/*              a file. */
 
-/*               On the VAX, SUN, PC, and HP logical units 5-7 are */
-/*               reserved by default.  On the Macintosh logical units */
-/*               5,6 and 9 are reserved by default. These may not be */
-/*               unreserved. */
+/*              On the VAX, SUN, PC, and HP logical units 5-7 are */
+/*              reserved by default. On the Macintosh logical units */
+/*              5,6 and 9 are reserved by default. These may not be */
+/*              unreserved. */
 
 /* $ Detailed_Output */
 
@@ -904,7 +947,7 @@ L_frelun:
 
 /*     FNDLUN maintains an array of logical flags, one for each unit */
 /*     offered by the system. FRELUN sets the value of the flag for */
-/*     UNIT to FALSE. */
+/*     UNIT to .FALSE. */
 
 /* $ Examples */
 
@@ -924,17 +967,49 @@ L_frelun:
 
 /* $ Literature_References */
 
-/*     See the module FNDLUN. */
+/*     [1]  "Programming in VAX FORTRAN", Digital Equipment Corporation, */
+/*          Section 11.1.1, p.11-2, September 1984. */
+
+/*     [2]  "Microsoft FORTRAN Reference", Microsoft Corporation */
+/*          Section 3.2.2, p.61, 1989, */
+
+/*     [3]  "Sun FORTRAN Programmer's Guide", Sun Microsystems, */
+/*          Revision A, Section 7.2, p.73, 6 May 1988 */
+
+/*     [4]  "Language Systems FORTRAN Reference Manual", Version 2.1, */
+/*          page 193. */
+
+/*     [5]  "Lahey F77L EM/32 Programmers Reference Manual", version 4.0, */
+/*          page 94. */
+
+/*     [6]  "FORTRAN/9000 Reference HP 9000 Series 700 Computers", First */
+/*          Edition, Hewlett Packard Company, pp.6-2 and 6-4, June 1991. */
+
+/*     [7]  Silicon Graphics "Fortran 77 Programmer's Guide", */
+/*          Document number 007-0711-030, page 1-20. */
+
+/*     [8]  "Language Reference Manual", Absoft Fortran V3.2, section */
+/*          7.3.1 (for the NeXT), p.7-4, 1993. */
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     C.A. Curzon     (JPL) */
-/*     H.A. Neilan     (JPL) */
-/*     M.J. Spencer    (JPL) */
-/*     I.M. Underwood  (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     C.A. Curzon        (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     H.A. Neilan        (JPL) */
+/*     B.V. Semenov       (JPL) */
+/*     M.J. Spencer       (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 6.1.0, 27-JUN-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. Added */
+/*        $Literature_References. */
 
 /* -    SPICELIB Version 6.0.5, 17-JUL-2002 (BVS) */
 
@@ -943,43 +1018,43 @@ L_frelun:
 /* -    SPICELIB Version 6.0.4, 08-OCT-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitely given.  New */
+/*        environments are now explicitly given. New */
 /*        environments are WIN-NT */
 
 /* -    SPICELIB Version 6.0.3, 24-SEP-1999 (NJB) */
 
-/*        CSPICE environments were added.  Some typos were corrected. */
+/*        CSPICE environments were added. Some typos were corrected. */
 
 /* -    SPICELIB Version 6.0.2, 28-JUL-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitely given.  New */
+/*        environments are now explicitly given. New */
 /*        environments are PC-DIGITAL, SGI-O32 and SGI-N32. */
 
 /* -    SPICELIB Version 6.0.1, 18-MAR-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitely given.  Previously, */
+/*        environments are now explicitly given. Previously, */
 /*        environments such as SUN-SUNOS and SUN-SOLARIS were implied */
 /*        by the environment label SUN. */
 
-/* -     SPICELIB Version 2.0.0, 16-MAR-1992 (MJS) */
+/* -    SPICELIB Version 2.0.0, 16-MAR-1992 (MJS) */
 
-/*         RESVD is now initialized on entry to this routine if */
-/*         it hasn't been done previously. */
+/*        RESVD is now initialized on entry to this routine if */
+/*        it hasn't been done previously. */
 
-/* -     SPICELIB Version 1.1.1, 10-MAR-1992 (WLT) */
+/* -    SPICELIB Version 1.1.1, 10-MAR-1992 (WLT) */
 
-/*         Comment section for permuted index source lines was added */
-/*         following the header. */
+/*        Comment section for permuted index source lines was added */
+/*        following the header. */
 
-/* -     SPICELIB Version 1.1.0, 12-MAR-1991 (MJS) */
+/* -    SPICELIB Version 1.1.0, 12-MAR-1991 (MJS) */
 
-/*         The array RESNUM now contains the default reserved */
-/*         logical units. All the elements of the array RESVD */
-/*         were initialized. */
+/*        The array RESNUM now contains the default reserved */
+/*        logical units. All the elements of the array RESVD */
+/*        were initialized. */
 
-/* -     SPICELIB Version 1.0.0, 31-JAN-1990 (CAC) (IMU) */
+/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (CAC) (IMU) (HAN) (NJB) */
 
 /* -& */
 /* $ Index_Entries */
@@ -989,22 +1064,22 @@ L_frelun:
 /* -& */
 /* $ Revisions */
 
-/* -     SPICELIB Version 2.0.0, 16-MAR-1992 (MJS) */
+/* -    SPICELIB Version 2.0.0, 16-MAR-1992 (MJS) */
 
-/*         RESVD is now initialized on entry to this routine if */
-/*         it hasn't been done previously. Prior to this fix, any actions */
-/*         taken by RESLUN or FRELUN before FNDLUN was called would have */
-/*         been discarded. FIRST is now checked on entry to all entry */
-/*         points. */
+/*        RESVD is now initialized on entry to this routine if */
+/*        it hasn't been done previously. Prior to this fix, any actions */
+/*        taken by RESLUN or FRELUN before FNDLUN was called would have */
+/*        been discarded. FIRST is now checked on entry to all entry */
+/*        points. */
 
-/* -     Beta Version 1.1.0, 27-FEB-1989 (HAN) (NJB) */
+/* -    Beta Version 1.1.0, 27-FEB-1989 (HAN) (NJB) */
 
-/*         This routine is now an entry point of FNDLUN rather than */
-/*         GETLUN.  The code of this entry point itself has not changed */
-/*         however. References to the routine FNDLUN were added to the */
-/*         header.  The restrictions section was updated to read "none." */
-/*         This module was declared "error free", which means */
-/*         that it will never participate in error handling. */
+/*        This routine is now an entry point of FNDLUN rather than */
+/*        GETLUN. The code of this entry point itself has not changed */
+/*        however. References to the routine FNDLUN were added to the */
+/*        header. The $Restrictions section was updated to read "none." */
+/*        This module was declared "error free", which means */
+/*        that it will never participate in error handling. */
 
 /* -& */
 
@@ -1013,13 +1088,13 @@ L_frelun:
     if (first) {
 	for (i__ = 1; i__ <= 99; ++i__) {
 	    resvd[(i__1 = i__ - 1) < 99 && 0 <= i__1 ? i__1 : s_rnge("resvd", 
-		    i__1, "fndlun_", (ftnlen)1022)] = FALSE_;
+		    i__1, "fndlun_", (ftnlen)1102)] = FALSE_;
 	}
 	for (i__ = 1; i__ <= 3; ++i__) {
 	    resvd[(i__2 = resnum[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : 
-		    s_rnge("resnum", i__1, "fndlun_", (ftnlen)1026)] - 1) < 
+		    s_rnge("resnum", i__1, "fndlun_", (ftnlen)1106)] - 1) < 
 		    99 && 0 <= i__2 ? i__2 : s_rnge("resvd", i__2, "fndlun_", 
-		    (ftnlen)1026)] = TRUE_;
+		    (ftnlen)1106)] = TRUE_;
 	}
 	first = FALSE_;
     }
@@ -1030,12 +1105,12 @@ L_frelun:
     if (*unit >= 1 && *unit <= 99) {
 	for (i__ = 1; i__ <= 3; ++i__) {
 	    if (*unit == resnum[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : 
-		    s_rnge("resnum", i__1, "fndlun_", (ftnlen)1040)]) {
+		    s_rnge("resnum", i__1, "fndlun_", (ftnlen)1120)]) {
 		return 0;
 	    }
 	}
 	resvd[(i__1 = *unit - 1) < 99 && 0 <= i__1 ? i__1 : s_rnge("resvd", 
-		i__1, "fndlun_", (ftnlen)1045)] = FALSE_;
+		i__1, "fndlun_", (ftnlen)1125)] = FALSE_;
     }
     return 0;
 } /* fndlun_ */

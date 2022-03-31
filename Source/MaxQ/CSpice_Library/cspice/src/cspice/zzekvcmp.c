@@ -1036,11 +1036,11 @@ logical zzekvcmp_(integer *op, integer *ncols, integer *tabs, integer *cols,
 /*         handle these errors. */
 
 /*     4)  If the data type code in the input column descriptor is not */
-/*         recognized, the error SPICE(INVALIDDATATYPE) is signalled. */
+/*         recognized, the error SPICE(INVALIDDATATYPE) is signaled. */
 /*         The function value is .FALSE. in this case. */
 
 /*     5)  If the relational operator code OP is not recognized, the */
-/*         error SPICE(UNNATURALRELATION) is signalled. */
+/*         error SPICE(UNNATURALRELATION) is signaled. */
 /*         The function value is .FALSE. in this case. */
 
 /* $ Files */
@@ -1059,7 +1059,7 @@ logical zzekvcmp_(integer *op, integer *ncols, integer *tabs, integer *cols,
 /* $ Restrictions */
 
 /*     1)  This routine must execute quickly.  Therefore, it checks in */
-/*         only if it detects an error.  If an error is signalled by a */
+/*         only if it detects an error.  If an error is signaled by a */
 /*         routine called by this routine, this routine will not appear */
 /*         in the SPICELIB traceback display.  Also, in the interest */
 /*         of speed, this routine does not test the value of the SPICELIB */
@@ -1074,6 +1074,10 @@ logical zzekvcmp_(integer *op, integer *ncols, integer *tabs, integer *cols,
 /*     N.J. Bachman   (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.0.1, 03-OCT-2021 (NJB) */
+
+/*        Corrected typos in comments. */
 
 /* -    Beta Version 1.0.0, 19-OCT-1995 (NJB) */
 
@@ -1125,37 +1129,37 @@ logical zzekvcmp_(integer *op, integer *ncols, integer *tabs, integer *cols,
 
 	for (i__ = 1; i__ <= 2; ++i__) {
 	    hans[(i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge("hans", 
-		    i__1, "zzekvcmp_", (ftnlen)356)] = sthan[segs[(i__2 = i__ 
+		    i__1, "zzekvcmp_", (ftnlen)360)] = sthan[segs[(i__2 = i__ 
 		    - 1) < 2 && 0 <= i__2 ? i__2 : s_rnge("segs", i__2, "zze"
-		    "kvcmp_", (ftnlen)356)] - 1];
+		    "kvcmp_", (ftnlen)360)] - 1];
 	    colptr[(i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge("colptr",
-		     i__1, "zzekvcmp_", (ftnlen)357)] = stdtpt[segs[(i__2 = 
+		     i__1, "zzekvcmp_", (ftnlen)361)] = stdtpt[segs[(i__2 = 
 		    i__ - 1) < 2 && 0 <= i__2 ? i__2 : s_rnge("segs", i__2, 
-		    "zzekvcmp_", (ftnlen)357)] - 1];
+		    "zzekvcmp_", (ftnlen)361)] - 1];
 	    i__1 = colidx;
 	    for (j = 2; j <= i__1; ++j) {
 		colptr[(i__2 = i__ - 1) < 2 && 0 <= i__2 ? i__2 : s_rnge(
-			"colptr", i__2, "zzekvcmp_", (ftnlen)360)] = lnknxt_(&
+			"colptr", i__2, "zzekvcmp_", (ftnlen)364)] = lnknxt_(&
 			colptr[(i__3 = i__ - 1) < 2 && 0 <= i__3 ? i__3 : 
-			s_rnge("colptr", i__3, "zzekvcmp_", (ftnlen)360)], 
+			s_rnge("colptr", i__3, "zzekvcmp_", (ftnlen)364)], 
 			dtpool);
 	    }
 	    movei_(&dtdscs[colptr[(i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : 
-		    s_rnge("colptr", i__1, "zzekvcmp_", (ftnlen)363)] * 11 - 
+		    s_rnge("colptr", i__1, "zzekvcmp_", (ftnlen)367)] * 11 - 
 		    11], &c__11, &cldscs[(i__2 = i__ * 11 - 11) < 22 && 0 <= 
 		    i__2 ? i__2 : s_rnge("cldscs", i__2, "zzekvcmp_", (ftnlen)
-		    363)]);
+		    367)]);
 	    movei_(&stsdsc[segs[(i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : 
-		    s_rnge("segs", i__1, "zzekvcmp_", (ftnlen)364)] * 24 - 24]
+		    s_rnge("segs", i__1, "zzekvcmp_", (ftnlen)368)] * 24 - 24]
 		    , &c__24, &sgdscs[(i__2 = i__ * 24 - 24) < 48 && 0 <= 
 		    i__2 ? i__2 : s_rnge("sgdscs", i__2, "zzekvcmp_", (ftnlen)
-		    364)]);
+		    368)]);
 	    dtype[(i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge("dtype", 
-		    i__1, "zzekvcmp_", (ftnlen)366)] = dtdscs[colptr[(i__2 = 
+		    i__1, "zzekvcmp_", (ftnlen)370)] = dtdscs[colptr[(i__2 = 
 		    i__ - 1) < 2 && 0 <= i__2 ? i__2 : s_rnge("colptr", i__2, 
-		    "zzekvcmp_", (ftnlen)366)] * 11 - 10];
+		    "zzekvcmp_", (ftnlen)370)] * 11 - 10];
 	    elidxs[(i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge("elidxs",
-		     i__1, "zzekvcmp_", (ftnlen)367)] = elts[col - 1];
+		     i__1, "zzekvcmp_", (ftnlen)371)] = elts[col - 1];
 	}
 	if (dtype[0] == dtype[1]) {
 

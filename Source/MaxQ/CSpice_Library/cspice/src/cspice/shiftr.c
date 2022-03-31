@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      SHIFTR ( Shift right ) */
+/* $Procedure SHIFTR ( Shift right ) */
 /* Subroutine */ int shiftr_(char *in, integer *nshift, char *fillc, char *
 	out, ftnlen in_len, ftnlen fillc_len, ftnlen out_len)
 {
@@ -21,9 +21,9 @@
 
 /* $ Abstract */
 
-/*      Shift the contents of a character string to the right. */
-/*      Characters moved past the end of the input string are */
-/*      lost. Vacant spaces are filled with a specified character. */
+/*     Shift the contents of a character string to the right. */
+/*     Characters moved past the end of the input string are */
+/*     lost. Vacant spaces are filled with a specified character. */
 
 /* $ Disclaimer */
 
@@ -56,125 +56,135 @@
 
 /* $ Keywords */
 
-/*      CHARACTER,  UTILITY */
+/*     CHARACTER */
+/*     UTILITY */
 
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*      VARIABLE  I/O  DESCRIPTION */
-/*      --------  ---  -------------------------------------------------- */
-/*      IN         I   Input string. */
-/*      NSHIFT     I   Number of times to shift. */
-/*      FILLC      I   Character to fill spaces left vacant. */
-/*      OUT        O   Shifted string. */
+/*     VARIABLE  I/O  DESCRIPTION */
+/*     --------  ---  -------------------------------------------------- */
+/*     IN         I   Input string. */
+/*     NSHIFT     I   Number of times to shift. */
+/*     FILLC      I   Character to fill spaces left vacant. */
+/*     OUT        O   Shifted string. */
 
 /* $ Detailed_Input */
 
-/*      IN          is the input character string. */
+/*     IN       is the input character string. */
 
-/*      NSHIFT      is the number of times the string is to be */
-/*                  shifted. If NSHIFT is negative, OUT will be */
-/*                  identical to IN. */
+/*     NSHIFT   is the number of times the string is to be */
+/*              shifted. If NSHIFT is negative, OUT will be */
+/*              identical to IN. */
 
-/*      FILLC       is the character with which spaces left vacant by */
-/*                  the shift are to be filled. */
+/*     FILLC    is the character with which spaces left vacant by */
+/*              the shift are to be filled. */
 
 /* $ Detailed_Output */
 
-/*      OUT         is the output string. This is the input string, */
-/*                  shifted N times, filled with FILLC. */
+/*     OUT      is the output string. This is the input string, */
+/*              shifted N times, filled with FILLC. */
 
-/*                  OUT may overwrite IN. */
+/*              OUT may overwrite IN. */
 
 /* $ Parameters */
 
 /*     None. */
 
-/* $ Particulars */
-
-/*      As a string is shifted left or right, the leftmost or */
-/*      rightmost characters of the string disappear (as if pushed */
-/*      off the end of the string). This is true regardless of */
-/*      the length of the output string. */
-
-/*      The remaining characters are shifted simultaneously, and */
-/*      the spaces vacated by those characters are filled with a */
-/*      replacement character. */
-
-/* $ Examples */
-
-/*    If FILLC = ' ' */
-
-/*       'abcde'   shifted left twice becomes     'cde  ' */
-/*       'abcde'   shifted right once becomes     ' abcd' */
-
-/*    If FILLC = '.' */
-
-/*       '12345 '  shifted right once becomes     '.12345' */
-/*       'Apple '  shifted left ten times becomes '......' */
-
-/*    Given the declarations */
-
-/*       CHARACTER*3         SHORT */
-/*       CHARACTER*10        LONG */
-
-/*    The calls */
-
-/*       CALL SHIFTR ( 'abcde ', 2, '-', SHORT ) */
-/*       CALL SHIFTR ( 'abcde ', 2, '-', LONG  ) */
-
-/*    yield the strings */
-
-/*       SHORT = '--a' */
-/*       LONG  = '--abcd    ' */
-
-/*    while the calls */
-
-/*       CALL SHIFTL ( 'abcde ', 2, '-', SHORT ) */
-/*       CALL SHIFTL ( 'abcde ', 2, '-', LONG  ) */
-
-/*    yield the strings */
-
-/*       SHORT = 'cde' */
-/*       LONG  = 'cde ..     ' */
-
-/* $ Restrictions */
-
-/*      None. */
-
 /* $ Exceptions */
 
-/*      Error free. */
+/*     Error free. */
 
 /* $ Files */
 
-/*      None. */
+/*     None. */
 
-/* $ Author_and_Institution */
+/* $ Particulars */
 
-/*      M.J. Spencer    (JPL) */
-/*      I.M. Underwood  (JPL) */
+/*     As a string is shifted left or right, the leftmost or */
+/*     rightmost characters of the string disappear (as if pushed */
+/*     off the end of the string). This is .TRUE. regardless of */
+/*     the length of the output string. */
+
+/*     The remaining characters are shifted simultaneously, and */
+/*     the spaces vacated by those characters are filled with a */
+/*     replacement character. */
+
+/* $ Examples */
+
+/*     If FILLC = ' ' */
+
+/*        'abcde'   shifted left twice becomes     'cde  ' */
+/*        'abcde'   shifted right once becomes     ' abcd' */
+
+/*     If FILLC = '.' */
+
+/*        '12345 '  shifted right once becomes     '.12345' */
+/*        'Apple '  shifted left ten times becomes '......' */
+
+/*     Given the declarations */
+
+/*        CHARACTER*3         SHORT */
+/*        CHARACTER*10        LONG */
+
+/*     The calls */
+
+/*        CALL SHIFTR ( 'abcde ', 2, '-', SHORT ) */
+/*        CALL SHIFTR ( 'abcde ', 2, '-', LONG  ) */
+
+/*     yield the strings */
+
+/*        SHORT = '--a' */
+/*        LONG  = '--abcd    ' */
+
+/*     while the calls */
+
+/*        CALL SHIFTL ( 'abcde ', 2, '-', SHORT ) */
+/*        CALL SHIFTL ( 'abcde ', 2, '-', LONG  ) */
+
+/*     yield the strings */
+
+/*        SHORT = 'cde' */
+/*        LONG  = 'cde ..     ' */
+
+/* $ Restrictions */
+
+/*     None. */
 
 /* $ Literature_References */
 
-/*      None. */
+/*     None. */
+
+/* $ Author_and_Institution */
+
+/*     J. Diaz del Rio    (ODC Space) */
+/*     M.J. Spencer       (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
 
-/* -     SPICELIB Version 2.0.1, 22-AUG-2001 (EDW) */
+/* -    SPICELIB Version 2.1.0, 12-AUG-2021 (JDR) */
 
-/*         Corrected ENDDO to END DO. */
+/*        Added IMPLICIT NONE statement. */
 
-/* -     SPICELIB Version 2.0.0, 01-SEP-1994 (MJS) */
+/*        Edited the header to comply with NAIF standard. */
 
-/*         This version correctly handles negative shifts. */
+/* -    SPICELIB Version 2.0.1, 22-AUG-2001 (EDW) */
 
-/* -     SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+/*        Corrected ENDDO to END DO. */
 
-/*         Comment section for permuted index source lines was added */
-/*         following the header. */
+/* -    SPICELIB Version 2.0.0, 01-SEP-1994 (MJS) */
 
-/* -     SPICELIB Version 1.0.0, 31-JAN-1990 (IMU) */
+/*        This version correctly handles negative shifts. */
+
+/* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+
+/*        Comment section for permuted index source lines was added */
+/*        following the header. */
+
+/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (IMU) */
 
 /* -& */
 /* $ Index_Entries */

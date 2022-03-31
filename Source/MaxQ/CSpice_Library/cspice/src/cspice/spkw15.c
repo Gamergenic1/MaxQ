@@ -10,7 +10,7 @@
 static integer c__15 = 15;
 static integer c__16 = 16;
 
-/* $Procedure      SPKW15 ( SPK, write a type 15 segment ) */
+/* $Procedure SPKW15 ( SPK, write a type 15 segment ) */
 /* Subroutine */ int spkw15_(integer *handle, integer *body, integer *center, 
 	char *frame, doublereal *first, doublereal *last, char *segid, 
 	doublereal *epoch, doublereal *tp, doublereal *pa, doublereal *p, 
@@ -88,7 +88,7 @@ static integer c__16 = 16;
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     I   Handle of an SPK file open for writing. */
 /*     BODY       I   Body code for ephemeris object. */
@@ -110,82 +110,82 @@ static integer c__16 = 16;
 
 /* $ Detailed_Input */
 
-/*     HANDLE      is the file handle of an SPK file that has been */
-/*                 opened for writing. */
+/*     HANDLE   is the file handle of an SPK file that has been */
+/*              opened for writing. */
 
-/*     BODY        is the NAIF ID for the body whose states are */
-/*                 to be recorded in an SPK file. */
+/*     BODY     is the NAIF ID for the body whose states are */
+/*              to be recorded in an SPK file. */
 
-/*     CENTER      is the NAIF ID for the center of motion associated */
-/*                 with BODY. */
+/*     CENTER   is the NAIF ID for the center of motion associated */
+/*              with BODY. */
 
-/*     FRAME       is the reference frame that states are referenced to, */
-/*                 for example 'J2000'. */
+/*     FRAME    is the reference frame that states are referenced to, */
+/*              for example 'J2000'. */
 
-/*     FIRST       are the bounds on the ephemeris times, expressed as */
-/*     LAST        seconds past J2000. */
+/*     FIRST    are the bounds on the ephemeris times, expressed as */
+/*     LAST     seconds past J2000. */
 
-/*     SEGID       is the segment identifier. An SPK segment identifier */
-/*                 may contain up to 40 characters. */
+/*     SEGID    is the segment identifier. An SPK segment identifier */
+/*              may contain up to 40 characters. */
 
-/*     EPOCH       is the epoch of the orbit elements at periapse */
-/*                 in ephemeris seconds past J2000. */
+/*     EPOCH    is the epoch of the orbit elements at periapse */
+/*              in ephemeris seconds past J2000. */
 
-/*     TP          is a vector parallel to the angular momentum vector */
-/*                 of the orbit at epoch expressed relative to FRAME. A */
-/*                 unit vector parallel to TP will be stored in the */
-/*                 output segment. */
+/*     TP       is a vector parallel to the angular momentum vector */
+/*              of the orbit at epoch expressed relative to FRAME. A */
+/*              unit vector parallel to TP will be stored in the */
+/*              output segment. */
 
-/*     PA          is a vector parallel to the position vector of the */
-/*                 trajectory at periapsis of EPOCH expressed relative */
-/*                 to FRAME. A unit vector parallel to PA will be */
-/*                 stored in the output segment. */
+/*     PA       is a vector parallel to the position vector of the */
+/*              trajectory at periapsis of EPOCH expressed relative */
+/*              to FRAME. A unit vector parallel to PA will be */
+/*              stored in the output segment. */
 
-/*     P           is the semi-latus rectum--- p in the equation: */
+/*     P        is the semi-latus rectum--- p in the equation: */
 
-/*                    r = p/(1 + ECC*COS(Nu)) */
+/*                 r = p/(1 + ECC*COS(Nu)) */
 
-/*     ECC          is the eccentricity. */
+/*     ECC      is the eccentricity. */
 
-/*     J2FLG        is the J2 processing flag describing what J2 */
-/*                  corrections are to be applied when the orbit is */
-/*                  propagated. */
+/*     J2FLG    is the J2 processing flag describing what J2 */
+/*              corrections are to be applied when the orbit is */
+/*              propagated. */
 
-/*                  All J2 corrections are applied if the value of J2FLG */
-/*                  is not 1, 2 or 3. */
+/*              All J2 corrections are applied if the value of J2FLG */
+/*              is not 1, 2 or 3. */
 
-/*                  If the value of the flag is 3 no corrections are */
-/*                  done. */
+/*              If the value of the flag is 3 no corrections are */
+/*              done. */
 
-/*                  If the value of the flag is 1 no corrections are */
-/*                  computed for the precession of the line of apsides. */
-/*                  However, regression of the line of nodes is */
-/*                  performed. */
+/*              If the value of the flag is 1 no corrections are */
+/*              computed for the precession of the line of apsides. */
+/*              However, regression of the line of nodes is */
+/*              performed. */
 
-/*                  If the value of the flag is 2 no corrections are */
-/*                  done for the regression of the line of nodes. */
-/*                  However, precession of the line of apsides is */
-/*                  performed. */
+/*              If the value of the flag is 2 no corrections are */
+/*              done for the regression of the line of nodes. */
+/*              However, precession of the line of apsides is */
+/*              performed. */
 
-/*                  Note that J2 effects are computed only if the orbit */
-/*                  is elliptic and does not intersect the central body. */
+/*              Note that J2 effects are computed only if the orbit */
+/*              is elliptic and does not intersect the central body. */
 
-/*     PV           is a vector parallel to the north pole vector of the */
-/*                  central body expressed relative to FRAME. A unit */
-/*                  vector parallel to PV will be stored in the output */
-/*                  segment. */
+/*     PV       is a vector parallel to the north pole vector of the */
+/*              central body expressed relative to FRAME. A unit */
+/*              vector parallel to PV will be stored in the output */
+/*              segment. */
 
-/*     GM           is the central body GM. */
+/*     GM       is the central body GM. */
 
-/*     J2           is the central body J2 (dimensionless). */
+/*     J2       is the central body J2 (dimensionless). */
 
-/*     RADIUS       is the equatorial radius of the central body. */
+/*     RADIUS   is the equatorial radius of the central body. */
 
 /*     Units are radians, km, seconds. */
 
 /* $ Detailed_Output */
 
-/*     None.  A type 15 segment is written to the file attached */
+/*     None. A type 15 segment is written to the file attached */
 /*     to HANDLE. */
 
 /* $ Parameters */
@@ -194,38 +194,38 @@ static integer c__16 = 16;
 
 /* $ Exceptions */
 
-/*     1) If the eccentricity is less than zero, the error */
-/*        'SPICE(BADECCENTRICITY)' will be signaled. */
+/*     1)  If the eccentricity is less than zero, the error */
+/*         SPICE(BADECCENTRICITY) is signaled. */
 
-/*     2) If the semi-latus rectum is 0, the error */
-/*        'SPICE(BADLATUSRECTUM)' is signaled. */
+/*     2)  If the semi-latus rectum is 0, the error */
+/*         SPICE(BADLATUSRECTUM) is signaled. */
 
-/*     3) If the pole vector, trajectory pole vector or periapsis vector */
-/*        have zero length, the error 'SPICE(BADVECTOR)' is signaled. */
+/*     3)  If the pole vector, trajectory pole vector or periapsis vector */
+/*         have zero length, the error SPICE(BADVECTOR) is signaled. */
 
-/*     4) If the trajectory pole vector and the periapsis vector are */
-/*        not orthogonal, the error 'SPICE(BADINITSTATE)' is signaled. */
-/*        The test for orthogonality is very crude.  The routine simply */
-/*        checks that the dot product of the unit vectors parallel */
-/*        to the trajectory pole and periapse vectors is less than */
-/*        0.00001.  This check is intended to catch blunders, not to */
-/*        enforce orthogonality to double precision capacity. */
+/*     4)  If the trajectory pole vector and the periapsis vector are */
+/*         not orthogonal, the error SPICE(BADINITSTATE) is signaled. */
+/*         The test for orthogonality is very crude. The routine simply */
+/*         checks that the dot product of the unit vectors parallel */
+/*         to the trajectory pole and periapse vectors is less than */
+/*         0.00001. This check is intended to catch blunders, not to */
+/*         enforce orthogonality to double precision capacity. */
 
-/*     5) If the mass of the central body is non-positive, the error */
-/*       'SPICE(NONPOSITIVEMASS)' is signaled. */
+/*     5)  If the mass of the central body is non-positive, the error */
+/*         SPICE(NONPOSITIVEMASS) is signaled. */
 
-/*     6) If the radius of the central body is negative, the error */
-/*       'SPICE(BADRADIUS)' is signaled. */
+/*     6)  If the radius of the central body is negative, the error */
+/*         SPICE(BADRADIUS) is signaled. */
 
-/*     7) If the segment identifier has more than 40 non-blank characters */
-/*        the error 'SPICE(SEGIDTOOLONG)' is signaled. */
+/*     7)  If the segment identifier has more than 40 non-blank */
+/*         characters, the error SPICE(SEGIDTOOLONG) is signaled. */
 
-/*     8) If the segment identifier contains non-printing characters */
-/*        the error 'SPICE(NONPRINTABLECHARS)' is signaled. */
+/*     8)  If the segment identifier contains non-printing characters, */
+/*         the error SPICE(NONPRINTABLECHARS) is signaled. */
 
-/*     9) If there are inconsistencies in the BODY, CENTER, FRAME or */
-/*        FIRST and LAST times, the problem will be diagnosed by */
-/*        a routine in the call tree of this routine. */
+/*     9)  If there are inconsistencies in the BODY, CENTER, FRAME or */
+/*         FIRST and LAST times, an error is signaled by */
+/*         a routine in the call tree of this routine. */
 
 /* $ Files */
 
@@ -245,51 +245,50 @@ static integer c__16 = 16;
 /* $ Examples */
 
 /*     Suppose that at time EPOCH you have the J2000 periapsis */
-/*     state of some object relative to some central body and would */
-/*     like to create a type 15 SPK segment to model the motion of */
-/*     the object using simple regression and precession of the */
-/*     line of nodes and apsides. The following code fragment */
-/*     illustrates how you can prepare such a segment.  We shall */
-/*     assume that you have in hand the J2000 direction of the */
-/*     central body's pole vector, its GM, J2 and equatorial */
-/*     radius.  In addition we assume that you have opened an SPK */
-/*     file for write access and that it is attached to HANDLE. */
+/*      state of some object relative to some central body and would */
+/*      like to create a type 15 SPK segment to model the motion of */
+/*      the object using simple regression and precession of the */
+/*      line of nodes and apsides. The following code fragment */
+/*      illustrates how you can prepare such a segment. We shall */
+/*      assume that you have in hand the J2000 direction of the */
+/*      central body's pole vector, its GM, J2 and equatorial */
+/*      radius. In addition we assume that you have opened an SPK */
+/*      file for write access and that it is attached to HANDLE. */
 
-/*    (If your state is at an epoch other than periapse the */
-/*     fragment below will NOT produce a "correct" type 15 segment */
-/*     for modeling the motion of your object.) */
+/*     (If your state is at an epoch other than periapse the */
+/*      fragment below will NOT produce a "correct" type 15 segment */
+/*      for modeling the motion of your object.) */
 
-/*     C */
-/*     C     First we get the osculating elements. */
-/*     C */
-/*           CALL OSCELT ( STATE, EPOCH, GM, ELTS ) */
+/*      C */
+/*      C     First we get the osculating elements. */
+/*      C */
+/*            CALL OSCELT ( STATE, EPOCH, GM, ELTS ) */
 
-/*     C */
-/*     C     From these collect the eccentricity and semi-latus rectum. */
-/*     C */
-/*           ECC = ELTS ( 2 ) */
-/*           P   = ELTS ( 1 ) * ( 1.0D0 + ECC ) */
-/*     C */
-/*     C     Next get the trajectory pole vector and the */
-/*     C     periapsis vector. */
-/*     C */
-/*           CALL UCRSS ( STATE(1), STATE(4), TP ) */
-/*           CALL VHAT  ( STATE(1),           PA ) */
+/*      C */
+/*      C     From these collect the eccentricity and semi-latus rectum. */
+/*      C */
+/*            ECC = ELTS ( 2 ) */
+/*            P   = ELTS ( 1 ) * ( 1.0D0 + ECC ) */
+/*      C */
+/*      C     Next get the trajectory pole vector and the */
+/*      C     periapsis vector. */
+/*      C */
+/*            CALL UCRSS ( STATE(1), STATE(4), TP ) */
+/*            CALL VHAT  ( STATE(1),           PA ) */
 
-/*     C */
-/*     C     Enable both J2 corrections. */
-/*     C */
+/*      C */
+/*      C     Enable both J2 corrections. */
+/*      C */
 
-/*          J2FLG = 0.0D0 */
+/*           J2FLG = 0.0D0 */
 
-/*     C */
-/*     C     Now add the segment. */
-/*     C */
+/*      C */
+/*      C     Now add the segment. */
+/*      C */
 
-/*           CALL SPKW15 ( HANDLE, BODY,  CENTER, FRAME,  FIRST, LAST, */
-/*           .              SEGID,  EPOCH, TP,     PA,    P,     ECC, */
-/*           .              J2FLG,  PV,    GM,     J2,    RADIUS      ) */
-
+/*            CALL SPKW15 ( HANDLE, BODY,  CENTER, FRAME,  FIRST, LAST, */
+/*            .              SEGID,  EPOCH, TP,     PA,    P,     ECC, */
+/*            .              J2FLG,  PV,    GM,     J2,    RADIUS      ) */
 
 /* $ Restrictions */
 
@@ -301,10 +300,17 @@ static integer c__16 = 16;
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     W.L. Taber      (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 2.1.0, 03-JUN-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 2.0.0, 29-MAY-2012 (NJB) */
 
@@ -321,7 +327,7 @@ static integer c__16 = 16;
 /* -& */
 /* $ Index_Entries */
 
-/*     Write a type 15 spk segment */
+/*     Write a type 15 SPK segment */
 
 /* -& */
 

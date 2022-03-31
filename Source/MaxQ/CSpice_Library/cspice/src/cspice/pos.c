@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure            POS ( Position of substring ) */
+/* $Procedure POS ( Position of substring ) */
 integer pos_(char *str, char *substr, integer *start, ftnlen str_len, ftnlen 
 	substr_len)
 {
@@ -73,12 +73,12 @@ integer pos_(char *str, char *substr, integer *start, ftnlen str_len, ftnlen
 
 /* $ Detailed_Input */
 
-/*     STR        is any character string. */
+/*     STR      is any character string. */
 
-/*     SUBSTR     is a substring to look for in STR.  Spaces in */
-/*                SUBSTR are significant. */
+/*     SUBSTR   is a substring to look for in STR. Spaces in */
+/*              SUBSTR are significant. */
 
-/*     START      is the position in STR to begin looking for SUBSTR. */
+/*     START    is the position in STR to begin looking for SUBSTR. */
 
 /* $ Detailed_Output */
 
@@ -93,13 +93,13 @@ integer pos_(char *str, char *substr, integer *start, ftnlen str_len, ftnlen
 
 /* $ Exceptions */
 
-/*     Error Free. */
+/*     Error free. */
 
-/*     1) If START is less than 1, the search begins at the first */
-/*        character of the string. */
+/*     1)  If START is less than 1, the search begins at the first */
+/*         character of the string. */
 
-/*     2) If START is greater than the length of the string, POS */
-/*        returns zero. */
+/*     2)  If START is greater than the length of the string, POS */
+/*         returns zero. */
 
 /* $ Files */
 
@@ -112,8 +112,8 @@ integer pos_(char *str, char *substr, integer *start, ftnlen str_len, ftnlen
 /*     An entire family of related SPICELIB routines (POS, CPOS, NCPOS, */
 /*     POSR, CPOSR, NCPOSR) is described in the Required Reading. */
 
-/*     Those familiar with the True BASIC language should note that */
-/*     these functions are equivalent to the True BASIC intrinsic */
+/*     Those familiar with the .TRUE. BASIC language should note that */
+/*     these functions are equivalent to the .TRUE. BASIC intrinsic */
 /*     functions with the same names. */
 
 /* $ Examples */
@@ -157,11 +157,18 @@ integer pos_(char *str, char *substr, integer *start, ftnlen str_len, ftnlen
 
 /* $ Author_and_Institution */
 
-/*     W.L. Taber      (JPL) */
-/*     H.A. Neilan     (JPL) */
-/*     B.V. Semenov    (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     H.A. Neilan        (JPL) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 04-JUL-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.0.3, 31-JAN-2008 (BVS) */
 

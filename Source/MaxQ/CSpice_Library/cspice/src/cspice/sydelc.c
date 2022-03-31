@@ -9,7 +9,7 @@
 
 static integer c__1 = 1;
 
-/* $Procedure      SYDELC ( Delete a symbol from the symbol table ) */
+/* $Procedure SYDELC ( Delete a symbol from the symbol table ) */
 /* Subroutine */ int sydelc_(char *name__, char *tabsym, integer *tabptr, 
 	char *tabval, ftnlen name_len, ftnlen tabsym_len, ftnlen tabval_len)
 {
@@ -77,40 +77,43 @@ static integer c__1 = 1;
 /*     NAME       I   Name of the symbol to be deleted. */
 /*     TABSYM, */
 /*     TABPTR, */
-/*     TABVAL    I/O  Components of the symbol table. */
+/*     TABVAL    I-O  Components of the symbol table. */
 
 /* $ Detailed_Input */
 
-/*     NAME       is the name of the symbol to be deleted from the symbol */
-/*                table. If the symbol does not exist, the symbol table */
-/*                remains unchanged. This subroutine is case sensitive. */
-/*                NAME must the symbol exactly. */
+/*     NAME     is the name of the symbol to be deleted from the symbol */
+/*              table. */
+
+/*              If the symbol does not exist, the symbol table remains */
+/*              unchanged. This subroutine is case sensitive. NAME must */
+/*              the symbol exactly. */
 
 /*     TABSYM, */
 /*     TABPTR, */
-/*     TABVAL      are the components of a character symbol table. */
-/*                 On input, the table may or may not contain the */
-/*                 symbol NAME. */
+/*     TABVAL   are the components of a character symbol table. */
+
+/*              On input, the table may or may not contain the symbol */
+/*              NAME. */
 
 /* $ Detailed_Output */
 
 /*     TABSYM, */
 /*     TABPTR, */
-/*     TABVAL      are the components of a character symbol table. */
-/*                 On output, the symbol table no longer contains the */
-/*                 symbol NAME or its associated values. If NAME is not */
-/*                 a symbol, the components of the symbol table remain */
-/*                 unchanged. */
+/*     TABVAL   are the components of a character symbol table. */
+
+/*              On output, the symbol table no longer contains the symbol */
+/*              NAME or its associated values. If NAME is not a symbol, */
+/*              the components of the symbol table remain unchanged. */
 
 /* $ Parameters */
 
 /*     None. */
 
-/* $ Files */
+/* $ Exceptions */
 
 /*     None. */
 
-/* $ Exceptions */
+/* $ Files */
 
 /*     None. */
 
@@ -133,7 +136,7 @@ static integer c__1 = 1;
 
 /*     The call */
 
-/*     CALL SYDELC ( 'BOHR', TABSYM, TABPTR, TABVAL ) */
+/*        CALL SYDELC ( 'BOHR', TABSYM, TABPTR, TABVAL ) */
 
 /*     deletes the symbol "BOHR" from the symbol table. The components */
 /*     of the symbol table on output are: */
@@ -153,17 +156,25 @@ static integer c__1 = 1;
 
 /* $ Author_and_Institution */
 
-/*     H.A. Neilan     (JPL) */
-/*     I.M. Underwood  (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     H.A. Neilan        (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
 
-/* -     SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+/* -    SPICELIB Version 1.1.0, 08-APR-2021 (JDR) */
 
-/*         Comment section for permuted index source lines was added */
-/*         following the header. */
+/*        Added IMPLICIT NONE statement. */
 
-/* -     SPICELIB Version 1.0.0, 31-JAN-1990 (IMU) (HAN) */
+/*        Edited the header to comply with NAIF standard. */
+
+/* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+
+/*        Comment section for permuted index source lines was added */
+/*        following the header. */
+
+/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (IMU) (HAN) */
 
 /* -& */
 /* $ Index_Entries */

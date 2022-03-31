@@ -71,12 +71,16 @@
 
 -Version
 
-   -CSPICE Version 13.0.0, 25-JAN-2017 (NJB) (EDW) 
+   -CSPICE Version 14.0.0, 19-DEC-2021 (NJB)
+
+       Added macro for invstm_c.
+
+   -CSPICE Version 13.0.0, 25-JAN-2017 (NJB) (EDW)
 
        Defined new abbreviation macro CONST_IVEC3.
        Added macros for
 
-          dskgd_c 
+          dskgd_c
           dskmi2_c
           dskb02_c
           dskd02_c
@@ -314,7 +318,7 @@ Include those rename assignments for routines whose symbols will
 collide with other libraries.
 */
 #ifndef   HAVE_SPICERENAME_H
-#include "SpiceZrnm.h" 
+#include "SpiceZrnm.h"
 #endif
 
 
@@ -807,6 +811,11 @@ Macros that substitute for function calls:
    #define  invort_c( m, mit )                                         \
                                                                        \
         (   invort_c ( CONST_MAT(m), (mit) )   )
+
+
+   #define  invstm_c( mat, invmat )                                    \
+                                                                       \
+        (   invstm_c ( CONST_MAT6(mat), (invmat) )   )
 
 
    #define  isordv_c( array, n )                                       \

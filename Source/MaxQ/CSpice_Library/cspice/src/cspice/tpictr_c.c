@@ -4,8 +4,8 @@
 
 -Abstract
 
-   Given a sample time string, create a time format picture
-   suitable for use by the routine timout_c.
+   Create a time format picture suitable for use by the routine
+   timout_c from a given sample time string.
 
 -Disclaimer
 
@@ -34,11 +34,11 @@
 
 -Required_Reading
 
-    None.
+   None.
 
 -Keywords
 
-    TIME
+   TIME
 
 */
 
@@ -46,14 +46,15 @@
    #include "SpiceZfc.h"
    #include "SpiceZmc.h"
    #include "SpiceZst.h"
-   
+
 
    void tpictr_c ( ConstSpiceChar * sample,
-                   SpiceInt         lenout,
-                   SpiceInt         lenerr,
+                   SpiceInt         pictln,
+                   SpiceInt         errmln,
                    SpiceChar      * pictur,
                    SpiceBoolean   * ok,
                    SpiceChar      * errmsg )
+
 /*
 
 -Brief_I/O
@@ -61,63 +62,72 @@
    VARIABLE  I/O  DESCRIPTION
    --------  ---  --------------------------------------------------
    sample     I   A sample time string.
-   lenout     I   The length for the output picture string.
-   lenerr     I   The length for the output error string.
+   pictln     I   The length for the output picture string.
+   errmln     I   The length for the output error string.
    pictur     O   A format picture that describes sample.
    ok         O   Flag indicating whether sample parsed successfully.
    errmsg     O   Diagnostic returned if sample cannot be parsed.
 
 -Detailed_Input
 
+   sample      is a representative time string to use as a model to
+               format time strings.
 
-   sample     is a representative time string to use as a model to
-              format time strings.
+   pictln      is the allowed length for the output picture. This length
+               must large enough to hold the output string plus the null
+               terminator. If the output string is expected to have x
+               characters, `pictln' needs to be x + 1. 80 is a reasonable
+               value for `pictln' (79 characters plus the null
+               terminator).
 
-   lenout     is the allowed length for the output picture.  This length
-              must large enough to hold the output string plus the null
-              terminator.  If the output string is expected to have x
-              characters, lenout needs to be x + 1.  80 is a reasonable
-              value for lenout (79 characters plus the null
-              terminator).  
+   errmln      is the allowed length for the output error string.
 
-   lenerr     is the allowed length for the output error string.    
-   
-   
 -Detailed_Output
 
+   pictur      is a format picture suitable for use with the SPICE
+               routine timout_c. This picture, when used to format an
+               epoch via timout_c, will yield the same time components in
+               the same order as the components in sample.
 
-   pictur     is a format picture suitable for use with the SPICE
-              routine timout_c.  This picture, when used to format an
-              epoch via timout_c, will yield the same time components in
-              the same order as the components in sample.
+   ok          is a logical flag indicating whether the input format
+               sample could be parsed. If all of the components of
+               sample are recognizable, ok will be returned with the
+               value SPICEFALSE. If some part of pictur cannot be
+               parsed, ok will be returned with the value SPICEFALSE.
 
-   ok         is a logical flag indicating whether the input format
-              sample could be parsed. If all of the components of
-              sample are recognizable, ok will be returned with the
-              value SPICEFALSE.  If some part of pictur cannot be
-              parsed, ok will be returned with the value SPICEFALSE.
-
-   errmsg     is a diagnostic message that indicates what part of
-              sample was not recognizable.  If sample was successfully
-              parsed, ok will be SPICEFALSE and errmsg will be
-              returned as an empty string.
+   errmsg      is a diagnostic message that indicates what part of
+               sample was not recognizable. If sample was successfully
+               parsed, ok will be SPICEFALSE and errmsg will be
+               returned as an empty string.
 
 -Parameters
 
    None.
 
+-Exceptions
+
+   1)  All problems with the inputs are reported via `ok' and `errmsg'.
+
+   2)  If a format picture can not be created from the sample
+       time string, `pictur' is returned as a blank string.
+
+   3)  If the `sample' input string pointer is null, the error
+       SPICE(NULLPOINTER) is signaled.
+
+   4)  If the `sample' input string has zero length, the error
+       SPICE(EMPTYSTRING) is signaled.
+
+   5)  If any of the `pictur' or `errmsg' output string pointers is
+       null, the error SPICE(NULLPOINTER) is signaled.
+
+   6)  If any of the `pictur' or `errmsg' output strings has length
+       less than two characters, the error SPICE(STRINGTOOSHORT) is
+       signaled, since the output string is too short to contain one
+       character of output data plus a null terminator.
+
 -Files
 
    None.
-
--Exceptions
-
-   Error free.
-
-   1) All problems with the inputs are diagnosed via ok and errmsg.
-
-   2) If a format picture can not be created from the sample
-      time string, pictur is returned as a blank string.
 
 -Particulars
 
@@ -132,58 +142,146 @@
    the routine timout_c.
 
    Note that timout_c can produce many time strings whose patterns
-   can not be discerned by this routine.  When such outputs are
+   can not be discerned by this routine. When such outputs are
    called for, the user must consult timout_c and construct the
-   appropriate format picture "by hand."  However, these exceptional
+   appropriate format picture "by hand." However, these exceptional
    formats are not widely used and are not generally recognizable
    to an uninitiated reader.
 
 -Examples
 
-   Suppose you need to print epochs corresponding to some events and
-   you wish the epochs to have the same arrangement of components as in
-   the string "10:23 P.M. PDT January 3, 1993".
+   The numerical results shown for this example may differ across
+   platforms. The results depend on the SPICE kernels used as input,
+   the compiler and supporting libraries, and the machine specific
+   arithmetic implementation.
 
-   The following subroutine call will construct the appropriate format
-   picture for use with timout_c.
+   1) Given a sample with the format of the UNIX date string
+      local to California, create a SPICE time picture for use
+      in timout_c.
 
-   tpictr_c ( "10:23 P.M. PDT January 3, 1993",
-               lenout, lenerr, pictur, &ok, errmsg );
+      Using that SPICE time picture, convert a series of ephemeris
+      times to that picture format.
 
-   The resulting picture is:
+      Use the LSK kernel below to load the leap seconds and time
+      constants required for the conversions.
 
-      "AP:MN AMPM PDT Month DD, YYYY ::UTC-7"
+         naif0012.tls
 
-   This picture can be used with timout_c to format a sequence
-   of epochs, et[0],...,et[n-1] (given as ephemeris seconds past J2000)
-   as shown in the loop below:
 
+      Example code begins here.
+
+
+      /.
+         Program tpictr_ex1
+      ./
+      #include <stdio.h>
       #include "SpiceUsr.h"
-          .
-          .
-          .
-      for ( i = 0; i < n; i++ )
+
+      int main( )
       {
-         timout_c ( et[i], pictur, string );
-         printf ( "Epoch: %d --- %s\n", i, string );
+
+         /.
+         Local parameters.
+         ./
+         #define ERRLEN       400
+         #define TIMLEN       65
+
+         /.
+         Local variables
+         ./
+         SpiceBoolean         ok;
+
+         SpiceChar            err    [ERRLEN];
+         SpiceChar            pictur [TIMLEN];
+         SpiceChar          * sample;
+         SpiceChar            timstr [TIMLEN];
+         SpiceChar          * utcstr;
+
+         SpiceDouble          et;
+
+
+         /.
+         Load LSK file.
+         ./
+         furnsh_c ( "naif0012.tls" );
+
+         /.
+         Create the required time picture.
+         ./
+         sample = "Thu Oct 01 11:11:11 PDT 1111";
+
+         tpictr_c ( sample, ERRLEN, TIMLEN, pictur, &ok, err );
+
+         if ( ! ok )
+         {
+
+            printf( "Invalid time picture.\n" );
+            printf( "%s\n", err );
+
+         }
+         else
+         {
+
+            /.
+            Convert the input UTC time to ephemeris time.
+            ./
+            utcstr = "24 Mar 2018  16:23:00 UTC";
+            str2et_c ( utcstr, &et );
+
+            /.
+            Now convert `et' to the desired output format.
+            ./
+            timout_c ( et, pictur, TIMLEN, timstr );
+
+            printf( "Sample format:  %s\n", sample );
+            printf( "Time picture :  %s\n", pictur );
+            printf( "\n" );
+            printf( "Input UTC    :  %s\n", utcstr );
+            printf( "Output       :  %s\n", timstr );
+
+         }
+
+         return ( 0 );
       }
+
+
+      When this program was executed on a Mac/Intel/cc/64-bit
+      platform, the output was:
+
+
+      Sample format:  Thu Oct 01 11:11:11 PDT 1111
+      Time picture :  Wkd Mon DD HR:MN:SC PDT YYYY ::UTC-7
+
+      Input UTC    :  24 Mar 2018  16:23:00 UTC
+      Output       :  Sat Mar 24 09:23:00 PDT 2018
+
 
 -Restrictions
 
    None.
 
--Author_and_Institution
-   
-   W.L. Taber      (JPL)
-   E.D. Wright     (JPL)
-
 -Literature_References
 
    None.
 
+-Author_and_Institution
+
+   J. Diaz del Rio     (ODC Space)
+   W.L. Taber          (JPL)
+   E.D. Wright         (JPL)
+
 -Version
 
-   -CSPICE Version 1.0.0, 23-JUL-1999   (EDW) (WLT)
+   -CSPICE Version 1.1.0, 05-AUG-2021 (JDR)
+
+       Changed the input argument names "lenout" and "lenerr" to
+       "pictln" and "errmln" for consistency with other routines.
+
+       Edited the header to comply with NAIF standard.
+       Converted the existing code fragments into complete example
+       and added reference to required LSK.
+
+   -CSPICE Version 1.0.0, 23-JUL-1999 (EDW) (WLT)
 
 -Index_Entries
 
@@ -216,33 +314,33 @@
    Make sure the output strings have at least enough room for one output
    character and a null terminator.  Also check for a null pointer.
    */
-   CHKOSTR ( CHK_STANDARD, "tpictr_c",  pictur, lenout );
-   CHKOSTR ( CHK_STANDARD, "tpictr_c",  errmsg, lenerr );
+   CHKOSTR ( CHK_STANDARD, "tpictr_c",  pictur, pictln );
+   CHKOSTR ( CHK_STANDARD, "tpictr_c",  errmsg, errmln );
 
 
-   /* 
-   Call the f2c'd routine. 
+   /*
+   Call the f2c'd routine.
    */
    tpictr_( ( char    * ) sample,
             ( char    * ) pictur,
             ( logical * ) &okeydoke,
             ( char    * ) errmsg,
             ( ftnlen    ) strlen( sample ),
-            ( ftnlen    ) lenout - 1,
-            ( ftnlen    ) lenerr - 1       );
-            
-   
-   /* 
+            ( ftnlen    ) pictln - 1,
+            ( ftnlen    ) errmln - 1       );
+
+
+   /*
    Convert the output strings to C style.
    */
-   F2C_ConvertStr( lenout, pictur );
-   F2C_ConvertStr( lenerr, errmsg );
+   F2C_ConvertStr( pictln, pictur );
+   F2C_ConvertStr( errmln, errmsg );
 
 
    /*
    Convert the status flag from logical to SpiceBoolean.
    */
-   
+
    *ok = okeydoke;
 
 
@@ -250,5 +348,3 @@
 
 
 } /* End tpictr_c */
-
-

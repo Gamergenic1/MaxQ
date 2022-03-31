@@ -11,7 +11,7 @@ static integer c__2 = 2;
 static integer c__3 = 3;
 static doublereal c_b19 = 1.;
 
-/* $Procedure      SURFPT ( Surface point on an ellipsoid ) */
+/* $Procedure SURFPT ( Surface point on an ellipsoid ) */
 /* Subroutine */ int surfpt_(doublereal *positn, doublereal *u, doublereal *a,
 	 doublereal *b, doublereal *c__, doublereal *point, logical *found)
 {
@@ -91,7 +91,8 @@ static doublereal c_b19 = 1.;
 
 /* $ Keywords */
 
-/*     ELLIPSOID,  GEOMETRY */
+/*     ELLIPSOID */
+/*     GEOMETRY */
 
 /* $ Declarations */
 /* $ Brief_I/O */
@@ -108,141 +109,148 @@ static doublereal c_b19 = 1.;
 
 /* $ Detailed_Input */
 
-/*     POSITN     3-vector giving the position of an observer with */
-/*                respect to the center of an ellipsoid. The vector is */
-/*                expressed in a body-fixed reference frame. The */
-/*                semi-axes of the ellipsoid are aligned with the x, y, */
-/*                and z-axes of the body-fixed frame. */
+/*     POSITN   is a 3-vector giving the position of an observer with */
+/*              respect to the center of an ellipsoid. The vector is */
+/*              expressed in a body-fixed reference frame. The semi-axes */
+/*              of the ellipsoid are aligned with the X, Y, and Z-axes of */
+/*              the body-fixed frame. */
 
-/*     U          Pointing vector emanating from the observer. */
+/*     U        is a pointing 3-vector emanating from the observer. */
 
-/*     A          Length of the semi-axis of the ellipsoid that is */
-/*                parallel to the x-axis of the body-fixed reference */
-/*                frame. */
+/*     A        is the length of the semi-axis of the ellipsoid that is */
+/*              parallel to the X-axis of the body-fixed reference frame. */
 
-/*     B          Length of the semi-axis of the ellipsoid that is */
-/*                parallel to the y-axis of the body-fixed reference */
-/*                frame. */
+/*     B        is the length of the semi-axis of the ellipsoid that is */
+/*              parallel to the Y-axis of the body-fixed reference frame. */
 
-/*     C          Length of the semi-axis of the ellipsoid that is */
-/*                parallel to the z-axis of the body-fixed reference */
-/*                frame. */
+/*     C        is the length of the semi-axis of the ellipsoid that is */
+/*              parallel to the Z-axis of the body-fixed reference frame. */
 
 /* $ Detailed_Output */
 
-/*     POINT      If the ray with direction vector U emanating from */
-/*                POSITN intersects the ellipsoid, POINT will be */
-/*                returned with the body-fixed coordinates of the point */
-/*                where the ray first meets the ellipsoid.  Otherwise, */
-/*                POINT will be returned as (0, 0, 0). */
+/*     POINT    is the position of the intercept of the input ray, */
+/*              defined by the direction vector U emanating from POSITN, */
+/*              on the surface of the input ellipsoid. */
 
-/*     FOUND      A logical flag indicating whether or not the ray from */
-/*                POSITN with direction U actually intersects the */
-/*                ellipsoid.  If the ray does intersect the ellipsoid, */
-/*                FOUND will be returned as .TRUE. If the ray misses the */
-/*                ellipsoid, FOUND will be returned as .FALSE. */
+/*              If the ray intersects the ellipsoid, POINT will be */
+/*              returned with the body-fixed coordinates of the point */
+/*              where the ray first meets the ellipsoid. Otherwise, */
+/*              POINT will be returned as (0, 0, 0). */
+
+/*     FOUND    is a logical flag indicating whether or not the ray from */
+/*              POSITN with direction U actually intersects the */
+/*              ellipsoid. If the ray does intersect the ellipsoid, FOUND */
+/*              will be returned as .TRUE. If the ray misses the */
+/*              ellipsoid, FOUND will be returned as .FALSE. */
 
 /* $ Parameters */
-
-/*      None. */
-
-/* $ Particulars */
-
-/*      This routine assumes that an ellipsoid having semi-axes of */
-/*      length A, B and C is given.  Moreover, it is assumed that these */
-/*      axes are parallel to the x-, y-, and z-axes of a reference frame */
-/*      whose origin is the geometric center of the ellipsoid---this is */
-/*      called the body-fixed reference frame. */
-
-/* $ Examples */
-
-/*      A typical use of SURFPT would be to obtain the planetocentric */
-/*      coordinates of the point at which the optic axis of a */
-/*      spacecraft-mounted instrument intersects the surface of a target */
-/*      body, given the following items. */
-
-/*         1) The epoch (ET) of observation, and the inertial */
-/*            pointing (VPNT) of the instrument at this epoch. */
-
-/*         2) The apparent position (VTARG) of the center of the */
-/*            target body as seen from the spacecraft at the epoch */
-/*            of observation, and the one-way light time (TAU) */
-/*            from the target to the spacecraft. */
-
-/*      In order to find the point of intersection, the following */
-/*      items are also needed. */
-
-/*         3) The transformation (TIBF) from inertial */
-/*            to body-fixed coordinates at epoch ET-TAU. */
-
-/*         4) The radii (R) of the tri-axial ellipsoid */
-/*            used to model the target body. */
-
-/*      These may be obtained from the kernel pool via calls to PXFORM */
-/*      and BODVRD or BODVCD respectively. */
-
-/*      The position of the observer is just the negative of the */
-/*      spacecraft-target vector, VTARG, computed using the VMINUS */
-/*      module. (Note that this is NOT the same as the apparent position */
-/*      of the spacecraft as seen from the target!) Both vectors must be */
-/*      specified in the body-fixed reference frame. The point of */
-/*      intersection is found as follows: */
-
-/*          CALL VMINUS ( VTARG, VPOS ) */
-/*          CALL MXV    ( TIBF,  VPOS,  VPOS ) */
-/*          CALL MXV    ( TIBF,  VPNT,  VPNT ) */
-
-/*          CALL SURFPT ( VPOS, VPNT, R(1), R(2), R(3), VSURF, FOUND ) */
-
-/*      Note that VSURF may or may not be a point of intersection, */
-/*      depending on whether FOUND is .TRUE. or .FALSE. Note also that */
-/*      VSURF is a vector from the center to the surface of the */
-/*      target, in body-fixed coordinates, which may be converted */
-/*      directly to planetocentric latitude, longitude, and radius: */
-
-/*          CALL RECLAT ( VSURF, RADIUS, LONG, LAT ) */
-
-/*      To get the inertial vector from the spacecraft to the */
-/*      surface point, you must subtract VPOS from VSURF, and rotate */
-/*      the resulting vector back to inertial coordinates: */
-
-/*          CALL VSUB ( VSURF, VPOS,  VSURF ) */
-/*          CALL MTXV ( TIBF,  VSURF, VSURF ) */
-
-
-/* $ Restrictions */
 
 /*     None. */
 
 /* $ Exceptions */
 
-/*     1) If the input vector is the zero vector, the error */
-/*        SPICE(ZEROVECTOR) is signaled. */
+/*     1)  If the input vector is the zero vector, the error */
+/*         SPICE(ZEROVECTOR) is signaled. */
 
-/*     2) If any of the body's axes is zero, the error */
-/*        SPICE(BADAXISLENGTH) is signaled. */
+/*     2)  If any of the body's axes is zero, the error */
+/*         SPICE(BADAXISLENGTH) is signaled. */
 
 /* $ Files */
 
 /*     None. */
 
-/* $ Author_and_Institution */
+/* $ Particulars */
 
-/*     C.H. Acton     (JPL) */
-/*     N.J. Bachman    (JPL) */
-/*     W.L. Taber      (JPL) */
+/*     This routine assumes that an ellipsoid having semi-axes of */
+/*     length A, B and C is given. Moreover, it is assumed that these */
+/*     axes are parallel to the X-, Y-, and Z-axes of a reference frame */
+/*     whose origin is the geometric center of the ellipsoid---this is */
+/*     called the body-fixed reference frame. */
+
+/* $ Examples */
+
+/*     A typical use of SURFPT would be to obtain the planetocentric */
+/*     coordinates of the point at which the optic axis of a */
+/*     spacecraft-mounted instrument intersects the surface of a target */
+/*     body, given the following items. */
+
+/*        1) The epoch (ET) of observation, and the inertial */
+/*           pointing (VPNT) of the instrument at this epoch. */
+
+/*        2) The apparent position (VTARG) of the center of the */
+/*           target body as seen from the spacecraft at the epoch */
+/*           of observation, and the one-way light time (TAU) */
+/*           from the target to the spacecraft. */
+
+/*     In order to find the point of intersection, the following */
+/*     items are also needed. */
+
+/*        3) The transformation (TIBF) from inertial */
+/*           to body-fixed coordinates at epoch ET-TAU. */
+
+/*        4) The radii (R) of the tri-axial ellipsoid */
+/*           used to model the target body. */
+
+/*     These may be obtained from the kernel pool via calls to PXFORM */
+/*     and BODVRD or BODVCD respectively. */
+
+/*     The position of the observer is just the negative of the */
+/*     spacecraft-target vector, VTARG, computed using the VMINUS */
+/*     module. (Note that this is NOT the same as the apparent position */
+/*     of the spacecraft as seen from the target!) Both vectors must be */
+/*     specified in the body-fixed reference frame. The point of */
+/*     intersection is found as follows: */
+
+/*         CALL VMINUS ( VTARG, VPOS ) */
+/*         CALL MXV    ( TIBF,  VPOS,  VPOS ) */
+/*         CALL MXV    ( TIBF,  VPNT,  VPNT ) */
+
+/*         CALL SURFPT ( VPOS, VPNT, R(1), R(2), R(3), VSURF, FOUND ) */
+
+/*     Note that VSURF may or may not be a point of intersection, */
+/*     depending on whether FOUND is .TRUE. or .FALSE. Note also that */
+/*     VSURF is a vector from the center to the surface of the */
+/*     target, in body-fixed coordinates, which may be converted */
+/*     directly to planetocentric latitude, longitude, and radius: */
+
+/*         CALL RECLAT ( VSURF, RADIUS, LONG, LAT ) */
+
+/*     To get the inertial vector from the spacecraft to the */
+/*     surface point, you must subtract VPOS from VSURF, and rotate */
+/*     the resulting vector back to inertial coordinates: */
+
+/*         CALL VSUB ( VSURF, VPOS,  VSURF ) */
+/*         CALL MTXV ( TIBF,  VSURF, VSURF ) */
+
+/* $ Restrictions */
+
+/*     None. */
 
 /* $ Literature_References */
 
 /*     None. */
 
+/* $ Author_and_Institution */
+
+/*     C.H. Acton         (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
+
 /* $ Version */
+
+/* -    SPICELIB Version 1.4.0, 25-MAY-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. Improved */
+/*        "POINT" argument description. */
 
 /* -    SPICELIB Version 1.3.0, 03-APR-2006 (NJB) */
 
-/*        Bug fix:  intercept point is now always set to the */
+/*        Bug fix: intercept point is now always set to the */
 /*        ray's vertex when the vertex is on the ellipsoid's */
-/*        surface.  This routine now uses discovery check-in. */
+/*        surface. This routine now uses discovery check-in. */
 
 /* -    SPICELIB Version 1.2.2, 24-OCT-2005 (NJB) */
 
@@ -251,7 +259,7 @@ static doublereal c_b19 = 1.;
 
 /* -    SPICELIB Version 1.2.1, 27-JUL-2003 (NJB) (CHA) */
 
-/*        Various header corrections were made.  The example program */
+/*        Various header corrections were made. The example program */
 /*        was upgraded to use real kernels, and the program's output is */
 /*        shown. */
 
@@ -285,17 +293,17 @@ static doublereal c_b19 = 1.;
 /* -& */
 /* $ Revisions */
 
-/* -     SPICELIB Version 1.2.0, 28-NOV-2002 (NJB) */
+/* -    SPICELIB Version 1.2.0, 28-NOV-2002 (NJB) */
 
-/*         Re-implemented intercept computation to reduce loss of */
-/*         precision.  New algorithm maps input ellipsoid to unit */
-/*         sphere, finds closest point on input ray to the origin, */
-/*         then finds the offset from this point to the surface. */
+/*        Re-implemented intercept computation to reduce loss of */
+/*        precision. New algorithm maps input ellipsoid to unit */
+/*        sphere, finds closest point on input ray to the origin, */
+/*        then finds the offset from this point to the surface. */
 
-/* -     Beta Version 2.0.0, 9-JAN-1988 (WLT) */
+/* -    Beta Version 2.0.0, 9-JAN-1988 (WLT) */
 
-/*      Short error message 'SPICE(ZEROAXISLENGTH)' changed to */
-/*      'SPICE(BADAXISLENGTH)' */
+/*      Short error message SPICE(ZEROAXISLENGTH) changed to */
+/*      SPICE(BADAXISLENGTH) */
 
 /* -& */
 
@@ -348,7 +356,7 @@ static doublereal c_b19 = 1.;
 	chkin_("SURFPT", (ftnlen)6);
 /* Writing concatenation */
 	i__2[0] = 32, a__1[0] = mssg + (((i__1 = bad - 1) < 7 && 0 <= i__1 ? 
-		i__1 : s_rnge("mssg", i__1, "surfpt_", (ftnlen)354)) << 5);
+		i__1 : s_rnge("mssg", i__1, "surfpt_", (ftnlen)365)) << 5);
 	i__2[1] = 3, a__1[1] = " ? ";
 	s_cat(ch__1, a__1, i__2, &c__2, (ftnlen)35);
 	setmsg_(ch__1, (ftnlen)35);

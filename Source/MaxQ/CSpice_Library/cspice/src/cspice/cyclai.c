@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      CYCLAI ( Cycle the elements of an integer array ) */
+/* $Procedure CYCLAI ( Cycle the elements of an integer array ) */
 /* Subroutine */ int cyclai_(integer *array, integer *nelt, char *dir, 
 	integer *ncycle, integer *out, ftnlen dir_len)
 {
@@ -71,22 +71,22 @@
 
 /* $ Detailed_Input */
 
-/*     ARRAY       is the array to be cycled. */
+/*     ARRAY    is the array to be cycled. */
 
-/*     NELT        is the number of elements in the input array. */
+/*     NELT     is the number of elements in the input array. */
 
-/*     DIR         is the direction in which the elements in the */
-/*                 array are to be cycled. */
+/*     DIR      is the direction in which the elements in the */
+/*              array are to be cycled. */
 
-/*                    'F' or 'f'  to cycle forward. */
-/*                    'B' or 'b'  to cycle backward. */
+/*                 'F' or 'f'  to cycle forward. */
+/*                 'B' or 'b'  to cycle backward. */
 
-/*     NCYCLE      is the number of times the elements in the array */
-/*                 are to be cycled. */
+/*     NCYCLE   is the number of times the elements in the array */
+/*              are to be cycled. */
 
 /* $ Detailed_Output */
 
-/*     OUT         is the input array after it has been cycled. */
+/*     OUT      is the input array after it has been cycled. */
 
 /* $ Parameters */
 
@@ -94,13 +94,13 @@
 
 /* $ Exceptions */
 
-/*     1) If the value of DIR is not recognized, the error */
-/*        SPICE(INVALIDDIRECTION) is signaled. */
+/*     1)  If the value of DIR is not recognized, the error */
+/*         SPICE(INVALIDDIRECTION) is signaled. */
 
-/*     2) If NELT is less than 1, the output array is not modified. */
+/*     2)  If NELT is less than 1, the output array is not modified. */
 
-/*     3) If NCYCLE is negative, the array is cycled NCYCLE times in */
-/*        the opposite direction of DIR. */
+/*     3)  If NCYCLE is negative, the array is cycled NCYCLE times in */
+/*         the opposite direction of DIR. */
 
 /* $ Files */
 
@@ -141,8 +141,8 @@
 
 /* $ Restrictions */
 
-/*     The memory used for the output array must be disjoint from the */
-/*     memory used for the input array. */
+/*     1)  The memory used for the output array must be disjoint from the */
+/*         memory used for the input array. */
 
 /* $ Literature_References */
 
@@ -150,11 +150,20 @@
 
 /* $ Author_and_Institution */
 
-/*     H.A. Neilan     (JPL) */
-/*     W.L. Taber      (JPL) */
-/*     I.M. Underwood  (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     H.A. Neilan        (JPL) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 20-AUG-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.0.3, 18-MAY-2010 (BVS) */
 
@@ -170,7 +179,7 @@
 /*        Comment section for permuted index source lines was added */
 /*        following the header. */
 
-/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (IMU) (WLT) */
+/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (IMU) (WLT) (HAN) */
 
 /* -& */
 /* $ Index_Entries */
@@ -184,7 +193,7 @@
 
 /*         Error handling was added to detect an invalid value for */
 /*         the cycling direction. If the direction is not recognized */
-/*         the error SPICE(INVALIDDIRECTION) is signalled and the */
+/*         the error SPICE(INVALIDDIRECTION) is signaled and the */
 /*         output array is not modified. (The routine used to copy the */
 /*         input array into the output array if the direction was not */
 /*         recognized.) */

@@ -10,7 +10,7 @@
 static integer c__2 = 2;
 static integer c__6 = 6;
 
-/* $Procedure      CKGR03 ( C-kernel, get record, type 03 ) */
+/* $Procedure CKGR03 ( C-kernel, get record, type 03 ) */
 /* Subroutine */ int ckgr03_(integer *handle, doublereal *descr, integer *
 	recno, doublereal *record)
 {
@@ -34,8 +34,9 @@ static integer c__6 = 6;
 
 /* $ Abstract */
 
-/*     Given the handle and descriptor of a type 3 segment in a CK file, */
-/*     return a specified pointing instance from that segment. */
+/*     Return a specified pointing instance from a CK type 03 segment. */
+/*     The segment is identified by a CK file handle and segment */
+/*     descriptor. */
 
 /* $ Disclaimer */
 
@@ -74,55 +75,54 @@ static integer c__6 = 6;
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
-/*     HANDLE     I   The handle of the file containing the segment. */
+/*     HANDLE     I   The handle of the CK file containing the segment. */
 /*     DESCR      I   The segment descriptor. */
 /*     RECNO      I   The number of the pointing instance to be returned. */
 /*     RECORD     O   The pointing record. */
 
 /* $ Detailed_Input */
 
-/*     HANDLE     is the handle of the binary CK file containing the */
-/*                desired segment. The file should have been opened */
-/*                for read or write access, either by CKLPF, DAFOPR, */
-/*                or DAFOPW. */
+/*     HANDLE   is the handle of the binary CK file containing the */
+/*              desired segment. The file should have been opened */
+/*              for read or write access, by CKLPF, DAFOPR or DAFOPW. */
 
-/*     DESCR      is the packed descriptor of the data type 3 segment. */
+/*     DESCR    is the packed descriptor of the data type 3 CK segment. */
 
-/*     RECNO      is the number of the discrete pointing instance to be */
-/*                returned from the data type 3 segment. */
+/*     RECNO    is the number of the discrete pointing instance to be */
+/*              returned from the data type 3 segment. */
 
 /* $ Detailed_Output */
 
-/*     RECORD     is the pointing instance indexed by RECNO in the */
-/*                segment.  The contents are as follows: */
+/*     RECORD   is the pointing instance indexed by RECNO in the */
+/*              segment. The contents are as follows: */
 
-/*                   RECORD( 1 ) = CLKOUT */
+/*                 RECORD( 1 ) = CLKOUT */
 
-/*                   RECORD( 2 ) = q0 */
-/*                   RECORD( 3 ) = q1 */
-/*                   RECORD( 4 ) = q2 */
-/*                   RECORD( 5 ) = q3 */
+/*                 RECORD( 2 ) = Q1 */
+/*                 RECORD( 3 ) = Q2 */
+/*                 RECORD( 4 ) = Q3 */
+/*                 RECORD( 5 ) = Q4 */
 
-/*                   RECORD( 6 ) = av1  ] */
-/*                   RECORD( 7 ) = av2  |-- Returned optionally */
-/*                   RECORD( 8 ) = av3  ] */
+/*                 RECORD( 6 ) = AV1  | */
+/*                 RECORD( 7 ) = AV2  |-- Returned optionally */
+/*                 RECORD( 8 ) = AV3  | */
 
-/*                CLKOUT is the encoded spacecraft clock time associated */
-/*                with the returned pointing values. */
+/*              CLKOUT is the encoded spacecraft clock time associated */
+/*              with the returned pointing values. */
 
-/*                The quantities q0 - q3 are the components of the */
-/*                quaternion that represents the C-matrix that transforms */
-/*                vectors from the inertial reference frame of the */
-/*                segment to the instrument frame at time CLKOUT. */
+/*              The quantities Q1 - Q4 are the components of the */
+/*              quaternion that represents the C-matrix that transforms */
+/*              vectors from the inertial reference frame of the */
+/*              segment to the instrument frame at time CLKOUT. */
 
-/*                The quantities av1, av2, and av3 represent the */
-/*                angular velocity vector, and are returned only if */
-/*                the segment contains angular velocity data. The */
-/*                components of the angular velocity vector are */
-/*                specified relative to the inertial reference */
-/*                frame of the segment. */
+/*              The quantities AV1, AV2, and AV3 represent the */
+/*              angular velocity vector, and are returned only if */
+/*              the segment contains angular velocity data. The */
+/*              components of the angular velocity vector are */
+/*              specified relative to the inertial reference */
+/*              frame of the segment. */
 
 /* $ Parameters */
 
@@ -131,15 +131,15 @@ static integer c__6 = 6;
 /* $ Exceptions */
 
 /*     1)  If the segment is not of data type 3, the error */
-/*         SPICE(CKWRONGDATATYPE) is signalled. */
+/*         SPICE(CKWRONGDATATYPE) is signaled. */
 
 /*     2)  If RECNO is less than one or greater than the number of */
 /*         records in the specified segment, the error */
-/*         SPICE(CKNONEXISTREC) is signalled. */
+/*         SPICE(CKNONEXISTREC) is signaled. */
 
 /*     3)  If the specified handle does not belong to any DAF file that */
-/*         is currently known to be open, an error is diagnosed by a */
-/*         routine that this routine calls. */
+/*         is currently known to be open, an error is signaled by a */
+/*         routine in the call tree of this routine. */
 
 /*     4)  If DESCR is not a valid descriptor of a segment in the CK */
 /*         file specified by HANDLE, the results of this routine are */
@@ -147,7 +147,7 @@ static integer c__6 = 6;
 
 /* $ Files */
 
-/*     The file specified by HANDLE should be open for read or */
+/*     The CK file specified by HANDLE should be open for read or */
 /*     write access. */
 
 /* $ Particulars */
@@ -156,116 +156,217 @@ static integer c__6 = 6;
 /*     see the CK required reading. */
 
 /*     This is a utility routine that may be used to read the individual */
-/*     pointing instances that make up a type 3 segment.  It is normally */
+/*     pointing instances that make up a type 3 segment. It is normally */
 /*     used in conjunction with CKNR03, which gives the number of */
 /*     pointing instances stored in a segment. */
 
 /* $ Examples */
 
-/*     Suppose that MOC.BC is a CK file that contains segments of */
-/*     data type 3.  Then the following code fragment extracts the */
-/*     SCLK time, boresight vector, and angular velocity vector for */
-/*     each pointing instance in the first segment in the file. */
+/*     The numerical results shown for this example may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
+
+/*     1) The following code example extracts the SCLK time, boresight */
+/*        vector, and angular velocity vector for each pointing instance */
+/*        in the first segment in a CK file that contains segments of */
+/*        data type 3. */
+
+/*        Use the CK kernel below, available in the Venus Express PDS */
+/*        archives, as input for the code example. */
+
+/*           VEX_BOOM_V01.BC */
+
+/*        Example code begins here. */
 
 
-/*           INTEGER               ICD     ( 6 ) */
-/*           INTEGER               HANDLE */
-/*           INTEGER               NREC */
-/*           INTEGER               I */
+/*              PROGRAM CKGR03_EX1 */
+/*              IMPLICIT NONE */
 
-/*           DOUBLE PRECISION      DCD     ( 2 ) */
-/*           DOUBLE PRECISION      DESCR   ( 5 ) */
-/*           DOUBLE PRECISION      RECORD  ( 8 ) */
-/*           DOUBLE PRECISION      QUAT    ( 4 ) */
-/*           DOUBLE PRECISION      AV      ( 3 ) */
-/*           DOUBLE PRECISION      BORE    ( 3 ) */
-/*           DOUBLE PRECISION      CMAT    ( 3, 3 ) */
-/*           DOUBLE PRECISION      SCLKDP */
+/*        C */
+/*        C     Local variables. */
+/*        C */
+/*              DOUBLE PRECISION      QUAT    ( 4 ) */
+/*              DOUBLE PRECISION      AV      ( 3 ) */
+/*              DOUBLE PRECISION      BORE    ( 3 ) */
+/*              DOUBLE PRECISION      CMAT    ( 3, 3 ) */
+/*              DOUBLE PRECISION      DCD     ( 2 ) */
+/*              DOUBLE PRECISION      DESCR   ( 5 ) */
+/*              DOUBLE PRECISION      RECORD  ( 8 ) */
+/*              DOUBLE PRECISION      SCLKDP */
 
-/*           LOGICAL               FOUND */
-/*           LOGICAL               AVSEG */
+/*              INTEGER               I */
+/*              INTEGER               ICD     ( 6 ) */
+/*              INTEGER               HANDLE */
+/*              INTEGER               NREC */
 
-/*     C */
-/*     C     First load the file. (The file may also be opened by using */
-/*     C     CKLPF.) */
-/*     C */
-/*           CALL DAFOPR ( 'MOC.BC', HANDLE ) */
-/*     C */
-/*     C     Begin forward search.  Find the first array. */
-/*     C */
-/*           CALL DAFBFS ( HANDLE ) */
-/*           CALL DAFFNA ( FOUND  ) */
-/*     C */
-/*     C     Get segment descriptor. */
-/*     C */
-/*           CALL DAFGS ( DESCR ) */
-/*     C */
-/*     C     Unpack the segment descriptor into its double precision */
-/*     C     and integer components. */
-/*     C */
-/*           CALL DAFUS ( DESCR, 2, 6, DCD, ICD ) */
-/*     C */
-/*     C     The data type for a segment is located in the third integer */
-/*     C     component of the descriptor. */
-/*     C */
-/*           IF ( ICD( 3 ) .EQ. 3 ) THEN */
-/*     C */
-/*     C        Does the segment contain AV data? */
-/*     C */
-/*              AVSEG =  ( ICD(4) .EQ. 1 ) */
-/*     C */
-/*     C        How many records does this segment contain? */
-/*     C */
-/*              CALL CKNR03 ( HANDLE, DESCR, NREC ) */
+/*              LOGICAL               AVSEG */
+/*              LOGICAL               FOUND */
 
-/*              DO I = 1, NREC */
-/*     C */
-/*     C           Get the Ith pointing instance in the segment. */
-/*     C */
-/*                 CALL CKGR03 ( HANDLE, DESCR, I, RECORD ) */
+/*        C */
+/*        C     First load the file (it may also be opened by using */
+/*        C     CKLPF). */
+/*        C */
+/*              CALL DAFOPR ( 'VEX_BOOM_V01.BC', HANDLE ) */
 
-/*     C */
-/*     C           Unpack RECORD into the time, quaternion, and av. */
-/*     C */
-/*                 SCLKDP = RECORD ( 1 ) */
+/*        C */
+/*        C     Begin forward search.  Find the first array. */
+/*        C */
+/*              CALL DAFBFS ( HANDLE ) */
+/*              CALL DAFFNA ( FOUND  ) */
 
-/*                 CALL MOVED ( RECORD(2), 4, QUAT ) */
+/*        C */
+/*        C     Get segment descriptor. */
+/*        C */
+/*              CALL DAFGS ( DESCR ) */
 
-/*                 IF  ( AVSEG )  THEN */
-/*                    CALL MOVED ( RECORD(6), 3, AV   ) */
-/*                 END IF */
+/*        C */
+/*        C     Unpack the segment descriptor into its double precision */
+/*        C     and integer components. */
+/*        C */
+/*              CALL DAFUS ( DESCR, 2, 6, DCD, ICD ) */
 
-/*     C */
-/*     C           The boresight vector is the third row of the C-matrix. */
-/*     C */
-/*                 CALL Q2M ( QUAT, CMAT ) */
+/*        C */
+/*        C     The data type for a segment is located in the third */
+/*        C     integer component of the descriptor. */
+/*        C */
+/*              IF ( ICD( 3 ) .EQ. 3 ) THEN */
 
-/*                 BORE(1) = CMAT(3,1) */
-/*                 BORE(2) = CMAT(3,2) */
-/*                 BORE(3) = CMAT(3,3) */
-/*     C */
-/*     C           Write out the results. */
-/*     C */
-/*                 WRITE (*,*) 'Record: ', I */
-/*                 WRITE (*,*) */
-/*                 WRITE (*,*) 'SCLK time = ', SCLKDP */
-/*                 WRITE (*,*) */
-/*                 WRITE (*,*) 'boresight: ', BORE */
+/*        C */
+/*        C        Does the segment contain AV data? */
+/*        C */
+/*                 AVSEG =  ( ICD(4) .EQ. 1 ) */
 
-/*                 IF ( AVSEG ) THEN */
+/*        C */
+/*        C        How many records does this segment contain? */
+/*        C */
+/*                 CALL CKNR03 ( HANDLE, DESCR, NREC ) */
+
+/*                 DO I = 1, NREC */
+
+/*        C */
+/*        C           Get the Ith pointing instance in the segment. */
+/*        C */
+/*                    CALL CKGR03 ( HANDLE, DESCR, I, RECORD ) */
+
+/*        C */
+/*        C           Unpack RECORD into the time, quaternion, and av. */
+/*        C */
+/*                    SCLKDP = RECORD ( 1 ) */
+
+/*                    CALL MOVED ( RECORD(2), 4, QUAT ) */
+
+/*                    IF  ( AVSEG )  THEN */
+/*                       CALL MOVED ( RECORD(6), 3, AV   ) */
+/*                    END IF */
+
+/*        C */
+/*        C           The boresight vector is the third row of the */
+/*        C           C-matrix. */
+/*        C */
+/*                    CALL Q2M ( QUAT, CMAT ) */
+
+/*                    BORE(1) = CMAT(3,1) */
+/*                    BORE(2) = CMAT(3,2) */
+/*                    BORE(3) = CMAT(3,3) */
+
+/*        C */
+/*        C           Write out the results. */
+/*        C */
+/*                    WRITE (*,'(A,I2)') 'Record: ', I */
+/*                    WRITE (*,'(A,F25.6)')  '   SCLK time       :', */
+/*             .                               SCLKDP */
+/*                    WRITE (*,'(A,3F14.9)') '   Boresight       :', */
+/*             .                               BORE */
+
+/*                    IF ( AVSEG ) THEN */
+/*                       WRITE (*,'(A,3F14.9)') '   Angular velocity:', */
+/*             .                                  AV */
+/*                    END IF */
 /*                    WRITE (*,*) */
-/*                    WRITE (*,*) 'angular velocity: ', AV */
-/*                 END IF */
 
-/*              END DO */
+/*                 END DO */
 
-/*           END IF */
+/*              END IF */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*        Record:  1 */
+/*           SCLK time       :           2162686.710986 */
+/*           Boresight       :  -0.999122830   0.000000000   0.041875654 */
+/*           Angular velocity:   0.000000000   0.000000000   0.000000000 */
+
+/*        Record:  2 */
+/*           SCLK time       :       54160369751.715164 */
+/*           Boresight       :  -0.999122830   0.000000000   0.041875654 */
+/*           Angular velocity:   0.000000000   1.176083393   0.000000000 */
+
+/*        Record:  3 */
+/*           SCLK time       :       54160454948.487686 */
+/*           Boresight       :   0.000000000   0.000000000   1.000000000 */
+/*           Angular velocity:   0.000000000   0.000000000   0.000000000 */
+
+/*        Record:  4 */
+/*           SCLK time       :      299264885854.937805 */
+/*           Boresight       :   0.000000000   0.000000000   1.000000000 */
+/*           Angular velocity:   0.000000000   0.000000000   0.000000000 */
+
+/*        Record:  5 */
+/*           SCLK time       :     2366007685832.532227 */
+/*           Boresight       :   0.000000000   0.000000000   1.000000000 */
+/*           Angular velocity:   0.000000000   0.000000000   0.000000000 */
+
+/*        Record:  6 */
+/*           SCLK time       :     4432750485810.126953 */
+/*           Boresight       :   0.000000000   0.000000000   1.000000000 */
+/*           Angular velocity:   0.000000000   0.000000000   0.000000000 */
+
+/*        Record:  7 */
+/*           SCLK time       :     6505155594828.757812 */
+/*           Boresight       :   0.000000000   0.000000000   1.000000000 */
+/*           Angular velocity:   0.000000000   0.000000000   0.000000000 */
+
+/*        Record:  8 */
+/*           SCLK time       :     8571898394806.352539 */
+/*           Boresight       :   0.000000000   0.000000000   1.000000000 */
+/*           Angular velocity:   0.000000000   0.000000000   0.000000000 */
+
+/*        Record:  9 */
+/*           SCLK time       :    10638641194783.947266 */
+/*           Boresight       :   0.000000000   0.000000000   1.000000000 */
+/*           Angular velocity:   0.000000000   0.000000000   0.000000000 */
+
+/*        Record: 10 */
+/*           SCLK time       :    12705383994761.541016 */
+/*           Boresight       :   0.000000000   0.000000000   1.000000000 */
+/*           Angular velocity:   0.000000000   0.000000000   0.000000000 */
+
+/*        Record: 11 */
+/*           SCLK time       :    14777789103780.169922 */
+/*           Boresight       :   0.000000000   0.000000000   1.000000000 */
+/*           Angular velocity:   0.000000000   0.000000000   0.000000000 */
+
+/*        Record: 12 */
+/*           SCLK time       :    16844531903757.763672 */
+/*           Boresight       :   0.000000000   0.000000000   1.000000000 */
+/*           Angular velocity:   0.000000000   0.000000000   0.000000000 */
+
+/*        Record: 13 */
+/*           SCLK time       :    18911274703735.359375 */
+/*           Boresight       :   0.000000000   0.000000000   1.000000000 */
+/*           Angular velocity:   0.000000000   0.000000000   0.000000000 */
+
 
 /* $ Restrictions */
 
-/*     1) The binary CK file containing the segment whose descriptor was */
-/*        passed to this routine must be opened for read or write access */
-/*        by either CKLPF, DAFOPR, DAFOPW. */
+/*     1)  The binary CK file containing the segment whose descriptor was */
+/*         passed to this routine must be opened for read or write access */
+/*         by CKLPF, DAFOPR or DAFOPW. */
 
 /* $ Literature_References */
 
@@ -273,9 +374,19 @@ static integer c__6 = 6;
 
 /* $ Author_and_Institution */
 
-/*     J.M. Lynch (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     J.M. Lynch         (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.1, 26-OCT-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. Added */
+/*        reference to required CK in example's problem statement. */
+
+/*        Fixed minor language issues in $Abstract, $Brief_I/O, */
+/*        $Detailed_Input, $Files and $Restrictions sections. */
 
 /* -    SPICELIB Version 1.1.0, 07-SEP-2001 (EDW) */
 
@@ -287,7 +398,7 @@ static integer c__6 = 6;
 /* -& */
 /* $ Index_Entries */
 
-/*     get ck type_3 record */
+/*     get CK type_3 record */
 
 /* -& */
 

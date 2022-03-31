@@ -9,12 +9,15 @@
 
 static integer c__1 = 1;
 
-/* $Procedure      DASUDC ( DAS, update data, character ) */
+/* $Procedure DASUDC ( DAS, update data, character ) */
 /* Subroutine */ int dasudc_(integer *handle, integer *first, integer *last, 
 	integer *bpos, integer *epos, char *data, ftnlen data_len)
 {
     /* System generated locals */
     integer i__1, i__2;
+
+    /* Builtin functions */
+    integer i_len(char *, ftnlen);
 
     /* Local variables */
     integer l, n;
@@ -79,7 +82,7 @@ static integer c__1 = 1;
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     I   DAS file handle. */
 /*     FIRST, */
@@ -90,38 +93,51 @@ static integer c__1 = 1;
 
 /* $ Detailed_Input */
 
-/*     HANDLE         is a file handle of a DAS file opened for writing. */
+/*     HANDLE   is a file handle of a DAS file opened for writing. */
 
 /*     FIRST, */
-/*     LAST           are the first and last of a range of DAS logical */
-/*                    addresses of characters.  These addresses satisfy */
-/*                    the inequality */
+/*     LAST     are the first and last of a range of DAS logical */
+/*              addresses of characters. These addresses satisfy */
+/*              the inequality */
 
-/*                       1  <   FIRST   <   LAST   <   LASTC */
-/*                          _           -          - */
+/*                 1  <=   FIRST   <=   LAST   <=   LASTC */
 
-/*                    where LASTC is the last character logical address */
-/*                    in use in the DAS file designated by HANDLE. */
+/*              where LASTC is the last character logical address */
+/*              in use in the DAS file designated by HANDLE. */
 
 /*     BPOS, */
-/*     EPOS           are begin and end character positions that define */
-/*                    the substrings of the input array that are to be */
-/*                    added to the DAS file. */
+/*     EPOS     are the begin and end character positions that define the */
+/*              substrings in each of the elements of the input array */
+/*              that are to replace the data in the range of DAS */
+/*              character addresses given by FIRST and LAST. */
 
-/*     DATA           is an array of character strings.  The contents of */
-/*                    the specified substrings of the elements of the */
-/*                    array DATA will be written to the indicated DAS */
-/*                    file in order:  DATA(1)(BPOS:BPOS) will be written */
-/*                    to character logical address FIRST; */
-/*                    DATA(1)(BPOS+1:BPOS+1) will be written to */
-/*                    the character logical address FIRST+1, and so on; */
-/*                    in this ordering scheme, character (BPOS:BPOS) of */
-/*                    DATA(I+1) is the successor of character (EPOS:EPOS) */
-/*                    of DATA(I). */
+/*     DATA     is an array of strings. The contents of the specified */
+/*              substrings of the elements of the array DATA will be */
+/*              written to the indicated DAS file in order: */
+/*              DATA(1)(BPOS:BPOS) will be written to character logical */
+/*              address FIRST; DATA(1)(BPOS+1:BPOS+1) will be written to */
+/*              the character logical address FIRST+1, and so on; in this */
+/*              ordering scheme, character (BPOS:BPOS) of DATA(I+1) is */
+/*              the successor of character (EPOS:EPOS) of DATA(I). */
+
+/*              DATA must be declared at least as */
+
+/*                 CHARACTER*(EPOS)      DATA   ( R ) */
+
+/*              with the dimension R being at least */
+
+/*                 R = INT( ( LAST - FIRST + SUBLEN ) / SUBLEN ) */
+
+/*              and SUBLEN, the length of each of the substrings in */
+/*              the array to be written to the DAS file, being */
+
+/*                 SUBLEN  =  EPOS - BPOS + 1 */
 
 /* $ Detailed_Output */
 
 /*     None. */
+
+/*     See $Particulars for a description of the effect of this routine. */
 
 /* $ Parameters */
 
@@ -129,32 +145,48 @@ static integer c__1 = 1;
 
 /* $ Exceptions */
 
-/*     1)  If the input file handle is invalid, the error will be */
-/*         diagnosed by routines called by this routine. */
+/*     1)  If the input file handle is invalid, an error is signaled by */
+/*         a routine in the call tree of this routine. */
 
 /*     2)  Only logical addresses that already contain data may be */
-/*         updated:  if either FIRST or LAST are outside the range */
+/*         updated: if either FIRST or LAST are outside the range */
 
-/*           [ 1,  LASTC ] */
+/*            [ 1,  LASTC ] */
 
 /*         where LASTC is the last character logical address that */
 /*         currently contains data in the indicated DAS file, the error */
-/*         SPICE(INVALIDADDRESS) is signalled.  The DAS file will not be */
+/*         SPICE(INVALIDADDRESS) is signaled. The DAS file will not be */
 /*         modified. */
 
-/*     3)  If FIRST > LAST but both addresses are valid, this routine */
-/*         will not modify the indicated DAS file.  No error will be */
-/*         signalled. */
+/*     3)  If EPOS or BPOS are outside of the range */
 
-/*     4)  If an I/O error occurs during the data update attempted */
-/*         by this routine, the error will be diagnosed by routines */
-/*         called by this routine.  FIRST and LAST will not be modified. */
+/*            [  1,  LEN( DATA(1) )  ] */
+
+/*         the error SPICE(INVALIDINDEX) is signaled. */
+
+/*     4)  If BPOS is greater than EPOS, the error */
+/*         SPICE(INDICESOUTOFORDER) is signaled. */
+
+/*     5)  If FIRST > LAST but both addresses are valid, this routine */
+/*         will not modify the indicated DAS file. No error will be */
+/*         signaled. */
+
+/*     6)  If an I/O error occurs during the data update attempted */
+/*         by this routine, the error is signaled by a routine in the */
+/*         call tree of this routine. FIRST and LAST will not be */
+/*         modified. */
 
 /* $ Files */
 
 /*     See the description of the argument HANDLE in $Detailed_Input. */
 
 /* $ Particulars */
+
+/*     DAS is a low-level format meant to store and transmit data. As */
+/*     such, character data in DAS files are not interpreted by SPICELIB */
+/*     DAS input or output routines. There are no limits on which */
+/*     character values may be placed in the virtual character array of a */
+/*     DAS file. */
 
 /*     This routine replaces the character data in the specified range */
 /*     of logical addresses within a DAS file with the contents of the */
@@ -163,94 +195,166 @@ static integer c__1 = 1;
 /*     The actual physical write operations that update the indicated */
 /*     DAS file with the contents of the input array DATA may not take */
 /*     place before this routine returns, since the DAS system buffers */
-/*     data that is written as well as data that is read.  In any case, */
+/*     data that are written as well as data that are read. In any case, */
 /*     the data will be flushed to the file at the time the file is */
-/*     closed, if not earlier.  A physical write of all buffered */
+/*     closed, if not earlier. A physical write of all buffered */
 /*     records can be forced by calling the SPICELIB routine DASWBR */
 /*     (DAS, write buffered records). */
 
 /*     In order to append character data to a DAS file, filling in a */
 /*     range of character logical addresses that starts immediately */
 /*     after the last character logical address currently in use, the */
-/*     SPICELIB routines DASADS ( DAS add data, substring ) or DASADC */
-/*     ( DAS add data, character ) should be used. */
+/*     SPICELIB routine DASADC (DAS add data, character) should be */
+/*     used. */
 
 /* $ Examples */
 
-/*     1)  Write to addresses 1 through 320 in a DAS file in */
-/*         random-access fashion by updating the file.  Recall */
-/*         that data must be present in the file before it can */
-/*         be updated. */
+/*     The numerical results shown for this example may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
+
+/*     1) The following example demonstrates the capabilities of the */
+/*        DAS character data routines. The reader should notice that */
+/*        in these interfaces, the character data are treated not as */
+/*        strings (or arrays of strings) but as a stream of single */
+/*        characters: DAS character data are not limited to */
+/*        human-readable text. For example, one can store images or */
+/*        DEM data as DAS character data. */
+
+/*        The example shows how to add a variable amount of character */
+/*        data to a new DAS file, how to update some of the character */
+/*        logical addresses within that file, and how to read that */
+/*        data out to a different array. */
 
 
-/*                  PROGRAM UP */
+/*        Example code begins here. */
 
-/*                  CHARACTER*(80)        BUFFER ( 10 ) */
-/*                  CHARACTER*(80)        LINE */
-/*                  CHARACTER*(4)         TYPE */
 
-/*                  INTEGER               FIRST */
-/*                  INTEGER               HANDLE */
-/*                  INTEGER               I */
-/*                  INTEGER               LAST */
+/*              PROGRAM DASUDC_EX1 */
+/*              IMPLICIT NONE */
 
-/*            C */
-/*            C     Open the new DAS file RAND.DAS.  Use the file name */
-/*            C     as the internal file name. */
-/*            C */
-/*                  TYPE = 'TEST' */
-/*                  CALL DASONW ( 'TEST.DAS', TYPE, 'TEST.DAS', HANDLE ) */
+/*        C */
+/*        C     Local parameters. */
+/*        C */
+/*              CHARACTER*(*)         FNAME */
+/*              PARAMETER           ( FNAME = 'dasudc_ex1.das' ) */
 
-/*            C */
-/*            C     Append 320 characters to the file, thereby reserving */
-/*            C     enough room for 10 strings of 32 characters.  After */
-/*            C     the data is present, we're free to update it in any */
-/*            C     order we please. */
-/*            C */
-/*                  LINE = ' ' */
+/*              CHARACTER*(*)         TYPE */
+/*              PARAMETER           ( TYPE  = 'TEST'           ) */
 
-/*                  DO I = 1, 10 */
-/*                    CALL DASADC ( HANDLE, 32, 1, 32, LINE ) */
-/*                  END DO */
+/*        C */
+/*        C     Local variables. */
+/*        C */
+/*              CHARACTER*(22)        CDATIN ( 3  ) */
+/*              CHARACTER*(30)        CDATOU ( 10 ) */
 
-/*            C */
-/*            C     Now the character logical addresses 1:320 can be */
-/*            C     written to in random-access fashion.  We'll fill */
-/*            C     them in by writing 32 characters at a time, starting */
-/*            C     with addresses 289:320 and working backwards. */
-/*            C */
-/*                  FIRST = 321 */
+/*              INTEGER               HANDLE */
+/*              INTEGER               I */
 
-/*                  DO I = 10, 1, -1 */
+/*              DATA CDATOU  / '..............................', */
+/*             .               '..............................', */
+/*             .               '..............................', */
+/*             .               '..............................', */
+/*             .               '..............................', */
+/*             .               '..............................', */
+/*             .               '..............................', */
+/*             .               '..............................', */
+/*             .               '         1         2         3', */
+/*             .               '123456789012345678901234567890' / */
 
-/*                     LAST  = FIRST - 1 */
-/*                     FIRST = LAST  - 32 */
+/*        C */
+/*        C     Open a new DAS file. Use the file name as the internal */
+/*        C     file name, and reserve no records for comments. */
+/*        C */
+/*              CALL DASONW ( FNAME, TYPE, FNAME, 0, HANDLE ) */
 
-/*                     LINE = 'This is the # line.' */
-/*                     CALL REPMOT ( LINE,  '#',    I,   'L',    LINE ) */
-/*                     CALL DASUDC ( HANDLE, FIRST, LAST, 1, 32, LINE ) */
+/*        C */
+/*        C     Set the input data. Note that these data will be */
+/*        C     considered as a binary data stream: DAS character data */
+/*        C     are not limited to human-readable text. For example, */
+/*        C     one can store images or DEM data as DAS character data. */
+/*        C */
+/*              CDATIN ( 1 ) = '--F-345678901234567890' */
+/*              CDATIN ( 2 ) = '--S-345678901234567890' */
+/*              CDATIN ( 3 ) = '--T-IRDxxxxxxxxxxxxxxx' */
 
-/*                  END DO */
+/*        C */
+/*        C     Add the last 20 characters of the first two elements */
+/*        C     of CDATIN, and the 3rd character from the third one. */
+/*        C */
+/*              CALL DASADC ( HANDLE, 41, 3, 22, CDATIN ) */
 
-/*            C */
-/*            C     Close the file. */
-/*            C */
-/*                  CALL DASCLS ( HANDLE ) */
+/*        C */
+/*        C     Update the 10th, 20th and 30th character in the DAS */
+/*        C     file with a vertical bar. */
+/*        C */
+/*              DO I = 1, 3 */
 
-/*            C */
-/*            C     Now make sure that we updated the file properly. */
-/*            C     Open the file for reading and dump the contents */
-/*            C     of the character logical addresses 1:320. */
-/*            C */
-/*                  CALL DASOPR ( 'RAND.DAS',  HANDLE       ) */
+/*                 CALL DASUDC ( HANDLE, I*10, I*10, 1, 1, '|' ) */
 
-/*                  CALL DASRDC (  HANDLE,  1, 320, 1, 32, BUFFER ) */
+/*              END DO */
 
-/*                  WRITE (*,*) 'Contents of RAND.DAS:' */
-/*                  WRITE (*,*) ' ' */
-/*                  WRITE (*,*) BUFFER(1:32) */
+/*        C */
+/*        C     Close the file. */
+/*        C */
+/*              CALL DASCLS ( HANDLE ) */
 
-/*                  END */
+/*        C */
+/*        C     Now verify the addition of data by opening the */
+/*        C     file for read access and retrieving the data. */
+/*        C */
+/*              CALL DASOPR ( FNAME, HANDLE ) */
+
+/*        C */
+/*        C     Read the 41 characters that we stored on the DAS */
+/*        C     file. Update the data on the CDATOU array, placing */
+/*        C     6 characters on each element, starting from the */
+/*        C     10th position. */
+/*        C */
+/*              CALL DASRDC ( HANDLE, 1, 41, 10, 15, CDATOU ) */
+
+/*        C */
+/*        C     Dump the data to the screen. Note that the last */
+/*        C     three lines should remain unmodified, and that */
+/*        C     only 5 characters will be written on the 7th line. */
+/*        C */
+/*              WRITE (*,*) */
+/*              WRITE (*,*) 'Data from "', FNAME, '":' */
+/*              WRITE (*,*) */
+
+/*              DO I = 1, 10 */
+/*                 WRITE (*,*) CDATOU(I) */
+/*              END DO */
+
+/*        C */
+/*        C     Close the file. */
+/*        C */
+/*              CALL DASCLS ( HANDLE ) */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*         Data from "dasudc_ex1.das": */
+
+/*         .........F-3456............... */
+/*         .........789|12............... */
+/*         .........345678............... */
+/*         .........9|S-34............... */
+/*         .........56789|............... */
+/*         .........123456............... */
+/*         .........7890T................ */
+/*         .............................. */
+/*                  1         2         3 */
+/*         123456789012345678901234567890 */
+
+
+/*        Note that after run completion, a new DAS file exists in the */
+/*        output directory. */
 
 /* $ Restrictions */
 
@@ -262,26 +366,44 @@ static integer c__1 = 1;
 
 /* $ Author_and_Institution */
 
-/*     K.R. Gehringer (JPL) */
-/*     N.J. Bachman   (JPL) */
-/*     W.L. Taber     (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
 
-/* -    SPICELIB Version 1.3.0 10-APR-2014 (NJB) */
+/* -    SPICELIB Version 2.0.0, 19-MAY-2021 (NJB) (JDR) */
+
+/*        Added error checks for invalid begin and end indices BPOS */
+/*        and EPOS. */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Updated entries in $Exceptions and $Revisions sections and */
+/*        removed reference to nonexistent API from $Particulars. */
+
+/*        Edited the header to comply with NAIF standard. */
+
+/*        Replaced example code with one that demonstrates the usage and */
+/*        effect of all DAS character data routines. */
+
+/*        Updated entries in $Revisions section. */
+
+/* -    SPICELIB Version 1.3.0, 10-APR-2014 (NJB) */
 
 /*        Deleted declarations of unused parameters. */
 
 /*        Corrected header comments: routine that flushes */
 /*        written, buffered records is DASWBR, not DASWUR. */
 
-/* -    SPICELIB Version 1.2.1 19-DEC-1995 (NJB) */
+/* -    SPICELIB Version 1.2.1, 19-DEC-1995 (NJB) */
 
 /*        Corrected title of permuted index entry section. */
 
 /* -    SPICELIB Version 1.2.0, 12-MAY-1995 (NJB) */
 
-/*        Bug fix:  routine handled values of BPOS incorrectly when */
+/*        Bug fix: routine handled values of BPOS incorrectly when */
 /*        BPOS > 1. */
 
 /* -    SPICELIB Version 1.1.0, 12-MAY-1994 (KRG) (NJB) */
@@ -289,11 +411,11 @@ static integer c__1 = 1;
 /*        Test of FAILED() added to loop termination conditions. */
 
 /*        Removed references to specific DAS file open routines in the */
-/*        $ Detailed_Input section of the header. This was done in order */
+/*        $Detailed_Input section of the header. This was done in order */
 /*        to minimize documentation changes if the DAS open routines ever */
 /*        change. */
 
-/*        Modified the $ Examples section to demonstrate the new ID word */
+/*        Modified the $Examples section to demonstrate the new ID word */
 /*        format which includes a file type and to include a call to the */
 /*        new routine DASONW, open new for write, which makes use of the */
 /*        file type. Also,  a variable for the type of the file to be */
@@ -312,9 +434,9 @@ static integer c__1 = 1;
 
 /* -    SPICELIB Version 1.2.0, 12-MAY-1995 (NJB) */
 
-/*        Bug fix:  routine handled values of BPOS incorrectly when */
-/*        BPOS > 1.  This was due to the incorrect initialization */
-/*        of the internal variables CHR and ELT.  The initialization */
+/*        Bug fix: routine handled values of BPOS incorrectly when */
+/*        BPOS > 1. This was due to the incorrect initialization */
+/*        of the internal variables CHR and ELT. The initialization */
 /*        was corrected. */
 
 /* -    SPICELIB Version 1.1.0, 12-MAY-1994 (KRG) (NJB) */
@@ -322,19 +444,6 @@ static integer c__1 = 1;
 /*        Tests of FAILED() added to loop termination conditions. */
 /*        Without these tests, infinite loops could result if DASA2L or */
 /*        DASURC signaled an error inside the loops. */
-
-/*        Removed references to specific DAS file open routines in the */
-/*        $ Detailed_Input section of the header. This was done in order */
-/*        to minimize documentation changes if the DAS open routines ever */
-/*        change. */
-
-/*        Modified the $ Examples section to demonstrate the new ID word */
-/*        format which includes a file type and to include a call to the */
-/*        new routine DASONW, open new for write, which makes use of the */
-/*        file type. Also,  a variable for the type of the file to be */
-/*        created was added. */
-
-/* -    SPICELIB Version 1.0.0, 12-NOV-1992 (NJB) (WLT) */
 
 /* -& */
 
@@ -351,9 +460,8 @@ static integer c__1 = 1;
 
     if (return_()) {
 	return 0;
-    } else {
-	chkin_("DASUDC", (ftnlen)6);
     }
+    chkin_("DASUDC", (ftnlen)6);
 
 /*     Get the last logical addresses in use in this DAS file. */
 
@@ -367,6 +475,41 @@ static integer c__1 = 1;
 	errint_("#", last, (ftnlen)1);
 	errint_("#", &lastc, (ftnlen)1);
 	sigerr_("SPICE(INVALIDADDRESS)", (ftnlen)21);
+	chkout_("DASUDC", (ftnlen)6);
+	return 0;
+    }
+
+/*     Make sure BPOS and EPOS are valid and compatible with the string */
+/*     length of the input array. */
+
+    if (*bpos < 1 || *bpos > i_len(data, data_len)) {
+	setmsg_("String begin index must be in the range #:# but was #.", (
+		ftnlen)54);
+	errint_("#", &c__1, (ftnlen)1);
+	i__1 = i_len(data, data_len);
+	errint_("#", &i__1, (ftnlen)1);
+	errint_("#", bpos, (ftnlen)1);
+	sigerr_("SPICE(INVALIDINDEX)", (ftnlen)19);
+	chkout_("DASUDC", (ftnlen)6);
+	return 0;
+    }
+    if (*epos < 1 || *epos > i_len(data, data_len)) {
+	setmsg_("String end index must be in the range #:# but was #.", (
+		ftnlen)52);
+	errint_("#", &c__1, (ftnlen)1);
+	i__1 = i_len(data, data_len);
+	errint_("#", &i__1, (ftnlen)1);
+	errint_("#", epos, (ftnlen)1);
+	sigerr_("SPICE(INVALIDINDEX)", (ftnlen)19);
+	chkout_("DASUDC", (ftnlen)6);
+	return 0;
+    }
+    if (*bpos > *epos) {
+	setmsg_("String begin index # must be less than or equal to the end "
+		"index #.", (ftnlen)67);
+	errint_("#", bpos, (ftnlen)1);
+	errint_("#", epos, (ftnlen)1);
+	sigerr_("SPICE(INDICESOUTOFORDER)", (ftnlen)24);
 	chkout_("DASUDC", (ftnlen)6);
 	return 0;
     }

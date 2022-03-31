@@ -10,7 +10,7 @@
 static integer c__2 = 2;
 static integer c__6 = 6;
 
-/* $Procedure      SPKR15 ( Read SPK record from segment, type 15 ) */
+/* $Procedure SPKR15 ( Read SPK record from segment, type 15 ) */
 /* Subroutine */ int spkr15_(integer *handle, doublereal *descr, doublereal *
 	et, doublereal *record)
 {
@@ -32,8 +32,8 @@ static integer c__6 = 6;
 
 /* $ Abstract */
 
-/*     This routine reads a single spk data record from a segment of */
-/*     type 15 (Precessing Conic Propagation). */
+/*     Read a single SPK data record from a segment of type 15 */
+/*     (Precessing Conic Propagation). */
 
 /* $ Disclaimer */
 
@@ -71,7 +71,7 @@ static integer c__6 = 6;
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     I   File handle. */
 /*     DESCR      I   Segment descriptor. */
@@ -81,35 +81,35 @@ static integer c__6 = 6;
 /* $ Detailed_Input */
 
 /*     HANDLE, */
-/*     DESCR       are the file handle and segment descriptor for */
-/*                 a SPK segment of type 15. */
+/*     DESCR    are the file handle and segment descriptor for */
+/*              a SPK segment of type 15. */
 
-/*     ET          is a target epoch, for which a data record from */
-/*                 a specific segment is required. */
+/*     ET       is a target epoch, for which a data record from */
+/*              a specific segment is required. */
 
 /* $ Detailed_Output */
 
-/*     RECORD      is the record from the specified segment which, */
-/*                 when evaluated at epoch ET, will give the state */
-/*                 (position and velocity) of some body, relative */
-/*                 to some center, in some inertial reference frame. */
+/*     RECORD   is the record from the specified segment which, */
+/*              when evaluated at epoch ET, will give the state */
+/*              (position and velocity) of some body, relative */
+/*              to some center, in some inertial reference frame. */
 
 /* $ Parameters */
 
 /*     None. */
 
+/* $ Exceptions */
+
+/*     1)  If the segment specified by DESCR is not a type 15 segment, */
+/*         the error SPICE(WRONGSPKTYPE) is signaled. */
+
+/*     2)  A type 15 segment should have exactly 16 values. If this */
+/*         is not the case, the error SPICE(MALFORMEDSEGMENT) is */
+/*         signaled. */
+
 /* $ Files */
 
 /*     See argument HANDLE. */
-
-/* $ Exceptions */
-
-/*     1) If the segment specified by DESCR is not a type 15 segment */
-/*        the error 'SPICE(WRONGSPKTYPE)' will be signalled. */
-
-/*     2) A type 15 segment should have exactly 16 values.  If this */
-/*        is not the case the error 'SPICE(MALFORMEDSEGMENT)' is */
-/*        signalled. */
 
 /* $ Particulars */
 
@@ -147,13 +147,12 @@ static integer c__6 = 6;
 
 /*     Except for J2, units are radians, km, seconds. */
 
-
 /* $ Examples */
 
 /*     The data returned by the SPKRnn routine is in its rawest form, */
-/*     taken directly from the segment.  As such, it will be meaningless */
+/*     taken directly from the segment. As such, it will be meaningless */
 /*     to a user unless he/she understands the structure of the data type */
-/*     completely.  Given that understanding, however, the SPKRnn */
+/*     completely. Given that understanding, however, the SPKRnn */
 /*     routines might be used to "dump" and check segment data for a */
 /*     particular epoch. */
 
@@ -178,21 +177,26 @@ static integer c__6 = 6;
 /*                  . */
 /*           END IF */
 
-
 /* $ Restrictions */
+
+/*     None. */
+
+/* $ Literature_References */
 
 /*     None. */
 
 /* $ Author_and_Institution */
 
-/*      S.   Schlaifer  (JPL) */
-/*      W.L. Taber      (JPL) */
-
-/* $ Literature_References */
-
-/*      None. */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     S. Schlaifer       (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.1, 27-AUG-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.1.0, 07-SEP-2001 (EDW) */
 
@@ -204,17 +208,17 @@ static integer c__6 = 6;
 /* -& */
 /* $ Index_Entries */
 
-/*     read record from type_15 spk segment */
+/*     read record from type_15 SPK segment */
 
 /* -& */
 
-/*     SPICELIB Funcions */
+/*     SPICELIB Functions */
 
 
 /*     Local Variables */
 
 
-/*     The differnce between the first and last address of a type 15 */
+/*     The difference between the first and last address of a type 15 */
 /*     segment should be 15. */
 
 

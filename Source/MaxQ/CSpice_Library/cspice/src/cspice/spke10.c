@@ -30,33 +30,34 @@ static integer c__6 = 6;
     static doublereal dwdt, mypi;
     extern /* Subroutine */ int vequ_(doublereal *, doublereal *), mxvg_(
 	    doublereal *, doublereal *, integer *, integer *, doublereal *);
-    static doublereal my2pi, w;
+    static doublereal w;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    static doublereal denom, precm[36]	/* was [6][6] */;
+    static doublereal denom;
     extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *),
 	     vlcom_(doublereal *, doublereal *, doublereal *, doublereal *, 
 	    doublereal *);
-    static doublereal vcomp[3], numer;
-    extern doublereal twopi_(void);
-    static doublereal s1[6], s2[6], t1, t2;
+    static doublereal vcomp[3], numer, s1[6], s2[6], t1, t2;
     extern logical failed_(void);
     extern doublereal pi_(void);
     static doublereal dargdt;
     extern /* Subroutine */ int vlcomg_(integer *, doublereal *, doublereal *,
 	     doublereal *, doublereal *, doublereal *), chkout_(char *, 
 	    ftnlen);
-    static doublereal invprc[36]	/* was [6][6] */, tmpsta[6];
-    extern /* Subroutine */ int zzteme_(doublereal *, doublereal *);
+    static doublereal tmpsta[6];
+    extern /* Subroutine */ int zzteme_(doublereal *, doublereal *, 
+	    doublereal *);
     extern logical return_(void);
-    extern /* Subroutine */ int invstm_(doublereal *, doublereal *);
     static doublereal arg;
     extern /* Subroutine */ int xxsgp4e_(doublereal *, doublereal *), 
 	    xxsgp4i_(doublereal *, doublereal *, integer *);
+    static doublereal j2tm[36]	/* was [6][6] */, tm2j[36]	/* was [6][6] 
+	    */;
 
 /* $ Abstract */
 
 /*     Evaluate a single SPK data record from a segment of type 10 */
-/*     (NORAD two-line element sets.). */
+/*     (NORAD two-line element sets.). This evaluator uses algorithms */
+/*     as described in Vallado 2006 [4]. */
 
 /* $ Disclaimer */
 
@@ -196,6 +197,11 @@ static integer c__6 = 6;
 
 /* $ Version */
 
+/* -    SPICELIB Version 1.0.0, MAY-27-2020 (EDW) */
+
+/*        Updated descriptions of GEOPHS constants to be consistent */
+/*        with what's used in other routines. */
+
 /* -    SPICELIB Version 1.0.0 22-JUL-2014 (EDW) */
 
 /* -& */
@@ -211,18 +217,20 @@ static integer c__6 = 6;
 /*      Gravitational constant indices. */
 
 
-/*     The following parameters give the location in the GEOPHS */
+/*     The following parameters give the indices in the GEOPHS */
 /*     array of the various geophysical parameters needed for */
 /*     the two line element sets. */
 
-/*     K_J2  --- location of J2 */
-/*     K_J3  --- location of J3 */
-/*     K_J4  --- location if J4 */
-/*     K_KE  --- location of KE = sqrt(GM) in earth-radii**1.5/MIN */
-/*     K_QO  --- upper bound of atmospheric model in KM */
-/*     K_SO  --- lower bound of atmospheric model in KM */
-/*     K_ER  --- earth equatorial radius in KM. */
-/*     K_AE  --- distance units/earth radius */
+/*     K_J2  --- index of J2 gravitational harmonic for earth */
+/*     K_J3  --- index of J3 gravitational harmonic for earth */
+/*     K_J4  --- index of J4 gravitational harmonic for earth */
+/*     K_KE  --- index of KE = sqrt(GM) in earth-radii**1.5/MIN */
+/*     K_QO  --- index of high altitude bound for atmospheric */
+/*               model in km */
+/*     K_SO  --- index of low altitude bound for atmospheric */
+/*               model in km */
+/*     K_ER  --- index of earth equatorial radius in km */
+/*     K_AE  --- index of distance units/earth radius */
 
 
 /*     Operation mode values, OPMODE. */
@@ -243,7 +251,7 @@ static integer c__6 = 6;
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     ET         I   Target epoch. */
 /*     RECORD     I   Data record. */
@@ -251,69 +259,66 @@ static integer c__6 = 6;
 
 /* $ Detailed_Input */
 
-/*     ET          is a target epoch, specified as ephemeris seconds past */
-/*                 J2000, at which a state vector is to be computed. */
+/*     ET       is a target epoch, specified as ephemeris seconds past */
+/*              J2000, at which a state vector is to be computed. */
 
-/*     RECORD      is a data record which, when evaluated at epoch ET, */
-/*                 will give the state (position and velocity) of some */
-/*                 body, relative to some center, in some inertial */
-/*                 reference frame. */
+/*     RECORD   is a data record which, when evaluated at epoch ET, */
+/*              will give the state (position and velocity) of some */
+/*              body, relative to some center, in some inertial */
+/*              reference frame. */
 
-/*                 The structure of RECORD is: */
+/*              The structure of RECORD is: */
 
-/*                     RECORD(1) */
-/*                        .            Geophysical Constants such as */
-/*                        .            GM, J2, J3, J4, etc. */
-/*                        . */
-/*                     RECORD(NGEO) */
+/*                  RECORD(1) */
+/*                     .            Geophysical Constants such as */
+/*                     .            GM, J2, J3, J4, etc. */
+/*                     . */
+/*                  RECORD(NGEO) */
 
-/*                     RECORD(NGEO + 1) */
-/*                        . */
-/*                        .            elements and epoch for the body */
-/*                        .            at epoch 1. */
-/*                        . */
-/*                     RECORD(NGEO + NELEMS ) */
+/*                  RECORD(NGEO + 1) */
+/*                     . */
+/*                     .            elements and epoch for the body */
+/*                     .            at epoch 1. */
+/*                     . */
+/*                  RECORD(NGEO + NELEMS ) */
 
-/*                     RECORD(NGEO + NELEMS + 1) */
-/*                        . */
-/*                        .            elements and epoch for the body */
-/*                        .            at epoch 2. */
-/*                        . */
-/*                     RECORD(NGEO + 2*NELEMS ) */
+/*                  RECORD(NGEO + NELEMS + 1) */
+/*                     . */
+/*                     .            elements and epoch for the body */
+/*                     .            at epoch 2. */
+/*                     . */
+/*                  RECORD(NGEO + 2*NELEMS ) */
 
-/*                 Epoch 1 and epoch 2 are the times in the segment that */
-/*                 bracket ET. If ET is less than the first time in the */
-/*                 segment then both epochs 1 and 2 are equal to the */
-/*                 first time. And if ET is greater than the last time */
-/*                 then, epochs 1 and 2 are set equal to this last time. */
+/*              Epoch 1 and epoch 2 are the times in the segment that */
+/*              bracket ET. If ET is less than the first time in the */
+/*              segment then both epochs 1 and 2 are equal to the */
+/*              first time. And if ET is greater than the last time */
+/*              then, epochs 1 and 2 are set equal to this last time. */
 
 /* $ Detailed_Output */
 
-/*     STATE       is the state produced by evaluating RECORD at ET. */
-/*                 Units are km and km/sec. */
+/*     STATE    is the state produced by evaluating RECORD at ET. */
+/*              Units are km and km/sec relative to the J2000 */
+/*              reference frame. */
 
 /* $ Parameters */
 
-/*     NGEO        Number of geophysical constants for SGP4 SPK records. */
+/*     NGEO     is the number of geophysical constants for SGP4 SPK */
+/*              records. */
 
-/*     AFSPC       set the SGP4 propagator to use the original */
-/*                 Spacke Track #3 GST algorithm [1]; value defined in */
-/*                 zzsgp4.inc. The other option for routines */
-/*                 using this value is IMPRVD which causes the algorithm */
-/*                 to use calculate GST as described in */
-/*                 Vallado 2006 [4]. */
+/*     AFSPC    set the SGP4 propagator to use the original */
+/*              Space Track #3 GST algorithm as described in Hoots [1]; */
+/*              value defined in zzsgp4.inc. */
 
-/*     IMPRVD      set the SGP4 propagator to use the improved */
-/*                 GST algorithm [1]; value defined in */
-/*                 zzsgp4.inc. The other option for routines */
-/*                 using this value is AFSPC which causes the algorithm */
-/*                 to use calculate GST as described in */
-/*                 Vallado 2006 [4]. */
+/*     IMPRVD   set the SGP4 propagator to use the improved GST */
+/*              algorithm as defined in Vallado [4]; value defined in */
+/*              zzsgp4.inc. */
 
 /* $ Exceptions */
 
-/*     1) If a problem occurs when evaluating the two-line elements, */
-/*         an error will signal from XXSGPeI or XSGP4E. */
+/*     1)  If a problem occurs when evaluating the two-line elements, an */
+/*         error is signaled by a routine in the call tree of this */
+/*         routine. */
 
 /* $ Files */
 
@@ -340,9 +345,9 @@ static integer c__6 = 6;
 /*     SPK files. */
 
 /*     The data returned by the SPKRnn routine is in its rawest form, */
-/*     taken directly from the segment.  As such, it will be meaningless */
+/*     taken directly from the segment. As such, it will be meaningless */
 /*     to a user unless he/she understands the structure of the data type */
-/*     completely.  Given that understanding, however, the SPKRnn */
+/*     completely. Given that understanding, however, the SPKRnn */
 /*     routines might be used to examine raw segment data before */
 /*     evaluating it with the SPKEnn routines. */
 
@@ -378,30 +383,38 @@ static integer c__6 = 6;
 
 /* $ Literature_References */
 
-/*   [1] Hoots, F. R., and Roehrich, R. L. 1980. "Models for */
-/*       Propagation of the NORAD Element Sets." Spacetrack Report #3. */
-/*       U.S. Air Force: Aerospace Defense Command. */
+/*     [1]  F. Hoots and R. Roehrich, "Spacetrack Report #3: Models for */
+/*          Propagation of the NORAD Element Sets," U.S. Air Force */
+/*          Aerospace Defense Command, Colorado Springs, CO, 1980. */
 
-/*   [2] Hoots, Felix R. "Spacetrack Report #6: Models for Propagation */
-/*       of Space Command Element Sets." Space Command, */
-/*       U. S. Air Force, CO. */
+/*     [2]  F. Hoots, "Spacetrack Report #6: Models for Propagation of */
+/*          Space Command Element Sets,"  U.S. Air Force Aerospace */
+/*          Defense Command, Colorado Springs, CO, 1986. */
 
-/*   [3] Hoots, Felix R., P. W. Schumacher, and R. A. Glover. 2004. */
-/*       History of Analytical Orbit Modeling in the U. S. Space */
-/*       Surveillance System. Journal of Guidance, Control, and */
-/*       Dynamics. 27(2):174-185. */
+/*     [3]  F. Hoots, P. Schumacher and R. Glover, "History of Analytical */
+/*          Orbit Modeling in the U. S. Space Surveillance System," */
+/*          Journal of Guidance, Control, and Dynamics. 27(2):174-185, */
+/*          2004. */
 
-/*   [4] Vallado, David, Crawford, Paul, Hujsak, Richard, */
-/*       and Kelso, T.S. 2006. Revisiting Spacetrack Report #3. Paper */
-/*       AIAA 2006-6753 presented at the AIAA/AAS Astrodynamics */
-/*       Specialist Conference, August 21-24, 2006. Keystone, CO. */
+/*     [4]  D. Vallado, P. Crawford, R. Hujsak and T. Kelso, "Revisiting */
+/*          Spacetrack Report #3," paper AIAA 2006-6753 presented at the */
+/*          AIAA/AAS Astrodynamics Specialist Conference, Keystone, CO., */
+/*          August 21-24, 2006. */
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     W.L. Taber      (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 3.1.0, 10-OCT-2021 (JDR) (EDW) */
+
+/*        Use of modified ZZTEME to eliminate a matrix inversion. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 3.0.0, 18-FEB-2015 (EDW) */
 
@@ -420,12 +433,12 @@ static integer c__6 = 6;
 /*        Updated to remove non-standard use of duplicate arguments */
 /*        in MTXV and VADD calls. */
 
-/* -    SPICELIB Version 1.0.0 18-JUL-1997 (WLT) */
+/* -    SPICELIB Version 1.0.0, 18-JUL-1997 (WLT) */
 
 /* -& */
 /* $ Index_Entries */
 
-/*     evaluate type_10 spk segment */
+/*     evaluate type_10 SPK segment */
 
 /* -& */
 
@@ -454,7 +467,6 @@ static integer c__6 = 6;
     if (first) {
 	first = FALSE_;
 	mypi = pi_();
-	my2pi = twopi_();
     }
 
 /*     Fetch the two epochs stored in the record. */
@@ -567,19 +579,18 @@ static integer c__6 = 6;
 	}
     }
 
-/*     Finally, convert the TEME state to J2000.  First get */
-/*     the rotation from J2000 to TEME... */
+/*     Finally, convert the TEME state to J2000.  First */
+/*     calculate the mapping from J2000 to TEME (J2TM), and from */
+/*     TEME to J2000 (TM2J) at time ET... */
 
-    zzteme_(et, precm);
+/*                         -1 */
+/*     Note that J2TM = TM2J */
 
-/*     ...now convert STATE to J2000. Invert the state transformation */
-/*     operator (important to correctly do this). */
+    zzteme_(et, j2tm, tm2j);
 
-    invstm_(precm, invprc);
+/*     ...now convert the TEME state to a J2000 state. */
 
-/*     Map STATE to the corresponding expression in J2000. */
-
-    mxvg_(invprc, state, &c__6, &c__6, tmpsta);
+    mxvg_(tm2j, state, &c__6, &c__6, tmpsta);
     moved_(tmpsta, &c__6, state);
     chkout_("SPKE10", (ftnlen)6);
     return 0;

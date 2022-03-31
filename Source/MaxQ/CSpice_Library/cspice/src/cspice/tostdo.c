@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      TOSTDO ( To Standard Output) */
+/* $Procedure TOSTDO ( To Standard Output) */
 /* Subroutine */ int tostdo_(char *line, ftnlen line_len)
 {
     /* Initialized data */
@@ -18,7 +18,7 @@
 
 /* $ Abstract */
 
-/*    Write a line of text to standard output. */
+/*     Write a line of text to standard output. */
 
 /* $ Disclaimer */
 
@@ -62,8 +62,8 @@
 
 /* $ Detailed_Input */
 
-/*     LINE       is a character string containing text to be written */
-/*                to standard output. */
+/*     LINE     is a character string containing text to be written */
+/*              to standard output. */
 
 /* $ Detailed_Output */
 
@@ -73,11 +73,13 @@
 
 /*     None. */
 
-/* $ Files */
-
-/*     None. */
-
 /* $ Exceptions */
+
+/*     1)  If an error occurs while attempting to write to the standard */
+/*         output, the error is signaled by a routine in the call tree of */
+/*         this routine. */
+
+/* $ Files */
 
 /*     None. */
 
@@ -92,7 +94,7 @@
 /* $ Examples */
 
 /*     Suppose you need to create a message to be printed on the */
-/*     user's terminal.  Here is how to use TOSTDO to handle this */
+/*     user's terminal. Here is how to use TOSTDO to handle this */
 /*     task. */
 
 /*        CALL TOSTDO ( 'Hello. '         ) */
@@ -105,18 +107,22 @@
 
 /*     None. */
 
-/* $ Author_and_Institution */
-
-/*     W.L. Taber      (JPL) */
-
 /* $ Literature_References */
 
 /*     None. */
 
+/* $ Author_and_Institution */
+
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
+
 /* $ Version */
 
-/* -    SPICELIB Version 1.0.0, 18-SEP-1996 (WLT) */
+/* -    SPICELIB Version 1.0.1, 03-JUN-2021 (JDR) */
 
+/*        Edited the header to comply with NAIF standard. */
+
+/* -    SPICELIB Version 1.0.0, 18-SEP-1996 (WLT) */
 
 /* -& */
 /* $ Index_Entries */

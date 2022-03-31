@@ -193,6 +193,11 @@
 
 /* $ Version */
 
+/* -    SPICELIB Version 1.0.0, MAY-27-2020 (EDW) */
+
+/*        Updated descriptions of GEOPHS constants to be consistent */
+/*        with what's used in other routines. */
+
 /* -    SPICELIB Version 1.0.0 22-JUL-2014 (EDW) */
 
 /* -& */
@@ -208,18 +213,20 @@
 /*      Gravitational constant indices. */
 
 
-/*     The following parameters give the location in the GEOPHS */
+/*     The following parameters give the indices in the GEOPHS */
 /*     array of the various geophysical parameters needed for */
 /*     the two line element sets. */
 
-/*     K_J2  --- location of J2 */
-/*     K_J3  --- location of J3 */
-/*     K_J4  --- location if J4 */
-/*     K_KE  --- location of KE = sqrt(GM) in earth-radii**1.5/MIN */
-/*     K_QO  --- upper bound of atmospheric model in KM */
-/*     K_SO  --- lower bound of atmospheric model in KM */
-/*     K_ER  --- earth equatorial radius in KM. */
-/*     K_AE  --- distance units/earth radius */
+/*     K_J2  --- index of J2 gravitational harmonic for earth */
+/*     K_J3  --- index of J3 gravitational harmonic for earth */
+/*     K_J4  --- index of J4 gravitational harmonic for earth */
+/*     K_KE  --- index of KE = sqrt(GM) in earth-radii**1.5/MIN */
+/*     K_QO  --- index of high altitude bound for atmospheric */
+/*               model in km */
+/*     K_SO  --- index of low altitude bound for atmospheric */
+/*               model in km */
+/*     K_ER  --- index of earth equatorial radius in km */
+/*     K_AE  --- index of distance units/earth radius */
 
 
 /*     Operation mode values, OPMODE. */

@@ -1,10 +1,10 @@
 /*
 
--Procedure expool_c ( Confirm the existence of a pool kernel variable )
+-Procedure expool_c ( Confirm the existence of a pooled kernel variable )
 
 -Abstract
 
-   Confirm the existence of a kernel variable in the kernel
+   Confirm the existence of a numeric kernel variable in the kernel
    pool.
 
 -Disclaimer
@@ -56,18 +56,18 @@
 
    VARIABLE  I/O  DESCRIPTION
    --------  ---  --------------------------------------------------
-   name       I   Name of the variable whose value is to be returned.
-   found      O   True when the variable is in the pool.
+   name       I   Name of a numeric kernel variable.
+   found      O   SPICETRUE when the variable is in the pool.
 
 -Detailed_Input
 
-   name       is the name of the variable whose values are to be
-              returned.
+   name        is the name of the numeric kernel variable whose
+               existence in the kernel pool is to be checked.
 
 -Detailed_Output
 
-   found      is true whenever the specified variable is included
-              in the pool.
+   found       is SPICETRUE whenever the specified variable is included
+               in the pool.
 
 -Parameters
 
@@ -75,11 +75,11 @@
 
 -Exceptions
 
-   1) If the input string pointer is null, the error SPICE(NULLPOINTER)
-      will be signaled.
+   1)  If the `name' input string pointer is null, the error
+       SPICE(NULLPOINTER) is signaled.
 
-   2) If the input string has length zero, the error SPICE(EMPTYSTRING)
-      will be signaled
+   2)  If the `name' input string has zero length, the error
+       SPICE(EMPTYSTRING) is signaled.
 
 -Files
 
@@ -88,25 +88,126 @@
 -Particulars
 
    This routine determines whether or not a numeric kernel pool
-   variable exists.  It does not detect the existence of
+   variable exists. It does not detect the existence of
    string valued kernel pool variables.
 
-   A better routine for determining the existence of kernel pool
-   variables is  dtpool_ which determines the
+   A better routine for determining the existence of numeric kernel
+   pool variables is the routine dtpool_c which determines the
    existence, size and type of kernel pool variables.
 
 -Examples
 
+   The numerical results shown for this example may differ across
+   platforms. The results depend on the SPICE kernels used as
+   input, the compiler and supporting libraries, and the machine
+   specific arithmetic implementation.
 
-   expool_c (  "BODY399_RADII", &found  );
+   1) The following code example demonstrates how to use expool_c
+      to confirm the existence of numeric kernel pool variables.
+      In the example, we will look for different variables;
+      some of them numeric, some string valued and some not
+      present in the kernel pool.
 
-    if ( found )
-       {
-        printf(  "BODY399_RADII is present in the kernel pool\n");
-       }
+      Use the kernel shown below; an IK defining two keywords
+      used to provide data for an instrument with NAIF ID -999001.
 
 
-   See bodfnd_c.
+         KPL/IK
+
+         File name: expool_ex1.ti
+
+         The keyword below define the three frequencies used by a
+         hypothetical instrument (NAIF ID -999001). They correspond
+         to three filters: red, green and blue. Frequencies are
+         given in micrometers.
+
+         \begindata
+
+            INS-999001_FREQ_RGB   = (  0.65,  0.55, 0.475 )
+            INS-999001_FREQ_UNITS = ( 'MICROMETERS'       )
+
+         \begintext
+
+
+         End of IK
+
+
+      Example code begins here.
+
+
+      /.
+         Program expool_ex1
+      ./
+      #include <stdio.h>
+      #include "SpiceUsr.h"
+
+      int main( )
+      {
+
+         /.
+         Local parameters.
+         ./
+         #define IKNAME       "expool_ex1.ti"
+         #define KPVNLN       33
+         #define NKPVNM       3
+
+         /.
+         Local variables.
+         ./
+         SpiceInt             i;
+
+         SpiceBoolean         found;
+
+         /.
+         Define the variable names
+         ./
+         SpiceChar            keywrd [NKPVNM][KPVNLN] = {
+                                                    "INS-999001_FREQ_RGB",
+                                                    "NOT_IN_THE_POOL",
+                                                    "INS-999001_FREQ_UNITS" };
+
+         /.
+         Load the instrument kernel.
+         ./
+         furnsh_c ( IKNAME );
+
+         for ( i = 0; i < NKPVNM; i++ )
+         {
+
+            /.
+            Check if the variable is numeric and present
+            in the kernel pool.
+            ./
+            expool_c ( keywrd[i], &found );
+
+            printf( "Variable name: %s\n", keywrd[i] );
+
+            if ( found )
+            {
+               printf( "   It is numeric and exists in the kernel pool.\n" );
+            }
+            else
+            {
+               printf( "   Either it is not numeric or it is not in the "
+                       "kernel pool.\n" );
+            }
+         }
+
+         return ( 0 );
+      }
+
+
+      When this program was executed on a Mac/Intel/cc/64-bit
+      platform, the output was:
+
+
+      Variable name: INS-999001_FREQ_RGB
+         It is numeric and exists in the kernel pool.
+      Variable name: NOT_IN_THE_POOL
+         Either it is not numeric or it is not in the kernel pool.
+      Variable name: INS-999001_FREQ_UNITS
+         Either it is not numeric or it is not in the kernel pool.
+
 
 -Restrictions
 
@@ -118,27 +219,33 @@
 
 -Author_and_Institution
 
-   I.M. Underwood  (JPL)
-   E.D. Wright     (JPL)
+   N.J. Bachman        (JPL)
+   J. Diaz del Rio     (ODC Space)
+   E.D. Wright         (JPL)
 
 -Version
 
-   -CSPICE Version 1.2.0 22-JUN-1999   (EDW)
+   -CSPICE Version 1.2.1, 04-AUG-2021 (JDR)
 
-      Added local variable to return boolean/logical values.  This
-      fix allows the routine to function if int and long are different
-      sizes.
+       Edited header to comply with NAIF standard. Added complete code
+       example.
+
+   -CSPICE Version 1.2.0, 22-JUN-1999 (EDW)
+
+       Added local variable to return boolean/logical values. This
+       fix allows the routine to function if int and long are different
+       sizes.
 
    -CSPICE Version 1.1.0, 08-FEB-1998 (NJB)
 
-      Re-implemented routine without dynamically allocated, temporary
-      strings.
+       Re-implemented routine without dynamically allocated, temporary
+       strings.
 
-   -CSPICE Version 1.0.0, 25-OCT-1997   (EDW)
+   -CSPICE Version 1.0.0, 25-OCT-1997 (EDW)
 
 -Index_Entries
 
-   CONFIRM the existence of a pooled kernel variable
+   CONFIRM the existence of a pooled numeric kernel variable
 
 -&
 */

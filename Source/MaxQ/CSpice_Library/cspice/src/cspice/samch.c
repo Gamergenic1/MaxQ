@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      SAMCH ( Same character ) */
+/* $Procedure SAMCH ( Same character ) */
 logical samch_(char *str1, integer *l1, char *str2, integer *l2, ftnlen 
 	str1_len, ftnlen str2_len)
 {
@@ -47,11 +47,11 @@ logical samch_(char *str1, integer *l1, char *str2, integer *l2, ftnlen
 
 /* $ Required_Reading */
 
-/*      None. */
+/*     None. */
 
 /* $ Keywords */
 
-/*       UTILITY */
+/*     UTILITY */
 
 /* $ Declarations */
 /* $ Brief_I/O */
@@ -63,53 +63,53 @@ logical samch_(char *str1, integer *l1, char *str2, integer *l2, ftnlen
 /*     STR2       I   A character string */
 /*     L2         I   The location (index) of a character in STR2 */
 
-/*     The function returns TRUE if the two characters are the */
+/*     The function returns .TRUE. if the two characters are the */
 /*     same. */
 
 /* $ Detailed_Input */
 
-/*     STR1       is a character string */
+/*     STR1     is a character string */
 
-/*     L1         is the location (index) of a character in STR1 */
+/*     L1       is the location (index) of a character in STR1 */
 
-/*     STR2       is a character string */
+/*     STR2     is a character string */
 
-/*     L2         is the location (index) of a character in STR2 */
+/*     L2       is the location (index) of a character in STR2 */
 
 /* $ Detailed_Output */
 
-
-/*     The function returns TRUE if the characters STR1(L1:L1) and */
+/*     The function returns .TRUE. if the characters STR1(L1:L1) and */
 /*     STR2(L2:L2) are the same. */
 
 /*     If the characters are different or L1 or L2 is out of range the */
-/*     function returns FALSE. */
+/*     function returns .FALSE. */
 
 /* $ Parameters */
 
-/*      None. */
-
-/* $ Files */
-
-/*      None. */
+/*     None. */
 
 /* $ Exceptions */
 
 /*     Error free. */
 
-/*     1) If either L1 or L2 is out of range the function returns FALSE. */
+/*     1)  If either L1 or L2 is out of range the function returns */
+/*         .FALSE. */
+
+/* $ Files */
+
+/*     None. */
 
 /* $ Particulars */
 
 /*     This is a utility function for determining whether or not */
-/*     two characters in different strings are the same.  This */
+/*     two characters in different strings are the same. This */
 /*     function is intended for situation in which you need to */
 /*     search two strings for a match (or mismatch). */
 
 /* $ Examples */
 
 /*     Often you need to scan through two string comparing character */
-/*     by character until a mismatch occurs.  The usual way to code */
+/*     by character until a mismatch occurs. The usual way to code */
 /*     this is */
 
 /*        DO WHILE (        L1 .LE. LEN(STR1) */
@@ -126,9 +126,9 @@ logical samch_(char *str1, integer *l1, char *str2, integer *l2, ftnlen
 /*     The problem with this loop is that even though the check to make */
 /*     sure that L1 and L2 are in range is performed, FORTRAN may */
 /*     go ahead and compute the equality condition even though one of the */
-/*     first two steps failed.  This can lead to out of range errors */
+/*     first two steps failed. This can lead to out of range errors */
 /*     and possible halting of your program depending upon how */
-/*     the routine is compiled.   An alternative way to code this is */
+/*     the routine is compiled. An alternative way to code this is */
 
 /*        IF ( L1 .LE. LEN(STR1) .AND. L2 .LE. LEN(STR2) ) THEN */
 /*           ALIKE = STR1(L1:L1) .EQ. STR2(L2:L2) */
@@ -148,7 +148,7 @@ logical samch_(char *str1, integer *l1, char *str2, integer *l2, ftnlen
 /*           END IF */
 /*        END DO */
 
-/*     However this is a much more complicated section of code.  This */
+/*     However this is a much more complicated section of code. This */
 /*     routine allows you to code the above loops as: */
 
 
@@ -160,24 +160,26 @@ logical samch_(char *str1, integer *l1, char *str2, integer *l2, ftnlen
 /*     The boundary checks are automatically performed and out */
 /*     of range errors are avoided. */
 
-
-
 /* $ Restrictions */
+
+/*     None. */
+
+/* $ Literature_References */
 
 /*     None. */
 
 /* $ Author_and_Institution */
 
-/*      W.L. Taber      (JPL) */
-
-/* $ Literature_References */
-
-/*      None. */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
 
-/* -    SPICELIB Version 1.0.0, 31-MAR-1995 (WLT) */
+/* -    SPICELIB Version 1.0.1, 12-AUG-2021 (JDR) */
 
+/*        Edited the header to comply with NAIF standard. */
+
+/* -    SPICELIB Version 1.0.0, 31-MAR-1995 (WLT) */
 
 /* -& */
 /* $ Index_Entries */

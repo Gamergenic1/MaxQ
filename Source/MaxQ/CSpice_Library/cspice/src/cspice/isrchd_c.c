@@ -3,11 +3,11 @@
 -Procedure isrchd_c  ( Search in a double precision array )
 
 -Abstract
- 
-   Search for a given value within a double precision array. Return 
-   the index of the first matching array entry, or -1 if the key value 
-   was not found. 
- 
+
+   Search for a given value within a double precision array. Return
+   the index of the first matching array entry, or -1 if the key value
+   was not found.
+
 -Disclaimer
 
    THIS SOFTWARE AND ANY RELATED MATERIALS WERE CREATED BY THE
@@ -34,13 +34,14 @@
    ACTIONS OF RECIPIENT IN THE USE OF THE SOFTWARE.
 
 -Required_Reading
- 
-   None. 
- 
+
+   None.
+
 -Keywords
- 
-   ARRAY,  SEARCH 
- 
+
+   ARRAY
+   SEARCH
+
 */
 
    #include "SpiceUsr.h"
@@ -50,105 +51,110 @@
 
    SpiceInt isrchd_c ( SpiceDouble         value,
                        SpiceInt            ndim,
-                       ConstSpiceDouble  * array  ) 
+                       ConstSpiceDouble  * array  )
 
 /*
 
 -Brief_I/O
- 
-   VARIABLE  I/O              DESCRIPTION 
-   --------  ---  -------------------------------------------------- 
-   value     I     Key value to be found in array. 
-   ndim      I     Dimension of array. 
-   array     I     Double Precision array to search. 
 
-   The function returns the index of the first matching array 
-   element or -1 if the value is not found. 
+   VARIABLE  I/O  DESCRIPTION
+   --------  ---  --------------------------------------------------
+   value      I   Key value to be found in array.
+   ndim       I   Dimension of array.
+   array      I   Double Precision array to search.
+
+   The function returns the index of the first matching array
+   element or -1 if the value is not found.
 
 -Detailed_Input
- 
-   value      is the key value to be found in the array. 
- 
-   ndim       is the dimension of the array. 
- 
-   array      is the double precision array to be searched. 
- 
+
+   value       is the key value to be found in the array.
+
+   ndim        is the dimension of the array.
+
+   array       is the double precision array to be searched.
+
 -Detailed_Output
- 
-   The function returns the index of the first matching array 
-   element in array. If value is not found, isrchd_c returns -1. 
- 
+
+   The function returns the index of the first matching array
+   element in array. If value is not found, isrchd_c returns -1.
+
 -Parameters
- 
-   None. 
- 
+
+   None.
+
 -Exceptions
- 
-   Error free. 
- 
-   1) If ndim < 1, the function value is -1. 
- 
+
+   Error free.
+
+   1)  If ndim < 1, the function value is -1.
+
+-Files
+
+   None.
+
 -Particulars
- 
-   None. 
- 
+
+   None.
+
 -Examples
- 
-   The following table shows the value of isrchd_c given the contents 
-   of array and value: 
+
+   The following table shows the value of isrchd_c given the contents
+   of array and value:
 
 
       array                        value   isrchd_c
    --------------------------      -----   --------
    1.0D0, 0.0D0, 4.0D0, 2.0D0      4.0D0       2
-   1.0D0, 0.0D0, 4.0D0, 2.0D0      2.OD0       3     
+   1.0D0, 0.0D0, 4.0D0, 2.0D0      2.OD0       3
    1.0D0, 0.0D0, 4.0D0, 2.0D0      3.0D0      -1
 
 -Restrictions
- 
-   None. 
- 
--Files
- 
-   None. 
- 
--Author_and_Institution
- 
-   N.J. Bachman    (JPL)
-   W.M. Owen       (JPL) 
- 
+
+   None.
+
 -Literature_References
- 
-   None. 
- 
+
+   None.
+
+-Author_and_Institution
+
+   N.J. Bachman        (JPL)
+   J. Diaz del Rio     (ODC Space)
+   W.M. Owen           (JPL)
+
 -Version
- 
+
+   -CSPICE Version 1.0.1, 03-JUL-2021 (JDR)
+
+       Edited the header to comply with NAIF standard.
+
    -CSPICE Version 1.0.0, 08-JUL-2002 (NJB) (WMO)
 
 -Index_Entries
- 
-   search in an double precision array 
- 
+
+   search in an double precision array
+
 -&
 */
 
 { /* Begin isrchd_c */
 
    /*
-   Local variables 
-   */  
+   Local variables
+   */
    SpiceInt                loc ;
 
 
    /*
-   Call the f2c'd routine. 
+   Call the f2c'd routine.
    */
-   loc =  (SpiceInt) isrchd_ ( (doublereal *) &value, 
-                               (integer    *) &ndim, 
-                               (doublereal *) array   ); 
+   loc =  (SpiceInt) isrchd_ ( (doublereal *) &value,
+                               (integer    *) &ndim,
+                               (doublereal *) array   );
 
    /*
-   Convert loc to a C-style index. 
+   Convert loc to a C-style index.
    */
    loc-- ;
 

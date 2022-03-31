@@ -1,6 +1,6 @@
 /*
 
--Procedure pckuof_c ( PCK Kernel, Unload binary file )
+-Procedure pckuof_c ( PCK, unload binary file )
 
 -Abstract
 
@@ -34,11 +34,13 @@
 
 -Required_Reading
 
+   DAF
    PCK
 
 -Keywords
 
    FILES
+   PCK
 
 */
 
@@ -51,14 +53,14 @@
 
 -Brief_I/O
 
-   Variable  I/O  Description
+   VARIABLE  I/O  DESCRIPTION
    --------  ---  --------------------------------------------------
-   handle     I   Handle of PCK file to be unloaded
+   handle     I   Handle of file to be unloaded
 
 -Detailed_Input
 
-   handle     Integer handle assigned to the PCK file when it was
-              loaded.
+   handle      is the integer handle assigned to the PCK file upon
+               loading.
 
 -Detailed_Output
 
@@ -70,38 +72,208 @@
 
 -Exceptions
 
-   None.
+   1)  Unloading a file that has not been loaded is a no-op.
+       No error is signaled.
 
 -Files
 
-   The file referred to by handle is unloaded.
+   The file referred to by `handle' is unloaded.
 
 -Particulars
 
-   A PCK file is removed from consideration by the readers during a
-   search by a call to pckuof_c.
+   A PCK file is removed from consideration during a search by the
+   readers by a call to pckuof_c.
 
    The file table entry corresponding to the file referenced by
-   handle, is removed and the file is closed.  Any segment table
+   `handle' is removed and the file is closed. Any segment table
    entry which came from the specified file is also deleted.
 
-   If the file specified by handle does not appear in the file table,
-   nothing happens.
+   If the file specified by `handle' is not currently loaded in the
+   PCK system, no action is taken.
 
 -Examples
 
-   Unload a binary PCK kernel specified by an integer handle, making
-   room to load another PCK.
+   The numerical results shown for these examples may differ across
+   platforms. The results depend on the SPICE kernels used as
+   input, the compiler and supporting libraries, and the machine
+   specific arithmetic implementation.
 
-      pck      = "/kernels/gen/pck/earth6.bpc";
-      pcklof_c ( pck, &handle );
-         .
-         .
-         .
-      pckuof_c ( handle );
+   1) Unload a binary PCK kernel specified by an integer handle, making
+      room to load another PCK.
+
+         pckuof_c ( handle );
 
 
-   Also see the Example in pckbsr.c or pckbsr.for.
+   2) Load a high precision PCK file for the Earth and compute the
+      position transformation matrix from ITRF93 to J2000 at
+      2000 Jan 01 12:00:00 TDB.
+
+      Use the PCK kernel below to load the required triaxial
+      ellipsoidal shape model and orientation data for the Earth.
+
+         earth_720101_070426.bpc
+
+
+      Example code begins here.
+
+
+      /.
+         Program pckuof_ex2
+      ./
+      #include <stdio.h>
+      #include "SpiceUsr.h"
+
+      int main()
+      {
+
+         /.
+         Local variables.
+         ./
+         SpiceDouble             xform  [3][3];
+
+         SpiceInt                handle;
+         SpiceInt                i;
+
+         /.
+         Open the PCK for read access. This call may be replaced (as
+         recommended by NAIF) by furnsh_c.
+         ./
+         pcklof_c ( "earth_720101_070426.bpc", &handle );
+
+         /.
+         Find the position transformation matrix at
+
+            2000 Jan 01 12:00:00 TDB
+
+         which corresponds to ephemeris time 0.
+         ./
+         pxform_c( "ITRF93", "J2000", 0.0, xform );
+
+         /.
+         Display the results.
+         ./
+         printf ("Position transformation from ITRF93 to J2000 frame:\n\n" );
+         for ( i = 0; i < 3; i++ )
+         {
+            printf("%20.10f %19.10f %19.10f\n",
+                    xform[i][0], xform[i][1], xform[i][2] );
+         }
+
+         /.
+         Close the PCK file. This call may be replaced (as
+         recommended by NAIF) by unload_c, if furnsh_c has
+         been used to load the file.
+         ./
+         pckuof_c ( handle );
+
+         return ( 0 );
+      }
+
+
+      When this program was executed on a Mac/Intel/cc/64-bit
+      platform, the output was:
+
+
+      Position transformation from ITRF93 to J2000 frame:
+
+              0.1769805935        0.9842143409       -0.0000251874
+             -0.9842143410        0.1769805928       -0.0000274792
+             -0.0000225878        0.0000296531        0.9999999993
+
+
+   3) The following example extracts the first 20 lines of the
+      comment area of a binary PCK, displaying the comments on
+      the terminal screen.
+
+
+      Example code begins here.
+
+
+      /.
+         Program pckuof_ex3
+      ./
+      #include <stdio.h>
+      #include "SpiceUsr.h"
+
+      int main()
+      {
+
+         /.
+         Local parameters.
+         ./
+         #define FILSIZ          256
+         #define LINLEN          1001
+         #define BUFFSZ          20
+
+         /.
+         Local variables.
+         ./
+         SpiceBoolean            done;
+
+         SpiceChar               pcknam [FILSIZ];
+         SpiceChar               buffer [BUFFSZ][LINLEN];
+
+         SpiceInt                handle;
+         SpiceInt                i;
+         SpiceInt                n;
+
+
+         prompt_c ( "Enter name of PCK > ", FILSIZ, pcknam );
+
+         /.
+         Open the PCK for read access. This operation could have
+         been done with dafopr_c.
+         ./
+         pcklof_c ( pcknam, &handle );
+
+         /.
+         Extract up to 20 lines from the comment area of the
+         loaded PCK file and display them on the terminal screen.
+         ./
+         dafec_c ( handle, BUFFSZ, LINLEN, &n, buffer, &done );
+
+         for ( i = 0;  i < n;  i++ )
+         {
+               printf ( "%s\n", buffer[i] );
+         }
+
+         /.
+         Close the PCK file. This operation could have been done
+         with dafcls_c.
+         ./
+         pckuof_c ( handle );
+
+         return ( 0 );
+      }
+
+
+      When this program was executed on a Mac/Intel/cc/64-bit
+      platform, using the hight precision PCK file for the Earth named
+      earth_720101_070426.bpc as input PCK file, the output was:
+
+
+      Enter name of PCK > earth_720101_070426.bpc
+
+
+      Binary "High Accuracy" Earth PCK File
+      ======================================
+
+      Created 27-APR-2007 by NJB (NAIF/JPL)
+      Original file name:   earth_720101_070426.bpc
+
+      Data Source
+
+         Input file:           EOP file 2007_04_26_long.eop
+                               (Copied from WWW URL
+                               http://epic.jpl.nasa.gov/nav/eop/latest.long)
+
+      Coverage
+
+         ET Start time:             1972 JAN 01 00:00:42.183
+         ET Stop time:              2007 APR 26 00:01:05.185
+
+         UTC Epoch of last datum:   26-APR-2007
+
 
 -Restrictions
 
@@ -113,20 +285,27 @@
 
 -Author_and_Institution
 
-   N.J. Bachman    (JPL)
-   J.M. Lynch      (JPL)
-   R.E. Thurman    (JPL)
-   K.S. Zukor      (JPL)
+   N.J. Bachman        (JPL)
+   J. Diaz del Rio     (ODC Space)
+   K.S. Zukor          (JPL)
 
 -Version
 
-   -CSPICE Version 1.0.0, 08-FEB-1998 (NJB)
+   -CSPICE Version 1.0.1, 10-AUG-2021 (JDR)
 
-      Based on SPICELIB Version 1.0.0, 16-MAR-1994 (KSZ)
+       Edited the header to comply with NAIF standard. Added complete
+       code examples.
+
+       Improved the documentation of -Keywords, -Exceptions, -Particulars
+       and -Index_Entries sections.
+
+   -CSPICE Version 1.0.0, 08-FEB-1998 (NJB) (KSZ)
+
+       Based on SPICELIB Version 1.0.0, 16-MAR-1994 (KSZ)
 
 -Index_Entries
 
-   unload PCK orientation file
+   unload PCK file
 
 -&
 */

@@ -182,7 +182,7 @@ static integer c__3 = 3;
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     TARGET     I   Name of target ephemeris object. */
 /*     ET         I   Observation epoch. */
@@ -198,256 +198,253 @@ static integer c__3 = 3;
 
 /* $ Detailed_Input */
 
-/*     TARGET      is the name of a target body. Optionally, you may */
-/*                 supply the ID code of the object as an integer */
-/*                 string. For example, both 'EARTH' and '399' are */
-/*                 legitimate strings to supply to indicate the target */
-/*                 is Earth. */
+/*     TARGET   is the name of a target body. Optionally, you may */
+/*              supply the ID code of the object as an integer */
+/*              string. For example, both 'EARTH' and '399' are */
+/*              legitimate strings to supply to indicate the target */
+/*              is Earth. */
 
-/*                 Case and leading and trailing blanks are not */
-/*                 significant in the string TARGET. */
-
-
-/*     ET          is the ephemeris time at which the state of the */
-/*                 target relative to the observer is to be computed. ET */
-/*                 is expressed as seconds past J2000 TDB. ET refers to */
-/*                 time at the observer's location. */
+/*              Case and leading and trailing blanks are not */
+/*              significant in the string TARGET. */
 
 
-/*     OUTREF      is the name of the reference frame with respect to */
-/*                 which the output state is expressed. */
-
-/*                 When OUTREF is time-dependent (non-inertial), its */
-/*                 orientation relative to the J2000 frame is evaluated */
-/*                 in the manner commanded by the input argument REFLOC */
-/*                 (see description below). */
-
-/*                 Case and leading and trailing blanks are not */
-/*                 significant in the string OUTREF. */
+/*     ET       is the ephemeris time at which the state of the */
+/*              target relative to the observer is to be computed. ET */
+/*              is expressed as seconds past J2000 TDB. ET refers to */
+/*              time at the observer's location. */
 
 
-/*     REFLOC      is a string indicating the output reference frame */
-/*                 evaluation locus: this is the location associated */
-/*                 with the epoch at which this routine is to evaluate */
-/*                 the orientation, relative to the J2000 frame, of the */
-/*                 output frame OUTREF. The values and meanings of */
-/*                 REFLOC are: */
+/*     OUTREF   is the name of the reference frame with respect to */
+/*              which the output state is expressed. */
 
-/*                    'OBSERVER'  Evaluate OUTREF at the observer's */
-/*                                epoch ET. */
+/*              When OUTREF is time-dependent (non-inertial), its */
+/*              orientation relative to the J2000 frame is evaluated */
+/*              in the manner commanded by the input argument REFLOC */
+/*              (see description below). */
 
-/*                                Normally the locus 'OBSERVER' should */
-/*                                be selected when OUTREF is centered */
-/*                                at the observer. */
+/*              Case and leading and trailing blanks are not */
+/*              significant in the string OUTREF. */
 
 
-/*                    'TARGET'    Evaluate OUTREF at the target epoch; */
-/*                                letting LT be the one-way light time */
-/*                                between the target and observer, the */
-/*                                target epoch is */
+/*     REFLOC   is a string indicating the output reference frame */
+/*              evaluation locus: this is the location associated */
+/*              with the epoch at which this routine is to evaluate */
+/*              the orientation, relative to the J2000 frame, of the */
+/*              output frame OUTREF. The values and meanings of */
+/*              REFLOC are: */
 
-/*                                   ET-LT  if reception aberration */
-/*                                          corrections are used */
+/*                 'OBSERVER'  Evaluate OUTREF at the observer's */
+/*                             epoch ET. */
 
-/*                                   ET+LT  if transmission aberration */
-/*                                          corrections are used */
-
-/*                                   ET     if no aberration corrections */
-/*                                          are used */
-
-/*                                Normally the locus 'TARGET' should */
-/*                                be selected when OUTREF is centered */
-/*                                at the target object. */
+/*                             Normally the locus 'OBSERVER' should */
+/*                             be selected when OUTREF is centered */
+/*                             at the observer. */
 
 
-/*                    'CENTER'    Evaluate the frame OUTREF at the epoch */
-/*                                associated its center. This epoch, */
-/*                                which we'll call ETCTR, is determined */
-/*                                as follows: */
+/*                 'TARGET'    Evaluate OUTREF at the target epoch; */
+/*                             letting LT be the one-way light time */
+/*                             between the target and observer, the */
+/*                             target epoch is */
 
-/*                                   Let LTCTR be the one-way light time */
-/*                                   between the observer and the center */
-/*                                   of OUTREF. Then ETCTR is */
+/*                                ET-LT  if reception aberration */
+/*                                       corrections are used */
 
-/*                                      ET-LTCTR  if reception */
-/*                                                aberration corrections */
-/*                                                are used */
+/*                                ET+LT  if transmission aberration */
+/*                                       corrections are used */
 
-/*                                      ET+LTCTR  if transmission */
-/*                                                aberration corrections */
-/*                                                are used */
+/*                                ET     if no aberration corrections */
+/*                                       are used */
 
-/*                                      ET        if no aberration */
-/*                                                corrections are used */
+/*                             Normally the locus 'TARGET' should */
+/*                             be selected when OUTREF is centered */
+/*                             at the target object. */
 
 
-/*                                The locus 'CENTER' should be selected */
-/*                                when the user intends to obtain */
-/*                                results compatible with those produced */
-/*                                by SPKEZR. */
+/*                 'CENTER'    Evaluate the frame OUTREF at the epoch */
+/*                             associated its center. This epoch, */
+/*                             which we'll call ETCTR, is determined */
+/*                             as follows: */
 
-/*                 When OUTREF is inertial, all choices of REFLOC */
-/*                 yield the same results. */
+/*                                Let LTCTR be the one-way light time */
+/*                                between the observer and the center */
+/*                                of OUTREF. Then ETCTR is */
 
-/*                 Case and leading and trailing blanks are not */
-/*                 significant in the string REFLOC. */
+/*                                   ET-LTCTR  if reception */
+/*                                             aberration corrections */
+/*                                             are used */
 
+/*                                   ET+LTCTR  if transmission */
+/*                                             aberration corrections */
+/*                                             are used */
 
-/*     ABCORR      indicates the aberration corrections to be applied to */
-/*                 the observer-target state to account for one-way */
-/*                 light time and stellar aberration. */
-
-/*                 ABCORR may be any of the following: */
-
-/*                    'NONE'     Apply no correction. Return the */
-/*                               geometric state of the target */
-/*                               relative to the observer. */
-
-/*                 The following values of ABCORR apply to the */
-/*                 "reception" case in which photons depart from the */
-/*                 target's location at the light-time corrected epoch */
-/*                 ET-LT and *arrive* at the observer's location at ET: */
-
-/*                    'LT'       Correct for one-way light time (also */
-/*                               called "planetary aberration") using a */
-/*                               Newtonian formulation. This correction */
-/*                               yields the state of the target at the */
-/*                               moment it emitted photons arriving at */
-/*                               the observer at ET. */
-
-/*                               The light time correction uses an */
-/*                               iterative solution of the light time */
-/*                               equation. The solution invoked by the */
-/*                               'LT' option uses one iteration. */
-
-/*                    'LT+S'     Correct for one-way light time and */
-/*                               stellar aberration using a Newtonian */
-/*                               formulation. This option modifies the */
-/*                               state obtained with the 'LT' option to */
-/*                               account for the observer's velocity */
-/*                               relative to the solar system */
-/*                               barycenter. The result is the apparent */
-/*                               state of the target---the position and */
-/*                               velocity of the target as seen by the */
-/*                               observer. */
-
-/*                    'CN'       Converged Newtonian light time */
-/*                               correction. In solving the light time */
-/*                               equation, the 'CN' correction iterates */
-/*                               until the solution converges. */
-
-/*                    'CN+S'     Converged Newtonian light time */
-/*                               and stellar aberration corrections. */
+/*                                   ET        if no aberration */
+/*                                             corrections are used */
 
 
-/*                 The following values of ABCORR apply to the */
-/*                 "transmission" case in which photons *depart* from */
-/*                 the observer's location at ET and arrive at the */
-/*                 target's location at the light-time corrected epoch */
-/*                 ET+LT: */
+/*                             The locus 'CENTER' should be selected */
+/*                             when the user intends to obtain */
+/*                             results compatible with those produced */
+/*                             by SPKEZR. */
 
-/*                    'XLT'      "Transmission" case:  correct for */
-/*                               one-way light time using a Newtonian */
-/*                               formulation. This correction yields the */
-/*                               state of the target at the moment it */
-/*                               receives photons emitted from the */
-/*                               observer's location at ET. */
+/*              When OUTREF is inertial, all choices of REFLOC */
+/*              yield the same results. */
 
-/*                    'XLT+S'    "Transmission" case:  correct for */
-/*                               one-way light time and stellar */
-/*                               aberration using a Newtonian */
-/*                               formulation  This option modifies the */
-/*                               state obtained with the 'XLT' option to */
-/*                               account for the observer's velocity */
-/*                               relative to the solar system */
-/*                               barycenter. The position component of */
-/*                               the computed target state indicates the */
-/*                               direction that photons emitted from the */
-/*                               observer's location must be "aimed" to */
-/*                               hit the target. */
-
-/*                    'XCN'      "Transmission" case:  converged */
-/*                               Newtonian light time correction. */
-
-/*                    'XCN+S'    "Transmission" case:  converged */
-/*                               Newtonian light time and stellar */
-/*                               aberration corrections. */
+/*              Case and leading and trailing blanks are not */
+/*              significant in the string REFLOC. */
 
 
-/*                 Neither special nor general relativistic effects are */
-/*                 accounted for in the aberration corrections applied */
-/*                 by this routine. */
+/*     ABCORR   indicates the aberration corrections to be applied to */
+/*              the observer-target state to account for one-way */
+/*              light time and stellar aberration. */
 
-/*                 Case and leading and trailing blanks are not */
-/*                 significant in the string ABCORR. */
+/*              ABCORR may be any of the following: */
+
+/*                 'NONE'     Apply no correction. Return the */
+/*                            geometric state of the target */
+/*                            relative to the observer. */
+
+/*              The following values of ABCORR apply to the */
+/*              "reception" case in which photons depart from the */
+/*              target's location at the light-time corrected epoch */
+/*              ET-LT and *arrive* at the observer's location at ET: */
+
+/*                 'LT'       Correct for one-way light time (also */
+/*                            called "planetary aberration") using a */
+/*                            Newtonian formulation. This correction */
+/*                            yields the state of the target at the */
+/*                            moment it emitted photons arriving at */
+/*                            the observer at ET. */
+
+/*                            The light time correction uses an */
+/*                            iterative solution of the light time */
+/*                            equation. The solution invoked by the */
+/*                            'LT' option uses one iteration. */
+
+/*                 'LT+S'     Correct for one-way light time and */
+/*                            stellar aberration using a Newtonian */
+/*                            formulation. This option modifies the */
+/*                            state obtained with the 'LT' option to */
+/*                            account for the observer's velocity */
+/*                            relative to the solar system */
+/*                            barycenter. The result is the apparent */
+/*                            state of the target---the position and */
+/*                            velocity of the target as seen by the */
+/*                            observer. */
+
+/*                 'CN'       Converged Newtonian light time */
+/*                            correction. In solving the light time */
+/*                            equation, the 'CN' correction iterates */
+/*                            until the solution converges. */
+
+/*                 'CN+S'     Converged Newtonian light time */
+/*                            and stellar aberration corrections. */
 
 
-/*     OBSPOS      is the fixed (constant) geometric position of an */
-/*                 observer relative to its center of motion OBSCTR, */
-/*                 expressed in the reference frame OBSREF. */
+/*              The following values of ABCORR apply to the */
+/*              "transmission" case in which photons *depart* from */
+/*              the observer's location at ET and arrive at the */
+/*              target's location at the light-time corrected epoch */
+/*              ET+LT: */
 
-/*                 Units are always km. */
+/*                 'XLT'      "Transmission" case: correct for */
+/*                            one-way light time using a Newtonian */
+/*                            formulation. This correction yields the */
+/*                            state of the target at the moment it */
+/*                            receives photons emitted from the */
+/*                            observer's location at ET. */
+
+/*                 'XLT+S'    "Transmission" case: correct for */
+/*                            one-way light time and stellar */
+/*                            aberration using a Newtonian */
+/*                            formulation. This option modifies the */
+/*                            state obtained with the 'XLT' option to */
+/*                            account for the observer's velocity */
+/*                            relative to the solar system */
+/*                            barycenter. The position component of */
+/*                            the computed target state indicates the */
+/*                            direction that photons emitted from the */
+/*                            observer's location must be "aimed" to */
+/*                            hit the target. */
+
+/*                 'XCN'      "Transmission" case: converged */
+/*                            Newtonian light time correction. */
+
+/*                 'XCN+S'    "Transmission" case: converged */
+/*                            Newtonian light time and stellar */
+/*                            aberration corrections. */
 
 
-/*     OBSCTR      is the name of the center of motion of OBSPOS. The */
-/*                 ephemeris of OBSCTR is provided by loaded SPK files. */
+/*              Neither special nor general relativistic effects are */
+/*              accounted for in the aberration corrections applied */
+/*              by this routine. */
 
-/*                 Optionally, you may supply the integer ID code for */
-/*                 the object as an integer string. For example both */
-/*                 'MOON' and '301' are legitimate strings that indicate */
-/*                 the moon is the center of motion. */
-
-/*                 Case and leading and trailing blanks are not */
-/*                 significant in the string OBSCTR. */
+/*              Case and leading and trailing blanks are not */
+/*              significant in the string ABCORR. */
 
 
-/*     OBSREF      is the name of the reference frame relative to which */
-/*                 the input position OBSPOS is expressed. The observer */
-/*                 has constant position relative to its center of */
-/*                 motion in this reference frame. */
+/*     OBSPOS   is the fixed (constant) geometric position of an */
+/*              observer relative to its center of motion OBSCTR, */
+/*              expressed in the reference frame OBSREF. */
 
-/*                 Case and leading and trailing blanks are not */
-/*                 significant in the string OBSREF. */
+/*              Units are always km. */
 
+
+/*     OBSCTR   is the name of the center of motion of OBSPOS. The */
+/*              ephemeris of OBSCTR is provided by loaded SPK files. */
+
+/*              Optionally, you may supply the integer ID code for */
+/*              the object as an integer string. For example both */
+/*              'MOON' and '301' are legitimate strings that indicate */
+/*              the moon is the center of motion. */
+
+/*              Case and leading and trailing blanks are not */
+/*              significant in the string OBSCTR. */
+
+
+/*     OBSREF   is the name of the reference frame relative to which */
+/*              the input position OBSPOS is expressed. The observer */
+/*              has constant position relative to its center of */
+/*              motion in this reference frame. */
+
+/*              Case and leading and trailing blanks are not */
+/*              significant in the string OBSREF. */
 
 /* $ Detailed_Output */
 
+/*     STATE    is a Cartesian state vector representing the position */
+/*              and velocity of the target relative to the specified */
+/*              observer. STATE is corrected for the specified */
+/*              aberrations and is expressed with respect to the */
+/*              reference frame specified by OUTREF. The first three */
+/*              components of STATE represent the x-, y- and */
+/*              z-components of the target's position; the last three */
+/*              components form the corresponding velocity vector. */
 
-/*     STATE       is a Cartesian state vector representing the position */
-/*                 and velocity of the target relative to the specified */
-/*                 observer. STATE is corrected for the specified */
-/*                 aberrations and is expressed with respect to the */
-/*                 reference frame specified by OUTREF. The first three */
-/*                 components of STATE represent the x-, y- and */
-/*                 z-components of the target's position; the last three */
-/*                 components form the corresponding velocity vector. */
+/*              The position component of STATE points from the */
+/*              observer's location at ET to the aberration-corrected */
+/*              location of the target. Note that the sense of the */
+/*              position vector is independent of the direction of */
+/*              radiation travel implied by the aberration */
+/*              correction. */
 
-/*                 The position component of STATE points from the */
-/*                 observer's location at ET to the aberration-corrected */
-/*                 location of the target. Note that the sense of the */
-/*                 position vector is independent of the direction of */
-/*                 radiation travel implied by the aberration */
-/*                 correction. */
+/*              The velocity component of STATE is the derivative */
+/*              with respect to time of the position component of */
+/*              STATE. */
 
-/*                 The velocity component of STATE is the derivative */
-/*                 with respect to time of the position component of */
-/*                 STATE. */
+/*              Units are always km and km/sec. */
 
-/*                 Units are always km and km/sec. */
-
-/*                 When STATE is expressed in a time-dependent */
-/*                 (non-inertial) output frame, the orientation of that */
-/*                 frame relative to the J2000 frame is evaluated in the */
-/*                 manner indicated by the input argument REFLOC (see */
-/*                 description above). */
+/*              When STATE is expressed in a time-dependent */
+/*              (non-inertial) output frame, the orientation of that */
+/*              frame relative to the J2000 frame is evaluated in the */
+/*              manner indicated by the input argument REFLOC (see */
+/*              description above). */
 
 
-/*     LT          is the one-way light time between the observer and */
-/*                 target in seconds. If the target state is corrected */
-/*                 for aberrations, then LT is the one-way light time */
-/*                 between the observer and the light time corrected */
-/*                 target location. */
-
+/*     LT       is the one-way light time between the observer and */
+/*              target in seconds. If the target state is corrected */
+/*              for aberrations, then LT is the one-way light time */
+/*              between the observer and the light time corrected */
+/*              target location. */
 
 /* $ Parameters */
 
@@ -456,29 +453,29 @@ static integer c__3 = 3;
 /* $ Exceptions */
 
 /*     1)  If either the name of the center of motion or the target */
-/*         cannot be translated to its NAIF ID code, the error will be */
-/*         diagnosed by a routine in the call tree of this routine. */
+/*         cannot be translated to its NAIF ID code, an error is signaled */
+/*         by a routine in the call tree of this routine. */
 
-/*     2)  If the reference frame OUTREF is unrecognized, the error will */
-/*         be diagnosed by a routine in the call tree of this routine. */
+/*     2)  If the reference frame OUTREF is unrecognized, an error is */
+/*         signaled by a routine in the call tree of this routine. */
 
-/*     3)  If the reference frame OBSREF is unrecognized, the error will */
-/*         be diagnosed by a routine in the call tree of this routine. */
+/*     3)  If the reference frame OBSREF is unrecognized, an error is */
+/*         signaled by a routine in the call tree of this routine. */
 
-/*     4)  If the frame evaluation locus REFLOC is not recognized, */
-/*         the error  will be diagnosed by a routine in the call tree of */
-/*         this routine. */
+/*     4)  If the frame evaluation locus REFLOC is not recognized, an */
+/*         error is signaled by a routine in the call tree of this */
+/*         routine. */
 
 /*     5)  If the loaded kernels provide insufficient data to compute */
-/*         the requested state vector, the deficiency will be diagnosed */
+/*         the requested state vector, an error is signaled */
 /*         by a routine in the call tree of this routine. */
 
 /*     6)  If an error occurs while reading an SPK or other kernel file, */
-/*         the error  will be diagnosed by a routine in the call tree of */
+/*         the error  is signaled by a routine in the call tree of */
 /*         this routine. */
 
-/*     7)  If the aberration correction ABCORR is not recognized, the */
-/*         error will be diagnosed by a routine in the call tree of this */
+/*     7)  If the aberration correction ABCORR is not recognized, an */
+/*         error is signaled by a routine in the call tree of this */
 /*         routine. */
 
 /* $ Files */
@@ -488,30 +485,30 @@ static integer c__3 = 3;
 
 /*     The following data are required: */
 
-/*        -  SPK data: ephemeris data for the observer center and target */
-/*           must be loaded. If aberration corrections are used, the */
-/*           states of the observer center and target relative to the */
-/*           solar system barycenter must be calculable from the */
-/*           available ephemeris data. Typically ephemeris data are made */
-/*           available by loading one or more SPK files using FURNSH. */
+/*     -  SPK data: ephemeris data for the observer center and target */
+/*        must be loaded. If aberration corrections are used, the */
+/*        states of the observer center and target relative to the */
+/*        solar system barycenter must be calculable from the */
+/*        available ephemeris data. Typically ephemeris data are made */
+/*        available by loading one or more SPK files using FURNSH. */
 
 /*     The following data may be required: */
 
-/*        -  PCK data: if the target frame is a PCK frame, rotation data */
-/*           for the target frame must be loaded. These may be provided */
-/*           in a text or binary PCK file. */
+/*     -  PCK data: if the target frame is a PCK frame, rotation data */
+/*        for the target frame must be loaded. These may be provided */
+/*        in a text or binary PCK file. */
 
-/*        -  Frame data: if a frame definition not built into SPICE is */
-/*           required, for example to convert the observer-target state */
-/*           to the output frame, that definition must be available in */
-/*           the kernel pool. Typically frame definitions are supplied */
-/*           by loading a frame kernel using FURNSH. */
+/*     -  Frame data: if a frame definition not built into SPICE is */
+/*        required, for example to convert the observer-target state */
+/*        to the output frame, that definition must be available in */
+/*        the kernel pool. Typically frame definitions are supplied */
+/*        by loading a frame kernel using FURNSH. */
 
-/*        -  Additional kernels: if any frame used in this routine's */
-/*           state computation is a CK frame, then at least one CK and */
-/*           corresponding SCLK kernel is required. If dynamic frames */
-/*           are used, additional SPK, PCK, CK, or SCLK kernels may be */
-/*           required. */
+/*     -  Additional kernels: if any frame used in this routine's */
+/*        state computation is a CK frame, then at least one CK and */
+/*        corresponding SCLK kernel is required. If dynamic frames */
+/*        are used, additional SPK, PCK, CK, or SCLK kernels may be */
+/*        required. */
 
 /*     In all cases, kernel data are normally loaded once per program */
 /*     run, NOT every time this routine is called. */
@@ -671,7 +668,7 @@ static integer c__3 = 3;
 
 /*        KPL/MK */
 
-/*           File name: spkcpo.tm */
+/*           File name: spkcpo_ex1.tm */
 
 /*           This is the meta-kernel file for the header code example for */
 /*           the subroutine SPKCPO. These kernel files can be found on */
@@ -722,13 +719,13 @@ static integer c__3 = 3;
 
 
 /*        C */
-/*        C     Program: EX1 */
+/*        C     Program: SPKCPO_EX1 */
 /*        C */
 /*        C     This program uses SPKCPO to compute solar azimuth */
 /*        C     and elevation at a given surface point on the earth. */
 /*        C */
 
-/*              PROGRAM EX1 */
+/*              PROGRAM SPKCPO_EX1 */
 /*              IMPLICIT NONE */
 /*        C */
 /*        C     SPICELIB functions */
@@ -740,13 +737,13 @@ static integer c__3 = 3;
 /*        C     Local parameters */
 /*        C */
 /*              CHARACTER*(*)         FMT0 */
-/*              PARAMETER           ( FMT0   = '(1X,A,3F20.8)' ) */
+/*              PARAMETER           ( FMT0   = '(A,3F20.8)' ) */
 
 /*              CHARACTER*(*)         FMT1 */
 /*              PARAMETER           ( FMT1   = '(1X,A, F20.8)' ) */
 
 /*              CHARACTER*(*)         META */
-/*              PARAMETER           ( META   = 'spkcvo.tm' ) */
+/*              PARAMETER           ( META   = 'spkcpo_ex1.tm' ) */
 
 /*              CHARACTER*(*)         TIMFMT */
 /*              PARAMETER           ( TIMFMT = */
@@ -776,7 +773,6 @@ static integer c__3 = 3;
 /*        C */
 /*              CHARACTER*(CORLEN)    ABCORR */
 /*              CHARACTER*(TIMLEN)    EMITIM */
-/*              CHARACTER*(TIMLEN)    EPCSTR */
 /*              CHARACTER*(EVLLEN)    REFLOC */
 /*              CHARACTER*(BDNMLN)    OBSCTR */
 /*              CHARACTER*(FRNMLN)    OBSREF */
@@ -794,7 +790,6 @@ static integer c__3 = 3;
 /*              DOUBLE PRECISION      LT1 */
 /*              DOUBLE PRECISION      NORMAL ( 3 ) */
 /*              DOUBLE PRECISION      OBSALT */
-/*              DOUBLE PRECISION      OBSEPC */
 /*              DOUBLE PRECISION      OBSLAT */
 /*              DOUBLE PRECISION      OBSLON */
 /*              DOUBLE PRECISION      OBSPOS ( 3 ) */
@@ -897,7 +892,6 @@ static integer c__3 = 3;
 /*        C     angles. */
 /*        C */
 /*              CALL TIMOUT ( ET-LT0, TIMFMT, EMITIM ) */
-/*              CALL TIMOUT ( OBSEPC, TIMFM2, EPCSTR ) */
 
 /*              WRITE (*,*) ' ' */
 /*              WRITE (*,*) 'Frame evaluation locus:     ', REFLOC */
@@ -993,7 +987,7 @@ static integer c__3 = 3;
 /*              WRITE (*,*) 'AZ/EL computed without frame kernel: ' */
 /*              WRITE (*,*) ' ' */
 /*              WRITE (*,FMT1) 'Distance between last two ' */
-/*             .//             'positions (km):  ', */
+/*             .//             'positions (km): ', */
 /*             .               VDIST ( STATE0, TOPVEC ) */
 /*              WRITE (*,*) ' ' */
 /*              WRITE (*,FMT1) 'Solar azimuth (deg):   ', AZ */
@@ -1003,39 +997,37 @@ static integer c__3 = 3;
 /*              END */
 
 
-/*        When this program was executed on a PC/Linux/gfortran */
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
 /*        platform, the output was: */
 
 
-/*        Frame evaluation locus:     OBSERVER */
+/*         Frame evaluation locus:     OBSERVER */
 
-/*        Target:                     SUN */
-/*        Observation time:           2003 OCT 13 06:00:00.000000 UTC */
-/*        Observer center:            EARTH */
-/*        Observer frame:             ITRF93 */
-/*        Emission time:              2003 OCT 13 05:51:42.068322 UTC */
-/*        Output reference frame:     DSS-14_TOPO */
-/*        Aberration correction:      CN+S */
+/*         Target:                     SUN */
+/*         Observation time:           2003 OCT 13 06:00:00.000000 UTC */
+/*         Observer center:            EARTH */
+/*         Observer frame:             ITRF93 */
+/*         Emission time:              2003 OCT 13 05:51:42.068322 UTC */
+/*         Output reference frame:     DSS-14_TOPO */
+/*         Aberration correction:      CN+S */
 
-/*        Observer-target position (km): */
-/*              62512272.82074844   58967494.42513601 -122059095.46751881 */
-/*        Observer-target velocity (km/s): */
+/*         Observer-target position (km): */
+/*              62512272.82074845   58967494.42513601 -122059095.46751881 */
+/*         Observer-target velocity (km/s): */
 /*                  2475.97326517      -9870.26706232      -3499.90809969 */
-/*        Light time (s):                497.93167797 */
+/*         Light time (s):                497.93167797 */
 
-/*        Solar azimuth (deg):           316.67141599 */
-/*        Solar elevation (deg):         -54.85253168 */
-
-
-
-/*        AZ/EL computed without frame kernel: */
-
-/*        Distance between last two positions (km):            3.07056971 */
-
-/*        Solar azimuth (deg):           316.67141786 */
-/*        Solar elevation (deg):         -54.85253216 */
+/*         Solar azimuth (deg):           316.67141599 */
+/*         Solar elevation (deg):         -54.85253168 */
 
 
+
+/*         AZ/EL computed without frame kernel: */
+
+/*         Distance between last two positions (km):           3.07056970 */
+
+/*         Solar azimuth (deg):           316.67141786 */
+/*         Solar elevation (deg):         -54.85253216 */
 
 
 /*     2) Demonstrate applications of the output frame evaluation locus. */
@@ -1077,7 +1069,7 @@ static integer c__3 = 3;
 /*        Example code begins here. */
 
 
-/*        C     Program: EX2 */
+/*        C     Program: SPKCPO_EX2 */
 /*        C */
 /*        C     This program demonstrates the use of SPKCPO. */
 /*        C     Computations are performed using all three possible */
@@ -1093,7 +1085,7 @@ static integer c__3 = 3;
 /*        C     simply to demonstrate use of the 'TARGET' option. */
 /*        C */
 
-/*              PROGRAM EX2 */
+/*              PROGRAM SPKCPO_EX2 */
 /*              IMPLICIT NONE */
 /*        C */
 /*        C     SPICELIB functions */
@@ -1105,13 +1097,13 @@ static integer c__3 = 3;
 /*        C     Local parameters */
 /*        C */
 /*              CHARACTER*(*)         FMT0 */
-/*              PARAMETER           ( FMT0   = '(1X,A,3F20.8)' ) */
+/*              PARAMETER           ( FMT0   = '(A,3F20.8)' ) */
 
 /*              CHARACTER*(*)         FMT1 */
 /*              PARAMETER           ( FMT1   = '(1X,A, F20.8)' ) */
 
 /*              CHARACTER*(*)         META */
-/*              PARAMETER           ( META   = 'spkcvo.tm' ) */
+/*              PARAMETER           ( META   = 'spkcpo_ex1.tm' ) */
 
 /*              CHARACTER*(*)         TIMFMT */
 /*              PARAMETER           ( TIMFMT = */
@@ -1280,9 +1272,9 @@ static integer c__3 = 3;
 /*              WRITE (*,*) ' ' */
 
 /*              WRITE (*,FMT1) 'Distance between above positions ' */
-/*             .//             '(km):     ',   VDIST( STATE0, STATE1 ) */
+/*             .//             '(km):    ',   VDIST( STATE0, STATE1 ) */
 /*              WRITE (*,FMT1) 'Velocity difference magnitude ' */
-/*             .//             ' (km/s):     ', */
+/*             .//             ' (km/s):    ', */
 /*             .               VDIST( STATE0(4), STATE1(4) ) */
 
 /*        C */
@@ -1312,10 +1304,10 @@ static integer c__3 = 3;
 /*              WRITE (*,*) ' ' */
 
 /*              WRITE (*,FMT1) 'Distance between last two ' */
-/*             .//             'positions (km):  ', */
+/*             .//             'positions (km): ', */
 /*             .               VDIST ( STATE1, STATE2 ) */
 /*              WRITE (*,FMT1) 'Velocity difference magnitude ' */
-/*             .//             '    (km/s):  ', */
+/*             .//             '    (km/s): ', */
 /*             .               VDIST( STATE1(4), STATE2(4) ) */
 
 /*        C */
@@ -1367,83 +1359,83 @@ static integer c__3 = 3;
 /*              END */
 
 
-/*        When this program was executed on a PC/Linux/gfortran */
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
 /*        platform, the output was: */
 
 
-/*        Frame evaluation locus:     OBSERVER */
+/*         Frame evaluation locus:     OBSERVER */
 
-/*        Target:                     MGS */
-/*        Observation time:           2003 OCT 13 06:00:00.000000 UTC */
-/*        Observer center:            EARTH */
-/*        Observer frame:             ITRF93 */
-/*        Emission time:              2003 OCT 13 05:55:44.201144 UTC */
-/*        Output reference frame:     ITRF93 */
-/*        Aberration correction:      CN+S */
+/*         Target:                     MGS */
+/*         Observation time:           2003 OCT 13 06:00:00.000000 UTC */
+/*         Observer center:            EARTH */
+/*         Observer frame:             ITRF93 */
+/*         Emission time:              2003 OCT 13 05:55:44.201144 UTC */
+/*         Output reference frame:     ITRF93 */
+/*         Aberration correction:      CN+S */
 
-/*        Observer-target position (km): */
+/*         Observer-target position (km): */
 /*             -53720675.37947631  -51381249.05335969  -18838416.34718024 */
-/*        Observer-target velocity (km/s): */
+/*         Observer-target velocity (km/s): */
 /*                 -3751.69274754       3911.73417167         -2.17503628 */
-/*        Light time (s):           255.79885530 */
+/*         Light time (s):           255.79885530 */
 
 
-/*        Frame evaluation locus:     CENTER */
+/*         Frame evaluation locus:     CENTER */
 
-/*        Target:                     MGS */
-/*        Observation time:           2003 OCT 13 06:00:00.000000 UTC */
-/*        Observer center:            EARTH */
-/*        Observer frame:             ITRF93 */
-/*        Emission time:              2003 OCT 13 05:55:44.201144 UTC */
-/*        Output reference frame:     ITRF93 */
-/*        Aberration correction:      CN+S */
+/*         Target:                     MGS */
+/*         Observation time:           2003 OCT 13 06:00:00.000000 UTC */
+/*         Observer center:            EARTH */
+/*         Observer frame:             ITRF93 */
+/*         Emission time:              2003 OCT 13 05:55:44.201144 UTC */
+/*         Output reference frame:     ITRF93 */
+/*         Aberration correction:      CN+S */
 
-/*        Observer-target position (km): */
+/*         Observer-target position (km): */
 /*             -53720595.74385086  -51381332.31464963  -18838416.34738571 */
-/*        Observer-target velocity (km/s): */
+/*         Observer-target velocity (km/s): */
 /*                 -3751.69880992       3911.72835653         -2.17503628 */
-/*        Light time (s):           255.79885530 */
+/*         Light time (s):           255.79885530 */
 
-/*        Distance between above positions (km):             115.21404099 */
-/*        Velocity difference magnitude  (km/s):               0.00840050 */
+/*         Distance between above positions (km):            115.21404099 */
+/*         Velocity difference magnitude  (km/s):              0.00840050 */
 
 
-/*        State computed using SPKEZR: */
+/*         State computed using SPKEZR: */
 
-/*        Target:                 MGS */
-/*        Observation time:       2003 OCT 13 06:00:00.000000 UTC */
-/*        Output reference frame: ITRF93 */
-/*        Aberration correction:  CN+S */
-/*        Observer:               DSS-14 */
+/*         Target:                 MGS */
+/*         Observation time:       2003 OCT 13 06:00:00.000000 UTC */
+/*         Output reference frame: ITRF93 */
+/*         Aberration correction:  CN+S */
+/*         Observer:               DSS-14 */
 
-/*        Observer-target position (km): */
+/*         Observer-target position (km): */
 /*             -53720595.74378239  -51381332.31467460  -18838416.34737090 */
-/*        Observer-target velocity (km/s): */
+/*         Observer-target velocity (km/s): */
 /*                 -3751.69880992       3911.72835653         -2.17503628 */
-/*        Light time (s):         255.79885530 */
+/*         Light time (s):         255.79885530 */
 
-/*        Distance between last two positions (km):            0.00007437 */
-/*        Velocity difference magnitude     (km/s):            0.00000000 */
+/*         Distance between last two positions (km):           0.00007437 */
+/*         Velocity difference magnitude     (km/s):           0.00000000 */
 
 
-/*        Frame evaluation locus:     TARGET */
+/*         Frame evaluation locus:     TARGET */
 
-/*        Target:                     MARS */
-/*        Observation time:           2003 OCT 13 06:00:00.000000 UTC */
-/*        Observer center:            EARTH */
-/*        Observer frame:             ITRF93 */
-/*        Emission time:              2003 OCT 13 05:55:44.201144 UTC */
-/*        Output reference frame:     IAU_MARS */
-/*        Aberration correction:      CN+S */
+/*         Target:                     MARS */
+/*         Observation time:           2003 OCT 13 06:00:00.000000 UTC */
+/*         Observer center:            EARTH */
+/*         Observer frame:             ITRF93 */
+/*         Emission time:              2003 OCT 13 05:55:44.201144 UTC */
+/*         Output reference frame:     IAU_MARS */
+/*         Aberration correction:      CN+S */
 
-/*        Observer-target position (km): */
+/*         Observer-target position (km): */
 /*             -71445232.12770166    2312773.74175354   27766441.52048387 */
-/*        Observer-target velocity (km/s): */
+/*         Observer-target velocity (km/s): */
 /*                   155.65895286       5061.78618477          5.09447030 */
-/*        Light time (s):           255.79702283 */
+/*         Light time (s):           255.79702283 */
 
-/*        Central meridian */
-/*        longitude (deg):           -1.85409037 */
+/*         Central meridian */
+/*         longitude (deg):           -1.85409037 */
 
 
 /* $ Restrictions */
@@ -1458,11 +1450,20 @@ static integer c__3 = 3;
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     S.C. Krening    (JPL) */
-/*     B.V. Semenov    (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     S.C. Krening       (JPL) */
+/*     B.V. Semenov       (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.0.1, 05-JUL-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
+
+/*        Corrected meta-kernel name in code examples. Modified code */
+/*        examples output format for the solutions to fit within the */
+/*        $Examples section without modifications. */
 
 /* -    SPICELIB Version 1.0.0, 27-MAR-2012 (NJB) (SCK) (BVS) */
 
@@ -1473,11 +1474,6 @@ static integer c__3 = 3;
 /*     state relative to constant_position surface_point */
 /*     state relative to surface_point on extended_object */
 /*     state relative to landmark on extended_object */
-
-/* -& */
-/* $ Revisions */
-
-/*     None. */
 
 /* -& */
 

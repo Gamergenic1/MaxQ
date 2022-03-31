@@ -11,7 +11,7 @@ static integer c__1 = 1;
 static integer c__15 = 15;
 static integer c__45 = 45;
 
-/* $Procedure      SPKE01 ( S/P Kernel, evaluate, type 1 ) */
+/* $Procedure SPKE01 ( S/P Kernel, evaluate, type 1 ) */
 /* Subroutine */ int spke01_(doublereal *et, doublereal *record, doublereal *
 	state)
 {
@@ -81,7 +81,7 @@ static integer c__45 = 45;
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     ET         I   Target epoch. */
 /*     RECORD     I   Data record. */
@@ -89,17 +89,17 @@ static integer c__45 = 45;
 
 /* $ Detailed_Input */
 
-/*     ET          is a target epoch, at which a state vector is to */
-/*                 be computed. */
+/*     ET       is a target epoch, at which a state vector is to */
+/*              be computed. */
 
-/*     RECORD      is a data record which, when evaluated at epoch ET, */
-/*                 will give the state (position and velocity) of some */
-/*                 body, relative to some center, in some inertial */
-/*                 reference frame. */
+/*     RECORD   is a data record which, when evaluated at epoch ET, */
+/*              will give the state (position and velocity) of some */
+/*              body, relative to some center, in some inertial */
+/*              reference frame. */
 
 /* $ Detailed_Output */
 
-/*     STATE       is the state. Units are km and km/sec. */
+/*     STATE    is the state. Units are km and km/sec. */
 
 /* $ Parameters */
 
@@ -135,31 +135,41 @@ static integer c__45 = 45;
 
 /* $ Restrictions */
 
-/*     Unknown. */
+/*     None. */
 
 /* $ Literature_References */
 
-/*     NAIF Document 168.0, "S- and P- Kernel (SPK) Specification and */
-/*     User's Guide" */
+/*     None. */
 
 /* $ Author_and_Institution */
 
-/*     F.T. Krogh      (JPL) */
-/*     I.M. Underwood  (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     F.T. Krogh         (JPL) */
+/*     H.A. Neilan        (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.2.0, 14-APR-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. Moved SPK */
+/*        required reading from $Literature_References to */
+/*        $Required_Reading section. */
 
 /* -    SPICELIB Version 1.1.0, 14-FEB-1997 (WLT) */
 
 /*        The goto's were removed and loop and if structures */
-/*        revealed.  We still don't know exactly what's going */
+/*        revealed. We still don't know exactly what's going */
 /*        on, but at least the bones of this routine have been */
 /*        cleaned off and are ready for assembly. (WLT) */
 
 /* -    SPICELIB Version 1.0.4, 30-OCT-1996 (WLT) */
 
 /*        Removed redundant SAVE statements from the declaration */
-/*        section.  Thanks to Steve Schlaifer for finding this */
+/*        section. Thanks to Steve Schlaifer for finding this */
 /*        error. */
 
 /* -    SPICELIB Version 1.0.3, 10-MAR-1992 (WLT) */
@@ -169,7 +179,7 @@ static integer c__45 = 45;
 
 /* -    SPICELIB Version 1.0.2, 23-AUG-1991 (HAN) */
 
-/*        SPK01 was removed from the Required_Reading section of the */
+/*        SPK01 was removed from the $Required_Reading section of the */
 /*        header. The information in the SPK01 Required Reading file */
 /*        is now part of the SPK Required Reading file. */
 
@@ -182,7 +192,7 @@ static integer c__45 = 45;
 /* -& */
 /* $ Index_Entries */
 
-/*     evaluate type_1 spk segment */
+/*     evaluate type_1 SPK segment */
 
 /* -& */
 
@@ -257,13 +267,13 @@ static integer c__45 = 45;
     i__1 = mq2;
     for (j = 1; j <= i__1; ++j) {
 	fc[(i__2 = j) < 14 && 0 <= i__2 ? i__2 : s_rnge("fc", i__2, "spke01_",
-		 (ftnlen)267)] = tp / g[(i__3 = j - 1) < 15 && 0 <= i__3 ? 
-		i__3 : s_rnge("g", i__3, "spke01_", (ftnlen)267)];
+		 (ftnlen)280)] = tp / g[(i__3 = j - 1) < 15 && 0 <= i__3 ? 
+		i__3 : s_rnge("g", i__3, "spke01_", (ftnlen)280)];
 	wc[(i__2 = j - 1) < 13 && 0 <= i__2 ? i__2 : s_rnge("wc", i__2, "spk"
-		"e01_", (ftnlen)268)] = delta / g[(i__3 = j - 1) < 15 && 0 <= 
-		i__3 ? i__3 : s_rnge("g", i__3, "spke01_", (ftnlen)268)];
+		"e01_", (ftnlen)281)] = delta / g[(i__3 = j - 1) < 15 && 0 <= 
+		i__3 ? i__3 : s_rnge("g", i__3, "spke01_", (ftnlen)281)];
 	tp = delta + g[(i__2 = j - 1) < 15 && 0 <= i__2 ? i__2 : s_rnge("g", 
-		i__2, "spke01_", (ftnlen)269)];
+		i__2, "spke01_", (ftnlen)282)];
     }
 
 /*     Collect KQMAX1 reciprocals. */
@@ -271,7 +281,7 @@ static integer c__45 = 45;
     i__1 = kqmax1;
     for (j = 1; j <= i__1; ++j) {
 	w[(i__2 = j - 1) < 17 && 0 <= i__2 ? i__2 : s_rnge("w", i__2, "spke0"
-		"1_", (ftnlen)276)] = 1. / (doublereal) j;
+		"1_", (ftnlen)289)] = 1. / (doublereal) j;
     }
 
 /*     Compute the W(K) terms needed for the position interpolation */
@@ -286,13 +296,13 @@ static integer c__45 = 45;
 	i__1 = jx;
 	for (j = 1; j <= i__1; ++j) {
 	    w[(i__2 = j + ks - 1) < 17 && 0 <= i__2 ? i__2 : s_rnge("w", i__2,
-		     "spke01_", (ftnlen)293)] = fc[(i__3 = j) < 14 && 0 <= 
-		    i__3 ? i__3 : s_rnge("fc", i__3, "spke01_", (ftnlen)293)] 
+		     "spke01_", (ftnlen)306)] = fc[(i__3 = j) < 14 && 0 <= 
+		    i__3 ? i__3 : s_rnge("fc", i__3, "spke01_", (ftnlen)306)] 
 		    * w[(i__4 = j + ks1 - 1) < 17 && 0 <= i__4 ? i__4 : 
-		    s_rnge("w", i__4, "spke01_", (ftnlen)293)] - wc[(i__5 = j 
+		    s_rnge("w", i__4, "spke01_", (ftnlen)306)] - wc[(i__5 = j 
 		    - 1) < 13 && 0 <= i__5 ? i__5 : s_rnge("wc", i__5, "spke"
-		    "01_", (ftnlen)293)] * w[(i__6 = j + ks - 1) < 17 && 0 <= 
-		    i__6 ? i__6 : s_rnge("w", i__6, "spke01_", (ftnlen)293)];
+		    "01_", (ftnlen)306)] * w[(i__6 = j + ks - 1) < 17 && 0 <= 
+		    i__6 ? i__6 : s_rnge("w", i__6, "spke01_", (ftnlen)306)];
 	}
 	ks = ks1;
 	--ks1;
@@ -303,19 +313,19 @@ static integer c__45 = 45;
 
     for (i__ = 1; i__ <= 3; ++i__) {
 	kqq = kq[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("kq", i__1,
-		 "spke01_", (ftnlen)307)];
+		 "spke01_", (ftnlen)320)];
 	sum = 0.;
 	for (j = kqq; j >= 1; --j) {
 	    sum += dt[(i__1 = j + i__ * 15 - 16) < 45 && 0 <= i__1 ? i__1 : 
-		    s_rnge("dt", i__1, "spke01_", (ftnlen)311)] * w[(i__2 = j 
+		    s_rnge("dt", i__1, "spke01_", (ftnlen)324)] * w[(i__2 = j 
 		    + ks - 1) < 17 && 0 <= i__2 ? i__2 : s_rnge("w", i__2, 
-		    "spke01_", (ftnlen)311)];
+		    "spke01_", (ftnlen)324)];
 	}
 	state[(i__1 = i__ - 1) < 6 && 0 <= i__1 ? i__1 : s_rnge("state", i__1,
-		 "spke01_", (ftnlen)314)] = refpos[(i__2 = i__ - 1) < 3 && 0 
+		 "spke01_", (ftnlen)327)] = refpos[(i__2 = i__ - 1) < 3 && 0 
 		<= i__2 ? i__2 : s_rnge("refpos", i__2, "spke01_", (ftnlen)
-		314)] + delta * (refvel[(i__3 = i__ - 1) < 3 && 0 <= i__3 ? 
-		i__3 : s_rnge("refvel", i__3, "spke01_", (ftnlen)314)] + 
+		327)] + delta * (refvel[(i__3 = i__ - 1) < 3 && 0 <= i__3 ? 
+		i__3 : s_rnge("refvel", i__3, "spke01_", (ftnlen)327)] + 
 		delta * sum);
     }
 
@@ -326,13 +336,13 @@ static integer c__45 = 45;
     i__1 = jx;
     for (j = 1; j <= i__1; ++j) {
 	w[(i__2 = j + ks - 1) < 17 && 0 <= i__2 ? i__2 : s_rnge("w", i__2, 
-		"spke01_", (ftnlen)324)] = fc[(i__3 = j) < 14 && 0 <= i__3 ? 
-		i__3 : s_rnge("fc", i__3, "spke01_", (ftnlen)324)] * w[(i__4 =
+		"spke01_", (ftnlen)337)] = fc[(i__3 = j) < 14 && 0 <= i__3 ? 
+		i__3 : s_rnge("fc", i__3, "spke01_", (ftnlen)337)] * w[(i__4 =
 		 j + ks1 - 1) < 17 && 0 <= i__4 ? i__4 : s_rnge("w", i__4, 
-		"spke01_", (ftnlen)324)] - wc[(i__5 = j - 1) < 13 && 0 <= 
-		i__5 ? i__5 : s_rnge("wc", i__5, "spke01_", (ftnlen)324)] * w[
+		"spke01_", (ftnlen)337)] - wc[(i__5 = j - 1) < 13 && 0 <= 
+		i__5 ? i__5 : s_rnge("wc", i__5, "spke01_", (ftnlen)337)] * w[
 		(i__6 = j + ks - 1) < 17 && 0 <= i__6 ? i__6 : s_rnge("w", 
-		i__6, "spke01_", (ftnlen)324)];
+		i__6, "spke01_", (ftnlen)337)];
     }
     --ks;
 
@@ -340,18 +350,18 @@ static integer c__45 = 45;
 
     for (i__ = 1; i__ <= 3; ++i__) {
 	kqq = kq[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("kq", i__1,
-		 "spke01_", (ftnlen)334)];
+		 "spke01_", (ftnlen)347)];
 	sum = 0.;
 	for (j = kqq; j >= 1; --j) {
 	    sum += dt[(i__1 = j + i__ * 15 - 16) < 45 && 0 <= i__1 ? i__1 : 
-		    s_rnge("dt", i__1, "spke01_", (ftnlen)338)] * w[(i__2 = j 
+		    s_rnge("dt", i__1, "spke01_", (ftnlen)351)] * w[(i__2 = j 
 		    + ks - 1) < 17 && 0 <= i__2 ? i__2 : s_rnge("w", i__2, 
-		    "spke01_", (ftnlen)338)];
+		    "spke01_", (ftnlen)351)];
 	}
 	state[(i__1 = i__ + 2) < 6 && 0 <= i__1 ? i__1 : s_rnge("state", i__1,
-		 "spke01_", (ftnlen)341)] = refvel[(i__2 = i__ - 1) < 3 && 0 
+		 "spke01_", (ftnlen)354)] = refvel[(i__2 = i__ - 1) < 3 && 0 
 		<= i__2 ? i__2 : s_rnge("refvel", i__2, "spke01_", (ftnlen)
-		341)] + delta * sum;
+		354)] + delta * sum;
     }
 
 /*     That's all folks.  We don't know why we did anything, but */

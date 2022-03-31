@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      SETERR ( Set Error Status ) */
+/* $Procedure SETERR ( Set Error Status ) */
 logical seterr_0_(int n__, logical *status)
 {
     /* Initialized data */
@@ -55,80 +55,87 @@ logical seterr_0_(int n__, logical *status)
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*      VARIABLE  I/O  DESCRIPTION */
-/*      --------  ---  -------------------------------------------------- */
-/*      STATUS     I   Status indicator. */
+/*     VARIABLE  I/O  DESCRIPTION */
+/*     --------  ---  -------------------------------------------------- */
+/*     STATUS     I   Status indicator. */
 
-
-/*      The function takes an UNSPECIFIED (and meaningless) value */
-/*      on exit. */
+/*     The function takes an UNSPECIFIED (and meaningless) value */
+/*     on exit. */
 
 /* $ Detailed_Input */
 
-/*      STATUS  Indicates the new status.  When .TRUE., it */
+/*     STATUS   is a flag that provides the new status. When .TRUE., it */
 /*              means that an error condition exists. */
 
 /* $ Detailed_Output */
 
-/*      None. */
+/*     None. */
 
-/*      This purpose of this routine is to set status; the */
-/*      function takes an UNSPECIFIED value on exit.  The */
-/*      assigned value does not have any meaning. */
+/*     This purpose of this routine is to set status; the */
+/*     function takes an UNSPECIFIED value on exit. The */
+/*     assigned value does not have any meaning. */
 
 /* $ Parameters */
 
-/*      None. */
+/*     None. */
 
 /* $ Exceptions */
 
-/*      None. */
+/*     Error free. */
 
 /* $ Files */
 
-/*      None. */
+/*     None. */
 
 /* $ Particulars */
 
-/*      DO NOT CALL THIS ROUTINE. */
+/*     DO NOT CALL THIS ROUTINE. */
 
-/*      This is a data structure access routine for the */
-/*      SPICELIB status.  This routine should be used for no */
-/*      other purpose; in particular, it should not be used */
-/*      to signal errors.  Use SIGERR or FAILED for that. */
+/*     This is a data structure access routine for the */
+/*     SPICELIB status. This routine should be used for no */
+/*     other purpose; in particular, it should not be used */
+/*     to signal errors. Use SIGERR or FAILED for that. */
 
-/*      This routine assigns a value to SETERR on exit. */
-/*      However, the value is not meaningful. */
+/*     This routine assigns a value to SETERR on exit. */
+/*     However, the value is not meaningful. */
 
 /* $ Examples */
 
-/*      None.  DON'T CALL THIS ROUTINE. */
+/*     None.  DON'T CALL THIS ROUTINE. */
 
-/*      No examples.  If you don't know EXACTLY what a */
-/*      ``data structure access routine'' is, don't call */
-/*      this routine.  If you do know, you don't need an */
-/*      example. */
+/*     No examples. If you don't know EXACTLY what a */
+/*     ``data structure access routine'' is, don't call */
+/*     this routine. If you do know, you don't need an */
+/*     example. */
 
 /* $ Restrictions */
 
-/*      DON'T CALL THIS ROUTINE. */
+/*     1)  DON'T CALL THIS ROUTINE. */
 
 /* $ Literature_References */
 
-/*      None. */
+/*     None. */
 
 /* $ Author_and_Institution */
 
-/*      N.J. Bachman    (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
 
-/* -     SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+/* -    SPICELIB Version 1.1.0, 26-OCT-2021 (JDR) (NJB) */
 
-/*         Comment section for permuted index source lines was added */
-/*         following the header. */
+/*        Added IMPLICIT NONE statement. */
 
-/* -     SPICELIB Version 1.0.0, 31-JAN-1990 (NJB) */
+/*        Edited the header to comply with NAIF standard. */
+
+/* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+
+/*        Comment section for permuted index source lines was added */
+/*        following the header. */
+
+/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (NJB) */
 
 /* -& */
 /* $ Index_Entries */
@@ -170,13 +177,13 @@ logical seterr_0_(int n__, logical *status)
 
     ret_val = TRUE_;
     return ret_val;
-/* $Procedure      FAILED ( Error Status Indicator ) */
+/* $Procedure FAILED ( Error Status Indicator ) */
 
 L_failed:
 /* $ Abstract */
 
-/*      True if an error condition has been signalled via SIGERR. */
-/*      FAILED is the SPICELIB status indicator. */
+/*     Return .TRUE. if an error condition has been signaled via SIGERR. */
+/*     FAILED is the SPICELIB status indicator. */
 
 /* $ Disclaimer */
 
@@ -205,192 +212,190 @@ L_failed:
 
 /* $ Required_Reading */
 
-/*      ERROR */
+/*     ERROR */
 
 /* $ Keywords */
 
-/*      ERROR */
+/*     ERROR */
 
 /* $ Declarations */
 
-/*      None. */
+/*     IMPLICIT NONE */
 
 /* $ Brief_I/O */
 
-/*      VARIABLE  I/O  DESCRIPTION */
-/*      --------  ---  -------------------------------------------------- */
-
-/*      The function takes the value .TRUE. if an error condition */
-/*      was detected; it is .FALSE. otherwise. */
-
+/*     The function takes the value .TRUE. if an error condition */
+/*     was detected; it is .FALSE. otherwise. */
 
 /* $ Detailed_Input */
 
-/*      None. */
+/*     None. */
 
 /* $ Detailed_Output */
 
-/*      Please read the required reading file before reading this! */
+/*     Please read the required reading file before reading this! */
 
-/*      The value taken by FAILED indicates status. */
+/*     The value taken by FAILED indicates status. */
 
-/*      The status value applies to the SPICELIB routines, */
-/*      and to any other routines which call the status-setting */
-/*      routine, SIGERR. */
+/*     The status value applies to the SPICELIB routines, */
+/*     and to any other routines which call the status-setting */
+/*     routine, SIGERR. */
 
-/*      When FAILED has the value, .TRUE., an error condition */
-/*      exists.   .FALSE. means "no error." */
+/*     When FAILED has the value, .TRUE., an error condition */
+/*     exists.   .FALSE. means "no error." */
 
-/*      More specifically, when FAILED has the value .TRUE., */
-/*      some routine has indicated an error by calling the */
-/*      SPICELIB routine, SIGERR.  All SPICELIB routines */
-/*      which can detect errors do this.  Non-SPICELIB */
-/*      routines may also reference SIGERR if desired. */
+/*     More specifically, when FAILED has the value .TRUE., */
+/*     some routine has indicated an error by calling the */
+/*     SPICELIB routine, SIGERR. All SPICELIB routines */
+/*     which can detect errors do this. Non-SPICELIB */
+/*     routines may also reference SIGERR if desired. */
 
-/*      When FAILED has the value .FALSE., either no routine */
-/*      has yet signalled an error via SIGERR, or the status */
-/*      has been reset using, what else, RESET. */
+/*     When FAILED has the value .FALSE., either no routine */
+/*     has yet signaled an error via SIGERR, or the status */
+/*     has been reset using, what else, RESET. */
 
-/*      FAILED is initialized to have the value, .FALSE. */
-/*      This indicates a  "no error" status. */
+/*     FAILED is initialized to have the value, .FALSE. */
+/*     This indicates a  "no error" status. */
 
-/*      See "particulars" below for (slightly) more information. */
-
-
+/*     See "particulars" below for (slightly) more information. */
 
 /* $ Parameters */
 
-/*      None. */
+/*     None. */
 
 /* $ Exceptions */
 
-/*      None. */
+/*     Error free. */
 
-/*      However, this routine is part of the SPICELIB error */
-/*      handling mechanism. */
+/*     1)  However, this routine is part of the SPICELIB error */
+/*         handling mechanism. */
 
 /* $ Files */
 
-/*      None. */
+/*     None. */
 
 /* $ Particulars */
 
-/*      See the required reading file for details of error */
-/*      processing.  However, here are some notes: */
+/*     See the required reading file for details of error */
+/*     processing. However, here are some notes: */
 
-/*      When any SPICELIB routine detects an error, the */
-/*      status is set to indicate an error condition via */
-/*      a call to SIGERR.   After SIGERR */
-/*      returns, further calls to FAILED will return the */
-/*      value, .TRUE., indicating an error condition. */
+/*     When any SPICELIB routine detects an error, the */
+/*     status is set to indicate an error condition via */
+/*     a call to SIGERR. After SIGERR */
+/*     returns, further calls to FAILED will return the */
+/*     value, .TRUE., indicating an error condition. */
 
-/*      Non-SPICELIB routines may also call SIGERR to indicate */
-/*      an error condition; FAILED will reflect such calls */
-/*      as well. */
+/*     Non-SPICELIB routines may also call SIGERR to indicate */
+/*     an error condition; FAILED will reflect such calls */
+/*     as well. */
 
-/*      It is possible to re-set the error status to indicate */
-/*      "no error" using the SPICELIB routine, RESET (see). */
+/*     It is possible to re-set the error status to indicate */
+/*     "no error" using the SPICELIB routine, RESET (see). */
 
-/*      The effect on FAILED of resetting the status is */
-/*      that FAILED will again return the value .FALSE., */
-/*      indicating "no error." */
+/*     The effect on FAILED of resetting the status is */
+/*     that FAILED will again return the value .FALSE., */
+/*     indicating "no error." */
 
-/*      One of the main virtues of the SPICELIB error */
-/*      handling mechanism is that you don't HAVE to test the */
-/*      error status after every call to a SPICELIB routine. */
-/*      If you set the error handling mode to 'RETURN', using */
-/*      the routine, ERRACT, SPICELIB routines won't crash */
-/*      when an error occurs; following the detection of the */
-/*      error, each routine will return immediately upon entry. */
-/*      Therefore, you call several SPICELIB routines in a */
-/*      row, and just test status at the end of the sequence */
-/*      of calls, if you wish.  See "examples" below. */
-
+/*     One of the main virtues of the SPICELIB error */
+/*     handling mechanism is that you don't HAVE to test the */
+/*     error status after every call to a SPICELIB routine. */
+/*     If you set the error handling mode to 'RETURN', using */
+/*     the routine, ERRACT, SPICELIB routines won't crash */
+/*     when an error occurs; following the detection of the */
+/*     error, each routine will return immediately upon entry. */
+/*     Therefore, you call several SPICELIB routines in a */
+/*     row, and just test status at the end of the sequence */
+/*     of calls, if you wish. See "examples" below. */
 
 /* $ Examples */
 
-/*      1.  Here's an example of a simple call to RDTEXT, followed */
-/*          by a test of the status. */
+/*     1. Here's an example of a simple call to RDTEXT, followed */
+/*         by a test of the status. */
 
 
-/*      C */
-/*      C     We read a line of text from file SPUD.DAT: */
-/*      C */
+/*     C */
+/*     C     We read a line of text from file SPUD.DAT: */
+/*     C */
 
-/*            CALL RDTEXT ( 'SPUD.DAT', LINE, EOF ) */
+/*           CALL RDTEXT ( 'SPUD.DAT', LINE, EOF ) */
 
-/*            IF ( FAILED() ) THEN */
+/*           IF ( FAILED() ) THEN */
 
-/*      C        An error occurred during the read. */
+/*     C        An error occurred during the read. */
 
-/*               [respond to error here] */
+/*              [respond to error here] */
 
-/*            END IF */
-
-
-/*      2.    Here's an example in which we don't want to */
-/*            put the error test inside our loop.  We just */
-/*            test the error status after the loop terminates. */
-/*            We can do this because we (that is, you, the user) */
-/*            have made the call, */
-
-/*                   CALL ERRACT ( 'RETURN' ) */
-
-/*            prior to execution of the following code.  If an */
-/*            error does occur, the remaining calls to RDTEXT */
-/*            will have no effect.  Here's the example: */
-
-/*      C */
-/*      C     We read the first 5000 lines of a file, or until */
-/*      C     EOF is reached, whichever comes first: */
-/*      C */
-/*      C     Note:  the "DO WHILE" construct is available in */
-/*      C     VAX FORTRAN. */
-/*      C */
-
-/*            LCOUNT = 0 */
-/*            DO WHILE (  ( .NOT. EOF ) .AND. ( LCOUNT .LE. 5000 )  ) */
-
-/*               CALL RDTEXT ( 'SPUD.DAT', LINE(LCOUNT), EOF ) */
-
-/*               LCOUNT = LCOUNT + 1 */
-
-/*            END DO */
-
-/*            IF ( FAILED() ) THEN */
-/*      C */
-/*      C        An error occurred during the read */
-/*      C */
-/*               [respond to error here] */
-
-/*            END IF */
+/*           END IF */
 
 
+/*     2.    Here's an example in which we don't want to */
+/*           put the error test inside our loop.  We just */
+/*           test the error status after the loop terminates. */
+/*           We can do this because we (that is, you, the user) */
+/*           have made the call, */
+
+/*                  CALL ERRACT ( 'RETURN' ) */
+
+/*           prior to execution of the following code. If an */
+/*           error does occur, the remaining calls to RDTEXT */
+/*           will have no effect. Here's the example: */
+
+/*     C */
+/*     C     We read the first 5000 lines of a file, or until */
+/*     C     EOF is reached, whichever comes first: */
+/*     C */
+/*     C     Note:  the "DO WHILE" construct is available in */
+/*     C     VAX FORTRAN. */
+/*     C */
+
+/*           LCOUNT = 0 */
+/*           DO WHILE (  ( .NOT. EOF ) .AND. ( LCOUNT .LE. 5000 )  ) */
+
+/*              CALL RDTEXT ( 'SPUD.DAT', LINE(LCOUNT), EOF ) */
+
+/*              LCOUNT = LCOUNT + 1 */
+
+/*           END DO */
+
+/*           IF ( FAILED() ) THEN */
+/*     C */
+/*     C        An error occurred during the read */
+/*     C */
+/*              [respond to error here] */
+
+/*           END IF */
 
 /* $ Restrictions */
 
-/*      This routine automatically detects errors occurring in */
-/*      the SPICELIB code.  To make this routine work */
-/*      for your own routines, your routines must call SIGERR */
-/*      to report errors. */
+/*     1)  This routine automatically detects errors occurring in */
+/*         the SPICELIB code. To make this routine work */
+/*         for your own routines, your routines must call SIGERR */
+/*         to report errors. */
 
 /* $ Literature_References */
 
-/*      None. */
+/*     None. */
 
 /* $ Author_and_Institution */
 
-/*      N.J. Bachman    (JPL) */
-/*      H.A. Neilan     (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
 
-/* -     SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+/* -    SPICELIB Version 1.1.0, 26-OCT-2021 (JDR) (NJB) */
 
-/*         Comment section for permuted index source lines was added */
-/*         following the header. */
+/*        Added IMPLICIT NONE statement. */
 
-/* -     SPICELIB Version 1.0.0, 31-JAN-1990 (NJB) */
+/*        Edited the header to comply with NAIF standard. */
+
+/* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+
+/*        Comment section for permuted index source lines was added */
+/*        following the header. */
+
+/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (NJB) */
 
 /* -& */
 /* $ Index_Entries */

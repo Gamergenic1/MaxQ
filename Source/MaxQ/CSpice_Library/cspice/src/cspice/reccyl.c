@@ -5,9 +5,9 @@
 
 #include "f2c.h"
 
-/* $Procedure      RECCYL ( Rectangular to cylindrical coordinates ) */
+/* $Procedure RECCYL ( Rectangular to cylindrical coordinates ) */
 /* Subroutine */ int reccyl_(doublereal *rectan, doublereal *r__, doublereal *
-	long__, doublereal *z__)
+	clon, doublereal *z__)
 {
     /* System generated locals */
     doublereal d__1, d__2;
@@ -23,7 +23,6 @@
 /* $ Abstract */
 
 /*     Convert from rectangular to cylindrical coordinates. */
-
 
 /* $ Disclaimer */
 
@@ -56,7 +55,8 @@
 
 /* $ Keywords */
 
-/*     CONVERSION, COORDINATES */
+/*     CONVERSION */
+/*     COORDINATES */
 
 /* $ Declarations */
 /* $ Brief_I/O */
@@ -65,21 +65,22 @@
 /*     --------  ---  ------------------------------------------------- */
 /*     RECTAN     I   Rectangular coordinates of a point. */
 /*     R          O   Distance of the point from Z axis. */
-/*     LONG       O   Angle (radians) of the point from XZ plane */
+/*     CLON       O   Angle (radians) of the point from XZ plane */
 /*     Z          O   Height of the point above XY plane. */
 
 /* $ Detailed_Input */
 
-/*     RECTAN     Rectangular coordinates of the point of interest. */
+/*     RECTAN   are the rectangular coordinates of the point of */
+/*              interest. */
 
 /* $ Detailed_Output */
 
-/*     R          Distance of the point of interest from Z axis. */
+/*     R        is the distance of the point of interest from Z-axis. */
 
-/*     LONG       Cylindrical angle (in radians) of the point of */
-/*                interest from XZ plane. The LONG range is [0, 2pi]. */
+/*     CLON     is the cylindrical angle (in radians) of the point of */
+/*              interest from XZ plane. The CLON range is [0, 2pi]. */
 
-/*     Z          Height of the point above XY plane. */
+/*     Z        is the height of the point above XY plane. */
 
 /* $ Parameters */
 
@@ -100,39 +101,245 @@
 
 /* $ Examples */
 
-/*     Below are two tables. */
+/*     The numerical results shown for these examples may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
 
-/*     Listed in the first table (under X(1), X(2) and X(3) ) are a */
-/*     number of points whose rectangular coordinates coorindates are */
-/*     taken from the set {-1, 0, 1}. */
+/*     1) Compute the cylindrical coordinates of the position of the Moon */
+/*        as seen from the Earth, and convert them to rectangular */
+/*        coordinates. */
 
-/*     The result of the code fragment */
-
-/*          CALL RECCYL ( X, R, LONG, Z ) */
-
-/*          Use the SPICELIB routine CONVRT to convert the angular */
-/*          quantities to degrees */
-
-/*          CALL CONVRT ( LONG, 'RADIANS', 'DEGREES', LONG ) */
-
-/*     are listed to 4 decimal places in the second parallel table under */
-/*     R (radius), LONG (longitude), and  Z (same as rectangular Z */
-/*     coordinate). */
+/*        Use the meta-kernel shown below to load the required SPICE */
+/*        kernels. */
 
 
-/*       X(1)       X(2)     X(3)        R         LONG     Z */
-/*       --------------------------      ------------------------- */
-/*       0.0000     0.0000   0.0000      0.0000    0.0000   0.0000 */
-/*       1.0000     0.0000   0.0000      1.0000    0.0000   0.0000 */
-/*       0.0000     1.0000   0.0000      1.0000   90.0000   0.0000 */
-/*       0.0000     0.0000   1.0000      0.0000    0.0000   1.0000 */
-/*      -1.0000     0.0000   0.0000      1.0000  180.0000   0.0000 */
-/*       0.0000    -1.0000   0.0000      1.0000  270.0000   0.0000 */
-/*       0.0000     0.0000  -1.0000      0.0000    0.0000  -1.0000 */
-/*       1.0000     1.0000   0.0000      1.4142   45.0000   0.0000 */
-/*       1.0000     0.0000   1.0000      1.0000    0.0000   1.0000 */
-/*       0.0000     1.0000   1.0000      1.0000   90.0000   1.0000 */
-/*       1.0000     1.0000   1.0000      1.4142   45.0000   1.0000 */
+/*           KPL/MK */
+
+/*           File name: reccyl_ex1.tm */
+
+/*           This meta-kernel is intended to support operation of SPICE */
+/*           example programs. The kernels shown here should not be */
+/*           assumed to contain adequate or correct versions of data */
+/*           required by SPICE-based user applications. */
+
+/*           In order for an application to use this meta-kernel, the */
+/*           kernels referenced here must be present in the user's */
+/*           current working directory. */
+
+/*           The names and contents of the kernels referenced */
+/*           by this meta-kernel are as follows: */
+
+/*              File name                     Contents */
+/*              ---------                     -------- */
+/*              de421.bsp                     Planetary ephemeris */
+/*              naif0012.tls                  Leapseconds */
+
+
+/*           \begindata */
+
+/*              KERNELS_TO_LOAD = ( 'de421.bsp', */
+/*                                  'naif0012.tls'  ) */
+
+/*           \begintext */
+
+/*           End of meta-kernel */
+
+
+/*        Example code begins here. */
+
+
+/*              PROGRAM RECCYL_EX1 */
+/*              IMPLICIT NONE */
+
+/*        C */
+/*        C     SPICELIB functions */
+/*        C */
+/*              DOUBLE PRECISION      DPR */
+
+/*        C */
+/*        C     Local parameters */
+/*        C */
+/*              CHARACTER*(*)         FMT1 */
+/*              PARAMETER           ( FMT1 = '(A,F20.8)' ) */
+
+/*        C */
+/*        C     Local variables */
+/*        C */
+/*              DOUBLE PRECISION      CLON */
+/*              DOUBLE PRECISION      ET */
+/*              DOUBLE PRECISION      LT */
+/*              DOUBLE PRECISION      POS    ( 3 ) */
+/*              DOUBLE PRECISION      RECTAN ( 3 ) */
+/*              DOUBLE PRECISION      R */
+/*              DOUBLE PRECISION      Z */
+
+/*        C */
+/*        C     Load SPK and LSK kernels, use a meta kernel for */
+/*        C     convenience. */
+/*        C */
+/*              CALL FURNSH ( 'reccyl_ex1.tm' ) */
+
+/*        C */
+/*        C     Look up the geometric state of the Moon as seen from */
+/*        C     the Earth at 2017 Mar 20, relative to the J2000 */
+/*        C     reference frame. */
+/*        C */
+/*              CALL STR2ET ( '2017 Mar 20', ET ) */
+
+/*              CALL SPKPOS ( 'Moon',  ET,  'J2000', 'NONE', */
+/*             .              'Earth', POS, LT               ) */
+
+/*        C */
+/*        C     Convert the position vector POS to cylindrical */
+/*        C     coordinates. */
+/*        C */
+/*              CALL RECCYL ( POS, R, CLON, Z ) */
+
+/*        C */
+/*        C     Convert the cylindrical to rectangular coordinates. */
+/*        C */
+
+/*              CALL CYLREC ( R, CLON, Z, RECTAN ) */
+
+/*              WRITE(*,*) ' ' */
+/*              WRITE(*,*) 'Original rectangular coordinates:' */
+/*              WRITE(*,*) ' ' */
+/*              WRITE(*,FMT1) '  X          (km): ', POS(1) */
+/*              WRITE(*,FMT1) '  Y          (km): ', POS(2) */
+/*              WRITE(*,FMT1) '  Z          (km): ', POS(3) */
+/*              WRITE(*,*) ' ' */
+/*              WRITE(*,*) 'Cylindrical coordinates:' */
+/*              WRITE(*,*) ' ' */
+/*              WRITE(*,FMT1) '  Radius     (km): ', R */
+/*              WRITE(*,FMT1) '  Longitude (deg): ', CLON*DPR() */
+/*              WRITE(*,FMT1) '  Z          (km): ', Z */
+/*              WRITE(*,*) ' ' */
+/*              WRITE(*,*) 'Rectangular coordinates from CYLREC:' */
+/*              WRITE(*,*) ' ' */
+/*              WRITE(*,FMT1) '  X          (km): ', RECTAN(1) */
+/*              WRITE(*,FMT1) '  Y          (km): ', RECTAN(2) */
+/*              WRITE(*,FMT1) '  Z          (km): ', RECTAN(3) */
+/*              WRITE(*,*) ' ' */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*         Original rectangular coordinates: */
+
+/*          X          (km):      -55658.44323296 */
+/*          Y          (km):     -379226.32931475 */
+/*          Z          (km):     -126505.93063865 */
+
+/*         Cylindrical coordinates: */
+
+/*          Radius     (km):      383289.01777726 */
+/*          Longitude (deg):         261.65040211 */
+/*          Z          (km):     -126505.93063865 */
+
+/*         Rectangular coordinates from CYLREC: */
+
+/*          X          (km):      -55658.44323296 */
+/*          Y          (km):     -379226.32931475 */
+/*          Z          (km):     -126505.93063865 */
+
+
+/*     2) Create a table showing a variety of rectangular coordinates */
+/*        and the corresponding cylindrical coordinates. */
+
+/*        Corresponding rectangular and cylindrical coordinates are */
+/*        listed to three decimal places. Output angles are in degrees. */
+
+
+/*        Example code begins here. */
+
+
+/*              PROGRAM RECCYL_EX2 */
+/*              IMPLICIT NONE */
+
+/*        C */
+/*        C     SPICELIB functions */
+/*        C */
+/*              DOUBLE PRECISION      DPR */
+
+/*        C */
+/*        C     Local parameters. */
+/*        C */
+/*              INTEGER               NREC */
+/*              PARAMETER           ( NREC = 11 ) */
+
+/*        C */
+/*        C     Local variables. */
+/*        C */
+/*              DOUBLE PRECISION      CLON */
+/*              DOUBLE PRECISION      R */
+/*              DOUBLE PRECISION      RECTAN ( 3, NREC ) */
+/*              DOUBLE PRECISION      Z */
+
+/*              INTEGER               I */
+/*              INTEGER               J */
+
+/*        C */
+/*        C     Define the input rectangular coordinates. */
+/*        C */
+/*              DATA                 RECTAN / */
+/*             .                  0.D0,         0.D0,         0.D0, */
+/*             .                  1.D0,         0.D0,         0.D0, */
+/*             .                  0.D0,         1.D0,         0.D0, */
+/*             .                  0.D0,         0.D0,         1.D0, */
+/*             .                 -1.D0,         0.D0,         0.D0, */
+/*             .                  0.D0,        -1.D0,         0.D0, */
+/*             .                  0.D0,         0.D0,        -1.D0, */
+/*             .                  1.D0,         1.D0,         0.D0, */
+/*             .                  1.D0,         0.D0,         1.D0, */
+/*             .                  0.D0,         1.D0,         1.D0, */
+/*             .                  1.D0,         1.D0,         1.D0  / */
+
+/*        C */
+/*        C     Print the banner. */
+/*        C */
+/*              WRITE(*,*) ' RECT(1)  RECT(2)  RECT(3) ' */
+/*             . //        '    R       CLON      Z' */
+/*              WRITE(*,*) ' -------  -------  ------- ' */
+/*             . //        ' -------  -------  ------- ' */
+
+/*        C */
+/*        C     Do the conversion. Output angles in degrees. */
+/*        C */
+/*              DO I = 1, NREC */
+
+/*                 CALL RECCYL( RECTAN(1,I), R, CLON, Z ) */
+
+/*                 WRITE (*,'(6F9.3)') ( RECTAN(J,I), J=1,3 ), */
+/*             .                         R, CLON * DPR(), Z */
+
+/*              END DO */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*          RECT(1)  RECT(2)  RECT(3)     R       CLON      Z */
+/*          -------  -------  -------  -------  -------  ------- */
+/*            0.000    0.000    0.000    0.000    0.000    0.000 */
+/*            1.000    0.000    0.000    1.000    0.000    0.000 */
+/*            0.000    1.000    0.000    1.000   90.000    0.000 */
+/*            0.000    0.000    1.000    0.000    0.000    1.000 */
+/*           -1.000    0.000    0.000    1.000  180.000    0.000 */
+/*            0.000   -1.000    0.000    1.000  270.000    0.000 */
+/*            0.000    0.000   -1.000    0.000    0.000   -1.000 */
+/*            1.000    1.000    0.000    1.414   45.000    0.000 */
+/*            1.000    0.000    1.000    1.000    0.000    1.000 */
+/*            0.000    1.000    1.000    1.000   90.000    1.000 */
+/*            1.000    1.000    1.000    1.414   45.000    1.000 */
+
 
 /* $ Restrictions */
 
@@ -144,9 +351,22 @@
 
 /* $ Author_and_Institution */
 
-/*     W.L. Taber      (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 06-JUL-2021 (JDR) */
+
+/*        Changed the output argument name LONG to CLON for consistency */
+/*        with other routines. */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
+/*        Added complete code examples. */
 
 /* -    SPICELIB Version 1.0.3, 26-JUL-2016 (BVS) */
 
@@ -154,7 +374,7 @@
 
 /* -    SPICELIB Version 1.0.2, 22-AUG-2001 (EDW) */
 
-/*        Corrected ENDIF to END IF. Obsolete Revisions section */
+/*        Corrected ENDIF to END IF. Obsolete $Revisions section */
 /*        deleted. */
 
 /* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
@@ -188,15 +408,15 @@
     *z__ = rectan[2];
     if (big == 0.) {
 	*r__ = 0.;
-	*long__ = 0.;
+	*clon = 0.;
     } else {
 	x = rectan[0] / big;
 	y = rectan[1] / big;
 	*r__ = big * sqrt(x * x + y * y);
-	*long__ = atan2(y, x);
+	*clon = atan2(y, x);
     }
-    if (*long__ < 0.) {
-	*long__ += twopi_();
+    if (*clon < 0.) {
+	*clon += twopi_();
     }
     return 0;
 } /* reccyl_ */

@@ -16,7 +16,7 @@
    PUBLICLY AVAILABLE UNDER U.S. EXPORT LAWS AND IS PROVIDED "AS-IS"
    TO THE RECIPIENT WITHOUT WARRANTY OF ANY KIND, INCLUDING ANY
    WARRANTIES OF PERFORMANCE OR MERCHANTABILITY OR FITNESS FOR A
-   PARTICULAR USE OR PURPOSE (AS set_c FORTH IN UNITED STATES UCC
+   PARTICULAR USE OR PURPOSE (AS SET FORTH IN UNITED STATES UCC
    SECTIONS 2312-2313) OR FOR ANY PURPOSE WHATSOEVER, FOR THE
    SOFTWARE AND RELATED MATERIALS, HOWEVER USED.
 
@@ -39,7 +39,6 @@
 -Keywords
 
    INTERPOLATION
-   MATH
    POLYNOMIAL
 
 */
@@ -60,52 +59,52 @@
 
 -Brief_I/O
 
-   Variable  I/O  Description
+   VARIABLE  I/O  DESCRIPTION
    --------  ---  --------------------------------------------------
    n          I   Number of points defining the polynomial.
    xvals      I   Abscissa values.
    yvals      I   Ordinate and derivative values.
    x          I   Point at which to interpolate the polynomial.
    work      I-O  Work space array.
-   f          O   Interpolated function value at x.
-   df         O   Interpolated function's derivative at x.
+   f          O   Interpolated function value at `x'.
+   df         O   Interpolated function's derivative at `x'.
 
 -Detailed_Input
 
-   n              is the number of points defining the polynomial.
-                  The arrays xvals and yvals contain n and 2*n
-                  elements respectively.
+   n           is the number of points defining the polynomial.
+               The arrays `xvals' and `yvals' contain `n' and 2*n
+               elements respectively.
 
-   xvals          is an array of length n containing abscissa values.
+   xvals       is an array of length `n' containing abscissa values.
 
-   yvals          is an array of length 2*n containing ordinate and
-                  derivative values for each point in the domain
-                  defined by xvals and n. The elements
+   yvals       is an array of length 2*n containing ordinate and
+               derivative values for each point in the domain
+               defined by `xvals'. The elements
 
-                     yvals[ 2*i    ]
-                     yvals[ 2*i +1 ]
+                  yvals[ 2*i    ]
+                  yvals[ 2*i +1 ]
 
-                  give the value and first derivative of the output
-                  polynomial at the abscissa value
+               give the value and first derivative of the output
+               polynomial at the abscissa value
 
-                     xvals[i]
+                  xvals[i]
 
-                  where i ranges from 0 to n - 1.
+               where `i' ranges from 0 to n - 1.
 
-   work           is a work space array.  It is used by this routine
-                  as a scratch area to hold intermediate results.
-                  Generally sized at number of elements in yvals
-                  time two.
+   work        is a work space array. It is used by this routine
+               as a scratch area to hold intermediate results.
+               Generally sized at number of elements in yvals
+               times two.
 
-   x              is the abscissa value at which the interpolating
-                  polynomial and its derivative are to be evaluated.
+   x           is the abscissa value at which the interpolating
+               polynomial and its derivative are to be evaluated.
 
 -Detailed_Output
 
    f,
-   df             are the value and derivative at x of the unique
-                  polynomial of degree 2n-1 that fits the points and
-                  derivatives defined by xvals and yvals.
+   df          are the value and derivative at `x' of the unique
+               polynomial of degree 2n-1 that fits the points and
+               derivatives defined by `xvals' and `yvals'.
 
 -Parameters
 
@@ -113,11 +112,11 @@
 
 -Exceptions
 
-   1)  The error SPICE(DIVIDEBYZERO) signals from a routine
-       in the call tree if two input abscissas are equal,
+   1)  If two input abscissas are equal, the error SPICE(DIVIDEBYZERO) is
+       signaled by a routine in the call tree of this routine.
 
-   2)  The error SPICE(INVALIDSIZE) signals from a routine
-       in the call tree if n is less than 1.
+   2)  If `n' is less than 1, the error SPICE(INVALIDSIZE) is
+       signaled by a routine in the call tree of this routine.
 
    3)  This routine does not attempt to ward off or diagnose
        arithmetic overflows.
@@ -129,12 +128,12 @@
 -Particulars
 
    Users of this routine must choose the number of points to use
-   in their interpolation method.  The authors of Reference [1] have
+   in their interpolation method. The authors of Reference [1] have
    this to say on the topic:
 
       Unless there is solid evidence that the interpolating function
-      is close in form to the true function f, it is a good idea to
-      be cautious about high-order interpolation.  We
+      is close in form to the true function `f', it is a good idea to
+      be cautious about high-order interpolation. We
       enthusiastically endorse interpolations with 3 or 4 points, we
       are perhaps tolerant of 5 or 6; but we rarely go higher than
       that unless there is quite rigorous monitoring of estimated
@@ -145,28 +144,46 @@
 
       ...the dangers of extrapolation cannot be overemphasized:
       An interpolating function, which is perforce an extrapolating
-      function, will typically go berserk when the argument x is
+      function, will typically go berserk when the argument `x' is
       outside the range of tabulated values by more than the typical
       spacing of tabulated points.
 
 -Examples
 
-   Example:
-   
-      Fit a 7th degree polynomial through the points ( x, y, y' )
+   The numerical results shown for this example may differ across
+   platforms. The results depend on the SPICE kernels used as
+   input, the compiler and supporting libraries, and the machine
+   specific arithmetic implementation.
 
-           ( -1,      6,       3 )
-           (  0,      5,       0 )
-           (  3,   2210,    5115 )
-           (  5,  78180,  109395 )
+   1) Fit a 7th degree polynomial through the points ( x, y, y' )
+
+         ( -1,      6,       3 )
+         (  0,      5,       0 )
+         (  3,   2210,    5115 )
+         (  5,  78180,  109395 )
 
       and evaluate this polynomial at x = 2.
+
+      The returned value should be 141.0, and the returned
+      derivative value should be 456.0, since the unique 7th degree
+      polynomial that fits these constraints is
+
+                   7       2
+         f(x)  =  x   +  2x  + 5
+
+
+      Example code begins here.
+
+
+      /.
+         Program hrmint_ex1
+      ./
 
       #include <stdio.h>
       #include "SpiceUsr.h"
 
-      int main()
-         {
+      int main( )
+      {
 
          /.
          Local variables.
@@ -182,18 +199,20 @@
 
          hrmint_c ( n, xvals, yvals, x, work, &answer, &deriv );
 
-         printf( "answer = %lf\n", answer );
-         printf( "deriv  = %lf\n", deriv );
+         printf( "ANSWER = %f\n", answer );
+         printf( "DERIV  = %f\n", deriv );
 
-         return(0);
-         }
+         return ( 0 );
+      }
 
-      The returned value of 'answer' should be 141., and the returned
-      value of 'deriv' should be 456., since the unique 7th degree
-      polynomial that fits these constraints is
 
-                   7       2
-         f(x)  =  x   +  2x  + 5
+      When this program was executed on a Mac/Intel/cc/64-bit
+      platform, the output was:
+
+
+      ANSWER = 141.000000
+      DERIV  = 456.000000
+
 
 -Restrictions
 
@@ -201,19 +220,23 @@
 
 -Literature_References
 
-   [1]  "Numerical Recipes---The Art of Scientific Computing" by
-         William H. Press, Brian P. Flannery, Saul A. Teukolsky,
-         William T. Vetterling (see sections 3.0 and 3.1).
+   [1]  W. Press, B. Flannery, S. Teukolsky and W. Vetterling,
+        "Numerical Recipes -- The Art of Scientific Computing,"
+        chapters 3.0 and 3.1, Cambridge University Press, 1986.
 
-   [2]  "Elementary Numerical Analysis---An Algorithmic Approach"
-         by S. D. Conte and Carl de Boor.  See p. 64.
+   [2]  S. Conte and C. de Boor, "Elementary Numerical Analysis -- An
+        Algorithmic Approach," 3rd Edition, p 64, McGraw-Hill, 1980.
 
 -Author_and_Institution
 
-    N.J. Bachman    (JPL)
-    E.D. Wright     (JPL)
+   J. Diaz del Rio     (ODC Space)
+   E.D. Wright         (JPL)
 
 -Version
+
+   -CSPICE Version 1.0.1, 22-FEB-2021 (JDR)
+
+       Updated the header to comply with NAIF standard.
 
    -CSPICE Version 1.0.0, 24-AUG-2015 (EDW)
 
@@ -226,26 +249,6 @@
 */
 
 { /* Begin hrmint_c */
-
-   /*
-   Local constants
-   */
-
-
-   /*
-   Local macros
-   */
-
-
-   /*
-   Local variables
-   */
-
-
-   /*
-   Static variables
-   */
-
 
    /*
    Participate in error tracing.

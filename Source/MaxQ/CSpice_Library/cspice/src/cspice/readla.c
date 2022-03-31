@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure   READLA   ( Read array of lines from a logical unit ) */
+/* $Procedure READLA   ( Read array of lines from a logical unit ) */
 /* Subroutine */ int readla_(integer *unit, integer *maxlin, integer *numlin, 
 	char *array, logical *eof, ftnlen array_len)
 {
@@ -20,8 +20,8 @@
 
 /* $ Abstract */
 
-/*     This routine reads lines from a Fortran logical unit placing */
-/*     them into a character array buffer. */
+/*     Read lines from a Fortran logical unit and place them in a */
+/*     character string array. */
 
 /* $ Disclaimer */
 
@@ -59,45 +59,45 @@
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
-/*      UNIT      I    Fortran unit number to use for input. */
-/*      MAXLIN    I    Maximum number of lines ARRAY can hold. */
-/*      NUMLIN    O    Number of lines read from the file. */
-/*      ARRAY     O    Array containing the lines read from the file. */
-/*      EOF       O    Logical flag indicating the end of file. */
+/*     UNIT       I   Fortran unit number to use for input. */
+/*     MAXLIN     I   Maximum number of lines ARRAY can hold. */
+/*     NUMLIN     O   Number of lines read from the file. */
+/*     ARRAY      O   Array containing the lines read from the file. */
+/*     EOF        O   Logical flag indicating the end of file. */
 
 /* $ Detailed_Input */
 
-/*     UNIT     The Fortran unit number for the input. This may */
+/*     UNIT     is the Fortran unit number for the input. This may */
 /*              be either the unit number for the terminal, or the */
 /*              unit number of a previously opened text file. */
 
-/*     MAXLIN   The maximum number of text lines that can be placed */
+/*     MAXLIN   is the maximum number of text lines that can be placed */
 /*              into the ARRAY. */
 
 /* $ Detailed_Output */
 
-/*     NUMLIN   The number of text lines read from the file attached to */
-/*              UNIT and placed into ARRAY. 0 <= NUMLIN <= MAXLIN. */
+/*     NUMLIN   is the number of text lines read from the file attached */
+/*              to UNIT and placed into ARRAY. 0 <= NUMLIN <= MAXLIN. */
 
 /*              In the event of an error while attempting to read a line */
 /*              from the text file attached to UNIT, NUMLIN will contain */
 /*              the number of lines successfully read before the error */
 /*              occurred. */
 
-/*     ARRAY    The array which is to contain the lines of text read from */
-/*              the text file attached to UNIT. */
+/*     ARRAY    is the array which is to contain the lines of text read */
+/*              from the text file attached to UNIT. */
 
 /*              If an error or the end of file occurs while reading */
 /*              from the text file attached to UNIT, this array will */
 /*              contain the NUMLIN successfully read lines ARRAY(1) */
 /*              through ARRAY(NUMLIN). */
 
-/*     EOF      On output, this variable will be set to .TRUE. if the */
+/*     EOF      on output, this variable will be set to .TRUE. if the */
 /*              end of file ( IOSTAT < 0 ) is encountered during an */
 /*              attempt to read from UNIT. Otherwise, this variable */
-/*              will be set to .FALSE.. */
+/*              will be set to .FALSE. */
 
 /* $ Parameters */
 
@@ -105,12 +105,12 @@
 
 /* $ Exceptions */
 
-/*     1)   If the maximum number of lines, MAXLIN, is not positive, the */
-/*          error SPICE(INVALIDARGUMENT) will be signalled. */
+/*     1)  If the maximum number of lines, MAXLIN, is not positive, the */
+/*         error SPICE(INVALIDARGUMENT) is signaled. */
 
-/*     2)   If an error occurs while attempting to read from the text */
-/*          file attached to unit, a routine called by this routine will */
-/*          detect and signal the error. */
+/*     2)  If an error occurs while attempting to read from the text file */
+/*         attached to unit, the error is signaled by a routine in the */
+/*         call tree of this routine. */
 
 /* $ Files */
 
@@ -230,22 +230,28 @@
 
 /* $ Author_and_Institution */
 
-/*     K.R. Gehringer (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
 
 /* $ Version */
 
-/* -    SPICELIB     1.0.0, 20-DEC-1995 (KRG) */
+/* -    SPICELIB Version 1.1.0, 26-OCT-2021 (JDR) */
 
-/*        The routine graduated */
+/*        Added IMPLICIT NONE statement. */
 
-/* -    Beta Version 3.0.0, 9-JAN-1995 (KRG) */
+/*        Edited the header to comply with NAIF standard. Moved $Version */
+/*        history entries for relevant Beta versions to $Revisions */
+/*        section. */
 
-/*        Added examples to the header. */
+/* -    SPICELIB Version 1.0.0, 20-DEC-1995 (KRG) */
 
-/*        Fixed some problems with the variable descriptions in the */
-/*        $ Detailed_Input and $ Detailed_Output sections of the header. */
+/* -& */
+/* $ Index_Entries */
 
-/*        Rearranged some of the code to be more aesthetically pleasing. */
+/*     read an array of text lines from a logical unit */
+
+/* -& */
+/* $ Revisions */
 
 /* -    Beta Version 2.0.0, 05-JAN-1995 (KRG) */
 
@@ -257,18 +263,11 @@
 /*        Moved the test for the end of file outside of the loop. There */
 /*        is no need to test for it every time in the loop, because we */
 /*        only do it to decrement the number of lines read by one to */
-/*        account for the pre-increment befor the READ that set the end */
+/*        account for the pre-increment before the READ that set the end */
 /*        of file. */
 
 /*        Added a local variable MYEOF so that a value of the variable */
 /*        EOF does not affect the termination of the read loop. */
-
-/* -    Beta Version 1.0.0, 18-DEC-1992 (KRG) */
-
-/* -& */
-/* $ Index_Entries */
-
-/*      read an array of text lines from a logical unit */
 
 /* -& */
 

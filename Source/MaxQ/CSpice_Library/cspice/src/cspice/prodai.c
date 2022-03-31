@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure             PRODAI ( Product of an integer array ) */
+/* $Procedure PRODAI ( Product of an integer array ) */
 integer prodai_(integer *array, integer *n)
 {
     /* System generated locals */
@@ -16,7 +16,7 @@ integer prodai_(integer *array, integer *n)
 
 /* $ Abstract */
 
-/*      Return the product of the elements of an integer array. */
+/*     Return the product of the elements of an integer array. */
 
 /* $ Disclaimer */
 
@@ -49,91 +49,101 @@ integer prodai_(integer *array, integer *n)
 
 /* $ Keywords */
 
-/*      ARRAY,  MATH,  UTILITY */
+/*     ARRAY */
+/*     MATH */
+/*     UTILITY */
 
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*      VARIABLE  I/O  DESCRIPTION */
-/*      --------  ---  -------------------------------------------------- */
-/*      ARRAY      I   Input array. */
-/*      N          I   Number of elements in ARRAY. */
-/*      PRODAI     O   Product of the elements of ARRAY. */
+/*     VARIABLE  I/O  DESCRIPTION */
+/*     --------  ---  -------------------------------------------------- */
+/*     ARRAY      I   Input array. */
+/*     N          I   Number of elements in ARRAY. */
+
+/*     The function returns the product of the elements of ARRAY. */
 
 /* $ Detailed_Input */
 
-/*      ARRAY       is the input array. */
+/*     ARRAY    is the input array. */
 
-/*      N           is the number of elements in the array. */
+/*     N        is the number of elements in the array. */
 
 /* $ Detailed_Output */
 
-/*      PRODAI      is the product of the elements of the input array. */
-/*                  That is, */
+/*     The function returns the product of the elements of the input */
+/*     array. That is, */
 
-/*                     PRODAI = ARRAY(1) * ARRAY(2) * ... * ARRAY(N) */
+/*        PRODAI = ARRAY(1) * ARRAY(2) * ... * ARRAY(N) */
 
-/*                  If N is zero or negative, PRODAI is one. */
+/*     If N is zero or negative, PRODAI is one. */
 
 /* $ Parameters */
 
 /*     None. */
 
-/* $ Particulars */
-
-/*      The value of the function is initially set to one. The elements */
-/*      of the array are then multiplied. If the number of elements is */
-/*      zero or negative, PRODAI is one. */
-
-/* $ Examples */
-
-/*      Let ARRAY contain the following elements. */
-
-/*            ARRAY(1) = 12 */
-/*            ARRAY(2) =  2 */
-/*            ARRAY(3) =  4 */
-/*            ARRAY(4) = 75 */
-/*            ARRAY(5) = 18 */
-
-/*      Then */
-
-/*            PRODAI ( ARRAY,   -3 )       =      1 */
-/*            PRODAI ( ARRAY,    0 )       =      1 */
-/*            PRODAI ( ARRAY,    1 )       =     12 */
-/*            PRODAI ( ARRAY,    2 )       =     24 */
-/*            PRODAI ( ARRAY,    5 )       = 129600 */
-/*            PRODAI ( ARRAY(3), 3 )       =   5400 */
-
-
-/* $ Restrictions */
-
-/*      PRODAI does not check for overflow. (For integers, this can */
-/*      occur relatively quickly.) */
-
 /* $ Exceptions */
 
-/*      Error free. */
+/*     Error free. */
 
 /* $ Files */
 
-/*      None. */
+/*     None. */
 
-/* $ Author_and_Institution */
+/* $ Particulars */
 
-/*      I.M. Underwood  (JPL) */
+/*     The value of the function is initially set to one. The elements */
+/*     of the array are then multiplied. If the number of elements is */
+/*     zero or negative, PRODAI is one. */
+
+/* $ Examples */
+
+/*     Let ARRAY contain the following elements. */
+
+/*           ARRAY(1) = 12 */
+/*           ARRAY(2) =  2 */
+/*           ARRAY(3) =  4 */
+/*           ARRAY(4) = 75 */
+/*           ARRAY(5) = 18 */
+
+/*     Then */
+
+/*           PRODAI ( ARRAY,   -3 )       =      1 */
+/*           PRODAI ( ARRAY,    0 )       =      1 */
+/*           PRODAI ( ARRAY,    1 )       =     12 */
+/*           PRODAI ( ARRAY,    2 )       =     24 */
+/*           PRODAI ( ARRAY,    5 )       = 129600 */
+/*           PRODAI ( ARRAY(3), 3 )       =   5400 */
+
+/* $ Restrictions */
+
+/*     1)  PRODAI does not check for overflow. (For integers, this can */
+/*         occur relatively quickly.) */
 
 /* $ Literature_References */
 
-/*      None. */
+/*     None. */
+
+/* $ Author_and_Institution */
+
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
 
-/* -     SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+/* -    SPICELIB Version 1.1.0, 08-APR-2021 (JDR) */
 
-/*         Comment section for permuted index source lines was added */
-/*         following the header. */
+/*        Added IMPLICIT NONE statement. */
 
-/* -     SPICELIB Version 1.0.0, 31-JAN-1990 (IMU) */
+/*        Edited the header to comply with NAIF standard. */
+
+/* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+
+/*        Comment section for permuted index source lines was added */
+/*        following the header. */
+
+/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (IMU) */
 
 /* -& */
 /* $ Index_Entries */

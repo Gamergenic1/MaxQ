@@ -9,7 +9,7 @@
 
 static doublereal c_b13 = 1.;
 
-/* $Procedure      SURFPV ( Surface point and velocity ) */
+/* $Procedure SURFPV ( Surface point and velocity ) */
 /* Subroutine */ int surfpv_(doublereal *stvrtx, doublereal *stdir, 
 	doublereal *a, doublereal *b, doublereal *c__, doublereal *stx, 
 	logical *found)
@@ -88,7 +88,7 @@ static doublereal c_b13 = 1.;
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     STVRTX     I   State of ray's vertex. */
 /*     STDIR      I   State of ray's direction vector. */
@@ -100,69 +100,68 @@ static doublereal c_b13 = 1.;
 
 /* $ Detailed_Input */
 
-/*     STVRTX         is the state of a ray's vertex. The first three */
-/*                    components of STVRTX are the vertex's x, y, and z */
-/*                    position components; the vertex's x, y, and z */
-/*                    velocity components follow. */
+/*     STVRTX   is the state of a ray's vertex. The first three */
+/*              components of STVRTX are the vertex's x, y, and z */
+/*              position components; the vertex's x, y, and z */
+/*              velocity components follow. */
 
-/*                    The reference frame relative to which STVRTX is */
-/*                    specified has axes aligned with with those of a */
-/*                    triaxial ellipsoid. See the description below of */
-/*                    the arguments A, B, and C. */
+/*              The reference frame relative to which STVRTX is */
+/*              specified has axes aligned with with those of a */
+/*              triaxial ellipsoid. See the description below of */
+/*              the arguments A, B, and C. */
 
-/*                    The vertex may be inside or outside of this */
-/*                    ellipsoid, but not on it, since the surface */
-/*                    intercept is a discontinuous function at */
-/*                    vertices on the ellipsoid's surface. */
+/*              The vertex may be inside or outside of this */
+/*              ellipsoid, but not on it, since the surface */
+/*              intercept is a discontinuous function at */
+/*              vertices on the ellipsoid's surface. */
 
-/*                    No assumption is made about the units of length */
-/*                    and time, but these units must be consistent with */
-/*                    those of the other inputs. */
+/*              No assumption is made about the units of length */
+/*              and time, but these units must be consistent with */
+/*              those of the other inputs. */
 
 
-/*     STDIR          is the state of the input ray's direction vector. */
-/*                    The first three components of STDIR are a non-zero */
-/*                    vector giving the x, y, and z components of the */
-/*                    ray's direction; the direction vector's x, y, and */
-/*                    z velocity components follow. */
+/*     STDIR    is the state of the input ray's direction vector. */
+/*              The first three components of STDIR are a non-zero */
+/*              vector giving the x, y, and z components of the */
+/*              ray's direction; the direction vector's x, y, and */
+/*              z velocity components follow. */
 
-/*                    STDIR is specified relative to the same reference */
-/*                    frame as is STVRTX. */
-
+/*              STDIR is specified relative to the same reference */
+/*              frame as is STVRTX. */
 
 /*     A, */
 /*     B, */
-/*     C              are, respectively, the lengths of a triaxial */
-/*                    ellipsoid's semi-axes lying along the x, y, and */
-/*                    z axes of the reference frame relative to which */
-/*                    STVRTX and STDIR are specified. */
+/*     C        are, respectively, the lengths of a triaxial */
+/*              ellipsoid's semi-axes lying along the x, y, and */
+/*              z axes of the reference frame relative to which */
+/*              STVRTX and STDIR are specified. */
 
 /* $ Detailed_Output */
 
-/*     STX            is the state of the intercept of the input ray on */
-/*                    the surface of the input ellipsoid. The first */
-/*                    three components of STX are the intercept's x, y, */
-/*                    and z position components; the intercept's x, y, */
-/*                    and z velocity components follow. */
+/*     STX      is the state of the intercept of the input ray on */
+/*              the surface of the input ellipsoid. The first */
+/*              three components of STX are the intercept's x, y, */
+/*              and z position components; the intercept's x, y, */
+/*              and z velocity components follow. */
 
-/*                    STX is specified relative to the same reference */
-/*                    frame as are STVRTX and STDIR. */
+/*              STX is specified relative to the same reference */
+/*              frame as are STVRTX and STDIR. */
 
-/*                    STX is defined if and only if both the intercept */
-/*                    and its velocity are computable, as indicated by */
-/*                    the output argument FOUND. */
+/*              STX is defined if and only if both the intercept */
+/*              and its velocity are computable, as indicated by */
+/*              the output argument FOUND. */
 
-/*                    The position units of STX are the same as those of */
-/*                    STVRTX, STDIR, and A, B, and C. The time units are */
-/*                    the same as those of STVRTX and STDIR. */
+/*              The position units of STX are the same as those of */
+/*              STVRTX, STDIR, and A, B, and C. The time units are */
+/*              the same as those of STVRTX and STDIR. */
 
 
-/*     FOUND          is a logical flag indicating whether STX is */
-/*                    defined. FOUND is .TRUE. if and only if both the */
-/*                    intercept and its velocity are computable. Note */
-/*                    that in some cases the intercept may computable */
-/*                    while the velocity is not; this can happen for */
-/*                    near-tangency cases. */
+/*     FOUND    is a logical flag indicating whether STX is */
+/*              defined. FOUND is .TRUE. if and only if both the */
+/*              intercept and its velocity are computable. Note */
+/*              that in some cases the intercept may computable */
+/*              while the velocity is not; this can happen for */
+/*              near-tangency cases. */
 
 /* $ Parameters */
 
@@ -170,16 +169,16 @@ static doublereal c_b13 = 1.;
 
 /* $ Exceptions */
 
-/*     1)  If the input ray's direction vector is the zero vector, then */
-/*         a routine in the call tree of this routine will signal */
-/*         an error. */
+/*     1)  If the input ray's direction vector is the zero vector, an */
+/*         error is signaled by a routine in the call tree of this */
+/*         routine. */
 
-/*     2)  If any of the ellipsoid's axis lengths is nonpositive, */
-/*         a routine in the call tree of this routine will signal */
-/*         an error. */
+/*     2)  If any of the ellipsoid's axis lengths is nonpositive, an */
+/*         error is signaled by a routine in the call tree of this */
+/*         routine. */
 
-/*     3)  If the vertex of the ray is on the ellipsoid, */
-/*         the error SPICE(INVALIDVERTEX) is signaled. */
+/*     3)  If the vertex of the ray is on the ellipsoid, the error */
+/*         SPICE(INVALIDVERTEX) is signaled. */
 
 /* $ Files */
 
@@ -200,11 +199,11 @@ static doublereal c_b13 = 1.;
 /*     intersection of the ray originating at V(t0) in the direction of */
 /*     D(t0) with the ellipsoid */
 
-/*          2      2      2 */
-/*         x      y      z */
-/*        --- +  --- +  ---  =  1 */
-/*          2      2      2 */
-/*         A      B      C */
+/*           2        2        2 */
+/*          x        y        z */
+/*        ----- +  ----- +  -----  =  1 */
+/*           2        2        2 */
+/*          A        B        C */
 
 /*     W(t) is the path of the intercept point along the surface of */
 /*     the ellipsoid. To determine the velocity of the intercept point, */
@@ -277,204 +276,203 @@ static doublereal c_b13 = 1.;
 
 /* $ Examples */
 
-
-/*     The numerical results shown for these examples may differ across */
-/*     platforms. The results depend on the compiler and supporting */
-/*     libraries, and the machine specific arithmetic implementation. */
-
+/*     The numerical results shown for this example may differ across */
+/*     platforms. The results depend on the SPICE kernels used as input, */
+/*     the compiler and supporting libraries, and the machine specific */
+/*     arithmetic implementation. */
 
 /*     1) Illustrate the role of the ray vertex velocity and */
 /*        ray direction vector velocity via several simple cases. Also */
 /*        show the results of a near-tangency computation. */
 
 
-/*     Example code begins here. */
+/*        Example code begins here. */
 
 
-/*           PROGRAM EX1 */
-/*           IMPLICIT NONE */
+/*              PROGRAM SURFPV_EX1 */
+/*              IMPLICIT NONE */
 
-/*           CHARACTER*(*)         F1 */
-/*           PARAMETER           ( F1 = '(A,3E23.16)' ) */
+/*              CHARACTER*(*)         F1 */
+/*              PARAMETER           ( F1 = '(A,3E20.12)' ) */
 
-/*           DOUBLE PRECISION      A */
-/*           DOUBLE PRECISION      B */
-/*           DOUBLE PRECISION      C */
-/*           DOUBLE PRECISION      STVRTX ( 6 ) */
-/*           DOUBLE PRECISION      STDIR  ( 6 ) */
-/*           DOUBLE PRECISION      STX    ( 6 ) */
+/*              DOUBLE PRECISION      A */
+/*              DOUBLE PRECISION      B */
+/*              DOUBLE PRECISION      C */
+/*              DOUBLE PRECISION      STVRTX ( 6 ) */
+/*              DOUBLE PRECISION      STDIR  ( 6 ) */
+/*              DOUBLE PRECISION      STX    ( 6 ) */
 
-/*           INTEGER               I */
+/*              INTEGER               I */
 
-/*           LOGICAL               FOUND */
+/*              LOGICAL               FOUND */
 
-/*           A      = 1.D0 */
-/*           B      = 2.D0 */
-/*           C      = 3.D0 */
+/*              A      = 1.D0 */
+/*              B      = 2.D0 */
+/*              C      = 3.D0 */
 
-/*           WRITE (*,*) ' ' */
-/*           WRITE (*,*) 'Ellipsoid radii:' */
-/*           WRITE (*,*) '     A = ', A */
-/*           WRITE (*,*) '     B = ', B */
-/*           WRITE (*,*) '     C = ', C */
+/*              WRITE (*,*) ' ' */
+/*              WRITE (*,*) 'Ellipsoid radii:' */
+/*              WRITE (*,*) '     A = ', A */
+/*              WRITE (*,*) '     B = ', B */
+/*              WRITE (*,*) '     C = ', C */
 
-/*           WRITE (*,*) ' ' */
-/*           WRITE (*,*) 'Case 1: Vertex varies, direction is constant' */
-/*           WRITE (*,*) ' ' */
+/*              WRITE (*,*) ' ' */
+/*              WRITE (*,*) 'Case 1: Vertex varies, direction ' */
+/*             .         // 'is constant' */
+/*              WRITE (*,*) ' ' */
 
-/*           STVRTX( 1 ) =  2.D0 */
-/*           STVRTX( 2 ) =  0.D0 */
-/*           STVRTX( 3 ) =  0.D0 */
-/*           STVRTX( 4 ) =  0.D0 */
-/*           STVRTX( 5 ) =  0.D0 */
-/*           STVRTX( 6 ) =  3.D0 */
-
-
-/*           STDIR ( 1 ) = -1.D0 */
-/*           STDIR ( 2 ) =  0.D0 */
-/*           STDIR ( 3 ) =  0.D0 */
-/*           STDIR ( 4 ) =  0.D0 */
-/*           STDIR ( 5 ) =  0.D0 */
-/*           STDIR ( 6 ) =  0.D0 */
-
-/*           WRITE (*,* ) 'Vertex:' */
-/*           WRITE (*,F1) ' ', ( STVRTX(I), I = 1,3 ) */
-/*           WRITE (*,* ) 'Vertex velocity:' */
-/*           WRITE (*,F1) ' ', ( STVRTX(I), I = 4,6 ) */
-/*           WRITE (*,* ) 'Direction:' */
-/*           WRITE (*,F1) ' ', ( STDIR(I),  I = 1,3 ) */
-/*           WRITE (*,* ) 'Direction velocity:' */
-/*           WRITE (*,F1) ' ', ( STDIR(I),  I = 4,6 ) */
-
-/*           CALL SURFPV ( STVRTX, STDIR, A, B, C, STX, FOUND ) */
-
-/*           IF ( .NOT. FOUND ) THEN */
-/*              WRITE (*,*) ' No intercept state found.' */
-/*           ELSE */
-/*              WRITE (*,* ) 'Intercept:' */
-/*              WRITE (*,F1) ' ', ( STX(I),  I = 1,3 ) */
-/*              WRITE (*,* ) 'Intercept velocity:' */
-/*              WRITE (*,F1) ' ', ( STX(I),  I = 4,6 ) */
-/*              WRITE (*,* ) ' ' */
-/*           END IF */
-
-/*           WRITE (*,*) ' ' */
-/*           WRITE (*,*) 'Case 2: Vertex and direction both vary' */
-/*           WRITE (*,*) ' ' */
-
-/*           STDIR ( 6 ) =  4.D0 */
-
-/*           WRITE (*,* ) 'Vertex:' */
-/*           WRITE (*,F1) ' ', ( STVRTX(I), I = 1,3 ) */
-/*           WRITE (*,* ) 'Vertex velocity:' */
-/*           WRITE (*,F1) ' ', ( STVRTX(I), I = 4,6 ) */
-/*           WRITE (*,* ) 'Direction:' */
-/*           WRITE (*,F1) ' ', ( STDIR(I),  I = 1,3 ) */
-/*           WRITE (*,* ) 'Direction velocity:' */
-/*           WRITE (*,F1) ' ', ( STDIR(I),  I = 4,6 ) */
-
-/*           CALL SURFPV ( STVRTX, STDIR, A, B, C, STX, FOUND ) */
-
-/*           IF ( .NOT. FOUND ) THEN */
-/*              WRITE (*,*) ' No intercept state found.' */
-/*           ELSE */
-/*              WRITE (*,* ) 'Intercept:' */
-/*              WRITE (*,F1) ' ', ( STX(I),  I = 1,3 ) */
-/*              WRITE (*,* ) 'Intercept velocity:' */
-/*              WRITE (*,F1) ' ', ( STX(I),  I = 4,6 ) */
-/*              WRITE (*,* ) ' ' */
-/*           END IF */
-
-/*           WRITE (*,*) ' ' */
-/*           WRITE (*,*) 'Case 3: Vertex and direction both vary;' */
-/*           WRITE (*,*) '        near-tangent case.' */
-/*           WRITE (*,*) ' ' */
-
-/*           STVRTX( 3 ) =  C - 1.D-15 */
-/*           STVRTX( 6 ) =  1.D299 */
-/*           STDIR ( 6 ) =  1.D299 */
-
-/*           WRITE (*,* ) 'Vertex:' */
-/*           WRITE (*,F1) ' ', ( STVRTX(I), I = 1,3 ) */
-/*           WRITE (*,* ) 'Vertex velocity:' */
-/*           WRITE (*,F1) ' ', ( STVRTX(I), I = 4,6 ) */
-/*           WRITE (*,* ) 'Direction:' */
-/*           WRITE (*,F1) ' ', ( STDIR(I),  I = 1,3 ) */
-/*           WRITE (*,* ) 'Direction velocity:' */
-/*           WRITE (*,F1) ' ', ( STDIR(I),  I = 4,6 ) */
-
-/*           CALL SURFPV ( STVRTX, STDIR, A, B, C, STX, FOUND ) */
-
-/*           IF ( .NOT. FOUND ) THEN */
-/*              WRITE (*,*) ' No intercept state found.' */
-/*           ELSE */
-/*              WRITE (*,* ) 'Intercept:' */
-/*              WRITE (*,F1) ' ', ( STX(I),  I = 1,3 ) */
-/*              WRITE (*,* ) 'Intercept velocity:' */
-/*              WRITE (*,F1) ' ', ( STX(I),  I = 4,6 ) */
-/*              WRITE (*,* ) ' ' */
-/*           END IF */
-
-/*           END */
+/*              STVRTX( 1 ) =  2.D0 */
+/*              STVRTX( 2 ) =  0.D0 */
+/*              STVRTX( 3 ) =  0.D0 */
+/*              STVRTX( 4 ) =  0.D0 */
+/*              STVRTX( 5 ) =  0.D0 */
+/*              STVRTX( 6 ) =  3.D0 */
 
 
-/*     When this program was executed on a PC/Linux/g77 platform, the */
-/*     output was: */
+/*              STDIR ( 1 ) = -1.D0 */
+/*              STDIR ( 2 ) =  0.D0 */
+/*              STDIR ( 3 ) =  0.D0 */
+/*              STDIR ( 4 ) =  0.D0 */
+/*              STDIR ( 5 ) =  0.D0 */
+/*              STDIR ( 6 ) =  0.D0 */
+
+/*              WRITE (*,* ) 'Vertex:' */
+/*              WRITE (*,F1) ' ', ( STVRTX(I), I = 1,3 ) */
+/*              WRITE (*,* ) 'Vertex velocity:' */
+/*              WRITE (*,F1) ' ', ( STVRTX(I), I = 4,6 ) */
+/*              WRITE (*,* ) 'Direction:' */
+/*              WRITE (*,F1) ' ', ( STDIR(I),  I = 1,3 ) */
+/*              WRITE (*,* ) 'Direction velocity:' */
+/*              WRITE (*,F1) ' ', ( STDIR(I),  I = 4,6 ) */
+
+/*              CALL SURFPV ( STVRTX, STDIR, A, B, C, STX, FOUND ) */
+
+/*              IF ( .NOT. FOUND ) THEN */
+/*                 WRITE (*,*) ' No intercept state found.' */
+/*              ELSE */
+/*                 WRITE (*,* ) 'Intercept:' */
+/*                 WRITE (*,F1) ' ', ( STX(I),  I = 1,3 ) */
+/*                 WRITE (*,* ) 'Intercept velocity:' */
+/*                 WRITE (*,F1) ' ', ( STX(I),  I = 4,6 ) */
+/*                 WRITE (*,* ) ' ' */
+/*              END IF */
+
+/*              WRITE (*,*) ' ' */
+/*              WRITE (*,*) 'Case 2: Vertex and direction both vary' */
+/*              WRITE (*,*) ' ' */
+
+/*              STDIR ( 6 ) =  4.D0 */
+
+/*              WRITE (*,* ) 'Vertex:' */
+/*              WRITE (*,F1) ' ', ( STVRTX(I), I = 1,3 ) */
+/*              WRITE (*,* ) 'Vertex velocity:' */
+/*              WRITE (*,F1) ' ', ( STVRTX(I), I = 4,6 ) */
+/*              WRITE (*,* ) 'Direction:' */
+/*              WRITE (*,F1) ' ', ( STDIR(I),  I = 1,3 ) */
+/*              WRITE (*,* ) 'Direction velocity:' */
+/*              WRITE (*,F1) ' ', ( STDIR(I),  I = 4,6 ) */
+
+/*              CALL SURFPV ( STVRTX, STDIR, A, B, C, STX, FOUND ) */
+
+/*              IF ( .NOT. FOUND ) THEN */
+/*                 WRITE (*,*) ' No intercept state found.' */
+/*              ELSE */
+/*                 WRITE (*,* ) 'Intercept:' */
+/*                 WRITE (*,F1) ' ', ( STX(I),  I = 1,3 ) */
+/*                 WRITE (*,* ) 'Intercept velocity:' */
+/*                 WRITE (*,F1) ' ', ( STX(I),  I = 4,6 ) */
+/*                 WRITE (*,* ) ' ' */
+/*              END IF */
+
+/*              WRITE (*,*) ' ' */
+/*              WRITE (*,*) 'Case 3: Vertex and direction both vary;' */
+/*              WRITE (*,*) '        near-tangent case.' */
+/*              WRITE (*,*) ' ' */
+
+/*              STVRTX( 3 ) =  C - 1.D-15 */
+/*              STVRTX( 6 ) =  1.D299 */
+/*              STDIR ( 6 ) =  1.D299 */
+
+/*              WRITE (*,* ) 'Vertex:' */
+/*              WRITE (*,F1) ' ', ( STVRTX(I), I = 1,3 ) */
+/*              WRITE (*,* ) 'Vertex velocity:' */
+/*              WRITE (*,F1) ' ', ( STVRTX(I), I = 4,6 ) */
+/*              WRITE (*,* ) 'Direction:' */
+/*              WRITE (*,F1) ' ', ( STDIR(I),  I = 1,3 ) */
+/*              WRITE (*,* ) 'Direction velocity:' */
+/*              WRITE (*,F1) ' ', ( STDIR(I),  I = 4,6 ) */
+
+/*              CALL SURFPV ( STVRTX, STDIR, A, B, C, STX, FOUND ) */
+
+/*              IF ( .NOT. FOUND ) THEN */
+/*                 WRITE (*,*) ' No intercept state found.' */
+/*              ELSE */
+/*                 WRITE (*,* ) 'Intercept:' */
+/*                 WRITE (*,F1) ' ', ( STX(I),  I = 1,3 ) */
+/*                 WRITE (*,* ) 'Intercept velocity:' */
+/*                 WRITE (*,F1) ' ', ( STX(I),  I = 4,6 ) */
+/*                 WRITE (*,* ) ' ' */
+/*              END IF */
+
+/*              END */
 
 
-/*  Ellipsoid radii: */
-/*       A =   1. */
-/*       B =   2. */
-/*       C =   3. */
-
-/*  Case 1: Vertex varies, direction is constant */
-
-/*  Vertex: */
-/*   0.2000000000000000E+01 0.0000000000000000E+00 0.0000000000000000E+00 */
-/*  Vertex velocity: */
-/*   0.0000000000000000E+00 0.0000000000000000E+00 0.3000000000000000E+01 */
-/*  Direction: */
-/*  -0.1000000000000000E+01 0.0000000000000000E+00 0.0000000000000000E+00 */
-/*  Direction velocity: */
-/*   0.0000000000000000E+00 0.0000000000000000E+00 0.0000000000000000E+00 */
-/*  Intercept: */
-/*   0.1000000000000000E+01 0.0000000000000000E+00 0.0000000000000000E+00 */
-/*  Intercept velocity: */
-/*   0.0000000000000000E+00 0.0000000000000000E+00 0.3000000000000000E+01 */
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
 
 
-/*  Case 2: Vertex and direction both vary */
+/*         Ellipsoid radii: */
+/*              A =    1.0000000000000000 */
+/*              B =    2.0000000000000000 */
+/*              C =    3.0000000000000000 */
 
-/*  Vertex: */
-/*   0.2000000000000000E+01 0.0000000000000000E+00 0.0000000000000000E+00 */
-/*  Vertex velocity: */
-/*   0.0000000000000000E+00 0.0000000000000000E+00 0.3000000000000000E+01 */
-/*  Direction: */
-/*  -0.1000000000000000E+01 0.0000000000000000E+00 0.0000000000000000E+00 */
-/*  Direction velocity: */
-/*   0.0000000000000000E+00 0.0000000000000000E+00 0.4000000000000000E+01 */
-/*  Intercept: */
-/*   0.1000000000000000E+01 0.0000000000000000E+00 0.0000000000000000E+00 */
-/*  Intercept velocity: */
-/*   0.0000000000000000E+00 0.0000000000000000E+00 0.7000000000000000E+01 */
+/*         Case 1: Vertex varies, direction is constant */
+
+/*         Vertex: */
+/*           0.200000000000E+01  0.000000000000E+00  0.000000000000E+00 */
+/*         Vertex velocity: */
+/*           0.000000000000E+00  0.000000000000E+00  0.300000000000E+01 */
+/*         Direction: */
+/*          -0.100000000000E+01  0.000000000000E+00  0.000000000000E+00 */
+/*         Direction velocity: */
+/*           0.000000000000E+00  0.000000000000E+00  0.000000000000E+00 */
+/*         Intercept: */
+/*           0.100000000000E+01  0.000000000000E+00  0.000000000000E+00 */
+/*         Intercept velocity: */
+/*           0.000000000000E+00  0.000000000000E+00  0.300000000000E+01 */
 
 
-/*  Case 3: Vertex and direction both vary; */
-/*          near-tangent case. */
+/*         Case 2: Vertex and direction both vary */
 
-/*  Vertex: */
-/*   0.2000000000000000E+01 0.0000000000000000E+00 0.2999999999999999E+01 */
-/*  Vertex velocity: */
-/*   0.0000000000000000E+00 0.0000000000000000E+00 0.1000000000000000+300 */
-/*  Direction: */
-/*  -0.1000000000000000E+01 0.0000000000000000E+00 0.0000000000000000E+00 */
-/*  Direction velocity: */
-/*   0.0000000000000000E+00 0.0000000000000000E+00 0.1000000000000000+300 */
-/*  Intercept: */
-/*   0.2580956827951785E-07 0.0000000000000000E+00 0.2999999999999999E+01 */
-/*  Intercept velocity: */
-/*  -0.3874532036207665+307 0.0000000000000000E+00 0.2999999974190432+300 */
+/*         Vertex: */
+/*           0.200000000000E+01  0.000000000000E+00  0.000000000000E+00 */
+/*         Vertex velocity: */
+/*           0.000000000000E+00  0.000000000000E+00  0.300000000000E+01 */
+/*         Direction: */
+/*          -0.100000000000E+01  0.000000000000E+00  0.000000000000E+00 */
+/*         Direction velocity: */
+/*           0.000000000000E+00  0.000000000000E+00  0.400000000000E+01 */
+/*         Intercept: */
+/*           0.100000000000E+01  0.000000000000E+00  0.000000000000E+00 */
+/*         Intercept velocity: */
+/*           0.000000000000E+00  0.000000000000E+00  0.700000000000E+01 */
 
+
+/*         Case 3: Vertex and direction both vary; */
+/*                 near-tangent case. */
+
+/*         Vertex: */
+/*           0.200000000000E+01  0.000000000000E+00  0.300000000000E+01 */
+/*         Vertex velocity: */
+/*           0.000000000000E+00  0.000000000000E+00  0.100000000000+300 */
+/*         Direction: */
+/*          -0.100000000000E+01  0.000000000000E+00  0.000000000000E+00 */
+/*         Direction velocity: */
+/*           0.000000000000E+00  0.000000000000E+00  0.100000000000+300 */
+/*         Intercept: */
+/*           0.258095682795E-07  0.000000000000E+00  0.300000000000E+01 */
+/*         Intercept velocity: */
+/*          -0.387453203621+307  0.000000000000E+00  0.299999997419+300 */
 
 
 /* $ Restrictions */
@@ -487,11 +485,19 @@ static doublereal c_b13 = 1.;
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
-/*     J.E. McLean    (JPL) */
-/*     W.L. Taber     (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     J.E. McLean        (JPL) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.0.1, 22-JUL-2020 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
+
+/*        Reformatted example's output to comply with maximum line */
+/*        length for header comments. */
 
 /* -    SPICELIB Version 1.0.0, 31-MAR-2009 (NJB) (JEM) (WLT) */
 

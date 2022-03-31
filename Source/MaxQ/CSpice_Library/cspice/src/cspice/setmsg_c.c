@@ -47,7 +47,7 @@
    #include "SpiceZmc.h"
 
 
-   void setmsg_c ( ConstSpiceChar * message )
+   void setmsg_c ( ConstSpiceChar * msg )
 
 /*
 
@@ -55,31 +55,31 @@
 
    VARIABLE  I/O  DESCRIPTION
    --------  ---  --------------------------------------------------
-   message    I   A long error message.
+   msg        I   A long error message.
 
 -Detailed_Input
 
-   message        A ``long'' error message.
-                  message is a detailed description of the error.
-                  message is supposed to start with the name of the
-                  module which detected the error, followed by a
-                  colon.  Example:
+   msg         is a ``long'' error message.
+               `msg' is a detailed description of the error.
+               `msg' is supposed to start with the name of the
+               module which detected the error, followed by a
+               colon. Example:
 
-                     "rdtext_c:  There are no more free logical units"
+                  "rdtext_c:  There are no more free logical units"
 
-                  Only the first LMSGLN (see setmsg.c) characters of
-                  message are stored; any further characters are
-                  truncated.
+               Only the first LMSGLN (see setmsg.c) characters of
+               `msg' are stored; any further characters are
+               truncated.
 
-                  Generally, message will be stored internally by the
-                  CSPICE error handling mechanism.  The only exception
-                  is the case in which the user has commanded the
-                  toolkit to ``ignore'' the error indicated by message.
+               Generally, `msg' will be stored internally by the
+               CSPICE error handling mechanism. The only exception
+               is the case in which the user has commanded the
+               toolkit to ``ignore'' the error indicated by `msg'.
 
-                  As a default, message will be output to the screen.
-                  See the required reading file for a discussion of how
-                  to customize toolkit error handling behavior, and
-                  in particular, the disposition of message.
+               As a default, `msg' will be output to the screen.
+               See the required reading file for a discussion of how
+               to customize toolkit error handling behavior, and
+               in particular, the disposition of `msg'.
 
 -Detailed_Output
 
@@ -91,12 +91,16 @@
 
 -Exceptions
 
-   This routine does not detect any errors.
+   1)  This routine is part of the interface to the CSPICE error
+       handling mechanism. For this reason, this routine does not
+       participate in the trace scheme, even though it has external
+       references, except in the following two cases.
 
-   However, this routine is part of the interface to the
-   CSPICE error handling mechanism.  For this reason,
-   this routine does not participate in the trace scheme,
-   even though it has external references.
+   2)  If the `msg' input string pointer is null, the error
+       SPICE(NULLPOINTER) is signaled.
+
+   3)  If the `msg' input string has zero length, the error
+       SPICE(EMPTYSTRING) is signaled.
 
 -Files
 
@@ -109,45 +113,101 @@
 
    The effects of this routine are:
 
-      1.  If acceptance of a new long error message is
+      1. If acceptance of a new long error message is
           allowed:
 
-          message will be stored internally.  As a result,
+          `msg' will be stored internally. As a result,
           The CSPICE routine, getmsg_ , will be able to
-          retrieve message, until message has been ``erased''
+          retrieve `msg', until `msg' has been ``erased''
           by a call to reset_c, or overwritten by another
           call to setmsg_c.
 
 
-      2.  If acceptance of a new long error message is not allowed,
+      2. If acceptance of a new long error message is not allowed,
           a call to this routine has no effect.
 
 -Examples
 
+   The numerical results shown for this example may differ across
+   platforms. The results depend on the SPICE kernels used as
+   input, the compiler and supporting libraries, and the machine
+   specific arithmetic implementation.
 
-    In the following example, an error is signaled because the
-    double precision variable x contains an invalid value.  The
-    value of x and the maximum allowed value MAXVAL are substituted
-    into the error message at the locations indicated by the # signs
-    below.
+   1) Create a user-defined error message, including both the
+      short and long messages, providing the value of an integer
+      and a double precision variables within the long message,
+      and signal the error.
 
-       /.
-       Indicate that x is out of range if x is too large.
-       ./
 
-       if ( x > MAXVAL )
-       {
-          setmsg_c ( "Variable x = #; maximum allowed value is #" );
-          errdp_c  ( "#",  x                                      );
-          errdp_c  ( "#",  MAXVAL                                 );
-          sigerr_c ( "SPICE(VALUEOUTOFRANGE)"                     ) ;
-          return;
-       }
+      Example code begins here.
 
+
+      /.
+         Program setmsg_ex1
+      ./
+      #include "SpiceUsr.h"
+
+      int main()
+      {
+
+         /.
+         Set long error message, with two different `marker'
+         strings where the value of the variables will go.
+         Our markers are "#" and "XX".
+         ./
+         setmsg_c ( "LONG MESSAGE.  Invalid operation value. "
+                    "  The value was #.  Left endpoint "
+                    "exceeded right endpoint.  The left "
+                    "endpoint was:  XX."                      );
+
+         /.
+         Insert the integer number where the # is now.
+         ./
+         errint_c ( "#", 5 );
+
+         /.
+         Insert a double precision number where the XX is now.
+         ./
+         errdp_c ( "XX", 910.26111991 );
+
+         /.
+         Signal the error.
+         ./
+         sigerr_c ( "SPICE(USERDEFINED)" );
+
+         return ( 0 );
+      }
+
+
+      When this program was executed on a Mac/Intel/cc/64-bit
+      platform, the output was:
+
+
+      =====================================================================
+
+      Toolkit version: N0066
+
+      SPICE(USERDEFINED) --
+
+      LONG MESSAGE. Invalid operation value. The value was 5. Left endpoint
+      exceeded right endpoint. The left endpoint was: 9.1026111991000E+02.
+
+      Oh, by the way:  The SPICELIB error handling actions are USER-
+      TAILORABLE.  You can choose whether the Toolkit aborts or continues
+      when errors occur, which error messages to output, and where to send
+      the output.  Please read the ERROR "Required Reading" file, or see
+      the routines ERRACT, ERRDEV, and ERRPRT.
+
+      =====================================================================
+
+
+      Note that the execution of this program produces the error
+      SPICE(USERDEFINED), which follows the NAIF standard as
+      described in the ERROR required reading.
 
 -Restrictions
 
-   sigerr_c must be called once after each call to this routine.
+   1)  sigerr_c must be called once after each call to this routine.
 
 -Literature_References
 
@@ -155,18 +215,31 @@
 
 -Author_and_Institution
 
-   N.J. Bachman    (JPL)
+   N.J. Bachman        (JPL)
+   J. Diaz del Rio     (ODC Space)
+   E.D. Wright         (JPL)
 
 -Version
 
+   -CSPICE Version 1.3.0, 05-AUG-2021 (JDR)
+
+       Changed input argument "message" to "msg" for consistency with
+       other routines.
+
+       Edited the header to comply with NAIF standard. Added
+       complete code example.
+
+       Improved entry #1 and added entries #2 and #3 in -Exceptions
+       section.
+
    -CSPICE Version 1.2.1, 25-MAR-1998 (EDW)
 
-      Corrected errors in header.
+       Corrected errors in header.
 
    -CSPICE Version 1.2.0, 08-FEB-1998 (NJB)
 
-      Re-implemented routine without dynamically allocated, temporary
-      strings.  Made various header fixes.
+       Re-implemented routine without dynamically allocated, temporary
+       strings. Made various header fixes.
 
    -CSPICE Version 1.0.0, 25-OCT-1997 (EDW)
 
@@ -185,14 +258,14 @@
    Check the input string to make sure the pointer is non-null
    and the string length is non-zero.
    */
-   CHKFSTR ( CHK_DISCOVER, "setmsg_c", message );
+   CHKFSTR ( CHK_DISCOVER, "setmsg_c", msg );
 
 
    /*
    Call the f2c'd Fortran routine.
    */
-   setmsg_ ( ( char  * ) message,
-             ( ftnlen  ) strlen(message) );
+   setmsg_ ( ( char  * ) msg,
+             ( ftnlen  ) strlen(msg) );
 
 
 } /* End setmsg_c */

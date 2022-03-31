@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      RJUST ( Right justify a character string ) */
+/* $Procedure RJUST ( Right justify a character string ) */
 /* Subroutine */ int rjust_(char *input, char *output, ftnlen input_len, 
 	ftnlen output_len)
 {
@@ -24,7 +24,7 @@
 
 /* $ Abstract */
 
-/*      Right justify a character string. */
+/*     Right justify a character string. */
 
 /* $ Disclaimer */
 
@@ -57,74 +57,84 @@
 
 /* $ Keywords */
 
-/*      ASCII,  CHARACTER,  STRING */
+/*     ASCII */
+/*     CHARACTER */
+/*     STRING */
 
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*      VARIABLE  I/O  DESCRIPTION */
-/*      --------  ---  -------------------------------------------------- */
-/*      INPUT      I   Input character string. */
-/*      OUTPUT     O   Output character string, right justified. */
+/*     VARIABLE  I/O  DESCRIPTION */
+/*     --------  ---  -------------------------------------------------- */
+/*     INPUT      I   Input character string. */
+/*     OUTPUT     O   Output character string, right justified. */
 
 /* $ Detailed_Input */
 
-/*      INPUT       is the input character string. */
+/*     INPUT    is the input character string. */
 
 /* $ Detailed_Output */
 
-/*      OUTPUT      is the output character string, right justified. */
-/*                  If INPUT is too large to fit into OUTPUT, it is */
-/*                  truncated on the left. */
+/*     OUTPUT   is the output character string, right justified. */
+/*              If INPUT is too large to fit into OUTPUT, it is */
+/*              truncated on the left. */
 
-/*                  OUTPUT may overwrite INPUT. */
+/*              OUTPUT may overwrite INPUT. */
 
 /* $ Parameters */
 
 /*     None. */
 
-/* $ Particulars */
-
-/*      Any trailing blanks in the input string are removed, and */
-/*      the remaining string is copied to the output string. */
-
-/* $ Examples */
-
-/*      The following examples should illustrate the use of RJUST. */
-
-/*         'ABCDE          '   becomes  '          ABCDE' */
-/*         'AN EXAMPLE     '            '     AN EXAMPLE' */
-/*         '   AN EXAMPLE  '            '     AN EXAMPLE' */
-/*         '               '            '               ' */
-
-/* $ Restrictions */
-
-/*      None. */
-
 /* $ Exceptions */
 
-/*      Error free. */
+/*     Error free. */
 
 /* $ Files */
 
-/*      None. */
+/*     None. */
 
-/* $ Author_and_Institution */
+/* $ Particulars */
 
-/*      I.M. Underwood  (JPL) */
+/*     Any trailing blanks in the input string are removed, and */
+/*     the remaining string is copied to the output string. */
+
+/* $ Examples */
+
+/*     The following examples should illustrate the use of RJUST. */
+
+/*        'ABCDE          '   becomes  '          ABCDE' */
+/*        'AN EXAMPLE     '            '     AN EXAMPLE' */
+/*        '   AN EXAMPLE  '            '     AN EXAMPLE' */
+/*        '               '            '               ' */
+
+/* $ Restrictions */
+
+/*     None. */
 
 /* $ Literature_References */
 
-/*      None. */
+/*     None. */
+
+/* $ Author_and_Institution */
+
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
 
-/* -     SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+/* -    SPICELIB Version 1.1.0, 12-AUG-2021 (JDR) */
 
-/*         Comment section for permuted index source lines was added */
-/*         following the header. */
+/*        Added IMPLICIT NONE statement. */
 
-/* -     SPICELIB Version 1.0.0, 31-JAN-1990 (IMU) */
+/*        Edited the header to comply with NAIF standard. */
+
+/* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+
+/*        Comment section for permuted index source lines was added */
+/*        following the header. */
+
+/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (IMU) */
 
 /* -& */
 /* $ Index_Entries */

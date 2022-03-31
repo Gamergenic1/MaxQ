@@ -52,50 +52,51 @@
 
    void m2q_c (  ConstSpiceDouble  r[3][3],
                  SpiceDouble       q[4]     )
+
 /*
 
 -Brief_I/O
 
-   Variable  I/O  Description
+   VARIABLE  I/O  DESCRIPTION
    --------  ---  --------------------------------------------------
    r          I   A rotation matrix.
    q          O   A unit quaternion representing `r'.
 
 -Detailed_Input
 
-   r              is a rotation matrix.
+   r           is a rotation matrix.
 
 -Detailed_Output
 
-   q              is a unit-length SPICE-style quaternion representing
-                  `r'. See the discussion of quaternion styles in
-                  Particulars below.
+   q           is a unit-length SPICE-style quaternion representing
+               `r'. See the discussion of quaternion styles in
+               -Particulars below.
 
-                  `q' is a 4-dimensional vector. If `r' rotates vectors in
-                  the counterclockwise sense by an angle of `theta' radians
-                  about a unit vector `a', where 
+               `q' is a 4-dimensional vector. If `r' rotates vectors in
+               the counterclockwise sense by an angle of `theta' radians
+               about a unit vector `a', where
 
-                     0 < theta < pi
-                       -       -
+                  0 < theta < pi
+                    -       -
 
-                  then letting h = theta/2,
+               then letting h = theta/2,
 
-                     q = ( cos(h), sin(h)a ,  sin(h)a ,  sin(h)a ).
-                                          1          2          3
+                  q = ( cos(h), sin(h)a ,  sin(h)a ,  sin(h)a ).
+                                       1          2          3
 
-                  The restriction that `theta' must be in the range [0, pi]
-                  determines the output quaternion `q' uniquely
-                  except when theta = pi; in this special case, both of
-                  the quaternions
+               The restriction that `theta' must be in the range [0, pi]
+               determines the output quaternion `q' uniquely
+               except when theta = pi; in this special case, both of
+               the quaternions
 
-                     q = ( 0,  a ,  a ,  a  )
-                                1    2    3
-                  and
+                  q = ( 0,  a ,  a ,  a  )
+                             1    2    3
+               and
 
-                     q = ( 0, -a , -a , -a  )
-                                1    2    3
+                  q = ( 0, -a , -a , -a  )
+                             1    2    3
 
-                 are possible outputs.
+               are possible outputs.
 
 -Parameters
 
@@ -103,8 +104,8 @@
 
 -Exceptions
 
-   1)   If `r' is not a rotation matrix, the error SPICE(NOTAROTATION)
-        is signaled.
+   1)  If `r' is not a rotation matrix, the error SPICE(NOTAROTATION)
+       is signaled by a routine in the call tree of this routine.
 
 -Files
 
@@ -115,11 +116,11 @@
    A unit quaternion is a 4-dimensional vector for which the sum of
    the squares of the components is 1. Unit quaternions can be used
    to represent rotations in the following way: given a rotation
-   angle `theta', where 
+   angle `theta', where
 
       0 < theta < pi
-        -       - 
- 
+        -       -
+
    and a unit vector `a', we can represent the transformation that
    rotates vectors in the counterclockwise sense by theta radians about
    `a' using the quaternion `q', where
@@ -136,7 +137,7 @@
       m2q_c ( r, q );
       q2m_c ( q, r );
 
-   leave `r' unchanged, except for round-off error.  However, the
+   leave `r' unchanged, except for round-off error. However, the
    calls
 
       q2m_c ( q, r );
@@ -152,12 +153,12 @@
    science and engineering applications. Quaternion styles
    are characterized by
 
-      - The order of quaternion elements
+   -  The order of quaternion elements
 
-      - The quaternion multiplication formula
+   -  The quaternion multiplication formula
 
-      - The convention for associating quaternions
-        with rotation matrices
+   -  The convention for associating quaternions
+      with rotation matrices
 
    Two of the commonly used styles are
 
@@ -277,7 +278,7 @@
                  +-             -+
 
    The vector N of matrix entries (n1, n2, n3) is the rotation axis
-   of M and theta is M's rotation angle.  Note that N and theta
+   of M and theta is M's rotation angle. Note that N and theta
    are not unique.
 
    Let
@@ -342,7 +343,6 @@
 
       M1*M2
 
-
 -Examples
 
    1)  A case amenable to checking by hand calculation:
@@ -377,10 +377,10 @@
               a = ( 0, 0, 1 )
 
           Equivalently, `r' rotates vectors by pi/2 radians in
-          the counterclockwise sense about the axis vector 
+          the counterclockwise sense about the axis vector
 
              -a = ( 0, 0, -1 )
-   
+
           so our definition of `q',
 
              h = theta/2
@@ -418,33 +418,39 @@
 
 -Literature_References
 
-   NAIF document 179.0, "Rotations and their Habits", by
-   W. L. Taber.
+   None.
 
 -Author_and_Institution
 
-   N.J. Bachman   (JPL)
-   E.D. Wright    (JPL)
+   N.J. Bachman        (JPL)
+   J. Diaz del Rio     (ODC Space)
+   W.L. Taber          (JPL)
+   E.D. Wright         (JPL)
 
 -Version
 
+   -CSPICE Version 1.1.2, 24-AUG-2021 (JDR)
+
+       Edited the header to comply with NAIF standard. Moved ROTATIONS required
+       reading from -Literature_References to -Required_Reading section.
+
    -CSPICE Version 1.1.1, 27-FEB-2008 (NJB)
 
-      Updated header; added information about SPICE 
-      quaternion conventions. Made minor edits throughout
-      header.
+       Updated header; added information about SPICE
+       quaternion conventions. Made minor edits throughout
+       header.
 
    -CSPICE Version 1.1.0, 21-OCT-1998 (NJB)
 
-       Made input matrix const.
+        Made input matrix const.
 
    -CSPICE Version 1.0.1, 13-FEB-1998 (EDW)
 
-       Minor corrections to header.
+        Minor corrections to header.
 
-   -CSPICE Version 1.0.0, 08-FEB-1998 (NJB)
+   -CSPICE Version 1.0.0, 08-FEB-1998 (NJB) (WLT)
 
-       Based on SPICELIB Version 1.0.1, 10-MAR-1992 (WLT)
+        Based on SPICELIB Version 1.0.1, 10-MAR-1992 (WLT)
 
 -Index_Entries
 

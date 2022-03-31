@@ -11,7 +11,7 @@ static integer c__9 = 9;
 static integer c__17 = 17;
 static integer c__12 = 12;
 
-/* $Procedure      SPKW17 ( SPK, write a type 17 segment ) */
+/* $Procedure SPKW17 ( SPK, write a type 17 segment ) */
 /* Subroutine */ int spkw17_(integer *handle, integer *body, integer *center, 
 	char *frame, doublereal *first, doublereal *last, char *segid, 
 	doublereal *epoch, doublereal *eqel, doublereal *rapol, doublereal *
@@ -84,7 +84,7 @@ static integer c__12 = 12;
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     I   Handle of an SPK file open for writing. */
 /*     BODY       I   Body code for ephemeris object. */
@@ -93,96 +93,113 @@ static integer c__12 = 12;
 /*     FIRST      I   First valid time for which states can be computed. */
 /*     LAST       I   Last valid time for which states can be computed. */
 /*     SEGID      I   Segment identifier. */
-/*     EPOCH      I   Epoch of elements in seconds past J2000 */
-/*     EQEL       I   Array of equinoctial elements */
-/*     RAPOL      I   Right Ascension of the pole of the reference plane */
-/*     DECPOL     I   Declination of the pole of the reference plane */
+/*     EPOCH      I   Epoch of elements in seconds past J2000. */
+/*     EQEL       I   Array of equinoctial elements. */
+/*     RAPOL      I   Right Ascension of the reference plane's pole. */
+/*     DECPOL     I   Declination of the reference plane's pole. */
 
 /* $ Detailed_Input */
 
-/*     HANDLE      is the file handle of an SPK file that has been */
-/*                 opened for writing. */
+/*     HANDLE   is the file handle of an SPK file that has been */
+/*              opened for writing. */
 
-/*     BODY        is the NAIF ID for the body whose states are */
-/*                 to be recorded in an SPK file. */
+/*     BODY     is the NAIF ID for the body whose states are */
+/*              to be recorded in the SPK file. */
 
-/*     CENTER      is the NAIF ID for the center of motion associated */
-/*                 with BODY. */
+/*     CENTER   is the NAIF ID for the center of motion associated */
+/*              with BODY. */
 
-/*     FRAME       is the reference frame that states are referenced to, */
-/*                 for example 'J2000'. */
+/*     FRAME    is the reference frame that states are referenced to, */
+/*              for example 'J2000'. */
 
-/*     FIRST       are the bounds on the ephemeris times, expressed as */
-/*     LAST        seconds past J2000. */
+/*     FIRST, */
+/*     LAST     are the bounds on the ephemeris times, expressed as */
+/*              seconds past J2000. */
 
-/*     SEGID       is the segment identifier. An SPK segment identifier */
-/*                 may contain up to 40 characters. */
+/*     SEGID    is the segment identifier. An SPK segment identifier */
+/*              may contain up to 40 characters. */
 
-/*     EPOCH      is the epoch of equinoctial elements in seconds */
-/*                past the J2000 epoch. */
+/*     EPOCH    is the epoch of equinoctial elements in seconds */
+/*              past the J2000 epoch. */
 
-/*     EQEL       is an array of 9 double precision numbers that */
-/*                are the equinoctial elements for some orbit relative */
-/*                to the equatorial frame of a central body. */
+/*     EQEL     is an array of 9 double precision numbers that */
+/*              are the equinoctial elements for some orbit relative */
+/*              to the equatorial frame of a central body. */
 
-/*                ( The z-axis of the equatorial frame is the direction */
-/*                  of the pole of the central body relative to FRAME. */
-/*                  The x-axis is given by the cross product of the */
-/*                  Z-axis of FRAME with the direction of the pole of */
-/*                  the central body.  The Y-axis completes a right */
-/*                  handed frame. ) */
+/*                 Note: The Z-axis of the equatorial frame is the */
+/*                 direction of the pole of the central body relative */
+/*                 to FRAME. The X-axis is given by the cross product of */
+/*                 the Z-axis of FRAME with the direction of the pole of */
+/*                 the central body. The Y-axis completes a right handed */
+/*                 frame. */
 
-/*                The specific arrangement of the elements is spelled */
-/*                out below.  The following terms are used in the */
-/*                discussion of elements of EQEL */
+/*              The specific arrangement of the elements is spelled */
+/*              out below. The following terms are used in the */
+/*              discussion of elements of EQEL: */
 
-/*                    INC  --- inclination of the orbit */
-/*                    ARGP --- argument of periapse */
-/*                    NODE --- longitude of the ascending node */
-/*                    E    --- eccentricity of the orbit */
+/*                 INC  --- inclination of the orbit */
+/*                 ARGP --- argument of periapse */
+/*                 NODE --- longitude of the ascending node */
+/*                 E    --- eccentricity of the orbit */
+/*                 M0   --- mean anomaly */
 
-/*                EQEL(1) is the semi-major axis (A) of the orbit in km. */
+/*              EQEL(1)   is the semi-major axis (A) of the orbit in km. */
 
-/*                EQEL(2) is the value of H at the specified epoch. */
-/*                        ( E*SIN(ARGP+NODE) ). */
+/*              EQEL(2)   is the value of H at the specified epoch: */
 
-/*                EQEL(3) is the value of K at the specified epoch */
-/*                        ( E*COS(ARGP+NODE) ). */
+/*                           H =  E * SIN( ARGP + NODE ) */
 
-/*                EQEL(4) is the mean longitude (MEAN0+ARGP+NODE)at */
-/*                        the epoch of the elements measured in radians. */
+/*              EQEL(3)   is the value of K at the specified epoch: */
 
-/*                EQEL(5) is the value of P (TAN(INC/2)*SIN(NODE))at */
-/*                        the specified epoch. */
+/*                           K =  E * COS( ARGP + NODE ) */
 
-/*                EQEL(6) is the value of Q (TAN(INC/2)*COS(NODE))at */
-/*                        the specified epoch. */
+/*              EQEL(4)   is the mean longitude at the epoch of the */
+/*                        elements measured in radians: */
 
-/*                EQEL(7) is the rate of the longitude of periapse */
-/*                        (dARGP/dt + dNODE/dt ) at the epoch of */
-/*                        the elements.  This rate is assumed to hold */
-/*                        for all time. The rate is measured in */
-/*                        radians per second. */
+/*                           ( M0 + ARGP + NODE ) */
 
-/*                EQEL(8) is the derivative of the mean longitude */
-/*                        ( dM/dt + dARGP/dt + dNODE/dt ).  This */
-/*                        rate is assumed to be constant and is */
+/*              EQEL(5)   is the value of P at the specified epoch: */
+
+/*                           P =  TAN( INC/2 ) * SIN( NODE ) */
+
+/*              EQEL(6)   is the value of Q at the specified epoch: */
+
+/*                           Q =  TAN( INC/2 ) * COS( NODE ) */
+
+/*              EQEL(7)   is the rate of the longitude of periapse */
+/*                        at the epoch of the elements. */
+
+/*                           ( dARGP/dt + dNODE/dt ) */
+
+/*                        This rate is assumed to hold for all time. The */
+/*                        rate is measured in radians per second. */
+
+/*              EQEL(8)   is the derivative of the mean longitude: */
+
+/*                           ( dM0/dt + dARGP/dt + dNODE/dt ) */
+
+/*                        This rate is assumed to be constant and is */
 /*                        measured in radians/second. */
 
-/*                EQEL(9) is the rate of the longitude of the ascending */
-/*                        node ( dNODE/dt).  This rate is measured */
-/*                        in radians per second. */
+/*              EQEL(9)   is the rate of the longitude of the ascending */
+/*                        node: */
 
-/*     RAPOL      Right Ascension of the pole of the reference plane */
-/*                relative to FRAME measured in radians. */
+/*                           ( dNODE/dt ) */
 
-/*     DECPOL     Declination of the pole of the reference plane */
-/*                relative to FRAME measured in radians. */
+/*                        This rate is measured in radians per second. */
+
+/*     RAPOL    is the Right Ascension of the pole of the reference */
+/*              plane relative to FRAME measured in radians. */
+
+/*     DECPOL   is the declination of the pole of the reference plane */
+/*              relative to FRAME measured in radians. */
 
 /* $ Detailed_Output */
 
-/*     None.  A type 17 segment is written to the file attached */
-/*     to HANDLE. */
+/*     None. */
+
+/*     The routine writes an SPK type 17 segment to the file attached to */
+/*     HANDLE. */
 
 /* $ Parameters */
 
@@ -190,22 +207,22 @@ static integer c__12 = 12;
 
 /* $ Exceptions */
 
-/*     1) If the semi-major axis is less than or equal to zero, the error */
-/*        'SPICE(BADSEMIAXIS)' is signalled. */
+/*     1)  If the semi-major axis is less than or equal to zero, the */
+/*         error SPICE(BADSEMIAXIS) is signaled. */
 
-/*     2) If the eccentricity of the orbit corresponding to the values */
-/*        of H and K ( EQEL(2) and EQEL(3) ) is greater than 0.9 the */
-/*        error 'SPICE(ECCOUTOFRANGE)' is signalled. */
+/*     2)  If the eccentricity of the orbit corresponding to the values */
+/*         of H and K ( EQEL(2) and EQEL(3) ) is greater than 0.9, the */
+/*         error SPICE(ECCOUTOFRANGE) is signaled. */
 
-/*     3) If the segment identifier has more than 40 non-blank characters */
-/*        the error 'SPICE(SEGIDTOOLONG)' is signalled. */
+/*     3)  If the segment identifier has more than 40 non-blank */
+/*         characters, the error SPICE(SEGIDTOOLONG) is signaled. */
 
-/*     4) If the segment identifier contains non-printing characters */
-/*        the error 'SPICE(NONPRINTABLECHARS)' is signalled. */
+/*     4)  If the segment identifier contains non-printing characters, */
+/*         the error SPICE(NONPRINTABLECHARS) is signaled. */
 
-/*     5) If there are inconsistencies in the BODY, CENTER, FRAME or */
-/*        FIRST and LAST times, the problem will be diagnosed by */
-/*        a routine in the call tree of this routine. */
+/*     5)  If there are inconsistencies in the BODY, CENTER, FRAME or */
+/*         FIRST and LAST times, an error is signaled by a routine in */
+/*         the call tree of this routine. */
 
 /* $ Files */
 
@@ -221,56 +238,185 @@ static integer c__12 = 12;
 
 /* $ Examples */
 
-/*     Suppose that at time EPOCH you have the classical elements */
-/*     of some BODY relative to the equatorial frame of some central */
-/*     body CENTER. These can be converted to equinoctial elements */
-/*     and stored in an SPK file as a type 17 segment so that this */
-/*     body can be used within the SPK subsystem of the SPICE system. */
+/*     The numerical results shown for this example may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
 
-/*     Below is a list of the variables used to represent the */
-/*     classical elements */
+/*     1) Suppose that at a given time you have the classical elements */
+/*        of Daphnis relative to the equatorial frame of Saturn. These */
+/*        can be converted to equinoctial elements and stored in an SPK */
+/*        file as a type 17 segment so that Daphnis can be used within */
+/*        the SPK subsystem of the SPICE system. */
 
-/*           Variable     Meaning */
-/*           --------     ---------------------------------- */
-/*           A            Semi-major axis in km */
-/*           ECC          Eccentricity of orbit */
-/*           INC          Inclination of orbit */
-/*           NODE         Longitude of the ascending node at epoch */
-/*           OMEGA        Argument of periapse at epoch */
-/*           M            Mean anomaly at epoch */
-/*           DMDT         Mean anomaly rate in radians/second */
-/*           DNODE        Rate of change of longitude of ascending node */
-/*                        in radians/second */
-/*           DOMEGA       Rate of change of argument of periapse in */
-/*                        radians/second */
-/*           EPOCH        is the epoch of the elements in seconds past */
-/*                        the J2000 epoch. */
+/*        The example code shown below creates an SPK type 17 kernel */
+/*        with a single segment using such data. */
 
 
-/*        These elements are converted to equinoctial elements (in */
-/*        the order compatible with type 17) as shown below. */
-
-/*           EQEL(1) = A */
-/*           EQEL(2) = ECC * DSIN ( OMEGA + NODE ) */
-/*           EQEL(3) = ECC * DCOS ( OMEGA + NODE ) */
-
-/*           EQEL(4) = M + OMEGA + NODE */
-
-/*           EQEL(5) = TAN(INC/2.0D0) * DSIN(NODE) */
-/*           EQEL(6) = TAN(INC/2.0D0) * DCOS(NODE) */
-
-/*           EQEL(7) = DOMEGA */
-/*           EQEL(8) = DOMEGA + DMDT + DNODE */
-/*           EQEL(9) = DNODE */
+/*        Example code begins here. */
 
 
-/*     C */
-/*     C     Now add the segment. */
-/*     C */
+/*              PROGRAM SPKW17_EX1 */
+/*              IMPLICIT NONE */
 
-/*           CALL SPKW17 ( HANDLE, BODY,  CENTER, FRAME,  FIRST, LAST, */
-/*          .              SEGID,  EPOCH, EQEL,   RAPOL,  DECPOL ) */
+/*        C */
+/*        C     Local parameters. */
+/*        C */
+/*              INTEGER               NAMLEN */
+/*              PARAMETER           ( NAMLEN = 40 ) */
 
+/*              CHARACTER*(*)         SPK17 */
+/*              PARAMETER           ( SPK17  = 'spkw17_ex1.bsp' ) */
+
+/*        C */
+/*        C     The SPK type 17 segment will contain data for Daphnis */
+/*        C     (ID 635) with respect to Saturn (ID 699) in the J2000 */
+/*        C     reference frame. */
+/*        C */
+/*              INTEGER               BODY */
+/*              PARAMETER           ( BODY   = 635     ) */
+
+/*              INTEGER               CENTER */
+/*              PARAMETER           ( CENTER = 699     ) */
+
+/*              CHARACTER*(*)         FRMNAM */
+/*              PARAMETER           ( FRMNAM = 'J2000' ) */
+
+/*        C */
+/*        C     This is the list of parameters used to represent the */
+/*        C     classical elements: */
+/*        C */
+/*        C        Variable     Meaning */
+/*        C        --------     --------------------------------------- */
+/*        C        A            Semi-major axis in km. */
+/*        C        ECC          Eccentricity of orbit. */
+/*        C        INC          Inclination of orbit. */
+/*        C        NODE         Longitude of the ascending node at */
+/*        C                     epoch. */
+/*        C        OMEGA        Argument of periapse at epoch. */
+/*        C        M            Mean anomaly at epoch. */
+/*        C        DMDT         Mean anomaly rate in radians/second. */
+/*        C        DNODE        Rate of change of longitude of */
+/*        C                     ascending node in radians/second. */
+/*        C        DOMEGA       Rate of change of argument of periapse */
+/*        C                     in radians/second. */
+/*        C        EPOCH        The epoch of the elements in seconds */
+/*        C                     past the J2000 epoch. */
+/*        C */
+/*              DOUBLE PRECISION      A */
+/*              PARAMETER           ( A      =  1.36505608D+05  ) */
+
+/*              DOUBLE PRECISION      ECC */
+/*              PARAMETER           ( ECC    = -2.105898062D-05 ) */
+
+/*              DOUBLE PRECISION      INC */
+/*              PARAMETER           ( INC    = -3.489710429D-05 ) */
+
+/*              DOUBLE PRECISION      NODE */
+/*              PARAMETER           ( NODE   = -3.349237456D-02 ) */
+
+/*              DOUBLE PRECISION      OMEGA */
+/*              PARAMETER           ( OMEGA  =  1.52080206722D0 ) */
+
+/*              DOUBLE PRECISION      M */
+/*              PARAMETER           ( M      =  1.21177109734D0 ) */
+
+/*              DOUBLE PRECISION      DMDT */
+/*              PARAMETER           ( DMDT   =  1.218114014D-04 ) */
+
+/*              DOUBLE PRECISION      DNODE */
+/*              PARAMETER           ( DNODE  = -5.96845468D-07  ) */
+
+/*              DOUBLE PRECISION      DOMEGA */
+/*              PARAMETER           ( DOMEGA =  1.196601093D-06 ) */
+
+/*              DOUBLE PRECISION      EPOCH */
+/*              PARAMETER           ( EPOCH  = 0.D0             ) */
+
+/*        C */
+/*        C     In addition, the SPKW17 routine requires the Right */
+/*        C     Ascension and Declination of the pole of the */
+/*        C     reference plane relative to the J2000 frame, in radians. */
+/*        C */
+/*              DOUBLE PRECISION      RAPOL */
+/*              PARAMETER           ( RAPOL  = 7.08332284D-01 ) */
+
+/*              DOUBLE PRECISION      DECPOL */
+/*              PARAMETER           ( DECPOL = 1.45800286D0   ) */
+
+/*        C */
+/*        C     Local variables. */
+/*        C */
+/*              CHARACTER*(NAMLEN)    IFNAME */
+/*              CHARACTER*(NAMLEN)    SEGID */
+
+/*              DOUBLE PRECISION      EQEL   ( 9 ) */
+/*              DOUBLE PRECISION      FIRST */
+/*              DOUBLE PRECISION      LAST */
+
+/*              INTEGER               HANDLE */
+/*              INTEGER               NCOMCH */
+
+/*        C */
+/*        C     Set the start and end times of interval covered by */
+/*        C     segment. */
+/*        C */
+/*              FIRST  =  504878400.D0 */
+/*              LAST   = 1578657600.D0 */
+
+/*        C */
+/*        C     NCOMCH is the number of characters to reserve for the */
+/*        C     kernel's comment area. This example doesn't write */
+/*        C     comments, so set to zero. */
+/*        C */
+/*              NCOMCH = 0 */
+
+/*        C */
+/*        C     Internal file name and segment ID. */
+/*        C */
+/*              IFNAME = 'Test for type 17 SPK internal file name' */
+/*              SEGID  = 'SPK type 17 test segment' */
+
+/*        C */
+/*        C     Open a new SPK file. */
+/*        C */
+/*              CALL SPKOPN( SPK17, IFNAME, NCOMCH, HANDLE ) */
+
+/*        C */
+/*        C     Convert the classical elements to equinoctial elements */
+/*        C     (in the order compatible with type 17). */
+/*        C */
+/*              EQEL(1) = A */
+/*              EQEL(2) = ECC * SIN ( OMEGA + NODE ) */
+/*              EQEL(3) = ECC * COS ( OMEGA + NODE ) */
+
+/*              EQEL(4) = M + OMEGA + NODE */
+
+/*              EQEL(5) = TAN( INC/2.D0 ) * SIN( NODE ) */
+/*              EQEL(6) = TAN( INC/2.D0 ) * COS( NODE ) */
+
+/*              EQEL(7) =        DOMEGA + DNODE */
+/*              EQEL(8) = DMDT + DOMEGA + DNODE */
+/*              EQEL(9) = DNODE */
+
+/*        C */
+/*        C     Now add the segment. */
+/*        C */
+/*              CALL SPKW17 ( HANDLE, BODY,  CENTER, FRMNAM, */
+/*             .              FIRST,  LAST,  SEGID,  EPOCH, */
+/*             .              EQEL,   RAPOL, DECPOL          ) */
+
+/*        C */
+/*        C     Close the SPK file. */
+/*        C */
+/*              CALL SPKCLS ( HANDLE ) */
+
+/*              END */
+
+
+/*        When this program is executed, no output is presented on */
+/*        screen. After run completion, a new SPK type 17 exists in */
+/*        the output directory. */
 
 /* $ Restrictions */
 
@@ -282,20 +428,28 @@ static integer c__12 = 12;
 
 /* $ Author_and_Institution */
 
-/*     W.L. Taber      (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
 
-/* -    SPICELIB Version 1.0.1, 24-Jun-1999 (WLT) */
+/* -    SPICELIB Version 1.1.0, 06-JUL-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. Added complete */
+/*        code example based on existing example. */
+
+/* -    SPICELIB Version 1.0.1, 24-JUN-1999 (WLT) */
 
 /*        Corrected typographical errors in the header. */
 
-/* -    SPICELIB Version 1.0.0, 8-Jan-1997 (WLT) */
+/* -    SPICELIB Version 1.0.0, 08-JAN-1997 (WLT) */
 
 /* -& */
 /* $ Index_Entries */
 
-/*     Write a type 17 spk segment */
+/*     Write a type 17 SPK segment */
 
 /* -& */
 

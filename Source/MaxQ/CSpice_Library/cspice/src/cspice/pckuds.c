@@ -76,28 +76,28 @@ static integer c__5 = 5;
 
 /* $ Detailed_Input */
 
-/*     DESCR      is a PCK segment descriptor. */
+/*     DESCR    is a PCK segment descriptor. */
 
 /* $ Detailed_Output */
 
-/*     BODY       is the NAIF ID code for the body of the segment. */
+/*     BODY     is the NAIF ID code for the body of the segment. */
 
-/*     FRAME      is the SPICE ID code for the inertial frame to which */
-/*                the body fixed orientation is referenced. */
+/*     FRAME    is the SPICE ID code for the inertial frame to which */
+/*              the body fixed orientation is referenced. */
 
-/*     TYPE       is the type of PCK segment. */
+/*     TYPE     is the type of PCK segment. */
 
-/*     FIRST      is the first epoch for which the segment has */
-/*                orientation data. */
+/*     FIRST    is the first epoch for which the segment has */
+/*              orientation data. */
 
-/*     LAST       is the last epoch for which the segment has */
-/*                orientation data. */
+/*     LAST     is the last epoch for which the segment has */
+/*              orientation data. */
 
-/*     BEGIN      is the starting address of the data associated */
-/*                with this descriptor. */
+/*     BEGIN    is the starting address of the data associated */
+/*              with this descriptor. */
 
-/*     END        is the last address of the data associated with */
-/*                this descriptor. */
+/*     END      is the last address of the data associated with */
+/*              this descriptor. */
 
 /* $ Parameters */
 
@@ -115,7 +115,7 @@ static integer c__5 = 5;
 
 /*     This routine extracts the contents of a PCK segment */
 /*     descriptor into the components needed for reading and */
-/*     evaluating the data stored in the segment.  It serves */
+/*     evaluating the data stored in the segment. It serves */
 /*     as a macro for expanding the PCK segment descriptor. */
 
 /* $ Examples */
@@ -140,7 +140,6 @@ static integer c__5 = 5;
 /*     WRITE (*,*) 'Segment Start : ', FSTCAL */
 /*     WRITE (*,*) 'Segment Stop  : ', LSTCAL */
 
-
 /* $ Restrictions */
 
 /*     None. */
@@ -151,13 +150,18 @@ static integer c__5 = 5;
 
 /* $ Author_and_Institution */
 
-/*     W.L. Taber      (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
 
+/* -    SPICELIB Version 1.0.2, 02-OCT-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
+
 /* -    SPICELIB Version 1.0.1, 03-JAN-2014 (EDW) */
 
-/*        Minor edits to Procedure; clean trailing whitespace. */
+/*        Minor edits to $Procedure; clean trailing whitespace. */
 /*        Corrected order of header sections to conform to NAIF */
 /*        standard. */
 
@@ -187,7 +191,7 @@ static integer c__5 = 5;
 	chkin_("PCKUDS", (ftnlen)6);
     }
 
-/*     No judgements are made about the descriptor when we */
+/*     No judgments are made about the descriptor when we */
 /*     unpack it.  If things were done right when the descriptor */
 /*     was created, it should be fine now. */
 

@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      PL2NVP ( Plane to normal vector and point ) */
+/* $Procedure PL2NVP ( Plane to normal vector and point ) */
 /* Subroutine */ int pl2nvp_(doublereal *plane, doublereal *normal, 
 	doublereal *point)
 {
@@ -58,31 +58,31 @@
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
-/*     PLANE      I   A SPICELIB plane. */
+/*     PLANE      I   A SPICE plane. */
 /*     NORMAL, */
 /*     POINT      O   A unit normal vector and point that define PLANE. */
 
 /* $ Detailed_Input */
 
-/*     PLANE          is a SPICELIB plane. */
+/*     PLANE    is a SPICE plane. */
 
 /* $ Detailed_Output */
 
 /*     NORMAL, */
-/*     POINT          are, respectively, a unit normal vector and point */
-/*                    that define the geometric plane represented by */
-/*                    PLANE.  Let the symbol < a, b > indicate the inner */
-/*                    product of vectors a and b; then the geometric */
-/*                    plane is the set of vectors X in three-dimensional */
-/*                    space that satisfy */
+/*     POINT    are, respectively, a unit normal vector and point */
+/*              that define the geometric plane represented by */
+/*              PLANE. Let the symbol < A, B > indicate the inner */
+/*              product of vectors A and B; then the geometric */
+/*              plane is the set of vectors X in three-dimensional */
+/*              space that satisfy */
 
-/*                       < X - POINT, NORMAL >  =  0. */
+/*                 < X - POINT, NORMAL >  =  0. */
 
-/*                    POINT is always the closest point in the input */
-/*                    plane to the origin.  POINT is always a */
-/*                    non-negative scalar multiple of NORMAL. */
+/*              POINT is always the closest point in the input */
+/*              plane to the origin. POINT is always a */
+/*              non-negative scalar multiple of NORMAL. */
 
 /* $ Parameters */
 
@@ -108,17 +108,17 @@
 /* $ Particulars */
 
 /*     SPICELIB geometry routines that deal with planes use the `plane' */
-/*     data type to represent input and output planes.  This data type */
+/*     data type to represent input and output planes. This data type */
 /*     makes the subroutine interfaces simpler and more uniform. */
 
-/*     The SPICELIB routines that produce SPICELIB planes from data that */
+/*     The SPICELIB routines that produce SPICE planes from data that */
 /*     define a plane are: */
 
 /*        NVC2PL ( Normal vector and constant to plane ) */
 /*        NVP2PL ( Normal vector and point to plane    ) */
 /*        PSV2PL ( Point and spanning vectors to plane ) */
 
-/*     The SPICELIB routines that convert SPICELIB planes to data that */
+/*     The SPICELIB routines that convert SPICE planes to data that */
 /*     define a plane are: */
 
 /*        PL2NVC ( Plane to normal vector and constant ) */
@@ -128,7 +128,7 @@
 /* $ Examples */
 
 /*     1)  Given a plane normal and constant, find a point in */
-/*         the plane.  POINT is the point we seek. */
+/*         the plane. POINT is the point we seek. */
 
 /*            CALL NVC2PL ( NORMAL, CONST,  PLANE ) */
 /*            CALL PL2NVP ( PLANE,  NORMAL, POINT ) */
@@ -139,13 +139,22 @@
 
 /* $ Literature_References */
 
-/*     [1] `Calculus and Analytic Geometry', Thomas and Finney. */
+/*     [1]  G. Thomas and R. Finney, "Calculus and Analytic Geometry," */
+/*          7th Edition, Addison Wesley, 1988. */
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 24-AUG-2021 (NJB) (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
 
@@ -164,10 +173,14 @@
 /*     Local variables */
 
 
-/*     Find a unit normal and constant for the plane.  Scaling the */
-/*     unit normal by the constant gives us the closest point in */
-/*     the plane to the origin. */
+/*     Note for programmers: validity of the input plane is not */
+/*     checked in the interest of efficiency. The input plane will be */
+/*     valid if it was created by one of the SPICE plane construction */
+/*     routines. */
 
+/*     Extract the unit normal and constant from the plane. Scaling the */
+/*     unit normal by the constant gives us the closest point in the */
+/*     plane to the origin. */
     pl2nvc_(plane, normal, &const__);
     vscl_(&const__, normal, point);
     return 0;

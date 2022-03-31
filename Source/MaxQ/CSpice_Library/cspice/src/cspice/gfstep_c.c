@@ -3,9 +3,9 @@
 -Procedure gfstep_c ( Geometry finder step size )
 
 -Abstract
- 
+
    Return the time step set by the most recent call to gfsstp_c.
- 
+
 -Disclaimer
 
    THIS SOFTWARE AND ANY RELATED MATERIALS WERE CREATED BY THE
@@ -32,16 +32,16 @@
    ACTIONS OF RECIPIENT IN THE USE OF THE SOFTWARE.
 
 -Required_Reading
- 
+
    GF
    TIME
 
 -Keywords
 
-   GEOMETRY 
-   SEARCH 
-   UTILITY 
- 
+   GEOMETRY
+   SEARCH
+   UTILITY
+
 */
 
    #include "SpiceUsr.h"
@@ -49,69 +49,66 @@
    #include "SpiceZst.h"
 
    void gfstep_c ( SpiceDouble    time,
-                   SpiceDouble  * step ) 
+                   SpiceDouble  * step )
 
 /*
 
 -Brief_I/O
- 
-   VARIABLE  I/O  DESCRIPTION 
-   --------  ---  -------------------------------------------------- 
-   time       I   Ignored ET value. 
-   step       O   Time step to take. 
- 
+
+   VARIABLE  I/O  DESCRIPTION
+   --------  ---  --------------------------------------------------
+   time       I   Ignored ET value.
+   step       O   Time step to take.
+
 -Detailed_Input
-  
-   time     is an ignored double precision number. This argument 
-            is present so the argument list of this routine is  
-            compatible with the GF step size routine argument list 
-            specification. 
 
-            When this routine is called from within the GF 
-            root-finding system, either the initial ET value of the 
-            current interval of the confinement window, or the 
-            value resulting from the last search step, is passed in 
-            via the `time' argument. 
- 
- 
+   time        is an ignored double precision number. This argument
+               is present so the argument list of this routine is
+               compatible with the GF step size routine argument list
+               specification.
 
--Detailed_Output  
- 
-   step     is the output step size. This is the value set by the 
-            most recent call to gfsstp_c. Units are TDB seconds. 
+               When this routine is called from within the GF
+               root-finding system, either the initial ET value of the
+               current interval of the confinement window, or the
+               value resulting from the last search step, is passed in
+               via the `time' argument.
 
-            `step' is used in the GF search root-bracketing process. 
-            `step' indicates how far to advance `time' so that `time' and 
-            time+step may bracket a state transition and definitely 
-            do not bracket more than one state transition. 
- 
+-Detailed_Output
+
+   step        is the output step size. This is the value set by the
+               most recent call to gfsstp_c. Units are TDB seconds.
+
+               `step' is used in the GF search root-bracketing process.
+               `step' indicates how far to advance `time' so that `time' and
+               time+step may bracket a state transition and definitely
+               do not bracket more than one state transition.
+
 -Parameters
- 
-   None. 
- 
+
+   None.
+
 -Exceptions
- 
-   1) If this routine is called before a step size has been 
-      set via a call to gfsstp_c, the error SPICE(NOTINITIALIZED)
-      is signaled.   
- 
+
+   1)  If this routine is called before a step size has been
+       set via a call to gfsstp_c, the error SPICE(NOTINITIALIZED)
+       is signaled by a routine in the call tree of this routine.
+
 -Files
- 
-   None. 
- 
+
+   None.
+
 -Particulars
- 
-   This routine returns the time step set by the most recent call to 
-   gfsstp_c. 
+
+   This routine returns the time step set by the most recent call to
+   gfsstp_c.
 
 -Examples
- 
 
-   1) User applications can pass gfstep_c to mid-level GF API routines 
-      expecting a step size routine as an input argument. For 
-      example, the GF API routine gfocce_c can be called as shown 
+   1) User applications can pass gfstep_c to mid-level GF API routines
+      expecting a step size routine as an input argument. For
+      example, the GF API routine gfocce_c can be called as shown
       in the code fragment below.
-      
+
             /.
             Select a twenty-second step. We'll ignore any occultations
             lasting less than 20 seconds.
@@ -122,47 +119,47 @@
             /.
             Perform the search.
             ./
-            gfocce_c ( "ANY",                            
-                       "MOON",     "ellipsoid",  "IAU_MOON", 
-                       "SUN",      "ellipsoid",  "IAU_SUN",  
-                       "LT",       "EARTH",      CNVTOL,    
-                       gfstep_c,   gfrefn_c,     rpt,       
-                       gfrepi_c,   gfrepu_c,     gfrepf_c, 
-                       bail,       gfbail_c,     cnfine,   
+            gfocce_c ( "ANY",
+                       "MOON",     "ellipsoid",  "IAU_MOON",
+                       "SUN",      "ellipsoid",  "IAU_SUN",
+                       "LT",       "EARTH",      CNVTOL,
+                       gfstep_c,   gfrefn_c,     rpt,
+                       gfrepi_c,   gfrepu_c,     gfrepf_c,
+                       bail,       gfbail_c,     cnfine,
                        &result                              );
 
-   
 -Restrictions
- 
+
    None.
- 
+
 -Literature_References
- 
-   None. 
- 
+
+   None.
+
 -Author_and_Institution
- 
-   N.J. Bachman   (JPL)
-   L.S. Elson     (JPL)
-   W.L. Taber     (JPL) 
-   I.M. Underwood (JPL) 
-   E.D. Wright    (JPL)  
- 
+
+   N.J. Bachman        (JPL)
+   J. Diaz del Rio     (ODC Space)
+   L.S. Elson          (JPL)
+
 -Version
- 
+
+   -CSPICE Version 1.0.1, 06-AUG-2021 (JDR)
+
+       Edited the header to comply with NAIF standard.
+
    -CSPICE Version 1.0.0, 15-APR-2009 (LSE) (NJB)
- 
+
 -Index_Entries
- 
+
    GF get constant step size
- 
 
 -&
 */
 
 { /* Begin gfstep_c */
 
-   
+
    /*
    Participate in error tracing.
    */
@@ -171,14 +168,13 @@
    {
       return;
    }
-
    chkin_c ( "gfstep_c" );
 
    /*
    Let the f2c'd routine do the work.
    */
 
-   gfstep_ (  ( doublereal *  ) &time, 
+   gfstep_ (  ( doublereal *  ) &time,
               ( doublereal *  ) step   );
 
    chkout_c ( "gfstep_c" );

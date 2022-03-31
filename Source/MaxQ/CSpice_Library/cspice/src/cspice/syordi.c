@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      SYORDI ( Order the components of a single symbol ) */
+/* $Procedure SYORDI ( Order the components of a single symbol ) */
 /* Subroutine */ int syordi_(char *name__, char *tabsym, integer *tabptr, 
 	integer *tabval, ftnlen name_len, ftnlen tabsym_len)
 {
@@ -72,35 +72,36 @@
 /*                    ordered. */
 /*     TABSYM, */
 /*     TABPTR, */
-/*     TABVAL    I/O  Components of the symbol table. */
+/*     TABVAL    I-O  Components of the symbol table. */
 
 /* $ Detailed_Input */
 
-/*     NAME       is the name of the symbol whose components are to be */
-/*                ordered. If NAME is not in the symbol table, the symbol */
-/*                table is not modified. */
+/*     NAME     is the name of the symbol whose components are to be */
+/*              ordered. */
 
 /*     TABSYM, */
 /*     TABPTR, */
-/*     TABVAL     are the components of an integer symbol table. */
+/*     TABVAL   are the components of an integer symbol table. */
 
 /* $ Detailed_Output */
 
 /*     TABSYM, */
 /*     TABPTR, */
-/*     TABVAL     are the components of an integer symbol table. */
-/*                The components of the symbol are sorted in increasing */
-/*                order. */
+/*     TABVAL   are the components of an integer symbol table. */
+
+/*              On output, the components of the symbol are sorted in */
+/*              increasing order. If NAME is not in the symbol table, the */
+/*              symbol table is not modified. */
 
 /* $ Parameters */
 
 /*     None. */
 
-/* $ Files */
+/* $ Exceptions */
 
 /*     None. */
 
-/* $ Exceptions */
+/* $ Files */
 
 /*     None. */
 
@@ -125,7 +126,7 @@
 
 /*     The call, */
 
-/*     CALL SYORDI ( 'pens', TABSYM, TABPTR, TABVAL ) */
+/*        CALL SYORDI ( 'pens', TABSYM, TABPTR, TABVAL ) */
 
 /*     modifies the contents of the symbol table to be: */
 
@@ -141,7 +142,7 @@
 
 /*     Note that the call, */
 
-/*     CALL SYORDI ( 'desks', TABSYM, TABPTR, TABVAL ) */
+/*        CALL SYORDI ( 'desks', TABSYM, TABPTR, TABVAL ) */
 
 /*     will not modify the symbol table because the symbol "desks" is */
 /*     not in the symbol table. */
@@ -156,17 +157,25 @@
 
 /* $ Author_and_Institution */
 
-/*     H.A. Neilan     (JPL) */
-/*     I.M. Underwood  (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     H.A. Neilan        (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
 
-/* -     SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+/* -    SPICELIB Version 1.1.0, 08-APR-2021 (JDR) */
 
-/*         Comment section for permuted index source lines was added */
-/*         following the header. */
+/*        Added IMPLICIT NONE statement. */
 
-/* -     SPICELIB Version 1.0.0, 31-JAN-1990 (IMU) (HAN) */
+/*        Edited the header to comply with NAIF standard. */
+
+/* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+
+/*        Comment section for permuted index source lines was added */
+/*        following the header. */
+
+/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (IMU) (HAN) */
 
 /* -& */
 /* $ Index_Entries */

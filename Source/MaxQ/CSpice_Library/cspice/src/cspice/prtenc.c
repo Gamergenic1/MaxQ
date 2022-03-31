@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      PRTENC ( Encode a character string, portably ) */
+/* $Procedure PRTENC ( Encode a character string, portably ) */
 /* Subroutine */ int prtenc_0_(int n__, integer *number, char *string, ftnlen 
 	string_len)
 {
@@ -23,7 +23,7 @@
 /* $ Abstract */
 
 /*     Encode a nonnegative integer number into a character string, */
-/*     portably.  This routine uses 128 as the base for encoding. */
+/*     portably, using 128 as the base for encoding. */
 
 /* $ Disclaimer */
 
@@ -56,7 +56,8 @@
 
 /* $ Keywords */
 
-/*     CELLS, CHARACTER */
+/*     CELLS */
+/*     CHARACTER */
 
 /* $ Declarations */
 /* $ Brief_I/O */
@@ -69,52 +70,68 @@
 
 /* $ Detailed_Input */
 
-/*     NUMBER      is an arbitrary nonnegative integer. */
+/*     NUMBER   is an arbitrary nonnegative integer. */
 
 /* $ Detailed_Output */
 
-/*     STRING      is the character string implied by the ASCII */
-/*                 interpretation of NUMBER when converted to its */
-/*                 base 128 representation. */
+/*     STRING   is the character string implied by the ASCII */
+/*              interpretation of NUMBER when converted to its */
+/*              base 128 representation. */
 
-/*                 Let L be the declared length of STRING, and let */
-/*                 NUMBER be given by */
+/*              Let L be the declared length of STRING, and let */
+/*              NUMBER be given by */
 
-/*                                     0           1                 L-1 */
-/*                    NUMBER = a    128  + a    128  + ... + a    128 */
-/*                              1           2                 L */
+/*                                  0           1                 L-1 */
+/*                 NUMBER = a    128  + a    128  + ... + a    128 */
+/*                           1           2                 L */
 
-/*                 Then */
+/*              Then */
 
-/*                    STRING(i:i) = CHAR(a )   for i = 1, L */
-/*                                        i */
+/*                 STRING(i:i) = CHAR(a )   for i = 1, L */
+/*                                     i */
 
-/*                 Note that, just as for any other "numbers", */
-/*                 the "digits" in STRING are arranged from right */
-/*                 to left in order of increasing significance. */
-/*                 The string is, in effect, "padded with nulls" */
-/*                 on the left. */
+/*              Note that, just as for any other "numbers", */
+/*              the "digits" in STRING are arranged from right */
+/*              to left in order of increasing significance. */
+/*              The string is, in effect, "padded with nulls" */
+/*              on the left. */
 
 /* $ Parameters */
 
-/*     MINLEN      is the minimum length of a string into which a */
-/*                 number may be encoded. In order to avoid padding */
-/*                 long strings with hundreds, possibly thousands */
-/*                 of null characters, only the first MINLEN characters */
-/*                 of the string are actually used. Note that this */
-/*                 also allows the encoded number to be preserved */
-/*                 during assignments, */
+/*     MINLEN   is the minimum length of a string into which a */
+/*              number may be encoded. In order to avoid padding */
+/*              long strings with hundreds, possibly thousands */
+/*              of null characters, only the first MINLEN characters */
+/*              of the string are actually used. Note that this */
+/*              also allows the encoded number to be preserved */
+/*              during assignments, */
 
-/*                    STR1 = STR2 */
+/*                 STR1 = STR2 */
 
-/*                 so long as both strings are of length MINLEN or */
-/*                 greater. */
+/*              so long as both strings are of length MINLEN or */
+/*              greater. */
+
+/* $ Exceptions */
+
+/*     1)  If the length of the output string is less than MINLEN, */
+/*         the error SPICE(INSUFFLEN) is signaled. */
+
+/*     2)  If the number to be encoded is negative, the error */
+/*         SPICE(OUTOFRANGE) is signaled. */
+
+/*                                                       MINLEN */
+/*     3)  If the number to be encoded is larger than 128       - 1, */
+/*         the error SPICE(OUTOFRANGE) is signaled. */
+
+/* $ Files */
+
+/*     None. */
 
 /* $ Particulars */
 
 /*     This routine is identical to ENCHAR, except that this routine */
 /*     does not use the machine-dependent encoding base returned by */
-/*     the SPICELIB routine CHBASE.  Instead, the base 128 is used. */
+/*     the SPICELIB routine CHBASE. Instead, the base 128 is used. */
 /*     This base is expected to work on all systems supporting ASCII */
 /*     encoding of characters. */
 
@@ -126,36 +143,25 @@
 
 /*     None. */
 
-/* $ Exceptions */
-
-/*     1) If the length of the output string is less than MINLEN, */
-/*        the error 'SPICE(INSUFFLEN)' is signalled. */
-
-/*     2) If the number to be encoded is negative, the error */
-/*        'SPICE(OUTOFRANGE)' is signalled. */
-
-/*                                                      MINLEN */
-/*     3) If the number to be encoded is larger than 128       - 1, */
-/*        the error 'SPICE(OUTOFRANGE)' is signalled. */
-
-/* $ Files */
-
-/*     None. */
-
 /* $ Literature_References */
 
 /*     None. */
 
 /* $ Author_and_Institution */
 
-/*     W.L. Taber      (JPL) */
-/*     I.M. Underwood  (JPL) */
-/*     N.J. Bachman    (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
 
-/* -    SPICELIB Version 1.0.1, 19-DEC-1995 (NJB)(WLT) */
+/* -    SPICELIB Version 1.1.0, 12-AUG-2021 (JDR) */
 
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
+
+/* -    SPICELIB Version 1.0.0, 19-DEC-1995 (NJB) (WLT) */
 
 /* -& */
 /* $ Index_Entries */
@@ -206,7 +212,7 @@
 	chkout_("PRTENC", (ftnlen)6);
     }
     return 0;
-/* $Procedure      PRTDEC ( Decode a character string ) */
+/* $Procedure PRTDEC ( Decode a character string ) */
 
 L_prtdec:
 /* $ Abstract */
@@ -260,17 +266,26 @@ L_prtdec:
 
 /* $ Detailed_Input */
 
-/*     STRING      is a character string previously encoded by PRTENC. */
-/*                 This contains an integer in base 128 notation, */
-/*                 where 128 is a function of the size of the */
-/*                 available character set. See PRTENC for details */
-/*                 about the format of STRING. */
+/*     STRING   is a character string previously encoded by PRTENC. */
+/*              This contains an integer in base 128 notation, */
+/*              where 128 is a function of the size of the */
+/*              available character set. See PRTENC for details */
+/*              about the format of STRING. */
 
 /* $ Detailed_Output */
 
-/*     NUMBER      is the integer encoded in the input string. */
+/*     NUMBER   is the integer encoded in the input string. */
 
 /* $ Parameters */
+
+/*     None. */
+
+/* $ Exceptions */
+
+/*     1)  If the length of the input string is less than MINLEN, */
+/*         the error SPICE(INSUFFLEN) is signaled. */
+
+/* $ Files */
 
 /*     None. */
 
@@ -290,7 +305,7 @@ L_prtdec:
 
 /*     This routine is identical to DECHAR, except that this routine */
 /*     does not use the machine-dependent encoding base returned by */
-/*     the SPICELIB routine CHBASE.  Instead, the base 128 is used. */
+/*     the SPICELIB routine CHBASE. Instead, the base 128 is used. */
 /*     This base is expected to work on all systems supporting ASCII */
 /*     encoding of characters. */
 
@@ -302,26 +317,23 @@ L_prtdec:
 
 /*     None. */
 
-/* $ Exceptions */
-
-/*     1) If the length of the input string is less than MINLEN, */
-/*        the error 'SPICE(INSUFFLEN)' is signalled. */
-
-/* $ Files */
-
-/*     None. */
-
 /* $ Literature_References */
 
 /*     None. */
 
 /* $ Author_and_Institution */
 
-/*     W.L. Taber      (JPL) */
-/*     I.M. Underwood  (JPL) */
-/*     N.J. Bachman    (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 12-AUG-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.0.0, 19-DEC-1995 (NJB) (WLT) */
 

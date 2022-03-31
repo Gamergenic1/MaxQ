@@ -9,7 +9,7 @@
 
 static integer c__1 = 1;
 
-/* $Procedure      SPKS21 ( S/P Kernel, subset, type 21 ) */
+/* $Procedure SPKS21 ( S/P Kernel, subset, type 21 ) */
 /* Subroutine */ int spks21_(integer *handle, integer *baddr, integer *eaddr, 
 	doublereal *begin, doublereal *end)
 {
@@ -148,7 +148,7 @@ static integer c__1 = 1;
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     I   Handle of source segment. */
 /*     BADDR      I   Beginning address of source segment. */
@@ -160,16 +160,15 @@ static integer c__1 = 1;
 
 /*     HANDLE, */
 /*     BADDR, */
-/*     EADDR       are the file handle assigned to a SPK file, and the */
-/*                 beginning and ending addresses of a segment within */
-/*                 the file. Together they determine a complete set of */
-/*                 ephemeris data, from which a subset is to be */
-/*                 extracted. */
+/*     EADDR    are the file handle assigned to a SPK file, and the */
+/*              beginning and ending addresses of a segment within */
+/*              the file. Together they determine a complete set of */
+/*              ephemeris data, from which a subset is to be */
+/*              extracted. */
 
 /*     BEGIN, */
-/*     END         are the initial and final epochs (ephemeris time) */
-/*                 of the subset to be extracted. */
-
+/*     END      are the initial and final epochs (ephemeris time) */
+/*              of the subset to be extracted. */
 
 /* $ Detailed_Output */
 
@@ -181,12 +180,12 @@ static integer c__1 = 1;
 
 /* $ Exceptions */
 
-/*     1)  Any errors that occur while reading data from the source SPK */
-/*         file will be diagnosed by routines in the call tree of this */
-/*         routine. */
+/*     1)  If an error occurs while reading data from the source SPK */
+/*         file, the error is signaled by a routine in the call tree of */
+/*         this routine. */
 
-/*     2)  Any errors that occur while writing data to the output SPK */
-/*         file will be diagnosed by routines in the call tree of this */
+/*     2)  If an error occurs while writing data to the output SPK file, */
+/*         the error is signaled by a routine in the call tree of this */
 /*         routine. */
 
 /* $ Files */
@@ -208,23 +207,34 @@ static integer c__1 = 1;
 
 /* $ Literature_References */
 
-/*     NAIF Document 168.0, "S- and P- Kernel (SPK) Specification and */
-/*     User's Guide" */
+/*     None. */
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     I.M. Underwood  (JPL) */
-/*     E.D. Wright     (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     F.T. Krogh         (JPL) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 14-OCT-2021 (JDR) (BVS) */
+
+/*        Bug fix: fixed routine name in CHKIN/CHKOUT calls (SPKS01 */
+/*        -> SPKS21). */
+
+/*        Edited the header to comply with NAIF standard. Moved SPK */
+/*        required reading from $Literature_References to */
+/*        $Required_Reading section. */
 
 /* -    SPICELIB Version 1.0.0, 16-JAN-2014 (NJB) (FTK) (WLT) (IMU) */
 
 /* -& */
 /* $ Index_Entries */
 
-/*     subset type_21 spk segment */
+/*     subset type_21 SPK segment */
 
 /* -& */
 
@@ -242,7 +252,7 @@ static integer c__1 = 1;
     if (return_()) {
 	return 0;
     }
-    chkin_("SPKS01", (ftnlen)6);
+    chkin_("SPKS21", (ftnlen)6);
 
 /*     Get the number of records in the segment. From that, we can */
 /*     compute */
@@ -335,7 +345,7 @@ static integer c__1 = 1;
     dafada_(&d__1, &c__1);
     data[0] = (doublereal) (last - first + 1);
     dafada_(data, &c__1);
-    chkout_("SPKS01", (ftnlen)6);
+    chkout_("SPKS21", (ftnlen)6);
     return 0;
 } /* spks21_ */
 

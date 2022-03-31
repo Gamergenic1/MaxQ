@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure            PCWID ( Printable width of a character array ) */
+/* $Procedure PCWID ( Printable width of a character array ) */
 integer pcwid_(char *array, integer *nelt, ftnlen array_len)
 {
     /* System generated locals */
@@ -52,7 +52,8 @@ integer pcwid_(char *array, integer *nelt, ftnlen array_len)
 
 /* $ Keywords */
 
-/*     ARRAY, CHARACTER */
+/*     ARRAY */
+/*     CHARACTER */
 
 /* $ Declarations */
 /* $ Brief_I/O */
@@ -61,28 +62,36 @@ integer pcwid_(char *array, integer *nelt, ftnlen array_len)
 /*     --------  ---  -------------------------------------------------- */
 /*     ARRAY      I   Input array. */
 /*     NELT       I   Number of elements in the array. */
-/*     PCWID      O   Maximum value of LASTPC for the array. */
+
+/*     The function returns the index of the rightmost printable */
+/*     character in the entire array of strings ARRAY. */
 
 /* $ Detailed_Input */
 
-/*     ARRAY       is the input array. */
+/*     ARRAY    is the input array. */
 
-/*     NELT        is the number of elements in the input array. */
+/*     NELT     is the number of elements in the input array. */
 
 /* $ Detailed_Output */
 
-/*     PCWID       is the index of the rightmost printable character */
-/*                 in the entire array. This is equivalent to the */
-/*                 maximum value of LASTPC for the array, but somewhat */
-/*                 more efficient to compute. If NELT is not greater */
-/*                 than zero, PCWID is zero. */
+/*     The function returns the index of the rightmost printable */
+/*     character in the entire array. This is equivalent to the maximum */
+/*     value of LASTPC for the array, but somewhat more efficient to */
+/*     compute. If NELT is not greater than zero, PCWID is zero. */
 
-/*                 ASCII characters in the range [33,126] are considered */
-/*                 printable. Blanks are not considered printable. Thus, */
-/*                 for character arrays padded with blanks, PCWID is */
-/*                 equivalent to NBWID. */
+/*     ASCII characters in the range [33,126] are considered printable. */
+/*     Blanks are not considered printable. Thus, for character arrays */
+/*     padded with blanks, PCWID is equivalent to NBWID. */
 
 /* $ Parameters */
+
+/*     None. */
+
+/* $ Exceptions */
+
+/*     Error free. */
+
+/* $ Files */
 
 /*     None. */
 
@@ -122,30 +131,30 @@ integer pcwid_(char *array, integer *nelt, ftnlen array_len)
 
 /*     None. */
 
-/* $ Exceptions */
-
-/*      Error free. */
-
-/* $ Files */
+/* $ Literature_References */
 
 /*     None. */
 
 /* $ Author_and_Institution */
 
-/*     I.M. Underwood  (JPL) */
-
-/* $ Literature_References */
-
-/*     None. */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
 
-/* -     SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+/* -    SPICELIB Version 1.1.0, 08-APR-2021 (JDR) */
 
-/*         Comment section for permuted index source lines was added */
-/*         following the header. */
+/*        Added IMPLICIT NONE statement. */
 
-/* -     SPICELIB Version 1.0.0, 31-JAN-1990 (IMU) */
+/*        Edited the header to comply with NAIF standard. */
+
+/* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+
+/*        Comment section for permuted index source lines was added */
+/*        following the header. */
+
+/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (IMU) */
 
 /* -& */
 /* $ Index_Entries */

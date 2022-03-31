@@ -167,6 +167,10 @@ static integer c__128 = 128;
 
 /* $ Version */
 
+/* -    SPICELIB Version 2.6.0, 28-NOV-2021 (BVS) */
+
+/*        Updated for MAC-OSX-M1-64BIT-CLANG_C. */
+
 /* -    SPICELIB Version 2.5.0, 10-MAR-2014 (BVS) */
 
 /*        Updated for SUN-SOLARIS-64BIT-INTEL. */
@@ -410,13 +414,6 @@ static integer c__128 = 128;
 
 /*     None. */
 
-/* $ Files */
-
-/*     This routine reads data from the DAF associated with HANDLE. */
-/*     This action may result in connecting a logical unit to the */
-/*     file, if the handle manager has rotated the file out of the */
-/*     unit table. */
-
 /* $ Exceptions */
 
 /*     1) SPICE(HANDLENOTFOUND) is signaled if HANDLE can not be */
@@ -424,6 +421,13 @@ static integer c__128 = 128;
 
 /*     2) Routines in the call tree of this routine may trap and */
 /*        signal errors. */
+
+/* $ Files */
+
+/*     This routine reads data from the DAF associated with HANDLE. */
+/*     This action may result in connecting a logical unit to the */
+/*     file, if the handle manager has rotated the file out of the */
+/*     unit table. */
 
 /* $ Particulars */
 
@@ -453,15 +457,19 @@ static integer c__128 = 128;
 /*     4) Characters a byte-sized, 8 characters constitute a double */
 /*        precision number, and 4 characters an integer. */
 
-/* $ Author_and_Institution */
-
-/*     F.S. Turner     (JPL) */
-
 /* $ Literature_References */
 
 /*     None. */
 
+/* $ Author_and_Institution */
+
+/*     F.S. Turner     (JPL) */
+
 /* $ Version */
+
+/* -    SPICELIB Version 1.0.1, 02-OCT-2021 (NJB) */
+
+/*        Corrected typo in comments. Reordered header sections. */
 
 /* -    SPICELIB Version 1.0.0, 12-NOV-2001 (FST) */
 
@@ -506,7 +514,7 @@ static integer c__128 = 128;
 	for (i__ = 1; i__ <= 4; ++i__) {
 	    zzddhgsd_("BFF", &i__, strbff + (((i__1 = i__ - 1) < 4 && 0 <= 
 		    i__1 ? i__1 : s_rnge("strbff", i__1, "zzdafgsr_", (ftnlen)
-		    235)) << 3), (ftnlen)3, (ftnlen)8);
+		    239)) << 3), (ftnlen)3, (ftnlen)8);
 	}
 
 /*        Fetch the native binary file format and determine its */
@@ -580,7 +588,7 @@ static integer c__128 = 128;
 	for (i__ = 1; i__ <= 128; ++i__) {
 	    iostat = do_uio(&c__1, (char *)&dpbuf[(i__1 = i__ - 1) < 128 && 0 
 		    <= i__1 ? i__1 : s_rnge("dpbuf", i__1, "zzdafgsr_", (
-		    ftnlen)315)], (ftnlen)sizeof(doublereal));
+		    ftnlen)319)], (ftnlen)sizeof(doublereal));
 	    if (iostat != 0) {
 		goto L100001;
 	    }
@@ -650,7 +658,7 @@ L100002:
 	for (i__ = 1; i__ <= i__1; ++i__) {
 
 /*           Set the start index into the double precision array */
-/*           to receive the componets.  Also set the character */
+/*           to receive the components.  Also set the character */
 /*           substring index to the start location for this summary. */
 /*           In the diagram below, each box represents a double */
 /*           precision number.  The figure assumes SUMSIZ is 5 */
@@ -681,7 +689,7 @@ L100002:
 		left = 128 - (i__ - 1) * sumsiz - 3;
 		zzxlated_(&ibff, chrbuf + (cindex - 1), &left, &dpbuf[(i__2 = 
 			dindex - 1) < 128 && 0 <= i__2 ? i__2 : s_rnge("dpbuf"
-			, i__2, "zzdafgsr_", (ftnlen)412)], cindex + (*nd << 
+			, i__2, "zzdafgsr_", (ftnlen)416)], cindex + (*nd << 
 			3) - 1 - (cindex - 1));
 
 /*              If the translation routine fails for any reason, */
@@ -710,7 +718,7 @@ L100002:
 		left = 256 - (i__ - 1 << 1) * sumsiz - (*nd << 1) - 6;
 		zzxlatei_(&ibff, chrbuf + (cindex - 1), &left, &inbuf[(i__2 = 
 			(dindex << 1) - 2) < 256 && 0 <= i__2 ? i__2 : s_rnge(
-			"inbuf", i__2, "zzdafgsr_", (ftnlen)447)], cindex + (*
+			"inbuf", i__2, "zzdafgsr_", (ftnlen)451)], cindex + (*
 			ni << 2) - 1 - (cindex - 1));
 
 /*              If the translation routine fails for any reason, */
@@ -729,7 +737,7 @@ L100002:
 		if (*ni % 2 == 1) {
 		    inbuf[(i__2 = (dindex << 1) - 1 + *ni - 1) < 256 && 0 <= 
 			    i__2 ? i__2 : s_rnge("inbuf", i__2, "zzdafgsr_", (
-			    ftnlen)468)] = 0;
+			    ftnlen)472)] = 0;
 		}
 	    }
 	}
@@ -741,7 +749,7 @@ L100002:
 	dindex = nsum * sumsiz + 4;
 	for (i__ = dindex; i__ <= 128; ++i__) {
 	    dpbuf[(i__1 = i__ - 1) < 128 && 0 <= i__1 ? i__1 : s_rnge("dpbuf",
-		     i__1, "zzdafgsr_", (ftnlen)483)] = 0.;
+		     i__1, "zzdafgsr_", (ftnlen)487)] = 0.;
 	}
     }
 

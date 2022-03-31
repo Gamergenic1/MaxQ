@@ -51,7 +51,7 @@
 
 -Brief_I/O
 
-   Variable  I/O  Description
+   VARIABLE  I/O  DESCRIPTION
    --------  ---  --------------------------------------------------
    handle     I   Handle of DAF to be closed.
 
@@ -65,18 +65,18 @@
 
 -Parameters
 
-    None.
+   None.
 
 -Exceptions
 
-   1) If the specified handle is not known to the DAF subsystem
-      (because it does not belong to a file opened via the DAF
-      API), nothing happens.
+   1)  If the specified handle is not known to the DAF subsystem
+       (because it does not belong to a file opened via the DAF
+       API), nothing happens.
 
-   2) If this routine is used to close a file whose handle is
-      known to the DAF subsystem, and if the file handle is
-      attached to a non-DAF file, routines called by this
-      routine signal an error.
+   2)  If this routine is used to close a file whose handle is
+       known to the DAF subsystem, and if the file handle is
+       attached to a non-DAF file, an error is signaled by a routine
+       in the call tree of this routine.
 
 -Files
 
@@ -97,12 +97,16 @@
 
 -Examples
 
-   Example (1):
+   The numerical results shown for these examples may differ across
+   platforms. The results depend on the SPICE kernels used as
+   input, the compiler and supporting libraries, and the machine
+   specific arithmetic implementation.
 
-   In the following code fragment, the arrays in a file are examined in
-   order to determine whether the file contains any arrays whose names
-   begin with the word TEST. The complete names for these arrays are
-   printed to the screen. The file is closed at the end of the search.
+   1) In the following code fragment, the arrays in a file are
+      examined in order to determine whether the file contains
+      any arrays whose names begin with the word TEST.
+      The complete names for these arrays are printed to
+      the screen. The file is closed at the end of the search.
 
       #include "SpiceUsr.h"
           .
@@ -126,19 +130,30 @@
       dafcls_c ( handle );
 
 
-   Note that if the file has been opened already by a DAF routine
-   at some other place in the calling program, it remains open.
-   This makes it possible to examine files that have been opened for
-   use by other modules without interfering with the operation of
-   those routines.
+      Note that if the file has been opened already by a DAF routine
+      at some other place in the calling program, it remains open.
+      This makes it possible to examine files that have been opened
+      for use by other modules without interfering with the operation
+      of those routines.
 
-   Example (2):
 
-   Use a simple routine to output the double precision and integer
-   values stored in an SPK's segments descriptors. This function
-   opens a DAF for read, performs a forwards search for the DAF
-   arrays, prints segments description for each array found, then
-   closes the DAF.
+   2) Use a simple routine to output the double precision and integer
+      values stored in an SPK's segments descriptors. This function
+      opens a DAF for read, performs a forwards search for the DAF
+      arrays, prints segments description for each array found, then
+      closes the DAF.
+
+      Use the SPK kernel below as input DAF file for the program.
+
+         de421.bsp
+
+
+      Example code begins here.
+
+
+      /.
+         Program dafcls_ex1
+      ./
 
       #include <stdio.h>
       #include "SpiceUsr.h"
@@ -171,7 +186,7 @@
 
 
          /.
-         Open a DAF for read. Return a handle referring to the file.
+         Open a DAF for read. Return a `handle' referring to the file.
          ./
          dafopr_c ( kernel, &handle );
 
@@ -214,57 +229,61 @@
          return ( 0 );
          }
 
-   The program outputs:
 
-       Doubles: -3169195200.000000 1696852800.000000 
+      When this program was executed on a Mac/Intel/cc/64-bit
+      platform, the output was:
+
+
+       Doubles: -3169195200.000000 1696852800.000000
       Integers: 1 0 1 2 641 310404
-      
-       Doubles: -3169195200.000000 1696852800.000000 
+
+       Doubles: -3169195200.000000 1696852800.000000
       Integers: 2 0 1 2 310405 423048
-      
-       Doubles: -3169195200.000000 1696852800.000000 
+
+       Doubles: -3169195200.000000 1696852800.000000
       Integers: 3 0 1 2 423049 567372
-      
-       Doubles: -3169195200.000000 1696852800.000000 
+
+       Doubles: -3169195200.000000 1696852800.000000
       Integers: 4 0 1 2 567373 628976
-      
-       Doubles: -3169195200.000000 1696852800.000000 
+
+       Doubles: -3169195200.000000 1696852800.000000
       Integers: 5 0 1 2 628977 674740
-      
-       Doubles: -3169195200.000000 1696852800.000000 
+
+       Doubles: -3169195200.000000 1696852800.000000
       Integers: 6 0 1 2 674741 715224
-      
-       Doubles: -3169195200.000000 1696852800.000000 
+
+       Doubles: -3169195200.000000 1696852800.000000
       Integers: 7 0 1 2 715225 750428
-      
-       Doubles: -3169195200.000000 1696852800.000000 
+
+       Doubles: -3169195200.000000 1696852800.000000
       Integers: 8 0 1 2 750429 785632
-      
-       Doubles: -3169195200.000000 1696852800.000000 
+
+       Doubles: -3169195200.000000 1696852800.000000
       Integers: 9 0 1 2 785633 820836
-      
-       Doubles: -3169195200.000000 1696852800.000000 
+
+       Doubles: -3169195200.000000 1696852800.000000
       Integers: 10 0 1 2 820837 944040
-      
-       Doubles: -3169195200.000000 1696852800.000000 
+
+       Doubles: -3169195200.000000 1696852800.000000
       Integers: 301 3 1 2 944041 1521324
-      
-       Doubles: -3169195200.000000 1696852800.000000 
+
+       Doubles: -3169195200.000000 1696852800.000000
       Integers: 399 3 1 2 1521325 2098608
-      
-       Doubles: -3169195200.000000 1696852800.000000 
+
+       Doubles: -3169195200.000000 1696852800.000000
       Integers: 199 1 1 2 2098609 2098620
-      
-       Doubles: -3169195200.000000 1696852800.000000 
+
+       Doubles: -3169195200.000000 1696852800.000000
       Integers: 299 2 1 2 2098621 2098632
-      
-       Doubles: -3169195200.000000 1696852800.000000 
+
+       Doubles: -3169195200.000000 1696852800.000000
       Integers: 499 4 1 2 2098633 2098644
 
-      Note, the final entries in the integer array contains the segment
-      start/end indexes. The output indicates the search proceeded
-      from the start of the file (low value index) towards the end
-      (high value index).
+
+      Note, the final entries in the integer array contains the
+      segment start/end indexes. The output indicates the search
+      proceeded from the start of the file (low value index) towards
+      the end (high value index).
 
 -Restrictions
 
@@ -276,36 +295,42 @@
 
 -Author_and_Institution
 
-   N.J. Bachman    (JPL)
-   K.R. Gehringer  (JPL)
-   W.L. Taber      (JPL)
-   I.M. Underwood  (JPL)
+   N.J. Bachman        (JPL)
+   J. Diaz del Rio     (ODC Space)
+   K.R. Gehringer      (JPL)
+   W.L. Taber          (JPL)
+   I.M. Underwood      (JPL)
+   E.D. Wright         (JPL)
 
 -Version
 
+   -CSPICE Version 1.0.4, 10-AUG-2021 (JDR)
+
+       Edited the header to comply with NAIF standard.
+
    -CSPICE Version 1.0.3, 28-JUN-2016 (EDW)
 
-      Edit to Example code, SpiceInts output as ints using 
-      explicit casting.
+       Edit to Example code, SpiceInts output as ints using
+       explicit casting.
 
    -CSPICE Version 1.0.2, 10-OCT-2012 (EDW)
 
-      Added a functional code example to the Examples section.
+       Added a functional code example to the -Examples section.
 
-      Removed the obsolete Reference citation to "NAIF
-      Document 167.0."
+       Removed the obsolete Reference citation to "NAIF
+       Document 167.0."
 
    -CSPICE Version 1.0.1, 28-JAN-2004 (NJB)
 
-      Header update:  the exceptions section now lists the
-      case of attempting to close a non-DAF file using this
-      routine.
+       Header update: the -Exceptions section now lists the
+       case of attempting to close a non-DAF file using this
+       routine.
 
    -CSPICE Version 1.0.0, 01-AUG-1999 (NJB) (KRG) (WLT) (IMU)
 
 -Index_Entries
 
-   close daf
+   close DAF
 
 -&
 */

@@ -63,6 +63,8 @@ logical bodfnd_(integer *body, char *item, ftnlen item_len)
 /* $ Required_Reading */
 
 /*     KERNEL */
+/*     PCK */
+/*     SPK */
 
 /* $ Keywords */
 
@@ -76,39 +78,41 @@ logical bodfnd_(integer *body, char *item, ftnlen item_len)
 /*     BODY       I   ID code of body. */
 /*     ITEM       I   Item to find ('RADII', 'NUT_AMP_RA', etc.). */
 
+/*     The function returns .TRUE. if ITEM is in the kernel pool, .FALSE. */
+/*     otherwise. */
+
 /* $ Detailed_Input */
 
-/*     BODY       is the ID code of the body for which the item is */
-/*                requested. Bodies are numbered according to the */
-/*                standard NAIF numbering scheme. */
+/*     BODY     is the ID code of the body for which the item is */
+/*              requested. */
 
-/*     ITEM       is the item to be returned. Together, the body and */
-/*                item name combine to form a variable name, e.g., */
+/*     ITEM     is the item to be returned. Together, the body and item */
+/*              name combine to form a variable name, e.g., */
 
-/*                      'BODY599_RADII' */
-/*                      'BODY4_POLE_RA' */
+/*                    'BODY599_RADII' */
+/*                    'BODY4_POLE_RA' */
 
 /* $ Detailed_Output */
 
-/*     The result is TRUE if the item is in the kernel pool, */
-/*     and is FALSE if it is not. */
+/*     The function returns .TRUE. if ITEM is in the kernel pool, and */
+/*     .FALSE. if it is not. */
 
 /* $ Parameters */
 
 /*     None. */
 
-/* $ Files */
-
-/*     None. */
-
 /* $ Exceptions */
+
+/*     Error free. */
+
+/* $ Files */
 
 /*     None. */
 
 /* $ Particulars */
 
 /*     BODVCD, which returns values from the kernel pool, causes an */
-/*     error to be signalled whenever the specified item is not found. */
+/*     error to be signaled whenever the specified item is not found. */
 /*     In many cases, this is appropriate. However, sometimes the */
 /*     program may attempt to recover, by providing default values, */
 /*     prompting for replacements, and so on. */
@@ -130,43 +134,51 @@ logical bodfnd_(integer *body, char *item, ftnlen item_len)
 
 /* $ Literature_References */
 
-/*      1) Refer to the SPK required reading file for a complete list of */
-/*         the NAIF integer ID codes for bodies. */
+/*     None. */
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     H.A. Neilan     (JPL) */
-/*     W.L. Taber      (JPL) */
-/*     I.M. Underwood  (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     H.A. Neilan        (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
 
-/* -     SPICELIB Version 1.2.1, 24-OCT-2005 (NJB) */
+/* -    SPICELIB Version 1.3.0, 12-AUG-2021 (JDR) */
 
-/*         Header update:  calls to BODVAR in example code were replaced */
-/*         with calls to BODVCD.  The string 'AXES' and variable AXES */
-/*         were replaced with the string 'RADII' and variable 'RADII' */
-/*         throughout the header. */
+/*        Added IMPLICIT NONE statement. */
 
-/* -     SPICELIB Version 1.2.0, 15-MAR-2002 (NJB) */
+/*        Edited the header to comply with NAIF standard. Updated */
+/*        input argument BODY detailed description. Added SPK and PCK to */
+/*        the list of required readings. */
 
-/*         Bug fix:  routine was updated to work with string-valued */
-/*         kernel variables. */
+/* -    SPICELIB Version 1.2.1, 24-OCT-2005 (NJB) */
 
-/* -     SPICELIB Version 1.1.0, 17-MAY-1994 (HAN) */
+/*        Header update: calls to BODVAR in example code were replaced */
+/*        with calls to BODVCD. The string 'AXES' and variable AXES */
+/*        were replaced with the string 'RADII' and variable 'RADII' */
+/*        throughout the header. */
 
-/*        If the value of the function RETURN is TRUE upon execution of */
+/* -    SPICELIB Version 1.2.0, 15-MAR-2002 (NJB) */
+
+/*        Bug fix: routine was updated to work with string-valued */
+/*        kernel variables. */
+
+/* -    SPICELIB Version 1.1.0, 17-MAY-1994 (HAN) */
+
+/*        If the value of the function RETURN is .TRUE. upon execution of */
 /*        this module, this function is assigned a default value of */
 /*        either 0, 0.0D0, .FALSE., or blank depending on the type of */
 /*        the function. */
 
-/* -     SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+/* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
 
-/*         Comment section for permuted index source lines was added */
-/*         following the header. */
+/*        Comment section for permuted index source lines was added */
+/*        following the header. */
 
-/* -     SPICELIB Version 1.0.0, 31-JAN-1990  (WLT) (IMU) */
+/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (WLT) (IMU) */
 
 /* -& */
 /* $ Index_Entries */

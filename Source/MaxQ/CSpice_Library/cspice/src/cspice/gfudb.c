@@ -75,8 +75,8 @@ static logical c_false = FALSE_;
 
 /* $ Keywords */
 
-/*     EVENT */
 /*     EPHEMERIS */
+/*     EVENT */
 /*     SEARCH */
 /*     WINDOW */
 
@@ -522,7 +522,7 @@ static logical c_false = FALSE_;
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     LBCELL     P   SPICE Cell lower bound. */
 /*     CNVTOL     P   Convergence tolerance. */
@@ -537,118 +537,125 @@ static logical c_false = FALSE_;
 
 /* $ Detailed_Input */
 
-/*     UDFUNS     the routine that returns the value of the scalar */
-/*                quantity of interest at time ET. The calling sequence */
-/*                for UDFUNC is: */
+/*     UDFUNS   is the routine that returns the value of the scalar */
+/*              quantity of interest at time ET. The calling sequence for */
+/*              UDFUNC is: */
 
-/*                   CALL UDFUNS ( ET, VALUE ) */
+/*                 CALL UDFUNS ( ET, VALUE ) */
 
-/*                where: */
+/*              where: */
 
-/*                   ET      a double precision value representing */
-/*                           ephemeris time, expressed as seconds past */
-/*                           J2000 TDB at which to evaluate UDFUNS. */
+/*                 ET      a double precision value representing */
+/*                         ephemeris time, expressed as seconds past */
+/*                         J2000 TDB at which to evaluate UDFUNS. */
 
-/*                   VALUE   is the value of the scalar quantity */
-/*                           at ET. */
+/*                 VALUE   is the value of the scalar quantity */
+/*                         at ET. */
 
-/*     UDFUNB     the user defined routine returning a boolean value */
-/*                for an epoch ET. The calling sequence for UNFUNB is: */
+/*     UDFUNB   is the user defined routine returning a boolean value for */
+/*              an epoch ET. The calling sequence for UNFUNB is: */
 
-/*                   CALL UDFUNB ( UDFUNS, ET, BOOL ) */
+/*                 CALL UDFUNB ( UDFUNS, ET, BOOL ) */
 
-/*                where: */
+/*              where: */
 
-/*                   UDFUNS   the name of the scalar function as */
-/*                            defined above. */
+/*                 UDFUNS   the name of the scalar function as */
+/*                          defined above. */
 
-/*                   ET       a double precision value representing */
-/*                            ephemeris time, expressed as seconds past */
-/*                            J2000 TDB, at which to evaluate UDFUNB. */
+/*                 ET       a double precision value representing */
+/*                          ephemeris time, expressed as seconds past */
+/*                          J2000 TDB, at which to evaluate UDFUNB. */
 
-/*                   BOOL     the boolean value at ET. */
+/*                 BOOL     the boolean value at ET. */
 
-/*                GFUDB will correctly operate only for boolean */
-/*                functions with true conditions defining non zero */
-/*                measure time intervals. */
+/*              GFUDB will correctly operate only for boolean functions */
+/*              with true conditions defining non zero measure time */
+/*              intervals. */
 
-/*                Note, UDFUNB need not call UDFUNS. The use of UDFUNS */
-/*                is determined by the needs of the calculation and */
-/*                the user's design. */
+/*              Note, UDFUNB need not call UDFUNS. The use of UDFUNS is */
+/*              determined by the needs of the calculation and the user's */
+/*              design. */
 
-/*     STEP       the step size to be used in the search. STEP must */
-/*                be shorter than any interval, within the confinement */
-/*                window, over which the user defined boolean function */
-/*                is met. In other words, STEP must be shorter than the */
-/*                shortest time interval for which the boolean function */
-/*                is true; STEP must also be shorter than the shortest */
-/*                time interval between two boolean function true events */
-/*                occurring within the confinement window (see below). */
-/*                However, STEP must not be *too* short, or the search */
-/*                will take an unreasonable amount of time. */
+/*     STEP     is the step size to be used in the search. STEP must be */
+/*              shorter than any interval, within the confinement window, */
+/*              over which the user defined boolean function is met. In */
+/*              other words, STEP must be shorter than the shortest time */
+/*              interval for which the boolean function is .TRUE.; STEP */
+/*              must also be shorter than the shortest time interval */
+/*              between two boolean function true events occurring within */
+/*              the confinement window (see below). However, STEP must */
+/*              not be *too* short, or the search will take an */
+/*              unreasonable amount of time. */
 
-/*                The choice of STEP affects the completeness but not */
-/*                the precision of solutions found by this routine; the */
-/*                precision is controlled by the convergence tolerance. */
-/*                See the discussion of the parameter CNVTOL for */
-/*                details. */
+/*              The choice of STEP affects the completeness but not */
+/*              the precision of solutions found by this routine; the */
+/*              precision is controlled by the convergence tolerance. */
+/*              See the discussion of the parameter CNVTOL for */
+/*              details. */
 
-/*                STEP has units of TDB seconds. */
+/*              STEP has units of TDB seconds. */
 
-/*     CNFINE     is a SPICE window that confines the time period over */
-/*                which the specified search is conducted. CNFINE may */
-/*                consist of a single interval or a collection of */
-/*                intervals. */
+/*     CNFINE   is a SPICE window that confines the time period over */
+/*              which the specified search is conducted. CNFINE may */
+/*              consist of a single interval or a collection of */
+/*              intervals. */
 
-/*                In some cases the confinement window can be used to */
-/*                greatly reduce the time period that must be searched */
-/*                for the desired solution. See the Particulars section */
-/*                below for further discussion. */
+/*              In some cases the confinement window can be used to */
+/*              greatly reduce the time period that must be searched */
+/*              for the desired solution. See the $Particulars section */
+/*              below for further discussion. */
 
-/*                See the Examples section below for a code example */
-/*                that shows how to create a confinement window. */
+/*              See the $Examples section below for a code example */
+/*              that shows how to create a confinement window. */
 
-/*                CNFINE must be initialized by the caller via the */
-/*                SPICELIB routine SSIZED. */
+/*              CNFINE must be initialized by the caller via the */
+/*              SPICELIB routine SSIZED. */
 
-/*     RESULT     a double precision SPICE window which will contain the */
-/*                search results. RESULT must be declared and initialized */
-/*                with sufficient size to capture the full set of time */
-/*                intervals within the search region on which the */
-/*                specified constraint is satisfied. */
+/*              Certain computations can expand the time window over */
+/*              which UDFUNS and UDFUNB require data. See $Particulars */
+/*              for details. */
 
-/*                RESULT must be initialized by the caller via the */
-/*                SPICELIB routine SSIZED. */
+/*     RESULT   is a double precision SPICE window which will contain */
+/*              the search results. RESULT must be declared and */
+/*              initialized with sufficient size to capture the full */
+/*              set of time intervals within the search region on which */
+/*              the specified condition is satisfied. */
 
-/*                If RESULT is non-empty on input, its contents */
-/*                will be discarded before GFUDB conducts its search. */
+/*              RESULT must be initialized by the caller via the */
+/*              SPICELIB routine SSIZED. */
+
+/*              If RESULT is non-empty on input, its contents will be */
+/*              discarded before GFUDB conducts its search. */
 
 /* $ Detailed_Output */
 
-/*     RESULT     is a SPICE window containing the time intervals within */
-/*                the confinement window, during which the specified */
-/*                boolean quantity is true. */
+/*     RESULT   is a SPICE window containing the time intervals within */
+/*              the confinement window, during which the specified */
+/*              boolean quantity is .TRUE. */
 
-/*                If no times within the confinement window satisfy the */
-/*                search, RESULT will be returned with a cardinality */
-/*                of zero. */
+/*              The endpoints of the time intervals comprising RESULT are */
+/*              interpreted as seconds past J2000 TDB. */
+
+/*              If no times within the confinement window satisfy the */
+/*              search criteria, RESULT will be returned with a */
+/*              cardinality of zero. */
 
 /* $ Parameters */
 
-/*     LBCELL     the integer value defining the lower bound for */
-/*                SPICE Cell arrays (a SPICE window is a kind of cell). */
+/*     LBCELL   is the integer value defining the lower bound for */
+/*              SPICE Cell arrays (a SPICE window is a kind of cell). */
 
-/*     CNVTOL     is the convergence tolerance used for finding */
-/*                endpoints of the intervals comprising the result */
-/*                window. CNVTOL is used to determine when binary */
-/*                searches for roots should terminate: when a root is */
-/*                bracketed within an interval of length CNVTOL, the */
-/*                root is considered to have been found. */
+/*     CNVTOL   is the convergence tolerance used for finding */
+/*              endpoints of the intervals comprising the result */
+/*              window. CNVTOL is used to determine when binary */
+/*              searches for roots should terminate: when a root is */
+/*              bracketed within an interval of length CNVTOL, the */
+/*              root is considered to have been found. */
 
-/*                The accuracy, as opposed to precision, of roots found */
-/*                by this routine depends on the accuracy of the input */
-/*                data. In most cases, the accuracy of solutions will be */
-/*                inferior to their precision. */
+/*              The accuracy, as opposed to precision, of roots found */
+/*              by this routine depends on the accuracy of the input */
+/*              data. In most cases, the accuracy of solutions will be */
+/*              inferior to their precision. */
 
 /*     See INCLUDE file gf.inc for declarations and descriptions of */
 /*     parameters used throughout the GF system. */
@@ -662,9 +669,9 @@ static logical c_false = FALSE_;
 /*         to run unacceptably slowly and in some cases, find spurious */
 /*         roots. */
 
-/*         This routine does not diagnose invalid step sizes, except */
-/*         that if the step size is non-positive, the error */
-/*         SPICE(INVALIDSTEP) is signaled. */
+/*         This routine does not diagnose invalid step sizes, except that */
+/*         if the step size is non-positive, an error is signaled by a */
+/*         routine in the call tree of this routine. */
 
 /*     2)  Due to numerical errors, in particular, */
 
@@ -677,14 +684,18 @@ static logical c_false = FALSE_;
 /*         RESULT window. One technique to handle such a situation, */
 /*         slightly contract RESULT using the window routine WNCOND. */
 
-/*     3)  If the size of the SPICE window RESULT is less than 2 or */
-/*         not an even value, the error SPICE(INVALIDDIMENSION) will */
-/*         signal. If RESULT has insufficient capacity to contain the */
-/*         number of intervals on which the specified condition */
-/*         is met, the error will be diagnosed by a routine in the call */
-/*         tree of this routine. */
+/*     3)  If an error (typically cell overflow) occurs while performing */
+/*         window arithmetic, the error is signaled by a routine */
+/*         in the call tree of this routine. */
 
-/*     4)  If required ephemerides or other kernel data are not */
+/*     4)  If the size of the SPICE window RESULT is less than 2 or not */
+/*         an even value, the error SPICE(INVALIDDIMENSION) is signaled. */
+
+/*     5)  If RESULT has insufficient capacity to contain the number of */
+/*         intervals on which the specified condition is met, an error is */
+/*         signaled by a routine in the call tree of this routine. */
+
+/*     6)  If required ephemerides or other kernel data are not */
 /*         available, an error is signaled by a routine in the call tree */
 /*         of this routine. */
 
@@ -695,17 +706,21 @@ static logical c_false = FALSE_;
 
 /*     If the boolean function requires access to ephemeris data: */
 
-/*        - SPK data: ephemeris data for any body over the */
-/*          time period defined by the confinement window must be */
-/*          loaded. If aberration corrections are used, the states of */
-/*          target and observer relative to the solar system barycenter */
-/*          must be calculable from the available ephemeris data. */
-/*          Typically ephemeris data are made available by loading one */
-/*          or more SPK files via FURNSH. */
+/*     -  SPK data: ephemeris data for any body over the */
+/*        time period defined by the confinement window must be */
+/*        loaded. If aberration corrections are used, the states of */
+/*        target and observer relative to the solar system barycenter */
+/*        must be calculable from the available ephemeris data. */
+/*        Typically ephemeris data are made available by loading one */
+/*        or more SPK files via FURNSH. */
 
-/*        - If non-inertial reference frames are used, then PCK */
-/*          files, frame kernels, C-kernels, and SCLK kernels may be */
-/*          needed. */
+/*     -  If non-inertial reference frames are used, then PCK */
+/*        files, frame kernels, C-kernels, and SCLK kernels may be */
+/*        needed. */
+
+/*     -  Certain computations can expand the time window over which */
+/*        UDFUNS and UDFUNB require data; such data must be provided by */
+/*        loaded kernels. See $Particulars for details. */
 
 /*     In all cases, kernel data are normally loaded once per program */
 /*     run, NOT every time this routine is called. */
@@ -814,6 +829,32 @@ static logical c_false = FALSE_;
 /*     which a relatively slow search of interest must be performed. */
 /*     See the "CASCADE" example program in gf.req for a demonstration. */
 
+/*     Certain user-defined computations may expand the window over */
+/*     which computations are performed. Here "expansion" of a window by */
+/*     an amount "T" means that the left endpoint of each interval */
+/*     comprising the window is shifted left by T, the right endpoint of */
+/*     each interval is shifted right by T, and any overlapping */
+/*     intervals are merged. Note that the input window CNFINE itself is */
+/*     not modified. */
+
+/*     Computation of observer-target states by SPKEZR or SPKEZ, using */
+/*     stellar aberration corrections, requires the state of the */
+/*     observer, relative to the solar system barycenter, to be computed */
+/*     at times offset from the input time by +/- 1 second. If the input */
+/*     time ET is used by UDFUNS or UDFUNB to compute such a state, the */
+/*     window over which the observer state is computed is expanded by 1 */
+/*     second. */
+
+/*     When light time corrections are used in the computation of */
+/*     observer-target states, expansion of the search window also */
+/*     affects the set of times at which the light time-corrected states */
+/*     of the targets are computed. */
+
+/*     In addition to possible expansion of the search window when */
+/*     stellar aberration corrections are used, round-off error should */
+/*     be taken into account when the need for data availability is */
+/*     analyzed. */
+
 /* $ Examples */
 
 /*     The numerical results shown for these examples may differ across */
@@ -821,12 +862,18 @@ static logical c_false = FALSE_;
 /*     input, the compiler and supporting libraries, and the machine */
 /*     specific arithmetic implementation. */
 
-/*     Use the meta-kernel shown below to load the required SPICE */
-/*     kernels. */
+/*     1) Calculate the time intervals when the position of the Moon */
+/*        relative to the Earth in the IAU_EARTH frame has a positive */
+/*        value for the Z position component, also with a positive value */
+/*        for the Vz velocity component. */
+
+/*        Use the meta-kernel shown below to load the required SPICE */
+/*        kernels. */
+
 
 /*           KPL/MK */
 
-/*           File name: standard.tm */
+/*           File name: gfudb_ex1.tm */
 
 /*           This meta-kernel is intended to support operation of SPICE */
 /*           example programs. The kernels shown here should not be */
@@ -837,6 +884,16 @@ static logical c_false = FALSE_;
 /*           kernels referenced here must be present in the user's */
 /*           current working directory. */
 
+/*           The names and contents of the kernels referenced */
+/*           by this meta-kernel are as follows: */
+
+/*              File name                     Contents */
+/*              ---------                     -------- */
+/*              de418.bsp                     Planetary ephemeris */
+/*              pck00009.tpc                  Planet orientation and */
+/*                                            radii */
+/*              naif0009.tls                  Leapseconds */
+
 
 /*           \begindata */
 
@@ -846,501 +903,528 @@ static logical c_false = FALSE_;
 
 /*           \begintext */
 
-/*     Example(1): */
-
-/*     Calculate the time intervals when the position of the moon */
-/*     relative to the earth in the IAU_EARTH frame has a positive value */
-/*     for the Z position component, also with a positive value for the */
-/*     Vz velocity component. */
-
-
-/*        Code: */
-
-/*           PROGRAM GFUDB_T */
+/*           End of meta-kernel */
+
+
+/*        Example code begins here. */
+
+
+/*              PROGRAM GFUDB_EX1 */
+/*              IMPLICIT NONE */
+
+/*        C */
+/*        C     SPICELIB functions */
+/*        C */
+/*              INTEGER               WNCARD */
+/*              DOUBLE PRECISION      SPD */
+
+/*        C */
+/*        C     User defined external routines */
+/*        C */
+/*              EXTERNAL              UDF */
+/*              EXTERNAL              GFB */
+
+/*        C */
+/*        C     Local parameters */
+/*        C */
+/*              INTEGER               LBCELL */
+/*              PARAMETER           ( LBCELL = -5 ) */
+
+/*        C */
+/*        C     Use the parameter MAXWIN for both the result window size */
+/*        C     and the workspace size. */
+/*        C */
+/*              INTEGER               MAXWIN */
+/*              PARAMETER           ( MAXWIN = 100 ) */
+
+/*        C */
+/*        C     Local variables */
+/*        C */
+/*              CHARACTER*(32)        UTC */
+
+/*              DOUBLE PRECISION      LEFT */
+/*              DOUBLE PRECISION      RIGHT */
+/*              DOUBLE PRECISION      ET */
+/*              DOUBLE PRECISION      ETS */
+/*              DOUBLE PRECISION      ETE */
+/*              DOUBLE PRECISION      LT */
+/*              DOUBLE PRECISION      STEP */
+/*              DOUBLE PRECISION      STATE  (6) */
+/*              DOUBLE PRECISION      CNFINE ( LBCELL : 2      ) */
+/*              DOUBLE PRECISION      RESULT ( LBCELL : MAXWIN ) */
+
+/*              INTEGER               I */
+
+/*        C */
+/*        C     Saved variables */
+/*        C */
+/*        C     The confinement and result windows CNFINE and RESULT are */
+/*        C     saved because this practice helps to prevent stack */
+/*        C     overflow. */
+/*        C */
+/*              SAVE                  CNFINE */
+/*              SAVE                  RESULT */
+
+/*        C */
+/*        C     Load needed kernels. */
+/*        C */
+/*              CALL FURNSH ( 'gfudb_ex1.tm' ) */
+
+/*        C */
+/*        C     Initialize windows. */
+/*        C */
+/*              CALL SSIZED ( MAXWIN, RESULT ) */
+/*              CALL SSIZED ( 2,      CNFINE ) */
+
+/*        C */
+/*        C     Store the time bounds of our search interval in */
+/*        C     the confinement window. */
+/*        C */
+/*              CALL STR2ET ( 'Jan 1 2011', ETS ) */
+/*              CALL STR2ET ( 'Apr 1 2011', ETE ) */
+/*              CALL WNINSD ( ETS, ETE, CNFINE  ) */
+
+/*        C */
+/*        C     The moon orbit about the earth-moon barycenter is */
+/*        C     twenty-eight days. The event condition occurs */
+/*        C     during (very) approximately a quarter of the orbit. Use */
+/*        C     a step of five days. */
+/*        C */
+/*              STEP = 5.D0 * SPD() */
+
+/*              CALL GFUDB ( UDF, GFB, STEP, CNFINE, RESULT ) */
+
+/*              IF ( WNCARD(RESULT) .EQ. 0 ) THEN */
 
-/*           EXTERNAL                  UDF */
-/*           EXTERNAL                  GFB */
+/*                    WRITE (*, '(A)') 'Result window is empty.' */
+
+/*              ELSE */
+
+/*                 DO I = 1, WNCARD(RESULT) */
+
+/*        C */
+/*        C           Fetch and display each RESULT interval. */
+/*        C */
+/*                    CALL WNFETD ( RESULT, I, LEFT, RIGHT ) */
+/*                    WRITE (*,*) 'Interval ', I */
 
-/*     C */
-/*     C     Local parameters */
-/*     C */
-/*           INTEGER               LBCELL */
-/*           PARAMETER           ( LBCELL = -5 ) */
+/*                    CALL ET2UTC ( LEFT, 'C', 4, UTC ) */
+/*                    WRITE (*, *) '   Interval start: ', UTC */
 
-/*     C */
-/*     C     Use the parameter MAXWIN for both the result window size and */
-/*     C     the workspace size. */
-/*     C */
-/*           INTEGER               MAXWIN */
-/*           PARAMETER           ( MAXWIN = 100 ) */
+/*                    CALL SPKEZ ( 301, LEFT, 'IAU_EARTH', 'NONE', 399, */
+/*             .                   STATE, LT ) */
+/*                    WRITE (*, *) '                Z= ', STATE(3) */
+/*                    WRITE (*, *) '               Vz= ', STATE(6) */
 
-/*           DOUBLE PRECISION      LEFT */
-/*           DOUBLE PRECISION      RIGHT */
-/*           DOUBLE PRECISION      ET */
-/*           DOUBLE PRECISION      ETS */
-/*           DOUBLE PRECISION      ETE */
-/*           DOUBLE PRECISION      STEP */
-/*           DOUBLE PRECISION      STATE (6) */
-/*           DOUBLE PRECISION      CNFINE ( LBCELL : 2 ) */
-/*           DOUBLE PRECISION      RESULT ( LBCELL : MAXWIN ) */
+/*                    CALL ET2UTC ( RIGHT, 'C', 4, UTC ) */
+/*                    WRITE (*, *) '   Interval end  : ', UTC */
+
+/*                    CALL SPKEZ ( 301, RIGHT, 'IAU_EARTH', 'NONE', 399, */
+/*             .                   STATE, LT ) */
+/*                    WRITE (*, *) '                Z= ', STATE(3) */
+/*                    WRITE (*, *) '               Vz= ', STATE(6) */
+/*                    WRITE (*, *) ' ' */
+
+/*                 END DO */
 
-/*           INTEGER               I */
+/*              END IF */
 
-/*           CHARACTER*(32)        UTC */
+/*              END */
 
-/*     C */
-/*     C     SPICELIB functions. */
-/*     C */
-/*           INTEGER               WNCARD */
-/*           DOUBLE PRECISION      SPD */
 
-/*     C */
-/*     C     Initialize windows. */
-/*     C */
-/*           CALL SSIZED ( MAXWIN, RESULT ) */
-/*           CALL SSIZED ( 2,      CNFINE ) */
 
+/*        C-Procedure GFB */
+/*        C */
+/*        C     User defined boolean routine. */
+/*        C */
 
-/*     C */
-/*     C     Load needed kernels. */
-/*     C */
-/*           CALL FURNSH ( 'standard.tm' ) */
+/*              SUBROUTINE GFB ( UDFUNS, ET, BOOL ) */
+/*              IMPLICIT NONE */
 
-/*     C */
-/*     C     Store the time bounds of our search interval in */
-/*     C     the confinement window. One year, 2011. */
-/*     C */
-/*           CALL STR2ET ( 'Jan 1 2011', ETS ) */
-/*           CALL STR2ET ( 'Jan 1 2012', ETE ) */
-/*           CALL WNINSD ( ETS, ETE, CNFINE ) */
+/*        C- Abstract */
+/*        C */
+/*        C     User defined geometric boolean function: */
+/*        C */
+/*        C        Z >= 0 with dZ/dt > 0. */
+/*        C */
 
-/*     C */
-/*     C     The moon orbit about the earth-moon barycenter is */
-/*     C     twenty-eight days. The event condition occurs */
-/*     C     during (very) approximately a quarter of the orbit. Use */
-/*     C     a step of five days. */
-/*     C */
-/*           STEP = 5.D0 * SPD() */
+/*              EXTERNAL              UDFUNS */
 
-/*           CALL GFUDB ( UDF, GFB, STEP, CNFINE, RESULT ) */
+/*              DOUBLE PRECISION      ET */
+/*              LOGICAL               BOOL */
 
-/*           IF ( WNCARD(RESULT) .EQ. 0 ) THEN */
+/*        C */
+/*        C     Local variables. */
+/*        C */
+/*              INTEGER               TARG */
+/*              INTEGER               OBS */
 
-/*                 WRITE (*, '(A)') 'Result window is empty.' */
+/*              CHARACTER*(12)        REF */
+/*              CHARACTER*(12)        ABCORR */
 
-/*           ELSE */
+/*              DOUBLE PRECISION      STATE ( 6 ) */
+/*              DOUBLE PRECISION      LT */
 
-/*              DO I = 1, WNCARD(RESULT) */
+/*        C */
+/*        C     Initialization. Retrieve the vector from the earth to */
+/*        C     the moon in the IAU_EARTH frame, without aberration */
+/*        C     correction. */
+/*        C */
+/*              TARG   = 301 */
+/*              REF    = 'IAU_EARTH' */
+/*              ABCORR = 'NONE' */
+/*              OBS    = 399 */
+
+/*        C */
+/*        C     Evaluate the state of TARG from OBS at ET with */
+/*        C     correction ABCORR. */
+/*        C */
+/*              CALL SPKEZ ( TARG, ET, REF, ABCORR, OBS, STATE, LT ) */
+
+/*        C */
+/*        C     Calculate the boolean value. */
+/*        C */
+/*              BOOL = (STATE(3) .GE. 0.D0) .AND. (STATE(6) .GT. 0.D0 ) */
+
+/*              RETURN */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*         Interval            1 */
+/*            Interval start: 2011 JAN 09 15:24:23.4165 */
+/*                         Z=   -1.1251040632487275E-007 */
+/*                        Vz=   0.39698408454587081 */
+/*            Interval end  : 2011 JAN 16 16:08:28.5642 */
+/*                         Z=    156247.48804193645 */
+/*                        Vz=    4.0992339730983041E-013 */
+
+/*         Interval            2 */
+/*            Interval start: 2011 FEB 05 23:17:57.3600 */
+/*                         Z=   -1.2467506849134224E-007 */
+/*                        Vz=   0.39678128284337311 */
+/*            Interval end  : 2011 FEB 13 01:38:28.4265 */
+/*                         Z=    157016.05500077485 */
+/*                        Vz=    1.7374578338558155E-013 */
+
+/*         Interval            3 */
+/*            Interval start: 2011 MAR 05 06:08:17.6689 */
+/*                         Z=   -7.7721836078126216E-008 */
+/*                        Vz=   0.39399025363429169 */
+/*            Interval end  : 2011 MAR 12 10:27:45.1896 */
+/*                         Z=    157503.77377718856 */
+/*                        Vz=   -2.9786351336824612E-013 */
+
+
+/*     2) Calculate the time intervals when the Z component of the */
+/*        Earth to Moon position vector in the IAU_EARTH frame has */
+/*        value between -1000 km and 1000 km (e.g. above and below */
+/*        the equatorial plane). */
+
+/*        Use the meta-kernel from the first example. */
+
+
+/*        Example code begins here. */
+
+
+/*              PROGRAM GFUDB_EX2 */
+/*              IMPLICIT NONE */
+
+/*        C */
+/*        C     SPICELIB functions. */
+/*        C */
+/*              INTEGER               WNCARD */
+/*              DOUBLE PRECISION      SPD */
+
+/*        C */
+/*        C     User defined external routines */
+/*        C */
+/*              EXTERNAL              GFB */
+/*              EXTERNAL              GFQ */
+
+/*        C */
+/*        C     Local parameters */
+/*        C */
+/*              INTEGER               LBCELL */
+/*              PARAMETER           ( LBCELL = -5 ) */
 
-/*     C */
-/*     C           Fetch and display each RESULT interval. */
-/*     C */
-/*                 CALL WNFETD ( RESULT, I, LEFT, RIGHT ) */
-/*                 WRITE (*,*) 'Interval ', I */
-
-/*                 CALL ET2UTC ( LEFT, 'C', 4, UTC ) */
-/*                 WRITE (*, *) '   Interval start: ', UTC */
-
-/*                 CALL SPKEZ ( 301, LEFT, 'IAU_EARTH', 'NONE', 399, */
-/*          .                   STATE, LT ) */
-/*                 WRITE (*, *) '                Z= ', STATE(3) */
-/*                 WRITE (*, *) '               Vz= ', STATE(6) */
-
-/*                 CALL ET2UTC ( RIGHT, 'C', 4, UTC ) */
-/*                 WRITE (*, *) '   Interval end  : ', UTC */
-
-/*                 CALL SPKEZ ( 301, RIGHT, 'IAU_EARTH', 'NONE', 399, */
-/*          .                   STATE, LT ) */
-/*                 WRITE (*, *) '                Z= ', STATE(3) */
-/*                 WRITE (*, *) '               Vz= ', STATE(6) */
-/*                 WRITE (*, *) ' ' */
-
-/*              END DO */
-
-/*           END IF */
-
-/*           END */
-
-
-
-/*     C-Procedure GFB */
-/*     C */
-/*     C     User defined boolean routine. */
-/*     C */
-
-/*           SUBROUTINE GFB ( UDFUNS, ET, BOOL ) */
-/*           IMPLICIT NONE */
-
-/*     C- Abstract */
-/*     C */
-/*     C     User defined geometric boolean function: */
-/*     C */
-/*     C        Z >= 0 with dZ/dt > 0. */
-/*     C */
-
-/*           EXTERNAL              UDFUNS */
-
-/*           DOUBLE PRECISION      ET */
-/*           LOGICAL               BOOL */
-
-/*     C */
-/*     C     Local variables. */
-/*     C */
-/*           INTEGER               TARG */
-/*           INTEGER               OBS */
-
-/*           CHARACTER*(12)        REF */
-/*           CHARACTER*(12)        ABCORR */
-
-/*           DOUBLE PRECISION      STATE ( 6 ) */
-/*           DOUBLE PRECISION      LT */
-
-/*     C */
-/*     C     Initialization. Retrieve the vector from the earth to */
-/*     C     the moon in the IAU_EARTH frame, without aberration */
-/*     C     correction. */
-/*     C */
-/*           TARG   = 301 */
-/*           REF    = 'IAU_EARTH' */
-/*           ABCORR = 'NONE' */
-/*           OBS    = 399 */
-
-/*     C */
-/*     C     Evaluate the state of TARG from OBS at ET with */
-/*     C     correction ABCORR. */
-/*     C */
-/*           CALL SPKEZ ( TARG, ET, REF, ABCORR, OBS, STATE, LT ) */
-
-/*     C */
-/*     C     Calculate the boolean value. */
-/*     C */
-/*           BOOL = (STATE(3) .GE. 0.D0) .AND. (STATE(6) .GT. 0.D0 ) */
-
-/*           RETURN */
-
-/*           END */
-
-/*     The program outputs: */
-
-/*      Interval            1 */
-/*         Interval start: 2011 JAN 09 15:24:23.4155 */
-/*                      Z=  -3.67969050785177387E-008 */
-/*                     Vz=   0.39698408492943960 */
-/*         Interval end  : 2011 JAN 16 16:08:28.5634 */
-/*                      Z=    156247.48820202681 */
-/*                     Vz=   3.76859567857712463E-013 */
-
-/*      Interval            2 */
-/*         Interval start: 2011 FEB 05 23:17:57.3590 */
-/*                      Z=  -3.98442807636456564E-008 */
-/*                     Vz=   0.39678128322307005 */
-/*         Interval end  : 2011 FEB 13 01:38:28.4256 */
-/*                      Z=    157016.05516171581 */
-/*                     Vz=   3.22388166509868235E-013 */
-
-/*      Interval            3 */
-/*         Interval start: 2011 MAR 05 06:08:17.6680 */
-/*                      Z=  -1.16190221888246015E-008 */
-/*                     Vz=   0.39399025399881443 */
-/*         Interval end  : 2011 MAR 12 10:27:45.1887 */
-/*                      Z=    157503.77393430873 */
-/*                     Vz=  -3.41879302645509142E-013 */
-
-/*                        ... */
-
-/*      Interval           12 */
-/*         Interval start: 2011 NOV 05 18:43:39.7428 */
-/*                      Z=  -1.80199890564836096E-008 */
-/*                     Vz=   0.37393762954280635 */
-/*         Interval end  : 2011 NOV 13 03:50:17.1540 */
-/*                      Z=    153172.08661820635 */
-/*                     Vz=  -3.62962481251227764E-013 */
-
-/*      Interval           13 */
-/*         Interval start: 2011 DEC 03 01:16:40.8174 */
-/*                      Z=   1.30391470065660542E-007 */
-/*                     Vz=   0.37425784503188919 */
-/*         Interval end  : 2011 DEC 10 09:51:07.7182 */
-/*                      Z=    152511.72037686800 */
-/*                     Vz=   2.11386680729064302E-013 */
-
-/*      Interval           14 */
-/*         Interval start: 2011 DEC 30 09:48:57.4099 */
-/*                      Z=   9.79434844339266419E-009 */
-/*                     Vz=   0.37733320145276139 */
-/*         Interval end  : 2012 JAN 01 00:00:00.0000 */
-/*                      Z=    50793.083312689421 */
-/*                     Vz=   0.35454996926793847 */
-
-
-/*     Example(2): */
-
-/*     Calculate the time intervals when the Z component of the earth */
-/*     to moon position vector in the IAU_EARTH frame has value */
-/*     between -1000 km and 1000 km (e.g. above and below the equatorial */
-/*     plane). */
-
-
-/*        Code: */
-
-/*           PROGRAM GFUDB_T2 */
-
-/*           EXTERNAL                  GFB */
-/*           EXTERNAL                  GFQ */
+/*        C */
+/*        C     Use the parameter MAXWIN for both the result window size */
+/*        C     and the workspace size. */
+/*        C */
+/*              INTEGER               MAXWIN */
+/*              PARAMETER           ( MAXWIN = 100 ) */
 
-/*     C */
-/*     C     Local parameters */
-/*     C */
-/*           INTEGER               LBCELL */
-/*           PARAMETER           ( LBCELL = -5 ) */
+/*        C */
+/*        C     Local variables */
+/*        C */
+/*              CHARACTER*(32)        UTC */
 
-/*     C */
-/*     C     Use the parameter MAXWIN for both the result window size */
-/*     C     and the workspace size. */
-/*     C */
-/*           INTEGER               MAXWIN */
-/*           PARAMETER           ( MAXWIN = 100 ) */
+/*              DOUBLE PRECISION      LEFT */
+/*              DOUBLE PRECISION      RIGHT */
+/*              DOUBLE PRECISION      ET */
+/*              DOUBLE PRECISION      ETS */
+/*              DOUBLE PRECISION      ETE */
+/*              DOUBLE PRECISION      LT */
+/*              DOUBLE PRECISION      STEP */
+/*              DOUBLE PRECISION      POS (3) */
+/*              DOUBLE PRECISION      CNFINE ( LBCELL : 2      ) */
+/*              DOUBLE PRECISION      RESULT ( LBCELL : MAXWIN ) */
 
-/*           DOUBLE PRECISION      LEFT */
-/*           DOUBLE PRECISION      RIGHT */
-/*           DOUBLE PRECISION      ET */
-/*           DOUBLE PRECISION      ETS */
-/*           DOUBLE PRECISION      ETE */
-/*           DOUBLE PRECISION      STEP */
-/*           DOUBLE PRECISION      POS (3) */
-/*           DOUBLE PRECISION      CNFINE ( LBCELL : 2 ) */
-/*           DOUBLE PRECISION      RESULT ( LBCELL : MAXWIN ) */
+/*              INTEGER               I */
 
-/*           INTEGER               I */
+/*        C */
+/*        C     Saved variables */
+/*        C */
+/*        C     The confinement and result windows CNFINE and RESULT are */
+/*        C     saved because this practice helps to prevent stack */
+/*        C     overflow. */
+/*        C */
+/*              SAVE                  CNFINE */
+/*              SAVE                  RESULT */
+
+/*        C */
+/*        C     Load needed kernels. */
+/*        C */
+/*              CALL FURNSH ( 'gfudb_ex1.tm' ) */
+
+/*        C */
+/*        C     Initialize windows. */
+/*        C */
+/*              CALL SSIZED ( MAXWIN, RESULT ) */
+/*              CALL SSIZED ( 2,      CNFINE ) */
+
+/*        C */
+/*        C     Store the time bounds of our search interval in */
+/*        C     the confinement window. */
+/*        C */
+/*              CALL STR2ET ( 'Jan 1 2011', ETS ) */
+/*              CALL STR2ET ( 'Apr 1 2011', ETE ) */
+/*              CALL WNINSD ( ETS, ETE, CNFINE ) */
 
-/*           CHARACTER*(32)        UTC */
+/*        C */
+/*        C     The duration of the event is approximately ninety */
+/*        C     minutes. Use a step of one hour. */
+/*        C */
+/*              STEP = 60.D0*60.D0 */
 
-/*     C */
-/*     C     SPICELIB functions. */
-/*     C */
-/*           INTEGER               WNCARD */
-/*           DOUBLE PRECISION      SPD */
-
-/*     C */
-/*     C     Initialize windows. */
-/*     C */
-/*           CALL SSIZED ( MAXWIN, RESULT ) */
-/*           CALL SSIZED ( 2,      CNFINE ) */
-
-
-/*     C */
-/*     C     Load needed kernels. */
-/*     C */
-/*           CALL FURNSH ( 'standard.tm' ) */
-
-/*     C */
-/*     C     Store the time bounds of our search interval in */
-/*     C     the confinement window. One year, 2011. */
-/*     C */
-/*           CALL STR2ET ( 'Jan 1 2011', ETS ) */
-/*           CALL STR2ET ( 'Jan 1 2012', ETE ) */
-/*           CALL WNINSD ( ETS, ETE, CNFINE ) */
+/*              CALL GFUDB ( GFQ, GFB, STEP, CNFINE, RESULT ) */
 
-/*     C */
-/*     C     The duration of the event is approximately ninety minutes. */
-/*     C     Use a step of one hour. */
-/*     C */
-/*           STEP = 60.D0*60.D0 */
+/*              IF ( WNCARD(RESULT) .EQ. 0 ) THEN */
 
-/*           CALL GFUDB ( GFQ, GFB, STEP, CNFINE, RESULT ) */
+/*                    WRITE (*, '(A)') 'Result window is empty.' */
 
-/*           IF ( WNCARD(RESULT) .EQ. 0 ) THEN */
+/*              ELSE */
 
-/*                 WRITE (*, '(A)') 'Result window is empty.' */
+/*                 DO I = 1, WNCARD(RESULT) */
 
-/*           ELSE */
+/*        C */
+/*        C           Fetch and display each RESULT interval. */
+/*        C */
+/*                    CALL WNFETD ( RESULT, I, LEFT, RIGHT ) */
+/*                    WRITE (*,*) 'Interval ', I */
 
-/*              DO I = 1, WNCARD(RESULT) */
+/*                    CALL ET2UTC ( LEFT, 'C', 4, UTC ) */
+/*                    WRITE (*, *) '   Interval start: ', UTC */
 
-/*     C */
-/*     C           Fetch and display each RESULT interval. */
-/*     C */
-/*                 CALL WNFETD ( RESULT, I, LEFT, RIGHT ) */
-/*                 WRITE (*,*) 'Interval ', I */
+/*                    CALL SPKEZP ( 301, LEFT, 'IAU_EARTH', 'NONE', 399, */
+/*             .                   POS, LT ) */
+/*                    WRITE (*, *) '                Z= ', POS(3) */
 
-/*                 CALL ET2UTC ( LEFT, 'C', 4, UTC ) */
-/*                 WRITE (*, *) '   Interval start: ', UTC */
+/*                    CALL ET2UTC ( RIGHT, 'C', 4, UTC ) */
+/*                    WRITE (*, *) '   Interval end  : ', UTC */
 
-/*                 CALL SPKEZP ( 301, LEFT, 'IAU_EARTH', 'NONE', 399, */
-/*          .                   POS, LT ) */
-/*                 WRITE (*, *) '                Z= ', POS(3) */
+/*                    CALL SPKEZP ( 301, RIGHT, 'IAU_EARTH', 'NONE', 399, */
+/*             .                   POS, LT ) */
+/*                    WRITE (*, *) '                Z= ', POS(3) */
+/*                    WRITE (*, *) ' ' */
 
-/*                 CALL ET2UTC ( RIGHT, 'C', 4, UTC ) */
-/*                 WRITE (*, *) '   Interval end  : ', UTC */
+/*                 END DO */
 
-/*                 CALL SPKEZP ( 301, RIGHT, 'IAU_EARTH', 'NONE', 399, */
-/*          .                   POS, LT ) */
-/*                 WRITE (*, *) '                Z= ', POS(3) */
-/*                 WRITE (*, *) ' ' */
+/*              END IF */
 
-/*              END DO */
+/*              END */
 
-/*           END IF */
 
-/*           END */
 
+/*        C-Procedure GFQ */
+/*        C */
+/*        C     User defined scalar routine. */
+/*        C */
 
+/*              SUBROUTINE GFQ ( ET, VALUE ) */
+/*              IMPLICIT NONE */
 
-/*     C-Procedure GFQ */
-/*     C */
-/*     C     User defined scalar routine. */
-/*     C */
+/*        C- Abstract */
+/*        C */
+/*        C     Return the Z component of the POS vector. */
+/*        C */
 
-/*           SUBROUTINE GFQ ( ET, VALUE ) */
-/*           IMPLICIT NONE */
+/*              DOUBLE PRECISION      ET */
+/*              DOUBLE PRECISION      VALUE */
 
-/*     C- Abstract */
-/*     C */
-/*     C     Return the Z component of the POS vector. */
-/*     C */
+/*        C */
+/*        C     Local variables. */
+/*        C */
+/*              INTEGER               TARG */
+/*              INTEGER               OBS */
 
-/*           DOUBLE PRECISION      ET */
-/*           DOUBLE PRECISION      VALUE */
+/*              CHARACTER*(12)        REF */
+/*              CHARACTER*(12)        ABCORR */
 
-/*     C */
-/*     C     Local variables. */
-/*     C */
-/*           INTEGER               TARG */
-/*           INTEGER               OBS */
+/*              DOUBLE PRECISION      POS ( 3 ) */
+/*              DOUBLE PRECISION      LT */
 
-/*           CHARACTER*(12)        REF */
-/*           CHARACTER*(12)        ABCORR */
+/*        C */
+/*        C     Initialization. Retrieve the vector from the earth to */
+/*        C     the moon in the IAU_EARTH frame, without aberration */
+/*        C     correction. */
+/*        C */
+/*              TARG   = 301 */
+/*              REF    = 'IAU_EARTH' */
+/*              ABCORR = 'NONE' */
+/*              OBS    = 399 */
 
-/*           DOUBLE PRECISION      POS ( 3 ) */
-/*           DOUBLE PRECISION      LT */
+/*        C */
+/*        C     Evaluate the position of TARG from OBS at ET with */
+/*        C     correction ABCORR. */
+/*        C */
+/*              CALL SPKEZP ( TARG, ET, REF, ABCORR, OBS, POS, LT ) */
 
-/*     C */
-/*     C     Initialization. Retrieve the vector from the earth to */
-/*     C     the moon in the IAU_EARTH frame, without aberration */
-/*     C     correction. */
-/*     C */
-/*           TARG   = 301 */
-/*           REF    = 'IAU_EARTH' */
-/*           ABCORR = 'NONE' */
-/*           OBS    = 399 */
+/*              VALUE = POS(3) */
 
-/*     C */
-/*     C     Evaluate the position of TARG from OBS at ET with */
-/*     C     correction ABCORR. */
-/*     C */
-/*           CALL SPKEZP ( TARG, ET, REF, ABCORR, OBS, POS, LT ) */
+/*              RETURN */
+/*              END */
 
-/*           VALUE = POS(3) */
 
-/*           RETURN */
-/*           END */
 
+/*        C-Procedure GFB */
+/*        C */
+/*        C     User defined boolean routine. */
+/*        C */
 
+/*              SUBROUTINE GFB ( UDFUNS, ET, BOOL ) */
+/*              IMPLICIT NONE */
 
-/*     C-Procedure GFB */
-/*     C */
-/*     C     User defined boolean routine. */
-/*     C */
+/*        C- Abstract */
+/*        C */
+/*        C     User defined boolean function: */
+/*        C */
+/*        C        VALUE >= LIM1 with VALUE <= LIM2. */
+/*        C */
 
-/*           SUBROUTINE GFB ( UDFUNS, ET, BOOL ) */
-/*           IMPLICIT NONE */
+/*              EXTERNAL              UDFUNS */
 
-/*     C- Abstract */
-/*     C */
-/*     C     User defined boolean function: */
-/*     C */
-/*     C        VALUE >= LIM1 with VALUE <= LIM2. */
-/*     C */
+/*              DOUBLE PRECISION      ET */
+/*              LOGICAL               BOOL */
+/*              DOUBLE PRECISION      VALUE */
 
-/*           EXTERNAL              UDFUNS */
 
-/*           DOUBLE PRECISION      ET */
-/*           LOGICAL               BOOL */
-/*           DOUBLE PRECISION      VALUE */
+/*              DOUBLE PRECISION      LIM1 */
+/*              DOUBLE PRECISION      LIM2 */
 
+/*              LIM1 = -1000.D0 */
+/*              LIM2 =  1000.D0 */
 
-/*           DOUBLE PRECISION      LIM1 */
-/*           DOUBLE PRECISION      LIM2 */
+/*              CALL UDFUNS ( ET, VALUE ) */
 
-/*           LIM1 = -1000.D0 */
-/*           LIM2 =  1000.D0 */
+/*        C */
+/*        C     Calculate the boolean value. */
+/*        C */
+/*              BOOL = (VALUE .GE. LIM1) .AND. (VALUE .LE. LIM2 ) */
 
-/*           CALL UDFUNS ( ET, VALUE ) */
+/*              RETURN */
+/*              END */
 
-/*     C */
-/*     C     Calculate the boolean value. */
-/*     C */
-/*           BOOL = (VALUE .GE. LIM1) .AND. (VALUE .LE. LIM2 ) */
 
-/*           RETURN */
-/*           END */
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
 
-/*     The program outputs: */
 
-/*      Interval            1 */
-/*         Interval start: 2011 JAN 09 14:42:24.4846 */
-/*                      Z=   -999.99999990308515 */
-/*         Interval end  : 2011 JAN 09 16:06:22.5021 */
-/*                      Z=    1000.0000000900436 */
+/*         Interval            1 */
+/*            Interval start: 2011 JAN 09 14:42:24.4855 */
+/*                         Z=   -999.99999984083206 */
+/*            Interval end  : 2011 JAN 09 16:06:22.5030 */
+/*                         Z=    999.99999987627757 */
 
-/*      Interval            2 */
-/*         Interval start: 2011 JAN 23 04:07:44.4554 */
-/*                      Z=    1000.0000001154267 */
-/*         Interval end  : 2011 JAN 23 05:23:06.2437 */
-/*                      Z=   -1000.0000001147444 */
+/*         Interval            2 */
+/*            Interval start: 2011 JAN 23 04:07:44.4563 */
+/*                         Z=    999.99999992179255 */
+/*            Interval end  : 2011 JAN 23 05:23:06.2446 */
+/*                         Z=   -1000.0000001340870 */
 
-/*      Interval            3 */
-/*         Interval start: 2011 FEB 05 22:35:57.1561 */
-/*                      Z=   -999.99999997469570 */
-/*         Interval end  : 2011 FEB 05 23:59:57.7487 */
-/*                      Z=    999.99999989149978 */
+/*         Interval            3 */
+/*            Interval start: 2011 FEB 05 22:35:57.1570 */
+/*                         Z=   -1000.0000000961383 */
+/*            Interval end  : 2011 FEB 05 23:59:57.7497 */
+/*                         Z=    999.99999984281567 */
 
-/*                        ... */
+/*         Interval            4 */
+/*            Interval start: 2011 FEB 19 14:11:28.2944 */
+/*                         Z=    1000.0000000983686 */
+/*            Interval end  : 2011 FEB 19 15:26:01.7199 */
+/*                         Z=   -999.99999985420800 */
 
-/*      Interval           25 */
-/*         Interval start: 2011 DEC 03 00:32:08.8206 */
-/*                      Z=   -999.99999987966544 */
-/*         Interval end  : 2011 DEC 03 02:01:12.7695 */
-/*                      Z=    999.99999987608885 */
+/*         Interval            5 */
+/*            Interval start: 2011 MAR 05 05:25:59.5621 */
+/*                         Z=   -1000.0000000277355 */
+/*            Interval end  : 2011 MAR 05 06:50:35.8628 */
+/*                         Z=    1000.0000000934349 */
 
-/*      Interval           26 */
-/*         Interval start: 2011 DEC 17 10:17:24.0390 */
-/*                      Z=    1000.0000000822058 */
-/*         Interval end  : 2011 DEC 17 11:40:37.2235 */
-/*                      Z=   -999.99999997521718 */
+/*         Interval            6 */
+/*            Interval start: 2011 MAR 19 01:30:19.1660 */
+/*                         Z=    999.99999982956138 */
+/*            Interval end  : 2011 MAR 19 02:45:21.1121 */
+/*                         Z=   -1000.0000000146936 */
 
-/*      Interval           27 */
-/*         Interval start: 2011 DEC 30 09:04:47.2759 */
-/*                      Z=   -1000.0000000487748 */
-/*         Interval end  : 2011 DEC 30 10:33:07.6707 */
-/*                      Z=    999.99999986779312 */
 
-/*     Recall the default convergence tolerance for the GF system has */
-/*     value 10^-6 seconds. */
+/*        Note that the default convergence tolerance for the GF system */
+/*        has value 10^-6 seconds. */
 
 /* $ Restrictions */
 
-/*     1) Any kernel files required by this routine must be loaded */
-/*        (normally via the SPICELIB routine FURNSH) before this routine */
-/*        is called. */
+/*     1)  Any kernel files required by this routine must be loaded */
+/*         (normally via the SPICELIB routine FURNSH) before this routine */
+/*         is called. */
 
 /* $ Literature_References */
 
-/*    None. */
+/*     None. */
 
 /* $ Author_and_Institution */
 
-/*    N.J. Bachman   (JPL) */
-/*    E.D. Wright    (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
 
-/* -   SPICELIB Version 1.0.0, 15-JUL-2014 (EDW) */
+/* -    SPICELIB Version 1.0.1, 21-OCT-2021 (JDR) (NJB) */
+
+/*        Edited the header to comply with NAIF standard. */
+
+/*        Added "IMPLICIT NONE" to example code and declared "LT" */
+/*        variable. Reduced the search interval to limit the length of */
+/*        the solutions. Added SAVE statements for CNFINE and RESULT */
+/*        variables in code examples. */
+
+/*        Updated description of RESULT argument in $Brief_I/O, */
+/*        $Detailed_Input and $Detailed_Output. */
+
+/*        Added entry #3 in $Exceptions section. */
+
+/*        Updated header to describe use of expanded confinement window. */
+
+/* -    SPICELIB Version 1.0.0, 15-JUL-2014 (EDW) (NJB) */
 
 /* -& */
 /* $ Index_Entries */
 
-/*   GF user defined boolean function search */
+/*     GF user defined boolean function search */
 
 /* -& */
 

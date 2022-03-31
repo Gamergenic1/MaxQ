@@ -955,7 +955,7 @@ static integer c__50 = 50;
 /*     1)  Most of the exceptions that can occur on a call to */
 /*         ZZEKPARS are caused by errors in the input query.  ZZEKPARS */
 /*         attempts to diagnose these via the output error flag and */
-/*         error message, instead of signalling errors.  The */
+/*         error message, instead of signaling errors.  The */
 /*         error messages that ZZEKPARS can return are listed below. */
 /*         In the messages shown, the symbol # is used to designate */
 /*         a marker for which a value can be substituted in an actual */
@@ -1008,7 +1008,7 @@ static integer c__50 = 50;
 /* $ Particulars */
 
 /*     This routine determines whether a query is syntactically correct; */
-/*     it tranforms correct queries into the EK system's encoded query */
+/*     it transforms correct queries into the EK system's encoded query */
 /*     representation. */
 
 /*     The encoded queries output by this routine are not ready for */
@@ -1034,6 +1034,10 @@ static integer c__50 = 50;
 /*     N.J. Bachman   (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 4.1.1, 03-OCT-2021 (NJB) */
+
+/*        Corrected typos in comments. */
 
 /* -    SPICELIB Version 4.1.0, 15-OCT-1996 (NJB) */
 
@@ -1207,7 +1211,7 @@ static integer c__50 = 50;
 		    for (j = 1; j <= 6; ++j) {
 			appndi_(&tabdsc[(i__1 = j - 1) < 6 && 0 <= i__1 ? 
 				i__1 : s_rnge("tabdsc", i__1, "zzekpars_", (
-				ftnlen)554)], eqryi);
+				ftnlen)558)], eqryi);
 		    }
 
 /*                 Add a place-holder value descriptor to reserve */
@@ -1220,7 +1224,7 @@ static integer c__50 = 50;
 		    for (j = 1; j <= 6; ++j) {
 			appndi_(&alsdsc[(i__1 = j - 1) < 6 && 0 <= i__1 ? 
 				i__1 : s_rnge("alsdsc", i__1, "zzekpars_", (
-				ftnlen)567)], eqryi);
+				ftnlen)571)], eqryi);
 		    }
 
 /*                 Update the table count in the encoded query. */
@@ -1413,7 +1417,7 @@ static integer c__50 = 50;
 		    for (j = 1; j <= 6; ++j) {
 			appndi_(&valdsc[(i__1 = j - 1) < 6 && 0 <= i__1 ? 
 				i__1 : s_rnge("valdsc", i__1, "zzekpars_", (
-				ftnlen)828)], eqryi);
+				ftnlen)832)], eqryi);
 		    }
 
 /*                 Update the SELECT column count in the encoded query. */
@@ -1449,7 +1453,7 @@ static integer c__50 = 50;
 
 		for (j = 1; j <= 6; ++j) {
 		    appndi_(&namdsc[(i__1 = j - 1) < 6 && 0 <= i__1 ? i__1 : 
-			    s_rnge("namdsc", i__1, "zzekpars_", (ftnlen)875)],
+			    s_rnge("namdsc", i__1, "zzekpars_", (ftnlen)879)],
 			     eqryi);
 		}
 		state = 16;
@@ -1461,7 +1465,7 @@ static integer c__50 = 50;
 
 		for (j = 1; j <= 6; ++j) {
 		    appndi_(&namdsc[(i__1 = j - 1) < 6 && 0 <= i__1 ? i__1 : 
-			    s_rnge("namdsc", i__1, "zzekpars_", (ftnlen)888)],
+			    s_rnge("namdsc", i__1, "zzekpars_", (ftnlen)892)],
 			     eqryi);
 		}
 		state = 12;
@@ -1480,7 +1484,7 @@ static integer c__50 = 50;
 
 		for (j = 1; j <= 6; ++j) {
 		    appndi_(&namdsc[(i__1 = j - 1) < 6 && 0 <= i__1 ? i__1 : 
-			    s_rnge("namdsc", i__1, "zzekpars_", (ftnlen)910)],
+			    s_rnge("namdsc", i__1, "zzekpars_", (ftnlen)914)],
 			     eqryi);
 		}
 
@@ -1542,7 +1546,7 @@ static integer c__50 = 50;
 
 		for (j = 1; j <= 6; ++j) {
 		    appndi_(&coldsc[(i__1 = j - 1) < 6 && 0 <= i__1 ? i__1 : 
-			    s_rnge("coldsc", i__1, "zzekpars_", (ftnlen)988)],
+			    s_rnge("coldsc", i__1, "zzekpars_", (ftnlen)992)],
 			     eqryi);
 		}
 		state = 15;
@@ -1722,7 +1726,7 @@ static integer c__50 = 50;
 		    for (j = 1; j <= 6; ++j) {
 			appndi_(&valdsc[(i__1 = j - 1) < 6 && 0 <= i__1 ? 
 				i__1 : s_rnge("valdsc", i__1, "zzekpars_", (
-				ftnlen)1240)], eqryi);
+				ftnlen)1244)], eqryi);
 		    }
 
 /*                 Update the order-by column count in the encoded query. */
@@ -1758,7 +1762,7 @@ static integer c__50 = 50;
 
 		for (j = 1; j <= 6; ++j) {
 		    appndi_(&namdsc[(i__1 = j - 1) < 6 && 0 <= i__1 ? i__1 : 
-			    s_rnge("namdsc", i__1, "zzekpars_", (ftnlen)1287)]
+			    s_rnge("namdsc", i__1, "zzekpars_", (ftnlen)1291)]
 			    , eqryi);
 		}
 
@@ -1780,7 +1784,7 @@ static integer c__50 = 50;
 
 		for (j = 1; j <= 6; ++j) {
 		    appndi_(&namdsc[(i__1 = j - 1) < 6 && 0 <= i__1 ? i__1 : 
-			    s_rnge("namdsc", i__1, "zzekpars_", (ftnlen)1311)]
+			    s_rnge("namdsc", i__1, "zzekpars_", (ftnlen)1315)]
 			    , eqryi);
 		}
 
@@ -1807,7 +1811,7 @@ static integer c__50 = 50;
 
 		for (j = 1; j <= 6; ++j) {
 		    appndi_(&namdsc[(i__1 = j - 1) < 6 && 0 <= i__1 ? i__1 : 
-			    s_rnge("namdsc", i__1, "zzekpars_", (ftnlen)1342)]
+			    s_rnge("namdsc", i__1, "zzekpars_", (ftnlen)1346)]
 			    , eqryi);
 		}
 
@@ -1882,7 +1886,7 @@ static integer c__50 = 50;
 
 		for (j = 1; j <= 6; ++j) {
 		    appndi_(&coldsc[(i__1 = j - 1) < 6 && 0 <= i__1 ? i__1 : 
-			    s_rnge("coldsc", i__1, "zzekpars_", (ftnlen)1444)]
+			    s_rnge("coldsc", i__1, "zzekpars_", (ftnlen)1448)]
 			    , eqryi);
 		}
 		state = 9;

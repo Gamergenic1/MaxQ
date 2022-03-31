@@ -3,10 +3,10 @@
 -Procedure reordi_c ( Reorder an integer array )
 
 -Abstract
- 
-    Re-order the elements of an integer array according to 
-    a given order vector. 
- 
+
+   Reorder the elements of an integer array according to a given
+   order vector.
+
 -Disclaimer
 
    THIS SOFTWARE AND ANY RELATED MATERIALS WERE CREATED BY THE
@@ -33,13 +33,14 @@
    ACTIONS OF RECIPIENT IN THE USE OF THE SOFTWARE.
 
 -Required_Reading
- 
-   None. 
- 
+
+   None.
+
 -Keywords
- 
-    ARRAY,  SORT 
- 
+
+   ARRAY
+   SORT
+
 */
 
    #include <stdlib.h>
@@ -47,126 +48,216 @@
    #include "SpiceZfc.h"
    #include "SpiceZim.h"
    #undef    reordi_c
-   
+
 
    void reordi_c ( ConstSpiceInt   * iorder,
-                   SpiceInt          ndim,      
-                   SpiceInt        * array ) 
+                   SpiceInt          ndim,
+                   SpiceInt        * array )
 
 /*
 
 -Brief_I/O
- 
-   VARIABLE  I/O  DESCRIPTION 
-   --------  ---  -------------------------------------------------- 
-   iorder     I   Order vector to be used to re-order array. 
-   ndim       I   Dimension of array. 
-   array     I/O  Array to be re-ordered. 
- 
--Detailed_Input
- 
-   iorder      is the order vector to be used to re-order the input 
-               array. The first element of iorder is the index of 
-               the first item of the re-ordered array, and so on. 
 
-               Note that the order imposed by reordi_c is not the 
-               same order that would be imposed by a sorting 
-               routine. In general, the order vector will have 
-               been created (by one of the order routines) for 
-               a related array, as illustrated in the example below. 
+   VARIABLE  I/O  DESCRIPTION
+   --------  ---  --------------------------------------------------
+   iorder     I   Order vector to be used to re-order array.
+   ndim       I   Dimension of array.
+   array     I-O  Array to be re-ordered.
+
+-Detailed_Input
+
+   iorder      is the order vector to be used to re-order the input
+               array. The first element of iorder is the index of
+               the first item of the re-ordered array, and so on.
+
+               Note that the order imposed by reordi_c is not the
+               same order that would be imposed by a sorting
+               routine. In general, the order vector will have
+               been created (by one of the order routines) for
+               a related array, as illustrated in the example below.
 
                The elements of iorder range from zero to ndim-1.
 
-   ndim        is the number of elements in the input array. 
+   ndim        is the number of elements in the input array.
 
-   array       on input, is an array containing some number of 
-               elements in unspecified order. 
+   array       on input, is an array containing some number of
+               elements in unspecified order.
 
 -Detailed_Output
- 
-   array       on output, is the same array, with the elements 
-               in re-ordered as specified by iorder. 
- 
+
+   array       on output, is the same array, with the elements
+               re-ordered as specified by iorder.
+
 -Parameters
- 
-   None. 
- 
+
+   None.
+
 -Exceptions
- 
-   1) If memory cannot be allocated to create a Fortran-style version of
-      the input order vector, the error SPICE(MALLOCFAILED) is signaled.
- 
-   2) If ndim < 2, this routine executes a no-op.  This case is 
-      not an error.
+
+   1)  If ndim < 2, this routine executes a no-op. This case is
+       not an error.
+
+   2)  If memory cannot be allocated to create the temporary variable
+       required for the execution of the underlying Fortran routine,
+       the error SPICE(MALLOCFAILED) is signaled.
 
 -Files
- 
-   None. 
- 
--Particulars
- 
-   reordi_c uses a cyclical algorithm to re-order the elements of 
-   the array in place. After re-ordering, element iorder[0] of 
-   the input array is the first element of the output array, 
-   element iorder[1] is the input array is the second element of 
-   the output array, and so on. 
 
-   The order vector used by reordi_c is typically created for 
-   a related array by one of the order*_c routines, as shown in 
-   the example below. 
- 
+   None.
+
+-Particulars
+
+   reordi_c uses a cyclical algorithm to re-order the elements of
+   the array in place. After re-ordering, element iorder[0] of
+   the input array is the first element of the output array,
+   element iorder[1] is the input array is the second element of
+   the output array, and so on.
+
+   The order vector used by reordi_c is typically created for
+   a related array by one of the order*_c routines, as shown in
+   the example below.
+
 -Examples
 
-   In the following example, the order*_c and reord*_c routines are 
-   used to sort four related arrays (containing the names, 
-   masses, integer ID codes, and visual magnitudes for a group 
-   of satellites). This is representative of the typical use of 
-   these routines. 
+   The numerical results shown for this example may differ across
+   platforms. The results depend on the SPICE kernels used as
+   input, the compiler and supporting libraries, and the machine
+   specific arithmetic implementation.
 
-      #include "SpiceUsr.h"
-          .
-          .
-          .
+   1) Sort four related arrays containing the names, masses,
+      integer ID codes, and flags indicating whether they have
+      a ring system, for a group of planets.
+
+
+      Example code begins here.
+
+
       /.
-      Sort the object arrays by name. 
-      ./ 
+         Program reordi_ex1
+      ./
+      #include <stdio.h>
+      #include "SpiceUsr.h"
 
-      orderc_c ( namlen, names, n,  iorder ); 
+      int main( )
+      {
 
-      reordc_c ( iorder, n, namlen, names  );
-      reordd_c ( iorder, n,         masses ); 
-      reordi_c ( iorder, n,         codes  ); 
-      reordd_c ( iorder, n,         vmags  );
- 
+         /.
+         Local constants.
+         ./
+         #define NDIM         8
+         #define STRLEN       8
+
+         /.
+         Local variables.
+         ./
+
+         SpiceInt             i;
+         SpiceInt             iorder [NDIM];
+
+         /.
+         Set the arrays containing the names, masses (given as
+         ratios to of Solar GM to barycenter GM), integer ID
+         codes, and flags indicating whether they have a ring
+         system.
+         ./
+         SpiceChar            names  [NDIM][STRLEN] = {
+                                 "MERCURY", "VENUS",  "EARTH",  "MARS",
+                                 "JUPITER", "SATURN", "URANUS", "NEPTUNE" };
+
+         SpiceDouble          masses [NDIM] = {     22032.080,   324858.599,
+                                                   398600.436,    42828.314,
+                                                126712767.881, 37940626.068,
+                                                  5794559.128,  6836534.065 };
+
+         SpiceInt             codes  [NDIM] = { 199, 299, 399, 499,
+                                                599, 699, 799, 899 };
+
+         SpiceBoolean         rings  [NDIM] = { SPICEFALSE, SPICEFALSE,
+                                                SPICEFALSE, SPICEFALSE,
+                                                SPICETRUE,  SPICETRUE,
+                                                SPICETRUE,  SPICETRUE  };
+
+         /.
+         Sort the object arrays by name.
+         ./
+         orderc_c ( STRLEN, names, NDIM,   iorder );
+
+         reordc_c ( iorder, NDIM,  STRLEN, names  );
+         reordd_c ( iorder, NDIM,  masses         );
+         reordi_c ( iorder, NDIM,  codes          );
+         reordl_c ( iorder, NDIM,  rings          );
+
+         /.
+         Output the resulting table.
+         ./
+         printf( " Planet   Mass(GMS/GM)  ID Code  Rings?\n" );
+         printf( "-------  -------------  -------  ------\n" );
+
+         for ( i = 0; i < NDIM; i++ )
+         {
+
+            printf( "%-7s %14.3f %8d %4d\n",
+                    names[i], masses[i], codes[i], rings[i] );
+
+         }
+
+         return ( 0 );
+      }
+
+
+      When this program was executed on a Mac/Intel/cc/64-bit
+      platform, the output was:
+
+
+       Planet   Mass(GMS/GM)  ID Code  Rings?
+      -------  -------------  -------  ------
+      EARTH       398600.436      399    0
+      JUPITER  126712767.881      599    1
+      MARS         42828.314      499    0
+      MERCURY      22032.080      199    0
+      NEPTUNE    6836534.065      899    1
+      SATURN    37940626.068      699    1
+      URANUS     5794559.128      799    1
+      VENUS       324858.599      299    0
+
+
 -Restrictions
- 
-   None. 
-  
--Author_and_Institution
- 
-   N.J. Bachman    (JPL)
-   W.L. Taber      (JPL) 
-   I.M. Underwood  (JPL) 
- 
+
+   None.
+
 -Literature_References
- 
-   None. 
- 
+
+   None.
+
+-Author_and_Institution
+
+   N.J. Bachman        (JPL)
+   J. Diaz del Rio     (ODC Space)
+   W.L. Taber          (JPL)
+   I.M. Underwood      (JPL)
+
 -Version
- 
+
+   -CSPICE Version 1.0.1, 27-AUG-2021 (JDR)
+
+       Edited the -Examples section to comply with NAIF standard.
+       Added complete code example.
+
+       Re-ordered header sections.
+
    -CSPICE Version 1.0.0, 10-JUL-2002 (NJB) (WLT) (IMU)
 
 -Index_Entries
- 
-   reorder an integer array 
- 
+
+   reorder an integer array
+
 -&
 */
 
 { /* Begin reordi_c */
 
    /*
-   Local variables 
+   Local variables
    */
    SpiceInt                i ;
    SpiceInt              * ordvec;
@@ -176,7 +267,7 @@
 
    /*
    If the input array doesn't have at least two elements, return
-   immediately. 
+   immediately.
    */
    if ( ndim < 2 )
    {
@@ -186,7 +277,7 @@
 
    /*
    Get a local copy of the input order vector; map the vector's contents
-   to the range 1:ndim. 
+   to the range 1:ndim.
    */
    vSize  = ndim * sizeof(SpiceInt);
 
@@ -194,7 +285,7 @@
 
    if ( ordvec == 0 )
    {
-      chkin_c  ( "reordi_c"                                ); 
+      chkin_c  ( "reordi_c"                                );
       setmsg_c ( "Failure on malloc call to create array "
                  "for Fortran-style order vector.  Tried "
                  "to allocate # bytes."                    );
@@ -218,4 +309,3 @@
    free ( ordvec );
 
 } /* End reordi_c */
-

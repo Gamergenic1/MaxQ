@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      GETLUN ( Get a free logical unit ) */
+/* $Procedure GETLUN ( Get a free logical unit ) */
 /* Subroutine */ int getlun_(integer *unit)
 {
     /* System generated locals */
@@ -67,9 +67,9 @@
 
 /* $ Detailed_Output */
 
-/*     UNIT        is the number of a free logical unit (also called */
-/*                 an "external unit"). If no free units are available, */
-/*                 the value of UNIT is 0. */
+/*     UNIT     is the number of a free logical unit (also called */
+/*              an "external unit"). If no free units are available, */
+/*              the value of UNIT is 0. */
 
 /* $ Parameters */
 
@@ -77,15 +77,15 @@
 
 /* $ Exceptions */
 
-/*     1)  If there are no free logical units available, UNIT is assigned */
-/*         the value 0, and the error SPICE(NOFREELOGICALUNIT) is */
-/*         signalled. */
+/*     1)  If there are no free logical units available, the error */
+/*         SPICE(NOFREELOGICALUNIT) is signaled and UNIT is assigned the */
+/*         value 0. */
 
-/*     2)  This routine obtains a logical unit number from FNDLUN. */
-/*         FNDLUN executes a Fortran INQUIRE statement; if that statement */
-/*         fails to execute properly, FNDLUN returns a negative unit */
-/*         number.  In this case, GETLUN assigns the value 0 to UNIT, */
-/*         and the error SPICE(INQUIREFAILED) is signalled. */
+/*     2)  This routine obtains a logical unit number from FNDLUN, which */
+/*         executes a Fortran INQUIRE statement. If that statement fails */
+/*         to execute properly, FNDLUN returns a negative unit number, */
+/*         GETLUN assigns the value 0 to UNIT, and, the error */
+/*         SPICE(INQUIREFAILED) is signaled. */
 
 /* $ Files */
 
@@ -94,16 +94,16 @@
 /* $ Particulars */
 
 /*     GETLUN returns the number of the first (unreserved) unit not */
-/*     currently connected to a file.  It thus frees the user from */
+/*     currently connected to a file. It thus frees the user from */
 /*     having to maintain an accounting of which units are open, which */
 /*     are closed, and which are available. */
 
 /*     This routine is related to the routines FNDLUN, RESLUN, and */
-/*     FRELUN.  Together, these routines support coordinated usage of */
+/*     FRELUN. Together, these routines support coordinated usage of */
 /*     Fortran logical units.  GETLUN (Get a free logical unit) and */
 /*     FNDLUN (Find a free logical unit) both have the function of */
 /*     returning a logical unit number that is not reserved or already */
-/*     in use.  The principal difference between the functionality of */
+/*     in use. The principal difference between the functionality of */
 /*     these routines is that GETLUN both returns a status code and */
 /*     signals an error if a free unit is not found, while FNDLUN */
 /*     merely returns a status code. */
@@ -121,12 +121,12 @@
 /*     refer to FRELUN. */
 
 /*     A unit returned by GETLUN does NOT automatically become a */
-/*     reserved unit.  If the user wishes to reserve a unit found by */
+/*     reserved unit. If the user wishes to reserve a unit found by */
 /*     GETLUN, the call to GETLUN must be followed by a call to RESLUN. */
 
 /*     This routine obtains a logical unit number via a call to FNDLUN. */
 /*     FNDLUN uses an INQUIRE statement; if that statement doesn't */
-/*     execute properly, GETLUN will signal the error.  This arrangement */
+/*     execute properly, GETLUN will signal the error. This arrangement */
 /*     allows FNDLUN to be error free. */
 
 /*     The range of possible unit numbers returned by GETLUN is dependent */
@@ -149,9 +149,9 @@
 
 /* $ Restrictions */
 
-/*     This routine never returns a logical unit number of 0.  The */
-/*     value 0 is used to indicate that no free logical unit was */
-/*     found. */
+/*     1)  This routine never returns a logical unit number of 0. The */
+/*         value 0 is used to indicate that no free logical unit was */
+/*         found. */
 
 /* $ Literature_References */
 
@@ -159,12 +159,19 @@
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     C.A. Curzon     (JPL) */
-/*     H.A. Neilan     (JPL) */
-/*     I.M. Underwood  (JPL) */
+/*     C.A. Curzon        (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 13-AUG-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.0.2, 18-MAY-2010 (BVS) */
 
@@ -191,7 +198,7 @@
 /*         obtain a free logical unit number via a call to FNDLUN. */
 
 /*         If there are no free logical units available, UNIT */
-/*         is assigned the value 0, and an error is signalled. */
+/*         is assigned the value 0, and an error is signaled. */
 
 /*         The "Parameters" section was added to the header. */
 

@@ -216,13 +216,13 @@ static integer c__21 = 21;
 /* -& */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Entry */
+/*     VARIABLE  I/O  ENTRY POINTS */
 /*     --------  ---  -------------------------------------------------- */
 /*     REFA       I   IRFROT */
 /*     REFB       I   IRFROT */
 /*     ROTAB      O   IRFROT */
-/*     NAME      I/O  IRFNUM, IRFNAM, IRFDEF */
-/*     INDEX     I/O  IRFNUM, IRFNAM */
+/*     NAME      I-O  IRFNUM, IRFNAM, IRFDEF */
+/*     INDEX     I-O  IRFNUM, IRFNAM */
 
 /* $ Detailed_Input */
 
@@ -234,15 +234,15 @@ static integer c__21 = 21;
 
 /* $ Parameters */
 
-/*      None. */
+/*     None. */
 
 /* $ Exceptions */
 
-/*     1) If CHGIRF is called directly, the signal SPICE(BOGUSENTRY) */
-/*        is signalled. */
+/*     1)  If CHGIRF is called directly, the signal, the error */
+/*         SPICE(BOGUSENTRY) is signaled. */
 
-/*     2) See entry points IRFROT, IRFNUM, IRFNAM, and IRFDEF for */
-/*        exceptions specific to those routines. */
+/*     2)  See entry points IRFROT, IRFNUM, IRFNAM, and IRFDEF for */
+/*         exceptions specific to those routines. */
 
 /* $ Files */
 
@@ -264,45 +264,55 @@ static integer c__21 = 21;
 
 /* $ Literature_References */
 
-/*     [1] Jay Lieske, ``Precession Matrix Based on IAU (1976) */
-/*         System of Astronomical Constants,'' Astron. Astrophys. */
-/*         73, 282-284 (1979). */
+/*     [1]  J. Lieske, "Precession Matrix Based on IAU (1976) System of */
+/*          Astronomical Constants," Astron. Astrophys. 73, 282-284, */
+/*          1979. */
 
-/*     [2] E.M. Standish, Jr., ``Orientation of the JPL Ephemerides, */
-/*         DE 200/LE 200, to the Dynamical Equinox of J2000,'' */
-/*         Astron. Astrophys. 114, 297-302 (1982). */
+/*     [2]  E. M. Standish, Jr., "Orientation of the JPL Ephemerides, */
+/*          DE 200/LE 200, to the Dynamical Equinox of J2000," Astron. */
+/*          Astrophys. 114, 297-302, 1982. */
 
-/*     [3] E.M. Standish, Jr., ``Conversion of Ephemeris Coordinates */
-/*         from the B1950 System to the J2000 System,'' JPL IOM */
-/*         314.6-581, 24 June 1985. */
+/*     [3]  E. M. Standish, Jr., "Conversion of Ephemeris Coordinates */
+/*          from the B1950 System to the J2000 System," JPL IOM */
+/*          314.6-581, 24 June 1985. */
 
-/*     [4] E.M. Standish, Jr., ``The Equinox Offsets of the JPL */
-/*         Ephemeris,'' JPL IOM 314.6-929, 26 February 1988. */
+/*     [4]  E. M. Standish, Jr., "The Equinox Offsets of the JPL */
+/*          Ephemeris," JPL IOM 314.6-929, 26 February 1988. */
 
-/*     [5] Jay Lieske, ``Expressions for the Precession  Quantities */
-/*         Based upon the IAU (1976) System of Astronomical */
-/*         Constants'' Astron. Astrophys. 58, 1-16 (1977). */
+/*     [5]  J. Lieske, "Expressions for the Precession Quantities Based */
+/*          upon the IAU (1976) System of Astronomical Constants," */
+/*          Astron. Astrophys. 58, 1-16, 1977. */
 
-/*     [6] Laura Bass and Robert Cesarone "Mars Observer Planetary */
-/*         Constants and Models" JPL D-3444 November 1990. */
+/*     [6]  L. Bass and R. Cesarone, "Mars Observer Planetary Constants */
+/*          and Models," JPL D-3444, November 1990. */
 
-/*     [7] "Explanatory Supplement to the Astronomical Almanac" */
-/*          edited by P. Kenneth Seidelmann. University Science */
-/*          Books, 20 Edgehill Road, Mill Valley, CA 94941 (1992) */
+/*     [7]  P. Kenneth Seidelmann (Ed.), "Explanatory Supplement to the */
+/*          Astronomical Almanac," University Science Books, 1992. */
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     B.V. Semenov    (JPL) */
-/*     W.L. Taber      (JPL) */
-/*     I.M. Underwood  (JPL) */
-/*     E.D. Wright     (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
 
+/* -    SPICELIB Version 4.5.0, 06-NOV-2021 (JDR) (NJB) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
+
+/*        Corrected sign error in comments describing the angles used to */
+/*        convert between the J2000 and B1950 reference frames. Also */
+/*        corrected a typo in the comments. */
+
 /* -    SPICELIB Version 4.4.0, 24-SEP-2013 (BVS) */
 
-/*        Updated enrtry point IRFNUM to treat J2000 as a special case */
+/*        Updated entry point IRFNUM to treat J2000 as a special case */
 /*        and to not participate of CHKIN/CHOUT to increase efficiency. */
 
 /* -    SPICELIB Version 4.3.0, 25-AUG-2005 (NJB) */
@@ -317,7 +327,7 @@ static integer c__21 = 21;
 /* -    SPICELIB Version 4.2.0, 10-APR-1997 (WLT) */
 
 /*        A descriptive diagnostic was added to the entry points */
-/*        IRFROT and IRFDEF.  Before they simply signalled the error */
+/*        IRFROT and IRFDEF. Before they simply signaled the error */
 /*        with no diagnostic. */
 
 /* -    SPICELIB Version 4.1.0, 14-OCT-1996 (WLT) */
@@ -342,7 +352,7 @@ static integer c__21 = 21;
 /*        the matrix given in [1]. */
 
 /*        The frame MARSIAU was added to the list */
-/*        of recognized frames.  This is the standard mars */
+/*        of recognized frames. This is the standard mars */
 /*        referenced inertial frame used by the Mars Observer */
 /*        project. */
 
@@ -466,11 +476,11 @@ static integer c__21 = 21;
 /*        [ zeta ]  [ -theta ]  [ z ] */
 /*                3           2      3 */
 
-/*     The values for z, theta, and zeta are taken directly from */
-/*     are computed from the formulas given in table 5 of [5]. */
+/*     The values for z, theta, and zeta are computed from the formulas */
+/*     given in table 5 of [5]. */
 
 /*        z     =  1153.04066200330" */
-/*        theta = -1002.26108439117" */
+/*        theta =  1002.26108439117" */
 /*        zeta  =  1152.84248596724" */
 
 
@@ -699,96 +709,96 @@ L_irfrot:
 
 /*     INTEGER               REFA */
 /*     INTEGER               REFB */
-/*     DOUBLE PRECISION      ROTAB    ( 3,3 ) */
+/*     DOUBLE PRECISION      ROTAB    ( 3, 3 ) */
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     REFA, */
 /*     REFB       I   Indices of target reference frames (A,B). */
-/*     MATRIX     O   Rotation from frame A to frame B. */
+/*     ROTAB      O   Rotation from frame A to frame B. */
 
 /* $ Detailed_Input */
 
 /*     REFA, */
-/*     REFB        are the indices of two standard inertial reference */
-/*                 frames. The complete set of supported frames is shown */
-/*                 below. */
+/*     REFB     are the indices of two standard inertial reference */
+/*              frames. The complete set of supported frames is shown */
+/*              below. */
 
-/*                    Index  Name      Description */
-/*                    -----  --------  -------------------------------- */
-/*                     1    J2000      Earth mean equator, dynamical */
-/*                                     equinox of J2000 */
+/*                 Index  Name      Description */
+/*                 -----  --------  -------------------------------- */
+/*                  1    J2000      Earth mean equator, dynamical */
+/*                                  equinox of J2000 */
 
-/*                     2    B1950      Earth mean equator, dynamical */
-/*                                     equinox of B1950 */
+/*                  2    B1950      Earth mean equator, dynamical */
+/*                                  equinox of B1950 */
 
-/*                     3    FK4        Fundamental Catalog (4) */
+/*                  3    FK4        Fundamental Catalog (4) */
 
-/*                     4    DE-118     JPL Developmental Ephemeris (118) */
+/*                  4    DE-118     JPL Developmental Ephemeris (118) */
 
-/*                     5    DE-96      JPL Developmental Ephemeris ( 96) */
+/*                  5    DE-96      JPL Developmental Ephemeris ( 96) */
 
-/*                     6    DE-102     JPL Developmental Ephemeris (102) */
+/*                  6    DE-102     JPL Developmental Ephemeris (102) */
 
-/*                     7    DE-108     JPL Developmental Ephemeris (108) */
+/*                  7    DE-108     JPL Developmental Ephemeris (108) */
 
-/*                     8    DE-111     JPL Developmental Ephemeris (111) */
+/*                  8    DE-111     JPL Developmental Ephemeris (111) */
 
-/*                     9    DE-114     JPL Developmental Ephemeris (114) */
+/*                  9    DE-114     JPL Developmental Ephemeris (114) */
 
-/*                    10    DE-122     JPL Developmental Ephemeris (122) */
+/*                 10    DE-122     JPL Developmental Ephemeris (122) */
 
-/*                    11    DE-125     JPL Developmental Ephemeris (125) */
+/*                 11    DE-125     JPL Developmental Ephemeris (125) */
 
-/*                    12    DE-130     JPL Developmental Ephemeris (130) */
+/*                 12    DE-130     JPL Developmental Ephemeris (130) */
 
-/*                    13    GALACTIC   Galactic System II */
+/*                 13    GALACTIC   Galactic System II */
 
-/*                    14    DE-200     JPL Developmental Ephemeris (200) */
+/*                 14    DE-200     JPL Developmental Ephemeris (200) */
 
-/*                    15    DE-202     JPL Developmental Ephemeris (202) */
+/*                 15    DE-202     JPL Developmental Ephemeris (202) */
 
-/*                    16    MARSIAU    Mars Observer inertial frame */
-/*                                     defined relative to MARS. */
+/*                 16    MARSIAU    Mars Observer inertial frame */
+/*                                  defined relative to MARS. */
 
-/*                    17    ECLIPJ2000 Earth mean ecliptic and equinox */
-/*                                     of the epoch J2000 */
+/*                 17    ECLIPJ2000 Earth mean ecliptic and equinox */
+/*                                  of the epoch J2000 */
 
-/*                    18    ECLIPB1950 Earth mean ecliptic and equinox */
-/*                                     of the Besselian date 1950. */
+/*                 18    ECLIPB1950 Earth mean ecliptic and equinox */
+/*                                  of the Besselian date 1950. */
 
-/*                    19    DE-140    JPL Developmental Ephemeris (140) */
+/*                 19    DE-140    JPL Developmental Ephemeris (140) */
 
-/*                    20    DE-142    JPL Developmental Ephemeris (142) */
+/*                 20    DE-142    JPL Developmental Ephemeris (142) */
 
-/*                    21    DE-143    JPL Developmental Ephemeris (143) */
+/*                 21    DE-143    JPL Developmental Ephemeris (143) */
 
 /* $ Detailed_Output */
 
-/*     ROTAB       is the rotation which, when applied to a vector v */
-/*                 in reference frame A, */
-/*                    _            _ */
-/*                    v  = (ROTAB) v */
-/*                     B            A */
+/*     ROTAB    is the rotation which, when applied to a vector v */
+/*              in reference frame A, */
+/*                 _            _ */
+/*                 v  = (ROTAB) v */
+/*                  B            A */
 
-/*                 yields the same vector in reference frame B. The */
-/*                 inverse rotation is performed by applying the */
-/*                 transpose, */
-/*                    _           T _ */
-/*                    v  = (ROTAB)  v */
-/*                     A             B */
+/*              yields the same vector in reference frame B. The */
+/*              inverse rotation is performed by applying the */
+/*              transpose, */
+/*                 _           T _ */
+/*                 v  = (ROTAB)  v */
+/*                  A             B */
 
 /* $ Parameters */
 
-/*      None. */
+/*     None. */
 
 /* $ Exceptions */
 
-/*     1) If either REFA or REFB is outside the range [1,MAXF], */
-/*        where MAXF is the number of supported frames, the error */
-/*        SPICE(IRFNOTREC) is signalled. */
+/*     1)  If either REFA or REFB is outside the range [1,MAXF], */
+/*         where MAXF is the number of supported frames, the error */
+/*         SPICE(IRFNOTREC) is signaled. */
 
 /* $ Files */
 
@@ -817,16 +827,48 @@ L_irfrot:
 
 /* $ Literature_References */
 
-/*     See subroutine CHGIRF. */
+/*     [1]  J. Lieske, "Precession Matrix Based on IAU (1976) System of */
+/*          Astronomical Constants," Astron. Astrophys. 73, 282-284, */
+/*          1979. */
+
+/*     [2]  E. M. Standish, Jr., "Orientation of the JPL Ephemerides, */
+/*          DE 200/LE 200, to the Dynamical Equinox of J2000," Astron. */
+/*          Astrophys. 114, 297-302, 1982. */
+
+/*     [3]  E. M. Standish, Jr., "Conversion of Ephemeris Coordinates */
+/*          from the B1950 System to the J2000 System," JPL IOM */
+/*          314.6-581, 24 June 1985. */
+
+/*     [4]  E. M. Standish, Jr., "The Equinox Offsets of the JPL */
+/*          Ephemeris," JPL IOM 314.6-929, 26 February 1988. */
+
+/*     [5]  J. Lieske, "Expressions for the Precession Quantities Based */
+/*          upon the IAU (1976) System of Astronomical Constants," */
+/*          Astron. Astrophys. 58, 1-16, 1977. */
+
+/*     [6]  L. Bass and R. Cesarone, "Mars Observer Planetary Constants */
+/*          and Models," JPL D-3444, November 1990. */
+
+/*     [7]  P. Kenneth Seidelmann (Ed.), "Explanatory Supplement to the */
+/*          Astronomical Almanac," University Science Books, 1992. */
 
 /* $ Author_and_Institution */
 
-/*     B.V. Semenov    (JPL) */
-/*     W.L. Taber      (JPL) */
-/*     I.M. Underwood  (JPL) */
-/*     E.D. Wright     (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 4.4.0, 17-JUN-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. Corrected */
+/*        argument name in $Brief_I/O section: ROTAB was MATRIX. Added */
+/*        $Literature_References. */
 
 /* -    SPICELIB Version 4.3.0, 24-SEP-2013 (BVS) */
 
@@ -839,7 +881,7 @@ L_irfrot:
 /* -    SPICELIB Version 4.2.0, 10-APR-1997 (WLT) */
 
 /*        A descriptive diagnostic was added to the entry points */
-/*        IRFROT and IRFDEF.  Before they simply signalled the error */
+/*        IRFROT and IRFDEF. Before they simply signaled the error */
 /*        with no diagnostic. */
 
 /* -    SPICELIB Version 4.1.0, 14-OCT-1996 (WLT) */
@@ -864,7 +906,7 @@ L_irfrot:
 /*        the matrix given in [1]. */
 
 /*        The frame MARSIAU was added to the list */
-/*        of recognized frames.  This is the standard mars */
+/*        of recognized frames. This is the standard mars */
 /*        referenced inertial frame used by the Mars Observer */
 /*        project. */
 
@@ -910,38 +952,38 @@ L_irfrot:
 	for (i__ = 1; i__ <= 21; ++i__) {
 	    rotate_(&c_b6, &c__1, &trans[(i__1 = i__ * 9 - 9) < 189 && 0 <= 
 		    i__1 ? i__1 : s_rnge("trans", i__1, "chgirf_", (ftnlen)
-		    882)]);
+		    930)]);
 	    for (j = wdcnt_(defs + ((i__1 = i__ - 1) < 21 && 0 <= i__1 ? i__1 
-		    : s_rnge("defs", i__1, "chgirf_", (ftnlen)884)) * 80, (
+		    : s_rnge("defs", i__1, "chgirf_", (ftnlen)932)) * 80, (
 		    ftnlen)80); j >= 2; j += -2) {
 		nthwd_(defs + ((i__1 = i__ - 1) < 21 && 0 <= i__1 ? i__1 : 
-			s_rnge("defs", i__1, "chgirf_", (ftnlen)886)) * 80, &
+			s_rnge("defs", i__1, "chgirf_", (ftnlen)934)) * 80, &
 			j, word, &loc, (ftnlen)80, (ftnlen)25);
 		nparsi_(word, &axis, error, &p, (ftnlen)25, (ftnlen)25);
 		i__2 = j - 1;
 		nthwd_(defs + ((i__1 = i__ - 1) < 21 && 0 <= i__1 ? i__1 : 
-			s_rnge("defs", i__1, "chgirf_", (ftnlen)889)) * 80, &
+			s_rnge("defs", i__1, "chgirf_", (ftnlen)937)) * 80, &
 			i__2, word, &loc, (ftnlen)80, (ftnlen)25);
 		nparsd_(word, &angle, error, &p, (ftnlen)25, (ftnlen)25);
 		convrt_(&angle, "ARCSECONDS", "RADIANS", &radang, (ftnlen)10, 
 			(ftnlen)7);
 		rotmat_(&trans[(i__1 = i__ * 9 - 9) < 189 && 0 <= i__1 ? i__1 
-			: s_rnge("trans", i__1, "chgirf_", (ftnlen)894)], &
+			: s_rnge("trans", i__1, "chgirf_", (ftnlen)942)], &
 			radang, &axis, tmpmat);
 		moved_(tmpmat, &c__9, &trans[(i__1 = i__ * 9 - 9) < 189 && 0 
 			<= i__1 ? i__1 : s_rnge("trans", i__1, "chgirf_", (
-			ftnlen)895)]);
+			ftnlen)943)]);
 	    }
 	    b = isrchc_(bases + (((i__1 = i__ - 1) < 21 && 0 <= i__1 ? i__1 : 
-		    s_rnge("bases", i__1, "chgirf_", (ftnlen)899)) << 4), &
+		    s_rnge("bases", i__1, "chgirf_", (ftnlen)947)) << 4), &
 		    i__, frames, (ftnlen)16, (ftnlen)16);
 	    mxm_(&trans[(i__1 = i__ * 9 - 9) < 189 && 0 <= i__1 ? i__1 : 
-		    s_rnge("trans", i__1, "chgirf_", (ftnlen)901)], &trans[(
+		    s_rnge("trans", i__1, "chgirf_", (ftnlen)949)], &trans[(
 		    i__2 = b * 9 - 9) < 189 && 0 <= i__2 ? i__2 : s_rnge(
-		    "trans", i__2, "chgirf_", (ftnlen)901)], tmpmat);
+		    "trans", i__2, "chgirf_", (ftnlen)949)], tmpmat);
 	    moved_(tmpmat, &c__9, &trans[(i__1 = i__ * 9 - 9) < 189 && 0 <= 
 		    i__1 ? i__1 : s_rnge("trans", i__1, "chgirf_", (ftnlen)
-		    902)]);
+		    950)]);
 	}
 	chkout_("IRFROT", (ftnlen)6);
 	ready = TRUE_;
@@ -990,9 +1032,9 @@ L_irfrot:
 	rotate_(&c_b6, &c__1, rotab);
     } else {
 	mxmt_(&trans[(i__1 = *refb * 9 - 9) < 189 && 0 <= i__1 ? i__1 : 
-		s_rnge("trans", i__1, "chgirf_", (ftnlen)963)], &trans[(i__2 =
-		 *refa * 9 - 9) < 189 && 0 <= i__2 ? i__2 : s_rnge("trans", 
-		i__2, "chgirf_", (ftnlen)963)], rotab);
+		s_rnge("trans", i__1, "chgirf_", (ftnlen)1011)], &trans[(i__2 
+		= *refa * 9 - 9) < 189 && 0 <= i__2 ? i__2 : s_rnge("trans", 
+		i__2, "chgirf_", (ftnlen)1011)], rotab);
     }
     return 0;
 /* $Procedure IRFNUM ( Inertial reference frame number ) */
@@ -1050,30 +1092,30 @@ L_irfnum:
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     NAME       I   Name of standard inertial reference frame. */
 /*     INDEX      O   Index of frame. */
 
 /* $ Detailed_Input */
 
-/*     NAME        is the name of one of the standard inertial */
-/*                 reference frames supported by IRFROT, or */
-/*                 'DEFAULT'. */
+/*     NAME     is the name of one of the standard inertial */
+/*              reference frames supported by IRFROT, or */
+/*              'DEFAULT'. */
 
 /* $ Detailed_Output */
 
-/*     INDEX       is the index of the frame specified by NAME. */
+/*     INDEX    is the index of the frame specified by NAME. */
 
 /* $ Parameters */
 
-/*      None. */
+/*     None. */
 
 /* $ Exceptions */
 
-/*     1) If NAME is not recognized, INDEX is zero. */
+/*     1)  If NAME is not recognized, INDEX is zero. */
 
-/*     2) If no default frame has been specified, INDEX is zero. */
+/*     2)  If no default frame has been specified, INDEX is zero. */
 
 /* $ Files */
 
@@ -1109,16 +1151,47 @@ L_irfnum:
 
 /* $ Literature_References */
 
-/*     See subroutine CHGIRF. */
+/*     [1]  J. Lieske, "Precession Matrix Based on IAU (1976) System of */
+/*          Astronomical Constants," Astron. Astrophys. 73, 282-284, */
+/*          1979. */
+
+/*     [2]  E. M. Standish, Jr., "Orientation of the JPL Ephemerides, */
+/*          DE 200/LE 200, to the Dynamical Equinox of J2000," Astron. */
+/*          Astrophys. 114, 297-302, 1982. */
+
+/*     [3]  E. M. Standish, Jr., "Conversion of Ephemeris Coordinates */
+/*          from the B1950 System to the J2000 System," JPL IOM */
+/*          314.6-581, 24 June 1985. */
+
+/*     [4]  E. M. Standish, Jr., "The Equinox Offsets of the JPL */
+/*          Ephemeris," JPL IOM 314.6-929, 26 February 1988. */
+
+/*     [5]  J. Lieske, "Expressions for the Precession Quantities Based */
+/*          upon the IAU (1976) System of Astronomical Constants," */
+/*          Astron. Astrophys. 58, 1-16, 1977. */
+
+/*     [6]  L. Bass and R. Cesarone, "Mars Observer Planetary Constants */
+/*          and Models," JPL D-3444, November 1990. */
+
+/*     [7]  P. Kenneth Seidelmann (Ed.), "Explanatory Supplement to the */
+/*          Astronomical Almanac," University Science Books, 1992. */
 
 /* $ Author_and_Institution */
 
-/*     B.V. Semenov    (JPL) */
-/*     W.L. Taber      (JPL) */
-/*     I.M. Underwood  (JPL) */
-/*     E.D. Wright     (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 4.4.0, 17-JUN-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. Added */
+/*        $Literature_References. */
 
 /* -    SPICELIB Version 4.3.0, 24-SEP-2013 (BVS) */
 
@@ -1132,7 +1205,7 @@ L_irfnum:
 /* -    SPICELIB Version 4.2.0, 10-APR-1997 (WLT) */
 
 /*        A descriptive diagnostic was added to the entry points */
-/*        IRFROT and IRFDEF.  Before they simply signalled the error */
+/*        IRFROT and IRFDEF. Before they simply signaled the error */
 /*        with no diagnostic. */
 
 /* -    SPICELIB Version 4.1.0, 14-OCT-1996 (WLT) */
@@ -1157,7 +1230,7 @@ L_irfnum:
 /*        the matrix given in [1]. */
 
 /*        The frame MARSIAU was added to the list */
-/*        of recognized frames.  This is the standard mars */
+/*        of recognized frames. This is the standard mars */
 /*        referenced inertial frame used by the Mars Observer */
 /*        project. */
 
@@ -1252,27 +1325,27 @@ L_irfnam:
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     INDEX      I   Index of standard inertial reference frame. */
 /*     NAME       O   Name of frame. */
 
 /* $ Detailed_Input */
 
-/*     INDEX       is the index of one of the standard inertial */
-/*                 reference frames supported by IRFROT. */
+/*     INDEX    is the index of one of the standard inertial */
+/*              reference frames supported by IRFROT. */
 
 /* $ Detailed_Output */
 
-/*     NAME        is the name of the frame specified by INDEX. */
+/*     NAME     is the name of the frame specified by INDEX. */
 
 /* $ Parameters */
 
-/*      None. */
+/*     None. */
 
 /* $ Exceptions */
 
-/*     1) If INDEX is not the index of a supported frame, NAME is blank. */
+/*     1)  If INDEX is not the index of a supported frame, NAME is blank. */
 
 /* $ Files */
 
@@ -1308,15 +1381,46 @@ L_irfnam:
 
 /* $ Literature_References */
 
-/*     See subroutine CHGIRF. */
+/*     [1]  J. Lieske, "Precession Matrix Based on IAU (1976) System of */
+/*          Astronomical Constants," Astron. Astrophys. 73, 282-284, */
+/*          1979. */
+
+/*     [2]  E. M. Standish, Jr., "Orientation of the JPL Ephemerides, */
+/*          DE 200/LE 200, to the Dynamical Equinox of J2000," Astron. */
+/*          Astrophys. 114, 297-302, 1982. */
+
+/*     [3]  E. M. Standish, Jr., "Conversion of Ephemeris Coordinates */
+/*          from the B1950 System to the J2000 System," JPL IOM */
+/*          314.6-581, 24 June 1985. */
+
+/*     [4]  E. M. Standish, Jr., "The Equinox Offsets of the JPL */
+/*          Ephemeris," JPL IOM 314.6-929, 26 February 1988. */
+
+/*     [5]  J. Lieske, "Expressions for the Precession Quantities Based */
+/*          upon the IAU (1976) System of Astronomical Constants," */
+/*          Astron. Astrophys. 58, 1-16, 1977. */
+
+/*     [6]  L. Bass and R. Cesarone, "Mars Observer Planetary Constants */
+/*          and Models," JPL D-3444, November 1990. */
+
+/*     [7]  P. Kenneth Seidelmann (Ed.), "Explanatory Supplement to the */
+/*          Astronomical Almanac," University Science Books, 1992. */
 
 /* $ Author_and_Institution */
 
-/*     W.L. Taber      (JPL) */
-/*     I.M. Underwood  (JPL) */
-/*     E.D. Wright     (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 4.3.0, 17-JUN-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. Added */
+/*        $Literature_References. */
 
 /* -    SPICELIB Version 4.2.1, 04-JAN-2002 (EDW) */
 
@@ -1325,7 +1429,7 @@ L_irfnam:
 /* -    SPICELIB Version 4.2.0, 10-APR-1997 (WLT) */
 
 /*        A descriptive diagnostic was added to the entry points */
-/*        IRFROT and IRFDEF.  Before they simply signalled the error */
+/*        IRFROT and IRFDEF. Before they simply signaled the error */
 /*        with no diagnostic. */
 
 /* -    SPICELIB Version 4.1.0, 14-OCT-1996 (WLT) */
@@ -1350,7 +1454,7 @@ L_irfnam:
 /*        the matrix given in [1]. */
 
 /*        The frame MARSIAU was added to the list */
-/*        of recognized frames.  This is the standard mars */
+/*        of recognized frames. This is the standard mars */
 /*        referenced inertial frame used by the Mars Observer */
 /*        project. */
 
@@ -1385,7 +1489,7 @@ L_irfnam:
 	s_copy(name__, " ", name_len, (ftnlen)1);
     } else {
 	s_copy(name__, frames + (((i__1 = *index - 1) < 21 && 0 <= i__1 ? 
-		i__1 : s_rnge("frames", i__1, "chgirf_", (ftnlen)1376)) << 4),
+		i__1 : s_rnge("frames", i__1, "chgirf_", (ftnlen)1488)) << 4),
 		 name_len, (ftnlen)16);
     }
     chkout_("IRFNAM", (ftnlen)6);
@@ -1444,14 +1548,14 @@ L_irfdef:
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     INDEX      I   Index of default frame. */
 
 /* $ Detailed_Input */
 
-/*     INDEX       is the index of one of the standard inertial */
-/*                 reference frames supported by IRFROT. */
+/*     INDEX    is the index of one of the standard inertial */
+/*              reference frames supported by IRFROT. */
 
 /* $ Detailed_Output */
 
@@ -1463,9 +1567,9 @@ L_irfdef:
 
 /* $ Exceptions */
 
-/*     1) If INDEX is outside the range [1,MAXF], where MAXF is the */
-/*        number of supported frames, the error SPICE(IRFNOTREC) is */
-/*        signalled. */
+/*     1)  If INDEX is outside the range [1,MAXF], where MAXF is the */
+/*         number of supported frames, the error SPICE(IRFNOTREC) is */
+/*         signaled. */
 
 /* $ Files */
 
@@ -1510,15 +1614,46 @@ L_irfdef:
 
 /* $ Literature_References */
 
-/*     See subroutine CHGIRF. */
+/*     [1]  J. Lieske, "Precession Matrix Based on IAU (1976) System of */
+/*          Astronomical Constants," Astron. Astrophys. 73, 282-284, */
+/*          1979. */
+
+/*     [2]  E. M. Standish, Jr., "Orientation of the JPL Ephemerides, */
+/*          DE 200/LE 200, to the Dynamical Equinox of J2000," Astron. */
+/*          Astrophys. 114, 297-302, 1982. */
+
+/*     [3]  E. M. Standish, Jr., "Conversion of Ephemeris Coordinates */
+/*          from the B1950 System to the J2000 System," JPL IOM */
+/*          314.6-581, 24 June 1985. */
+
+/*     [4]  E. M. Standish, Jr., "The Equinox Offsets of the JPL */
+/*          Ephemeris," JPL IOM 314.6-929, 26 February 1988. */
+
+/*     [5]  J. Lieske, "Expressions for the Precession Quantities Based */
+/*          upon the IAU (1976) System of Astronomical Constants," */
+/*          Astron. Astrophys. 58, 1-16, 1977. */
+
+/*     [6]  L. Bass and R. Cesarone, "Mars Observer Planetary Constants */
+/*          and Models," JPL D-3444, November 1990. */
+
+/*     [7]  P. Kenneth Seidelmann (Ed.), "Explanatory Supplement to the */
+/*          Astronomical Almanac," University Science Books, 1992. */
 
 /* $ Author_and_Institution */
 
-/*     W.L. Taber      (JPL) */
-/*     I.M. Underwood  (JPL) */
-/*     E.D. Wright     (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 4.3.0, 17-JUN-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. Added */
+/*        $Literature_References. */
 
 /* -    SPICELIB Version 4.2.1, 04-JAN-2002 (EDW) */
 
@@ -1527,7 +1662,7 @@ L_irfdef:
 /* -    SPICELIB Version 4.2.0, 10-APR-1997 (WLT) */
 
 /*        A descriptive diagnostic was added to the entry points */
-/*        IRFROT and IRFDEF.  Before they simply signalled the error */
+/*        IRFROT and IRFDEF. Before they simply signaled the error */
 /*        with no diagnostic. */
 
 /* -    SPICELIB Version 4.1.0, 14-OCT-1996 (WLT) */
@@ -1552,7 +1687,7 @@ L_irfdef:
 /*        the matrix given in [1]. */
 
 /*        The frame MARSIAU was added to the list */
-/*        of recognized frames.  This is the standard mars */
+/*        of recognized frames. This is the standard mars */
 /*        referenced inertial frame used by the Mars Observer */
 /*        project. */
 

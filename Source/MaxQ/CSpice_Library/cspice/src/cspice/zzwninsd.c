@@ -137,7 +137,7 @@ static integer c__3 = 3;
 /*      RIGHT       are the left and right endpoints of the interval */
 /*                  to be inserted. */
 
-/*      CONTEXT     a context/explaination string to append to the */
+/*      CONTEXT     a context/explanation string to append to the */
 /*                  long error message if an error signals. The caller */
 /*                  need not include a message. A single blank, ' ', */
 /*                  represents no message. */
@@ -157,10 +157,10 @@ static integer c__3 = 3;
 /* $ Exceptions */
 
 /*     1) If LEFT is greater than RIGHT, the error SPICE(BADENDPOINTS) is */
-/*        signalled. */
+/*        signaled. */
 
 /*     2) If the insertion of the interval causes an excess of elements, */
-/*        the error SPICE(WINDOWEXCESS) is signalled. */
+/*        the error SPICE(WINDOWEXCESS) is signaled. */
 
 /* $ Files */
 
@@ -220,6 +220,10 @@ static integer c__3 = 3;
 
 /* $ Version */
 
+/* -     SPICELIB Version 1.1.1, 05-OCT-2021 (NJB) */
+
+/*         Corrected typos in long error messages and in comments. */
+
 /* -     SPICELIB Version 1.0.0, 03-MAR-2009 (EDW) */
 
 /*         This routine is a copy of the SPICELIB WNINSD routine */
@@ -228,7 +232,7 @@ static integer c__3 = 3;
 /* -& */
 /* $ Index_Entries */
 
-/*     insert an interval into a d.p. window, optional context string */
+/*     insert interval into d.p. window, with context string */
 
 /* -& */
 
@@ -238,7 +242,7 @@ static integer c__3 = 3;
 /*     Local Variables */
 
 
-/*     Local paramters */
+/*     Local parameters */
 
 
 /*     Standard SPICE error handling. */
@@ -258,8 +262,8 @@ static integer c__3 = 3;
 /*     Signal that an error has occurred and set the error message. */
 
     if (*left > *right) {
-	s_copy(msg, "Left endpoint greather-than right. Left endpoint was #1"
-		". Right endpoint was #2.", (ftnlen)1840, (ftnlen)79);
+	s_copy(msg, "Left endpoint greater-than right. Left endpoint was #1."
+		" Right endpoint was #2.", (ftnlen)1840, (ftnlen)78);
 /* Writing concatenation */
 	i__1[0] = lastnb_(msg, (ftnlen)1840), a__1[0] = msg;
 	i__1[1] = 1, a__1[1] = " ";

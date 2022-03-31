@@ -665,7 +665,7 @@ integer zzeksz05_(integer *handle, integer *segdsc, integer *coldsc, integer *
 /*         routine. */
 
 /*     3)  If the column index contained in the input column descriptor */
-/*         is out of range, the error SPICE(INVALIDINDEX) is signalled. */
+/*         is out of range, the error SPICE(INVALIDINDEX) is signaled. */
 
 /* $ Files */
 
@@ -694,6 +694,10 @@ integer zzeksz05_(integer *handle, integer *segdsc, integer *coldsc, integer *
 /*     N.J. Bachman   (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.0.1, 03-OCT-2021 (NJB) */
+
+/*        Corrected typos in comments. */
 
 /* -    Beta Version 1.0.0, 18-OCT-1995 (NJB) */
 

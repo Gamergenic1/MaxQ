@@ -10,7 +10,7 @@
 static integer c__2 = 2;
 static integer c__6 = 6;
 
-/* $Procedure      CKPFS ( C-kernel, get pointing from segment ) */
+/* $Procedure CKPFS ( C-kernel, get pointing from segment ) */
 /* Subroutine */ int ckpfs_(integer *handle, doublereal *descr, doublereal *
 	sclkdp, doublereal *tol, logical *needav, doublereal *cmat, 
 	doublereal *av, doublereal *clkout, logical *found)
@@ -275,82 +275,81 @@ static integer c__6 = 6;
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     I   CK file handle. */
 /*     DESCR      I   Segment descriptor. */
 /*     SCLKDP     I   Spacecraft clock time. */
 /*     TOL        I   Time tolerance. */
-/*     NEEDAV     I   True when angular velocity data is requested. */
+/*     NEEDAV     I   .TRUE. when angular velocity data is requested. */
 /*     CMAT       O   C-matrix. */
 /*     AV         O   Angular velocity vector. */
 /*     CLKOUT     O   Output spacecraft clock time. */
-/*     FOUND      O   True when requested pointing is available. */
+/*     FOUND      O   .TRUE. when requested pointing is available. */
 
 /* $ Detailed_Input */
 
-/*     HANDLE     is the handle of the binary CK file containing the */
-/*                desired segment. The file should have been opened */
-/*                for read access, either by CKLPF or DAFOPR. */
+/*     HANDLE   is the handle of the binary CK file containing the */
+/*              desired segment. The file should have been opened */
+/*              for read access, either by CKLPF or DAFOPR. */
 
-/*     DESCR      is the packed descriptor of the segment. */
+/*     DESCR    is the packed descriptor of the segment. */
 
-/*     SCLKDP     is the encoded spacecraft clock time for which */
-/*                pointing is desired. */
+/*     SCLKDP   is the encoded spacecraft clock time for which */
+/*              pointing is desired. */
 
-/*     TOL        is a time tolerance, measured in the same units as */
-/*                encoded spacecraft clock.  The C-matrix returned by */
-/*                CKPFS is the one whose time is closest to SCLKDP and */
-/*                within TOL units of SCLKDP. */
+/*     TOL      is a time tolerance, measured in the same units as */
+/*              encoded spacecraft clock. The C-matrix returned by */
+/*              CKPFS is the one whose time is closest to SCLKDP and */
+/*              within TOL units of SCLKDP. */
 
-/*     NEEDAV     is true when angular velocity data is requested. */
-
+/*     NEEDAV   is .TRUE. when angular velocity data is requested. */
 
 /* $ Detailed_Output */
 
-/*     CMAT       is a rotation matrix that transforms the components of */
-/*                of a vector expressed in the reference frame given in */
-/*                the segment to components expressed in the instrument */
-/*                fixed frame at time CLKOUT. */
+/*     CMAT     is a rotation matrix that transforms the components of */
+/*              of a vector expressed in the reference frame given in */
+/*              the segment to components expressed in the instrument */
+/*              fixed frame at time CLKOUT. */
 
-/*                Thus, if a vector v has components x, y, z in the */
-/*                CK base frame, then v has components x', y', z' in */
-/*                the instrument fixed frame at time CLKOUT: */
+/*              Thus, if a vector v has components x, y, z in the */
+/*              CK base frame, then v has components x', y', z' in */
+/*              the instrument fixed frame at time CLKOUT: */
 
-/*                     [ x' ]     [          ] [ x ] */
-/*                     | y' |  =  |   CMAT   | | y | */
-/*                     [ z' ]     [          ] [ z ] */
+/*                   [ x' ]     [          ] [ x ] */
+/*                   | y' |  =  |   CMAT   | | y | */
+/*                   [ z' ]     [          ] [ z ] */
 
-/*                If the x', y', z' components are known, use the */
-/*                transpose of the C-matrix to determine x, y, z as */
-/*                follows. */
+/*              If the x', y', z' components are known, use the */
+/*              transpose of the C-matrix to determine x, y, z as */
+/*              follows. */
 
-/*                     [ x ]      [          ]T    [ x' ] */
-/*                     | y |  =   |   CMAT   |     | y' | */
-/*                     [ z ]      [          ]     [ z' ] */
-/*                             (Transpose of CMAT) */
+/*                   [ x ]      [          ]T    [ x' ] */
+/*                   | y |  =   |   CMAT   |     | y' | */
+/*                   [ z ]      [          ]     [ z' ] */
+/*                           (Transpose of CMAT) */
 
-/*     AV         is the angular velocity vector. This is returned only */
-/*                if it has been requested, as indicated by NEEDAV. In */
-/*                other words, if NEEDAV is true, then the pointing */
-/*                records in the segment must contain AV data. */
+/*     AV       is the angular velocity vector. This is returned only */
+/*              if it has been requested, as indicated by NEEDAV. In */
+/*              other words, if NEEDAV is .TRUE., then the pointing */
+/*              records in the segment must contain AV data. */
 
-/*                The angular velocity vector is the right-handed axis */
-/*                about which the reference frame tied to the instrument */
-/*                is instantaneously rotating at time CLKOUT. The */
-/*                magnitude of AV is the magnitude of the instantaneous */
-/*                velocity of the rotation, in radians per second. */
+/*              The angular velocity vector is the right-handed axis */
+/*              about which the reference frame tied to the instrument */
+/*              is instantaneously rotating at time CLKOUT. The */
+/*              magnitude of AV is the magnitude of the instantaneous */
+/*              velocity of the rotation, in radians per second. */
 
-/*                The components of AV are given relative to the */
-/*                reference frame specified in the segment descriptor. */
+/*              The components of AV are given relative to the */
+/*              reference frame specified in the segment descriptor. */
 
-/*     CLKOUT     is the encoded spacecraft clock time associated with */
-/*                the returned C-matrix and, optionally, the returned */
-/*                angular velocity vector. */
+/*     CLKOUT   is the encoded spacecraft clock time associated with */
+/*              the returned C-matrix and, optionally, the returned */
+/*              angular velocity vector. */
 
-/*     FOUND      is true if a C-matrix and an angular velocity vector */
-/*                (if requested) were found to satisfy the pointing */
-/*                request. FOUND will be false otherwise. */
+/*     FOUND    is .TRUE. if a C-matrix and an angular velocity vector */
+/*              (if requested) were found to satisfy the pointing */
+/*              request. FOUND will be false otherwise. */
 
 /* $ Parameters */
 
@@ -363,17 +362,18 @@ static integer c__6 = 6;
 /*         signaled. */
 
 /*     2)  If the specified handle does not belong to any file that is */
-/*         currently known to be open, an error is diagnosed by a */
-/*         routine that this routine calls. */
+/*         currently known to be open, an error is signaled by a routine */
+/*         in the call tree of this routine. */
 
 /*     3)  If DESCR is not a valid, packed descriptor of a segment in */
 /*         the CK file specified by HANDLE, the results of this routine */
 /*         are unpredictable. */
 
-/*     4)  If TOL is negative, FOUND is false. */
+/*     4)  If TOL is negative, FOUND is .FALSE. */
 
-/*     5)  If NEEDAV is true, but the segment doesn't contain AV data, */
-/*         an error is signaled by a routine that this routine calls. */
+/*     5)  If NEEDAV is .TRUE., but the segment doesn't contain AV data, */
+/*         an error is signaled by a routine in the call tree of this */
+/*         routine. */
 
 /* $ Files */
 
@@ -385,7 +385,7 @@ static integer c__6 = 6;
 /*     segment data type is supported by two routines: */
 
 /*        CKRnn   which reads a single logical pointing record from a */
-/*                segment of type nn.  (A logical record is defined as */
+/*                segment of type nn. (A logical record is defined as */
 /*                a collection of numbers sufficient to determine the */
 /*                C-matrix, and optionally the angular velocity vector, */
 /*                at the input time.) */
@@ -462,11 +462,10 @@ static integer c__6 = 6;
 
 /*           END DO */
 
-
 /* $ Restrictions */
 
-/*     A C-kernel file should have been loaded by either CKLPF */
-/*     or DAFOPR. */
+/*     1)  A C-kernel file should have been loaded by either CKLPF */
+/*         or DAFOPR. */
 
 /* $ Literature_References */
 
@@ -474,13 +473,21 @@ static integer c__6 = 6;
 
 /* $ Author_and_Institution */
 
-/*     J.M. Lynch     (JPL) */
-/*     B.V. Semenov   (JPL) */
-/*     M.J. Spencer   (JPL) */
-/*     R.E. Thurman   (JPL) */
-/*     I.M. Underwood (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     J.M. Lynch         (JPL) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     R.E. Thurman       (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 6.1.0, 12-AUG-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 6.0.0, 24-MAR-2014 (NJB) */
 
@@ -527,12 +534,12 @@ static integer c__6 = 6;
 /* -& */
 /* $ Index_Entries */
 
-/*     get pointing from ck segment */
+/*     get pointing from CK segment */
 
 /* -& */
 /* $ Revisions */
 
-/* -    SPICELIB Version 6.0.0, 01-FEB-2014 (NJB) */
+/* -    SPICELIB Version 6.0.0, 24-MAR-2014 (NJB) */
 
 /*        The routine was updated to handle data type 6 segments. */
 

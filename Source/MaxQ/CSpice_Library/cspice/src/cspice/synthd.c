@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      SYNTHD ( Return the Nth component of a symbol ) */
+/* $Procedure SYNTHD ( Return the Nth component of a symbol ) */
 /* Subroutine */ int synthd_(char *name__, integer *nth, char *tabsym, 
 	integer *tabptr, doublereal *tabval, doublereal *value, logical *
 	found, ftnlen name_len, ftnlen tabsym_len)
@@ -74,85 +74,87 @@
 /*     TABPTR, */
 /*     TABVAL     I   Components of the symbol table. */
 /*     VALUE      O   Nth value associated with the symbol. */
-/*     FOUND      O   True if the Nth value of the symbol exists, false */
-/*                    if it does not. */
+/*     FOUND      O   .TRUE. if the Nth value of the symbol exists. */
 
 /* $ Detailed_Input */
 
-/*     NAME       is the name of the symbol whose Nth component is to be */
-/*                returned. If NAME is not in the symbol table, FOUND is */
-/*                false. */
+/*     NAME     is the name of the symbol whose Nth component is to be */
+/*              returned. If NAME is not in the symbol table, FOUND is */
+/*              .FALSE. */
 
-/*     NTH        is the index of the component to be returned. If the */
-/*                value of NTH is out of range ( NTH < 1 or NTH is */
-/*                greater than the dimension of the symbol ) FOUND is */
-/*                false. */
+/*     NTH      is the index of the component to be returned. If the */
+/*              value of NTH is out of range ( NTH < 1 or NTH is */
+/*              greater than the dimension of the symbol ) FOUND is */
+/*              .FALSE. */
 
 /*     TABSYM, */
 /*     TABPTR, */
-/*     TABVAL     are the components of a double precision symbol table. */
-/*                The symbol table is not modified by this subroutine. */
+/*     TABVAL   are the components of a double precision symbol table. */
+/*              The symbol table is not modified by this subroutine. */
 
 /* $ Detailed_Output */
 
-/*     VALUES     is the NTH component of the symbol NAME. */
+/*     VALUES   is the NTH component of the symbol NAME. */
 
-/*     FOUND      is true if NAME is in the symbol table and the NTH */
-/*                component of NAME exists.  Otherwise FOUND is false. */
+/*     FOUND    is .TRUE. if NAME is in the symbol table and the NTH */
+/*              component of NAME exists. Otherwise FOUND is .FALSE. */
 
 /* $ Parameters */
 
 /*     None. */
 
-/* $ Files */
-
-/*     None. */
-
 /* $ Exceptions */
+
+/*     1)  If there is an issue while reading the components of a double */
+/*         precision symbol table, an error is signaled by a routine in */
+/*         the call tree of this routine. This normally indicates that */
+/*         the double precision symbol table is corrupted. */
+
+/* $ Files */
 
 /*     None. */
 
 /* $ Particulars */
 
-/*     Two conditions will cause the value of FOUND to be false: */
+/*     Two conditions will cause the value of FOUND to be .FALSE.: */
 
-/*       1) The symbol NAME is not in the symbol table. */
+/*     1)  The symbol NAME is not in the symbol table. */
 
-/*       2) NTH is out of range ( NTH < 1 or NTH is greater than the */
-/*          dimension of the symbol ). */
+/*     2)  NTH is out of range ( NTH < 1 or NTH is greater than the */
+/*         dimension of the symbol ). */
 
 /* $ Examples */
 
 /*     The contents of the symbol table are: */
 
-/*        BODY4_POLE_RA -->    3.17681D2 */
-/*                             1.08D-1 */
-/*                             0.0D0 */
-/*        DELTA_T_A     -->    3.2184D1 */
-/*        K             -->    1.657D-3 */
-/*        MEAN_ANOM     -->    6.239996D0 */
-/*                             1.99096871D-7 */
-/*        ORBIT_ECC     -->    1.671D-2 */
+/*         BODY4_POLE_RA -->    3.17681D2 */
+/*                              1.08D-1 */
+/*                              0.0D0 */
+/*         DELTA_T_A     -->    3.2184D1 */
+/*         K             -->    1.657D-3 */
+/*         MEAN_ANOM     -->    6.239996D0 */
+/*                              1.99096871D-7 */
+/*         ORBIT_ECC     -->    1.671D-2 */
 
-/*     The calls, */
+/*      The calls, */
 
-/*     CALL SYNTHD ( 'MEAN_ANOM',     2, TABSYM, TABPTR, TABVAL, VALUE, */
-/*    .               FOUND                                             ) */
+/*      CALL SYNTHD ( 'MEAN_ANOM',   2, TABSYM, TABPTR, TABVAL, VALUE, */
+/*      .               FOUND                                          ) */
 
-/*     CALL SYNTHD ( 'BODY4_PRIME',   1, TABSYM, TABPTR, TABVAL, VALUE, */
-/*    .               FOUND                                             ) */
+/*      CALL SYNTHD ( 'BODY4_PRIME', 1, TABSYM, TABPTR, TABVAL, VALUE, */
+/*      .               FOUND                                          ) */
 
-/*     CALL SYNTHD ( 'ORBIT_ECC',    -5, TABSYM, TABPTR, TABVAL, VALUE, */
-/*    .               FOUND                                             ) */
+/*      CALL SYNTHD ( 'ORBIT_ECC',  -5, TABSYM, TABPTR, TABVAL, VALUE, */
+/*      .               FOUND                                          ) */
 
-/*     return the values of VALUE and FOUND corresponding to NAME and */
-/*     NTH: */
+/*      return the values of VALUE and FOUND corresponding to NAME and */
+/*      NTH: */
 
-/*     NAME            NTH           VALUE            FOUND */
-/*     ----------     -----     ----------------      ------- */
-/*     MEAN_ANOM        2        1.99096871D-7          TRUE */
-/*     BODY4_PRIME      1                              FALSE */
-/*     ORBIT_ECC       -5                              FALSE */
+/*         NAME            NTH           VALUE            FOUND */
+/*         ----------     -----     ----------------      ------- */
+/*         MEAN_ANOM        2        1.99096871D-7         .TRUE. */
+/*         BODY4_PRIME      1                             .FALSE. */
+/*         ORBIT_ECC       -5                             .FALSE. */
 
 /* $ Restrictions */
 
@@ -164,17 +166,26 @@
 
 /* $ Author_and_Institution */
 
-/*     H.A. Neilan     (JPL) */
-/*     I.M. Underwood  (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     H.A. Neilan        (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
 
-/* -     SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+/* -    SPICELIB Version 1.1.0, 16-AUG-2021 (JDR) */
 
-/*         Comment section for permuted index source lines was added */
-/*         following the header. */
+/*        Added IMPLICIT NONE statement. */
 
-/* -     SPICELIB Version 1.0.0, 31-JAN-1990 (IMU) (HAN) */
+/*        Edited the header to comply with NAIF standard. Added entry #1 */
+/*        in $Exceptions section. */
+
+/* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+
+/*        Comment section for permuted index source lines was added */
+/*        following the header. */
+
+/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (IMU) (HAN) */
 
 /* -& */
 /* $ Index_Entries */

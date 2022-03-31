@@ -701,7 +701,7 @@ static integer c__1 = 1;
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     I   Handle assigned to the opened DSK file. */
 /*     CENTER     I   Central body ID code. */
@@ -736,60 +736,60 @@ static integer c__1 = 1;
 
 /* $ Detailed_Input */
 
-/*     HANDLE      is the DAS file handle associated with a DSK file. */
-/*                 The file must be open for write access. */
+/*     HANDLE   is the DAS file handle associated with a DSK file. */
+/*              The file must be open for write access. */
 
-/*     CENTER      is the ID code of the body whose surface is described */
-/*                 by the input plate model. CENTER refers to an */
-/*                 ephemeris object. */
+/*     CENTER   is the ID code of the body whose surface is described */
+/*              by the input plate model. CENTER refers to an */
+/*              ephemeris object. */
 
-/*     SURFID      is the ID code of the surface described by the input */
-/*                 plate model. Multiple surfaces (for example, surfaces */
-/*                 having different resolutions) may be associated with */
-/*                 a given body. */
+/*     SURFID   is the ID code of the surface described by the input */
+/*              plate model. Multiple surfaces (for example, surfaces */
+/*              having different resolutions) may be associated with */
+/*              a given body. */
 
-/*     DCLASS      is the data class of the input data set. See the */
-/*                 INCLUDE file dskdsc.inc for values and meanings. */
+/*     DCLASS   is the data class of the input data set. See the */
+/*              INCLUDE file dskdsc.inc for values and meanings. */
 
-/*     FRAME       is the name of the reference frame with respect to */
-/*                 which the input data are expressed. */
+/*     FRAME    is the name of the reference frame with respect to */
+/*              which the input data are expressed. */
 
-/*     CORSYS      is the coordinate system in which the spatial coverage */
-/*                 of the input data is expressed. CORSYS is an integer */
-/*                 code. The supported values of CORPAR are */
+/*     CORSYS   is the coordinate system in which the spatial coverage */
+/*              of the input data is expressed. CORSYS is an integer */
+/*              code. The supported values of CORPAR are */
 
-/*                    Parameter name      Coordinate system */
-/*                    --------------      ----------------- */
-/*                    LATSYS              Planetocentric latitudinal */
-/*                    RECSYS              Rectangular (Cartesian) */
-/*                    PDTSYS              Planetodetic */
+/*                 Parameter name      Coordinate system */
+/*                 --------------      ----------------- */
+/*                 LATSYS              Planetocentric latitudinal */
+/*                 RECSYS              Rectangular (Cartesian) */
+/*                 PDTSYS              Planetodetic */
 
-/*                 See the INCLUDE file dskdsc.inc for parameter */
-/*                 declarations. */
+/*              See the INCLUDE file dskdsc.inc for parameter */
+/*              declarations. */
 
 
-/*     CORPAR      is an array of parameters associated with the input */
-/*                 coordinate system. */
+/*     CORPAR   is an array of parameters associated with the input */
+/*              coordinate system. */
 
-/*                 For latitudinal and rectangular coordinates, CORPAR */
-/*                 is ignored. */
+/*              For latitudinal and rectangular coordinates, CORPAR */
+/*              is ignored. */
 
-/*                 For planetodetic coordinates, the contents of CORPAR */
-/*                 are: */
+/*              For planetodetic coordinates, the contents of CORPAR */
+/*              are: */
 
-/*                    Element         Contents */
-/*                    ---------       ----------------------------------- */
-/*                    CORPAR(1)       Equatorial radius of reference */
-/*                                    spheroid. */
+/*                 Element         Contents */
+/*                 ---------       ----------------------------------- */
+/*                 CORPAR(1)       Equatorial radius of reference */
+/*                                 spheroid. */
 
-/*                    CORPAR(2)       Flattening coefficient. The polar */
-/*                                    radius of the reference spheroid */
-/*                                    is given by */
+/*                 CORPAR(2)       Flattening coefficient. The polar */
+/*                                 radius of the reference spheroid */
+/*                                 is given by */
 
-/*                                       CORPAR(1) * ( 1 - CORPAR(2) ) */
+/*                                    CORPAR(1) * ( 1 - CORPAR(2) ) */
 
-/*                    CORPAR(3)... */
-/*                    CORPAR(NSYPAR)  Unused. */
+/*                 CORPAR(3)... */
+/*                 CORPAR(NSYPAR)  Unused. */
 
 
 /*     MNCOR1, */
@@ -797,138 +797,132 @@ static integer c__1 = 1;
 /*     MNCOR2, */
 /*     MXCOR2, */
 /*     MNCOR3, */
-/*     MXCOR3      are, respectively, lower and upper bounds of */
-/*                 each of the coordinates of the input data, where the */
-/*                 coordinate system is defined by CORSYS and CORPAR. */
-/*                 These bounds define the region for which the segment */
-/*                 provides data. */
+/*     MXCOR3   are, respectively, lower and upper bounds of */
+/*              each of the coordinates of the input data, where the */
+/*              coordinate system is defined by CORSYS and CORPAR. */
+/*              These bounds define the region for which the segment */
+/*              provides data. */
 
-/*                 Distance units are km. Angular units are radians. */
+/*              Distance units are km. Angular units are radians. */
 
-/*                 The interpretation of these bounds depends on the data */
-/*                 class; see DCLASS above. */
+/*              The interpretation of these bounds depends on the data */
+/*              class; see DCLASS above. */
 
-/*                    Single-valued surfaces */
-/*                    ---------------------- */
+/*                 Single-valued surfaces */
+/*                 ---------------------- */
 
-/*                    If the segment has data class SVFCLS (see */
-/*                    dskdsc.inc), the segment defines a surface as a */
-/*                    single-valued function of its domain coordinates: */
-/*                    for example, it may define the radius of the */
-/*                    surface as a function of planetocentric longitude */
-/*                    and latitude, or Z as a function of X and Y. */
+/*                 If the segment has data class SVFCLS (see */
+/*                 dskdsc.inc), the segment defines a surface as a */
+/*                 single-valued function of its domain coordinates: */
+/*                 for example, it may define the radius of the */
+/*                 surface as a function of planetocentric longitude */
+/*                 and latitude, or Z as a function of X and Y. */
 
-/*                    In this case, the input data must cover a */
-/*                    rectangle in dimensions 1 and 2 of the input */
-/*                    coordinate system: the set of points */
+/*                 In this case, the input data must cover a */
+/*                 rectangle in dimensions 1 and 2 of the input */
+/*                 coordinate system: the set of points */
 
-/*                       R = { (x,y): MNCOR1 < x < MXCOR1; */
-/*                                    MNCOR2 < y < MXCOR2  } */
+/*                    R = { (x,y): MNCOR1 <= x <= MXCOR1; */
+/*                                 MNCOR2 <= y <= MXCOR2  } */
 
-/*                    must be completely covered by the input data. In */
-/*                    other words, for each point (x,y) of R, there must */
-/*                    be some plate containing a point whose first two */
-/*                    coordinates are (x,y). */
+/*                 must be completely covered by the input data. In */
+/*                 other words, for each point (x,y) of R, there must */
+/*                 be some plate containing a point whose first two */
+/*                 coordinates are (x,y). */
 
-/*                    The plate set may extend beyond the coordinate */
-/*                    range defined by the bounds on the domain. */
+/*                 The plate set may extend beyond the coordinate */
+/*                 range defined by the bounds on the domain. */
 
-/*                    Normally for single-valued surfaces, MNCOR3 and */
-/*                    MXCOR3 are the minimum and maximum values of the */
-/*                    function attained on the domain. */
-
-
-/*                    General surfaces */
-/*                    ---------------- */
-
-/*                    If the segment has data class GENCLS (see */
-/*                    dskdsc.inc), the segment simply contains a */
-/*                    collection of plates: no guarantees are made about */
-/*                    the topology of the surface. The coordinate bounds */
-/*                    simply indicate the spatial region for which the */
-/*                    segment provides data. */
-
-/*                    Note that shapes of small bodies such as asteroids */
-/*                    and comet nuclei may fall into the "general */
-/*                    surface" category. Surface features such as cliffs, */
-/*                    caves, and arches can prevent a surface from being */
-/*                    represented as a single-valued function of latitude */
-/*                    and longitude, for example. */
+/*                 Normally for single-valued surfaces, MNCOR3 and */
+/*                 MXCOR3 are the minimum and maximum values of the */
+/*                 function attained on the domain. */
 
 
-/*                 Longitude interpretation and restrictions */
-/*                 ----------------------------------------- */
+/*                 General surfaces */
+/*                 ---------------- */
 
-/*                 The following rules apply to longitudes provided in */
-/*                 the arguments */
+/*                 If the segment has data class GENCLS (see */
+/*                 dskdsc.inc), the segment simply contains a */
+/*                 collection of plates: no guarantees are made about */
+/*                 the topology of the surface. The coordinate bounds */
+/*                 simply indicate the spatial region for which the */
+/*                 segment provides data. */
 
-/*                    MNCOR1 */
-/*                    MXCOR1 */
-
-/*                 All angles have units of radians. The tolerance */
-/*                 ANGMRG is used for the comparisons shown below. */
-
-/*                    1) Longitudes must be in the range */
-
-/*                          -2*pi  :  2*pi */
-
-/*                       Values that are out of range by no more than */
-/*                       ANGMRG are bracketed to be in range. */
+/*                 Note that shapes of small bodies such as asteroids */
+/*                 and comet nuclei may fall into the "general */
+/*                 surface" category. Surface features such as cliffs, */
+/*                 caves, and arches can prevent a surface from being */
+/*                 represented as a single-valued function of latitude */
+/*                 and longitude, for example. */
 
 
-/*                    2) It is acceptable for the longitude bounds to be */
-/*                       out of order. If */
+/*              Longitude interpretation and restrictions */
+/*              ----------------------------------------- */
 
-/*                          MXCOR1 < MNCOR1 */
+/*              The following rules apply to longitudes provided in */
+/*              the arguments */
 
-/*                       then either MXCOR1 is treated by the DSK */
-/*                       subsystem as though it were MXCOR1 + 2*pi, or */
-/*                       MNCOR1 is treated as MNCOR1 - 2*pi: whichever */
-/*                       shift puts the bounds in the allowed range is */
-/*                       made. */
+/*                 MNCOR1 */
+/*                 MXCOR1 */
 
-/*                       The input longitude bounds must not be equal. */
-/*                       If the lower bound is greater than the upper */
-/*                       bound, the difference between the bounds must */
-/*                       not be an integer multiple of 2*pi. */
+/*              All angles have units of radians. The tolerance */
+/*              ANGMRG is used for the comparisons shown below. */
 
-/*                       Aside from any small changes made to move the */
-/*                       input values of MNCOR1 or MXCOR1 into range, */
-/*                       the values are stored in the DSK segment as is. */
+/*                 1) Longitudes must be in the range */
+
+/*                       -2*pi  :  2*pi */
+
+/*                    Values that are out of range by no more than */
+/*                    ANGMRG are bracketed to be in range. */
 
 
-/*                    3) MXCOR1 must not exceed MNCOR1 by more than 2*pi. */
-/*                       Values that are out of range by no more than */
-/*                       ANGMRG are bracketed to be in range. */
+/*                 2) It is acceptable for the longitude bounds to be */
+/*                    out of order. If */
+
+/*                       MXCOR1 < MNCOR1 */
+
+/*                    then either MXCOR1 is treated by the DSK */
+/*                    subsystem as though it were MXCOR1 + 2*pi, or */
+/*                    MNCOR1 is treated as MNCOR1 - 2*pi: whichever */
+/*                    shift puts the bounds in the allowed range is */
+/*                    made. */
+
+/*                    The input longitude bounds must not be equal. */
+/*                    If the lower bound is greater than the upper */
+/*                    bound, the difference between the bounds must */
+/*                    not be an integer multiple of 2*pi. */
+
+/*                 3) MXCOR1 must not exceed MNCOR1 by more than 2*pi. */
+/*                    Values that are out of range by no more than */
+/*                    ANGMRG are bracketed to be in range. */
 
 
 /*     FIRST, */
-/*     LAST        are the endpoints of the time interval over which */
-/*                 this data set is applicable. These times are */
-/*                 expressed as seconds past J2000 TDB. */
+/*     LAST     are the endpoints of the time interval over which */
+/*              this data set is applicable. These times are */
+/*              expressed as seconds past J2000 TDB. */
 
-/*     NV          is the number of vertices belonging to the plate */
-/*                 model. */
+/*     NV       is the number of vertices belonging to the plate */
+/*              model. */
 
-/*     VRTCES      is an array of coordinates of the vertices. */
-/*                 The Ith vertex occupies elements (1:3,I) of */
-/*                 this array. */
+/*     VRTCES   is an array of coordinates of the vertices. */
+/*              The Ith vertex occupies elements (1:3,I) of */
+/*              this array. */
 
-/*     NP          is the number of plates in the plate model. */
+/*     NP       is the number of plates in the plate model. */
 
-/*     PLATES      is an array representing the plates of the model. */
-/*                 The elements of PLATES are vertex indices. The vertex */
-/*                 indices of the Ith plate occupy elements (1:3,I) of */
-/*                 this array. */
+/*     PLATES   is an array representing the plates of the model. */
+/*              The elements of PLATES are vertex indices. The vertex */
+/*              indices of the Ith plate occupy elements (1:3,I) of */
+/*              this array. */
 
 /*     SPAIXD, */
-/*     SPAIXI      are, respectively, the double precision and integer */
-/*                 components of the spatial index of the segment. */
+/*     SPAIXI   are, respectively, the double precision and integer */
+/*              components of the spatial index of the segment. */
 
-/*                 It is strongly recommended that the helper routine */
-/*                 DSKMI2 be used to create these arrays. See the */
-/*                 Examples section below. */
-
+/*              It is strongly recommended that the helper routine */
+/*              DSKMI2 be used to create these arrays. See the */
+/*              $Examples section below. */
 
 /* $ Detailed_Output */
 
@@ -957,13 +951,13 @@ static integer c__1 = 1;
 
 /*            [ -2*pi - ANGMRG,   2*pi + ANGMRG ] */
 
-/*         the error SPICE(VALUEOUTOFRANGE) will be signaled. Longitudes */
+/*         the error SPICE(VALUEOUTOFRANGE) is signaled. Longitudes */
 /*         outside of the range by a smaller amount than ANGMRG will be */
 /*         truncated to lie in the interval [-2*pi, 2*pi]. */
 
 /*     4)  If the absolute value of the difference between the input */
 /*         maximum longitude and the minimum longitude is more than 2*pi */
-/*         + ANGMRG, the error SPICE(INVALIDLONEXTENT) will be signaled. */
+/*         + ANGMRG, the error SPICE(INVALIDLONEXTENT) is signaled. */
 /*         If either longitude bound exceeds the other by an amount */
 /*         between 2*pi and 2*pi+ANGMRG, the larger value will be */
 /*         truncated to the smaller value plus 2*pi. */
@@ -972,37 +966,35 @@ static integer c__1 = 1;
 
 /*            [ -pi/2 - ANGMRG,   pi/2 + ANGMRG ] */
 
-/*         the error SPICE(VALUEOUTOFRANGE) will be signaled. Latitudes */
+/*         the error SPICE(VALUEOUTOFRANGE) is signaled. Latitudes */
 /*         outside of the range by a smaller amount than ANGMRG will be */
 /*         truncated to lie in the interval [-pi/2, pi/2]. */
 
 /*     6)  If the coordinate system is latitudinal and the lower radius */
 /*         bound is negative, or if the upper radius bound is */
-/*         non-positive, the error SPICE(VALUEOUTOFRANGE) will be */
-/*         signaled. */
+/*         non-positive, the error SPICE(VALUEOUTOFRANGE) is signaled. */
 
 /*     7)  If the coordinate system is latitudinal or planetodetic and */
 /*         the bounds of the latitude, radius or altitude coordinate are */
-/*         out of order, the error SPICE(BOUNDSOUTOFORDER) will be */
-/*         signaled. */
+/*         out of order, the error SPICE(BOUNDSOUTOFORDER) is signaled. */
 
 /*     8)  If the coordinate system is latitudinal or planetodetic and */
 /*         the lower and upper bounds of the longitude, latitude, radius */
 /*         or altitude coordinate, respectively, are equal, the error */
-/*         SPICE(ZEROBOUNDSEXTENT) will be signaled. If the lower */
+/*         SPICE(ZEROBOUNDSEXTENT) is signaled. If the lower */
 /*         longitude bound is greater than the upper bound, and if the */
 /*         difference between the bounds is an integer multiple of 2*pi, */
-/*         the same error will be signaled. */
+/*         the same error is signaled. */
 
 /*     9)  If the coordinate system is planetodetic and the input */
 /*         equatorial radius is non-positive, the error */
-/*         SPICE(VALUEOUTOFRANGE) will be signaled. */
+/*         SPICE(VALUEOUTOFRANGE) is signaled. */
 
-/*    10)  If the coordinate system is planetodetic and the input */
+/*     10) If the coordinate system is planetodetic and the input */
 /*         flattening coefficient is greater than or equal to 1, the */
-/*         error SPICE(VALUEOUTOFRANGE) will be signaled. */
+/*         error SPICE(VALUEOUTOFRANGE) is signaled. */
 
-/*    11)  If the coordinate system is planetodetic, and if the minimum */
+/*     11) If the coordinate system is planetodetic, and if the minimum */
 /*         altitude is less than the maximum of */
 
 /*                    2           2 */
@@ -1010,48 +1002,46 @@ static integer c__1 = 1;
 
 /*         where A and B are the semi-major and semi-minor axis lengths */
 /*         of the reference ellipsoid, the error */
-/*         SPICE(DEGENERATESURFACE) will be signaled. */
+/*         SPICE(DEGENERATESURFACE) is signaled. */
 
-/*    12)  If the coordinate system is rectangular and any coordinate */
+/*     12) If the coordinate system is rectangular and any coordinate */
 /*         lower bound is greater than or equal to the corresponding */
-/*         upper bound, the error SPICE(BOUNDSOUTOFORDER) will be */
-/*         signaled. */
+/*         upper bound, the error SPICE(BOUNDSOUTOFORDER) is signaled. */
 
-/*    13)  If the coordinate system code is not recognized, the error */
-/*         SPICE(NOTSUPPORTED) will be signaled. */
-
-/*    14)  If any vertex index belonging to an input plate is outside */
-/*         of the range 1:NV, the error SPICE(BADVERTEXINDEX) will be */
-/*         signaled. */
-
-/*    15)  If NV is less than 1 or greater than MAXVRT, the error */
-/*         SPICE(VALUEOUTOFRANGE) is signaled. */
-
-/*    16)  If NP is less than 1 or greater than MAXPLT, the error */
-/*         SPICE(VALUEOUTOFRANGE) is signaled. */
-
-/*    17)  If any voxel grid extent is less than 1 or greater than */
-/*         MAXVOX, the error SPICE(VALUEOUTOFRANGE) is signaled. */
-
-/*    18)  If the voxel count is greater than MAXVOX, the error */
-/*         SPICE(VALUEOUTOFRANGE) is signaled. */
-
-/*    19)  If the coarse voxel count is less than 1 or greater than */
-/*         MAXCGR, the error SPICE(VALUEOUTOFRANGE) is signaled. */
-
-/*    20)  If the coarse voxel scale is less than 1 or more than */
-/*         the cube root of the fine voxel count, the error */
-/*         SPICE(VALUEOUTOFRANGE) will be signaled. */
-
-/*    21)  If the cube of the coarse voxel scale does not divide the */
-/*         fine voxel count evenly, the error SPICE(INCOMPATIBLESCALE) */
-/*         will be signaled. */
-
-/*    22)  If the input data class is not recognized, the error */
+/*     13) If the coordinate system code is not recognized, the error */
 /*         SPICE(NOTSUPPORTED) is signaled. */
 
-/*    23)  If an error occurs while writing the segment to the output */
-/*         DSK file, the error will be diagnosed by routines in the call */
+/*     14) If any vertex index belonging to an input plate is outside of */
+/*         the range 1:NV, the error SPICE(BADVERTEXINDEX) is signaled. */
+
+/*     15) If NV is less than 1 or greater than MAXVRT, the error */
+/*         SPICE(VALUEOUTOFRANGE) is signaled. */
+
+/*     16) If NP is less than 1 or greater than MAXPLT, the error */
+/*         SPICE(VALUEOUTOFRANGE) is signaled. */
+
+/*     17) If any voxel grid extent is less than 1 or greater than */
+/*         MAXVOX, the error SPICE(VALUEOUTOFRANGE) is signaled. */
+
+/*     18) If the voxel count is greater than MAXVOX, the error */
+/*         SPICE(VALUEOUTOFRANGE) is signaled. */
+
+/*     19) If the coarse voxel count is less than 1 or greater than */
+/*         MAXCGR, the error SPICE(VALUEOUTOFRANGE) is signaled. */
+
+/*     20) If the coarse voxel scale is less than 1 or more than */
+/*         the cube root of the fine voxel count, the error */
+/*         SPICE(VALUEOUTOFRANGE) is signaled. */
+
+/*     21) If the cube of the coarse voxel scale does not divide the */
+/*         fine voxel count evenly, the error SPICE(INCOMPATIBLESCALE) */
+/*         is signaled. */
+
+/*     22) If the input data class is not recognized, the error */
+/*         SPICE(NOTSUPPORTED) is signaled. */
+
+/*     23) If an error occurs while writing the segment to the output */
+/*         DSK file, the error is signaled by a routine in the call */
 /*         tree of this routine. */
 
 /* $ Files */
@@ -1104,16 +1094,16 @@ static integer c__1 = 1;
 
 /*     There are two voxel scales: */
 
-/*        - The coarse voxel scale is the integer ratio of the */
-/*          edge length of a coarse voxel to the edge length of */
-/*          a fine voxel */
+/*     -  The coarse voxel scale is the integer ratio of the */
+/*        edge length of a coarse voxel to the edge length of */
+/*        a fine voxel */
 
-/*        - The fine voxel scale is the double precision ratio */
-/*          of the edge length of a fine voxel to the average */
-/*          extent of the plates in the input plate set. "Extents" */
-/*          of a plate are the absolute values of the differences */
-/*          between the respective maximum and minimum X, Y, and Z */
-/*          coordinates of the plate's vertices. */
+/*     -  The fine voxel scale is the double precision ratio */
+/*        of the edge length of a fine voxel to the average */
+/*        extent of the plates in the input plate set. "Extents" */
+/*        of a plate are the absolute values of the differences */
+/*        between the respective maximum and minimum X, Y, and Z */
+/*        coordinates of the plate's vertices. */
 
 /*     Voxel scales determine the resolution of the voxel grid. */
 /*     Voxel scales must be chosen to satisfy size constraints and */
@@ -1150,9 +1140,7 @@ static integer c__1 = 1;
 
 /*        In general, FS should not smaller than 1. */
 
-
 /* $ Examples */
-
 
 /*     The numerical results shown for this example may differ across */
 /*     platforms. The results depend on the SPICE kernels used as */
@@ -1165,285 +1153,323 @@ static integer c__1 = 1;
 /*        realistic example, but it serves to demonstrate use of */
 /*        the supported coordinate systems. */
 
-/*        For simplicity, use an existing DSK file to provide the */
+/*        Use the DSK kernel below to provide, for simplicity, the */
 /*        input plate and vertex data. The selected input file has one */
 /*        segment. */
 
+/*           phobos_3_3.bds */
 
 
-/*     C */
-/*     C     Example program for DSKW02, DSKMI2, and DSKRB2 */
-/*     C */
-/*     C        Create a three-segment DSK file using plate model data */
-/*     C        for Phobos. Use latitudinal, rectangular, and */
-/*     C        planetodetic coordinates in the respective segments. */
-/*     C */
-/*     C        For simplicity, use an existing DSK file to provide the */
-/*     C        input plate and vertex data. The selected input file has */
-/*     C        one segment. */
-/*     C */
-/*     C           Version 1.0.0 22-JAN-2016 (NJB) */
-/*     C */
-/*           PROGRAM EX1 */
-/*           IMPLICIT NONE */
+/*        Example code begins here. */
 
-/*           INCLUDE 'dla.inc' */
-/*           INCLUDE 'dskdsc.inc' */
-/*           INCLUDE 'dsk02.inc' */
 
-/*     C */
-/*     C     SPICELIB functions */
-/*     C */
-/*           DOUBLE PRECISION      JYEAR */
-/*           DOUBLE PRECISION      PI */
-/*     C */
-/*     C     Local parameters */
-/*     C */
-/*           INTEGER               FRNMLN */
-/*           PARAMETER           ( FRNMLN = 32 ) */
+/*        C */
+/*        C     Example program for DSKW02, DSKMI2, and DSKRB2 */
+/*        C */
+/*        C        Create a three-segment DSK file using plate model */
+/*        C        data for Phobos. Use latitudinal, rectangular, and */
+/*        C        planetodetic coordinates in the respective segments. */
+/*        C */
+/*        C        For simplicity, use an existing DSK file to provide */
+/*        C        the input plate and vertex data. The selected input */
+/*        C        file has one segment. */
+/*        C */
+/*        C           Version 1.0.0 22-JAN-2016 (NJB) */
+/*        C */
+/*              PROGRAM DSKW02_EX1 */
+/*              IMPLICIT NONE */
 
-/*           INTEGER               NSEG */
-/*           PARAMETER           ( NSEG   = 3 ) */
+/*              INCLUDE 'dla.inc' */
+/*              INCLUDE 'dskdsc.inc' */
+/*              INCLUDE 'dsk02.inc' */
 
-/*           INTEGER               NAMLEN */
-/*           PARAMETER           ( NAMLEN = 20 ) */
+/*        C */
+/*        C     SPICELIB functions */
+/*        C */
+/*              DOUBLE PRECISION      JYEAR */
+/*              DOUBLE PRECISION      PI */
+/*        C */
+/*        C     Local parameters */
+/*        C */
+/*              INTEGER               FRNMLN */
+/*              PARAMETER           ( FRNMLN = 32 ) */
 
-/*           INTEGER               FILSIZ */
-/*           PARAMETER           ( FILSIZ = 255 ) */
+/*              INTEGER               NSEG */
+/*              PARAMETER           ( NSEG   = 3 ) */
 
-/*           INTEGER               LNSIZE */
-/*           PARAMETER           ( LNSIZE = 80 ) */
+/*              INTEGER               NAMLEN */
+/*              PARAMETER           ( NAMLEN = 20 ) */
 
-/*           INTEGER               NCOR */
-/*           PARAMETER           ( NCOR   = 4 ) */
+/*              INTEGER               FILSIZ */
+/*              PARAMETER           ( FILSIZ = 255 ) */
 
-/*     C */
-/*     C     Local variables */
-/*     C */
-/*           CHARACTER*(NAMLEN)    CORNAM ( NCOR ) */
-/*           CHARACTER*(FILSIZ)    DSK */
-/*           CHARACTER*(FRNMLN)    FRAME */
-/*           CHARACTER*(FILSIZ)    INDSK */
-/*           CHARACTER*(LNSIZE)    LINE */
-/*     C */
-/*     C     Note: the values of MAXVRT and MAXPLT declared */
-/*     C     in dsk02.inc, and the integer spatial index */
-/*     C     dimension SPAISZ are very large. Smaller buffers */
-/*     C     can be used for most applications. */
-/*     C */
-/*           DOUBLE PRECISION      CORPAR ( NSYPAR ) */
-/*           DOUBLE PRECISION      F */
-/*           DOUBLE PRECISION      FINSCL */
-/*           DOUBLE PRECISION      FIRST */
-/*           DOUBLE PRECISION      LAST */
-/*           DOUBLE PRECISION      MNCOR1 */
-/*           DOUBLE PRECISION      MNCOR2 */
-/*           DOUBLE PRECISION      MNCOR3 */
-/*           DOUBLE PRECISION      MXCOR1 */
-/*           DOUBLE PRECISION      MXCOR2 */
-/*           DOUBLE PRECISION      MXCOR3 */
-/*           DOUBLE PRECISION      RE */
-/*           DOUBLE PRECISION      RP */
-/*           DOUBLE PRECISION      SPAIXD ( IXDFIX ) */
-/*           DOUBLE PRECISION      VRTCES ( 3, MAXVRT ) */
+/*              INTEGER               LNSIZE */
+/*              PARAMETER           ( LNSIZE = 80 ) */
 
-/*           INTEGER               CENTER */
-/*           INTEGER               CORSCL */
-/*           INTEGER               CORSYS */
-/*           INTEGER               DCLASS */
-/*           INTEGER               DLADSC ( DLADSZ ) */
-/*           INTEGER               HANDLE */
-/*           INTEGER               INHAN */
-/*           INTEGER               NP */
-/*           INTEGER               NV */
-/*           INTEGER               PLATES ( 3, MAXPLT ) */
-/*           INTEGER               SEGNO */
-/*           INTEGER               SPAIXI ( SPAISZ ) */
-/*           INTEGER               SURFID */
-/*           INTEGER               VOXPSZ */
-/*           INTEGER               VOXLSZ */
-/*           INTEGER               WORK   ( 2, MAXCEL ) */
-/*           INTEGER               WORKSZ */
+/*              INTEGER               NCOR */
+/*              PARAMETER           ( NCOR   = 4 ) */
 
-/*           LOGICAL               FOUND */
-/*     C */
-/*     C     Saved variables */
-/*     C */
-/*     C     Save all large arrays to avoid stack problems. */
-/*     C */
-/*           SAVE */
-/*     C */
-/*     C     Initial values */
-/*     C */
-/*           DATA                  CORNAM / 'radius', */
-/*          .                               'Z-coordinate', */
-/*          .                               'Z-coordinate', */
-/*          .                               'altitude'     / */
+/*        C */
+/*        C     Local variables */
+/*        C */
+/*              CHARACTER*(NAMLEN)    CORNAM ( NCOR ) */
+/*              CHARACTER*(FILSIZ)    DSK */
+/*              CHARACTER*(FRNMLN)    FRAME */
+/*              CHARACTER*(FILSIZ)    INDSK */
+/*              CHARACTER*(LNSIZE)    LINE */
+/*        C */
+/*        C     Note: the values of MAXVRT and MAXPLT declared */
+/*        C     in dsk02.inc, and the integer spatial index */
+/*        C     dimension SPAISZ are very large. Smaller buffers */
+/*        C     can be used for most applications. */
+/*        C */
+/*              DOUBLE PRECISION      CORPAR ( NSYPAR ) */
+/*              DOUBLE PRECISION      F */
+/*              DOUBLE PRECISION      FINSCL */
+/*              DOUBLE PRECISION      FIRST */
+/*              DOUBLE PRECISION      LAST */
+/*              DOUBLE PRECISION      MNCOR1 */
+/*              DOUBLE PRECISION      MNCOR2 */
+/*              DOUBLE PRECISION      MNCOR3 */
+/*              DOUBLE PRECISION      MXCOR1 */
+/*              DOUBLE PRECISION      MXCOR2 */
+/*              DOUBLE PRECISION      MXCOR3 */
+/*              DOUBLE PRECISION      RE */
+/*              DOUBLE PRECISION      RP */
+/*              DOUBLE PRECISION      SPAIXD ( IXDFIX ) */
+/*              DOUBLE PRECISION      VRTCES ( 3, MAXVRT ) */
 
-/*     C */
-/*     C     Assign names of input and output DSK files. */
-/*     C */
-/*           INDSK = 'phobos_3_3.bds' */
-/*           DSK   = 'phobos_3_3_3seg.bds' */
-/*     C */
-/*     C     Open input DSK for read access; find first segment. */
-/*     C */
-/*           CALL DASOPR ( INDSK, INHAN ) */
-/*           CALL DLABFS ( INHAN, DLADSC, FOUND ) */
-/*     C */
-/*     C     Fetch vertices and plates from input DSK file. */
-/*     C */
-/*           WRITE (*,*) 'Reading input data...' */
+/*              INTEGER               CENTER */
+/*              INTEGER               CORSCL */
+/*              INTEGER               CORSYS */
+/*              INTEGER               DCLASS */
+/*              INTEGER               DLADSC ( DLADSZ ) */
+/*              INTEGER               HANDLE */
+/*              INTEGER               INHAN */
+/*              INTEGER               NP */
+/*              INTEGER               NV */
+/*              INTEGER               PLATES ( 3, MAXPLT ) */
+/*              INTEGER               SEGNO */
+/*              INTEGER               SPAIXI ( SPAISZ ) */
+/*              INTEGER               SURFID */
+/*              INTEGER               VOXPSZ */
+/*              INTEGER               VOXLSZ */
+/*              INTEGER               WORK   ( 2, MAXCEL ) */
+/*              INTEGER               WORKSZ */
 
-/*           CALL DSKV02 ( INHAN, DLADSC, 1, MAXVRT, NV, VRTCES ) */
-/*           CALL DSKP02 ( INHAN, DLADSC, 1, MAXPLT, NP, PLATES ) */
+/*              LOGICAL               FOUND */
+/*        C */
+/*        C     Saved variables */
+/*        C */
+/*        C     Save all large arrays to avoid stack problems. */
+/*        C */
+/*              SAVE */
+/*        C */
+/*        C     Initial values */
+/*        C */
+/*              DATA                  CORNAM / 'radius', */
+/*             .                               'Z-coordinate', */
+/*             .                               'Z-coordinate', */
+/*             .                               'altitude'     / */
 
-/*           WRITE (*,*) 'Done.' */
-/*     C */
-/*     C     Set input array sizes required by DSKMI2. */
-/*     C */
-/*           VOXPSZ = MAXVXP */
-/*           VOXLSZ = MXNVLS */
-/*           WORKSZ = MAXCEL */
-/*     C */
-/*     C     Set fine and coarse voxel scales. (These usually */
-/*     C     need to determined by experimentation.) */
-/*     C */
-/*           FINSCL = 5.D0 */
-/*           CORSCL = 4 */
-/*     C */
-/*     C     Open a new DSK file. */
-/*     C */
-/*           CALL DSKOPN ( DSK, DSK, 0, HANDLE ) */
-/*     C */
-/*     C     Create three segments and add them to the file. */
-/*     C */
-/*           DO SEGNO = 1, NSEG */
-/*     C */
-/*     C        Create spatial index. */
-/*     C */
-/*              WRITE (*,*) 'Creating segment ', SEGNO */
-/*              WRITE (*,*) 'Creating spatial index...' */
+/*        C */
+/*        C     Assign names of input and output DSK files. */
+/*        C */
+/*              INDSK = 'phobos_3_3.bds' */
+/*              DSK   = 'phobos_3_3_3seg.bds' */
+/*        C */
+/*        C     Open input DSK for read access; find first segment. */
+/*        C */
+/*              CALL DASOPR ( INDSK, INHAN ) */
+/*              CALL DLABFS ( INHAN, DLADSC, FOUND ) */
+/*        C */
+/*        C     Fetch vertices and plates from input DSK file. */
+/*        C */
+/*              WRITE (*,*) 'Reading input data...' */
 
-/*              CALL DSKMI2 ( NV,     VRTCES, NP,     PLATES, FINSCL, */
-/*          .                 CORSCL, WORKSZ, VOXPSZ, VOXLSZ, .TRUE., */
-/*          .                 SPAISZ, WORK,   SPAIXD, SPAIXI          ) */
+/*              CALL DSKV02 ( INHAN, DLADSC, 1, MAXVRT, NV, VRTCES ) */
+/*              CALL DSKP02 ( INHAN, DLADSC, 1, MAXPLT, NP, PLATES ) */
 
 /*              WRITE (*,*) 'Done.' */
-/*     C */
-/*     C        Set up inputs describing segment attributes: */
-/*     C */
-/*     C        - Central body: Phobos */
-/*     C        - Surface ID code: user's choice. */
-/*     C          We use the segment number here. */
-/*     C        - Data class: general (arbitrary) shape */
-/*     C        - Body-fixed reference frame */
-/*     C        - Time coverage bounds (TBD) */
-/*     C */
-/*              CENTER = 401 */
-/*              SURFID = SEGNO */
-/*              DCLASS = GENCLS */
-/*              FRAME  = 'IAU_PHOBOS' */
+/*        C */
+/*        C     Set input array sizes required by DSKMI2. */
+/*        C */
+/*              VOXPSZ = MAXVXP */
+/*              VOXLSZ = MXNVLS */
+/*              WORKSZ = MAXCEL */
+/*        C */
+/*        C     Set fine and coarse voxel scales. (These usually */
+/*        C     need to determined by experimentation.) */
+/*        C */
+/*              FINSCL = 5.D0 */
+/*              CORSCL = 4 */
+/*        C */
+/*        C     Open a new DSK file. */
+/*        C */
+/*              CALL DSKOPN ( DSK, DSK, 0, HANDLE ) */
+/*        C */
+/*        C     Create three segments and add them to the file. */
+/*        C */
+/*              DO SEGNO = 1, NSEG */
+/*        C */
+/*        C        Create spatial index. */
+/*        C */
+/*                 WRITE (*,*) 'Creating segment ', SEGNO */
+/*                 WRITE (*,*) 'Creating spatial index...' */
 
-/*              FIRST = -50 * JYEAR() */
-/*              LAST  =  50 * JYEAR() */
-/*     C */
-/*     C        Set the coordinate system and coordinate system */
-/*     C        bounds based on the segment index. */
-/*     C */
-/*     C        Zero out the coordinate parameters to start. */
-/*     C */
-/*              CALL CLEARD ( NSYPAR, CORPAR ) */
+/*                 CALL DSKMI2 ( NV,     VRTCES, NP,     PLATES, FINSCL, */
+/*             .                 CORSCL, WORKSZ, VOXPSZ, VOXLSZ, .TRUE., */
+/*             .                 SPAISZ, WORK,   SPAIXD, SPAIXI        ) */
 
-/*              IF ( SEGNO .EQ. 1 ) THEN */
-/*     C */
-/*     C           Use planetocentric latitudinal coordinates. Set */
-/*     C           the longitude and latitude bounds. */
-/*     C */
-/*                 CORSYS = LATSYS */
+/*                 WRITE (*,*) 'Done.' */
+/*        C */
+/*        C        Set up inputs describing segment attributes: */
+/*        C */
+/*        C        - Central body: Phobos */
+/*        C        - Surface ID code: user's choice. */
+/*        C          We use the segment number here. */
+/*        C        - Data class: general (arbitrary) shape */
+/*        C        - Body-fixed reference frame */
+/*        C        - Time coverage bounds (TBD) */
+/*        C */
+/*                 CENTER = 401 */
+/*                 SURFID = SEGNO */
+/*                 DCLASS = GENCLS */
+/*                 FRAME  = 'IAU_PHOBOS' */
 
-/*                 MNCOR1 = -PI() */
-/*                 MXCOR1 =  PI() */
-/*                 MNCOR2 = -PI()/2 */
-/*                 MXCOR2 =  PI()/2 */
+/*                 FIRST = -50 * JYEAR() */
+/*                 LAST  =  50 * JYEAR() */
+/*        C */
+/*        C        Set the coordinate system and coordinate system */
+/*        C        bounds based on the segment index. */
+/*        C */
+/*        C        Zero out the coordinate parameters to start. */
+/*        C */
+/*                 CALL CLEARD ( NSYPAR, CORPAR ) */
 
-/*              ELSE IF ( SEGNO .EQ. 2 ) THEN */
-/*     C */
-/*     C           Use rectangular coordinates. Set the */
-/*     C           X and Y bounds. */
-/*     C */
-/*     C           The bounds shown here were derived from */
-/*     C           the plate data. They lie slightly outside */
-/*     C           of the range spanned by the plates. */
-/*     C */
-/*                 CORSYS = RECSYS */
+/*                 IF ( SEGNO .EQ. 1 ) THEN */
+/*        C */
+/*        C           Use planetocentric latitudinal coordinates. Set */
+/*        C           the longitude and latitude bounds. */
+/*        C */
+/*                    CORSYS = LATSYS */
 
-/*                 MNCOR1 = -1.3D0 */
-/*                 MXCOR1 =  1.31D0 */
-/*                 MNCOR2 = -1.21D0 */
-/*                 MXCOR2 =  1.2D0 */
+/*                    MNCOR1 = -PI() */
+/*                    MXCOR1 =  PI() */
+/*                    MNCOR2 = -PI()/2 */
+/*                    MXCOR2 =  PI()/2 */
 
-/*              ELSE */
-/*     C */
-/*     C           Set the coordinate system to planetodetic. */
-/*     C */
-/*                 CORSYS    = PDTSYS */
+/*                 ELSE IF ( SEGNO .EQ. 2 ) THEN */
+/*        C */
+/*        C           Use rectangular coordinates. Set the */
+/*        C           X and Y bounds. */
+/*        C */
+/*        C           The bounds shown here were derived from */
+/*        C           the plate data. They lie slightly outside */
+/*        C           of the range spanned by the plates. */
+/*        C */
+/*                    CORSYS = RECSYS */
 
-/*                 MNCOR1    = -PI() */
-/*                 MXCOR1    =  PI() */
-/*                 MNCOR2    = -PI()/2 */
-/*                 MXCOR2    =  PI()/2 */
-/*     C */
-/*     C           We'll use equatorial and polar radii from */
-/*     C           pck00010.tpc. These normally would be fetched */
-/*     C           at run time, but for simplicity, we'll use */
-/*     C           hard-coded values. */
+/*                    MNCOR1 = -1.3D0 */
+/*                    MXCOR1 =  1.31D0 */
+/*                    MNCOR2 = -1.21D0 */
+/*                    MXCOR2 =  1.2D0 */
 
-/*                 RE        = 13.0D0 */
-/*                 RP        =  9.1D0 */
-/*                 F         = ( RE - RP ) / RE */
+/*                 ELSE */
+/*        C */
+/*        C           Set the coordinate system to planetodetic. */
+/*        C */
+/*                    CORSYS    = PDTSYS */
 
-/*                 CORPAR(1) = RE */
-/*                 CORPAR(2) = F */
+/*                    MNCOR1    = -PI() */
+/*                    MXCOR1    =  PI() */
+/*                    MNCOR2    = -PI()/2 */
+/*                    MXCOR2    =  PI()/2 */
+/*        C */
+/*        C           We'll use equatorial and polar radii from */
+/*        C           pck00010.tpc. These normally would be fetched */
+/*        C           at run time, but for simplicity, we'll use */
+/*        C           hard-coded values. */
 
-/*              END IF */
-/*     C */
-/*     C        Compute plate model radius bounds. */
-/*     C */
-/*              LINE = 'Computing # bounds of plate set...' */
+/*                    RE        = 13.0D0 */
+/*                    RP        =  9.1D0 */
+/*                    F         = ( RE - RP ) / RE */
 
-/*              CALL REPMC ( LINE, '#', CORNAM(CORSYS), LINE ) */
-/*              WRITE (*,*) LINE */
+/*                    CORPAR(1) = RE */
+/*                    CORPAR(2) = F */
 
-/*              CALL DSKRB2 ( NV,     VRTCES, NP,     PLATES, */
-/*          .                 CORSYS, CORPAR, MNCOR3, MXCOR3 ) */
+/*                 END IF */
+/*        C */
+/*        C        Compute plate model radius bounds. */
+/*        C */
+/*                 LINE = 'Computing # bounds of plate set...' */
+
+/*                 CALL REPMC ( LINE, '#', CORNAM(CORSYS), LINE ) */
+/*                 WRITE (*,*) LINE */
+
+/*                 CALL DSKRB2 ( NV,     VRTCES, NP,     PLATES, */
+/*             .                 CORSYS, CORPAR, MNCOR3, MXCOR3 ) */
+
+/*                 WRITE (*,*) 'Done.' */
+/*        C */
+/*        C        Write the segment to the file. */
+/*        C */
+/*                 WRITE (*,*) 'Writing segment...' */
+
+/*                 CALL DSKW02 ( HANDLE, */
+/*             .                 CENTER, SURFID, DCLASS, FRAME,  CORSYS, */
+/*             .                 CORPAR, MNCOR1, MXCOR1, MNCOR2, MXCOR2, */
+/*             .                 MNCOR3, MXCOR3, FIRST,  LAST,   NV, */
+/*             .                 VRTCES, NP,     PLATES, SPAIXD, SPAIXI ) */
+
+/*                 WRITE (*,*) 'Done.' */
+
+/*              END DO */
+/*        C */
+/*        C     Segregate the data records in the DSK file and */
+/*        C     close the file. */
+/*        C */
+/*              WRITE (*,*) 'Segregating and closing DSK file...' */
+
+/*              CALL DSKCLS ( HANDLE, .TRUE. ) */
 
 /*              WRITE (*,*) 'Done.' */
-/*     C */
-/*     C        Write the segment to the file. */
-/*     C */
-/*              WRITE (*,*) 'Writing segment...' */
+/*              END */
 
-/*              CALL DSKW02 ( HANDLE, */
-/*          .                 CENTER, SURFID, DCLASS, FRAME,  CORSYS, */
-/*          .                 CORPAR, MNCOR1, MXCOR1, MNCOR2, MXCOR2, */
-/*          .                 MNCOR3, MXCOR3, FIRST,  LAST,   NV, */
-/*          .                 VRTCES, NP,     PLATES, SPAIXD, SPAIXI ) */
 
-/*              WRITE (*,*) 'Done.' */
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
 
-/*           END DO */
-/*     C */
-/*     C     Segregate the data records in the DSK file and */
-/*     C     close the file. */
-/*     C */
-/*           WRITE (*,*) 'Segregating and closing DSK file...' */
 
-/*           CALL DSKCLS ( HANDLE, .TRUE. ) */
+/*         Reading input data... */
+/*         Done. */
+/*         Creating segment            1 */
+/*         Creating spatial index... */
+/*         Done. */
+/*         Computing radius bounds of plate set... */
+/*         Done. */
+/*         Writing segment... */
+/*         Done. */
+/*         Creating segment            2 */
+/*         Creating spatial index... */
+/*         Done. */
+/*         Computing Z-coordinate bounds of plate set... */
+/*         Done. */
+/*         Writing segment... */
+/*         Done. */
+/*         Creating segment            3 */
+/*         Creating spatial index... */
+/*         Done. */
+/*         Computing altitude bounds of plate set... */
+/*         Done. */
+/*         Writing segment... */
+/*         Done. */
+/*         Segregating and closing DSK file... */
+/*         Done. */
 
-/*           WRITE (*,*) 'Done.' */
-/*           END */
 
+/*        Note that after run completion, a new DSK exists in the output */
+/*        directory. */
 
 /* $ Restrictions */
 
@@ -1455,9 +1481,22 @@ static integer c__1 = 1;
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.0.1, 28-AUG-2021 (JDR) (NJB) */
+
+/*        Edited the header to comply with NAIF standard. */
+/*        Added solution to code example. */
+
+/*        Corrected description of coverage requirements for class 1 */
+/*        segments. */
+
+/*        Deleted paragraph saying that, except for changes made to */
+/*        move longitude values into range, the values are stored in */
+/*        segment "as is." */
 
 /* -    SPICELIB Version 1.0.0, 04-MAR-2017 (NJB) */
 
@@ -1508,10 +1547,11 @@ static integer c__1 = 1;
 /*        27-JUN-2006 (NJB) */
 
 /*           Initial version. */
+
 /* -& */
 /* $ Index_Entries */
 
-/*     write a type 2 dsk segment */
+/*     write a type 2 DSK segment */
 
 /* -& */
 
@@ -1908,7 +1948,7 @@ static integer c__1 = 1;
 	for (j = 1; j <= 3; ++j) {
 	    k = plates[(i__2 = j + i__ * 3 - 4) < plates_dim2 * 3 && 0 <= 
 		    i__2 ? i__2 : s_rnge("plates", i__2, "dskw02_", (ftnlen)
-		    1404)];
+		    1446)];
 	    if (k < 1 || k > *nv) {
 		setmsg_("Vertex index # of plate # was #; vertex indices mus"
 			"t be in the range 1:NV. The input NV = #.", (ftnlen)
@@ -2031,9 +2071,9 @@ static integer c__1 = 1;
 
     for (i__ = 1; i__ <= 3; ++i__) {
 	if (vgrext[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("vgrext",
-		 i__1, "dskw02_", (ftnlen)1542)] < 1 || vgrext[(i__2 = i__ - 
+		 i__1, "dskw02_", (ftnlen)1584)] < 1 || vgrext[(i__2 = i__ - 
 		1) < 3 && 0 <= i__2 ? i__2 : s_rnge("vgrext", i__2, "dskw02_",
-		 (ftnlen)1542)] > 100000000) {
+		 (ftnlen)1584)] > 100000000) {
 	    setmsg_("Voxel grid extents are = (#, #, #); all be in the range"
 		    " 1:#.", (ftnlen)60);
 	    errint_("#", vgrext, (ftnlen)1);

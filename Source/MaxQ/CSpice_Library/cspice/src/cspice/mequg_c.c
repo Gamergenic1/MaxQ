@@ -60,25 +60,36 @@
 
    VARIABLE  I/O  DESCRIPTION
    --------  ---  --------------------------------------------------
-    m1        I     Input matrix.
-    nr        I     Row dimension of m1 (and also mout).
-    nc        I     Column dimension of m1 (and also mout).
-    mout      O     Output matrix equal to m1.
+   m1         I   Input matrix.
+   nr         I   Row dimension of m1 (and also mout).
+   nc         I   Column dimension of m1 (and also mout).
+   mout       O   Output matrix equal to m1.
 
 -Detailed_Input
 
-   m1      is an arbitrary-sized double precision matrix.
-           There are no restrictions on what it may contain.
+   m1          is an arbitrary-sized double precision matrix.
+               There are no restrictions on what it may contain.
 
-   nr      is the number of rows in the input matrix.
+   nr          is the number of rows in the input matrix.
 
-   nc      is the number of columns in the input matrix.
+   nc          is the number of columns in the input matrix.
 
 -Detailed_Output
 
-   mout    This matrix is set to be equal to m1.
+   mout        This matrix is set to be equal to m1.
 
 -Parameters
+
+   None.
+
+-Exceptions
+
+   Error free.
+
+   1)  If nr < 1 or nc < 1, the elements of the matrix `mout' are not
+       assigned any values.
+
+-Files
 
    None.
 
@@ -110,31 +121,27 @@
 
    None.
 
--Exceptions
-
-   1) If nr < 1 or nc < 1, the elements of the matrix mout are not
-      assigned any values, i.e. all zeros.
-
--Files
+-Literature_References
 
    None.
 
 -Author_and_Institution
 
-   W.M. Owen       (JPL)
-   E.D. Wright     (JPL)
-
--Literature_References
-
-   None.
+   N.J. Bachman        (JPL)
+   J. Diaz del Rio     (ODC Space)
+   E.D. Wright         (JPL)
 
 -Version
 
+   -CSPICE Version 1.2.1, 04-AUG-2021 (JDR)
+
+       Edited the header to comply with NAIF standard.
+
    -CSPICE Version 1.2.0, 28-AUG-2001 (NJB)
 
-      Const-qualified input array.
+       Const-qualified input array.
 
-   -CSPICE Version 1.0.0, 31-MAR-1998   (EDW)
+   -CSPICE Version 1.0.0, 31-MAR-1998 (EDW)
 
 -Index_Entries
 

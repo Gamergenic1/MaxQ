@@ -564,11 +564,11 @@ static integer c__6 = 6;
 /* $ Exceptions */
 
 /*     1)  If the input query is uninitialized, the error */
-/*         SPICE(NOTINITIALIZED) will be signalled. */
+/*         SPICE(NOTINITIALIZED) will be signaled. */
 
 /*     2)  If there is insufficient space in the encoded query's */
 /*         numeric component, the error SPICE(BUFFERTOOSMALL) is */
-/*         signalled. */
+/*         signaled. */
 
 /* $ Files */
 
@@ -597,6 +597,10 @@ static integer c__6 = 6;
 /*     N.J. Bachman       (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.0.1, 03-OCT-2021 (NJB) */
+
+/*        Corrected typos in comments. */
 
 /* -    Beta Version 1.0.0, 10-OCT-1995 (NJB) */
 

@@ -13,10 +13,11 @@ static integer c__36 = 36;
 static integer c__1 = 1;
 static integer c__0 = 0;
 static integer c__3 = 3;
-static doublereal c_b192 = 0.;
+static doublereal c_b193 = 0.;
 static integer c__6 = 6;
-static doublereal c_b365 = 1.;
+static doublereal c_b371 = 1.;
 static integer c__20 = 20;
+static integer c__10 = 10;
 
 /* $Procedure ZZDYNROT ( Dynamic position transformation evaluation ) */
 /* Subroutine */ int zzdynrot_(integer *infram, integer *center, doublereal *
@@ -50,6 +51,7 @@ static integer c__20 = 20;
     char spec[80];
     integer targ;
     doublereal oblr[9]	/* was [3][3] */;
+    integer toid;
     extern /* Subroutine */ int vhat_(doublereal *, doublereal *);
     doublereal pobs[3];
     integer axis[2];
@@ -62,26 +64,28 @@ static integer c__20 = 20;
 	    char *, integer *, doublereal *, doublereal *, ftnlen, ftnlen), 
 	    vsub_(doublereal *, doublereal *, doublereal *), vequ_(doublereal 
 	    *, doublereal *);
-    doublereal poly[2], rnut[9]	/* was [3][3] */;
+    doublereal poly[2], rnut[9]	/* was [3][3] */, rout[9]	/* was [3][3] 
+	    */;
     extern /* Subroutine */ int zzspkzp0_(integer *, doublereal *, char *, 
 	    char *, integer *, doublereal *, doublereal *, ftnlen, ftnlen), 
 	    zzdynbid_(char *, integer *, char *, integer *, ftnlen, ftnlen), 
-	    zzdynfid_(char *, integer *, char *, integer *, ftnlen, ftnlen), 
-	    zzdynoad_(char *, integer *, char *, integer *, integer *, 
-	    doublereal *, logical *, ftnlen, ftnlen), zzdynoac_(char *, 
-	    integer *, char *, integer *, integer *, char *, logical *, 
-	    ftnlen, ftnlen, ftnlen), eul2m_(doublereal *, doublereal *, 
-	    doublereal *, integer *, integer *, integer *, doublereal *), 
-	    zzcorepc_(char *, doublereal *, doublereal *, doublereal *, 
-	    ftnlen), zzmobliq_(doublereal *, doublereal *, doublereal *), 
-	    zzdynvac_(char *, integer *, char *, integer *, integer *, char *,
-	     ftnlen, ftnlen, ftnlen), zzdynvad_(char *, integer *, char *, 
-	    integer *, integer *, doublereal *, ftnlen, ftnlen), zzdynvai_(
-	    char *, integer *, char *, integer *, integer *, integer *, 
-	    ftnlen, ftnlen);
+	    zzgftreb_(integer *, doublereal *), zzdynfid_(char *, integer *, 
+	    char *, integer *, ftnlen, ftnlen), zzdynoad_(char *, integer *, 
+	    char *, integer *, integer *, doublereal *, logical *, ftnlen, 
+	    ftnlen), zzdynoac_(char *, integer *, char *, integer *, integer *
+	    , char *, logical *, ftnlen, ftnlen, ftnlen), eul2m_(doublereal *,
+	     doublereal *, doublereal *, integer *, integer *, integer *, 
+	    doublereal *), zzcorepc_(char *, doublereal *, doublereal *, 
+	    doublereal *, ftnlen), zzmobliq_(doublereal *, doublereal *, 
+	    doublereal *), zzdynvac_(char *, integer *, char *, integer *, 
+	    integer *, char *, ftnlen, ftnlen, ftnlen), zzdynvad_(char *, 
+	    integer *, char *, integer *, integer *, doublereal *, ftnlen, 
+	    ftnlen), zzvalcor_(char *, logical *, ftnlen), zzdynvai_(char *, 
+	    integer *, char *, integer *, integer *, integer *, ftnlen, 
+	    ftnlen);
     integer i__;
     extern /* Subroutine */ int zzprscor_(char *, logical *, ftnlen);
-    integer n, frcid;
+    integer m, n, frcid;
     doublereal radii[3], delta;
     extern /* Subroutine */ int etcal_(doublereal *, char *, ftnlen), chkin_(
 	    char *, ftnlen);
@@ -118,21 +122,20 @@ static integer c__20 = 20;
     char inname__[32], abcorr[5], axname[80];
     extern integer isrchc_(char *, integer *, char *, ftnlen, ftnlen);
     extern logical return_(void);
-    char cfrmnm[32], ctrnam[36], cvcorr[5], dynstl[80], dynfam[80];
+    char cfrmnm[32], ctrnam[36], cvcorr[5], dynstl[80], dynfam[80], fframs[32*
+	    10];
     static char itmaxe[32*2], itmfrm[32*2], itmlat[32*2], itmlon[32*2], 
 	    itmobs[32*2], itmspc[32*2], itmtrg[32*2], itmunt[32*2], itmvdf[32*
 	    2], itmvec[32*2];
-    char nutmod[80], oblmod[80], prcmod[80], rotsta[80], timstr[50], tmpfam[
-	    80], velfrm[32];
-    doublereal angles[2], ctrpos[3], dec, dirvec[3], eulang[3], alt, fet, lat,
-	     minsep, mob, precxf[36]	/* was [6][6] */, r2000[9]	/* 
-	    was [3][3] */, sep, lon;
-    integer cfrmid;
+    char nutmod[80], oblmod[80], prcmod[80], rotsta[80], tframs[32*10], 
+	    timstr[50], tmpfam[80], velfrm[32];
+    doublereal alt, angles[2], ctrpos[3], dec, dirvec[3], eulang[3], fet, lat,
+	     lon, minsep, mob, precxf[36]	/* was [6][6] */, r2000[9]	
+	    /* was [3][3] */, sep, vet;
+    integer cfrmid, fromid;
     static integer j2000;
     integer obs;
-    logical corblk[15];
-    doublereal vet;
-    logical fnd, frozen, meaneq, ofdate, trueeq;
+    logical corblk[15], fnd, frozen, meaneq, ofdate, trueeq;
     extern /* Subroutine */ int irfnum_(char *, integer *, ftnlen), frmnam_(
 	    integer *, char *, ftnlen), chkout_(char *, ftnlen), cmprss_(char 
 	    *, integer *, char *, char *, ftnlen, ftnlen, ftnlen), setmsg_(
@@ -141,17 +144,17 @@ static integer c__20 = 20;
 	    errint_(char *, integer *, ftnlen), frinfo_(integer *, integer *, 
 	    integer *, integer *, logical *), mxv_(doublereal *, doublereal *,
 	     doublereal *), cidfrm_(integer *, integer *, char *, logical *, 
-	    ftnlen), bodvcd_(integer *, char *, integer *, integer *, 
-	    doublereal *, ftnlen), vminus_(doublereal *, doublereal *), 
-	    nearpt_(doublereal *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *, doublereal *), convrt_(doublereal *, char *, char *,
-	     doublereal *, ftnlen, ftnlen), latrec_(doublereal *, doublereal *
-	    , doublereal *, doublereal *), stlabx_(doublereal *, doublereal *,
-	     doublereal *), stelab_(doublereal *, doublereal *, doublereal *),
-	     twovec_(doublereal *, integer *, doublereal *, integer *, 
-	    doublereal *), polyds_(doublereal *, integer *, integer *, 
-	    doublereal *, doublereal *), zzeprc76_(doublereal *, doublereal *)
-	    , zzenut80_(doublereal *, doublereal *);
+	    ftnlen), vminus_(doublereal *, doublereal *), nearpt_(doublereal *
+	    , doublereal *, doublereal *, doublereal *, doublereal *, 
+	    doublereal *), convrt_(doublereal *, char *, char *, doublereal *,
+	     ftnlen, ftnlen), latrec_(doublereal *, doublereal *, doublereal *
+	    , doublereal *), stlabx_(doublereal *, doublereal *, doublereal *)
+	    , stelab_(doublereal *, doublereal *, doublereal *), twovec_(
+	    doublereal *, integer *, doublereal *, integer *, doublereal *), 
+	    polyds_(doublereal *, integer *, integer *, doublereal *, 
+	    doublereal *), namfrm_(char *, integer *, ftnlen), zzeprc76_(
+	    doublereal *, doublereal *), zzenut80_(doublereal *, doublereal *)
+	    ;
 
 /* $ Abstract */
 
@@ -203,8 +206,8 @@ static integer c__20 = 20;
 /* $ Abstract */
 
 /*     The parameters below form an enumerated list of the recognized */
-/*     frame types.  They are: INERTL, PCK, CK, TK, DYN.  The meanings */
-/*     are outlined below. */
+/*     frame types. They are: INERTL, PCK, CK, TK, DYN, SWTCH, and ALL. */
+/*     The meanings are outlined below. */
 
 /* $ Disclaimer */
 
@@ -254,6 +257,11 @@ static integer c__20 = 20;
 /*                 definition depends on parameters supplied via a */
 /*                 frame kernel. */
 
+/*     SWTCH       is a "switch" frame. These frames have orientation */
+/*                 defined by their alignment with base frames selected */
+/*                 from a prioritized list. The base frames optionally */
+/*                 have associated time intervals of applicability. */
+
 /*     ALL         indicates any of the above classes. This parameter */
 /*                 is used in APIs that fetch information about frames */
 /*                 of a specified class. */
@@ -262,6 +270,7 @@ static integer c__20 = 20;
 /* $ Author_and_Institution */
 
 /*     N.J. Bachman    (JPL) */
+/*     B.V. Semenov    (JPL) */
 /*     W.L. Taber      (JPL) */
 
 /* $ Literature_References */
@@ -269,6 +278,11 @@ static integer c__20 = 20;
 /*     None. */
 
 /* $ Version */
+
+/* -    SPICELIB Version 5.0.0, 08-OCT-2020 (NJB) (BVS) */
+
+/*       The parameter SWTCH was added to support the switch */
+/*       frame class. */
 
 /* -    SPICELIB Version 4.0.0, 08-MAY-2012 (NJB) */
 
@@ -459,6 +473,10 @@ static integer c__20 = 20;
 
 /* $ Version */
 
+/* -    SPICELIB Version 2.0.0, 22-SEP-2020 (NJB) */
+
+/*        Updated to support the product frame family. */
+
 /* -    SPICELIB Version 1.1.0, 12-JAN-2005 (NJB) */
 
 /*        Parameters KWX, KWY, KWZ renamed to KVX, KVY, KVZ. */
@@ -505,6 +523,10 @@ static integer c__20 = 20;
 /*     in an "Euler frame" definition */
 
 
+/*     The parameter MXNFAC is the maximum number of factors in */
+/*     a product frame. */
+
+
 /*     The parameter LBSEP is the default angular separation limit for */
 /*     the vectors defining a two-vector frame.  The angular separation */
 /*     of the vectors must differ from Pi and 0 by at least this amount. */
@@ -534,7 +556,7 @@ static integer c__20 = 20;
 /*        T0 +/- DELTA */
 
 /*     while providing the largest value of DELTA having this form that */
-/*     causes the order of the error term O(DELTA**2) in the quadratric */
+/*     causes the order of the error term O(DELTA**2) in the quadratic */
 /*     function approximation to round to zero.  Note that the error */
 /*     itself will normally be small but doesn't necessarily round to */
 /*     zero.  Note also that the small function approximation error */
@@ -615,6 +637,9 @@ static integer c__20 = 20;
 
 
 /*     Token indicating Euler frame. */
+
+
+/*     Token indicating product frame. */
 
 
 /*     "Of date" frame family parameters */
@@ -740,6 +765,10 @@ static integer c__20 = 20;
 /*     parameters applicable to Euler frames. */
 
 
+/*     Product frame family parameters */
+/*     --------------------------------- */
+
+
 /*     Physical unit parameters */
 /*     --------------------------------- */
 
@@ -798,33 +827,6 @@ static integer c__20 = 20;
 /* $ Parameters */
 
 /*     See include file zzdyn.inc. */
-
-/* $ Files */
-
-/*     1) SPK files containing data for each observer and target */
-/*        are required to support two-vector frames.  Note that */
-/*        observer-target pairs can be implicit, as in the case */
-/*        of a constant vector whose frame is evaluated at a */
-/*        light-time corrected epoch:  the light time the frame */
-/*        center to an observer must be computable in this case, */
-/*        which implies the state of the frame center as seen by */
-/*        the observer must be computable. */
-
-/*     2) Any of SPK, CK, PCK, and frame kernels will also be required */
-/*        if any frames referenced in the definition of INFRAM (as a */
-/*        base frame, velocity vector frame, or constant vector frame) */
-/*        require them, or if any vectors used to define INFRAM require */
-/*        these data in order to be computable. */
-
-/*     3) When CK data are required, one or more associated SCLK kernels */
-/*        ---normally, one kernel per spacecraft clock---are */
-/*        required as well.  A leapseconds kernel may be required */
-/*        whenever an SCLK kernel is required. */
-
-/*     4) When a two-vector frame is defined using a target near point, */
-/*        a PCK file giving orientation and providing a triaxial shape */
-/*        model for the target body is required. */
-
 
 /* $ Exceptions */
 
@@ -910,6 +912,40 @@ static integer c__20 = 20;
 /*         definition, the error will be diagnosed by a routine in the */
 /*         call tree of this routine. */
 
+/*     22) If a body RADII vector has other than exactly thee elements, */
+/*         the error SPICE(INVALIDCOUNT) is signaled by a routine in */
+/*         the call tree of this routine. */
+
+/*     23) If a body RADII vector has any element less-than or */
+/*         equal to zero, the error SPICE(BADAXISLENGTH) is signaled by */
+/*         a routine in the call tree of this routine. */
+
+/* $ Files */
+
+/*     1) SPK files containing data for each observer and target */
+/*        are required to support two-vector frames.  Note that */
+/*        observer-target pairs can be implicit, as in the case */
+/*        of a constant vector whose frame is evaluated at a */
+/*        light-time corrected epoch:  the light time the frame */
+/*        center to an observer must be computable in this case, */
+/*        which implies the state of the frame center as seen by */
+/*        the observer must be computable. */
+
+/*     2) Any of SPK, CK, PCK, and frame kernels will also be required */
+/*        if any frames referenced in the definition of INFRAM (as a */
+/*        base frame, velocity vector frame, or constant vector frame) */
+/*        require them, or if any vectors used to define INFRAM require */
+/*        these data in order to be computable. */
+
+/*     3) When CK data are required, one or more associated SCLK kernels */
+/*        ---normally, one kernel per spacecraft clock---are */
+/*        required as well.  A leapseconds kernel may be required */
+/*        whenever an SCLK kernel is required. */
+
+/*     4) When a two-vector frame is defined using a target near point, */
+/*        a PCK file giving orientation and providing a triaxial shape */
+/*        model for the target body is required. */
+
 /* $ Particulars */
 
 /*     Currently only parameterized dynamic frames are supported by */
@@ -962,6 +998,15 @@ static integer c__20 = 20;
 /*           Polynomial */
 
 
+/*        Product frames */
+/*        ============== */
+
+/*           Product definitions */
+/*           ------------------- */
+/*           Array of "from" frames */
+/*           Array of "to" frames */
+
+
 /* $ Examples */
 
 /*     See ROTGET. */
@@ -980,15 +1025,31 @@ static integer c__20 = 20;
 /*     3) Two-vector frame definitions can suffer extreme loss of */
 /*         precision due to near-singular geometry. */
 
-/* $ Author_and_Institution */
-
-/*     N.J. Bachman    (JPL) */
-
 /* $ Literature_References */
 
 /*     None. */
 
+/* $ Author_and_Institution */
+
+/*     N.J. Bachman    (JPL) */
+
 /* $ Version */
+
+/* -    SPICELIB Version 2.0.0, 09-OCT-2021 (NJB) (EDW) */
+
+/*        Support for product frames was added. */
+
+/*        Body radii accessed from kernel pool using ZZGFTREB. */
+
+/*        Bug fix: aberration correction strings for observer-target */
+/*        velocity vectors are now parsed using ZZVALCOR. This improves */
+/*        error checking. Note that aberration correction strings for */
+/*        constant vectors used in two-vector frame specifications are */
+/*        still parsed using ZZPRSCOR. */
+
+/*        Code clean-up: unnecessary call to ZZPRSCOR was removed. */
+
+/*        Added and removed some FAILED() calls. */
 
 /* -    SPICELIB Version 1.1.0, 24-OCT-2005 (NJB) */
 
@@ -1039,10 +1100,10 @@ static integer c__20 = 20;
 /* Writing concatenation */
 	    i__3[0] = 4, a__1[0] = vname + (((i__2 = i__ - 1) < 2 && 0 <= 
 		    i__2 ? i__2 : s_rnge("vname", i__2, "zzdynrot_", (ftnlen)
-		    502)) << 2);
+		    540)) << 2);
 	    i__3[1] = 4, a__1[1] = "AXIS";
 	    s_cat(itmaxe + (((i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : 
-		    s_rnge("itmaxe", i__1, "zzdynrot_", (ftnlen)502)) << 5), 
+		    s_rnge("itmaxe", i__1, "zzdynrot_", (ftnlen)540)) << 5), 
 		    a__1, i__3, &c__2, (ftnlen)32);
 
 /*           Vector definition: */
@@ -1050,10 +1111,10 @@ static integer c__20 = 20;
 /* Writing concatenation */
 	    i__3[0] = 4, a__1[0] = vname + (((i__2 = i__ - 1) < 2 && 0 <= 
 		    i__2 ? i__2 : s_rnge("vname", i__2, "zzdynrot_", (ftnlen)
-		    506)) << 2);
+		    544)) << 2);
 	    i__3[1] = 10, a__1[1] = "VECTOR_DEF";
 	    s_cat(itmvdf + (((i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : 
-		    s_rnge("itmvdf", i__1, "zzdynrot_", (ftnlen)506)) << 5), 
+		    s_rnge("itmvdf", i__1, "zzdynrot_", (ftnlen)544)) << 5), 
 		    a__1, i__3, &c__2, (ftnlen)32);
 
 /*           Vector aberration correction: */
@@ -1061,10 +1122,10 @@ static integer c__20 = 20;
 /* Writing concatenation */
 	    i__3[0] = 4, a__1[0] = vname + (((i__2 = i__ - 1) < 2 && 0 <= 
 		    i__2 ? i__2 : s_rnge("vname", i__2, "zzdynrot_", (ftnlen)
-		    510)) << 2);
+		    548)) << 2);
 	    i__3[1] = 6, a__1[1] = "ABCORR";
 	    s_cat(itmabc + (((i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : 
-		    s_rnge("itmabc", i__1, "zzdynrot_", (ftnlen)510)) << 5), 
+		    s_rnge("itmabc", i__1, "zzdynrot_", (ftnlen)548)) << 5), 
 		    a__1, i__3, &c__2, (ftnlen)32);
 
 /*           Vector frame: */
@@ -1072,10 +1133,10 @@ static integer c__20 = 20;
 /* Writing concatenation */
 	    i__3[0] = 4, a__1[0] = vname + (((i__2 = i__ - 1) < 2 && 0 <= 
 		    i__2 ? i__2 : s_rnge("vname", i__2, "zzdynrot_", (ftnlen)
-		    514)) << 2);
+		    552)) << 2);
 	    i__3[1] = 5, a__1[1] = "FRAME";
 	    s_cat(itmfrm + (((i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : 
-		    s_rnge("itmfrm", i__1, "zzdynrot_", (ftnlen)514)) << 5), 
+		    s_rnge("itmfrm", i__1, "zzdynrot_", (ftnlen)552)) << 5), 
 		    a__1, i__3, &c__2, (ftnlen)32);
 
 /*           Vector observer: */
@@ -1083,10 +1144,10 @@ static integer c__20 = 20;
 /* Writing concatenation */
 	    i__3[0] = 4, a__1[0] = vname + (((i__2 = i__ - 1) < 2 && 0 <= 
 		    i__2 ? i__2 : s_rnge("vname", i__2, "zzdynrot_", (ftnlen)
-		    518)) << 2);
+		    556)) << 2);
 	    i__3[1] = 8, a__1[1] = "OBSERVER";
 	    s_cat(itmobs + (((i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : 
-		    s_rnge("itmobs", i__1, "zzdynrot_", (ftnlen)518)) << 5), 
+		    s_rnge("itmobs", i__1, "zzdynrot_", (ftnlen)556)) << 5), 
 		    a__1, i__3, &c__2, (ftnlen)32);
 
 /*           Vector target: */
@@ -1094,10 +1155,10 @@ static integer c__20 = 20;
 /* Writing concatenation */
 	    i__3[0] = 4, a__1[0] = vname + (((i__2 = i__ - 1) < 2 && 0 <= 
 		    i__2 ? i__2 : s_rnge("vname", i__2, "zzdynrot_", (ftnlen)
-		    522)) << 2);
+		    560)) << 2);
 	    i__3[1] = 6, a__1[1] = "TARGET";
 	    s_cat(itmtrg + (((i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : 
-		    s_rnge("itmtrg", i__1, "zzdynrot_", (ftnlen)522)) << 5), 
+		    s_rnge("itmtrg", i__1, "zzdynrot_", (ftnlen)560)) << 5), 
 		    a__1, i__3, &c__2, (ftnlen)32);
 
 /*           Vector longitude: */
@@ -1105,10 +1166,10 @@ static integer c__20 = 20;
 /* Writing concatenation */
 	    i__3[0] = 4, a__1[0] = vname + (((i__2 = i__ - 1) < 2 && 0 <= 
 		    i__2 ? i__2 : s_rnge("vname", i__2, "zzdynrot_", (ftnlen)
-		    526)) << 2);
+		    564)) << 2);
 	    i__3[1] = 9, a__1[1] = "LONGITUDE";
 	    s_cat(itmlon + (((i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : 
-		    s_rnge("itmlon", i__1, "zzdynrot_", (ftnlen)526)) << 5), 
+		    s_rnge("itmlon", i__1, "zzdynrot_", (ftnlen)564)) << 5), 
 		    a__1, i__3, &c__2, (ftnlen)32);
 
 /*           Vector latitude: */
@@ -1116,10 +1177,10 @@ static integer c__20 = 20;
 /* Writing concatenation */
 	    i__3[0] = 4, a__1[0] = vname + (((i__2 = i__ - 1) < 2 && 0 <= 
 		    i__2 ? i__2 : s_rnge("vname", i__2, "zzdynrot_", (ftnlen)
-		    530)) << 2);
+		    568)) << 2);
 	    i__3[1] = 8, a__1[1] = "LATITUDE";
 	    s_cat(itmlat + (((i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : 
-		    s_rnge("itmlat", i__1, "zzdynrot_", (ftnlen)530)) << 5), 
+		    s_rnge("itmlat", i__1, "zzdynrot_", (ftnlen)568)) << 5), 
 		    a__1, i__3, &c__2, (ftnlen)32);
 
 /*           Vector right ascension: */
@@ -1127,10 +1188,10 @@ static integer c__20 = 20;
 /* Writing concatenation */
 	    i__3[0] = 4, a__1[0] = vname + (((i__2 = i__ - 1) < 2 && 0 <= 
 		    i__2 ? i__2 : s_rnge("vname", i__2, "zzdynrot_", (ftnlen)
-		    534)) << 2);
+		    572)) << 2);
 	    i__3[1] = 2, a__1[1] = "RA";
 	    s_cat(itmra + (((i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge(
-		    "itmra", i__1, "zzdynrot_", (ftnlen)534)) << 5), a__1, 
+		    "itmra", i__1, "zzdynrot_", (ftnlen)572)) << 5), a__1, 
 		    i__3, &c__2, (ftnlen)32);
 
 /*           Vector declination: */
@@ -1138,10 +1199,10 @@ static integer c__20 = 20;
 /* Writing concatenation */
 	    i__3[0] = 4, a__1[0] = vname + (((i__2 = i__ - 1) < 2 && 0 <= 
 		    i__2 ? i__2 : s_rnge("vname", i__2, "zzdynrot_", (ftnlen)
-		    538)) << 2);
+		    576)) << 2);
 	    i__3[1] = 3, a__1[1] = "DEC";
 	    s_cat(itmdec + (((i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : 
-		    s_rnge("itmdec", i__1, "zzdynrot_", (ftnlen)538)) << 5), 
+		    s_rnge("itmdec", i__1, "zzdynrot_", (ftnlen)576)) << 5), 
 		    a__1, i__3, &c__2, (ftnlen)32);
 
 /*           Vector units: */
@@ -1149,10 +1210,10 @@ static integer c__20 = 20;
 /* Writing concatenation */
 	    i__3[0] = 4, a__1[0] = vname + (((i__2 = i__ - 1) < 2 && 0 <= 
 		    i__2 ? i__2 : s_rnge("vname", i__2, "zzdynrot_", (ftnlen)
-		    542)) << 2);
+		    580)) << 2);
 	    i__3[1] = 5, a__1[1] = "UNITS";
 	    s_cat(itmunt + (((i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : 
-		    s_rnge("itmunt", i__1, "zzdynrot_", (ftnlen)542)) << 5), 
+		    s_rnge("itmunt", i__1, "zzdynrot_", (ftnlen)580)) << 5), 
 		    a__1, i__3, &c__2, (ftnlen)32);
 
 /*           Constant vector coordinate specification: */
@@ -1160,10 +1221,10 @@ static integer c__20 = 20;
 /* Writing concatenation */
 	    i__3[0] = 4, a__1[0] = vname + (((i__2 = i__ - 1) < 2 && 0 <= 
 		    i__2 ? i__2 : s_rnge("vname", i__2, "zzdynrot_", (ftnlen)
-		    546)) << 2);
+		    584)) << 2);
 	    i__3[1] = 4, a__1[1] = "SPEC";
 	    s_cat(itmspc + (((i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : 
-		    s_rnge("itmspc", i__1, "zzdynrot_", (ftnlen)546)) << 5), 
+		    s_rnge("itmspc", i__1, "zzdynrot_", (ftnlen)584)) << 5), 
 		    a__1, i__3, &c__2, (ftnlen)32);
 
 /*           Constant vector in cartesian coordinates, literal value: */
@@ -1171,10 +1232,10 @@ static integer c__20 = 20;
 /* Writing concatenation */
 	    i__3[0] = 4, a__1[0] = vname + (((i__2 = i__ - 1) < 2 && 0 <= 
 		    i__2 ? i__2 : s_rnge("vname", i__2, "zzdynrot_", (ftnlen)
-		    550)) << 2);
+		    588)) << 2);
 	    i__3[1] = 6, a__1[1] = "VECTOR";
 	    s_cat(itmvec + (((i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : 
-		    s_rnge("itmvec", i__1, "zzdynrot_", (ftnlen)550)) << 5), 
+		    s_rnge("itmvec", i__1, "zzdynrot_", (ftnlen)588)) << 5), 
 		    a__1, i__3, &c__2, (ftnlen)32);
 	}
 	first = FALSE_;
@@ -1208,6 +1269,10 @@ static integer c__20 = 20;
 /*     We need the name of the base frame. */
 
     zzdynfid_(inname__, infram, "RELATIVE", basfrm, (ftnlen)32, (ftnlen)8);
+    if (failed_()) {
+	chkout_("ZZDYNROT", (ftnlen)8);
+	return 0;
+    }
     frmnam_(basfrm, basnam, (ftnlen)32);
 
 /*     The output frame code and name are set. */
@@ -1232,6 +1297,10 @@ static integer c__20 = 20;
 
 	zzdynvac_(inname__, infram, "FAMILY", &c__1, &n, dynfam, (ftnlen)32, (
 		ftnlen)6, (ftnlen)80);
+	if (failed_()) {
+	    chkout_("ZZDYNROT", (ftnlen)8);
+	    return 0;
+	}
 	cmprss_(" ", &c__0, dynfam, tmpfam, (ftnlen)1, (ftnlen)80, (ftnlen)80)
 		;
 	ucase_(tmpfam, dynfam, (ftnlen)80, (ftnlen)80);
@@ -1337,10 +1406,6 @@ static integer c__20 = 20;
 	    errch_("#", "FREEZE_EPOCH", (ftnlen)1, (ftnlen)12);
 	    errch_("#", "ROTATION_STATE", (ftnlen)1, (ftnlen)14);
 	    sigerr_("SPICE(FRAMEDEFERROR)", (ftnlen)20);
-	    chkout_("ZZDYNROT", (ftnlen)8);
-	    return 0;
-	}
-	if (failed_()) {
 	    chkout_("ZZDYNROT", (ftnlen)8);
 	    return 0;
 	}
@@ -1540,7 +1605,7 @@ static integer c__20 = 20;
 /*                 zero; the axes are arbitrary, as long as the */
 /*                 middle axis is distinct from the other two. */
 
-		    eul2m_(&c_b192, &c_b192, &mob, &c__1, &c__3, &c__1, oblr);
+		    eul2m_(&c_b193, &c_b193, &mob, &c__1, &c__3, &c__1, oblr);
 
 /*                 Find the rotation from the J2000 to the */
 /*                 earth mean ecliptic of date frame.  Invert. */
@@ -1596,8 +1661,12 @@ static integer c__20 = 20;
 
 		zzdynvac_(inname__, infram, itmaxe + (((i__1 = i__ - 1) < 2 &&
 			 0 <= i__1 ? i__1 : s_rnge("itmaxe", i__1, "zzdynrot_"
-			, (ftnlen)1058)) << 5), &c__1, &n, axname, (ftnlen)32,
+			, (ftnlen)1102)) << 5), &c__1, &n, axname, (ftnlen)32,
 			 (ftnlen)32, (ftnlen)80);
+		if (failed_()) {
+		    chkout_("ZZDYNROT", (ftnlen)8);
+		    return 0;
+		}
 		cmprss_(" ", &c__0, axname, axname, (ftnlen)1, (ftnlen)80, (
 			ftnlen)80);
 		ucase_(axname, axname, (ftnlen)80, (ftnlen)80);
@@ -1610,10 +1679,10 @@ static integer c__20 = 20;
 		cmprss_("+", &c__0, axname, axname, (ftnlen)1, (ftnlen)80, (
 			ftnlen)80);
 		axis[(i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge("axis",
-			 i__1, "zzdynrot_", (ftnlen)1071)] = isrchc_(axname, &
+			 i__1, "zzdynrot_", (ftnlen)1120)] = isrchc_(axname, &
 			c__3, axes, (ftnlen)80, (ftnlen)1);
 		if (axis[(i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge(
-			"axis", i__1, "zzdynrot_", (ftnlen)1074)] == 0) {
+			"axis", i__1, "zzdynrot_", (ftnlen)1123)] == 0) {
 		    setmsg_("Definition of frame # associates vector # with "
 			    "axis #.  The only valid axis values are { X, -X,"
 			    " Y, -Y, Z, -Z }. This situation is usually cause"
@@ -1639,23 +1708,27 @@ static integer c__20 = 20;
 
 		zzdynvac_(inname__, infram, itmvdf + (((i__1 = i__ - 1) < 2 &&
 			 0 <= i__1 ? i__1 : s_rnge("itmvdf", i__1, "zzdynrot_"
-			, (ftnlen)1103)) << 5), &c__1, &n, vecdef + ((i__2 = 
+			, (ftnlen)1152)) << 5), &c__1, &n, vecdef + ((i__2 = 
 			i__ - 1) < 2 && 0 <= i__2 ? i__2 : s_rnge("vecdef", 
-			i__2, "zzdynrot_", (ftnlen)1103)) * 80, (ftnlen)32, (
+			i__2, "zzdynrot_", (ftnlen)1152)) * 80, (ftnlen)32, (
 			ftnlen)32, (ftnlen)80);
+		if (failed_()) {
+		    chkout_("ZZDYNROT", (ftnlen)8);
+		    return 0;
+		}
 		cmprss_(" ", &c__0, vecdef + ((i__1 = i__ - 1) < 2 && 0 <= 
 			i__1 ? i__1 : s_rnge("vecdef", i__1, "zzdynrot_", (
-			ftnlen)1106)) * 80, vecdef + ((i__2 = i__ - 1) < 2 && 
+			ftnlen)1160)) * 80, vecdef + ((i__2 = i__ - 1) < 2 && 
 			0 <= i__2 ? i__2 : s_rnge("vecdef", i__2, "zzdynrot_",
-			 (ftnlen)1106)) * 80, (ftnlen)1, (ftnlen)80, (ftnlen)
+			 (ftnlen)1160)) * 80, (ftnlen)1, (ftnlen)80, (ftnlen)
 			80);
 		ucase_(vecdef + ((i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : 
-			s_rnge("vecdef", i__1, "zzdynrot_", (ftnlen)1107)) * 
+			s_rnge("vecdef", i__1, "zzdynrot_", (ftnlen)1161)) * 
 			80, vecdef + ((i__2 = i__ - 1) < 2 && 0 <= i__2 ? 
 			i__2 : s_rnge("vecdef", i__2, "zzdynrot_", (ftnlen)
-			1107)) * 80, (ftnlen)80, (ftnlen)80);
+			1161)) * 80, (ftnlen)80, (ftnlen)80);
 		if (s_cmp(vecdef + ((i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 :
-			 s_rnge("vecdef", i__1, "zzdynrot_", (ftnlen)1110)) * 
+			 s_rnge("vecdef", i__1, "zzdynrot_", (ftnlen)1164)) * 
 			80, "OBSERVER_TARGET_POSITION", (ftnlen)80, (ftnlen)
 			24) == 0) {
 
@@ -1666,22 +1739,22 @@ static integer c__20 = 20;
 
 		    zzdynbid_(inname__, infram, itmtrg + (((i__1 = i__ - 1) < 
 			    2 && 0 <= i__1 ? i__1 : s_rnge("itmtrg", i__1, 
-			    "zzdynrot_", (ftnlen)1117)) << 5), &targ, (ftnlen)
+			    "zzdynrot_", (ftnlen)1171)) << 5), &targ, (ftnlen)
 			    32, (ftnlen)32);
 		    zzdynbid_(inname__, infram, itmobs + (((i__1 = i__ - 1) < 
 			    2 && 0 <= i__1 ? i__1 : s_rnge("itmobs", i__1, 
-			    "zzdynrot_", (ftnlen)1119)) << 5), &obs, (ftnlen)
+			    "zzdynrot_", (ftnlen)1173)) << 5), &obs, (ftnlen)
 			    32, (ftnlen)32);
 		    zzdynvac_(inname__, infram, itmabc + (((i__1 = i__ - 1) < 
 			    2 && 0 <= i__1 ? i__1 : s_rnge("itmabc", i__1, 
-			    "zzdynrot_", (ftnlen)1121)) << 5), &c__1, &n, 
+			    "zzdynrot_", (ftnlen)1175)) << 5), &c__1, &n, 
 			    abcorr, (ftnlen)32, (ftnlen)32, (ftnlen)5);
 
 /*                 Look up the Ith position vector in the J2000 frame. */
 
 		    zzspkzp0_(&targ, &t0, "J2000", abcorr, &obs, &v2[(i__1 = 
 			    i__ * 3 - 3) < 6 && 0 <= i__1 ? i__1 : s_rnge(
-			    "v2", i__1, "zzdynrot_", (ftnlen)1127)], &lt, (
+			    "v2", i__1, "zzdynrot_", (ftnlen)1181)], &lt, (
 			    ftnlen)5, (ftnlen)5);
 		    if (failed_()) {
 			chkout_("ZZDYNROT", (ftnlen)8);
@@ -1693,7 +1766,7 @@ static integer c__20 = 20;
 
 		} else if (s_cmp(vecdef + ((i__1 = i__ - 1) < 2 && 0 <= i__1 ?
 			 i__1 : s_rnge("vecdef", i__1, "zzdynrot_", (ftnlen)
-			1140)) * 80, "OBSERVER_TARGET_VELOCITY", (ftnlen)80, (
+			1194)) * 80, "OBSERVER_TARGET_VELOCITY", (ftnlen)80, (
 			ftnlen)24) == 0) {
 
 /*                 The vector is the velocity of a target relative */
@@ -1703,15 +1776,15 @@ static integer c__20 = 20;
 
 		    zzdynbid_(inname__, infram, itmtrg + (((i__1 = i__ - 1) < 
 			    2 && 0 <= i__1 ? i__1 : s_rnge("itmtrg", i__1, 
-			    "zzdynrot_", (ftnlen)1147)) << 5), &targ, (ftnlen)
+			    "zzdynrot_", (ftnlen)1201)) << 5), &targ, (ftnlen)
 			    32, (ftnlen)32);
 		    zzdynbid_(inname__, infram, itmobs + (((i__1 = i__ - 1) < 
 			    2 && 0 <= i__1 ? i__1 : s_rnge("itmobs", i__1, 
-			    "zzdynrot_", (ftnlen)1149)) << 5), &obs, (ftnlen)
+			    "zzdynrot_", (ftnlen)1203)) << 5), &obs, (ftnlen)
 			    32, (ftnlen)32);
 		    zzdynvac_(inname__, infram, itmabc + (((i__1 = i__ - 1) < 
 			    2 && 0 <= i__1 ? i__1 : s_rnge("itmabc", i__1, 
-			    "zzdynrot_", (ftnlen)1151)) << 5), &c__1, &n, 
+			    "zzdynrot_", (ftnlen)1205)) << 5), &c__1, &n, 
 			    abcorr, (ftnlen)32, (ftnlen)32, (ftnlen)5);
 
 /*                 We need to know the frame in which the velocity is */
@@ -1719,24 +1792,24 @@ static integer c__20 = 20;
 
 		    zzdynfid_(inname__, infram, itmfrm + (((i__1 = i__ - 1) < 
 			    2 && 0 <= i__1 ? i__1 : s_rnge("itmfrm", i__1, 
-			    "zzdynrot_", (ftnlen)1158)) << 5), &frid, (ftnlen)
+			    "zzdynrot_", (ftnlen)1212)) << 5), &frid, (ftnlen)
 			    32, (ftnlen)32);
 		    frmnam_(&frid, velfrm, (ftnlen)32);
-		    if (failed_()) {
-			chkout_("ZZDYNROT", (ftnlen)8);
-			return 0;
-		    }
 
 /*                 Look up the Ith velocity vector in the velocity frame. */
 
 		    zzspkez0_(&targ, &t0, velfrm, abcorr, &obs, stemp, &lt, (
 			    ftnlen)32, (ftnlen)5);
+		    if (failed_()) {
+			chkout_("ZZDYNROT", (ftnlen)8);
+			return 0;
+		    }
 
 /*                 We'll work with the unit velocity vector. */
 
 		    vhat_(&stemp[3], &v2[(i__1 = i__ * 3 - 3) < 6 && 0 <= 
 			    i__1 ? i__1 : s_rnge("v2", i__1, "zzdynrot_", (
-			    ftnlen)1175)]);
+			    ftnlen)1229)]);
 
 /*                 We need the epoch VET at which VELFRM is evaluated. */
 /*                 This epoch will be used to transform the velocity */
@@ -1749,7 +1822,11 @@ static integer c__20 = 20;
 /*                 Parse the aberration correction.  Capture the */
 /*                 epoch used to evaluate the velocity vector's frame. */
 
-		    zzprscor_(abcorr, corblk, (ftnlen)5);
+		    zzvalcor_(abcorr, corblk, (ftnlen)5);
+		    if (failed_()) {
+			chkout_("ZZDYNROT", (ftnlen)8);
+			return 0;
+		    }
 		    if (corblk[1]) {
 
 /*                    Light time correction is used.  The epoch used */
@@ -1788,12 +1865,6 @@ static integer c__20 = 20;
 				return 0;
 			    }
 			}
-		    } else {
-
-/*                    No aberration correction was specified.  Evaluate */
-/*                    the frame at T0. */
-
-			vet = t0;
 		    }
 
 /*                 The velocity frame evaluation epoch VET is now set. */
@@ -1811,17 +1882,17 @@ static integer c__20 = 20;
 			}
 			mxv_(r2000, &v2[(i__1 = i__ * 3 - 3) < 6 && 0 <= i__1 
 				? i__1 : s_rnge("v2", i__1, "zzdynrot_", (
-				ftnlen)1267)], ptemp);
+				ftnlen)1319)], ptemp);
 			moved_(ptemp, &c__3, &v2[(i__1 = i__ * 3 - 3) < 6 && 
 				0 <= i__1 ? i__1 : s_rnge("v2", i__1, "zzdyn"
-				"rot_", (ftnlen)1268)]);
+				"rot_", (ftnlen)1320)]);
 		    }
 
 /*                 At this point, V2(*,I) contains velocity */
 /*                 relative to frame J2000. */
 		} else if (s_cmp(vecdef + ((i__1 = i__ - 1) < 2 && 0 <= i__1 ?
 			 i__1 : s_rnge("vecdef", i__1, "zzdynrot_", (ftnlen)
-			1277)) * 80, "TARGET_NEAR_POINT", (ftnlen)80, (ftnlen)
+			1329)) * 80, "TARGET_NEAR_POINT", (ftnlen)80, (ftnlen)
 			17) == 0) {
 
 /*                 The vector points from an observer to the near */
@@ -1831,15 +1902,15 @@ static integer c__20 = 20;
 
 		    zzdynbid_(inname__, infram, itmtrg + (((i__1 = i__ - 1) < 
 			    2 && 0 <= i__1 ? i__1 : s_rnge("itmtrg", i__1, 
-			    "zzdynrot_", (ftnlen)1284)) << 5), &targ, (ftnlen)
+			    "zzdynrot_", (ftnlen)1336)) << 5), &targ, (ftnlen)
 			    32, (ftnlen)32);
 		    zzdynbid_(inname__, infram, itmobs + (((i__1 = i__ - 1) < 
 			    2 && 0 <= i__1 ? i__1 : s_rnge("itmobs", i__1, 
-			    "zzdynrot_", (ftnlen)1286)) << 5), &obs, (ftnlen)
+			    "zzdynrot_", (ftnlen)1338)) << 5), &obs, (ftnlen)
 			    32, (ftnlen)32);
 		    zzdynvac_(inname__, infram, itmabc + (((i__1 = i__ - 1) < 
 			    2 && 0 <= i__1 ? i__1 : s_rnge("itmabc", i__1, 
-			    "zzdynrot_", (ftnlen)1288)) << 5), &c__1, &n, 
+			    "zzdynrot_", (ftnlen)1340)) << 5), &c__1, &n, 
 			    abcorr, (ftnlen)32, (ftnlen)32, (ftnlen)5);
 
 /*                 The vector points from an observer to the */
@@ -1878,7 +1949,11 @@ static integer c__20 = 20;
 
 /*                 Get the radii of the target body. */
 
-		    bodvcd_(&targ, "RADII", &c__3, &n, radii, (ftnlen)5);
+		    zzgftreb_(&targ, radii);
+		    if (failed_()) {
+			chkout_("ZZDYNROT", (ftnlen)8);
+			return 0;
+		    }
 
 /*                 Look up the Ith position vector in the target-fixed */
 /*                 frame.  Negate the vector to obtain the target-to- */
@@ -1926,7 +2001,7 @@ static integer c__20 = 20;
 		    }
 		    mxv_(tipm, ptemp, &v2[(i__1 = i__ * 3 - 3) < 6 && 0 <= 
 			    i__1 ? i__1 : s_rnge("v2", i__1, "zzdynrot_", (
-			    ftnlen)1395)]);
+			    ftnlen)1452)]);
 
 /*                 At this point, V2(*,I) contains position of the near */
 /*                 point on the target as seen by the observer, relative */
@@ -1934,7 +2009,7 @@ static integer c__20 = 20;
 
 		} else if (s_cmp(vecdef + ((i__1 = i__ - 1) < 2 && 0 <= i__1 ?
 			 i__1 : s_rnge("vecdef", i__1, "zzdynrot_", (ftnlen)
-			1403)) * 80, "CONSTANT", (ftnlen)80, (ftnlen)8) == 0) 
+			1460)) * 80, "CONSTANT", (ftnlen)80, (ftnlen)8) == 0) 
 			{
 
 /*                 The vector is constant in a specified frame. */
@@ -1946,7 +2021,7 @@ static integer c__20 = 20;
 
 		    zzdynfid_(inname__, infram, itmfrm + (((i__1 = i__ - 1) < 
 			    2 && 0 <= i__1 ? i__1 : s_rnge("itmfrm", i__1, 
-			    "zzdynrot_", (ftnlen)1412)) << 5), &frid, (ftnlen)
+			    "zzdynrot_", (ftnlen)1469)) << 5), &frid, (ftnlen)
 			    32, (ftnlen)32);
 
 /*                 Let FET ("frame ET") be the evaluation epoch for */
@@ -1967,7 +2042,7 @@ static integer c__20 = 20;
 
 		    zzdynoac_(inname__, infram, itmabc + (((i__1 = i__ - 1) < 
 			    2 && 0 <= i__1 ? i__1 : s_rnge("itmabc", i__1, 
-			    "zzdynrot_", (ftnlen)1432)) << 5), &c__1, &n, 
+			    "zzdynrot_", (ftnlen)1489)) << 5), &c__1, &n, 
 			    cvcorr, &fnd, (ftnlen)32, (ftnlen)32, (ftnlen)5);
 		    if (failed_()) {
 			chkout_("ZZDYNROT", (ftnlen)8);
@@ -1977,11 +2052,14 @@ static integer c__20 = 20;
 			s_copy(cvcorr, "NONE", (ftnlen)5, (ftnlen)4);
 		    }
 		    zzprscor_(cvcorr, corblk, (ftnlen)5);
+		    if (failed_()) {
+			chkout_("ZZDYNROT", (ftnlen)8);
+			return 0;
+		    }
 		    if (! corblk[0]) {
 
 /*                    We need to apply an aberration correction to */
 /*                    the constant vector. */
-			zzprscor_(cvcorr, corblk, (ftnlen)5);
 
 /*                    Check for errors in the aberration correction */
 /*                    specification. */
@@ -2042,7 +2120,7 @@ static integer c__20 = 20;
 				zzdynbid_(inname__, infram, itmobs + (((i__1 =
 					 i__ - 1) < 2 && 0 <= i__1 ? i__1 : 
 					s_rnge("itmobs", i__1, "zzdynrot_", (
-					ftnlen)1525)) << 5), &cvobs, (ftnlen)
+					ftnlen)1584)) << 5), &cvobs, (ftnlen)
 					32, (ftnlen)32);
 
 /*                          Obtain light time from the observer to the */
@@ -2055,6 +2133,10 @@ static integer c__20 = 20;
 /*                          Find the evaluation epoch for the frame. */
 
 				zzcorepc_(cvcorr, &t0, &lt, &fet, (ftnlen)5);
+				if (failed_()) {
+				    chkout_("ZZDYNROT", (ftnlen)8);
+				    return 0;
+				}
 			    }
 			} else if (corblk[2]) {
 
@@ -2070,9 +2152,13 @@ static integer c__20 = 20;
 
 			    zzdynbid_(inname__, infram, itmobs + (((i__1 = 
 				    i__ - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge(
-				    "itmobs", i__1, "zzdynrot_", (ftnlen)1555)
+				    "itmobs", i__1, "zzdynrot_", (ftnlen)1619)
 				    ) << 5), &cvobs, (ftnlen)32, (ftnlen)32);
 			    zzspksb0_(&cvobs, &t0, "J2000", stobs, (ftnlen)5);
+			    if (failed_()) {
+				chkout_("ZZDYNROT", (ftnlen)8);
+				return 0;
+			    }
 			}
 		    }
 
@@ -2080,7 +2166,7 @@ static integer c__20 = 20;
 
 		    zzdynvac_(inname__, infram, itmspc + (((i__1 = i__ - 1) < 
 			    2 && 0 <= i__1 ? i__1 : s_rnge("itmspc", i__1, 
-			    "zzdynrot_", (ftnlen)1567)) << 5), &c__1, &n, 
+			    "zzdynrot_", (ftnlen)1636)) << 5), &c__1, &n, 
 			    spec, (ftnlen)32, (ftnlen)32, (ftnlen)80);
 		    if (failed_()) {
 			chkout_("ZZDYNROT", (ftnlen)8);
@@ -2098,7 +2184,7 @@ static integer c__20 = 20;
 
 			zzdynvad_(inname__, infram, itmvec + (((i__1 = i__ - 
 				1) < 2 && 0 <= i__1 ? i__1 : s_rnge("itmvec", 
-				i__1, "zzdynrot_", (ftnlen)1584)) << 5), &
+				i__1, "zzdynrot_", (ftnlen)1653)) << 5), &
 				c__3, &n, dirvec, (ftnlen)32, (ftnlen)32);
 		    } else if (s_cmp(spec, "LATITUDINAL", (ftnlen)80, (ftnlen)
 			    11) == 0 || s_cmp(spec, "RA/DEC", (ftnlen)80, (
@@ -2110,7 +2196,7 @@ static integer c__20 = 20;
 
 			zzdynvac_(inname__, infram, itmunt + (((i__1 = i__ - 
 				1) < 2 && 0 <= i__1 ? i__1 : s_rnge("itmunt", 
-				i__1, "zzdynrot_", (ftnlen)1595)) << 5), &
+				i__1, "zzdynrot_", (ftnlen)1664)) << 5), &
 				c__1, &n, units, (ftnlen)32, (ftnlen)32, (
 				ftnlen)80);
 			if (s_cmp(spec, "LATITUDINAL", (ftnlen)80, (ftnlen)11)
@@ -2120,12 +2206,12 @@ static integer c__20 = 20;
 
 			    zzdynvad_(inname__, infram, itmlon + (((i__1 = 
 				    i__ - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge(
-				    "itmlon", i__1, "zzdynrot_", (ftnlen)1603)
+				    "itmlon", i__1, "zzdynrot_", (ftnlen)1672)
 				    ) << 5), &c__1, &n, &lon, (ftnlen)32, (
 				    ftnlen)32);
 			    zzdynvad_(inname__, infram, itmlat + (((i__1 = 
 				    i__ - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge(
-				    "itmlat", i__1, "zzdynrot_", (ftnlen)1606)
+				    "itmlat", i__1, "zzdynrot_", (ftnlen)1675)
 				    ) << 5), &c__1, &n, &lat, (ftnlen)32, (
 				    ftnlen)32);
 
@@ -2141,12 +2227,12 @@ static integer c__20 = 20;
 
 			    zzdynvad_(inname__, infram, itmra + (((i__1 = i__ 
 				    - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge(
-				    "itmra", i__1, "zzdynrot_", (ftnlen)1619))
+				    "itmra", i__1, "zzdynrot_", (ftnlen)1688))
 				     << 5), &c__1, &n, &ra, (ftnlen)32, (
 				    ftnlen)32);
 			    zzdynvad_(inname__, infram, itmdec + (((i__1 = 
 				    i__ - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge(
-				    "itmdec", i__1, "zzdynrot_", (ftnlen)1622)
+				    "itmdec", i__1, "zzdynrot_", (ftnlen)1691)
 				    ) << 5), &c__1, &n, &dec, (ftnlen)32, (
 				    ftnlen)32);
 
@@ -2164,7 +2250,7 @@ static integer c__20 = 20;
 
 /*                    Now  produce a direction vector. */
 
-			latrec_(&c_b365, angles, &angles[1], dirvec);
+			latrec_(&c_b371, angles, &angles[1], dirvec);
 		    } else {
 			setmsg_("Definition of two-vector parameterized dyna"
 				"mic frame # includes constant vector specifi"
@@ -2179,14 +2265,14 @@ static integer c__20 = 20;
 			return 0;
 		    }
 
-/*                 At this point, the cartesian coordinates of the */
+/*                 At this point, the Cartesian coordinates of the */
 /*                 vector relative to the constant vector frame */
 /*                 are stored in DIRVEC. */
 
 		    if (frid == j2000) {
 			vequ_(dirvec, &v2[(i__1 = i__ * 3 - 3) < 6 && 0 <= 
 				i__1 ? i__1 : s_rnge("v2", i__1, "zzdynrot_", 
-				(ftnlen)1669)]);
+				(ftnlen)1738)]);
 		    } else {
 
 /*                    Convert the direction vector to the J2000 frame. */
@@ -2198,7 +2284,7 @@ static integer c__20 = 20;
 			}
 			mxv_(r2000, dirvec, &v2[(i__1 = i__ * 3 - 3) < 6 && 0 
 				<= i__1 ? i__1 : s_rnge("v2", i__1, "zzdynro"
-				"t_", (ftnlen)1682)]);
+				"t_", (ftnlen)1751)]);
 		    }
 
 /*                 The constant vector is now represented */
@@ -2216,14 +2302,14 @@ static integer c__20 = 20;
 
 			    stlabx_(&v2[(i__1 = i__ * 3 - 3) < 6 && 0 <= i__1 
 				    ? i__1 : s_rnge("v2", i__1, "zzdynrot_", (
-				    ftnlen)1700)], &stobs[3], ptemp);
+				    ftnlen)1769)], &stobs[3], ptemp);
 			} else {
 
 /*                       The correction is for reception. */
 
 			    stelab_(&v2[(i__1 = i__ * 3 - 3) < 6 && 0 <= i__1 
 				    ? i__1 : s_rnge("v2", i__1, "zzdynrot_", (
-				    ftnlen)1706)], &stobs[3], ptemp);
+				    ftnlen)1775)], &stobs[3], ptemp);
 			}
 			if (failed_()) {
 			    chkout_("ZZDYNROT", (ftnlen)8);
@@ -2231,7 +2317,7 @@ static integer c__20 = 20;
 			}
 			vequ_(ptemp, &v2[(i__1 = i__ * 3 - 3) < 6 && 0 <= 
 				i__1 ? i__1 : s_rnge("v2", i__1, "zzdynrot_", 
-				(ftnlen)1715)]);
+				(ftnlen)1784)]);
 		    }
 
 /*                 At this point, V2(*,I) contains the constant */
@@ -2248,7 +2334,7 @@ static integer c__20 = 20;
 		    errch_("#", inname__, (ftnlen)1, (ftnlen)32);
 		    errch_("#", vecdef + ((i__1 = i__ - 1) < 2 && 0 <= i__1 ? 
 			    i__1 : s_rnge("vecdef", i__1, "zzdynrot_", (
-			    ftnlen)1736)) * 80, (ftnlen)1, (ftnlen)80);
+			    ftnlen)1805)) * 80, (ftnlen)1, (ftnlen)80);
 		    sigerr_("SPICE(NOTSUPPORTED)", (ftnlen)19);
 		    chkout_("ZZDYNROT", (ftnlen)8);
 		    return 0;
@@ -2258,11 +2344,11 @@ static integer c__20 = 20;
 
 		if (negate) {
 		    vminus_(&v2[(i__1 = i__ * 3 - 3) < 6 && 0 <= i__1 ? i__1 :
-			     s_rnge("v2", i__1, "zzdynrot_", (ftnlen)1747)], 
+			     s_rnge("v2", i__1, "zzdynrot_", (ftnlen)1816)], 
 			    ptemp);
 		    moved_(ptemp, &c__3, &v2[(i__1 = i__ * 3 - 3) < 6 && 0 <= 
 			    i__1 ? i__1 : s_rnge("v2", i__1, "zzdynrot_", (
-			    ftnlen)1748)]);
+			    ftnlen)1817)]);
 		}
 	    }
 
@@ -2371,15 +2457,15 @@ static integer c__20 = 20;
 		n = 0;
 		zzdynvad_(inname__, infram, itmcof + (((i__1 = i__ - 1) < 3 &&
 			 0 <= i__1 ? i__1 : s_rnge("itmcof", i__1, "zzdynrot_"
-			, (ftnlen)1880)) << 5), &c__20, &n, &coeffs[(i__2 = 
+			, (ftnlen)1949)) << 5), &c__20, &n, &coeffs[(i__2 = 
 			i__ * 20 - 20) < 60 && 0 <= i__2 ? i__2 : s_rnge(
-			"coeffs", i__2, "zzdynrot_", (ftnlen)1880)], (ftnlen)
+			"coeffs", i__2, "zzdynrot_", (ftnlen)1949)], (ftnlen)
 			32, (ftnlen)32);
 
 /*              Set the polynomial degree for the Ith angle. */
 
 		degs[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("degs",
-			 i__1, "zzdynrot_", (ftnlen)1886)] = n - 1;
+			 i__1, "zzdynrot_", (ftnlen)1955)] = n - 1;
 	    }
 
 /*           Look up the units associated with the angles. */
@@ -2397,15 +2483,15 @@ static integer c__20 = 20;
 	    for (i__ = 1; i__ <= 3; ++i__) {
 		polyds_(&coeffs[(i__1 = i__ * 20 - 20) < 60 && 0 <= i__1 ? 
 			i__1 : s_rnge("coeffs", i__1, "zzdynrot_", (ftnlen)
-			1906)], &degs[(i__2 = i__ - 1) < 3 && 0 <= i__2 ? 
-			i__2 : s_rnge("degs", i__2, "zzdynrot_", (ftnlen)1906)
+			1975)], &degs[(i__2 = i__ - 1) < 3 && 0 <= i__2 ? 
+			i__2 : s_rnge("degs", i__2, "zzdynrot_", (ftnlen)1975)
 			], &c__0, &delta, poly);
 
 /*              Convert units.  Fill in the Euler angle vector. */
 
 		convrt_(poly, units, "RADIANS", &eulang[(i__1 = i__ - 1) < 3 
 			&& 0 <= i__1 ? i__1 : s_rnge("eulang", i__1, "zzdynr"
-			"ot_", (ftnlen)1910)], (ftnlen)80, (ftnlen)7);
+			"ot_", (ftnlen)1979)], (ftnlen)80, (ftnlen)7);
 	    }
 
 /*           Produce a position transformation matrix that maps from */
@@ -2417,6 +2503,66 @@ static integer c__20 = 20;
 /*           This is the end of the work specific to Euler frames. */
 /*           From here we drop out of the IF block. */
 
+	} else if (s_cmp(dynfam, "PRODUCT", (ftnlen)80, (ftnlen)7) == 0) {
+
+/*           The frame belongs to the product family. */
+
+/*           We expect to see specifications of "from" and "to" frames */
+/*           that make up the product. */
+
+/*           Look up the "from" and "to" frames that define the product. */
+
+	    zzdynvac_(inname__, infram, "FROM_FRAMES", &c__10, &m, fframs, (
+		    ftnlen)32, (ftnlen)11, (ftnlen)32);
+	    zzdynvac_(inname__, infram, "TO_FRAMES", &c__10, &n, tframs, (
+		    ftnlen)32, (ftnlen)9, (ftnlen)32);
+	    if (failed_()) {
+		chkout_("ZZDYNROT", (ftnlen)8);
+		return 0;
+	    }
+	    if (n != m) {
+		setmsg_("Definition of product parameterized dynamic frame #"
+			" has # \"from\" frames and # \"to\" frames. These co"
+			"unts must match.", (ftnlen)115);
+		errch_("#", inname__, (ftnlen)1, (ftnlen)32);
+		errint_("#", &m, (ftnlen)1);
+		errint_("#", &n, (ftnlen)1);
+		sigerr_("SPICE(BADFRAMECOUNT)", (ftnlen)20);
+		chkout_("ZZDYNROT", (ftnlen)8);
+		return 0;
+	    }
+
+/*           The product of the factors is the transformation from the */
+/*           base frame to the output frame. We need the inverse of */
+/*           this transformation. */
+
+/*           Compute the inverse of the product of the factors; place */
+/*           the result in ROTATE. */
+
+	    namfrm_(fframs, &fromid, (ftnlen)32);
+	    namfrm_(tframs, &toid, (ftnlen)32);
+	    zzrefch0_(&toid, &fromid, &t0, rotate);
+	    if (failed_()) {
+		chkout_("ZZDYNROT", (ftnlen)8);
+		return 0;
+	    }
+	    i__1 = n;
+	    for (i__ = 2; i__ <= i__1; ++i__) {
+		moved_(rotate, &c__9, rtemp);
+		namfrm_(fframs + (((i__2 = i__ - 1) < 10 && 0 <= i__2 ? i__2 :
+			 s_rnge("fframs", i__2, "zzdynrot_", (ftnlen)2049)) <<
+			 5), &fromid, (ftnlen)32);
+		namfrm_(tframs + (((i__2 = i__ - 1) < 10 && 0 <= i__2 ? i__2 :
+			 s_rnge("tframs", i__2, "zzdynrot_", (ftnlen)2050)) <<
+			 5), &toid, (ftnlen)32);
+		zzrefch0_(&toid, &fromid, &t0, rotate);
+		if (failed_()) {
+		    chkout_("ZZDYNROT", (ftnlen)8);
+		    return 0;
+		}
+		mxm_(rotate, rtemp, rout);
+		moved_(rout, &c__9, rotate);
+	    }
 	} else {
 	    setmsg_("Dynamic frame family # (in definition of frame #) is no"
 		    "t supported. This situation is usually caused by an erro"

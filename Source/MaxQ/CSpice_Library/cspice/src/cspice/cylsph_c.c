@@ -47,11 +47,11 @@
    #include "SpiceZmc.h"
 
    void cylsph_c ( SpiceDouble    r,
-                   SpiceDouble    lonc,
+                   SpiceDouble    clon,
                    SpiceDouble    z,
                    SpiceDouble *  radius,
                    SpiceDouble *  colat,
-                   SpiceDouble *  lon )
+                   SpiceDouble *  slon )
 
 /*
 
@@ -60,30 +60,30 @@
    VARIABLE  I/O  DESCRIPTION
    --------  ---  -------------------------------------------------
    r          I   Distance of point from z axis.
-   lonc       I   Angle (radians) of point from XZ plane.
+   clon       I   Angle (radians) of point from XZ plane.
    z          I   Height of point above XY plane.
    radius     O   Distance of point from origin.
    colat      O   Polar angle (co-latitude in radians) of point.
-   lon        O   Azimuthal angle (longitude) of point (radians).
+   slon       O   Azimuthal angle (longitude) of point (radians).
 
 -Detailed_Input
 
-   r          Distance of the point of interest from z axis.
+   r           is the distance of the point of interest from z axis.
 
-   lonc       Cylindrical angle (radians) of the point from the
-              XZ plane.
+   clon        is the cylindrical angle (radians) of the point from the
+               XZ plane.
 
-   z          Height of the point above XY plane.
+   z           is the height of the point above XY plane.
 
 -Detailed_Output
 
-   radius     Distance of the point from origin.
+   radius      is the distance of the point from origin.
 
-   colat      Polar angle (co-latitude in radians) of the point.
-              The range of `colat' is [-pi, pi].
+   colat       is the polar angle (co-latitude in radians) of the point.
+               The range of `colat' is [-pi, pi].
 
-   lon        Azimuthal angle (longitude) of the point (radians).
-              `lon' is set equal to `lonc'.
+   slon        is the azimuthal angle (longitude) of the point
+               (radians). `slon' is set equal to `clon'.
 
 -Parameters
 
@@ -104,31 +104,266 @@
 
 -Examples
 
+   The numerical results shown for these examples may differ across
+   platforms. The results depend on the SPICE kernels used as
+   input, the compiler and supporting libraries, and the machine
+   specific arithmetic implementation.
 
-   Below are two tables:  The first is a set of input values
-   the second is the result of the following sequence of
-   calls to Spicelib routines.  Note all input and output angular
-   quantities are in degrees.
+   1) Compute the cylindrical coordinates of the position of the
+      Moon as seen from the Earth, and convert them to spherical
+      and rectangular coordinates.
 
-       convrt_c ( lonc, "DEGREES", "RADIANS", lonc  );
-
-       cylsph_c ( r, lonc, z, &radius, &colat, &lon );
-
-       convrt_c ( lon,  "RADIANS", "DEGREES", lon   );
-       convrt_c ( lat,  "RADIANS", "DEGREES", lat   );
-
+      Use the meta-kernel shown below to load the required SPICE
+      kernels.
 
 
-   Inputs:                         Results:
+         KPL/MK
 
-   r        lonc     z             radius   lon      colat
-   ------   ------   ------        ------   ------   ------
-   1.0000     0       0            1.0000     0       90.00
-   1.0000    90.00    0            1.0000    90.00    90.00
-   1.0000   180.00    1.000        1.4142   180.00    45.00
-   1.0000   180.00   -1.000        1.4142   180.00   135.00
-   0.0000   180.00    1.000        1.0000   180.00     0.00
-   0.0000    33.00    0            0.0000    33.00     0.00
+         File name: cylsph_ex1.tm
+
+         This meta-kernel is intended to support operation of SPICE
+         example programs. The kernels shown here should not be
+         assumed to contain adequate or correct versions of data
+         required by SPICE-based user applications.
+
+         In order for an application to use this meta-kernel, the
+         kernels referenced here must be present in the user's
+         current working directory.
+
+         The names and contents of the kernels referenced
+         by this meta-kernel are as follows:
+
+            File name                     Contents
+            ---------                     --------
+            de421.bsp                     Planetary ephemeris
+            naif0012.tls                  Leapseconds
+
+
+         \begindata
+
+            KERNELS_TO_LOAD = ( 'de421.bsp',
+                                'naif0012.tls'  )
+
+         \begintext
+
+         End of meta-kernel
+
+
+      Example code begins here.
+
+
+      /.
+         Program cylsph_ex1
+      ./
+      #include <stdio.h>
+      #include "SpiceUsr.h"
+
+      int main( )
+      {
+
+         /.
+         Local variables
+         ./
+         SpiceDouble          clon;
+         SpiceDouble          colat;
+         SpiceDouble          et;
+         SpiceDouble          lt;
+         SpiceDouble          pos    [3];
+         SpiceDouble          r;
+         SpiceDouble          radius;
+         SpiceDouble          rectan [3];
+         SpiceDouble          slon;
+         SpiceDouble          z;
+
+         /.
+         Load SPK and LSK kernels, use a meta kernel for
+         convenience.
+         ./
+         furnsh_c ( "cylsph_ex1.tm" );
+
+         /.
+         Look up the geometric state of the Moon as seen from
+         the Earth at 2017 Mar 20, relative to the J2000
+         reference frame.
+         ./
+         str2et_c ( "2017 Mar 20", &et );
+
+         spkpos_c ( "Moon", et, "J2000", "NONE", "Earth", pos, &lt );
+
+         /.
+         Convert the position vector `pos' to cylindrical
+         coordinates.
+         ./
+         reccyl_c ( pos, &r, &clon, &z );
+
+         /.
+         Convert the cylindrical coordinates to spherical.
+         ./
+         cylsph_c ( r, clon, z, &radius, &colat, &slon );
+
+         /.
+         Convert the spherical coordinates to rectangular.
+         ./
+         sphrec_c ( radius, colat, slon, rectan );
+
+         printf( " \n" );
+         printf( "Original rectangular coordinates:\n" );
+         printf( " \n" );
+         printf( " X           (km):  %19.8f\n", pos[0] );
+         printf( " Y           (km):  %19.8f\n", pos[1] );
+         printf( " Z           (km):  %19.8f\n", pos[2] );
+         printf( " \n" );
+         printf( "Cylindrical coordinates:\n" );
+         printf( " \n" );
+         printf( " Radius      (km):  %19.8f\n", r );
+         printf( " Longitude  (deg):  %19.8f\n", clon*dpr_c ( ) );
+         printf( " Z           (km):  %19.8f\n", z );
+         printf( " \n" );
+         printf( "Spherical coordinates:\n" );
+         printf( " \n" );
+         printf( " Radius      (km):  %19.8f\n", radius );
+         printf( " Colatitude (deg):  %19.8f\n", colat*dpr_c ( ) );
+         printf( " Longitude  (deg):  %19.8f\n", slon*dpr_c ( ) );
+         printf( " \n" );
+         printf( "Rectangular coordinates from sphrec_c:\n" );
+         printf( " \n" );
+         printf( " X           (km):  %19.8f\n", rectan[0] );
+         printf( " Y           (km):  %19.8f\n", rectan[1] );
+         printf( " Z           (km):  %19.8f\n", rectan[2] );
+         printf( " \n" );
+
+         return ( 0 );
+      }
+
+
+      When this program was executed on a Mac/Intel/cc/64-bit
+      platform, the output was:
+
+
+      Original rectangular coordinates:
+
+       X           (km):      -55658.44323296
+       Y           (km):     -379226.32931475
+       Z           (km):     -126505.93063865
+
+      Cylindrical coordinates:
+
+       Radius      (km):      383289.01777726
+       Longitude  (deg):         261.65040211
+       Z           (km):     -126505.93063865
+
+      Spherical coordinates:
+
+       Radius      (km):      403626.33912495
+       Colatitude (deg):         108.26566077
+       Longitude  (deg):         261.65040211
+
+      Rectangular coordinates from sphrec_c:
+
+       X           (km):      -55658.44323296
+       Y           (km):     -379226.32931475
+       Z           (km):     -126505.93063865
+
+
+   2) Create a table showing a variety of cylindrical coordinates
+      and the corresponding spherical coordinates.
+
+      Corresponding spherical and cylindrical coordinates are
+      listed to three decimal places. All input and output angles
+      are in degrees.
+
+
+      Example code begins here.
+
+
+      /.
+         Program cylsph_ex2
+      ./
+      #include <stdio.h>
+      #include "SpiceUsr.h"
+
+      int main( )
+      {
+
+         /.
+         Local parameters.
+         ./
+         #define NREC         11
+
+         /.
+         Local variables.
+         ./
+         SpiceDouble          colat;
+         SpiceDouble          radius;
+         SpiceDouble          rclon;
+         SpiceDouble          slon;
+
+         SpiceInt             i;
+
+         /.
+         Define the input cylindrical coordinates. Angles
+         in degrees.
+         ./
+
+         SpiceDouble          r      [NREC] = { 0.0, 1.0, 1.0,
+                                                0.0, 1.0, 1.0,
+                                                0.0, 1.0, 1.0,
+                                                0.0, 0.0      };
+
+         SpiceDouble          clon   [NREC] = {   0.0,   0.0,  90.0,
+                                                  0.0, 180.0, -90.0,
+                                                  0.0,  45.0, 180.0,
+                                                180.0,  33.0        };
+
+         SpiceDouble          z      [NREC] = {  0.0,  0.0,  0.0,
+                                                 1.0,  1.0,  0.0,
+                                                -1.0,  0.0, -1.0,
+                                                 1.0,  0.0       };
+
+         /.
+         Print the banner.
+         ./
+         printf( "    r       clon      z      radius   colat     slon \n" );
+         printf( " -------  -------  -------  -------  -------  -------\n" );
+
+         /.
+         Do the conversion. Output angles in degrees.
+         ./
+         for ( i = 0; i < NREC; i++ )
+         {
+
+            rclon = clon[i] * rpd_c ( );
+
+            cylsph_c ( r[i], rclon, z[i], &radius, &colat, &slon );
+
+            printf( "%8.3f %8.3f %8.3f ", r[i], clon[i], z[i] );
+            printf( "%8.3f %8.3f %8.3f\n",
+                    radius, colat * dpr_c ( ), slon  * dpr_c ( ) );
+
+         }
+
+         return ( 0 );
+      }
+
+
+      When this program was executed on a Mac/Intel/cc/64-bit
+      platform, the output was:
+
+
+          r       clon      z      radius   colat     slon
+       -------  -------  -------  -------  -------  -------
+         0.000    0.000    0.000    0.000    0.000    0.000
+         1.000    0.000    0.000    1.000   90.000    0.000
+         1.000   90.000    0.000    1.000   90.000   90.000
+         0.000    0.000    1.000    1.000    0.000    0.000
+         1.000  180.000    1.000    1.414   45.000  180.000
+         1.000  -90.000    0.000    1.000   90.000  -90.000
+         0.000    0.000   -1.000    1.000  180.000    0.000
+         1.000   45.000    0.000    1.000   90.000   45.000
+         1.000  180.000   -1.000    1.414  135.000  180.000
+         0.000  180.000    1.000    1.000    0.000  180.000
+         0.000   33.000    0.000    0.000    0.000   33.000
+
 
 -Restrictions
 
@@ -140,20 +375,30 @@
 
 -Author_and_Institution
 
-   E.D. Wright     (JPL)
-   W.L. Taber      (JPL)
+   J. Diaz del Rio     (ODC Space)
+   B.V. Semenov        (JPL)
+   W.L. Taber          (JPL)
+   E.D. Wright         (JPL)
 
 -Version
 
+   -CSPICE Version 1.1.0, 02-JUL-2021 (JDR)
+
+       Changed the argument names "lonc" and "lon" to "clon" and
+       "slon" for consistency with other routines.
+
+       Edited the header to comply with NAIF standard.
+       Added complete code examples.
+
    -CSPICE Version 1.0.2, 26-JUL-2016 (BVS)
 
-      Minor headers edits.
+       Minor headers edits.
 
    -CSPICE Version 1.0.1, 08-FEB-1998 (EDW)
 
-      Corrected and clarified header entries.
+       Corrected and clarified header entries.
 
-   -CSPICE Version 1.0.0, 25-OCT-1997 (EDW)
+   -CSPICE Version 1.0.0, 25-OCT-1997 (EDW) (WLT)
 
 -Index_Entries
 
@@ -195,7 +440,7 @@
 
    /* Move the results to output variables */
 
-   *lon    = lonc;
+   *slon   = clon;
    *radius = rh;
    *colat  = th;
 

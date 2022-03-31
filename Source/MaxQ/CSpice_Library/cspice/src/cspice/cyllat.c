@@ -5,9 +5,9 @@
 
 #include "f2c.h"
 
-/* $Procedure      CYLLAT ( Cylindrical to latitudinal ) */
-/* Subroutine */ int cyllat_(doublereal *r__, doublereal *longc, doublereal *
-	z__, doublereal *radius, doublereal *long__, doublereal *lat)
+/* $Procedure CYLLAT ( Cylindrical to latitudinal ) */
+/* Subroutine */ int cyllat_(doublereal *r__, doublereal *clon, doublereal *
+	z__, doublereal *radius, doublereal *lon, doublereal *lat)
 {
     /* System generated locals */
     doublereal d__1, d__2;
@@ -53,7 +53,8 @@
 
 /* $ Keywords */
 
-/*     CONVERSION,  COORDINATES */
+/*     CONVERSION */
+/*     COORDINATES */
 
 /* $ Declarations */
 /* $ Brief_I/O */
@@ -61,29 +62,30 @@
 /*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     R          I   Distance of point from Z axis. */
-/*     LONGC      I   Cylindrical angle of point from XZ plane(radians). */
+/*     CLON       I   Cylindrical angle of point from XZ plane(radians). */
 /*     Z          I   Height of point above XY plane. */
 /*     RADIUS     O   Distance of point from origin. */
-/*     LONG       O   Longitude of point (radians). */
+/*     LON        O   Longitude of point (radians). */
 /*     LAT        O   Latitude of point (radians). */
 
 /* $ Detailed_Input */
 
-/*     R          Distance of the input point from Z axis. */
+/*     R        is the distance of the input point from Z axis. */
 
-/*     LONGC      Cylindrical angle of the point from XZ plane (radians). */
+/*     CLON     is the cylindrical angle of the point from XZ plane */
+/*              (radians). */
 
-/*     Z          Height of the point above XY plane. */
+/*     Z        is the height of the point above XY plane. */
 
 /* $ Detailed_Output */
 
-/*     RADIUS     Distance of the input point from origin. */
+/*     RADIUS   is the distance of the input point from origin. */
 
-/*     LONG       Longitude (i.e. angle from the XZ plane) of the input */
-/*                point (radians). LONG is set equal to LONGC. */
+/*     LON      is the longitude (i.e. angle from the XZ plane) of */
+/*              the input point (radians). LON is set equal to CLON. */
 
-/*     LAT        Latitude (i.e. angle above the XY plane) of the input */
-/*                point (radians). The range of LAT is [-pi, pi]. */
+/*     LAT      is the latitude (i.e. angle above the XY plane) of the */
+/*              input point (radians). The range of LAT is [-pi, pi]. */
 
 /* $ Parameters */
 
@@ -102,37 +104,282 @@
 /*     This routine converts coordinates given in cylindrical */
 /*     coordinates to coordinates in latitudinal coordinates. */
 
-/*     Latitudinal coordinates are the same coordinates as use for */
-/*     the earth.  Latitude refers to angle above the equator, longitude */
-/*     to angle east from a meridian, and radius to the distance from */
-/*     an origin. */
+/*     Latitudinal coordinates are defined by a distance from a central */
+/*     reference point, an angle from a reference meridian, and an angle */
+/*     above the equator of a sphere centered at the central reference */
+/*     point. */
 
 /* $ Examples */
 
-/*     Below are two tables:  The first is a set of input values */
-/*     the second is the result of the following sequence of */
-/*     calls to Spicelib routines.  Note all input and output angular */
-/*     quantities are in degrees. */
+/*     The numerical results shown for these examples may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
 
-/*         CALL CONVRT ( LONGC, 'DEGREES', 'RADIANS', LONGC     ) */
+/*     1) Compute the cylindrical coordinates of the position of the */
+/*        Moon as seen from the Earth, and convert them to latitudinal */
+/*        and rectangular coordinates. */
 
-/*         CALL CYLLAT ( R,      LONGC, Z,  RADIUS,   LONG, LAT ) */
-
-/*         CALL CONVRT ( LONG,  'RADIANS', 'DEGREES', LONG      ) */
-/*         CALL CONVRT ( LAT,   'RADIANS', 'DEGREES', LAT       ) */
+/*        Use the meta-kernel shown below to load the required SPICE */
+/*        kernels. */
 
 
+/*           KPL/MK */
 
-/*     Inputs:                         Results: */
+/*           File name: cyllat_ex1.tm */
 
-/*     R        LONGC    Z             RADIUS   LONG     LAT */
-/*     ------   ------   ------        ------   ------   ------ */
-/*     1.0000     0       0            1.0000     0        0 */
-/*     1.0000    90.00    0            1.0000    90.00     0 */
-/*     1.0000   180.00    1.000        1.4142   180.00    45.00 */
-/*     1.0000   180.00   -1.000        1.4142   180.00   -45.00 */
-/*     0.0000   180.00    1.000        1.0000   180.00    90.00 */
-/*     0.0000    33.00    0            0.0000    33.00     0.00 */
+/*           This meta-kernel is intended to support operation of SPICE */
+/*           example programs. The kernels shown here should not be */
+/*           assumed to contain adequate or correct versions of data */
+/*           required by SPICE-based user applications. */
+
+/*           In order for an application to use this meta-kernel, the */
+/*           kernels referenced here must be present in the user's */
+/*           current working directory. */
+
+/*           The names and contents of the kernels referenced */
+/*           by this meta-kernel are as follows: */
+
+/*              File name                     Contents */
+/*              ---------                     -------- */
+/*              de421.bsp                     Planetary ephemeris */
+/*              naif0012.tls                  Leapseconds */
+
+
+/*           \begindata */
+
+/*              KERNELS_TO_LOAD = ( 'de421.bsp', */
+/*                                  'naif0012.tls'  ) */
+
+/*           \begintext */
+
+/*           End of meta-kernel */
+
+
+/*        Example code begins here. */
+
+
+/*              PROGRAM CYLLAT_EX1 */
+/*              IMPLICIT NONE */
+
+/*        C */
+/*        C     SPICELIB functions */
+/*        C */
+/*              DOUBLE PRECISION      DPR */
+
+/*        C */
+/*        C     Local parameters */
+/*        C */
+/*              CHARACTER*(*)         FMT1 */
+/*              PARAMETER           ( FMT1 = '(A,F20.8)' ) */
+
+/*        C */
+/*        C     Local variables */
+/*        C */
+/*              DOUBLE PRECISION      CLON */
+/*              DOUBLE PRECISION      ET */
+/*              DOUBLE PRECISION      LAT */
+/*              DOUBLE PRECISION      LON */
+/*              DOUBLE PRECISION      LT */
+/*              DOUBLE PRECISION      POS    ( 3 ) */
+/*              DOUBLE PRECISION      RADIUS */
+/*              DOUBLE PRECISION      RECTAN ( 3 ) */
+/*              DOUBLE PRECISION      R */
+/*              DOUBLE PRECISION      Z */
+
+/*        C */
+/*        C     Load SPK and LSK kernels, use a meta kernel for */
+/*        C     convenience. */
+/*        C */
+/*              CALL FURNSH ( 'cyllat_ex1.tm' ) */
+
+/*        C */
+/*        C     Look up the geometric state of the Moon as seen from */
+/*        C     the Earth at 2017 Mar 20, relative to the J2000 */
+/*        C     reference frame. */
+/*        C */
+/*              CALL STR2ET ( '2017 Mar 20', ET ) */
+
+/*              CALL SPKPOS ( 'Moon',  ET,  'J2000', 'NONE', */
+/*             .              'Earth', POS, LT               ) */
+
+/*        C */
+/*        C     Convert the position vector POS to cylindrical */
+/*        C     coordinates. */
+/*        C */
+/*              CALL RECCYL ( POS, R, CLON, Z ) */
+
+/*        C */
+/*        C     Convert the cylindrical coordinates to latitudinal. */
+/*        C */
+/*              CALL CYLLAT ( R, CLON, Z, RADIUS, LON, LAT ) */
+
+/*        C */
+/*        C     Convert the latitudinal coordinates to rectangular. */
+/*        C */
+/*              CALL LATREC ( RADIUS, LON, LAT, RECTAN ) */
+
+
+/*              WRITE(*,*) ' ' */
+/*              WRITE(*,*) 'Original rectangular coordinates:' */
+/*              WRITE(*,*) ' ' */
+/*              WRITE(*,FMT1) '  X          (km): ', POS(1) */
+/*              WRITE(*,FMT1) '  Y          (km): ', POS(2) */
+/*              WRITE(*,FMT1) '  Z          (km): ', POS(3) */
+/*              WRITE(*,*) ' ' */
+/*              WRITE(*,*) 'Cylindrical coordinates:' */
+/*              WRITE(*,*) ' ' */
+/*              WRITE(*,FMT1) '  Radius     (km): ', R */
+/*              WRITE(*,FMT1) '  Longitude (deg): ', CLON*DPR() */
+/*              WRITE(*,FMT1) '  Z          (km): ', Z */
+/*              WRITE(*,*) ' ' */
+/*              WRITE(*,*) 'Latitudinal coordinates:' */
+/*              WRITE(*,*) ' ' */
+/*              WRITE(*,FMT1) '  Radius     (km): ', RADIUS */
+/*              WRITE(*,FMT1) '  Longitude (deg): ', LON*DPR() */
+/*              WRITE(*,FMT1) '  Latitude  (deg): ', LAT*DPR() */
+/*              WRITE(*,*) ' ' */
+/*              WRITE(*,*) 'Rectangular coordinates from LATREC:' */
+/*              WRITE(*,*) ' ' */
+/*              WRITE(*,FMT1) '  X          (km): ', RECTAN(1) */
+/*              WRITE(*,FMT1) '  Y          (km): ', RECTAN(2) */
+/*              WRITE(*,FMT1) '  Z          (km): ', RECTAN(3) */
+/*              WRITE(*,*) ' ' */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*         Original rectangular coordinates: */
+
+/*          X          (km):      -55658.44323296 */
+/*          Y          (km):     -379226.32931475 */
+/*          Z          (km):     -126505.93063865 */
+
+/*         Cylindrical coordinates: */
+
+/*          Radius     (km):      383289.01777726 */
+/*          Longitude (deg):         261.65040211 */
+/*          Z          (km):     -126505.93063865 */
+
+/*         Latitudinal coordinates: */
+
+/*          Radius     (km):      403626.33912495 */
+/*          Longitude (deg):         261.65040211 */
+/*          Latitude  (deg):         -18.26566077 */
+
+/*         Rectangular coordinates from LATREC: */
+
+/*          X          (km):      -55658.44323296 */
+/*          Y          (km):     -379226.32931475 */
+/*          Z          (km):     -126505.93063865 */
+
+
+/*     2) Create a table showing a variety of cylindrical coordinates */
+/*        and the corresponding latitudinal coordinates. */
+
+/*        Corresponding latitudinal and cylindrical coordinates are */
+/*        listed to three decimal places. All input and output angles */
+/*        are in degrees. */
+
+
+/*        Example code begins here. */
+
+
+/*              PROGRAM CYLLAT_EX2 */
+/*              IMPLICIT NONE */
+
+/*        C */
+/*        C     SPICELIB functions */
+/*        C */
+/*              DOUBLE PRECISION      DPR */
+/*              DOUBLE PRECISION      RPD */
+
+/*        C */
+/*        C     Local parameters. */
+/*        C */
+/*              INTEGER               NREC */
+/*              PARAMETER           ( NREC = 11 ) */
+
+/*        C */
+/*        C     Local variables. */
+/*        C */
+/*              DOUBLE PRECISION      CLON   ( NREC ) */
+/*              DOUBLE PRECISION      LAT */
+/*              DOUBLE PRECISION      LON */
+/*              DOUBLE PRECISION      R      ( NREC ) */
+/*              DOUBLE PRECISION      RADIUS */
+/*              DOUBLE PRECISION      RCLON */
+/*              DOUBLE PRECISION      Z      ( NREC ) */
+
+/*              INTEGER               I */
+
+/*        C */
+/*        C     Define the input cylindrical coordinates. Angles */
+/*        C     in degrees. */
+/*        C */
+
+/*              DATA                 R    /  0.D0, 1.D0, 1.D0, */
+/*             .                             0.D0, 1.D0, 1.D0, */
+/*             .                             0.D0, 1.D0, 1.D0, */
+/*             .                             0.D0, 0.D0           / */
+
+/*              DATA                 CLON /  0.D0,   0.D0,  90.D0, */
+/*             .                             0.D0, 180.D0, -90.D0, */
+/*             .                             0.D0,  45.D0, 180.D0, */
+/*             .                           180.D0,  33.D0         / */
+
+/*              DATA                 Z    /  0.D0,   0.D0,  0.D0, */
+/*             .                             1.D0,   1.D0,  0.D0, */
+/*             .                            -1.D0,   0.D0, -1.D0, */
+/*             .                             1.D0,   0.D0         / */
+
+/*        C */
+/*        C     Print the banner. */
+/*        C */
+/*              WRITE(*,*) '    R       CLON      Z    ' */
+/*             . //        '  RADIUS     LON     LAT   ' */
+/*              WRITE(*,*) ' -------  -------  ------- ' */
+/*             . //        ' -------  -------  ------- ' */
+
+/*        C */
+/*        C     Do the conversion. Output angles in degrees. */
+/*        C */
+/*              DO I = 1, NREC */
+
+/*                 RCLON = CLON(I) * RPD() */
+
+/*                 CALL CYLLAT( R(I), RCLON, Z(I), RADIUS, LON, LAT ) */
+
+/*                 WRITE (*,'(6F9.3)') R(I), CLON(I), Z(I), */
+/*             .                       RADIUS, LON * DPR(), LAT * DPR() */
+
+/*              END DO */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*             R       CLON      Z      RADIUS     LON     LAT */
+/*          -------  -------  -------  -------  -------  ------- */
+/*            0.000    0.000    0.000    0.000    0.000    0.000 */
+/*            1.000    0.000    0.000    1.000    0.000    0.000 */
+/*            1.000   90.000    0.000    1.000   90.000    0.000 */
+/*            0.000    0.000    1.000    1.000    0.000   90.000 */
+/*            1.000  180.000    1.000    1.414  180.000   45.000 */
+/*            1.000  -90.000    0.000    1.000  -90.000    0.000 */
+/*            0.000    0.000   -1.000    1.000    0.000  -90.000 */
+/*            1.000   45.000    0.000    1.000   45.000    0.000 */
+/*            1.000  180.000   -1.000    1.414  180.000  -45.000 */
+/*            0.000  180.000    1.000    1.000  180.000   90.000 */
+/*            0.000   33.000    0.000    0.000   33.000    0.000 */
+
 
 /* $ Restrictions */
 
@@ -144,9 +391,22 @@
 
 /* $ Author_and_Institution */
 
-/*     W.L. Taber      (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 06-JUL-2021 (JDR) */
+
+/*        Changed the argument names LONGC and LONG to CLON and LON for */
+/*        consistency with other routines. */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. Removed */
+/*        unnecessary $Revisions section. Added complete code examples. */
 
 /* -    SPICELIB Version 1.0.3, 26-JUL-2016 (BVS) */
 
@@ -167,13 +427,6 @@
 /* $ Index_Entries */
 
 /*     cylindrical to latitudinal */
-
-/* -& */
-/* $ Revisions */
-
-/* -    Beta Version 1.0.1, 1-Feb-1989 (WLT) */
-
-/*        Example section of header upgraded. */
 
 /* -& */
 
@@ -201,7 +454,7 @@
 
 /*     Move results to output variables */
 
-    *long__ = *longc;
+    *lon = *clon;
     *radius = rho;
     *lat = lattud;
 

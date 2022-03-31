@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      HYPTOF ( Hyperbolic time of flight ) */
+/* $Procedure HYPTOF ( Hyperbolic time of flight ) */
 /* Subroutine */ int hyptof_(doublereal *ma, doublereal *ecc, doublereal *f)
 {
     /* Initialized data */
@@ -80,33 +80,33 @@
 
 /* $ Detailed_Input */
 
-/*     MA          is the hyperbolic mean anomaly of an orbiting body at */
-/*                 some epoch t, */
+/*     MA       is the hyperbolic mean anomaly of an orbiting body at */
+/*              some epoch t, */
 
-/*                                         3 1/2 */
-/*                       MA = (t-T)(mu/(-a) ) */
+/*                                   3 1/2 */
+/*                 MA = (t-T)(mu/(-a) ) */
 
-/*                 where T is the time of periapsis passage, a is */
-/*                 the semi-major axis of the orbit, and mu is the */
-/*                 gravitational parameter of the primary body. */
+/*              where T is the time of periapsis passage, a is */
+/*              the semi-major axis of the orbit, and mu is the */
+/*              gravitational parameter of the primary body. */
 
-/*     ECC         is the eccentricity of the orbit. */
+/*     ECC      is the eccentricity of the orbit. */
 
 /* $ Detailed_Output */
 
-/*     F           is the corresponding eccentric anomaly. This is the */
-/*                 solution to the time of flight equation */
+/*     F        is the corresponding eccentric anomaly. This is the */
+/*              solution to the time of flight equation */
 
-/*                       MA = e sinh(F) - F */
+/*                 MA = e sinh(F) - F */
 
 /* $ Parameters */
 
-/*      None. */
+/*     None. */
 
 /* $ Exceptions */
 
-/*     1) If the eccentricity (ECC) is less than one, the error */
-/*        'SPICE(WRONGCONIC)' is signaled. */
+/*     1)  If the eccentricity (ECC) is less than one, the error */
+/*         SPICE(WRONGCONIC) is signaled. */
 
 /* $ Files */
 
@@ -116,7 +116,7 @@
 
 /*     Iterate to solve */
 
-/*           f(F,MA,e) = e sinh(F) - F - MA = 0 */
+/*        f(F,MA,e) = e sinh(F) - F - MA = 0 */
 
 /* $ Examples */
 
@@ -128,14 +128,23 @@
 
 /* $ Literature_References */
 
-/*     [1] Roger Bate, Fundamentals of Astrodynamics, Dover, 1971. */
+/*     [1]  R. Bate, D. Mueller, and J. White, "Fundamentals of */
+/*          Astrodynamics," Dover Publications Inc., 1971. */
 
 /* $ Author_and_Institution */
 
-/*     I.M. Underwood  (JPL) */
-/*     W.L. Taber      (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 3.2.0, 14-APR-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 3.1.0, 13-JUL-2007 (NJB) */
 
@@ -145,9 +154,9 @@
 
 /*        A counter was placed in the loop which bisects to a */
 /*        solution to the hyperbolic version of Kepler's equation. */
-/*        This addition forces the loop to terminate.  On some platforms */
+/*        This addition forces the loop to terminate. On some platforms */
 /*        the loop would not terminate without this additional */
-/*        check.  This was due to the compiler performing tests on */
+/*        check. This was due to the compiler performing tests on */
 /*        extended precision registers. */
 
 /* -    SPICELIB Version 2.0.1, 10-MAR-1992 (WLT) */
@@ -159,7 +168,7 @@
 
 /*        A bad initial guess at bracketing the solution to the */
 /*        hyperbolic time of flight equation was corrected so that */
-/*        floating point overflows are now avoided.  In addition, the */
+/*        floating point overflows are now avoided. In addition, the */
 /*        Newton's method used before has been replaced by simply */
 /*        bisection. */
 
@@ -169,40 +178,6 @@
 /* $ Index_Entries */
 
 /*     hyperbolic time of flight */
-
-/* -& */
-/* $ Revisions */
-
-/* -    SPICELIB Version 3.0.0, 14-DEC-1994 (WLT) */
-
-/*        A counter was placed in the loop which bisects to a */
-/*        solution to the hyperbolic version of Kepler's equation. */
-/*        This addition forces the loop to terminate.  On some platforms */
-/*        the loop would not terminate without this additional */
-/*        check.  This was due to the compiler performing tests on */
-/*        extended precision registers. */
-
-/*        This is not due to a bug in the algorithm but rather to */
-/*        what NAIF feels is an error on the part of some compiler */
-/*        vendors.  If the difference between two d.p. numbers is */
-/*        zero to double precision we feel that that is the number */
-/*        that should be used in subsequent statements---ESPECIALLY */
-/*        in comparisons.  However, since we don't have control */
-/*        over how compiler writers decide to compile code, we have */
-/*        added the loop counter to guarantee that the loop solving */
-/*        the hyperbolic Kepler's equation terminates. */
-
-/* -    SPICELIB Version 2.0.0, 19-APR-1990 (WLT) */
-
-/*        A bad initial guess at bracketing the solution to the */
-/*        hyperbolic time of flight equation was corrected so that */
-/*        floating point overflows are now avoided.  In addition, the */
-/*        Newton's method used before has been replaced by simply */
-/*        bisection. */
-
-/* -    Beta Version 1.1.1, 27-JAN-1989 (IMU) */
-
-/*        Examples section completed. */
 
 /* -& */
 /* $ Revisions */

@@ -9,7 +9,7 @@
 
 static doublereal c_b2 = .33333333333333331;
 
-/* $Procedure  DCBRT ( Double precision cube root ) */
+/* $Procedure DCBRT ( Double precision cube root ) */
 doublereal dcbrt_(doublereal *x)
 {
     /* System generated locals */
@@ -21,7 +21,7 @@ doublereal dcbrt_(doublereal *x)
 
 /* $ Abstract */
 
-/*      Return the cube root of a double precision number. */
+/*     Return the cube root of a double precision number. */
 
 /* $ Disclaimer */
 
@@ -54,77 +54,88 @@ doublereal dcbrt_(doublereal *x)
 
 /* $ Keywords */
 
-/*      MATH,  ROOT */
+/*     MATH */
+/*     ROOT */
 
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*      VARIABLE  I/O  DESCRIPTION */
-/*      --------  ---  -------------------------------------------------- */
-/*       X         I     Number whose cube root is desired. */
+/*     VARIABLE  I/O  DESCRIPTION */
+/*     --------  ---  -------------------------------------------------- */
+/*     X          I     Number whose cube root is desired. */
+
+/*     The function returns the cube root of the input value. */
 
 /* $ Detailed_Input */
 
-/*      X   may be any double precision value. */
+/*     X        is a double precision value. */
 
 /* $ Detailed_Output */
 
-/*      DCBRT   is the cube root of the input value. */
+/*     The function returns the cube root of the input value. */
 
 /* $ Parameters */
 
 /*     None. */
 
-/* $ Particulars */
-
-/*      DCBRT calculates the cube root of the input value by using the */
-/*      exponentiation operator to raise the input value to the 1/3 */
-/*      power.  This operation, however, is performed on the absolute */
-/*      value of the input variable, and then the sign of the input */
-/*      is transferred to the output value. */
-
-/*      All values of the input variable X should be acceptible to the */
-/*      DCBRT. */
-
-/* $ Examples */
-
-/*      The following table gives sample values of the variable X and */
-/*      DCBRT(X) */
-
-/*       X                        DCBRT(X) */
-/*      -------------------------------------------------------------- */
-/*       0.0D0                    0.0D0 */
-/*       8.0D0                    2.0D0 */
-/*      -1.0D3                   -1.0D1 */
-
-/* $ Restrictions */
-
-/*      None */
-
 /* $ Exceptions */
 
-/*      Error free. */
+/*     Error free. */
 
 /* $ Files */
 
-/*      None */
+/*     None. */
 
-/* $ Author_and_Institution */
+/* $ Particulars */
 
-/*      W.M. Owen       (JPL) */
+/*     DCBRT calculates the cube root of the input value by using the */
+/*     exponentiation operator to raise the input value to the 1/3 */
+/*     power. This operation, however, is performed on the absolute */
+/*     value of the input variable, and then the sign of the input */
+/*     is transferred to the output value. */
+
+/*     All values of the input variable X should be acceptable to the */
+/*     DCBRT. */
+
+/* $ Examples */
+
+/*     The following table gives sample values of the variable X and */
+/*     DCBRT(X) */
+
+/*      X                        DCBRT(X) */
+/*     -------------------------------------------------------------- */
+/*      0.0D0                    0.0D0 */
+/*      8.0D0                    2.0D0 */
+/*     -1.0D3                   -1.0D1 */
+
+/* $ Restrictions */
+
+/*     None. */
 
 /* $ Literature_References */
 
-/*      None */
+/*     None. */
+
+/* $ Author_and_Institution */
+
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.M. Owen          (JPL) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
 
-/* -     SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+/* -    SPICELIB Version 1.1.0, 17-JUN-2021 (JDR) */
 
-/*         Comment section for permuted index source lines was added */
-/*         following the header. */
+/*        Added IMPLICIT NONE statement. */
 
-/* -     SPICELIB Version 1.0.0, 31-JAN-1990 (WMO) */
+/*        Edited the header to comply with NAIF standard. */
+
+/* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+
+/*        Comment section for permuted index source lines was added */
+/*        following the header. */
+
+/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (WMO) */
 
 /* -& */
 /* $ Index_Entries */

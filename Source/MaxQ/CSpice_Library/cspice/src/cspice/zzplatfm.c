@@ -183,6 +183,14 @@ static integer c__6 = 6;
 
 /* $ Version */
 
+/* -    SPICELIB Version 3.1.0, 28-NOV-2021 (BVS) */
+
+/*        Updated for: */
+
+/*           MAC-OSX-M1-64BIT-CLANG_C */
+
+/*        environment. */
+
 /* -    SPICELIB Version 3.0.0, 10-MAR-2014 (BVS) */
 
 /*        Updated for: */
@@ -199,9 +207,9 @@ static integer c__6 = 6;
 
 /*        Updated for: */
 
-/*        -  MAC-OSX-64BIT-INTEL_C */
-/*        -  PC-64BIT-MS_C */
-/*        -  SUN-SOLARIS-64BIT-NATIVE_C */
+/*           MAC-OSX-64BIT-INTEL_C */
+/*           PC-64BIT-MS_C */
+/*           SUN-SOLARIS-64BIT-NATIVE_C */
 /*           MAC-OSX-64BIT-GFORTRAN */
 /*           MAC-OSX-64BIT-IFORT */
 /*           PC-LINUX-64BIT-GFORTRAN */
@@ -372,7 +380,7 @@ static integer c__6 = 6;
 
     index = isrchc_(keycpy, &c__6, keyval, (ftnlen)64, (ftnlen)64);
     s_copy(value, attcpy + (((i__1 = index) < 7 && 0 <= i__1 ? i__1 : s_rnge(
-	    "attcpy", i__1, "zzplatfm_", (ftnlen)425)) << 5), value_len, (
+	    "attcpy", i__1, "zzplatfm_", (ftnlen)433)) << 5), value_len, (
 	    ftnlen)32);
     return 0;
 } /* zzplatfm_ */

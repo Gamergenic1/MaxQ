@@ -9,7 +9,7 @@
 
 static integer c__1 = 1;
 
-/* $Procedure      SPKR14 ( Read SPK record from segment, type 14 ) */
+/* $Procedure SPKR14 ( Read SPK record from segment, type 14 ) */
 /* Subroutine */ int spkr14_(integer *handle, doublereal *descr, doublereal *
 	et, doublereal *record)
 {
@@ -65,7 +65,7 @@ static integer c__1 = 1;
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     I   Handle of the open SPK file. */
 /*     DESCR      I   Descriptor of the segment with the desired record. */
@@ -96,16 +96,16 @@ static integer c__1 = 1;
 
 /* $ Exceptions */
 
-/*     1) It is assumed that the descriptor and handle supplied are */
-/*        for a properly constructed type 14 segment. No checks are */
-/*        performed to ensure this. */
+/*     1)  It is assumed that the descriptor and handle supplied are */
+/*         for a properly constructed type 14 segment. No checks are */
+/*         performed to ensure this. */
 
-/*     2) If the input ET value is not within the range specified */
-/*        in the segment descriptor, the error SPICE(TIMEOUTOFBOUNDS) */
-/*        is signalled. */
+/*     2)  If the input ET value is not within the range specified */
+/*         in the segment descriptor, the error SPICE(TIMEOUTOFBOUNDS) */
+/*         is signaled. */
 
-/*     3) All other errors are diagnosed by routines in the call tree */
-/*        of this routine. */
+/*     3)  If any other error occurs while looking up SPK data, the error */
+/*         is signaled by a routine in the call tree of this routine. */
 
 /* $ Files */
 
@@ -124,9 +124,9 @@ static integer c__1 = 1;
 /* $ Examples */
 
 /*     The data returned by the SPKRnn routine is in a raw form, taken */
-/*     directly from the segment.  As such, it will be not be directly */
+/*     directly from the segment. As such, it will be not be directly */
 /*     useful to a user unless they have a complete understanding of the */
-/*     structure of the data type.  Given that understanding, however, */
+/*     structure of the data type. Given that understanding, however, */
 /*     the SPKRnn routines could be used to "dump" and check segment data */
 /*     for a particular epoch, as in the example which follows. */
 
@@ -153,28 +153,36 @@ static integer c__1 = 1;
 
 /* $ Restrictions */
 
-/*     This subroutine should not be called directly by a casual user. It */
-/*     is intended for use by the subroutine SPKPV, and certain tests for */
-/*     error conditions are not performed here, as SPKPV will have */
-/*     already performed them. */
+/*     1)  This subroutine should not be called directly by a casual */
+/*         user. It is intended for use by the subroutine SPKPV, and */
+/*         certain tests for error conditions are not performed here, as */
+/*         SPKPV will have already performed them. */
 
 /* $ Literature_References */
 
-/*     NAIF Document 168.0, "S- and P- Kernel (SPK) Specification and */
-/*     User's Guide" */
+/*     None. */
 
 /* $ Author_and_Institution */
 
-/*     K.R. Gehringer  (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.0.1, 14-APR-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. Updated entry */
+/*        #3 in $Exceptions section. Moved SPK required reading from */
+/*        $Literature_References to $Required_Reading section. */
 
 /* -    SPICELIB Version 1.0.0, 10-MAR-1995 (KRG) */
 
 /* -& */
 /* $ Index_Entries */
 
-/*     read record from type_14 spk segment */
+/*     read record from type_14 SPK segment */
 
 /* -& */
 

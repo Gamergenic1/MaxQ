@@ -610,7 +610,7 @@ static integer c__19 = 19;
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     I   DSK file handle. */
 /*     DLADSC     I   DLA descriptor. */
@@ -621,90 +621,106 @@ static integer c__19 = 19;
 
 /* $ Detailed_Input */
 
-/*     HANDLE         is the handle of a DSK file containing a type 2 */
-/*                    segment from which data are to be fetched. */
+/*     HANDLE   is the handle of a DSK file containing a type 2 */
+/*              segment from which data are to be fetched. */
 
-/*     DLADSC         is the DLA descriptor associated with the segment */
-/*                    from which data are to be fetched. */
+/*     DLADSC   is the DLA descriptor associated with the segment */
+/*              from which data are to be fetched. */
 
-/*     START          is the ID of the first vertex to be fetched from */
-/*                    the segment designated by HANDLE and DLADSC. The */
-/*                    ID of a vertex is its ordinal position within the */
-/*                    segment. Vertex IDs range from 1 to NV, where NV */
-/*                    is the number of vertices in the segment. */
+/*     START    is the ID of the first vertex to be fetched from */
+/*              the segment designated by HANDLE and DLADSC. The */
+/*              ID of a vertex is its ordinal position within the */
+/*              segment. Vertex IDs range from 1 to NV, where NV */
+/*              is the number of vertices in the segment. */
 
-/*     ROOM           is the number of vertices that can fit in the */
-/*                    output VRTCES array: the output array must be */
-/*                    large enough to hold at least 3*ROOM double */
-/*                    precision values. */
+/*     ROOM     is the number of vertices that can fit in the */
+/*              output VRTCES array: the output array must be */
+/*              large enough to hold at least 3*ROOM double */
+/*              precision values. */
 
 /* $ Detailed_Output */
 
-/*     N              is the number of vertices fetched to the output */
-/*                    array VRTCES. N is normally in the range */
+/*     N        is the number of vertices fetched to the output */
+/*              array VRTCES. N is normally in the range */
 
-/*                        1 : MIN( NV, ROOM ) */
+/*                  1 : MIN( NV, ROOM ) */
 
-/*                    If an error occurs on the call, N is undefined. */
+/*              If an error occurs on the call, N is undefined. */
 
-/*     VRTCES         is a contiguous set of vertices. The returned */
-/*                    vertices are arranged in order of increasing vertex */
-/*                    ID. The IDs of the returned vertices range from */
+/*     VRTCES   is a contiguous set of vertices. The returned */
+/*              vertices are arranged in order of increasing vertex */
+/*              ID. The IDs of the returned vertices range from */
 
-/*                       START */
+/*                 START */
 
-/*                    to */
+/*              to */
 
-/*                       START + N - 1 */
+/*                 START + N - 1 */
 
-/*                    Each vertex is a 3-vector. The correspondence of */
-/*                    elements of VRTCES with the elements of the set of */
-/*                    vertices contained in the segment is: */
+/*              Each vertex is a 3-vector. The correspondence of */
+/*              elements of VRTCES with the elements of the set of */
+/*              vertices contained in the segment is: */
 
-/*                       VRTCES(1,1)      vertex_set(1, START) */
-/*                       VRTCES(2,1)      vertex_set(2, START) */
-/*                       VRTCES(3,1)      vertex_set(3, START) */
-/*                         ...             ... */
-/*                       VRTCES(1,N)      vertex_set(1, START+N-1) */
-/*                       VRTCES(2,N)      vertex_set(2, START+N-1) */
-/*                       VRTCES(3,N)      vertex_set(3, START+N-1) */
+/*                 VRTCES(1,1)      vertex_set(1, START) */
+/*                 VRTCES(2,1)      vertex_set(2, START) */
+/*                 VRTCES(3,1)      vertex_set(3, START) */
+/*                   ...             ... */
+/*                 VRTCES(1,N)      vertex_set(1, START+N-1) */
+/*                 VRTCES(2,N)      vertex_set(2, START+N-1) */
+/*                 VRTCES(3,N)      vertex_set(3, START+N-1) */
 
-/*                    The vertices are expressed in the body-fixed */
-/*                    reference frame of the segment designated by */
-/*                    HANDLE and DLADSC. The center of this frame is the */
-/*                    origin of the Cartesian coordinate system in which */
-/*                    the vertices are expressed. Note that the frame */
-/*                    center need not coincide with the central body of */
-/*                    the segment. Units are km. */
+/*              The vertices are expressed in the body-fixed */
+/*              reference frame of the segment designated by */
+/*              HANDLE and DLADSC. The center of this frame is the */
+/*              origin of the Cartesian coordinate system in which */
+/*              the vertices are expressed. Note that the frame */
+/*              center need not coincide with the central body of */
+/*              the segment. Units are km. */
 
-/*                    If an error occurs on the call, VRTCES is */
-/*                    undefined. */
+/*              If an error occurs on the call, VRTCES is */
+/*              undefined. */
 
 /* $ Parameters */
 
-/*     See the INCLUDE files */
+/*     See the include file */
 
-/*         dla.inc */
-/*         dsk02.inc */
-/*         dskdsc.inc */
+/*        dla.inc */
+
+/*     for declarations of DLA descriptor sizes and documentation of the */
+/*     contents of DLA descriptors. */
+
+/*     See the include file */
+
+/*        dskdsc.inc */
+
+/*     for declarations of DSK descriptor sizes and documentation of the */
+/*     contents of DSK descriptors. */
+
+/*     See the include file */
+
+/*        dsk02.inc */
+
+/*     for declarations of DSK data type 2 (plate model) parameters. */
 
 /* $ Exceptions */
 
-/*     1) If the input handle is invalid, the error will be diagnosed by */
-/*        routines in the call tree of this routine. */
+/*     1)  If the input handle is invalid, an error is signaled by a */
+/*         routine in the call tree of this routine. */
 
-/*     2) If a file read error occurs, the error will be diagnosed by */
-/*        routines in the call tree of this routine. */
+/*     2)  If a file read error occurs, the error is signaled by a */
+/*         routine in the call tree of this routine. */
 
-/*     3) If the input DLA descriptor is invalid, the effect of this */
-/*        routine is undefined. The error *may* be diagnosed by routines */
-/*        in the call tree of this routine, but there are no guarantees. */
+/*     3)  If the input DLA descriptor is invalid, the effect of this */
+/*         routine is undefined. The error *may* be diagnosed by */
+/*         routines in the call tree of this routine, but there are no */
+/*         guarantees. */
 
-/*     4) If ROOM is non-positive, the error SPICE(VALUEOUTOFRANGE) */
-/*        is signaled. */
+/*     4)  If ROOM is non-positive, the error SPICE(VALUEOUTOFRANGE) */
+/*         is signaled. */
 
-/*     5) If START is less than 1 or greater than the number of vertices */
-/*        in the segment, the error SPICE(INDEXOUTOFRANGE) is signaled. */
+/*     5)  If START is less than 1 or greater than the number of */
+/*         vertices in the segment, the error SPICE(INDEXOUTOFRANGE) is */
+/*         signaled. */
 
 /* $ Files */
 
@@ -723,7 +739,6 @@ static integer c__19 = 19;
 /*     input, the compiler and supporting libraries, and the machine */
 /*     specific arithmetic implementation. */
 
-
 /*     1) Look up all the vertices associated with each plate */
 /*        of the model contained in a specified type 2 segment. For each */
 /*        plate, display the plate's vertices and normal vector. */
@@ -736,159 +751,173 @@ static integer c__19 = 19;
 /*        Example code begins here. */
 
 
-/*           PROGRAM EX1 */
-/*           IMPLICIT NONE */
+/*              PROGRAM DSKV02_EX1 */
+/*              IMPLICIT NONE */
 
-/*           INCLUDE 'dla.inc' */
-/*           INCLUDE 'dsk02.inc' */
-
-
-/*           CHARACTER*(*)         FMT */
-/*           PARAMETER           ( FMT    = '(1X,A,3(1XE16.9))' ) */
+/*              INCLUDE 'dla.inc' */
+/*              INCLUDE 'dsk02.inc' */
 
 
-/*           INTEGER               BUFSIZ */
-/*           PARAMETER           ( BUFSIZ = 10000 ) */
-
-/*           INTEGER               FILSIZ */
-/*           PARAMETER           ( FILSIZ = 255 ) */
+/*              CHARACTER*(*)         FMT */
+/*              PARAMETER           ( FMT    = '(1X,A,3(1XE15.8))' ) */
 
 
-/*           CHARACTER*(FILSIZ)    DSK */
+/*              INTEGER               BUFSIZ */
+/*              PARAMETER           ( BUFSIZ = 10000 ) */
 
-/*           DOUBLE PRECISION      NORMAL ( 3 ) */
-/*           DOUBLE PRECISION      VERTS  ( 3, BUFSIZ ) */
+/*              INTEGER               FILSIZ */
+/*              PARAMETER           ( FILSIZ = 255 ) */
 
-/*           INTEGER               DLADSC ( DLADSZ ) */
-/*           INTEGER               HANDLE */
-/*           INTEGER               I */
-/*           INTEGER               J */
-/*           INTEGER               N */
-/*           INTEGER               NNORM */
-/*           INTEGER               NP */
-/*           INTEGER               NREAD */
-/*           INTEGER               NV */
-/*           INTEGER               NVTX */
-/*           INTEGER               PLATES  ( 3, BUFSIZ ) */
-/*           INTEGER               PLIX */
-/*           INTEGER               REMAIN */
-/*           INTEGER               START */
 
-/*           LOGICAL               FOUND */
+/*              CHARACTER*(FILSIZ)    DSK */
 
-/*     C */
-/*     C     Prompt for name of DSK and open file for reading. */
-/*     C */
-/*           CALL PROMPT ( 'Enter DSK name > ', DSK ) */
+/*              DOUBLE PRECISION      NORMAL ( 3 ) */
+/*              DOUBLE PRECISION      VERTS  ( 3, BUFSIZ ) */
 
-/*           CALL DASOPR ( DSK, HANDLE ) */
+/*              INTEGER               DLADSC ( DLADSZ ) */
+/*              INTEGER               HANDLE */
+/*              INTEGER               I */
+/*              INTEGER               J */
+/*              INTEGER               N */
+/*              INTEGER               NNORM */
+/*              INTEGER               NP */
+/*              INTEGER               NREAD */
+/*              INTEGER               NV */
+/*              INTEGER               NVTX */
+/*              INTEGER               PLATES  ( 3, BUFSIZ ) */
+/*              INTEGER               PLIX */
+/*              INTEGER               REMAIN */
+/*              INTEGER               START */
 
-/*           CALL DLABFS ( HANDLE, DLADSC, FOUND ) */
+/*              LOGICAL               FOUND */
 
-/*           IF ( .NOT. FOUND ) THEN */
+/*        C */
+/*        C     Prompt for name of DSK and open file for reading. */
+/*        C */
+/*              CALL PROMPT ( 'Enter DSK name > ', DSK ) */
 
-/*              CALL SETMSG ( 'No segment found in file #.' ) */
-/*              CALL ERRCH  ( '#',  DSK                     ) */
-/*              CALL SIGERR ( 'SPICE(NOSEGMENT)'            ) */
+/*              CALL DASOPR ( DSK, HANDLE ) */
 
-/*           END IF */
+/*              CALL DLABFS ( HANDLE, DLADSC, FOUND ) */
 
-/*     C */
-/*     C     Get segment vertex and plate counts. */
-/*     C */
-/*           CALL DSKZ02 ( HANDLE, DLADSC, NV, NP ) */
+/*              IF ( .NOT. FOUND ) THEN */
 
-/*           WRITE (*,*) ' ' */
-/*           WRITE (*,*) 'Number of vertices: ', NV */
-/*           WRITE (*,*) 'Number of plates:   ', NP */
-/*     C */
-/*     C     Display the vertices of each plate. */
-/*     C */
-/*           REMAIN = NP */
-/*           START  = 1 */
+/*                 CALL SETMSG ( 'No segment found in file #.' ) */
+/*                 CALL ERRCH  ( '#',  DSK                     ) */
+/*                 CALL SIGERR ( 'SPICE(NOSEGMENT)'            ) */
 
-/*           DO WHILE ( REMAIN .GT. 0 ) */
-/*     C */
-/*     C        NREAD is the number of plates we'll read on this */
-/*     C        loop pass. */
-/*     C */
-/*              NREAD  = MIN ( BUFSIZ, REMAIN ) */
+/*              END IF */
 
-/*              CALL DSKP02 ( HANDLE, DLADSC, START, NREAD, N, PLATES ) */
+/*        C */
+/*        C     Get segment vertex and plate counts. */
+/*        C */
+/*              CALL DSKZ02 ( HANDLE, DLADSC, NV, NP ) */
 
-/*              DO I = 1, N */
+/*              WRITE (*,*) ' ' */
+/*              WRITE (*,*) 'Number of vertices: ', NV */
+/*              WRITE (*,*) 'Number of plates:   ', NP */
+/*        C */
+/*        C     Display the vertices of the first 5 plates. */
+/*        C */
+/*              REMAIN = MIN(5, NP) */
+/*              START  = 1 */
 
-/*                 PLIX = START + I - 1 */
-/*     C */
-/*     C           Read the vertices of the current plate. */
-/*     C */
-/*                 DO J = 1, 3 */
-/*                    CALL DSKV02 ( HANDLE, DLADSC, PLATES(J,I), */
-/*          .                       1,      NVTX,   VERTS (1,J)  ) */
+/*              DO WHILE ( REMAIN .GT. 0 ) */
+/*        C */
+/*        C        NREAD is the number of plates we'll read on this */
+/*        C        loop pass. */
+/*        C */
+/*                 NREAD  = MIN ( BUFSIZ, REMAIN ) */
+
+/*                 CALL DSKP02 ( HANDLE, DLADSC, START, NREAD, N, */
+/*             .                 PLATES                          ) */
+
+/*                 DO I = 1, N */
+
+/*                    PLIX = START + I - 1 */
+/*        C */
+/*        C           Read the vertices of the current plate. */
+/*        C */
+/*                    DO J = 1, 3 */
+/*                       CALL DSKV02 ( HANDLE, DLADSC, PLATES(J,I), */
+/*             .                       1,      NVTX,   VERTS (1,J)  ) */
+/*                    END DO */
+/*        C */
+/*        C           Display the vertices of the current plate: */
+/*        C */
+/*                    WRITE (*,*  ) ' ' */
+/*                    WRITE (*,*  ) 'Plate number: ', PLIX */
+/*                    WRITE (*,FMT) '   Vertex 1: ', (VERTS(J,1), J=1,3) */
+/*                    WRITE (*,FMT) '   Vertex 2: ', (VERTS(J,2), J=1,3) */
+/*                    WRITE (*,FMT) '   Vertex 3: ', (VERTS(J,3), J=1,3) */
+
+/*        C */
+/*        C           Display the normal vector of the current plate: */
+/*        C */
+/*                    CALL DSKN02 ( HANDLE, DLADSC, PLIX, NORMAL ) */
+
+/*                    WRITE (*,FMT) '   Normal:   ', (NORMAL(J), J=1,3) */
+
 /*                 END DO */
-/*     C */
-/*     C           Display the vertices of the current plate: */
-/*     C */
-/*                 WRITE (*,*  ) ' ' */
-/*                 WRITE (*,*  ) 'Plate number: ', PLIX */
-/*                 WRITE (*,FMT) '   Vertex 1: ', (VERTS(J,1), J = 1,3) */
-/*                 WRITE (*,FMT) '   Vertex 2: ', (VERTS(J,2), J = 1,3) */
-/*                 WRITE (*,FMT) '   Vertex 3: ', (VERTS(J,3), J = 1,3) */
 
-/*     C */
-/*     C           Display the normal vector of the current plate: */
-/*     C */
-/*                 CALL DSKN02 ( HANDLE, DLADSC, PLIX, NORMAL ) */
-
-/*                 WRITE (*,FMT) '   Normal:   ', (NORMAL(J), J = 1,3) */
+/*                 START  = START  + NREAD */
+/*                 REMAIN = REMAIN - NREAD */
 
 /*              END DO */
 
-/*              START  = START  + NREAD */
-/*              REMAIN = REMAIN - NREAD */
+/*        C */
+/*        C     Close the kernel.  This isn't necessary in a stand- */
+/*        C     alone program, but it's good practice in subroutines */
+/*        C     because it frees program and system resources. */
+/*        C */
+/*              CALL DASCLS ( HANDLE ) */
 
-/*           END DO */
-
-/*     C */
-/*     C     Close the kernel.  This isn't necessary in a stand- */
-/*     C     alone program, but it's good practice in subroutines */
-/*     C     because it frees program and system resources. */
-/*     C */
-/*           CALL DASCLS ( HANDLE ) */
-
-/*           END */
+/*              END */
 
 
-/*     When this program was executed on a PC/Linux/gfortran/64bit */
-/*     platform, using a DSK file representing a regular icosahedron, */
-/*     the output was: */
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, using the DSK file named phobos512.bds, the output */
+/*        was: */
 
 
-/*     Enter DSK name > solid.bds */
+/*        Enter DSK name > phobos512.bds */
 
-/*      Number of vertices:           12 */
-/*      Number of plates:             20 */
+/*         Number of vertices:      1579014 */
+/*         Number of plates:        3145728 */
 
-/*      Plate number:            1 */
-/*         Vertex 1:   0.000000000E+00  0.000000000E+00  0.117557000E+01 */
-/*         Vertex 2:   0.105146000E+01  0.000000000E+00  0.525731000E+00 */
-/*         Vertex 3:   0.324920000E+00  0.100000000E+01  0.525731000E+00 */
-/*         Normal:     0.491124160E+00  0.356821347E+00  0.794654382E+00 */
+/*         Plate number:            1 */
+/*            Vertex 1:  -0.67744400E+01  0.62681500E+01  0.60114900E+01 */
+/*            Vertex 2:  -0.67623800E+01  0.62572800E+01  0.60255600E+01 */
+/*            Vertex 3:  -0.67571000E+01  0.62775400E+01  0.60209600E+01 */
+/*            Normal:    -0.58197377E+00  0.32128561E+00  0.74704892E+00 */
 
-/*      Plate number:            2 */
-/*         Vertex 1:   0.000000000E+00  0.000000000E+00  0.117557000E+01 */
-/*         Vertex 2:   0.324920000E+00  0.100000000E+01  0.525731000E+00 */
-/*         Vertex 3:  -0.850651000E+00  0.618034000E+00  0.525731000E+00 */
-/*         Normal:    -0.187592328E+00  0.577350079E+00  0.794654645E+00 */
+/*         Plate number:            2 */
+/*            Vertex 1:  -0.67744400E+01  0.62681500E+01  0.60114900E+01 */
+/*            Vertex 2:  -0.67797300E+01  0.62479000E+01  0.60161000E+01 */
+/*            Vertex 3:  -0.67623800E+01  0.62572800E+01  0.60255600E+01 */
+/*            Normal:    -0.58145695E+00  0.32198831E+00  0.74714881E+00 */
 
-/*           ... */
+/*         Plate number:            3 */
+/*            Vertex 1:  -0.67797300E+01  0.62479000E+01  0.60161000E+01 */
+/*            Vertex 2:  -0.67676800E+01  0.62370100E+01  0.60301900E+01 */
+/*            Vertex 3:  -0.67623800E+01  0.62572800E+01  0.60255600E+01 */
+/*            Normal:    -0.58159707E+00  0.32264196E+00  0.74675767E+00 */
 
-/*      Plate number:           20 */
-/*         Vertex 1:   0.850651000E+00 -0.618034000E+00 -0.525731000E+00 */
-/*         Vertex 2:   0.000000000E+00  0.000000000E+00 -0.117557000E+01 */
-/*         Vertex 3:   0.850651000E+00  0.618034000E+00 -0.525731000E+00 */
-/*         Normal:     0.607061680E+00  0.000000000E+00 -0.794654715E+00 */
+/*         Plate number:            4 */
+/*            Vertex 1:  -0.67797300E+01  0.62479000E+01  0.60161000E+01 */
+/*            Vertex 2:  -0.67849900E+01  0.62276200E+01  0.60207000E+01 */
+/*            Vertex 3:  -0.67676800E+01  0.62370100E+01  0.60301900E+01 */
+/*            Normal:    -0.58312901E+00  0.32056070E+00  0.74645924E+00 */
 
+/*         Plate number:            5 */
+/*            Vertex 1:  -0.67849900E+01  0.62276200E+01  0.60207000E+01 */
+/*            Vertex 2:  -0.67729900E+01  0.62167400E+01  0.60348200E+01 */
+/*            Vertex 3:  -0.67676800E+01  0.62370100E+01  0.60301900E+01 */
+/*            Normal:    -0.58366405E+00  0.32306020E+00  0.74496200E+00 */
+
+
+/*        Note that only the vertex information for first 5 plates is */
+/*        provided. */
 
 /* $ Restrictions */
 
@@ -900,9 +929,16 @@ static integer c__19 = 19;
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     B.V. Semenov       (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.0.1, 08-JUL-2020 (JDR) (BVS) */
+
+/*        Edited the header to comply with NAIF standard. Modified code */
+/*        example to reduce the output. */
 
 /* -    SPICELIB Version 1.0.0, 04-APR-2017 (NJB) */
 
@@ -913,7 +949,7 @@ static integer c__19 = 19;
 
 /*        DSKLIB Version 1.0.1, 21-APR-2014 (NJB) */
 
-/*           The diagram in the Detailed_Output header section showing */
+/*           The diagram in the $Detailed_Output header section showing */
 /*           the contents of the output VRTCES array has been corrected. */
 
 /*        DSKLIB Version 1.0.0, 02-JUN-2010 (NJB) */
@@ -921,7 +957,7 @@ static integer c__19 = 19;
 /* -& */
 /* $ Index_Entries */
 
-/*     return specified vertices from type 2 dsk segment */
+/*     return specified vertices from type 2 DSK segment */
 
 /* -& */
 

@@ -1,6 +1,6 @@
 /*
 
--Procedure  mtxmg_c ( Matrix transpose times matrix, general dimension )
+-Procedure mtxmg_c ( Matrix transpose times matrix, general dimension )
 
 -Abstract
 
@@ -38,10 +38,11 @@
    None.
 
 -Keywords
- 
+
    MATRIX
 
 */
+
    #include <stdlib.h>
    #include <math.h>
    #include "SpiceUsr.h"
@@ -49,66 +50,69 @@
    #include "SpiceZim.h"
    #undef    mtxmg_c
 
-
    void mtxmg_c ( const void  * m1,
                   const void  * m2,
-                  SpiceInt      ncol1,
+                  SpiceInt      nc1,
                   SpiceInt      nr1r2,
-                  SpiceInt      ncol2,
+                  SpiceInt      nc2,
                   void        * mout  )
+
 /*
 
 -Brief_I/O
 
    VARIABLE  I/O  DESCRIPTION
    --------  ---  --------------------------------------------------
-   m1         I   nr1r2 X ncol1 double precision matrix.
-   m2         I   nr1r2 X ncol2 double precision matrix.
-   ncol1      I   Column dimension of m1 and row dimension of mout.
-   nr1r2      I   Row dimension of m1 and m2.
-   ncol2      I   Column dimension of m2 (and also mout).
-   mout       O   Transpose of m1 times m2.
- 
+   m1         I   nr1r2 X nc1 double precision matrix.
+   m2         I   nr1r2 X nc2 double precision matrix.
+   nc1        I   Column dimension of `m1' and row dimension of `mout'.
+   nr1r2      I   Row dimension of `m1' and `m2'.
+   nc2        I   Column dimension of `m2' (and also `mout').
+   mout       O   Transpose of `m1' times `m2'.
+
 -Detailed_Input
 
-   m1         is any double precision matrix of arbitrary size.
+   m1          is any double precision matrix of arbitrary size.
 
-   m2         is any double precision matrix of arbitrary size.
-              The number of rows in m2 must match the number of
-              rows in m1.
+   m2          is any double precision matrix of arbitrary size.
+               The number of rows in `m2' must match the number of
+               rows in `m1'.
 
-   ncol1      is the number of columns in m1 and the number of rows of
-              mout.
+   nc1         is the number of columns in `m1' and the number of rows
+               of `mout'.
 
-   nr1r2      is the number of rows in both m1 and (by necessity) m2.
+   nr1r2       is the number of rows in both `m1' and (by necessity)
+               `m2'.
 
-   ncol2      is the number of columns in both m2 and mout.
- 
+   nc2         is the number of columns in both `m2' and `mout'.
+
 -Detailed_Output
 
-   mout       mout is the product matrix defined as the transpose of 
-              m1 times m2, that is
-              
-                            t
-                 mout = (m1)  x (m2)
-                 
-              where the superscript t denotes the transpose of m1.
-              
-              mout is a double precision matrix of dimension ncol1 x 
-              ncol2.
-              
-              mout may overwrite m1 or m2.  Note that this capability 
-              does not exist in the Fortran version of SPICELIB; in the
-              Fortran version, the output must not overwrite either 
-              input.
+   mout        is the product matrix defined as the transpose of
+               `m1' times `m2', that is
+
+                             t
+                  mout = (m1)  x (m2)
+
+               where the superscript `t' denotes the transpose of `m1'.
+
+               `mout' is a double precision matrix of dimension nc1 x
+               nc2.
+
+               `mout' may overwrite `m1' or `m2'.
+
 -Parameters
 
    None.
 
 -Exceptions
 
-   1) If dynamic allocation of memory fails, the error 
-      SPICE(MEMALLOCFAILED) is signalled.
+   1)  If nr1r2 < 0, the elements of the matrix `mout' are set equal to
+       zero.
+
+   2)  If memory cannot be allocated to create the temporary matrix
+       required for the execution of the routine, the error
+       SPICE(MALLOCFAILED) is signaled.
 
 -Files
 
@@ -118,67 +122,130 @@
 
    The code reflects precisely the following mathematical expression
 
-   For each value of the subscript i from 1 to ncol1, and j from 1
-   to ncol2:
+   For each value of the subscript `i' from 1 to `nc1', and `j' from 1
+   to `nc2':
 
       mout(i,j) = Summation from k=1 to nr1r2 of  m1(k,i) * m2(k,j)
 
-
 -Examples
- 
-   1)  Suppose that m1 = | 1  2  3  0 |
-                         | 1  1  1  1 |
- 
-       and that     m2 = | 1  2  3 |
-                         | 0  0  0 |
- 
-       Then calling mtxmg_c as shown
- 
-          mtxmg_c ( m1, m2, 4, 2, 3, mout )
- 
-       will yield the following value for mout:
- 
-                 | 1  2  3 |
-          mout = | 2  4  6 |
-                 | 3  6  9 |
-                 | 0  0  0 |
-       
+
+   The numerical results shown for this example may differ across
+   platforms. The results depend on the SPICE kernels used as
+   input, the compiler and supporting libraries, and the machine
+   specific arithmetic implementation.
+
+   1) Given a 2x4 and a 2x3 matrices, multiply the transpose of the
+      first matrix by the second one.
+
+
+      Example code begins here.
+
+
+      /.
+         Program mtxmg_ex1
+      ./
+      #include <stdio.h>
+      #include "SpiceUsr.h"
+
+      int main( )
+      {
+
+         /.
+         Local variables.
+         ./
+         SpiceDouble          mout   [4][3];
+
+         SpiceInt             i;
+
+         /.
+         Define `m1' and `m2'.
+         ./
+         SpiceDouble          m1     [2][4] = { { 1.0, 2.0, 3.0, 0.0 },
+                                                { 1.0, 1.0, 1.0, 0.0 }  };
+
+         SpiceDouble          m2     [2][3] = { { 1.0, 2.0, 3.0 },
+                                                { 0.0, 0.0, 0.0 } };
+
+         /.
+         Multiply the transpose of `m1' by `m2'.
+         ./
+         mtxmg_c ( m1, m2, 4, 2, 3, mout );
+
+         printf( "Transpose of M1 times M2:\n" );
+         for ( i = 0; i < 4; i++ )
+         {
+
+            printf( "%10.3f %9.3f %9.3f\n",
+                    mout[i][0], mout[i][1], mout[i][2] );
+
+         }
+
+         return ( 0 );
+      }
+
+
+      When this program was executed on a Mac/Intel/cc/64-bit
+      platform, the output was:
+
+
+      Transpose of M1 times M2:
+           1.000     2.000     3.000
+           2.000     4.000     6.000
+           3.000     6.000     9.000
+           0.000     0.000     0.000
+
+
 -Restrictions
 
-   1) No error checking is performed to prevent numeric overflow or
-      underflow.
+   1)  No error checking is performed to prevent numeric overflow or
+       underflow.
 
-   2) No error checking performed to determine if the input and
-      output matrices have, in fact, been correctly dimensioned.
-   
+   2)  No error checking performed to determine if the input and
+       output matrices have, in fact, been correctly dimensioned.
+
 -Literature_References
 
    None.
 
 -Author_and_Institution
 
-   N.J. Bachman       (JPL)
-   W.M. Owen          (JPL)
+   N.J. Bachman        (JPL)
+   J. Diaz del Rio     (ODC Space)
+   W.M. Owen           (JPL)
+   E.D. Wright         (JPL)
 
 -Version
 
-   -CSPICE Version 1.2.2, 16-JAN-2008   (EDW)
+   -CSPICE Version 1.3.0, 10-AUG-2021 (JDR)
 
-      Corrected typos in header titles:
-      
-      Detailed Input to Detailed_Input
-      Detailed Output to Detailed_Output
-      
-   -CSPICE Version 1.2.1, 10-NOV-2006   (EDW)
+       Changed the input argument names "ncol1" and "ncol2" to "nc1"
+       and "nc2" for consistency with other routines.
 
-      Added Parameters section header. 
+       Updated short error message for consistency within CSPICE wrapper
+       interface: MEMALLOCFAILED -> MALLOCFAILED.
+
+       Edited the header to comply with NAIF standard.
+       Added complete code example based on the existing example.
+
+       Added entry #1 to -Exceptions section.
+
+   -CSPICE Version 1.2.2, 16-JAN-2008 (EDW)
+
+       Corrected typos in header titles:
+
+       Detailed Input to -Detailed_Input
+       Detailed Output to -Detailed_Output
+
+   -CSPICE Version 1.2.1, 10-NOV-2006 (EDW)
+
+       Added -Parameters section header.
 
    -CSPICE Version 1.2.0, 28-AUG-2001 (NJB)
 
-      Const-qualified input arrays.
+       Const-qualified input arrays.
 
-   -CSPICE Version 1.0.0, 16-APR-1999 (NJB)
-   
+   -CSPICE Version 1.0.0, 16-APR-1999 (NJB) (WMO)
+
 -Index_Entries
 
    matrix transpose times matrix n-dimensional_case
@@ -187,8 +254,8 @@
 */
 
 {  /* Begin mtxmg_c */
- 
- 
+
+
    /*
    Local macros
 
@@ -197,21 +264,21 @@
    compiler doesn't know how to compute index offsets for the array
    arguments, which have user-adjustable size, we must compute the
    offsets ourselves.  To make syntax a little easier to read (we hope),
-   we'll use macros to do the computations.  
-   
-   The macro INDEX(width, i,j) computes the index offset from the array 
+   we'll use macros to do the computations.
+
+   The macro INDEX(width, i,j) computes the index offset from the array
    base of the element at position [i][j] in a 2-dimensional matrix
    having the number of columns indicated by width.  For example, if
    the input matrix m1 has 2 rows and 3 columns, the element at position
-   [0][1] would be indicated by 
-   
-      m1[ INDEX(3,0,1) ] 
-      
+   [0][1] would be indicated by
+
+      m1[ INDEX(3,0,1) ]
+
    */
 
-   #define INDEX( width, row, col )     ( (row)*(width) + (col) )  
-     
-     
+   #define INDEX( width, row, col )     ( (row)*(width) + (col) )
+
+
    /*
    Local variables
    */
@@ -227,24 +294,24 @@
 
    size_t                  size;
 
-   
+
    /*
    Allocate space for a temporary copy of the output matrix, which
-   has ncol1 rows and ncol2 columns.  
+   has nc1 rows and nc2 columns.
    */
-   nelt   =  ncol1 * ncol2;
+   nelt   =  nc1 * nc2;
    size   =  (size_t) ( nelt * sizeof(SpiceDouble) );
-   
+
    tmpmat =  (SpiceDouble *) malloc ( size );
 
    if ( tmpmat == (SpiceDouble *)0 )
    {
       chkin_c  ( "mtxmg_c"                                         );
       setmsg_c ( "An attempt to create a temporary matrix failed." );
-      sigerr_c ( "SPICE(MEMALLOCFAILED)"                           );
+      sigerr_c ( "SPICE(MALLOCFAILED)"                             );
       chkout_c ( "mtxmg_c"                                         );
       return;
-   }  
+   }
 
    /*
    Cast the input pointers to pointers to SpiceDoubles.  Note:  the
@@ -255,11 +322,11 @@
    can't simply declare the arguments to be (SpiceDouble *).  On the
    other hand, every pointer type can be cast to (void *).
    */
-   
+
    loc_m1 = (SpiceDouble *) m1;
    loc_m2 = (SpiceDouble *) m2;
-   
-   
+
+
    /*
    Compute the product.  The matrix element at position (row,col) is
    the inner product of the column of m1 having index row and the
@@ -267,33 +334,32 @@
    the macro INDEX.
    */
 
-   for ( row = 0;  row < ncol1;  row++ )
+   for ( row = 0;  row < nc1;  row++ )
    {
-   
-      for ( col = 0;  col < ncol2;  col++ )
+
+      for ( col = 0;  col < nc2;  col++ )
       {
          innerProduct = 0.0;
-         
-         for ( i = 0;  i < nr1r2;  i++ )   
+
+         for ( i = 0;  i < nr1r2;  i++ )
          {
-            innerProduct +=   loc_m1[ INDEX(ncol1, i, row) ]
-                            * loc_m2[ INDEX(ncol2, i, col) ];
+            innerProduct +=   loc_m1[ INDEX(nc1, i, row) ]
+                            * loc_m2[ INDEX(nc2, i, col) ];
          }
-         
-         tmpmat [ INDEX( ncol2, row, col ) ]  =  innerProduct;
+
+         tmpmat [ INDEX( nc2, row, col ) ]  =  innerProduct;
       }
    }
 
    /*
    Move the result from tmpmat into mout.
-   */ 
+   */
    MOVED ( tmpmat, nelt, mout );
-   
+
    /*
    Free the temporary matrix.
-   */ 
+   */
    free ( tmpmat );
-   
-   
-} /* End mtxmg_c */
 
+
+} /* End mtxmg_c */

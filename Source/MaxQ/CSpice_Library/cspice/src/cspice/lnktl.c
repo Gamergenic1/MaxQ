@@ -9,7 +9,7 @@
 
 static integer c__0 = 0;
 
-/* $Procedure      LNKTL ( LNK, tail of list ) */
+/* $Procedure LNKTL ( LNK, tail of list ) */
 integer lnktl_(integer *node, integer *pool)
 {
     /* System generated locals */
@@ -52,7 +52,7 @@ integer lnktl_(integer *node, integer *pool)
 
 /* $ Required_Reading */
 
-/*     LNK */
+/*     None. */
 
 /* $ Keywords */
 
@@ -61,7 +61,7 @@ integer lnktl_(integer *node, integer *pool)
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     NODE       I   Number of a node. */
 /*     POOL       I   A doubly linked list pool. */
@@ -72,34 +72,34 @@ integer lnktl_(integer *node, integer *pool)
 
 /* $ Detailed_Input */
 
-/*     NODE           is the number of a node in POOL.  Normally, */
-/*                    NODE will designate an allocated node, but NODE */
-/*                    is permitted to be less than or equal to zero. */
+/*     NODE     is the number of a node in POOL. Normally, */
+/*              NODE will designate an allocated node, but NODE */
+/*              is permitted to be less than or equal to zero. */
 
-/*     POOL           is a doubly linked list pool. */
+/*     POOL     is a doubly linked list pool. */
 
 /* $ Detailed_Output */
 
 /*     The function returns the number of the tail node of the list */
-/*     containing NODE.  If NODE is non-positive, the function returns */
+/*     containing NODE. If NODE is non-positive, the function returns */
 /*     zero. */
 
 /* $ Parameters */
 
-/*     LBPOOL        is the lower bound of the column indices of the POOL */
-/*                   array.  The columns indexed LBPOOL to 0 are reserved */
-/*                   as a control area for the pool. */
+/*     LBPOOL   is the lower bound of the column indices of the POOL */
+/*              array. The columns indexed LBPOOL to 0 are reserved */
+/*              as a control area for the pool. */
 
 /* $ Exceptions */
 
 /*     1)  If the NODE is less than or equal to zero, NODE is not */
-/*         considered to be erroneous.  The value 0 is returned. */
+/*         considered to be erroneous. The value 0 is returned. */
 
 /*     2)  If NODE is greater than the size of the pool, the error */
-/*         SPICE(INVALIDNODE) is signalled.  The value 0 is returned. */
+/*         SPICE(INVALIDNODE) is signaled. The value 0 is returned. */
 
 /*     3)  If NODE is not the number of an allocated node, the error */
-/*         SPICE(UNALLOCATEDNODE) is signalled.  The value 0 is returned. */
+/*         SPICE(UNALLOCATEDNODE) is signaled. The value 0 is returned. */
 
 /* $ Files */
 
@@ -108,8 +108,8 @@ integer lnktl_(integer *node, integer *pool)
 /* $ Particulars */
 
 /*     This routine provides a convenient way to find the tail of a list */
-/*     in a doubly linked list pool.  The need to find the tail of a */
-/*     list arises in applications such as buffer management.  For */
+/*     in a doubly linked list pool. The need to find the tail of a */
+/*     list arises in applications such as buffer management. For */
 /*     example, in a system using a "least recently used" buffer */
 /*     replacement policy, the tail of a list may point to the least */
 /*     recently accessed buffer element. */
@@ -142,9 +142,9 @@ integer lnktl_(integer *node, integer *pool)
 
 /* $ Restrictions */
 
-/*     Linked list pools must be initialized via the routine */
-/*     LNKINI.  Failure to initialize a linked list pool, */
-/*     will almost certainly lead to confusing results. */
+/*     1)  Linked list pools must be initialized via the routine */
+/*         LNKINI. Failure to initialize a linked list pool, */
+/*         will almost certainly lead to confusing results. */
 
 /* $ Literature_References */
 
@@ -152,10 +152,15 @@ integer lnktl_(integer *node, integer *pool)
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
-/*     W.L. Taber     (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.1, 24-NOV-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.1.0, 09-JAN-1997 (NJB) */
 
@@ -173,9 +178,10 @@ integer lnktl_(integer *node, integer *pool)
 
 /* -    SPICELIB Version 1.1.0, 09-JAN-1997 (NJB) */
 
-/*        Corrected module name in one pair of CHKIN/CHKOUT calls.  The */
+/*        Corrected module name in one pair of CHKIN/CHKOUT calls. The */
 /*        affected error case was the check for a node number being out */
 /*        of range. */
+
 /* -& */
 
 /*     Local parameters */

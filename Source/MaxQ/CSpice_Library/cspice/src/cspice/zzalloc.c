@@ -131,6 +131,11 @@ enum{ ALLOC_INC,    /* Increment the count value by +1.   */
 
 -Version
 
+   CSPICE 1.3.1 24-JUL-2021 (EDW)
+
+      Corrected spelling mistake "must excceed" in error message 
+      with "must exceed".
+
    CSPICE 1.3.0 26-AUG-2016 (EDW)
 
       Added routine alloc_SpiceBoolean_C_array.
@@ -577,7 +582,7 @@ SpiceInt * alloc_SpiceInt_C_array ( int rows, int cols )
       setmsg_c ( "The specified total workspace size #1 was "
                  "less than the minimum allowed value (1). "
                  "The value for both rows, #2, and cols, #3, "
-                 "must excceed zero."                       );
+                 "must exceed zero."                       );
       errint_c ( "#1", (SpiceInt) (rows*cols)               );
       errint_c ( "#2", (SpiceInt) rows                      );
       errint_c ( "#3", (SpiceInt) cols                      );
@@ -721,7 +726,7 @@ SpiceBoolean * alloc_SpiceBoolean_C_array ( int rows, int cols )
       setmsg_c ( "The specified total workspace size #1 was "
                  "less than the minimum allowed value (1). "
                  "The value for both rows, #2, and cols, #3, "
-                 "must excceed zero."                       );
+                 "must exceed zero."                       );
       errint_c ( "#1", (SpiceInt) (rows*cols)               );
       errint_c ( "#2", (SpiceInt) rows                      );
       errint_c ( "#3", (SpiceInt) cols                      );
@@ -878,7 +883,7 @@ SpiceDouble * alloc_SpiceDouble_C_array ( int rows, int cols )
       setmsg_c ( "The specified total workspace size #1 was "
                  "less than the minimum allowed value (1). "
                  "The value for both rows, #2, and cols, #3, "
-                 "must excceed zero."                       );
+                 "must exceed zero."                       );
       errint_c ( "#1", (SpiceInt) (rows*cols)               );
       errint_c ( "#2", (SpiceInt) rows                      );
       errint_c ( "#3", (SpiceInt) cols                      );

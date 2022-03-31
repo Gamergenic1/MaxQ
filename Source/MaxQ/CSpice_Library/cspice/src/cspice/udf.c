@@ -10,7 +10,9 @@
 {
 /* $ Abstract */
 
-/*     No-op routine for with an argument signature matching UDFUNS. */
+/*     Serve as a dummy function for GF routines expecting an UDFUNS */
+/*     argument. It is a no-op routine with an argument signature */
+/*     matching UDFUNS. */
 
 /* $ Disclaimer */
 
@@ -39,73 +41,78 @@
 
 /* $ Required_Reading */
 
-/*    None. */
+/*     None. */
 
 /* $ Keywords */
 
-/*    None. */
+/*     None. */
 
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
-/*     X         I/O  Double precision value, unused. */
-/*     VALUE     I/O  Double precision value, unused. */
+/*     X          I   Double precision value, unused. */
+/*     VALUE      I   Double precision value, unused. */
 
 /* $ Detailed_Input */
 
-/*     X         Double precision value, unused. */
+/*     X        is a double precision value, unused. */
 
-/*     VALUE     Double precision value, unused. */
+/*     VALUE    is a double precision value, unused. */
 
 /* $ Detailed_Output */
 
-/*    None. */
+/*     None. */
 
 /* $ Parameters */
 
-/*    None. */
+/*     None. */
 
 /* $ Exceptions */
 
-/*    None. */
+/*     Error free. */
 
 /* $ Files */
 
-/*    None. */
+/*     None. */
 
 /* $ Particulars */
 
-/*    The routine performs no evaluations. It exists for routines */
-/*    expecting an UDFUNS argument. In the cases where UDFUNC is */
-/*    unneeded or unavailable, this routine provides a null operation */
-/*    alternative. */
+/*     The routine performs no evaluations. It exists for routines */
+/*     expecting an UDFUNS argument. In the cases where UDFUNC is */
+/*     unneeded or unavailable, this routine provides a null operation */
+/*     alternative. */
 
 /* $ Examples */
 
-/*    None. */
+/*     None. */
 
 /* $ Restrictions */
 
-/*    None. */
+/*     None. */
 
 /* $ Literature_References */
 
-/*    None. */
+/*     None. */
 
 /* $ Author_and_Institution */
 
-/*    E.D. Wright    (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
 
-/* -   SPICELIB Version 1.0.0  21-OCT-2013 (EDW) */
+/* -    SPICELIB Version 1.0.1, 27-AUG-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
+
+/* -    SPICELIB Version 1.0.0, 21-OCT-2013 (EDW) */
 
 /* -& */
 /* $ Index_Entries */
 
-/*   dummy function for UDFUNS signature arguments */
+/*     dummy function for UDFUNS signature arguments */
 
 /* -& */
     *x += 0.;

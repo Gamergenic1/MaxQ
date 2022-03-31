@@ -165,7 +165,7 @@ static integer c__1 = 1;
 /*     LUN        I   Logical unit number of an open DAF file. */
 /*     IDWORD     I   DAF ID word. */
 /*     ND         I   Number of double precision components in a summary. */
-/*     NI         I   Number of integer componenets in a summary. */
+/*     NI         I   Number of integer components in a summary. */
 /*     IFNAME     I   Internal filename. */
 /*     FWARD      I   First descriptor record. */
 /*     BWARD      I   Last descriptor record. */
@@ -208,16 +208,16 @@ static integer c__1 = 1;
 
 /*     See include file zzftprms.inc. */
 
-/* $ Files */
-
-/*     This routine writes to the first record of the DAF whose */
-/*     logical unit is LUN. */
-
 /* $ Exceptions */
 
 /*     1) If any errors occur from the WRITE to the logical unit LUN, */
 /*        the error SPICE(DAFWRITEFAIL) is signaled. Before returning */
 /*        to the caller, the file attached to LUN is closed and deleted. */
+
+/* $ Files */
+
+/*     This routine writes to the first record of the DAF whose */
+/*     logical unit is LUN. */
 
 /* $ Particulars */
 
@@ -241,15 +241,19 @@ static integer c__1 = 1;
 /*        else the computations to null pad the gaps in the file */
 /*        record may overstep record boundaries. */
 
-/* $ Author_and_Institution */
-
-/*     F.S. Turner     (JPL) */
-
 /* $ Literature_References */
 
 /*     None. */
 
+/* $ Author_and_Institution */
+
+/*     F.S. Turner     (JPL) */
+
 /* $ Version */
+
+/* -    SPICELIB Version 1.0.2, 02-OCT-2021 (NJB) */
+
+/*        Corrected typos in comments. Reordered header sections. */
 
 /* -    SPICELIB Version 1.0.1, 11-DEC-2001 (FST) */
 
@@ -277,7 +281,7 @@ static integer c__1 = 1;
 /*     end of the file record. Note: This value assumes the */
 /*     length of the file record is 1024 bytes.  The DAF */
 /*     specification only requires the presence of 1000 */
-/*     characters, so this may requiremodification for */
+/*     characters, so this may require modification for */
 /*     non-standard platforms. */
 
 

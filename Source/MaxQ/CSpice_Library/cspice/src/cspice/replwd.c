@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      REPLWD ( Replace a word ) */
+/* $Procedure REPLWD ( Replace a word ) */
 /* Subroutine */ int replwd_(char *instr, integer *nth, char *new__, char *
 	outstr, ftnlen instr_len, ftnlen new_len, ftnlen outstr_len)
 {
@@ -24,7 +24,7 @@
 
 /* $ Abstract */
 
-/*      Replace the Nth word in a string with a new word. */
+/*     Replace the Nth word in a string with a new word. */
 
 /* $ Disclaimer */
 
@@ -57,142 +57,131 @@
 
 /* $ Keywords */
 
-/*      ASSIGNMENT,  WORD */
+/*     ASSIGNMENT */
+/*     WORD */
 
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*      VARIABLE  I/O  DESCRIPTION */
-/*      --------  ---  -------------------------------------------------- */
-/*      INSTR      I   Input string. */
-/*      NTH        I   Number of the word to be replaced. */
-/*      NEW        I   Replacement word. */
-/*      OUTSTR     O   Output string. */
+/*     VARIABLE  I/O  DESCRIPTION */
+/*     --------  ---  -------------------------------------------------- */
+/*     INSTR      I   Input string. */
+/*     NTH        I   Number of the word to be replaced. */
+/*     NEW        I   Replacement word. */
+/*     OUTSTR     O   Output string. */
 
 /* $ Detailed_Input */
 
-/*      INSTR       is the input character string, possibly containing */
-/*                  one or more words, where a word is any string of */
-/*                  consecutive non-blank characters delimited by a */
-/*                  blank or by either end of the string. */
+/*     INSTR    is the input character string, possibly containing */
+/*              one or more words, where a word is any string of */
+/*              consecutive non-blank characters delimited by a */
+/*              blank or by either end of the string. */
 
-/*      NTH         is the number of the word to be replaced. Words */
-/*                  are numbered from one. If NTH is less than one, */
-/*                  or greater than the number of words in the string, */
-/*                  no replacement is made. */
+/*     NTH      is the number of the word to be replaced. Words */
+/*              are numbered from one. If NTH is less than one, */
+/*              or greater than the number of words in the string, */
+/*              no replacement is made. */
 
-/*      NEW         is the word which is to replace the specified word */
-/*                  in the input string. Leading and trailing blanks */
-/*                  are ignored. If the replacement word is blank, */
-/*                  the original word is simply removed. */
+/*     NEW      is the word which is to replace the specified word */
+/*              in the input string. Leading and trailing blanks */
+/*              are ignored. If the replacement word is blank, */
+/*              the original word is simply removed. */
 
 /* $ Detailed_Output */
 
-/*      OUTSTR      is the output string. This is the input string */
-/*                  with the N'th word replaced by the word NEW. */
-/*                  Any blanks originally surrounding the replaced */
-/*                  word are retained. */
+/*     OUTSTR   is the output string. This is the input string */
+/*              with the N'th word replaced by the word NEW. */
+/*              Any blanks originally surrounding the replaced */
+/*              word are retained. */
 
-/*                  OUTSTR may overwrite INSTR. */
+/*              OUTSTR may overwrite INSTR. */
 
 /* $ Parameters */
 
 /*     None. */
 
-/* $ Particulars */
-
-/*      The effect of this routine is to remove the old word with */
-/*      REMSUB, and insert the replacement word with INSSUB. */
-
 /* $ Exceptions */
 
-/*      Error free. */
+/*     Error free. */
 
-/*      1) If NEW is blank, then the Nth word is replaced by a single */
+/*     1)  If NEW is blank, then the Nth word is replaced by a single */
 /*         space. */
 
 /* $ Files */
 
-/*      None. */
+/*     None. */
+
+/* $ Particulars */
+
+/*     The effect of this routine is to remove the old word with */
+/*     REMSUB, and insert the replacement word with INSSUB. */
 
 /* $ Examples */
 
-/*      Let */
-/*            INSTR  = '  Woodsy is the Anti-Pollution  Owl.' */
+/*     Let */
+/*           INSTR  = '  Woodsy is the Anti-Pollution  Owl.' */
 
-/*      and */
-/*            NEW    = '   an   ' */
+/*     and */
+/*           NEW    = '   an   ' */
 
-/*      then the following values of NTH yield the following strings. */
+/*     then the following values of NTH yield the following strings. */
 
-/*            NTH      OUTSTR */
-/*            ---      ------------------------------------------ */
-/*             -1      '  Woodsy is the Anti-Pollution  Owl.' */
-/*              0      '  Woodsy is the Anti-Pollution  Owl.' */
-/*              1      '  an is the Anti-Pollution  Owl.' */
-/*              3      '  Woodsy is an Anti-Pollution  Owl.' */
-/*              4      '  Woodsy is the an  Owl.' */
-/*              5      '  Woodsy is the Anti-Pollution  an' */
-/*              6      '  Woodsy is the Anti-Pollution  Owl.' */
+/*           NTH      OUTSTR */
+/*           ---      ------------------------------------------ */
+/*            -1      '  Woodsy is the Anti-Pollution  Owl.' */
+/*             0      '  Woodsy is the Anti-Pollution  Owl.' */
+/*             1      '  an is the Anti-Pollution  Owl.' */
+/*             3      '  Woodsy is an Anti-Pollution  Owl.' */
+/*             4      '  Woodsy is the an  Owl.' */
+/*             5      '  Woodsy is the Anti-Pollution  an' */
+/*             6      '  Woodsy is the Anti-Pollution  Owl.' */
 
-/*      Note that in the first, second, and last cases, the string */
-/*      was not changed. Note also that in the next to last case, */
-/*      the final period was treated as part of the fifth word in the */
-/*      string. */
+/*     Note that in the first, second, and last cases, the string */
+/*     was not changed. Note also that in the next to last case, */
+/*     the final period was treated as part of the fifth word in the */
+/*     string. */
 
-/*      If NEW is ' ', and NTH is 3, then */
+/*     If NEW is ' ', and NTH is 3, then */
 
-/*            OUTSTR = '  Woodsy is Anti-Pollution  Owl.' */
+/*           OUTSTR = '  Woodsy is Anti-Pollution  Owl.' */
 
 /* $ Restrictions */
 
-/*      None. */
-
-/* $ Author_and_Institution */
-
-/*      N.J. Bachman    (JPL) */
-/*      H.A. Neilan     (JPL) */
-/*      W.L. Taber      (JPL) */
-/*      I.M. Underwood  (JPL) */
+/*     None. */
 
 /* $ Literature_References */
 
-/*      None. */
+/*     None. */
+
+/* $ Author_and_Institution */
+
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     H.A. Neilan        (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
 
-/* -     SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+/* -    SPICELIB Version 1.1.0, 12-AUG-2021 (JDR) */
 
-/*         Comment section for permuted index source lines was added */
-/*         following the header. */
+/*        Added IMPLICIT NONE statement. */
 
-/* -     SPICELIB Version 1.0.0, 31-JAN-1990 (IMU) */
+/*        Edited the header to comply with NAIF standard. Removed */
+/*        unnecessary $Revisions section. */
+
+/* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+
+/*        Comment section for permuted index source lines was added */
+/*        following the header. */
+
+/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (IMU) (WLT) (HAN) (NJB) */
 
 /* -& */
 /* $ Index_Entries */
 
 /*     replace a word */
 
-/* -& */
-/* $ Revisions */
-
-/* -     Beta Version 1.3.0, 7-MAR-1989  (WLT) */
-
-/*         To satisfy complaints about me not having enough to do, */
-/*         the case of a blank NEW word has been handled. */
-
-/* -     Beta Version 1.2.0, 28-FEB-1989 (WLT) */
-
-/*         Routine completely rewritten to satify whims of the */
-/*         NAIF group. */
-
-/* -     Beta Version 1.1.1, 17-FEB-1989 (HAN) (NJB) */
-
-/*         Contents of the Exceptions section was changed */
-/*         to "error free" to reflect the decision that the */
-/*         module will never participate in error handling. */
-
-/*         Declaration of the unused variable OUTLEN deleted. */
 /* -& */
 
 /*     SPICELIB functions */

@@ -9,7 +9,7 @@
 
 static integer c__9 = 9;
 
-/* $Procedure      ROTMAT ( Rotate a matrix ) */
+/* $Procedure ROTMAT ( Rotate a matrix ) */
 /* Subroutine */ int rotmat_(doublereal *m1, doublereal *angle, integer *
 	iaxis, doublereal *mout)
 {
@@ -35,9 +35,8 @@ static integer c__9 = 9;
 
 /* $ Abstract */
 
-/*     ROTMAT applies a rotation of ANGLE radians about axis IAXIS to a */
-/*     matrix.  This rotation is thought of as rotating the coordinate */
-/*     system. */
+/*     Apply a rotation of ANGLE radians about axis IAXIS to a matrix. */
+/*     This rotation is thought of as rotating the coordinate system. */
 
 /* $ Disclaimer */
 
@@ -86,28 +85,31 @@ static integer c__9 = 9;
 
 /* $ Detailed_Input */
 
-/*     M1       This is a matrix to which a rotation is to be applied. */
-/*              In matrix algebra, the components of the matrix are */
-/*              relevant in one particular coordinate system. Applying */
-/*              ROTMAT changes the components of M1 so that they are */
-/*              relevant to a rotated coordinate system. */
+/*     M1       is a 3x3 matrix to which a rotation is to be applied. In */
+/*              matrix algebra, the components of the matrix are relevant */
+/*              in one particular coordinate system. Applying ROTMAT */
+/*              changes the components of M1 so that they are relevant to */
+/*              a rotated coordinate system. */
 
-/*     ANGLE    The angle in radians through which the original */
+/*     ANGLE    is the angle in radians through which the original */
 /*              coordinate system is to be rotated. */
 
-/*     IAXIS    An index for the axis of the original coordinate system */
-/*              about which the rotation by ANGLE is to be performed. */
-/*              IAXIS = 1,2 or 3 designates the x-, y- or z-axis, */
-/*              respectively. */
+/*     IAXIS    is the index for the axis of the original coordinate */
+/*              system about which the rotation by ANGLE is to be */
+/*              performed. IAXIS = 1,2 or 3 designates the X-, Y- or */
+/*              Z-axis, respectively. */
 
 /* $ Detailed_Output */
 
-/*     MOUT     The matrix resulting from the application of the */
-/*              specified rotation to the input matrix M1.  If */
-/*              [ANGLE]        denotes the rotation matrix by ANGLE */
-/*                     IAXIS */
-/*              radians about IAXIS, (refer to the routine ROTATE) then */
-/*              MOUT is given by the following matrix equation: */
+/*     MOUT     is the matrix resulting from the application of the */
+/*              specified rotation to the input matrix M1. If */
+
+/*                 [ANGLE] */
+/*                        IAXIS */
+
+/*              denotes the rotation matrix by ANGLE radians about IAXIS, */
+/*              (refer to the routine ROTATE) then MOUT is given by the */
+/*              following matrix equation: */
 
 /*                 MOUT = [ANGLE]      * M1 */
 /*                               IAXIS */
@@ -120,9 +122,9 @@ static integer c__9 = 9;
 
 /*     Error free. */
 
-/*     1) If the axis index is not in the range 1 to 3 it will be */
-/*        treated the same as that integer 1, 2, or 3 that is congruent */
-/*        to it mod 3. */
+/*     1)  If the axis index is not in the range 1 to 3, it will be */
+/*         treated the same as that integer 1, 2, or 3 that is congruent */
+/*         to it mod 3. */
 
 /* $ Files */
 
@@ -136,10 +138,10 @@ static integer c__9 = 9;
 
 /*     Suppose that to rotate a set of inertial axes to body fixed */
 /*     axes, one must first roll the coordinate axes about the x-axis by */
-/*     angle R to get x', y', z'.  From this one must pitch about the y' */
+/*     angle R to get x', y', z'. From this one must pitch about the y' */
 /*     axis by angle P to get x'', y'', z''.  And finally yaw the x'', */
 /*     y'', z'' about the z'' axis by angle Y to obtain the */
-/*     transformation to bodyfixed coordinates.  If ID is the identity */
+/*     transformation to bodyfixed coordinates. If ID is the identity */
 /*     matrix, then the following code fragment generates the */
 /*     transformation from inertial to body fixed. */
 
@@ -157,10 +159,19 @@ static integer c__9 = 9;
 
 /* $ Author_and_Institution */
 
-/*     W.M. Owen       (JPL) */
-/*     W.L. Taber      (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.M. Owen          (JPL) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 27-MAY-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. Reformatted */
+/*        arguments' description. */
 
 /* -    SPICELIB Version 1.0.2, 23-APR-2010 (NJB) */
 
@@ -184,9 +195,9 @@ static integer c__9 = 9;
 
 /* -    Beta Version 1.1.0, 3-JAN-1989 (WLT) */
 
-/*     Upgrade the routine to work with negative axis indexes.  Also take */
+/*     Upgrade the routine to work with negative axis indexes. Also take */
 /*     care of the funky way the indices (other than the input) were */
-/*     obtained via the MOD function.  It works but isn't as clear */
+/*     obtained via the MOD function. It works but isn't as clear */
 /*     (or fast) as just reading the axes from data. */
 
 /* -& */
@@ -202,31 +213,31 @@ static integer c__9 = 9;
 
     temp = (*iaxis % 3 + 3) % 3;
     i1 = indexs[(i__1 = temp) < 5 && 0 <= i__1 ? i__1 : s_rnge("indexs", i__1,
-	     "rotmat_", (ftnlen)201)];
+	     "rotmat_", (ftnlen)214)];
     i2 = indexs[(i__1 = temp + 1) < 5 && 0 <= i__1 ? i__1 : s_rnge("indexs", 
-	    i__1, "rotmat_", (ftnlen)202)];
+	    i__1, "rotmat_", (ftnlen)215)];
     i3 = indexs[(i__1 = temp + 2) < 5 && 0 <= i__1 ? i__1 : s_rnge("indexs", 
-	    i__1, "rotmat_", (ftnlen)203)];
+	    i__1, "rotmat_", (ftnlen)216)];
 
 /*  Calculate the output matrix column by column */
 
     for (i__ = 1; i__ <= 3; ++i__) {
 	prodm[(i__1 = i1 + i__ * 3 - 4) < 9 && 0 <= i__1 ? i__1 : s_rnge(
-		"prodm", i__1, "rotmat_", (ftnlen)208)] = m1[(i__2 = i1 + i__ 
+		"prodm", i__1, "rotmat_", (ftnlen)221)] = m1[(i__2 = i1 + i__ 
 		* 3 - 4) < 9 && 0 <= i__2 ? i__2 : s_rnge("m1", i__2, "rotma"
-		"t_", (ftnlen)208)];
+		"t_", (ftnlen)221)];
 	prodm[(i__1 = i2 + i__ * 3 - 4) < 9 && 0 <= i__1 ? i__1 : s_rnge(
-		"prodm", i__1, "rotmat_", (ftnlen)209)] = c__ * m1[(i__2 = i2 
+		"prodm", i__1, "rotmat_", (ftnlen)222)] = c__ * m1[(i__2 = i2 
 		+ i__ * 3 - 4) < 9 && 0 <= i__2 ? i__2 : s_rnge("m1", i__2, 
-		"rotmat_", (ftnlen)209)] + s * m1[(i__3 = i3 + i__ * 3 - 4) < 
+		"rotmat_", (ftnlen)222)] + s * m1[(i__3 = i3 + i__ * 3 - 4) < 
 		9 && 0 <= i__3 ? i__3 : s_rnge("m1", i__3, "rotmat_", (ftnlen)
-		209)];
+		222)];
 	prodm[(i__1 = i3 + i__ * 3 - 4) < 9 && 0 <= i__1 ? i__1 : s_rnge(
-		"prodm", i__1, "rotmat_", (ftnlen)210)] = -s * m1[(i__2 = i2 
+		"prodm", i__1, "rotmat_", (ftnlen)223)] = -s * m1[(i__2 = i2 
 		+ i__ * 3 - 4) < 9 && 0 <= i__2 ? i__2 : s_rnge("m1", i__2, 
-		"rotmat_", (ftnlen)210)] + c__ * m1[(i__3 = i3 + i__ * 3 - 4) 
+		"rotmat_", (ftnlen)223)] + c__ * m1[(i__3 = i3 + i__ * 3 - 4) 
 		< 9 && 0 <= i__3 ? i__3 : s_rnge("m1", i__3, "rotmat_", (
-		ftnlen)210)];
+		ftnlen)223)];
     }
 
 /*  Move the buffered matrix into MOUT. */

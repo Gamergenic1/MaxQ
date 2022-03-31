@@ -477,7 +477,7 @@ integer zzekille_(integer *handle, integer *segdsc, integer *coldsc, integer *
 /* $ Exceptions */
 
 /*     1)  If the array size NROWS is non-positive, the error */
-/*         SPICE(INVALIDSIZE) will be signalled. */
+/*         SPICE(INVALIDSIZE) will be signaled. */
 
 /*     2)  If HANDLE is invalid, the error will be diagnosed by routines */
 /*         called by this routine. */
@@ -517,6 +517,10 @@ integer zzekille_(integer *handle, integer *segdsc, integer *coldsc, integer *
 /*     N.J. Bachman   (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.0.1, 03-OCT-2021 (NJB) */
+
+/*        Corrected typos in comments. */
 
 /* -    Beta Version 1.0.0, 10-OCT-1995 (NJB) */
 

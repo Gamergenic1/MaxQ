@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      SXFORM ( State Transformation Matrix ) */
+/* $Procedure SXFORM ( State Transformation Matrix ) */
 /* Subroutine */ int sxform_(char *from, char *to, doublereal *et, doublereal 
 	*xform, ftnlen from_len, ftnlen to_len)
 {
@@ -132,34 +132,34 @@
 
 /* $ Detailed_Input */
 
-/*     FROM        is the name of a reference frame in which a state is */
-/*                 known. */
+/*     FROM     is the name of a reference frame in which a state is */
+/*              known. */
 
-/*     TO          is the name of a reference frame in which it is */
-/*                 desired to represent the state. */
+/*     TO       is the name of a reference frame in which it is */
+/*              desired to represent the state. */
 
-/*     ET          is the epoch in ephemeris seconds past the epoch of */
-/*                 J2000 (TDB) at which the state transformation matrix */
-/*                 should be evaluated. */
+/*     ET       is the epoch in ephemeris seconds past the epoch of */
+/*              J2000 (TDB) at which the state transformation matrix */
+/*              should be evaluated. */
 
 /* $ Detailed_Output */
 
-/*     XFORM       is the state transformation matrix that transforms */
-/*                 states from the reference frame FROM to the frame TO */
-/*                 at epoch ET.  If (x, y, z, dx, dy, dz) is a state */
-/*                 relative to the frame FROM then the vector ( x', y', */
-/*                 z', dx', dy', dz' ) is the same state relative to the */
-/*                 frame TO at epoch ET.  Here the vector ( x', y', z', */
-/*                 dx', dy', dz' ) is defined by the equation: */
+/*     XFORM    is the state transformation matrix that transforms */
+/*              states from the reference frame FROM to the frame TO */
+/*              at epoch ET. If (x, y, z, dx, dy, dz) is a state */
+/*              relative to the frame FROM then the vector ( x', y', */
+/*              z', dx', dy', dz' ) is the same state relative to the */
+/*              frame TO at epoch ET. Here the vector ( x', y', z', */
+/*              dx', dy', dz' ) is defined by the equation: */
 
-/*                   -   -       -          -     -  - */
-/*                  | x'  |     |            |   | x  | */
-/*                  | y'  |     |            |   | y  | */
-/*                  | z'  |  =  |   XFORM    |   | z  | */
-/*                  | dx' |     |            |   | dx | */
-/*                  | dy' |     |            |   | dy | */
-/*                  | dz' |     |            |   | dz | */
-/*                   -   -       -          -     -  - */
+/*                 .-   -.     .-          -.   .-  -. */
+/*                 | x'  |     |            |   | x  | */
+/*                 | y'  |     |            |   | y  | */
+/*                 | z'  |  =  |   XFORM    |   | z  | */
+/*                 | dx' |     |            |   | dx | */
+/*                 | dy' |     |            |   | dy | */
+/*                 | dz' |     |            |   | dz | */
+/*                 `-   -'     `-          -'   `-  -' */
 
 /* $ Parameters */
 
@@ -167,13 +167,13 @@
 
 /* $ Exceptions */
 
-/*     1) If sufficient information has not been supplied via loaded */
-/*        SPICE kernels to compute the transformation between the */
-/*        two frames, the error will be diagnosed by a routine */
-/*        in the call tree to this routine. */
+/*     1)  If sufficient information has not been supplied via loaded */
+/*         SPICE kernels to compute the transformation between the two */
+/*         frames, an error is signaled by a routine in the call tree of */
+/*         this routine. */
 
-/*     2) If either frame FROM or TO is not recognized the error */
-/*        SPICE(UNKNOWNFRAME) will be signaled. */
+/*     2)  If either frame FROM or TO is not recognized, the error */
+/*         SPICE(UNKNOWNFRAME) is signaled. */
 
 /* $ Files */
 
@@ -193,7 +193,7 @@
 
 /*     Suppose that you have geodetic coordinates of a station on */
 /*     the surface of the earth and that you need the inertial */
-/*     (J2000) state of this station.  The following code fragment */
+/*     (J2000) state of this station. The following code fragment */
 /*     illustrates how to transform the position of the station to */
 /*     a J2000 state. */
 
@@ -224,12 +224,17 @@
 
 /* $ Author_and_Institution */
 
-/*     C.H. Acton      (JPL) */
-/*     N.J. Bachman    (JPL) */
-/*     B.V. Semenov    (JPL) */
-/*     W.L. Taber      (JPL) */
+/*     C.H. Acton         (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.1, 05-JUL-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.1.0, 23-SEP-2013 (BVS) */
 
@@ -239,12 +244,12 @@
 
 /* -    SPICELIB Version 1.0.3, 27-FEB-2008 (BVS) */
 
-/*        Added FRAMES to the Required_Reading section. */
+/*        Added FRAMES to the $Required_Reading section. */
 
 /* -    SPICELIB Version 1.0.2, 23-OCT-2005 (NJB) */
 
 /*        Header example had invalid flattening factor computation; */
-/*        this was corrected.  Reference to BODVAR in header was */
+/*        this was corrected. Reference to BODVAR in header was */
 /*        replaced with reference to BODVRD. */
 
 /* -    SPICELIB Version 1.0.1, 29-JUL-2003 (NJB) (CHA) */

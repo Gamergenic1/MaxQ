@@ -3,9 +3,9 @@
 -Procedure appndc_c ( Append an item to a character cell )
 
 -Abstract
- 
-   Append an item to a character cell. 
- 
+
+   Append an item to a character cell.
+
 -Disclaimer
 
    THIS SOFTWARE AND ANY RELATED MATERIALS WERE CREATED BY THE
@@ -32,13 +32,13 @@
    ACTIONS OF RECIPIENT IN THE USE OF THE SOFTWARE.
 
 -Required_Reading
- 
-   CELLS 
- 
+
+   CELLS
+
 -Keywords
- 
-   CELLS 
- 
+
+   CELLS
+
 */
 
 
@@ -50,67 +50,77 @@
 
    void appndc_c ( ConstSpiceChar   * item,
                    SpiceCell        * cell  )
-   
+
 /*
 
 -Brief_I/O
- 
-   VARIABLE  I/O  DESCRIPTION 
-   --------  ---  -------------------------------------------------- 
-   item       I   The item to append. 
-   cell      I/O  The cell to which item will be appended. 
- 
+
+   VARIABLE  I/O  DESCRIPTION
+   --------  ---  --------------------------------------------------
+   item       I   The item to append.
+   cell      I-O  The cell to which item will be appended.
+
 -Detailed_Input
- 
-   item       is a character string which is to be appended to cell. 
- 
-   cell       is a character SpiceCell to which item will be appended. 
- 
+
+   item        is a character string which is to be appended to `cell'.
+
+   cell        is a character SPICE cell to which `item' will be
+               appended.
+
+               `cell' must be declared as a character SpiceCell.
+
+               CSPICE provides the following macro, which declares and
+               initializes the cell
+
+                  SPICECHAR_CELL          ( cell, CELLSZ, CELLMLEN );
+
+               where CELLSZ is the maximum capacity of `cell' and CELLMLEN is
+               the maximum length of any member in the character cell.
+
 -Detailed_Output
- 
-   cell       is the input SpiceCell with item appended.  item is the 
-              last member of cell. 
 
-              If cell is actually a CSPICE set on input and ceases to
-              qualify as a set as result of the append operation, 
-              the isSet member of cell will be set to SPICEFALSE.
- 
+   cell        is the input cell with `item' appended. `item' is the last
+               member of `cell'.
+
+               If `cell' is actually a SPICE set on input and ceases to
+               qualify as a set as result of the append operation,
+               the `isSet' member of `cell' will be set to SPICEFALSE.
+
 -Parameters
- 
-   None. 
- 
+
+   None.
+
 -Exceptions
- 
-   1) If the input cell argument is a SpiceCell of type other than
-      character, the error SPICE(TYPEMISMATCH) is signaled.
 
-   2) If the cell is not large enough to accommodate the addition 
-      of a new element, the error SPICE(CELLTOOSMALL) is signaled. 
- 
-   3) If the length of the item is longer than the length of the 
-      cell, ITEM is truncated on the right. 
- 
-   4) If on input cell is actually a CSPICE set, that is, it
-      contains sorted elements with no duplicates, and if item
-      is not strictly greater than the last element, on output the
-      isSet member of cell will be set to SPICEFALSE.  This case
-      is not considered an error.
+   1)  If the input cell argument is a SpiceCell of type other than
+       character, the error SPICE(TYPEMISMATCH) is signaled.
 
-   5) If the input string pointer is null, the error SPICE(NULLPOINTER)
-      is signaled.
+   2)  If the cell is not large enough to accommodate the addition
+       of a new element, the error SPICE(CELLTOOSMALL) is signaled.
+
+   3)  If the length of the item is longer than the length of the
+       cell, `item' is truncated on the right.
+
+   4)  If on input cell is actually a SPICE set, that is, it contains sorted
+       elements with no duplicates, and if item is not strictly greater than
+       the last element, on output the `isSet' member of cell will be set to
+       SPICEFALSE. This case is not considered an error.
+
+   5)  If the input string pointer is null, the error SPICE(NULLPOINTER)
+       is signaled.
 
 -Files
- 
-   None. 
- 
+
+   None.
+
 -Particulars
- 
-   None. 
- 
+
+   None.
+
 -Examples
- 
-   1) In the following example, the item "PLUTO" is appended to 
-      the character cell planets.  planets is declared with
+
+   1) In the following example, the item "PLUTO" is appended to
+      the character cell planets. planets is declared with
       string length NAMLEN.
 
          #include "SpiceUsr.h"
@@ -129,15 +139,15 @@
          Before appending "PLUTO", suppose the cell planets' data array
          contains:
 
-            Element 0: == "MERCURY" 
-            Element 1: == "VENUS" 
-            Element 2: == "EARTH" 
-            Element 3: == "MARS" 
-            Element 4: == "JUPITER" 
-            Element 5: == "SATURN" 
-            Element 6: == "URANUS" 
-            Element 7: == "NEPTUNE" 
-         
+            Element 0: == "MERCURY"
+            Element 1: == "VENUS"
+            Element 2: == "EARTH"
+            Element 3: == "MARS"
+            Element 4: == "JUPITER"
+            Element 5: == "SATURN"
+            Element 6: == "URANUS"
+            Element 7: == "NEPTUNE"
+
          Append the string "PLUTO" at index 8, and update the
          cell's cardinality.
          ./
@@ -147,38 +157,46 @@
          /.
          The cell's data array now has the contents
 
-            Element 0: == "MERCURY" 
-            Element 1: == "VENUS" 
-            Element 2: == "EARTH" 
-            Element 3: == "MARS" 
-            Element 4: == "JUPITER" 
-            Element 5: == "SATURN" 
-            Element 6: == "URANUS" 
-            Element 7: == "NEPTUNE" 
-            Element 8: == "PLUTO" 
+            Element 0: == "MERCURY"
+            Element 1: == "VENUS"
+            Element 2: == "EARTH"
+            Element 3: == "MARS"
+            Element 4: == "JUPITER"
+            Element 5: == "SATURN"
+            Element 6: == "URANUS"
+            Element 7: == "NEPTUNE"
+            Element 8: == "PLUTO"
          ./
 
 -Restrictions
- 
+
    1)  String comparisons performed by this routine are Fortran-style:
        trailing blanks in the input array or key value are ignored.
        This gives consistent behavior with CSPICE code generated by
        the f2c translator, as well as with the Fortran SPICE Toolkit.
-      
+
        Note that this behavior is not identical to that of the ANSI
        C library functions strcmp and strncmp.
- 
+
 -Literature_References
- 
-   None. 
- 
+
+   None.
+
 -Author_and_Institution
- 
-   N.J. Bachman    (JPL)
-   H.A. Neilan     (JPL) 
- 
+
+   N.J. Bachman        (JPL)
+   J. Diaz del Rio     (ODC Space)
+   H.A. Neilan         (JPL)
+
 -Version
- 
+
+   -CSPICE Version 1.1.1, 27-AUG-2021 (JDR)
+
+       Edited the header to comply with NAIF standard.
+
+       Extended description of argument "cell" in -Detailed_Input to include
+       type and preferred declaration method.
+
    -CSPICE Version 1.1.0, 07-MAR-2009 (NJB)
 
        This file now includes the header file f2cMang.h.
@@ -190,9 +208,9 @@
    -CSPICE Version 1.0.0, 21-AUG-2002 (NJB) (HAN)
 
 -Index_Entries
- 
-   append an item to a character cell 
- 
+
+   append an item to a character cell
+
 -&
 */
 
@@ -200,13 +218,13 @@
 
 
    /*
-   f2c library utility prototypes 
+   f2c library utility prototypes
    */
-   extern integer   s_cmp  (char *a, char *b, ftnlen la, ftnlen lb ); 
+   extern integer   s_cmp  (char *a, char *b, ftnlen la, ftnlen lb );
 
 
    /*
-   Local variables 
+   Local variables
    */
    SpiceChar             * sPtr;
 
@@ -215,7 +233,7 @@
 
 
    /*
-   Use discovery check-in. 
+   Use discovery check-in.
    */
    if ( return_c() )
    {
@@ -230,17 +248,17 @@
 
 
    /*
-   Make sure we're working with a character cell. 
+   Make sure we're working with a character cell.
    */
    CELLTYPECHK ( CHK_DISCOVER, "appndc_c", SPICE_CHR, cell );
 
 
    /*
-   Initialize the cell if necessary. 
+   Initialize the cell if necessary.
    */
    CELLINIT ( cell );
 
-   
+
    card = cell->card;
 
    if ( card == cell->size )
@@ -262,7 +280,7 @@
       the input cell is no longer a set.
       */
       sPtr = SPICE_CELL_ELEM_C(cell, card-1 );
-      
+
       diff = s_cmp ( (char     *) item,
                      (char     *) sPtr,
                      (ftnlen    ) strlen(item),

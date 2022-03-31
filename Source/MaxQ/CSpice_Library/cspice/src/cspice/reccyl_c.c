@@ -4,9 +4,8 @@
 
 -Abstract
 
-   Convert from rectangular to cylindrical coordinates. 
- 
- 
+   Convert from rectangular to cylindrical coordinates.
+
 -Disclaimer
 
    THIS SOFTWARE AND ANY RELATED MATERIALS WERE CREATED BY THE
@@ -33,13 +32,14 @@
    ACTIONS OF RECIPIENT IN THE USE OF THE SOFTWARE.
 
 -Required_Reading
- 
-   None. 
- 
+
+   None.
+
 -Keywords
- 
-   CONVERSION, COORDINATES 
- 
+
+   CONVERSION
+   COORDINATES
+
 */
 
    #include <math.h>
@@ -49,121 +49,333 @@
    #undef    reccyl_c
 
 
-   void reccyl_c ( ConstSpiceDouble     rectan[3], 
-                   SpiceDouble        * r, 
-                   SpiceDouble        * lon, 
-                   SpiceDouble        * z         ) 
+   void reccyl_c ( ConstSpiceDouble     rectan[3],
+                   SpiceDouble        * r,
+                   SpiceDouble        * clon,
+                   SpiceDouble        * z         )
 
 /*
 
 -Brief_I/O
- 
-   VARIABLE  I/O  DESCRIPTION 
-   --------  ---  ------------------------------------------------- 
-   rectan     I   Rectangular coordinates of a point. 
-   r          O   Distance of the point from Z axis. 
-   lon        O   Angle (radians) of the point from XZ plane 
-   z          O   Height of the point above XY plane. 
- 
+
+   VARIABLE  I/O  DESCRIPTION
+   --------  ---  -------------------------------------------------
+   rectan     I   Rectangular coordinates of a point.
+   r          O   Distance of the point from Z axis.
+   clon       O   Angle (radians) of the point from XZ plane
+   z          O   Height of the point above XY plane.
+
 -Detailed_Input
- 
-   rectan     Rectangular coordinates of the point of interest. 
- 
+
+   rectan      are the rectangular coordinates of the point of interest.
+
 -Detailed_Output
- 
-   r          Distance of the point of interest from Z axis. 
- 
-   lon        Cylindrical angle (in radians) of the point of 
-              interest from XZ plane. The `lon' range is [0, 2pi].
- 
-   z          Height of the point above XY plane. 
- 
+
+   r           is the distance of the point of interest from Z axis.
+
+   clon        is the cylindrical angle (in radians) of the point of
+               interest from XZ plane. The `clon' range is [0, 2pi].
+
+   z           is the height of the point above XY plane.
+
 -Parameters
- 
-   None. 
- 
+
+   None.
+
 -Exceptions
- 
-   Error free. 
- 
+
+   Error free.
+
 -Files
- 
-   None. 
- 
+
+   None.
+
 -Particulars
- 
-   This routine transforms the coordinates of a point from 
-   rectangular to cylindrical coordinates. 
- 
+
+   This routine transforms the coordinates of a point from
+   rectangular to cylindrical coordinates.
+
 -Examples
- 
-   Below are two tables. 
- 
-   Listed in the first table (under x(1), x(2) and x(3) ) are a 
-   number of points whose rectangular coordinates coorindates are 
-   taken from the set {-1, 0, 1}. 
- 
-   The result of the code fragment 
- 
-        reccyl_c ( x, r,  lon, z );
- 
-        Use the CSPICE routine convrt_c to convert the angular 
-        quantities to degrees 
- 
-        convrt_c (  lon, "RADIANS", "DEGREES", lon  );
- 
-   are listed to 4 decimal places in the second parallel table under 
-   r (radius), lon  (longitude), and  z (same as rectangular z 
-   coordinate). 
- 
- 
-     x(1)       x(2)     x(3)        r         lon      z 
-     --------------------------      ------------------------- 
-     0.0000     0.0000   0.0000      0.0000    0.0000   0.0000 
-     1.0000     0.0000   0.0000      1.0000    0.0000   0.0000 
-     0.0000     1.0000   0.0000      1.0000   90.0000   0.0000 
-     0.0000     0.0000   1.0000      0.0000    0.0000   1.0000 
-    -1.0000     0.0000   0.0000      1.0000  180.0000   0.0000 
-     0.0000    -1.0000   0.0000      1.0000  270.0000   0.0000 
-     0.0000     0.0000  -1.0000      0.0000    0.0000  -1.0000 
-     1.0000     1.0000   0.0000      1.4142   45.0000   0.0000 
-     1.0000     0.0000   1.0000      1.0000    0.0000   1.0000 
-     0.0000     1.0000   1.0000      1.0000   90.0000   1.0000 
-     1.0000     1.0000   1.0000      1.4142   45.0000   1.0000 
- 
+
+   The numerical results shown for these examples may differ across
+   platforms. The results depend on the SPICE kernels used as
+   input, the compiler and supporting libraries, and the machine
+   specific arithmetic implementation.
+
+   1) Compute the cylindrical coordinates of the position of the Moon
+      as seen from the Earth, and convert them to rectangular
+      coordinates.
+
+      Use the meta-kernel shown below to load the required SPICE
+      kernels.
+
+
+         KPL/MK
+
+         File name: reccyl_ex1.tm
+
+         This meta-kernel is intended to support operation of SPICE
+         example programs. The kernels shown here should not be
+         assumed to contain adequate or correct versions of data
+         required by SPICE-based user applications.
+
+         In order for an application to use this meta-kernel, the
+         kernels referenced here must be present in the user's
+         current working directory.
+
+         The names and contents of the kernels referenced
+         by this meta-kernel are as follows:
+
+            File name                     Contents
+            ---------                     --------
+            de421.bsp                     Planetary ephemeris
+            naif0012.tls                  Leapseconds
+
+
+         \begindata
+
+            KERNELS_TO_LOAD = ( 'de421.bsp',
+                                'naif0012.tls'  )
+
+         \begintext
+
+         End of meta-kernel
+
+
+      Example code begins here.
+
+
+      /.
+         Program reccyl_ex1
+      ./
+      #include <stdio.h>
+      #include "SpiceUsr.h"
+
+      int main( )
+      {
+
+         /.
+         Local variables
+         ./
+         SpiceDouble          clon;
+         SpiceDouble          et;
+         SpiceDouble          lt;
+         SpiceDouble          pos    [3];
+         SpiceDouble          rectan [3];
+         SpiceDouble          r;
+         SpiceDouble          z;
+
+         /.
+         Load SPK and LSK kernels, use a meta kernel for
+         convenience.
+         ./
+         furnsh_c ( "reccyl_ex1.tm" );
+
+         /.
+         Look up the geometric state of the Moon as seen from
+         the Earth at 2017 Mar 20, relative to the J2000
+         reference frame.
+         ./
+         str2et_c ( "2017 Mar 20", &et );
+
+         spkpos_c ( "Moon", et, "J2000", "NONE", "Earth", pos, &lt );
+
+         /.
+         Convert the position vector `pos' to cylindrical
+         coordinates.
+         ./
+         reccyl_c ( pos, &r, &clon, &z );
+
+         /.
+         Convert the cylindrical to rectangular coordinates.
+         ./
+
+         cylrec_c ( r, clon, z, rectan );
+
+         printf( " \n" );
+         printf( "Original rectangular coordinates:\n" );
+         printf( " \n" );
+         printf( " X          (km):  %19.8f\n", pos[0] );
+         printf( " Y          (km):  %19.8f\n", pos[1] );
+         printf( " Z          (km):  %19.8f\n", pos[2] );
+         printf( " \n" );
+         printf( "Cylindrical coordinates:\n" );
+         printf( " \n" );
+         printf( " Radius     (km):  %19.8f\n", r );
+         printf( " Longitude (deg):  %19.8f\n", clon*dpr_c ( ) );
+         printf( " Z          (km):  %19.8f\n", z );
+         printf( " \n" );
+         printf( "Rectangular coordinates from cylrec_c:\n" );
+         printf( " \n" );
+         printf( " X          (km):  %19.8f\n", rectan[0] );
+         printf( " Y          (km):  %19.8f\n", rectan[1] );
+         printf( " Z          (km):  %19.8f\n", rectan[2] );
+         printf( " \n" );
+
+         return ( 0 );
+      }
+
+
+      When this program was executed on a Mac/Intel/cc/64-bit
+      platform, the output was:
+
+
+      Original rectangular coordinates:
+
+       X          (km):      -55658.44323296
+       Y          (km):     -379226.32931475
+       Z          (km):     -126505.93063865
+
+      Cylindrical coordinates:
+
+       Radius     (km):      383289.01777726
+       Longitude (deg):         261.65040211
+       Z          (km):     -126505.93063865
+
+      Rectangular coordinates from cylrec_c:
+
+       X          (km):      -55658.44323296
+       Y          (km):     -379226.32931475
+       Z          (km):     -126505.93063865
+
+
+   2) Create a table showing a variety of rectangular coordinates
+      and the corresponding cylindrical coordinates.
+
+      Corresponding rectangular and cylindrical coordinates are
+      listed to three decimal places. Output angles are in degrees.
+
+
+      Example code begins here.
+
+
+      /.
+         Program reccyl_ex2
+      ./
+      #include <stdio.h>
+      #include "SpiceUsr.h"
+
+      int main( )
+      {
+
+         /.
+         Local parameters.
+         ./
+         #define NREC         11
+
+         /.
+         Local variables.
+         ./
+         SpiceDouble          clon;
+         SpiceDouble          r;
+         SpiceDouble          z;
+
+         SpiceInt             i;
+
+         /.
+         Define the input rectangular coordinates.
+         ./
+         SpiceDouble          rectan [NREC][3] = {
+                                   { 0.0,         0.0,         0.0},
+                                   { 1.0,         0.0,         0.0},
+                                   { 0.0,         1.0,         0.0},
+                                   { 0.0,         0.0,         1.0},
+                                   {-1.0,         0.0,         0.0},
+                                   { 0.0,        -1.0,         0.0},
+                                   { 0.0,         0.0,        -1.0},
+                                   { 1.0,         1.0,         0.0},
+                                   { 1.0,         0.0,         1.0},
+                                   { 0.0,         1.0,         1.0},
+                                   { 1.0,         1.0,         1.0} };
+
+         /.
+         Print the banner.
+         ./
+         printf( " rect[0]  rect[1]  rect[2]     r       clon      z\n"    );
+         printf( " -------  -------  -------  -------  -------  -------\n" );
+
+         /.
+         Do the conversion. Output angles in degrees.
+         ./
+         for ( i = 0; i < NREC; i++ )
+         {
+
+            reccyl_c ( rectan[i], &r, &clon, &z );
+
+            printf( "%8.3f %8.3f %8.3f ", rectan[i][0], rectan[i][1],
+                                          rectan[i][2]               );
+            printf( "%8.3f %8.3f %8.3f\n", r, clon * dpr_c ( ), z );
+
+         }
+
+         return ( 0 );
+      }
+
+
+      When this program was executed on a Mac/Intel/cc/64-bit
+      platform, the output was:
+
+
+       rect[0]  rect[1]  rect[2]     r       clon      z
+       -------  -------  -------  -------  -------  -------
+         0.000    0.000    0.000    0.000    0.000    0.000
+         1.000    0.000    0.000    1.000    0.000    0.000
+         0.000    1.000    0.000    1.000   90.000    0.000
+         0.000    0.000    1.000    0.000    0.000    1.000
+        -1.000    0.000    0.000    1.000  180.000    0.000
+         0.000   -1.000    0.000    1.000  270.000    0.000
+         0.000    0.000   -1.000    0.000    0.000   -1.000
+         1.000    1.000    0.000    1.414   45.000    0.000
+         1.000    0.000    1.000    1.000    0.000    1.000
+         0.000    1.000    1.000    1.000   90.000    1.000
+         1.000    1.000    1.000    1.414   45.000    1.000
+
+
 -Restrictions
- 
-   None. 
- 
+
+   None.
+
 -Literature_References
- 
-   None. 
- 
+
+   None.
+
 -Author_and_Institution
- 
-   W.L. Taber      (JPL) 
- 
+
+   N.J. Bachman        (JPL)
+   J. Diaz del Rio     (ODC Space)
+   B.V. Semenov        (JPL)
+   W.L. Taber          (JPL)
+   E.D. Wright         (JPL)
+
 -Version
- 
+
+   -CSPICE Version 1.3.0, 04-JUL-2021 (JDR)
+
+       Changed the output argument name "lon" to "clon" for consistency
+       with other routines.
+
+       Edited the header to comply with NAIF standard.
+       Added complete code examples.
+
    -CSPICE Version 1.2.1, 26-JUL-2016 (BVS)
 
-      Minor headers edits.
+       Minor headers edits.
 
    -CSPICE Version 1.2.0, 28-AUG-2001 (NJB)
-     
-      Removed tab characters from source file.  Include interface
-      macro definition header SpiceZim.h.
+
+       Removed tab characters from source file. Include interface
+       macro definition header SpiceZim.h.
 
    -CSPICE Version 1.1.0, 21-OCT-1998 (NJB)
 
-      Made input vector const.
+       Made input vector const.
 
-   -CSPICE Version 1.0.0, 08-FEB-1998 (EDW)
+   -CSPICE Version 1.0.0, 08-FEB-1998 (EDW) (WLT)
 
 -Index_Entries
- 
-   rectangular to cylindrical coordinates 
- 
+
+   rectangular to cylindrical coordinates
+
 -&
 */
 
@@ -189,19 +401,19 @@
    if ( big == 0.)
       {
       *r   = 0.;
-      *lon = 0.;
+      *clon = 0.;
       }
    else
       {
       x   = rectan[0] / big;
       y   = rectan[1] / big;
-      *r   = big * sqrt(x * x + y * y);
-      *lon = atan2(y, x);
+      *r  = big * sqrt(x * x + y * y);
+      *clon = atan2(y, x);
       }
 
-   if ( *lon < 0.)
+   if ( *clon < 0.)
       {
-      *lon += twopi_c();
+      *clon += twopi_c();
       }
 
 

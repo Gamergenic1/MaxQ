@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure  MTXVG ( Matrix transpose times vector, general dimension ) */
+/* $Procedure MTXVG ( Matrix transpose times vector, general dimension ) */
 /* Subroutine */ int mtxvg_(doublereal *m1, doublereal *v2, integer *nc1, 
 	integer *nr1r2, doublereal *vout)
 {
@@ -22,8 +22,8 @@
 
 /* $ Abstract */
 
-/*      Multiply the transpose of a matrix and a vector of */
-/*      arbitrary size. */
+/*     Multiply the transpose of a matrix and a vector of */
+/*     arbitrary size. */
 
 /* $ Disclaimer */
 
@@ -56,115 +56,162 @@
 
 /* $ Keywords */
 
-/*      MATRIX,  VECTOR */
+/*     MATRIX */
+/*     VECTOR */
 
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*      VARIABLE  I/O  DESCRIPTION */
-/*      --------  ---  -------------------------------------------------- */
-/*       M1        I     Left-hand matrix whose transpose is to be */
-/*                       multiplied. */
-/*       V2        I     Right-hand vector to be multiplied. */
-/*       NC1       I     Column dimension of M1 and length of VOUT. */
-/*       NR1R2     I     Row dimension of M1 and length of V2. */
-/*       VOUT      O     Product vector M1**T * V2. */
-/*                       VOUT must NOT overwrite either M1 or V2. */
+/*     VARIABLE  I/O  DESCRIPTION */
+/*     --------  ---  -------------------------------------------------- */
+/*     M1         I   Left-hand matrix whose transpose is to be */
+/*                    multiplied. */
+/*     V2         I   Right-hand vector to be multiplied. */
+/*     NC1        I   Column dimension of M1 and length of VOUT. */
+/*     NR1R2      I   Row dimension of M1 and length of V2. */
+/*     VOUT       O   Product vector M1**T * V2. */
 
 /* $ Detailed_Input */
 
-/*      M1      This is a double precision matrix of arbitrary size whose */
+/*     M1       is a double precision matrix of arbitrary size whose */
 /*              transpose forms the left-hand matrix of the */
 /*              multiplication. */
 
-/*      V2      This is a double precision vector on the right of the */
+/*     V2       is a double precision vector on the right of the */
 /*              multiplication. */
 
-/*      NC1     This is the column dimension of M1 and length of VOUT. */
+/*     NC1      is the column dimension of M1 and length of VOUT. */
 
-/*      NR1R2   This is the row dimension of M1 and length of V2. */
+/*     NR1R2    is the row dimension of M1 and length of V2. */
 
 /* $ Detailed_Output */
 
-/*      VOUT    This is the double precision vector which results from */
+/*     VOUT     is the double precision vector which results from */
 /*              the expression */
 
-/*                         T */
-/*              VOUT = (M1)  x V2 */
+/*                            T */
+/*                 VOUT = (M1)  x V2 */
 
 /*              where the T denotes the transpose of M1. */
+
+/*              VOUT must NOT overwrite either M1 or V2. */
 
 /* $ Parameters */
 
 /*     None. */
 
-/* $ Particulars */
-
-/*      The code reflects precisely the following mathematical expression */
-
-/*      For each value of the subscript I from 1 to NC1, */
-
-/*      VOUT(I) = Summation from K=1 to NR1R2 of  ( M1(K,I) * V2(K) ) */
-
-/*      Note that the reversal of the K and I subscripts in the left-hand */
-/*      matrix M1 is what makes VOUT the product of the TRANSPOSE of M1 */
-/*      and not simply of M1 itself. */
-
-/*      Since this subroutine operates on matrices of arbitrary size, it */
-/*      is not feasible to buffer intermediate results.  Thus, VOUT */
-/*      should NOT overwrite either M1 or V2. */
-
-/* $ Examples */
-
-/*                        | 1  2 | */
-/*      Suppose that M1 = | 1  3 | */
-/*                        | 1  4 | */
-
-/*                        | 1 | */
-/*      and that     V2 = | 2 | */
-/*                        | 3 | */
-
-/*      Then calling MTXVG according to the following calling sequence */
-
-/*      CALL MTXVG (M1, V2, 2, 3, VOUT) */
-
-/*      will yield the following vector value for VOUT */
-
-/*      VOUT = | 6  | */
-/*             | 20 | */
-
-/* $ Restrictions */
-
-/*      1) The user is responsible for checking the magnitudes of the */
-/*      elements of M1 and V2 so that a floating point overflow does */
-/*      not occur. */
-/*      2) VOUT not overwrite M1 or V2 or else the intermediate */
-/*      will affect the final result. */
-
 /* $ Exceptions */
 
-/*      Error free. */
+/*     Error free. */
 
 /* $ Files */
 
-/*      None. */
+/*     None. */
 
-/* $ Author_and_Institution */
+/* $ Particulars */
 
-/*      W.M. Owen       (JPL) */
+/*     The code reflects precisely the following mathematical expression */
+
+/*     For each value of the subscript I from 1 to NC1, */
+
+/*     VOUT(I) = Summation from K=1 to NR1R2 of  ( M1(K,I) * V2(K) ) */
+
+/*     Note that the reversal of the K and I subscripts in the left-hand */
+/*     matrix M1 is what makes VOUT the product of the TRANSPOSE of M1 */
+/*     and not simply of M1 itself. */
+
+/*     Since this subroutine operates on matrices of arbitrary size, it */
+/*     is not feasible to buffer intermediate results. Thus, VOUT */
+/*     should NOT overwrite either M1 or V2. */
+
+/* $ Examples */
+
+/*     The numerical results shown for this example may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
+
+/*     1) Given a 3x2 matrix and a 3-vector, multiply the transpose of */
+/*        the matrix by the vector. */
+
+
+/*        Example code begins here. */
+
+
+/*              PROGRAM MTXVG_EX1 */
+/*              IMPLICIT NONE */
+
+/*        C */
+/*        C     Local variables. */
+/*        C */
+/*              DOUBLE PRECISION      M    ( 3, 2 ) */
+/*              DOUBLE PRECISION      VIN  ( 3    ) */
+/*              DOUBLE PRECISION      VOUT ( 2    ) */
+
+/*              INTEGER               I */
+/*              INTEGER               J */
+
+/*        C */
+/*        C     Define M and VIN. */
+/*        C */
+/*              DATA                  M    /  1.0D0,  1.0D0,  1.0D0, */
+/*             .                              2.0D0,  3.0D0,  4.0D0  / */
+
+/*              DATA                  VIN  /  1.0D0,  2.0D0,  3.0D0  / */
+
+/*        C */
+/*        C     Multiply the transpose of M by VIN. */
+/*        C */
+/*              CALL MTXVG ( M, VIN, 2, 3, VOUT ) */
+
+/*              WRITE(*,'(A)') 'Transpose of M times VIN:' */
+/*              WRITE(*,'(2F10.3)') VOUT */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*        Transpose of M times VIN: */
+/*             6.000    20.000 */
+
+
+/* $ Restrictions */
+
+/*     1)  The user is responsible for checking the magnitudes of the */
+/*         elements of M1 and V2 so that a floating point overflow does */
+/*         not occur. */
+
+/*     2)  VOUT not overwrite M1 or V2 or else the intermediate */
+/*         will affect the final result. */
 
 /* $ Literature_References */
 
-/*      None. */
+/*     None. */
+
+/* $ Author_and_Institution */
+
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.M. Owen          (JPL) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
 
-/* -     SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+/* -    SPICELIB Version 1.1.0, 04-JUL-2021 (JDR) */
 
-/*         Comment section for permuted index source lines was added */
-/*         following the header. */
+/*        Added IMPLICIT NONE statement. */
 
-/* -     SPICELIB Version 1.0.0, 31-JAN-1990 (WMO) */
+/*        Edited the header to comply with NAIF standard. */
+/*        Added complete code example based on the existing example. */
+
+/* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+
+/*        Comment section for permuted index source lines was added */
+/*        following the header. */
+
+/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (WMO) */
 
 /* -& */
 /* $ Index_Entries */
@@ -193,11 +240,11 @@
 	for (k = 1; k <= i__2; ++k) {
 	    sum += m1[(i__3 = k + i__ * m1_dim1 - m1_offset) < m1_dim1 * 
 		    m1_dim2 && 0 <= i__3 ? i__3 : s_rnge("m1", i__3, "mtxvg_",
-		     (ftnlen)183)] * v2[(i__4 = k - 1) < v2_dim1 && 0 <= i__4 
-		    ? i__4 : s_rnge("v2", i__4, "mtxvg_", (ftnlen)183)];
+		     (ftnlen)232)] * v2[(i__4 = k - 1) < v2_dim1 && 0 <= i__4 
+		    ? i__4 : s_rnge("v2", i__4, "mtxvg_", (ftnlen)232)];
 	}
 	vout[(i__2 = i__ - 1) < vout_dim1 && 0 <= i__2 ? i__2 : s_rnge("vout",
-		 i__2, "mtxvg_", (ftnlen)186)] = sum;
+		 i__2, "mtxvg_", (ftnlen)235)] = sum;
     }
     return 0;
 } /* mtxvg_ */

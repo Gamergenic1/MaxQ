@@ -9,7 +9,7 @@
 
 static integer c__1 = 1;
 
-/* $Procedure      SIGDGT ( Retain significant digits ) */
+/* $Procedure SIGDGT ( Retain significant digits ) */
 /* Subroutine */ int sigdgt_(char *in, char *out, ftnlen in_len, ftnlen 
 	out_len)
 {
@@ -31,7 +31,7 @@ static integer c__1 = 1;
 
 /* $ Abstract */
 
-/*      Retain only the significant digits in a numeric string. */
+/*     Retain only the significant digits in a numeric string. */
 
 /* $ Disclaimer */
 
@@ -60,99 +60,107 @@ static integer c__1 = 1;
 
 /* $ Required_Reading */
 
-/*      None. */
+/*     None. */
 
 /* $ Keywords */
 
-/*      CHARACTER,  PARSING */
+/*     CHARACTER */
+/*     PARSING */
 
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*      VARIABLE  I/O  DESCRIPTION */
-/*      --------  ---  -------------------------------------------------- */
-/*      IN         I   Input numeric string. */
-/*      OUT        O   Numeric string, with insignificant digits removed. */
+/*     VARIABLE  I/O  DESCRIPTION */
+/*     --------  ---  -------------------------------------------------- */
+/*     IN         I   Input numeric string. */
+/*     OUT        O   Numeric string, with insignificant digits removed. */
 
 /* $ Detailed_Input */
 
-/*      IN          is a numeric string. */
+/*     IN       is a numeric string. */
 
 /* $ Detailed_Output */
 
-/*      OUT         is the same numeric string with insignificant */
-/*                  zeros and spaces removed. The special case '.000...' */
-/*                  becomes just '0'. OUT may overwrite IN. If the */
-/*                  output string is too long, it is truncated on the */
-/*                  right. */
+/*     OUT      is the same numeric string with insignificant */
+/*              zeros and spaces removed. The special case '.000...' */
+/*              becomes just '0'. OUT may overwrite IN. If the */
+/*              output string is too long, it is truncated on the */
+/*              right. */
 
 /* $ Parameters */
 
 /*     None. */
 
-/* $ Particulars */
-
-/*      There are only two interesting cases: */
-
-/*         1) There is a decimal point and an exponent immediately */
-/*            preceded by zero ('...0E', '...0D', '...0e', '...0d') */
-/*            or by a space ('... E', '... D', '... e', '... d'). */
-
-/*         2) There is a decimal point and no exponent, and the last non- */
-/*            blank character is a zero ('...0'). */
-
-/*      In each of these cases, go to the zero in question, and step */
-/*      backwards until you find something other than a blank or a zero. */
-
-/*      Finally, remove all leading spaces, and all occurrences of more */
-/*      than one consecutive space within the string. */
-
-/* $ Examples */
-
-/*      The following examples illustrate the use of SIGDGT. */
-
-/*      '0.123456000000D-04'        becomes     '0.123456D-04' */
-/*      '  -9.2100000000000'                    '-9.21' */
-/*      '       13'                             '13' */
-/*      '    00013'                             '00013' */
-/*      ' .314 159 265 300 000 e1'              '.314 159 265 3e1' */
-/*      '   123    45     6'                    '123 45 6' */
-/*      '  .000000000'                          '0' */
-
-/* $ Restrictions */
-
-/*      None. */
-
 /* $ Exceptions */
 
-/*      Error free. */
+/*     Error free. */
 
-/*      If IN is a non-numeric string, the contents of OUT are */
-/*      unpredictable. */
+/*     1)  If IN is a non-numeric string, the contents of OUT are */
+/*         unpredictable. */
 
 /* $ Files */
 
-/*      None. */
+/*     None. */
 
-/* $ Author_and_Institution */
+/* $ Particulars */
 
-/*      N.J. Bachman    (JPL) */
-/*      H.A. Neilan     (JPL) */
-/*      W.L. Taber      (JPL) */
-/*      I.M. Underwood  (JPL) */
+/*     There are only two interesting cases: */
+
+/*        1) There is a decimal point and an exponent immediately */
+/*           preceded by zero ('...0E', '...0D', '...0e', '...0d') */
+/*           or by a space ('... E', '... D', '... e', '... d'). */
+
+/*        2) There is a decimal point and no exponent, and the last non- */
+/*           blank character is a zero ('...0'). */
+
+/*     In each of these cases, go to the zero in question, and step */
+/*     backwards until you find something other than a blank or a zero. */
+
+/*     Finally, remove all leading spaces, and all occurrences of more */
+/*     than one consecutive space within the string. */
+
+/* $ Examples */
+
+/*     The following examples illustrate the use of SIGDGT. */
+
+/*     '0.123456000000D-04'        becomes     '0.123456D-04' */
+/*     '  -9.2100000000000'                    '-9.21' */
+/*     '       13'                             '13' */
+/*     '    00013'                             '00013' */
+/*     ' .314 159 265 300 000 e1'              '.314 159 265 3e1' */
+/*     '   123    45     6'                    '123 45 6' */
+/*     '  .000000000'                          '0' */
+
+/* $ Restrictions */
+
+/*     None. */
 
 /* $ Literature_References */
 
-/*      None. */
+/*     None. */
+
+/* $ Author_and_Institution */
+
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     H.A. Neilan        (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
 
-/* -     SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+/* -    SPICELIB Version 1.1.0, 12-AUG-2021 (JDR) */
 
-/*         Comment section for permuted index source lines was added */
-/*         following the header. */
+/*        Added IMPLICIT NONE statement. */
 
-/* -     SPICELIB Version 1.0.0, 31-JAN-1990 (IMU) */
+/*        Edited the header to comply with NAIF standard. */
+
+/* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+
+/*        Comment section for permuted index source lines was added */
+/*        following the header. */
+
+/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (IMU) (HAN) (NJB) (WLT) */
 
 /* -& */
 /* $ Index_Entries */
@@ -164,7 +172,7 @@ static integer c__1 = 1;
 
 /* -     Beta Version 1.3.0, 21-MAR-1989 (WLT) */
 
-/*         Previous fix was unbelievably bad, very buggy.  This */
+/*         Previous fix was unbelievably bad, very buggy. This */
 /*         has been fixed along with other bugs and non-standard */
 /*         code has been removed. */
 
@@ -172,10 +180,9 @@ static integer c__1 = 1;
 
 /*         Reference to INSSUB replaced by SUFFIX */
 
-/* -     Beta Version 1.1.1, 17-FEB-1989 (HAN)  (NJB) */
+/* -     Beta Version 1.1.1, 17-FEB-1989 (HAN) (NJB) */
 
 /*         Declaration of the unused function ISRCHC removed. */
-
 
 /* -& */
 

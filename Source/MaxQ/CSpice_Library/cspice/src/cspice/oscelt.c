@@ -11,7 +11,7 @@ static doublereal c_b16 = 0.;
 static doublereal c_b17 = 1.;
 static doublereal c_b18 = 1e-10;
 
-/* $Procedure      OSCELT ( Determine conic elements from state ) */
+/* $Procedure OSCELT ( Determine conic elements from state ) */
 /* Subroutine */ int oscelt_(doublereal *state, doublereal *et, doublereal *
 	mu, doublereal *elts)
 {
@@ -107,38 +107,38 @@ static doublereal c_b18 = 1e-10;
 
 /* $ Detailed_Input */
 
-/*     STATE      is the state (position and velocity) of the body */
-/*                at some epoch. Components are x, y, z, dx/dt, dy/dt, */
-/*                dz/dt. STATE must be expressed relative to an */
-/*                inertial reference frame.  Units are km and km/sec. */
+/*     STATE    is the state (position and velocity) of the body */
+/*              at some epoch. Components are x, y, z, dx/dt, dy/dt, */
+/*              dz/dt. STATE must be expressed relative to an */
+/*              inertial reference frame. Units are km and km/sec. */
 
 
-/*     ET         is the epoch of the input state, in ephemeris seconds */
-/*                past J2000. */
+/*     ET       is the epoch of the input state, in ephemeris seconds */
+/*              past J2000. */
 
-/*                                                       3    2 */
-/*     MU         is the gravitational parameter (GM, km /sec ) of */
-/*                the primary body. */
+/*                                                    3    2 */
+/*     MU       is the gravitational parameter (GM, km /sec ) of */
+/*              the primary body. */
 
 /* $ Detailed_Output */
 
-/*     ELTS        are equivalent conic elements describing the orbit */
-/*                 of the body around its primary. The elements are, */
-/*                 in order: */
+/*     ELTS     are equivalent conic elements describing the orbit */
+/*              of the body around its primary. The elements are, */
+/*              in order: */
 
-/*                    RP      Perifocal distance. */
-/*                    ECC     Eccentricity. */
-/*                    INC     Inclination. */
-/*                    LNODE   Longitude of the ascending node. */
-/*                    ARGP    Argument of periapsis. */
-/*                    M0      Mean anomaly at epoch. */
-/*                    T0      Epoch. */
-/*                    MU      Gravitational parameter. */
+/*                 RP      Perifocal distance. */
+/*                 ECC     Eccentricity. */
+/*                 INC     Inclination. */
+/*                 LNODE   Longitude of the ascending node. */
+/*                 ARGP    Argument of periapsis. */
+/*                 M0      Mean anomaly at epoch. */
+/*                 T0      Epoch. */
+/*                 MU      Gravitational parameter. */
 
-/*                 The epoch of the elements is the epoch of the input */
-/*                 state. Units are km, rad, rad/sec. The same elements */
-/*                 are used to describe all three types (elliptic, */
-/*                 hyperbolic, and parabolic) of conic orbit. */
+/*              The epoch of the elements is the epoch of the input */
+/*              state. Units are km, rad, rad/sec. The same elements */
+/*              are used to describe all three types (elliptic, */
+/*              hyperbolic, and parabolic) of conic orbit. */
 
 /* $ Parameters */
 
@@ -146,41 +146,41 @@ static doublereal c_b18 = 1e-10;
 
 /* $ Exceptions */
 
-/*     1) If MU is not positive, the error SPICE(NONPOSITIVEMASS) */
-/*        is signaled. */
+/*     1)  If MU is not positive, the error SPICE(NONPOSITIVEMASS) */
+/*         is signaled. */
 
-/*     2) If the specific angular momentum vector derived from STATE */
-/*        is the zero vector, the error SPICE(DEGENERATECASE) */
-/*        is signaled. */
+/*     2)  If the specific angular momentum vector derived from STATE */
+/*         is the zero vector, the error SPICE(DEGENERATECASE) */
+/*         is signaled. */
 
-/*     3) If the position or velocity vectors derived from STATE */
-/*        is the zero vector, the error SPICE(DEGENERATECASE) */
-/*        is signaled. */
+/*     3)  If the position or velocity vectors derived from STATE */
+/*         is the zero vector, the error SPICE(DEGENERATECASE) */
+/*         is signaled. */
 
-/*     4) If the inclination is determined to be zero or 180 degrees, */
-/*        the longitude of the ascending node is set to zero. */
+/*     4)  If the inclination is determined to be zero or 180 degrees, */
+/*         the longitude of the ascending node is set to zero. */
 
-/*     5) If the eccentricity is determined to be zero, the argument of */
-/*        periapse is set to zero. */
+/*     5)  If the eccentricity is determined to be zero, the argument of */
+/*         periapse is set to zero. */
 
-/*     6) If the eccentricy of the orbit is very close to but not */
-/*        equal to zero, the argument of periapse may not be accurately */
-/*        determined. */
+/*     6)  If the eccentricity of the orbit is very close to but not */
+/*         equal to zero, the argument of periapse may not be accurately */
+/*         determined. */
 
-/*     7) For inclinations near but not equal to 0 or 180 degrees, */
-/*        the longitude of the ascending node may not be determined */
-/*        accurately.  The argument of periapse and mean anomaly may */
-/*        also be inaccurate. */
+/*     7)  For inclinations near but not equal to 0 or 180 degrees, */
+/*         the longitude of the ascending node may not be determined */
+/*         accurately. The argument of periapse and mean anomaly may */
+/*         also be inaccurate. */
 
-/*     8) For eccentricities very close to but not equal to 1, the */
-/*        results of this routine are unreliable. */
+/*     8)  For eccentricities very close to but not equal to 1, the */
+/*         results of this routine are unreliable. */
 
-/*     9) If the specific angular momentum vector is non-zero but */
-/*        "close" to zero, the results of this routine are unreliable. */
+/*     9)  If the specific angular momentum vector is non-zero but */
+/*         "close" to zero, the results of this routine are unreliable. */
 
-/*    10) If STATE is expressed relative to a non-inertial reference */
-/*        frame, the resulting elements are invalid.  No error checking */
-/*        is done to detect this problem. */
+/*     10) If STATE is expressed relative to a non-inertial reference */
+/*         frame, the resulting elements are invalid. No error checking */
+/*         is done to detect this problem. */
 
 /* $ Files */
 
@@ -194,87 +194,330 @@ static doublereal c_b18 = 1e-10;
 
 /* $ Examples */
 
-/*     Let VINIT contain the initial state of a spacecraft relative to */
-/*     the center of a planet at epoch ET, and let GM be the gravitation */
-/*     parameter of the planet. The call */
+/*     The numerical results shown for these examples may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
 
-/*        CALL OSCELT ( VINIT, ET, GM, ELTS ) */
+/*     1) Determine the osculating elements of Phobos with respect to */
+/*        Mars at some arbitrary time in the J2000 inertial reference */
+/*        frame. */
 
-/*     produces a set of osculating elements describing the nominal */
-/*     orbit that the spacecraft would follow in the absence of all */
-/*     other bodies in the solar system. */
+/*        Use the meta-kernel shown below to load the required SPICE */
+/*        kernels. */
 
-/*     Now let STATE contain the state of the same spacecraft at some */
-/*     other epoch, LATER. The difference between this state and the */
-/*     state predicted by the nominal orbit at the same epoch can be */
-/*     computed as follows. */
 
-/*        CALL CONICS ( ELTS, LATER, NOMINAL ) */
-/*        CALL VSUBG  ( NOMINAL, STATE, 6, DIFF ) */
+/*           KPL/MK */
 
-/*        WRITE (*,*) 'Perturbation in x, dx/dt = ', DIFF(1), DIFF(4) */
-/*        WRITE (*,*) '                y, dy/dt = ', DIFF(2), DIFF(5) */
-/*        WRITE (*,*) '                z, dz/dt = ', DIFF(3), DIFF(6) */
+/*           File name: oscelt_ex1.tm */
+
+/*           This meta-kernel is intended to support operation of SPICE */
+/*           example programs. The kernels shown here should not be */
+/*           assumed to contain adequate or correct versions of data */
+/*           required by SPICE-based user applications. */
+
+/*           In order for an application to use this meta-kernel, the */
+/*           kernels referenced here must be present in the user's */
+/*           current working directory. */
+
+/*           The names and contents of the kernels referenced */
+/*           by this meta-kernel are as follows: */
+
+/*              File name                     Contents */
+/*              ---------                     -------- */
+/*              mar097.bsp                    Mars satellite ephemeris */
+/*              gm_de431.tpc                  Gravitational constants */
+/*              naif0012.tls                  Leapseconds */
+
+
+/*           \begindata */
+
+/*              KERNELS_TO_LOAD = ( 'mar097.bsp', */
+/*                                  'gm_de431.tpc', */
+/*                                  'naif0012.tls'  ) */
+
+/*           \begintext */
+
+/*           End of meta-kernel */
+
+
+/*        Example code begins here. */
+
+
+/*              PROGRAM OSCELT_EX1 */
+/*              IMPLICIT NONE */
+
+/*        C */
+/*        C     SPICELIB functions */
+/*        C */
+/*              DOUBLE PRECISION      DPR */
+
+/*        C */
+/*        C     Local variables. */
+/*        C */
+/*              DOUBLE PRECISION      ELTS   (8) */
+/*              DOUBLE PRECISION      ET */
+/*              DOUBLE PRECISION      LT */
+/*              DOUBLE PRECISION      MU     (1) */
+/*              DOUBLE PRECISION      STATE  (6) */
+/*              DOUBLE PRECISION      STEP */
+
+/*              INTEGER               DIM */
+
+/*        C */
+/*        C     Load the meta kernel listing the needed SPK, LSK and */
+/*        C     PCK with gravitational parameters kernels. */
+/*        C */
+/*              CALL FURNSH ( 'oscelt_ex1.tm' ) */
+
+/*        C */
+/*        C     Convert the time string to ephemeris time */
+/*        C */
+/*              CALL STR2ET ( 'Dec 25, 2007', ET ) */
+
+/*        C */
+/*        C     Retrieve the state of Phobos with respect to Mars in */
+/*        C     J2000. */
+/*        C */
+/*              CALL SPKEZR ( 'PHOBOS', ET, 'J2000', 'NONE', 'MARS', */
+/*             .               STATE,   LT                          ) */
+
+/*        C */
+/*        C     Read the gravitational parameter for Mars. */
+/*        C */
+/*              CALL BODVRD ( 'MARS', 'GM', 1, DIM, MU ) */
+
+/*        C */
+/*        C     Convert the state 6-vector to the elts 8-vector. Note: */
+/*        C     BODVRD returns data as arrays, so to access the */
+/*        C     gravitational parameter (the only value in the array), */
+/*        C     we use MU(1). */
+/*        C */
+/*              CALL OSCELT ( STATE, ET, MU(1), ELTS ) */
+
+/*        C */
+/*        C     Output the elts vector. */
+/*        C */
+/*              WRITE(*,'(A,F21.10)') */
+/*             .  'Perifocal distance          (km): ', ELTS(1) */
+/*              WRITE(*,'(A,F21.10)') */
+/*             .  'Eccentricity                    : ', ELTS(2) */
+/*              WRITE(*,'(A,F21.10)') */
+/*             .  'Inclination                (deg): ', ELTS(3) * DPR( ) */
+/*              WRITE(*,'(A,F21.10)') */
+/*             .  'Lon of ascending node      (deg): ', ELTS(4) * DPR( ) */
+/*              WRITE(*,'(A,F21.10)') */
+/*             .  'Argument of periapsis      (deg): ', ELTS(5) * DPR( ) */
+/*              WRITE(*,'(A,F21.10)') */
+/*             .  'Mean anomaly at epoch      (deg): ', ELTS(6) * DPR( ) */
+/*              WRITE(*,'(A,F21.10)') */
+/*             .  'Epoch                        (s): ', ELTS(7) */
+/*              WRITE(*,'(A,F21.10)') */
+/*             .  'Gravitational parameter (km3/s2): ', ELTS(8) */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*        Perifocal distance          (km):       9232.5746716211 */
+/*        Eccentricity                    :          0.0156113904 */
+/*        Inclination                (deg):         38.1225231660 */
+/*        Lon of ascending node      (deg):         47.0384055902 */
+/*        Argument of periapsis      (deg):        214.1546430017 */
+/*        Mean anomaly at epoch      (deg):        340.5048466068 */
+/*        Epoch                        (s):  251812865.1837092042 */
+/*        Gravitational parameter (km3/s2):      42828.3736206991 */
+
+
+/*     2) Calculate the history of Phobos's orbit plane inclination */
+/*        with respect to Mars in the J2000 frame at intervals of six */
+/*        months for a time interval of 10 years. */
+
+/*        Use the meta-kernel from the first example. */
+
+
+/*        Example code begins here. */
+
+
+/*              PROGRAM OSCELT_EX2 */
+/*              IMPLICIT NONE */
+
+/*        C */
+/*        C     SPICELIB functions */
+/*        C */
+/*              DOUBLE PRECISION      DPR */
+/*              DOUBLE PRECISION      SPD */
+
+/*        C */
+/*        C     Local parameters. */
+/*        C */
+/*              INTEGER               TIMLEN */
+/*              PARAMETER           ( TIMLEN = 24 ) */
+
+/*        C */
+/*        C     Local variables. */
+/*        C */
+/*              CHARACTER*(TIMLEN)    UTCSTR */
+
+/*              DOUBLE PRECISION      ELTS   (8) */
+/*              DOUBLE PRECISION      ET */
+/*              DOUBLE PRECISION      LT */
+/*              DOUBLE PRECISION      MU     (1) */
+/*              DOUBLE PRECISION      STATE  (6) */
+/*              DOUBLE PRECISION      STEP */
+
+/*              INTEGER               DIM */
+/*              INTEGER               I */
+
+/*        C */
+/*        C     Load the meta kernel listing the needed SPK, LSK and */
+/*        C     PCK with gravitational parameters kernels. */
+/*        C */
+/*              CALL FURNSH ( 'oscelt_ex1.tm' ) */
+
+/*        C */
+/*        C     Read the gravitational parameter for Mars. */
+/*        C */
+/*              CALL BODVRD ( 'MARS', 'GM', 1, DIM, MU ) */
+
+/*        C */
+/*        C     Convert the time string to ephemeris time */
+/*        C */
+/*              CALL STR2ET ( 'Jan 1, 2000 12:00:00', ET ) */
+
+/*        C */
+/*        C     A step of six months - in seconds. */
+/*        C */
+/*              STEP = 180.0D0 * SPD( ) */
+
+/*        C */
+/*        C     10 years in steps of six months starting */
+/*        C     approximately Jan 1, 2000. */
+/*        C */
+/*              WRITE(*,'(A)') '        UCT Time          Inclination' */
+/*              WRITE(*,'(A)') '------------------------  -----------' */
+
+/*              DO I= 1, 20 */
+
+/*        C */
+/*        C        Retrieve the state; convert to osculating elements. */
+/*        C */
+/*                 CALL SPKEZR ( 'PHOBOS', ET, 'J2000', 'NONE', 'MARS', */
+/*             .                  STATE,   LT                          ) */
+/*                 CALL OSCELT ( STATE, ET, MU(1), ELTS ) */
+
+/*        C */
+/*        C        Convert the ephemeris time to calendar UTC. */
+/*        C */
+/*                 CALL ET2UTC ( ET, 'C', 3, UTCSTR ) */
+
+/*                 WRITE(*,'(A,X,F12.6)') UTCSTR,  ELTS(3) * DPR( ) */
+
+/*                 ET = ET + STEP */
+
+/*              END DO */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*                UCT Time          Inclination */
+/*        ------------------------  ----------- */
+/*        2000 JAN 01 12:00:00.000    36.055248 */
+/*        2000 JUN 29 12:00:00.000    37.112144 */
+/*        2000 DEC 26 12:00:00.000    38.152129 */
+/*        2001 JUN 24 12:00:00.000    37.552071 */
+/*        2001 DEC 21 12:00:00.000    36.242049 */
+/*        2002 JUN 19 11:59:59.999    36.330470 */
+/*        2002 DEC 16 12:00:00.000    37.674595 */
+/*        2003 JUN 14 11:59:59.999    38.121191 */
+/*        2003 DEC 11 12:00:00.001    36.973204 */
+/*        2004 JUN 08 11:59:59.999    36.033732 */
+/*        2004 DEC 05 12:00:00.001    36.844542 */
+/*        2005 JUN 03 11:59:59.999    38.077365 */
+/*        2005 NOV 30 12:00:00.001    37.786106 */
+/*        2006 MAY 29 11:59:58.999    36.413540 */
+/*        2006 NOV 25 11:59:59.001    36.171050 */
+/*        2007 MAY 24 11:59:58.999    37.448015 */
+/*        2007 NOV 20 11:59:59.001    38.189118 */
+/*        2008 MAY 18 11:59:58.999    37.223573 */
+/*        2008 NOV 14 11:59:59.001    36.084745 */
+/*        2009 MAY 13 11:59:57.999    36.608971 */
+
 
 /* $ Restrictions */
 
-/*     1) The input state vector must be expressed relative to an */
-/*        inertial reference frame. */
+/*     1)  The input state vector must be expressed relative to an */
+/*         inertial reference frame. */
 
-/*     2) Osculating elements are generally not useful for */
-/*        high-accuracy work. */
+/*     2)  Osculating elements are generally not useful for */
+/*         high-accuracy work. */
 
-/*     3) Accurate osculating elements may be difficult to derive for */
-/*        near-circular or near-equatorial orbits. Osculating elements */
-/*        for such orbits should be used with caution. */
+/*     3)  Accurate osculating elements may be difficult to derive for */
+/*         near-circular or near-equatorial orbits. Osculating elements */
+/*         for such orbits should be used with caution. */
 
-/*     4) Extracting osculating elements from a state vector is a */
-/*        mathematically simple but numerically challenging task.  The */
-/*        mapping from a state vector to equivalent elements is */
-/*        undefined for certain state vectors, and the mapping is */
-/*        difficult to implement with finite precision arithmetic for */
-/*        states near the subsets of R6 where singularities occur. */
+/*     4)  Extracting osculating elements from a state vector is a */
+/*         mathematically simple but numerically challenging task. The */
+/*         mapping from a state vector to equivalent elements is */
+/*         undefined for certain state vectors, and the mapping is */
+/*         difficult to implement with finite precision arithmetic for */
+/*         states near the subsets of R6 where singularities occur. */
 
-/*        In general, the elements found by this routine can have */
-/*        two kinds of problems: */
+/*         In general, the elements found by this routine can have */
+/*         two kinds of problems: */
 
-/*           - The elements are not accurate but still represent */
-/*             the input state accurately.  The can happen in */
-/*             cases where the inclination is near zero or 180 */
-/*             degrees, or for near-circular orbits. */
+/*         -  The elements are not accurate but still represent */
+/*            the input state accurately. The can happen in */
+/*            cases where the inclination is near zero or 180 */
+/*            degrees, or for near-circular orbits. */
 
-/*           - The elements are garbage.  This can occur when */
-/*             the eccentricity of the orbit is close to but */
-/*             not equal to 1.   In general, any inputs that cause */
-/*             great loss of precision in the computation of the */
-/*             specific angular momentum vector or the eccentricity */
-/*             vector will result in invalid outputs. */
+/*         -  The elements are garbage. This can occur when */
+/*            the eccentricity of the orbit is close to but */
+/*            not equal to 1. In general, any inputs that cause */
+/*            great loss of precision in the computation of the */
+/*            specific angular momentum vector or the eccentricity */
+/*            vector will result in invalid outputs. */
 
-/*        For further details, see the Exceptions section. */
+/*         For further details, see the $Exceptions section. */
 
-/*        Users of this routine should carefully consider whether */
-/*        it is suitable for their applications.  One recommended */
-/*        "sanity check" on the outputs is to supply them to the */
-/*        SPICELIB routine CONICS and compare the resulting state */
-/*        vector with the one supplied to this routine. */
+/*         Users of this routine should carefully consider whether */
+/*         it is suitable for their applications. One recommended */
+/*         "sanity check" on the outputs is to supply them to the */
+/*         SPICELIB routine CONICS and compare the resulting state */
+/*         vector with the one supplied to this routine. */
 
 /* $ Literature_References */
 
-/*     [1] Roger Bate, Fundamentals of Astrodynamics, Dover, 1971. */
+/*     [1]  R. Bate, D. Mueller, and J. White, "Fundamentals of */
+/*          Astrodynamics," Dover Publications Inc., 1971. */
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     K.R. Gehringer  (JPL) */
-/*     I.M. Underwood  (JPL) */
-/*     E.D. Wright     (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
 
+/* -    SPICELIB Version 1.3.2, 13-AUG-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. Added complete */
+/*        code examples to $Examples section. */
+
 /* -    SPICELIB Version 1.3.1, 28-FEB-2008 (NJB) */
 
-/*        Updated Index_Entries header section to use keywords */
-/*        "osculating" and "convert." Updated Particulars header */
+/*        Updated $Index_Entries header section to use keywords */
+/*        "osculating" and "convert." Updated $Particulars header */
 /*        section to refer to CONICS. Fixed typo in in-line */
 /*        comments. */
 
@@ -283,11 +526,11 @@ static doublereal c_b18 = 1e-10;
 /*        Updated to remove non-standard use of duplicate arguments */
 /*        in VSCL call. */
 
-/*        The Exceptions and Restrictions header sections were updated. */
+/*        The $Exceptions and $Restrictions header sections were updated. */
 
 /* -    SPICELIB Version 1.2.0, 28-JAN-2003 (NJB) (EDW) */
 
-/*        Bug fixes:  routine previously didn't correctly compute */
+/*        Bug fixes: routine previously didn't correctly compute */
 /*        the argument of periapse or mean anomaly for some cases. */
 /*        Also, the arguments of the ACOS and DACOSH functions were */
 /*        able to go out of range, causing floating-point exceptions. */
@@ -305,7 +548,7 @@ static doublereal c_b18 = 1e-10;
 /*        external function. This removes a conflict with any */
 /*        compilers that have a PI intrinsic function. */
 
-/* -    SPICELIB Version 1.0.2, 6-APR-1995 (WLT) */
+/* -    SPICELIB Version 1.0.2, 06-APR-1995 (WLT) */
 
 /*        A typo was fixed in the description of the node vector */
 /*        in the comments of the routine. */
@@ -327,20 +570,20 @@ static doublereal c_b18 = 1e-10;
 /* -& */
 /* $ Revisions */
 
-/* -    SPICELIB Version 1.3.0, 02-SEP-2005 (NJB) */
+/* -    SPICELIB Version 1.3.0, 17-NOV-2005 (NJB) */
 
 /*        Updated to remove non-standard use of duplicate arguments */
 /*        in VSCL call. */
 
 /* -    SPICELIB Version 1.2.0, 28-JAN-2003 (NJB) (EDW) */
 
-/*        Bug fixes:  routine previously didn't correctly compute */
+/*        Bug fixes: routine previously didn't correctly compute */
 /*        the argument of periapse or mean anomaly for some cases. */
 /*        Also, the arguments of the ACOS and DACOSH functions were */
 /*        able to go out of range, causing floating-point exceptions. */
 
 /*        The old computation of ARGP did not work for cases where */
-/*        the inclination was 0 or pi:  the sign of ARGP was sometimes */
+/*        the inclination was 0 or pi: the sign of ARGP was sometimes */
 /*        incorrect. */
 
 /*        The new method uses the criterion: for inclination zero or pi */
@@ -362,7 +605,7 @@ static doublereal c_b18 = 1e-10;
 
 /*        The computation of M0 was re-coded for improved accuracy. */
 /*        The new computation uses ATAN2 rather than ACOS to find */
-/*        the eccentric anomaly for the ellipse case.  The quadrant */
+/*        the eccentric anomaly for the ellipse case. The quadrant */
 /*        of M0 is now found by converting the position to the */
 /*        perifocal frame and finding the corresponding longitude. */
 
@@ -389,7 +632,7 @@ static doublereal c_b18 = 1e-10;
 
 /* -    Beta Version 1.0.1, 27-JAN-1989 (IMU) */
 
-/*        Examples section completed. */
+/*        $Examples section completed. */
 
 /* -& */
 
@@ -438,7 +681,7 @@ static doublereal c_b18 = 1e-10;
 
 /*        n         The node vector. This is perpendicular to the */
 /*        -         normals of both the reference and orbital planes; */
-/*                  it lies in the intersecton of these planes, */
+/*                  it lies in the intersection of these planes, */
 /*                  pointing toward the ascending node. */
 
 /*                             ^ */

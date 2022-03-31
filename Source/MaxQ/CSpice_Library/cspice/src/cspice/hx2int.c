@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure  HX2INT  ( Signed hexadecimal string to integer ) */
+/* $Procedure HX2INT  ( Signed hexadecimal string to integer ) */
 /* Subroutine */ int hx2int_(char *string, integer *number, logical *error, 
 	char *errmsg, ftnlen string_len, ftnlen errmsg_len)
 {
@@ -90,7 +90,7 @@
 
 /* $ Detailed_Input */
 
-/*     STRING   The hexadecimal string to be converted to an integer. */
+/*     STRING   is the hexadecimal string to be converted to an integer. */
 
 /*              The following table describes the character set used */
 /*              to represent the hexadecimal digits and their */
@@ -128,24 +128,24 @@
 /*                    i */
 
 /*             STRING may have leading and trailing blanks, but blanks */
-/*             embedded within the signficant portion of the character */
+/*             embedded within the significant portion of the character */
 /*             string are not allowed. This includes any blanks which */
 /*             appear between the sign character and the first */
 /*             hexadecimal digit. */
 
 /* $ Detailed_Output */
 
-/*     NUMBER   The integer value to be returned. The value of this */
+/*     NUMBER   is the integer value to be returned. The value of this */
 /*              variable is not changed if an error occurs while parsing */
 /*              the hexadecimal character string. */
 
-/*     ERROR    A logical flag which indicates whether an error occurred */
-/*              while attempting to parse NUMBER from the hexadecimal */
-/*              character string STRING. ERROR will have the value */
-/*              .TRUE. if an error occurs. It will have the value */
+/*     ERROR    is a logical flag which indicates whether an error */
+/*              occurred while attempting to parse NUMBER from the */
+/*              hexadecimal character string STRING. ERROR will have the */
+/*              value .TRUE. if an error occurs. It will have the value */
 /*              .FALSE. otherwise. */
 
-/*     ERRMSG   Contains a descriptive error message if an error */
+/*     ERRMSG   contains a descriptive error message if an error */
 /*              occurs while attempting to parse NUMBER from the */
 /*              hexadecimal character string STRING, blank otherwise. */
 /*              The error message will be left justified. */
@@ -158,28 +158,28 @@
 
 /*     Error free. */
 
-/*     1)   If an unexpected character is encountered while parsing the */
-/*          hexadecimal character string, an appropriate error message */
-/*          will be set, and the routine will exit. The value of NUMBER */
-/*          will be unchanged. */
+/*     1)  If an unexpected character is encountered while parsing the */
+/*         hexadecimal character string, an appropriate error message */
+/*         will be set, and the routine will exit. The value of NUMBER */
+/*         will be unchanged. */
 
-/*     2)   If the string represents a number that is larger than */
-/*          the maximum representable integer an appropriate error */
-/*          message will be set, and the routine will exit. The value */
-/*          of NUMBER will be unchanged. */
+/*     2)  If the string represents a number that is larger than */
+/*         the maximum representable integer an appropriate error */
+/*         message will be set, and the routine will exit. The value */
+/*         of NUMBER will be unchanged. */
 
-/*     3)   If the string represents a number that is smaller than */
-/*          the minimum representable integer, an appropriate error */
-/*          message will be set, and the routine will exit. The value */
-/*          of NUMBER will be unchanged. */
+/*     3)  If the string represents a number that is smaller than */
+/*         the minimum representable integer, an appropriate error */
+/*         message will be set, and the routine will exit. The value */
+/*         of NUMBER will be unchanged. */
 
-/*     4)   If the input string is blank, an appropriate error message */
-/*          will be set, and the routine will exit. The value of NUMBER */
-/*          will be unchanged. */
+/*     4)  If the input string is blank, an appropriate error message */
+/*         will be set, and the routine will exit. The value of NUMBER */
+/*         will be unchanged. */
 
-/*     5)   If the error message string is not long enough to contain */
-/*          the entire error message, the error message will be */
-/*          truncated on the right. */
+/*     5)  If the error message string is not long enough to contain */
+/*         the entire error message, the error message will be */
+/*         truncated on the right. */
 
 /* $ Files */
 
@@ -261,28 +261,33 @@
 
 /*     None. */
 
-/* $ Author_and_Institution */
-
-/*      K.R. Gehringer   (JPL) */
-
 /* $ Literature_References */
 
-/*      None. */
+/*     None. */
+
+/* $ Author_and_Institution */
+
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
 
 /* $ Version */
 
-/* -     SPICELIB Version 1.1.0, 10-MAR-1994 (KRG) */
+/* -    SPICELIB Version 1.1.1, 20-AUG-2021 (JDR) */
 
-/*         Changed an IF test operand from .LE. to .LT. so that */
-/*         the ELSE IF clause could be reached. This change has */
-/*         NO effect on the execution of the routine because it */
-/*         makes use of a base that is a power of 2 (16), so the */
-/*         ELSE IF clause never needs to be reached. The algorithm */
-/*         was meant to be as general as possible, however, so that */
-/*         only the base and digits would need to be changed in order to */
-/*         implement a different number base. */
+/*        Edited the header to comply with NAIF standard. */
 
-/* -     SPICELIB Version 1.0.0, 22-OCT-1992 (KRG) */
+/* -    SPICELIB Version 1.1.0, 10-MAR-1994 (KRG) */
+
+/*        Changed an IF test operand from .LE. to .LT. so that */
+/*        the ELSE IF clause could be reached. This change has */
+/*        NO effect on the execution of the routine because it */
+/*        makes use of a base that is a power of 2 (16), so the */
+/*        ELSE IF clause never needs to be reached. The algorithm */
+/*        was meant to be as general as possible, however, so that */
+/*        only the base and digits would need to be changed in order to */
+/*        implement a different number base. */
+
+/* -    SPICELIB Version 1.0.0, 22-OCT-1992 (KRG) */
 
 /* -& */
 /* $ Index_Entries */

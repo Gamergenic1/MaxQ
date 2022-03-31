@@ -714,12 +714,12 @@ static logical c_false = FALSE_;
 /*         called by this routine.  The file is not modified. */
 
 /*     2)  If the ordinal position of the column specified by COLDSC */
-/*         is out of range, the error SPICE(INVALIDINDEX) is signalled. */
+/*         is out of range, the error SPICE(INVALIDINDEX) is signaled. */
 /*         The file is not modified. */
 
 /*     3)  If the input flag ISNULL is .TRUE. but the target column */
 /*         does not allow nulls, the error SPICE(BADATTRIBUTE) is */
-/*         signalled.  The file is not modified. */
+/*         signaled.  The file is not modified. */
 
 /*     4)  If RECPTR is invalid, a DAS addressing error may occur.  The */
 /*         error in *not* trapped in advance.  This routine assumes that */
@@ -769,6 +769,10 @@ static logical c_false = FALSE_;
 /*     N.J. Bachman   (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.0.1, 03-OCT-2021 (NJB) */
+
+/*        Corrected typos in comments. */
 
 /* -    Beta Version 1.0.0, 23-OCT-1995 (NJB) */
 

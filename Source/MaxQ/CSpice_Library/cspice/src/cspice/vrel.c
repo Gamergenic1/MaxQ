@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure  VREL ( Vector relative difference, 3 dimensions ) */
+/* $Procedure VREL ( Vector relative difference, 3 dimensions ) */
 doublereal vrel_(doublereal *v1, doublereal *v2)
 {
     /* System generated locals */
@@ -18,7 +18,7 @@ doublereal vrel_(doublereal *v1, doublereal *v2)
 
 /* $ Abstract */
 
-/*   Return the relative difference between two 3-dimensional vectors. */
+/*     Return the relative difference between two 3-dimensional vectors. */
 
 /* $ Disclaimer */
 
@@ -47,7 +47,7 @@ doublereal vrel_(doublereal *v1, doublereal *v2)
 
 /* $ Required_Reading */
 
-/*   None. */
+/*     None. */
 
 /* $ Keywords */
 
@@ -57,30 +57,35 @@ doublereal vrel_(doublereal *v1, doublereal *v2)
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
-/*      V1,V2     I   Input vectors. */
+/*     V1, */
+/*     V2         I   Input vectors. */
+
+/*     The function returns the relative difference between two */
+/*     3-dimensional vectors. */
 
 /* $ Detailed_Input */
 
-/*      V1, V2        are two 3-dimensional vectors for which the */
-/*                    relative difference is to be computed. */
+/*     V1, */
+/*     V2       are two 3-dimensional vectors for which the relative */
+/*              difference is to be computed. */
 
 /* $ Detailed_Output */
 
-/*      VREL          is the relative difference between V1 and V2. */
-/*                    It is defined as: */
-/*                                             || V1 - V2 || */
-/*                              VREL   =   ---------------------- */
-/*                                         MAX ( ||V1||, ||V2|| ) */
+/*     The function returns the relative difference between the two input */
+/*     3-dimensional vectors V1 and V2. */
 
-/*                    where || X || indicates the Euclidean norm of */
-/*                    the vector X. */
+/*     It is defined as: */
 
-/*                    VREL assumes values in the range [0,2]. If both */
-/*                    V1 and V2 are zero vectors then VREL is defined */
-/*                    to be zero. */
+/*                          || V1 - V2 || */
+/*        VREL   =   ------------------------ */
+/*                    MAX ( ||V1||, ||V2|| ) */
 
+/*     where ||X|| indicates the Euclidean norm of the vector X. */
+
+/*     VREL assumes values in the range [0,2]. If both V1 and V2 are zero */
+/*     vectors then VREL is defined to be zero. */
 
 /* $ Parameters */
 
@@ -90,8 +95,8 @@ doublereal vrel_(doublereal *v1, doublereal *v2)
 
 /*     Error free. */
 
-/*     If both V1 and V2 are zero vectors then VREL is defined */
-/*     to be zero. */
+/*     1)  If both V1 and V2 are zero vectors, then VREL is defined */
+/*         to be zero. */
 
 /* $ Files */
 
@@ -123,7 +128,7 @@ doublereal vrel_(doublereal *v1, doublereal *v2)
 /*           PARAMETER           ( VG2 = -32 ) */
 
 /*     C */
-/*     C     Spicelib function */
+/*     C     SPICELIB function */
 /*     C */
 /*           DOUBLE PRECISION      VREL */
 /*     C */
@@ -181,9 +186,16 @@ doublereal vrel_(doublereal *v1, doublereal *v2)
 
 /* $ Author_and_Institution */
 
-/*     J.M. Lynch     (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     J.M. Lynch         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 12-AUG-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.0.0, 15-JUN-1992 (JML) */
 

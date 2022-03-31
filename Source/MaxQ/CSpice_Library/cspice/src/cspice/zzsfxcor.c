@@ -74,8 +74,10 @@ static doublereal c_b27 = 1e-14;
 	    doublereal *, doublereal *, ftnlen, ftnlen), spkssb_(integer *, 
 	    doublereal *, char *, doublereal *, ftnlen), stelab_(doublereal *,
 	     doublereal *, doublereal *), stlabx_(doublereal *, doublereal *, 
-	    doublereal *), errint_(char *, integer *, ftnlen), vhatip_(
-	    doublereal *), mxv_(doublereal *, doublereal *, doublereal *);
+	    doublereal *), errint_(char *, integer *, ftnlen), nplnpt_(
+	    doublereal *, doublereal *, doublereal *, doublereal *, 
+	    doublereal *), vhatip_(doublereal *), mxv_(doublereal *, 
+	    doublereal *, doublereal *);
 
 /* $ Abstract */
 
@@ -132,8 +134,8 @@ static doublereal c_b27 = 1e-14;
 /* $ Abstract */
 
 /*     The parameters below form an enumerated list of the recognized */
-/*     frame types.  They are: INERTL, PCK, CK, TK, DYN.  The meanings */
-/*     are outlined below. */
+/*     frame types. They are: INERTL, PCK, CK, TK, DYN, SWTCH, and ALL. */
+/*     The meanings are outlined below. */
 
 /* $ Disclaimer */
 
@@ -183,6 +185,11 @@ static doublereal c_b27 = 1e-14;
 /*                 definition depends on parameters supplied via a */
 /*                 frame kernel. */
 
+/*     SWTCH       is a "switch" frame. These frames have orientation */
+/*                 defined by their alignment with base frames selected */
+/*                 from a prioritized list. The base frames optionally */
+/*                 have associated time intervals of applicability. */
+
 /*     ALL         indicates any of the above classes. This parameter */
 /*                 is used in APIs that fetch information about frames */
 /*                 of a specified class. */
@@ -191,6 +198,7 @@ static doublereal c_b27 = 1e-14;
 /* $ Author_and_Institution */
 
 /*     N.J. Bachman    (JPL) */
+/*     B.V. Semenov    (JPL) */
 /*     W.L. Taber      (JPL) */
 
 /* $ Literature_References */
@@ -198,6 +206,11 @@ static doublereal c_b27 = 1e-14;
 /*     None. */
 
 /* $ Version */
+
+/* -    SPICELIB Version 5.0.0, 08-OCT-2020 (NJB) (BVS) */
+
+/*       The parameter SWTCH was added to support the switch */
+/*       frame class. */
 
 /* -    SPICELIB Version 4.0.0, 08-MAY-2012 (NJB) */
 
@@ -703,6 +716,11 @@ static doublereal c_b27 = 1e-14;
 
 /* $ Version */
 
+/* -    SPICELIB Version 2.0.0, 14-JUN-2021 (NJB) */
+
+/*        Updated logic for limb grazing geometry to reduce chance of */
+/*        failing to find an intercept. */
+
 /* -    SPICELIB Version 1.0.0, 21-FEB-2017 (NJB) */
 
 /*        Added FAILED tests. */
@@ -737,6 +755,21 @@ static doublereal c_b27 = 1e-14;
 /*     generalized ray-surface intercept */
 /*     ray-surface intercept core algorithm */
 
+/* -& */
+/* $ Revisions */
+
+/* -    SPICELIB Version 2.0.0, 14-JUN-2021 (NJB) */
+
+/*        Updated logic for limb grazing geometry to reduce chance of */
+/*        failing to find an intercept. */
+
+/*        In the main solution loop, if the iteration count has not */
+/*        reached the termination limit minus one, and if a call to */
+/*        UDRAYX does produce an intercept, NPEDLN and NPLNPT are used */
+/*        to find the tangent point. That point is used to produce a new */
+/*        light time estimate. In some cases, this allows an intercept */
+/*        to be found again in a later pass through the loop, and a */
+/*        solution intercept to be found at that point or later. */
 /* -& */
 
 /*     SPICELIB functions */
@@ -1222,7 +1255,9 @@ static doublereal c_b27 = 1e-14;
 	}
     }
 
-/*     Making it to this point means we've got an intersection. */
+/*     Making it to this point means we've got an intersection, given */
+/*     our current light time estimate. It's possible that a better */
+/*     light time estimate will yield no intersection. */
 
 /*     Since we're using light time corrections, we're going to make */
 /*     an estimate of light time to the intercept point, then re-do */
@@ -1289,11 +1324,32 @@ static doublereal c_b27 = 1e-14;
 	    return 0;
 	}
 
-/*        If there's no intercept, we're done. */
+/*        If there's no intercept, try to get an estimate of the */
+/*        intercept location and the light time by using the nearest */
+/*        point to the ellipsoid on the line containing the ray. This is */
+/*        useful only if the iteration count has not reached its maximum */
+/*        value (the termination value minus one), since the point of */
+/*        this is to make it possible to find an intercept. */
+
+/*        Note that an intercept was already found using the initial */
+/*        aberration corrections, so we can't get to this case unless */
+/*        we have near-intercept geometry. */
 
 	if (! (*found)) {
-	    chkout_("ZZSFXCOR", (ftnlen)8);
-	    return 0;
+	    if (i__ < nitr - 1) {
+
+/*              SPOINT is the nearest point to the ellipsoid on the */
+/*              line containing the ray. */
+
+		(*udnear)(obspos, trgdir, et, pnear, &rayalt);
+		nplnpt_(obspos, trgdir, pnear, spoint, &rayalt);
+	    } else {
+
+/*              We're not going to find an intercept. */
+
+		chkout_("ZZSFXCOR", (ftnlen)8);
+		return 0;
+	    }
 	}
 
 /*        Compute the distance between intercept and observer. */

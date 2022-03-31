@@ -98,10 +98,6 @@
 
 /*     None. */
 
-/* $ Files */
-
-/*     None. */
-
 /* $ Exceptions */
 
 /*     Error free. */
@@ -111,6 +107,10 @@
 
 /*     2) IF N is 1 OUTPUT will be returned as M_1 where M_1 is */
 /*        the matrix defined above in the description of OUTPUT. */
+
+/* $ Files */
+
+/*     None. */
 
 /* $ Particulars */
 
@@ -125,15 +125,19 @@
 
 /*     None. */
 
-/* $ Author_and_Institution */
-
-/*     W.L. Taber      (JPL) */
-
 /* $ Literature_References */
 
 /*     None. */
 
+/* $ Author_and_Institution */
+
+/*     W.L. Taber      (JPL) */
+
 /* $ Version */
+
+/* -    SPICELIB Version 1.0.1, 03-OCT-2021 (NJB) */
+
+/*        Reordered header sections. Corrected typo in comments. */
 
 /* -    SPICELIB Version 1.0.0, 03-MAR-1999 (WLT) */
 
@@ -156,7 +160,7 @@
 	for (j = 1; j <= 3; ++j) {
 	    for (k = 1; k <= 3; ++k) {
 		output[(i__1 = j + k * 3 - 4) < 9 && 0 <= i__1 ? i__1 : 
-			s_rnge("output", i__1, "zzrxr_", (ftnlen)158)] = 
+			s_rnge("output", i__1, "zzrxr_", (ftnlen)162)] = 
 			matrix[j + 8] * matrix[(k + 3) * 3 - 12] + matrix[j + 
 			11] * matrix[(k + 3) * 3 - 11] + matrix[j + 14] * 
 			matrix[(k + 3) * 3 - 10];
@@ -176,7 +180,7 @@
 	for (j = 1; j <= 3; ++j) {
 	    for (k = 1; k <= 3; ++k) {
 		temp[(i__1 = j + (k + put * 3) * 3 - 13) < 18 && 0 <= i__1 ? 
-			i__1 : s_rnge("temp", i__1, "zzrxr_", (ftnlen)180)] = 
+			i__1 : s_rnge("temp", i__1, "zzrxr_", (ftnlen)184)] = 
 			matrix[j + 8] * matrix[(k + 3) * 3 - 12] + matrix[j + 
 			11] * matrix[(k + 3) * 3 - 11] + matrix[j + 14] * 
 			matrix[(k + 3) * 3 - 10];
@@ -197,22 +201,22 @@
 	i__1 = *n - 1;
 	for (i__ = 3; i__ <= i__1; ++i__) {
 
-/*           First the uppper left hand portion of the product. */
+/*           First the upper left hand portion of the product. */
 
 	    for (j = 1; j <= 3; ++j) {
 		for (k = 1; k <= 3; ++k) {
 		    temp[(i__2 = j + (k + put * 3) * 3 - 13) < 18 && 0 <= 
 			    i__2 ? i__2 : s_rnge("temp", i__2, "zzrxr_", (
-			    ftnlen)207)] = matrix[j + (i__ * 3 + 1) * 3 - 13] 
+			    ftnlen)211)] = matrix[j + (i__ * 3 + 1) * 3 - 13] 
 			    * temp[(i__3 = (k + get * 3) * 3 - 12) < 18 && 0 
 			    <= i__3 ? i__3 : s_rnge("temp", i__3, "zzrxr_", (
-			    ftnlen)207)] + matrix[j + (i__ * 3 + 2) * 3 - 13] 
+			    ftnlen)211)] + matrix[j + (i__ * 3 + 2) * 3 - 13] 
 			    * temp[(i__4 = (k + get * 3) * 3 - 11) < 18 && 0 
 			    <= i__4 ? i__4 : s_rnge("temp", i__4, "zzrxr_", (
-			    ftnlen)207)] + matrix[j + (i__ * 3 + 3) * 3 - 13] 
+			    ftnlen)211)] + matrix[j + (i__ * 3 + 3) * 3 - 13] 
 			    * temp[(i__5 = (k + get * 3) * 3 - 10) < 18 && 0 
 			    <= i__5 ? i__5 : s_rnge("temp", i__5, "zzrxr_", (
-			    ftnlen)207)];
+			    ftnlen)211)];
 		}
 	    }
 
@@ -232,16 +236,16 @@
 	for (j = 1; j <= 3; ++j) {
 	    for (k = 1; k <= 3; ++k) {
 		output[(i__1 = j + k * 3 - 4) < 9 && 0 <= i__1 ? i__1 : 
-			s_rnge("output", i__1, "zzrxr_", (ftnlen)234)] = 
+			s_rnge("output", i__1, "zzrxr_", (ftnlen)238)] = 
 			matrix[j + (*n * 3 + 1) * 3 - 13] * temp[(i__2 = (k + 
 			get * 3) * 3 - 12) < 18 && 0 <= i__2 ? i__2 : s_rnge(
-			"temp", i__2, "zzrxr_", (ftnlen)234)] + matrix[j + (*
+			"temp", i__2, "zzrxr_", (ftnlen)238)] + matrix[j + (*
 			n * 3 + 2) * 3 - 13] * temp[(i__3 = (k + get * 3) * 3 
 			- 11) < 18 && 0 <= i__3 ? i__3 : s_rnge("temp", i__3, 
-			"zzrxr_", (ftnlen)234)] + matrix[j + (*n * 3 + 3) * 3 
+			"zzrxr_", (ftnlen)238)] + matrix[j + (*n * 3 + 3) * 3 
 			- 13] * temp[(i__4 = (k + get * 3) * 3 - 10) < 18 && 
 			0 <= i__4 ? i__4 : s_rnge("temp", i__4, "zzrxr_", (
-			ftnlen)234)];
+			ftnlen)238)];
 	    }
 	}
     } else if (*n == 1) {
@@ -252,7 +256,7 @@
 	for (i__ = 1; i__ <= 3; ++i__) {
 	    for (j = 1; j <= 3; ++j) {
 		output[(i__1 = j + i__ * 3 - 4) < 9 && 0 <= i__1 ? i__1 : 
-			s_rnge("output", i__1, "zzrxr_", (ftnlen)248)] = 
+			s_rnge("output", i__1, "zzrxr_", (ftnlen)252)] = 
 			matrix[j + (i__ + 3) * 3 - 13];
 	    }
 	}

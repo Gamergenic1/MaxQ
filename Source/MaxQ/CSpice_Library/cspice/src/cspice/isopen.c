@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure             ISOPEN ( Is a file currently open? ) */
+/* $Procedure ISOPEN ( Is a file currently open? ) */
 logical isopen_(char *file, ftnlen file_len)
 {
     /* System generated locals */
@@ -68,16 +68,16 @@ logical isopen_(char *file, ftnlen file_len)
 /*     --------  ---  -------------------------------------------------- */
 /*     FILE       I   Name of the file in question. */
 
-/*     The function returns the value TRUE if the file is open, FALSE */
+/*     The function returns the value .TRUE. if the file is open, .FALSE. */
 /*     otherwise. */
 
 /* $ Detailed_Input */
 
-/*     FILE        is the name of the file in question. */
+/*     FILE     is the name of the file in question. */
 
 /* $ Detailed_Output */
 
-/*     The function returns the value TRUE if the file is open, FALSE */
+/*     The function returns the value .TRUE. if the file is open, .FALSE. */
 /*     otherwise. */
 
 /* $ Parameters */
@@ -86,11 +86,11 @@ logical isopen_(char *file, ftnlen file_len)
 
 /* $ Exceptions */
 
-/*     1) If the filename is blank, the error SPICE(BLANKFILENAME) will */
-/*        be signalled. */
+/*     1)  If the filename is blank, the error SPICE(BLANKFILENAME) is */
+/*         signaled. */
 
-/*     2) If an error occurs during the execution of the Fortran INQUIRE */
-/*        statement, the error SPICE(INQUIREFAILED) is signalled. */
+/*     2)  If an error occurs during the execution of the Fortran INQUIRE */
+/*         statement, the error SPICE(INQUIREFAILED) is signaled. */
 
 /* $ Files */
 
@@ -115,22 +115,29 @@ logical isopen_(char *file, ftnlen file_len)
 
 /*     None. */
 
-/* $ Author_and_Institution */
-
-/*     K.R. Gehringer  (JPL) */
-
 /* $ Literature_References */
 
 /*     None. */
 
+/* $ Author_and_Institution */
+
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
+
 /* $ Version */
 
-/* -     SPICELIB Version 1.1.0, 29-FEB-1996 (KRG) */
+/* -    SPICELIB Version 1.2.0, 12-AUG-2021 (JDR) */
 
-/*         Added a local logical variable that is used as temporary */
-/*         storage for the results from the INQUIRE statement rather */
-/*         than using the function name. This solved a problem on the */
-/*         macintosh. */
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
+
+/* -    SPICELIB Version 1.1.0, 29-FEB-1996 (KRG) */
+
+/*        Added a local logical variable that is used as temporary */
+/*        storage for the results from the INQUIRE statement rather */
+/*        than using the function name. This solved a problem on the */
+/*        macintosh. */
 
 /* -    SPICELIB Version 1.0.0, 05-OCT-1994 (KRG) */
 

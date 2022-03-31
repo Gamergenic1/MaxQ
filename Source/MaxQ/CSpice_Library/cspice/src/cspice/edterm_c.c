@@ -65,11 +65,12 @@
                    SpiceDouble        * trgepc,
                    SpiceDouble          obspos  [3],
                    SpiceDouble          trmpts  [ ][3] )
+
 /*
 
 -Brief_I/O
 
-   Variable  I/O  Description
+   VARIABLE  I/O  DESCRIPTION
    --------  ---  --------------------------------------------------
    trmtyp     I   Terminator type.
    source     I   Light source.
@@ -252,7 +253,6 @@
 
    npts        is the number of terminator points to compute.
 
-
 -Detailed_Output
 
    trgepc      is the "target epoch."  `trgepc' is defined as follows:
@@ -324,48 +324,57 @@
 
 -Exceptions
 
-   1)  If the input frame name `fixref' cannot be mapped to a frame ID
-       code, the error will be diagnosed by a routine in the call tree
-       of this routine.
+   1)  If the input frame name `fixref' cannot be mapped
+       to a frame ID code, the error SPICE(NOTRANSLATION) is
+       signaled by a routine in the call tree of this routine.
 
-   2)  If the target name `target' cannot be mapped to a body ID code,
-       the error will be diagnosed by a routine in the call tree of
+   2)  If the target name `target' cannot be mapped
+       to a body ID code, the error SPICE(NOTRANSLATION) is
+       signaled by a routine in the call tree of this routine.
+
+   3)  If the frame designated by `fixref' is not centered
+       on the target, the error SPICE(INVALIDFIXREF) is
+       signaled by a routine in the call tree of this routine.
+
+   4)  If the terminator type is not recognized, an error
+       is signaled by a routine in the call tree of
        this routine.
 
-   3)  If the frame designated by `fixref' is not centered on the
-       target, the error will be diagnosed by a routine in the call
-       tree of this routine.
+   5)  If the terminator point count `npts' is not at least 1, an error
+       is signaled by a routine in the call tree of this routine.
 
-   4)  If the terminator type is not recognized, the error will be
-       diagnosed by a routine in the call tree of this routine.
-
-   5)  If the terminator point count`npts' is not at least 1, the error
-       will be diagnosed by a routine in the call tree of this routine.
-
-   6)  If any of the ellipsoid's semi-axis lengths are non-positive,
-       the error will be diagnosed by a routine in the call tree of
+   6)  If the light source has non-positive radius, an error
+       is signaled by a routine in the call tree of
        this routine.
 
-   7)  If the light source has non-positive radius, the error will be
-       diagnosed by a routine in the call tree of this routine.
+   7)  If the light source intersects the smallest sphere centered at
+       the origin and containing the ellipsoid, an error is signaled
+       by a routine in the call tree of this routine.
 
-   8)  If the light source intersects the smallest sphere centered at
-       the origin and containing the ellipsoid, the error will be
-       diagnosed by a routine in the call tree of this routine.
-
-   9)  If radii for the target body or light source are not available
-       in the kernel pool, or if radii are available but either body
-       does not have three radii, the error will be diagnosed by a
-       routine in the call tree of this routine.
-
-   10) If any SPK look-up fails, the error will be diagnosed by
+   8)  If radii for the target body or light source are not
+       available in the kernel pool, an error is signaled by
        a routine in the call tree of this routine.
 
-   11) If any array pointer argument is null, the error SPICE(NULLPOINTER)
-       will be signaled.
+   9)  If radii are available but either body does not have three
+       radii, an error is signaled by a routine in the call tree of
+       this routine.
 
-   12) If any input string pointer is empty, the error SPICE(EMPTYSTRING)
-       will be signaled.
+   10) If any of the radii is less-than or equal to zero, an error is
+       signaled by a routine in the call tree of this routine.
+
+   11) If any SPK look-up fails, an error is signaled by
+       a routine in the call tree of this routine.
+
+   12) If any of the `trmtyp', `source', `target', `fixref', `abcorr'
+       or `obsrvr' input string pointers is null, the error
+       SPICE(NULLPOINTER) is signaled.
+
+   13) If any of the `trmtyp', `source', `target', `fixref', `abcorr'
+       or `obsrvr' input strings has zero length, the error
+       SPICE(EMPTYSTRING) is signaled.
+
+   14) If any of the `obspos' or `trmpts' output array pointers is
+       null, the error SPICE(NULLPOINTER) is signaled.
 
 -Files
 
@@ -374,26 +383,26 @@
 
    The following data are required:
 
-      -  SPK data: ephemeris data for the target, observer, and light
-         source must be loaded. If aberration corrections are used, the
-         states of all three objects relative to the solar system
-         barycenter must be calculable from the available ephemeris
-         data. Typically ephemeris data are made available by loading
-         one or more SPK files via furnsh_c.
+   -  SPK data: ephemeris data for the target, observer, and light
+      source must be loaded. If aberration corrections are used, the
+      states of all three objects relative to the solar system
+      barycenter must be calculable from the available ephemeris
+      data. Typically ephemeris data are made available by loading
+      one or more SPK files via furnsh_c.
 
-      -  PCK data: triaxial radii for the target body and the light
-         source must be loaded into the kernel pool. Typically this is
-         done by loading a text PCK file via furnsh_c.
+   -  PCK data: triaxial radii for the target body and the light
+      source must be loaded into the kernel pool. Typically this is
+      done by loading a text PCK file via furnsh_c.
 
-      -  Further PCK data: rotation data for the target body must be
-         loaded. These may be provided in a text or binary PCK file.
+   -  Further PCK data: rotation data for the target body must be
+      loaded. These may be provided in a text or binary PCK file.
 
-      -  Frame data: if a frame definition is required to convert the
-         observer and target states to the target body-fixed frame
-         designated by `fixref', that definition must be available in
-         the kernel pool. Typically the definitions of frames not
-         already built-in to SPICE are supplied by loading a frame
-         kernel.
+   -  Frame data: if a frame definition is required to convert the
+      observer and target states to the target body-fixed frame
+      designated by `fixref', that definition must be available in
+      the kernel pool. Typically the definitions of frames not
+      already built-in to SPICE are supplied by loading a frame
+      kernel.
 
    In all cases, kernel data are normally loaded once per program
    run, NOT every time this routine is called.
@@ -408,16 +417,16 @@
    Points on the target body's surface are classified according to
    their illumination as follows:
 
-      -  A target surface point X for which no vector from X to any
-         point in the light source intersects the target, except at
-         X, is considered to be "completely illuminated."
+   -  A target surface point X for which no vector from X to any
+      point in the light source intersects the target, except at
+      X, is considered to be "completely illuminated."
 
-      -  A target surface point X for which each vector from X to a
-         point in the light source intersects the target at points
-         other than X is considered to be "in total shadow."
+   -  A target surface point X for which each vector from X to a
+      point in the light source intersects the target at points
+      other than X is considered to be "in total shadow."
 
-      -  All other target points are considered to be in partial
-         shadow.
+   -  All other target points are considered to be in partial
+      shadow.
 
    In this routine, we use the term "umbral terminator" to denote
    the curve usually called the "terminator": this curve is the
@@ -439,271 +448,285 @@
 
 -Examples
 
-   The numerical results shown for these examples may differ across
+   The numerical results shown for this example may differ across
    platforms. The results depend on the SPICE kernels used as
    input, the compiler and supporting libraries, and the machine
    specific arithmetic implementation.
 
+   1) Compute sets of umbral and penumbral terminator points on the
+      Moon. Perform a consistency check using the solar incidence
+      angle at each point. We expect to see a solar incidence angle of
+      approximately 90 degrees. Since the solar incidence angle is
+      measured between the local outward normal and the direction to
+      the center of the Sun, the solar incidence angle at an umbral
+      terminator point should exceed 90 degrees by approximately the
+      angular radius of the Sun, while the angle at a penumbral
+      terminator points should be less than 90 degrees by that amount.
 
-   1)  Compute sets of umbral and penumbral terminator points on the
-       Moon. Perform a consistency check using the solar incidence
-       angle at each point. We expect to see a solar incidence angle of
-       approximately 90 degrees. Since the solar incidence angle is
-       measured between the local outward normal and the direction to
-       the center of the Sun, the solar incidence angle at an umbral
-       terminator point should exceed 90 degrees by approximately the
-       angular radius of the Sun, while the angle at a penumbral
-       terminator points should be less than 90 degrees by that amount.
-
-       This program loads SPICE kernels via a meta-kernel. The
-       meta-kernel used to produce the results shown below is
-
-          KPL/MK
-
-          This meta-kernel is intended to support operation of SPICE
-          example programs. The kernels shown here should not be
-          assumed to contain adequate or correct versions of data
-          required by SPICE-based user applications.
-
-          In order for an application to use this meta-kernel, the
-          kernels referenced here must be present in the user's
-          current working directory.
+      Use the meta-kernel shown below to load the required SPICE
+      kernels.
 
 
-          \begindata
+         KPL/MK
 
-             KERNELS_TO_LOAD = ( 'de421.bsp',
-                                 'pck00010.tpc',
-                                 'naif0010.tls'  )
+         File name: edterm_ex1.tm
 
-          \begintext
+         This meta-kernel is intended to support operation of SPICE
+         example programs. The kernels shown here should not be
+         assumed to contain adequate or correct versions of data
+         required by SPICE-based user applications.
 
+         In order for an application to use this meta-kernel, the
+         kernels referenced here must be present in the user's
+         current working directory.
 
-       Program source code:
+         The names and contents of the kernels referenced
+         by this meta-kernel are as follows:
 
-
-          /.
-             Program EX1
-          ./
-
-          #include <stdio.h>
-          #include <math.h>
-          #include "SpiceUsr.h"
-
-
-          int main()
-          {
-             /.
-             Local constants
-             ./
-
-             #define META            "edterm.tm"
-             #define NPTS            3
+            File name                     Contents
+            ---------                     --------
+            de421.bsp                     Planetary ephemeris
+            pck00010.tpc                  Planet orientation and
+                                          radii
+            naif0010.tls                  Leapseconds
 
 
-             /.
-             Local variables
-             ./
-             SpiceBoolean            first = SPICETRUE;
+         \begindata
 
-             SpiceChar             * abcorr;
-             SpiceChar             * fixref;
-             SpiceChar             * obsrvr;
-             SpiceChar             * source;
-             SpiceChar             * target;
-             SpiceChar             * trmtyps [2] = { "UMBRAL",
-                                                     "PENUMBRAL" };
-             SpiceChar             * utc;
+            KERNELS_TO_LOAD = ( 'de421.bsp',
+                                'pck00010.tpc',
+                                'naif0010.tls'  )
 
-             SpiceDouble             angrad;
-             SpiceDouble             emissn;
-             SpiceDouble             et;
-             SpiceDouble             lat;
-             SpiceDouble             lon;
-             SpiceDouble             lt;
-             SpiceDouble             obspos  [3];
-             SpiceDouble             phase;
-             SpiceDouble             radius;
-             SpiceDouble             s       [2] = { -1.0,  1.0};
+         \begintext
 
-             SpiceDouble             solar;
-             SpiceDouble             srcpos  [3];
-             SpiceDouble             srcrad  [3];
-             SpiceDouble             srfvec  [3];
-             SpiceDouble             trgepc;
-             SpiceDouble             trmpts  [NPTS][3];
-
-             SpiceInt                i;
-             SpiceInt                n;
-             SpiceInt                trmidx;
+         End of meta-kernel
 
 
-             /.
-             Load meta-kernel.
-             ./
-             furnsh_c ( META );
-
-             /.
-             Set observation time.
-             ./
-             utc    = "2007 FEB 3 00:00:00.000";
-
-             str2et_c ( utc, &et );
-
-             /.
-             Set participating objects, frame, and aberration
-             corrections.
-             ./
-             obsrvr = "EARTH";
-             target = "MOON";
-             source = "SUN";
-             fixref = "IAU_MOON";
-             abcorr = "LT+S";
-
-             /.
-             Look up the radii of the sun.
-             ./
-             bodvrd_c ( source, "RADII", 3, &n, srcrad );
-
-             /.
-             Compute terminator points.
-             ./
-             for ( trmidx = 0;  trmidx < 2;  trmidx++  )
-             {
-                edterm_c ( trmtyps[trmidx],  source,  target,
-                           et,               fixref,  abcorr,
-                           obsrvr,           NPTS,    &trgepc,
-                           obspos,           trmpts            );
-                /.
-                Validate terminator points.
-
-                Look up the target-sun vector at the light-time
-                corrected target epoch.
-                ./
-                if ( first )
-                {
-                   spkpos_c ( source, trgepc, fixref,
-                              abcorr, target, srcpos, &lt );
-
-                   first = SPICEFALSE;
-                }
+      Example code begins here.
 
 
-                printf ( "\n"
-                         " Terminator type: %s\n", trmtyps[trmidx] );
+      /.
+         Program edterm_ex1
+      ./
 
-                for ( i = 0;  i < NPTS;  i++ )
-                {
-                   /.
-                   Convert the ith terminator point to latitudinal
-                   coordinates. Display the point.
-                   ./
-                   reclat_c ( trmpts[i], &radius, &lon, &lat );
-
-                   printf ( "\n"
-                            "   Terminator point %d:\n"
-                            "     Radius                     (km):  %18.9f\n"
-                            "     Planetocentric longitude   (deg): %18.9f\n"
-                            "     Planetocentric latitude    (deg): %18.9f\n",
-                            (int)i,
-                            radius,
-                            lon * dpr_c(),
-                            lat * dpr_c()                            );
-
-                   /.
-                   Find the illumination angles at the
-                   ith terminator point.
-                   ./
-                   ilumin_c  ( "Ellipsoid", target,  et,         fixref,
-                               abcorr,      obsrvr,  trmpts[i],  &trgepc,
-                               srfvec,      &phase,  &solar,     &emissn  );
-
-                   printf ( "     Solar incidence angle      (deg): %18.9f\n",
-                            solar * dpr_c()                                   );
-
-                   /.
-                   Find the angular radius of the Sun as seen from
-                   the terminator point.
-                   ./
-                   angrad = asin (   srcrad[0]
-                                   / vdist_c ( srcpos, trmpts[i] )  );
-
-                   /.
-                   Display the solar incidence angle after
-                   adjusting the angular radius of the Sun
-                   as seen from the terminator point.The
-                   result should be approximately 90 degrees.
-                   ./
-                   printf ( "     Solar incidence angle adjusted for\n"
-                            "     sun's angular radius (deg):       %18.9f\n",
-                            ( solar + ( s[trmidx]*angrad ) ) * dpr_c()        );
-                }
-             }
-
-             return ( 0 );
-          }
+      #include <stdio.h>
+      #include <math.h>
+      #include "SpiceUsr.h"
 
 
-      When this program was executed on a PC/Linux/gfortan platform,
-      the output was:
+      int main()
+      {
+         /.
+         Local constants
+         ./
+
+         #define META            "edterm_ex1.tm"
+         #define NPTS            3
 
 
-         Terminator type: UMBRAL
+         /.
+         Local variables
+         ./
+         SpiceBoolean            first = SPICETRUE;
 
-           Terminator point 0:
-             Radius                     (km):      1737.400000000
-             Planetocentric longitude   (deg):      -95.084552819
-             Planetocentric latitude    (deg):        0.004052763
-             Solar incidence angle      (deg):       90.269765819
-             Solar incidence angle adjusted for
-             sun's angular radius (deg):             90.000000129
+         SpiceChar             * abcorr;
+         SpiceChar             * fixref;
+         SpiceChar             * obsrvr;
+         SpiceChar             * source;
+         SpiceChar             * target;
+         SpiceChar             * trmtyps [2] = { "UMBRAL",
+                                                 "PENUMBRAL" };
+         SpiceChar             * utc;
 
-           Terminator point 1:
-             Radius                     (km):      1737.400000000
-             Planetocentric longitude   (deg):       84.228091534
-             Planetocentric latitude    (deg):       59.995755519
-             Solar incidence angle      (deg):       90.269765706
-             Solar incidence angle adjusted for
-             sun's angular radius (deg):             90.000000016
+         SpiceDouble             angrad;
+         SpiceDouble             emissn;
+         SpiceDouble             et;
+         SpiceDouble             lat;
+         SpiceDouble             lon;
+         SpiceDouble             lt;
+         SpiceDouble             obspos  [3];
+         SpiceDouble             phase;
+         SpiceDouble             radius;
+         SpiceDouble             s       [2] = { -1.0,  1.0};
 
-           Terminator point 2:
-             Radius                     (km):      1737.400000000
-             Planetocentric longitude   (deg):       87.216417974
-             Planetocentric latitude    (deg):      -59.979550515
-             Solar incidence angle      (deg):       90.269765730
-             Solar incidence angle adjusted for
-             sun's angular radius (deg):             90.000000040
+         SpiceDouble             solar;
+         SpiceDouble             srcpos  [3];
+         SpiceDouble             srcrad  [3];
+         SpiceDouble             srfvec  [3];
+         SpiceDouble             trgepc;
+         SpiceDouble             trmpts  [NPTS][3];
 
-         Terminator type: PENUMBRAL
+         SpiceInt                i;
+         SpiceInt                n;
+         SpiceInt                trmidx;
 
-           Terminator point 0:
-             Radius                     (km):      1737.400000000
-             Planetocentric longitude   (deg):       84.914100511
-             Planetocentric latitude    (deg):       -0.004073047
-             Solar incidence angle      (deg):       89.730234406
-             Solar incidence angle adjusted for
-             sun's angular radius (deg):             90.000000126
 
-           Terminator point 1:
-             Radius                     (km):      1737.400000000
-             Planetocentric longitude   (deg):      -95.769215814
-             Planetocentric latitude    (deg):      -59.995785101
-             Solar incidence angle      (deg):       89.730234298
-             Solar incidence angle adjusted for
-             sun's angular radius (deg):             90.000000018
+         /.
+         Load meta-kernel.
+         ./
+         furnsh_c ( META );
 
-           Terminator point 2:
-             Radius                     (km):      1737.400000000
-             Planetocentric longitude   (deg):      -92.780892017
-             Planetocentric latitude    (deg):       59.979498997
-             Solar incidence angle      (deg):       89.730234322
-             Solar incidence angle adjusted for
-             sun's angular radius (deg):             90.000000042
+         /.
+         Set observation time.
+         ./
+         utc    = "2007 FEB 3 00:00:00.000";
+
+         str2et_c ( utc, &et );
+
+         /.
+         Set participating objects, frame, and aberration
+         corrections.
+         ./
+         obsrvr = "EARTH";
+         target = "MOON";
+         source = "SUN";
+         fixref = "IAU_MOON";
+         abcorr = "LT+S";
+
+         /.
+         Look up the radii of the sun.
+         ./
+         bodvrd_c ( source, "RADII", 3, &n, srcrad );
+
+         /.
+         Compute terminator points.
+         ./
+         for ( trmidx = 0;  trmidx < 2;  trmidx++  )
+         {
+            edterm_c ( trmtyps[trmidx],  source,  target,
+                       et,               fixref,  abcorr,
+                       obsrvr,           NPTS,    &trgepc,
+                       obspos,           trmpts            );
+            /.
+            Validate terminator points.
+
+            Look up the target-sun vector at the light-time
+            corrected target epoch.
+            ./
+            if ( first )
+            {
+               spkpos_c ( source, trgepc, fixref,
+                          abcorr, target, srcpos, &lt );
+
+               first = SPICEFALSE;
+            }
+
+
+            printf ( "\n"
+                     " Terminator type: %s\n", trmtyps[trmidx] );
+
+            for ( i = 0;  i < NPTS;  i++ )
+            {
+               /.
+               Convert the ith terminator point to latitudinal
+               coordinates. Display the point.
+               ./
+               reclat_c ( trmpts[i], &radius, &lon, &lat );
+
+               printf ( "\n"
+                        "   Terminator point %d:\n"
+                        "     Radius                     (km):  %18.9f\n"
+                        "     Planetocentric longitude   (deg): %18.9f\n"
+                        "     Planetocentric latitude    (deg): %18.9f\n",
+                        (int)i,
+                        radius,
+                        lon * dpr_c(),
+                        lat * dpr_c()                            );
+
+               /.
+               Find the illumination angles at the
+               ith terminator point.
+               ./
+               ilumin_c  ( "Ellipsoid", target,  et,         fixref,
+                           abcorr,      obsrvr,  trmpts[i],  &trgepc,
+                           srfvec,      &phase,  &solar,     &emissn  );
+
+               printf ( "     Solar incidence angle      (deg): %18.9f\n",
+                        solar * dpr_c()                                   );
+
+               /.
+               Find the angular radius of the Sun as seen from
+               the terminator point.
+               ./
+               angrad = asin (   srcrad[0]
+                               / vdist_c ( srcpos, trmpts[i] )  );
+
+               /.
+               Display the solar incidence angle after
+               adjusting the angular radius of the Sun
+               as seen from the terminator point.The
+               result should be approximately 90 degrees.
+               ./
+               printf ( "     Solar incidence angle adjusted for\n"
+                        "     sun's angular radius (deg):       %18.9f\n",
+                        ( solar + ( s[trmidx]*angrad ) ) * dpr_c()        );
+            }
+         }
+
+         return ( 0 );
+      }
+
+
+      When this program was executed on a Mac/Intel/cc/64-bit
+      platform, the output was:
+
+
+       Terminator type: UMBRAL
+
+         Terminator point 0:
+           Radius                     (km):      1737.400000000
+           Planetocentric longitude   (deg):      -95.084552819
+           Planetocentric latitude    (deg):        0.004052763
+           Solar incidence angle      (deg):       90.269765815
+           Solar incidence angle adjusted for
+           sun's angular radius (deg):             90.000000125
+
+         Terminator point 1:
+           Radius                     (km):      1737.400000000
+           Planetocentric longitude   (deg):       84.228091534
+           Planetocentric latitude    (deg):       59.995755519
+           Solar incidence angle      (deg):       90.269765709
+           Solar incidence angle adjusted for
+           sun's angular radius (deg):             90.000000019
+
+         Terminator point 2:
+           Radius                     (km):      1737.400000000
+           Planetocentric longitude   (deg):       87.216417974
+           Planetocentric latitude    (deg):      -59.979550515
+           Solar incidence angle      (deg):       90.269765733
+           Solar incidence angle adjusted for
+           sun's angular radius (deg):             90.000000043
+
+       Terminator type: PENUMBRAL
+
+         Terminator point 0:
+           Radius                     (km):      1737.400000000
+           Planetocentric longitude   (deg):       84.914100511
+           Planetocentric latitude    (deg):       -0.004073047
+           Solar incidence angle      (deg):       89.730234402
+           Solar incidence angle adjusted for
+           sun's angular radius (deg):             90.000000122
+
+         Terminator point 1:
+           Radius                     (km):      1737.400000000
+           Planetocentric longitude   (deg):      -95.769215814
+           Planetocentric latitude    (deg):      -59.995785101
+           Solar incidence angle      (deg):       89.730234301
+           Solar incidence angle adjusted for
+           sun's angular radius (deg):             90.000000021
+
+         Terminator point 2:
+           Radius                     (km):      1737.400000000
+           Planetocentric longitude   (deg):      -92.780892017
+           Planetocentric latitude    (deg):       59.979498997
+           Solar incidence angle      (deg):       89.730234325
+           Solar incidence angle adjusted for
+           sun's angular radius (deg):             90.000000044
 
 
 -Restrictions
 
-   1) This routine models light paths as straight lines.
+   1)  This routine models light paths as straight lines.
 
 -Literature_References
 
@@ -711,15 +734,20 @@
 
 -Author_and_Institution
 
-   N.J. Bachman    (JPL)
-   E.D. Wright     (JPL)
+   N.J. Bachman        (JPL)
+   J. Diaz del Rio     (ODC Space)
+   E.D. Wright         (JPL)
 
 -Version
 
+   -CSPICE Version 1.0.2, 01-NOV-2021 (JDR)
+
+       Edited the header to comply with NAIF standard.
+
    -CSPICE Version 1.0.1, 12-JUL-2016 (EDW)
 
-      Edit to example program to use "%d" with explicit casts
-      to int for printing SpiceInts with printf.
+       Edit to example program to use "%d" with explicit casts
+       to int for printing SpiceInts with printf.
 
    -CSPICE Version 1.0.0, 13-JUN-2012 (NJB) (EDW)
 

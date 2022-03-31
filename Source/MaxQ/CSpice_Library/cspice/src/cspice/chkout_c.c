@@ -60,11 +60,11 @@
 
 -Detailed_Input
 
-   module         is the name of the routine calling chkout_c.  The
-                  named routine is supposed to be `checking out'
-                  when it calls chkout_c; that is, the call should be
-                  the last executable statement preceding any exit
-                  from the routine.
+   module      is the name of the routine calling chkout_c. The
+               named routine is supposed to be `checking out'
+               when it calls chkout_c; that is, the call should be
+               the last executable statement preceding any exit
+               from the routine.
 
 -Detailed_Output
 
@@ -74,17 +74,23 @@
 
    None.
 
-
 -Exceptions
 
-   chkout_c does not signal errors; rather it writes error messages,
-   so as to avoid recursion.
+   1)  If the `module' input string pointer is null, the error
+       SPICE(NULLPOINTER) is signaled.
 
-   1)  If the input module name module does not match the name popped
+   2)  If the `module' input string has zero length, the error
+       SPICE(EMPTYSTRING) is signaled.
+
+   The underlying f2c'd CSPICE routine chkout_ does not signal errors;
+   rather it writes error messages, so as to avoid recursion. The
+   errors detected by chkout_ are:
+
+   3)  If the input module name module does not match the name popped
        from the trace stack, the short error message
        SPICE(NAMESDONOTMATCH) is written to the error output device.
 
-   2)  If the trace stack is empty, the short error message
+   4)  If the trace stack is empty, the short error message
        SPICE(TRACESTACKEMPTY) is written to the error output device.
 
 -Files
@@ -96,7 +102,7 @@
    This routine is part of the CSPICE error handling mechanism.
 
    Conceptually, the effect of this routine is to `pop' a module
-   name from a stack.  The routine chkin_c performs the inverse, or
+   name from a stack. The routine chkin_c performs the inverse, or
    `push' operation.
 
    Every routine that participates in the traceback scheme should
@@ -121,7 +127,7 @@
       chkout_c  ( module );
 
    All CSPICE routines should call chkin_c and chkout_c, unless they
-   are classified as `error free'.  Programs linked with CSPICE
+   are classified as `error free'. Programs linked with CSPICE
    may also use chkin_c and chkout_c.
 
    Routines that don't call chkin_c and chkout_c won't appear in the
@@ -131,8 +137,8 @@
    trace mechanism will become very confused and need alot of therapy.
 
    It is possible to disable check-ins (and check-outs) by calling
-   the trcoff_c.  chkin_c and chkout_c will return immediately
-   upon entry after trcoff_c has been called.  It is not possible to
+   the trcoff_c. chkin_c and chkout_c will return immediately
+   upon entry after trcoff_c has been called. It is not possible to
    re-enable check-ins and check-outs after calling trcoff_c. Routines
    that don't call chkin_c and chkout_c won't appear in the traceback.
 
@@ -158,11 +164,10 @@
           chkout_c ( module ) ;
           return;
 
-
 -Restrictions
 
-   Routines that call this routine must call chkin_c as the second
-   executable statement. (The first is a call to return_c() ).
+   1)  Routines that call this routine must call chkin_c as the second
+       executable statement. (The first is a call to return_c() ).
 
 -Literature_References
 
@@ -170,21 +175,27 @@
 
 -Author_and_Institution
 
-   N.J. Bachman    (JPL)
-   K.R. Gehringer  (JPL)
+   N.J. Bachman        (JPL)
+   J. Diaz del Rio     (ODC Space)
+   E.D. Wright         (JPL)
 
 -Version
 
+   -CSPICE Version 2.0.2, 02-JUN-2021 (JDR)
+
+       Edited the header to comply with NAIF standard. Added entries
+       #1 and #2 to -Exceptions section.
+
    -CSPICE Version 2.0.1, 08-FEB-1998 (EDW)
 
-      Corrected and clarified header entries.
+       Corrected and clarified header entries.
 
    -CSPICE Version 2.0.0, 09-JAN-1998 (NJB)
 
-      Input argument filename was changed to type ConstSpiceChar *.
+       Input argument filename was changed to type ConstSpiceChar *.
 
-      Re-implemented routine without dynamically allocated, temporary
-      strings.
+       Re-implemented routine without dynamically allocated, temporary
+       strings.
 
    -CSPICE Version 1.0.0, 25-OCT-1997 (EDW)
 

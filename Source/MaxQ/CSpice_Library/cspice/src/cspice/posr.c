@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure            POSR ( Position of substring, reverse search) */
+/* $Procedure POSR ( Position of substring, reverse search) */
 integer posr_(char *str, char *substr, integer *start, ftnlen str_len, ftnlen 
 	substr_len)
 {
@@ -73,12 +73,12 @@ integer posr_(char *str, char *substr, integer *start, ftnlen str_len, ftnlen
 
 /* $ Detailed_Input */
 
-/*     STR        is any character string. */
+/*     STR      is any character string. */
 
-/*     SUBSTR     is a substring to look for in STR.  Spaces in */
-/*                SUBSTR are significant. */
+/*     SUBSTR   is a substring to look for in STR. Spaces in */
+/*              SUBSTR are significant. */
 
-/*     START      is the position in STR to begin looking for SUBSTR. */
+/*     START    is the position in STR to begin looking for SUBSTR. */
 
 /* $ Detailed_Output */
 
@@ -93,12 +93,12 @@ integer posr_(char *str, char *substr, integer *start, ftnlen str_len, ftnlen
 
 /* $ Exceptions */
 
-/*     Error Free. */
+/*     Error free. */
 
-/*     1) If START is less than 1, POSR returns zero. */
+/*     1)  If START is less than 1, POSR returns zero. */
 
-/*     2) If START is greater than LEN(STRING), the search begins */
-/*        at the last character of the string. */
+/*     2)  If START is greater than LEN(STRING), the search begins */
+/*         at the last character of the string. */
 
 /* $ Files */
 
@@ -109,44 +109,43 @@ integer posr_(char *str, char *substr, integer *start, ftnlen str_len, ftnlen
 /*     POSR is case sensitive. */
 
 /*     An entire family of related SPICELIB routines (POS, CPOS, NCPOS, */
-/*     POSR, CPOSR, NCPOSR) is desribed in the Required Reading. */
+/*     POSR, CPOSR, NCPOSR) is described in the Required Reading. */
 
-/*     Those familiar with the True BASIC language should note that */
-/*     these functions are equivalent to the True BASIC intrinsic */
+/*     Those familiar with the .TRUE. BASIC language should note that */
+/*     these functions are equivalent to the .TRUE. BASIC intrinsic */
 /*     functions with the same name. */
 
 /* $ Examples */
 
+/*     Let STRING = 'AN ANT AND AN ELEPHANT        ' */
+/*                   123456789012345678901234567890 */
 
-/*      Let STRING = 'AN ANT AND AN ELEPHANT        ' */
-/*                    123456789012345678901234567890 */
+/*     Normal (Sequential) Searching: */
+/*     ------------------------------ */
 
-/*      Normal (Sequential) Searching: */
-/*      ------------------------------ */
+/*           POSR ( STRING, 'AN',  31 ) = 20 */
+/*           POSR ( STRING, 'AN',  19 ) = 12 */
+/*           POSR ( STRING, 'AN',  11 ) =  8 */
+/*           POSR ( STRING, 'AN',   7 ) =  4 */
+/*           POSR ( STRING, 'AN',   3 ) =  1 */
+/*           POSR ( STRING, 'AN',   0 ) =  0 */
 
-/*            POSR ( STRING, 'AN',  31 ) = 20 */
-/*            POSR ( STRING, 'AN',  19 ) = 12 */
-/*            POSR ( STRING, 'AN',  11 ) =  8 */
-/*            POSR ( STRING, 'AN',   7 ) =  4 */
-/*            POSR ( STRING, 'AN',   3 ) =  1 */
-/*            POSR ( STRING, 'AN',   0 ) =  0 */
+/*     START out of bounds: */
+/*     -------------------- */
 
-/*      START out of bounds: */
-/*      -------------------- */
+/*           POSR ( STRING, 'AN', -5 ) =  0 */
+/*           POSR ( STRING, 'AN',  0 ) =  0 */
+/*           POSR ( STRING, 'AN', 31 ) = 20 */
+/*           POSR ( STRING, 'AN', 44 ) = 20 */
 
-/*            POSR ( STRING, 'AN', -5 ) =  0 */
-/*            POSR ( STRING, 'AN',  0 ) =  0 */
-/*            POSR ( STRING, 'AN', 31 ) = 20 */
-/*            POSR ( STRING, 'AN', 44 ) = 20 */
+/*     Significance of Spaces: */
+/*     ----------------------- */
 
-/*      Significance of Spaces: */
-/*      ----------------------- */
-
-/*            POSR ( STRING, 'AN',    31 ) =  20 */
-/*            POSR ( STRING, ' AN',   31 ) =  11 */
-/*            POSR ( STRING, ' AN ',  31 ) =  11 */
-/*            POSR ( STRING, ' AN ',  10 ) =   0 */
-/*            POSR ( STRING, ' AN  ', 31 ) =   0 */
+/*           POSR ( STRING, 'AN',    31 ) =  20 */
+/*           POSR ( STRING, ' AN',   31 ) =  11 */
+/*           POSR ( STRING, ' AN ',  31 ) =  11 */
+/*           POSR ( STRING, ' AN ',  10 ) =   0 */
+/*           POSR ( STRING, ' AN  ', 31 ) =   0 */
 
 /* $ Restrictions */
 
@@ -158,12 +157,19 @@ integer posr_(char *str, char *substr, integer *start, ftnlen str_len, ftnlen
 
 /* $ Author_and_Institution */
 
-/*     W.L. Taber      (JPL) */
-/*     H.A. Neilan     (JPL) */
-/*     K.S. Zukor      (JPL) */
-/*     B.V. Semenov    (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     H.A. Neilan        (JPL) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     K.S. Zukor         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 13-AUG-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.0.4, 31-JAN-2008 (BVS) */
 
@@ -172,7 +178,7 @@ integer posr_(char *str, char *substr, integer *start, ftnlen str_len, ftnlen
 
 /* -    SPICELIB Version 1.0.3, 25-AUG-1994 (HAN) (KSZ) */
 
-/*        Examples section of the header used POS instead of POSR. */
+/*        $Examples section of the header used POS instead of POSR. */
 /*        Also, some examples were incorrect. They have been corrected. */
 
 /* -    SPICELIB Version 1.0.2, 10-MAR-1992 (WLT) */

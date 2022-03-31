@@ -11,7 +11,7 @@ static integer c__100 = 100;
 static integer c__4 = 4;
 static integer c__0 = 0;
 static integer c__3 = 3;
-static doublereal c_b199 = 1e-12;
+static doublereal c_b185 = 1e-12;
 
 /* $Procedure ZZGFOCU ( GF, occultation utilities ) */
 /* Subroutine */ int zzgfocu_0_(int n__, char *occtyp, char *front, char *
@@ -42,9 +42,10 @@ static doublereal c_b199 = 1e-12;
 	    );
     extern doublereal vsep_(doublereal *, doublereal *);
     extern /* Subroutine */ int vsub_(doublereal *, doublereal *, doublereal *
-	    ), zzminrad_(doublereal *), zzcorepc_(char *, doublereal *, 
-	    doublereal *, doublereal *, ftnlen), zzmaxrad_(doublereal *), 
-	    zzvalcor_(char *, logical *, ftnlen);
+	    ), zzgftreb_(integer *, doublereal *), zzminrad_(doublereal *), 
+	    zzcorepc_(char *, doublereal *, doublereal *, doublereal *, 
+	    ftnlen), zzmaxrad_(doublereal *), zzvalcor_(char *, logical *, 
+	    ftnlen);
     doublereal t2sep;
     extern /* Subroutine */ int zzsudski_(integer *, integer *, integer *, 
 	    integer *);
@@ -52,7 +53,6 @@ static doublereal c_b199 = 1e-12;
     extern /* Subroutine */ int zzprsmet_(integer *, char *, integer *, char *
 	    , char *, logical *, integer *, integer *, char *, char *, ftnlen,
 	     ftnlen, ftnlen, ftnlen, ftnlen);
-    integer n;
     doublereal radii[3];
     extern /* Subroutine */ int minad_(doublereal *, integer *, doublereal *, 
 	    integer *), maxad_(doublereal *, integer *, doublereal *, integer 
@@ -64,8 +64,7 @@ static doublereal c_b199 = 1e-12;
     doublereal bdist, fdist;
     integer trgid;
     logical found;
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen), moved_(
-	    doublereal *, integer *, doublereal *);
+    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
     doublereal mtemp[9]	/* was [3][3] */, tdist;
     integer nsurf;
     extern logical eqstr_(char *, char *, ftnlen, ftnlen);
@@ -96,23 +95,22 @@ static doublereal c_b199 = 1e-12;
     logical attblk[15], pntocc, pri;
     extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
 	    ftnlen), setmsg_(char *, ftnlen), suffix_(char *, integer *, char 
-	    *, ftnlen, ftnlen), bodvcd_(integer *, char *, integer *, integer 
-	    *, doublereal *, ftnlen), errint_(char *, integer *, ftnlen), 
-	    namfrm_(char *, integer *, ftnlen), frinfo_(integer *, integer *, 
-	    integer *, integer *, logical *), spkezp_(integer *, doublereal *,
-	     char *, char *, integer *, doublereal *, doublereal *, ftnlen, 
-	    ftnlen), pxform_(char *, char *, doublereal *, doublereal *, 
-	    ftnlen, ftnlen), vminus_(doublereal *, doublereal *), sincpt_(
-	    char *, char *, doublereal *, char *, char *, char *, char *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *, logical *,
-	     ftnlen, ftnlen, ftnlen, ftnlen, ftnlen, ftnlen);
+	    *, ftnlen, ftnlen), namfrm_(char *, integer *, ftnlen), frinfo_(
+	    integer *, integer *, integer *, integer *, logical *), errint_(
+	    char *, integer *, ftnlen), spkezp_(integer *, doublereal *, char 
+	    *, char *, integer *, doublereal *, doublereal *, ftnlen, ftnlen),
+	     pxform_(char *, char *, doublereal *, doublereal *, ftnlen, 
+	    ftnlen), vminus_(doublereal *, doublereal *), sincpt_(char *, 
+	    char *, doublereal *, char *, char *, char *, char *, doublereal *
+	    , doublereal *, doublereal *, doublereal *, logical *, ftnlen, 
+	    ftnlen, ftnlen, ftnlen, ftnlen, ftnlen);
     extern integer zzocced_(doublereal *, doublereal *, doublereal *, 
 	    doublereal *, doublereal *);
 
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
-/*     routines.  Users should not call this routine directly due */
+/*     routines. Users should not call this routine directly due */
 /*     to the volatile nature of this routine. */
 
 /*     This routine contains the entry points that produce the */
@@ -154,9 +152,9 @@ static doublereal c_b199 = 1e-12;
 
 /* $ Keywords */
 
-/*     SEARCH */
 /*     GEOMETRY */
 /*     OCCULTATION */
+/*     SEARCH */
 
 /* $ Declarations */
 
@@ -606,7 +604,7 @@ static doublereal c_b199 = 1e-12;
 
 /* $ Brief_I/O */
 
-/*     VARIABLE  I/O  Entry points */
+/*     VARIABLE  I/O  ENTRY POINTS */
 /*     --------  ---  -------------------------------------------------- */
 /*     OCCTYP     I   ZZGFOCIN */
 /*     FRONT      I   ZZGFOCIN */
@@ -634,69 +632,68 @@ static doublereal c_b199 = 1e-12;
 
 /* $ Exceptions */
 
-/*     See entry points. */
+/*     1)  See entry points. */
 
 /* $ Files */
-
 
 /*     Appropriate SPICE kernels must be loaded by the calling program */
 /*     before this routine is called. */
 
 /*     The following data are required: */
 
-/*        - SPK data: the calling application must load ephemeris data */
-/*          for the target, source and observer that cover the time */
-/*          period specified by the window CNFINE. If aberration */
-/*          corrections are used, the states of the target bodies and of */
-/*          the observer relative to the solar system barycenter must be */
-/*          calculable from the available ephemeris data. Typically */
-/*          ephemeris data */
-/*          are made available by loading one or more SPK files via */
-/*          FURNSH. */
+/*     -  SPK data: the calling application must load ephemeris data */
+/*        for the target, source and observer that cover the time */
+/*        period specified by the window CNFINE. If aberration */
+/*        corrections are used, the states of the target bodies and of */
+/*        the observer relative to the solar system barycenter must be */
+/*        calculable from the available ephemeris data. Typically */
+/*        ephemeris data */
+/*        are made available by loading one or more SPK files via */
+/*        FURNSH. */
 
-/*        - PCK data: bodies modeled as triaxial ellipsoids must have */
-/*          semi-axis lengths provided by variables in the kernel pool. */
-/*          Typically these data are made available by loading a text */
-/*          PCK file via FURNSH. */
+/*     -  PCK data: bodies modeled as triaxial ellipsoids must have */
+/*        semi-axis lengths provided by variables in the kernel pool. */
+/*        Typically these data are made available by loading a text */
+/*        PCK file via FURNSH. */
 
-/*        - FK data: if either of the reference frames designated by */
-/*          BFRAME or FFRAME are not built in to the SPICE system, */
-/*          one or more FKs specifying these frames must be loaded. */
+/*     -  FK data: if either of the reference frames designated by */
+/*        BFRAME or FFRAME are not built in to the SPICE system, */
+/*        one or more FKs specifying these frames must be loaded. */
 
 /*     The following data may be required: */
 
-/*        - DSK data: if either FSHAPE or BSHAPE indicates that DSK */
-/*          data are to be used, DSK files containing topographic data */
-/*          for the target body must be loaded. If a surface list is */
-/*          specified, data for at least one of the listed surfaces must */
-/*          be loaded. */
+/*     -  DSK data: if either FSHAPE or BSHAPE indicates that DSK */
+/*        data are to be used, DSK files containing topographic data */
+/*        for the target body must be loaded. If a surface list is */
+/*        specified, data for at least one of the listed surfaces must */
+/*        be loaded. */
 
-/*        - Surface name-ID associations: if surface names are specified */
-/*          in FSHAPE or BSHAPE, the association of these names with */
-/*          their corresponding surface ID codes must be established by */
-/*          assignments of the kernel variables */
+/*     -  Surface name-ID associations: if surface names are specified */
+/*        in FSHAPE or BSHAPE, the association of these names with */
+/*        their corresponding surface ID codes must be established by */
+/*        assignments of the kernel variables */
 
-/*             NAIF_SURFACE_NAME */
-/*             NAIF_SURFACE_CODE */
-/*             NAIF_SURFACE_BODY */
+/*           NAIF_SURFACE_NAME */
+/*           NAIF_SURFACE_CODE */
+/*           NAIF_SURFACE_BODY */
 
-/*          Normally these associations are made by loading a text */
-/*          kernel containing the necessary assignments. An example */
-/*          of such a set of assignments is */
+/*        Normally these associations are made by loading a text */
+/*        kernel containing the necessary assignments. An example */
+/*        of such a set of assignments is */
 
-/*             NAIF_SURFACE_NAME += 'Mars MEGDR 128 PIXEL/DEG' */
-/*             NAIF_SURFACE_CODE += 1 */
-/*             NAIF_SURFACE_BODY += 499 */
+/*           NAIF_SURFACE_NAME += 'Mars MEGDR 128 PIXEL/DEG' */
+/*           NAIF_SURFACE_CODE += 1 */
+/*           NAIF_SURFACE_BODY += 499 */
 
-/*        - CK data: either of the body-fixed frames to which FFRAME or */
-/*          BFRAME refer might be a CK frame. If so, at least one CK */
-/*          file will be needed to permit transformation of vectors */
-/*          between that frame and the J2000 frame. */
+/*     -  CK data: either of the body-fixed frames to which FFRAME or */
+/*        BFRAME refer might be a CK frame. If so, at least one CK */
+/*        file will be needed to permit transformation of vectors */
+/*        between that frame and the J2000 frame. */
 
-/*        - SCLK data: if a CK file is needed, an associated SCLK */
-/*          kernel is required to enable conversion between encoded SCLK */
-/*          (used to time-tag CK data) and barycentric dynamical time */
-/*          (TDB). */
+/*     -  SCLK data: if a CK file is needed, an associated SCLK */
+/*        kernel is required to enable conversion between encoded SCLK */
+/*        (used to time-tag CK data) and barycentric dynamical time */
+/*        (TDB). */
 
 /*     Kernel data are normally loaded once per program run, NOT every */
 /*     time this routine is called. */
@@ -738,8 +735,8 @@ static doublereal c_b199 = 1e-12;
 
 /* $ Restrictions */
 
-/*     This is a SPICELIB private routine; it should not be called by */
-/*     user applications. */
+/*     1)  This is a SPICELIB private routine; it should not be called by */
+/*         user applications. */
 
 /* $ Literature_References */
 
@@ -747,13 +744,22 @@ static doublereal c_b199 = 1e-12;
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
-/*     L.S. Elson     (JPL) */
-/*     W.L. Taber     (JPL) */
-/*     I.M. Underwood (JPL) */
-/*     E.D. Wright    (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     L.S. Elson         (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 2.1.0, 17-OCT-2021 (EDW) (JDR) */
+
+/*        Body radii accessed from kernel pool using ZZGFTREB in */
+/*        ZZGFOCIN. */
+
+/*        Edited the header of the umbrella routine and all its entry */
+/*        points to comply with NAIF standard. Added $Index_Entries. */
 
 /* -    SPICELIB Version 2.0.0, 21-FEB-2017 (NJB) */
 
@@ -783,6 +789,11 @@ static doublereal c_b199 = 1e-12;
 /*        centered on the correct body. */
 
 /* -    SPICELIB Version 1.0.0, 05-MAR-2009 (NJB) (LSE) (WLT) (IMU) (EDW) */
+
+/* -& */
+/* $ Index_Entries */
+
+/*     solving for occultation states in GF routines */
 
 /* -& */
 
@@ -823,13 +834,13 @@ static doublereal c_b199 = 1e-12;
     sigerr_("SPICE(BOGUSENTRY)", (ftnlen)17);
     chkout_("ZZGFOCU", (ftnlen)7);
     return 0;
-/* $Procedure  ZZGFOCIN ( GF, occultation initialization ) */
+/* $Procedure ZZGFOCIN ( GF, occultation initialization ) */
 
 L_zzgfocin:
 /* $ Abstract */
 
-/*    Perform initialization functions for occultation state */
-/*    determination. */
+/*     Perform initialization functions for occultation state */
+/*     determination. */
 
 /* $ Disclaimer */
 
@@ -866,9 +877,9 @@ L_zzgfocin:
 
 /* $ Keywords */
 
-/*     SEARCH */
 /*     GEOMETRY */
 /*     OCCULTATION */
+/*     SEARCH */
 
 /* $ Declarations */
 
@@ -898,208 +909,207 @@ L_zzgfocin:
 
 /* $ Detailed_Input */
 
+/*     OCCTYP   indicates the type of occultation that is to be found. */
+/*              The full set of possible values of OCCTYP may be used */
+/*              when both target bodies are modeled as ellipsoids. */
+/*              When either target is modeled as a point, OCCTYP must */
+/*              be set to 'ANY' (see description below). */
 
-/*     OCCTYP     indicates the type of occultation that is to be found. */
-/*                The full set of possible values of OCCTYP may be used */
-/*                when both target bodies are modeled as ellipsoids. */
-/*                When either target is modeled as a point, OCCTYP must */
-/*                be set to 'ANY' (see description below). */
-
-/*                Supported values of OCCTYP and corresponding */
-/*                definitions are: */
-
-
-/*                   'FULL'      denotes the full occultation of the */
-/*                               body designated by BACK by the body */
-/*                               designated by FRONT, as seen from the */
-/*                               location of the observer. In other */
-/*                               words, the occulted body is completely */
-/*                               invisible as seen from the observer's */
-/*                               location. */
-
-/*                   'ANNULAR'   denotes an annular occultation: the */
-/*                               body designated by FRONT blocks part */
-/*                               of, but not the limb of, the body */
-/*                               designated by BACK, as seen from the */
-/*                               location of the observer. */
-
-/*                   'PARTIAL'   denotes a partial, non-annular */
-/*                               occultation: the body designated by */
-/*                               FRONT blocks part, but not all, of the */
-/*                               limb of the body designated by BACK, as */
-/*                               seen from the location of the observer. */
-
-/*                   'ANY'       denotes any of the above three types of */
-/*                               occultations: 'PARTIAL', 'ANNULAR', or */
-/*                               'FULL'. */
-
-/*                               'ANY' should be used to search for */
-/*                               times when the body designated by FRONT */
-/*                               blocks any part of the body designated */
-/*                               by BACK. */
-
-/*                               The option 'ANY' must be used if either */
-/*                               the front or back target body is */
-/*                               modeled as a point. */
-
-/*                Case and leading or trailing blanks are not */
-/*                significant in the string OCCTYP. */
+/*              Supported values of OCCTYP and corresponding */
+/*              definitions are: */
 
 
-/*     FRONT      is the name of the target body that occults---that is, */
-/*                passes in front of---the other. Optionally, you may */
-/*                supply the integer NAIF ID code for the body as a */
-/*                string. For example both 'MOON' and '301' are */
-/*                legitimate strings that designate the Moon. */
+/*                 'FULL'      denotes the full occultation of the */
+/*                             body designated by BACK by the body */
+/*                             designated by FRONT, as seen from the */
+/*                             location of the observer. In other */
+/*                             words, the occulted body is completely */
+/*                             invisible as seen from the observer's */
+/*                             location. */
 
-/*                Case and leading or trailing blanks are not */
-/*                significant in the string FRONT. */
+/*                 'ANNULAR'   denotes an annular occultation: the */
+/*                             body designated by FRONT blocks part */
+/*                             of, but not the limb of, the body */
+/*                             designated by BACK, as seen from the */
+/*                             location of the observer. */
 
+/*                 'PARTIAL'   denotes a partial, non-annular */
+/*                             occultation: the body designated by */
+/*                             FRONT blocks part, but not all, of the */
+/*                             limb of the body designated by BACK, as */
+/*                             seen from the location of the observer. */
 
+/*                 'ANY'       denotes any of the above three types of */
+/*                             occultations: 'PARTIAL', 'ANNULAR', or */
+/*                             'FULL'. */
 
-/*     FSHAPE     is a string indicating the geometric model used to */
-/*                represent the shape of the front target body. The */
-/*                supported options are: */
+/*                             'ANY' should be used to search for */
+/*                             times when the body designated by FRONT */
+/*                             blocks any part of the body designated */
+/*                             by BACK. */
 
-/*                   'ELLIPSOID' */
+/*                             The option 'ANY' must be used if either */
+/*                             the front or back target body is */
+/*                             modeled as a point. */
 
-/*                       Use a triaxial ellipsoid model with radius */
-/*                       values provided via the kernel pool. A kernel */
-/*                       variable having a name of the form */
-
-/*                          'BODYnnn_RADII' */
-
-/*                       where nnn represents the NAIF integer code */
-/*                       associated with the body, must be present in */
-/*                       the kernel pool. This variable must be */
-/*                       associated with three numeric values giving the */
-/*                       lengths of the ellipsoid's X, Y, and Z */
-/*                       semi-axes. */
-
-/*                   'POINT' */
-
-/*                       Treat the body as a single point. When a point */
-/*                       target is specified, the occultation type must */
-/*                       be set to 'ANY'. */
-
-/*                   'DSK/UNPRIORITIZED[/SURFACES = <surface list>]' */
-
-/*                       Use topographic data provided by DSK files to */
-/*                       model the body's shape. These data must be */
-/*                       provided by loaded DSK files. */
-
-/*                       The surface list specification is optional. The */
-/*                       syntax of the list is */
-
-/*                          <surface 1> [, <surface 2>...] */
-
-/*                       If present, it indicates that data only for the */
-/*                       listed surfaces are to be used; however, data */
-/*                       need not be available for all surfaces in the */
-/*                       list. If absent, loaded DSK data for any surface */
-/*                       associated with the target body are used. */
-
-/*                       The surface list may contain surface names or */
-/*                       surface ID codes. Names containing blanks must */
-/*                       be delimited by double quotes, for example */
-
-/*                          SURFACES = "Mars MEGDR 128 PIXEL/DEG" */
-
-/*                       If multiple surfaces are specified, their names */
-/*                       or IDs must be separated by commas. */
-
-/*                       See the Particulars section below for details */
-/*                       concerning use of DSK data. */
-
-/*                The combinations of the shapes of the target bodies */
-/*                FRONT and BACK must be one of: */
-
-/*                   One ELLIPSOID, one POINT */
-/*                   Two ELLIPSOIDs */
-/*                   One DSK, one POINT */
-
-/*                Case and leading or trailing blanks are not */
-/*                significant in the string FSHAPE. */
+/*              Case and leading or trailing blanks are not */
+/*              significant in the string OCCTYP. */
 
 
-/*     FFRAME     is the name of the body-fixed, body-centered reference */
-/*                frame associated with the front target body. Examples */
-/*                of such names are 'IAU_SATURN' (for Saturn) and */
-/*                'ITRF93' (for the Earth). */
+/*     FRONT    is the name of the target body that occults---that is, */
+/*              passes in front of---the other. Optionally, you may */
+/*              supply the integer NAIF ID code for the body as a */
+/*              string. For example both 'MOON' and '301' are */
+/*              legitimate strings that designate the Moon. */
 
-/*                If the front target body is modeled as a point, FFRAME */
-/*                should be left blank. */
-
-/*                Case and leading or trailing blanks bracketing a */
-/*                non-blank frame name are not significant in the string */
-/*                FFRAME. */
+/*              Case and leading or trailing blanks are not */
+/*              significant in the string FRONT. */
 
 
-/*     BACK       is the name of the target body that is occulted */
-/*                by---that is, passes in back of---the other. */
-/*                Optionally, you may supply the integer NAIF ID code */
-/*                for the body as a string. For example both 'MOON' and */
-/*                '301' are legitimate strings that designate the Moon. */
 
-/*                Case and leading or trailing blanks are not */
-/*                significant in the string BACK. */
+/*     FSHAPE   is a string indicating the geometric model used to */
+/*              represent the shape of the front target body. The */
+/*              supported options are: */
+
+/*                 'ELLIPSOID' */
+
+/*                     Use a triaxial ellipsoid model with radius */
+/*                     values provided via the kernel pool. A kernel */
+/*                     variable having a name of the form */
+
+/*                        'BODYnnn_RADII' */
+
+/*                     where nnn represents the NAIF integer code */
+/*                     associated with the body, must be present in */
+/*                     the kernel pool. This variable must be */
+/*                     associated with three numeric values giving the */
+/*                     lengths of the ellipsoid's X, Y, and Z */
+/*                     semi-axes. */
+
+/*                 'POINT' */
+
+/*                     Treat the body as a single point. When a point */
+/*                     target is specified, the occultation type must */
+/*                     be set to 'ANY'. */
+
+/*                 'DSK/UNPRIORITIZED[/SURFACES = <surface list>]' */
+
+/*                     Use topographic data provided by DSK files to */
+/*                     model the body's shape. These data must be */
+/*                     provided by loaded DSK files. */
+
+/*                     The surface list specification is optional. The */
+/*                     syntax of the list is */
+
+/*                        <surface 1> [, <surface 2>...] */
+
+/*                     If present, it indicates that data only for the */
+/*                     listed surfaces are to be used; however, data */
+/*                     need not be available for all surfaces in the */
+/*                     list. If absent, loaded DSK data for any surface */
+/*                     associated with the target body are used. */
+
+/*                     The surface list may contain surface names or */
+/*                     surface ID codes. Names containing blanks must */
+/*                     be delimited by double quotes, for example */
+
+/*                        SURFACES = "Mars MEGDR 128 PIXEL/DEG" */
+
+/*                     If multiple surfaces are specified, their names */
+/*                     or IDs must be separated by commas. */
+
+/*                     See the $Particulars section below for details */
+/*                     concerning use of DSK data. */
+
+/*              The combinations of the shapes of the target bodies */
+/*              FRONT and BACK must be one of: */
+
+/*                 One ELLIPSOID, one POINT */
+/*                 Two ELLIPSOIDs */
+/*                 One DSK, one POINT */
+
+/*              Case and leading or trailing blanks are not */
+/*              significant in the string FSHAPE. */
 
 
-/*     BSHAPE     is the shape specification for the body designated */
-/*                by BACK. See the description of FSHAPE above for */
-/*                details. */
+/*     FFRAME   is the name of the body-fixed, body-centered reference */
+/*              frame associated with the front target body. Examples */
+/*              of such names are 'IAU_SATURN' (for Saturn) and */
+/*              'ITRF93' (for the Earth). */
+
+/*              If the front target body is modeled as a point, FFRAME */
+/*              should be left blank. */
+
+/*              Case and leading or trailing blanks bracketing a */
+/*              non-blank frame name are not significant in the string */
+/*              FFRAME. */
 
 
-/*     BFRAME     is the name of the body-fixed, body-centered reference */
-/*                frame associated with the ``back'' target body. */
-/*                Examples of such names are 'IAU_SATURN' (for Saturn) */
-/*                and 'ITRF93' (for the Earth). */
+/*     BACK     is the name of the target body that is occulted */
+/*              by---that is, passes in back of---the other. */
+/*              Optionally, you may supply the integer NAIF ID code */
+/*              for the body as a string. For example both 'MOON' and */
+/*              '301' are legitimate strings that designate the Moon. */
 
-/*                If the back target body is modeled as a point, BFRAME */
-/*                should be left blank. */
-
-/*                Case and leading or trailing blanks bracketing a */
-/*                non-blank frame name are not significant in the string */
-/*                BFRAME. */
+/*              Case and leading or trailing blanks are not */
+/*              significant in the string BACK. */
 
 
-/*     OBSRVR     is the name of the body from which the occultation is */
-/*                observed. Optionally, you may supply the integer NAIF */
-/*                ID code for the body as a string. */
-
-/*                Case and leading or trailing blanks are not */
-/*                significant in the string OBSRVR. */
+/*     BSHAPE   is the shape specification for the body designated */
+/*              by BACK. See the description of FSHAPE above for */
+/*              details. */
 
 
-/*     ABCORR     indicates the aberration corrections to be applied to */
-/*                the state of the target body to account for one-way */
-/*                light time.  Stellar aberration corrections are */
-/*                ignored if specified, since these corrections don't */
-/*                improve the accuracy of the occultation determination. */
+/*     BFRAME   is the name of the body-fixed, body-centered reference */
+/*              frame associated with the ``back'' target body. */
+/*              Examples of such names are 'IAU_SATURN' (for Saturn) */
+/*              and 'ITRF93' (for the Earth). */
 
-/*                See the header of the SPICE routine SPKEZR for a */
-/*                detailed description of the aberration correction */
-/*                options. For convenience, the options supported by */
-/*                this routine are listed below: */
+/*              If the back target body is modeled as a point, BFRAME */
+/*              should be left blank. */
 
-/*                   'NONE'     Apply no correction. */
+/*              Case and leading or trailing blanks bracketing a */
+/*              non-blank frame name are not significant in the string */
+/*              BFRAME. */
 
-/*                   'LT'       "Reception" case:  correct for */
-/*                              one-way light time using a Newtonian */
-/*                              formulation. */
 
-/*                   'CN'       "Reception" case:  converged */
-/*                              Newtonian light time correction. */
+/*     OBSRVR   is the name of the body from which the occultation is */
+/*              observed. Optionally, you may supply the integer NAIF */
+/*              ID code for the body as a string. */
 
-/*                   'XLT'      "Transmission" case:  correct for */
-/*                              one-way light time using a Newtonian */
-/*                              formulation. */
+/*              Case and leading or trailing blanks are not */
+/*              significant in the string OBSRVR. */
 
-/*                   'XCN'      "Transmission" case:  converged */
-/*                              Newtonian light time correction. */
 
-/*                Case and blanks are not significant in the string */
-/*                ABCORR. */
+/*     ABCORR   indicates the aberration corrections to be applied to */
+/*              the state of the target body to account for one-way */
+/*              light time. Stellar aberration corrections are */
+/*              ignored if specified, since these corrections don't */
+/*              improve the accuracy of the occultation determination. */
+
+/*              See the header of the SPICE routine SPKEZR for a */
+/*              detailed description of the aberration correction */
+/*              options. For convenience, the options supported by */
+/*              this routine are listed below: */
+
+/*                 'NONE'     Apply no correction. */
+
+/*                 'LT'       "Reception" case: correct for */
+/*                            one-way light time using a Newtonian */
+/*                            formulation. */
+
+/*                 'CN'       "Reception" case: converged */
+/*                            Newtonian light time correction. */
+
+/*                 'XLT'      "Transmission" case: correct for */
+/*                            one-way light time using a Newtonian */
+/*                            formulation. */
+
+/*                 'XCN'      "Transmission" case: converged */
+/*                            Newtonian light time correction. */
+
+/*              Case and blanks are not significant in the string */
+/*              ABCORR. */
 
 /* $ Detailed_Output */
 
@@ -1117,20 +1127,19 @@ L_zzgfocin:
 
 /*     2)  If either of the target bodies FRONT or BACK coincides with */
 /*         the observer body OBSRVR, or if the targets coincide, */
-/*         the error SPICE(BODIESNOTDISTINCT) will be signaled. */
+/*         the error SPICE(BODIESNOTDISTINCT) is signaled. */
 
 /*     3)  If either of the body model specifiers FSHAPE or BSHAPE */
-/*         is not recognized, the error SPICE(INVALIDSHAPE) will be */
-/*         signaled. */
+/*         is not recognized, the error SPICE(INVALIDSHAPE) is signaled. */
 
 /*     4)  If both of the body model specifiers FSHAPE and BSHAPE */
 /*         specify point targets, the error SPICE(INVALIDSHAPECOMBO) */
-/*         will be signaled. */
+/*         is signaled. */
 
 /*     5)  If one of the target shape arguments FSHAPE and BSHAPE */
 /*         specifies a DSK model, and the other argument does not */
 /*         specify a point target, the error SPICE(INVALIDSHAPECOMBO) */
-/*         will be signaled. */
+/*         is signaled. */
 
 /*     6)  If an unrecognized value of OCCTYP is seen, the error */
 /*         SPICE(INVALIDOCCTYPE) is signaled. */
@@ -1138,36 +1147,36 @@ L_zzgfocin:
 /*     7)  If one target body is modeled as a point and OCCTYP is not */
 /*         set to 'ANY', the error SPICE(BADTYPESHAPECOMBO) is signaled. */
 
-/*     8)  If a target indicated to be an ellipsoid by its shape */
-/*         specification argument does not have three associated */
-/*         positive radii, the error SPICE(DEGENERATECASE) will be */
-/*         signaled. */
-
-/*     9)  If the number of radii associated with a target body is */
-/*         not three, the error SPICE(BADRADIUSCOUNT) will be */
-/*         signaled. */
-
-/*     10) If a target body-fixed reference frame associated with a */
+/*     8)  If a target body-fixed reference frame associated with a */
 /*         non-point target is not recognized, the error */
-/*         SPICE(INVALIDFRAME) will be signaled. */
+/*         SPICE(INVALIDFRAME) is signaled. */
 
-/*     11) If a target body-fixed reference frame is not centered at */
+/*     9)  If a target body-fixed reference frame is not centered at */
 /*         the corresponding target body, the error */
-/*         SPICE(INVALIDFRAME) will be signaled. */
+/*         SPICE(INVALIDFRAME) is signaled. */
 
-/*     12) If the aberration correction string is invalid, the error */
-/*         will be diagnosed by a routine in the call tree of this */
+/*     10) If the aberration correction string is invalid, an error */
+/*         is signaled by a routine in the call tree of this */
 /*         routine. */
 
-/*     13) If either FSHAPE or BSHAPE specifies that the target surface */
+/*     11) If either FSHAPE or BSHAPE specifies that the target surface */
 /*         is represented by DSK data, and no DSK files are loaded for */
-/*         the specified target, the error is signaled by a routine in */
+/*         the specified target, an error is signaled by a routine in */
 /*         the call tree of this routine. */
 
-/*     14) If either FSHAPE or BSHAPE specifies that the target surface */
+/*     12) If either FSHAPE or BSHAPE specifies that the target surface */
 /*         is represented by DSK data, but the shape specification is */
-/*         invalid, the error is signaled by a routine in the call tree */
+/*         invalid, an error is signaled by a routine in the call tree */
 /*         of this routine. */
+
+/*     13) If a body RADII vector has other than exactly thee elements, */
+/*         an error is signaled by a routine in the call tree of this */
+/*         routine. */
+
+/*     14) If a body RADII vector has any element less-than or equal to */
+/*         zero, an error is signaled by a routine in the call tree of */
+/*         this routine. */
+
 /* $ Files */
 
 /*     See the header of the umbrella routine ZZGFOCU. */
@@ -1183,8 +1192,8 @@ L_zzgfocin:
 
 /* $ Restrictions */
 
-/*     This is a SPICELIB private routine; it should not be called by */
-/*     user applications. */
+/*     1)  This is a SPICELIB private routine; it should not be called by */
+/*         user applications. */
 
 /* $ Literature_References */
 
@@ -1192,12 +1201,19 @@ L_zzgfocin:
 
 /* $ Author_and_Institution */
 
-/*     L.S. Elson     (JPL) */
-/*     W.L. Taber     (JPL) */
-/*     N.J. Bachman   (JPL) */
-/*     E.D. Wright    (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     L.S. Elson         (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 2.1.0, 07-SEP-2021 (EDW) (JDR) */
+
+/*        Body radii accessed from kernel pool using ZZGFTREB. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 2.0.0, 21-FEB-2017 (NJB) */
 
@@ -1220,9 +1236,9 @@ L_zzgfocin:
 /* -    SPICELIB Version 1.0.0, 15-APR-2009 (LSE) (WLT) (NJB) (EDW) */
 
 /* -& */
-/* $ Revisions */
+/* $ Index_Entries */
 
-/*     None. */
+/*     initialization for occultation state determination */
 
 /* -& */
 
@@ -1399,7 +1415,7 @@ L_zzgfocin:
 	errch_("#", occtyp, (ftnlen)1, occtyp_len);
 	for (i__ = 1; i__ <= 4; ++i__) {
 	    errch_("#", svtyps + ((i__1 = i__ - 1) < 4 && 0 <= i__1 ? i__1 : 
-		    s_rnge("svtyps", i__1, "zzgfocu_", (ftnlen)1095)) * 7, (
+		    s_rnge("svtyps", i__1, "zzgfocu_", (ftnlen)1114)) * 7, (
 		    ftnlen)1, (ftnlen)7);
 	}
 	sigerr_("SPICE(INVALIDOCCTYPE)", (ftnlen)21);
@@ -1473,36 +1489,8 @@ L_zzgfocin:
 
 /*           Fetch and check the radii. */
 
-	    bodvcd_(&trgid, "RADII", &c__3, &n, radii, (ftnlen)5);
+	    zzgftreb_(&trgid, radii);
 	    if (failed_()) {
-		chkout_("ZZGFOCIN", (ftnlen)8);
-		return 0;
-	    }
-
-/*           Check the count of the radii. */
-
-	    if (n != 3) {
-		setmsg_("Target # should have 3 radii but actually has #. Th"
-			"is may be due to an error in a PCK file used to prov"
-			"ide the radii.", (ftnlen)117);
-		errch_("#", posnam, (ftnlen)1, (ftnlen)10);
-		errint_("#", &n, (ftnlen)1);
-		sigerr_("SPICE(BADRADIUSCOUNT)", (ftnlen)21);
-		chkout_("ZZGFOCIN", (ftnlen)8);
-		return 0;
-	    }
-
-/*           Check to make sure the current target has 3 positive */
-/*           semi-axis lengths. */
-
-	    if (radii[0] <= 0. || radii[1] <= 0. || radii[2] <= 0.) {
-		setmsg_("One or more semi-axis lengths of the # target body "
-			"are non-positive: 1 = #, 2 = #, 3 = #. ", (ftnlen)90);
-		errch_("#", posnam, (ftnlen)1, (ftnlen)10);
-		errdp_("#", radii, (ftnlen)1);
-		errdp_("#", &radii[1], (ftnlen)1);
-		errdp_("#", &radii[2], (ftnlen)1);
-		sigerr_("SPICE(DEGENERATECASE)", (ftnlen)21);
 		chkout_("ZZGFOCIN", (ftnlen)8);
 		return 0;
 	    }
@@ -1705,9 +1693,9 @@ L_zzgfocst:
 
 /* $ Keywords */
 
-/*     SEARCH */
 /*     GEOMETRY */
 /*     OCCULTATION */
+/*     SEARCH */
 
 /* $ Declarations */
 
@@ -1724,16 +1712,16 @@ L_zzgfocst:
 
 /* $ Detailed_Input */
 
-/*     TIME       is the epoch of interest in TDB seconds past the */
-/*                J2000 epoch. */
+/*     TIME     is the epoch of interest in TDB seconds past the */
+/*              J2000 epoch. */
 
 /* $ Detailed_Output */
 
-/*     OCSTAT     is a logical flag indicating the state of */
-/*                occultation. If the configuration initialized by */
-/*                ZZGFOCIN is in occultation at the epoch TIME, OCSTAT is */
-/*                returned with the value .TRUE. Otherwise it is */
-/*                returned with the value .FALSE. */
+/*     OCSTAT   is a logical flag indicating the state of */
+/*              occultation. If the configuration initialized by */
+/*              ZZGFOCIN is in occultation at the epoch TIME, OCSTAT is */
+/*              returned with the value .TRUE. Otherwise it is */
+/*              returned with the value .FALSE. */
 
 /* $ Parameters */
 
@@ -1741,30 +1729,30 @@ L_zzgfocst:
 
 /* $ Exceptions */
 
-/*     1) If any SPK lookup fails, the error will be diagnosed by */
-/*        routines in the call tree of this routine. */
+/*     1)  If any SPK lookup fails, an error is signaled by a routine in */
+/*         the call tree of this routine. */
 
-/*     2) If any frame transformation lookup fails, the error will be */
-/*        diagnosed by routines in the call tree of this routine. */
+/*     2)  If any frame transformation lookup fails, an error is signaled */
+/*         by a routine in the call tree of this routine. */
 
-/*     3) If any occultation computation is done for ellipsoidal */
-/*        targets, and if either semi-axis matrix is invalid, the error */
-/*        will be diagnosed by routines in the call tree of this */
-/*        routine. */
+/*     3)  If any occultation computation is done for ellipsoidal */
+/*         targets, and if either semi-axis matrix is invalid, an error */
+/*         is signaled by a routine in the call tree of this */
+/*         routine. */
 
-/*     4) If any two of the bodies defining the occultation geometry */
-/*        intersect, either error SPICE(NOTDISJOINT) will be */
-/*        signaled by this routine, or the error will be diagnosed by */
-/*        routines in the call tree of this routine. */
+/*     4)  If any two of the bodies defining the occultation geometry */
+/*         intersect, either error, the error SPICE(NOTDISJOINT) is */
+/*         signaled by this routine, or, the error is signaled by a */
+/*         routine in the call tree of this routine. */
 
 /*     5)  If the body model specifiers FSHAPE and BSHAPE don't specify */
 /*         either two ellipsoidal targets or one ellipsoidal target and */
 /*         one point target, the error SPICE(INVALIDSHAPECOMBO) */
-/*         will be signaled. */
+/*         is signaled. */
 
 /* $ Files */
 
-/*     See the Files header section of the umbrella routine ZZGFOCU. */
+/*     See the $Files header section of the umbrella routine ZZGFOCU. */
 
 /* $ Particulars */
 
@@ -1778,8 +1766,8 @@ L_zzgfocst:
 
 /* $ Restrictions */
 
-/*     This is a SPICELIB private routine; it should not be called by */
-/*     user applications. */
+/*     1)  This is a SPICELIB private routine; it should not be called by */
+/*         user applications. */
 
 /* $ Literature_References */
 
@@ -1787,12 +1775,17 @@ L_zzgfocst:
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
-/*     L.S. Elson     (JPL) */
-/*     W.L. Taber     (JPL) */
-/*     E.D. Wright    (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     L.S. Elson         (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 2.0.1, 11-SEP-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 2.0.0, 21-FEB-2017 (NJB) */
 
@@ -1807,6 +1800,11 @@ L_zzgfocst:
 /*        Initial updates to support surfaces represented by DSKs. */
 
 /* -    SPICELIB Version 1.0.0, 30-DEC-2008 (NJB) (LSE) (WLT) (EDW) */
+
+/* -& */
+/* $ Index_Entries */
+
+/*     None. */
 
 /* -& */
 
@@ -1857,11 +1855,11 @@ L_zzgfocst:
 
 	for (i__ = 1; i__ <= 3; ++i__) {
 	    vscl_(&svbrad[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(
-		    "svbrad", i__1, "zzgfocu_", (ftnlen)1633)], &mtemp[(i__2 =
+		    "svbrad", i__1, "zzgfocu_", (ftnlen)1626)], &mtemp[(i__2 =
 		     i__ * 3 - 3) < 9 && 0 <= i__2 ? i__2 : s_rnge("mtemp", 
-		    i__2, "zzgfocu_", (ftnlen)1633)], &bsmaxs[(i__3 = i__ * 3 
+		    i__2, "zzgfocu_", (ftnlen)1626)], &bsmaxs[(i__3 = i__ * 3 
 		    - 3) < 9 && 0 <= i__3 ? i__3 : s_rnge("bsmaxs", i__3, 
-		    "zzgfocu_", (ftnlen)1633)]);
+		    "zzgfocu_", (ftnlen)1626)]);
 	}
 	zzcorepc_(svcorr, time, &ltfrnt, &etfcor, (ftnlen)5);
 	pxform_(svffrm, "J2000", &etfcor, mtemp, (ftnlen)32, (ftnlen)5);
@@ -1875,11 +1873,11 @@ L_zzgfocst:
 
 	for (i__ = 1; i__ <= 3; ++i__) {
 	    vscl_(&svfrad[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(
-		    "svfrad", i__1, "zzgfocu_", (ftnlen)1649)], &mtemp[(i__2 =
+		    "svfrad", i__1, "zzgfocu_", (ftnlen)1642)], &mtemp[(i__2 =
 		     i__ * 3 - 3) < 9 && 0 <= i__2 ? i__2 : s_rnge("mtemp", 
-		    i__2, "zzgfocu_", (ftnlen)1649)], &fsmaxs[(i__3 = i__ * 3 
+		    i__2, "zzgfocu_", (ftnlen)1642)], &fsmaxs[(i__3 = i__ * 3 
 		    - 3) < 9 && 0 <= i__3 ? i__3 : s_rnge("fsmaxs", i__3, 
-		    "zzgfocu_", (ftnlen)1649)]);
+		    "zzgfocu_", (ftnlen)1642)]);
 	}
 
 /*        Classify the occultation state of BACK by FRONT as seen from */
@@ -2049,7 +2047,7 @@ L_zzgfocst:
 	}
 	if (srad < tdist) {
 	    d__1 = srad / tdist;
-	    maxang = dasine_(&d__1, &c_b199);
+	    maxang = dasine_(&d__1, &c_b185);
 	    if (failed_()) {
 		chkout_("ZZGFOCST", (ftnlen)8);
 		return 0;
@@ -2076,10 +2074,10 @@ L_zzgfocst:
 
 	if (pntocc) {
 	    d__1 = svmnfr * .98999999999999999 / fdist;
-	    minang = dasine_(&d__1, &c_b199);
+	    minang = dasine_(&d__1, &c_b185);
 	} else {
 	    d__1 = svmnbr * .98999999999999999 / bdist;
-	    minang = dasine_(&d__1, &c_b199);
+	    minang = dasine_(&d__1, &c_b185);
 	}
 	if (failed_()) {
 	    chkout_("ZZGFOCST", (ftnlen)8);

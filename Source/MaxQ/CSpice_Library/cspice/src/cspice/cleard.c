@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      CLEARD ( Clear a double precision array ) */
+/* $Procedure CLEARD ( Clear a double precision array ) */
 /* Subroutine */ int cleard_(integer *ndim, doublereal *array)
 {
     /* System generated locals */
@@ -16,7 +16,7 @@
 
 /* $ Abstract */
 
-/*      Fill a double precision array with zeros. */
+/*     Fill a double precision array with zeros. */
 
 /* $ Disclaimer */
 
@@ -49,72 +49,129 @@
 
 /* $ Keywords */
 
-/*      ARRAY,  ASSIGNMENT */
+/*     ARRAY */
+/*     ASSIGNMENT */
 
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*      VARIABLE  I/O   DESCRIPTION */
-/*      --------  ---  --------------------------------------- */
-/*       NDIM      I    The number of elements of ARRAY which are to be */
-/*                      set to zero. */
-/*       ARRAY     O    Double precision array to be filled. */
+/*     VARIABLE  I/O  DESCRIPTION */
+/*     --------  ---  -------------------------------------------------- */
+/*     NDIM       I   The number of elements of ARRAY which are to be */
+/*                    set to zero. */
+/*     ARRAY      O   Double precision array to be filled. */
 
 /* $ Detailed_Input */
 
-/*      NDIM       is the number of elements in ARRAY which are to be */
-/*                 set to zero. */
+/*     NDIM     is the number of elements in ARRAY which are to be */
+/*              set to zero. */
 
 /* $ Detailed_Output */
 
-/*      ARRAY      is the double precision array which it to be filled */
-/*                 with zeros. */
+/*     ARRAY    is the double precision array which is to be filled */
+/*              with zeros. */
 
 /* $ Parameters */
 
-/*      None. */
-
-/* $ Particulars */
-
-/*      None. */
-
-/* $ Examples */
-
-/*      If NDIM = 4, then the contents of ARRAY are: */
-
-/*      ARRAY (1) = 0.0D0 */
-/*      ARRAY (2) = 0.0D0 */
-/*      ARRAY (3) = 0.0D0 */
-/*      ARRAY (4) = 0.0D0 */
-
-/* $ Restrictions */
-
-/*      None. */
+/*     None. */
 
 /* $ Exceptions */
 
 /*     Error free. */
 
-/*     1) If NDIM < 1, the array is not modified. */
+/*     1)  If NDIM < 1, the array is not modified. */
 
 /* $ Files */
 
-/*      None. */
+/*     None. */
 
-/* $ Author_and_Institution */
+/* $ Particulars */
 
-/*      W.M. Owen       (JPL) */
+/*     None. */
+
+/* $ Examples */
+
+/*     The numerical results shown for this example may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
+
+/*     1) Initialize all members of a double precision array to the */
+/*        same value and clear it afterwards. */
+
+
+/*        Example code begins here. */
+
+
+/*              PROGRAM CLEARD_EX1 */
+/*              IMPLICIT NONE */
+
+/*        C */
+/*        C     Local parameters. */
+/*        C */
+/*              INTEGER               NDIM */
+/*              PARAMETER           ( NDIM = 4 ) */
+
+/*        C */
+/*        C     Local variables. */
+/*        C */
+/*              DOUBLE PRECISION      ARRAY ( NDIM ) */
+
+/*              INTEGER               I */
+
+/*        C */
+/*        C     Initialize all member of the array ARRAY to 11.5, and */
+/*        C     print out its contents. */
+/*        C */
+/*              CALL FILLD ( 11.5D0, NDIM, ARRAY ) */
+
+/*              WRITE(*,'(A)') 'Contents of ARRAY before CLEARD:' */
+/*              WRITE(*,'(4F6.1)') ( ARRAY(I), I=1, NDIM ) */
+
+/*        C */
+/*        C     Clear the contents of ARRAY and print it. */
+/*        C */
+/*              CALL CLEARD ( NDIM, ARRAY ) */
+
+/*              WRITE(*,*) */
+/*              WRITE(*,'(A)') 'Contents of ARRAY after CLEARD:' */
+/*              WRITE(*,'(4F6.1)') ( ARRAY(I), I=1, NDIM ) */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*        Contents of ARRAY before CLEARD: */
+/*          11.5  11.5  11.5  11.5 */
+
+/*        Contents of ARRAY after CLEARD: */
+/*           0.0   0.0   0.0   0.0 */
+
+
+/* $ Restrictions */
+
+/*     None. */
 
 /* $ Literature_References */
 
-/*      None. */
+/*     None. */
+
+/* $ Author_and_Institution */
+
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.M. Owen          (JPL) */
 
 /* $ Version */
 
-/* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+/* -    SPICELIB Version 1.1.0, 29-MAY-2021 (JDR) */
 
-/*        Comment section for permuted index source lines was added */
-/*        following the header. */
+/*        Added IMPLICIT NONE statement. */
+
+/*        Updated the header to comply with NAIF standard. Added */
+/*        full code example. */
 
 /* -    SPICELIB Version 1.0.0, 31-JAN-1990 (WMO) */
 

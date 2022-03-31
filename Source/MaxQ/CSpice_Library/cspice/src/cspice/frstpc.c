@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure            FRSTPC ( First printable character ) */
+/* $Procedure FRSTPC ( First printable character ) */
 integer frstpc_(char *string, ftnlen string_len)
 {
     /* System generated locals */
@@ -54,7 +54,9 @@ integer frstpc_(char *string, ftnlen string_len)
 
 /* $ Keywords */
 
-/*      ASCII, CHARACTER, SEARCH */
+/*     ASCII */
+/*     CHARACTER */
+/*     SEARCH */
 
 /* $ Declarations */
 /* $ Brief_I/O */
@@ -62,66 +64,26 @@ integer frstpc_(char *string, ftnlen string_len)
 /*      VARIABLE  I/O  DESCRIPTION */
 /*      --------  ---  -------------------------------------------------- */
 /*      STRING     I   Input character string. */
-/*      FRSTPC     O   Index of the first printable character in STRING. */
+
+/*     The function returns the index of the first non-blank printable */
+/*     character in STRING. */
 
 /* $ Detailed_Input */
 
-/*      STRING      is the input character string. */
+/*     STRING   is the input character string. */
 
 /* $ Detailed_Output */
 
-/*      FRSTPC      is the index of the first printable character */
-/*                  in the input string. Characters 33-126 are */
-/*                  considered to be printable characters. Blanks */
-/*                  are not considered printable characters. If */
-/*                  the input string contains no printable characters, */
-/*                  FRSTPC is zero. */
+/*     The function returns the index of the first printable character in */
+/*     the input string. */
+
+/*     ASCII characters 33-126 are considered to be printable characters. */
+/*     Blanks are not considered printable characters. If the input */
+/*     string contains no printable characters, FRSTPC is zero. */
 
 /* $ Parameters */
 
-/*      None. */
-
-/* $ Particulars */
-
-/*      This works exactly like FRSTNB, except that it skips */
-/*      non-printable characters (ASCII control characters) as */
-/*      well as blanks. */
-
-/* $ Examples */
-
-/*      The program */
-
-/*         INTEGER         FRSTNB */
-/*         INTEGER         FRSTPC */
-/*         INTEGER         LASTNB */
-/*         INTEGER         LASTPC */
-
-/*         CHARACTER*10    S */
-
-/*         S( 1: 1) = ' ' */
-/*         S( 2: 2) = CHAR (  2 ) */
-/*         S( 3: 3) = CHAR (  3 ) */
-/*         S( 4: 4) = 'A' */
-/*         S( 5: 5) = 'B' */
-/*         S( 6: 6) = 'C' */
-/*         S( 7: 7) = CHAR (  7 ) */
-/*         S( 8: 8) = CHAR (  8 ) */
-/*         S( 9: 9) = CHAR (  9 ) */
-/*         S(10:10) = ' ' */
-
-/*         WRITE (*,*) 'Non-blank from ', FRSTNB(S), ' to ', LASTNB(S) */
-/*         WRITE (*,*) 'Printable from ', FRSTPC(S), ' to ', LASTPC(S) */
-
-/*         END */
-
-/*      produces te following output: */
-
-/*         Non-blank from 2 to 9. */
-/*         Printable from 4 to 6. */
-
-/* $ Restrictions */
-
-/*      None. */
+/*     None. */
 
 /* $ Exceptions */
 
@@ -129,17 +91,67 @@ integer frstpc_(char *string, ftnlen string_len)
 
 /* $ Files */
 
-/*      None. */
+/*     None. */
 
-/* $ Author_and_Institution */
+/* $ Particulars */
 
-/*      I.M. Underwood  (JPL) */
+/*     This works exactly like FRSTNB, except that it skips non-printable */
+/*     characters (ASCII control characters) as well as blanks. */
+
+/* $ Examples */
+
+/*     The program */
+
+/*        INTEGER         FRSTNB */
+/*        INTEGER         FRSTPC */
+/*        INTEGER         LASTNB */
+/*        INTEGER         LASTPC */
+
+/*        CHARACTER*10    S */
+
+/*        S( 1: 1) = ' ' */
+/*        S( 2: 2) = CHAR (  2 ) */
+/*        S( 3: 3) = CHAR (  3 ) */
+/*        S( 4: 4) = 'A' */
+/*        S( 5: 5) = 'B' */
+/*        S( 6: 6) = 'C' */
+/*        S( 7: 7) = CHAR (  7 ) */
+/*        S( 8: 8) = CHAR (  8 ) */
+/*        S( 9: 9) = CHAR (  9 ) */
+/*        S(10:10) = ' ' */
+
+/*        WRITE (*,*) 'Non-blank from ', FRSTNB(S), ' to ', LASTNB(S) */
+/*        WRITE (*,*) 'Printable from ', FRSTPC(S), ' to ', LASTPC(S) */
+
+/*        END */
+
+/*     produces the following output: */
+
+/*        Non-blank from 2 to 9. */
+/*        Printable from 4 to 6. */
+
+/* $ Restrictions */
+
+/*     None. */
 
 /* $ Literature_References */
 
-/*      None. */
+/*     None. */
+
+/* $ Author_and_Institution */
+
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 17-JUN-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. Removed */
+/*        unnecessary $Revisions section. */
 
 /* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
 
@@ -152,13 +164,6 @@ integer frstpc_(char *string, ftnlen string_len)
 /* $ Index_Entries */
 
 /*     first printable character */
-
-/* -& */
-/* $ Revisions */
-
-/* -    Beta Version 1.0.1, 27-JAN-1989 (IMU) */
-
-/*        Examples section completed. */
 
 /* -& */
 

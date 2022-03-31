@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      SCARDI ( Set the cardinality of an integer cell ) */
+/* $Procedure SCARDI ( Set the cardinality of an integer cell ) */
 /* Subroutine */ int scardi_(integer *card, integer *cell)
 {
     extern /* Subroutine */ int chkin_(char *, ftnlen), sigerr_(char *, 
@@ -60,19 +60,29 @@
 
 /* $ Detailed_Input */
 
-/*     CARD        is the cardinality of (number of elements in) the */
-/*                 cell. */
+/*     CARD     is the cardinality of (number of elements in) the */
+/*              cell. */
 
 /* $ Detailed_Output */
 
-/*      CELL        is a cell. */
+/*     CELL     is a cell. */
 
 
-/*                 On output, the cardinality of the cell is CARD. */
+/*                On output, the cardinality of the cell is CARD. */
 
 /* $ Parameters */
 
-/*      None. */
+/*     None. */
+
+/* $ Exceptions */
+
+/*     1)  If the cardinality value supplied is less than 0 or greater */
+/*         than the cell size, the error SPICE(INVALIDCARDINALITY) is */
+/*         signaled. */
+
+/* $ Files */
+
+/*     None. */
 
 /* $ Particulars */
 
@@ -129,18 +139,7 @@
 /*           RETURN */
 /*           END */
 
-
 /* $ Restrictions */
-
-/*     None. */
-
-/* $ Exceptions */
-
-/*     1)  If the cardinality value supplied is less than 0 or greater */
-/*         than the cell size, the error SPICE(INVALIDCARDINALITY) is */
-/*         signalled. */
-
-/* $ Files */
 
 /*     None. */
 
@@ -150,19 +149,26 @@
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     C.A. Curzon     (JPL) */
-/*     W.L. Taber      (JPL) */
-/*     I.M. Underwood  (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     C.A. Curzon        (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 20-AUG-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
 
 /*        Comment section for permuted index source lines was added */
 /*        following the header. */
 
-/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (CAC) (WLT) (IMU) */
+/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (CAC) (WLT) (IMU) (NJB) */
 
 /* -& */
 /* $ Index_Entries */
@@ -174,8 +180,8 @@
 
 /* -    Beta Version 2.0.0, 13-MAR-1989 (NJB) */
 
-/*        Check for invalid cardinality value added.  An error */
-/*        is signalled if the value is out of range.  Examples */
+/*        Check for invalid cardinality value added. An error */
+/*        is signaled if the value is out of range. Examples */
 /*        updated so as not to refer to the EMPTYx routines, and */
 /*        to show the correct calling protocol for EXCESS. */
 

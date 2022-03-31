@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure  INT2HX  ( Integer to signed hexadecimal string ) */
+/* $Procedure INT2HX  ( Integer to signed hexadecimal string ) */
 /* Subroutine */ int int2hx_(integer *number, char *string, integer *length, 
 	ftnlen string_len)
 {
@@ -74,11 +74,11 @@
 
 /* $ Detailed_Input */
 
-/*     NUMBER   The integer to be converted. */
+/*     NUMBER   is the integer to be converted. */
 
 /* $ Detailed_Output */
 
-/*     STRING   The signed hexadecimal string representing the integer */
+/*     STRING   is the signed hexadecimal string representing the integer */
 /*              NUMBER. */
 
 /*              The following table describes the character set used */
@@ -141,8 +141,8 @@
 /*              The character string produced will be blank padded on */
 /*              the right if LENGTH < LEN( STRING ). */
 
-/*     LENGTH   The length of the hexadecimal character string produced */
-/*              by the conversion. */
+/*     LENGTH   is the length of the hexadecimal character string */
+/*              produced by the conversion. */
 
 /* $ Parameters */
 
@@ -152,12 +152,12 @@
 
 /*     Error free. */
 
-/*     1)   If the output character string is not long enough to */
-/*          contain the entire hexadecimal string that was produced, */
-/*          the hexadecimal string will be truncated on the right. */
+/*     1)  If the output character string is not long enough to */
+/*         contain the entire hexadecimal string that was produced, */
+/*         the hexadecimal string will be truncated on the right. */
 
-/*     2)   If LEN( STRING ) > LENGTH, the output character string will */
-/*          be blank padded on the right. */
+/*     2)  If LEN( STRING ) > LENGTH, the output character string will */
+/*         be blank padded on the right. */
 
 /* $ Files */
 
@@ -208,18 +208,25 @@
 
 /* $ Restrictions */
 
-/*     The maximum number of characters permitted in the output string */
-/*     is specified by the local parameter STRLEN. */
-
-/* $ Author_and_Institution */
-
-/*     K.R. Gehringer   (JPL) */
+/*     1)  The maximum number of characters permitted in the output */
+/*         string is specified by the local parameter STRLEN. */
 
 /* $ Literature_References */
 
 /*     None. */
 
+/* $ Author_and_Institution */
+
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
+
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 12-AUG-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.0.0, 22-OCT-1992 (KRG) */
 
@@ -287,7 +294,7 @@
 	    itemp = result;
 	    *(unsigned char *)&tmpstr[begin - 1] = *(unsigned char *)&digits[(
 		    i__1 = remndr) < 16 && 0 <= i__1 ? i__1 : s_rnge("digits",
-		     i__1, "int2hx_", (ftnlen)301)];
+		     i__1, "int2hx_", (ftnlen)309)];
 	}
 
 /*        Put the minus sign in place. */
@@ -307,7 +314,7 @@
 	    itemp = result;
 	    *(unsigned char *)&tmpstr[begin - 1] = *(unsigned char *)&digits[(
 		    i__1 = remndr) < 16 && 0 <= i__1 ? i__1 : s_rnge("digits",
-		     i__1, "int2hx_", (ftnlen)322)];
+		     i__1, "int2hx_", (ftnlen)330)];
 	}
     } else {
 

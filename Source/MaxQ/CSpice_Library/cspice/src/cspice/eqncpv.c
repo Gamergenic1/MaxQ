@@ -9,7 +9,7 @@
 
 static doublereal c_b13 = 1.;
 
-/* $Procedure      EQNCPV (Equinoctial Elements to position and velocity) */
+/* $Procedure EQNCPV (Equinoctial Elements to position and velocity) */
 /* Subroutine */ int eqncpv_(doublereal *et, doublereal *epoch, doublereal *
 	eqel, doublereal *rapol, doublereal *decpol, doublereal *state)
 {
@@ -52,7 +52,7 @@ static doublereal c_b13 = 1.;
 
 /* $ Abstract */
 
-/*     Compute the state (position and velocity of an object whose */
+/*     Compute the state (position and velocity) of an object whose */
 /*     trajectory is described via equinoctial elements relative to some */
 /*     fixed plane (usually the equatorial plane of some planet). */
 
@@ -83,7 +83,7 @@ static doublereal c_b13 = 1.;
 
 /* $ Required_Reading */
 
-/*     None. */
+/*     SPK */
 
 /* $ Keywords */
 
@@ -103,81 +103,92 @@ static doublereal c_b13 = 1.;
 
 /* $ Detailed_Input */
 
-/*     ET         is the epoch (ephemeris time) at which the state */
-/*                of the target body is to be computed. ET is measured */
-/*                in seconds past the J2000 epoch. */
+/*     ET       is the epoch (ephemeris time) at which the state */
+/*              of the target body is to be computed. ET is measured */
+/*              in seconds past the J2000 epoch. */
 
-/*     EPOCH      is the epoch of the equinoctial elements in seconds */
-/*                past the J2000 epoch. */
+/*     EPOCH    is the epoch of the equinoctial elements in seconds */
+/*              past the J2000 epoch. */
 
-/*     EQEL       is an array of 9 double precision numbers that */
-/*                are the equinoctial elements for some orbit expressed */
-/*                relative to the equatorial frame of the central body. */
-/*                (The z-axis of the equatorial frame is the direction */
-/*                of the pole of the central body relative to some */
-/*                inertial frame.  The x-axis is given by the cross */
-/*                product of the Z-axis of the inertial frame */
-/*                with the direction of the pole of the central body. */
-/*                The Y-axis completes a right handed frame. */
-/*                (If the z-axis of the equatorial frame is aligned */
-/*                with the z-axis of the inertial frame, then the */
-/*                x-axis of the equatorial frame will be located at */
-/*                90 degrees + RAPOL in the inertial frame.) */
+/*     EQEL     is an array of 9 double precision numbers that are the */
+/*              equinoctial elements for some orbit expressed relative to */
+/*              the equatorial frame of the central body defined as */
 
-/*                The specific arrangement of the elements is spelled */
-/*                out below.  The following terms are used in the */
-/*                discussion of elements of EQEL */
+/*              -  The Z-axis of the equatorial frame is the direction */
+/*                 of the pole of the central body relative to some */
+/*                 inertial frame; */
 
-/*                    INC  --- inclination of the orbit */
-/*                    ARGP --- argument of periapse */
-/*                    NODE --- longitude of the ascending node */
-/*                    E    --- eccentricity of the orbit */
+/*              -  The X-axis is given by the cross product of the Z-axis */
+/*                 of the inertial frame with the direction of the pole */
+/*                 of the central body; and */
 
-/*                EQEL(1) is the semi-major axis (A) of the orbit in km. */
+/*              -  The Y-axis completes a right handed frame. */
 
-/*                EQEL(2) is the value of H at the specified epoch. */
-/*                        ( E*SIN(ARGP+NODE) ). */
+/*              If the X-axis of the equatorial frame is aligned with the */
+/*              X-axis of the inertial frame, then the X-axis of the */
+/*              equatorial frame will be located at 90 degrees + RAPOL in */
+/*              the inertial frame. */
 
-/*                EQEL(3) is the value of K at the specified epoch */
-/*                        ( E*COS(ARGP+NODE) ). */
+/*              The specific arrangement of the elements is spelled out */
+/*              below: */
 
-/*                EQEL(4) is the mean longitude (MEAN0+ARGP+NODE)at */
-/*                        the epoch of the elements measured in radians. */
+/*                 EQEL(1)   is the semi-major axis (A) of the orbit in */
+/*                           km. */
 
-/*                EQEL(5) is the value of P (TAN(INC/2)*SIN(NODE))at */
-/*                        the specified epoch. */
+/*                 EQEL(2)   is the value of H at the specified epoch. */
+/*                           ( E*SIN(ARGP+NODE) ). */
 
-/*                EQEL(6) is the value of Q (TAN(INC/2)*COS(NODE))at */
-/*                        the specified epoch. */
+/*                 EQEL(3)   is the value of K at the specified epoch */
+/*                           ( E*COS(ARGP+NODE) ). */
 
-/*                EQEL(7) is the rate of the longitude of periapse */
-/*                        (dARGP/dt + dNODE/dt ) at the epoch of */
-/*                        the elements.  This rate is assumed to hold */
-/*                        for all time. The rate is measured in */
-/*                        radians per second. */
+/*                 EQEL(4)   is the mean longitude (MEAN0+ARGP+NODE) at */
+/*                           the epoch of the elements measured in */
+/*                           radians. */
 
-/*                EQEL(8) is the derivative of the mean longitude */
-/*                        ( dM/dt + dARGP/dt + dNODE/dt ).  This */
-/*                        rate is assumed to be constant and is */
-/*                        measured in radians/second. */
+/*                 EQEL(5)   is the value of P (TAN(INC/2)*SIN(NODE)) at */
+/*                           the specified epoch. */
 
-/*                EQEL(9) is the rate of the longitude of the ascending */
-/*                        node ( dNODE/dt).  This rate is measured */
-/*                        in radians per second. */
+/*                 EQEL(6)   is the value of Q (TAN(INC/2)*COS(NODE)) at */
+/*                           the specified epoch. */
 
-/*     RAPOL      Right Ascension of the pole of the reference plane */
-/*                with respect to some inertial frame (measured in */
-/*                radians). */
+/*                 EQEL(7)   is the rate of the longitude of periapse */
+/*                           (dARGP/dt + dNODE/dt ) at the epoch of */
+/*                           the elements. This rate is assumed to hold */
+/*                           for all time. The rate is measured in */
+/*                           radians per second. */
 
-/*     DECPOL     Declination of the pole of the reference plane */
-/*                with respect to some inertial frame (measured in */
-/*                radians). */
+/*                 EQEL(8)   is the derivative of the mean longitude */
+/*                           ( dM/dt + dARGP/dt + dNODE/dt ). This */
+/*                           rate is assumed to be constant and is */
+/*                           measured in radians/second. */
+
+/*                 EQEL(9)   is the rate of the longitude of the */
+/*                           ascending node ( dNODE/dt). This rate is */
+/*                           measured in radians per second. */
+
+/*              where */
+
+/*                 INC       is the inclination of the orbit, */
+
+/*                 ARGP      is the argument of periapse, */
+
+/*                 NODE      is longitude of the ascending node, and */
+
+/*                 E         is eccentricity of the orbit. */
+
+/*     RAPOL    is the Right Ascension of the pole of the reference plane */
+/*              with respect to some inertial frame (measured in */
+/*              radians). */
+
+/*     DECPOL   is the Declination of the pole of the reference plane */
+/*              with respect to some inertial frame (measured in */
+/*              radians). */
 
 /* $ Detailed_Output */
 
-/*     STATE      State of the object described by EQEL relative to the */
-/*                inertial frame used to define RAPOL and DECPOL. Units */
-/*                are in km and km/sec. */
+/*     STATE    is the state of the object described by EQEL relative to */
+/*              the inertial frame used to define RAPOL and DECPOL. Units */
+/*              are in km and km/sec. */
 
 /* $ Parameters */
 
@@ -185,11 +196,11 @@ static doublereal c_b13 = 1.;
 
 /* $ Exceptions */
 
-/*     1) If the eccentricity corresponding to the input elements is */
-/*        greater than 0.9, the error SPICE(ECCOUTOFRANGE) is signalled. */
+/*     1)  If the eccentricity corresponding to the input elements is */
+/*         greater than 0.9, the error SPICE(ECCOUTOFRANGE) is signaled. */
 
-/*     2) If the semi-major axis of the elements is non-positive, the */
-/*        error SPICE(BADSEMIAXIS) is signalled. */
+/*     2)  If the semi-major axis of the elements is non-positive, the */
+/*         error SPICE(BADSEMIAXIS) is signaled. */
 
 /* $ Files */
 
@@ -212,7 +223,7 @@ static doublereal c_b13 = 1.;
 
 /*     By transforming the classical elements */
 /*     this routine can be used to compute the state of the */
-/*     object at an arbitrary epoch.  The code below illustrates */
+/*     object at an arbitrary epoch. The code below illustrates */
 /*     how you might do this. */
 
 /*     The table below illustrates the meanings of the various */
@@ -262,40 +273,47 @@ static doublereal c_b13 = 1.;
 
 /* $ Restrictions */
 
-/*     The equinoctial elements used by this routine are taken */
-/*     from  "Tangent" formulation of equinoctial elements */
+/*     1)  The equinoctial elements used by this routine are taken */
+/*         from  "Tangent" formulation of equinoctial elements */
 
-/*        p = Tan(inclination/2) * Sin(R.A. of ascending node) */
-/*        q = Tan(inclination/2) * Cos(R.A. of ascending node) */
+/*            p = tan(inclination/2) * sin(R.A. of ascending node) */
+/*            q = tan(inclination/2) * cos(R.A. of ascending node) */
 
-/*     Other formulations use Sine instead of Tangent.  We shall */
-/*     call these the "Sine" formulations. */
+/*         Other formulations use Sine instead of Tangent. We shall */
+/*         call these the "Sine" formulations. */
 
-/*        p = Sin(inclination/2) * Sin(R.A. of ascending node) */
-/*        q = Sin(inclination/2) * Cos(R.A. of ascending node) */
+/*            p = sin(inclination/2) * sin(R.A. of ascending node) */
+/*            q = sin(inclination/2) * cos(R.A. of ascending node) */
 
-/*     If you have equinoctial elements from this alternative */
-/*     formulation you should replace p and q  by the */
-/*     expressions below. */
+/*         If you have equinoctial elements from this alternative */
+/*         formulation you should replace p and q  by the */
+/*         expressions below. */
 
-/*       P = P / DSQRT ( 1.0D0 - P*P - Q*Q ) */
-/*       Q = Q / DSQRT ( 1.0D0 - P*P - Q*Q ) */
+/*            P = P / DSQRT ( 1.0D0 - P*P - Q*Q ) */
+/*            Q = Q / DSQRT ( 1.0D0 - P*P - Q*Q ) */
 
-/*     This will convert the Sine formulation to the Tangent formulation. */
+/*         This will convert the Sine formulation to the Tangent */
+/*         formulation. */
 
 /* $ Literature_References */
 
-/*     JPL Engineering Memorandum 314-513 "Optical Navigation Program */
-/*     Mathematical Models" by William M. Owen, Jr. and Robin M Vaughan */
-/*     August 9, 1991 */
+/*     [1]  W. Owen and R. Vaughan, "Optical Navigation Program */
+/*          Mathematical Models," JPL Engineering Memorandum 314-513, */
+/*          August 9, 1991. */
 
 /* $ Author_and_Institution */
 
-/*     W.L. Taber      (JPL) */
-/*     R.A. Jacobson   (JPL) */
-/*     B.V. Semenov    (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     R.A. Jacobson      (JPL) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.0.3, 14-APR-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. Added SPK */
+/*        required reading. */
 
 /* -    SPICELIB Version 1.0.2, 18-MAY-2010 (BVS) */
 
@@ -306,7 +324,7 @@ static doublereal c_b13 = 1.;
 /*        Removed non-standard header section heading */
 /*        'Declarations_of_external_functions'. */
 
-/* -    SPICELIB Version 1.0.0, 8-JAN-1997 (WLT) */
+/* -    SPICELIB Version 1.0.0, 08-JAN-1997 (WLT) (RAJ) */
 
 /* -& */
 /* $ Index_Entries */

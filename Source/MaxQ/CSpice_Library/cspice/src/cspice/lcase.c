@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      LCASE ( Convert to lowercase ) */
+/* $Procedure LCASE ( Convert to lowercase ) */
 /* Subroutine */ int lcase_(char *in, char *out, ftnlen in_len, ftnlen 
 	out_len)
 {
@@ -27,7 +27,7 @@
 
 /* $ Abstract */
 
-/*      Convert the characters in a string to lowercase. */
+/*     Convert the characters in a string to lowercase. */
 
 /* $ Disclaimer */
 
@@ -60,86 +60,100 @@
 
 /* $ Keywords */
 
-/*      ASCII,  CHARACTER */
+/*     ASCII */
+/*     CHARACTER */
 
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*      VARIABLE  I/O  DESCRIPTION */
-/*      --------  ---  -------------------------------------------------- */
-/*      IN         I   Input string. */
-/*      OUT        O   Output string, all lowercase. */
+/*     VARIABLE  I/O  DESCRIPTION */
+/*     --------  ---  -------------------------------------------------- */
+/*     IN         I   Input string. */
+/*     OUT        O   Output string, all lowercase. */
 
 /* $ Detailed_Input */
 
-/*      IN          is the input string. */
+/*     IN       is the input string. */
 
 /* $ Detailed_Output */
 
-/*      OUT         is the output string. This is the input string */
-/*                  with all uppercase letters converted to lowercase. */
-/*                  Non-letters are not affected. */
+/*     OUT      is the output string. This is the input string */
+/*              with all uppercase letters converted to lowercase. */
+/*              Non-letters are not affected. */
 
-/*                  OUT may overwrite IN. */
+/*              OUT may overwrite IN. */
 
 /* $ Parameters */
 
 /*     None. */
 
-/* $ Particulars */
-
-/*      Convert each uppercase character in IN to lowercase. */
-
-/* $ Examples */
-
-/*      'This is an EXAMPLE'     becomes  'this is an example' */
-/*      '12345 +-=? > * $ &'              '12345 +-=? > * $ &' */
-
-/* $ Restrictions */
-
-/*      None. */
-
 /* $ Exceptions */
 
-/*      Error free. */
+/*     Error free. */
+
+/*     1)  If the output string length is less than the input string */
+/*         length, the result will be truncated on the right. */
 
 /* $ Files */
 
-/*      None. */
+/*     None. */
 
-/* $ Author_and_Institution */
+/* $ Particulars */
 
-/*      I.M. Underwood  (JPL) */
+/*     Convert each uppercase character in IN to lowercase. */
+
+/* $ Examples */
+
+/*     'This is an EXAMPLE'     becomes  'this is an example' */
+/*     '12345 +-=? > * $ &'              '12345 +-=? > * $ &' */
+
+/* $ Restrictions */
+
+/*     None. */
 
 /* $ Literature_References */
 
-/*      K.R. Gehringer  (JPL) */
-/*      None. */
+/*     None. */
+
+/* $ Author_and_Institution */
+
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
 
-/* -     SPICELIB Version 1.1.0, 13-MAR-1996 (KRG) */
+/* -    SPICELIB Version 1.2.0, 04-AUG-2021 (JDR) */
 
-/*         Removed the calls to the string lexicographic functions. */
+/*        Added IMPLICT NONE statement. */
 
-/*         Modified the algorithm to use the ICHAR() intrinsic function */
-/*         and some local integer storage for the bases of the lower and */
-/*         upper case letters. */
+/*        Edited the header to comply with NAIF standard. */
 
-/*         Added a "FIRST" clause to the code so that the lower and */
-/*         upper case bases and the separation between them are only */
-/*         initialized the first time the subroutine is called rather */
-/*         than every time. */
+/*        Added entry #1 in $Exceptions section. */
 
-/*         These changes were made to improve the execution speed of */
-/*         the subroutine */
+/* -    SPICELIB Version 1.1.0, 13-MAR-1996 (KRG) */
 
-/* -     SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+/*        Removed the calls to the string lexicographic functions. */
 
-/*         Comment section for permuted index source lines was added */
-/*         following the header. */
+/*        Modified the algorithm to use the ICHAR() intrinsic function */
+/*        and some local integer storage for the bases of the lower and */
+/*        upper case letters. */
 
-/* -     SPICELIB Version 1.0.0, 31-JAN-1990 (IMU) */
+/*        Added a "FIRST" clause to the code so that the lower and */
+/*        upper case bases and the separation between them are only */
+/*        initialized the first time the subroutine is called rather */
+/*        than every time. */
+
+/*        These changes were made to improve the execution speed of */
+/*        the subroutine */
+
+/* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+
+/*        Comment section for permuted index source lines was added */
+/*        following the header. */
+
+/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (IMU) */
 
 /* -& */
 /* $ Index_Entries */

@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure  DACOSH ( Double precision arc hyperbolic cosine ) */
+/* $Procedure DACOSH ( Double precision arc hyperbolic cosine ) */
 doublereal dacosh_(doublereal *x)
 {
     /* System generated locals */
@@ -21,8 +21,8 @@ doublereal dacosh_(doublereal *x)
 
 /* $ Abstract */
 
-/*      Return the inverse hyperbolic cosine of a double */
-/*      precision argument. */
+/*     Return the inverse hyperbolic cosine of a double precision */
+/*     argument. */
 
 /* $ Disclaimer */
 
@@ -55,87 +55,99 @@ doublereal dacosh_(doublereal *x)
 
 /* $ Keywords */
 
-/*      HYPERBOLIC,  MATH */
+/*     HYPERBOLIC */
+/*     MATH */
 
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*      VARIABLE  I/O  DESCRIPTION */
-/*      --------  ---  -------------------------------------------------- */
-/*       X         I   Number whose inverse hyperbolic cosine is desired. */
-/*                     X must be >= 1. */
+/*     VARIABLE  I/O  DESCRIPTION */
+/*     --------  ---  -------------------------------------------------- */
+/*      X         I   Number whose inverse hyperbolic cosine is desired. */
+
+/*     The function returns the inverse hyperbolic cosine of a double */
+/*     precision number. */
 
 /* $ Detailed_Input */
 
-/*      X      is any double precision number greater than or equal to 1. */
+/*     X        is any double precision number greater than or equal to */
+/*              1. */
 
 /* $ Detailed_Output */
 
-/*      DACOSH is the inverse hyperbolic cosine of X. */
+/*     The function returns the inverse hyperbolic cosine of the double */
+/*     precision number X. */
 
 /* $ Parameters */
 
 /*     None. */
 
-/* $ Particulars */
-
-/*      This function simply implements the definition of the inverse */
-/*      hyperbolic cosine as follows: */
-
-/*      DACOSH = DLOG (X + DSQRT (X*X-1.D0)) */
-
-/*      If the input value is not valid, an error is signalled. */
-
-/* $ Examples */
-
-/*      The following table gives a few values for X and the resulting */
-/*      value of DACOSH. */
-
-/*      X                       DACOSH(X) */
-/*      ---------------------------------------------- */
-/*      1.000000000000000      0.0000000000000000E+00 */
-/*      10.00000000000000       2.993222846126381 */
-/*      100.0000000000000       5.298292365610485 */
-/*      1000.000000000000       7.600902209541989 */
-
-/* $ Restrictions */
-
-/*      The value of the input variable X must be greater than or equal */
-/*      to 1.0d0. */
-
 /* $ Exceptions */
 
-/*      1) If X is less than 1.0d0, the error SPICE(INVALIDARGUMENT) is */
-/*         signalled. */
+/*     1)  If X is less than 1.0D0, the error SPICE(INVALIDARGUMENT) is */
+/*         signaled. */
 
 /* $ Files */
 
-/*      None. */
+/*     None. */
 
-/* $ Author_and_Institution */
+/* $ Particulars */
 
-/*      H.A. Neilan     (JPL) */
-/*      W.M. Owen       (JPL) */
+/*     This function simply implements the definition of the inverse */
+/*     hyperbolic cosine as follows: */
+
+/*        DACOSH = DLOG (X + DSQRT (X*X-1.D0)) */
+
+/*     If the input value is not valid, an error is signaled. */
+
+/* $ Examples */
+
+/*     The following table gives a few values for X and the resulting */
+/*     value of DACOSH. */
+
+/*     X                       DACOSH(X) */
+/*     ---------------------------------------------- */
+/*     1.000000000000000      0.0000000000000000E+00 */
+/*     10.00000000000000       2.993222846126381 */
+/*     100.0000000000000       5.298292365610485 */
+/*     1000.000000000000       7.600902209541989 */
+
+/* $ Restrictions */
+
+/*     1)  The value of the input variable X must be greater than or */
+/*         equal to 1.0d0. */
 
 /* $ Literature_References */
 
-/*      Any good book of mathematical tables and formulae, for example */
-/*      the "Standard Mathematical Tables" published by the Chemical */
-/*      Rubber Company. */
+/*     [1]  W.H. Beyer, "CRC Standard Mathematical Tables," CRC Press, */
+/*          1987. */
+
+/* $ Author_and_Institution */
+
+/*     J. Diaz del Rio    (ODC Space) */
+/*     H.A. Neilan        (JPL) */
+/*     W.M. Owen          (JPL) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
 
-/* -     SPICELIB Version 1.1.0, 17-MAY-1994 (HAN) */
+/* -    SPICELIB Version 1.2.0, 17-JUN-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
+
+/* -    SPICELIB Version 1.1.0, 17-MAY-1994 (HAN) */
 
 /*        Set the default function value to either 0, 0.0D0, .FALSE., */
 /*        or blank depending on the type of the function. */
 
-/* -     SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+/* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
 
 /*        Comment section for permuted index source lines was added */
 /*        following the header. */
 
-/* -     SPICELIB Version 1.0.0, 31-JAN-1990 (WMO) */
+/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (WMO) */
 
 /* -& */
 /* $ Index_Entries */

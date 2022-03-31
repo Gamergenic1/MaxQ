@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      LOCATI ( Locate an identifier in a list ) */
+/* $Procedure LOCATI ( Locate an identifier in a list ) */
 /* Subroutine */ int locati_(integer *id, integer *idsz, integer *list, 
 	integer *pool, integer *at, logical *presnt)
 {
@@ -31,11 +31,10 @@
 
 /* $ Abstract */
 
-/*     This routine locates the current location of an identifier */
-/*     within a list or finds a location within the list to */
-/*     store it and then does so.  It returns the location of */
-/*     the identifier and a flag indicating whether or not the */
-/*     identifier was already present. */
+/*     Find a given identifier, which consists of an integer array, */
+/*     within a list of such identifiers, or insert the identifier */
+/*     into the list. Return the location of the identifier and a flag */
+/*     indicating whether or not the identifier was already present. */
 
 /* $ Disclaimer */
 
@@ -64,100 +63,100 @@
 
 /* $ Required_Reading */
 
-/*      None. */
+/*     None. */
 
 /* $ Keywords */
 
-/*       UTILITY */
+/*     UTILITY */
 
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*      VARIABLE  I/O  DESCRIPTION */
-/*      --------  ---  -------------------------------------------------- */
-/*      ID         I   An array of integers that comprise an identifier */
-/*      IDSZ       I   The number of integer components per identifier */
-/*      LIST      I/O  A list of known identifiers */
-/*      POOL      I/O  A doubly linked list used for search the list */
-/*      AT        I/O  Location of the ID in the list */
-/*      PRESNT     O   If ID was already in the list TRUE otherwise FALSE */
+/*     VARIABLE  I/O  DESCRIPTION */
+/*     --------  ---  -------------------------------------------------- */
+/*     ID         I   An array of integers that comprise an identifier. */
+/*     IDSZ       I   The number of integer components per identifier. */
+/*     LIST      I-O  A list of known identifiers. */
+/*     POOL      I-O  A doubly linked list used for search LIST. */
+/*     AT        I-O  Location of the ID in the LIST. */
+/*     PRESNT     O   Flag indicating if ID was already in LIST. */
 
 /* $ Detailed_Input */
 
-/*     ID          is an integer array that serves as an identifier */
-/*                 for some object.  For example it might be a SPICE */
-/*                 id code for a planet or satellite; it might be the */
-/*                 instrument id and mode of operation of an instrument. */
-/*                 See the examples section for more details. */
+/*     ID       is an integer array that serves as an identifier */
+/*              for some object. For example it might be a SPICE */
+/*              id code for a planet or satellite; it might be the */
+/*              instrument id and mode of operation of an instrument. */
+/*              See the $Examples section for more details. */
 
-/*     IDSZ        is the number of components in the array ID. */
+/*     IDSZ     is the number of components in the array ID. */
 
-/*     LIST        is an array containing several ID's.  The array */
-/*                 should be declared so as to have the same upper */
-/*                 bound at least as large as the upper bound used */
-/*                 in the declaration of POOL. */
+/*     LIST     is an array containing several ID's. The array */
+/*              should be declared so as to have the same upper */
+/*              bound at least as large as the upper bound used */
+/*              in the declaration of POOL. */
 
-/*     POOL        is a linked list pool that gives the search order */
-/*                 for examining LIST to locate ID's.  The declaration */
-/*                 of POOL and LIST need to be compatible.  Normally, */
-/*                 the declaration should look like this: */
+/*     POOL     is a linked list pool that gives the search order */
+/*              for examining LIST to locate ID's. The declaration */
+/*              of POOL and LIST need to be compatible. Normally, */
+/*              the declaration should look like this: */
 
-/*                    INTEGER   LIST (IDSZ,         LSTSIZ ) */
-/*                    INTEGER   POOL (   2, LBPOOL: LSTSIZ ) */
+/*                 INTEGER   LIST (IDSZ,         LSTSIZ ) */
+/*                 INTEGER   POOL (   2, LBPOOL: LSTSIZ ) */
 
-/*                 If POOL is declared with the statement */
+/*              If POOL is declared with the statement */
 
-/*                    INTEGER   POOL (   2, LBPOOL: PSIZE  ) */
+/*                 INTEGER   POOL (   2, LBPOOL: PSIZE  ) */
 
-/*                 then you must make sure that PSIZE is less than */
-/*                 or equal to LSTSIZ. */
+/*              then you must make sure that PSIZE is less than */
+/*              or equal to LSTSIZ. */
 
-/*                 POOL should be initialized before the first */
-/*                 call to this routine with the SPICE routine */
-/*                 LNKINI. */
+/*              POOL should be initialized before the first */
+/*              call to this routine with the SPICE routine */
+/*              LNKINI. */
 
-/*     AT          is a value that is set by this routine and that */
-/*                 you should never reset yourself.  It points */
-/*                 to the head of the linked list used for */
-/*                 searching LIST.  Changing AT will destroy the */
-/*                 link between POOL and LIST. */
+/*     AT       is a value that is set by this routine and that */
+/*              you should never reset yourself. It points */
+/*              to the head of the linked list used for */
+/*              searching LIST. Changing AT will destroy the */
+/*              link between POOL and LIST. */
 
-/*                 There is one exception to these restrictions. */
-/*                 The first call to this routine that occurs after */
-/*                 initializing POOL, AT may have any value. It will */
-/*                 be set upon output and from that time on, you should */
-/*                 not alter its value except by calling this routine */
-/*                 to do so. */
+/*              There is one exception to these restrictions. */
+/*              The first call to this routine that occurs after */
+/*              initializing POOL, AT may have any value. It will */
+/*              be set upon output and from that time on, you should */
+/*              not alter its value except by calling this routine */
+/*              to do so. */
 
 /* $ Detailed_Output */
 
-/*     AT          on output AT points to the location in LIST */
-/*                 of ID. */
+/*     AT       on output AT points to the location in LIST */
+/*              of ID. */
 
-/*     PRESNT      is a logical flag.  It indicates whether or not */
-/*                 ID was already present in the LIST when this */
-/*                 routine was called.  If ID was already in LIST */
-/*                 PRESNT is returned with the value TRUE.  Otherwise */
-/*                 it is returned with the value FALSE. */
+/*     PRESNT   is a logical flag. It indicates whether or not */
+/*              ID was already present in the LIST when this */
+/*              routine was called. If ID was already in LIST */
+/*              PRESNT is returned with the value .TRUE. Otherwise */
+/*              it is returned with the value .FALSE. */
 
 /* $ Parameters */
 
-/*      None. */
-
-/* $ Files */
-
-/*      None. */
+/*     None. */
 
 /* $ Exceptions */
 
-/*     1) If the value of AT is less than zero or greater than */
-/*        the declared size of POOL (except immediately after */
-/*        initializing or re-initializing POOL) the */
-/*        error 'SPICE(ADDRESSOUTOFBOUNDS)' will be signalled. */
+/*     1)  If the value of AT is less than zero or greater than */
+/*         the declared size of POOL (except immediately after */
+/*         initializing or re-initializing POOL), the */
+/*         error SPICE(ADDRESSOUTOFBOUNDS) is signaled. */
 
-/*     2) If the linked list pool POOL is corrupted by a higher */
-/*        level routine, a diagnosis of the problem will be */
-/*        made by a routine called by this one. */
+/*     2)  If the linked list pool POOL is corrupted by a higher */
+/*         level routine, a diagnosis of the problem will be */
+/*         made by a routine called by this one. */
+
+/* $ Files */
+
+/*     None. */
 
 /* $ Particulars */
 
@@ -165,7 +164,7 @@
 /*     needed when using a local buffering scheme which removes */
 /*     the last used item when the local buffer becomes full. */
 
-/*     It is primarily a programming utility.  Unless you are dealing */
+/*     It is primarily a programming utility. Unless you are dealing */
 /*     with a problem very similar to the one just described, you */
 /*     probably shouldn't be using this routine. */
 
@@ -178,31 +177,31 @@
 
 /*     Suppose that a routine is being written that will */
 /*     access large amounts of data stored in the SPICE */
-/*     kernel pool.  Kernel pool access requires overhead that */
-/*     may be prohibitive under some circumstances.  Buffering */
+/*     kernel pool. Kernel pool access requires overhead that */
+/*     may be prohibitive under some circumstances. Buffering */
 /*     data locally and only fetching data from the kernel pool */
 /*     when it has not been buffered locally, may substantially */
 /*     improve the performance of the routine being written. */
 
 /*     However, since FORTRAN does not allow dynamic memory allocation */
-/*     the local data storage must be set at compile time.  As */
+/*     the local data storage must be set at compile time. As */
 /*     a result the local data buffer might become full during */
-/*     an execution of your program.  If data for an item needs */
+/*     an execution of your program. If data for an item needs */
 /*     to be fetched from the kernel pool once the buffer has become */
 /*     full, you must either repeatedly call the kernel pool to fetch */
 /*     the new data or overwrite some of the data in your local buffer. */
 
 /*     This routine helps with the decisions of which items to */
-/*     overwrite.  In addition it always moves the last requested */
+/*     overwrite. In addition it always moves the last requested */
 /*     item to the head of the index used for searching the buffered */
-/*     ID's.  In this way if the same item is needed many times */
+/*     ID's. In this way if the same item is needed many times */
 /*     in succession, there will be very little overhead associated */
-/*     with finding the item.  Thus the routine spends its time */
+/*     with finding the item. Thus the routine spends its time */
 /*     in computing the desired quantities, not in looking up the */
 /*     parameters needed for the computation. */
 
 /*     Below is a fragment of code that illustrates how this routine */
-/*     should be used. In the situation outlined above.  We'll suppose */
+/*     should be used. In the situation outlined above. We'll suppose */
 /*     that we are fetching MDLSIZ double precision numbers from the */
 /*     kernel pool that are associated with the item */
 
@@ -260,7 +259,7 @@
 
 /*        IF ( .NOT. PRESNT ) THEN */
 
-/*           The data has not yet been buffered, look it up.  Normally */
+/*           The data has not yet been buffered, look it up. Normally */
 /*           you might want to check to see if the data exists and */
 /*           handle things appropriately if it doesn't but this is just */
 /*           to give you the idea... */
@@ -280,13 +279,13 @@
 /*     There are a few things to note about the code fragment above. */
 /*     First the handling of the buffering of data was very easy. */
 /*     Second, if this routine is called again using the same ID, */
-/*     the buffer will already contain the needed model.  Moreover */
+/*     the buffer will already contain the needed model. Moreover */
 /*     the routine LOCATI will return very quickly because the */
 /*     ID will already be at the head of the list indexed by POOL. */
 
 /*     You can also easily add an entry point to this routine that */
 /*     will force it to look up data from the kernel pool on the */
-/*     next call.  All that needs to be done is re-initialize the */
+/*     next call. All that needs to be done is re-initialize the */
 /*     linked list pool. */
 
 /*        ENTRY DOLOOK */
@@ -297,24 +296,29 @@
 
 /*     None. */
 
-/* $ Author_and_Institution */
-
-/*      N.J. Bachman    (JPL) */
-/*      W.L. Taber      (JPL) */
-
 /* $ Literature_References */
 
-/*      None. */
+/*     None. */
+
+/* $ Author_and_Institution */
+
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
 
+/* -    SPICELIB Version 1.0.2, 26-OCT-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. Updated */
+/*        PRESNT short description in $Brief_I/O section. */
+
 /* -    SPICELIB Version 1.0.1, 24-OCT-2005 (NJB) */
 
-/*        Header update:  changed reference to BODVAR to reference */
+/*        Header update: changed reference to BODVAR to reference */
 /*        to BODVCD. */
 
-/* -    SPICELIB Version 1.0.0, 9-APR-1997 (WLT) */
-
+/* -    SPICELIB Version 1.0.0, 09-APR-1997 (WLT) */
 
 /* -& */
 /* $ Index_Entries */

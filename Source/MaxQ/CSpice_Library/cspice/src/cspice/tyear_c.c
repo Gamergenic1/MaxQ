@@ -3,9 +3,9 @@
 -Procedure tyear_c ( Seconds per tropical year )
 
 -Abstract
- 
-   Return the number of seconds in a tropical year. 
- 
+
+   Return the number of seconds in a tropical year.
+
 -Disclaimer
 
    THIS SOFTWARE AND ANY RELATED MATERIALS WERE CREATED BY THE
@@ -32,91 +32,182 @@
    ACTIONS OF RECIPIENT IN THE USE OF THE SOFTWARE.
 
 -Required_Reading
- 
-None. 
- 
+
+   None.
+
 -Keywords
- 
-   CONSTANTS 
- 
+
+   CONSTANTS
+
 */
 
    #include "SpiceUsr.h"
 
-   SpiceDouble tyear_c ( void ) 
+   SpiceDouble tyear_c ( void )
 
 /*
 
 -Brief_I/O
- 
-   VARIABLE  I/O              DESCRIPTION 
-   --------  ---  -------------------------------------------------- 
-   tyear_c       O   The number of seconds/tropical year 
- 
+
+   The function returns the number of seconds per tropical year.
+
 -Detailed_Input
- 
-   None. 
- 
+
+   None.
+
 -Detailed_Output
- 
-   The function returns the number of seconds per tropical 
-   year.  This value is taken from the 1992 Explanatory Supplement 
-   to the Astronomical Almanac. 
- 
+
+   The function returns the number of seconds per tropical
+   year. This value is taken from the 1992 Explanatory Supplement
+   to the Astronomical Almanac (see [1]).
+
 -Parameters
- 
-   None. 
- 
--Particulars
- 
-   The tropical year is often used as a fundamental unit 
-   of time when dealing with older ephemeris data.  For this 
-   reason its value in terms of ephemeris seconds is 
-   recorded in this function. 
- 
--Examples
- 
-   Suppose you wish to compute the number of tropical centuries 
-   that have elapsed since the ephemeris epoch B1950 (beginning 
-   of the Besselian year 1950) at a particular ET epoch.  The 
-   following line of code will do the trick. 
- 
- 
-      century = ( et - unitim_ ( b1950_c(), "JED", "ET" ) ) 
-                / ( 100.0 * tyear_c() );
- 
- 
--Restrictions
- 
-    None. 
- 
+
+   None.
+
 -Exceptions
- 
-   Error free. 
- 
+
+   Error free.
+
 -Files
- 
-   None. 
- 
--Author_and_Institution
- 
-   W.L. Taber      (JPL) 
-   E.D. Wright     (JPL)
- 
+
+   None.
+
+-Particulars
+
+   The tropical year is often used as a fundamental unit
+   of time when dealing with older ephemeris data. For this
+   reason its value in terms of ephemeris seconds is
+   recorded in this function.
+
+-Examples
+
+   The numerical results shown for these examples may differ across
+   platforms. The results depend on the SPICE kernels used as
+   input, the compiler and supporting libraries, and the machine
+   specific arithmetic implementation.
+
+   1) Display the double precision value of the number of seconds in a
+      tropical year.
+
+      Example code begins here.
+
+
+      /.
+         Program tyear_ex1
+      ./
+      #include <stdio.h>
+      #include "SpiceUsr.h"
+
+      int main( )
+      {
+         /.
+         Display the number of seconds in a tropical year,
+         in 16.3 floating point format
+         ./
+         printf ( "Seconds per tropical year: %20.8f\n", tyear_c() );
+
+         return ( 0 );
+      }
+
+
+      When this program was executed on a Mac/Intel/cc/64-bit
+      platform, the output was:
+
+
+      Seconds per tropical year:    31556925.97470000
+
+
+   2) Suppose you wish to compute the number of tropical centuries
+      that have elapsed since the ephemeris epoch B1950 (beginning
+      of the Besselian year 1950) at a particular UTC epoch.
+
+      Use the LSK kernel below to load the leap seconds and time
+      constants required for the conversions.
+
+         naif0012.tls
+
+
+      Example code begins here.
+
+
+      /.
+         Program tyear_ex2
+      ./
+      #include <stdio.h>
+      #include "SpiceUsr.h"
+
+      int main( )
+      {
+         /.
+         Local constants.
+         ./
+         #define        UTCSTR        "2044-JUL-31"
+
+         /.
+         Local variables.
+         ./
+         SpiceDouble             et;
+         SpiceDouble             centur;
+
+         /.
+         Load the LSK file.
+         ./
+         furnsh_c ( "naif0012.tls" );
+
+         /.
+         Convert input UTC string to Ephemeris Time.
+         ./
+         str2et_c ( UTCSTR, &et );
+         printf ( "Input ephemeris time         : %16.3f\n", et );
+
+
+         centur = ( et - unitim_c ( b1950_c(), "JED", "ET" ) );
+         centur = centur / ( 100.0 * tyear_c() );
+
+         printf ( "Tropical centuries past B1950: %16.10f\n", centur );
+
+         return ( 0 );
+
+      }
+
+
+      When this program was executed on a Mac/Intel/cc/64-bit
+      platform, the output was:
+
+
+      Input ephemeris time         :   1406808069.183
+      Tropical centuries past B1950:     0.9458128731
+
+
+-Restrictions
+
+   None.
+
 -Literature_References
- 
-   Explanatory Supplement to the Astronomical Almanac. 
-   Page 80. University Science Books, 20 Edgehill Road, 
-   Mill Valley, CA 94941 
- 
+
+   [1]  P. Kenneth Seidelmann (Ed.), "Explanatory Supplement to the
+        Astronomical Almanac," p 80, University Science Books, 1992.
+
+-Author_and_Institution
+
+   J. Diaz del Rio     (ODC Space)
+   W.L. Taber          (JPL)
+   E.D. Wright         (JPL)
+
 -Version
 
-   -CSPICE Version 1.0.0, 08-FEB-1998 (EDW)
+   -CSPICE Version 1.0.1, 05-JUL-2021 (JDR)
+
+       Edited the header to comply with NAIF standard. Added
+       complete code examples.
+
+   -CSPICE Version 1.0.0, 08-FEB-1998 (EDW) (WLT)
 
 -Index_Entries
- 
-   Number of seconds per tropical year 
- 
+
+   Number of seconds per tropical year
+
 -&
 */
 

@@ -38,7 +38,9 @@
 
 -Keywords
 
-   ASCII,  CHARACTER,  SEARCH
+   ASCII
+   CHARACTER
+   SEARCH
 
 */
 
@@ -55,20 +57,30 @@
    --------  ---  --------------------------------------------------
    string     I   Input character string.
 
-   The function returns the zero-based index of the last non-blank 
+   The function returns the zero-based index of the last non-blank
    character in a character string.
-   
+
 -Detailed_Input
 
-   string     is the input character string.
+   string      is the input character string.
 
 -Detailed_Output
 
-   The function returns the zero-based index of the last non-blank 
-   character in a character string.  If the string is entirely blank 
+   The function returns the zero-based index of the last non-blank
+   character in a character string. If the string is entirely blank
    or is empty, the value -1 is returned.
-   
+
 -Parameters
+
+   None.
+
+-Exceptions
+
+   1)  If the `string' input string pointer is null, the error
+       SPICE(NULLPOINTER) is signaled. The function returns the value
+       -1.
+
+-Files
 
    None.
 
@@ -102,34 +114,30 @@
 
    None.
 
--Exceptions
-
-    1) If the input string pointer is null, the error 
-       SPICE(NULLPOINTER) will be signaled.
-
--Files
+-Literature_References
 
    None.
 
 -Author_and_Institution
 
-   N.J. Bachman    (JPL)
-   K.R. Gehringer  (JPL)
-   I.M. Underwood  (JPL)
-   E.D. Wright     (JPL)
-   
--Literature_References
-
-   None.
+   N.J. Bachman        (JPL)
+   J. Diaz del Rio     (ODC Space)
+   K.R. Gehringer      (JPL)
+   I.M. Underwood      (JPL)
+   E.D. Wright         (JPL)
 
 -Version
 
-   -CSPICE Version 1.1.0, 27-AUG-1999   (NJB)
+   -CSPICE Version 1.1.1, 10-AUG-2021 (JDR)
 
-      Added check for null input string.  Added some further comments
-      to the Brief_I/O and Detailed_Output header sections.
-      
-   -CSPICE Version 1.0.0, 08-FEB-1998   (KRG) (IMU) (EDW) 
+       Edited the header to comply with NAIF standard.
+
+   -CSPICE Version 1.1.0, 27-AUG-1999 (NJB)
+
+       Added check for null input string. Added some further comments
+       to the -Brief_I/O and -Detailed_Output header sections.
+
+   -CSPICE Version 1.0.0, 08-FEB-1998 (KRG) (IMU) (EDW)
 
 -Index_Entries
 
@@ -151,7 +159,7 @@
    Check the input string pointer to make sure it's non-null.
    */
    CHKPTR_VAL ( CHK_DISCOVER, "lastnb_c", string, -1 );
-   
+
 
    i = strlen(string) - 1;
 

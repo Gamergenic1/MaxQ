@@ -652,7 +652,7 @@
 /*         called by this routine.  The file will not be modified. */
 
 /*     2)  If RECNO is out of range, the error SPICE(INVALIDINDEX) */
-/*         will be signalled.  The file will not be modified. */
+/*         will be signaled.  The file will not be modified. */
 
 /*     3)  If an I/O error occurs while reading or writing the indicated */
 /*         file, the error will be diagnosed by routines called by this */
@@ -696,6 +696,10 @@
 /*     N.J. Bachman   (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.0.1, 03-OCT-2021 (NJB) */
+
+/*        Corrected typos in comments. */
 
 /* -    Beta Version 1.0.0, 27-SEP-1995 (NJB) */
 

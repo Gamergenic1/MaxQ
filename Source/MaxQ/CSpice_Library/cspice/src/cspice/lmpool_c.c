@@ -3,10 +3,10 @@
 -Procedure lmpool_c ( Load variables from memory into the pool )
 
 -Abstract
- 
-   Load the variables contained in an internal buffer into the 
-   kernel pool. 
- 
+
+   Load the variables contained in an internal buffer into the
+   kernel pool.
+
 -Disclaimer
 
    THIS SOFTWARE AND ANY RELATED MATERIALS WERE CREATED BY THE
@@ -33,14 +33,14 @@
    ACTIONS OF RECIPIENT IN THE USE OF THE SOFTWARE.
 
 -Required_Reading
- 
-   KERNEL 
- 
+
+   KERNEL
+
 -Keywords
- 
-   CONSTANTS 
-   FILES 
- 
+
+   CONSTANTS
+   FILES
+
 */
 
    #include "SpiceUsr.h"
@@ -52,83 +52,138 @@
 
 
    void lmpool_c ( const void  * cvals,
-                   SpiceInt      lenvals,
-                   SpiceInt      n       ) 
+                   SpiceInt      cvalen,
+                   SpiceInt      n       )
 
 /*
 
 -Brief_I/O
- 
-   VARIABLE  I/O  DESCRIPTION 
-   --------  ---  -------------------------------------------------- 
+
+   VARIABLE  I/O  DESCRIPTION
+   --------  ---  --------------------------------------------------
    cvals      I   An array that contains a SPICE text kernel.
-   lenvals    I   Length of strings in cvals.
-   n          I   The number of entries in cvals. 
- 
+   cvalen     I   Length of strings in cvals.
+   n          I   The number of entries in cvals.
+
 -Detailed_Input
- 
-   cvals          is an array of strings that contains lines of text 
-                  that could serve as a SPICE text kernel.  cvals is 
-                  declared as follows:
-              
-                     ConstSpiceChar   cvals [n][lenvals]
-              
-                  Each string in cvals is null-terminated.
-              
-   lenvals        is the common length of the strings in cvals,
-                  including the terminating nulls.
-              
-   n              is the number of strings in cvals. 
- 
+
+   cvals       is an array of strings that contains lines of text
+               that could serve as a SPICE text kernel. cvals is
+               declared as follows:
+
+                  ConstSpiceChar   cvals [n][cvalen]
+
+               Each string in cvals is null-terminated.
+
+   cvalen      is the common length of the strings in cvals,
+               including the terminating nulls.
+
+   n           is the number of strings in cvals.
+
 -Detailed_Output
- 
-   None. 
- 
+
+   None.
+
 -Parameters
- 
-   None. 
- 
+
+   None.
+
 -Exceptions
- 
-   1) If the input string pointer is null, the error SPICE(NULLPOINTER) 
-      will be signaled.
 
-   2) If the input string length lenvals is not at least 2, the error
-      SPICE(STRINGTOOLSHORT) will be signaled.
+   1)  If any of the kernel pool variables names or their values, as
+       provided in the input `cvals' array, cannot be parsed, an error
+       is signaled by a routine in the call tree of this routine.
 
-   3) The error 'SPICE(BADVARNAME)' signals if a kernel pool
-      variable name length exceeds 32.
+   2)  If there is no room left in the kernel pool to store all
+       variables present in the input `cvals' array, an error is
+       signaled by a routine in the call tree of this routine.
 
-   4) Other exceptions are diagnosed by routines in the call tree of 
-      this routine.
+   3)  If the length of any kernel pool variable name present in the
+       input `cvals' array exceeds its maximum allowed length (see
+       Kernel Required Reading, kernel.req), an error is signaled by
+       a routine in the call tree of this routine.
+
+   4)  If the `cvals' input array pointer is null, the error
+       SPICE(NULLPOINTER) is signaled.
+
+   5)  If the `cvals' input array strings have length less than two
+       characters, the error SPICE(STRINGTOOSHORT) is signaled.
+
 -Files
- 
-   None. 
- 
+
+   None.
+
 -Particulars
- 
-   This routine allows you to store a text kernel in an internal 
-   array of your program and load this array into the kernel pool 
-   without first storing its contents as a text kernel. 
+
+   This routine allows you to store a text kernel in an internal
+   array of your program and load this array into the kernel pool
+   without first storing its contents as a text kernel.
 
    Kernel pool variable names are restricted to a length of 32
    characters or less.
- 
+
 -Examples
- 
-   Suppose that your application is not particularly sensitive 
-   to the current number of leapseconds but that you would 
-   still like to use a relatively recent leapseconds kernel 
-   without requiring users to load a leapseconds kernel into 
-   the program.  The example below shows how you might set up 
-   the initialization portion of your program. 
- 
+
+   The numerical results shown for this example may differ across
+   platforms. The results depend on the SPICE kernels used as
+   input, the compiler and supporting libraries, and the machine
+   specific arithmetic implementation.
+
+   1) Create an LSK kernel in a text buffer and load the variables
+      contained within the buffer into the kernel pool. Ensure the
+      loaded data exists in the kernel pool. Query the pool for
+      each expected name, and print the size of the variable with
+      that name, and the type of data for that name.
+
+      Convert a UTC time string to ephemeris time to verify that
+      the LSK loaded from the text buffer works as if it was loaded
+      using a furnsh_c call.
+
+
+      Example code begins here.
+
+
+      /.
+         Program lmpool_ex1
+      ./
+      #include <stdio.h>
       #include "SpiceUsr.h"
-      
-      #define LNSIZE          81
-      #define NLINES          27
-      
-      SpiceChar               textbuf[NLINES][LNSIZE] = 
+
+      int main( )
+      {
+
+         /.
+         Local constants.
+         ./
+         #define LNSIZE          81
+         #define NLINES          27
+
+         /.
+         Local variables.
+         ./
+         SpiceBoolean            found;
+
+         SpiceChar               dtype  [ 20 ];
+
+         SpiceInt                i;
+         SpiceInt                n;
+
+         SpiceDouble             et;
+
+
+         /.
+         Kernel pool variable's names.
+         ./
+         SpiceChar             * varnam [] = { "DELTET/DELTA_T_A",
+                                               "DELTET/K",
+                                               "DELTET/EB",
+                                               "DELTET/M",
+                                               "DELTET/DELTA_AT" };
+
+         /.
+         Create a kernel in a text buffer.
+         ./
+         SpiceChar               textbuf[NLINES][LNSIZE] =
                      {
                         "DELTET/DELTA_T_A = 32.184",
                         "DELTET/K         = 1.657D-3",
@@ -158,49 +213,123 @@
                         "                     31, @1997-JUL-1",
                         "                     32, @1999-JAN-1 )"
                      };
-                      
-      lmpool_c ( textbuf, LNSIZE, NLINES );
- 
- 
+
+         /.
+         Load the kernel data into the kernel pool.
+         ./
+         lmpool_c ( textbuf, LNSIZE, NLINES );
+
+         /.
+         Ensure the loaded data exists in the kernel pool.
+         Query the pool for each expected name, size of the
+         variable with that name, and the type of data
+         for that name.
+         ./
+         printf ( "Checking data loaded in the kernel pool...\n");
+         for ( i = 0; i < 5; i++ )
+         {
+            dtpool_c ( varnam[i], &found, &n, dtype );
+
+            if ( found )
+            {
+               printf ( "Found %s\n", varnam[i] );
+               printf ( "   # values assigned to name : %d\n", (int)n );
+               printf ( "   with data type            : %s\n", dtype  );
+            }
+            else
+            {
+               printf ( "Variable '%s' not found in the kernel pool\n",
+                         varnam[i]                                     );
+            }
+
+         }
+
+         /.
+         Convert an UTC string to ephemeris time.
+         ./
+         str2et_c ( "1991-NOV-26", &et );
+         printf ( "\nPerforming time conversion...\n" );
+         printf ( "   Ephemeris time (1991-NOV-26): %f\n", et );
+
+         return ( 0 );
+
+      }
+
+
+      When this program was executed on a Mac/Intel/cc/64-bit
+      platform, the output was:
+
+
+      Checking data loaded in the kernel pool...
+      Found DELTET/DELTA_T_A
+         # values assigned to name : 1
+         with data type            : N
+      Found DELTET/K
+         # values assigned to name : 1
+         with data type            : N
+      Found DELTET/EB
+         # values assigned to name : 1
+         with data type            : N
+      Found DELTET/M
+         # values assigned to name : 2
+         with data type            : N
+      Found DELTET/DELTA_AT
+         # values assigned to name : 46
+         with data type            : N
+
+      Performing time conversion...
+         Ephemeris time (1991-NOV-26): -255614341.817042
+
+
 -Restrictions
- 
-   None. 
- 
+
+   None.
+
 -Literature_References
- 
-   None. 
- 
+
+   None.
+
 -Author_and_Institution
- 
-   N.J. Bachman    (JPL)
-   W.L. Taber      (JPL) 
- 
+
+   N.J. Bachman        (JPL)
+   J. Diaz del Rio     (ODC Space)
+   W.L. Taber          (JPL)
+   E.D. Wright         (JPL)
+
 -Version
 
-   -CSPICE Version 1.3.1,  10-FEB-2010 (EDW)
+   -CSPICE Version 1.4.0, 04-AUG-2021 (JDR)
 
-      Added mention of the restriction on kernel pool variable 
-      names to 32 characters or less.
+       Changed the input argument name "lenvals" to "cvalen" for
+       consistency with other routines.
+
+       Edited the header to comply with NAIF standard. Added complete
+       code example. Extended the -Exceptions section.
+
+   -CSPICE Version 1.3.1, 10-FEB-2010 (EDW)
+
+       Added mention of the restriction on kernel pool variable
+       names to 32 characters or less.
 
    -CSPICE Version 1.3.0, 12-JUL-2002 (NJB)
 
-      Call to C2F_CreateStrArr_Sig replaced with call to C2F_MapStrArr.
+       Call to C2F_CreateStrArr_Sig replaced with call to C2F_MapStrArr.
 
    -CSPICE Version 1.2.0, 28-AUG-2001 (NJB)
 
-      Const-qualified input array.
+       Const-qualified input array.
 
    -CSPICE Version 1.1.0, 14-FEB-2000 (NJB)
 
-       Calls to C2F_CreateStrArr replaced with calls to error-signaling 
+       Calls to C2F_CreateStrArr replaced with calls to error-signaling
        version of this routine:  C2F_CreateStrArr_Sig.
-      
-   -CSPICE Version 1.0.0, 08-JUN-1999 (NJB) (WLT) 
+
+   -CSPICE Version 1.0.0, 08-JUN-1999 (NJB) (WLT)
 
 -Index_Entries
- 
-   Load the kernel pool from an internal text buffer 
- 
+
+   Load the kernel pool from an internal text buffer
+
 -&
 */
 
@@ -224,15 +353,15 @@
 
    /*
    Make sure the input string pointer is non-null and that the
-   length lenvals is sufficient.  
+   length cvalen is sufficient.
    */
-   CHKOSTR ( CHK_STANDARD, "lmpool_c", cvals, lenvals );
+   CHKOSTR ( CHK_STANDARD, "lmpool_c", cvals, cvalen );
 
 
    /*
    Create a Fortran-style string array.
    */
-   C2F_MapStrArr ( "lmpool_c", n, lenvals, cvals, &fCvalsLen, &fCvalsArr );
+   C2F_MapStrArr ( "lmpool_c", n, cvalen, cvals, &fCvalsLen, &fCvalsArr );
 
    if ( failed_c() )
    {
@@ -253,8 +382,7 @@
    Free the dynamically allocated array.
    */
    free ( fCvalsArr );
-   
+
    chkout_c ( "lmpool_c" );
 
 } /* End lmpool_c */
-

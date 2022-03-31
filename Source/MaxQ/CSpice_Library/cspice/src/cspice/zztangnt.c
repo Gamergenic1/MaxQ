@@ -412,7 +412,12 @@ static doublereal c_b9 = 1e-12;
 
 /* $ Version */
 
-/* -     SPICELIB Version 1.0.0 24-AUG-2016 (NJB) */
+/* -     SPICELIB Version 1.1.0, 17-OCT-2021 (NJB) */
+
+/*         Deleted unnecessary declarations of external routines */
+/*         GFBAIL and GFREPU. */
+
+/* -     SPICELIB Version 1.0.0, 24-AUG-2016 (NJB) */
 
 /*           10-FEB-2016 (NJB) */
 

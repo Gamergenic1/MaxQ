@@ -112,7 +112,7 @@ static integer c_b65 = 2500000;
 /* $ Exceptions */
 
 /*     1) If this routine is called directly, the error SPICE(BOGUSENTRY) */
-/*        is signalled. */
+/*        is signaled. */
 
 /*     See the entry points for discussions of exceptions specific to */
 /*     those routines. */
@@ -235,6 +235,10 @@ static integer c_b65 = 2500000;
 /*     N.J. Bachman   (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 3.2.1, 03-OCT-2021 (NJB) */
+
+/*        Corrected typos in comments. */
 
 /* -    SPICELIB Version 3.2.0, 28-JUN-2005 (NJB) */
 
@@ -530,7 +534,7 @@ L_zzekspsh:
 /* $ Exceptions */
 
 /*     1)  If N is non-positive, this routine simply returns.  No error */
-/*         is signalled. */
+/*         is signaled. */
 
 /*     2)  If an I/O error occurs during the data addition, the error */
 /*         will be diagnosed by routines called by this routine. */
@@ -556,7 +560,7 @@ L_zzekspsh:
 /* $ Restrictions */
 
 /*     1)  This routine must execute quickly.  Therefore, it checks in */
-/*         only if it detects an error.  If an error is signalled by a */
+/*         only if it detects an error.  If an error is signaled by a */
 /*         routine called by this routine, this routine will not appear */
 /*         in the SPICELIB traceback display.  Also, in the interest */
 /*         of speed, this routine does not test the value of the SPICELIB */
@@ -571,6 +575,10 @@ L_zzekspsh:
 /*     N.J. Bachman   (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.0.1, 03-OCT-2021 (NJB) */
+
+/*        Corrected typos in comments. */
 
 /* -    Beta Version 1.0.0, 15-JAN-1995 (NJB) */
 
@@ -609,7 +617,7 @@ L_zzekspsh:
 	i__1 = numadd;
 	for (i__ = 1; i__ <= i__1; ++i__) {
 	    scrtch[(i__2 = t + i__ - 1) < 2500000 && 0 <= i__2 ? i__2 : 
-		    s_rnge("scrtch", i__2, "zzeksca_", (ftnlen)624)] = idata[
+		    s_rnge("scrtch", i__2, "zzeksca_", (ftnlen)632)] = idata[
 		    i__ - 1];
 	}
 	t += numadd;
@@ -748,7 +756,7 @@ L_zzekspop:
 
 /*     1)  If N is non-positive or if N is greater than the number of */
 /*         items on the stack, the error SPICE(INVALIDCOUNT) is */
-/*         signalled. */
+/*         signaled. */
 
 /*     2)  If an I/O error occurs during the data read, the error */
 /*         will be diagnosed by routines called by this routine. */
@@ -774,7 +782,7 @@ L_zzekspop:
 /* $ Restrictions */
 
 /*     1)  This routine must execute quickly.  Therefore, it checks in */
-/*         only if it detects an error.  If an error is signalled by a */
+/*         only if it detects an error.  If an error is signaled by a */
 /*         routine called by this routine, this routine will not appear */
 /*         in the SPICELIB traceback display.  Also, in the interest */
 /*         of speed, this routine does not test the value of the SPICELIB */
@@ -789,6 +797,10 @@ L_zzekspop:
 /*     N.J. Bachman   (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.0.1, 03-OCT-2021 (NJB) */
+
+/*        Corrected typos in comments. */
 
 /* -    Beta Version 1.0.0, 10-SEP-1994 (NJB) */
 
@@ -848,7 +860,7 @@ L_zzekspop:
 	for (i__ = 1; i__ <= i__1; ++i__) {
 	    idata[i__ - 1] = scrtch[(i__2 = base + i__ - 1) < 2500000 && 0 <= 
 		    i__2 ? i__2 : s_rnge("scrtch", i__2, "zzeksca_", (ftnlen)
-		    895)];
+		    907)];
 	}
 	if (numrd == *n) {
 	    t -= numrd;
@@ -941,7 +953,7 @@ L_zzeksdec:
 
 /*     1)  If N is non-positive or if N is greater than the number of */
 /*         items on the stack, the error SPICE(INVALIDCOUNT) is */
-/*         signalled. */
+/*         signaled. */
 
 /* $ Files */
 
@@ -961,7 +973,7 @@ L_zzeksdec:
 /* $ Restrictions */
 
 /*     1)  This routine must execute quickly.  Therefore, it checks in */
-/*         only if it detects an error.  If an error is signalled by a */
+/*         only if it detects an error.  If an error is signaled by a */
 /*         routine called by this routine, this routine will not appear */
 /*         in the SPICELIB traceback display.  Also, in the interest */
 /*         of speed, this routine does not test the value of the SPICELIB */
@@ -976,6 +988,10 @@ L_zzeksdec:
 /*     N.J. Bachman   (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.0.1, 03-OCT-2021 (NJB) */
+
+/*        Corrected typos in comments. */
 
 /* -    Beta Version 1.0.0, 10-SEP-1994 (NJB) */
 
@@ -1112,10 +1128,10 @@ L_zzeksupd:
 
 /*     1)  If either of BEG or END are outside of the range 1:TOP, */
 /*         where TOP is the EK scratch area stack top, the error */
-/*         SPICE(INVALIDADDRESS) is signalled. */
+/*         SPICE(INVALIDADDRESS) is signaled. */
 
 /*     2)  If END < BEG, this routine simply returns.  No error */
-/*         is signalled. */
+/*         is signaled. */
 
 /*     3)  If an I/O error occurs during the data addition, the error */
 /*         will be diagnosed by routines called by this routine. */
@@ -1138,7 +1154,7 @@ L_zzeksupd:
 /* $ Restrictions */
 
 /*     1)  This routine must execute quickly.  Therefore, it checks in */
-/*         only if it detects an error.  If an error is signalled by a */
+/*         only if it detects an error.  If an error is signaled by a */
 /*         routine called by this routine, this routine will not appear */
 /*         in the SPICELIB traceback display.  Also, in the interest */
 /*         of speed, this routine does not test the value of the SPICELIB */
@@ -1153,6 +1169,10 @@ L_zzeksupd:
 /*     N.J. Bachman   (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 2.0.1, 03-OCT-2021 (NJB) */
+
+/*        Corrected typos in comments. */
 
 /* -    Beta Version 2.0.0, 23-FEB-1995 (NJB) */
 
@@ -1199,7 +1219,7 @@ L_zzeksupd:
 	i__1 = *end;
 	for (i__ = *beg; i__ <= i__1; ++i__) {
 	    scrtch[(i__2 = i__ - 1) < 2500000 && 0 <= i__2 ? i__2 : s_rnge(
-		    "scrtch", i__2, "zzeksca_", (ftnlen)1296)] = idata[i__ - *
+		    "scrtch", i__2, "zzeksca_", (ftnlen)1316)] = idata[i__ - *
 		    beg];
 	}
     } else if (*beg <= 2500000) {
@@ -1208,7 +1228,7 @@ L_zzeksupd:
 
 	for (i__ = *beg; i__ <= 2500000; ++i__) {
 	    scrtch[(i__1 = i__ - 1) < 2500000 && 0 <= i__1 ? i__1 : s_rnge(
-		    "scrtch", i__1, "zzeksca_", (ftnlen)1305)] = idata[i__ - *
+		    "scrtch", i__1, "zzeksca_", (ftnlen)1325)] = idata[i__ - *
 		    beg];
 	}
 
@@ -1310,10 +1330,10 @@ L_zzeksrd:
 
 /*     1)  If either of BEG or END are outside of the range 1:LAST, */
 /*         where LAST is the last address already in use in the EK */
-/*         scratch area, the error SPICE(INVALIDADDRESS) is signalled. */
+/*         scratch area, the error SPICE(INVALIDADDRESS) is signaled. */
 
 /*     2)  If END < BEG, this routine simply returns.  No error */
-/*         is signalled. */
+/*         is signaled. */
 
 /*     3)  If an I/O error occurs during the read, the error will be */
 /*         diagnosed by routines called by this routine. */
@@ -1340,7 +1360,7 @@ L_zzeksrd:
 /* $ Restrictions */
 
 /*     1)  This routine must execute quickly.  Therefore, it checks in */
-/*         only if it detects an error.  If an error is signalled by a */
+/*         only if it detects an error.  If an error is signaled by a */
 /*         routine called by this routine, this routine will not appear */
 /*         in the SPICELIB traceback display.  Also, in the interest */
 /*         of speed, this routine does not test the value of the SPICELIB */
@@ -1355,6 +1375,10 @@ L_zzeksrd:
 /*     N.J. Bachman   (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.0.1, 03-OCT-2021 (NJB) */
+
+/*        Corrected typos in comments. */
 
 /* -    Beta Version 1.0.0, 23-FEB-1995 (NJB) */
 
@@ -1398,7 +1422,7 @@ L_zzeksrd:
 	for (i__ = *beg; i__ <= i__1; ++i__) {
 	    idata[i__ - *beg] = scrtch[(i__2 = i__ - 1) < 2500000 && 0 <= 
 		    i__2 ? i__2 : s_rnge("scrtch", i__2, "zzeksca_", (ftnlen)
-		    1512)];
+		    1536)];
 	}
     } else if (*beg <= 2500000) {
 
@@ -1407,7 +1431,7 @@ L_zzeksrd:
 	for (i__ = *beg; i__ <= 2500000; ++i__) {
 	    idata[i__ - *beg] = scrtch[(i__1 = i__ - 1) < 2500000 && 0 <= 
 		    i__1 ? i__1 : s_rnge("scrtch", i__1, "zzeksca_", (ftnlen)
-		    1521)];
+		    1545)];
 	}
 
 /*        Now read the rest of the range, which is in the scratch */

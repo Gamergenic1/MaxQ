@@ -3,9 +3,9 @@
 -Procedure psv2pl_c ( Point and spanning vectors to plane )
 
 -Abstract
- 
-   Make a CSPICE plane from a point and two spanning vectors. 
- 
+
+   Make a SPICE plane from a point and two spanning vectors.
+
 -Disclaimer
 
    THIS SOFTWARE AND ANY RELATED MATERIALS WERE CREATED BY THE
@@ -32,15 +32,15 @@
    ACTIONS OF RECIPIENT IN THE USE OF THE SOFTWARE.
 
 -Required_Reading
- 
-   PLANES 
- 
+
+   PLANES
+
 -Keywords
- 
-   GEOMETRY 
-   MATH 
-   PLANE 
- 
+
+   GEOMETRY
+   MATH
+   PLANE
+
 */
 
    #include "SpiceUsr.h"
@@ -50,121 +50,127 @@
    void psv2pl_c ( ConstSpiceDouble    point[3],
                    ConstSpiceDouble    span1[3],
                    ConstSpiceDouble    span2[3],
-                   SpicePlane        * plane    ) 
+                   SpicePlane        * plane    )
+
 /*
 
 -Brief_I/O
- 
-   Variable  I/O  Description 
-   --------  ---  -------------------------------------------------- 
-   point, 
-   span1, 
-   span2      I   A point and two spanning vectors defining a plane. 
-   plane      O   A CSPICE plane representing the plane. 
- 
+
+   VARIABLE  I/O  DESCRIPTION
+   --------  ---  --------------------------------------------------
+   point,
+   span1,
+   span2      I   A point and two spanning vectors defining a plane.
+   plane      O   A SPICE plane representing the plane.
+
 -Detailed_Input
- 
-   point, 
-   span1, 
-   span2          are, respectively, a point and two spanning vectors 
-                  that define a geometric plane in three-dimensional 
-                  space. The plane is the set of vectors 
- 
-                     point   +   s * span1   +   t * span2 
- 
-                  where s and t are real numbers.  The spanning 
-                  vectors span1 and span2 must be linearly 
-                  independent, but they need not be orthogonal or 
-                  unitized. 
- 
+
+   point,
+   span1,
+   span2       are, respectively, a point and two spanning vectors
+               that define a geometric plane in three-dimensional
+               space. The plane is the set of vectors
+
+                  point   +   s * span1   +   t * span2
+
+               where s and t are real numbers. The spanning
+               vectors `span1' and `span2' must be linearly
+               independent, but they need not be orthogonal or
+               unitized.
+
 -Detailed_Output
- 
-   plane          is a CSPICE plane that represents the geometric 
-                  plane defined by point, span1, and span2. 
- 
+
+   plane       is a SPICE plane that represents the geometric
+               plane defined by `point', `span1', and `span2'.
+
 -Parameters
- 
-   None. 
- 
+
+   None.
+
 -Exceptions
- 
-   1)  If span1 and span2 are linearly dependent, then the vectors 
-       point, span1, and span2 do not define a plane.  The error 
-       SPICE(DEGENERATECASE) is signaled. 
- 
+
+   1)  If `span1' and `span2' are linearly dependent, i.e. the vectors
+       `point', `span1', and `span2' do not define a plane, the error
+       SPICE(DEGENERATECASE) is signaled.
+
 -Files
- 
-   None. 
- 
+
+   None.
+
 -Particulars
- 
-   CSPICE geometry routines that deal with planes use the `plane' 
-   data type to represent input and output planes.  This data type 
-   makes the subroutine interfaces simpler and more uniform. 
- 
-   The CSPICE routines that produce CSPICE planes from data that 
-   define a plane are: 
- 
-      nvc2pl_c ( Normal vector and constant to plane ) 
-      nvp2pl_c ( Normal vector and point to plane    ) 
-      psv2pl_c ( Point and spanning vectors to plane ) 
- 
-   The CSPICE routines that convert CSPICE planes to data that 
-   define a plane are: 
- 
-      pl2nvc_c ( Plane to normal vector and constant ) 
-      pl2nvp_c ( Plane to normal vector and point    ) 
-      pl2psv_c ( Plane to point and spanning vectors ) 
- 
-   Any of these last three routines may be used to convert this 
-   routine's output, plane, to another representation of a 
-   geometric plane. 
- 
+
+   CSPICE geometry routines that deal with planes use the `plane'
+   data type to represent input and output planes. This data type
+   makes the routine interfaces simpler and more uniform.
+
+   The CSPICE routines that produce SPICE planes from data that
+   define a plane are:
+
+      nvc2pl_c ( Normal vector and constant to plane )
+      nvp2pl_c ( Normal vector and point to plane    )
+      psv2pl_c ( Point and spanning vectors to plane )
+
+   The CSPICE routines that convert SPICE planes to data that
+   define a plane are:
+
+      pl2nvc_c ( Plane to normal vector and constant )
+      pl2nvp_c ( Plane to normal vector and point    )
+      pl2psv_c ( Plane to point and spanning vectors )
+
+   Any of these last three routines may be used to convert this
+   routine's output, `plane', to another representation of a
+   geometric plane.
+
 -Examples
- 
-   1)  Project a vector v orthogonally onto a plane defined by 
-       point, span1, and span2.  proj is the projection we want; it 
-       is the closest vector in the plane to v. 
- 
-          psv2pl_c ( point,  span1,   span2,  &plane ); 
+
+   1)  Project a vector v orthogonally onto a plane defined by
+       point, span1, and span2. proj is the projection we want; it
+       is the closest vector in the plane to v.
+
+          psv2pl_c ( point,  span1,   span2,  &plane );
           vprjp_c  ( v,      &plane,  proj           );
- 
- 
-   2)  Find the plane determined by a spacecraft's position vector 
-       relative to a central body and the spacecraft's velocity 
-       vector.  We assume that all vectors are given in the same 
-       coordinate system. 
- 
+
+
+   2)  Find the plane determined by a spacecraft's position vector
+       relative to a central body and the spacecraft's velocity
+       vector. We assume that all vectors are given in the same
+       coordinate system.
+
           /.
-          pos is the spacecraft's position, relative to 
-          the central body.  vel is the spacecraft's velocity 
-          vector.  pos is a point (vector, if you like) in 
-          the orbit plane, and it is also one of the spanning 
-          vectors of the plane. 
+          pos is the spacecraft's position, relative to
+          the central body. vel is the spacecraft's velocity
+          vector. pos is a point (vector, if you like) in
+          the orbit plane, and it is also one of the spanning
+          vectors of the plane.
           ./
           psv2pl_c ( pos, pos, vel, &plane );
-           
- 
+
 -Restrictions
- 
-   None. 
- 
+
+   None.
+
 -Literature_References
- 
-   [1] `Calculus and Analytic Geometry', Thomas and Finney. 
- 
+
+   [1]  G. Thomas and R. Finney, "Calculus and Analytic Geometry,"
+        7th Edition, Addison Wesley, 1988.
+
 -Author_and_Institution
- 
-   N.J. Bachman   (JPL) 
- 
+
+   N.J. Bachman        (JPL)
+   J. Diaz del Rio     (ODC Space)
+
 -Version
- 
+
+   -CSPICE Version 1.0.1, 24-AUG-2021 (JDR)
+
+       Edited the header to comply with NAIF standard.
+
    -CSPICE Version 1.0.0, 05-MAR-1999 (NJB)
 
 -Index_Entries
- 
-   point and spanning vectors to plane 
- 
+
+   point and spanning vectors to plane
+
 -&
 */
 
@@ -176,7 +182,7 @@
    This routine checks in only if an error is discovered.
    */
 
-   if ( return_c () ) 
+   if ( return_c () )
    {
       return;
    }
@@ -195,28 +201,27 @@
       chkout_c ( "psv2pl_c"                       );
       return;
    }
- 
- 
+
+
    /*
    Find the plane constant corresponding to the unit normal
    vector we've found.
    */
    plane->constant  =  vdot_c ( plane->normal, point );
- 
- 
+
+
    /*
    The constant should be the distance of the plane from the
    origin.  If the constant is negative, negate both it and the
    normal vector.
    */
-      
-   if ( plane->constant  <  0. ) 
+
+   if ( plane->constant  <  0. )
    {
       plane->constant  =   - (plane->constant);
-      
+
       vminus_c ( plane->normal, plane->normal );
    }
 
 
 } /* End psv2pl_c */
-

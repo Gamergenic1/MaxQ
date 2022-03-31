@@ -1,12 +1,12 @@
 /*
 
--Procedure      q2m_c ( Quaternion to matrix )
+-Procedure q2m_c ( Quaternion to matrix )
 
 -Abstract
- 
-   Find the rotation matrix corresponding to a specified unit 
-   quaternion. 
- 
+
+   Find the rotation matrix corresponding to a specified unit
+   quaternion.
+
 -Disclaimer
 
    THIS SOFTWARE AND ANY RELATED MATERIALS WERE CREATED BY THE
@@ -33,104 +33,109 @@
    ACTIONS OF RECIPIENT IN THE USE OF THE SOFTWARE.
 
 -Required_Reading
- 
-   ROTATION 
- 
+
+   ROTATION
+
 -Keywords
- 
-   MATH 
-   MATRIX 
-   ROTATION 
- 
+
+   MATH
+   MATRIX
+   ROTATION
+
 */
 
    #include "SpiceUsr.h"
    #include "SpiceZfc.h"
    #include "SpiceZim.h"
    #undef    q2m_c
-   
 
-   void q2m_c ( ConstSpiceDouble  q[4], 
-                SpiceDouble       r[3][3] ) 
+
+   void q2m_c ( ConstSpiceDouble  q[4],
+                SpiceDouble       r[3][3] )
+
 /*
 
 -Brief_I/O
- 
-   Variable  I/O  Description 
-   --------  ---  -------------------------------------------------- 
-   q          I   A unit quaternion. 
-   r          O   A rotation matrix corresponding to `q'. 
- 
--Detailed_Input
- 
-   q              is a unit-length SPICE-style quaternion representing
-                  a rotation. `q' has the property that
- 
-                     || q ||  =  1
 
-                  See the discussion of quaternion styles in
-                  Particulars below.
+   VARIABLE  I/O  DESCRIPTION
+   --------  ---  --------------------------------------------------
+   q          I   A unit quaternion.
+   r          O   A rotation matrix corresponding to `q'.
+
+-Detailed_Input
+
+   q           is a unit-length SPICE-style quaternion representing
+               a rotation. `q' has the property that
+
+                  || q ||  =  1
+
+               See the discussion of quaternion styles in
+               -Particulars below.
 
 -Detailed_Output
- 
-   r              is a 3 by 3 rotation matrix representing the same
-                  rotation as does `q'. See the discussion titled
-                  "Associating SPICE Quaternions with Rotation
-                  Matrices" in Particulars below.
- 
+
+   r           is a 3 by 3 rotation matrix representing the same
+               rotation as does `q'. See the discussion titled
+               "Associating SPICE Quaternions with Rotation
+               Matrices" in -Particulars below.
+
 -Parameters
- 
-   None. 
- 
+
+   None.
+
 -Exceptions
- 
-   Error free. 
- 
-   1)  If `q' is not a unit quaternion, the output matrix `r' is 
-       unlikely to be a rotation matrix. 
- 
+
+   Error free.
+
+   1)  If `q' is not a unit quaternion, the output matrix `r' is
+       the rotation matrix that is the result of converting
+       normalized `q' to a rotation matrix.
+
+   2)  If `q' is the zero quaternion, the output matrix `r' is
+       the identity matrix.
+
 -Files
- 
-   None. 
- 
+
+   None.
+
 -Particulars
- 
-   If a 4-dimensional vector `q' satisfies the equality 
- 
-      || q ||   =  1 
- 
-   or equivalently 
- 
-          2          2          2          2 
-      q(0)   +   q(1)   +   q(2)   +   q(3)   =  1, 
- 
+
+   If a 4-dimensional vector `q' satisfies the equality
+
+      || q ||   =  1
+
+   or equivalently
+
+          2          2          2          2
+      q(0)   +   q(1)   +   q(2)   +   q(3)   =  1,
+
    then we can always find a unit vector `q' and a scalar `theta' such
    that
- 
-      q = 
+
+      q =
 
       ( cos(theta/2), sin(theta/2)a(1), sin(theta/2)a(2), sin(theta/2)a(3) )
- 
+
    We can interpret `a' and `theta' as the axis and rotation angle of a
    rotation in 3-space. If we restrict `theta' to the range [0, pi],
    then `theta' and `a' are uniquely determined, except if theta = pi.
    In this special case, `a' and -a are both valid rotation axes.
- 
-   Every rotation is represented by a unique orthogonal matrix; this 
-   routine returns that unique rotation matrix corresponding to `q'. 
- 
-   The CSPICE routine m2q_c is a one-sided inverse of this routine: 
-   given any rotation matrix `r', the calls 
- 
-      m2q_c ( r, q ) 
-      q2m_c ( q, r ) 
- 
-   leave `r' unchanged, except for round-off error.  However, the 
-   calls 
- 
-      q2m_c ( q, r ) 
-      m2q_c ( r, q ) 
- 
+
+   Every rotation is represented by a unique orthogonal matrix; this
+   routine returns that unique rotation matrix corresponding to `q'.
+
+   The CSPICE routine m2q_c is a one-sided inverse of this routine:
+   given any rotation matrix `r', the calls
+
+      m2q_c ( r, q )
+      q2m_c ( q, r )
+
+   leave `r' unchanged, except for round-off error. However, the
+   calls
+
+      q2m_c ( q, r )
+      m2q_c ( r, q )
+
    might preserve `q' or convert `q' to -q.
 
 
@@ -141,12 +146,12 @@
    science and engineering applications. Quaternion styles
    are characterized by
 
-      - The order of quaternion elements
+   -  The order of quaternion elements
 
-      - The quaternion multiplication formula
+   -  The quaternion multiplication formula
 
-      - The convention for associating quaternions
-        with rotation matrices
+   -  The convention for associating quaternions
+      with rotation matrices
 
    Two of the commonly used styles are
 
@@ -266,7 +271,7 @@
                  +-             -+
 
    The vector N of matrix entries (n1, n2, n3) is the rotation axis
-   of M and theta is M's rotation angle.  Note that N and theta
+   of M and theta is M's rotation angle. Note that N and theta
    are not unique.
 
    Let
@@ -330,10 +335,8 @@
    represents the matrix product
 
       M1*M2
- 
- 
+
 -Examples
- 
 
    1)  A case amenable to checking by hand calculation:
 
@@ -367,10 +370,10 @@
               a = ( 0, 0, 1 )
 
           Equivalently, `r' rotates vectors by pi/2 radians in
-          the counterclockwise sense about the axis vector 
+          the counterclockwise sense about the axis vector
 
              -a = ( 0, 0, -1 )
-   
+
           so our definition of `q',
 
              h = theta/2
@@ -383,70 +386,78 @@
              q =  ( cos(pi/4),  0,  0,  -sin(pi/4) )
 
                =  ( sqrt(2)/2,  0,  0,  -sqrt(2)/2 )
- 
- 
-   2)  Finding a set of Euler angles that represent a rotation 
-       specified by a quaternion: 
- 
-          Suppose our rotation `r' is represented by the quaternion 
-          `q'.  To find angles `tau', `alpha', `delta' such that 
- 
- 
-             r  =  [ tau ]  [ pi/2 - delta ]  [ alpha ] 
-                          3                 2          3 
- 
-          we can use the code fragment 
- 
- 
+
+
+   2)  Finding a set of Euler angles that represent a rotation
+       specified by a quaternion:
+
+          Suppose our rotation `r' is represented by the quaternion
+          `q'. To find angles `tau', `alpha', `delta' such that
+
+
+             r  =  [ tau ]  [ pi/2 - delta ]  [ alpha ]
+                          3                 2          3
+
+          we can use the code fragment
+
+
              q2m_c   ( q, r );
              m2eul_c ( r, 3, 2, 3, tau, delta, alpha );
- 
-             delta = halfpi_c() - delta; 
- 
+
+             delta = halfpi_c() - delta;
+
 -Restrictions
- 
-   None. 
- 
+
+   None.
+
 -Literature_References
- 
-   [1]    NAIF document 179.0, "Rotations and their Habits", by 
-          W. L. Taber. 
- 
+
+   None.
+
 -Author_and_Institution
- 
-   N.J. Bachman   (JPL) 
-   E.D. Wright    (JPL)
+
+   N.J. Bachman        (JPL)
+   J. Diaz del Rio     (ODC Space)
+   W.L. Taber          (JPL)
+   E.D. Wright         (JPL)
 
 -Version
- 
+
+   -CSPICE Version 1.3.3, 10-AUG-2021 (JDR)
+
+       Edited the header to comply with NAIF standard. Moved ROTATIONS required
+       reading from -Literature_References to -Required_Reading section.
+
+       Updated entry #1 and added entry #2 to -Exceptions section.
+
    -CSPICE Version 1.3.2, 27-FEB-2008 (NJB)
 
-      Updated header; added information about SPICE quaternion
-      conventions. Made miscellaneous edits throughout header.
+       Updated header; added information about SPICE quaternion
+       conventions. Made miscellaneous edits throughout header.
 
    -CSPICE Version 1.3.1, 06-FEB-2003 (EDW)
 
-       Corrected typo error in Examples section.
+       Corrected typo error in -Examples section.
 
-   -CSPICE Version 1.3.0, 24-JUL-2001   (NJB)
+   -CSPICE Version 1.3.0, 24-JUL-2001 (NJB)
 
-       Changed prototype:  input q is now type (ConstSpiceDouble [4]).
+       Changed prototype: input q is now type (ConstSpiceDouble [4]).
        Implemented interface macro for casting input q to const.
 
    -CSPICE Version 1.2.0, 08-FEB-1998 (NJB)
-   
-      Removed local variables used for temporary capture of outputs.
-      Removed tracing calls, since the underlying Fortran routine
-      is error-free.
 
-   -CSPICE Version 1.0.0, 25-OCT-1997 (NJB)
-   
-      Based on SPICELIB Version 1.0.1, 10-MAR-1992 (WLT)
+       Removed local variables used for temporary capture of outputs.
+       Removed tracing calls, since the underlying Fortran routine
+       is error-free.
+
+   -CSPICE Version 1.0.0, 25-OCT-1997 (NJB) (WLT)
+
+       Based on SPICELIB Version 1.0.1, 10-MAR-1992 (WLT)
 
 -Index_Entries
- 
-   quaternion to matrix 
- 
+
+   quaternion to matrix
+
 -&
 */
 
@@ -458,11 +469,11 @@
    */
    q2m_ ( (doublereal *) q,
           (doublereal *) r );
-          
+
    /*
    Transpose the output matrix to put it in row-major order.
    */
    xpose_c ( r, r );
-          
+
 
 } /* End q2m_c */

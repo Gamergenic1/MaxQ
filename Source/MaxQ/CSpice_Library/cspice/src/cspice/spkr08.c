@@ -10,7 +10,7 @@
 static integer c__2 = 2;
 static integer c__6 = 6;
 
-/* $Procedure      SPKR08 ( Read SPK record from segment, type 8 ) */
+/* $Procedure SPKR08 ( Read SPK record from segment, type 8 ) */
 /* Subroutine */ int spkr08_(integer *handle, doublereal *descr, doublereal *
 	et, doublereal *record)
 {
@@ -86,7 +86,7 @@ static integer c__6 = 6;
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     I   File handle. */
 /*     DESCR      I   Segment descriptor. */
@@ -96,38 +96,38 @@ static integer c__6 = 6;
 /* $ Detailed_Input */
 
 /*     HANDLE, */
-/*     DESCR       are the file handle and segment descriptor for */
-/*                 a SPK segment of type 8. */
+/*     DESCR    are the file handle and segment descriptor for */
+/*              a SPK segment of type 8. */
 
-/*     ET          is a target epoch, for which a data record from */
-/*                 a specific segment is required. */
+/*     ET       is a target epoch, for which a data record from */
+/*              a specific segment is required. */
 
 /* $ Detailed_Output */
 
-/*     RECORD      is a set of data from the specified segment which, */
-/*                 when evaluated at epoch ET, will give the state */
-/*                 (position and velocity) of some body, relative */
-/*                 to some center, in some inertial reference frame. */
+/*     RECORD   is a set of data from the specified segment which, */
+/*              when evaluated at epoch ET, will give the state */
+/*              (position and velocity) of some body, relative */
+/*              to some center, in some inertial reference frame. */
 
-/*                 The structure of the record is as follows: */
+/*              The structure of the record is as follows: */
 
-/*                    +----------------------+ */
-/*                    | number of states (n) | */
-/*                    +----------------------+ */
-/*                    | start epoch          | */
-/*                    +----------------------+ */
-/*                    | step size            | */
-/*                    +----------------------+ */
-/*                    | state 1 (6 elts.)    | */
-/*                    +----------------------+ */
-/*                    | state 2 (6 elts.)    | */
-/*                    +----------------------+ */
-/*                                . */
-/*                                . */
-/*                                . */
-/*                    +----------------------+ */
-/*                    | state n (6 elts.)    | */
-/*                    +----------------------+ */
+/*                 +----------------------+ */
+/*                 | number of states (n) | */
+/*                 +----------------------+ */
+/*                 | start epoch          | */
+/*                 +----------------------+ */
+/*                 | step size            | */
+/*                 +----------------------+ */
+/*                 | state 1 (6 elts.)    | */
+/*                 +----------------------+ */
+/*                 | state 2 (6 elts.)    | */
+/*                 +----------------------+ */
+/*                             . */
+/*                             . */
+/*                             . */
+/*                 +----------------------+ */
+/*                 | state n (6 elts.)    | */
+/*                 +----------------------+ */
 
 /* $ Parameters */
 
@@ -137,17 +137,18 @@ static integer c__6 = 6;
 
 /*     This routine follows the pattern established in the lower-numbered */
 /*     SPK data type readers of not explicitly performing error */
-/*     diagnoses.  Exceptions are listed below nonetheless. */
+/*     diagnoses. Exceptions are listed below nonetheless. */
 
-/*     1)  If the input HANDLE does not designate a loaded SPK file, the */
-/*         error will be diagnosed by routines called by this routine. */
+/*     1)  If the input HANDLE does not designate a loaded SPK file, an */
+/*         error is signaled by a routine in the call tree of this */
+/*         routine. */
 
-/*     2) If the segment specified by DESCR is not of data type 08, */
-/*        the error 'SPICE(WRONGSPKTYPE)' is signalled. */
+/*     2)  If the segment specified by DESCR is not of data type 08, */
+/*         the error SPICE(WRONGSPKTYPE) is signaled. */
 
 /*     3)  If the input ET value is not within the range specified */
 /*         in the segment descriptor, the error SPICE(TIMEOUTOFBOUNDS) */
-/*         is signalled. */
+/*         is signaled. */
 
 /* $ Files */
 
@@ -161,9 +162,9 @@ static integer c__6 = 6;
 /* $ Examples */
 
 /*     The data returned by the SPKRnn routine is in its rawest form, */
-/*     taken directly from the segment.  As such, it will be meaningless */
+/*     taken directly from the segment. As such, it will be meaningless */
 /*     to a user unless he/she understands the structure of the data type */
-/*     completely.  Given that understanding, however, the SPKRxx */
+/*     completely. Given that understanding, however, the SPKRxx */
 /*     routines might be used to "dump" and check segment data for a */
 /*     particular epoch. */
 
@@ -199,9 +200,15 @@ static integer c__6 = 6;
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 2.1.1, 12-AUG-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 2.1.0, 07-SEP-2001 (EDW) */
 
@@ -223,10 +230,7 @@ static integer c__6 = 6;
 /* -& */
 /* $ Index_Entries */
 
-/*     read record from type_8 spk segment */
-
-/* -& */
-/* $ Revisions */
+/*     read record from type_8 SPK segment */
 
 /* -& */
 

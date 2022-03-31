@@ -7,9 +7,10 @@
 
 /* Table of constant values */
 
-static doublereal c_b3 = 1.;
+static doublereal c_b2 = 1.;
+static doublereal c_b3 = 1e-14;
 
-/* $Procedure      VPRJPI ( Vector projection onto plane, inverted ) */
+/* $Procedure VPRJPI ( Vector projection onto plane, inverted ) */
 /* Subroutine */ int vprjpi_(doublereal *vin, doublereal *projpl, doublereal *
 	invpl, doublereal *vout, logical *found)
 {
@@ -23,13 +24,17 @@ static doublereal c_b3 = 1.;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     doublereal denom;
     extern doublereal dpmax_(void);
+    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
     doublereal projc, limit;
     extern /* Subroutine */ int vlcom_(doublereal *, doublereal *, doublereal 
 	    *, doublereal *, doublereal *);
     doublereal numer, projn[3];
+    extern doublereal vnorm_(doublereal *);
     extern /* Subroutine */ int pl2nvc_(doublereal *, doublereal *, 
-	    doublereal *), chkout_(char *, ftnlen);
-    extern logical return_(void);
+	    doublereal *), sigerr_(char *, ftnlen), chkout_(char *, ftnlen), 
+	    setmsg_(char *, ftnlen);
+    extern logical approx_(doublereal *, doublereal *, doublereal *), return_(
+	    void);
 
 /* $ Abstract */
 
@@ -75,50 +80,55 @@ static doublereal c_b3 = 1.;
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     VIN        I   The projected vector. */
 /*     PROJPL     I   Plane containing VIN. */
 /*     INVPL      I   Plane containing inverse image of VIN. */
 /*     VOUT       O   Inverse projection of VIN. */
 /*     FOUND      O   Flag indicating whether VOUT could be calculated. */
+/*     UBPL       P   SPICE plane upper bound. */
 
 /* $ Detailed_Input */
 
 /*     VIN, */
 /*     PROJPL, */
-/*     INVPL          are, respectively, a 3-vector, a SPICELIB plane */
-/*                    containing the vector, and a SPICELIB plane */
-/*                    containing the inverse image of the vector under */
-/*                    orthogonal projection onto PROJPL. */
+/*     INVPL    are, respectively, a 3-vector, a SPICE plane */
+/*              containing the vector, and a SPICE plane */
+/*              containing the inverse image of the vector under */
+/*              orthogonal projection onto PROJPL. */
 
 /* $ Detailed_Output */
 
-/*     VOUT           is the inverse orthogonal projection of VIN.  This */
-/*                    is the vector lying in the plane INVPL whose */
-/*                    orthogonal projection onto the plane PROJPL is */
-/*                    VIN.  VOUT is valid only when FOUND (defined below) */
-/*                    is .TRUE.  Otherwise, VOUT is undefined. */
+/*     VOUT     is the inverse orthogonal projection of VIN. This */
+/*              is the vector lying in the plane INVPL whose */
+/*              orthogonal projection onto the plane PROJPL is */
+/*              VIN. VOUT is valid only when FOUND (defined below) */
+/*              is .TRUE. Otherwise, VOUT is undefined. */
 
-/*     FOUND          indicates whether the inverse orthogonal projection */
-/*                    of VIN could be computed.  FOUND is .TRUE. if so, */
-/*                    .FALSE. otherwise. */
+/*     FOUND    indicates whether the inverse orthogonal projection */
+/*              of VIN could be computed. FOUND is .TRUE. if so, */
+/*              .FALSE. otherwise. */
 
 /* $ Parameters */
 
-/*     None. */
+/*     UBPL     is the upper bound of a SPICE plane array. */
 
 /* $ Exceptions */
 
-/*     1)  If the geometric planes defined by PROJPL and INVPL are */
+/*     1)  If the normal vector of either input plane does not have unit */
+/*         length (allowing for round-off error), the error */
+/*         SPICE(NONUNITNORMAL) is signaled. */
+
+/*     2)  If the geometric planes defined by PROJPL and INVPL are */
 /*         orthogonal, or nearly so, the inverse orthogonal projection */
 /*         of VIN may be undefined or have magnitude too large to */
-/*         represent with double precision numbers.  In either such */
+/*         represent with double precision numbers. In either such */
 /*         case, FOUND will be set to .FALSE. */
 
-/*     2)  Even when FOUND is .TRUE., VOUT may be a vector of extremely */
+/*     3)  Even when FOUND is .TRUE., VOUT may be a vector of extremely */
 /*         large magnitude, perhaps so large that it is impractical to */
-/*         compute with it.  It's up to you to make sure that this */
+/*         compute with it. It's up to you to make sure that this */
 /*         situation does not occur in your application of this routine. */
 
 /* $ Files */
@@ -129,13 +139,13 @@ static doublereal c_b3 = 1.;
 
 /*     Projecting a vector orthogonally onto a plane can be thought of */
 /*     as finding the closest vector in the plane to the original vector. */
-/*     This `closest vector' always exists; it may be coincident with the */
-/*     original vector.  Inverting an orthogonal projection means finding */
+/*     This "closest vector" always exists; it may be coincident with the */
+/*     original vector. Inverting an orthogonal projection means finding */
 /*     the vector in a specified plane whose orthogonal projection onto */
-/*     a second specified plane is a specified vector.  The vector whose */
+/*     a second specified plane is a specified vector. The vector whose */
 /*     projection is the specified vector is the inverse projection of */
-/*     the specified vector, also called the `inverse image under */
-/*     orthogonal projection' of the specified vector.  This routine */
+/*     the specified vector, also called the "inverse image under */
+/*     orthogonal projection" of the specified vector. This routine */
 /*     finds the inverse orthogonal projection of a vector onto a plane. */
 
 /*     Related routines are VPRJP, which projects a vector onto a plane */
@@ -159,7 +169,7 @@ static doublereal c_b3 = 1.;
 
 /*          Then VIN lies on the y-axis in the x-y plane, and we want to */
 /*          find the vector VOUT lying in INVPL such that the orthogonal */
-/*          projection of VOUT the x-y plane is VIN.  Let the notation */
+/*          projection of VOUT the x-y plane is VIN. Let the notation */
 /*          < a, b > indicate the inner product of vectors a and b. */
 /*          Since every point X in INVPL satisfies the equation */
 
@@ -169,14 +179,14 @@ static doublereal c_b3 = 1.;
 
 /*             ( 0.0, 1.0, 1.0 ) */
 
-/*          is in INVPL and differs from VIN by a multiple of PROJN.  So */
+/*          is in INVPL and differs from VIN by a multiple of PROJN. So */
 
 /*             ( 0.0, 1.0, 1.0 ) */
 
 /*          must be VOUT. */
 
 /*          To find this result using SPICELIB, we can create the */
-/*          SPICELIB planes PROJPL and INVPL using the code fragment */
+/*          SPICE planes PROJPL and INVPL using the code fragment */
 
 /*             CALL NVP2PL  ( PROJN,  VIN,   PROJPL ) */
 /*             CALL NVC2PL  ( INVN,   INVC,  INVPL  ) */
@@ -191,17 +201,39 @@ static doublereal c_b3 = 1.;
 
 /* $ Restrictions */
 
-/*     None. */
+/*     1)  It is recommended that the input planes be created by one of */
+/*         the SPICELIB routines */
+
+/*            NVC2PL ( Normal vector and constant to plane ) */
+/*            NVP2PL ( Normal vector and point to plane    ) */
+/*            PSV2PL ( Point and spanning vectors to plane ) */
+
+/*         In any case each input plane must have a unit length normal */
+/*         vector and a plane constant consistent with the normal */
+/*         vector. */
 
 /* $ Literature_References */
 
-/*     [1] `Calculus and Analytic Geometry', Thomas and Finney. */
+/*     [1]  G. Thomas and R. Finney, "Calculus and Analytic Geometry," */
+/*          7th Edition, Addison Wesley, 1988. */
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 2.1.0, 25-AUG-2021 (NJB) (JDR) */
+
+/*        Added error checks for non-unit plane normal vectors. */
+/*        Changed check-in style to discovery. */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
+/*        Added documentation of the parameter UBPL. */
 
 /* -    SPICELIB Version 2.0.0, 17-FEB-2004 (NJB) */
 
@@ -248,6 +280,10 @@ static doublereal c_b3 = 1.;
 /*     BOUND is chosen somewhat arbitrarily.... */
 
 
+/*     Tolerance for deviation from unit length of the normal */
+/*     vector of the input plane. */
+
+
 /*     Local variables */
 
 
@@ -255,8 +291,6 @@ static doublereal c_b3 = 1.;
 
     if (return_()) {
 	return 0;
-    } else {
-	chkin_("VPRJPI", (ftnlen)6);
     }
 
 /*     Unpack the planes. */
@@ -264,12 +298,41 @@ static doublereal c_b3 = 1.;
     pl2nvc_(projpl, projn, &projc);
     pl2nvc_(invpl, invn, &invc);
 
+/*     Check the normal vectors obtained from the planes. */
+
+/*     Each normal vector returned by PL2NVC should be a unit vector. */
+
+    d__1 = vnorm_(projn);
+    if (! approx_(&d__1, &c_b2, &c_b3)) {
+	chkin_("VPRJPI", (ftnlen)6);
+	setmsg_("Normal vector of plane containing input point does not have"
+		" unit length; the difference of the length from 1 is #. The "
+		"input plane is invalid. ", (ftnlen)143);
+	d__1 = vnorm_(projn) - 1.;
+	errdp_("#", &d__1, (ftnlen)1);
+	sigerr_("SPICE(NONUNITNORMAL)", (ftnlen)20);
+	chkout_("VPRJPI", (ftnlen)6);
+	return 0;
+    }
+    d__1 = vnorm_(invn);
+    if (! approx_(&d__1, &c_b2, &c_b3)) {
+	chkin_("VPRJPI", (ftnlen)6);
+	setmsg_("Normal vector of plane containing output point does not hav"
+		"e unit length; the difference of the length from 1 is #. The"
+		" output plane is invalid. ", (ftnlen)145);
+	d__1 = vnorm_(invn) - 1.;
+	errdp_("#", &d__1, (ftnlen)1);
+	sigerr_("SPICE(NONUNITNORMAL)", (ftnlen)20);
+	chkout_("VPRJPI", (ftnlen)6);
+	return 0;
+    }
+
 /*     We'll first discuss the computation of VOUT in the nominal case, */
 /*     and then deal with the exceptional cases. */
 
 /*     When PROJPL and INVPL are not orthogonal to each other, the */
 /*     inverse projection of VIN will differ from VIN by a multiple of */
-/*     PROJN, the unit normal vector to PROJPL.  We find this multiple */
+/*     PROJN, the unit normal vector to PROJPL. We find this multiple */
 /*     by using the fact that the inverse projection VOUT satisfies the */
 /*     plane equation for the inverse projection plane INVPL. */
 
@@ -338,7 +401,7 @@ static doublereal c_b3 = 1.;
 /*        We can find VOUT after all. */
 
 	mult = numer / denom;
-	vlcom_(&c_b3, vin, &mult, projn, vout);
+	vlcom_(&c_b2, vin, &mult, projn, vout);
 	*found = TRUE_;
     } else {
 
@@ -346,7 +409,6 @@ static doublereal c_b3 = 1.;
 
 	*found = FALSE_;
     }
-    chkout_("VPRJPI", (ftnlen)6);
     return 0;
 } /* vprjpi_ */
 

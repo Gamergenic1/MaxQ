@@ -85,9 +85,9 @@ doublereal phaseq_(doublereal *et, char *target, char *illmn, char *obsrvr,
 
 /* $ Keywords */
 
-/*     PHASE ANGLE */
 /*     EPHEMERIS */
 /*     GEOMETRY */
+/*     PHASE ANGLE */
 /*     SEARCH */
 
 /* $ Declarations */
@@ -264,71 +264,73 @@ doublereal phaseq_(doublereal *et, char *target, char *illmn, char *obsrvr,
 /*     ILLMN      I   Illuminating body name. */
 /*     OBSRVR     I   Observer body. */
 /*     ABCORR     I   Aberration correction flag. */
-/*     PHASEQ     O   Value of phase angle. */
+
+/*     The function returns the value of phase angle. */
 
 /* $ Detailed_Input */
 
-/*     ET         the time in ephemeris seconds past J2000 TDB at which */
-/*                to compute the phase angle. */
+/*     ET       is the time in ephemeris seconds past J2000 TDB at which */
+/*              to compute the phase angle. */
 
-/*     TARGET     the name of the target body. Optionally, you may */
-/*                supply a string containing the integer ID code */
-/*                for the object. For example both 'MOON' and '301' */
-/*                are legitimate strings that indicate the Moon is the */
-/*                target body. The TARGET string lack sensitivity to */
-/*                case, leading and trailing blanks. */
+/*     TARGET   is the name of the target body. Optionally, you may */
+/*              supply a string containing the integer ID code */
+/*              for the object. For example both 'MOON' and '301' */
+/*              are legitimate strings that indicate the Moon is the */
+/*              target body. The TARGET string lack sensitivity to */
+/*              case, leading and trailing blanks. */
 
-/*     ILLMN      the name of the illuminating body. Optionally, you may */
-/*                supply a string containing the integer ID code */
-/*                for the object. For example both 'SUN' and '10' */
-/*                are legitimate strings that indicate the sun is the */
-/*                illuminating body. The ILLMN string lack sensitivity */
-/*                to case, leading and trailing blanks. */
+/*     ILLMN    is the name of the illuminating body. Optionally, you may */
+/*              supply a string containing the integer ID code */
+/*              for the object. For example both 'SUN' and '10' */
+/*              are legitimate strings that indicate the sun is the */
+/*              illuminating body. The ILLMN string lack sensitivity */
+/*              to case, leading and trailing blanks. */
 
-/*                In most cases, ILLMN is the sun. */
+/*              In most cases, ILLMN is the sun. */
 
-/*     OBSRVR     the name of the observer body. Optionally, you may */
-/*                supply a string containing the integer ID code */
-/*                for the object. For example both 'MOON' and '301' */
-/*                are legitimate strings that indicate the Moon is the */
-/*                observer body. The OBSRVR string lack sensitivity */
-/*                to case, leading and trailing blanks. */
+/*     OBSRVR   is the name of the observer body. Optionally, you may */
+/*              supply a string containing the integer ID code */
+/*              for the object. For example both 'MOON' and '301' */
+/*              are legitimate strings that indicate the Moon is the */
+/*              observer body. The OBSRVR string lack sensitivity */
+/*              to case, leading and trailing blanks. */
 
-/*     ABCORR     the string description of the aberration corrections to */
-/*                apply to the state evaluations to account for one-way */
-/*                light time and stellar aberration. The ABCORR string */
-/*                lack sensitivity to case, leading and trailing blanks. */
+/*     ABCORR   is the string description of the aberration corrections */
+/*              to apply to the state evaluations to account for one-way */
+/*              light time and stellar aberration. The ABCORR string lack */
+/*              sensitivity to case, leading and trailing blanks. */
 
-/*                This routine accepts only reception mode aberration */
-/*                corrections. See the header of SPKEZR for a detailed */
-/*                description of the aberration correction options. */
-/*                For convenience, the appropriate aberration options are */
-/*                listed below: */
+/*              This routine accepts only reception mode aberration */
+/*              corrections. See the header of SPKEZR for a detailed */
+/*              description of the aberration correction options. */
+/*              For convenience, the appropriate aberration options are */
+/*              listed below: */
 
-/*                   'NONE'     Apply no correction. Returns the "true" */
-/*                              geometric state. */
+/*                 'NONE'     Apply no correction. Returns the "true" */
+/*                            geometric state. */
 
-/*                   'LT'       "Reception" case:  correct for */
-/*                              one-way light time using a Newtonian */
-/*                              formulation. */
+/*                 'LT'       "Reception" case: correct for */
+/*                            one-way light time using a Newtonian */
+/*                            formulation. */
 
-/*                   'LT+S'     "Reception" case:  correct for */
-/*                              one-way light time and stellar */
-/*                              aberration using a Newtonian */
-/*                              formulation. */
+/*                 'LT+S'     "Reception" case: correct for */
+/*                            one-way light time and stellar */
+/*                            aberration using a Newtonian */
+/*                            formulation. */
 
-/*                   'CN'       "Reception" case:  converged */
-/*                              Newtonian light time correction. */
+/*                 'CN'       "Reception" case: converged */
+/*                            Newtonian light time correction. */
 
-/*                   'CN+S'     "Reception" case:  converged */
-/*                              Newtonian light time and stellar */
-/*                              aberration corrections. */
+/*                 'CN+S'     "Reception" case: converged */
+/*                            Newtonian light time and stellar */
+/*                            aberration corrections. */
 
 /* $ Detailed_Output */
 
-/*     PHASEQ     is the optionally light-time corrected phase angle */
-/*                between TARG and ILLMN as observed from OBS. */
-/*                The range of PHASEQ is [0, pi]. */
+/*     The function returns the optionally light-time corrected phase */
+/*     angle between TARGET and ILLMN as observed from OBSRVR. */
+
+/*     The range of the phase angle is [0, pi]. */
 
 /* $ Parameters */
 
@@ -336,19 +338,41 @@ doublereal phaseq_(doublereal *et, char *target, char *illmn, char *obsrvr,
 
 /* $ Exceptions */
 
-/*     1) The error SPICE(IDCODENOTFOUND) signals if the body name to */
-/*        SPICE ID look-up fails for any of the TARGET, ILLMN, or */
-/*        OBSRVR names. */
+/*     1)  If the body name to SPICE ID look-up fails for any of the */
+/*         TARGET, ILLMN, or OBSRVR names, the error */
+/*         SPICE(IDCODENOTFOUND) is signaled. */
 
-/*     2) The error SPICE(INVALIDOPTION) signals if the aberration */
-/*        correct, ABCORR, indicates a transmission based correction. */
+/*     2)  If the aberration correct, ABCORR, indicates a transmission */
+/*         based correction, the error SPICE(INVALIDOPTION) is signaled. */
 
-/*     3) The error SPICE(BODIESNOTDISTINCT) signals if the TARGET, */
-/*        ILLMN, and OBSRVR are not unique. */
+/*     3)  If the TARGET, ILLMN, and OBSRVR are not unique, the error */
+/*         SPICE(BODIESNOTDISTINCT) is signaled. */
 
 /* $ Files */
 
-/*     None. */
+/*   Appropriate kernels must be loaded by the calling program before */
+/*   this routine is called. */
+
+/*   The following data are required: */
+
+/*   -  SPK data: ephemeris data for the observer, illuminator, and */
+/*      target must be loaded. If aberration corrections are used, */
+/*      the states of the ephemeris bodies relative to the solar */
+/*      system barycenter must be calculable from the available */
+/*      ephemeris data. Typically ephemeris data are made */
+/*      available by loading one or more SPK files using FURNSH. */
+
+/*   The following data may be required: */
+
+/*   -  Frame data: if a frame definition not built into SPICE is */
+/*      required, that definition must be available in the kernel */
+/*      pool. Typically frame definitions are supplied by loading a */
+/*      frame kernel using FURNSH. */
+
+/*   -  Orientation data: if a CK based frame is used in this routine's */
+/*      state computation, then at least one CK and corresponding SCLK */
+/*      kernel is required. If dynamic frames are used, additional */
+/*      SPK, PCK, CK, or SCLK kernels may be required. */
 
 /* $ Particulars */
 
@@ -357,19 +381,22 @@ doublereal phaseq_(doublereal *et, char *target, char *illmn, char *obsrvr,
 /*     bodies). */
 
 
-/*                       ILLMN      OBS */
+
+/*                       ILLMN     OBSRVR */
 /*       ILLMN as seen      ^       / */
-/*       from TARG at       |      / */
+/*       from TARGET at     |      / */
 /*       ET - LT.           |     / */
 /*                         >|..../< phase angle */
 /*                          |   / */
 /*                        . |  / */
 /*                      .   | / */
-/*                     .    |v     TARG as seen from OBS */
-/*               SEP   .   TARG    at ET */
+/*                     .    |v        TARGET as seen from OBSRVR */
+/*               SEP   .  TARGET      at ET */
 /*                      .  / */
 /*                        / */
 /*                       v */
+
+
 
 /*        PI = SEP + PHASE */
 
@@ -377,21 +404,31 @@ doublereal phaseq_(doublereal *et, char *target, char *illmn, char *obsrvr,
 
 /*        PHASE = PI - SEP */
 
-/*     This routine serves as a wrapper to the private routine ZZGFPAQ. */
-
 /* $ Examples */
 
-/*     The numerical results shown for these examples may differ across */
+/*     The numerical results shown for this example may differ across */
 /*     platforms. The results depend on the SPICE kernels used as */
 /*     input, the compiler and supporting libraries, and the machine */
 /*     specific arithmetic implementation. */
 
+/*     1) Determine the time windows from December 1, 2006 UTC to */
+/*        January 31, 2007 UTC for which the sun-moon-earth configuration */
+/*        phase angle satisfies the relation conditions with respect to a */
+/*        reference value of 0.57598845 radians (the phase angle at */
+/*        January 1, 2007 00:00:00.000 UTC, 33.001707 degrees). Also */
+/*        determine the time windows corresponding to the local maximum */
+/*        and minimum phase angles, and the absolute maximum and minimum */
+/*        phase angles during the search interval. The configuration */
+/*        defines the Sun as the illuminator, the Moon as the target, and */
+/*        the Earth as the observer. */
+
 /*        Use the meta-kernel shown below to load the required SPICE */
 /*        kernels. */
 
+
 /*           KPL/MK */
 
-/*           File name: standard.tm */
+/*           File name: phaseq_ex1.tm */
 
 /*           This meta-kernel is intended to support operation of SPICE */
 /*           example programs. The kernels shown here should not be */
@@ -420,18 +457,13 @@ doublereal phaseq_(doublereal *et, char *target, char *illmn, char *obsrvr,
 
 /*           \begintext */
 
-/*     Determine the time windows from December 1, 2006 UTC to */
-/*     January 31, 2007 UTC for which the sun-moon-earth configuration */
-/*     phase angle satisfies the relation conditions with respect to a */
-/*     reference value of .57598845 radians (the phase angle at */
-/*     January 1, 2007 00:00:00.000 UTC, 33.001707 degrees). Also */
-/*     determine the time windows corresponding to the local maximum and */
-/*     minimum phase angles, and the absolute maximum and minimum phase */
-/*     angles during the search interval. The configuration defines the */
-/*     sun as the illuminator, the moon as the target, and the earth as */
-/*     the observer. */
+/*           End of meta-kernel */
 
-/*              PROGRAM GFPA_T */
+
+/*        Example code begins here. */
+
+
+/*              PROGRAM PHASEQ_EX1 */
 /*              IMPLICIT NONE */
 
 /*        C */
@@ -510,7 +542,7 @@ doublereal phaseq_(doublereal *et, char *target, char *illmn, char *obsrvr,
 /*        C */
 /*        C     Load kernels. */
 /*        C */
-/*              CALL FURNSH ( 'standard.tm' ) */
+/*              CALL FURNSH ( 'phaseq_ex1.tm' ) */
 
 /*        C */
 /*        C     Initialize windows. */
@@ -580,8 +612,8 @@ doublereal phaseq_(doublereal *et, char *target, char *illmn, char *obsrvr,
 /*             .                       'YYYY-MON-DD HR:MN:SC.###', */
 /*             .                       TIMSTR                          ) */
 
-/*                       WRITE (*, '(A,F16.9)') 'Start time = '//TIMSTR, */
-/*             .                                                  PHASE */
+/*                       WRITE (*, '(2X,A,F16.9)') 'Start time = ' */
+/*             .                               //   TIMSTR, PHASE */
 
 
 /*                       PHASE = PHASEQ( FINISH, TARGET, ILLMN, OBSRVR, */
@@ -590,8 +622,8 @@ doublereal phaseq_(doublereal *et, char *target, char *illmn, char *obsrvr,
 /*             .                       'YYYY-MON-DD HR:MN:SC.###', */
 /*             .                       TIMSTR                          ) */
 
-/*                       WRITE (*, '(A,F16.9)') 'Stop time  = '//TIMSTR, */
-/*             .                                                  PHASE */
+/*                       WRITE (*, '(2X,A,F16.9)') 'Stop time  = ' */
+/*             .                                //  TIMSTR, PHASE */
 
 /*                    END DO */
 
@@ -603,55 +635,59 @@ doublereal phaseq_(doublereal *et, char *target, char *illmn, char *obsrvr,
 
 /*              END */
 
-/*     The program outputs: */
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
 
 /*         Relation condition: = */
-/*        Start time = 2006-DEC-02 13:31:34.414       0.575988450 */
-/*        Stop time  = 2006-DEC-02 13:31:34.414       0.575988450 */
-/*        Start time = 2006-DEC-07 14:07:55.470       0.575988450 */
-/*        Stop time  = 2006-DEC-07 14:07:55.470       0.575988450 */
-/*        Start time = 2006-DEC-31 23:59:59.997       0.575988450 */
-/*        Stop time  = 2006-DEC-31 23:59:59.997       0.575988450 */
-/*        Start time = 2007-JAN-06 08:16:25.512       0.575988450 */
-/*        Stop time  = 2007-JAN-06 08:16:25.512       0.575988450 */
-/*        Start time = 2007-JAN-30 11:41:32.557       0.575988450 */
-/*        Stop time  = 2007-JAN-30 11:41:32.557       0.575988450 */
+/*          Start time = 2006-DEC-02 13:31:34.414       0.575988450 */
+/*          Stop time  = 2006-DEC-02 13:31:34.414       0.575988450 */
+/*          Start time = 2006-DEC-07 14:07:55.470       0.575988450 */
+/*          Stop time  = 2006-DEC-07 14:07:55.470       0.575988450 */
+/*          Start time = 2006-DEC-31 23:59:59.997       0.575988450 */
+/*          Stop time  = 2006-DEC-31 23:59:59.997       0.575988450 */
+/*          Start time = 2007-JAN-06 08:16:25.512       0.575988450 */
+/*          Stop time  = 2007-JAN-06 08:16:25.512       0.575988450 */
+/*          Start time = 2007-JAN-30 11:41:32.557       0.575988450 */
+/*          Stop time  = 2007-JAN-30 11:41:32.557       0.575988450 */
 
 /*         Relation condition: < */
-/*        Start time = 2006-DEC-02 13:31:34.414       0.575988450 */
-/*        Stop time  = 2006-DEC-07 14:07:55.470       0.575988450 */
-/*        Start time = 2006-DEC-31 23:59:59.997       0.575988450 */
-/*        Stop time  = 2007-JAN-06 08:16:25.512       0.575988450 */
-/*        Start time = 2007-JAN-30 11:41:32.557       0.575988450 */
-/*        Stop time  = 2007-JAN-31 00:00:00.000       0.468279091 */
+/*          Start time = 2006-DEC-02 13:31:34.414       0.575988450 */
+/*          Stop time  = 2006-DEC-07 14:07:55.470       0.575988450 */
+/*          Start time = 2006-DEC-31 23:59:59.997       0.575988450 */
+/*          Stop time  = 2007-JAN-06 08:16:25.512       0.575988450 */
+/*          Start time = 2007-JAN-30 11:41:32.557       0.575988450 */
+/*          Stop time  = 2007-JAN-31 00:00:00.000       0.468279091 */
 
 /*         Relation condition: > */
-/*        Start time = 2006-DEC-01 00:00:00.000       0.940714974 */
-/*        Stop time  = 2006-DEC-02 13:31:34.414       0.575988450 */
-/*        Start time = 2006-DEC-07 14:07:55.470       0.575988450 */
-/*        Stop time  = 2006-DEC-31 23:59:59.997       0.575988450 */
-/*        Start time = 2007-JAN-06 08:16:25.512       0.575988450 */
-/*        Stop time  = 2007-JAN-30 11:41:32.557       0.575988450 */
+/*          Start time = 2006-DEC-01 00:00:00.000       0.940714974 */
+/*          Stop time  = 2006-DEC-02 13:31:34.414       0.575988450 */
+/*          Start time = 2006-DEC-07 14:07:55.470       0.575988450 */
+/*          Stop time  = 2006-DEC-31 23:59:59.997       0.575988450 */
+/*          Start time = 2007-JAN-06 08:16:25.512       0.575988450 */
+/*          Stop time  = 2007-JAN-30 11:41:32.557       0.575988450 */
 
 /*         Relation condition: LOCMIN */
-/*        Start time = 2006-DEC-05 00:16:50.416       0.086121423 */
-/*        Stop time  = 2006-DEC-05 00:16:50.416       0.086121423 */
-/*        Start time = 2007-JAN-03 14:18:32.086       0.079899769 */
-/*        Stop time  = 2007-JAN-03 14:18:32.086       0.079899769 */
+/*          Start time = 2006-DEC-05 00:16:50.317       0.086121423 */
+/*          Stop time  = 2006-DEC-05 00:16:50.317       0.086121423 */
+/*          Start time = 2007-JAN-03 14:18:31.977       0.079899769 */
+/*          Stop time  = 2007-JAN-03 14:18:31.977       0.079899769 */
 
 /*         Relation condition: ABSMIN */
-/*        Start time = 2007-JAN-03 14:18:32.086       0.079899769 */
-/*        Stop time  = 2007-JAN-03 14:18:32.086       0.079899769 */
+/*          Start time = 2007-JAN-03 14:18:31.977       0.079899769 */
+/*          Stop time  = 2007-JAN-03 14:18:31.977       0.079899769 */
 
 /*         Relation condition: LOCMAX */
-/*        Start time = 2006-DEC-20 14:09:10.496       3.055062862 */
-/*        Stop time  = 2006-DEC-20 14:09:10.496       3.055062862 */
-/*        Start time = 2007-JAN-19 04:27:54.694       3.074603891 */
-/*        Stop time  = 2007-JAN-19 04:27:54.694       3.074603891 */
+/*          Start time = 2006-DEC-20 14:09:10.392       3.055062862 */
+/*          Stop time  = 2006-DEC-20 14:09:10.392       3.055062862 */
+/*          Start time = 2007-JAN-19 04:27:54.600       3.074603891 */
+/*          Stop time  = 2007-JAN-19 04:27:54.600       3.074603891 */
 
 /*         Relation condition: ABSMAX */
-/*        Start time = 2007-JAN-19 04:27:54.694       3.074603891 */
-/*        Stop time  = 2007-JAN-19 04:27:54.694       3.074603891 */
+/*          Start time = 2007-JAN-19 04:27:54.600       3.074603891 */
+/*          Stop time  = 2007-JAN-19 04:27:54.600       3.074603891 */
+
 
 /* $ Restrictions */
 
@@ -663,12 +699,21 @@ doublereal phaseq_(doublereal *et, char *target, char *illmn, char *obsrvr,
 
 /* $ Author_and_Institution */
 
-/*     E.D. Wright    (JPL) */
-/*     B.V. Semenov   (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     B.V. Semenov       (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
 
-/* -    SPICELIB version 1.0.0, 27-MAR-2014 (EDW) (BVS) */
+/* -    SPICELIB Version 1.0.1, 31-AUG-2021 (JDR) (EDW) */
+
+/*        Edited the header to comply with NAIF standards. */
+
+/*        Fixed typos in the Header. Renamed example's meta-kernel. */
+/*        Removed reference to private routine ZZGFPAQ from $Particulars */
+/*        section. */
+
+/* -    SPICELIB Version 1.0.0, 27-MAR-2014 (EDW) (BVS) */
 
 /* -& */
 /* $ Index_Entries */

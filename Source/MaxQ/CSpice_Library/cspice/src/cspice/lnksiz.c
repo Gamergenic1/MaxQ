@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      LNKSIZ ( LNK, size ) */
+/* $Procedure LNKSIZ ( LNK, size ) */
 integer lnksiz_(integer *pool)
 {
     /* System generated locals */
@@ -42,7 +42,7 @@ integer lnksiz_(integer *pool)
 
 /* $ Required_Reading */
 
-/*     LNK */
+/*     None. */
 
 /* $ Keywords */
 
@@ -51,7 +51,7 @@ integer lnksiz_(integer *pool)
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     POOL       I   A doubly linked list pool. */
 /*     LBPOOL     P   Lower bound of pool column indices. */
@@ -60,7 +60,7 @@ integer lnksiz_(integer *pool)
 
 /* $ Detailed_Input */
 
-/*     POOL           is a doubly linked list pool. */
+/*     POOL     is a doubly linked list pool. */
 
 /* $ Detailed_Output */
 
@@ -68,9 +68,9 @@ integer lnksiz_(integer *pool)
 
 /* $ Parameters */
 
-/*     LBPOOL        is the lower bound of the column indices of the POOL */
-/*                   array.  The columns indexed LBPOOL to 0 are reserved */
-/*                   as a control area for the pool. */
+/*     LBPOOL   is the lower bound of the column indices of the POOL */
+/*              array. The columns indexed LBPOOL to 0 are reserved */
+/*              as a control area for the pool. */
 
 /* $ Exceptions */
 
@@ -89,9 +89,9 @@ integer lnksiz_(integer *pool)
 
 /* $ Examples */
 
-/*     1)  Let POOL be a doubly linked list pool.  The total number of */
+/*     1)  Let POOL be a doubly linked list pool. The total number of */
 /*         nodes in a doubly linked list pool is set when the pool is */
-/*         initialized by LNKINI.  This number is returned by LNKSIZ: */
+/*         initialized by LNKINI. This number is returned by LNKSIZ: */
 
 /*            C */
 /*            C     This sequence of calls will assign the value 100 */
@@ -102,9 +102,9 @@ integer lnksiz_(integer *pool)
 
 /* $ Restrictions */
 
-/*     Linked list pools must be initialized via the routine */
-/*     LNKINI.  Failure to initialize a linked list pool */
-/*     will almost certainly lead to confusing results. */
+/*     1)  Linked list pools must be initialized via the routine */
+/*         LNKINI. Failure to initialize a linked list pool */
+/*         will almost certainly lead to confusing results. */
 
 /* $ Literature_References */
 
@@ -112,10 +112,15 @@ integer lnksiz_(integer *pool)
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
-/*     W.L. Taber     (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.0.1, 24-NOV-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.0.0, 19-DEC-1995 (NJB) (WLT) */
 

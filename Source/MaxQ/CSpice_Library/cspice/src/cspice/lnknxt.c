@@ -9,7 +9,7 @@
 
 static integer c__0 = 0;
 
-/* $Procedure      LNKNXT ( LNK, next node ) */
+/* $Procedure LNKNXT ( LNK, next node ) */
 integer lnknxt_(integer *node, integer *pool)
 {
     /* System generated locals */
@@ -52,7 +52,7 @@ integer lnknxt_(integer *node, integer *pool)
 
 /* $ Required_Reading */
 
-/*     LNK */
+/*     None. */
 
 /* $ Keywords */
 
@@ -61,7 +61,7 @@ integer lnknxt_(integer *node, integer *pool)
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     NODE       I   Number of an allocated node. */
 /*     POOL       I   A doubly linked list pool. */
@@ -72,22 +72,22 @@ integer lnknxt_(integer *node, integer *pool)
 
 /* $ Detailed_Input */
 
-/*     NODE           is the number of an allocated node in POOL. */
+/*     NODE     is the number of an allocated node in POOL. */
 
-/*     POOL           is a doubly linked list pool. */
+/*     POOL     is a doubly linked list pool. */
 
 /* $ Detailed_Output */
 
 /*     The function returns the number of the successor of the node */
-/*     indicated by NODE.  If NODE is the tail node of a list, the */
+/*     indicated by NODE. If NODE is the tail node of a list, the */
 /*     function returns the negative of the node number of the head */
 /*     of the list. */
 
 /* $ Parameters */
 
-/*     LBPOOL        is the lower bound of the column indices of the POOL */
-/*                   array.  The columns indexed LBPOOL to 0 are reserved */
-/*                   as a control area for the pool. */
+/*     LBPOOL   is the lower bound of the column indices of the POOL */
+/*              array. The columns indexed LBPOOL to 0 are reserved */
+/*              as a control area for the pool. */
 
 /* $ Exceptions */
 
@@ -95,10 +95,10 @@ integer lnknxt_(integer *node, integer *pool)
 /*         negative of the node number of the head of the list. */
 
 /*     2)  If NODE is not a valid node number, the error */
-/*         SPICE(INVALIDNODE) is signalled.  The value 0 is returned. */
+/*         SPICE(INVALIDNODE) is signaled. The value 0 is returned. */
 
 /*     3)  If NODE is not the number of an allocated node, the error */
-/*         SPICE(UNALLOCATEDNODE) is signalled.  The value 0 is returned. */
+/*         SPICE(UNALLOCATEDNODE) is signaled. The value 0 is returned. */
 
 /* $ Files */
 
@@ -121,7 +121,7 @@ integer lnknxt_(integer *node, integer *pool)
 
 /*           3 <--> 7 <--> 1 */
 
-/*         be a list in the pool.  The table below shows the effects */
+/*         be a list in the pool. The table below shows the effects */
 /*         of function references to LNKNXT, where nodes in this list */
 /*         are used as inputs: */
 
@@ -133,7 +133,7 @@ integer lnknxt_(integer *node, integer *pool)
 /*            LNKNXT ( 1, POOL )                    -3 */
 
 
-/*     2)  Forward traversal of a list:  Let POOL be a doubly linked */
+/*     2)  Forward traversal of a list: Let POOL be a doubly linked */
 /*         list pool, and let NODE be an allocated node in the pool. */
 /*         To traverse the list containing NODE in forward order */
 /*         and print out the nodes of the list, we can use the */
@@ -159,9 +159,9 @@ integer lnknxt_(integer *node, integer *pool)
 
 /* $ Restrictions */
 
-/*     Linked list pools must be initialized via the routine */
-/*     LNKINI.  Failure to initialize a linked list pool */
-/*     will almost certainly lead to confusing results. */
+/*     1)  Linked list pools must be initialized via the routine */
+/*         LNKINI. Failure to initialize a linked list pool */
+/*         will almost certainly lead to confusing results. */
 
 /* $ Literature_References */
 
@@ -169,10 +169,15 @@ integer lnknxt_(integer *node, integer *pool)
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
-/*     W.L. Taber     (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.0.1, 24-NOV-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.0.0, 19-DEC-1995 (NJB) (WLT) */
 

@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      DASDC    ( DAS delete comments ) */
+/* $Procedure DASDC    ( DAS delete comments ) */
 /* Subroutine */ int dasdc_(integer *handle)
 {
     extern /* Subroutine */ int chkin_(char *, ftnlen);
@@ -64,15 +64,15 @@
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     I   The handle of a binary DAS file opened for writing. */
 
 /* $ Detailed_Input */
 
-/*     HANDLE    The handle of a binary DAS file that is to have its */
-/*               entire comment area deleted. The DAS file should have */
-/*               been opened with write access. */
+/*     HANDLE   is the handle of a binary DAS file that is to have its */
+/*              entire comment area deleted. The DAS file should have */
+/*              been opened with write access. */
 
 /* $ Detailed_Output */
 
@@ -84,13 +84,13 @@
 
 /* $ Exceptions */
 
-/*     1)   If the binary DAS file attached to HANDLE is not open with */
-/*          write access, an error will be signalled by a routine called */
-/*          by this routine. */
+/*     1)  If the binary DAS file attached to HANDLE is not open with */
+/*         write access, an error is signaled by a routine in the call */
+/*         tree of this routine. */
 
 /* $ Files */
 
-/*     See argument HANDLE in $ Detailed_Input. */
+/*     See argument HANDLE in $Detailed_Input. */
 
 /* $ Particulars */
 
@@ -134,19 +134,28 @@
 
 /* $ Author_and_Institution */
 
-/*     K.R. Gehringer (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
 
 /* $ Version */
 
+/* -    SPICELIB Version 1.1.0, 02-JUN-2021 (JDR) */
+
+/*        Added IMPLICIT NONE standard. */
+
+/*        Edited the header to comply with NAIF standard. Removed */
+/*        unnecessary $Revisions section. */
+
 /* -    SPICELIB Version 1.0.2, 11-NOV-2016 (NJB) */
 
-/*        Fixed typo in Particulars header section. */
+/*        Fixed typo in $Particulars header section. */
 
 /* -    SPICELIB Version 1.0.1, 26-OCT-1993 (KRG) */
 
 /*        Changed the $Brief_I/O description of handle. It now mentions */
 /*        that the file must be open for writing. Also added a statement */
-/*        to the $ Detailed_Input section to the effect that the DAS file */
+/*        to the $Detailed_Input section to the effect that the DAS file */
 /*        should have been opened with write access. */
 
 /* -    SPICELIB Version 1.0.0, 24-NOV-1992 (KRG) */
@@ -154,19 +163,7 @@
 /* -& */
 /* $ Index_Entries */
 
-/*      delete das comment area */
-
-/* -& */
-/* $ Revisions */
-
-/* -    SPICELIB Version 1.0.1, 26-OCT-1993 (KRG) */
-
-/*        Changed the $Brief_I/O description of handle. It now mentions */
-/*        that the file must be open for writing. Also added a statement */
-/*        to the $ Detailed_Input section to the effect that the DAS file */
-/*        should have been opened with write access. */
-
-/* -    SPICELIB Version 1.0.0, 24-NOV-1992 (KRG) */
+/*     delete DAS comment area */
 
 /* -& */
 

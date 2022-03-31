@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure            CARDI ( Cardinality of an integer cell ) */
+/* $Procedure CARDI ( Cardinality of an integer cell ) */
 integer cardi_(integer *cell)
 {
     /* System generated locals */
@@ -65,9 +65,7 @@ integer cardi_(integer *cell)
 
 /* $ Detailed_Input */
 
-
-/*      CELL        is a cell. */
-
+/*     CELL     is a cell. */
 
 /* $ Detailed_Output */
 
@@ -76,7 +74,21 @@ integer cardi_(integer *cell)
 
 /* $ Parameters */
 
-/*      None. */
+/*     None. */
+
+/* $ Exceptions */
+
+/*     1)  If the input array has invalid cardinality, the error */
+/*         SPICE(INVALIDCARDINALITY) is signaled. CARDI returns */
+/*         an unspecified value in this case. */
+
+/*     2)  If the input array has invalid size, the error */
+/*         SPICE(INVALIDSIZE) is signaled. CARDI returns */
+/*         an unspecified value in this case. */
+
+/* $ Files */
+
+/*     None. */
 
 /* $ Particulars */
 
@@ -114,42 +126,35 @@ integer cardi_(integer *cell)
 
 /*     None. */
 
-/* $ Exceptions */
-
-/*     1)  If the input array has invalid cardinality, the error */
-/*         SPICE(INVALIDCARDINALITY) is signaled.  CARDI returns */
-/*         an unspecified value in this case. */
-
-/*     2)  If the input array has invalid size, the error */
-/*         SPICE(INVALIDSIZE) is signaled.  CARDI returns */
-/*         an unspecified value in this case. */
-
-/* $ Files */
-
-/*     None. */
-
 /* $ Literature_References */
 
 /*     None. */
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     C.A. Curzon     (JPL) */
-/*     H.A. Neilan     (JPL) */
-/*     W.L. Taber      (JPL) */
-/*     I.M. Underwood  (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     C.A. Curzon        (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     H.A. Neilan        (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
 
+/* -    SPICELIB Version 1.2.0, 12-AUG-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
+
 /* -    SPICELIB Version 1.1.1, 29-JUL-2002 (NJB) */
 
-/*        Errors in code fragments in the Examples section of */
+/*        Errors in code fragments in the $Examples section of */
 /*        the header were corrected. */
 
 /* -    SPICELIB Version 1.1.0, 17-MAY-1994 (HAN) */
 
-/*       If the value of the function RETURN is TRUE upon execution of */
+/*       If the value of the function RETURN is .TRUE. upon execution of */
 /*       this module, this function is assigned a default value of */
 /*       either 0, 0.0D0, .FALSE., or blank depending on the type of the */
 /*       function. */
@@ -171,8 +176,9 @@ integer cardi_(integer *cell)
 
 /* -    Beta Version 2.0.0, 13-MAR-1989 (NJB) */
 
-/*        Check for valid input cell added.  The input cell must */
+/*        Check for valid input cell added. The input cell must */
 /*        have valid size and cardinality values. */
+
 /* -& */
 
 /*     SPICELIB functions */

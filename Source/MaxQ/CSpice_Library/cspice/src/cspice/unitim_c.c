@@ -4,8 +4,8 @@
 
 -Abstract
 
-   Transform time from one uniform scale to another.  The uniform
-   time scales are TAI, TDT, TDB, ET, JED, JDTDB, JDTDT.
+   Transform time from one uniform scale to another. The uniform
+   time scales are TAI, GPS, TT, TDT, TDB, ET, JED, JDTDB, JDTDT.
 
 -Disclaimer
 
@@ -38,8 +38,8 @@
 
 -Keywords
 
-   TIME
    CONVERSION
+   TIME
    UTILITY
 
 */
@@ -57,7 +57,7 @@
 
 -Brief_I/O
 
-   Variable  I/O  Description
+   VARIABLE  I/O  DESCRIPTION
    --------  ---  --------------------------------------------------
    epoch      I   An epoch to be converted.
    insys      I   The time scale associated with the input epoch.
@@ -68,32 +68,34 @@
 
 -Detailed_Input
 
-   epoch      is an epoch relative to the insys time scale.
+   epoch       is an epoch relative to the `insys' time scale.
 
-   insys      is a time scale.  Acceptable values are:
+   insys       is a time scale. Acceptable values are:
 
-              "TAI"     International Atomic Time.
-              "TDB"     Barycentric Dynamical Time.
-              "TDT"     Terrestrial Dynamical Time.
-              "ET"      Ephemeris time (in the SPICE system, this is
-                        equivalent to TDB).
-              "JDTDB"   Julian Date relative to TDB.
-              "JDTDT"   Julian Date relative to TDT.
-              "JED"     Julian Ephemeris date (in the SPICE system
-                        this is equivalent to JDTDB).
+                  "TAI"     International Atomic Time.
+                  "TDB"     Barycentric Dynamical Time.
+                  "TDT"     Terrestrial Dynamical Time.
+                  "TT"      Terrestrial Time, identical to TDT.
+                  "ET"      Ephemeris time (in the SPICE system, this is
+                            equivalent to TDB).
+                  "JDTDB"   Julian Date relative to TDB.
+                  "JDTDT"   Julian Date relative to TDT.
+                  "JED"     Julian Ephemeris date (in the SPICE system
+                            this is equivalent to JDTDB).
+                  "GPS"     Global Positioning System Time.
 
-              The routine is not sensitive to the case of the
-              characters in insys;  "tai" "Tai" and "TAI" are
-              all equivalent from the point of view of this routine.
+               The routine is not sensitive to the case of the
+               characters in `insys'; "tai" "Tai" and "TAI" are all
+               equivalent from the point of view of this routine.
 
-   outsys     is the time scale to which epoch should be converted.
-              Acceptable values are the same as for insys.  The
-              routine is not sensitive to the case of outsys.
+   outsys      is the time scale to which `epoch' should be converted.
+               Acceptable values are the same as for `insys'. The
+               routine is not sensitive to the case of `outsys'.
 
 -Detailed_Output
 
-   The function returns the time in the system specified by outsys
-   that is equivalent to the epoch in the insys time scale.
+   The function returns the time in the system specified by `outsys'
+   that is equivalent to the `epoch' in the `insys' time scale.
 
 -Parameters
 
@@ -101,27 +103,29 @@
 
 -Exceptions
 
-   1) The kernel pool must contain the variables:
+   1)  The kernel pool must contain the variables:
 
-         "DELTET/DELTA_T_A"
-         "DELTET/K"
-         "DELTET/EB"
-         "DELTET/M"
+          'DELTET/DELTA_T_A'
+          'DELTET/K'
+          'DELTET/EB'
+          'DELTET/M'
 
-      If these are not present, the error SPICE(MISSINGTIMEINFO)
-      will be signalled.  (These variables are typically inserted
-      into the kernel pool by loading a leapseconds kernel with
-      the SPICE routine furnsh_c.)
+       If these are not present, the error SPICE(MISSINGTIMEINFO) is
+       signaled by a routine in the call tree of this routine. (These
+       variables are typically inserted into the kernel pool by
+       loading a leapseconds kernel with the SPICE routine furnsh_c.)
 
-   2) If the names of either the input or output time types are
-      unrecognized, the error SPICE(BADTIMETYPE) will be signalled.
+   2)  If the names of either the input or output time types are
+       unrecognized, the error SPICE(BADTIMETYPE) is signaled by a
+       routine in the call tree of this routine.
 
-   4) The error SPICE(EMPTYSTRING) is signalled if either input
-      string does not contain at least one character, since an
-      empty input string cannot be converted to a Fortran-style string.
-      
-   5) The error SPICE(NULLPOINTER) is signalled if either input string
-      pointer is null.
+   3)  If any of the `insys' or `outsys' input string pointers is
+       null, the error SPICE(NULLPOINTER) is signaled. The function
+       returns the value 0.0.
+
+   4)  If any of the `insys' or `outsys' input strings has zero
+       length, the error SPICE(EMPTYSTRING) is signaled. The function
+       returns the value 0.0.
 
 -Files
 
@@ -131,30 +135,91 @@
 
    We use the term uniform time scale to refer to those
    representations of time that are numeric (each epoch is
-   represented by a number) and additive.  A numeric time
-   system is additive if given the representations, E1 and E2,
-   of any pair of successive epochs, the time elapsed between
-   the epochs is given by E2 - E1.
+   represented by a number) and additive. A numeric time system is
+   additive if given the representations, `e1' and `e2', of any pair of
+   successive epochs, the time elapsed between the epochs is given by
+   e2 - e1.
 
-   Given an epoch in one of the uniform time scales
-   specified by insys, the function returns the equivalent
-   representation in the scale specified by outsys.  A list
-   of the recognized uniform time scales is given in the
-   detailed input for insys.
+   Given an epoch in one of the uniform time scales specified by
+   `insys', the function returns the equivalent representation in the
+   scale specified by `outsys'. A list of the recognized uniform time
+   scales is given in the detailed input for `insys'.
 
 -Examples
 
-   To convert an epoch with respect to the International Atomic
-   Time (TAI) scale to ET (Barycentric Dynamical Time), make the
-   following assignment.
+   The numerical results shown for this example may differ across
+   platforms. The results depend on the SPICE kernels used as
+   input, the compiler and supporting libraries, and the machine
+   specific arithmetic implementation.
 
-         et = unitim_c ( tai, "TAI", "ET" );
+   1) Convert a calendar date in UTC string format to Julian Ephemeris
+      date.
+
+      Use the LSK kernel below to load the leap seconds and time
+      constants required for the conversions.
+
+         naif0012.tls
+
+
+      Example code begins here.
+
+
+      /.
+         Program unitim_ex1
+      ./
+      #include <stdio.h>
+      #include "SpiceUsr.h"
+
+      int main( )
+      {
+         /.
+         Local constants.
+         ./
+         #define        UTCSTR        "Dec 19 2003  16:48:00"
+
+         /.
+         Local variables.
+         ./
+         SpiceDouble             et;
+         SpiceDouble             jed;
+
+         /.
+         Load the LSK file.
+         ./
+         furnsh_c ( "naif0012.tls" );
+
+         /.
+         Convert input UTC string to Ephemeris Time.
+         ./
+         str2et_c ( UTCSTR, &et );
+         printf ( "UTC time             : %s\n", UTCSTR  );
+         printf ( "Ephemeris time       : %21.9f\n", et  );
+
+         /.
+         Convert the Ephemeris Time to Julian ephemeris date, i.e.
+         Julian date relative to TDB time scale.
+         ./
+         jed = unitim_c ( et, "ET", "JED" );
+         printf ( "Julian Ephemeris Date: %21.9f\n", jed );
+
+         return ( 0 );
+      }
+
+
+      When this program was executed on a Mac/Intel/cc/64-bit
+      platform, the output was:
+
+
+      UTC time             : Dec 19 2003  16:48:00
+      Ephemeris time       :   125124544.183560610
+      Julian Ephemeris Date:     2452993.200742865
+
 
 -Restrictions
 
-   The appropriate variable must be loaded into the SPICE kernel pool
-   (normally by loading a leapseconds kernel with furnsh_c) prior to
-   calling this routine.
+   1)  The appropriate variable must be loaded into the SPICE kernel
+       pool (normally by loading a leapseconds kernel with furnsh_c)
+       prior to calling this routine.
 
 -Literature_References
 
@@ -162,21 +227,34 @@
 
 -Author_and_Institution
 
-   H.A. Neilan    (JPL)
-   W.L. Taber     (JPL)
+   N.J. Bachman        (JPL)
+   J. Diaz del Rio     (ODC Space)
+   H.A. Neilan         (JPL)
+   W.L. Taber          (JPL)
+   E.D. Wright         (JPL)
 
 -Version
 
-   -CSPICE Version 1.1.1, 14-AUG-2006   (EDW)
+   -CSPICE Version 1.2.0, 05-AUG-2021 (EDW) (JDR)
 
-      Replace mention of ldpool_c with furnsh_c.
+       Added time system name "TT" (Terrestrial Time) as alternate
+       assignment of "TDT" (Terrestrial Dynamical Time).
+
+       Included GPS time system mapping.
+
+       Edited the header to comply with NAIF standard. Added complete
+       code example.
+
+   -CSPICE Version 1.1.1, 14-AUG-2006 (EDW)
+
+       Replace mention of ldpool_c with furnsh_c.
 
    -CSPICE Version 1.1.0, 08-FEB-1998 (NJB)
 
-      Re-implemented routine without dynamically allocated, temporary 
-      strings.   
- 
-   -CSPICE Version 1.0.0, 25-OCT-1997   (EDW)
+       Re-implemented routine without dynamically allocated, temporary
+       strings.
+
+   -CSPICE Version 1.0.0, 25-OCT-1997 (EDW) (HAN) (WLT)
 
 -Index_Entries
 
@@ -194,7 +272,7 @@
    Local variables
    */
    SpiceDouble             result;
-   
+
 
    /*
    Participate in error tracing.
@@ -203,17 +281,17 @@
 
 
    /*
-   Check the input string insys to make sure the pointer is non-null 
+   Check the input string insys to make sure the pointer is non-null
    and the string length is non-zero.
    */
    CHKFSTR_VAL ( CHK_STANDARD, "unitim_c", insys, 0. );
 
    /*
-   Check the input string outsys to make sure the pointer is non-null 
+   Check the input string outsys to make sure the pointer is non-null
    and the string length is non-zero.
    */
    CHKFSTR_VAL ( CHK_STANDARD, "unitim_c", outsys, 0. );
-   
+
    /*
    Call the f2c'd routine.
    */
@@ -224,8 +302,8 @@
                                    ( ftnlen       ) strlen(outsys) );
 
    chkout_c ( "unitim_c");
-   
+
    return ( result );
-   
+
 
 } /* End unitim_c */

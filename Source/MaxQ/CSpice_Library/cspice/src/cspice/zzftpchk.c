@@ -166,12 +166,6 @@ static integer c__1 = 1;
 
 /*     See include file zzftprms.inc. */
 
-/* $ Files */
-
-/*     Although this routine validates information from a binary file, */
-/*     it does not interact with the file directly, and relies upon */
-/*     the caller to pass the appropriate string block. */
-
 /* $ Exceptions */
 
 /*     1) In the event that both the left and right end markers of the */
@@ -190,6 +184,12 @@ static integer c__1 = 1;
 /*        where <TESTSQ> is the actual test sequence, then it will */
 /*        incorrectly compare [THISISNOTATEST] to the test component */
 /*        returned from ZZFTPSTR. */
+
+/* $ Files */
+
+/*     Although this routine validates information from a binary file, */
+/*     it does not interact with the file directly, and relies upon */
+/*     the caller to pass the appropriate string block. */
 
 /* $ Particulars */
 
@@ -214,7 +214,7 @@ static integer c__1 = 1;
 
 /*     C */
 /*     C     Check for FTP transfer errors to prevent the user from */
-/*     C     inadvertantly using a damaged kernel. First read the file */
+/*     C     inadvertently using a damaged kernel. First read the file */
 /*     C     record into a string of 1000 characters. */
 /*     C */
 /*           READ ( UNIT = LUN, REC = 1, IOSTAT = IOSTAT ) FTPTST */
@@ -267,15 +267,19 @@ static integer c__1 = 1;
 /*        'ENDFTP' in STRING indicates that validation is to be */
 /*        attempted. */
 
-/* $ Author_and_Institution */
-
-/*     F.S. Turner     (JPL) */
-
 /* $ Literature_References */
 
 /*     None. */
 
+/* $ Author_and_Institution */
+
+/*     F.S. Turner     (JPL) */
+
 /* $ Version */
+
+/* -    SPICELIB Version 1.0.1, 02-OCT-2021 (NJB) */
+
+/*        Fixed typo in comment. Reordered header sections. */
 
 /* -    SPICELIB Version 1.0.0, 22-MAR-1999 (FST) */
 

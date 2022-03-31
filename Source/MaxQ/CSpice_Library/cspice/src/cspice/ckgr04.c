@@ -12,7 +12,7 @@ static integer c__6 = 6;
 static integer c__7 = 7;
 static doublereal c_b15 = 128.;
 
-/* $Procedure      CKGR04 ( C-kernel, get record, type 04 ) */
+/* $Procedure CKGR04 ( C-kernel, get record, type 04 ) */
 /* Subroutine */ int ckgr04_(integer *handle, doublereal *descr, integer *
 	recno, doublereal *record)
 {
@@ -41,9 +41,9 @@ static doublereal c_b15 = 128.;
 
 /* $ Abstract */
 
-/*     Given the handle and descriptor of a type 4 segment in */
-/*     a CK file, return a specified pointing record from that */
-/*     segment. */
+/*     Return a specified pointing record from a CK type 04 segment. */
+/*     The segment is identified by a CK file handle and segment */
+/*     descriptor. */
 
 /* $ Disclaimer */
 
@@ -272,7 +272,7 @@ static doublereal c_b15 = 128.;
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     I   The handle of the file containing the segment. */
 /*     DESCR      I   The segment descriptor. */
@@ -281,54 +281,54 @@ static doublereal c_b15 = 128.;
 
 /* $ Detailed_Input */
 
-/*     HANDLE     is the handle of the binary CK file containing the */
-/*                desired segment. The file should have been opened */
-/*                for read or write access, either by CKLPF, DAFOPR, */
-/*                or DAFOPW. */
+/*     HANDLE   is the handle of the binary CK file containing the */
+/*              desired segment. The file should have been opened */
+/*              for read or write access, either by CKLPF, DAFOPR, */
+/*              or DAFOPW. */
 
-/*     DESCR      is the packed descriptor of the data type 4 segment. */
+/*     DESCR    is the packed descriptor of the data type 4 segment. */
 
-/*     RECNO      is the number of the pointing record to be returned */
-/*                from the data type 4 segment. */
+/*     RECNO    is the number of the pointing record to be returned */
+/*              from the data type 4 segment. */
 
 /* $ Detailed_Output */
 
-/*     RECORD     is the pointing record indexed by RECNO in the */
-/*                segment. The contents of the record are as follows: */
+/*     RECORD   is the pointing record indexed by RECNO in the */
+/*              segment. The contents of the record are as follows: */
 
-/*                --------------------------------------------------- */
-/*                | The midpoint of the approximation interval      | */
-/*                --------------------------------------------------- */
-/*                | The radius of the approximation interval        | */
-/*                --------------------------------------------------- */
-/*                | Number of coefficients for q0                   | */
-/*                --------------------------------------------------- */
-/*                | Number of coefficients for q1                   | */
-/*                --------------------------------------------------- */
-/*                | Number of coefficients for q2                   | */
-/*                --------------------------------------------------- */
-/*                | Number of coefficients for q3                   | */
-/*                --------------------------------------------------- */
-/*                | Number of coefficients for AV1                  | */
-/*                --------------------------------------------------- */
-/*                | Number of coefficients for AV2                  | */
-/*                --------------------------------------------------- */
-/*                | Number of coefficients for AV3                  | */
-/*                --------------------------------------------------- */
-/*                | q0 Cheby coefficients                           | */
-/*                --------------------------------------------------- */
-/*                | q1 Cheby coefficients                           | */
-/*                --------------------------------------------------- */
-/*                | q2 Cheby coefficients                           | */
-/*                --------------------------------------------------- */
-/*                | q3 Cheby coefficients                           | */
-/*                --------------------------------------------------- */
-/*                | AV1 Cheby coefficients (optional)               | */
-/*                --------------------------------------------------- */
-/*                | AV2 Cheby coefficients (optional)               | */
-/*                --------------------------------------------------- */
-/*                | AV3 Cheby coefficients (optional)               | */
-/*                --------------------------------------------------- */
+/*              --------------------------------------------------- */
+/*              | The midpoint of the approximation interval      | */
+/*              --------------------------------------------------- */
+/*              | The radius of the approximation interval        | */
+/*              --------------------------------------------------- */
+/*              | Number of coefficients for q0                   | */
+/*              --------------------------------------------------- */
+/*              | Number of coefficients for q1                   | */
+/*              --------------------------------------------------- */
+/*              | Number of coefficients for q2                   | */
+/*              --------------------------------------------------- */
+/*              | Number of coefficients for q3                   | */
+/*              --------------------------------------------------- */
+/*              | Number of coefficients for AV1                  | */
+/*              --------------------------------------------------- */
+/*              | Number of coefficients for AV2                  | */
+/*              --------------------------------------------------- */
+/*              | Number of coefficients for AV3                  | */
+/*              --------------------------------------------------- */
+/*              | q0 Cheby coefficients                           | */
+/*              --------------------------------------------------- */
+/*              | q1 Cheby coefficients                           | */
+/*              --------------------------------------------------- */
+/*              | q2 Cheby coefficients                           | */
+/*              --------------------------------------------------- */
+/*              | q3 Cheby coefficients                           | */
+/*              --------------------------------------------------- */
+/*              | AV1 Cheby coefficients (optional)               | */
+/*              --------------------------------------------------- */
+/*              | AV2 Cheby coefficients (optional)               | */
+/*              --------------------------------------------------- */
+/*              | AV3 Cheby coefficients (optional)               | */
+/*              --------------------------------------------------- */
 
 /* $ Parameters */
 
@@ -337,15 +337,15 @@ static doublereal c_b15 = 128.;
 /* $ Exceptions */
 
 /*     1)  If the segment is not of data type 4, the error */
-/*         SPICE(CKWRONGDATATYPE) is signalled. */
+/*         SPICE(CKWRONGDATATYPE) is signaled. */
 
 /*     2)  If RECNO is less than one or greater than the number of */
 /*         records in the specified segment, the error */
-/*         SPICE(CKNONEXISTREC) is signalled. */
+/*         SPICE(CKNONEXISTREC) is signaled. */
 
 /*     3)  If the specified handle does not belong to any DAF file that */
-/*         is currently known to be open, an error is diagnosed by a */
-/*         routine that this routine calls. */
+/*         is currently known to be open, an error is signaled by a */
+/*         routine in the call tree of this routine. */
 
 /*     4)  If DESCR is not a valid descriptor of a segment in the CK */
 /*         file specified by HANDLE, the results of this routine are */
@@ -376,8 +376,9 @@ static doublereal c_b15 = 128.;
 /*     C     CK parameters include file. */
 /*     C */
 /*           INCLUDE               'ckparam.inc' */
+
 /*     C */
-/*     C     Declarations. */
+/*     C     Local variables. */
 /*     C */
 /*           DOUBLE PRECISION      DCD    ( 2 ) */
 /*           DOUBLE PRECISION      DESCR  ( 5 ) */
@@ -463,9 +464,9 @@ static doublereal c_b15 = 128.;
 
 /* $ Restrictions */
 
-/*     1) The binary CK file containing the segment whose descriptor */
-/*        was passed to this routine must be opened for read or write */
-/*        access by either CKLPF, DAFOPR, or DAFOPW. */
+/*     1)  The binary CK file containing the segment whose descriptor */
+/*         was passed to this routine must be opened for read or write */
+/*         access by either CKLPF, DAFOPR, or DAFOPW. */
 
 /* $ Literature_References */
 
@@ -473,10 +474,15 @@ static doublereal c_b15 = 128.;
 
 /* $ Author_and_Institution */
 
-/*     Y.K. Zaiko     (JPL) */
-/*     B.V. Semenov   (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     B.V. Semenov       (JPL) */
+/*     Y.K. Zaiko         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.0.2, 26-OCT-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.0.1, 18-APR-2014 (BVS) */
 
@@ -555,7 +561,7 @@ static doublereal c_b15 = 128.;
     numall = 0;
     for (k = 1; k <= 7; ++k) {
 	numall += numcft[(i__1 = k - 1) < 7 && 0 <= i__1 ? i__1 : s_rnge(
-		"numcft", i__1, "ckgr04_", (ftnlen)369)];
+		"numcft", i__1, "ckgr04_", (ftnlen)378)];
     }
 
 /*     Move polynomial coefficients to the right to free space for */
@@ -567,7 +573,7 @@ static doublereal c_b15 = 128.;
     }
     for (k = 1; k <= 7; ++k) {
 	record[k + 1] = (doublereal) numcft[(i__1 = k - 1) < 7 && 0 <= i__1 ? 
-		i__1 : s_rnge("numcft", i__1, "ckgr04_", (ftnlen)382)];
+		i__1 : s_rnge("numcft", i__1, "ckgr04_", (ftnlen)391)];
     }
 
 /*     All done. */

@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure  REPMD  ( Replace marker with double precision number ) */
+/* $Procedure REPMD  ( Replace marker with double precision number ) */
 /* Subroutine */ int repmd_(char *in, char *marker, doublereal *value, 
 	integer *sigdig, char *out, ftnlen in_len, ftnlen marker_len, ftnlen 
 	out_len)
@@ -79,55 +79,57 @@
 
 /* $ Detailed_Input */
 
-/*     IN             is an arbitrary character string. */
+/*     IN       is an arbitrary character string. */
 
-/*     MARKER         is an arbitrary character string. The first */
-/*                    occurrence of MARKER in the input string is */
-/*                    to be replaced by VALUE. */
+/*     MARKER   is an arbitrary character string. The first occurrence of */
+/*              MARKER in the input string is to be replaced by VALUE. */
 
-/*                    Leading and trailing blanks in MARKER are NOT */
-/*                    significant. In particular, no substitution is */
-/*                    performed if MARKER is blank. */
+/*              Leading and trailing blanks in MARKER are NOT */
+/*              significant. In particular, no substitution is performed */
+/*              if MARKER is blank. */
 
-/*     VALUE          is an arbitrary double precision number. */
+/*     VALUE    is an arbitrary double precision number. */
 
-/*     SIGDIG         is the number of significant digits with */
-/*                    which VALUE is to be represented. SIGDIG */
-/*                    must be greater than zero and less than 15. */
+/*     SIGDIG   is the number of significant digits with which VALUE is */
+/*              to be represented. SIGDIG must be greater than zero and */
+/*              less than 15. */
 
 /* $ Detailed_Output */
 
+/*     OUT      is the string obtained by substituting the text */
+/*              representation of VALUE for the first occurrence of */
+/*              MARKER in the input string. */
 
-/*     OUT            is the string obtained by substituting the text */
-/*                    representation of VALUE for the first occurrence */
-/*                    of MARKER in the input string. */
+/*              The text representation of VALUE is in scientific */
+/*              notation, having the number of significant digits */
+/*              specified by SIGDIG. The representation of VALUE is */
+/*              produced by the SPICELIB routine DPSTR; see that routine */
+/*              for details concerning the representation of double */
+/*              precision numbers. */
 
-/*                    The text representation of VALUE is in scientific */
-/*                    notation, having the number of significant digits */
-/*                    specified by SIGDIG.  The representation of VALUE */
-/*                    is produced by the routine DPSTR; see that routine */
-/*                    for details concerning the representation of */
-/*                    double precision numbers. */
-
-/*                    OUT and IN must be identical or disjoint. */
+/*              OUT and IN must be identical or disjoint. */
 
 /* $ Parameters */
 
-/*     MAXLDP         is the maximum expected length of the text */
-/*                    representation of a double precision number. */
-/*                    23 characters are sufficient to hold any result */
-/*                    returned by DPSTR. (See $Restrictions.) */
+/*     MAXLDP   is the maximum expected length of the text representation */
+/*              of a double precision number. 23 characters are */
+/*              sufficient to hold any result returned by the SPICELIB */
+/*              routine DPSTR. (See $Restrictions) */
+
+/*              This routine assumes that the input d.p. value is such */
+/*              that its string representation contains no more than */
+/*              MAXLDP characters. */
 
 /* $ Exceptions */
 
-/*     Error Free. */
+/*     Error free. */
 
-/*     1) If OUT does not have sufficient length to accommodate the */
-/*        result of the substitution, the result will be truncated on */
-/*        the right. */
+/*     1)  If OUT does not have sufficient length to accommodate the */
+/*         result of the substitution, the result will be truncated on */
+/*         the right. */
 
-/*     2) If MARKER is blank, or if MARKER is not a substring of IN, */
-/*        no substitution is performed. (OUT and IN are identical.) */
+/*     2)  If MARKER is blank, or if MARKER is not a substring of IN, */
+/*         no substitution is performed. (OUT and IN are identical.) */
 
 /* $ Files */
 
@@ -148,8 +150,8 @@
 
 /*     by the calls */
 
-/*        CALL REPMCT ( STRING, '#1', N_PICS,  'C', STRING ) */
-/*        CALL REPMC  ( STRING, '#2', DIR_NAME,     STRING ) */
+/*        CALL REPMCT ( STRING, '#1',  51,           'C', STRING ) */
+/*        CALL REPMC  ( STRING, '#2', '[USER.DATA]',      STRING ) */
 
 /*     which substitute the cardinal text 'Fifty-one' and the character */
 /*     string '[USER.DATA]' for the markers '#1' and '#2' respectively. */
@@ -158,89 +160,115 @@
 
 /*        REPMC    ( Replace marker with character string value ) */
 /*        REPMD    ( Replace marker with double precision value ) */
-/*        REPMF    ( Replace marker with formatted d.p. value ) */
-/*        REPMI    ( Replace marker with integer value ) */
-/*        REPMCT   ( Replace marker with cardinal text) */
-/*        REPMOT   ( Replace marker with ordinal text ) */
+/*        REPMF    ( Replace marker with formatted d.p. value   ) */
+/*        REPMI    ( Replace marker with integer value          ) */
+/*        REPML    ( Replace marker with logical value          ) */
+/*        REPMCT   ( Replace marker with cardinal text          ) */
+/*        REPMOT   ( Replace marker with ordinal text           ) */
 
 /* $ Examples */
 
-/*     1. Let */
+/*     The numerical results shown for this example may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
 
-/*          IN = 'Invalid operation value.  The value was #.' */
-
-/*        Then following the call, */
-
-/*           CALL REPMD ( IN, '#', 5.0D1, 2, IN  ) */
-
-/*        IN is */
-
-/*           'Invalid operation value.  The value was 5.0E+01.' */
+/*     1) The following example illustrate the use of REPMD to */
+/*        replace a marker within a string with the text representation */
+/*        of a double precision value. */
 
 
-/*     2. Let */
-
-/*          IN = 'Left endpoint exceeded right endpoint.  The left */
-/*                endpoint was: XX.  The right endpoint was: XX.' */
-
-/*        Then following the call, */
-
-/*           CALL REPMD ( IN, '  XX  ',  -5.2D-9, 3, OUT ) */
-
-/*         OUT is */
-
-/*           'Left endpoint exceeded right endpoint.  The left */
-/*            endpoint was: -5.20E-09.  The right endpoint was: XX.' */
+/*        Example code begins here. */
 
 
-/*     3. Let */
+/*              PROGRAM REPMD_EX1 */
+/*              IMPLICIT NONE */
 
-/*          IN = 'Invalid operation value.  The value was #.' */
+/*        C */
+/*        C     Local parameters. */
+/*        C */
+/*              INTEGER                 STRLEN */
+/*              PARAMETER             ( STRLEN = 80 ) */
 
-/*        Then following the call */
+/*        C */
+/*        C     Local variables. */
+/*        C */
+/*              CHARACTER*(STRLEN)      INSTR */
+/*              CHARACTER*(STRLEN)      MARKER */
+/*              CHARACTER*(STRLEN)      OUTSTR */
 
-/*           CALL REPMD ( IN, '#', 5.0D1, 100, IN  ) */
+/*        C */
+/*        C     1. Single marker, two significant digits. */
+/*        C */
+/*              MARKER = '#' */
+/*              INSTR  = 'Invalid value. The value was:  #' */
 
-/*        IN is */
+/*              CALL REPMD ( INSTR, MARKER, 5.0D1, 2, OUTSTR ) */
 
-/*            'Invalid operation value.  The value was */
-/*             5.0000000000000E+01.' */
+/*              WRITE(*,*) 'Case 1: Single marker, two significant ' */
+/*             .        // 'digits.' */
+/*              WRITE(*,*) '   Input : ', INSTR */
+/*              WRITE(*,*) '   Output: ', OUTSTR */
+/*              WRITE(*,*) */
 
-/*        Note that even though 100 digits of precision were requested, */
-/*        only 14 were returned. */
+/*        C */
+/*        C     2. Multiple markers, three significant digits. */
+/*        C */
+/*              MARKER = ' XX ' */
+/*              INSTR  = 'Left > Right endpoint. Left: XX; Right: XX' */
+
+/*              CALL REPMD ( INSTR, MARKER, -5.2D-9, 3, OUTSTR ) */
+
+/*              WRITE(*,*) 'Case 2: Multiple markers, three ' */
+/*             .        // 'significant digits.' */
+/*              WRITE(*,*) '   Input : ', INSTR */
+/*              WRITE(*,*) '   Output: ', OUTSTR */
+/*              WRITE(*,*) */
+
+/*        C */
+/*        C     3. Excessive significant digits. */
+/*        C */
+/*              MARKER = '#' */
+/*              INSTR  = 'Invalid value. The value was:  #' */
+
+/*              CALL REPMD ( INSTR, MARKER, 5.0D1, 100, OUTSTR ) */
+
+/*              WRITE(*,*) 'Case 3: Excessive significant digits.' */
+/*              WRITE(*,*) '   Input : ', INSTR */
+/*              WRITE(*,*) '   Output: ', OUTSTR */
+/*              WRITE(*,*) */
+
+/*              END */
 
 
-/*     4. Let */
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
 
-/*           NUM    = 23 */
-/*           CHANCE = 'fair' */
-/*           SCORE  = 4.665D0 */
 
-/*        Then following the sequence of calls, */
+/*         Case 1: Single marker, two significant digits. */
+/*            Input : Invalid value. The value was:  # */
+/*            Output: Invalid value. The value was:  5.0E+01 */
 
-/*           CALL REPMI ( 'There are & routines that have a '  // */
-/*          .             '& chance of meeting your needs.'    // */
-/*          .             'The maximum score was &.', */
-/*          .             '&', */
-/*          .             NUM, */
-/*          .             MSG  ) */
+/*         Case 2: Multiple markers, three significant digits. */
+/*            Input : Left > Right endpoint. Left: XX; Right: XX */
+/*            Output: Left > Right endpoint. Left: -5.20E-09; Right: XX */
 
-/*           CALL REPMC ( MSG, '&', CHANCE, MSG ) */
+/*         Case 3: Excessive significant digits. */
+/*            Input : Invalid value. The value was:  # */
+/*            Output: Invalid value. The value was:  5.0000000000000E+01 */
 
-/*           CALL REPMD ( MSG, '&', SCORE, 4, MSG ) */
 
-/*        MSG is */
-
-/*           'There are 23 routines that have a fair chance of */
-/*            meeting your needs.  The maximum score was 4.665E+00.' */
+/*        Note that, in Case #3 even though 100 digits of precision were */
+/*        requested, only 14 were returned. */
 
 /* $ Restrictions */
 
-/*     1) The maximum number of significant digits returned is 14. */
+/*     1)  The maximum number of significant digits returned is 14. */
 
-/*     2) This routine makes explicit use of the format of the string */
-/*        returned by DPSTR; should that routine change, substantial */
-/*        work may be required to bring this routine back up to snuff. */
+/*     2)  This routine makes explicit use of the format of the string */
+/*         returned by the SPICELIB routine DPSTR; should that routine */
+/*         change, substantial work may be required to bring this routine */
+/*         back up to snuff. */
 
 /* $ Literature_References */
 
@@ -248,12 +276,24 @@
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
-/*     B.V. Semenov   (JPL) */
-/*     W.L. Taber     (JPL) */
-/*     I.M. Underwood (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.3.0, 03-OCT-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. Added complete */
+/*        code example based on existing fragments. */
+
+/*        Added REPML to the list of available replace marker routines in */
+/*        $Particulars and extended the description of MAXLDP in */
+/*        $Parameters. */
 
 /* -    SPICELIB Version 1.2.0, 23-SEP-2013 (BVS) */
 

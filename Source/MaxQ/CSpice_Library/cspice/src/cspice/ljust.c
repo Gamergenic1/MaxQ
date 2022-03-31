@@ -18,7 +18,7 @@
 
 /* $ Abstract */
 
-/*     Left justify a character string. */
+/*     Left-justify a character string. */
 
 /* $ Disclaimer */
 
@@ -51,7 +51,9 @@
 
 /* $ Keywords */
 
-/*     ASCII,  CHARACTER,  STRING */
+/*     ASCII */
+/*     CHARACTER */
+/*     STRING */
 
 /* $ Declarations */
 /* $ Brief_I/O */
@@ -63,13 +65,13 @@
 
 /* $ Detailed_Input */
 
-/*     INPUT       is the input character string. */
+/*     INPUT    is the input character string. */
 
 /* $ Detailed_Output */
 
-/*     OUTPUT      is the output character string, left justified. */
+/*     OUTPUT   is the output character string, left justified. */
 
-/*                 OUTPUT may overwrite INPUT. */
+/*              OUTPUT may overwrite INPUT. */
 
 /* $ Parameters */
 
@@ -108,11 +110,18 @@
 
 /* $ Author_and_Institution */
 
-/*     I.M. Underwood  (JPL) */
-/*     W.L. Taber      (JPL) */
-/*     B.V. Semenov    (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.2.0, 27-AUG-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.1.0, 29-JUL-2013 (BVS) */
 

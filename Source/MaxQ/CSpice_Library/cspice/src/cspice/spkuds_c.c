@@ -3,9 +3,9 @@
 -Procedure spkuds_c ( SPK - unpack segment descriptor )
 
 -Abstract
- 
-   Unpack the contents of an SPK segment descriptor 
- 
+
+   Unpack the contents of an SPK segment descriptor.
+
 -Disclaimer
 
    THIS SOFTWARE AND ANY RELATED MATERIALS WERE CREATED BY THE
@@ -32,13 +32,13 @@
    ACTIONS OF RECIPIENT IN THE USE OF THE SOFTWARE.
 
 -Required_Reading
- 
-   SPK 
- 
+
+   SPK
+
 -Keywords
- 
-   SPK 
- 
+
+   SPK
+
 */
 
    #include "SpiceUsr.h"
@@ -54,137 +54,150 @@
                    SpiceInt           * type,
                    SpiceDouble        * first,
                    SpiceDouble        * last,
-                   SpiceInt           * begin,
-                   SpiceInt           * end       )
+                   SpiceInt           * baddrs,
+                   SpiceInt           * eaddrs     )
+
 /*
 
 -Brief_I/O
- 
-   VARIABLE  I/O  DESCRIPTION 
-   --------  ---  -------------------------------------------------- 
-   descr      I   An SPK segment descriptor. 
-   body       O   The NAIF ID code for the body of the segment. 
-   center     O   The center of motion for body. 
-   frame      O   The ID code for the frame of this segment. 
-   type       O   The type of SPK segment. 
-   first      O   The first epoch for which the segment is valid. 
-   last       O   The last  epoch for which the segment is valid. 
-   begin      O   Beginning DAF address of the segment. 
-   end        O   Ending DAF address of the segment. 
- 
--Detailed_Input
- 
-   descr      is an SPK segment descriptor. 
- 
--Detailed_Output
- 
-   body       is the NAIF ID code for the body of the segment. 
- 
-   center     is the center of motion for body. 
- 
-   frame      is the SPICE integer code for the frame to which states 
-              for the body are be referenced. 
- 
-   type       is the type of SPK segment. 
- 
-   first      is the first epoch for which the segment has 
-              ephemeris data. 
- 
-   last       is the last epoch for which the segment has 
-              ephemeris data. 
- 
-   begin      is the starting address of the data associated 
-              with this descriptor. 
- 
-   end        is the last address of the data associated with 
-              this descriptor. 
- 
--Parameters
- 
-   None. 
- 
--Particulars
- 
-   This routine extracts the contents of an SPK segment 
-   descriptor into the components needed for reading and 
-   evaluating the data stored in the segment.  It serves 
-   as a macro for expanding the SPK segment descriptor. 
- 
--Examples
- 
-   Suppose you wished to summarize a particular SPK segment 
-   and that you have the descriptor for that segment in hand. 
-   The following code fragment shows how you might use this 
-   routine to create a summary message concerning the segment. 
- 
-      #include <stdio.h>
-      #include "SpiceUsr.h"
-      
-      #define   TIMLEN       35
-            .
-            .
-            .
-            
-      spkuds_c ( descr,  &body, &center, &frame, 
-  .              &type,  &first, &last,  &baddr, &eaddr ); 
- 
-      /.
-      Convert the start and stop times to TDB calendar strings.
-      ./
-      etcal_c ( first, TIMLEN, fstcal ); 
-      etcal_c ( last,  TIMLEN, lstcal ); 
- 
-      printf ( "\n"
-               "Body     : %d\n"  
-               "Center   : %d\n"   
-               "Frame ID : %d\n"   
-               "Data Type: %d\n"  
-               "\n"
-               "Segment Start :  %s\n"  
-               "Segment Stop  :  %s\n",
-               body,
-               center,
-               frame,
-               type,
-               fstcal,
-               lstcal                   );
-  
- 
--Restrictions
- 
-   None. 
- 
--Exceptions
- 
-   None. 
- 
--Files
- 
-   None. 
- 
--Author_and_Institution
- 
-   N.J. Bachman      (JPL)
-   W.L. Taber        (JPL) 
-   K.R. Gehringer    (JPL) 
- 
--Literature_References
- 
-   None. 
- 
--Version
- 
-   -CSPICE Version 1.1.0, 24-JUL-2001   (NJB)
 
-       Changed protoype:  input descr is now type (ConstSpiceDouble *).
+   VARIABLE  I/O  DESCRIPTION
+   --------  ---  --------------------------------------------------
+   descr      I   An SPK segment descriptor.
+   body       O   The NAIF ID code for the body of the segment.
+   center     O   The center of motion for `body'.
+   frame      O   The code for the frame of this segment.
+   type       O   The type of SPK segment.
+   first      O   The first epoch for which the segment is valid.
+   last       O   The last  epoch for which the segment is valid.
+   baddrs     O   Beginning DAF address of the segment.
+   eaddrs     O   Ending DAF address of the segment.
+
+-Detailed_Input
+
+   descr       is an SPK segment descriptor.
+
+-Detailed_Output
+
+   body        is the NAIF ID code for the body of the segment.
+
+   center      is the center of motion for `body'.
+
+   frame       is the SPICE integer code for the frame to which states
+               for the body are be referenced.
+
+   type        is the type of SPK segment.
+
+   first       is the first epoch for which the segment has
+               ephemeris data.
+
+   last        is the last epoch for which the segment has
+               ephemeris data.
+
+   baddrs      is the starting address of the data associated
+               with this descriptor.
+
+   eaddrs      is the last address of the data associated with
+               this descriptor.
+
+-Parameters
+
+   None.
+
+-Exceptions
+
+   Error free.
+
+   1)  If the input descriptor `descr' is invalid, it's possible for
+       the output times to contain bit patterns that don't represent
+       normal double precision values. This error is not diagnosed.
+
+-Files
+
+   None.
+
+-Particulars
+
+   This routine extracts the contents of an SPK segment
+   descriptor into the components needed for reading and
+   evaluating the data stored in the segment. It serves
+   as a macro for expanding the SPK segment descriptor.
+
+-Examples
+
+   Suppose you wished to summarize a particular SPK segment
+   and that you have the descriptor for that segment in hand.
+   The following code fragment shows how you might use this
+   routine to create a summary message concerning the segment.
+
+       #include <stdio.h>
+       #include "SpiceUsr.h"
+
+       #define   TIMLEN       35
+             .
+             .
+             .
+
+       spkuds_c ( descr,  &body, &center, &frame,
+                  &type,  &first, &last,  &baddr, &eaddr );
+
+       /.
+       Convert the start and stop times to TDB calendar strings.
+       ./
+       etcal_c ( first, TIMLEN, fstcal );
+       etcal_c ( last,  TIMLEN, lstcal );
+
+       printf ( "\n"
+                "Body     : %d\n"
+                "Center   : %d\n"
+                "Frame ID : %d\n"
+                "Data Type: %d\n"
+                "\n"
+                "Segment Start :  %s\n"
+                "Segment Stop  :  %s\n",
+                body,
+                center,
+                frame,
+                type,
+                fstcal,
+                lstcal                   );
+
+-Restrictions
+
+   None.
+
+-Literature_References
+
+   None.
+
+-Author_and_Institution
+
+   N.J. Bachman        (JPL)
+   J. Diaz del Rio     (ODC Space)
+   K.R. Gehringer      (JPL)
+   W.L. Taber          (JPL)
+
+-Version
+
+   -CSPICE Version 1.2.0, 17-JUN-2021 (JDR)
+
+       Changed the output argument names "begin" and "end" to "baddrs" and
+       "eaddrs" for consistency with other routines.
+
+       Edited the header to comply with NAIF standard. Added -Exceptions
+       section.
+
+   -CSPICE Version 1.1.0, 24-JUL-2001 (NJB)
+
+       Changed prototype: input descr is now type (ConstSpiceDouble *).
        Implemented interface macro for casting input descr to const.
 
    -CSPICE Version 1.0.0, 22-JUL-1999 (NJB) (WLT) (KRG)
 
 -Index_Entries
- 
-   Unpack and SPK segment descriptor 
- 
+
+   Unpack and SPK segment descriptor
+
 -&
 */
 
@@ -194,7 +207,6 @@
    /*
    Participate in error tracing.
    */
-
    chkin_c ( "spkuds_c" );
 
 
@@ -205,11 +217,10 @@
               ( integer     * ) type,
               ( doublereal  * ) first,
               ( doublereal  * ) last,
-              ( integer     * ) begin,
-              ( integer     * ) end    );
-                 
-              
+              ( integer     * ) baddrs,
+              ( integer     * ) eaddrs    );
+
+
    chkout_c ( "spkuds_c" );
 
 } /* End spkuds_c */
-

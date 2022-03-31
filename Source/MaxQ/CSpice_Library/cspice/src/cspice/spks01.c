@@ -10,7 +10,7 @@
 static integer c__71 = 71;
 static integer c__1 = 1;
 
-/* $Procedure      SPKS01 ( S/P Kernel, subset, type 1 ) */
+/* $Procedure SPKS01 ( S/P Kernel, subset, type 1 ) */
 /* Subroutine */ int spks01_(integer *handle, integer *baddr, integer *eaddr, 
 	doublereal *begin, doublereal *end)
 {
@@ -69,7 +69,7 @@ static integer c__1 = 1;
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     I   Handle of source segment. */
 /*     BADDR      I   Beginning address of source segment. */
@@ -81,15 +81,15 @@ static integer c__1 = 1;
 
 /*     HANDLE, */
 /*     BADDR, */
-/*     EADDR       are the file handle assigned to a SPK file, and the */
-/*                 beginning and ending addresses of a segment within */
-/*                 the file.  Together they determine a complete set of */
-/*                 ephemeris data, from which a subset is to be */
-/*                 extracted. */
+/*     EADDR    are the file handle assigned to a SPK file, and the */
+/*              beginning and ending addresses of a segment within */
+/*              the file. Together they determine a complete set of */
+/*              ephemeris data, from which a subset is to be */
+/*              extracted. */
 
 /*     BEGIN, */
-/*     END         are the initial and final epochs (ephemeris time) */
-/*                 of the subset. */
+/*     END      are the initial and final epochs (ephemeris time) */
+/*              of the subset. */
 
 /* $ Detailed_Output */
 
@@ -101,7 +101,13 @@ static integer c__1 = 1;
 
 /* $ Exceptions */
 
-/*     None. */
+/*     1)  If an error occurs while reading data from the source SPK */
+/*         file, the error is signaled by a routine in the call tree of */
+/*         this routine. */
+
+/*     2)  If an error occurs while writing data to the output SPK file, */
+/*         the error is signaled by a routine in the call tree of this */
+/*         routine. */
 
 /* $ Files */
 
@@ -122,14 +128,23 @@ static integer c__1 = 1;
 
 /* $ Literature_References */
 
-/*     NAIF Document 168.0, "S- and P- Kernel (SPK) Specification and */
-/*     User's Guide" */
+/*     None. */
 
 /* $ Author_and_Institution */
 
-/*     I.M. Underwood  (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     H.A. Neilan        (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.1, 14-APR-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. Completed */
+/*        $Exceptions section. Moved SPK required reading from */
+/*        $Literature_References to $Required_Reading section. */
 
 /* -    SPICELIB Version 1.1.0, 07-SEP-2001 (EDW) */
 
@@ -143,7 +158,7 @@ static integer c__1 = 1;
 
 /* -    SPICELIB Version 1.0.2, 23-AUG-1991 (HAN) */
 
-/*        SPK01 was removed from the Required_Reading section of the */
+/*        SPK01 was removed from the $Required_Reading section of the */
 /*        header. The information in the SPK01 Required Reading file */
 /*        is now part of the SPK Required Reading file. */
 
@@ -156,7 +171,7 @@ static integer c__1 = 1;
 /* -& */
 /* $ Index_Entries */
 
-/*     subset type_1 spk segment */
+/*     subset type_1 SPK segment */
 
 /* -& */
 

@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      EXPLN ( Get Explanation for Short Error Message ) */
+/* $Procedure EXPLN ( Get Explanation for Short Error Message ) */
 /* Subroutine */ int expln_(char *msg, char *expl, ftnlen msg_len, ftnlen 
 	expl_len)
 {
@@ -15,7 +15,7 @@
 
 /* $ Abstract */
 
-/*      Return the explanation of a short error message. */
+/*     Return the explanation of a short error message. */
 
 /* $ Disclaimer */
 
@@ -44,23 +44,23 @@
 
 /* $ Required_Reading */
 
-/*      ERROR */
+/*     ERROR */
 
 /* $ Keywords */
 
-/*      ERROR */
+/*     ERROR */
 
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*      VARIABLE  I/O  DESCRIPTION */
-/*      --------  ---  -------------------------------------------------- */
-/*      MSG        I   A short error message. */
-/*      EXPL       O   The explanation of the short error message. */
+/*     VARIABLE  I/O  DESCRIPTION */
+/*     --------  ---  -------------------------------------------------- */
+/*     MSG        I   A short error message. */
+/*     EXPL       O   The explanation of the short error message. */
 
 /* $ Detailed_Input */
 
-/*      MSG     A ``short'' error message. */
+/*     MSG      is a "short" error message. */
 /*              MSG indicates the type of error that has occurred. */
 
 /*              The exact format that MSG must follow is */
@@ -68,7 +68,7 @@
 
 /* $ Detailed_Output */
 
-/*      EXPL    is a character string containing an one-line */
+/*     EXPL     is a character string containing an one-line */
 /*              explanation of the short error message, MSG. */
 
 /*              If there is no explanatory text corresponding */
@@ -80,52 +80,57 @@
 
 /* $ Exceptions */
 
+/*     1)  This routine does not detect any errors. */
 
-/*      This routine does not detect any errors. */
-
-/*      However, this routine is part of the interface to the */
-/*      SPICELIB error handling mechanism.  For this reason, */
-/*      this routine does not participate in the trace scheme, */
-/*      even though it has external references. */
-
+/*         However, this routine is part of the interface to the SPICELIB */
+/*         error handling mechanism. For this reason, this routine does */
+/*         not participate in the trace scheme, even though it has */
+/*         external references. */
 
 /* $ Files */
 
-/*      None. */
+/*     None. */
 
 /* $ Particulars */
 
-/*      None. */
+/*     None. */
 
 /* $ Examples */
 
+/*     C */
+/*     C     We want to find the explanation corresponding to */
+/*     C     the short message, SPICE(ZERORADIUS) : */
+/*     C */
 
-/*      C */
-/*      C     We want to find the explanation corresponding to */
-/*      C     the short message, 'SPICE(ZERORADIUS)' : */
-/*      C */
-
-/*             CALL EXPLN ( 'SPICE(ZERORADIUS)', EXPL ) */
+/*            CALL EXPLN ( SPICE(ZERORADIUS), EXPL ) */
 
 
-/*      Now, EXPL  = */
+/*     Now, EXPL  = */
 
-/*      'Invalid Radius--Equatorial or Polar Radius is Zero' */
-
+/*     'Invalid Radius--Equatorial or Polar Radius is Zero' */
 
 /* $ Restrictions */
 
-/*      None. */
+/*     None. */
 
 /* $ Literature_References */
 
-/*      None. */
+/*     None. */
 
 /* $ Author_and_Institution */
 
-/*      N.J. Bachman    (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 12-AUG-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.0.2, 18-APR-2014 (BVS) */
 
@@ -149,7 +154,7 @@
 /* -    Beta Version 1.1.0, 27-OCT-1988 (NJB) */
 
 /*        Removed code used to create upper case, left-justified */
-/*        copy of the short error message.  The resulting message */
+/*        copy of the short error message. The resulting message */
 /*        was not used. */
 
 /* -& */

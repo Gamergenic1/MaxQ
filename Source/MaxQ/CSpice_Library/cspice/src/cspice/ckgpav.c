@@ -11,7 +11,7 @@ static integer c__2 = 2;
 static integer c__6 = 6;
 static integer c__9 = 9;
 
-/* $Procedure      CKGPAV ( C-kernel, get pointing and angular velocity ) */
+/* $Procedure CKGPAV ( C-kernel, get pointing and angular velocity ) */
 /* Subroutine */ int ckgpav_(integer *inst, doublereal *sclkdp, doublereal *
 	tol, char *ref, doublereal *cmat, doublereal *av, doublereal *clkout, 
 	logical *found, ftnlen ref_len)
@@ -110,8 +110,8 @@ static integer c__9 = 9;
 /* $ Abstract */
 
 /*     The parameters below form an enumerated list of the recognized */
-/*     frame types.  They are: INERTL, PCK, CK, TK, DYN.  The meanings */
-/*     are outlined below. */
+/*     frame types. They are: INERTL, PCK, CK, TK, DYN, SWTCH, and ALL. */
+/*     The meanings are outlined below. */
 
 /* $ Disclaimer */
 
@@ -161,6 +161,11 @@ static integer c__9 = 9;
 /*                 definition depends on parameters supplied via a */
 /*                 frame kernel. */
 
+/*     SWTCH       is a "switch" frame. These frames have orientation */
+/*                 defined by their alignment with base frames selected */
+/*                 from a prioritized list. The base frames optionally */
+/*                 have associated time intervals of applicability. */
+
 /*     ALL         indicates any of the above classes. This parameter */
 /*                 is used in APIs that fetch information about frames */
 /*                 of a specified class. */
@@ -169,6 +174,7 @@ static integer c__9 = 9;
 /* $ Author_and_Institution */
 
 /*     N.J. Bachman    (JPL) */
+/*     B.V. Semenov    (JPL) */
 /*     W.L. Taber      (JPL) */
 
 /* $ Literature_References */
@@ -176,6 +182,11 @@ static integer c__9 = 9;
 /*     None. */
 
 /* $ Version */
+
+/* -    SPICELIB Version 5.0.0, 08-OCT-2020 (NJB) (BVS) */
+
+/*       The parameter SWTCH was added to support the switch */
+/*       frame class. */
 
 /* -    SPICELIB Version 4.0.0, 08-MAY-2012 (NJB) */
 
@@ -251,7 +262,7 @@ static integer c__9 = 9;
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     INST       I   NAIF ID of instrument, spacecraft, or structure. */
 /*     SCLKDP     I   Encoded spacecraft clock time. */
@@ -260,108 +271,113 @@ static integer c__9 = 9;
 /*     CMAT       O   C-matrix pointing data. */
 /*     AV         O   Angular velocity vector. */
 /*     CLKOUT     O   Output encoded spacecraft clock time. */
-/*     FOUND      O   True when requested pointing is available. */
+/*     FOUND      O   .TRUE. when requested pointing is available. */
 
 /* $ Detailed_Input */
 
-/*     INST       is the NAIF integer ID for the instrument, spacecraft, */
-/*                or other structure for which pointing and angular */
-/*                velocity are requested. For brevity we will refer to */
-/*                this object as the "instrument," and the frame fixed */
-/*                to this object as the "instrument frame" or */
-/*                "instrument-fixed" frame. */
+/*     INST     is the NAIF integer ID for the instrument, spacecraft, */
+/*              or other structure for which pointing and angular */
+/*              velocity are requested. For brevity we will refer to */
+/*              this object as the "instrument," and the frame fixed */
+/*              to this object as the "instrument frame" or */
+/*              "instrument-fixed" frame. */
 
-/*     SCLKDP     is the encoded spacecraft clock time for which */
-/*                pointing and angular velocity are requested. */
+/*     SCLKDP   is the encoded spacecraft clock time for which */
+/*              pointing and angular velocity are requested. */
 
-/*                The SPICELIB routines SCENCD and SCE2C respectively */
-/*                convert spacecraft clock strings and ephemeris time to */
-/*                encoded spacecraft clock.  The inverse conversions are */
-/*                performed by SCDECD and SCT2E. */
+/*              The SPICELIB routines SCENCD and SCE2C respectively */
+/*              convert spacecraft clock strings and ephemeris time to */
+/*              encoded spacecraft clock. The inverse conversions are */
+/*              performed by SCDECD and SCT2E. */
 
-/*     TOL        is a time tolerance in ticks, the units of encoded */
-/*                spacecraft clock time. */
+/*     TOL      is a time tolerance in ticks, the units of encoded */
+/*              spacecraft clock time. */
 
-/*                The SPICELIB routine SCTIKS converts a spacecraft */
-/*                clock tolerance duration from its character string */
-/*                representation to ticks.  SCFMT performs the inverse */
-/*                conversion. */
+/*              The SPICELIB routine SCTIKS converts a spacecraft */
+/*              clock tolerance duration from its character string */
+/*              representation to ticks. SCFMT performs the inverse */
+/*              conversion. */
 
-/*                The C-matrix - angular velocity vector pair returned by */
-/*                CKGPAV is the one whose time tag is closest to SCLKDP */
-/*                and within TOL units of SCLKDP.  (More in Particulars, */
-/*                below.) */
+/*              The C-matrix - angular velocity vector pair returned by */
+/*              CKGPAV is the one whose time tag is closest to SCLKDP */
+/*              and within TOL units of SCLKDP. (More in $Particulars, */
+/*              below.) */
 
-/*                In general, because using a non-zero tolerance */
-/*                affects selection of the segment from which the */
-/*                data is obtained, users are strongly discouraged */
-/*                from using a non-zero tolerance when reading CKs */
-/*                with continuous data. Using a non-zero tolerance */
-/*                should be reserved exclusively to reading CKs with */
-/*                discrete data because in practice obtaining data */
-/*                from such CKs using a zero tolerance is often not */
-/*                possible due to time round off. */
+/*              In general, because using a non-zero tolerance */
+/*              affects selection of the segment from which the */
+/*              data is obtained, users are strongly discouraged */
+/*              from using a non-zero tolerance when reading CKs */
+/*              with continuous data. Using a non-zero tolerance */
+/*              should be reserved exclusively to reading CKs with */
+/*              discrete data because in practice obtaining data */
+/*              from such CKs using a zero tolerance is often not */
+/*              possible due to time round off. */
 
-/*     REF        is the desired reference frame for the returned */
-/*                pointing and angular velocity.  The returned C-matrix */
-/*                CMAT gives the orientation of the instrument */
-/*                designated by INST relative to the frame designated by */
-/*                REF.  When a vector specified relative to frame REF is */
-/*                left-multiplied by CMAT, the vector is rotated to the */
-/*                frame associated with INST. The returned angular */
-/*                velocity vector AV expresses the angular velocity of */
-/*                the instrument designated by INST relative to the */
-/*                frame designated by REF.  See the discussion of CMAT */
-/*                and AV below for details. */
+/*     REF      is the desired reference frame for the returned */
+/*              pointing and angular velocity. The returned C-matrix */
+/*              CMAT gives the orientation of the instrument */
+/*              designated by INST relative to the frame designated by */
+/*              REF. When a vector specified relative to frame REF is */
+/*              left-multiplied by CMAT, the vector is rotated to the */
+/*              frame associated with INST. The returned angular */
+/*              velocity vector AV expresses the angular velocity of */
+/*              the instrument designated by INST relative to the */
+/*              frame designated by REF. See the discussion of CMAT */
+/*              and AV below for details. */
 
-/*                Consult the SPICE document "Frames" for a discussion */
-/*                of supported reference frames. */
+/*              Consult the SPICE document "Frames" for a discussion */
+/*              of supported reference frames. */
 
 /* $ Detailed_Output */
 
-/*     CMAT       is a rotation matrix that transforms the components of */
-/*                a vector expressed in the reference frame specified by */
-/*                REF to components expressed in the frame tied to the */
-/*                instrument, spacecraft, or other structure at time */
-/*                CLKOUT (see below). */
+/*     CMAT     is a rotation matrix that transforms the components of */
+/*              a vector expressed in the reference frame specified by */
+/*              REF to components expressed in the frame tied to the */
+/*              instrument, spacecraft, or other structure at time */
+/*              CLKOUT (see below). */
 
-/*                Thus, if a vector v has components x,y,z in the REF */
-/*                reference frame, then v has components x',y',z' in the */
-/*                instrument fixed frame at time CLKOUT: */
+/*              Thus, if a vector v has components x,y,z in the REF */
+/*              reference frame, then v has components x',y',z' in the */
+/*              instrument fixed frame at time CLKOUT: */
 
-/*                     [ x' ]     [          ] [ x ] */
-/*                     | y' |  =  |   CMAT   | | y | */
-/*                     [ z' ]     [          ] [ z ] */
+/*                 .-   -.     .-        -. .-   -. */
+/*                 |  x' |     |          | |  x  | */
+/*                 |  y' |  =  |   CMAT   | |  y  | */
+/*                 |  z' |     |          | |  z  | */
+/*                 '-   -'     '-        -' '-   -' */
 
-/*                If you know x', y', z', use the transpose of the */
-/*                C-matrix to determine x, y, z as follows: */
+/*              If you know x', y', z', use the transpose of the */
+/*              C-matrix to determine x, y, z as follows: */
 
-/*                     [ x ]      [          ]T    [ x' ] */
-/*                     | y |  =   |   CMAT   |     | y' | */
-/*                     [ z ]      [          ]     [ z' ] */
-/*                              (Transpose of CMAT) */
+/*                 .-   -.      .-        -.T  .-   -. */
+/*                 |  x  |      |          |   |  x' | */
+/*                 |  y  |  =   |   CMAT   |   |  y' | */
+/*                 |  z  |      |          |   |  z' | */
+/*                 '-   -'      '-        -'   '-   -' */
 
-/*     AV         is the angular velocity vector. This is the axis about */
-/*                which the reference frame tied to the instrument is */
-/*                rotating in the right-handed sense at time CLKOUT. The */
-/*                magnitude of AV is the magnitude of the instantaneous */
-/*                velocity of the rotation, in radians per second.  AV */
-/*                is expressed relative to the frame designated by REF. */
+/*                         (Transpose of CMAT) */
 
-/*     CLKOUT     is the encoded spacecraft clock time associated with */
-/*                the returned C-matrix and the returned angular */
-/*                velocity vector. This value may differ from the */
-/*                requested time, but never by more than the input */
-/*                tolerance TOL. */
+/*     AV       is the angular velocity vector. This is the axis about */
+/*              which the reference frame tied to the instrument is */
+/*              rotating in the right-handed sense at time CLKOUT. The */
+/*              magnitude of AV is the magnitude of the instantaneous */
+/*              velocity of the rotation, in radians per second.  AV */
+/*              is expressed relative to the frame designated by REF. */
 
-/*                The particulars section below describes the search */
-/*                algorithm used by CKGPAV to satisfy a pointing */
-/*                request.  This algorithm determines the pointing */
-/*                instance (and therefore the associated time value) */
-/*                that is returned. */
+/*     CLKOUT   is the encoded spacecraft clock time associated with */
+/*              the returned C-matrix and the returned angular */
+/*              velocity vector. This value may differ from the */
+/*              requested time, but never by more than the input */
+/*              tolerance TOL. */
 
-/*     FOUND      is true if a record was found to satisfy the pointing */
-/*                request.  FOUND will be false otherwise. */
+/*              The $Particulars section below describes the search */
+/*              algorithm used by CKGPAV to satisfy a pointing */
+/*              request. This algorithm determines the pointing */
+/*              instance (and therefore the associated time value) */
+/*              that is returned. */
+
+/*     FOUND    is .TRUE. if a record was found to satisfy the pointing */
+/*              request. FOUND will be .FALSE. otherwise. */
 
 /* $ Parameters */
 
@@ -383,7 +399,7 @@ static integer c__9 = 9;
 
 /*     CKGPAV searches through files loaded by FURNSH to locate a */
 /*     segment that can satisfy the request for pointing and angular */
-/*     velocity for instrument INST at time SCLKDP.  You must load a */
+/*     velocity for instrument INST at time SCLKDP. You must load a */
 /*     C-kernel file using FURNSH prior to calling this routine. */
 
 /* $ Particulars */
@@ -409,7 +425,7 @@ static integer c__9 = 9;
 /*          pointing instances is indicated by the "+" sign. */
 
 /*        - TOL is the time tolerance specified in the pointing */
-/*          request.  The square brackets "[ ]" represent the */
+/*          request. The square brackets "[ ]" represent the */
 /*          endpoints of the time interval */
 
 /*             SCLKDP-TOL : SCLKDP+TOL */
@@ -467,7 +483,7 @@ static integer c__9 = 9;
 /*          pointing instances is indicated by the "+" sign. */
 
 /*        - TOL is the time tolerance specified in the pointing */
-/*          request.  The square brackets "[ ]" represent the */
+/*          request. The square brackets "[ ]" represent the */
 /*          endpoints of the time interval */
 
 /*             SCLKDP-TOL : SCLKDP+TOL */
@@ -509,7 +525,7 @@ static integer c__9 = 9;
 /*                                             ^ */
 /*                                             | */
 
-/*                   The request time lies in a gap:  an interval where */
+/*                   The request time lies in a gap: an interval where */
 /*                   continuous pointing is *not* available.  CKGPAV */
 /*                   returns pointing for the epoch closest to the */
 /*                   request time SCLKDP. */
@@ -633,7 +649,7 @@ static integer c__9 = 9;
 
 
 /*     In the next case, assume that the order of segments A and C in the */
-/*     file is reversed:  A is now closer to the front, so data from */
+/*     file is reversed: A is now closer to the front, so data from */
 /*     segment C are considered first. */
 
 
@@ -694,159 +710,203 @@ static integer c__9 = 9;
 
 /* $ Examples */
 
+/*     The numerical results shown for this example may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
 
-/*     Suppose you have two C-kernel files containing data for the */
-/*     Voyager 2 narrow angle camera.  One file contains predict values, */
-/*     and the other contains corrected pointing for a selected group */
-/*     of images, that is, for a subset of images from the first file. */
+/*     1) The following example program uses CKGPAV to get C-matrices */
+/*        and associated angular velocity vectors for a set of images */
+/*        whose SCLK counts (un-encoded character string versions) are */
+/*        known. */
 
-/*     The following example program uses CKGPAV to get C-matrices and */
-/*     associated angular velocity vectors for a set of images whose */
-/*     SCLK counts (un-encoded character string versions) are contained */
-/*     in the array SCLKCH. */
+/*        For each C-matrix, a unit pointing vector is constructed and */
+/*        printed along with the angular velocity vector. */
 
-/*     If available, the program will get the corrected pointing values. */
-/*     Otherwise, predict values will be used. */
+/*        Note: if the C-kernels of interest do not contain angular */
+/*        velocity data, then the SPICELIB routine CKGP should be used */
+/*        to read the pointing data. An example program in the header */
+/*        of the SPICELIB routine CKGP demonstrates this. */
 
-/*     For each C-matrix, a unit  pointing vector is constructed */
-/*     and printed along with the angular velocity vector. */
-
-/*     Note: if the C-kernels of interest do not contain angular */
-/*     velocity data, then the SPICELIB routine CKGP should be used to */
-/*     read the pointing data.  An example program in the header of the */
-/*     SPICELIB routine CKGP demonstrates this. */
-
-
-
-/*     C */
-/*     C     Constants for this program. */
-/*     C */
-/*     C     -- The code for the Voyager 2 spacecraft clock is -32 */
-/*     C */
-/*     C     -- The code for the narrow angle camera on the Voyager 2 */
-/*     C        spacecraft is -32001. */
-/*     C */
-/*     C    --  Spacecraft clock times for successive Voyager images */
-/*     C        always differ by more than 0:0:400.  This is an */
-/*     C        acceptable tolerance, and must be converted to "ticks" */
-/*     C        (units of encoded SCLK) for input to CKGPAV. */
-/*     C */
-/*     C     -- The reference frame we want is FK4. */
-/*     C */
-/*     C     -- The narrow angle camera boresight defines the third */
-/*     C        axis of the instrument-fixed coordinate system. */
-/*     C        Therefore, the vector ( 0, 0, 1 ) represents */
-/*     C        the boresight direction in the camera-fixed frame. */
-/*     C */
-/*           IMPLICIT NONE */
-
-/*           INTEGER               FILEN */
-/*           PARAMETER           ( FILEN  = 255 ) */
-
-/*           INTEGER               NPICS */
-/*           PARAMETER           ( NPICS  = 2 ) */
-
-/*           INTEGER               TIMLEN */
-/*           PARAMETER           ( TIMLEN = 30 ) */
-
-/*           INTEGER               REFLEN */
-/*           PARAMETER           ( REFLEN = 32 ) */
-
-/*           CHARACTER*(TIMLEN)    CLKCH */
-/*           CHARACTER*(FILEN)     CKPRED */
-/*           CHARACTER*(FILEN)     CKCORR */
-/*           CHARACTER*(REFLEN)    REF */
-/*           CHARACTER*(FILEN)     SCLK */
-/*           CHARACTER*(TIMLEN)    SCLKCH ( NPICS ) */
-/*           CHARACTER*(TIMLEN)    TOLVGR */
-
-/*           DOUBLE PRECISION      AV     ( 3 ) */
-/*           DOUBLE PRECISION      CLKOUT */
-/*           DOUBLE PRECISION      CMAT   ( 3, 3 ) */
-/*           DOUBLE PRECISION      SCLKDP */
-/*           DOUBLE PRECISION      TOLTIK */
-/*           DOUBLE PRECISION      VCFIX  ( 3 ) */
-/*           DOUBLE PRECISION      VINERT ( 3 ) */
-
-/*           INTEGER               SC */
-/*           INTEGER               I */
-/*           INTEGER               INST */
-
-/*           LOGICAL               FOUND */
-
-/*           CKPRED     = 'voyager2_predict.bc' */
-/*           CKCORR     = 'voyager2_corrected.bc' */
-/*           SCLK       = 'voyager2_sclk.tsc' */
-/*           SC         = -32 */
-/*           INST       = -32001 */
-/*           SCLKCH(1)  = '4/08966:30:768' */
-/*           SCLKCH(2)  = '4/08970:58:768' */
-/*           TOLVGR     = '0:0:400' */
-/*           REF        = 'FK4' */
-/*           VCFIX( 1 ) =  0.D0 */
-/*           VCFIX( 2 ) =  0.D0 */
-/*           VCFIX( 3 ) =  1.D0 */
-
-/*     C */
-/*     C     Loading the files in this order ensures that the */
-/*     C     corrected file will get searched first. */
-/*     C */
-/*           CALL FURNSH ( CKPRED ) */
-/*           CALL FURNSH ( CKCORR ) */
-
-/*     C */
-/*     C     Need to load a Voyager 2 SCLK kernel to convert from */
-/*     C     clock strings to ticks. */
-/*     C */
-/*           CALL FURNSH ( SCLK ) */
-
-/*     C */
-/*     C     Convert tolerance from VGR formatted character string */
-/*     C     SCLK to ticks which are units of encoded SCLK. */
-/*     C */
-/*           CALL SCTIKS ( SC, TOLVGR, TOLTIK ) */
+/*        We need to load also an SCLK kernel to convert from clock */
+/*        string to 'ticks.' Although not required for older spacecraft */
+/*        clocks, most modern spacecraft ones require a leapseconds */
+/*        kernel to be loaded in addition to an SCLK kernel. */
 
 
-/*           DO I = 1, NPICS */
-/*     C */
-/*     C        CKGPAV requires encoded spacecraft clock. */
-/*     C */
-/*              CALL SCENCD ( SC, SCLKCH( I ), SCLKDP ) */
+/*        Use the meta-kernel shown below to load the required SPICE */
+/*        kernels. */
 
-/*              CALL CKGPAV ( INST,   SCLKDP, TOLTIK, REF, CMAT, AV, */
-/*          .                 CLKOUT, FOUND                        ) */
 
-/*              IF ( FOUND ) THEN */
+/*           KPL/MK */
 
-/*     C */
-/*     C           Use the transpose of the C-matrix to transform the */
-/*     C           boresight vector from camera-fixed to reference */
-/*     C           coordinates. */
-/*     C */
-/*                 CALL MTXV   ( CMAT, VCFIX,  VINERT ) */
-/*                 CALL SCDECD ( SC,   CLKOUT, CLKCH  ) */
+/*           File name: ckgpav_ex1.tm */
 
-/*                 WRITE (*,*) 'VGR 2 SCLK Time:         ', CLKCH */
-/*                 WRITE (*,*) 'VGR 2 NA ISS boresight ' */
-/*          .      //          'pointing vector: ',         VINERT */
-/*                 WRITE (*,*) 'Angular velocity vector: ', AV */
+/*           This meta-kernel is intended to support operation of SPICE */
+/*           example programs. The kernels shown here should not be */
+/*           assumed to contain adequate or correct versions of data */
+/*           required by SPICE-based user applications. */
 
-/*              ELSE */
+/*           In order for an application to use this meta-kernel, the */
+/*           kernels referenced here must be present in the user's */
+/*           current working directory. */
 
-/*                 WRITE (*,*) 'Pointing not found for time ', SCLKCH(I) */
+/*           The names and contents of the kernels referenced */
+/*           by this meta-kernel are as follows: */
 
-/*              END IF */
+/*              File name              Contents */
+/*              --------------------   ----------------------- */
+/*              cas00071.tsc           CASSINI SCLK */
+/*              04153_04182ca_ISS.bc   CASSINI image navigated */
+/*                                     spacecraft CK */
 
-/*           END DO */
 
-/*           END */
+/*           \begindata */
+
+/*             KERNELS_TO_LOAD = ( 'cas00071.tsc' */
+/*                                 '04153_04182ca_ISS.bc' ) */
+
+/*           \begintext */
+
+/*           End of meta-kernel */
+
+
+/*        Example code begins here. */
+
+
+/*              PROGRAM CKGPAV_EX1 */
+/*              IMPLICIT NONE */
+
+/*        C */
+/*        C     Constants for this program. */
+/*        C */
+/*        C     -- The code for the CASSINI spacecraft clock is -82. */
+/*        C */
+/*        C     -- The code for CASSINI spacecraft reference frame is */
+/*        C        -82000. */
+/*        C */
+/*        C    --  Spacecraft clock times for successive CASSINI */
+/*        C        navigation images always differ by more than 1.0 */
+/*        C        seconds. This is an acceptable tolerance, and must */
+/*        C        be converted to "ticks" (units of encoded SCLK) for */
+/*        C        input to CKGPAV. */
+/*        C */
+/*        C     -- The reference frame we want is J2000. */
+/*        C */
+/*        C     -- The CASSINI ISS camera boresight in the spacecraft */
+/*        C        frame is (0.0005760, -0.99999982, -0.0001710). */
+/*        C */
+/*              INTEGER               NPICS */
+/*              PARAMETER           ( NPICS  = 2 ) */
+
+/*              INTEGER               TIMLEN */
+/*              PARAMETER           ( TIMLEN = 30 ) */
+
+/*              INTEGER               REFLEN */
+/*              PARAMETER           ( REFLEN = 32 ) */
+
+/*              CHARACTER*(TIMLEN)    CLKCH */
+/*              CHARACTER*(REFLEN)    REF */
+/*              CHARACTER*(TIMLEN)    SCLKCH ( NPICS ) */
+/*              CHARACTER*(TIMLEN)    TOL */
+
+/*              DOUBLE PRECISION      AV     ( 3 ) */
+/*              DOUBLE PRECISION      CLKOUT */
+/*              DOUBLE PRECISION      CMAT   ( 3, 3 ) */
+/*              DOUBLE PRECISION      SCLKDP */
+/*              DOUBLE PRECISION      TOLTIK */
+/*              DOUBLE PRECISION      ISSFIX ( 3 ) */
+/*              DOUBLE PRECISION      VINERT ( 3 ) */
+
+/*              INTEGER               SC */
+/*              INTEGER               I */
+/*              INTEGER               INST */
+
+/*              LOGICAL               FOUND */
+
+/*              DATA                  SCLKCH /  '1465644281.0', */
+/*             .                                '1465644351.0' / */
+
+/*              DATA                  ISSFIX /  0.00057600D0, */
+/*             .                               -0.99999982D0, */
+/*             .                               -0.00017100D0  / */
+
+/*              SC   = -82 */
+/*              INST = -82000 */
+/*              TOL  = '1.0' */
+/*              REF  = 'J2000' */
+
+/*        C */
+/*        C     Load kernels. */
+/*        C */
+/*              CALL FURNSH ( 'ckgpav_ex1.tm' ) */
+
+/*        C */
+/*        C     Convert tolerance from CASSINI formatted character */
+/*        C     string SCLK to ticks which are units of encoded SCLK. */
+/*        C */
+/*              CALL SCTIKS ( SC, TOL, TOLTIK ) */
+
+
+/*              DO I = 1, NPICS */
+/*        C */
+/*        C        CKGPAV requires encoded spacecraft clock. */
+/*        C */
+/*                 CALL SCENCD ( SC, SCLKCH( I ), SCLKDP ) */
+
+/*                 CALL CKGPAV ( INST,   SCLKDP, TOLTIK, REF, CMAT, AV, */
+/*             .                 CLKOUT, FOUND                        ) */
+
+/*                 IF ( FOUND ) THEN */
+
+/*        C */
+/*        C           Use the transpose of the C-matrix to transform the */
+/*        C           boresight vector from camera-fixed to reference */
+/*        C           coordinates. */
+/*        C */
+/*                    CALL MTXV   ( CMAT, ISSFIX, VINERT ) */
+/*                    CALL SCDECD ( SC,   CLKOUT, CLKCH  ) */
+
+/*                    WRITE(*,*) 'Requested SCLK time : ', SCLKCH(I) */
+/*                    WRITE(*,*) '   CASSINI SCLK time: ', CLKCH */
+/*                    WRITE(*,'(A,3F11.7)') */
+/*             .             '    CASSINI ISS boresight  :', VINERT */
+/*                    WRITE(*,'(A,3F11.7)') */
+/*             .             '    Angular velocity vector:', AV */
+/*                    WRITE(*,*) ' ' */
+
+/*                 ELSE */
+
+/*                    WRITE (*,*) 'Pointing not found for time ', */
+/*             .                   SCLKCH(I) */
+
+/*                 END IF */
+
+/*              END DO */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*         Requested SCLK time : 1465644281.0 */
+/*            CASSINI SCLK time: 1/1465644281.171 */
+/*            CASSINI ISS boresight  :  0.9376789  0.3444125  0.0462419 */
+/*            Angular velocity vector:  0.0000000  0.0000000  0.0000000 */
+
+/*         Requested SCLK time : 1465644351.0 */
+/*            CASSINI SCLK time: 1/1465644351.071 */
+/*            CASSINI ISS boresight  :  0.9376657  0.3444504  0.0462266 */
+/*            Angular velocity vector:  0.0000000  0.0000000  0.0000000 */
 
 
 /* $ Restrictions */
 
-/*     Only loaded C-kernel segments containing both pointing and */
-/*     angular velocity data will be searched by this reader.  Segments */
-/*     containing only pointing data will be skipped over. */
+/*     1)  Only loaded C-kernel segments containing both pointing and */
+/*         angular velocity data will be searched by this reader. */
+/*         Segments containing only pointing data will be skipped over. */
 
 /* $ Literature_References */
 
@@ -854,16 +914,24 @@ static integer c__9 = 9;
 
 /* $ Author_and_Institution */
 
-/*     C.H. Acton     (JPL) */
-/*     N.J. Bachman   (JPL) */
-/*     W.L. Taber     (JPL) */
-/*     J.M. Lynch     (JPL) */
-/*     B.V. Semenov   (JPL) */
-/*     M.J. Spencer   (JPL) */
-/*     R.E. Thurman   (JPL) */
-/*     I.M. Underwood (JPL) */
+/*     C.H. Acton         (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     J.M. Lynch         (JPL) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     R.E. Thurman       (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 5.3.1, 02-JUL-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. Updated the */
+/*        example code, input times and kernel set to work with */
+/*        PDS archived CASSINI data. */
+
+/*        Added missing entry in $Versions section. */
 
 /* -    SPICELIB Version 5.3.0, 23-SEP-2013 (BVS) */
 
@@ -873,7 +941,7 @@ static integer c__9 = 9;
 
 /* -    SPICELIB Version 5.2.1, 03-JUN-2010 (BVS) */
 
-/*        Header update: description of the tolerance and Particulars */
+/*        Header update: description of the tolerance and $Particulars */
 /*        section were expanded to address some problems arising from */
 /*        using a non-zero tolerance. */
 
@@ -884,7 +952,7 @@ static integer c__9 = 9;
 
 /* -    SPICELIB Version 5.1.2, 29-JAN-2004 (NJB) */
 
-/*        Header update:  descriptions of input arguments REF and */
+/*        Header update: descriptions of input arguments REF and */
 /*        AV were expanded. */
 
 /* -    SPICELIB Version 5.1.1, 27-JUL-2003 (CHA) (NJB) */
@@ -894,7 +962,7 @@ static integer c__9 = 9;
 /* -    SPICELIB Version 5.1.0, 23-FEB-1999 (WLT) */
 
 /*        The previous editions of this routine did not properly handle */
-/*        the case when TOL was negative.  The routine now returns a */
+/*        the case when TOL was negative. The routine now returns a */
 /*        value of .FALSE. for FOUND as is advertised above. */
 
 /* -    SPICELIB Version 5.0.0, 28-JUL-1997 (WLT) */
@@ -904,12 +972,18 @@ static integer c__9 = 9;
 /*        to the platform frame of the C-matrix for non-inertial */
 /*        reference frames. */
 
+/* -    SPICELIB Version 4.1.0, 20-DEC-1995 (WLT) */
+
+/*        A call to FRINFO did not have enough arguments and */
+/*        went undetected until Howard Taylor of ACT. Many */
+/*        thanks go out to Howard for tracking down this error. */
+
 /* -    SPICELIB Version 4.0.0, 19-SEP-1995 (WLT) */
 
 /*        The routine was upgraded so that the reference frame may */
 /*        be non-inertial. */
 
-/* -    SPICELIB Version 3.0.0, 5-OCT-1994 (WLT) */
+/* -    SPICELIB Version 3.0.0, 05-OCT-1994 (WLT) */
 
 /*        The previous versions all computed an incorrect */
 /*        value for the angular velocity if the frame specified by */
@@ -924,7 +998,7 @@ static integer c__9 = 9;
 
 /* -    SPICELIB Version 2.0.0, 30-AUG-1991 (JML) */
 
-/*        1) The Particulars section was updated to show how the */
+/*        1) The $Particulars section was updated to show how the */
 /*           search algorithm processes segments with continuous */
 /*           pointing data. */
 
@@ -955,20 +1029,39 @@ static integer c__9 = 9;
 /* -& */
 /* $ Index_Entries */
 
-/*     get ck pointing and angular velocity */
+/*     get CK pointing and angular velocity */
 
 /* -& */
 /* $ Revisions */
+
+/* -    SPICELIB Version 5.3.0, 23-SEP-2013 (BVS) */
+
+/*        Updated to save the input frame name and POOL state counter */
+/*        and to do frame name-ID conversion only if the counter has */
+/*        changed. */
 
 /* -    SPICELIB Version 5.2.0, 25-AUG-2005 (NJB) */
 
 /*        Updated to remove non-standard use of duplicate arguments */
 /*        in MTXV, MXM and VADD calls. */
 
+/* -    SPICELIB Version 5.1.0, 23-FEB-1999 (WLT) */
+
+/*        The previous editions of this routine did not properly handle */
+/*        the case when TOL was negative. The routine now returns a */
+/*        value of .FALSE. for FOUND as is advertised above. */
+
+/* -    SPICELIB Version 5.0.0, 28-JUL-1997 (WLT) */
+
+/*        The previous routine incorrectly computed the angular */
+/*        velocity of the transformation from the request frame */
+/*        to the platform frame of the C-matrix for non-inertial */
+/*        reference frames. */
+
 /* -    SPICELIB Version 4.1.0, 20-DEC-1995 (WLT) */
 
 /*        A call to FRINFO did not have enough arguments and */
-/*        went undetected until Howard Taylor of ACT.  Many */
+/*        went undetected until Howard Taylor of ACT. Many */
 /*        thanks go out to Howard for tracking down this error. */
 
 /* -    SPICELIB Version 4.0.0, 19-SEP-1995 (WLT) */
@@ -989,7 +1082,7 @@ static integer c__9 = 9;
 
 /* -    SPICELIB Version 2.0.0, 30-AUG-1991 (JML) */
 
-/*        1) The Particulars section was updated to show how the */
+/*        1) The $Particulars section was updated to show how the */
 /*           search algorithm processes segments with continuous */
 /*           pointing data. */
 

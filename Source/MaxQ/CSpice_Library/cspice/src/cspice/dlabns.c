@@ -183,24 +183,24 @@ static integer c__8 = 8;
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     I   Handle of open DLA file. */
 
 /* $ Detailed_Input */
 
-/*     HANDLE      is the integer handle associated with the DLA file to */
-/*                 be updated.  This handle is used to identify the file */
-/*                 in subsequent calls to other DLA or DAS routines. */
+/*     HANDLE   is the integer handle associated with the DLA file to */
+/*              be updated. This handle is used to identify the file */
+/*              in subsequent calls to other DLA or DAS routines. */
 
-/*                 The DLA file must be open for write access. A new DLA */
-/*                 segment is started in the indicated file.  The file */
-/*                 is left open, since normally data will be written to */
-/*                 the file following a call to this routine. */
+/*              The DLA file must be open for write access. A new DLA */
+/*              segment is started in the indicated file. The file */
+/*              is left open, since normally data will be written to */
+/*              the file following a call to this routine. */
 
 /* $ Detailed_Output */
 
-/*     None.  See the Particulars and Examples header sections for */
+/*     None. See the $Particulars and $Examples header sections for */
 /*     a description of the actions performed by this routine. */
 
 /* $ Parameters */
@@ -209,13 +209,13 @@ static integer c__8 = 8;
 
 /* $ Exceptions */
 
-/*     1) If the input file handle does not refer to a DAS file that is */
-/*        open for write access, the error will be diagnosed by routines */
-/*        in the call tree of this routine. */
+/*     1)  If the input file handle does not refer to a DAS file that is */
+/*         open for write access, an error is signaled by a routine */
+/*         in the call tree of this routine. */
 
-/*     2) If an error occurs while reading or writing to the DLA file, */
-/*        the error will be diagnosed by routines in the call tree of */
-/*        this routine. */
+/*     2)  If an error occurs while reading or writing to the DLA file, */
+/*         the error is signaled by a routine in the call tree of */
+/*         this routine. */
 
 /* $ Files */
 
@@ -225,22 +225,22 @@ static integer c__8 = 8;
 
 /*     DLA files are built using the DAS low-level format; DLA files are */
 /*     a specialized type of DAS file in which data are organized as a */
-/*     doubly linked list of segments.  Each segment's data belong to */
+/*     doubly linked list of segments. Each segment's data belong to */
 /*     contiguous components of character, double precision, and integer */
 /*     type. */
 
-/*     This routine supports creation of a DLA segment.  DLA segments */
+/*     This routine supports creation of a DLA segment. DLA segments */
 /*     are created by appending data to the DAS integer, double */
-/*     precision, and character address spaces of a DLA file.  The new */
+/*     precision, and character address spaces of a DLA file. The new */
 /*     segment's descriptor is located immediately before the integer */
 /*     component of the segment's data. */
 
 /*     When a new segment is added to a DLA file, the segment is */
-/*     inserted into the file's doubly linked segment list.  If the new */
+/*     inserted into the file's doubly linked segment list. If the new */
 /*     segment is the first, the DLA file's first and last list entry */
 /*     pointers are updated to point to the new segment; specifically, */
 /*     these pointers point to the first integer of the new segment's */
-/*     descriptor.  The backward pointer of the new segment is set to */
+/*     descriptor. The backward pointer of the new segment is set to */
 /*     null in this case. */
 
 /*     If the new segment is not the first, the DLA file's list end */
@@ -266,8 +266,12 @@ static integer c__8 = 8;
 
 /*        Call DASCLS to segregate and close the DLA file. */
 
-
 /* $ Examples */
+
+/*     The numerical results shown for this example may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
 
 /*     1) Create a DLA file containing one segment; the segment */
 /*        contains character, double precision, and integer data. */
@@ -275,7 +279,10 @@ static integer c__8 = 8;
 /*        read access; dump the data to standard output. */
 
 
-/*              PROGRAM EX1 */
+/*        Example code begins here. */
+
+
+/*              PROGRAM DLABNS_EX1 */
 /*              IMPLICIT NONE */
 
 /*              INCLUDE 'dla.inc' */
@@ -284,13 +291,13 @@ static integer c__8 = 8;
 /*        C     Local parameters */
 /*        C */
 /*              CHARACTER*(*)         DLA */
-/*              PARAMETER           ( DLA    = 'test.dla' ) */
+/*              PARAMETER           ( DLA    = 'dlabns_ex1.dla' ) */
 
 /*              INTEGER               IFNLEN */
 /*              PARAMETER           ( IFNLEN =  60 ) */
 
 /*              INTEGER               LNSIZE */
-/*              PARAMETER           ( LNSIZE =  80 ) */
+/*              PARAMETER           ( LNSIZE =  61 ) */
 
 /*              INTEGER               MAXC */
 /*              PARAMETER           ( MAXC   =  5 ) */
@@ -411,7 +418,7 @@ static integer c__8 = 8;
 /*        C     Display the character data. */
 /*        C */
 /*              WRITE (*,*) ' ' */
-/*              WRITE (*,*) 'Character array' */
+/*              WRITE (*,*) 'Character array:' */
 
 /*              DO I = 1, N/LNSIZE */
 /*                 WRITE (*,*) CVALS2(I) */
@@ -426,9 +433,10 @@ static integer c__8 = 8;
 /*              CALL DASRDI( HANDLE, BASE+1, BASE+N, IVALS2 ) */
 
 /*              WRITE (*,*) ' ' */
-/*              WRITE (*,*) 'Integer array' */
-/*              WRITE (*,*) IVALS2 */
-
+/*              WRITE (*,*) 'Integer array:' */
+/*              DO I = 1, N/10 */
+/*                 WRITE (*,'(10I6)') (IVALS2((I-1)*10 + J), J=1, 10) */
+/*              END DO */
 
 /*              BASE = DESCR(DBSIDX) */
 /*              N    = DESCR(DSZIDX) */
@@ -436,8 +444,10 @@ static integer c__8 = 8;
 /*              CALL DASRDD( HANDLE, BASE+1, BASE+N, DVALS2 ) */
 
 /*              WRITE (*,*) ' ' */
-/*              WRITE (*,*) 'Double precision array' */
-/*              WRITE (*,*) DVALS2 */
+/*              WRITE (*,*) 'Double precision array:' */
+/*              DO I = 1, N/10 */
+/*                 WRITE (*,'(10F6.1)') (DVALS2((I-1)*10 + J), J=1, 10) */
+/*              END DO */
 
 /*        C */
 /*        C     Close the file.  This step is unnecessary in this */
@@ -449,6 +459,40 @@ static integer c__8 = 8;
 /*              END */
 
 
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*         Character array: */
+/*         1234567890123456789012345678901234567890123456789012345678901 */
+/*         2345678901234567890123456789012345678901234567890123456789012 */
+/*         3456789012345678901234567890123456789012345678901234567890123 */
+/*         4567890123456789012345678901234567890123456789012345678901234 */
+/*         5678901234567890123456789012345678901234567890123456789012345 */
+
+/*         Integer array: */
+/*             1     2     3     4     5     6     7     8     9    10 */
+/*            11    12    13    14    15    16    17    18    19    20 */
+/*            21    22    23    24    25    26    27    28    29    30 */
+/*            31    32    33    34    35    36    37    38    39    40 */
+/*            41    42    43    44    45    46    47    48    49    50 */
+/*            51    52    53    54    55    56    57    58    59    60 */
+/*            61    62    63    64    65    66    67    68    69    70 */
+/*            71    72    73    74    75    76    77    78    79    80 */
+/*            81    82    83    84    85    86    87    88    89    90 */
+/*            91    92    93    94    95    96    97    98    99   100 */
+
+/*         Double precision array: */
+/*           1.0   2.0   3.0   4.0   5.0   6.0   7.0   8.0   9.0  10.0 */
+/*          11.0  12.0  13.0  14.0  15.0  16.0  17.0  18.0  19.0  20.0 */
+/*          21.0  22.0  23.0  24.0  25.0  26.0  27.0  28.0  29.0  30.0 */
+/*          31.0  32.0  33.0  34.0  35.0  36.0  37.0  38.0  39.0  40.0 */
+/*          41.0  42.0  43.0  44.0  45.0  46.0  47.0  48.0  49.0  50.0 */
+
+
+/*        Note that after run completion, a new DLA file exists in the */
+/*        output directory. */
+
 /* $ Restrictions */
 
 /*     None. */
@@ -459,9 +503,16 @@ static integer c__8 = 8;
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.0.1, 14-JUN-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. Modified */
+/*        the presentation of the output in the code example to comply */
+/*        with the maximum line length for the header comments. */
 
 /* -    SPICELIB Version 1.0.0, 08-FEB-2017 (NJB) */
 
@@ -481,7 +532,7 @@ static integer c__8 = 8;
 /* -& */
 /* $ Index_Entries */
 
-/*     begin new segment in dla file */
+/*     begin new segment in DLA file */
 
 /* -& */
 

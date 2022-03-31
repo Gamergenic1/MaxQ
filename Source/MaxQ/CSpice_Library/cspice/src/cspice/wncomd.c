@@ -9,7 +9,7 @@
 
 static integer c__0 = 0;
 
-/* $Procedure      WNCOMD ( Complement a DP window ) */
+/* $Procedure WNCOMD ( Complement a DP window ) */
 /* Subroutine */ int wncomd_(doublereal *left, doublereal *right, doublereal *
 	window, doublereal *result)
 {
@@ -24,8 +24,8 @@ static integer c__0 = 0;
 
 /* $ Abstract */
 
-/*      Determine the complement of a double precision window with */
-/*      respect to the interval [LEFT,RIGHT]. */
+/*     Determine the complement of a double precision window with */
+/*     respect to the interval [LEFT,RIGHT]. */
 
 /* $ Disclaimer */
 
@@ -54,144 +54,153 @@ static integer c__0 = 0;
 
 /* $ Required_Reading */
 
-/*      WINDOWS */
+/*     WINDOWS */
 
 /* $ Keywords */
 
-/*      WINDOWS */
+/*     WINDOWS */
 
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*      VARIABLE  I/O  DESCRIPTION */
-/*      --------  ---  -------------------------------------------------- */
-/*      LEFT, */
-/*      RIGHT      I   Left, right endpoints of complement interval. */
-/*      WINDOW     I   Input window. */
-/*      RESULT     O   Complement of WINDOW with respect to [LEFT,RIGHT]. */
+/*     VARIABLE  I/O  DESCRIPTION */
+/*     --------  ---  -------------------------------------------------- */
+/*     LEFT, */
+/*     RIGHT      I   Left, right endpoints of complement interval. */
+/*     WINDOW     I   Input window. */
+/*     RESULT     O   Complement of WINDOW with respect to [LEFT,RIGHT]. */
 
 /* $ Detailed_Input */
 
-/*      LEFT, */
-/*      RIGHT       are the left and right endpoints of the complement */
-/*                  interval. */
+/*     LEFT, */
+/*     RIGHT    are the left and right endpoints of the complement */
+/*              interval. */
 
-/*      WINDOW      is the window to be complemented. */
+/*     WINDOW   is the window to be complemented. */
 
 /* $ Detailed_Output */
 
-/*      RESULT      is the output window, containing the complement */
-/*                  of WINDOW with respect to the interval from LEFT */
-/*                  to RIGHT. If the output window is not large enough */
-/*                  to contain the result, as many intervals as will */
-/*                  fit are returned. */
+/*     RESULT   is the output window, containing the complement */
+/*              of WINDOW with respect to the interval from LEFT */
+/*              to RIGHT. If the output window is not large enough */
+/*              to contain the result, as many intervals as will */
+/*              fit are returned. */
 
-/*                  RESULT must be distinct from WINDOW. */
+/*              RESULT must be distinct from WINDOW. */
 
 /* $ Parameters */
 
 /*     None. */
 
-/* $ Particulars */
-
-/*      Mathematically, the complement of a window contains those */
-/*      points that are not contained in the window. That is, the */
-/*      complement of the set of closed intervals */
-
-/*           [ a(1), b(1) ], [ a(2), b(2) ], ..., [ a(n), b(n) ] */
-
-/*      is the set of open intervals */
-
-/*           ( -inf, a(1) ), ( b(1), a(2) ), ..., ( b(n), +inf ) */
-
-/*      Because Fortran offers no satisfactory representation of */
-/*      infinity, we must take the complement with respect to a */
-/*      finite interval. */
-
-/*      In addition, Fortran offers no satisfactory floating point */
-/*      representation of open intervals. Therefore, the complement */
-/*      of a floating point window is closure of the set theoretical */
-/*      complement. In short, the floating point complement of the */
-/*      window */
-
-/*           [ a(1), b(1) ], [ a(2), b(2) ], ..., [ a(n), b(n) ] */
-
-/*      with respect to the interval from LEFT to RIGHT is the */
-/*      intersection of the windows */
-
-/*           ( -inf, a(1) ], [ b(1), a(2) ], ..., [ b(n), +inf ) */
-
-/*      and */
-
-/*           [ LEFT, RIGHT ] */
-
-/*      Note that floating point intervals of measure zero (singleton */
-/*      intervals) in the original window are replaced by gaps of */
-/*      measure zero, which are filled. Thus, complementing a floating */
-/*      point window twice does not necessarily yield the original */
-/*      window. */
-
-/* $ Examples */
-
-/*      Let WINDOW contain the intervals */
-
-/*            [ 1, 3 ]  [ 7, 11 ]  [ 23, 27 ] */
-
-/*      Then the floating point complement of WINDOW with respect */
-/*      to [2,20] contains the intervals */
-
-/*            [ 3, 7 ]  [ 11, 20 ] */
-
-/*      and the complement with respect to [ 0, 100 ] contains */
-
-/*            [ 0, 1 ]  [ 3, 7 ]  [ 11, 23 ]  [ 27, 100 ] */
-
 /* $ Exceptions */
 
-/*      If LEFT is greater than RIGHT, the error SPICE(BADENDPOINTS) is */
-/*      signalled. */
+/*     1)  If LEFT is greater than RIGHT, the error SPICE(BADENDPOINTS) */
+/*         is signaled. */
+
+/*     2)  The cardinality of the input WINDOW must be even. Left */
+/*         endpoints of stored intervals must be strictly greater than */
+/*         preceding right endpoints. Right endpoints must be greater */
+/*         than or equal to corresponding left endpoints. Invalid window */
+/*         data are not diagnosed by this routine and may lead to */
+/*         unpredictable results. */
 
 /* $ Files */
 
-/*      None. */
+/*     None. */
+
+/* $ Particulars */
+
+/*     Mathematically, the complement of a window contains those */
+/*     points that are not contained in the window. That is, the */
+/*     complement of the set of closed intervals */
+
+/*          [ a(1), b(1) ], [ a(2), b(2) ], ..., [ a(n), b(n) ] */
+
+/*     is the set of open intervals */
+
+/*          ( -inf, a(1) ), ( b(1), a(2) ), ..., ( b(n), +inf ) */
+
+/*     Because Fortran offers no satisfactory representation of */
+/*     infinity, we must take the complement with respect to a */
+/*     finite interval. */
+
+/*     In addition, Fortran offers no satisfactory floating point */
+/*     representation of open intervals. Therefore, the complement */
+/*     of a floating point window is closure of the set theoretical */
+/*     complement. In short, the floating point complement of the */
+/*     window */
+
+/*          [ a(1), b(1) ], [ a(2), b(2) ], ..., [ a(n), b(n) ] */
+
+/*     with respect to the interval from LEFT to RIGHT is the */
+/*     intersection of the windows */
+
+/*          ( -inf, a(1) ], [ b(1), a(2) ], ..., [ b(n), +inf ) */
+
+/*     and */
+
+/*          [ LEFT, RIGHT ] */
+
+/*     Note that floating point intervals of measure zero (singleton */
+/*     intervals) in the original window are replaced by gaps of */
+/*     measure zero, which are filled. Thus, complementing a floating */
+/*     point window twice does not necessarily yield the original */
+/*     window. */
+
+/* $ Examples */
+
+/*     Let WINDOW contain the intervals */
+
+/*           [ 1, 3 ]  [ 7, 11 ]  [ 23, 27 ] */
+
+/*     Then the floating point complement of WINDOW with respect */
+/*     to [2,20] contains the intervals */
+
+/*           [ 3, 7 ]  [ 11, 20 ] */
+
+/*     and the complement with respect to [ 0, 100 ] contains */
+
+/*           [ 0, 1 ]  [ 3, 7 ]  [ 11, 23 ]  [ 27, 100 ] */
 
 /* $ Restrictions */
 
-/*      None. */
+/*     None. */
 
 /* $ Literature_References */
 
-/*      None. */
+/*     None. */
 
 /* $ Author_and_Institution */
 
-/*      N.J. Bachman    (JPL) */
-/*      H.A. Neilan     (JPL) */
-/*      W.L. Taber      (JPL) */
-/*      I.M. Underwood  (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     H.A. Neilan        (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
 
-/* -     SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+/* -    SPICELIB Version 1.1.0, 06-JUL-2021 (JDR) (NJB) */
 
-/*         Comment section for permuted index source lines was added */
-/*         following the header. */
+/*        Added IMPLICIT NONE statement. */
 
-/* -     SPICELIB Version 1.0.0, 31-JAN-1990 (WLT) (IMU) */
+/*        Edited the header to comply with NAIF standard. Removed */
+/*        unnecessary $Revisions section. */
+
+/*        Added entry #2 in $Exceptions section. */
+
+/* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+
+/*        Comment section for permuted index source lines was added */
+/*        following the header. */
+
+/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (WLT) (IMU) (HAN) (NJB) */
 
 /* -& */
 /* $ Index_Entries */
 
 /*     complement a d.p. window */
 
-/* -& */
-/* $ Revisions */
-
-/* -     Beta Version 1.1.0, 17-FEB-1989 (HAN) (NJB) */
-
-/*         Contents of the Required_Reading section was */
-/*         changed from "None." to "WINDOWS".  Also, the */
-/*         declaration of the unused variable J was removed. */
 /* -& */
 
 /*     SPICELIB functions */

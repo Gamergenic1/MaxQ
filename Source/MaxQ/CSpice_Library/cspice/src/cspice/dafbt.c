@@ -121,17 +121,17 @@ static integer c__2 = 2;
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     BINFIL     I   The name of a binary DAF file to be converted. */
 /*     XFRLUN     I   Logical unit of a previously opened file. */
 
 /* $ Detailed_Input */
 
-/*     BINFIL   The name of a binary DAF file which is to be converted */
+/*     BINFIL   is the name of a binary DAF file which is to be converted */
 /*              to an equivalent DAF transfer file. */
 
-/*     XFRLUN   The Fortran logical unit number of a previously opened */
+/*     XFRLUN   is the Fortran logical unit number of a previously opened */
 /*              file. The DAF transfer file will be written to the */
 /*              file attached to this logical unit beginning at the */
 /*              current position in the file. */
@@ -142,34 +142,31 @@ static integer c__2 = 2;
 
 /* $ Parameters */
 
-/*      None. */
+/*     None. */
+
+/* $ Exceptions */
+
+/*     1)  If the binary DAF file specified by the filename BINFIL cannot */
+/*         be opened for read access, an error is signaled by a routine */
+/*         in the call tree of this routine. */
+
+/*     2)  If for some reason the DAF transfer file cannot be written */
+/*         to, the error SPICE(FILEWRITEFAILED) is signaled. */
+
+/*     3)  If, for any reason, the DAF file cannot be read, an error is */
+/*         signaled by a routine in the call tree of this routine. */
+
+/*     4)  If the ID word cannot be read from the binary file, the error */
+/*         SPICE(FILEREADFAILED) is signaled. */
+
+/*     5)  The binary DAF file opened by this routine, BINFIL, is only */
+/*         GUARANTEED to be closed upon successful completion of the */
+/*         conversion process. In the event of an error, the caller of */
+/*         this routine is required to close the binary DAF file BINFIL. */
 
 /* $ Files */
 
 /*     See arguments BINFIL, XFRLUN. */
-
-/* $ Exceptions */
-
-
-/*     1)   If the binary DAF file specified by the filename BINFIL */
-/*          cannot be opened for read access, an appropriate error */
-/*          message will be signalled by a DAF file access routine that */
-/*          is called. */
-
-/*     2)   If for some reason the DAF transfer file cannot be written */
-/*          to, the error SPICE(FILEWRITEFAILED) is signalled. */
-
-/*     3)   If, for any reason, the DAF file cannot be read, a DAF file */
-/*          access routine will signal an error with appropriate error */
-/*          message. */
-
-/*     4)   If the ID word cannot be read from the binary file, the error */
-/*          SPICE(FILEREADFAILED) will be signalled. */
-
-/*     5)   The binary DAF file opened by this routine, BINFIL, is only */
-/*          GUARANTEED to be closed upon successful completion of the */
-/*          conversion process. In the event of an error, the caller of */
-/*          this routine is required to close the binary DAF file BINFIL. */
 
 /* $ Particulars */
 
@@ -227,9 +224,17 @@ static integer c__2 = 2;
 
 /* $ Author_and_Institution */
 
-/*     K.R. Gehringer  (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
+/*     F.S. Turner        (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 4.1.0, 13-AUG-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 4.0.0, 16-NOV-2001 (FST) */
 
@@ -267,7 +272,7 @@ static integer c__2 = 2;
 /* -& */
 /* $ Index_Entries */
 
-/*     convert binary daf into a daf transfer file */
+/*     convert binary DAF into a DAF transfer file */
 
 /* -& */
 /* $ Revisions */
@@ -276,7 +281,7 @@ static integer c__2 = 2;
 
 /*        This routine still uses a naked READ to retrieve the */
 /*        file IDWORD from the first 8 characters stored in the */
-/*        file record.  It may be that future environments */
+/*        file record. It may be that future environments */
 /*        will have characters whose storage exceeds 1 byte, */
 /*        in which case this routine will require modification. */
 /*        One possibility is to call the private file record */
@@ -317,8 +322,6 @@ static integer c__2 = 2;
 /*        low level routines which encode and write the data were */
 /*        modified to fix a problem. See the routines WRENCD and WRENCI */
 /*        for details of the modification. */
-
-/* -    SPICELIB Version 1.0.0, 29-OCT-1992 (KRG) */
 
 /* -& */
 
@@ -449,11 +452,11 @@ static integer c__2 = 2;
 
 /*     This routine will check the SPICELIB function FAILED() after */
 /*     each call, or consecutive sequence of calls, to data encoding */
-/*     routines, and if an error was signalled it will simply check out */
+/*     routines, and if an error was signaled it will simply check out */
 /*     and return to the caller. */
 
 /*     This routine will check the SPICELIB function FAILED() after */
-/*     each DAF file access call, and if an error was signalled it will */
+/*     each DAF file access call, and if an error was signaled it will */
 /*     simply check out and return to the caller. */
 
 /*     We begin by opening the binary DAF file specified by BINFIL for */
@@ -678,7 +681,7 @@ L100004:
 /*              If an error occurred on any of the DAF system calls */
 /*              above, return to the caller. An appropriate error */
 /*              message will have already been set by the routine which */
-/*              signalled the error. */
+/*              signaled the error. */
 
 		chkout_("DAFBT", (ftnlen)5);
 		return 0;
@@ -687,15 +690,15 @@ L100004:
 /*           Get the beginning address for the data in the current array. */
 
 	    dtabeg = isumry[(i__2 = ni - 2) < 250 && 0 <= i__2 ? i__2 : 
-		    s_rnge("isumry", i__2, "dafbt_", (ftnlen)657)];
+		    s_rnge("isumry", i__2, "dafbt_", (ftnlen)664)];
 
 /*           Set the number of double precision numbers in the current */
 /*           array. */
 
 	    dtacnt = isumry[(i__2 = ni - 1) < 250 && 0 <= i__2 ? i__2 : 
-		    s_rnge("isumry", i__2, "dafbt_", (ftnlen)662)] - isumry[(
+		    s_rnge("isumry", i__2, "dafbt_", (ftnlen)669)] - isumry[(
 		    i__3 = ni - 2) < 250 && 0 <= i__3 ? i__3 : s_rnge("isumry"
-		    , i__3, "dafbt_", (ftnlen)662)] + 1;
+		    , i__3, "dafbt_", (ftnlen)669)] + 1;
 	    s_copy(line, "BEGIN_ARRAY # #", (ftnlen)80, (ftnlen)15);
 	    repmi_(line, "#", &numarr, line, (ftnlen)80, (ftnlen)1, (ftnlen)
 		    80);
@@ -769,7 +772,7 @@ L100006:
 
 /*              If an error occurred on any of the data encoding calls */
 /*              above, return to the caller. An appropriate error message */
-/*              will have already been set by the routine which signalled */
+/*              will have already been set by the routine which signaled */
 /*              the error. */
 
 		chkout_("DAFBT", (ftnlen)5);

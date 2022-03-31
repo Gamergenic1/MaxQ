@@ -6,7 +6,7 @@
 #include "f2c.h"
 
 /* $Procedure DAFGDA ( DAF, read data from address ) */
-/* Subroutine */ int dafgda_(integer *handle, integer *begin, integer *end, 
+/* Subroutine */ int dafgda_(integer *handle, integer *baddr, integer *eaddr, 
 	doublereal *data)
 {
     /* System generated locals */
@@ -66,51 +66,50 @@
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     I   Handle of a DAF. */
-/*     BEGIN, */
-/*     END        I   Initial, final address within file. */
-/*     DATA       O   Data contained between BEGIN and END. */
+/*     BADDR, */
+/*     EADDR      I   Initial, final address within file. */
+/*     DATA       O   Data contained between BADDR and EADDR. */
 
 /* $ Detailed_Input */
 
-/*     HANDLE      is the handle of a DAF. */
+/*     HANDLE   is the handle of a DAF. */
 
-/*     BEGIN, */
-/*     END         are the initial and final addresses of a contiguous */
-/*                 set of double precision numbers within a DAF. */
-/*                 Presumably, these make up all or part of a particular */
-/*                 array. */
+/*     BADDR, */
+/*     EADDR    are the initial and final addresses of a contiguous */
+/*              set of double precision numbers within a DAF. */
+/*              Presumably, these make up all or part of a particular */
+/*              array. */
 
 /* $ Detailed_Output */
 
-/*     DATA        are the double precision data contained between */
-/*                 the specified addresses within the specified file. */
+/*     DATA     are the double precision data contained between */
+/*              the specified addresses within the specified file. */
 
 /* $ Parameters */
-
-/*      None. */
-
-/* $ Files */
 
 /*     None. */
 
 /* $ Exceptions */
 
-/*     1) If BEGIN is zero or negative, the error SPICE(DAFNEGADDR) */
-/*        is signalled. */
+/*     1)  If BADDR is zero or negative, the error SPICE(DAFNEGADDR) */
+/*         is signaled. */
 
-/*     2) If the BEGIN > END, the error SPICE(DAFBEGGTEND) */
-/*        is signalled. */
+/*     2)  If BADDR > EADDR, the error SPICE(DAFBEGGTEND) is signaled. */
 
-/*     3) If HANDLE is invalid, routines in the call tree of DAFGDA */
-/*        signal an appropriate error. */
+/*     3)  If HANDLE is invalid, an error is signaled by a routine in the */
+/*         call tree of this routine. */
 
-/*     4) If the range of addresses covered between BEGIN and END */
-/*        includes records that do not contain strictly double */
-/*        precision data, then the values returned in DATA are */
-/*        undefined.  See the Restrictions section below for details. */
+/*     4)  If the range of addresses covered between BADDR and EADDR */
+/*         includes records that do not contain strictly double */
+/*         precision data, then the values returned in DATA are */
+/*         undefined. See the $Restrictions section below for details. */
+
+/* $ Files */
+
+/*     None. */
 
 /* $ Particulars */
 
@@ -125,52 +124,161 @@
 
 /* $ Examples */
 
-/*     The following code fragment illustrates the use of DAFGDA */
-/*     to read data from an imaginary array. The array begins with a */
-/*     directory containing 11 epochs. Each pair of epochs bounds */
-/*     an interval, and each interval is covered by a set of eight */
-/*     osculating elements. */
+/*     The numerical results shown for this example may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
 
-/*        CALL DAFUS ( SUM, ND, NI, DC, IC ) */
-/*        BEGIN = IC(5) */
-/*        END   = IC(6) */
+/*     1) Open a type 8 SPK for read access, retrieve the data for */
+/*        the first segment and identify the beginning and end addresses, */
+/*        the number of data elements within, the size of the data */
+/*        array, and print the first two records. */
 
-/*        CALL DAFGDA ( HANDLE, BEGIN, BEGIN+10, EPOCHS ) */
+/*        Use the SPK kernel below as input type 8 SPK file for the */
+/*        example. */
 
-/*        DO I = 1, 10 */
-/*           IF ( ET .GE. EPOCHS(I)  .AND.  ET .LE. EPOCHS(I+1) ) THEN */
-/*              OFFSET = 11 + (I - 1) * 8 */
+/*           mer1_ls_040128_iau2000_v1.bsp */
 
-/*              CALL DAFGDA ( HANDLE, OFFSET+1, OFFSET+8, ELEMENTS ) */
-/*              RETURN */
-/*           END IF */
-/*        END DO */
+/*        Each segment contains only two records which provide the start */
+/*        and end position for the MER-1 rover landing site in the */
+/*        IAU_MARS frame. Since the landing site does not change over */
+/*        time, it is expected that both records are equal. */
+
+
+/*        Example code begins here. */
+
+
+/*              PROGRAM DAFGDA_EX1 */
+/*              IMPLICIT NONE */
+
+/*        C */
+/*        C     Local constants. */
+/*        C */
+/*              CHARACTER*(*)         FMT */
+/*              PARAMETER           ( FMT = '(6F10.3)' ) */
+
+/*              INTEGER               MAXDAT */
+/*              PARAMETER           ( MAXDAT = 1000 ) */
+
+/*              INTEGER               MAXSUM */
+/*              PARAMETER           ( MAXSUM = 125  ) */
+
+/*              INTEGER               ND */
+/*              PARAMETER           ( ND     = 2    ) */
+
+/*              INTEGER               NI */
+/*              PARAMETER           ( NI     = 6    ) */
+
+/*        C */
+/*        C     Local variables. */
+/*        C */
+/*              DOUBLE PRECISION      DAFSUM ( MAXSUM ) */
+/*              DOUBLE PRECISION      DATA   ( MAXDAT ) */
+/*              DOUBLE PRECISION      DC     ( ND ) */
+
+/*              INTEGER               BADDR */
+/*              INTEGER               EADDR */
+/*              INTEGER               HANDLE */
+/*              INTEGER               IC     ( NI ) */
+/*              INTEGER               SIZE */
+
+/*              LOGICAL               FOUND */
+
+/*        C */
+/*        C     Open the type 8 SPK for read access, then read the */
+/*        C     data from the first segment. */
+/*        C */
+/*              CALL DAFOPR ( 'mer1_ls_040128_iau2000_v1.bsp', HANDLE ) */
+
+/*        C */
+/*        C     Begin a forward search; find the first segment; read the */
+/*        C     segment summary. */
+/*        C */
+/*              CALL DAFBFS ( HANDLE ) */
+/*              CALL DAFFNA ( FOUND  ) */
+/*              CALL DAFGS  ( DAFSUM ) */
+/*              CALL DAFUS  ( DAFSUM, ND, NI, DC, IC ) */
+
+/*        C */
+/*        C     Retrieve the data begin and end addresses. */
+/*        C */
+/*              BADDR = IC(5) */
+/*              EADDR = IC(6) */
+
+/*              WRITE(*,'(A,I4)') 'Beginning address       : ', BADDR */
+/*              WRITE(*,'(A,I4)') 'Ending address          : ', EADDR */
+/*              WRITE(*,'(A,I4)') 'Number of data elements : ', */
+/*             .                                    EADDR - BADDR + 1 */
+
+/*        C */
+/*        C     Extract all data bounded by the begin and end addresses. */
+/*        C */
+/*              CALL DAFGDA ( HANDLE, BADDR, EADDR, DATA ) */
+
+/*        C */
+/*        C     Check the data. */
+/*        C */
+/*              WRITE(*,'(A)') 'The first and second states ' */
+/*             .            // 'stored in the segment:' */
+/*              WRITE(*,FMT) DATA(1),  DATA(2),  DATA(3), */
+/*             .             DATA(4),  DATA(5),  DATA(6) */
+/*              WRITE(*,FMT) DATA(7),  DATA(8),  DATA(9), */
+/*             .             DATA(10), DATA(11), DATA(12) */
+
+/*        C */
+/*        C     Safely close the file */
+/*        C */
+/*              CALL DAFCLS ( HANDLE ) */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*        Beginning address       :  897 */
+/*        Ending address          :  912 */
+/*        Number of data elements :   16 */
+/*        The first and second states stored in the segment: */
+/*          3376.422  -326.649  -115.392     0.000     0.000     0.000 */
+/*          3376.422  -326.649  -115.392     0.000     0.000     0.000 */
 
 
 /* $ Restrictions */
 
-/*     1) There are several types of records in a DAF.  This routine */
-/*        is only to be used to read double precision data bounded */
-/*        between two DAF addresses.  The range of addresses input */
-/*        may not cross data and summary record boundaries. */
+/*     1)  There are several types of records in a DAF. This routine */
+/*         is only to be used to read double precision data bounded */
+/*         between two DAF addresses. The range of addresses input */
+/*         may not cross data and summary record boundaries. */
 
 /* $ Literature_References */
 
-/*     NAIF Document 167.0, "Double Precision Array Files (DAF) */
-/*     Specification and User's Guide" */
+/*     None. */
 
 /* $ Author_and_Institution */
 
-/*     F.S. Turner     (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     F.S. Turner        (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 13-AUG-2021 (JDR) */
+
+/*        Changed the input argument names BEGIN and END to BADDR to */
+/*        EADDR for consistency with other routines. */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. Added */
+/*        complete code example. Removed unnecessary $Revisions section. */
 
 /* -    SPICELIB Version 1.0.0, 16-NOV-2001 (FST) */
 
 /* -& */
 /* $ Index_Entries */
 
-/*     read data from daf address */
+/*     read data from DAF address */
 
 /* -& */
 
@@ -188,19 +296,19 @@
 
 /*     Bad addresses? */
 
-    if (*begin <= 0) {
+    if (*baddr <= 0) {
 	chkin_("DAFGDA", (ftnlen)6);
-	setmsg_("Negative value for BEGIN address: #", (ftnlen)35);
-	errint_("#", begin, (ftnlen)1);
+	setmsg_("Negative value for BADDR address: #", (ftnlen)35);
+	errint_("#", baddr, (ftnlen)1);
 	sigerr_("SPICE(DAFNEGADDR)", (ftnlen)17);
 	chkout_("DAFGDA", (ftnlen)6);
 	return 0;
-    } else if (*begin > *end) {
+    } else if (*baddr > *eaddr) {
 	chkin_("DAFGDA", (ftnlen)6);
 	setmsg_("Beginning address (#) greater than ending address (#).", (
 		ftnlen)54);
-	errint_("#", begin, (ftnlen)1);
-	errint_("#", end, (ftnlen)1);
+	errint_("#", baddr, (ftnlen)1);
+	errint_("#", eaddr, (ftnlen)1);
 	sigerr_("SPICE(DAFBEGGTEND)", (ftnlen)18);
 	chkout_("DAFGDA", (ftnlen)6);
 	return 0;
@@ -208,8 +316,8 @@
 
 /*     Convert raw addresses to record/word representations. */
 
-    dafarw_(begin, &begr, &begw);
-    dafarw_(end, &endr, &endw);
+    dafarw_(baddr, &begr, &begw);
+    dafarw_(eaddr, &endr, &endw);
 
 /*     Get as many records as needed. Return the last part of the */
 /*     first record, the first part of the last record, and all of */

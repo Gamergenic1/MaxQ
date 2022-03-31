@@ -49,11 +49,11 @@
 
 /* $ Required_Reading */
 
-/*      None. */
+/*     None. */
 
 /* $ Keywords */
 
-/*      VECTOR */
+/*     VECTOR */
 
 /* $ Declarations */
 /* $ Brief_I/O */
@@ -69,23 +69,25 @@
 
 /* $ Detailed_Input */
 
-/*     V          is a 3-vector.  This is the vector to test to see */
-/*                if it lies between the 3 vectors E1, E2 and E3 */
+/*     V        is a 3-vector. This is the vector to test to see */
+/*              if it lies between the 3 vectors E1, E2 and E3 */
 
-/*     E1         are the three edges of a solid tetrahedral angle. */
-/*     E2         (See particulars for a discussion of the solid */
-/*     E3         angle). */
+/*     E1, */
+/*     E2, */
+/*     E3       are the three edges of a solid tetrahedral angle. (See */
+/*              particulars for a discussion of the solid angle). */
 
 /* $ Detailed_Output */
 
-/*     FOUND      indicates that V lies inside the solid tetrahedral */
-/*                angle determined by E1, E2 and E3. */
+/*     FOUND    indicates that V lies inside the solid tetrahedral */
+/*              angle determined by E1, E2 and E3. */
 
 
-/*     SCALE      if V lies inside the solid tetrahedral angle given */
-/*                by E1, E2 and E3, SCALE*V is the point is the positive */
-/*                scalar multiple of V that pierces the triangle */
-/*                determined by the points E1, E2, E3. */
+/*     SCALE    if V lies inside the solid tetrahedral angle given */
+/*              by E1, E2 and E3, SCALE*V is the point is the positive */
+/*              scalar multiple of V that pierces the triangle */
+/*              determined by the points E1, E2, E3. */
+
 /* $ Parameters */
 
 /*     None. */
@@ -94,11 +96,11 @@
 
 /*     Error free. */
 
-/*     1) If E1, E2 and E3 are not linearly independent, the routine */
-/*        returns FALSE. SCALE will be set to 0. */
+/*     1)  If E1, E2 and E3 are not linearly independent, the routine */
+/*         returns .FALSE. SCALE will be set to 0. */
 
-/*     2) If V is the zero vector, the routine returns FALSE. */
-/*        SCALE will be set to 0. */
+/*     2)  If V is the zero vector, the routine returns .FALSE. */
+/*         SCALE will be set to 0. */
 
 /* $ Files */
 
@@ -109,7 +111,7 @@
 /*     Given 3 linearly independent vectors E1, E2, and E3 the */
 /*     set of vectors a*E1 + b*E2 + c*E3  where a, b, and c */
 /*     are non-negative form a region of space that is a tetrahedral */
-/*     solid angle.  If you cut this solid angle with a plane */
+/*     solid angle. If you cut this solid angle with a plane */
 /*     that intersects all three rays from the origin determined */
 /*     by E1, E2 and E3 you will get a tetrahedron (a 4-sided */
 /*     solid with each face a triangle). */
@@ -127,10 +129,10 @@
 /*     Suppose you have a triangle in space specified by three */
 /*     vertices P1, P2 and P3 and that an observer at location */
 /*     OBS is looking along the ray emanating from OBS with */
-/*     direction V.  Does this ray intersect the triangle */
+/*     direction V. Does this ray intersect the triangle */
 /*     P1, P2, P3?  Using this routine, you can answer this */
 /*     question and give the point of intersection if there is */
-/*     one.  Here's how. */
+/*     one. Here's how. */
 
 /*     First construct the vectors from OBS to the corners of */
 /*     the triangle. */
@@ -145,7 +147,7 @@
 /*     CALL INSANG ( V, E1, E2, E3, FOUND, SCALE ) */
 
 /*     If there was an intersection, add SCALE*V to OBS to get the */
-/*     point of intersection.  Otherwise say there was no intersection. */
+/*     point of intersection. Otherwise say there was no intersection. */
 
 /*     IF ( FOUND ) THEN */
 
@@ -164,12 +166,12 @@
 
 /* $ Restrictions */
 
-/*     This routine can suffer from extreme loss of precision if */
-/*     the vectors E1, E2, E3 are too long compared to the lengths */
-/*     of the line segments formed by their pairwise differences. */
+/*     1)  This routine can suffer from extreme loss of precision if the */
+/*         vectors E1, E2, E3 are too long compared to the lengths of the */
+/*         line segments formed by their pairwise differences. */
 
-/*     The user of this routine must ensure that the inputs are */
-/*     suitable. */
+/*         The user of this routine must ensure that the inputs are */
+/*         suitable. */
 
 /* $ Literature_References */
 
@@ -177,21 +179,25 @@
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     W.L. Taber      (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
 
+/* -    SPICELIB Version 1.0.3, 12-AUG-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
+
 /* -    SPICELIB Version 1.0.2, 02-FEB-2016 (NJB) */
 
-/*        Fixed comment typos. Updated Restrictions. */
+/*        Fixed comment typos. Updated $Restrictions. */
 
 /* -    SPICELIB Version 1.0.1, 08-OCT-2009 (NJB) */
 
 /*        Updated header. */
 
 /* -    SPICELIB Version 1.0.0, 09-JUN-1996 (WLT) */
-
 
 /* -& */
 /* $ Index_Entries */

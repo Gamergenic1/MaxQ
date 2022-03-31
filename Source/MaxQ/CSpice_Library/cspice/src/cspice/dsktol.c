@@ -239,7 +239,7 @@ static integer c__6 = 6;
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Entry points */
+/*     VARIABLE  I/O  ENTRY POINTS */
 /*     --------  ---  -------------------------------------------------- */
 /*     KEYWRD     I   DSKGTL, DSKSTL */
 /*     DPVAL     I-O  DSKGTL, DSKSTL */
@@ -267,8 +267,8 @@ static integer c__6 = 6;
 /*     1)  If this routine is called directly, the error */
 /*         SPICE(BOGUSENTRY) is signaled. */
 
-/*     See the entry points for descriptions of exceptions specific to */
-/*     those entry points. */
+/*     2)  See the entry points for descriptions of exceptions specific */
+/*         to those entry points. */
 
 /* $ Files */
 
@@ -305,12 +305,12 @@ static integer c__6 = 6;
 
 /* $ Restrictions */
 
-/*     1) The default settings used by the DSK subsystem should */
-/*        be overridden only by expert SPICE users. */
+/*     1)  The default settings used by the DSK subsystem should */
+/*         be overridden only by expert SPICE users. */
 
-/*     2) The entry points of this routine do not check the */
-/*        validity of new parameter values supplied by the */
-/*        calling application. */
+/*     2)  The entry points of this routine do not check the */
+/*         validity of new parameter values supplied by the */
+/*         calling application. */
 
 /* $ Literature_References */
 
@@ -318,16 +318,22 @@ static integer c__6 = 6;
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.0.1, 09-JUL-2020 (JDR) */
+
+/*        Edited the entry points and umbrella headers to comply with */
+/*        NAIF standard. */
 
 /* -    SPICELIB Version 1.0.0, 01-AUG-2016 (NJB) */
 
 /* -& */
 /* $ Index_Entries */
 
-/*     dsk tolerance and margin umbrella */
+/*     DSK tolerance and margin umbrella */
 
 /* -& */
 
@@ -409,20 +415,20 @@ L_dskgtl:
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     KEYWRD     I   Code specifying parameter to retrieve. */
 /*     DPVAL      O   Value of parameter. */
 
 /* $ Detailed_Input */
 
-/*     KEYWRD     is an integer code specifying the parameter to */
-/*                retrieve. See the include file dsktol.inc for */
-/*                a description of the possible keywords. */
+/*     KEYWRD   is an integer code specifying the parameter to */
+/*              retrieve. See the include file dsktol.inc for */
+/*              a description of the possible keywords. */
 
 /* $ Detailed_Output */
 
-/*     DPVAL      is the value of the parameter specified by KEYWRD. */
+/*     DPVAL    is the value of the parameter specified by KEYWRD. */
 
 /* $ Parameters */
 
@@ -466,13 +472,42 @@ L_dskgtl:
 
 /* $ Examples */
 
-/*     1) Obtain the DSK type 2 plate expansion fraction: */
+/*     The numerical results shown for this example may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
 
-/*           DOUBLE PRECISION      F */
+/*     1) Obtain and display the DSK type 2 plate expansion fraction. */
 
-/*             ... */
 
-/*           CALL DSKGTL ( KEYXFR, F ) */
+/*        Example code begins here. */
+
+
+/*              PROGRAM DSKGTL_EX1 */
+/*              IMPLICIT NONE */
+
+/*        C */
+/*        C     Include files */
+/*        C */
+/*              INCLUDE 'dsktol.inc' */
+
+/*        C */
+/*        C     Local variables */
+/*        C */
+/*              DOUBLE PRECISION      DPVAL */
+
+/*              CALL DSKGTL ( KEYXFR, DPVAL ) */
+
+/*              WRITE(*,*) 'Plate expansion fraction = ', DPVAL */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*         Plate expansion fraction =    1.0000000000000000E-010 */
 
 
 /* $ Restrictions */
@@ -485,16 +520,22 @@ L_dskgtl:
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.0.1, 09-JUL-2020 (JDR) */
+
+/*        Updated the header to comply with NAIF standard. Added */
+/*        complete example code. */
 
 /* -    SPICELIB Version 1.0.0, 01-AUG-2016 (NJB) */
 
 /* -& */
 /* $ Index_Entries */
 
-/*     retrieve dsk tolerance or margin parameters */
+/*     retrieve DSK tolerance or margin parameters */
 
 /* -& */
 
@@ -510,7 +551,7 @@ L_dskgtl:
 	return 0;
     }
     *dpval = dppars[(i__1 = *keywrd - 1) < 6 && 0 <= i__1 ? i__1 : s_rnge(
-	    "dppars", i__1, "dsktol_", (ftnlen)366)];
+	    "dppars", i__1, "dsktol_", (ftnlen)411)];
     return 0;
 /* $Procedure DSKSTL ( DSK, set tolerance ) */
 
@@ -562,27 +603,29 @@ L_dskstl:
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     KEYWRD     I   Code specifying parameter to modify. */
 /*     DPVAL      I   New value of parameter. */
 
 /* $ Detailed_Input */
 
-/*     KEYWRD     is an integer code specifying the parameter to */
-/*                set. See the include file dsktol.inc for */
-/*                a description of the possible keywords. */
+/*     KEYWRD   is an integer code specifying the parameter to */
+/*              set. See the include file dsktol.inc for */
+/*              a description of the possible keywords. */
 
-/*     DPVAL      is the new value of the parameter specified by KEYWRD. */
-/*                This value will be retrieved by future calls to */
-/*                to DSKGTL made to retrieve the specified parameter. */
+/*     DPVAL    is the new value of the parameter specified by KEYWRD. */
+/*              This value will be retrieved by future calls to */
+/*              to DSKGTL made to retrieve the specified parameter. */
 
-/*                <<< Use extreme caution. This routine performs no */
-/*                checks on DPVAL. >>> */
+/*              <<< Use extreme caution. This routine performs no */
+/*              checks on DPVAL. >>> */
 
 /* $ Detailed_Output */
 
-/*     None. This routine operates by side effects. */
+/*     None. */
+
+/*     This routine operates by side effects. */
 
 /* $ Parameters */
 
@@ -629,19 +672,65 @@ L_dskstl:
 
 /* $ Examples */
 
-/*     1) Change the DSK type 2 plate expansion fraction to */
-/*        1.e-8: */
+/*     The numerical results shown for this example may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
 
-/*            CALL DSKSTL ( KEYXFR, 1.D-8 ) */
+/*     1) Obtain, display, and update the DSK type 2 plate expansion */
+/*        fraction. */
+
+
+/*        Example code begins here. */
+
+
+/*              PROGRAM DSKSTL_EX1 */
+/*              IMPLICIT NONE */
+
+/*        C */
+/*        C     Include files */
+/*        C */
+/*              INCLUDE 'dsktol.inc' */
+
+/*        C */
+/*        C     Local variables */
+/*        C */
+/*              DOUBLE PRECISION      DPVAL */
+
+/*              CALL DSKGTL ( KEYXFR, DPVAL ) */
+
+/*              WRITE(*,*) 'Default plate expansion fraction = ', DPVAL */
+
+/*        C */
+/*        C     Update the parameter. */
+/*        C */
+/*              CALL DSKSTL ( KEYXFR, 1.D-8 ) */
+
+/*        C */
+/*        C     Verify the update. */
+/*        C */
+/*              CALL DSKGTL ( KEYXFR, DPVAL ) */
+
+/*              WRITE(*,*) 'New plate expansion fraction     = ', DPVAL */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*         Default plate expansion fraction =    1.0000000000000000E-010 */
+/*         New plate expansion fraction     =    1.0000000000000000E-008 */
+
 
 /* $ Restrictions */
 
-/*     1) The default settings used by the DSK subsystem should */
-/*        be overridden only by expert SPICE users. */
+/*     1)  The default settings used by the DSK subsystem should */
+/*         be overridden only by expert SPICE users. */
 
-/*     2) The entry points of this routine do not check the */
-/*        validity of new parameter values supplied by the */
-/*        calling application. */
+/*     2)  This routine does not check the  validity of new parameter */
+/*         values supplied by the calling application. */
 
 /* $ Literature_References */
 
@@ -649,16 +738,22 @@ L_dskstl:
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.0.1, 09-JUL-2020 (JDR) */
+
+/*        Updated the header to comply with NAIF standard. Added */
+/*        complete example code. */
 
 /* -    SPICELIB Version 1.0.0, 01-AUG-2016 (NJB) */
 
 /* -& */
 /* $ Index_Entries */
 
-/*     set dsk tolerance or margin parameters */
+/*     set DSK tolerance or margin parameters */
 
 /* -& */
     if (return_()) {
@@ -674,10 +769,10 @@ L_dskstl:
 	return 0;
     }
     if (isfixd[(i__1 = *keywrd - 1) < 6 && 0 <= i__1 ? i__1 : s_rnge("isfixd",
-	     i__1, "dsktol_", (ftnlen)543)]) {
+	     i__1, "dsktol_", (ftnlen)645)]) {
 	setmsg_("The parameter # cannot be modified.", (ftnlen)35);
 	errch_("#", names + ((i__1 = *keywrd - 1) < 6 && 0 <= i__1 ? i__1 : 
-		s_rnge("names", i__1, "dsktol_", (ftnlen)546)) * 6, (ftnlen)1,
+		s_rnge("names", i__1, "dsktol_", (ftnlen)648)) * 6, (ftnlen)1,
 		 (ftnlen)6);
 	sigerr_("SPICE(IMMUTABLEVALUE)", (ftnlen)21);
 	chkout_("DSKSTL", (ftnlen)6);
@@ -689,7 +784,7 @@ L_dskstl:
 /*     the reason for change. */
 
     dppars[(i__1 = *keywrd - 1) < 6 && 0 <= i__1 ? i__1 : s_rnge("dppars", 
-	    i__1, "dsktol_", (ftnlen)558)] = *dpval;
+	    i__1, "dsktol_", (ftnlen)660)] = *dpval;
     chkout_("DSKSTL", (ftnlen)6);
     return 0;
 } /* dsktol_ */

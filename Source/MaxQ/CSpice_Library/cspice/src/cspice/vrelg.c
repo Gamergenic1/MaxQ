@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure  VRELG ( Vector relative difference, general dimension ) */
+/* $Procedure VRELG ( Vector relative difference, general dimension ) */
 doublereal vrelg_(doublereal *v1, doublereal *v2, integer *ndim)
 {
     /* System generated locals */
@@ -19,8 +19,8 @@ doublereal vrelg_(doublereal *v1, doublereal *v2, integer *ndim)
 
 /* $ Abstract */
 
-/*   Return the relative difference between two vectors of general */
-/*   dimension. */
+/*     Return the relative difference between two vectors of general */
+/*     dimension. */
 
 /* $ Disclaimer */
 
@@ -49,7 +49,7 @@ doublereal vrelg_(doublereal *v1, doublereal *v2, integer *ndim)
 
 /* $ Required_Reading */
 
-/*   None. */
+/*     None. */
 
 /* $ Keywords */
 
@@ -59,32 +59,38 @@ doublereal vrelg_(doublereal *v1, doublereal *v2, integer *ndim)
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
-/*      V1,V2     I   Input vectors. */
-/*      NDIM      I   Dimension of V1 and V2. */
+/*     V1, */
+/*     V2         I   Input vectors. */
+/*     NDIM       I   Dimension of V1 and V2. */
+
+/*     The function returns the relative difference between two vectors */
+/*     of general dimension. */
 
 /* $ Detailed_Input */
 
-/*      V1, V2        are two vectors for which the relative difference */
-/*                    is to be computed. */
+/*     V1, */
+/*     V2       are two vectors for which the relative difference is to */
+/*              be computed. */
 
-/*      NDIM          is the dimension of V1 and V2. */
+/*     NDIM     is the dimension of V1 and V2. */
 
 /* $ Detailed_Output */
 
-/*      VRELG         is the relative difference between V1 and V2. */
-/*                    It is defined as: */
-/*                                             || V1 - V2 || */
-/*                              VRELG  =   ---------------------- */
-/*                                         MAX ( ||V1||, ||V2|| ) */
+/*     The function returns the relative difference between the two input */
+/*     n-dimensional vectors V1 and V2. */
 
-/*                    where || X || indicates the Euclidean norm of */
-/*                    the vector X. */
+/*     It is defined as: */
 
-/*                    VRELG assumes values in the range [0,2]. If both */
-/*                    V1 and V2 are zero vectors then VRELG is defined */
-/*                    to be zero. */
+/*                          || V1 - V2 || */
+/*        VRELG   =   ------------------------ */
+/*                     MAX ( ||V1||, ||V2|| ) */
+
+/*     where ||X|| indicates the Euclidean norm of the vector X. */
+
+/*     VRELG assumes values in the range [0,2]. If both V1 and V2 are */
+/*     zero vectors then VRELG is defined to be zero. */
 
 /* $ Parameters */
 
@@ -94,8 +100,8 @@ doublereal vrelg_(doublereal *v1, doublereal *v2, integer *ndim)
 
 /*     Error free. */
 
-/*     If both V1 and V2 are zero vectors then VRELG is defined to be */
-/*     zero. */
+/*     1)  If both V1 and V2 are zero vectors, then VRELG is defined to */
+/*         be zero. */
 
 /* $ Files */
 
@@ -134,7 +140,7 @@ doublereal vrelg_(doublereal *v1, doublereal *v2, integer *ndim)
 /*           PARAMETER           ( TOL = 5.D-04 ) */
 
 /*     C */
-/*     C     Spicelib function */
+/*     C     SPICELIB function */
 /*     C */
 /*           DOUBLE PRECISION      VRELG */
 /*     C */
@@ -210,9 +216,16 @@ doublereal vrelg_(doublereal *v1, doublereal *v2, integer *ndim)
 
 /* $ Author_and_Institution */
 
-/*     J.M. Lynch     (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     J.M. Lynch         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 12-AUG-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.0.0, 15-JUN-1992 (JML) */
 

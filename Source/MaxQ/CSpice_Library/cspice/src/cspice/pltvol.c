@@ -58,7 +58,7 @@ doublereal pltvol_(integer *nv, doublereal *vrtces, integer *np, integer *
 
 /* $ Required_Reading */
 
-/*     None. */
+/*     DSK */
 
 /* $ Keywords */
 
@@ -70,7 +70,7 @@ doublereal pltvol_(integer *nv, doublereal *vrtces, integer *np, integer *
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     NV         I   Number of vertices. */
 /*     VRTCES     I   Array of vertices. */
@@ -82,51 +82,50 @@ doublereal pltvol_(integer *nv, doublereal *vrtces, integer *np, integer *
 
 /* $ Detailed_Input */
 
-/*     NV             is the number of vertices comprising the plate */
-/*                    model. */
+/*     NV       is the number of vertices comprising the plate */
+/*              model. */
 
-/*     VRTCES         is an array containing the plate model's vertices. */
-/*                    Elements */
+/*     VRTCES   is an array containing the plate model's vertices. */
+/*              Elements */
 
-/*                       VRTCES( 1, I ) */
-/*                       VRTCES( 2, I ) */
-/*                       VRTCES( 3, I ) */
+/*                 VRTCES( 1, I ) */
+/*                 VRTCES( 2, I ) */
+/*                 VRTCES( 3, I ) */
 
-/*                    are, respectively, the X, Y, and Z components of */
-/*                    the Ith vertex. */
+/*              are, respectively, the X, Y, and Z components of */
+/*              the Ith vertex. */
 
-/*                    This routine doesn't associate units with the */
-/*                    vertices. */
+/*              This routine doesn't associate units with the */
+/*              vertices. */
 
 
-/*     NP             is the number of triangular plates comprising the */
-/*                    plate model. */
+/*     NP       is the number of triangular plates comprising the */
+/*              plate model. */
 
-/*     PLATES         is an array containing 3-tuples of integers */
-/*                    representing the model's plates. The elements of */
-/*                    PLATES are vertex indices. The vertex indices are */
-/*                    1-based: vertices have indices ranging from 1 to */
-/*                    NV. The elements */
+/*     PLATES   is an array containing 3-tuples of integers */
+/*              representing the model's plates. The elements of */
+/*              PLATES are vertex indices. The vertex indices are */
+/*              1-based: vertices have indices ranging from 1 to */
+/*              NV. The elements */
 
-/*                       PLATES( 1, I ) */
-/*                       PLATES( 2, I ) */
-/*                       PLATES( 3, I ) */
+/*                 PLATES( 1, I ) */
+/*                 PLATES( 2, I ) */
+/*                 PLATES( 3, I ) */
 
-/*                    are, respectively, the indices of the vertices */
-/*                    comprising the Ith plate. */
+/*              are, respectively, the indices of the vertices */
+/*              comprising the Ith plate. */
 
-/*                    Note that the order of the vertices of a plate is */
-/*                    significant: the vertices must be ordered in the */
-/*                    positive (counterclockwise) sense with respect to */
-/*                    the outward normal direction associated with the */
-/*                    plate. In other words, if V1, V2, V3 are the */
-/*                    vertices of a plate, then */
+/*              Note that the order of the vertices of a plate is */
+/*              significant: the vertices must be ordered in the */
+/*              positive (counterclockwise) sense with respect to */
+/*              the outward normal direction associated with the */
+/*              plate. In other words, if V1, V2, V3 are the */
+/*              vertices of a plate, then */
 
-/*                       ( V2 - V1 )  x  ( V3 - V2 ) */
+/*                 ( V2 - V1 )  x  ( V3 - V2 ) */
 
-/*                    points in the outward normal direction. Here */
-/*                    'x' denotes the vector cross product operator. */
-
+/*              points in the outward normal direction. Here */
+/*              "x" denotes the vector cross product operator. */
 
 /* $ Detailed_Output */
 
@@ -145,21 +144,21 @@ doublereal pltvol_(integer *nv, doublereal *vrtces, integer *np, integer *
 
 /* $ Exceptions */
 
-/*     1) The input plate model must define a spatial region with */
-/*        a boundary. This routine does not check the inputs to */
-/*        verify this condition. See the Restrictions section below. */
+/*     1)  The input plate model must define a spatial region with */
+/*         a boundary. This routine does not check the inputs to */
+/*         verify this condition. See the $Restrictions section below. */
 
-/*     2) If the number of vertices is less than 4, the error */
-/*        SPICE(TOOFEWVERTICES) is signaled. */
+/*     2)  If the number of vertices is less than 4, the error */
+/*         SPICE(TOOFEWVERTICES) is signaled. */
 
-/*     3) If the number of plates is less than 4, the error */
-/*        SPICE(TOOFEWPLATES) is signaled. */
+/*     3)  If the number of plates is less than 4, the error */
+/*         SPICE(TOOFEWPLATES) is signaled. */
 
-/*     4) If any plate contains a vertex index outside of the range */
+/*     4)  If any plate contains a vertex index outside of the range */
 
-/*           [1, NV] */
+/*            [1, NV] */
 
-/*        the error SPICE(INDEXOUTOFRANGE) will be signaled. */
+/*         the error SPICE(INDEXOUTOFRANGE) is signaled. */
 
 /* $ Files */
 
@@ -187,10 +186,9 @@ doublereal pltvol_(integer *nv, doublereal *vrtces, integer *np, integer *
 /*        Tiled ellipsoid with one plate removed */
 /*        Two boxes with intersection having positive volume */
 
-
 /* $ Examples */
 
-/*     The numerical results shown for these examples may differ across */
+/*     The numerical results shown for this example may differ across */
 /*     platforms. The results depend on the SPICE kernels used as input */
 /*     (if any), the compiler and supporting libraries, and the machine */
 /*     specific arithmetic implementation. */
@@ -208,88 +206,103 @@ doublereal pltvol_(integer *nv, doublereal *vrtces, integer *np, integer *
 
 /*        Example code begins here. */
 
-/*           PROGRAM EX1 */
-/*           IMPLICIT NONE */
-/*     C */
-/*     C     Compute the volume of a plate model representing the pyramid */
-/*     C     with one vertex at the origin and the other vertices */
-/*     C     coinciding with the standard basis vectors. */
-/*     C */
-/*     C */
-/*     C     SPICELIB functions */
-/*     C */
-/*           DOUBLE PRECISION      PLTVOL */
-/*     C */
-/*     C     Local parameters */
-/*     C */
-/*           INTEGER               NVERT */
-/*           PARAMETER           ( NVERT  = 4 ) */
 
-/*           INTEGER               NPLATE */
-/*           PARAMETER           ( NPLATE = 4 ) */
-/*     C */
-/*     C     Local variables */
-/*     C */
-/*           DOUBLE PRECISION      VRTCES ( 3, NVERT  ) */
-/*           DOUBLE PRECISION      VOL */
+/*        C */
+/*        C     Compute the volume of a plate model representing the */
+/*        C     pyramid with one vertex at the origin and the other */
+/*        C     vertices coinciding with the standard basis vectors. */
+/*        C */
+/*              PROGRAM PLTVOL_EX1 */
+/*              IMPLICIT NONE */
 
-/*           INTEGER               PLATES ( 3, NPLATE ) */
-/*     C */
-/*     C     Initial values */
-/*     C */
-/*     C     The plates defined below lie in the following planes, */
-/*     C     respectively: */
-/*     C */
-/*     C        Plate 1:    { P :  < P, (-1,  0,  0) > = 0 } */
-/*     C        Plate 2:    { P :  < P, ( 0, -1,  0) > = 0 } */
-/*     C        Plate 3:    { P :  < P, ( 0,  0, -1) > = 0 } */
-/*     C        Plate 4:    { P :  < P, ( 1,  1,  1) > = 1 } */
-/*     C */
-/*           DATA                  PLATES /    1,     4,     3, */
-/*          .                                  1,     2,     4, */
-/*          .                                  1,     3,     2, */
-/*          .                                  2,     3,     4 / */
+/*        C */
+/*        C     SPICELIB functions */
+/*        C */
+/*              DOUBLE PRECISION      PLTVOL */
+/*        C */
+/*        C     Local parameters */
+/*        C */
+/*              INTEGER               NVERT */
+/*              PARAMETER           ( NVERT  = 4 ) */
 
-/*           DATA                  VRTCES / 0.D0,  0.D0,  0.D0, */
-/*          .                               1.D0,  0.D0,  0.D0, */
-/*          .                               0.D0,  1.D0,  0.D0, */
-/*          .                               0.D0,  0.D0,  1.D0 / */
+/*              INTEGER               NPLATE */
+/*              PARAMETER           ( NPLATE = 4 ) */
+/*        C */
+/*        C     Local variables */
+/*        C */
+/*              DOUBLE PRECISION      VRTCES ( 3, NVERT  ) */
+/*              DOUBLE PRECISION      VOL */
+
+/*              INTEGER               PLATES ( 3, NPLATE ) */
+
+/*        C */
+/*        C     Let the notation */
+/*        C */
+/*        C        < A, B > */
+/*        C */
+/*        C     denote the dot product of vectors A and B. */
+/*        C */
+/*        C     The plates defined below lie in the following planes, */
+/*        C     respectively: */
+/*        C */
+/*        C        Plate 1:    { P :  < P, (-1,  0,  0) > = 0 } */
+/*        C        Plate 2:    { P :  < P, ( 0, -1,  0) > = 0 } */
+/*        C        Plate 3:    { P :  < P, ( 0,  0, -1) > = 0 } */
+/*        C        Plate 4:    { P :  < P, ( 1,  1,  1) > = 1 } */
+/*        C */
+/*              DATA                  PLATES /    1,     4,     3, */
+/*             .                                  1,     2,     4, */
+/*             .                                  1,     3,     2, */
+/*             .                                  2,     3,     4 / */
+
+/*              DATA                  VRTCES / 0.D0,  0.D0,  0.D0, */
+/*             .                               1.D0,  0.D0,  0.D0, */
+/*             .                               0.D0,  1.D0,  0.D0, */
+/*             .                               0.D0,  0.D0,  1.D0 / */
 
 
-/*           VOL = PLTVOL ( NVERT, VRTCES, NPLATE, PLATES ) */
+/*              VOL = PLTVOL ( NVERT, VRTCES, NPLATE, PLATES ) */
 
-/*           WRITE (*,*) 'Expected volume =    1/6' */
-/*           WRITE (*,*) 'Computed volume = ', VOL */
+/*              WRITE (*,*) 'Expected volume =    1/6' */
+/*              WRITE (*,*) 'Computed volume = ', VOL */
 
-/*           END */
+/*              END */
 
 
-/*     When this program was executed on a PC/Linux/gfortran platform, */
-/*     the output was: */
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
 
-/*        Expected volume =    1/6 */
-/*        Computed volume =   0.16666666666666666 */
+
+/*         Expected volume =    1/6 */
+/*         Computed volume =   0.16666666666666666 */
 
 
 /* $ Restrictions */
 
-/*     1) The plate collection must describe a surface and enclose a */
-/*        volume such that the divergence theorem (see [1]) is */
-/*        applicable. */
+/*     1)  The plate collection must describe a surface and enclose a */
+/*         volume such that the divergence theorem (see [1]) is */
+/*         applicable. */
 
 /* $ Literature_References */
 
-/*     [1]  Calculus, Vol. II. Tom Apostol. John Wiley & Sons, 1969. */
+/*     [1]  T. Apostol, "Calculus, Vol. II," John Wiley & Sons, 1969. */
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.0.1, 08-JUL-2020 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. Added DSK to */
+/*        $Required_Reading. Updated code example comments. */
 
 /* -    SPICELIB Version 1.0.0, 24-OCT-2016 (NJB) */
 
 /*        Based on original 11-FEB-2011 */
+
 /* -& */
 /* $ Index_Entries */
 
@@ -344,9 +357,9 @@ doublereal pltvol_(integer *nv, doublereal *vrtces, integer *np, integer *
 	for (j = 1; j <= 3; ++j) {
 	    if (plates[(i__2 = j + i__ * 3 - 4) < plates_dim2 * 3 && 0 <= 
 		    i__2 ? i__2 : s_rnge("plates", i__2, "pltvol_", (ftnlen)
-		    346)] < 1 || plates[(i__3 = j + i__ * 3 - 4) < 
+		    361)] < 1 || plates[(i__3 = j + i__ * 3 - 4) < 
 		    plates_dim2 * 3 && 0 <= i__3 ? i__3 : s_rnge("plates", 
-		    i__3, "pltvol_", (ftnlen)346)] > *nv) {
+		    i__3, "pltvol_", (ftnlen)361)] > *nv) {
 		chkin_("PLTVOL", (ftnlen)6);
 		setmsg_("Vertex indices must be in the range [1, NV] for all"
 			" SPICE language versions. The input value of NV was "
@@ -358,7 +371,7 @@ doublereal pltvol_(integer *nv, doublereal *vrtces, integer *np, integer *
 		errint_("#", &i__, (ftnlen)1);
 		errint_("#", &plates[(i__2 = j + i__ * 3 - 4) < plates_dim2 * 
 			3 && 0 <= i__2 ? i__2 : s_rnge("plates", i__2, "pltv"
-			"ol_", (ftnlen)359)], (ftnlen)1);
+			"ol_", (ftnlen)374)], (ftnlen)1);
 		sigerr_("SPICE(INDEXOUTOFRANGE)", (ftnlen)22);
 		chkout_("PLTVOL", (ftnlen)6);
 		return ret_val;
@@ -575,10 +588,10 @@ doublereal pltvol_(integer *nv, doublereal *vrtces, integer *np, integer *
 	for (j = 1; j <= 3; ++j) {
 	    vequ_(&vrtces[(i__3 = plates[(i__2 = j + i__ * 3 - 4) < 
 		    plates_dim2 * 3 && 0 <= i__2 ? i__2 : s_rnge("plates", 
-		    i__2, "pltvol_", (ftnlen)579)] * 3 - 3) < vrtces_dim2 * 3 
+		    i__2, "pltvol_", (ftnlen)594)] * 3 - 3) < vrtces_dim2 * 3 
 		    && 0 <= i__3 ? i__3 : s_rnge("vrtces", i__3, "pltvol_", (
-		    ftnlen)579)], &m[(i__4 = j * 3 - 3) < 9 && 0 <= i__4 ? 
-		    i__4 : s_rnge("m", i__4, "pltvol_", (ftnlen)579)]);
+		    ftnlen)594)], &m[(i__4 = j * 3 - 3) < 9 && 0 <= i__4 ? 
+		    i__4 : s_rnge("m", i__4, "pltvol_", (ftnlen)594)]);
 	}
 
 /*        The determinant of M gives the volume of the parallelepiped */

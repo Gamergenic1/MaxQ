@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      ACCEPT ( Accept New Long Error Message ) */
+/* $Procedure ACCEPT ( Accept New Long Error Message ) */
 logical accept_0_(int n__, logical *ok)
 {
     /* Initialized data */
@@ -17,9 +17,11 @@ logical accept_0_(int n__, logical *ok)
 
 /* $ Abstract */
 
-/*      Indicate to the SPICELIB error handling mechanism whether or not */
-/*      a replacement or modification of the long error message can be */
-/*      accepted.  DO NOT CALL THIS ROUTINE. */
+/*     Indicate to the SPICELIB error handling mechanism whether or not */
+/*     a replacement or modification of the long error message can be */
+/*     accepted. */
+
+/*     DO NOT CALL THIS ROUTINE. */
 
 /* $ Disclaimer */
 
@@ -48,82 +50,91 @@ logical accept_0_(int n__, logical *ok)
 
 /* $ Required_Reading */
 
-/*      ERROR */
+/*     ERROR */
 
 /* $ Keywords */
 
-/*      ERROR */
+/*     ERROR */
 
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*      VARIABLE  I/O  DESCRIPTION */
-/*      --------  ---  -------------------------------------------------- */
-/*      OK         I   Indicates whether long error msg changes are ok. */
+/*     VARIABLE  I/O  DESCRIPTION */
+/*     --------  ---  -------------------------------------------------- */
+/*     OK         I   Indicates whether long error msg changes are ok. */
 
-/*      The function takes an UNSPECIFIED value on exit. */
+/*     The function takes an UNSPECIFIED value on exit. */
 
 /* $ Detailed_Input */
 
-/*      OK       Indicates to the error handling mechanism whether */
-/*               replacement of or changes to the long error message */
-/*               are to be allowed; for them to be allowed, */
-/*               both of the following must be true: */
+/*     OK       indicates to the error handling mechanism whether */
+/*              replacement of or changes to the long error message */
+/*              are to be allowed; for them to be allowed, */
+/*              both of the following must be true: */
 
-/*               1. No error condition exists, or the error response */
-/*                  action is not 'RETURN'. */
+/*              1. No error condition exists, or the error response */
+/*                 action is not 'RETURN'. */
 
-/*               2. The current error response mode is not 'IGNORE'. */
-
+/*              2. The current error response mode is not 'IGNORE'. */
 
 /* $ Detailed_Output */
 
-/*      The function is assigned a value on output, but the */
-/*      value is not meaningful. */
+/*     The function is assigned a value on output, but the */
+/*     value is not meaningful. */
 
 /* $ Parameters */
 
-/*      None. */
+/*     None. */
 
 /* $ Exceptions */
 
-/*      This routine does not detect any errors. */
+/*     Error free. */
 
-/*      However, this routine is part of the SPICELIB error */
-/*      handling mechanism. */
+/*     1)  This routine does not detect any errors. */
+
+/*         However, this routine is part of the SPICELIB error handling */
+/*         mechanism. */
 
 /* $ Files */
 
-/*      None. */
+/*     None. */
 
 /* $ Particulars */
 
-/*      DO NOT CALL THIS ROUTINE. */
+/*     DO NOT CALL THIS ROUTINE. */
 
 /* $ Examples */
 
-/*      None. */
+/*     None. */
 
 /* $ Restrictions */
 
-/*      DO NOT CALL THIS ROUTINE. */
+/*     1)  DO NOT CALL THIS ROUTINE. */
 
 /* $ Literature_References */
 
-/*      None. */
+/*     None. */
 
 /* $ Author_and_Institution */
 
-/*      N.J. Bachman    (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
 
-/* -     SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+/* -    SPICELIB Version 1.1.0, 26-OCT-2021 (JDR) */
 
-/*         Comment section for permuted index source lines was added */
-/*         following the header. */
+/*        Added IMPLICIT NONE statement. */
 
-/* -     SPICELIB Version 1.0.0, 31-JAN-1990 (NJB) */
+/*        Edited the header to comply with NAIF standard. */
+
+/* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+
+/*        Comment section for permuted index source lines was added */
+/*        following the header. */
+
+/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (NJB) */
 
 /* -& */
 /* $ Index_Entries */
@@ -133,11 +144,10 @@ logical accept_0_(int n__, logical *ok)
 /* -& */
 /* $ Revisions */
 
-
 /* -     Beta Version 1.1.0, 13-DEC-1989 (NJB) */
 
 /*         ACCEPT must return a value, in order to comply with the */
-/*         Fortran standard.  So, now it does.  The value has no */
+/*         Fortran standard. So, now it does. The value has no */
 /*         meaning, as far as the specification of ACCEPT is */
 /*         concerned. */
 
@@ -166,13 +176,15 @@ logical accept_0_(int n__, logical *ok)
     savok = *ok;
     ret_val = FALSE_;
     return ret_val;
-/* $Procedure      ALLOWD    (Are Changes of Long Error Message Allowed?) */
+/* $Procedure ALLOWD    (Are Changes of Long Error Message Allowed?) */
 
 L_allowd:
 /* $ Abstract */
 
-/*      True if replacement or modification of the long error message */
-/*      is allowed.  DO NOT CALL THIS ROUTINE. */
+/*     Return .TRUE. if replacement or modification of the long error */
+/*     message is allowed. */
+
+/*     DO NOT CALL THIS ROUTINE. */
 
 /* $ Disclaimer */
 
@@ -201,11 +213,11 @@ L_allowd:
 
 /* $ Required_Reading */
 
-/*      ERROR */
+/*     ERROR */
 
 /* $ Keywords */
 
-/*      ERROR */
+/*     ERROR */
 
 /* $ Declarations */
 
@@ -213,72 +225,79 @@ L_allowd:
 
 /* $ Brief_I/O */
 
-/*      The function takes the value, .TRUE., if replacement or */
-/*      modification of the long error message is currently allowed. */
+/*     The function takes the value, .TRUE., if replacement or */
+/*     modification of the long error message is currently allowed. */
 
 /* $ Detailed_Input */
 
-/*      None. */
+/*     None. */
 
 /* $ Detailed_Output */
 
-/*      The function takes the value, .TRUE., if replacement of or */
-/*      changes to the long error message are to be allowed; for them */
-/*      to be allowed, both of the following must be true: */
+/*     The function takes the value, .TRUE., if replacement of or */
+/*     changes to the long error message are to be allowed; for them */
+/*     to be allowed, both of the following must be true: */
 
-/*      1. No error condition exists, or the error response */
-/*         action is not 'RETURN'. */
+/*     1. No error condition exists, or the error response */
+/*        action is not 'RETURN'. */
 
-/*      2. The current error response mode is not 'IGNORE'. */
-
+/*     2. The current error response mode is not 'IGNORE'. */
 
 /* $ Parameters */
 
-/*      None. */
+/*     None. */
 
 /* $ Exceptions */
 
-/*      This routine does not detect any errors. */
+/*     1)  This routine does not detect any errors. */
 
 /* $ Files */
 
-/*      None. */
+/*     None. */
 
 /* $ Particulars */
 
-/*      DO NOT CALL THIS ROUTINE. */
+/*     DO NOT CALL THIS ROUTINE. */
 
-/*      Non-error handling routines should not call this routine.  Such */
-/*      routines can set the long error message using SETMSG, which */
-/*      itself calls this routine to test whether an update is allowed. */
+/*     Non-error handling routines should not call this routine. Such */
+/*     routines can set the long error message using SETMSG, which */
+/*     itself calls this routine to test whether an update is allowed. */
 
-/*      The initial value returned by ALLOWD is .FALSE. */
+/*     The initial value returned by ALLOWD is .FALSE. */
 
 /* $ Examples */
 
-/*      None. */
+/*     None. */
 
 /* $ Restrictions */
 
-/*      DO NOT CALL THIS ROUTINE. */
+/*     1)  DO NOT CALL THIS ROUTINE. */
 
 /* $ Literature_References */
 
-/*      None. */
+/*     None. */
 
 /* $ Author_and_Institution */
 
-/*      N.J. Bachman    (JPL) */
-/*      H.A. Neilan     (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     H.A. Neilan        (JPL) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
 
-/* -     SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+/* -    SPICELIB Version 1.1.0, 26-OCT-2021 (JDR) */
 
-/*         Comment section for permuted index source lines was added */
-/*         following the header. */
+/*        Added IMPLICIT NONE statement. */
 
-/* -     SPICELIB Version 1.0.0, 31-JAN-1990 (NJB) */
+/*        Edited the header to comply with NAIF standard. */
+
+/* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+
+/*        Comment section for permuted index source lines was added */
+/*        following the header. */
+
+/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (NJB) (HAN) */
 
 /* -& */
 /* $ Index_Entries */

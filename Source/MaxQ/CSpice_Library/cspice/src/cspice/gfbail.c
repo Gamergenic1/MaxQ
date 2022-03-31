@@ -13,8 +13,7 @@ logical gfbail_(void)
 
 /* $ Abstract */
 
-/*     This routine serves as a placeholder for an interrupt */
-/*     detection function. */
+/*     Serve as a placeholder for an interrupt detection function. */
 
 /* $ Disclaimer */
 
@@ -51,20 +50,17 @@ logical gfbail_(void)
 /*     UTILITY */
 
 /* $ Declarations */
-
-/*     None. */
-
 /* $ Brief_I/O */
 
-/*     This function always returns the value .FALSE. */
+/*     The function returns the value .FALSE. in all cases. */
 
 /* $ Detailed_Input */
 
-/*     None */
+/*     None. */
 
 /* $ Detailed_Output */
 
-/*     This function always returns the value .FALSE. */
+/*     The function returns the value .FALSE. in all cases. */
 
 /* $ Parameters */
 
@@ -72,7 +68,7 @@ logical gfbail_(void)
 
 /* $ Exceptions */
 
-/*     None. */
+/*     Error free. */
 
 /* $ Files */
 
@@ -186,11 +182,9 @@ logical gfbail_(void)
 
 /*             ... */
 
-
-
 /* $ Restrictions */
 
-/*     This is a stub routine. */
+/*     1)  This is a stub routine. */
 
 /* $ Literature_References */
 
@@ -198,17 +192,22 @@ logical gfbail_(void)
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
-/*     L.S. Elson     (JPL) */
-/*     E.D. Wright    (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     L.S. Elson         (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
 
-/* -    SPICELIB Version 1.0.1  23-JUN-2010 (EDW) */
+/* -    SPICELIB Version 1.0.2, 17-AUG-2021 (JDR) */
 
-/*        Minor edit to Declarations for correct header format. */
+/*        Edited the header to comply with NAIF standard. */
 
-/* -    SPICELIB Version 1.0.0  05-MAR-2009 (NJB) (LSE) (EDW) */
+/* -    SPICELIB Version 1.0.1, 23-JUN-2010 (EDW) */
+
+/*        Minor edit to $Declarations for correct header format. */
+
+/* -    SPICELIB Version 1.0.0, 05-MAR-2009 (NJB) (LSE) (EDW) */
 
 /* -& */
 /* $ Index_Entries */

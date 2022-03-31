@@ -48,641 +48,713 @@
 
 -Author_and_Institution
 
-   N.J. Bachman       (JPL)
-   K.R. Gehringer     (JPL)
-   W.L. Taber         (JPL)
-   F.S. Turner        (JPL)
-   E.D. Wright        (JPL)
+   N.J. Bachman        (JPL)
+   M. Costa Sitja      (JPL)
+   J. Diaz del Rio     (ODC Space)
+   K.R. Gehringer      (JPL)
+   W.L. Taber          (JPL)
+   F.S. Turner         (JPL)
+   E.D. Wright         (JPL)
 
 -Version
 
+   -CSPICE Version 13.0.0, 05-NOV-2021 (JDR) (MCS) (NJB)
+
+       Fixed size of "accobs" argument of spkaps_c: it was 6 when it
+       should be 3.
+
+       Corrected prototype of gfoclt_c: switched order of abcorr and
+       obsrvr.
+
+       Added prototypes for
+
+          azlcpo_c
+          azlrec_c
+          chbigr_c
+          chbint_c
+          chbval_c
+          ckfrot_c
+          ckfxfm_c
+          ckgr02_c
+          ckgr03_c
+          ckmeta_c
+          cknr02_c
+          cknr03_c
+          clearc_c
+          cleari_c
+          dafhsf_c
+          dasadc_c
+          dasadd_c
+          dasadi_c
+          dashfs_c
+          daslla_c
+          dasllc_c
+          dasonw_c
+          dasops_c
+          dasrdc_c
+          dasrdd_c
+          dasrdi_c
+          dasudc_c
+          dasudd_c
+          dasudi_c
+          daswbr_c
+          dazldr_c
+          dlabns_c
+          dlaens_c
+          dlaopn_c
+          dnearp_c
+          drdazl_c
+          ednmpt_c
+          edpnt_c
+          evsgp4_c
+          filld_c
+          filli_c
+          getfvn_c
+          hrmesp_c
+          invstm_c
+          lgresp_c
+          lgrint_c
+          moved_c
+          nextwd_c
+          nthwd_c
+          qderiv_c
+          recazl_c
+          repml_c
+          stlabx_c
+          tangpt_c
+          tkfram_c
+          tparch_c
+          trgsep_c
+          twovxf_c
+          vprojg_c
+
    -CSPICE Version 12.14.0, 05-JAN-2017 (EDW) (NJB)
 
-      Added prototypes for
+       Added prototypes for
 
-         chbder_c
-         cleard_c
-         dasdc_c
-         dashfn_c
-         dasopw_c 
-         dasrfr_c
-         dlabbs_c 
-         dlabfs_c
-         dlafns_c
-         dlafps_c
-         dskb02_c
-         dskcls_c
-         dskd02_c
-         dskgd_c
-         dskgtl_c
-         dski02_c
-         dskmi2_c 
-         dskn02_c
-         dskobj_c
-         dskopn_c
-         dskp02_c
-         dskrb2_c
-         dsksrf_c
-         dskstl_c
-         dskv02_c
-         dskw02_c
-         dskx02_c
-         dskxsi_c
-         dskxv_c
-         dskz02_c
-         hrmint_c
-         illum_pl02
-         illum_plid_pl02
-         latsrf_c
-         lgrind_c
-         limb_pl02
-         limbpt_c
-         llgrid_pl02
-         oscltx_c
-         pckcls_c
-         pckopn_c
-         pckw02_c
-         pltar_c
-         pltexp_c
-         pltnp_c
-         pltnrm_c
-         pltvol_c
-         polyds_c
-         srfc2s_c
-         srfcss_c
-         srfnrm_c
-         srfs2c_c
-         srfscc_c
-         subpt_pl02
-         subsol_pl02
-         term_pl02
-         termpt_c
+          chbder_c
+          cleard_c
+          dasdc_c
+          dashfn_c
+          dasopw_c
+          dasrfr_c
+          dlabbs_c
+          dlabfs_c
+          dlafns_c
+          dlafps_c
+          dskb02_c
+          dskcls_c
+          dskd02_c
+          dskgd_c
+          dskgtl_c
+          dski02_c
+          dskmi2_c
+          dskn02_c
+          dskobj_c
+          dskopn_c
+          dskp02_c
+          dskrb2_c
+          dsksrf_c
+          dskstl_c
+          dskv02_c
+          dskw02_c
+          dskx02_c
+          dskxsi_c
+          dskxv_c
+          dskz02_c
+          hrmint_c
+          illum_pl02
+          illum_plid_pl02
+          latsrf_c
+          lgrind_c
+          limb_pl02
+          limbpt_c
+          llgrid_pl02
+          oscltx_c
+          pckcls_c
+          pckopn_c
+          pckw02_c
+          pltar_c
+          pltexp_c
+          pltnp_c
+          pltnrm_c
+          pltvol_c
+          polyds_c
+          srfc2s_c
+          srfcss_c
+          srfnrm_c
+          srfs2c_c
+          srfscc_c
+          subpt_pl02
+          subsol_pl02
+          term_pl02
+          termpt_c
 
    -CSPICE Version 12.13.0, 03-DEC-2013 (NJB) (SCK) (EDW)
 
-      Correction to argument order for gfsep_c.c prototype.
+       Correction to argument order for gfsep_c.c prototype.
 
-      Added prototypes for
+       Added prototypes for
 
-         bltfrm_c
-         ccifrm_c
-         edterm_c
-         eqncpv_c
-         fovray_c
-         fovtrg_c
-         gfilum_c
-         gfpa_c
-         gfstol_c
-         gfudb_c
-         illumg_c
-         kplfrm_c
-         occult_c
-         phaseq_c
-         pxfrm2_c
-         qcktrc_c
-         trcdep_c
-         trcnam_c
-         spkcpo_c
-         spkcpt_c
-         spkcvo_c
-         spkcvt_c
-         spkpvn_c
-         spksfs_c
-         spkw20_c
-         xfmsta_c
-         udf_c
+          bltfrm_c
+          ccifrm_c
+          edterm_c
+          eqncpv_c
+          fovray_c
+          fovtrg_c
+          gfilum_c
+          gfpa_c
+          gfstol_c
+          gfudb_c
+          illumg_c
+          kplfrm_c
+          occult_c
+          phaseq_c
+          pxfrm2_c
+          qcktrc_c
+          trcdep_c
+          trcnam_c
+          spkcpo_c
+          spkcpt_c
+          spkcvo_c
+          spkcvt_c
+          spkpvn_c
+          spksfs_c
+          spkw20_c
+          xfmsta_c
+          udf_c
 
    -CSPICE Version 12.12.0, 19-FEB-2010 (EDW) (NJB)
 
-      Added prototypes for
+       Added prototypes for
 
-         bodc2s_c
-         dafgsr_c
-         dafrfr_c
-         dp2hx_c
-         ducrss_c
-         dvcrss_c
-         dvnorm_c
-         gfrr_c
-         gfuds_c
-         hx2dp_c
-         uddc_c
-         uddf_c
+          bodc2s_c
+          dafgsr_c
+          dafrfr_c
+          dp2hx_c
+          ducrss_c
+          dvcrss_c
+          dvnorm_c
+          gfrr_c
+          gfuds_c
+          hx2dp_c
+          uddc_c
+          uddf_c
 
    -CSPICE Version 12.11.0, 29-MAR-2009 (EDW) (NJB)
 
-      Added prototypes for
+       Added prototypes for
 
-         dvsep_c
-         gfbail_c
-         gfclrh_c
-         gfdist_c
-         gfevnt_c
-         gffove_c
-         gfinth_c
-         gfocce_c
-         gfoclt_c
-         gfposc_c
-         gfrefn_c
-         gfrepf_c
-         gfrepi_c
-         gfrepu_c
-         gfrfov_c
-         gfsep_c
-         gfseth_c
-         gfsntc_c
-         gfsstp_c
-         gfstep_c
-         gfsubc_c
-         gftfov_c
-         surfpv_c
-         zzgfgeth_c
-         zzgfsavh_c
+          dvsep_c
+          gfbail_c
+          gfclrh_c
+          gfdist_c
+          gfevnt_c
+          gffove_c
+          gfinth_c
+          gfocce_c
+          gfoclt_c
+          gfposc_c
+          gfrefn_c
+          gfrepf_c
+          gfrepi_c
+          gfrepu_c
+          gfrfov_c
+          gfsep_c
+          gfseth_c
+          gfsntc_c
+          gfsstp_c
+          gfstep_c
+          gfsubc_c
+          gftfov_c
+          surfpv_c
+          zzgfgeth_c
+          zzgfsavh_c
 
    -CSPICE Version 12.10.0, 30-JAN-2008 (EDW) (NJB)
 
-      Added prototypes for:
+       Added prototypes for:
 
-         ilumin_c
-         pckcov_c
-         pckfrm_c
-         sincpt_c
-         spkacs_c
-         spkaps_c
-         spkltc_c
-         subpnt_c
-         subslr_c
-         wncard_c
+          ilumin_c
+          pckcov_c
+          pckfrm_c
+          sincpt_c
+          spkacs_c
+          spkaps_c
+          spkltc_c
+          subpnt_c
+          subslr_c
+          wncard_c
 
    -CSPICE Version 12.9.0, 16-NOV-2006 (NJB)
 
-      Bug fix:  corrected prototype for vhatg_c.
+       Bug fix:  corrected prototype for vhatg_c.
 
-      Renamed wnfild_c and wnfltd_c arguments `small' to 'smal' for
-      compatibility with MS Visual C++.
+       Renamed wnfild_c and wnfltd_c arguments `small' to 'smal' for
+       compatibility with MS Visual C++.
 
-      Added prototypes for
+       Added prototypes for
 
-         dafac_c
-         dafdc_c
-         dafec_c
-         dafgda_c
-         dascls_c
-         dasopr_c
-         kclear_c
+          dafac_c
+          dafdc_c
+          dafec_c
+          dafgda_c
+          dascls_c
+          dasopr_c
+          kclear_c
 
    -CSPICE Version 12.8.0, 07-NOV-2005 (NJB)
 
-      Added prototypes for
+       Added prototypes for
 
-         bodvcd_c
-         qdq2av_c
-         qxq_c
-         srfrec_c
+          bodvcd_c
+          qdq2av_c
+          qxq_c
+          srfrec_c
 
    -CSPICE Version 12.7.0, 06-JAN-2004 (NJB)
 
-      Added prototypes for
+       Added prototypes for
 
-         bods2c_c
-         ckcov_c
-         ckobj_c
-         dafopw_c
-         dafrs_c
-         dpgrdr_c
-         drdpgr_c
-         lspcn_c
-         pgrrec_c
-         recpgr_c
-         spkcov_c
-         spkobj_c
+          bods2c_c
+          ckcov_c
+          ckobj_c
+          dafopw_c
+          dafrs_c
+          dpgrdr_c
+          drdpgr_c
+          lspcn_c
+          pgrrec_c
+          recpgr_c
+          spkcov_c
+          spkobj_c
 
    -CSPICE Version 12.6.0, 24-FEB-2003 (NJB)
 
-      Added prototype for
+       Added prototype for
 
-         bodvrd_c
-         deltet_c
-         srfxpt_c
+          bodvrd_c
+          deltet_c
+          srfxpt_c
 
    -CSPICE Version 12.5.0, 14-MAY-2003 (NJB)
 
-      Removed prototype for getcml_.
+       Removed prototype for getcml_.
 
 
    -CSPICE Version 12.4.0, 25-FEB-2003 (NJB)
 
-      Added prototypes for
+       Added prototypes for
 
-         dasac_c
-         dasec_c
-         et2lst_c
+          dasac_c
+          dasec_c
+          et2lst_c
 
    -CSPICE Version 12.3.0, 03-SEP-2002 (NJB)
 
-      Added prototypes for
+       Added prototypes for
 
-         appndc_c
-         appndd_c
-         appndi_c
-         bschoc_c
-         bschoi_c
-         bsrchc_c
-         bsrchd_c
-         bsrchi_c
-         card_c
-         ckw05_c
-         copy_c
-         cpos_c
-         cposr_c
-         diff_c
-         elemc_c
-         elemd_c
-         elemi_c
-         esrchc_c
-         insrtc_c
-         insrtd_c
-         insrti_c
-         inter_c
-         isordv_c
-         isrchc_c
-         isrchd_c
-         isrchi_c
-         lparss_c
-         lstlec_c
-         lstled_c
-         lstlei_c
-         lstltc_c
-         lstltd_c
-         lstlti_c
-         lx4dec_c
-         lx4num_c
-         lx4sgn_c
-         lx4uns_c
-         lxqstr_c
-         ncpos_c
-         ncposr_c
-         ordc_c
-         ordd_c
-         orderc_c
-         orderd_c
-         orderi_c
-         ordi_c
-         pos_c
-         posr_c
-         prefix_c
-         removc_c
-         removd_c
-         remove_c
-         removi_c
-         reordc_c
-         reordd_c
-         reordi_c
-         reordl_c
-         repmc_c
-         repmct_c
-         repmd_c
-         repmf_c
-         repmi_c
-         repmot_c
-         scard_c
-         sdiff_c
-         set_c
-         shellc_c
-         shelld_c
-         shelli_c
-         size_c
-         spkw18_c
-         ssize_c
-         union_c
-         valid_c
-         wncomd_c
-         wncond_c
-         wndifd_c
-         wnelmd_c
-         wnexpd_c
-         wnextd_c
-         wnfetd_c
-         wnfild_c
-         wnfltd_c
-         wnincd_c
-         wninsd_c
-         wnintd_c
-         wnreld_c
-         wnsumd_c
-         wnunid_c
-         wnvald_c
-         zzsynccl_c
+          appndc_c
+          appndd_c
+          appndi_c
+          bschoc_c
+          bschoi_c
+          bsrchc_c
+          bsrchd_c
+          bsrchi_c
+          card_c
+          ckw05_c
+          copy_c
+          cpos_c
+          cposr_c
+          diff_c
+          elemc_c
+          elemd_c
+          elemi_c
+          esrchc_c
+          insrtc_c
+          insrtd_c
+          insrti_c
+          inter_c
+          isordv_c
+          isrchc_c
+          isrchd_c
+          isrchi_c
+          lparss_c
+          lstlec_c
+          lstled_c
+          lstlei_c
+          lstltc_c
+          lstltd_c
+          lstlti_c
+          lx4dec_c
+          lx4num_c
+          lx4sgn_c
+          lx4uns_c
+          lxqstr_c
+          ncpos_c
+          ncposr_c
+          ordc_c
+          ordd_c
+          orderc_c
+          orderd_c
+          orderi_c
+          ordi_c
+          pos_c
+          posr_c
+          prefix_c
+          removc_c
+          removd_c
+          remove_c
+          removi_c
+          reordc_c
+          reordd_c
+          reordi_c
+          reordl_c
+          repmc_c
+          repmct_c
+          repmd_c
+          repmf_c
+          repmi_c
+          repmot_c
+          scard_c
+          sdiff_c
+          set_c
+          shellc_c
+          shelld_c
+          shelli_c
+          size_c
+          spkw18_c
+          ssize_c
+          union_c
+          valid_c
+          wncomd_c
+          wncond_c
+          wndifd_c
+          wnelmd_c
+          wnexpd_c
+          wnextd_c
+          wnfetd_c
+          wnfild_c
+          wnfltd_c
+          wnincd_c
+          wninsd_c
+          wnintd_c
+          wnreld_c
+          wnsumd_c
+          wnunid_c
+          wnvald_c
+          zzsynccl_c
 
    -CSPICE Version 12.2.0, 23-OCT-2001 (NJB)
 
-      Added prototypes for
+       Added prototypes for
 
-         badkpv_c
-         dcyldr_c
-         dgeodr_c
-         dlatdr_c
-         drdcyl_c
-         drdgeo_c
-         drdlat_c
-         drdsph_c
-         dsphdr_c
-         ekacec_c
-         ekaced_c
-         ekacei_c
-         ekappr_c
-         ekbseg_c
-         ekccnt_c
-         ekcii_c
-         ekdelr_c
-         ekinsr_c
-         ekntab_c
-         ekrcec_c
-         ekrced_c
-         ekrcei_c
-         ektnam_c
-         ekucec_c
-         ekuced_c
-         ekucei_c
-         inelpl_c
-         invort_c
-         kxtrct_c
+          badkpv_c
+          dcyldr_c
+          dgeodr_c
+          dlatdr_c
+          drdcyl_c
+          drdgeo_c
+          drdlat_c
+          drdsph_c
+          dsphdr_c
+          ekacec_c
+          ekaced_c
+          ekacei_c
+          ekappr_c
+          ekbseg_c
+          ekccnt_c
+          ekcii_c
+          ekdelr_c
+          ekinsr_c
+          ekntab_c
+          ekrcec_c
+          ekrced_c
+          ekrcei_c
+          ektnam_c
+          ekucec_c
+          ekuced_c
+          ekucei_c
+          inelpl_c
+          invort_c
+          kxtrct_c
 
-      Added const qualifier to input array arguments of
+       Added const qualifier to input array arguments of
 
-         conics_c
-         illum_c
-         pdpool_c
-         prop2b_c
-         q2m_c
-         spkuds_c
-         xposeg_c
+          conics_c
+          illum_c
+          pdpool_c
+          prop2b_c
+          q2m_c
+          spkuds_c
+          xposeg_c
 
-      Added const qualifier to the return value of
+       Added const qualifier to the return value of
 
-         tkvrsn_c
+          tkvrsn_c
 
    -CSPICE Version 12.1.0, 12-APR-2000 (FST)
 
-      Added prototype for
+       Added prototype for
 
-         getfov_c
+          getfov_c
 
    -CSPICE Version 12.0.0, 22-MAR-2000 (NJB)
 
-      Added prototypes for
+       Added prototypes for
 
-         lparse_c
-         lparsm_c
-         spkw12_c
-         spkw13_c
+          lparse_c
+          lparsm_c
+          spkw12_c
+          spkw13_c
 
 
    -CSPICE Version 11.1.0, 17-DEC-1999 (WLT)
 
-      Added prototype for
+       Added prototype for
 
-         dafrda_c
+          dafrda_c
 
    -CSPICE Version 11.0.0, 07-OCT-1999 (NJB) (EDW)
 
-      Changed ekaclc_c, ekacld_c, ekacli_c prototypes to make input
-      pointers const-qualified where appropriate.
+       Changed ekaclc_c, ekacld_c, ekacli_c prototypes to make input
+       pointers const-qualified where appropriate.
 
-      Changed prompt_c prototype to accommodate memory leak bug fix.
+       Changed prompt_c prototype to accommodate memory leak bug fix.
 
-      Changed ekpsel_c prototype to be consistent with other interfaces
-      having string array outputs.
+       Changed ekpsel_c prototype to be consistent with other interfaces
+       having string array outputs.
 
-      Added prototypes for
+       Added prototypes for
 
-         axisar_c
-         brcktd_c
-         brckti_c
-         cgv2el_c
-         cidfrm_c
-         clpool_c
-         cmprss_c
-         cnmfrm_c
-         convrt_c
-         cvpool_c
-         dafbbs_c
-         dafbfs_c
-         dafcls_c
-         dafcs_c
-         daffna_c
-         daffpa_c
-         dafgh_c
-         dafgn_c
-         dafgs_c
-         dafopr_c
-         dafps_c
-         dafus_c
-         diags2_c
-         dtpool_c
-         dvdot_c
-         dvhat_c
-         dvpool_c
-         edlimb_c
-         ekops_c
-         ekopw_c
-         eul2xf_c
-         ftncls_c
-         furnsh_c
-         getelm_c
-         getmsg_c
-         gnpool_c
-         ident_c
-         illum_c
-         inedpl_c
-         kdata_c
-         kinfo_c
-         ktotal_c
-         lmpool_c
-         matchi_c
-         matchw_c
-         maxd_c
-         maxi_c
-         mequ_c
-         mind_c
-         mini_c
-         moved_
-         npedln_c
-         npelpt_c
-         nplnpt_c
-         pcpool_c
-         pdpool_c
-         pipool_c
-         pjelpl_c
-         pxform_c
-         rav2xf_c
-         raxisa_c
-         rquad_c
-         saelgv_c
-         spk14a_c
-         spk14b_c
-         spk14e_c
-         spkapo_c
-         spkapp_c
-         spkcls_c
-         spkezp_c
-         spkgps_c
-         spkopn_c
-         spkpds_c
-         spkpos_c
-         spkssb_c
-         spksub_c
-         spkuds_c
-         spkw02_c
-         spkw03_c
-         spkw05_c
-         spkw08_c
-         spkw09_c
-         spkw10_c
-         spkw15_c
-         spkw17_c
-         stpool_c
-         subpt_c
-         subsol_c
-         swpool_c
-         szpool_c
-         tparse_c
-         trace_c
-         unload_c
-         vaddg_c
-         vhatg_c
-         vlcomg_c
-         vminug_c
-         vrel_c
-         vrelg_c
-         vsepg_c
-         vtmv_c
-         vtmvg_c
-         vzerog_c
-         xf2eul_c
-         xf2rav_c
-         xposeg_c
+          axisar_c
+          brcktd_c
+          brckti_c
+          cgv2el_c
+          cidfrm_c
+          clpool_c
+          cmprss_c
+          cnmfrm_c
+          convrt_c
+          cvpool_c
+          dafbbs_c
+          dafbfs_c
+          dafcls_c
+          dafcs_c
+          daffna_c
+          daffpa_c
+          dafgh_c
+          dafgn_c
+          dafgs_c
+          dafopr_c
+          dafps_c
+          dafus_c
+          diags2_c
+          dtpool_c
+          dvdot_c
+          dvhat_c
+          dvpool_c
+          edlimb_c
+          ekops_c
+          ekopw_c
+          eul2xf_c
+          ftncls_c
+          furnsh_c
+          getelm_c
+          getmsg_c
+          gnpool_c
+          ident_c
+          illum_c
+          inedpl_c
+          kdata_c
+          kinfo_c
+          ktotal_c
+          lmpool_c
+          matchi_c
+          matchw_c
+          maxd_c
+          maxi_c
+          mequ_c
+          mind_c
+          mini_c
+          moved_
+          npedln_c
+          npelpt_c
+          nplnpt_c
+          pcpool_c
+          pdpool_c
+          pipool_c
+          pjelpl_c
+          pxform_c
+          rav2xf_c
+          raxisa_c
+          rquad_c
+          saelgv_c
+          spk14a_c
+          spk14b_c
+          spk14e_c
+          spkapo_c
+          spkapp_c
+          spkcls_c
+          spkezp_c
+          spkgps_c
+          spkopn_c
+          spkpds_c
+          spkpos_c
+          spkssb_c
+          spksub_c
+          spkuds_c
+          spkw02_c
+          spkw03_c
+          spkw05_c
+          spkw08_c
+          spkw09_c
+          spkw10_c
+          spkw15_c
+          spkw17_c
+          stpool_c
+          subpt_c
+          subsol_c
+          swpool_c
+          szpool_c
+          tparse_c
+          trace_c
+          unload_c
+          vaddg_c
+          vhatg_c
+          vlcomg_c
+          vminug_c
+          vrel_c
+          vrelg_c
+          vsepg_c
+          vtmv_c
+          vtmvg_c
+          vzerog_c
+          xf2eul_c
+          xf2rav_c
+          xposeg_c
 
    -CSPICE Version 10.0.0, 09-MAR-1999 (NJB)
 
-      Added prototypes for
+       Added prototypes for
 
-         frame_c
-         inrypl_c
-         nvc2pl_c
-         nvp2pl_c
-         pl2nvc_c
-         pl2nvp_c
-         pl2psv_c
-         psv2pl_c
-         sce2c_c
-         vprjp_c
-         vprjpi_c
+          frame_c
+          inrypl_c
+          nvc2pl_c
+          nvp2pl_c
+          pl2nvc_c
+          pl2nvp_c
+          pl2psv_c
+          psv2pl_c
+          sce2c_c
+          vprjp_c
+          vprjpi_c
 
-      Now conditionally includes SpiceEll.h and SpicePln.h.
+       Now conditionally includes SpiceEll.h and SpicePln.h.
 
 
    -CSPICE Version 9.0.0, 25-FEB-1999 (NJB)
 
-      Added prototypes for
+       Added prototypes for
 
-         eknseg_c
-         eknelt_c
-         ekpsel_c
-         ekssum_c
+          eknseg_c
+          eknelt_c
+          ekpsel_c
+          ekssum_c
 
-      Now conditionally includes SpiceEK.h.
+       Now conditionally includes SpiceEK.h.
 
 
    -CSPICE Version 8.0.0, 20-OCT-1998 (NJB)
 
-      Added const qualifier to all input matrix and vector arguments.
+       Added const qualifier to all input matrix and vector arguments.
 
-      Added prototypes for
+       Added prototypes for
 
-         det_c
-         dpmax_c
-         dpmax_
-         dpmin_c
-         dpmin_
-         frinfo_c
-         frmnam_c
-         getfat_c
-         intmax_c
-         intmax_
-         intmin_c
-         intmin_
-         invert_c
-         namfrm_c
-         vrotv_c
-         vsclg_c
+          det_c
+          dpmax_c
+          dpmax_
+          dpmin_c
+          dpmin_
+          frinfo_c
+          frmnam_c
+          getfat_c
+          intmax_c
+          intmax_
+          intmin_c
+          intmin_
+          invert_c
+          namfrm_c
+          vrotv_c
+          vsclg_c
 
 
    -CSPICE Version 7.0.0, 02-APR-1998 (EDW)
 
-      Added prototypes for
+       Added prototypes for
 
-         mequg_c
-         unormg_g
-         vdistg_c
-         vdotg_c
-         vequg_c
-         vnormg_c
+          mequg_c
+          unormg_c
+          vdistg_c
+          vdotg_c
+          vequg_c
+          vnormg_c
 
    -CSPICE Version 6.0.0, 31-MAR-1998 (NJB)
 
-      Added prototypes for
+       Added prototypes for
 
-         ekaclc_c
-         ekacld_c
-         ekacli_c
-         ekcls_c
-         ekffld_c
-         ekfind_c
-         ekgc_c
-         ekgd_c
-         ekgi_c
-         ekifld_c
-         eklef_c
-         ekopr_c
-         ekopn_c
-         ekuef_c
+          ekaclc_c
+          ekacld_c
+          ekacli_c
+          ekcls_c
+          ekffld_c
+          ekfind_c
+          ekgc_c
+          ekgd_c
+          ekgi_c
+          ekifld_c
+          eklef_c
+          ekopr_c
+          ekopn_c
+          ekuef_c
 
    -CSPICE Version 5.0.1, 05-MAR-1998 (EDW)
 
-      Remove some non printing characters.
+       Remove some non printing characters.
 
    -CSPICE Version 5.0.0, 03-MAR-1998 (NJB)
 
-      Added prototypes for
+       Added prototypes for
 
-         etcal_c
-         ltime_c
-         stelab_c
-         tpictr_c
-         twovec_c
-         vsubg_c
+          etcal_c
+          ltime_c
+          stelab_c
+          tpictr_c
+          twovec_c
+          vsubg_c
 
    -CSPICE Version 4.0.0, 11-FEB-1998 (EDW)
 
-      Added prototypes for
+       Added prototypes for
 
-         timdef_c
-         tsetyr_c
+          timdef_c
+          tsetyr_c
 
 
    -CSPICE Version 3.0.0, 02-FEB-1998 (NJB)
 
-      Added prototypes for
+       Added prototypes for
 
-         pckuof_c
-         tipbod_c
+          pckuof_c
+          tipbod_c
 
-      Type SpiceVoid was replaced with void.
+       Type SpiceVoid was replaced with void.
 
    -CSPICE Version 2.0.0, 06-JAN-1998 (NJB)
 
-      Changed all input-only character pointers to type ConstSpiceChar.
+       Changed all input-only character pointers to type ConstSpiceChar.
 
    -CSPICE Version 1.0.0, 25-OCT-1997 (NJB) (KRG) (EDW)
 
@@ -724,7 +796,7 @@ Include Files:
 
 #ifndef  HAVE_SPICE_ELLIPSES_H
 #include "SpiceEll.h"
-#endif 
+#endif
 
 #ifndef  HAVE_SPICE_OSC_H
 #include "SpiceOsc.h"
@@ -766,6 +838,27 @@ Include Files:
    void              axisar_c ( ConstSpiceDouble     axis   [3],
                                 SpiceDouble          angle,
                                 SpiceDouble          r      [3][3]  );
+
+
+   void              azlcpo_c ( ConstSpiceChar    * method,
+                                ConstSpiceChar    * target,
+                                SpiceDouble         et,
+                                ConstSpiceChar    * abcorr,
+                                SpiceBoolean        azccw,
+                                SpiceBoolean        elplsz,
+                                ConstSpiceDouble    obspos [3],
+                                ConstSpiceChar    * obsctr,
+                                ConstSpiceChar    * obsref,
+                                SpiceDouble         azlsta [6],
+                                SpiceDouble       * lt         );
+
+
+   void              azlrec_c ( SpiceDouble         range,
+                                SpiceDouble         az,
+                                SpiceDouble         el,
+                                SpiceBoolean        azccw,
+                                SpiceBoolean        elplsz,
+                                SpiceDouble         rectan [3] );
 
 
    SpiceBoolean      badkpv_c ( ConstSpiceChar      *caller,
@@ -900,6 +993,29 @@ Include Files:
                                 SpiceDouble      * dpdxs );
 
 
+   void              chbigr_c ( SpiceInt            degp,
+                                ConstSpiceDouble    cp     [],
+                                ConstSpiceDouble    x2s    [2],
+                                SpiceDouble         x,
+                                SpiceDouble       * p,
+                                SpiceDouble       * itgrlp  );
+
+
+   void              chbint_c ( ConstSpiceDouble    cp     [],
+                                SpiceInt            degp,
+                                ConstSpiceDouble    x2s    [2],
+                                SpiceDouble         x,
+                                SpiceDouble       * p,
+                                SpiceDouble       * dpdx       );
+
+
+   void              chbval_c ( ConstSpiceDouble    cp     [],
+                                SpiceInt            degp,
+                                ConstSpiceDouble    x2s    [2],
+                                SpiceDouble         x,
+                                SpiceDouble       * p          );
+
+
    void              chkin_c  ( ConstSpiceChar    * module );
 
 
@@ -913,6 +1029,26 @@ Include Files:
                                 SpiceBoolean      * found  );
 
 
+   void              ckfrot_c ( SpiceInt            inst,
+                                SpiceDouble         et,
+                                SpiceDouble         rotate [3][3],
+                                SpiceInt          * ref,
+                                SpiceBoolean      * found         );
+
+
+   void              ckfxfm_c ( SpiceInt            inst,
+                                SpiceDouble         et,
+                                SpiceDouble         xform  [6][6],
+                                SpiceInt          * ref,
+                                SpiceBoolean      * found         );
+
+
+   void              ckgr02_c ( SpiceInt            handle,
+                                ConstSpiceDouble    descr  [],
+                                SpiceInt            recno,
+                                SpiceDouble         record [] );
+
+
    void              ckcls_c  ( SpiceInt            handle );
 
 
@@ -923,6 +1059,12 @@ Include Files:
                                 SpiceDouble         tol,
                                 ConstSpiceChar    * timsys,
                                 SpiceCell         * cover   );
+
+
+   void              ckgr03_c ( SpiceInt            handle,
+                                ConstSpiceDouble    descr  [],
+                                SpiceInt            recno,
+                                SpiceDouble         record [] );
 
 
    void              ckobj_c  ( ConstSpiceChar    * ck,
@@ -946,6 +1088,26 @@ Include Files:
                                 SpiceDouble         av[3],
                                 SpiceDouble       * clkout,
                                 SpiceBoolean      * found      );
+
+
+   void              ckmeta_c ( SpiceInt            ckid,
+                                ConstSpiceChar    * meta,
+                                SpiceInt          * idcode );
+
+
+   void              cknr02_c ( SpiceInt            handle,
+                                ConstSpiceDouble    descr  [],
+                                SpiceInt          * nrec      );
+
+
+   void              cknr03_c ( SpiceInt            handle,
+                                ConstSpiceDouble    descr  [],
+                                SpiceInt          * nrec      );
+
+
+   void              clearc_c ( SpiceInt            ndim,
+                                SpiceInt            arrlen,
+                                void              * array   );
 
 
    void              cklpf_c  ( ConstSpiceChar    * fname,
@@ -1024,6 +1186,10 @@ Include Files:
                                 SpiceDouble        * array );
 
 
+   void              cleari_c ( SpiceInt            ndim,
+                                SpiceInt            array  [] );
+
+
    SpiceDouble       clight_c ( void );
 
 
@@ -1057,7 +1223,6 @@ Include Files:
 
    void              copy_c   ( SpiceCell         * a,
                                 SpiceCell         * b     );
-
 
 
    SpiceInt          cpos_c   ( ConstSpiceChar    * str,
@@ -1155,6 +1320,11 @@ Include Files:
                                 SpiceBoolean      * found  );
 
 
+   void              dafhsf_c ( SpiceInt            handle,
+                                SpiceInt          * nd,
+                                SpiceInt          * ni      );
+
+
    void              dafopr_c ( ConstSpiceChar    * fname,
                                 SpiceInt          * handle  );
 
@@ -1185,6 +1355,24 @@ Include Files:
                                 SpiceInt          * fward,
                                 SpiceInt          * bward,
                                 SpiceInt          * free    );
+
+
+   void              dasadc_c ( SpiceInt            handle,
+                                SpiceInt            n,
+                                SpiceInt            bpos,
+                                SpiceInt            epos,
+                                SpiceInt            datlen,
+                                const void        * data   );
+
+
+   void              dasadd_c ( SpiceInt            handle,
+                                SpiceInt            n,
+                                ConstSpiceDouble    data   [] );
+
+
+   void              dasadi_c ( SpiceInt            handle,
+                                SpiceInt            n,
+                                ConstSpiceInt       data   [] );
 
 
 
@@ -1223,12 +1411,63 @@ Include Files:
                                 SpiceChar         * fname  );
 
 
+   void              dashfs_c ( SpiceInt            handle,
+                                SpiceInt          * nresvr,
+                                SpiceInt          * nresvc,
+                                SpiceInt          * ncomr,
+                                SpiceInt          * ncomc,
+                                SpiceInt          * free,
+                                SpiceInt            lastla [3],
+                                SpiceInt            lastrc [3],
+                                SpiceInt            lastwd [3] );
+
+
+   void              daslla_c ( SpiceInt            handle,
+                                SpiceInt          * lastc,
+                                SpiceInt          * lastd,
+                                SpiceInt          * lasti  );
+
+
+   void              dasllc_c ( SpiceInt            handle );
+
+
+   void              dasonw_c ( ConstSpiceChar    * fname,
+                                ConstSpiceChar    * ftype,
+                                ConstSpiceChar    * ifname,
+                                SpiceInt            ncomr,
+                                SpiceInt          * handle );
+
+
    void              dasopr_c ( ConstSpiceChar    * fname,
                                 SpiceInt          * handle  );
 
 
+   void              dasops_c ( SpiceInt          * handle );
+
+
    void              dasopw_c ( ConstSpiceChar    * fname,
                                 SpiceInt          * handle  );
+
+
+   void              dasrdc_c ( SpiceInt            handle,
+                                SpiceInt            first,
+                                SpiceInt            last,
+                                SpiceInt            bpos,
+                                SpiceInt            epos,
+                                SpiceInt            datlen,
+                                void              * data   );
+
+
+   void              dasrdd_c ( SpiceInt            handle,
+                                SpiceInt            first,
+                                SpiceInt            last,
+                                SpiceDouble         data   [] );
+
+
+   void              dasrdi_c ( SpiceInt            handle,
+                                SpiceInt            first,
+                                SpiceInt            last,
+                                SpiceInt            data   [] );
 
 
 
@@ -1241,6 +1480,38 @@ Include Files:
                                 SpiceInt          * nresvc,
                                 SpiceInt          * ncomr,
                                 SpiceInt          * ncomc   );
+
+
+   void              dasudc_c ( SpiceInt            handle,
+                                SpiceInt            first,
+                                SpiceInt            last,
+                                SpiceInt            bpos,
+                                SpiceInt            epos,
+                                SpiceInt            datlen,
+                                const void        * data   );
+
+
+   void              dasudd_c ( SpiceInt            handle,
+                                SpiceInt            first,
+                                SpiceInt            last,
+                                ConstSpiceDouble    data   [] );
+
+
+   void              dasudi_c ( SpiceInt            handle,
+                                SpiceInt            first,
+                                SpiceInt            last,
+                                ConstSpiceInt       data   [] );
+
+
+   void              daswbr_c ( SpiceInt            handle );
+
+
+   void              dazldr_c ( SpiceDouble         x,
+                                SpiceDouble         y,
+                                SpiceDouble         z,
+                                SpiceBoolean        azccw,
+                                SpiceBoolean        elplsz,
+                                SpiceDouble         jacobi [3][3] );
 
 
    void              dcyldr_c ( SpiceDouble         x,
@@ -1285,6 +1556,12 @@ Include Files:
                                 SpiceBoolean    * found  );
 
 
+   void              dlabns_c ( SpiceInt            handle );
+
+
+   void              dlaens_c ( SpiceInt            handle );
+
+
    void              dlafns_c ( SpiceInt               handle,
                                 ConstSpiceDLADescr   * descr,
                                 SpiceDLADescr        * nxtdsc,
@@ -1297,10 +1574,26 @@ Include Files:
                                 SpiceBoolean         * found   );
 
 
+   void              dlaopn_c ( ConstSpiceChar    * fname,
+                                ConstSpiceChar    * ftype,
+                                ConstSpiceChar    * ifname,
+                                SpiceInt            ncomch,
+                                SpiceInt          * handle );
+
+
    void              dlatdr_c ( SpiceDouble         x,
                                 SpiceDouble         y,
                                 SpiceDouble         z,
                                 SpiceDouble         jacobi[3][3] );
+
+
+   void              dnearp_c ( ConstSpiceDouble    state  [6],
+                                SpiceDouble         a,
+                                SpiceDouble         b,
+                                SpiceDouble         c,
+                                SpiceDouble         dnear  [6],
+                                SpiceDouble         dalt   [2],
+                                SpiceBoolean      * found       );
 
 
    void              dp2hx_c  ( SpiceDouble   number,
@@ -1316,6 +1609,14 @@ Include Files:
                                 SpiceDouble         re,
                                 SpiceDouble         f,
                                 SpiceDouble         jacobi[3][3] );
+
+
+   void              drdazl_c ( SpiceDouble         range,
+                                SpiceDouble         az,
+                                SpiceDouble         el,
+                                SpiceBoolean        azccw,
+                                SpiceBoolean        elplsz,
+                                SpiceDouble         jacobi [3][3] );
 
 
    SpiceDouble       dpmax_c  ( void );
@@ -1443,7 +1744,7 @@ Include Files:
                                 SpiceDouble           spaixd [],
                                 SpiceInt              spaixi []    );
 
-                    
+
    void              dskp02_c ( SpiceInt              handle,
                                 ConstSpiceDLADescr  * dladsc,
                                 SpiceInt              start,
@@ -1464,7 +1765,7 @@ Include Files:
 
    void              dsksrf_c ( ConstSpiceChar      * dsk,
                                 SpiceInt              bodyid,
-                                SpiceCell           * srfids ); 
+                                SpiceCell           * srfids );
 
 
    void              dskstl_c ( SpiceInt               keywrd,
@@ -1592,6 +1893,20 @@ Include Files:
                                 SpiceDouble           c,
                                 ConstSpiceDouble      viewpt[3],
                                 SpiceEllipse        * limb      );
+
+
+   void              ednmpt_c ( SpiceDouble         a,
+                                SpiceDouble         b,
+                                SpiceDouble         c,
+                                ConstSpiceDouble    normal [3],
+                                SpiceDouble         point  [3] );
+
+
+   void              edpnt_c  ( ConstSpiceDouble    p      [3],
+                                SpiceDouble         a,
+                                SpiceDouble         b,
+                                SpiceDouble         c,
+                                SpiceDouble         ep     [3] );
 
 
    void              edterm_c ( ConstSpiceChar      * trmtyp,
@@ -1973,6 +2288,12 @@ Include Files:
                                 SpiceDouble         xform [6][6] );
 
 
+   void              evsgp4_c ( SpiceDouble         et,
+                                ConstSpiceDouble    geophs [8],
+                                ConstSpiceDouble    elems  [10],
+                                SpiceDouble         state  [6]  );
+
+
    SpiceBoolean      exists_c ( ConstSpiceChar    * name );
 
 
@@ -1998,6 +2319,16 @@ Include Files:
                                 ConstSpiceChar   * obsrvr,
                                 SpiceDouble      * et,
                                 SpiceBoolean     * visible  );
+
+
+   void              filli_c  ( SpiceInt            value,
+                                SpiceInt            ndim,
+                                SpiceInt            array  [] );
+
+
+   void              filld_c  ( SpiceDouble         value,
+                                SpiceInt            ndim,
+                                SpiceDouble         array  [] );
 
 
    void              frame_c  ( SpiceDouble         x[3],
@@ -2070,6 +2401,17 @@ Include Files:
                                 SpiceInt            room,
                                 SpiceInt            shapelen,
                                 SpiceInt            framelen,
+                                SpiceChar         * shape,
+                                SpiceChar         * frame,
+                                SpiceDouble         bsight [3],
+                                SpiceInt          * n,
+                                SpiceDouble         bounds [][3] );
+
+
+   void              getfvn_c ( ConstSpiceChar    * inst,
+                                SpiceInt            room,
+                                SpiceInt            shalen,
+                                SpiceInt            fralen,
                                 SpiceChar         * shape,
                                 SpiceChar         * frame,
                                 SpiceDouble         bsight [3],
@@ -2161,12 +2503,12 @@ Include Files:
                                                     ConstSpiceChar  * srcsuf ),
                      void            ( * udrepu ) ( SpiceDouble       ivbeg,
                                                     SpiceDouble       ivend,
-                                                    SpiceDouble       et      ),
+                                                    SpiceDouble       et     ),
                      void            ( * udrepf ) ( void ),
                      SpiceBoolean        bail,
                      SpiceBoolean    ( * udbail ) ( void ),
                      SpiceCell         * cnfine,
-                     SpiceCell         * result                               );
+                     SpiceCell         * result                              );
 
 
    void              gfilum_c ( ConstSpiceChar     * method,
@@ -2217,7 +2559,7 @@ Include Files:
                      SpiceBoolean        bail,
                      SpiceBoolean    ( * udbail ) ( void ),
                      SpiceCell         * cnfine,
-                     SpiceCell         * result                               );
+                     SpiceCell         * result                              );
 
 
 
@@ -2228,8 +2570,8 @@ Include Files:
                                 ConstSpiceChar    * back,
                                 ConstSpiceChar    * bshape,
                                 ConstSpiceChar    * bframe,
-                                ConstSpiceChar    * obsrvr,
                                 ConstSpiceChar    * abcorr,
+                                ConstSpiceChar    * obsrvr,
                                 SpiceDouble         step,
                                 SpiceCell         * cnfine,
                                 SpiceCell         * result );
@@ -2384,8 +2726,8 @@ Include Files:
                                                     SpiceDouble     * value ),
 
                                 void  ( * udfunb ) ( void ( * udfuns )
-                                                        ( SpiceDouble   et,
-                                                          SpiceDouble * value ),
+                                                       ( SpiceDouble   et,
+                                                         SpiceDouble * value ),
 
                                                    SpiceDouble       et,
                                                    SpiceBoolean    * xbool ),
@@ -2429,6 +2771,15 @@ Include Files:
                                 SpiceInt          * n,
                                 void              * kvars,
                                 SpiceBoolean      * found  );
+
+
+   void              hrmesp_c ( SpiceInt            n,
+                                SpiceDouble         first,
+                                SpiceDouble         step,
+                                ConstSpiceDouble    yvals  [],
+                                SpiceDouble         x,
+                                SpiceDouble       * f,
+                                SpiceDouble       * df        );
 
 
   void               hrmint_c ( SpiceInt            n,
@@ -2598,6 +2949,10 @@ Include Files:
                                 SpiceDouble         mit[3][3] );
 
 
+   void              invstm_c ( ConstSpiceDouble    mat    [6][6],
+                                SpiceDouble         invmat [6][6] );
+
+
    SpiceBoolean      isordv_c ( ConstSpiceInt     * array,
                                 SpiceInt            n      );
 
@@ -2727,6 +3082,13 @@ Include Files:
    void              ldpool_c ( ConstSpiceChar    * filename );
 
 
+   SpiceDouble       lgresp_c ( SpiceInt            n,
+                                SpiceDouble         first,
+                                SpiceDouble         step,
+                                ConstSpiceDouble    yvals  [],
+                                SpiceDouble         x         );
+
+
    void              lgrind_c ( SpiceInt            n,
                                 ConstSpiceDouble  * xvals,
                                 ConstSpiceDouble  * yvals,
@@ -2734,6 +3096,12 @@ Include Files:
                                 SpiceDouble         x,
                                 SpiceDouble       * p,
                                 SpiceDouble       * dp );
+
+
+   SpiceDouble       lgrint_c ( SpiceInt            n,
+                                ConstSpiceDouble    xvals  [],
+                                ConstSpiceDouble    yvals  [],
+                                SpiceDouble         x         );
 
 
    void              limb_pl02 ( SpiceInt              handle,
@@ -2905,11 +3273,11 @@ Include Files:
                                 SpiceChar           wchr   );
 
 
-   SpiceDouble       maxd_c  ( SpiceInt             n,
+   SpiceDouble       maxd_c   ( SpiceInt            n,
                                                     ... );
 
 
-   SpiceInt          maxi_c  ( SpiceInt             n,
+   SpiceInt          maxi_c   ( SpiceInt            n,
                                                     ... );
 
 
@@ -2934,6 +3302,11 @@ Include Files:
    int               moved_   ( SpiceDouble       * arrfrm,
                                 SpiceInt          * ndim,
                                 SpiceDouble       * arrto  );
+
+
+   void              moved_c  ( ConstSpiceDouble    arrfrm [],
+                                SpiceInt            ndim,
+                                SpiceDouble         arrto  [] );
 
 
    void              mtxm_c   ( ConstSpiceDouble    m1  [3][3],
@@ -3021,6 +3394,13 @@ Include Files:
                                 SpiceDouble       * alt        );
 
 
+   void              nextwd_c ( ConstSpiceChar    * string,
+                                SpiceInt            nexlen,
+                                SpiceInt            reslen,
+                                SpiceChar         * next,
+                                SpiceChar         * rest   );
+
+
    void              npedln_c ( SpiceDouble         a,
                                 SpiceDouble         b,
                                 SpiceDouble         c,
@@ -3041,6 +3421,13 @@ Include Files:
                                 ConstSpiceDouble    point  [3],
                                 SpiceDouble         pnear  [3],
                                 SpiceDouble       * dist       );
+
+
+   void              nthwd_c  ( ConstSpiceChar    * string,
+                                SpiceInt            nth,
+                                SpiceInt            worlen,
+                                SpiceChar         * word,
+                                SpiceInt          * loc    );
 
 
    void              nvc2pl_c ( ConstSpiceDouble    normal[3],
@@ -3200,7 +3587,7 @@ Include Files:
    SpiceDouble       pltar_c  ( SpiceInt            nv,
                                 ConstSpiceDouble    vrtces[][3],
                                 SpiceInt            np,
-                                ConstSpiceInt       plates[][3] );  
+                                ConstSpiceInt       plates[][3] );
 
 
    void              pltexp_c ( ConstSpiceDouble    iverts[3][3],
@@ -3225,7 +3612,7 @@ Include Files:
    SpiceDouble       pltvol_c ( SpiceInt           nv,
                                 ConstSpiceDouble   vrtces[][3],
                                 SpiceInt           np,
-                                ConstSpiceInt      plates[][3] );  
+                                ConstSpiceInt      plates[][3] );
 
 
    void              polyds_c ( ConstSpiceDouble    * coeffs,
@@ -3301,6 +3688,13 @@ Include Files:
                                 SpiceChar         * trace    );
 
 
+   void              qderiv_c ( SpiceInt            ndim,
+                                ConstSpiceDouble    f0     [],
+                                ConstSpiceDouble    f2     [],
+                                SpiceDouble         delta,
+                                SpiceDouble         dfdt   [] );
+
+
    void              qdq2av_c ( ConstSpiceDouble    q[4],
                                 ConstSpiceDouble    dq[4],
                                 SpiceDouble         av[3] );
@@ -3332,6 +3726,14 @@ Include Files:
                                 SpiceInt             lenout,
                                 SpiceChar          * line,
                                 SpiceBoolean       * eof    );
+
+
+   void              recazl_c ( ConstSpiceDouble    rectan [3],
+                                SpiceBoolean        azccw,
+                                SpiceBoolean        elplsz,
+                                SpiceDouble       * range,
+                                SpiceDouble       * az,
+                                SpiceDouble       * el          );
 
 
    void              reccyl_c ( ConstSpiceDouble    rectan[3],
@@ -3416,6 +3818,14 @@ Include Files:
                                 SpiceChar            strCase,
                                 SpiceInt             lenout,
                                 SpiceChar          * out     );
+
+
+   void              repml_c  ( ConstSpiceChar    * in,
+                                ConstSpiceChar    * marker,
+                                SpiceBoolean        value,
+                                SpiceChar           rtcase,
+                                SpiceInt            outlen,
+                                SpiceChar         * out    );
 
 
    void              repmd_c  ( ConstSpiceChar     * in,
@@ -3676,7 +4086,7 @@ Include Files:
                                 ConstSpiceChar    * ref,
                                 ConstSpiceChar    * abcorr,
                                 ConstSpiceDouble    stobs[6],
-                                ConstSpiceDouble    accobs[6],
+                                ConstSpiceDouble    accobs[3],
                                 SpiceDouble         starg[6],
                                 SpiceDouble       * lt,
                                 SpiceDouble       * dlt      );
@@ -4110,6 +4520,11 @@ Include Files:
                                 SpiceDouble         appobj[3] );
 
 
+   void              stlabx_c ( ConstSpiceDouble    pobj   [3],
+                                ConstSpiceDouble    vobs   [3],
+                                SpiceDouble         corpos [3] );
+
+
    void              stpool_c ( ConstSpiceChar    * item,
                                 SpiceInt            nth,
                                 ConstSpiceChar    * contin,
@@ -4235,6 +4650,23 @@ Include Files:
                                 SpiceBoolean      * found );
 
 
+   void              tangpt_c ( ConstSpiceChar    * method,
+                                ConstSpiceChar    * target,
+                                SpiceDouble         et,
+                                ConstSpiceChar    * fixref,
+                                ConstSpiceChar    * abcorr,
+                                ConstSpiceChar    * corloc,
+                                ConstSpiceChar    * obsrvr,
+                                ConstSpiceChar    * dref,
+                                ConstSpiceDouble    dvec   [3],
+                                SpiceDouble         tanpt  [3],
+                                SpiceDouble       * alt,
+                                SpiceDouble       * range,
+                                SpiceDouble         srfpt  [3],
+                                SpiceDouble       * trgepc,
+                                SpiceDouble         srfvec [3] );
+
+
    void              term_pl02 ( SpiceInt              handle,
                                  ConstSpiceDLADescr  * dladsc,
                                  ConstSpiceChar      * trmtyp,
@@ -4295,7 +4727,16 @@ Include Files:
                                 SpiceDouble         tsipm[6][6] );
 
 
+   void              tkfram_c ( SpiceInt            frcode,
+                                SpiceDouble         rot    [3][3],
+                                SpiceInt          * frame,
+                                SpiceBoolean      * found         );
+
+
    ConstSpiceChar  * tkvrsn_c ( ConstSpiceChar    * item );
+
+
+   void              tparch_c ( ConstSpiceChar    * type );
 
 
    void              tparse_c ( ConstSpiceChar    * string,
@@ -4326,6 +4767,17 @@ Include Files:
    void              trcoff_c ( void );
 
 
+   SpiceDouble       trgsep_c ( SpiceDouble         et,
+                                ConstSpiceChar    * targ1,
+                                ConstSpiceChar    * shape1,
+                                ConstSpiceChar    * frame1,
+                                ConstSpiceChar    * targ2,
+                                ConstSpiceChar    * shape2,
+                                ConstSpiceChar    * frame2,
+                                ConstSpiceChar    * obsrvr,
+                                ConstSpiceChar    * abcorr );
+
+
    void              tsetyr_c ( SpiceInt            year );
 
 
@@ -4337,6 +4789,13 @@ Include Files:
                                 ConstSpiceDouble    plndef [3],
                                 SpiceInt            indexp,
                                 SpiceDouble         mout   [3][3] );
+
+
+   void              twovxf_c ( ConstSpiceDouble    axdef  [6],
+                                SpiceInt            indexa,
+                                ConstSpiceDouble    plndef [6],
+                                SpiceInt            indexp,
+                                SpiceDouble         xform  [6][6] );
 
 
    SpiceDouble       tyear_c  ( void );
@@ -4515,6 +4974,12 @@ Include Files:
                                 ConstSpicePlane   * invpl,
                                 SpiceDouble         vout   [3],
                                 SpiceBoolean      * found       );
+
+
+   void              vprojg_c ( ConstSpiceDouble    a      [],
+                                ConstSpiceDouble    b      [],
+                                SpiceInt            ndim,
+                                SpiceDouble         p      [] );
 
 
    void              vproj_c  ( ConstSpiceDouble    a[3],

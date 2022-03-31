@@ -3,11 +3,11 @@
 -Procedure bschoi_c ( Binary search with order vector, integer )
 
 -Abstract
- 
-   Do a binary search for a given value within an integer array, 
-   accompanied by an order vector.  Return the index of the
-   matching array entry, or -1 if the key value is not found. 
- 
+
+   Do a binary search for a given value within an integer array,
+   accompanied by an order vector. Return the index of the
+   matching array entry, or -1 if the key value is not found.
+
 -Disclaimer
 
    THIS SOFTWARE AND ANY RELATED MATERIALS WERE CREATED BY THE
@@ -34,13 +34,14 @@
    ACTIONS OF RECIPIENT IN THE USE OF THE SOFTWARE.
 
 -Required_Reading
- 
-   None. 
- 
+
+   None.
+
 -Keywords
- 
-   ARRAY,  SEARCH 
- 
+
+   ARRAY
+   SEARCH
+
 */
 
    #include <stdlib.h>
@@ -53,71 +54,74 @@
    SpiceInt bschoi_c ( SpiceInt          value,
                        SpiceInt          ndim,
                        ConstSpiceInt   * array,
-                       ConstSpiceInt   * order  ) 
+                       ConstSpiceInt   * order  )
+
 /*
 
 -Brief_I/O
- 
-   VARIABLE  I/O  DESCRIPTION 
-   --------  ---  -------------------------------------------------- 
-   value      I   Value to find in array. 
-   ndim       I   Dimension of array. 
-   array      I   Array to be searched. 
+
+   VARIABLE  I/O  DESCRIPTION
+   --------  ---  --------------------------------------------------
+   value      I   Value to find in `array'.
+   ndim       I   Dimension of `array'.
+   array      I   Array to be searched.
    order      I   Order vector.
 
-   The function returns the index of value in array, or -1 if the value
-   is not found.
+   The function returns the index of the first matching array element
+   or -1 if the value is not found.
 
 -Detailed_Input
- 
-   value       is the value to be found in the input array. 
 
-   ndim        is the number of elements in the input array. 
+   value       is the value to be found in the input array.
 
-   array       is the array to be searched.  
+   ndim        is the number of elements in the input array.
 
-   order       is an order vector which can be used to access the elements 
-               of array in order.  The contents of order are a permutation
-               of the sequence of integers ranging from zero to ndim-1.
+   array       is the array to be searched.
+
+   order       is an order vector which can be used to access the
+               elements of `array' in order. The contents of order are a
+               permutation of the sequence of integers ranging from 0 to
+               ndim-1.
 
 -Detailed_Output
- 
-   The function returns the index of the input value in the input array. 
-   Indices range from zero to ndim-1.
 
-   If the input array does not contain the specified value, the function 
-   returns -1. 
- 
-   If the input array contains more than one occurrence of the specified
-   value, the returned index may point to any of the occurrences. 
- 
+   The function returns the index of the specified value in the input
+   array. Indices range from 0 to ndim-1.
+
+   If the input array does not contain the specified value, the
+   function returns -1.
+
+   If the input array contains more than one occurrence of the
+   specified value, the returned index may point to any of the
+   occurrences.
+
 -Parameters
- 
-   None. 
- 
--Exceptions
- 
- 
-   1) If memory cannot be allocated to create a Fortran-style version of
-      the input order vector, the error SPICE(MALLOCFAILED) is signaled.
-      The function returns -1 in this case.
 
-   2) If ndim < 1 the value of the function is -1. This is not an error.
+   None.
+
+-Exceptions
+
+   1)  If ndim < 1, the value of the function is -1.
+
+   2)  If memory cannot be allocated to create the temporary variable
+       required for the execution of the underlying Fortran routine,
+       the error SPICE(MALLOCFAILED) is signaled. The function
+       returns the value -1.
 
 -Files
- 
-   None. 
+
+   None.
 
 -Particulars
- 
-   A binary search is performed on the input array, whose order is given
-   by an associated order vector.  If an element of the array is found to 
-   match the input value, the index of that element is returned. If no 
-   matching element is found, -1 is returned. 
+
+   A binary search is performed on the input array, whose order is
+   given by an associated order vector. If an element of the array is
+   found to match the input value, the index of that element is
+   returned. If no matching element is found, -1 is returned.
 
 -Examples
- 
-   Let array and order contain the following elements:
+
+   Let `array' and `order' contain the following elements:
 
       array         order
       -----------   -----
@@ -142,29 +146,35 @@
       array[3] == 10000
 
 -Restrictions
- 
-   The input order vector is assumed give the order of the elements of the
-   input array in increasing order. If this condition is not met, the 
-   results of bschoi_c are unpredictable. 
- 
--Author_and_Institution
- 
-   N.J. Bachman    (JPL)
-   W.L. Taber      (JPL)
-   I.M. Underwood  (JPL) 
- 
+
+   1)  `order' is assumed to give the order of the elements of `array'
+       in increasing order. If this condition is not met, the results
+       of bschoi_c are unpredictable.
+
 -Literature_References
- 
-   None. 
- 
+
+   None.
+
+-Author_and_Institution
+
+   N.J. Bachman        (JPL)
+   J. Diaz del Rio     (ODC Space)
+   W.L. Taber          (JPL)
+   I.M. Underwood      (JPL)
+
 -Version
- 
+
+   -CSPICE Version 1.0.1, 08-JUL-2021 (JDR)
+
+       Edited the header to comply with NAIF standard. Updated
+       -Index_Entries to better explain the objective of this function.
+
    -CSPICE Version 1.0.0, 10-JUL-2002 (NJB) (WLT) (IMU)
 
 -Index_Entries
- 
-   binary search for an integer value 
- 
+
+   binary search for an integer using an order vector
+
 -&
 */
 
@@ -172,7 +182,7 @@
 
 
    /*
-   Local variables 
+   Local variables
    */
    SpiceInt                i ;
    SpiceInt                loc ;
@@ -184,9 +194,9 @@
    /*
    Use discovery check-in.
 
-   Return immediately if the array dimension is non-positive. 
+   Return immediately if the array dimension is non-positive.
    */
-   if ( ndim < 1 ) 
+   if ( ndim < 1 )
    {
       return ( -1 );
    }
@@ -194,7 +204,7 @@
 
    /*
    Get a local copy of the input order vector; map the vector's contents
-   to the range 1:ndim. 
+   to the range 1:ndim.
    */
    vSize  = ndim * sizeof(SpiceInt);
 
@@ -209,7 +219,7 @@
       errint_c ( "#",  vSize                               );
       sigerr_c ( "SPICE(MALLOCFAILED)"                     );
       chkout_c ( "bschoi_c"                                );
-      
+
       return   ( -1 );
    }
 
@@ -217,11 +227,11 @@
    {
       ordvec[i] = order[i] + 1;
    }
-  
+
    loc  =  bschoi_ ( (integer *) &value,
                      (integer *) &ndim,
                      (integer *) array,
-                     (integer *) ordvec   )   -  1; 
+                     (integer *) ordvec   )   -  1;
 
    free   ( ordvec );
 

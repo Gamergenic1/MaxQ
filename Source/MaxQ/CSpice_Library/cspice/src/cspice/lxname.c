@@ -10,7 +10,7 @@
 static integer c__255 = 255;
 static integer c__0 = 0;
 
-/* $Procedure      LXNAME ( Lex names ) */
+/* $Procedure LXNAME ( Lex names ) */
 /* Subroutine */ int lxname_0_(int n__, char *hdchrs, char *tlchrs, char *
 	string, integer *first, integer *last, integer *idspec, integer *
 	nchar, ftnlen hdchrs_len, ftnlen tlchrs_len, ftnlen string_len)
@@ -82,7 +82,7 @@ static integer c__0 = 0;
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Entry points */
+/*     VARIABLE  I/O  ENTRY POINTS */
 /*     --------  ---  -------------------------------------------------- */
 /*     HDCHRS     I   LXCSID */
 /*     TLCHRS     I   LXCSID */
@@ -108,11 +108,11 @@ static integer c__0 = 0;
 
 /* $ Exceptions */
 
-/*     1) If this routine is called directly, the error */
-/*        SPICE(BOGUSENTRY) is signaled. */
+/*     See the entry points for descriptions of the exceptions specific */
+/*     to those entry points. */
 
-/*     See the entry points for descriptions of the exceptions */
-/*     specific to those entry points. */
+/*     1)  If this routine is called directly, the error */
+/*         SPICE(BOGUSENTRY) is signaled. */
 
 /* $ Files */
 
@@ -123,7 +123,7 @@ static integer c__0 = 0;
 /*     Many computer languages include tokens that represent names. */
 /*     Examples of names include procedure names and variable names. */
 /*     The term `identifier' is generally used to indicate this type */
-/*     of token.  Rules for constructing identifiers vary from */
+/*     of token. Rules for constructing identifiers vary from */
 /*     language to language, but identifiers conforming to the */
 /*     following rules are widely recognized: */
 
@@ -135,8 +135,8 @@ static integer c__0 = 0;
 /*            limit. */
 
 /*     This suite of routines has its own set of default rules for */
-/*     forming identifiers.  These rules are somewhat more liberal */
-/*     than those listed above.  Rule (1) above still holds, but */
+/*     forming identifiers. These rules are somewhat more liberal */
+/*     than those listed above. Rule (1) above still holds, but */
 /*     trailing characters may include letters, numbers, and the */
 /*     special characters */
 
@@ -155,11 +155,11 @@ static integer c__0 = 0;
 /*     In order to use this suite of routines to scan identifiers that */
 /*     conform to the default rules, a program normally calls the entry */
 /*     point LXDFID (Lex, default identifier specification) once to */
-/*     obtain the default `identifier specification'.  This specification */
+/*     obtain the default `identifier specification'. This specification */
 /*     is an integer array in which the allowed head and tail character */
-/*     sets are specified.  This specification is then saved and supplied */
+/*     sets are specified. This specification is then saved and supplied */
 /*     to the entry point LXIDNT (Lex identifier) whenever LXIDNT is */
-/*     called to scan an identifier.  The entry point LXIDNT  recognizes */
+/*     called to scan an identifier. The entry point LXIDNT  recognizes */
 /*     valid identifier tokens, using an input identifier specification */
 /*     to decide which head and tail characters are allowed in an */
 /*     identifier. */
@@ -262,7 +262,7 @@ static integer c__0 = 0;
 
 /*            TLCHRS = 'abcdefghijklmnopqrstuvwxyz012345.' */
 
-/*        will produce an indentifier specification IDSPEC that, */
+/*        will produce an identifier specification IDSPEC that, */
 /*        when supplied as an input to LXIDNT, will cause LXIDNT */
 /*        to perform in accordance with the table shown below: */
 
@@ -279,7 +279,6 @@ static integer c__0 = 0;
 /*         WHERE a0$lt_b7              7       8      2 */
 /*         where a .lt. b              9       12     4 */
 
-
 /* $ Restrictions */
 
 /*     None. */
@@ -291,15 +290,22 @@ static integer c__0 = 0;
 /* $ Author_and_Institution */
 
 /*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
 /*     B.V. Semenov       (JPL) */
 
 /* $ Version */
 
-/* -    Beta Version 1.0.1, 10-FEB-2014 (BVS) */
+/* -    SPICELIB Version 1.1.0, 26-OCT-2021 (JDR) */
 
-/*        Added LBCELL to the Brief_I/O section. */
+/*        Added IMPLICIT NONE statement. */
 
-/* -    Beta Version 1.0.0, 25-OCT-1995 (NJB) */
+/*        Edited the header to comply with NAIF standard. */
+
+/* -    SPICELIB Version 1.0.1, 10-FEB-2014 (BVS) */
+
+/*        Added LBCELL to the $Brief_I/O section. */
+
+/* -    SPICELIB Version 1.0.0, 25-OCT-1995 (NJB) */
 
 /* -& */
 /* $ Index_Entries */
@@ -336,12 +342,12 @@ static integer c__0 = 0;
     sigerr_("SPICE(BOGUSENTRY)", (ftnlen)17);
     chkout_("LXNAME", (ftnlen)6);
     return 0;
-/* $Procedure      LXIDNT ( Lex identifer ) */
+/* $Procedure LXIDNT ( Lex identifier ) */
 
 L_lxidnt:
 /* $ Abstract */
 
-/*     Lex (scan) an identifer,  starting from a specified character */
+/*     Scan an identifier, starting from a specified character */
 /*     position. */
 
 /* $ Disclaimer */
@@ -383,6 +389,8 @@ L_lxidnt:
 
 /* $ Declarations */
 
+/*     IMPLICIT NONE */
+
 /*     INTEGER               LBCELL */
 /*     PARAMETER           ( LBCELL = -5 ) */
 
@@ -394,67 +402,67 @@ L_lxidnt:
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     IDSPEC     I   Identifier character specification. */
 /*     STRING     I   String to be scanned. */
 /*     FIRST      I   Character position at which to start scanning. */
 /*     LAST       O   Character position of end of token. */
 /*     NCHAR      O   Number of characters in token. */
-/*     LBCELL     P   The SPICELIB cell lower bound. */
+/*     LBCELL     P   The SPICE cell lower bound. */
 
 /* $ Detailed_Input */
 
-/*     IDSPEC         is an integer cell containing a specification of */
-/*                    the head and tail identifier character sets to be */
-/*                    used in scanning the input argument STRING.  IDSPEC */
-/*                    should be obtained by calling LXDFID or LXCSID. */
-/*                    The structure of IDSPEC is not part of the */
-/*                    specification of this routine suite and should not */
-/*                    be relied upon by calling code. */
+/*     IDSPEC   is an integer cell containing a specification of */
+/*              the head and tail identifier character sets to be */
+/*              used in scanning the input argument STRING. IDSPEC */
+/*              should be obtained by calling LXDFID or LXCSID. */
+/*              The structure of IDSPEC is not part of the */
+/*              specification of this routine suite and should not */
+/*              be relied upon by calling code. */
 
-/*     STRING         is a character string that may contain an */
-/*                    `identifier' starting at the character position */
-/*                    indicated by the input argument FIRST (see */
-/*                    below).  Identifier tokens are sequences of */
-/*                    characters that represent names.  Syntactically, an */
-/*                    identifier is a sequence of characters that begins */
-/*                    with a character belonging to a set of valid `head' */
-/*                    characters and is followed by zero or more */
-/*                    characters belonging to a set of valid `tail' */
-/*                    characters. */
+/*     STRING   is a character string that may contain an */
+/*              `identifier' starting at the character position */
+/*              indicated by the input argument FIRST (see */
+/*              below). Identifier tokens are sequences of */
+/*              characters that represent names. Syntactically, an */
+/*              identifier is a sequence of characters that begins */
+/*              with a character belonging to a set of valid `head' */
+/*              characters and is followed by zero or more */
+/*              characters belonging to a set of valid `tail' */
+/*              characters. */
 
-/*     FIRST          is the character position at which the routine */
-/*                    is to start scanning an identifier.  Note */
-/*                    that the character STRING(FIRST:FIRST) must be a */
-/*                    valid head character if an identifier is to */
-/*                    be found; this routine does *not* attempt to locate */
-/*                    the first identifier following the position */
-/*                    FIRST. */
+/*     FIRST    is the character position at which the routine */
+/*              is to start scanning an identifier. Note */
+/*              that the character STRING(FIRST:FIRST) must be a */
+/*              valid head character if an identifier is to */
+/*              be found; this routine does *not* attempt to locate */
+/*              the first identifier following the position */
+/*              FIRST. */
 
 /* $ Detailed_Output */
 
-/*     LAST           is the last character position such that the */
-/*                    substring STRING(FIRST:LAST) is an identifier, if */
-/*                    such a substring exists.  Otherwise, the */
-/*                    returned value of LAST is FIRST-1. */
+/*     LAST     is the last character position such that the */
+/*              substring STRING(FIRST:LAST) is an identifier, if */
+/*              such a substring exists. Otherwise, the */
+/*              returned value of LAST is FIRST-1. */
 
-/*     NCHAR          is the length of the identifier found by this */
-/*                    routine, if such a token exists.  If an identifier */
-/*                    is not found, the returned value of NCHAR is */
-/*                    zero. */
+/*     NCHAR    is the length of the identifier found by this */
+/*              routine, if such a token exists. If an identifier */
+/*              is not found, the returned value of NCHAR is */
+/*              zero. */
 
 /* $ Parameters */
 
-/*     LBCELL         is the SPICELIB cell lower bound. */
+/*     LBCELL   is the SPICE cell lower bound. */
 
 /* $ Exceptions */
 
 /*     Error free. */
 
-/*     1) If the input argument FIRST is less than 1 or greater than */
-/*        LEN(STRING)-1, the returned value of LAST is FIRST-1, and the */
-/*        returned value of NCHAR is zero. */
+/*     1)  If the input argument FIRST is less than 1 or greater than */
+/*         LEN(STRING)-1, the returned value of LAST is FIRST-1, and the */
+/*         returned value of NCHAR is zero. */
 
 /* $ Files */
 
@@ -463,7 +471,7 @@ L_lxidnt:
 /* $ Particulars */
 
 /*     The default syntax rules for valid identifiers are specified in */
-/*     the $Particulars section of the umbrella routine LXNAME.  These */
+/*     the $Particulars section of the umbrella routine LXNAME. These */
 /*     rules may be overridden by calling LXCSID. */
 
 /* $ Examples */
@@ -481,21 +489,28 @@ L_lxidnt:
 /* $ Author_and_Institution */
 
 /*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
 /*     B.V. Semenov       (JPL) */
 
 /* $ Version */
 
-/* -    Beta Version 1.0.1, 10-FEB-2014 (BVS) */
+/* -    SPICELIB Version 1.1.0, 26-OCT-2021 (JDR) */
 
-/*        Added LBCELL to the Declarations, Brief_I/O, and Parameters */
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
+
+/* -    SPICELIB Version 1.0.1, 10-FEB-2014 (BVS) */
+
+/*        Added LBCELL to the $Declarations, $Brief_I/O, and $Parameters */
 /*        sections. */
 
-/* -    Beta Version 1.0.0, 25-OCT-1995 (NJB) */
+/* -    SPICELIB Version 1.0.0, 25-OCT-1995 (NJB) */
 
 /* -& */
 /* $ Index_Entries */
 
-/*        scan identifiers */
+/*     scan identifiers */
 
 /* -& */
 
@@ -547,7 +562,7 @@ L_lxidnt:
 	}
     }
     return 0;
-/* $Procedure      LXDFID ( Lex, default identifier characters ) */
+/* $Procedure LXDFID ( Lex, default identifier characters ) */
 
 L_lxdfid:
 /* $ Abstract */
@@ -594,6 +609,8 @@ L_lxdfid:
 
 /* $ Declarations */
 
+/*     IMPLICIT NONE */
+
 /*     INTEGER               MXSPEC */
 /*     PARAMETER           ( MXSPEC = 512 ) */
 
@@ -604,43 +621,43 @@ L_lxdfid:
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     IDSPEC    I-O  Identifier character specification. */
 /*     MXSPEC     P   Recommended size for declaration of IDSPEC. */
-/*     LBCELL     P   The SPICELIB cell lower bound. */
+/*     LBCELL     P   The SPICE cell lower bound. */
 
 /* $ Detailed_Input */
 
-/*     IDSPEC         is an integer cell.  The caller must initialize */
-/*                    IDSPEC as a cell, and should use MXSPEC as the size */
-/*                    of IDSPEC. */
+/*     IDSPEC   is an integer cell. The caller must initialize */
+/*              IDSPEC as a cell, and should use MXSPEC as the size */
+/*              of IDSPEC. */
 
 /* $ Detailed_Output */
 
-/*     IDSPEC         is an integer cell containing a specification of */
-/*                    the head and tail identifier character sets to be */
-/*                    used the entry point LXIDNT in scanning strings. */
+/*     IDSPEC   is an integer cell containing a specification of */
+/*              the head and tail identifier character sets to be */
+/*              used the entry point LXIDNT in scanning strings. */
 
 /* $ Parameters */
 
-/*     MXSPEC         is the recommended size for the declaration of */
-/*                    IDSPEC; the caller should declare IDSPEC as shown: */
+/*     MXSPEC   is the recommended size for the declaration of */
+/*              IDSPEC; the caller should declare IDSPEC as shown: */
 
-/*                       INTEGER       IDSPEC ( LBCELL : MXSPEC ) */
+/*                 INTEGER       IDSPEC ( LBCELL : MXSPEC ) */
 
-/*                    The caller should also initialize IDSPEC as shown: */
+/*              The caller should also initialize IDSPEC as shown: */
 
-/*                       CALL SSIZEI ( MXSPEC, IDSPEC ) */
+/*                 CALL SSIZEI ( MXSPEC, IDSPEC ) */
 
-/*     LBCELL         is the SPICELIB cell lower bound. */
+/*     LBCELL   is the SPICE cell lower bound. */
 
 /* $ Exceptions */
 
-/*     1) If IDSPEC is not properly initialized on input, or if its */
-/*        size is too small, the error will be diagnosed by routines */
-/*        called by this routine.  IDSPEC is undefined on output in this */
-/*        case. */
+/*     1)  If IDSPEC is not properly initialized on input, or if its size */
+/*         is too small, an error is signaled by a routine in the call */
+/*         tree of this routine. IDSPEC is undefined on output in this */
+/*         case. */
 
 /* $ Files */
 
@@ -669,16 +686,23 @@ L_lxdfid:
 /* $ Author_and_Institution */
 
 /*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
 /*     B.V. Semenov       (JPL) */
 
 /* $ Version */
 
-/* -    Beta Version 1.0.1, 10-FEB-2014 (BVS) */
+/* -    SPICELIB Version 1.1.0, 27-AUG-2021 (JDR) */
 
-/*        Added LBCELL to the Declarations, Brief_I/O, and Parameters */
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
+
+/* -    SPICELIB Version 1.0.1, 10-FEB-2014 (BVS) */
+
+/*        Added LBCELL to the $Declarations, $Brief_I/O, and $Parameters */
 /*        sections. */
 
-/* -    Beta Version 1.0.0, 25-OCT-1995 (NJB) */
+/* -    SPICELIB Version 1.0.0, 25-OCT-1995 (NJB) */
 
 /* -& */
 /* $ Index_Entries */
@@ -705,21 +729,21 @@ L_lxdfid:
 
     for (i__ = 1; i__ <= 26; ++i__) {
 	headc[(i__1 = i__ + 5) < 261 && 0 <= i__1 ? i__1 : s_rnge("headc", 
-		i__1, "lxname_", (ftnlen)761)] = 'A' + i__ - 1;
+		i__1, "lxname_", (ftnlen)793)] = 'A' + i__ - 1;
 	headc[(i__1 = i__ + 31) < 261 && 0 <= i__1 ? i__1 : s_rnge("headc", 
-		i__1, "lxname_", (ftnlen)762)] = 'a' + i__ - 1;
+		i__1, "lxname_", (ftnlen)794)] = 'a' + i__ - 1;
 	tailc[(i__1 = i__ + 5) < 261 && 0 <= i__1 ? i__1 : s_rnge("tailc", 
-		i__1, "lxname_", (ftnlen)763)] = headc[(i__2 = i__ + 5) < 261 
+		i__1, "lxname_", (ftnlen)795)] = headc[(i__2 = i__ + 5) < 261 
 		&& 0 <= i__2 ? i__2 : s_rnge("headc", i__2, "lxname_", (
-		ftnlen)763)];
+		ftnlen)795)];
 	tailc[(i__1 = i__ + 31) < 261 && 0 <= i__1 ? i__1 : s_rnge("tailc", 
-		i__1, "lxname_", (ftnlen)764)] = headc[(i__2 = i__ + 31) < 
+		i__1, "lxname_", (ftnlen)796)] = headc[(i__2 = i__ + 31) < 
 		261 && 0 <= i__2 ? i__2 : s_rnge("headc", i__2, "lxname_", (
-		ftnlen)764)];
+		ftnlen)796)];
     }
     for (i__ = 1; i__ <= 10; ++i__) {
 	tailc[(i__1 = i__ + 57) < 261 && 0 <= i__1 ? i__1 : s_rnge("tailc", 
-		i__1, "lxname_", (ftnlen)769)] = '0' + i__ - 1;
+		i__1, "lxname_", (ftnlen)801)] = '0' + i__ - 1;
     }
     tailc[68] = '$';
     tailc[69] = '_';
@@ -748,16 +772,16 @@ L_lxdfid:
     i__1 = nhead;
     for (i__ = 1; i__ <= i__1; ++i__) {
 	appndi_(&headc[(i__2 = i__ + 5) < 261 && 0 <= i__2 ? i__2 : s_rnge(
-		"headc", i__2, "lxname_", (ftnlen)802)], idspec);
+		"headc", i__2, "lxname_", (ftnlen)834)], idspec);
     }
     i__1 = ntail;
     for (i__ = 1; i__ <= i__1; ++i__) {
 	appndi_(&tailc[(i__2 = i__ + 5) < 261 && 0 <= i__2 ? i__2 : s_rnge(
-		"tailc", i__2, "lxname_", (ftnlen)806)], idspec);
+		"tailc", i__2, "lxname_", (ftnlen)838)], idspec);
     }
     chkout_("LXDFID", (ftnlen)6);
     return 0;
-/* $Procedure      LXCSID ( Lex, custom identifier characters ) */
+/* $Procedure LXCSID ( Lex, custom identifier characters ) */
 
 L_lxcsid:
 /* $ Abstract */
@@ -804,6 +828,8 @@ L_lxcsid:
 
 /* $ Declarations */
 
+/*     IMPLICIT NONE */
+
 /*     INTEGER               MXSPEC */
 /*     PARAMETER           ( MXSPEC = 512 ) */
 
@@ -816,60 +842,60 @@ L_lxcsid:
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     HDCHRS     I   Allowed head characters for identifiers. */
 /*     TLCHRS     I   Allowed tail characters for identifiers. */
 /*     IDSPEC    I-O  Identifier character specification. */
 /*     MXSPEC     P   Recommended size for declaration of IDSPEC. */
-/*     LBCELL     P   The SPICELIB cell lower bound. */
+/*     LBCELL     P   The SPICE cell lower bound. */
 
 /* $ Detailed_Input */
 
-/*     HDCHRS         is a string containing the set of characters */
-/*                    allowed as the first (`head') character of an */
-/*                    identifier token.  Case is significant; if both */
-/*                    upper and lower case instances of a letter are */
-/*                    allowed, they must both be listed.  White space is */
-/*                    ignored.  Non-printing characters are not allowed. */
+/*     HDCHRS   is a string containing the set of characters */
+/*              allowed as the first (`head') character of an */
+/*              identifier token. Case is significant; if both */
+/*              upper and lower case instances of a letter are */
+/*              allowed, they must both be listed. White space is */
+/*              ignored. Non-printing characters are not allowed. */
 
-/*     TLCHRS         is a string containing the set of characters */
-/*                    allowed as tail characters (characters following */
-/*                    the head character) of an identifier token.  Case */
-/*                    is significant; white space is ignored. */
-/*                    Non-printing characters are not allowed. */
+/*     TLCHRS   is a string containing the set of characters */
+/*              allowed as tail characters (characters following */
+/*              the head character) of an identifier token. Case */
+/*              is significant; white space is ignored. */
+/*              Non-printing characters are not allowed. */
 
-/*     IDSPEC         is an integer cell.  The caller must initialize */
-/*                    IDSPEC as a cell, and should use MXSPEC as the size */
-/*                    of IDSPEC. */
+/*     IDSPEC   is an integer cell. The caller must initialize */
+/*              IDSPEC as a cell, and should use MXSPEC as the size */
+/*              of IDSPEC. */
 
 /* $ Detailed_Output */
 
-/*     IDSPEC         is an integer cell containing a specification of */
-/*                    the head and tail identifier character sets to be */
-/*                    used the entry point LXIDNT in scanning strings. */
-/*                    The caller must initialize IDSPEC as a cell, and */
-/*                    should use MXSPEC as the size of IDSPEC. */
+/*     IDSPEC   is an integer cell containing a specification of */
+/*              the head and tail identifier character sets to be */
+/*              used the entry point LXIDNT in scanning strings. */
+/*              The caller must initialize IDSPEC as a cell, and */
+/*              should use MXSPEC as the size of IDSPEC. */
 
 /* $ Parameters */
 
-/*     MXSPEC         is the recommended size for the declaration of */
-/*                    IDSPEC; the caller should declare IDSPEC as shown: */
+/*     MXSPEC   is the recommended size for the declaration of */
+/*              IDSPEC; the caller should declare IDSPEC as shown: */
 
-/*                       INTEGER       IDSPEC ( LBCELL : MXSPEC ) */
+/*                 INTEGER       IDSPEC ( LBCELL : MXSPEC ) */
 
-/*                    The caller should also initialize IDSPEC as shown: */
+/*              The caller should also initialize IDSPEC as shown: */
 
-/*                       CALL SSIZEI ( MXSPEC, IDSPEC ) */
+/*                 CALL SSIZEI ( MXSPEC, IDSPEC ) */
 
-/*     LBCELL         is the SPICELIB cell lower bound. */
+/*     LBCELL   is the SPICE cell lower bound. */
 
 /* $ Exceptions */
 
-/*     1) If non-printing characters are found in either of the input */
-/*        arguments HDCHRS or TLCHRS, the error SPICE(NONPRINTINGCHARS) */
-/*        is signaled.  The set of allowed identifier characters is not */
-/*        modified. */
+/*     1)  If non-printing characters are found in either of the input */
+/*         arguments HDCHRS or TLCHRS, the error SPICE(NONPRINTINGCHARS) */
+/*         is signaled. The set of allowed identifier characters is not */
+/*         modified. */
 
 /* $ Files */
 
@@ -898,16 +924,23 @@ L_lxcsid:
 /* $ Author_and_Institution */
 
 /*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
 /*     B.V. Semenov       (JPL) */
 
 /* $ Version */
 
-/* -    Beta Version 1.0.1, 10-FEB-2014 (BVS) */
+/* -    SPICELIB Version 1.1.0, 27-AUG-2021 (JDR) */
 
-/*        Added LBCELL to the Declarations, Brief_I/O, and Parameters */
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
+
+/* -    SPICELIB Version 1.0.1, 10-FEB-2014 (BVS) */
+
+/*        Added LBCELL to the $Declarations, $Brief_I/O, and $Parameters */
 /*        sections. */
 
-/* -    Beta Version 1.0.0, 25-OCT-1995 (NJB) */
+/* -    SPICELIB Version 1.0.0, 25-OCT-1995 (NJB) */
 
 /* -& */
 /* $ Index_Entries */
@@ -1000,12 +1033,12 @@ L_lxcsid:
     i__1 = nhead;
     for (i__ = 1; i__ <= i__1; ++i__) {
 	appndi_(&headc[(i__2 = i__ + 5) < 261 && 0 <= i__2 ? i__2 : s_rnge(
-		"headc", i__2, "lxname_", (ftnlen)1089)], idspec);
+		"headc", i__2, "lxname_", (ftnlen)1132)], idspec);
     }
     i__1 = ntail;
     for (i__ = 1; i__ <= i__1; ++i__) {
 	appndi_(&tailc[(i__2 = i__ + 5) < 261 && 0 <= i__2 ? i__2 : s_rnge(
-		"tailc", i__2, "lxname_", (ftnlen)1093)], idspec);
+		"tailc", i__2, "lxname_", (ftnlen)1136)], idspec);
     }
     chkout_("LXCSID", (ftnlen)6);
     return 0;

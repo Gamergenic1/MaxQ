@@ -112,17 +112,17 @@ static integer c__4 = 4;
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     BINFIL     I   Name of the binary DAS file to be converted. */
 /*     XFRLUN     I   Logical unit of a previously opened file. */
 
 /* $ Detailed_Input */
 
-/*     BINFIL   The name of a binary DAS file which is to be converted */
+/*     BINFIL   is the name of a binary DAS file which is to be converted */
 /*              to an equivalent DAS transfer file. */
 
-/*     XFRLUN   The Fortran logical unit number of a previously opened */
+/*     XFRLUN   is the Fortran logical unit number of a previously opened */
 /*              file. The DAS transfer file will be written to the */
 /*              file attached to this logical unit beginning at the */
 /*              current position in the file. */
@@ -133,33 +133,31 @@ static integer c__4 = 4;
 
 /* $ Parameters */
 
-/*      None. */
+/*     None. */
 
 /* $ Exceptions */
 
-/*     1)   If the binary DAS file specified by the filename BINFIL */
-/*          cannot be opened for read access, an appropriate error */
-/*          message will be signaled by a DAS file access routine that */
-/*          is called by this routine. */
+/*     1)  If the binary DAS file specified by the filename BINFIL cannot */
+/*         be opened for read access, an error is signaled by a routine */
+/*         in the call tree of this routine. */
 
-/*     2)   If for some reason the DAS transfer file cannot be written */
-/*          to, the error SPICE(FILEWRITEFAILED) is signaled. */
+/*     2)  If for some reason the DAS transfer file cannot be written */
+/*         to, the error SPICE(FILEWRITEFAILED) is signaled. */
 
-/*     3)   If, for any reason, the DAS file cannot be read, a DAS file */
-/*          access routine will signal an error with appropriate error */
-/*          message. */
+/*     3)  If, for any reason, the DAS file cannot be read, an error is */
+/*         signaled by a routine in the call tree of this routine. */
 
-/*     4)   The binary DAS file opened by this routine, BINFIL, is only */
-/*          GUARANTEED to be closed upon successful completion of the */
-/*          binary to transfer conversion process. In the event of an */
-/*          error, the caller of this routine is required to close the */
-/*          binary DAS file BINFIL. */
+/*     4)  The binary DAS file opened by this routine, BINFIL, is only */
+/*         GUARANTEED to be closed upon successful completion of the */
+/*         binary to transfer conversion process. In the event of an */
+/*         error, the caller of this routine is required to close the */
+/*         binary DAS file BINFIL. */
 
-/*     5)   If the values for the number of reserved records or the */
-/*          number of reserved characters in a DAS file is nonzero, */
-/*          the error SPICE(BADDASFILE) will be signaled. THIS ERROR */
-/*          IS SIGNALED ONLY BECAUSE THE RESERVED RECORD AREA HAS */
-/*          NOT YET BEEN IMPLEMENTED. */
+/*     5)  If the values for the number of reserved records or the */
+/*         number of reserved characters in a DAS file is nonzero, */
+/*         the error SPICE(BADDASFILE) is signaled. THIS ERROR */
+/*         IS SIGNALED ONLY BECAUSE THE RESERVED RECORD AREA HAS */
+/*         NOT YET BEEN IMPLEMENTED. */
 
 /* $ Files */
 
@@ -219,9 +217,18 @@ static integer c__4 = 4;
 
 /* $ Author_and_Institution */
 
-/*     K.R. Gehringer  (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 3.2.0, 02-JUN-2021 (JDR) */
+
+/*        Added IMPLICIT NONE standard. */
+
+/*        Edited the header to comply with NAIF standard. Removed */
+/*        unnecessary $Revisions section. */
 
 /* -    SPICELIB Version 3.1.0, 05-FEB-1995 (NJB) */
 
@@ -251,28 +258,7 @@ static integer c__4 = 4;
 /* -& */
 /* $ Index_Entries */
 
-/*     convert binary das to das transfer file */
-
-/* -& */
-/* $ Revisions */
-
-/* -    SPICELIB Version 3.0.0, 13-AUG-1994 (KRG) */
-
-/*        Updated the header and in line comments to reflect the change */
-/*        from calling files text files to calling them transfer files. */
-
-/*        Changed the variable name TXTLUN to XFRLUN to make it */
-/*        compatible with the change in terminology. */
-
-/* -    SPICELIB Version 2.0.0, 13-AUG-1994 (KRG) */
-
-/*        A potential problem with list directed writes was fixed. Some */
-/*        compilers have list directed writes that write multiple comma */
-/*        separated items to one line and other compilers write these to */
-/*        multiple lines even when all of the output will fit on a single */
-/*        line. This was fixed by replacing all of the affected list */
-/*        directed write statements with code to put the desired data */
-/*        into a character string and then write the character string. */
+/*     convert binary DAS to DAS transfer file */
 
 /* -& */
 

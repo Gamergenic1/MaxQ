@@ -3,11 +3,11 @@
 -Procedure isrchi_c  ( Search in an integer array )
 
 -Abstract
- 
-   Search for a given value within an integer array. Return 
-   the index of the first matching array entry, or -1 if the key 
-   value was not found. 
- 
+
+   Search for a given value within an integer array. Return
+   the index of the first matching array entry, or -1 if the key
+   value was not found.
+
 -Disclaimer
 
    THIS SOFTWARE AND ANY RELATED MATERIALS WERE CREATED BY THE
@@ -34,13 +34,14 @@
    ACTIONS OF RECIPIENT IN THE USE OF THE SOFTWARE.
 
 -Required_Reading
- 
-   None. 
- 
+
+   None.
+
 -Keywords
- 
-   ARRAY,  SEARCH 
- 
+
+   ARRAY
+   SEARCH
+
 */
 
    #include "SpiceUsr.h"
@@ -50,104 +51,109 @@
 
    SpiceInt isrchi_c ( SpiceInt         value,
                        SpiceInt         ndim,
-                       ConstSpiceInt  * array  ) 
+                       ConstSpiceInt  * array  )
 
 /*
 
 -Brief_I/O
- 
-   VARIABLE  I/O              DESCRIPTION 
-   --------  ---  -------------------------------------------------- 
-   value     I     Key value to be found in array. 
-   ndim      I     Dimension of array. 
-   array     I     Integer array to search. 
 
-   The function returns the index of the first matching array 
-   element or -1 if the value is not found. 
+   VARIABLE  I/O  DESCRIPTION
+   --------  ---  --------------------------------------------------
+   value      I   Key value to be found in array.
+   ndim       I   Dimension of array.
+   array      I   Integer array to search.
+
+   The function returns the index of the first matching array
+   element or -1 if the value is not found.
 
 -Detailed_Input
- 
-   value      is the key value to be found in the array. 
- 
-   ndim       is the dimension of the array. 
- 
-   array      is the integer array to be searched. 
- 
--Detailed_Output
- 
-   The function returns the index of the first matching array 
-   element in array. If value is not found, isrchi_c returns -1. 
- 
--Parameters
- 
-   None. 
- 
--Exceptions
- 
-   Error free. 
- 
-   1) If ndim < 1, the function value is -1. 
- 
--Files
- 
-   None. 
- 
--Particulars
- 
-   None. 
- 
--Examples
- 
-   The following table shows the value of isrchi_c given the contents 
-   of ARRAY and VALUE: 
 
-     ARRAY        VALUE   isrchi_c 
-   ----------     -----   -------- 
+   value       is the key value to be found in the array.
+
+   ndim        is the dimension of the array.
+
+   array       is the integer array to be searched.
+
+-Detailed_Output
+
+   The function returns the index of the first matching array
+   element in array. If value is not found, isrchi_c returns -1.
+
+-Parameters
+
+   None.
+
+-Exceptions
+
+   Error free.
+
+   1)  If ndim < 1, the function value is -1.
+
+-Files
+
+   None.
+
+-Particulars
+
+   None.
+
+-Examples
+
+   The following table shows the value of isrchi_c given the contents
+   of ARRAY and VALUE:
+
+     ARRAY        VALUE   isrchi_c
+   ----------     -----   --------
    1, 0, 4, 2       4        2
-   1, 0, 4, 2       2        3 
-   1, 0, 4, 2       3       -1 
+   1, 0, 4, 2       2        3
+   1, 0, 4, 2       3       -1
 
 -Restrictions
- 
-   None. 
- 
--Author_and_Institution
- 
-   N.J. Bachman    (JPL)
-   W.M. Owen       (JPL) 
- 
+
+   None.
+
 -Literature_References
- 
-   None. 
- 
+
+   None.
+
+-Author_and_Institution
+
+   N.J. Bachman        (JPL)
+   J. Diaz del Rio     (ODC Space)
+   W.M. Owen           (JPL)
+
 -Version
- 
+
+   -CSPICE Version 1.0.1, 03-JUL-2021 (JDR)
+
+       Edited the header to comply with NAIF standard.
+
    -CSPICE Version 1.0.0, 10-JUL-2000 (NJB) (WMO)
 
 -Index_Entries
- 
-   search in an integer array 
- 
+
+   search in an integer array
+
 -&
 */
 
 { /* Begin isrchi_c */
 
    /*
-   Local variables 
-   */  
+   Local variables
+   */
    SpiceInt                loc ;
 
 
    /*
-   Call the f2c'd routine. 
+   Call the f2c'd routine.
    */
-   loc =  (SpiceInt) isrchi_ ( (integer *) &value, 
-                               (integer *) &ndim, 
-                               (integer *) array   ); 
+   loc =  (SpiceInt) isrchi_ ( (integer *) &value,
+                               (integer *) &ndim,
+                               (integer *) array   );
 
    /*
-   Convert loc to a C-style index. 
+   Convert loc to a C-style index.
    */
    loc-- ;
 

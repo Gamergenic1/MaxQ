@@ -80,7 +80,7 @@ static integer c__22 = 22;
 
 /* $ Required_Reading */
 
-/*     WORD */
+/*     None. */
 
 /* $ Keywords */
 
@@ -90,41 +90,46 @@ static integer c__22 = 22;
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
-/*     WORD       I   is a word that should be modified by "a" or "an" */
+/*     WORD       I   is a word that should be modified by "a" or "an". */
 /*     CASE       I   'U', 'L', or 'C' to specify capitalization of ANA. */
-/*     ANA        O   'A' or 'AN' appropriately capitalized. */
+
+/*     The function returns the correct article, 'A' or 'AN', needed to */
+/*     modify a word WORD, appropriately capitalized. */
 
 /* $ Detailed_Input */
 
-/*     WORD       is any english word for which you want to write the */
-/*                correct phrase "a(an) response(answer)".  The case */
-/*                of the letters of word do not matter. */
+/*     WORD     is any English word for which you want to write the */
+/*              correct phrase "a(an) response(answer)".  The case of the */
+/*              letters of word do not matter. */
 
-/*                Leading white space in word is ignored.  The characters */
-/*                " and ' are ignored.  Thus ''' apple '' ' and */
-/*                '"apple"' and ' apple' and 'apple' are all treated as */
-/*                the same word. */
+/*              Leading white space in word is ignored. The characters */
+/*              " and ' are ignored.  Thus ''' apple '' ' and */
+/*              '"apple"' and ' apple' and 'apple' are all treated as */
+/*              the same word. */
 
-/*     CASE       is a character that describes how the value returned */
-/*                in ANA should be capitalized.  The rules are: */
+/*     CASE     is a character that describes how the value returned in */
+/*              ANA should be capitalized. The rules are: */
 
-/*                   'U'  ---  ANA is returned in all caps ( A, AN ) */
-/*                   'C'  ---  ANA is returned capitalized ( A, An ) */
-/*                   'L'  ---  ANA is returned lower case  ( a, an ) */
+/*                 'U'  ---  ANA is returned in all caps ( A, AN ) */
+/*                 'C'  ---  ANA is returned capitalized ( A, An ) */
+/*                 'L'  ---  ANA is returned lower case  ( a, an ) */
 
-/*                The case of CASE does not matter.  Any value other */
-/*                than those specified result in ANA being returned */
-/*                in all lower case. */
+/*              The case of CASE does not matter. Any value other than */
+/*              those specified result in ANA being returned in all lower */
+/*              case. */
 
 /* $ Detailed_Output */
 
-/*     ANA        is a character function an will return the correct */
-/*                indefinite article needed to modify the word contained */
-/*                in WORD.  ANA should be declared to be CHARACTER*(2) */
-/*                (or CHARACTER*(N) where N > 1) in the calling */
-/*                program. */
+/*     The function returns the correct indefinite article needed to */
+/*     modify the word contained in WORD. */
+
+/*     ANA should be declared to be */
+
+/*        CHARACTER*(2) */
+
+/*     (or CHARACTER*(N) where N > 1) in the calling program. */
 
 /* $ Parameters */
 
@@ -132,10 +137,10 @@ static integer c__22 = 22;
 
 /* $ Exceptions */
 
-/*     Error Free */
+/*     Error free. */
 
-/*     1) If the uppercase value of CASE is not 'U', 'C' or 'L', it shall */
-/*        be treated as 'L'. */
+/*     1)  If the uppercase value of CASE is not 'U', 'C' or 'L', it */
+/*         shall be treated as 'L'. */
 
 /* $ Files */
 
@@ -144,11 +149,11 @@ static integer c__22 = 22;
 /* $ Particulars */
 
 /*     This routine allows you to construct grammatically correct phrases */
-/*     when you need to modify a word by an indefinite article.  Using */
+/*     when you need to modify a word by an indefinite article. Using */
 /*     the pronunciations contained in the Webster's Ninth Collegiate */
 /*     Dictionary, the phrase */
 
-/*      ANA(WORD, CASE) // ' ' // WORD */
+/*        ANA(WORD, CASE) // ' ' // WORD */
 
 /*     will be grammatically correct. */
 
@@ -171,18 +176,25 @@ static integer c__22 = 22;
 
 /* $ Literature_References */
 
-/*     Webster's Ninth Collegiate Dictionary. */
+/*     [1]  Merriam-Webster (Ed.), "Webster's Ninth New Collegiate */
+/*          Dictionary," 10th edition, 1990. */
 
 /* $ Author_and_Institution */
 
-/*     B.V. Semenov    (JPL) */
-/*     W.L. Taber      (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
 
+/* -    SPICELIB Version 1.1.3, 24-NOV-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
+
 /* -    SPICELIB Version 1.1.2, 28-FEB-2008 (BVS) */
 
-/*        Corrected the contents of the Required_Reading section. */
+/*        Corrected the contents of the $Required_Reading section. */
 
 /* -    SPICELIB Version 1.1.1, 22-SEP-2004 (EDW) */
 
@@ -190,14 +202,14 @@ static integer c__22 = 22;
 
 /* -    SPICELIB Version 1.1.0, 18-JAN-2001 (WLT) */
 
-/*        Made SCLK and "an" word. */
+/*        Made SCLK an "an" word. */
 
 /* -    SPICELIB Version 1.0.0, 29-NOV-1995 (WLT) */
 
 /* -& */
 /* $ Index_Entries */
 
-/*     GET THE CORRECT INDEFINITE ARTICLE */
+/*     get the correct indefinite article */
 
 /* -& */
     ucase_(word, myword, word_len, (ftnlen)32);
@@ -221,12 +233,12 @@ static integer c__22 = 22;
     *(unsigned char *)begin = *(unsigned char *)myword;
     if (i_indx("AI", begin, (ftnlen)2, (ftnlen)1) > 0) {
 	s_copy(ret_val, an + (((i__1 = caps - 1) < 3 && 0 <= i__1 ? i__1 : 
-		s_rnge("an", i__1, "ana_", (ftnlen)235)) << 1), ret_val_len, (
+		s_rnge("an", i__1, "ana_", (ftnlen)251)) << 1), ret_val_len, (
 		ftnlen)2);
 	return ;
     } else if (i_indx("BCDGJKPQTVWYZ", begin, (ftnlen)13, (ftnlen)1) > 0) {
 	s_copy(ret_val, a + (((i__1 = caps - 1) < 3 && 0 <= i__1 ? i__1 : 
-		s_rnge("a", i__1, "ana_", (ftnlen)240)) << 1), ret_val_len, (
+		s_rnge("a", i__1, "ana_", (ftnlen)256)) << 1), ret_val_len, (
 		ftnlen)2);
 	return ;
     }
@@ -238,7 +250,7 @@ static integer c__22 = 22;
 
     for (i__ = 1; i__ <= 7; ++i__) {
 	s_copy(start + (((i__1 = i__ - 1) < 7 && 0 <= i__1 ? i__1 : s_rnge(
-		"start", i__1, "ana_", (ftnlen)252)) << 5), myword, (ftnlen)
+		"start", i__1, "ana_", (ftnlen)268)) << 5), myword, (ftnlen)
 		32, i__);
     }
 
@@ -247,33 +259,33 @@ static integer c__22 = 22;
 
     for (i__ = 7; i__ >= 2; --i__) {
 	if (isrchc_(start + (((i__1 = i__ - 1) < 7 && 0 <= i__1 ? i__1 : 
-		s_rnge("start", i__1, "ana_", (ftnlen)261)) << 5), &c__33, 
+		s_rnge("start", i__1, "ana_", (ftnlen)277)) << 5), &c__33, 
 		aword, (ftnlen)32, (ftnlen)8) != 0) {
 	    s_copy(ret_val, a + (((i__1 = caps - 1) < 3 && 0 <= i__1 ? i__1 : 
-		    s_rnge("a", i__1, "ana_", (ftnlen)263)) << 1), 
+		    s_rnge("a", i__1, "ana_", (ftnlen)279)) << 1), 
 		    ret_val_len, (ftnlen)2);
 	    return ;
 	}
 	if (isrchc_(start + (((i__1 = i__ - 1) < 7 && 0 <= i__1 ? i__1 : 
-		s_rnge("start", i__1, "ana_", (ftnlen)268)) << 5), &c__22, 
+		s_rnge("start", i__1, "ana_", (ftnlen)284)) << 5), &c__22, 
 		anword, (ftnlen)32, (ftnlen)8) != 0) {
 	    s_copy(ret_val, an + (((i__1 = caps - 1) < 3 && 0 <= i__1 ? i__1 :
-		     s_rnge("an", i__1, "ana_", (ftnlen)270)) << 1), 
+		     s_rnge("an", i__1, "ana_", (ftnlen)286)) << 1), 
 		    ret_val_len, (ftnlen)2);
 	    return ;
 	}
     }
 
-/*     If we got this far we can determine the ANAe by */
+/*     If we got this far we can determine the ANA by */
 /*     just looking at the beginning of the string. */
 
     if (i_indx("AEIOU", myword, (ftnlen)5, (ftnlen)1) > 0) {
 	s_copy(ret_val, an + (((i__1 = caps - 1) < 3 && 0 <= i__1 ? i__1 : 
-		s_rnge("an", i__1, "ana_", (ftnlen)282)) << 1), ret_val_len, (
+		s_rnge("an", i__1, "ana_", (ftnlen)299)) << 1), ret_val_len, (
 		ftnlen)2);
     } else {
 	s_copy(ret_val, a + (((i__1 = caps - 1) < 3 && 0 <= i__1 ? i__1 : 
-		s_rnge("a", i__1, "ana_", (ftnlen)286)) << 1), ret_val_len, (
+		s_rnge("a", i__1, "ana_", (ftnlen)303)) << 1), ret_val_len, (
 		ftnlen)2);
     }
     return ;

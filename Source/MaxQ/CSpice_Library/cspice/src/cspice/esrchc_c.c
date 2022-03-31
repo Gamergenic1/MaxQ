@@ -3,11 +3,11 @@
 -Procedure esrchc_c ( Equivalence search, character )
 
 -Abstract
- 
-   Search for a given value within a character string array. 
-   Return the index of the first equivalent array entry, or -1 
-   if no equivalent element is found. 
- 
+
+   Search for a given value within a character string array.
+   Return the index of the first equivalent array entry, or -1
+   if no equivalent element is found.
+
 -Disclaimer
 
    THIS SOFTWARE AND ANY RELATED MATERIALS WERE CREATED BY THE
@@ -34,13 +34,14 @@
    ACTIONS OF RECIPIENT IN THE USE OF THE SOFTWARE.
 
 -Required_Reading
- 
-   None. 
- 
+
+   None.
+
 -Keywords
- 
-   ARRAY,  SEARCH 
- 
+
+   ARRAY
+   SEARCH
+
 */
 
    #include "SpiceUsr.h"
@@ -51,125 +52,139 @@
 
    SpiceInt esrchc_c ( ConstSpiceChar  * value,
                        SpiceInt          ndim,
-                       SpiceInt          lenvals,
-                       const void      * array    )                    
+                       SpiceInt          arrlen,
+                       const void      * array    )
+
 /*
 
 -Brief_I/O
- 
-   VARIABLE  I/O              DESCRIPTION 
-   --------  ---  -------------------------------------------------- 
-   value      I   Key value to be found in array. 
-   ndim       I   Dimension of array. 
-   lenvals    I   String length.
-   array      I   Character string array to search. 
- 
-   The function returns the index of the first array entry 
-   equivalent to value, or -1 if none is found. 
- 
+
+   VARIABLE  I/O  DESCRIPTION
+   --------  ---  --------------------------------------------------
+   value      I   Key value to be found in array.
+   ndim       I   Dimension of array.
+   arrlen     I   String length.
+   array      I   Character string array to search.
+
+   The function returns the index of the first array entry
+   equivalent to value, or -1 if none is found.
+
 -Detailed_Input
- 
-   value       is the key value to be found in the array.  Trailing
-               blanks in this key are not significant:  string matches
+
+   value       is the key value to be found in the array. Trailing
+               blanks in this key are not significant: string matches
                found by this routine do not require trailing blanks in
                value to match those in the corresponding element of
-               array.
+               `array'.
 
-   ndim        is the dimension of the array. 
+               `value' may be an empty string.
 
-   lenvals     is the declared length of the strings in the input
-               string array, including null terminators.  The input   
-               array should be declared with dimension 
+   ndim        is the dimension of the array.
 
-                  [ndim][lenvals]
- 
-   array       is the array of character srings to be searched.  Trailing
-               blanks in the strings in this array are not significant.   
- 
+   arrlen      is the declared length of the strings in the input
+               string `array', including null terminators. The input
+               array should be declared with dimension
+
+                  [ndim][arrlen]
+
+   array       is the array of character strings to be searched. Trailing
+               blanks in the strings in this array are not significant.
+
 -Detailed_Output
- 
-   The function returns the index of the first element of the 
-   input array equivalent to the input value, or -1 if the 
-   array contains no such elements. 
- 
-   Two strings are equivalent if they contain the same characters 
-   in the same order, when blanks are ignored and uppercase and 
-   lowercase characters are considered equal. 
- 
+
+   The function returns the index of the first element of the
+   input array equivalent to the input value, or -1 if the
+   array contains no such elements.
+
+   Two strings are equivalent if they contain the same characters
+   in the same order, when blanks are ignored and uppercase and
+   lowercase characters are considered equal.
+
 -Parameters
- 
-   None. 
- 
+
+   None.
+
 -Exceptions
- 
-   1) If ndim < 1 the function value is -1.  This is not considered
-      an error.
 
-   2) If input key value pointer is null, the error SPICE(NULLPOINTER) will 
-      be signaled.  The function returns -1.
-  
-   3) The input key value may have length zero.  This case is not
-      considered an error.
+   1)  If ndim < 1 the function value is -1. This is not considered
+       an error.
 
-   4) If the input array pointer is null,  the error SPICE(NULLPOINTER) will 
-      be signaled.  The function returns -1.
+   2)  If the `value' input string pointer is null, the error
+       SPICE(NULLPOINTER) is signaled. The function returns the value
+       -1.
 
-   5) If the input array string's length is less than 2, the error
-      SPICE(STRINGTOOSHORT) will be signaled.  The function returns -1.
- 
+   3)  If the `array' input array pointer is null, the error
+       SPICE(NULLPOINTER) is signaled. The function returns the value
+       -1.
+
+   4)  If the `array' input array strings have length less than two
+       characters, the error SPICE(STRINGTOOSHORT) is signaled. The
+       function returns the value -1.
+
 -Files
- 
-   None. 
- 
+
+   None.
+
 -Particulars
- 
-   esrchc_c is identical to isrchc_c, except that it looks for 
-   the first equivalent string (as defined by eqstr_c) instead 
-   of the first identical one. 
- 
+
+   esrchc_c is identical to isrchc_c, except that it looks for
+   the first equivalent string (as defined by eqstr_c) instead
+   of the first identical one.
+
 -Examples
- 
+
    Let array be declared with dimension
 
       [NDIM][STRLEN]
 
-   and contain the following elements: 
- 
-      array[0] == "This" 
-      array[1] == "little" 
-      array[2] == "piggy" 
-      array[3] == "went" 
-      array[4] == "to" 
-      array[5] == "market" 
- 
-   Then 
- 
+   and contain the following elements:
+
+      array[0] == "This"
+      array[1] == "little"
+      array[2] == "piggy"
+      array[3] == "went"
+      array[4] == "to"
+      array[5] == "market"
+
+   Then
+
       esrchc_c ( "PIGGY",      NDIM,  STRLEN,  array )  ==  2
-      esrchc_c ( " LiTtLe  ",  NDIM,  STRLEN,  array )  ==  1 
-      esrchc_c ( "W e n t",    NDIM,  STRLEN,  array )  ==  3 
-      esrchc_c ( "mall",       NDIM,  STRLEN,  array )  == -1 
- 
+      esrchc_c ( " LiTtLe  ",  NDIM,  STRLEN,  array )  ==  1
+      esrchc_c ( "W e n t",    NDIM,  STRLEN,  array )  ==  3
+      esrchc_c ( "mall",       NDIM,  STRLEN,  array )  == -1
+
 -Restrictions
- 
+
    None.
- 
+
 -Literature_References
- 
-   None. 
- 
+
+   None.
+
 -Author_and_Institution
- 
-   N.J. Bachman    (JPL)
-   I.M. Underwood  (JPL) 
- 
+
+   N.J. Bachman        (JPL)
+   J. Diaz del Rio     (ODC Space)
+   I.M. Underwood      (JPL)
+
 -Version
- 
+
+   -CSPICE Version 1.1.0, 24-AUG-2021 (JDR)
+
+       Changed the input argument name "lenvals" to "arrlen" for consistency
+       with other routines.
+
+       Edited the header to comply with NAIF standard.
+
+       Removed entry #3 from -Exceptions section and updated the argument
+       "value" description to indicate that empty strings are allowed.
+
    -CSPICE Version 1.0.0, 22-JUL-2002 (NJB) (IMU)
 
 -Index_Entries
- 
-   search array for equivalent character_string 
- 
+
+   search array for equivalent character_string
+
 -&
 */
 
@@ -177,40 +192,40 @@
 
 
    /*
-   Local macros 
+   Local macros
    */
-   #define ARRAY( i )     (  ( (SpiceChar *)array ) + (i)*lenvals  )
+   #define ARRAY( i )     (  ( (SpiceChar *)array ) + (i)*arrlen  )
 
    /*
    Local variables
    */
    SpiceInt                i;
-   
+
 
    /*
    Use discovery check-in.
 
-   Return immediately if the array dimension is non-positive. 
+   Return immediately if the array dimension is non-positive.
    */
-   if ( ndim < 1 ) 
+   if ( ndim < 1 )
    {
       return ( -1 );
    }
 
 
    /*
-   Make sure the input pointer for the key value is non-null 
-   and that the length is adequate.  
+   Make sure the input pointer for the key value is non-null
+   and that the length is adequate.
    */
    CHKPTR_VAL ( CHK_DISCOVER, "esrchc_c", value, -1 );
 
-   
+
    /*
-   Make sure the input pointer for the string array is non-null 
-   and that the length lenvals is sufficient.  
+   Make sure the input pointer for the string array is non-null
+   and that the length arrlen is sufficient.
    */
-   CHKOSTR_VAL ( CHK_DISCOVER, "esrchc_c", array, lenvals, -1 );
-   
+   CHKOSTR_VAL ( CHK_DISCOVER, "esrchc_c", array, arrlen, -1 );
+
 
    for ( i = 0;  i < ndim;  i++ )
    {
@@ -221,7 +236,7 @@
    }
 
    /*
-   Indicate no match was found. 
+   Indicate no match was found.
    */
    return ( -1 );
 

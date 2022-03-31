@@ -11,7 +11,7 @@ static integer c__14 = 14;
 static integer c__1 = 1;
 static integer c__3 = 3;
 
-/* $Procedure      SPK14B ( SPK type 14: Begin a segment.) */
+/* $Procedure SPK14B ( SPK type 14: Begin a segment.) */
 /* Subroutine */ int spk14b_(integer *handle, char *segid, integer *body, 
 	integer *center, char *frame, doublereal *first, doublereal *last, 
 	integer *chbdeg, ftnlen segid_len, ftnlen frame_len)
@@ -33,7 +33,7 @@ static integer c__3 = 3;
 /* $ Abstract */
 
 /*     Begin a type 14 SPK segment in the SPK file associated with */
-/*     HANDLE. See also SPK14A and SPK14E. */
+/*     HANDLE. */
 
 /* $ Disclaimer */
 
@@ -500,12 +500,11 @@ static integer c__3 = 3;
 
 /* $ Detailed_Output */
 
-/*     None.    The input data is used to create the segment summary for */
-/*              the segment being started in the SPK file associated with */
-/*              HANDLE. */
+/*     None. The input data is used to create the segment summary for the */
+/*     segment being started in the SPK file associated with HANDLE. */
 
-/*              See the $ Particulars section for details about the */
-/*              structure of a type 14 SPK segment. */
+/*     See the $Particulars section for details about the structure of a */
+/*     type 14 SPK segment. */
 
 /* $ Parameters */
 
@@ -514,20 +513,20 @@ static integer c__3 = 3;
 
 /* $ Exceptions */
 
-/*     1) If the degree of the Chebyshev Polynomial to be used for this */
-/*        segment is negative, the error SPICE(INVALIDARGUMENT) will */
-/*        be signaled. */
+/*     1)  If the degree of the Chebyshev Polynomial to be used for this */
+/*         segment is negative, the error SPICE(INVALIDARGUMENT) is */
+/*         signaled. */
 
-/*     2) Errors in the structure or content of the inputs other than the */
-/*        degree of the Chebyshev Polynomial are diagnosed by routines */
-/*        called by this one. */
+/*     2)  If there are issues in the structure or content of the inputs */
+/*         other than the degree of the Chebyshev Polynomial, an error is */
+/*         signaled by a routine in the call tree of this routine. */
 
-/*     3) File access errors are diagnosed by routines in the call tree */
-/*        of this routine. */
+/*     3)  If a file access error occurs, the error is signaled by a */
+/*         routine in the call tree of this routine. */
 
 /* $ Files */
 
-/*      See HANDLE in the $ Detailed_Input section. */
+/*     See HANDLE in the $Detailed_Input section. */
 
 /* $ Particulars */
 
@@ -589,174 +588,189 @@ static integer c__3 = 3;
 
 /* $ Examples */
 
-/*     Assume we have the following for each of the examples that */
-/*     follow. */
+/*     The numerical results shown for this example may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
 
-/*        HANDLE   is the handle of an SPK file opened with write */
-/*                 access. */
+/*     1) This example demonstrates how to create an SPK type 14 kernel */
+/*        containing only one segment, given a set of Chebyshev */
+/*        coefficients and their associated epochs. */
 
-/*        SEGID    is a character string of no more than 40 characters */
-/*                 which provides a pedigree for the data in the SPK */
-/*                 segment we will create. */
 
-/*        BODY     is the SPICE ID code for the body whose ephemeris */
-/*                 is to be placed into the file. */
+/*        Example code begins here. */
 
-/*        CENTER   is the center of motion for the ephemeris of BODY. */
 
-/*        REFFRM   is the name of the SPICE reference frame for the */
-/*                 ephemeris. */
+/*              PROGRAM SPK14B_EX1 */
+/*              IMPLICIT NONE */
 
-/*        FIRST    is the starting epoch, in seconds past J2000, for */
-/*                 the ephemeris data to be placed into the segment. */
+/*        C */
+/*        C     Local parameters. */
+/*        C */
+/*              INTEGER               NAMLEN */
+/*              PARAMETER           ( NAMLEN = 42 ) */
 
-/*        LAST     is the ending epoch, in seconds past J2000, for */
-/*                 the ephemeris data to be placed into the segment. */
+/*        C */
+/*        C     Define the segment identifier parameters. */
+/*        C */
+/*              CHARACTER*(*)         SPK14 */
+/*              PARAMETER           ( SPK14  = 'spk14b_ex1.bsp' ) */
 
-/*     Example 1: */
+/*              CHARACTER*(*)         REF */
+/*              PARAMETER           ( REF    = 'J2000'          ) */
 
-/*        For this example, we also assume that: */
+/*              INTEGER               BODY */
+/*              PARAMETER           ( BODY   = 3  ) */
 
-/*           N        is the number of type 14 records that we want to */
-/*                    put into a segment in an SPK file. */
+/*              INTEGER               CENTER */
+/*              PARAMETER           ( CENTER = 10 ) */
 
-/*           RECRDS   contains N type 14 records packaged for the SPK */
-/*                    file. */
+/*              INTEGER               CHBDEG */
+/*              PARAMETER           ( CHBDEG = 2  ) */
 
-/*           ETSTRT   contains the initial epochs for each of the */
-/*                    records contained in RECRDS, where */
+/*              INTEGER               NRECS */
+/*              PARAMETER           ( NRECS  = 4  ) */
 
-/*                       ETSTRT(I) < ETSTRT(I+1), I = 1, N-1 */
+/*              INTEGER               RECSIZ */
+/*              PARAMETER           ( RECSIZ = 2 + 6*(CHBDEG+1) ) */
 
-/*                       ETSTRT(1) <= FIRST, ETSTRT(N) < LAST */
+/*        C */
+/*        C     Local variables. */
+/*        C */
+/*              CHARACTER*(NAMLEN)    IFNAME */
+/*              CHARACTER*(NAMLEN)    SEGID */
 
-/*                       ETSTRT(I+1), I = 1, N-1, is the ending epoch for */
-/*                       record I as well as the initial epoch for record */
-/*                       I+1. */
+/*              DOUBLE PRECISION      EPOCHS ( NRECS + 1 ) */
+/*              DOUBLE PRECISION      FIRST */
+/*              DOUBLE PRECISION      LAST */
+/*              DOUBLE PRECISION      RECRDS ( RECSIZ, NRECS ) */
 
-/*        Then the following code fragment demonstrates how to create a */
-/*        type 14 SPK segment if all of the data for the segment is */
-/*        available at one time. */
+/*              INTEGER               HANDLE */
+/*              INTEGER               NCOMCH */
+
+/*        C */
+/*        C     Define the epochs and coefficients. */
+/*        C */
+/*              DATA                  EPOCHS / */
+/*             .                100.D0, 200.D0, 300.D0, 400.D0, 500.D0 / */
+
+/*              DATA                  RECRDS / */
+/*             .     150.0D0, 50.0D0, 1.0101D0, 1.0102D0, 1.0103D0, */
+/*             .                      1.0201D0, 1.0202D0, 1.0203D0, */
+/*             .                      1.0301D0, 1.0302D0, 1.0303D0, */
+/*             .                      1.0401D0, 1.0402D0, 1.0403D0, */
+/*             .                      1.0501D0, 1.0502D0, 1.0503D0, */
+/*             .                      1.0601D0, 1.0602D0, 1.0603D0, */
+/*             .     250.0D0, 50.0D0, 2.0101D0, 2.0102D0, 2.0103D0, */
+/*             .                      2.0201D0, 2.0202D0, 2.0203D0, */
+/*             .                      2.0301D0, 2.0302D0, 2.0303D0, */
+/*             .                      2.0401D0, 2.0402D0, 2.0403D0, */
+/*             .                      2.0501D0, 2.0502D0, 2.0503D0, */
+/*             .                      2.0601D0, 2.0602D0, 2.0603D0, */
+/*             .     350.0D0, 50.0D0, 3.0101D0, 3.0102D0, 3.0103D0, */
+/*             .                      3.0201D0, 3.0202D0, 3.0203D0, */
+/*             .                      3.0301D0, 3.0302D0, 3.0303D0, */
+/*             .                      3.0401D0, 3.0402D0, 3.0403D0, */
+/*             .                      3.0501D0, 3.0502D0, 3.0503D0, */
+/*             .                      3.0601D0, 3.0602D0, 3.0603D0, */
+/*             .     450.0D0, 50.0D0, 4.0101D0, 4.0102D0, 4.0103D0, */
+/*             .                      4.0201D0, 4.0202D0, 4.0203D0, */
+/*             .                      4.0301D0, 4.0302D0, 4.0303D0, */
+/*             .                      4.0401D0, 4.0402D0, 4.0403D0, */
+/*             .                      4.0501D0, 4.0502D0, 4.0503D0, */
+/*             .                      4.0601D0, 4.0602D0, 4.0603D0 / */
+
+
+/*        C */
+/*        C     Set the start and end times of interval covered by */
+/*        C     segment. */
+/*        C */
+/*              FIRST = EPOCHS(1) */
+/*              LAST  = EPOCHS(NRECS + 1) */
+
+/*        C */
+/*        C     NCOMCH is the number of characters to reserve for the */
+/*        C     kernel's comment area. This example doesn't write */
+/*        C     comments, so set to zero. */
+/*        C */
+/*              NCOMCH = 0 */
+
+/*        C */
+/*        C     Internal file name and segment ID. */
+/*        C */
+/*              IFNAME = 'Type 14 SPK internal file name.' */
+/*              SEGID  = 'SPK type 14 test segment' */
+
+/*        C */
+/*        C     Open a new SPK file. */
+/*        C */
+/*              CALL SPKOPN( SPK14, IFNAME, NCOMCH, HANDLE ) */
 
 /*        C */
 /*        C     Begin the segment. */
 /*        C */
-/*              CALL SPK14B ( HANDLE, SEGID, BODY, CENTER, REFFRM, */
-/*             .              FIRST,  LAST,  CHBDEG                ) */
+/*              CALL SPK14B ( HANDLE, SEGID, BODY, CENTER, REF, */
+/*             .              FIRST,  LAST,  CHBDEG            ) */
+
 /*        C */
 /*        C     Add the data to the segment all at once. */
 /*        C */
-/*              CALL SPK14A ( HANDLE, N, RECRDS, ETSTRT ) */
-/*        C */
-/*        C     End the segment, making the segment a permanent addition */
-/*        C     to the SPK file. */
-/*        C */
-/*              CALL SPK14E ( HANDLE ) */
-
-/*     Example 2: */
-
-/*        In this example we want to add type 14 SPK records, as */
-/*        described above in the $ Particulars section, to the segment */
-/*        being written as they are generated.  The ability to write the */
-/*        records in this way is useful if computer memory is limited. It */
-/*        may also be convenient from a programming perspective to write */
-/*        the records one at a time. */
-
-/*        For this example, assume that we want to generate N type 14 SPK */
-/*        records, one for each of N time intervals, writing them all to */
-/*        the same segment in the SPK file. Let */
-
-/*           N        be the number of type 14 records that we want to */
-/*                    generate and put into a segment in an SPK file. */
-
-/*           RECORD   be an array with enough room to hold a single type */
-/*                    14 record, i.e. RECORD should have dimension at */
-/*                    least 6 * (CHBDEG + 1 ) + 2. */
-
-/*           START    be an array of N times that are the beginning */
-/*                    epochs for each of the intervals of interest. The */
-/*                    times should be in increasing order and the start */
-/*                    time for the first interval should equal the */
-/*                    starting time for the segment. */
-
-/*                       START(I) < START(I+1), I = 1, N-1 */
-
-/*                       START(1) = FIRST */
-
-/*           STOP     be an array of N times that are the ending epochs */
-/*                    for each of the intervals of interest. The times */
-/*                    should be in increasing order and the stop time for */
-/*                    interval I should equal the start time for interval */
-/*                    I+1, i.e., we want to have continuous coverage in */
-/*                    time across all of the records. Also, the stop time */
-/*                    for the last interval should equal the ending time */
-/*                    for the segment. */
-
-/*                       STOP(I) < STOP(I+1), I = 1, N-1 */
-
-/*                       STOP(I) = START(I+1), I = 1, N-1 */
-
-/*                       STOP(N) = LAST */
-
-/*           GENREC( TIME1, TIME2, RECORD ) */
-
-/*                    be a subroutine that generates a type 14 SPK record */
-/*                    for a time interval specified by TIME1 and TIME2. */
-
-/*        Then the following code fragment demonstrates how to create a */
-/*        type 14 SPK segment if all of the data for the segment is not */
-/*        available at one time. */
-
-/*        C */
-/*        C     Begin the segment. */
-/*        C */
-/*              CALL SPK14B ( HANDLE, SEGID, BODY, CENTER, REFFRM, */
-/*             .              FIRST,  LAST,  CHBDEG                ) */
-
-/*        C */
-/*        C     Generate the records and write them to the segment in the */
-/*        C     SPK file one at at time. */
-/*        C */
-/*              DO I = 1, N */
-
-/*                 CALL GENREC ( START(I), STOP(I), RECORD ) */
-/*                 CALL SPK14A ( HANDLE, 1, RECORD, START(I) ) */
-
-/*              END DO */
+/*              CALL SPK14A ( HANDLE, NRECS, RECRDS, EPOCHS ) */
 
 /*        C */
 /*        C     End the segment, making the segment a permanent addition */
 /*        C     to the SPK file. */
 /*        C */
 /*              CALL SPK14E ( HANDLE ) */
+
+/*        C */
+/*        C     Close the SPK file. */
+/*        C */
+/*              CALL SPKCLS ( HANDLE ) */
+
+/*              END */
+
+
+/*        When this program is executed, no output is presented on */
+/*        screen. After run completion, a new SPK type 14 exists in */
+/*        the output directory. */
 
 /* $ Restrictions */
 
-/*     The SPK file must be open with write access. */
+/*     1)  The SPK file must be open with write access. */
 
-/*     Only one segment may be written to a particular SPK file at a */
-/*     time. All of the data for the segment must be written and the */
-/*     segment must be ended before another segment may be started in */
-/*     the file. */
+/*     2)  Only one segment may be written to a particular SPK file at a */
+/*         time. All of the data for the segment must be written and the */
+/*         segment must be ended before another segment may be started in */
+/*         the file. */
 
 /* $ Literature_References */
 
-/*      None. */
+/*     None. */
 
 /* $ Author_and_Institution */
 
-/*      K.R. Gehringer      (JPL) */
-/*      B.V. Semenov        (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
+/*     B.V. Semenov       (JPL) */
 
 /* $ Version */
 
+/* -    SPICELIB Version 1.0.3, 27-AUG-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. Added */
+/*        complete example code from existing fragment. */
+
+/*        Removed references to other routines from $Abstract section */
+/*        (present in $Particulars). */
+
 /* -    SPICELIB Version 1.0.2, 10-FEB-2014 (BVS) */
 
-/*        Removed comments from the Declarations section. */
+/*        Removed comments from the $Declarations section. */
 
 /* -    SPICELIB Version 1.0.1, 30-OCT-2006 (BVS) */
 
-/*        Deleted "inertial" from the FRAME description in the Brief_I/O */
+/*        Deleted "inertial" from the FRAME description in the $Brief_I/O */
 /*        section of the header. */
 
 /* -    SPICELIB Version 1.0.0, 06-MAR-1995 (KRG) */
@@ -764,7 +778,7 @@ static integer c__3 = 3;
 /* -& */
 /* $ Index_Entries */
 
-/*     begin writing a type_14 spk segment */
+/*     begin writing a type_14 SPK segment */
 
 /* -& */
 

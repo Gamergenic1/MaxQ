@@ -10,7 +10,7 @@
 static logical c_true = TRUE_;
 static logical c_false = FALSE_;
 
-/* $Procedure      RDKER ( Read a kernel file ) */
+/* $Procedure RDKER ( Read a kernel file ) */
 /* Subroutine */ int rdker_0_(int n__, char *kernel, char *line, integer *
 	number, logical *eof, ftnlen kernel_len, ftnlen line_len)
 {
@@ -89,7 +89,7 @@ static logical c_false = FALSE_;
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     VARIABLE  I/O  ENTRY */
+/*     VARIABLE  I/O  ENTRY POINTS */
 /*     --------  ---  -------------------------------------------------- */
 /*     KERNEL     I   RDKNEW */
 /*     LINE       O   RDKDAT */
@@ -110,13 +110,13 @@ static logical c_false = FALSE_;
 
 /* $ Exceptions */
 
-/*     1) If RDKER is called directly, the error SPICE(BOGUSENTRY) is */
-/*        signalled. */
+/*     1)  If RDKER is called directly, the error SPICE(BOGUSENTRY) is */
+/*         signaled. */
 
 /* $ Files */
 
 /*     The SPICE ASCII kernel file KERNEL is opened by RDKNEW and read */
-/*     by RDKDAT.  The entry point RDKLIN is available for reporting */
+/*     by RDKDAT. The entry point RDKLIN is available for reporting */
 /*     the name of the open file and the number of the last line that */
 /*     was read from that file. */
 
@@ -177,8 +177,8 @@ static logical c_false = FALSE_;
 
 /* $ Restrictions */
 
-/*     The input file must be opened and initialized by RDKNEW prior */
-/*     to the first call to RDKDAT. */
+/*     1)  The input file must be opened and initialized by RDKNEW prior */
+/*         to the first call to RDKDAT. */
 
 /* $ Literature_References */
 
@@ -186,12 +186,25 @@ static logical c_false = FALSE_;
 
 /* $ Author_and_Institution */
 
-/*     W.L. Taber      (JPL) */
-/*     H.A. Neilan     (JPL) */
-/*     M.J. Spencer    (JPL) */
-/*     I.M. Underwood  (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     H.A. Neilan        (JPL) */
+/*     B.V. Semenov       (JPL) */
+/*     M.J. Spencer       (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 3.7.0, 28-NOV-2021 (BVS) */
+
+/*        Updated for MAC-OSX-M1-64BIT-CLANG_C. */
+
+/* -    SPICELIB Version 3.6.1, 17-JUN-2021 (JDR) */
+
+/*        Edited the header of the RDKER umbrella routine and all its */
+/*        entry entry points to comply with NAIF standard. */
 
 /* -    SPICELIB Version 3.6.0, 10-MAR-2014 (BVS) */
 
@@ -249,37 +262,37 @@ static logical c_false = FALSE_;
 /*        the non-native text line read capability for the */
 /*        CSPICE toolkit. */
 
-/* -     SPICELIB Version 2.0.1, 22-AUG-2001 (EDW) */
+/* -    SPICELIB Version 2.0.1, 22-AUG-2001 (EDW) */
 
 /*        Corrected ENDIF to END IF. */
 
-/* -     SPICELIB Version 2.0.0, 20-SEP-1995 (WLT) */
+/* -    SPICELIB Version 2.0.0, 20-SEP-1995 (WLT) */
 
 /*         The entry point RDKLIN was added. */
 
-/* -     SPICELIB Version 1.3.0, 22-SEP-1993 (NJB) */
+/* -    SPICELIB Version 1.3.0, 22-SEP-1993 (NJB) */
 
-/*         Updated for port to NeXT.  The "previous kernel" is now closed */
+/*         Updated for port to NeXT. The "previous kernel" is now closed */
 /*         only if there actually was a previous kernel. */
 
-/* -     SPICELIB Version 1.2.0, 01-JUN-1992 (MJS) */
+/* -    SPICELIB Version 1.2.0, 01-JUN-1992 (MJS) */
 
 /*         RDKER now initializes the variables BEGDAT and BEGTXT */
 /*         in a portable way. On the first valid entry to this routine, */
 /*         the backslash character in the form CHAR(92) is concatenated */
 /*         individually to 'begindata' and 'begintext'. */
 
-/* -     SPICELIB Version 1.1.1, 10-MAR-1992 (WLT) */
+/* -    SPICELIB Version 1.1.1, 10-MAR-1992 (WLT) */
 
 /*         Comment section for permuted index source lines was added */
 /*         following the header. */
 
-/* -     SPICELIB Version 1.1.0, 7-DEC-1990 (HAN) */
+/* -    SPICELIB Version 1.1.0, 07-DEC-1990 (HAN) */
 
 /*         The declarations for BEGDAT and BEGTXT were changed from */
 /*         CHARACTER*10 to CHARACTER*(*). */
 
-/* -     SPICELIB Version 1.0.0, 31-JAN-1990 (IMU) */
+/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (IMU) */
 
 /* -& */
 /* $ Index_Entries */
@@ -295,14 +308,14 @@ static logical c_false = FALSE_;
 
 /* -     SPICELIB Version 1.3.0, 22-SEP-1993 (NJB) */
 
-/*         Updated for port to NeXT.  The "previous kernel" is now closed */
+/*         Updated for port to NeXT. The "previous kernel" is now closed */
 /*         only if there actually was a previous kernel. */
 
 /*         In the last version of this routine, on the first entry into */
 /*         the routine, the variable FILE, which records the name of */
 /*         the last kernel accessed, was passed to CLTEXT.  CLTEXT */
 /*         executed an INQUIRE statement using this name, which was */
-/*         not initialized.  On the NeXT, this caused the INQUIRE */
+/*         not initialized. On the NeXT, this caused the INQUIRE */
 /*         statement to fail. */
 
 
@@ -319,7 +332,7 @@ static logical c_false = FALSE_;
 /*         FILE is now initialized to ' '. Before this modification, if */
 /*         a call to RDKDAT was performed prior to RDKNEW, RDTEXT */
 /*         would have printed out garbage (on some machines) in its */
-/*         error message when notifiying the user that it couldn't read */
+/*         error message when notifying the user that it couldn't read */
 /*         from FILE. */
 
 /* -     SPICELIB Version 1.1.0, 7-DEC-1990 (HAN) */
@@ -331,8 +344,8 @@ static logical c_false = FALSE_;
 /* -     Beta Version 1.1.0, 9-MAR-1989 (HAN) */
 
 /*         Moved the declaration of the parameters BEGDAT and */
-/*         BEGTXT from the code to the Declarations section. */
-/*         Filled out the Brief I/O and Parameters sections. */
+/*         BEGTXT from the code to the $Declarations section. */
+/*         Filled out the Brief I/O and $Parameters sections. */
 
 /* -& */
 
@@ -376,7 +389,7 @@ static logical c_false = FALSE_;
     }
 
 /*     Calling RDKER directly is a serious breach of protocol. */
-/*     If RDKER is called, an error is signalled. */
+/*     If RDKER is called, an error is signaled. */
 
     setmsg_("RDKER: You have called an entry which performs no run-time func"
 	    "tion. This may indicate a bug. Please check the documentation fo"
@@ -436,12 +449,12 @@ L_rdknew:
 
 /* $ Detailed_Input */
 
-/*     KERNEL      is the name of the SPICE ASCII kernel file to be */
-/*                 opened and initialized. */
+/*     KERNEL   is the name of the SPICE ASCII kernel file to be opened */
+/*              and initialized. */
 
 /* $ Detailed_Output */
 
-/*      None. */
+/*     None. */
 
 /* $ Parameters */
 
@@ -521,9 +534,18 @@ L_rdknew:
 
 /* $ Author_and_Institution */
 
-/*     I.M. Underwood  (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     M.J. Spencer       (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 3.0.1, 17-JUN-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 3.0.0, 11-FEB-2008 (NJB) */
 
@@ -542,23 +564,23 @@ L_rdknew:
 /*        the non-native text line read capability for the */
 /*        CSPICE toolkit. */
 
-/* -     SPICELIB Version 2.0.0, 20-SEP-1995 (WLT) */
+/* -    SPICELIB Version 2.0.0, 20-SEP-1995 (WLT) */
 
 /*         The entry point RDKLIN was added. */
 
-/* -     SPICELIB Version 1.2.0, 01-JUN-1992 (MJS) */
+/* -    SPICELIB Version 1.2.0, 01-JUN-1992 (MJS) */
 
 /*         RDKER now initializes the variables BEGDAT and BEGTXT */
 /*         in a portable way. On the first valid entry to this routine, */
 /*         the backslash character in the form CHAR(92) is concatenated */
 /*         individually to 'begindata' and 'begintext'. */
 
-/* -     SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+/* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
 
 /*         Comment section for permuted index source lines was added */
 /*         following the header. */
 
-/* -     SPICELIB Version 1.0.0, 31-JAN-1990 (IMU) */
+/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (IMU) */
 
 /* -& */
 /* $ Index_Entries */
@@ -697,16 +719,14 @@ L_rdkdat:
 
 /* $ Detailed_Output */
 
-/*     LINE        is the next line of data from the kernel file */
-/*                 most recently opened by NEWKER. Data lines are */
-/*                 non-blank lines which lie between \begindata */
-/*                 and \begintext markers. Lines are returned left */
-/*                 justified. */
+/*     LINE     is the next line of data from the kernel file most */
+/*              recently opened by NEWKER. Data lines are non-blank lines */
+/*              which lie between \begindata and \begintext markers. */
+/*              Lines are returned left justified. */
 
-/*     EOF         is true when the end of the kernel file has been */
-/*                 reached, and is false otherwise. The kernel file */
-/*                 is closed automatically when the end of the file */
-/*                 is reached. */
+/*     EOF      is .TRUE. when the end of the kernel file has been */
+/*              reached, and is .FALSE. otherwise. The kernel file is */
+/*              closed automatically when the end of the file is reached. */
 
 /* $ Parameters */
 
@@ -779,8 +799,8 @@ L_rdkdat:
 
 /* $ Restrictions */
 
-/*     The input file must be opened and initialized by NEWKER prior */
-/*     to the first call to RDKDAT. */
+/*     1)  The input file must be opened and initialized by NEWKER prior */
+/*         to the first call to RDKDAT. */
 
 /* $ Literature_References */
 
@@ -788,11 +808,17 @@ L_rdkdat:
 
 /* $ Author_and_Institution */
 
-/*     W.L. Taber      (JPL) */
-/*     H.A. Neilan     (JPL) */
-/*     I.M. Underwood  (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 3.0.1, 17-JUN-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 3.0.0, 11-FEB-2008 (NJB) */
 
@@ -907,7 +933,7 @@ L_rdkdat:
     }
     chkout_("RDKDAT", (ftnlen)6);
     return 0;
-/* $Procedure      RDKLIN ( Reading kernel at line number ) */
+/* $Procedure RDKLIN ( Reading kernel at line number ) */
 
 L_rdklin:
 /* $ Abstract */
@@ -942,23 +968,23 @@ L_rdklin:
 
 /* $ Required_Reading */
 
-/*      None. */
+/*     None. */
 
 /* $ Keywords */
 
-/*       UTILITY */
+/*     UTILITY */
 
 /* $ Declarations */
 
-/*     CHARACTER*(*)         FILE */
+/*     CHARACTER*(*)         KERNEL */
 /*     INTEGER               NUMBER */
 
 /* $ Brief_I/O */
 
-/*      VARIABLE  I/O  DESCRIPTION */
-/*      --------  ---  -------------------------------------------------- */
-/*      KERNEL     O   The name of the current file that is being read */
-/*      NUMBER     O   The line number of the last line read in the file */
+/*     VARIABLE  I/O  DESCRIPTION */
+/*     --------  ---  -------------------------------------------------- */
+/*     KERNEL     O   The name of the current file that is being read. */
+/*     NUMBER     O   The line number of the last line read in the file. */
 
 /* $ Detailed_Input */
 
@@ -966,38 +992,36 @@ L_rdklin:
 
 /* $ Detailed_Output */
 
-/*     KERNEL      is the name of the last file supplied via a call */
-/*                 to RDKNEW.  If no call to RDKNEW have been made */
-/*                 KERNEL is returned as a blank.  If KERNEL is not */
-/*                 sufficiently long to hold th name of the file, the */
-/*                 file name will be truncated on the right. */
+/*     KERNEL   is the name of the last file supplied via a call to */
+/*              RDKNEW. If no call to RDKNEW have been made KERNEL is */
+/*              returned as a blank. If KERNEL is not sufficiently long */
+/*              to hold th name of the file, the file name will be */
+/*              truncated on the right. */
 
-/*     NUMBER      is the number of the last line in KERNEL returned by */
-/*                 a call to RDKDAT.  If no call to RDKNEW or RDKDAT */
-/*                 have been made NUMBER is returned with the value 0. */
-
-
+/*     NUMBER   is the number of the last line in KERNEL returned by a */
+/*              call to RDKDAT. If no call to RDKNEW or RDKDAT have been */
+/*              made NUMBER is returned with the value 0. */
 
 /* $ Parameters */
 
-/*      None. */
+/*     None. */
 
 /* $ Exceptions */
 
 /*     Error free. */
 
-/*     1) If no calls to RDKNEW have been made, KERNEL is returned as */
-/*        a blank and NUMBER is returned with the value 0. */
+/*     1)  If no calls to RDKNEW have been made, KERNEL is returned as */
+/*         a blank and NUMBER is returned with the value 0. */
 
-/*     2) If no calls to RDKDAT have been made but RDKNEW has been */
-/*        called NUMBER is returned with the value 1. */
+/*     2)  If no calls to RDKDAT have been made but RDKNEW has been */
+/*         called, NUMBER is returned with the value 1. */
 
-/*     3) If KERNEL is not sufficiently long to hold the name of the */
-/*        file being read, the name will be truncated on the right. */
+/*     3)  If KERNEL is not sufficiently long to hold the name of the */
+/*         file being read, the name will be truncated on the right. */
 
 /* $ Files */
 
-/*      None. */
+/*     None. */
 
 /* $ Particulars */
 
@@ -1010,7 +1034,7 @@ L_rdklin:
 /* $ Examples */
 
 /*     Suppose that you are processing a file and have detected an */
-/*     error in the syntax in the file.  The following code fragment */
+/*     error in the syntax in the file. The following code fragment */
 /*     illustrates how you can use this routine to inform a user of */
 /*     the location of the error in the file. */
 
@@ -1020,20 +1044,27 @@ L_rdklin:
 /*        WRITE (*,*) 'An error occurred while reading line ', NUMBER */
 /*        WRITE (*,*) 'of the file ''', FILE(1:R), '''' */
 
-
 /* $ Restrictions */
 
 /*     None. */
 
 /* $ Literature_References */
 
-/*      None. */
+/*     None. */
 
 /* $ Author_and_Institution */
 
-/*      W.L. Taber      (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 2.1.1, 17-JUN-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. Corrected */
+/*        output argument name in $Declarations section (changed FILE to */
+/*        KERNEL) */
 
 /* -    SPICELIB Version 2.1.0, 03-OCT-2005 (EDW) */
 

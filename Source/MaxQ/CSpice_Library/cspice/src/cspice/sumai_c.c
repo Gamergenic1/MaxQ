@@ -3,9 +3,9 @@
 -Procedure sumai_c ( Sum of an integer array )
 
 -Abstract
- 
-    Return the sum of the elements of an integer array. 
- 
+
+   Return the sum of the elements of an integer array.
+
 -Disclaimer
 
    THIS SOFTWARE AND ANY RELATED MATERIALS WERE CREATED BY THE
@@ -32,107 +32,113 @@
    ACTIONS OF RECIPIENT IN THE USE OF THE SOFTWARE.
 
 -Required_Reading
- 
-   None. 
- 
+
+   None.
+
 -Keywords
- 
-   ARRAY,  MATH,  UTILITY 
- 
+
+   ARRAY
+   MATH
+   UTILITY
+
 */
 
    #include "SpiceUsr.h"
    #undef    sumai_c
-   
-   
+
+
    SpiceInt sumai_c ( ConstSpiceInt   * array,
-                      SpiceInt          n     ) 
+                      SpiceInt          n     )
 
 /*
 
 -Brief_I/O
- 
-   VARIABLE  I/O  DESCRIPTION 
-   --------  ---  -------------------------------------------------- 
-   array      I   Input array. 
-   n          I   Number of elements in the array. 
 
-   The function returns the sum of the elements of the input array. 
- 
+   VARIABLE  I/O  DESCRIPTION
+   --------  ---  --------------------------------------------------
+   array      I   Input array.
+   n          I   Number of elements in `array'.
+
+   The function returns the sum of the elements of `array'.
+
 -Detailed_Input
- 
-   array       is the input array. 
 
-   n           is the number of elements in the array. 
- 
+   array       is the input integer array.
+
+   n           is the number of elements in the array.
+
 -Detailed_Output
- 
-   The function returns the sum of the elements of the input array. 
-   That is, 
 
-      sumai_c ( array, n )  =  array[0] + array[1] + ... + array[n-1] 
+   The function returns the sum of the elements of the input array.
+   That is,
 
-   If n is zero or negative, sumai_c returns zero. 
- 
+      sumai_c( array, n ) = array[0] + array[1] + ... + array[n-1]
+
+   If `n' is zero or negative, sumai_c is zero.
+
 -Parameters
- 
-   None. 
- 
+
+   None.
+
+-Exceptions
+
+   Error free.
+
+-Files
+
+   None.
+
 -Particulars
- 
-   The value of the function is initially set to zero. The elements 
-   of the array are then added. If the number of elements is zero or 
-   negative, sumai_c is zero. 
- 
+
+   The value of the function is initially set to zero. The elements
+   of the array are then added. If the number of elements is zero or
+   negative, sumai_c is zero.
+
 -Examples
- 
-   Let array contain the following elements. 
+
+   Let `array' contain the following elements.
 
          array[0] = 12
-         array[1] =  1 
-         array[2] =  4 
-         array[3] = 75 
-         array[4] = 18 
+         array[1] =  1
+         array[2] =  4
+         array[3] = 75
+         array[4] = 18
 
-   Then 
+   Then
 
-         sumai_c ( array,   -3 )       =   0 
-         sumai_c ( array,    0 )       =   0 
-         sumai_c ( array,    1 )       =  12 
-         sumai_c ( array,    2 )       =  13 
-         sumai_c ( array,    5 )       = 110 
-         sumai_c ( array+2,  3 )       =  97 
- 
- 
+         sumai_c ( array,   -3 )       =   0
+         sumai_c ( array,    0 )       =   0
+         sumai_c ( array,    1 )       =  12
+         sumai_c ( array,    2 )       =  13
+         sumai_c ( array,    5 )       = 110
+         sumai_c ( array+2,  3 )       =  97
+
 -Restrictions
- 
-   sumai_c does not check for overflow. 
- 
--Exceptions
- 
-   Error free. 
- 
--Files
- 
-   None. 
- 
--Author_and_Institution
- 
-   N.J. Bachman    (JPL) 
-   I.M. Underwood  (JPL) 
+
+   1)  sumai_c does not check for overflow.
 
 -Literature_References
- 
-   None. 
- 
+
+   None.
+
+-Author_and_Institution
+
+   N.J. Bachman        (JPL)
+   J. Diaz del Rio     (ODC Space)
+   I.M. Underwood      (JPL)
+
 -Version
- 
+
+   -CSPICE Version 1.0.1, 09-APR-2021 (JDR)
+
+       Edited the header to comply with NAIF standard.
+
    -CSPICE Version 1.0.0, 24-MAR-1999 (IMU) (NJB)
 
 -Index_Entries
- 
-   sum of an integer array 
- 
+
+   sum of an integer array
+
 -&
 */
 
@@ -141,20 +147,20 @@
    /*
    Local variables
    */
-   
+
    SpiceInt                retval;
    SpiceInt                i;
 
 
 
    retval = 0;
-   
+
    for ( i = 0;  i < n;  i++  )
    {
       retval += array[i];
    }
 
    return ( retval );
-   
-   
+
+
 } /* End sumai_c */

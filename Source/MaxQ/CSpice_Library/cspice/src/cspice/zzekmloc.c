@@ -127,7 +127,7 @@ static integer c__1 = 1;
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     I   File handle. */
 /*     SEGNO      I   Segment number. */
@@ -164,7 +164,7 @@ static integer c__1 = 1;
 /*         called by this routine. */
 
 /*     2)  If SEGNO is out of range, the error SPICE(INVALIDINDEX) */
-/*         will be signalled. */
+/*         will be signaled. */
 
 /*     3)  If an I/O error occurs while reading or writing the indicated */
 /*         file, the error will be diagnosed by routines called by this */
@@ -212,9 +212,15 @@ static integer c__1 = 1;
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.2.0, 02-OCT-2021 (JDR) */
+
+/*        Fixed typo in the INVALIDINDEX short error message. */
 
 /* -    SPICELIB Version 1.1.0, 18-JUN-1999 (WLT) */
 
@@ -239,7 +245,7 @@ static integer c__1 = 1;
 /*     Validate the segment number to start out. */
 
 
-/*     Get the segment count; valididate SEGNO. */
+/*     Get the segment count; validate SEGNO. */
 
     nseg = eknseg_(handle);
 
@@ -250,7 +256,7 @@ static integer c__1 = 1;
 	setmsg_("Segment number = #; valid range is 1:#.", (ftnlen)39);
 	errint_("#", segno, (ftnlen)1);
 	errint_("#", &nseg, (ftnlen)1);
-	sigerr_("SPICE(INVALIDINDEX )", (ftnlen)20);
+	sigerr_("SPICE(INVALIDINDEX)", (ftnlen)19);
 	chkout_("ZZEKMLOC", (ftnlen)8);
 	return 0;
     }

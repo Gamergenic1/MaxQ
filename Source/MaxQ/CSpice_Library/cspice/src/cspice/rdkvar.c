@@ -9,7 +9,7 @@
 
 static integer c__2 = 2;
 
-/* $Procedure      RDKVAR ( Read the next variable from a kernel file ) */
+/* $Procedure RDKVAR ( Read the next variable from a kernel file ) */
 /* Subroutine */ int rdkvar_(char *tabsym, integer *tabptr, doublereal *
 	tabval, char *name__, logical *eof, ftnlen tabsym_len, ftnlen 
 	name_len)
@@ -78,7 +78,8 @@ static integer c__2 = 2;
 
 /* $ Required_Reading */
 
-/*     KERNEL, SYMBOLS */
+/*     KERNEL */
+/*     SYMBOLS */
 
 /* $ Keywords */
 
@@ -91,7 +92,7 @@ static integer c__2 = 2;
 /*     --------  ---  -------------------------------------------------- */
 /*     TABSYM, */
 /*     TABPTR, */
-/*     TABVAL    I/O  Symbol table. */
+/*     TABVAL    I-O  Symbol table. */
 /*     NAME       O   Name of the variable. */
 /*     EOF        O   End of file indicator. */
 /*     LINLEN     P   Maximum line length. */
@@ -100,43 +101,40 @@ static integer c__2 = 2;
 
 /*     TABSYM, */
 /*     TABPTR, */
-/*     TABVAL      are the components of a double precision symbol */
-/*                 table. On input, the table may or may not contain */
-/*                 any variables. */
+/*     TABVAL   are the components of a double precision symbol table. On */
+/*              input, the table may or may not contain any variables. */
 
 /* $ Detailed_Output */
 
 /*     TABSYM, */
 /*     TABPTR, */
-/*     TABVAL      on output, contains the name and values of the next */
-/*                 variable in kernel file. Depending on the assignment */
-/*                 directive, the values in the file may replace or */
-/*                 augment any existing values. */
+/*     TABVAL   on output, contains the name and values of the next */
+/*              variable in kernel file. Depending on the assignment */
+/*              directive, the values in the file may replace or augment */
+/*              any existing values. */
 
-/*      NAME       is the name of the variable. NAME is blank if */
-/*                 no variable is read. */
+/*      NAME    is the name of the variable. NAME is blank if no variable */
+/*              is read. */
 
-/*      EOF        is true when the end of the kernel file has been */
-/*                 reached, and is false otherwise. The kernel file */
-/*                 is closed automatically when the end of the file */
-/*                 is reached. */
+/*      EOF     is .TRUE. when the end of the kernel file has been */
+/*              reached, and is .FALSE. otherwise. The kernel file is */
+/*              closed automatically when the end of the file is reached. */
 
 /* $ Parameters */
 
-/*      LINLEN      is the maximum length of a line in the kernel file. */
+/*     LINLEN   is the maximum length of a line in the kernel file. */
 
+/* $ Exceptions */
+
+/*     1)  If an error occurs parsing a date from the kernel file, the */
+/*         error SPICE(DATEEXPECTED) is signaled. */
+
+/*     2)  If an error occurs parsing a numeric value from the kernel */
+/*         file, the error SPICE(NUMBEREXPECTED) is signaled. */
 
 /* $ Files */
 
 /*     RDKVAR reads from the file most recently opened by RDKNEW. */
-
-/* $ Exceptions */
-
-/*     1) If an error occurs parsing a date from the kernel file, the */
-/*        error SPICE(DATEEXPECTED) is signalled. */
-
-/*     2) If an error occurs parsing a numeric value from the kernel */
-/*        file, the error SPICE(NUMBEREXPECTED) is signalled. */
 
 /* $ Particulars */
 
@@ -194,8 +192,8 @@ static integer c__2 = 2;
 
 /* $ Restrictions */
 
-/*     The input file must be opened and initialized by RDKNEW prior */
-/*     to the first call to RDKVAR. */
+/*     1)  The input file must be opened and initialized by RDKNEW prior */
+/*         to the first call to RDKVAR. */
 
 /* $ Literature_References */
 
@@ -203,16 +201,23 @@ static integer c__2 = 2;
 
 /* $ Author_and_Institution */
 
-/*     H.A. Neilan     (JPL) */
-/*     I.M. Underwood  (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.2.0, 17-JUN-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.1.0, 10-MAR-1992 (WLT) */
 
 /*        Changed the length of the local character variable ERROR so */
 /*        that it would always have a length greater than the lengths of */
-/*        the character strng values placed into it. */
+/*        the character string values placed into it. */
 
 /* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
 
@@ -233,7 +238,7 @@ static integer c__2 = 2;
 
 /*        Changed the length of the local character variable ERROR so */
 /*        that it would always have a length greater than the lengths of */
-/*        the character strng values placed into it. */
+/*        the character string values placed into it. */
 
 /*        The length of the character variable ERROR was changed from 30 */
 /*        to 80. */

@@ -10,7 +10,7 @@
 static integer c__2 = 2;
 static integer c__6 = 6;
 
-/* $Procedure      CKR03 ( C-kernel, read pointing record, data type 3 ) */
+/* $Procedure CKR03 ( C-kernel, read pointing record, data type 3 ) */
 /* Subroutine */ int ckr03_(integer *handle, doublereal *descr, doublereal *
 	sclkdp, doublereal *tol, logical *needav, doublereal *record, logical 
 	*found)
@@ -105,7 +105,7 @@ static integer c__6 = 6;
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     I   File handle. */
 /*     DESCR      I   Segment descriptor. */
@@ -113,89 +113,89 @@ static integer c__6 = 6;
 /*     TOL        I   Time tolerance. */
 /*     NEEDAV     I   Angular velocity request flag. */
 /*     RECORD     O   Pointing data record. */
-/*     FOUND      O   True when data is found. */
+/*     FOUND      O   .TRUE. when data is found. */
 
 /* $ Detailed_Input */
 
-/*     HANDLE     is the integer handle of the CK file containing the */
-/*                segment. */
+/*     HANDLE   is the integer handle of the CK file containing the */
+/*              segment. */
 
-/*     DESCR      is the descriptor of the segment. */
+/*     DESCR    is the descriptor of the segment. */
 
-/*     SCLKDP     is the encoded spacecraft clock time for which */
-/*                pointing is being requested. */
+/*     SCLKDP   is the encoded spacecraft clock time for which */
+/*              pointing is being requested. */
 
-/*     TOL        is a time tolerance, measured in the same units as */
-/*                encoded spacecraft clock. */
+/*     TOL      is a time tolerance, measured in the same units as */
+/*              encoded spacecraft clock. */
 
-/*                When SCLKDP falls within the bounds of one of the */
-/*                interpolation intervals then the tolerance has no */
-/*                effect because pointing will be returned at the */
-/*                request time. */
+/*              When SCLKDP falls within the bounds of one of the */
+/*              interpolation intervals then the tolerance has no */
+/*              effect because pointing will be returned at the */
+/*              request time. */
 
-/*                However, if the request time is not in one of the */
-/*                intervals, then the tolerance is used to determine */
-/*                if pointing at one of the interval endpoints should */
-/*                be returned. */
+/*              However, if the request time is not in one of the */
+/*              intervals, then the tolerance is used to determine */
+/*              if pointing at one of the interval endpoints should */
+/*              be returned. */
 
-/*     NEEDAV     is true if angular velocity is requested. */
+/*     NEEDAV   is .TRUE. if angular velocity is requested. */
 
 /* $ Detailed_Output */
 
-/*     RECORD     is the record that CKE03 will evaluate to determine */
-/*                the pointing. */
+/*     RECORD   is the record that CKE03 will evaluate to determine */
+/*              the pointing. */
 
-/*                When the request time falls within an interval for */
-/*                which linear interpolation is valid, the values of */
-/*                the two pointing instances that bracket the request */
-/*                time are returned in RECORD as follows: */
+/*              When the request time falls within an interval for */
+/*              which linear interpolation is valid, the values of */
+/*              the two pointing instances that bracket the request */
+/*              time are returned in RECORD as follows: */
 
-/*                   RECORD( 1  ) = Left bracketing SCLK time. */
+/*                 RECORD( 1  ) = Left bracketing SCLK time. */
 
-/*                   RECORD( 2  ) = lq0  \ */
-/*                   RECORD( 3  ) = lq1   \    Left bracketing */
-/*                   RECORD( 4  ) = lq2   /      quaternion. */
-/*                   RECORD( 5  ) = lq3  / */
+/*                 RECORD( 2  ) = lq0  \ */
+/*                 RECORD( 3  ) = lq1   \    Left bracketing */
+/*                 RECORD( 4  ) = lq2   /      quaternion. */
+/*                 RECORD( 5  ) = lq3  / */
 
-/*                   RECORD( 6  ) = lav1 \     Left bracketing */
-/*                   RECORD( 7  ) = lav2       angular velocity */
-/*                   RECORD( 8  ) = lav3 /       ( optional ) */
+/*                 RECORD( 6  ) = lav1 \     Left bracketing */
+/*                 RECORD( 7  ) = lav2       angular velocity */
+/*                 RECORD( 8  ) = lav3 /       ( optional ) */
 
-/*                   RECORD( 9  ) = Right bracketing SCLK time. */
+/*                 RECORD( 9  ) = Right bracketing SCLK time. */
 
-/*                   RECORD( 10 ) = rq0  \ */
-/*                   RECORD( 11 ) = rq1   \    Right bracketing */
-/*                   RECORD( 12 ) = rq2   /       quaternion. */
-/*                   RECORD( 13 ) = rq3  / */
+/*                 RECORD( 10 ) = rq0  \ */
+/*                 RECORD( 11 ) = rq1   \    Right bracketing */
+/*                 RECORD( 12 ) = rq2   /       quaternion. */
+/*                 RECORD( 13 ) = rq3  / */
 
-/*                   RECORD( 14 ) = rav1 \     Right bracketing */
-/*                   RECORD( 15 ) = rav2       angular velocity */
-/*                   RECORD( 16 ) = rav3 /       ( optional ) */
+/*                 RECORD( 14 ) = rav1 \     Right bracketing */
+/*                 RECORD( 15 ) = rav2       angular velocity */
+/*                 RECORD( 16 ) = rav3 /       ( optional ) */
 
-/*                   RECORD( 17 ) = pointing request time, SCLKDP. */
+/*                 RECORD( 17 ) = pointing request time, SCLKDP. */
 
-/*                The quantities lq0 - lq3 and rq0 - rq3 are the */
-/*                components of the quaternions that represent the */
-/*                C-matrices associated with the times that bracket */
-/*                the requested time. */
+/*              The quantities lq0 - lq3 and rq0 - rq3 are the */
+/*              components of the quaternions that represent the */
+/*              C-matrices associated with the times that bracket */
+/*              the requested time. */
 
-/*                The quantities lav1, lav2, lav3 and rav1, rav2, rav3 */
-/*                are the components of the angular velocity vectors at */
-/*                the respective bracketing times. The components of the */
-/*                angular velocity vectors are specified relative to */
-/*                the inertial reference frame of the segment. */
+/*              The quantities lav1, lav2, lav3 and rav1, rav2, rav3 */
+/*              are the components of the angular velocity vectors at */
+/*              the respective bracketing times. The components of the */
+/*              angular velocity vectors are specified relative to */
+/*              the inertial reference frame of the segment. */
 
-/*                If the request time does not fall within an */
-/*                interpolation interval, but is within TOL of an */
-/*                interval endpoint, the values of that pointing */
-/*                instance are returned in both parts of RECORD */
-/*                ( i.e. RECORD(1-9) and RECORD(10-16) ). */
+/*              If the request time does not fall within an */
+/*              interpolation interval, but is within TOL of an */
+/*              interval endpoint, the values of that pointing */
+/*              instance are returned in both parts of RECORD */
+/*              ( i.e. RECORD(1-9) and RECORD(10-16) ). */
 
-/*     FOUND      is true if a record was found to satisfy the pointing */
-/*                request.  This occurs when the time for which pointing */
-/*                is requested falls inside one of the interpolation */
-/*                intervals, or when the request time is within the */
-/*                tolerance of an interval endpoint. */
+/*     FOUND    is .TRUE. if a record was found to satisfy the pointing */
+/*              request. This occurs when the time for which pointing */
+/*              is requested falls inside one of the interpolation */
+/*              intervals, or when the request time is within the */
+/*              tolerance of an interval endpoint. */
 
 /* $ Parameters */
 
@@ -204,18 +204,19 @@ static integer c__6 = 6;
 /* $ Exceptions */
 
 /*     1)  If the specified handle does not belong to an open DAF file, */
-/*         an error is diagnosed by a routine that this routine calls. */
+/*         an error is signaled by a routine in the call tree of this */
+/*         routine. */
 
 /*     2)  If DESCR is not a valid descriptor of a segment in the CK */
 /*         file specified by HANDLE, the results of this routine are */
 /*         unpredictable. */
 
 /*     3)  If the segment is not of data type 3, as specified in the */
-/*         third integer component of the segment descriptor, then */
-/*         the error SPICE(WRONGDATATYPE) is signalled. */
+/*         third integer component of the segment descriptor, */
+/*         the error SPICE(WRONGDATATYPE) is signaled. */
 
 /*     4)  If angular velocity data was requested but the segment */
-/*         contains no such data, the error SPICE(NOAVDATA) is signalled. */
+/*         contains no such data, the error SPICE(NOAVDATA) is signaled. */
 
 /* $ Files */
 
@@ -237,7 +238,7 @@ static integer c__6 = 6;
 /*     However, when the request time is not within any of the */
 /*     interpolation intervals, then FOUND will be true only if the */
 /*     interval endpoint closest to the request time is within the */
-/*     tolerance specified by the user.  In this case both parts of */
+/*     tolerance specified by the user. In this case both parts of */
 /*     RECORD will contain this closest pointing instance, and CKE03 */
 /*     will evaluate RECORD to give pointing at the time associated */
 /*     with the returned pointing instance. */
@@ -248,11 +249,15 @@ static integer c__6 = 6;
 /*     routines, which evaluate the record returned by CKRnn to give */
 /*     the pointing information and output time. */
 
-/*     The following code fragment searches through all of the segments */
-/*     in a file applicable to the Mars Observer spacecraft bus that */
-/*     are of data type 3, for a particular spacecraft clock time. */
+/*     The following code fragment searches backwards through all of the */
+/*     segments in a file applicable to the Mars Observer spacecraft bus */
+/*     that are of data type 3, for a particular spacecraft clock time. */
 /*     It then evaluates the pointing for that epoch and prints the */
 /*     result. */
+
+/*     The search performed here does not mimic the behavior of the CK */
+/*     reader APIs CKGP and CKGPAV, which consider data from multiple CK */
+/*     files, when available. See the CK Required reading for details. */
 
 /*           CHARACTER*(20)        SCLKCH */
 /*           CHARACTER*(20)        SCTIME */
@@ -304,11 +309,11 @@ static integer c__6 = 6;
 /*           CALL SCTIKS ( SC, '0000000002:000', TOL ) */
 
 /*     C */
-/*     C     Search from the beginning of the CK file through all */
+/*     C     Search backwards from the end of the CK file through all */
 /*     C     of the segments. */
 /*     C */
-/*           CALL DAFBFS ( HANDLE ) */
-/*           CALL DAFFNA ( SFND   ) */
+/*           CALL DAFBBS ( HANDLE ) */
+/*           CALL DAFFPA ( SFND   ) */
 
 /*           FND    = .FALSE. */
 
@@ -361,17 +366,17 @@ static integer c__6 = 6;
 
 /*              END IF */
 
-/*              CALL DAFFNA ( SFND ) */
+/*              CALL DAFFPA ( SFND ) */
 
 /*           END DO */
 
 /* $ Restrictions */
 
-/*     1) The file containing the segment should be opened for read */
-/*        or write access either by CKLPF, DAFOPR, or DAFOPW. */
+/*     1)  The file containing the segment should be opened for read */
+/*         or write access either by CKLPF, DAFOPR, or DAFOPW. */
 
-/*     2) The record returned by this routine is intended to be */
-/*        evaluated by CKE03. */
+/*     2)  The record returned by this routine is intended to be */
+/*         evaluated by CKE03. */
 
 /* $ Literature_References */
 
@@ -379,9 +384,20 @@ static integer c__6 = 6;
 
 /* $ Author_and_Institution */
 
-/*     J.M. Lynch     (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     J.M. Lynch         (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.2, 12-AUG-2021 (NJB) (JDR) */
+
+/*        Updated code example to use backwards search. Added */
+/*        note regarding difference between this search and those */
+/*        performed by the CK reader APIs CKGP and CKGPAV. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.1.1, 22-AUG-2006 (EDW) */
 
@@ -398,7 +414,7 @@ static integer c__6 = 6;
 /* -& */
 /* $ Index_Entries */
 
-/*     read ck type_3 pointing data record */
+/*     read CK type_3 pointing data record */
 
 /* -& */
 
@@ -449,7 +465,7 @@ static integer c__6 = 6;
     }
 
 /*     Start off with FOUND equal to false just in case a SPICELIB error */
-/*     is signalled and the return mode is not set to ABORT. */
+/*     is signaled and the return mode is not set to ABORT. */
 
     *found = FALSE_;
 
@@ -731,11 +747,11 @@ static integer c__6 = 6;
 /*           SCLKDP - BUFFER(N) will be zero in this case. ) */
 
 	if (*sclkdp - buffer[(i__1 = n - 1) < 100 && 0 <= i__1 ? i__1 : 
-		s_rnge("buffer", i__1, "ckr03_", (ftnlen)826)] <= *tol) {
+		s_rnge("buffer", i__1, "ckr03_", (ftnlen)841)] <= *tol) {
 	    record[0] = buffer[(i__1 = n - 1) < 100 && 0 <= i__1 ? i__1 : 
-		    s_rnge("buffer", i__1, "ckr03_", (ftnlen)828)];
+		    s_rnge("buffer", i__1, "ckr03_", (ftnlen)843)];
 	    record[8] = buffer[(i__1 = n - 1) < 100 && 0 <= i__1 ? i__1 : 
-		    s_rnge("buffer", i__1, "ckr03_", (ftnlen)829)];
+		    s_rnge("buffer", i__1, "ckr03_", (ftnlen)844)];
 
 /*           Calculate the address of the quaternion and angular */
 /*           velocity data.  Then read it from the file. */
@@ -755,9 +771,9 @@ static integer c__6 = 6;
 /*        The bracketing times are contained in this group. */
 
 	lsclk = buffer[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-		"buffer", i__1, "ckr03_", (ftnlen)855)];
+		"buffer", i__1, "ckr03_", (ftnlen)870)];
 	rsclk = buffer[(i__1 = i__) < 100 && 0 <= i__1 ? i__1 : s_rnge("buff"
-		"er", i__1, "ckr03_", (ftnlen)856)];
+		"er", i__1, "ckr03_", (ftnlen)871)];
 	laddr = beg + (skip + i__ - 1) * psiz;
 	raddr = laddr + psiz;
     }
@@ -910,7 +926,7 @@ static integer c__6 = 6;
 /*              This is the last interval in the segment. */
 
 		start = buffer[(i__1 = n - 1) < 100 && 0 <= i__1 ? i__1 : 
-			s_rnge("buffer", i__1, "ckr03_", (ftnlen)1040)];
+			s_rnge("buffer", i__1, "ckr03_", (ftnlen)1055)];
 		nstart = dpmax_();
 	    } else {
 
@@ -918,7 +934,7 @@ static integer c__6 = 6;
 /*              request time. */
 
 		start = buffer[(i__1 = n - 1) < 100 && 0 <= i__1 ? i__1 : 
-			s_rnge("buffer", i__1, "ckr03_", (ftnlen)1049)];
+			s_rnge("buffer", i__1, "ckr03_", (ftnlen)1064)];
 		addr__ = grpadd + n;
 		dafgda_(handle, &addr__, &addr__, &nstart);
 	    }
@@ -927,9 +943,9 @@ static integer c__6 = 6;
 /*           The bracketing START times are contained in this group. */
 
 	    start = buffer[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : 
-		    s_rnge("buffer", i__1, "ckr03_", (ftnlen)1061)];
+		    s_rnge("buffer", i__1, "ckr03_", (ftnlen)1076)];
 	    nstart = buffer[(i__1 = i__) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-		    "buffer", i__1, "ckr03_", (ftnlen)1062)];
+		    "buffer", i__1, "ckr03_", (ftnlen)1077)];
 	}
 
 /*        Save the information about the interval and segment. */

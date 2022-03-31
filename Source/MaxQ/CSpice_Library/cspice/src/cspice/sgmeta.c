@@ -11,7 +11,7 @@ static integer c__1 = 1;
 static integer c__2 = 2;
 static integer c__15 = 15;
 
-/* $Procedure      SGMETA ( Generic segments: Fetch meta data value ) */
+/* $Procedure SGMETA ( Generic segments: Fetch meta data value ) */
 /* Subroutine */ int sgmeta_(integer *handle, doublereal *descr, integer *
 	mnemon, integer *value)
 {
@@ -84,58 +84,58 @@ static integer c__15 = 15;
 
 /* $ Required_Reading */
 
-/*      DAF Required Reading */
+/*     DAF */
 
 /* $ Keywords */
 
-/*       GENERIC SEGMENTS */
+/*     GENERIC SEGMENTS */
 
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*      VARIABLE  I/O  DESCRIPTION */
-/*      --------  ---  -------------------------------------------------- */
-/*      HANDLE     I   Handle of a DAF open for reading. */
-/*      DESCR      I   Descriptor for a generic segment in the DAF. */
-/*      MNEMON     I   An integer mnemonic for the desired meta data. */
-/*      VALUE      O   The value of the meta data item requested. */
+/*     VARIABLE  I/O  DESCRIPTION */
+/*     --------  ---  -------------------------------------------------- */
+/*     HANDLE     I   Handle of a DAF open for reading. */
+/*     DESCR      I   Descriptor for a generic segment in the DAF. */
+/*     MNEMON     I   An integer mnemonic for the desired meta data. */
+/*     VALUE      O   The value of the meta data item requested. */
 
 /* $ Detailed_Input */
 
-/*     HANDLE     is the handle of a DAF opened for reading that */
-/*                contains the generic segment described by DESCR. */
+/*     HANDLE   is the handle of a DAF opened for reading that */
+/*              contains the generic segment described by DESCR. */
 
-/*     DESCR      is the descriptor of a generic segment. This must */
-/*                be the descriptor for a generic segment in the DAF */
-/*                associated with HANDLE. */
+/*     DESCR    is the descriptor of a generic segment. This must */
+/*              be the descriptor for a generic segment in the DAF */
+/*              associated with HANDLE. */
 
-/*     MNEMON     is the mnemonic used to represent the desired piece of */
-/*                meta data. See the file 'sgparam.inc' for details, the */
-/*                mnemonics, and their values. */
+/*     MNEMON   is the mnemonic used to represent the desired piece of */
+/*              meta data. See the file 'sgparam.inc' for details, the */
+/*              mnemonics, and their values. */
 
 /* $ Detailed_Output */
 
-/*     VALUE      is the value of the meta data item associated with */
-/*                the mnemonic MNEMON that is in the generic segment */
-/*                specified by HANDLE and DESCR. */
+/*     VALUE    is the value of the meta data item associated with */
+/*              the mnemonic MNEMON that is in the generic segment */
+/*              specified by HANDLE and DESCR. */
 
 /* $ Parameters */
 
 /*     This subroutine makes use of parameters defined in the file */
 /*     'sgparam.inc'. */
 
-/* $ Files */
-
-/*      See the description of HANDLE above. */
-
 /* $ Exceptions */
 
-/*     1) If the mnemonic for the meta data item is not valid, the error */
-/*        SPICE(UNKNOWNMETAITEM) will be signalled. */
+/*     1)  If the mnemonic for the meta data item is not valid, the error */
+/*         SPICE(UNKNOWNMETAITEM) is signaled. */
 
-/*     2) If the last address in the DAF segment that reports the number */
-/*        of meta data items that exist in the segment is less than */
-/*        MNMETA, the error SPICE(INVALIDMETADATA) will be signaled. */
+/*     2)  If the last address in the DAF segment that reports the number */
+/*         of meta data items that exist in the segment is less than */
+/*         MNMETA, the error SPICE(INVALIDMETADATA) is signaled. */
+
+/* $ Files */
+
+/*     See the description of HANDLE above. */
 
 /* $ Particulars */
 
@@ -226,20 +226,26 @@ static integer c__15 = 15;
 
 /* $ Restrictions */
 
-/*     The segment described by DESCR MUST be a generic segment, */
-/*     otherwise the results of this routine are not predictable. */
-
-/* $ Author_and_Institution */
-
-/*      K.R. Gehringer  (JPL) */
-/*      W.L. Taber      (JPL) */
-/*      F.S. Turner     (JPL) */
+/*     1)  The segment described by DESCR MUST be a generic segment, */
+/*         otherwise the results of this routine are not predictable. */
 
 /* $ Literature_References */
 
-/*      None. */
+/*     None. */
+
+/* $ Author_and_Institution */
+
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     F.S. Turner        (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.4.1, 20-AUG-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.4.0, 07-SEP-2001 (EDW) */
 
@@ -257,7 +263,7 @@ static integer c__15 = 15;
 /*        DAF to handle the case when the number of meta data items in */
 /*        the file exceeds the current maximum defined in sgparam.inc. */
 /*        In the event that this situation occurs, the routine loads */
-/*        what meta data it can interpret and ignores the rest.  In */
+/*        what meta data it can interpret and ignores the rest. In */
 /*        this event if NMETA is requested, it is returned as MXMETA in */
 /*        sgparam.inc. */
 
@@ -269,10 +275,10 @@ static integer c__15 = 15;
 /*        The conditions that cause the SPICE(UNKNOWNMETAITEM) to be */
 /*        signaled have been altered. Now if the integer mnemonic */
 /*        is not between 1 and METASZ inclusive, or NMETA the error */
-/*        is signaled.  In the versions preceding this change, for */
+/*        is signaled. In the versions preceding this change, for */
 /*        segments that reported less than NMETA items of meta data */
 /*        could not use this routine to request the number of meta */
-/*        data items without signalling SPICE(UNKNOWNMETAITEM). */
+/*        data items without signaling SPICE(UNKNOWNMETAITEM). */
 
 /* -    SPICELIB Version 1.1.0, 11-APR-1995 (KRG) */
 
@@ -741,7 +747,7 @@ static integer c__15 = 15;
 /*           Set the value for the desired meta data item and return. */
 
 	    *value = meta[(i__1 = *mnemon - 1) < 17 && 0 <= i__1 ? i__1 : 
-		    s_rnge("meta", i__1, "sgmeta_", (ftnlen)364)];
+		    s_rnge("meta", i__1, "sgmeta_", (ftnlen)371)];
 	    return 0;
 	}
     }
@@ -853,9 +859,9 @@ static integer c__15 = 15;
     i__1 = metasz;
     for (i__ = 1; i__ <= i__1; ++i__) {
 	meta[(i__2 = i__ - 1) < 17 && 0 <= i__2 ? i__2 : s_rnge("meta", i__2, 
-		"sgmeta_", (ftnlen)503)] = i_dnnt(&xmeta[(i__3 = i__ - 1) < 
+		"sgmeta_", (ftnlen)510)] = i_dnnt(&xmeta[(i__3 = i__ - 1) < 
 		17 && 0 <= i__3 ? i__3 : s_rnge("xmeta", i__3, "sgmeta_", (
-		ftnlen)503)]);
+		ftnlen)510)]);
     }
 
 /*     The kludge continues... NMETA and MXMETA are ALWAYS the same */
@@ -866,7 +872,7 @@ static integer c__15 = 15;
     meta[16] = metasz;
     for (i__ = metasz; i__ <= 16; ++i__) {
 	meta[(i__1 = i__ - 1) < 17 && 0 <= i__1 ? i__1 : s_rnge("meta", i__1, 
-		"sgmeta_", (ftnlen)515)] = 0;
+		"sgmeta_", (ftnlen)522)] = 0;
     }
 
 /*     Adjust the bases so that the N'th item of a partition is at */
@@ -899,7 +905,7 @@ static integer c__15 = 15;
 /*     need to, and return. */
 
     *value = meta[(i__1 = *mnemon - 1) < 17 && 0 <= i__1 ? i__1 : s_rnge(
-	    "meta", i__1, "sgmeta_", (ftnlen)555)];
+	    "meta", i__1, "sgmeta_", (ftnlen)562)];
     chkout_("SGMETA", (ftnlen)6);
     return 0;
 } /* sgmeta_ */

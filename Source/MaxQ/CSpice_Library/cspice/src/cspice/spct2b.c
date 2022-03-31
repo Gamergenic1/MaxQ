@@ -82,33 +82,33 @@ static integer c__1 = 1;
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     UNIT       I   Logical unit connected to the text format file. */
 /*     BINARY     I   Name of a binary SPK or CK file to be created. */
 
 /* $ Detailed_Input */
 
-/*     UNIT        is the logical unit connected to an existing text */
-/*                 format SPK or CK file that may contain comments in */
-/*                 the appropriate SPC format, as written by SPCB2A or */
-/*                 SPCB2T.  This file must be opened for read access */
-/*                 using the routine TXTOPR. */
+/*     UNIT     is the logical unit connected to an existing text */
+/*              format SPK or CK file that may contain comments in */
+/*              the appropriate SPC format, as written by SPCB2A or */
+/*              SPCB2T. This file must be opened for read access */
+/*              using the routine TXTOPR. */
 
-/*                 This file may contain text that precedes and */
-/*                 follows the SPK or CK data and comments, however, */
-/*                 when calling this routine, the file pointer must be */
-/*                 in a position in the file such that the next line */
-/*                 returned by a READ statement is */
+/*              This file may contain text that precedes and */
+/*              follows the SPK or CK data and comments, however, */
+/*              when calling this routine, the file pointer must be */
+/*              in a position in the file such that the next line */
+/*              returned by a READ statement is */
 
-/*                      ''NAIF/DAF'' */
+/*                   ''NAIF/DAF'' */
 
-/*                 which marks the beginning of the data. */
+/*              which marks the beginning of the data. */
 
-/*     BINARY      is the name of a binary SPK or CK file to be created. */
-/*                 The binary file contains the same data and comments */
-/*                 as the text file, but in the binary format required */
-/*                 for use with the SPICELIB reader subroutines. */
+/*     BINARY   is the name of a binary SPK or CK file to be created. */
+/*              The binary file contains the same data and comments */
+/*              as the text file, but in the binary format required */
+/*              for use with the SPICELIB reader subroutines. */
 
 /* $ Detailed_Output */
 
@@ -118,27 +118,27 @@ static integer c__1 = 1;
 
 /*     None. */
 
-/* $ Files */
-
-/*     1)  See arguments UNIT and BINARY above. */
-
-/*     2)  This routine uses a Fortran scratch file to temporarily */
-/*         store the lines of comments if there are any. */
-
 /* $ Exceptions */
 
-/*     1) If there is a problem opening or writing to the binary */
-/*        file, a routine that SPCT2B calls diagnoses and signals */
-/*        an error. */
+/*     1)  If there is a problem opening or writing to the binary file, */
+/*         an error is signaled by a routine in the call tree of this */
+/*         routine. */
 
-/*     2) If there is a problem reading from the text file, the */
-/*        error SPICE(FILEREADFAILED) is signalled. */
+/*     2)  If there is a problem reading from the text file, the */
+/*         error SPICE(FILEREADFAILED) is signaled. */
 
-/*     3) If there is a problem opening a scratch file, the error */
-/*        SPICE(FILEOPENERROR) is signalled. */
+/*     3)  If there is a problem opening a scratch file, the error */
+/*         SPICE(FILEOPENERROR) is signaled. */
 
-/*     4) If there is a problem writing to the scratch file, the */
-/*        error SPICE(FILEWRITEFAILED) is signalled. */
+/*     4)  If there is a problem writing to the scratch file, the */
+/*         error SPICE(FILEWRITEFAILED) is signaled. */
+
+/* $ Files */
+
+/*     See arguments UNIT and BINARY above. */
+
+/*     This routine uses a Fortran scratch file to temporarily store the */
+/*     lines of comments if there are any. */
 
 /* $ Particulars */
 
@@ -147,24 +147,24 @@ static integer c__1 = 1;
 /*     binary representations of numbers, you must convert SPK and CK */
 /*     files to text format when porting from one system to another. */
 /*     After converting the file to text, you can transfer it using */
-/*     a transfer protocol program like Kermit or FTP.  Then, convert */
+/*     a transfer protocol program like Kermit or FTP. Then, convert */
 /*     the text file back to binary format. */
 
 /*     The following is a list of the SPICELIB routines that convert */
 /*     SPK and CK files between binary and text format: */
 
-/*        SPCA2B    converts text to binary.  It opens the text file, */
+/*        SPCA2B    converts text to binary. It opens the text file, */
 /*                  creates a new binary file, and closes both files. */
 
-/*        SPCB2A    converts binary to text.  It opens the binary file, */
+/*        SPCB2A    converts binary to text. It opens the binary file, */
 /*                  creates a new text file, and closes both files. */
 
-/*        SPCT2B    converts text to binary.  It creates a new binary */
-/*                  file and closes it.  The text file is open on */
+/*        SPCT2B    converts text to binary. It creates a new binary */
+/*                  file and closes it. The text file is open on */
 /*                  entrance and exit. */
 
-/*        SPCB2T    converts binary to text.  It opens the binary */
-/*                  file and closes it.  The text file is open on */
+/*        SPCB2T    converts binary to text. It opens the binary */
+/*                  file and closes it. The text file is open on */
 /*                  entrance and exit */
 
 /*     See the SPC required reading for more information */
@@ -177,7 +177,7 @@ static integer c__1 = 1;
 /*         by a standard label. */
 
 /*         The SPICELIB routine TXTOPN opens a new text file and TXTOPR */
-/*         opens an existing text file for read access.  TEXT and */
+/*         opens an existing text file for read access. TEXT and */
 /*         BINARY are character strings that contain the names of the */
 /*         text and binary files. */
 
@@ -207,7 +207,7 @@ static integer c__1 = 1;
 
 
 /*     2)  Suppose three text format SPK files have been appended */
-/*         together into one text file called THREE.TSP.  The following */
+/*         together into one text file called THREE.TSP. The following */
 /*         code fragment converts each set of data and comments into */
 /*         its own binary file. */
 
@@ -229,17 +229,17 @@ static integer c__1 = 1;
 /*         properly. */
 
 /*     2)  Older versions of SPK and CK files did not have a comment */
-/*         area.  These files, in text format, may still be converted */
-/*         to binary using SPCT2B.  However, upon exit, the file pointer */
+/*         area. These files, in text format, may still be converted */
+/*         to binary using SPCT2B. However, upon exit, the file pointer */
 /*         will not be in position ready to read the first line of text */
-/*         after the data.  Instead, the next READ statement after */
+/*         after the data. Instead, the next READ statement after */
 /*         calling SPCT2B will return the second line of text after */
-/*         the data.  Therefore, example 1 may not work as desired */
+/*         the data. Therefore, example 1 may not work as desired */
 /*         if the trailing label begins on the first line after the */
-/*         data.  To solve this problem, use DAFT2B instead of SPCT2B. */
+/*         data. To solve this problem, use DAFT2B instead of SPCT2B. */
 
-/*     3)  UNIT must be obtained via TXTOPR.  Use TXTOPR to open text */
-/*         files for read access and get the logical unit.  System */
+/*     3)  UNIT must be obtained via TXTOPR. Use TXTOPR to open text */
+/*         files for read access and get the logical unit. System */
 /*         dependencies regarding opening text files have been isolated */
 /*         in the routines TXTOPN and TXTOPR. */
 
@@ -249,9 +249,17 @@ static integer c__1 = 1;
 
 /* $ Author_and_Institution */
 
-/*     J.E. McLean    (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     J.E. McLean        (JPL) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 13-AUG-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
 
@@ -263,7 +271,7 @@ static integer c__1 = 1;
 /* -& */
 /* $ Index_Entries */
 
-/*     text spk or ck to binary */
+/*     text SPK or CK to binary */
 
 /* -& */
 
@@ -298,7 +306,7 @@ static integer c__1 = 1;
 /*     we can't backspace because the file was written using list- */
 /*     directed formatting (See the ANSI standard).  All we can do */
 /*     is check out, leaving the file pointer where it is, but */
-/*     that's better than signalling an error. */
+/*     that's better than signaling an error. */
 
     ci__1.cierr = 1;
     ci__1.ciend = 1;

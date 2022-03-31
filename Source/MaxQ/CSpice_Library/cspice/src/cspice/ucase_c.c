@@ -1,11 +1,11 @@
 /*
 
--Procedure      ucase_c ( Convert to uppercase )
+-Procedure ucase_c ( Convert to uppercase )
 
 -Abstract
- 
-    Convert the characters in a string to uppercase. 
- 
+
+   Convert the characters in a string to uppercase.
+
 -Disclaimer
 
    THIS SOFTWARE AND ANY RELATED MATERIALS WERE CREATED BY THE
@@ -32,13 +32,14 @@
    ACTIONS OF RECIPIENT IN THE USE OF THE SOFTWARE.
 
 -Required_Reading
- 
-   None. 
- 
+
+   None.
+
 -Keywords
- 
-    ASCII,  CHARACTER 
- 
+
+   ASCII
+   CHARACTER
+
 */
 
    #include <string.h>
@@ -47,113 +48,119 @@
 
 
    void ucase_c ( SpiceChar   * in,
-                  SpiceInt      lenout, 
-                  SpiceChar   * out    ) 
+                  SpiceInt      outlen,
+                  SpiceChar   * out    )
 
 /*
 
 -Brief_I/O
- 
-    VARIABLE  I/O  DESCRIPTION 
-    --------  ---  -------------------------------------------------- 
-    in         I   Input string. 
-    lenout     I   Maximum length of output string.
-    out        O   Output string, all uppercase. 
- 
--Detailed_Input
- 
-    in          is the input string. 
-    
-    lenout      is the maximum allowed length of the output string, 
-                including the terminating null.
- 
--Detailed_Output
- 
-    out         is the output string. This is the input string 
-                with all lowercase letters converted to uppercase. 
-                Non-letters are not affected. 
-                
-                If 
-                  
-                   lenout < strlen(in)+1
-                   
-                the output string will be truncated on the right.
 
-                A terminating null will be placed in out at position
-                
-                   min ( strlen(in),  lenout-1 )
-                   
-                unless lenout is less than or equal to zero.
-                
- 
-                out may overwrite in. 
- 
+   VARIABLE  I/O  DESCRIPTION
+   --------  ---  --------------------------------------------------
+   in         I   Input string.
+   outlen     I   Maximum length of output string.
+   out        O   Output string, all uppercase.
+
+-Detailed_Input
+
+   in          is the input string.
+
+   outlen      is the maximum allowed length of the output string,
+               including the terminating null.
+
+-Detailed_Output
+
+   out         is the output string. This is the input string
+               with all lowercase letters converted to uppercase.
+               Non-letters are not affected.
+
+               If
+
+                  outlen < strlen(in)+1
+
+               the output string will be truncated on the right.
+
+               A terminating null will be placed in out at position
+
+                  min ( strlen(in),  outlen-1 )
+
+               unless `outlen' is less than or equal to zero.
+
+               `out' may overwrite `in'.
+
 -Parameters
- 
-   None. 
- 
--Particulars
- 
-    Convert each lowercase character in IN to uppercase. 
- 
--Examples
- 
-    "This is an example"   becomes   "THIS IS AN EXAMPLE" 
-    "12345 +-=? > * $ &"             "12345 +-=? > * $ &" 
- 
--Restrictions
- 
-    None. 
- 
+
+   None.
+
 -Exceptions
- 
- 
-    1) If the input string pointer is null, the error 
-       SPICE(NULLPOINTER) will be signaled.
-       
-    2) If the output string pointer is null, the error 
-       SPICE(NULLPOINTER) will be signaled.
-       
-    3) If lenout is less than or equal to zero, the error 
-       SPICE(STRINGTOOSHORT) will be signaled.      
- 
-    4) If the output string is shorter than the input string, the
-       result will be truncated on the right.
-       
+
+   1)  If the output string length is less than the input string
+       length, the result will be truncated on the right.
+
+   2)  If the `in' input string pointer is null, the error
+       SPICE(NULLPOINTER) is signaled.
+
+   3)  If the `out' output string pointer is null, the error
+       SPICE(NULLPOINTER) is signaled.
+
+   4)  If the `out' output string has length less than two
+       characters, the error SPICE(STRINGTOOSHORT) is signaled, since
+       the output string is too short to contain one character of
+       output data plus a null terminator.
+
 -Files
- 
-    None. 
- 
--Author_and_Institution
- 
-    N.J. Bachman    (JPL)
-    K.R. Gehringer  (JPL) 
-    I.M. Underwood  (JPL) 
- 
+
+   None.
+
+-Particulars
+
+   Convert each lowercase character in `in' to uppercase.
+
+-Examples
+
+   "This is an example"   becomes   "THIS IS AN EXAMPLE"
+   "12345 +-=? > * $ &"             "12345 +-=? > * $ &"
+
+-Restrictions
+
+   None.
+
 -Literature_References
- 
-    None. 
- 
+
+   None.
+
+-Author_and_Institution
+
+   N.J. Bachman        (JPL)
+   J. Diaz del Rio     (ODC Space)
+   K.R. Gehringer      (JPL)
+
 -Version
- 
+
+   -CSPICE Version 1.2.0, 05-AUG-2021 (JDR)
+
+       Changed the input argument "lenout" to "outlen" for consistency with
+       other routines.
+
+       Edited the header to comply with NAIF standard.
+
    -CSPICE Version 1.1.0, 26-JAN-2005 (NJB)
 
        Cast to SpiceInt was applied to strlen output to suppress
        compiler warnings about comparison of signed and unsigned types.
 
    -CSPICE Version 2.0.0, 26-AUG-1999 (NJB)
-   
+
       Added string error checks.
 
-   -CSPICE Version 1.0.0, 08-FEB-1998 (NJB)
+   -CSPICE Version 1.0.0, 08-FEB-1998 (NJB) (KRG)
 
       Based on SPICELIB Version 1.1.0, 13-MAR-1996 (KRG)
-      
-      
+
 -Index_Entries
- 
-   convert to uppercase 
- 
+
+   convert to uppercase
+
 -&
 */
 
@@ -176,36 +183,33 @@
    SpiceInt                nmove;
 
 
-
-   
    /*
    Check the input string pointer to make sure it's non-null.
    */
    CHKPTR( CHK_DISCOVER, "ucase_c", in );
-   
+
 
    /*
    Make sure the output string has at least enough room for one output
    character and a null terminator.  Also check for a null pointer.
    */
-   CHKOSTR ( CHK_DISCOVER, "ucase_c", out, lenout );
-   
-   
+   CHKOSTR ( CHK_DISCOVER, "ucase_c", out, outlen );
+
+
    /*
-   Move the string from in to out. Step through in one character
+   Move the string from `in' to `out'. Step through in one character
    at a time, translating letters between 'a' and 'z' to uppercase.
-   
+
    First, determine how many characters to move.
    */
-   
-   nmove = MinVal ( (SpiceInt)strlen(in), lenout-1 );
-   
-   
+   nmove = MinVal ( (SpiceInt)strlen(in), outlen-1 );
+
+
    for ( i = 0;  i < nmove;  i++ )
    {
       ich = (SpiceInt) in[i];
 
-      if ( ( ich >= LOWA ) && ( ich <= LOWZ ) ) 
+      if ( ( ich >= LOWA ) && ( ich <= LOWZ ) )
       {
          out[i] = (char) ( ich + SHIFT );
       }
@@ -214,10 +218,10 @@
          out[i] = in[i];
       }
    }
- 
- 
+
+
    /*
-   Terminate the output string with a null. We know it has room for at 
+   Terminate the output string with a null. We know it has room for at
    least one character.
    */
    out[nmove] = NULLCHAR;

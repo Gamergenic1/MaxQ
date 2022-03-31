@@ -74,8 +74,8 @@ static integer c__5 = 5;
 
 /* $ Abstract */
 
-/*     Deprecated. The routine DAFTB supersedes this routine. */
-/*     NAIF supports this routine only to provide backward */
+/*     Deprecated: This routine has been superseded by the SPICELIB */
+/*     routine DAFTB. NAIF supports this routine only to provide backward */
 /*     compatibility. */
 
 /*     Reconstruct a binary DAF from a text file opened by */
@@ -117,7 +117,7 @@ static integer c__5 = 5;
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     TEXT       I   Logical unit connected to text file. */
 /*     BINARY     I   Name of a binary DAF to be created. */
@@ -126,19 +126,19 @@ static integer c__5 = 5;
 
 /* $ Detailed_Input */
 
-/*     TEXT        is a logical unit number, to which a text file has */
-/*                 been connected by the calling program, and into */
-/*                 which the contents of binary DAF have been */
-/*                 written. The file pointer should be placed just */
-/*                 before the file ID word. */
+/*     TEXT     is a logical unit number, to which a text file has */
+/*              been connected by the calling program, and into */
+/*              which the contents of binary DAF have been */
+/*              written. The file pointer should be placed just */
+/*              before the file ID word. */
 
-/*     BINARY      is the name of a binary DAF to be created. */
-/*                 The binary DAF contains the same data as the */
-/*                 text file, but in a form more suitable for use */
-/*                 by application programs. */
+/*     BINARY   is the name of a binary DAF to be created. */
+/*              The binary DAF contains the same data as the */
+/*              text file, but in a form more suitable for use */
+/*              by application programs. */
 
-/*     RESV        is the number of records to be reserved in the */
-/*                 binary DAF. */
+/*     RESV     is the number of records to be reserved in the */
+/*              binary DAF. */
 
 /* $ Detailed_Output */
 
@@ -146,26 +146,26 @@ static integer c__5 = 5;
 
 /* $ Parameters */
 
-/*     BSIZE       is the size of the buffer used to read array elements */
-/*                 from the text file. No single group of elements should */
-/*                 contains more than BSIZE elements. */
+/*     BSIZE    is the size of the buffer used to read array elements */
+/*              from the text file. No single group of elements should */
+/*              contains more than BSIZE elements. */
 
 /* $ Exceptions */
 
-/*     1) If for some reason the text file cannot be read, */
-/*        the error SPICE(DAFREADFAIL) is signalled. */
+/*     1)  If for some reason the text file cannot be read, */
+/*         the error SPICE(DAFREADFAIL) is signaled. */
 
-/*     2) If the architecture of the file is not DAF, as specified by */
-/*        the ID word, the error SPICE(NOTADAFFILE) will be signalled. */
+/*     2)  If the architecture of the file is not DAF, as specified by */
+/*         the ID word, the error SPICE(NOTADAFFILE) is signaled. */
 
-/*     3) If the text file does not contain matching internal file */
-/*        names, the error SPICE(DAFNOIFNMATCH) is signalled. */
+/*     3)  If the text file does not contain matching internal file */
+/*         names, the error SPICE(DAFNOIFNMATCH) is signaled. */
 
-/*     4) If the text file does not contain matching array names, */
-/*        the error SPICE(DAFNONAMEMATCH) is signalled. */
+/*     4)  If the text file does not contain matching array names, */
+/*         the error SPICE(DAFNONAMEMATCH) is signaled. */
 
-/*     5) If the buffer size is not sufficient, the error */
-/*        SPICE(DAFOVERFLOW) is signalled. */
+/*     5)  If the buffer size is not sufficient, the error */
+/*         SPICE(DAFOVERFLOW) is signaled. */
 
 /* $ Files */
 
@@ -250,28 +250,39 @@ static integer c__5 = 5;
 
 /* $ Restrictions */
 
-/*     DAFT2B cannot be executed while any other DAF is open */
-/*     for writing. */
+/*     1)  DAFT2B cannot be executed while any other DAF is open */
+/*         for writing. */
 
 /* $ Literature_References */
 
-/*     NAIF Document 167.0, "Double Precision Array Files (DAF) */
-/*     Specification and User's Guide" */
+/*     None. */
 
 /* $ Author_and_Institution */
 
-/*     K. R. Gehringer (JPL) */
-/*     J.E. McLean     (JPL) */
-/*     I.M. Underwood  (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
+/*     J.E. McLean        (JPL) */
+/*     H.A. Neilan        (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
 
+/* -    SPICELIB Version 3.1.0, 26-OCT-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. Moved DAF */
+/*        required reading from $Literature_References to */
+/*        $Required_Reading section. */
+
 /* -    SPICELIB Version 3.0.1, 26-JUL-2012 (EDW) */
 
-/*        Edited Abstract section to use "Deprecated" keyword */
+/*        Edited $Abstract section to use "Deprecated" keyword */
 /*        and state replacement routine. */
 
-/*        Eliminated unneeded Revisions section. */
+/*        Eliminated unneeded $Revisions section. */
 
 /* -    SPICELIB Version 3.0.0, 04-OCT-1993 (KRG) */
 
@@ -294,7 +305,7 @@ static integer c__5 = 5;
 /*               CALL SETMSG ( 'The attempt to read from file ''#''' // */
 /*         .                   ' failed. IOSTAT = #.'                 ) */
 /*               CALL ERRFNM ( '#', UNIT                              ) */
-/*               CALL SIGERR ( 'SPICE(DAFREADFAIL)'                   ) */
+/*               CALL SIGERR ( SPICE(DAFREADFAIL)                   ) */
 /*               CALL CHKOUT ( 'DAFT2B'                               ) */
 /*               RETURN */
 
@@ -310,7 +321,7 @@ static integer c__5 = 5;
 /*                  IF ( IOSTAT .NE. 0 ) THEN */
 /*                     CALL SETMSG ( 'Value of IOSTAT was: #. ' ) */
 /*                     CALL ERRINT ( '#', IOSTAT                ) */
-/*                     CALL SIGERR ( 'SPICE(DAFREADFAIL)'       ) */
+/*                     CALL SIGERR ( SPICE(DAFREADFAIL)       ) */
 /*                   END IF */
 
 /*        The answer to the question is: */
@@ -318,14 +329,14 @@ static integer c__5 = 5;
 /*            You have to do a billion separate checks because the IOSTAT */
 /*            value is only valid for the most recently executed read. */
 
-/*        Added a statment to the $ Particulars section to the effect */
+/*        Added a statement to the $Particulars section to the effect */
 /*        that this routine has been made obsolete by the introduction of */
 /*        the routine DAFTB, and that we strongly recommend the use of */
 /*        the new routine. This routine must, however, be used when */
 /*        converting older text files to binary, as the old and new */
 /*        formats are not compatible. */
 
-/*        Modified the $ Abstract section to reflect the fact that this */
+/*        Modified the $Abstract section to reflect the fact that this */
 /*        routine is obsolete and maintained for purposes of backward */
 /*        compatibility only. */
 
@@ -334,23 +345,23 @@ static integer c__5 = 5;
 /*        Comment section for permuted index source lines was added */
 /*        following the header. */
 
-/* -    SPICELIB Version 2.0.1,  6-AUG-1990 (HAN) */
+/* -    SPICELIB Version 2.0.1, 06-AUG-1990 (HAN) */
 
 /*        Header documentation was corrected. This routine will */
 /*        convert a file containing either ID word, 'NAIF/DAF' or */
 /*        'NAIF/NIP'. (Previous versions of SPICELIB software used */
 /*        the ID word 'NAIF/NIP'.) */
 
-/* -    SPICELIB Version 2.0.0,  2-AUG-1990 (JEM) */
+/* -    SPICELIB Version 2.0.0, 02-AUG-1990 (JEM) */
 
 /*        The previous version of this routine always failed and */
-/*        signalled the error SPICE(DAFNOIDWORD) because of a faulty */
+/*        signaled the error SPICE(DAFNOIDWORD) because of a faulty */
 /*        logical expression in an error-checking IF statement. */
-/*        The error SPICE(DAFNOIDWORD) should be signalled if the */
+/*        The error SPICE(DAFNOIDWORD) should be signaled if the */
 /*        next non-blank line in the text file does not begin with the */
 /*        word 'NAIF/DAF' AND does not begin with the word 'NAIF/NIP'. */
 /*        Previously the logic was incorrect causing the error to be */
-/*        signalled every time no matter what the word was. The */
+/*        signaled every time no matter what the word was. The */
 /*        correction consisted of replacing '.OR.' with '.AND.' */
 /*        in the logical expression. */
 
@@ -363,7 +374,7 @@ static integer c__5 = 5;
 /* -& */
 /* $ Index_Entries */
 
-/*     text daf to binary */
+/*     DEPRECATED text DAF to binary */
 
 /* -& */
 
@@ -413,7 +424,7 @@ L100001:
 
 /*     Split the ID word into an architecture and type, and verify that */
 /*     the architecture is 'DAF'. If it is not, this is the wrong */
-/*     routine, and an error will be signalled. */
+/*     routine, and an error will be signaled. */
 
     idw2at_(idword, tarch, ttype, (ftnlen)8, (ftnlen)8, (ftnlen)8);
     if (s_cmp(tarch, "DAF", (ftnlen)8, (ftnlen)3) != 0) {
@@ -525,7 +536,7 @@ L100004:
 	for (i__ = 1; i__ <= i__1; ++i__) {
 	    iostat = do_lio(&c__5, &c__1, (char *)&dc[(i__2 = i__ - 1) < 125 
 		    && 0 <= i__2 ? i__2 : s_rnge("dc", i__2, "daft2b_", (
-		    ftnlen)465)], (ftnlen)sizeof(doublereal));
+		    ftnlen)479)], (ftnlen)sizeof(doublereal));
 	    if (iostat != 0) {
 		goto L100005;
 	    }
@@ -551,7 +562,7 @@ L100005:
 	for (i__ = 1; i__ <= i__2; ++i__) {
 	    iostat = do_lio(&c__3, &c__1, (char *)&ic[(i__1 = i__ - 1) < 250 
 		    && 0 <= i__1 ? i__1 : s_rnge("ic", i__1, "daft2b_", (
-		    ftnlen)480)], (ftnlen)sizeof(integer));
+		    ftnlen)494)], (ftnlen)sizeof(integer));
 	    if (iostat != 0) {
 		goto L100006;
 	    }
@@ -614,7 +625,7 @@ L100007:
 		for (i__ = 1; i__ <= i__1; ++i__) {
 		    iostat = do_lio(&c__5, &c__1, (char *)&buffer[(i__2 = i__ 
 			    - 1) < 1024 && 0 <= i__2 ? i__2 : s_rnge("buffer",
-			     i__2, "daft2b_", (ftnlen)533)], (ftnlen)sizeof(
+			     i__2, "daft2b_", (ftnlen)547)], (ftnlen)sizeof(
 			    doublereal));
 		    if (iostat != 0) {
 			goto L100008;

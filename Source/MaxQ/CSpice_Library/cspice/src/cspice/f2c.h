@@ -109,6 +109,18 @@
    
 -Version
 
+   -CSPICE Version 4.3.0, 09-NOV-2021 (BVS)
+
+      Updated for:
+       
+         MAC-OSX-M1-64BIT-CLANG_C
+          
+      environment. Added the corresponding tag:
+       
+         CSPICE_MAC_OSX_M1_64BIT_CLANG
+
+      tag to the #ifdefs set.
+
    -CSPICE Version 4.2.0, 09-APR-2014 (EDW) (BVS)
 
       Added include for SpiceZrnm.h to eliminate symbol conflict
@@ -200,6 +212,7 @@ Optionally include name-mangling macros for f2c external symbols.
       || defined(CSPICE_SUN_SOLARIS_64BIT_GCC      ) \
       || defined(CSPICE_SUN_SOLARIS_64BIT_NATIVE   ) \
       || defined(CSPICE_MAC_OSX_INTEL_64BIT_GCC    ) \
+      || defined(CSPICE_MAC_OSX_M1_64BIT_CLANG     ) \
       || defined(CSPICE_SUN_SOLARIS_INTEL_64BIT_CC ) \
       || defined(CSPICE_PC_CYGWIN_64BIT_GCC        ) \
       || defined(CSPICE_PC_LINUX_64BIT_GCC         )   )

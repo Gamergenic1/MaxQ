@@ -9,22 +9,23 @@
 
 static integer c__9 = 9;
 static integer c__1 = 1;
+static integer c__3 = 3;
 
-/* $Procedure      ROTGET ( Frame get rotation ) */
+/* $Procedure ROTGET ( Frame get rotation ) */
 /* Subroutine */ int rotget_(integer *infrm, doublereal *et, doublereal *
 	rotate, integer *outfrm, logical *found)
 {
-    /* Builtin functions */
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
+    /* Initialized data */
 
-    /* Local variables */
+    static char versn[6] = "5.0.0 ";
+
     doublereal tipm[9]	/* was [3][3] */;
     integer type__;
-    extern /* Subroutine */ int zzdynrot_(integer *, integer *, doublereal *, 
-	    doublereal *, integer *), chkin_(char *, ftnlen), errch_(char *, 
-	    char *, ftnlen, ftnlen);
-    char versn[6];
-    extern /* Subroutine */ int xpose_(doublereal *, doublereal *);
+    extern /* Subroutine */ int zzswfxfm_(integer *, doublereal *, integer *, 
+	    doublereal *, integer *, logical *), zzdynrot_(integer *, integer 
+	    *, doublereal *, doublereal *, integer *), chkin_(char *, ftnlen),
+	     errch_(char *, char *, ftnlen, ftnlen), xpose_(doublereal *, 
+	    doublereal *);
     extern logical failed_(void);
     extern /* Subroutine */ int cleard_(integer *, doublereal *);
     integer center;
@@ -81,8 +82,8 @@ static integer c__1 = 1;
 /* $ Abstract */
 
 /*     The parameters below form an enumerated list of the recognized */
-/*     frame types.  They are: INERTL, PCK, CK, TK, DYN.  The meanings */
-/*     are outlined below. */
+/*     frame types. They are: INERTL, PCK, CK, TK, DYN, SWTCH, and ALL. */
+/*     The meanings are outlined below. */
 
 /* $ Disclaimer */
 
@@ -132,6 +133,11 @@ static integer c__1 = 1;
 /*                 definition depends on parameters supplied via a */
 /*                 frame kernel. */
 
+/*     SWTCH       is a "switch" frame. These frames have orientation */
+/*                 defined by their alignment with base frames selected */
+/*                 from a prioritized list. The base frames optionally */
+/*                 have associated time intervals of applicability. */
+
 /*     ALL         indicates any of the above classes. This parameter */
 /*                 is used in APIs that fetch information about frames */
 /*                 of a specified class. */
@@ -140,6 +146,7 @@ static integer c__1 = 1;
 /* $ Author_and_Institution */
 
 /*     N.J. Bachman    (JPL) */
+/*     B.V. Semenov    (JPL) */
 /*     W.L. Taber      (JPL) */
 
 /* $ Literature_References */
@@ -147,6 +154,11 @@ static integer c__1 = 1;
 /*     None. */
 
 /* $ Version */
+
+/* -    SPICELIB Version 5.0.0, 08-OCT-2020 (NJB) (BVS) */
+
+/*       The parameter SWTCH was added to support the switch */
+/*       frame class. */
 
 /* -    SPICELIB Version 4.0.0, 08-MAY-2012 (NJB) */
 
@@ -175,36 +187,36 @@ static integer c__1 = 1;
 /*     ET         I   An epoch in seconds past J2000. */
 /*     ROTATE     O   A rotation matrix. */
 /*     OUTFRM     O   The frame that ROTATE transforms INFRM to. */
-/*     FOUND      O   TRUE if a rotation can be found. */
+/*     FOUND      O   .TRUE. if a rotation can be found. */
 
 /* $ Detailed_Input */
 
-/*     INFRM       is the SPICE ID-code for some reference frame. */
+/*     INFRM    is the SPICE ID-code for some reference frame. */
 
-/*     ET          is an epoch in ephemeris seconds past J2000 at which */
-/*                 the user wishes to retrieve a rotation matrix. */
+/*     ET       is an epoch in ephemeris seconds past J2000 at which */
+/*              the user wishes to retrieve a rotation matrix. */
 
 /* $ Detailed_Output */
 
-/*     ROTATE      is a 3x3 matrix that rotates positions relative to */
-/*                 INFRM to positions relative to OUTFRM. (Assuming such */
-/*                 a rotation can be found.) */
+/*     ROTATE   is a 3x3 matrix that rotates positions relative to */
+/*              INFRM to positions relative to OUTFRM. (Assuming such */
+/*              a rotation can be found.) */
 
-/*     OUTFRM      is the SPICE ID-code of a reference frame. The 3x3 */
-/*                 matrix ROTATE rotates positions relative to INFRM to */
-/*                 positions relative to OUTFRM. The positions */
-/*                 transformation is achieved by multiplying ROTATE on */
-/*                 the right by a position relative to INFRM. This is */
-/*                 easily accomplished via the subroutine call shown */
-/*                 below. */
+/*     OUTFRM   is the SPICE ID-code of a reference frame. The 3x3 */
+/*              matrix ROTATE rotates positions relative to INFRM to */
+/*              positions relative to OUTFRM. The positions */
+/*              transformation is achieved by multiplying ROTATE on */
+/*              the right by a position relative to INFRM. This is */
+/*              easily accomplished via the subroutine call shown */
+/*              below. */
 
-/*                    CALL MXV  ( ROTATE, INPOS,  OUTPOS ) */
+/*                 CALL MXV  ( ROTATE, INPOS,  OUTPOS ) */
 
-/*     FOUND       is a logical flag indicating whether or not a */
-/*                 rotation matrix could be found from INFRM to some */
-/*                 other frame. If a rotation matrix cannot be found */
-/*                 OUTFRM will be set to zero, FOUND will be set to */
-/*                 FALSE and ROTATE will be returned as the zero matrix. */
+/*     FOUND    is a logical flag indicating whether or not a */
+/*              rotation matrix could be found from INFRM to some */
+/*              other frame. If a rotation matrix cannot be found */
+/*              OUTFRM will be set to zero, FOUND will be set to */
+/*              .FALSE. and ROTATE will be returned as the zero matrix. */
 
 /* $ Parameters */
 
@@ -212,12 +224,12 @@ static integer c__1 = 1;
 
 /* $ Exceptions */
 
-/*     1) If a rotation matrix cannot be located, then FOUND will be set */
-/*        to FALSE, OUTFRM will be set to zero and ROTATE will be set to */
-/*        the zero 3x3 matrix. */
+/*     1)  If a rotation matrix cannot be located, then FOUND will be set */
+/*         to .FALSE., OUTFRM will be set to zero and ROTATE will be set */
+/*         to the zero 3x3 matrix. */
 
-/*     2) If the class of the requested frame is not recognized the */
-/*        exception 'SPICE(UNKNOWNFRAMETYPE)' will be signaled. */
+/*     2)  If the class of the requested frame is not recognized the */
+/*         exception, the error SPICE(UNKNOWNFRAMETYPE) is signaled. */
 
 /* $ Files */
 
@@ -243,11 +255,23 @@ static integer c__1 = 1;
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     B.V. Semenov    (JPL) */
-/*     W.L. Taber      (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 5.0.0, 15-MAR-2021 (NJB) (JDR) */
+
+/*        **Updated shadow routines ZZROTGT0 and ZZROTGT1, as must be */
+/*          done each time this routine is updated.** */
+
+/*        Support for switch frames was added. VERSN is now */
+/*        initialized via a DATA statement. Corrected long error */
+/*        message to use the term "class" rather than "class id-code." */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 4.0.0, 21-MAR-2014 (BVS) */
 
@@ -286,9 +310,14 @@ static integer c__1 = 1;
 /*     Local Variables */
 
 
-/*     Set version and output flag. */
+/*     Saved variables */
 
-    s_copy(versn, "4.0.0", (ftnlen)6, (ftnlen)5);
+
+/*     Initial values */
+
+
+/*     Set output flag. */
+
     *found = FALSE_;
 
 /*     Standard SPICE error handling. */
@@ -338,14 +367,16 @@ static integer c__1 = 1;
 /*        it here. If ZZDYNROT signaled an error, FOUND will be set */
 /*        to .FALSE. at end of this routine. */
 
+    } else if (type__ == 6) {
+	zzswfxfm_(infrm, et, &c__3, rotate, outfrm, found);
     } else {
 	cleard_(&c__9, rotate);
 	*outfrm = 0;
 	*found = FALSE_;
-	setmsg_("The reference frame # has class id-code #. This form of ref"
-		"erence frame is not supported in version # of ROTGET. You ne"
-		"ed to update your version of SPICELIB to the latest version "
-		"in order to support this frame. ", (ftnlen)211);
+	setmsg_("The reference frame # has class #. This form of reference f"
+		"rame is not supported in version # of ROTGET. You need to up"
+		"date your version of SPICELIB to the latest version in order"
+		" to support this frame. ", (ftnlen)203);
 	errint_("#", infrm, (ftnlen)1);
 	errint_("#", &type__, (ftnlen)1);
 	errch_("#", versn, (ftnlen)1, (ftnlen)6);

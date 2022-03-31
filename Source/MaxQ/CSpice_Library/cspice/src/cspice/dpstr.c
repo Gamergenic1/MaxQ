@@ -9,7 +9,7 @@
 
 static integer c__2 = 2;
 
-/* $Procedure      DPSTR ( Double Precision Number to Character ) */
+/* $Procedure DPSTR ( Double Precision Number to Character ) */
 /* Subroutine */ int dpstr_(doublereal *x, integer *sigdig, char *string, 
 	ftnlen string_len)
 {
@@ -84,209 +84,213 @@ static integer c__2 = 2;
 
 /* $ Keywords */
 
-/*      CHARACTER */
-/*      CONVERSION */
-/*      PARSING */
+/*     CHARACTER */
+/*     CONVERSION */
+/*     PARSING */
 
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*      VARIABLE  I/O  DESCRIPTION */
-/*      --------  ---  -------------------------------------------------- */
-/*      X          I   A double precision number */
-/*      SIGDIG     I   The number of significant digits placed in output */
-/*      STRING     O   A character string representation of X */
+/*     VARIABLE  I/O  DESCRIPTION */
+/*     --------  ---  -------------------------------------------------- */
+/*     X          I   A double precision number */
+/*     SIGDIG     I   The number of significant digits placed in output */
+/*     STRING     O   A character string representation of X */
 
 /* $ Detailed_Input */
 
-/*      X          is a double precision number. */
+/*     X        is a double precision number. */
 
-/*      SIGDIG     is the number of significant digits that are desired */
-/*                 for the output string. */
+/*     SIGDIG   is the number of significant digits that are desired */
+/*              for the output string. */
 
 /* $ Detailed_Output */
 
-
-/*      STRING     is a character representation of X to the number of */
-/*                 significant digits specified by SIGDIG.  The number of */
-/*                 spaces required to return the requested character */
-/*                 string is SIGDIG + 6.  If STRING is not declared to */
-/*                 have adequate length, the number returned will be */
-/*                 truncated on the right. */
+/*     STRING   is a character representation of X to the number of */
+/*              significant digits specified by SIGDIG. The number of */
+/*              spaces required to return the requested character */
+/*              string is SIGDIG + 6. If STRING is not declared to */
+/*              have adequate length, the number returned will be */
+/*              truncated on the right. */
 
 /* $ Parameters */
 
 /*     None. */
 
-/* $ Particulars */
-
-/*      This routine computes an approximate character representation */
-/*      of the input string X. The maximum number of significant */
-/*      digits returned is 14. The representation returned will be */
-/*      the same as that given by the FORTRAN write statement */
-
-/*          WRITE ( STRING, FMT=(P1E23.xx) */
-
-/*      where xx is a two digit number that represents MIN(14,SIGDIG). */
-/*      The last decimal place is rounded. The output string is left */
-/*      justified. */
-
-/*      This routine has the advantage that it does not use an internal */
-/*      file and is about 2.3 times as fast as an internal write. It can */
-/*      be used as part of character function without fear of introducing */
-/*      recursive I/O conflicts. It is intended to be an approximate */
-/*      inverse to the subroutine NPARSD. */
-
-/*      There is of course no formatting of the output string.  All */
-/*      outputs are written in scientific notation. */
-
-/*      IF you want the character string representation of a double */
-/*      precision number to be the same as that produced by a formatted */
-/*      write statement use a FORTRAN write statement. */
-
-/*      For example the number represented by the string */
-
-/*            1.245454545454545454545E+01 */
-
-/*      when read (via a FORTRAN READ statement) into the DP variable X */
-/*      and converted back to a character string having 14 significant */
-/*      digits by this routine yields */
-
-/*            1.2454545454545E+01 */
-
-/*      The FORTRAN write statement */
-
-/*            WRITE ( 6, FMT='(P1E)' ) X */
-
-/*      yields */
-
-/*            1.2454545454545454E+01 */
-
-/*      If this is too much error for your application DO NOT use this */
-/*      routine.  You should be aware however, that a character string */
-/*      read into a double precision number may not WRITE out with an */
-/*      equivalent character representation as was input. */
-
-/*      For example on a VAX 11/780 if you */
-
-/*            READ  (5,*)         X */
-/*            WRITE (6,FMT='(E)') X */
-
-/*      and enter a value of 7.00000001 for the read statement */
-/*      the output written will be 0.7000000010000001E+01 */
-
-
-/* $ Examples */
-
-/*      This routine is intended for use by routines that manipulate */
-/*      character strings.  For example, it may be desirable for a */
-/*      routine to be able to take a character string input such as */
-
-/*            12 miles */
-
-/*      and convert it to the string */
-
-/*            1.932E+02 km */
-
-/*      or to simply */
-
-/*            1.932E+02 */
-
-/*      The arithmetic is of course most easily handled using numeric */
-/*      variables.  However, it may be that a string is required for */
-/*      subsequent processing of the input.  A SPICELIB routine NPARSD */
-/*      exists that will take a character representation of a number */
-/*      and convert it to a DOUBLE PRECISION number.  The 12 above */
-/*      can be converted to double precision using NPARSD,  the d.p. */
-/*      number can then be multiplied by the 1.61... and the result */
-/*      converted back to a string using this routine. */
-
-/*      Suppose the following declarations are made */
-
-/*            CHARACTER*(80)     TEXT */
-/*            CHARACTER*(80)     NUMBER */
-/*            CHARACTER*(80)     SCRATCH */
-
-/*            DOUBLE PRECISION   X */
-/*            INTEGER            I */
-
-/*      and that TEXT contains the string '12 mi'.  Then the following */
-/*      code would produce a character string  '1.932E+01 KM' */
-
-/*            CALL NEXTWD (  TEXT,   NUMBER, SCRATCH   ) */
-/*            CALL NPARSD (  NUMBER, X,      ERROR,  I ) */
-
-/*            IF ( ERROR .EQ. ' ' ) THEN */
-
-/*               X    = X * 1.61D0 */
-/*               CALL DPSTR ( X, 5, NUMBER ) */
-/*               TEXT = NUMBER(1:10) // 'KM' */
-
-/*            ELSE */
-/*               . */
-/*               . */
-/*               create an error message, try again, etc. */
-/*               . */
-/*               . */
-/*            END IF */
-
-
-/* $ Restrictions */
-
-/*      Note:  The format of the string returned by this routine is */
-/*      used in DPSTRF which is in the call tree to DPFMT.  Changes */
-/*      to the format of the output string may have unexpected */
-/*      consequences for these SPICE routines.  Please check those */
-/*      routines before modifying this routine. */
-
-/*      The maximum number of significant digits returned is 14. */
-
-/*      If the output string is not declared to be adequately large */
-/*      (at least SIGDIG + 6), the numeric string will be truncated */
-/*      to the side opposite its justification. */
-
 /* $ Exceptions */
 
-/*      Error free. */
+/*     Error free. */
 
-/*      If SIGDIG is less than one, this routine returns one significant */
-/*      digit in the output string. */
+/*     1)  If SIGDIG is less than one, this routine returns one */
+/*         significant digit in the output string. */
 
 /* $ Files */
 
-/*      None. */
+/*     None. */
 
-/* $ Author_and_Institution */
+/* $ Particulars */
 
-/*      N.J. Bachman    (JPL) */
-/*      H.A. Neilan     (JPL) */
-/*      W.L. Taber      (JPL) */
+/*     This routine computes an approximate character representation */
+/*     of the input string X. The maximum number of significant */
+/*     digits returned is 14. The representation returned will be */
+/*     the same as that given by the FORTRAN write statement */
+
+/*         WRITE ( STRING, FMT=(P1E23.xx) */
+
+/*     where xx is a two digit number that represents MIN(14,SIGDIG). */
+/*     The last decimal place is rounded. The output string is left */
+/*     justified. */
+
+/*     This routine has the advantage that it does not use an internal */
+/*     file and is about 2.3 times as fast as an internal write. It can */
+/*     be used as part of character function without fear of introducing */
+/*     recursive I/O conflicts. It is intended to be an approximate */
+/*     inverse to the subroutine NPARSD. */
+
+/*     There is of course no formatting of the output string. All */
+/*     outputs are written in scientific notation. */
+
+/*     IF you want the character string representation of a double */
+/*     precision number to be the same as that produced by a formatted */
+/*     write statement use a FORTRAN write statement. */
+
+/*     For example the number represented by the string */
+
+/*           1.245454545454545454545E+01 */
+
+/*     when read (via a FORTRAN READ statement) into the DP variable X */
+/*     and converted back to a character string having 14 significant */
+/*     digits by this routine yields */
+
+/*           1.2454545454545E+01 */
+
+/*     The FORTRAN write statement */
+
+/*           WRITE ( 6, FMT='(P1E)' ) X */
+
+/*     yields */
+
+/*           1.2454545454545454E+01 */
+
+/*     If this is too much error for your application DO NOT use this */
+/*     routine. You should be aware however, that a character string */
+/*     read into a double precision number may not WRITE out with an */
+/*     equivalent character representation as was input. */
+
+/*     For example on a VAX 11/780 if you */
+
+/*           READ  (5,*)         X */
+/*           WRITE (6,FMT='(E)') X */
+
+/*     and enter a value of 7.00000001 for the read statement */
+/*     the output written will be 0.7000000010000001E+01 */
+
+/* $ Examples */
+
+/*     This routine is intended for use by routines that manipulate */
+/*     character strings. For example, it may be desirable for a */
+/*     routine to be able to take a character string input such as */
+
+/*           12 miles */
+
+/*     and convert it to the string */
+
+/*           1.932E+02 km */
+
+/*     or to simply */
+
+/*           1.932E+02 */
+
+/*     The arithmetic is of course most easily handled using numeric */
+/*     variables. However, it may be that a string is required for */
+/*     subsequent processing of the input.  A SPICELIB routine NPARSD */
+/*     exists that will take a character representation of a number */
+/*     and convert it to a DOUBLE PRECISION number. The 12 above */
+/*     can be converted to double precision using NPARSD,  the d.p. */
+/*     number can then be multiplied by the 1.61... and the result */
+/*     converted back to a string using this routine. */
+
+/*     Suppose the following declarations are made */
+
+/*           CHARACTER*(80)     TEXT */
+/*           CHARACTER*(80)     NUMBER */
+/*           CHARACTER*(80)     SCRATCH */
+
+/*           DOUBLE PRECISION   X */
+/*           INTEGER            I */
+
+/*     and that TEXT contains the string '12 mi'.  Then the following */
+/*     code would produce a character string  '1.932E+01 KM' */
+
+/*           CALL NEXTWD (  TEXT,   NUMBER, SCRATCH   ) */
+/*           CALL NPARSD (  NUMBER, X,      ERROR,  I ) */
+
+/*           IF ( ERROR .EQ. ' ' ) THEN */
+
+/*              X    = X * 1.61D0 */
+/*              CALL DPSTR ( X, 5, NUMBER ) */
+/*              TEXT = NUMBER(1:10) // 'KM' */
+
+/*           ELSE */
+/*              . */
+/*              . */
+/*              create an error message, try again, etc. */
+/*              . */
+/*              . */
+/*           END IF */
+
+/* $ Restrictions */
+
+/*     1)  The format of the string returned by this routine is used in */
+/*         DPSTRF which is in the call tree to DPFMT. Changes to the */
+/*         format of the output string may have unexpected consequences */
+/*         for these SPICE routines. Please check those routines before */
+/*         modifying this routine. */
+
+/*     2)  The maximum number of significant digits returned is 14. */
+
+/*     3)  If the output string is not declared to be adequately large */
+/*         (at least SIGDIG + 6), the numeric string will be truncated to */
+/*         the side opposite its justification. */
 
 /* $ Literature_References */
 
-/*      None. */
+/*     None. */
+
+/* $ Author_and_Institution */
+
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     H.A. Neilan        (JPL) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
 
-/* -     SPICELIB Version 1.1.1, 09-SEP-1996 (WLT) */
+/* -    SPICELIB Version 1.2.0, 20-AUG-2021 (JDR) */
 
-/*         Added a reference to the header concerning the dependency */
-/*         of the SPICE routines DPSTRF and DPFMT on the format of */
-/*         the string produced by this routine. */
+/*        Added IMPLICIT NONE statement. */
 
-/* -     SPICELIB Version 1.1.0, 11-JUN-1992 (WLT) */
+/*        Edited the header to comply with NAIF standard. */
 
-/*         A bug that caused this routine to have a floating point */
-/*         overflow for values of X close to zero was corrected.  In */
-/*         addition the restriction on range of exponents supported */
-/*         has been removed. */
+/* -    SPICELIB Version 1.1.1, 09-SEP-1996 (WLT) */
 
-/* -     SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+/*        Added a reference to the header concerning the dependency */
+/*        of the SPICE routines DPSTRF and DPFMT on the format of */
+/*        the string produced by this routine. */
 
-/*         Comment section for permuted index source lines was added */
-/*         following the header. */
+/* -    SPICELIB Version 1.1.0, 11-JUN-1992 (WLT) */
 
-/* -     SPICELIB Version 1.0.0, 31-JAN-1990 (WLT) */
+/*        A bug that caused this routine to have a floating point */
+/*        overflow for values of X close to zero was corrected. In */
+/*        addition the restriction on range of exponents supported */
+/*        has been removed. */
+
+/* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+
+/*        Comment section for permuted index source lines was added */
+/*        following the header. */
+
+/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (WLT) (HAN) (NJB) */
 
 /* -& */
 /* $ Index_Entries */
@@ -299,7 +303,7 @@ static integer c__2 = 2;
 /* -     SPICELIB Version 1.1.0, 14-OCT-1992 (WLT) */
 
 /*         A bug that caused this routine to have a floating point */
-/*         overflow for values of X close to zero was corrected.  In */
+/*         overflow for values of X close to zero was corrected. In */
 /*         addition the restriction on range of exponents supported */
 /*         has been removed. */
 
@@ -380,7 +384,7 @@ static integer c__2 = 2;
 	}
 	if (k != 0) {
 	    copy *= power[(i__1 = k) < 18 && 0 <= i__1 ? i__1 : s_rnge("power"
-		    , i__1, "dpstr_", (ftnlen)434)];
+		    , i__1, "dpstr_", (ftnlen)438)];
 	}
     } else {
 	expont = (integer) exp10;
@@ -391,18 +395,18 @@ static integer c__2 = 2;
 	}
 	if (k != 0) {
 	    copy *= ipower[(i__1 = k) < 18 && 0 <= i__1 ? i__1 : s_rnge("ipo"
-		    "wer", i__1, "dpstr_", (ftnlen)449)];
+		    "wer", i__1, "dpstr_", (ftnlen)453)];
 	}
     }
 
 /*     Round off the last significant digit. */
 
     d__1 = copy * power[(i__1 = maxsig - 1) < 18 && 0 <= i__1 ? i__1 : s_rnge(
-	    "power", i__1, "dpstr_", (ftnlen)460)];
+	    "power", i__1, "dpstr_", (ftnlen)464)];
     copy = (d_nint(&d__1) + .125) * ipower[(i__2 = maxsig - 1) < 18 && 0 <= 
-	    i__2 ? i__2 : s_rnge("ipower", i__2, "dpstr_", (ftnlen)460)];
+	    i__2 ? i__2 : s_rnge("ipower", i__2, "dpstr_", (ftnlen)464)];
 
-/*     We might have accidently made copy as big as 10 by the */
+/*     We might have accidentally made copy as big as 10 by the */
 /*     round off process.  If we did we need to divide by 10 and add 1 */
 /*     to the exponent value.  (COPY must always remain between 0 and 10) */
 
@@ -416,9 +420,9 @@ static integer c__2 = 2;
     i__ = (integer) copy;
     *(unsigned char *)&numstr[postn - 1] = *(unsigned char *)&digits[(i__1 = 
 	    i__) < 10 && 0 <= i__1 ? i__1 : s_rnge("digits", i__1, "dpstr_", (
-	    ftnlen)476)];
+	    ftnlen)480)];
     copy = (copy - values[(i__1 = i__) < 10 && 0 <= i__1 ? i__1 : s_rnge(
-	    "values", i__1, "dpstr_", (ftnlen)478)]) * 10.;
+	    "values", i__1, "dpstr_", (ftnlen)482)]) * 10.;
 
 /*     Set the string pointer to the next position and compute the */
 /*     position of the last significant digit */
@@ -433,9 +437,9 @@ static integer c__2 = 2;
 	i__ = (integer) copy;
 	*(unsigned char *)&numstr[postn - 1] = *(unsigned char *)&digits[(
 		i__1 = i__) < 10 && 0 <= i__1 ? i__1 : s_rnge("digits", i__1, 
-		"dpstr_", (ftnlen)494)];
+		"dpstr_", (ftnlen)498)];
 	copy = (copy - values[(i__1 = i__) < 10 && 0 <= i__1 ? i__1 : s_rnge(
-		"values", i__1, "dpstr_", (ftnlen)495)]) * 10.;
+		"values", i__1, "dpstr_", (ftnlen)499)]) * 10.;
 	++postn;
     }
 
@@ -457,7 +461,7 @@ static integer c__2 = 2;
 
     if (expont <= 40) {
 	s_copy(expc, vaxexp + (((i__1 = expont) < 41 && 0 <= i__1 ? i__1 : 
-		s_rnge("vaxexp", i__1, "dpstr_", (ftnlen)524)) << 1), (ftnlen)
+		s_rnge("vaxexp", i__1, "dpstr_", (ftnlen)528)) << 1), (ftnlen)
 		20, (ftnlen)2);
     } else {
 	intstr_(&expont, expc, (ftnlen)20);

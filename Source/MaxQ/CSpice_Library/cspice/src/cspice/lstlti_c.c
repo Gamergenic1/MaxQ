@@ -3,10 +3,10 @@
 -Procedure lstlti_c ( Last integer element less than )
 
 -Abstract
- 
-   Given a number x and an array of non-decreasing numbers, 
-   find the index of the largest array element less than x. 
- 
+
+   Find the index of the largest array element less than
+   a given integer `x' in an array of non-decreasing integers.
+
 -Disclaimer
 
    THIS SOFTWARE AND ANY RELATED MATERIALS WERE CREATED BY THE
@@ -33,13 +33,14 @@
    ACTIONS OF RECIPIENT IN THE USE OF THE SOFTWARE.
 
 -Required_Reading
- 
-   None. 
- 
+
+   None.
+
 -Keywords
- 
-   SEARCH,  ARRAY 
- 
+
+   ARRAY
+   SEARCH
+
 */
 
    #include "SpiceUsr.h"
@@ -50,75 +51,79 @@
 
    SpiceInt lstlti_c ( SpiceInt          x,
                        SpiceInt          n,
-                       ConstSpiceInt   * array )      
+                       ConstSpiceInt   * array )
 
 /*
 
 -Brief_I/O
- 
-   VARIABLE  I/O  DESCRIPTION 
-   --------  ---  -------------------------------------------------- 
-   x          I   Value to search against. 
-   n          I   Number of elements in array. 
-   array      I   Array of possible lower bounds. 
 
-   The function returns the index of the last element of array that is 
-   less than x.
- 
+   VARIABLE  I/O  DESCRIPTION
+   --------  ---  --------------------------------------------------
+   x          I   Upper bound value to search against.
+   n          I   Number of elements in `array'.
+   array      I   Array of possible lower bounds.
+
+   The function returns the index of the last element of `array' that
+   is less than `x'.
+
 -Detailed_Input
- 
-   x              is an integer serving as a key value. 
 
-   n              is the total number of elements in array. 
+   x           is an integer value acting as an upper bound: the element
+               of `array' that is the greatest element less than `x' is to
+               be found.
 
-   array          is an array of integers that forms a  non-decreasing 
-                  sequence. 
- 
+   n           is the total number of elements in `array'.
+
+   array       is an array of integers that forms a non-decreasing
+               sequence. The elements of array need not be distinct.
+
 -Detailed_Output
- 
-   The function returns the index of the last element of the non-decreasing
-   sequence
 
-      {array[i] : 0 <=  i < n } 
+   The function returns the index of the highest-indexed element in
+   the input array that is less than `x'. The routine assumes the array
+   elements are sorted in non-decreasing order.
 
-   that is less than x.  Indices range from zero to n-1.
+   Indices range from 0 to n-1.
 
-   If all elements of array are greater than or equal to x, this routine 
-   returns the value -1.
+   If all elements of `array' are greater than or equal to `x', the
+   routine returns the value -1. If `n' is less than or equal to zero,
+   the routine returns the value -1.
 
 -Parameters
- 
-   None. 
- 
--Files
- 
-   None. 
+
+   None.
 
 -Exceptions
- 
-   Error free. 
- 
-   If n is less than or equal to zero, the function returns -1.  This case
-   is not treated as an error. 
- 
--Particulars  
- 
-   This routine uses a binary search algorithm and so requires 
+
+   Error free.
+
+   1)  If `n' is less than or equal to zero, the function returns -1.
+       This case is not treated as an error.
+
+   2)  If the input array is not sorted in non-decreasing order, the
+       output of this routine is undefined. No error is signaled.
+
+-Files
+
+   None.
+
+-Particulars
+
+   This routine uses a binary search algorithm and so requires
    at most on the order of
 
       log (n)
          2
 
-   steps to compute the value of lstlti_c. 
+   steps to compute the value of lstlti_c.
 
-   Note:  If you need to find the first element of the array that is greater 
-          than or equal to x, simply add 1 to the result returned by this 
-          function and check to see if the result is within the array bounds 
-          given by n. 
- 
+   Note: If you need to find the first element of the array that is
+   greater than or equal to `x', simply add 1 to the result returned by
+   this function and check to see if the result is within the array
+   bounds given by `n'.
+
 -Examples
- 
- 
+
    1)  Let array be assigned the following values:
 
           array[0] = -2;
@@ -144,36 +149,44 @@
           lstlti_c ( 12, 6, array )                 5
 
 -Restrictions
- 
-   If the sequence in the input argument array is not non-decreasing, 
-   the results of this routine are undefined. 
- 
--Author_and_Institution
- 
-   N.J. Bachman    (JPL)
-   H.A. Neilan     (JPL) 
-   W.L. Taber      (JPL) 
- 
+
+   1)  If the sequence of integer numbers in the input array `array' is
+       not non-decreasing, the program will run to completion but the
+       index found will not mean anything.
+
 -Literature_References
- 
-   None. 
- 
+
+   None.
+
+-Author_and_Institution
+
+   N.J. Bachman        (JPL)
+   J. Diaz del Rio     (ODC Space)
+   H.A. Neilan         (JPL)
+   W.L. Taber          (JPL)
+
 -Version
- 
+
+   -CSPICE Version 1.0.1, 01-NOV-2021 (JDR)
+
+       Edited the header to comply with NAIF standard. Corrected -Index_Entries
+       entry. Improved -Detailed_Input, -Detailed_Output, -Particulars,
+       -Exceptions and -Restrictions sections.
+
    -CSPICE Version 1.0.0, 09-JUL-2002 (NJB) (HAN) (WLT)
 
 -Index_Entries
- 
-   last integer element less_than_or_equal_to 
- 
+
+   last integer element less_than
+
 -&
 */
 
 { /* Begin lstlti_c */
 
 
-   return  (   lstlti_ ( (integer *) &x, 
-                         (integer *) &n, 
+   return  (   lstlti_ ( (integer *) &x,
+                         (integer *) &n,
                          (integer *) array )  -  1   );
 
 } /* End lstlti_c */

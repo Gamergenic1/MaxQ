@@ -72,7 +72,7 @@
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     N          I   Number of points defining the polynomial. */
 /*     XVALS      I   Abscissa values. */
@@ -84,40 +84,38 @@
 
 /* $ Detailed_Input */
 
-/*     N              is the number of points defining the polynomial. */
-/*                    The arrays XVALS and YVALS contain N and 2*N */
-/*                    elements respectively. */
+/*     N        is the number of points defining the polynomial. */
+/*              The arrays XVALS and YVALS contain N and 2*N */
+/*              elements respectively. */
 
-/*     XVALS          is an array of length N containing abscissa values. */
+/*     XVALS    is an array of length N containing abscissa values. */
 
-/*     YVALS          is an array of length 2*N containing ordinate and */
-/*                    derivative values for each point in the domain */
-/*                    defined by FIRST, STEP,  and N.  The elements */
+/*     YVALS    is an array of length 2*N containing ordinate and */
+/*              derivative values for each point in the domain */
+/*              defined by XVALS. The elements */
 
-/*                       YVALS( 2*I - 1 ) */
-/*                       YVALS( 2*I     ) */
+/*                 YVALS( 2*I - 1 ) */
+/*                 YVALS( 2*I     ) */
 
-/*                    give the value and first derivative of the output */
-/*                    polynomial at the abscissa value */
+/*              give the value and first derivative of the output */
+/*              polynomial at the abscissa value */
 
-/*                       XVALS(I) */
+/*                 XVALS(I) */
 
-/*                    where I ranges from 1 to N. */
+/*              where I ranges from 1 to N. */
 
+/*     WORK     is a work space array. It is used by this routine */
+/*              as a scratch area to hold intermediate results. */
 
-/*     WORK           is a work space array.  It is used by this routine */
-/*                    as a scratch area to hold intermediate results. */
-
-
-/*     X              is the abscissa value at which the interpolating */
-/*                    polynomial and its derivative are to be evaluated. */
+/*     X        is the abscissa value at which the interpolating */
+/*              polynomial and its derivative are to be evaluated. */
 
 /* $ Detailed_Output */
 
 /*     F, */
-/*     DF             are the value and derivative at X of the unique */
-/*                    polynomial of degree 2N-1 that fits the points and */
-/*                    derivatives defined by XVALS and YVALS. */
+/*     DF       are the value and derivative at X of the unique */
+/*              polynomial of degree 2N-1 that fits the points and */
+/*              derivatives defined by XVALS and YVALS. */
 
 /* $ Parameters */
 
@@ -126,7 +124,7 @@
 /* $ Exceptions */
 
 /*     1)  If two input abscissas are equal, the error */
-/*         SPICE(DIVIDEBYZERO) will be signaled. */
+/*         SPICE(DIVIDEBYZERO) is signaled. */
 
 /*     2)  If N is less than 1, the error SPICE(INVALIDSIZE) is */
 /*         signaled. */
@@ -141,12 +139,12 @@
 /* $ Particulars */
 
 /*     Users of this routine must choose the number of points to use */
-/*     in their interpolation method.  The authors of Reference [1] have */
+/*     in their interpolation method. The authors of Reference [1] have */
 /*     this to say on the topic: */
 
 /*        Unless there is solid evidence that the interpolating function */
 /*        is close in form to the true function f, it is a good idea to */
-/*        be cautious about high-order interpolation.  We */
+/*        be cautious about high-order interpolation. We */
 /*        enthusiastically endorse interpolations with 3 or 4 points, we */
 /*        are perhaps tolerant of 5 or 6; but we rarely go higher than */
 /*        that unless there is quite rigorous monitoring of estimated */
@@ -163,54 +161,73 @@
 
 /* $ Examples */
 
-/*     1)  Fit a 7th degree polynomial through the points ( x, y, y' ) */
+/*     The numerical results shown for this example may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
 
-/*             ( -1,      6,       3 ) */
-/*             (  0,      5,       0 ) */
-/*             (  3,   2210,    5115 ) */
-/*             (  5,  78180,  109395 ) */
+/*     1) Fit a 7th degree polynomial through the points ( x, y, y' ) */
 
-/*         and evaluate this polynomial at x = 2. */
+/*           ( -1,      6,       3 ) */
+/*           (  0,      5,       0 ) */
+/*           (  3,   2210,    5115 ) */
+/*           (  5,  78180,  109395 ) */
 
+/*        and evaluate this polynomial at x = 2. */
 
-/*            PROGRAM TEST_HRMINT */
-
-/*            DOUBLE PRECISION      ANSWER */
-/*            DOUBLE PRECISION      DERIV */
-/*            DOUBLE PRECISION      XVALS (4) */
-/*            DOUBLE PRECISION      YVALS (8) */
-/*            DOUBLE PRECISION      WORK  (8,2) */
-/*            INTEGER               N */
-
-/*            N         =   4 */
-
-/*            XVALS(1)  =      -1.D0 */
-/*            XVALS(2)  =       0.D0 */
-/*            XVALS(3)  =       3.D0 */
-/*            XVALS(4)  =       5.D0 */
-
-/*            YVALS(1)  =       6.D0 */
-/*            YVALS(2)  =       3.D0 */
-/*            YVALS(3)  =       5.D0 */
-/*            YVALS(4)  =       0.D0 */
-/*            YVALS(5)  =    2210.D0 */
-/*            YVALS(6)  =    5115.D0 */
-/*            YVALS(7)  =   78180.D0 */
-/*            YVALS(8)  =  109395.D0 */
-
-/*            CALL HRMINT ( N, XVALS, YVALS, 2.D0, WORK, ANSWER, DERIV ) */
-
-/*            WRITE (*,*) 'ANSWER = ', ANSWER */
-/*            WRITE (*,*) 'DERIV  = ', DERIV */
-/*            END */
-
-
-/*        The returned value of ANSWER should be 141.D0, and the returned */
-/*        derivative value should be 456.D0, since the unique 7th degree */
+/*        The returned value should be 141.0, and the returned */
+/*        derivative value should be 456.0, since the unique 7th degree */
 /*        polynomial that fits these constraints is */
 
 /*                     7       2 */
 /*           f(x)  =  x   +  2x  + 5 */
+
+
+/*        Example code begins here. */
+
+
+/*              PROGRAM HRMINT_EX1 */
+/*              IMPLICIT NONE */
+
+/*              DOUBLE PRECISION      ANSWER */
+/*              DOUBLE PRECISION      DERIV */
+/*              DOUBLE PRECISION      XVALS (4) */
+/*              DOUBLE PRECISION      YVALS (8) */
+/*              DOUBLE PRECISION      WORK  (8,2) */
+/*              INTEGER               N */
+
+/*              N         =   4 */
+
+/*              XVALS(1)  =      -1.D0 */
+/*              XVALS(2)  =       0.D0 */
+/*              XVALS(3)  =       3.D0 */
+/*              XVALS(4)  =       5.D0 */
+
+/*              YVALS(1)  =       6.D0 */
+/*              YVALS(2)  =       3.D0 */
+/*              YVALS(3)  =       5.D0 */
+/*              YVALS(4)  =       0.D0 */
+/*              YVALS(5)  =    2210.D0 */
+/*              YVALS(6)  =    5115.D0 */
+/*              YVALS(7)  =   78180.D0 */
+/*              YVALS(8)  =  109395.D0 */
+
+/*              CALL HRMINT ( N, XVALS, YVALS, 2.D0, WORK, ANSWER, */
+/*             .                                           DERIV ) */
+
+/*              WRITE (*,*) 'ANSWER = ', ANSWER */
+/*              WRITE (*,*) 'DERIV  = ', DERIV */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*         ANSWER =    141.00000000000000 */
+/*         DERIV  =    456.00000000000000 */
+
 
 /* $ Restrictions */
 
@@ -218,18 +235,26 @@
 
 /* $ Literature_References */
 
-/*     [1]  "Numerical Recipes---The Art of Scientific Computing" by */
-/*           William H. Press, Brian P. Flannery, Saul A. Teukolsky, */
-/*           William T. Vetterling (see sections 3.0 and 3.1). */
+/*     [1]  W. Press, B. Flannery, S. Teukolsky and W. Vetterling, */
+/*          "Numerical Recipes -- The Art of Scientific Computing," */
+/*          chapters 3.0 and 3.1, Cambridge University Press, 1986. */
 
-/*     [2]  "Elementary Numerical Analysis---An Algorithmic Approach" */
-/*           by S. D. Conte and Carl de Boor.  See p. 64. */
+/*     [2]  S. Conte and C. de Boor, "Elementary Numerical Analysis -- An */
+/*          Algorithmic Approach," 3rd Edition, p 64, McGraw-Hill, 1980. */
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.2.2, 01-OCT-2021 (NJB) (JDR) */
+
+/*        Edited the header to comply with NAIF standard. Fixed */
+/*        a few more comment typos. Added IMPLICIT NONE to code */
+/*        example. */
 
 /* -    SPICELIB Version 1.2.1, 28-JAN-2014 (NJB) */
 
@@ -237,9 +262,9 @@
 
 /* -    SPICELIB Version 1.2.0, 01-FEB-2002 (NJB) (EDW) */
 
-/*        Bug fix:  declarations of local variables XI and XIJ */
+/*        Bug fix: declarations of local variables XI and XIJ */
 /*        were changed from DOUBLE PRECISION to INTEGER. */
-/*        Note:  bug had no effect on behavior of this routine. */
+/*        Note: bug had no effect on behavior of this routine. */
 
 /* -    SPICELIB Version 1.1.0, 28-DEC-2001 (NJB) */
 
@@ -293,9 +318,9 @@
     i__1 = *n << 1;
     for (i__ = 1; i__ <= i__1; ++i__) {
 	work[(i__2 = i__ + work_dim1 - work_offset) < work_dim1 << 1 && 0 <= 
-		i__2 ? i__2 : s_rnge("work", i__2, "hrmint_", (ftnlen)293)] = 
+		i__2 ? i__2 : s_rnge("work", i__2, "hrmint_", (ftnlen)318)] = 
 		yvals[(i__3 = i__ - 1) < yvals_dim1 && 0 <= i__3 ? i__3 : 
-		s_rnge("yvals", i__3, "hrmint_", (ftnlen)293)];
+		s_rnge("yvals", i__3, "hrmint_", (ftnlen)318)];
     }
 
 /*     Compute the second column of the interpolation table: this */
@@ -311,13 +336,13 @@
     i__1 = *n - 1;
     for (i__ = 1; i__ <= i__1; ++i__) {
 	c1 = xvals[(i__2 = i__) < xvals_dim1 && 0 <= i__2 ? i__2 : s_rnge(
-		"xvals", i__2, "hrmint_", (ftnlen)310)] - *x;
+		"xvals", i__2, "hrmint_", (ftnlen)335)] - *x;
 	c2 = *x - xvals[(i__2 = i__ - 1) < xvals_dim1 && 0 <= i__2 ? i__2 : 
-		s_rnge("xvals", i__2, "hrmint_", (ftnlen)311)];
+		s_rnge("xvals", i__2, "hrmint_", (ftnlen)336)];
 	denom = xvals[(i__2 = i__) < xvals_dim1 && 0 <= i__2 ? i__2 : s_rnge(
-		"xvals", i__2, "hrmint_", (ftnlen)312)] - xvals[(i__3 = i__ - 
+		"xvals", i__2, "hrmint_", (ftnlen)337)] - xvals[(i__3 = i__ - 
 		1) < xvals_dim1 && 0 <= i__3 ? i__3 : s_rnge("xvals", i__3, 
-		"hrmint_", (ftnlen)312)];
+		"hrmint_", (ftnlen)337)];
 	if (denom == 0.) {
 	    chkin_("HRMINT", (ftnlen)6);
 	    setmsg_("XVALS(#) = XVALS(#) = #", (ftnlen)23);
@@ -325,7 +350,7 @@
 	    i__2 = i__ + 1;
 	    errint_("#", &i__2, (ftnlen)1);
 	    errdp_("#", &xvals[(i__2 = i__ - 1) < xvals_dim1 && 0 <= i__2 ? 
-		    i__2 : s_rnge("xvals", i__2, "hrmint_", (ftnlen)321)], (
+		    i__2 : s_rnge("xvals", i__2, "hrmint_", (ftnlen)346)], (
 		    ftnlen)1);
 	    sigerr_("SPICE(DIVIDEBYZERO)", (ftnlen)19);
 	    chkout_("HRMINT", (ftnlen)6);
@@ -343,9 +368,9 @@
 	next = this__ + 1;
 	work[(i__2 = prev + (work_dim1 << 1) - work_offset) < work_dim1 << 1 
 		&& 0 <= i__2 ? i__2 : s_rnge("work", i__2, "hrmint_", (ftnlen)
-		339)] = work[(i__3 = this__ + work_dim1 - work_offset) < 
+		364)] = work[(i__3 = this__ + work_dim1 - work_offset) < 
 		work_dim1 << 1 && 0 <= i__3 ? i__3 : s_rnge("work", i__3, 
-		"hrmint_", (ftnlen)339)];
+		"hrmint_", (ftnlen)364)];
 
 /*        The even-indexed interpolated derivatives are the slopes of */
 /*        the linear interpolating polynomials for adjacent input */
@@ -353,11 +378,11 @@
 
 	work[(i__2 = this__ + (work_dim1 << 1) - work_offset) < work_dim1 << 
 		1 && 0 <= i__2 ? i__2 : s_rnge("work", i__2, "hrmint_", (
-		ftnlen)346)] = (work[(i__3 = next + work_dim1 - work_offset) <
+		ftnlen)371)] = (work[(i__3 = next + work_dim1 - work_offset) <
 		 work_dim1 << 1 && 0 <= i__3 ? i__3 : s_rnge("work", i__3, 
-		"hrmint_", (ftnlen)346)] - work[(i__4 = prev + work_dim1 - 
+		"hrmint_", (ftnlen)371)] - work[(i__4 = prev + work_dim1 - 
 		work_offset) < work_dim1 << 1 && 0 <= i__4 ? i__4 : s_rnge(
-		"work", i__4, "hrmint_", (ftnlen)346)]) / denom;
+		"work", i__4, "hrmint_", (ftnlen)371)]) / denom;
 
 /*        The first column of WORK contains interpolated function values. */
 /*        The odd-indexed entries are the linear Taylor polynomials, */
@@ -365,20 +390,20 @@
 
 	temp = work[(i__2 = this__ + work_dim1 - work_offset) < work_dim1 << 
 		1 && 0 <= i__2 ? i__2 : s_rnge("work", i__2, "hrmint_", (
-		ftnlen)353)] * (*x - xvals[(i__3 = i__ - 1) < xvals_dim1 && 0 
-		<= i__3 ? i__3 : s_rnge("xvals", i__3, "hrmint_", (ftnlen)353)
+		ftnlen)378)] * (*x - xvals[(i__3 = i__ - 1) < xvals_dim1 && 0 
+		<= i__3 ? i__3 : s_rnge("xvals", i__3, "hrmint_", (ftnlen)378)
 		]) + work[(i__4 = prev + work_dim1 - work_offset) < work_dim1 
 		<< 1 && 0 <= i__4 ? i__4 : s_rnge("work", i__4, "hrmint_", (
-		ftnlen)353)];
+		ftnlen)378)];
 	work[(i__2 = this__ + work_dim1 - work_offset) < work_dim1 << 1 && 0 
-		<= i__2 ? i__2 : s_rnge("work", i__2, "hrmint_", (ftnlen)356)]
+		<= i__2 ? i__2 : s_rnge("work", i__2, "hrmint_", (ftnlen)381)]
 		 = (c1 * work[(i__3 = prev + work_dim1 - work_offset) < 
 		work_dim1 << 1 && 0 <= i__3 ? i__3 : s_rnge("work", i__3, 
-		"hrmint_", (ftnlen)356)] + c2 * work[(i__4 = next + work_dim1 
+		"hrmint_", (ftnlen)381)] + c2 * work[(i__4 = next + work_dim1 
 		- work_offset) < work_dim1 << 1 && 0 <= i__4 ? i__4 : s_rnge(
-		"work", i__4, "hrmint_", (ftnlen)356)]) / denom;
+		"work", i__4, "hrmint_", (ftnlen)381)]) / denom;
 	work[(i__2 = prev + work_dim1 - work_offset) < work_dim1 << 1 && 0 <= 
-		i__2 ? i__2 : s_rnge("work", i__2, "hrmint_", (ftnlen)359)] = 
+		i__2 ? i__2 : s_rnge("work", i__2, "hrmint_", (ftnlen)384)] = 
 		temp;
     }
 
@@ -387,17 +412,17 @@
 
     work[(i__1 = (*n << 1) - 1 + (work_dim1 << 1) - work_offset) < work_dim1 
 	    << 1 && 0 <= i__1 ? i__1 : s_rnge("work", i__1, "hrmint_", (
-	    ftnlen)367)] = work[(i__2 = (*n << 1) + work_dim1 - work_offset) <
+	    ftnlen)392)] = work[(i__2 = (*n << 1) + work_dim1 - work_offset) <
 	     work_dim1 << 1 && 0 <= i__2 ? i__2 : s_rnge("work", i__2, "hrmi"
-	    "nt_", (ftnlen)367)];
+	    "nt_", (ftnlen)392)];
     work[(i__1 = (*n << 1) - 1 + work_dim1 - work_offset) < work_dim1 << 1 && 
-	    0 <= i__1 ? i__1 : s_rnge("work", i__1, "hrmint_", (ftnlen)368)] =
+	    0 <= i__1 ? i__1 : s_rnge("work", i__1, "hrmint_", (ftnlen)393)] =
 	     work[(i__2 = (*n << 1) + work_dim1 - work_offset) < work_dim1 << 
 	    1 && 0 <= i__2 ? i__2 : s_rnge("work", i__2, "hrmint_", (ftnlen)
-	    368)] * (*x - xvals[(i__3 = *n - 1) < xvals_dim1 && 0 <= i__3 ? 
-	    i__3 : s_rnge("xvals", i__3, "hrmint_", (ftnlen)368)]) + work[(
+	    393)] * (*x - xvals[(i__3 = *n - 1) < xvals_dim1 && 0 <= i__3 ? 
+	    i__3 : s_rnge("xvals", i__3, "hrmint_", (ftnlen)393)]) + work[(
 	    i__4 = (*n << 1) - 1 + work_dim1 - work_offset) < work_dim1 << 1 
-	    && 0 <= i__4 ? i__4 : s_rnge("work", i__4, "hrmint_", (ftnlen)368)
+	    && 0 <= i__4 ? i__4 : s_rnge("work", i__4, "hrmint_", (ftnlen)393)
 	    ];
 
 /*     Compute columns 3 through 2*N of the table. */
@@ -408,7 +433,7 @@
 	for (i__ = 1; i__ <= i__2; ++i__) {
 
 /*           In the theoretical construction of the interpolation table, */
-/*           there are 2*N abscissa values, since each input abcissa */
+/*           there are 2*N abscissa values, since each input abscissa */
 /*           value occurs with multiplicity two. In this theoretical */
 /*           construction, the Jth column of the interpolation table */
 /*           contains results of evaluating interpolants that span J+1 */
@@ -420,20 +445,20 @@
 	    xi = (i__ + 1) / 2;
 	    xij = (i__ + j + 1) / 2;
 	    c1 = xvals[(i__3 = xij - 1) < xvals_dim1 && 0 <= i__3 ? i__3 : 
-		    s_rnge("xvals", i__3, "hrmint_", (ftnlen)391)] - *x;
+		    s_rnge("xvals", i__3, "hrmint_", (ftnlen)416)] - *x;
 	    c2 = *x - xvals[(i__3 = xi - 1) < xvals_dim1 && 0 <= i__3 ? i__3 :
-		     s_rnge("xvals", i__3, "hrmint_", (ftnlen)392)];
+		     s_rnge("xvals", i__3, "hrmint_", (ftnlen)417)];
 	    denom = xvals[(i__3 = xij - 1) < xvals_dim1 && 0 <= i__3 ? i__3 : 
-		    s_rnge("xvals", i__3, "hrmint_", (ftnlen)394)] - xvals[(
+		    s_rnge("xvals", i__3, "hrmint_", (ftnlen)419)] - xvals[(
 		    i__4 = xi - 1) < xvals_dim1 && 0 <= i__4 ? i__4 : s_rnge(
-		    "xvals", i__4, "hrmint_", (ftnlen)394)];
+		    "xvals", i__4, "hrmint_", (ftnlen)419)];
 	    if (denom == 0.) {
 		chkin_("HRMINT", (ftnlen)6);
 		setmsg_("XVALS(#) = XVALS(#) = #", (ftnlen)23);
 		errint_("#", &xi, (ftnlen)1);
 		errint_("#", &xij, (ftnlen)1);
 		errdp_("#", &xvals[(i__3 = xi - 1) < xvals_dim1 && 0 <= i__3 ?
-			 i__3 : s_rnge("xvals", i__3, "hrmint_", (ftnlen)402)]
+			 i__3 : s_rnge("xvals", i__3, "hrmint_", (ftnlen)427)]
 			, (ftnlen)1);
 		sigerr_("SPICE(DIVIDEBYZERO)", (ftnlen)19);
 		chkout_("HRMINT", (ftnlen)6);
@@ -453,28 +478,28 @@
 
 	    work[(i__3 = i__ + (work_dim1 << 1) - work_offset) < work_dim1 << 
 		    1 && 0 <= i__3 ? i__3 : s_rnge("work", i__3, "hrmint_", (
-		    ftnlen)421)] = (c1 * work[(i__4 = i__ + (work_dim1 << 1) 
+		    ftnlen)446)] = (c1 * work[(i__4 = i__ + (work_dim1 << 1) 
 		    - work_offset) < work_dim1 << 1 && 0 <= i__4 ? i__4 : 
-		    s_rnge("work", i__4, "hrmint_", (ftnlen)421)] + c2 * work[
+		    s_rnge("work", i__4, "hrmint_", (ftnlen)446)] + c2 * work[
 		    (i__5 = i__ + 1 + (work_dim1 << 1) - work_offset) < 
 		    work_dim1 << 1 && 0 <= i__5 ? i__5 : s_rnge("work", i__5, 
-		    "hrmint_", (ftnlen)421)] + (work[(i__6 = i__ + 1 + 
+		    "hrmint_", (ftnlen)446)] + (work[(i__6 = i__ + 1 + 
 		    work_dim1 - work_offset) < work_dim1 << 1 && 0 <= i__6 ? 
-		    i__6 : s_rnge("work", i__6, "hrmint_", (ftnlen)421)] - 
+		    i__6 : s_rnge("work", i__6, "hrmint_", (ftnlen)446)] - 
 		    work[(i__7 = i__ + work_dim1 - work_offset) < work_dim1 <<
 		     1 && 0 <= i__7 ? i__7 : s_rnge("work", i__7, "hrmint_", (
-		    ftnlen)421)])) / denom;
+		    ftnlen)446)])) / denom;
 
 /*           Compute the interpolated function value at X for the Ith */
 /*           interpolant. */
 
 	    work[(i__3 = i__ + work_dim1 - work_offset) < work_dim1 << 1 && 0 
 		    <= i__3 ? i__3 : s_rnge("work", i__3, "hrmint_", (ftnlen)
-		    428)] = (c1 * work[(i__4 = i__ + work_dim1 - work_offset) 
+		    453)] = (c1 * work[(i__4 = i__ + work_dim1 - work_offset) 
 		    < work_dim1 << 1 && 0 <= i__4 ? i__4 : s_rnge("work", 
-		    i__4, "hrmint_", (ftnlen)428)] + c2 * work[(i__5 = i__ + 
+		    i__4, "hrmint_", (ftnlen)453)] + c2 * work[(i__5 = i__ + 
 		    1 + work_dim1 - work_offset) < work_dim1 << 1 && 0 <= 
-		    i__5 ? i__5 : s_rnge("work", i__5, "hrmint_", (ftnlen)428)
+		    i__5 ? i__5 : s_rnge("work", i__5, "hrmint_", (ftnlen)453)
 		    ]) / denom;
 	}
     }
@@ -483,9 +508,9 @@
 /*     point.  The interpolated derivative is located in WORK(1,2). */
 
     *f = work[(i__1 = work_dim1 + 1 - work_offset) < work_dim1 << 1 && 0 <= 
-	    i__1 ? i__1 : s_rnge("work", i__1, "hrmint_", (ftnlen)438)];
+	    i__1 ? i__1 : s_rnge("work", i__1, "hrmint_", (ftnlen)463)];
     *df = work[(i__1 = (work_dim1 << 1) + 1 - work_offset) < work_dim1 << 1 &&
-	     0 <= i__1 ? i__1 : s_rnge("work", i__1, "hrmint_", (ftnlen)439)];
+	     0 <= i__1 ? i__1 : s_rnge("work", i__1, "hrmint_", (ftnlen)464)];
     return 0;
 } /* hrmint_ */
 

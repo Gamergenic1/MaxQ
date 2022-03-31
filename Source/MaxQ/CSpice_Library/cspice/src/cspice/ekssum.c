@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      EKSSUM ( EK, return segment summary ) */
+/* $Procedure EKSSUM ( EK, return segment summary ) */
 /* Subroutine */ int ekssum_(integer *handle, integer *segno, char *tabnam, 
 	integer *nrows, integer *ncols, char *cnames, char *dtypes, integer *
 	sizes, integer *strlns, logical *indexd, logical *nullok, ftnlen 
@@ -437,7 +437,7 @@
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     I   Handle of EK. */
 /*     SEGNO      I   Number of segment to be summarized. */
@@ -453,71 +453,71 @@
 
 /* $ Detailed_Input */
 
-/*     HANDLE         is an EK file handle specifying the EK containing */
-/*                    the segment to be summarized. */
+/*     HANDLE   is an EK file handle specifying the EK containing */
+/*              the segment to be summarized. */
 
-/*     SEGNO          is the number of the segment whose summary is */
-/*                    desired.  Segments are numbered from 1 to NSEG, */
-/*                    where NSEG is the count of segments in the file. */
+/*     SEGNO    is the number of the segment whose summary is */
+/*              desired. Segments are numbered from 1 to NSEG, */
+/*              where NSEG is the count of segments in the file. */
 
 /* $ Detailed_Output */
 
-/*     TABNAM         is the name of the table to which the segment */
-/*                    belongs. */
+/*     TABNAM   is the name of the table to which the segment */
+/*              belongs. */
 
-/*     NROWS          is the number of rows in the segment. */
+/*     NROWS    is the number of rows in the segment. */
 
-/*     NCOLS          is the number of columns in the segment.  The */
-/*                    maximum number of columns in a segment is given */
-/*                    by the parameter MXCLSG, which is defined in the */
-/*                    include file */
+/*     NCOLS    is the number of columns in the segment. The */
+/*              maximum number of columns in a segment is given */
+/*              by the parameter MXCLSG, which is defined in the */
+/*              include file */
 
-/*                       ekglimit.inc. */
+/*                 ekglimit.inc. */
 
-/*                    Currently, this limit is set at 100 columns. */
+/*              Currently, this limit is set at 100 columns. */
 
-/*     CNAMES         is an array of names of columns in the segment. */
+/*     CNAMES   is an array of names of columns in the segment. */
 
-/*     DTYPES         is an array of data types of columns in the */
-/*                    segment.  Each data type is indicated by a short */
-/*                    character string.  The strings and their meanings */
-/*                    are: */
+/*     DTYPES   is an array of data types of columns in the */
+/*              segment. Each data type is indicated by a short */
+/*              character string. The strings and their meanings */
+/*              are: */
 
-/*                       'CHR'       Character type. */
-/*                       'DP'        Double precision type. */
-/*                       'INT'       Integer type. */
-/*                       'TIME'      Time type. */
+/*                 'CHR'       Character type. */
+/*                 'DP'        Double precision type. */
+/*                 'INT'       Integer type. */
+/*                 'TIME'      Time type. */
 
-/*                    The Ith element of DTYPES corresponds to the */
-/*                    column whose name is the Ith element of CNAMES. */
+/*              The Ith element of DTYPES corresponds to the */
+/*              column whose name is the Ith element of CNAMES. */
 
-/*     SIZES          is an array of declared sizes of column entries. */
-/*                    The Ith element of SIZES is the declared size of */
-/*                    the column whose name is the Ith element of CNAMES. */
-/*                    Scalar-valued columns have size 1; fixed-size, */
-/*                    array-valued columns have size greater than 1. */
-/*                    Array valued columns of variable size have a size */
-/*                    value of -1. */
+/*     SIZES    is an array of declared sizes of column entries. */
+/*              The Ith element of SIZES is the declared size of */
+/*              the column whose name is the Ith element of CNAMES. */
+/*              Scalar-valued columns have size 1; fixed-size, */
+/*              array-valued columns have size greater than 1. */
+/*              Array valued columns of variable size have a size */
+/*              value of -1. */
 
-/*     STRLNS         is an array of declared string lengths of */
-/*                    character column entries.  These lengths are */
-/*                    defined only for columns of character type. */
-/*                    The Ith element of SIZES is the declared size of */
-/*                    the column whose name is the Ith element of CNAMES, */
-/*                    if that column has character type; otherwise, the */
-/*                    Ith element of STRLNS is undefined.  For */
-/*                    character columns having variable string length, */
-/*                    the returned value of STRLNS is -1. */
+/*     STRLNS   is an array of declared string lengths of */
+/*              character column entries. These lengths are */
+/*              defined only for columns of character type. */
+/*              The Ith element of SIZES is the declared size of */
+/*              the column whose name is the Ith element of CNAMES, */
+/*              if that column has character type; otherwise, the */
+/*              Ith element of STRLNS is undefined. For */
+/*              character columns having variable string length, */
+/*              the returned value of STRLNS is -1. */
 
-/*     INDEXD         is an array of logical flags indicating whether the */
-/*                    corresponding columns are indexed.  The Ith element */
-/*                    of INDEXD applies to the column whose name is the */
-/*                    Ith element of CNAMES. */
+/*     INDEXD   is an array of logical flags indicating whether the */
+/*              corresponding columns are indexed. The Ith element */
+/*              of INDEXD applies to the column whose name is the */
+/*              Ith element of CNAMES. */
 
-/*     NULLOK         is an array of logical flags indicating whether the */
-/*                    corresponding columns allow null values.  The Ith */
-/*                    element of NULLOK applies to the column whose name */
-/*                    is the Ith element of CNAMES. */
+/*     NULLOK   is an array of logical flags indicating whether the */
+/*              corresponding columns allow null values. The Ith */
+/*              element of NULLOK applies to the column whose name */
+/*              is the Ith element of CNAMES. */
 
 /* $ Parameters */
 
@@ -525,17 +525,17 @@
 
 /* $ Exceptions */
 
-/*     1)  If HANDLE is invalid, the error will be diagnosed by routines */
-/*         called by this routine.  The output arguments will not be */
+/*     1)  If HANDLE is invalid, an error is signaled by a routine in the */
+/*         call tree of this routine. The output arguments will not be */
 /*         modified. */
 
 /*     2)  If SEGNO is not the index of an existing segment in the */
-/*         specified file, the error SPICE(INDEXOUTOFRANGE) will be */
-/*         signalled.  The output arguments will not be modified. */
+/*         specified file, the error SPICE(INDEXOUTOFRANGE) is signaled. */
+/*         The output arguments will not be modified. */
 
 /*     3)  If an I/O error occurs while attempting to obtain summary */
-/*         information for the specified segment, the error will be */
-/*         diagnosed by routines called by this routine.  The output */
+/*         information for the specified segment, the error is signaled */
+/*         by a routine in the call tree of this routine. The output */
 /*         arguments may be modified in this case. */
 
 /* $ Files */
@@ -546,7 +546,7 @@
 
 /*     This routine supports the function of summarizing a binary */
 /*     EK file, allowing NAIF Toolkit users to determine whether it */
-/*     contains data of interest.  The routine also also provides */
+/*     contains data of interest. The routine also also provides */
 /*     address information necessary to retrieve information from the */
 /*     segment. */
 
@@ -634,16 +634,24 @@
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
 
 /* $ Version */
 
+/* -    SPICELIB Version 1.2.0, 02-JUL-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. Fixed previous */
+/*        version number. */
+
 /* -    SPICELIB Version 1.1.0, 07-JUL-1996 (NJB) */
 
-/*        Bug fix:  correct parameter is now used to set dimension */
+/*        Bug fix: correct parameter is now used to set dimension */
 /*        of local variable SEGDSC. */
 
-/* -    Beta Version 1.0.0, 26-SEP-1995 (NJB) */
+/* -    SPICELIB Version 1.0.0, 26-SEP-1995 (NJB) */
 
 /* -& */
 /* $ Index_Entries */
@@ -655,8 +663,8 @@
 
 /* -    SPICELIB Version 1.1.0, 07-JUL-1996 (NJB) */
 
-/*        Bug fix:  correct parameter SDSCSZ is now used to set dimension */
-/*        of local variable SEGDSC.  Previously, the parameter */
+/*        Bug fix: correct parameter SDSCSZ is now used to set dimension */
+/*        of local variable SEGDSC. Previously, the parameter */
 /*        CDSCSZ had been used. */
 
 /* -& */
@@ -698,23 +706,23 @@
     for (i__ = 1; i__ <= i__1; ++i__) {
 	s_copy(dtypes + (i__ - 1) * dtypes_len, typstr + (((i__3 = cdscrs[(
 		i__2 = i__ * 11 - 10) < 1100 && 0 <= i__2 ? i__2 : s_rnge(
-		"cdscrs", i__2, "ekssum_", (ftnlen)355)] - 1) < 4 && 0 <= 
-		i__3 ? i__3 : s_rnge("typstr", i__3, "ekssum_", (ftnlen)355)) 
+		"cdscrs", i__2, "ekssum_", (ftnlen)366)] - 1) < 4 && 0 <= 
+		i__3 ? i__3 : s_rnge("typstr", i__3, "ekssum_", (ftnlen)366)) 
 		<< 2), dtypes_len, (ftnlen)4);
 	sizes[i__ - 1] = cdscrs[(i__2 = i__ * 11 - 8) < 1100 && 0 <= i__2 ? 
-		i__2 : s_rnge("cdscrs", i__2, "ekssum_", (ftnlen)357)];
+		i__2 : s_rnge("cdscrs", i__2, "ekssum_", (ftnlen)368)];
 	if (cdscrs[(i__2 = i__ * 11 - 10) < 1100 && 0 <= i__2 ? i__2 : s_rnge(
-		"cdscrs", i__2, "ekssum_", (ftnlen)359)] == 1) {
+		"cdscrs", i__2, "ekssum_", (ftnlen)370)] == 1) {
 	    strlns[i__ - 1] = cdscrs[(i__2 = i__ * 11 - 9) < 1100 && 0 <= 
 		    i__2 ? i__2 : s_rnge("cdscrs", i__2, "ekssum_", (ftnlen)
-		    360)];
+		    371)];
 	} else {
 	    strlns[i__ - 1] = 0;
 	}
 	indexd[i__ - 1] = cdscrs[(i__2 = i__ * 11 - 6) < 1100 && 0 <= i__2 ? 
-		i__2 : s_rnge("cdscrs", i__2, "ekssum_", (ftnlen)365)] != -1;
+		i__2 : s_rnge("cdscrs", i__2, "ekssum_", (ftnlen)376)] != -1;
 	nullok[i__ - 1] = cdscrs[(i__2 = i__ * 11 - 4) < 1100 && 0 <= i__2 ? 
-		i__2 : s_rnge("cdscrs", i__2, "ekssum_", (ftnlen)366)] != -1;
+		i__2 : s_rnge("cdscrs", i__2, "ekssum_", (ftnlen)377)] != -1;
     }
     chkout_("EKSSUM", (ftnlen)6);
     return 0;

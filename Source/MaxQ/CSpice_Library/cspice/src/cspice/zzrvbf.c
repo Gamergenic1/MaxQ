@@ -202,23 +202,23 @@ static integer c__132 = 132;
 /* $ Exceptions */
 
 
-/*     1) The error 'SPICE(BADTIMESPEC)' is signalled if a value */
+/*     1) The error 'SPICE(BADTIMESPEC)' is signaled if a value */
 /*        beginning with '@' cannot be parsed as a time. */
 
-/*     2) The error 'SPICE(BADVARASSIGN)' is signalled if variable */
+/*     2) The error 'SPICE(BADVARASSIGN)' is signaled if variable */
 /*        assignment does not have the form NAME = [(] value [ value ) ]. */
 
-/*     3) The error 'SPICE(KERNELPOOLFULL)' is signalled if there is */
+/*     3) The error 'SPICE(KERNELPOOLFULL)' is signaled if there is */
 /*        no room left in the kernel pool to store another variable */
 /*        or value. */
 
-/*     4) The error 'SPICE(NONPRINTINGCHAR)' is signalled if the name */
+/*     4) The error 'SPICE(NONPRINTINGCHAR)' is signaled if the name */
 /*        in a variable assignment contains a non-printing character. */
 
-/*     5) The error 'SPICE(NUMBEREXPECTED)' is signalled if a value */
+/*     5) The error 'SPICE(NUMBEREXPECTED)' is signaled if a value */
 /*        that is unquoted cannot be parsed as time or number. */
 
-/*     6) The error 'SPICE(TYPEMISMATCH)' is signalled if a variable */
+/*     6) The error 'SPICE(TYPEMISMATCH)' is signaled if a variable */
 /*        has a first value of one type (numeric or character) and */
 /*        a subsequent component has the other type. */
 
@@ -250,6 +250,10 @@ static integer c__132 = 132;
 /*     W.L. Taber (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.1, 03-OCT-2021 (NJB) */
+
+/*        Corrected typo in comments. */
 
 /* -    SPICELIB Version 1.1.0, 09-FEB-2010 (EDW) */
 
@@ -418,13 +422,13 @@ static integer c__132 = 132;
 		    if (code == iequal) {
 			++count;
 			begs[(i__1 = count - 1) < 132 && 0 <= i__1 ? i__1 : 
-				s_rnge("begs", i__1, "zzrvbf_", (ftnlen)544)] 
+				s_rnge("begs", i__1, "zzrvbf_", (ftnlen)548)] 
 				= i__;
 			type__[(i__1 = count - 1) < 132 && 0 <= i__1 ? i__1 : 
-				s_rnge("type", i__1, "zzrvbf_", (ftnlen)545)] 
+				s_rnge("type", i__1, "zzrvbf_", (ftnlen)549)] 
 				= 5;
 			ends[(i__1 = count - 1) < 132 && 0 <= i__1 ? i__1 : 
-				s_rnge("ends", i__1, "zzrvbf_", (ftnlen)546)] 
+				s_rnge("ends", i__1, "zzrvbf_", (ftnlen)550)] 
 				= i__;
 			if (i__ > 1) {
 
@@ -442,58 +446,58 @@ static integer c__132 = 132;
 
 				type__[(i__1 = count - 1) < 132 && 0 <= i__1 ?
 					 i__1 : s_rnge("type", i__1, "zzrvbf_"
-					, (ftnlen)562)] = 6;
+					, (ftnlen)566)] = 6;
 				begs[(i__1 = count - 1) < 132 && 0 <= i__1 ? 
 					i__1 : s_rnge("begs", i__1, "zzrvbf_",
-					 (ftnlen)563)] = i__ - 1;
+					 (ftnlen)567)] = i__ - 1;
 				if (begs[(i__1 = count - 2) < 132 && 0 <= 
 					i__1 ? i__1 : s_rnge("begs", i__1, 
-					"zzrvbf_", (ftnlen)565)] == ends[(
+					"zzrvbf_", (ftnlen)569)] == ends[(
 					i__2 = count - 2) < 132 && 0 <= i__2 ?
 					 i__2 : s_rnge("ends", i__2, "zzrvbf_"
-					, (ftnlen)565)]) {
+					, (ftnlen)569)]) {
 				    --count;
 				    begs[(i__1 = count - 1) < 132 && 0 <= 
 					    i__1 ? i__1 : s_rnge("begs", i__1,
-					     "zzrvbf_", (ftnlen)569)] = i__ - 
+					     "zzrvbf_", (ftnlen)573)] = i__ - 
 					    1;
 				    ends[(i__1 = count - 1) < 132 && 0 <= 
 					    i__1 ? i__1 : s_rnge("ends", i__1,
-					     "zzrvbf_", (ftnlen)570)] = i__;
+					     "zzrvbf_", (ftnlen)574)] = i__;
 				    type__[(i__1 = count - 1) < 132 && 0 <= 
 					    i__1 ? i__1 : s_rnge("type", i__1,
-					     "zzrvbf_", (ftnlen)571)] = 6;
+					     "zzrvbf_", (ftnlen)575)] = 6;
 				} else {
 				    ends[(i__1 = count - 2) < 132 && 0 <= 
 					    i__1 ? i__1 : s_rnge("ends", i__1,
-					     "zzrvbf_", (ftnlen)575)] = ends[(
+					     "zzrvbf_", (ftnlen)579)] = ends[(
 					    i__2 = count - 2) < 132 && 0 <= 
 					    i__2 ? i__2 : s_rnge("ends", i__2,
-					     "zzrvbf_", (ftnlen)575)] - 1;
+					     "zzrvbf_", (ftnlen)579)] - 1;
 				}
 			    }
 			}
 		    } else if (code == irparn) {
 			++count;
 			begs[(i__1 = count - 1) < 132 && 0 <= i__1 ? i__1 : 
-				s_rnge("begs", i__1, "zzrvbf_", (ftnlen)586)] 
+				s_rnge("begs", i__1, "zzrvbf_", (ftnlen)590)] 
 				= i__;
 			ends[(i__1 = count - 1) < 132 && 0 <= i__1 ? i__1 : 
-				s_rnge("ends", i__1, "zzrvbf_", (ftnlen)587)] 
+				s_rnge("ends", i__1, "zzrvbf_", (ftnlen)591)] 
 				= i__;
 			type__[(i__1 = count - 1) < 132 && 0 <= i__1 ? i__1 : 
-				s_rnge("type", i__1, "zzrvbf_", (ftnlen)588)] 
+				s_rnge("type", i__1, "zzrvbf_", (ftnlen)592)] 
 				= 4;
 		    } else if (code == ilparn) {
 			++count;
 			begs[(i__1 = count - 1) < 132 && 0 <= i__1 ? i__1 : 
-				s_rnge("begs", i__1, "zzrvbf_", (ftnlen)593)] 
+				s_rnge("begs", i__1, "zzrvbf_", (ftnlen)597)] 
 				= i__;
 			ends[(i__1 = count - 1) < 132 && 0 <= i__1 ? i__1 : 
-				s_rnge("ends", i__1, "zzrvbf_", (ftnlen)594)] 
+				s_rnge("ends", i__1, "zzrvbf_", (ftnlen)598)] 
 				= i__;
 			type__[(i__1 = count - 1) < 132 && 0 <= i__1 ? i__1 : 
-				s_rnge("type", i__1, "zzrvbf_", (ftnlen)595)] 
+				s_rnge("type", i__1, "zzrvbf_", (ftnlen)599)] 
 				= 3;
 		    }
 		}
@@ -513,13 +517,13 @@ static integer c__132 = 132;
 		    inquot = TRUE_;
 		    ++count;
 		    begs[(i__1 = count - 1) < 132 && 0 <= i__1 ? i__1 : 
-			    s_rnge("begs", i__1, "zzrvbf_", (ftnlen)618)] = 
+			    s_rnge("begs", i__1, "zzrvbf_", (ftnlen)622)] = 
 			    i__;
 		    type__[(i__1 = count - 1) < 132 && 0 <= i__1 ? i__1 : 
-			    s_rnge("type", i__1, "zzrvbf_", (ftnlen)619)] = 1;
+			    s_rnge("type", i__1, "zzrvbf_", (ftnlen)623)] = 1;
 		}
 		ends[(i__1 = count - 1) < 132 && 0 <= i__1 ? i__1 : s_rnge(
-			"ends", i__1, "zzrvbf_", (ftnlen)623)] = i__;
+			"ends", i__1, "zzrvbf_", (ftnlen)627)] = i__;
 	    } else {
 
 /*              This is some character other than a quote, or */
@@ -543,13 +547,13 @@ static integer c__132 = 132;
 		    intokn = TRUE_;
 		    ++count;
 		    begs[(i__1 = count - 1) < 132 && 0 <= i__1 ? i__1 : 
-			    s_rnge("begs", i__1, "zzrvbf_", (ftnlen)648)] = 
+			    s_rnge("begs", i__1, "zzrvbf_", (ftnlen)652)] = 
 			    i__;
 		    type__[(i__1 = count - 1) < 132 && 0 <= i__1 ? i__1 : 
-			    s_rnge("type", i__1, "zzrvbf_", (ftnlen)649)] = 2;
+			    s_rnge("type", i__1, "zzrvbf_", (ftnlen)653)] = 2;
 		}
 		ends[(i__1 = count - 1) < 132 && 0 <= i__1 ? i__1 : s_rnge(
-			"ends", i__1, "zzrvbf_", (ftnlen)652)] = i__;
+			"ends", i__1, "zzrvbf_", (ftnlen)656)] = i__;
 	    }
 	}
 
@@ -763,7 +767,7 @@ static integer c__132 = 132;
 		nxttok = 3;
 		++count;
 		type__[(i__1 = count - 1) < 132 && 0 <= i__1 ? i__1 : s_rnge(
-			"type", i__1, "zzrvbf_", (ftnlen)921)] = 4;
+			"type", i__1, "zzrvbf_", (ftnlen)925)] = 4;
 	    }
 
 /*        For subsequent lines, treat everything as a new value. */
@@ -780,15 +784,15 @@ static integer c__132 = 132;
 /*        Dates begin with @; anything else is presumed to be a number. */
 
 	while(type__[(i__1 = nxttok - 1) < 132 && 0 <= i__1 ? i__1 : s_rnge(
-		"type", i__1, "zzrvbf_", (ftnlen)941)] != 4 && nxttok <= 
+		"type", i__1, "zzrvbf_", (ftnlen)945)] != 4 && nxttok <= 
 		count) {
 
 /*           Get the begin and end of this token. */
 
 	    b = begs[(i__1 = nxttok - 1) < 132 && 0 <= i__1 ? i__1 : s_rnge(
-		    "begs", i__1, "zzrvbf_", (ftnlen)945)];
+		    "begs", i__1, "zzrvbf_", (ftnlen)949)];
 	    e = ends[(i__1 = nxttok - 1) < 132 && 0 <= i__1 ? i__1 : s_rnge(
-		    "ends", i__1, "zzrvbf_", (ftnlen)946)];
+		    "ends", i__1, "zzrvbf_", (ftnlen)950)];
 	    if (vartyp == 3) {
 
 /*              We need to determine which category of variable we */
@@ -796,10 +800,10 @@ static integer c__132 = 132;
 /*              type. */
 
 		if (type__[(i__1 = nxttok - 1) < 132 && 0 <= i__1 ? i__1 : 
-			s_rnge("type", i__1, "zzrvbf_", (ftnlen)954)] == 1) {
+			s_rnge("type", i__1, "zzrvbf_", (ftnlen)958)] == 1) {
 		    vartyp = 1;
 		} else if (type__[(i__1 = nxttok - 1) < 132 && 0 <= i__1 ? 
-			i__1 : s_rnge("type", i__1, "zzrvbf_", (ftnlen)958)] 
+			i__1 : s_rnge("type", i__1, "zzrvbf_", (ftnlen)962)] 
 			== 2) {
 		    vartyp = 2;
 		} else {
@@ -827,7 +831,7 @@ static integer c__132 = 132;
 /*              First make sure that this token represents a string. */
 
 		if (type__[(i__1 = nxttok - 1) < 132 && 0 <= i__1 ? i__1 : 
-			s_rnge("type", i__1, "zzrvbf_", (ftnlen)996)] != 1) {
+			s_rnge("type", i__1, "zzrvbf_", (ftnlen)1000)] != 1) {
 
 /*                 First perform the clean up function. */
 
@@ -921,7 +925,7 @@ static integer c__132 = 132;
 
 	    } else {
 		if (type__[(i__1 = nxttok - 1) < 132 && 0 <= i__1 ? i__1 : 
-			s_rnge("type", i__1, "zzrvbf_", (ftnlen)1117)] != 2) {
+			s_rnge("type", i__1, "zzrvbf_", (ftnlen)1121)] != 2) {
 
 /*                 First perform the clean up function. */
 

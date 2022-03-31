@@ -44,16 +44,17 @@
    #include "SpiceUsr.h"
    #include "SpiceZmc.h"
    #undef    vdistg_c
-   
+
 
    SpiceDouble vdistg_c ( ConstSpiceDouble   * v1,
                           ConstSpiceDouble   * v2,
                           SpiceInt             ndim )
+
 /*
 
 -Brief_I/O
 
-   Variable  I/O  Description
+   VARIABLE  I/O  DESCRIPTION
    --------  ---  --------------------------------------------------
    v1,
    v2         I   Two vectors of arbitrary dimension.
@@ -64,17 +65,17 @@
 -Detailed_Input
 
    v1,
-   v2         are two vectors of arbitrary dimension, the
-              distance between which is desired.
+   v2          are two vectors of arbitrary dimension, the
+               distance between which is desired.
 
-   ndim       is the common dimension of v1 and v2.  ndim must be
-              non-negative and must not exceed the minimum of the
-              declared sizes of the actual arguments corresponding
-              to v1 and v2.
+   ndim        is the common dimension of v1 and v2. ndim must be
+               non-negative and must not exceed the minimum of the
+               declared sizes of the actual arguments corresponding
+               to v1 and v2.
 
 -Detailed_Output
 
-   The function returns the distance between v1 and v2.  This is
+   The function returns the distance between v1 and v2. This is
    defined as
 
             ||  v1 - v2  ||,
@@ -110,7 +111,7 @@
            1        2                  n
 
    This number is the distance of the point (x, y, z) from the
-   origin.  If n = 3, and A and B are two vectors whose components
+   origin. If n = 3, and A and B are two vectors whose components
    are
 
       ( a[0], a[1], a[2] )    and    ( b[0], b[1], b[2] ),
@@ -149,16 +150,21 @@
 
 -Author_and_Institution
 
-   N.J. Bachman   (JPL)
-   E.D. Wright    (JPL)
+   N.J. Bachman        (JPL)
+   J. Diaz del Rio     (ODC Space)
+   E.D. Wright         (JPL)
 
 -Version
 
+   -CSPICE Version 1.1.1, 05-JUL-2021 (JDR)
+
+       Edited the header to comply with NAIF standard.
+
    -CSPICE Version 1.1.0, 22-OCT-1998 (NJB)
 
-      Made input vectors const.
+       Made input vectors const.
 
-   -CSPICE Version 1.0.0, 23-MAR-1998   (EDW)
+   -CSPICE Version 1.0.0, 23-MAR-1998 (EDW)
 
 -Index_Entries
 
@@ -179,13 +185,13 @@
 
 
    /* Initialize dist and scale to zero. */
-   
+
    dist  = 0.;
    scale = 0.;
 
 
    /* Check ndim makes sense. */
-   
+
    if ( ndim <= 0 )
       {
       return 0.;

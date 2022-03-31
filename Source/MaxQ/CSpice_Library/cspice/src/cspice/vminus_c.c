@@ -1,11 +1,11 @@
 /*
 
--Procedure vminus_c ( Minus V, "-V", 3 dimensions )
+-Procedure vminus_c ( Negate vector, "-v", 3 dimensions )
 
 -Abstract
- 
-   Negate a double precision 3-dimensional vector. 
- 
+
+   Negate a double precision 3-dimensional vector.
+
 -Disclaimer
 
    THIS SOFTWARE AND ANY RELATED MATERIALS WERE CREATED BY THE
@@ -32,98 +32,170 @@
    ACTIONS OF RECIPIENT IN THE USE OF THE SOFTWARE.
 
 -Required_Reading
- 
-   None. 
- 
+
+   None.
+
 -Keywords
- 
-   VECTOR 
- 
+
+   VECTOR
+
 */
 
    #include "SpiceUsr.h"
    #undef    vminus_c
-   
 
-   void vminus_c ( ConstSpiceDouble v1[3],  SpiceDouble vout[3] ) 
+
+   void vminus_c ( ConstSpiceDouble    v1     [3],
+                   SpiceDouble         vout   [3] )
 
 /*
 
 -Brief_I/O
- 
-   VARIABLE  I/O  DESCRIPTION 
-   --------  ---  -------------------------------------------------- 
-   v1         I     Vector to be negated. 
-   vout       O     Negated vector -v1. vout can overwrite v1. 
- 
- 
+
+   VARIABLE  I/O  DESCRIPTION
+   --------  ---  --------------------------------------------------
+   v1         I   Vector to be negated.
+   vout       O   Negated vector -v1.
+
 -Detailed_Input
- 
-   v1      This may be any 3-dimensional, double precision vector. 
- 
+
+   v1          is any double precision 3-dimensional vector.
+
 -Detailed_Output
- 
-   vout    This will be the negation (additive inverse) of v1.  It 
-           is a 3-dimensional, double precision vector.  vout may 
-           overwrite v1. 
- 
+
+   vout        is the negation (additive inverse) of `v1'. It is a
+               double precision 3-dimensional vector. `vout' may
+               overwrite `v1'.
+
 -Parameters
- 
-   None. 
- 
--Particulars
- 
-   vminus_c implements (by components) the expression vminus_c = -v1. 
-   No error checking is performed since overflow can occur ONLY if 
-   the dynamic range of positive floating point numbers is not the 
-   same size as the dynamic range of negative floating point 
-   numbers AND at least one component of v1 falls outside the 
-   common range.  The likelihood of this occuring is so small as to 
-   be of no concern. 
- 
--Examples
- 
-   The following table shows the output vout as a function of the 
-   the input v1 from the subroutine vminus_c. 
- 
-   v1                     vout 
-   ------------------------------------------------------- 
-   (1, -2, 0)       (-1, 2, 0) 
-   (0, 0,  0)       (0, 0,  0) 
- 
--Restrictions
- 
-   None. 
- 
+
+   None.
+
 -Exceptions
- 
-   Error free. 
- 
+
+   Error free.
+
 -Files
- 
-   None. 
- 
--Author_and_Institution
- 
-   W.M. Owen       (JPL)
-   E.D. Wright     (JPL)
- 
+
+   None.
+
+-Particulars
+
+   For each value of the index `i' from 0 to 2, vminus_c negates `v1'
+   by the expression:
+
+      vout[i] = -v1[i];
+
+   No error checking is performed since overflow can occur ONLY if
+   the dynamic range of positive floating point numbers is not the
+   same size as the dynamic range of negative floating point numbers
+   AND at least one component of `v1' falls outside the common range.
+   The likelihood of this occurring is so small as to be of no
+   concern.
+
+-Examples
+
+   The numerical results shown for this example may differ across
+   platforms. The results depend on the SPICE kernels used as
+   input, the compiler and supporting libraries, and the machine
+   specific arithmetic implementation.
+
+   1) Define a set of 3-dimensional vectors and negate each of them.
+
+
+      Example code begins here.
+
+
+      /.
+         Program vminus_ex1
+      ./
+      #include <stdio.h>
+      #include "SpiceUsr.h"
+
+      int main( )
+      {
+
+         /.
+         Local parameters.
+         ./
+         #define SETSIZ       2
+
+         /.
+         Local variables.
+         ./
+         SpiceDouble          vout   [3];
+
+         SpiceInt             i;
+
+         /.
+         Define a set of 3-dimensional vectors.
+         ./
+         SpiceDouble          v1     [SETSIZ][3] = { { 1.0, -2.0, 0.0 },
+                                                     { 0.0,  0.0, 0.0 } };
+
+         /.
+         Negate each vector
+         ./
+         for ( i = 0; i < SETSIZ; i++ )
+         {
+
+            vminus_c ( v1[i], vout );
+
+            printf( "Input vector  :  %5.1f %5.1f %5.1f\n",
+                               v1[i][0], v1[i][1], v1[i][2] );
+            printf( "Negated vector:  %5.1f %5.1f %5.1f\n",
+                                  vout[0], vout[1], vout[2] );
+            printf( "\n" );
+
+         }
+
+         return ( 0 );
+      }
+
+
+      When this program was executed on a Mac/Intel/cc/64-bit
+      platform, the output was:
+
+
+      Input vector  :    1.0  -2.0   0.0
+      Negated vector:   -1.0   2.0  -0.0
+
+      Input vector  :    0.0   0.0   0.0
+      Negated vector:   -0.0  -0.0  -0.0
+
+
+-Restrictions
+
+   None.
+
 -Literature_References
- 
-   None. 
- 
+
+   None.
+
+-Author_and_Institution
+
+   N.J. Bachman        (JPL)
+   J. Diaz del Rio     (ODC Space)
+   W.M. Owen           (JPL)
+   E.D. Wright         (JPL)
+
 -Version
- 
+
+   -CSPICE Version 1.1.1, 01-NOV-2021 (JDR)
+
+       Edited the header to comply with NAIF standard. Added complete
+       code example based on existing example.
+
    -CSPICE Version 1.1.0, 22-OCT-1998 (NJB)
 
-      Made input vector const.
+       Made input vector const.
 
-   -CSPICE Version 1.0.0, 08-FEB-1998 (EDW)
+   -CSPICE Version 1.0.0, 08-FEB-1998 (EDW) (WMO)
 
 -Index_Entries
- 
-   negate a 3-dimensional vector 
- 
+
+   negate a 3-dimensional vector
+
 -&
 */
 

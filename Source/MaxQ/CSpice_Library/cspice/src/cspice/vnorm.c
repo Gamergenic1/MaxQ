@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      VNORM ( Vector norm, 3 dimensions ) */
+/* $Procedure VNORM ( Vector norm, 3 dimensions ) */
 doublereal vnorm_(doublereal *v1)
 {
     /* System generated locals */
@@ -19,8 +19,8 @@ doublereal vnorm_(doublereal *v1)
 
 /* $ Abstract */
 
-/*      Compute the magnitude of a double precision, 3-dimensional */
-/*      vector. */
+/*     Compute the magnitude of a double precision 3-dimensional */
+/*     vector. */
 
 /* $ Disclaimer */
 
@@ -53,84 +53,153 @@ doublereal vnorm_(doublereal *v1)
 
 /* $ Keywords */
 
-/*      VECTOR */
+/*     VECTOR */
 
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*      VARIABLE  I/O  DESCRIPTION */
-/*      --------  ---  -------------------------------------------------- */
-/*       V1        I     Vector whose magnitude is to be found. */
+/*     VARIABLE  I/O  DESCRIPTION */
+/*     --------  ---  -------------------------------------------------- */
+/*     V1         I   Vector whose magnitude is to be found. */
+
+/*     The function returns the magnitude of V1. */
 
 /* $ Detailed_Input */
 
-/*      V1      This may be any 3-dimensional, double precision vector. */
+/*     V1       is any double precision 3-dimensional vector. */
 
 /* $ Detailed_Output */
 
-/*      VNORM is the magnitude of V1 calculated in a numerically stable */
-/*      way. */
+/*     The function returns the magnitude of V1 calculated in a */
+/*     numerically stable way. */
 
 /* $ Parameters */
 
 /*     None. */
 
-/* $ Particulars */
-
-/*      VNORM finds the component of V1 whose magnitude is the largest. */
-/*      If the absolute magnitude of that component indicates that a */
-/*      numeric overflow would occur when it is squared, or if it */
-/*      indicates that an underflow would occur when square (giving a */
-/*      magnitude of zero) then the following expression is used: */
-
-/*      VNORM = V1MAX * MAGNITUDE OF [ (1/V1MAX)*V1 ] */
-
-/*      Otherwise a simpler expression is used: */
-
-/*      VNORM = MAGNITUDE OF [ V1 ] */
-
-/*      Beyond the logic described above, no further checking of the */
-/*      validity of the input is performed. */
-
-/* $ Examples */
-
-/*      The following table show the correlation between various input */
-/*      vectors V1 and VNORM: */
-
-/*      V1                                    VNORM */
-/*      ----------------------------------------------------------------- */
-/*      (1.D0, 2.D0, 2.D0)                     3.D0 */
-/*      (5.D0, 12.D0, 0.D0)                   13.D0 */
-/*      (-5.D-17, 0.0D0, 12.D-17)             13.D-17 */
-
-/* $ Restrictions */
-
-/*      None. */
-
 /* $ Exceptions */
 
-/*      Error free. */
+/*     Error free. */
 
 /* $ Files */
 
-/*      None. */
+/*     None. */
 
-/* $ Author_and_Institution */
+/* $ Particulars */
 
-/*      W.M. Owen       (JPL) */
+/*     VNORM takes care to avoid overflow while computing the norm of the */
+/*     input vector V1. VNORM finds the component of V1 whose magnitude */
+/*     is the largest. Calling this magnitude V1MAX, the norm is computed */
+/*     using the formula: */
+
+/*                        ||    1         || */
+/*        VNORM = V1MAX * || ------- * V1 || */
+/*                        ||  V1MAX       || */
+
+/*     where the notation ||X|| indicates the norm of the vector X. */
+
+/* $ Examples */
+
+/*     The numerical results shown for this example may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
+
+/*     1) Define a set of 3-dimensional vectors and compute the */
+/*        magnitude of each vector within. */
+
+
+/*        Example code begins here. */
+
+
+/*              PROGRAM VNORM_EX1 */
+/*              IMPLICIT NONE */
+
+/*        C */
+/*        C     SPICELIB functions. */
+/*        C */
+/*              DOUBLE PRECISION      VNORM */
+
+/*        C */
+/*        C     Local parameters. */
+/*        C */
+/*              INTEGER               SETSIZ */
+/*              PARAMETER           ( SETSIZ = 3 ) */
+
+/*        C */
+/*        C     Local variables. */
+/*        C */
+/*              DOUBLE PRECISION      V1   ( 3, SETSIZ ) */
+
+/*              INTEGER               I */
+/*              INTEGER               J */
+
+/*        C */
+/*        C     Define a set of 3-dimensional vectors. */
+/*        C */
+/*              DATA                  V1  /  1.D0,   2.D0,   2.D0, */
+/*             .                             5.D0,  12.D0,   0.D0, */
+/*             .                            -5.D-17, 0.0D0, 12.D-17  / */
+
+/*        C */
+/*        C     Calculate the magnitude of each vector */
+/*        C */
+/*              DO I=1, SETSIZ */
+
+/*                 WRITE(*,'(A,3E10.2)') 'Input vector: ', */
+/*             .                         ( V1(J,I), J=1,3 ) */
+/*                 WRITE(*,'(A,F24.20)') 'Magnitude   : ', */
+/*             .                         VNORM ( V1(1,I) ) */
+/*                 WRITE(*,*) */
+
+/*              END DO */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*        Input vector:   0.10E+01  0.20E+01  0.20E+01 */
+/*        Magnitude   :   3.00000000000000000000 */
+
+/*        Input vector:   0.50E+01  0.12E+02  0.00E+00 */
+/*        Magnitude   :  13.00000000000000000000 */
+
+/*        Input vector:  -0.50E-16  0.00E+00  0.12E-15 */
+/*        Magnitude   :   0.00000000000000013000 */
+
+
+/* $ Restrictions */
+
+/*     None. */
 
 /* $ Literature_References */
 
-/*      None. */
+/*     None. */
+
+/* $ Author_and_Institution */
+
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.M. Owen          (JPL) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
 
-/* -     SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+/* -    SPICELIB Version 1.0.2, 06-JUL-2020 (JDR) */
 
-/*         Comment section for permuted index source lines was added */
-/*         following the header. */
+/*        Added IMPLICIT NONE statement. */
 
-/* -     SPICELIB Version 1.0.0, 31-JAN-1990 (WMO) */
+/*        Edited the header to comply with NAIF standard. Added complete */
+/*        code example. */
+
+/* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+
+/*        Comment section for permuted index source lines was added */
+/*        following the header. */
+
+/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (WMO) */
 
 /* -& */
 /* $ Index_Entries */

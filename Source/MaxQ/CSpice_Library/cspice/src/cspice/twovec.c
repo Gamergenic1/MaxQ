@@ -9,7 +9,7 @@
 
 static integer c__9 = 9;
 
-/* $Procedure      TWOVEC ( Two vectors defining an orthonormal frame ) */
+/* $Procedure TWOVEC ( Two vectors defining an orthonormal frame ) */
 /* Subroutine */ int twovec_(doublereal *axdef, integer *indexa, doublereal *
 	plndef, integer *indexp, doublereal *mout)
 {
@@ -71,7 +71,10 @@ static integer c__9 = 9;
 
 /* $ Keywords */
 
-/*     AXES,  FRAME,  ROTATION,  TRANSFORMATION */
+/*     AXES */
+/*     FRAME */
+/*     ROTATION */
+/*     TRANSFORMATION */
 
 /* $ Declarations */
 /* $ Brief_I/O */
@@ -82,49 +85,48 @@ static integer c__9 = 9;
 /*     INDEXA     I   Principal axis number of AXDEF (X=1, Y=2, Z=3). */
 /*     PLNDEF     I   Vector defining (with AXDEF) a principal plane. */
 /*     INDEXP     I   Second axis number (with INDEXA) of principal */
-/*                     plane. */
+/*                    plane. */
 /*     MOUT       O   Output rotation matrix. */
 
 /* $ Detailed_Input */
 
-/*     AXDEF      is a vector defining one of the priciple axes of a */
-/*                coordinate frame. */
+/*     AXDEF    is a vector defining one of the principle axes of a */
+/*              coordinate frame. */
 
-/*     INDEXA     is a number that determines which of the three */
-/*                coordinate axes contains AXDEF. */
+/*     INDEXA   is a number that determines which of the three */
+/*              coordinate axes contains AXDEF. */
 
-/*                If INDEXA is 1 then AXDEF defines the X axis of the */
-/*                coordinate frame. */
+/*              If INDEXA is 1 then AXDEF defines the X axis of the */
+/*              coordinate frame. */
 
-/*                If INDEXA is 2 then AXDEF defines the Y axis of the */
-/*                coordinate frame. */
+/*              If INDEXA is 2 then AXDEF defines the Y axis of the */
+/*              coordinate frame. */
 
-/*                If INDEXA is 3 then AXDEF defines the Z axis of the */
-/*                coordinate frame */
+/*              If INDEXA is 3 then AXDEF defines the Z axis of the */
+/*              coordinate frame. */
 
-/*     PLNDEF     is a vector defining (with AXDEF) a principal plane of */
-/*                the coordinate frame. AXDEF and PLNDEF must be */
-/*                linearly independent. */
+/*     PLNDEF   is a vector defining (with AXDEF) a principal plane of */
+/*              the coordinate frame. AXDEF and PLNDEF must be */
+/*              linearly independent. */
 
-/*     INDEXP     is the second axis of the principal frame determined */
-/*                by AXDEF and PLNDEF.  INDEXA, INDEXP must be different */
-/*                and be integers from 1 to 3. */
+/*     INDEXP   is the second axis of the principal frame determined */
+/*              by AXDEF and PLNDEF.  INDEXA, INDEXP must be different */
+/*              and be integers from 1 to 3. */
 
-/*                If INDEXP is 1, the second axis of the principal */
-/*                plane is the X-axis. */
+/*              If INDEXP is 1, the second axis of the principal */
+/*              plane is the X-axis. */
 
-/*                If INDEXP is 2, the second axis of the principal */
-/*                plane is the Y-axis. */
+/*              If INDEXP is 2, the second axis of the principal */
+/*              plane is the Y-axis. */
 
-/*                If INDEXP is 3, the second axis of the principal plane */
-/*                is the Z-axis. */
-
+/*              If INDEXP is 3, the second axis of the principal plane */
+/*              is the Z-axis. */
 
 /* $ Detailed_Output */
 
-/*     MOUT       is a rotation matrix that transforms coordinates given */
-/*                in the input frame to the frame determined by AXDEF, */
-/*                PLNDEF, INDEXA and INDEXP. */
+/*     MOUT     is a rotation matrix that transforms coordinates given */
+/*              in the input frame to the frame determined by AXDEF, */
+/*              PLNDEF, INDEXA and INDEXP. */
 
 /* $ Parameters */
 
@@ -132,14 +134,14 @@ static integer c__9 = 9;
 
 /* $ Exceptions */
 
-/*     1) If INDEXA or INDEXP is not in the set {1,2,3} the error */
-/*        SPICE(BADINDEX) will be signaled. */
+/*     1)  If INDEXA or INDEXP is not in the set {1,2,3}, the error */
+/*         SPICE(BADINDEX) is signaled. */
 
-/*     2) If INDEXA and INDEXP are the same the error */
-/*        SPICE(UNDEFINEDFRAME) will be signaled. */
+/*     2)  If INDEXA and INDEXP are the same, the error */
+/*         SPICE(UNDEFINEDFRAME) is signaled. */
 
-/*     3) If the cross product of the vectors AXDEF and PLNDEF is zero, */
-/*        the error SPICE(DEPENDENTVECTORS) will be signaled. */
+/*     3)  If the cross product of the vectors AXDEF and PLNDEF is zero, */
+/*         the error SPICE(DEPENDENTVECTORS) is signaled. */
 
 /* $ Files */
 
@@ -156,7 +158,7 @@ static integer c__9 = 9;
 
 /*     This routine determines the transformation matrix that transforms */
 /*     from coordinates used to represent the input vectors to the */
-/*     the system determined by AXDEF and PLNDEF.  Thus a vector */
+/*     the system determined by AXDEF and PLNDEF. Thus a vector */
 /*     (x,y,z) in the input coordinate system will have coordinates */
 
 /*                     t */
@@ -175,17 +177,25 @@ static integer c__9 = 9;
 
 /*     None. */
 
-/* $ Author_and_Institution */
-
-/*     N.J. Bachman    (JPL) */
-/*     W.M. Owen       (JPL) */
-/*     W.L. Taber      (JPL) */
-
 /* $ Literature_References */
 
 /*     None. */
 
+/* $ Author_and_Institution */
+
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.M. Owen          (JPL) */
+/*     W.L. Taber         (JPL) */
+
 /* $ Version */
+
+/* -    SPICELIB Version 1.2.0, 06-JUL-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. Removed */
+/*        unnecessary $Revisions section. */
 
 /* -    SPICELIB Version 1.1.0, 31-AUG-2005 (NJB) */
 
@@ -197,24 +207,13 @@ static integer c__9 = 9;
 /*        Comment section for permuted index source lines was added */
 /*        following the header. */
 
-/* -    SPICELIB Version 1.0.0,  31-JAN-1990 (WMO) */
+/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (WMO) (WLT) */
 
 /* -& */
 /* $ Index_Entries */
 
 /*     define an orthonormal frame from two vectors */
 
-/* -& */
-/* $ Revisions */
-
-/* -    SPICELIB Version 1.1.0, 31-AUG-2005 (NJB) */
-
-/*        Updated to remove non-standard use of duplicate arguments */
-/*        in VSCL call. */
-
-/* -    Beta Version 2.0.0, 10-JAN-1989 (WLT) */
-
-/*     Error checking was added and the algorithm somewhat redesigned. */
 /* -& */
 
 /*     SPICELIB functions */
@@ -240,9 +239,9 @@ static integer c__9 = 9;
 /*     Check for obvious bad inputs. */
 
     if (max(*indexp,*indexa) > 3 || min(*indexp,*indexa) < 1) {
-	setmsg_("The definition indexs must lie in the range from 1 to 3.  T"
-		"he value of INDEXA was #. The value of INDEXP was #. ", (
-		ftnlen)112);
+	setmsg_("The definition indexes must lie in the range from 1 to 3.  "
+		"The value of INDEXA was #. The value of INDEXP was #. ", (
+		ftnlen)113);
 	errint_("#", indexa, (ftnlen)1);
 	errint_("#", indexp, (ftnlen)1);
 	sigerr_("SPICE(BADINDEX)", (ftnlen)15);
@@ -266,14 +265,14 @@ static integer c__9 = 9;
 /*     ... then the other two. */
 
     i2 = seqnce[(i__1 = *indexa) < 5 && 0 <= i__1 ? i__1 : s_rnge("seqnce", 
-	    i__1, "twovec_", (ftnlen)270)];
+	    i__1, "twovec_", (ftnlen)271)];
     i3 = seqnce[(i__1 = *indexa + 1) < 5 && 0 <= i__1 ? i__1 : s_rnge("seqnce"
-	    , i__1, "twovec_", (ftnlen)271)];
+	    , i__1, "twovec_", (ftnlen)272)];
 
 /*     Row I1 contains normalized AXDEF (store in columns for now) */
 
     vhat_(axdef, &mout[(i__1 = i1 * 3 - 3) < 9 && 0 <= i__1 ? i__1 : s_rnge(
-	    "mout", i__1, "twovec_", (ftnlen)276)]);
+	    "mout", i__1, "twovec_", (ftnlen)277)]);
 
 /*     Obtain rows I2 and I3 using cross products.  Which order to use */
 /*     depends on whether INDEXP = I2 (next axis in right-handed order) */
@@ -281,18 +280,18 @@ static integer c__9 = 9;
 
     if (*indexp == i2) {
 	ucrss_(axdef, plndef, &mout[(i__1 = i3 * 3 - 3) < 9 && 0 <= i__1 ? 
-		i__1 : s_rnge("mout", i__1, "twovec_", (ftnlen)285)]);
+		i__1 : s_rnge("mout", i__1, "twovec_", (ftnlen)286)]);
 	ucrss_(&mout[(i__1 = i3 * 3 - 3) < 9 && 0 <= i__1 ? i__1 : s_rnge(
-		"mout", i__1, "twovec_", (ftnlen)286)], axdef, &mout[(i__2 = 
+		"mout", i__1, "twovec_", (ftnlen)287)], axdef, &mout[(i__2 = 
 		i2 * 3 - 3) < 9 && 0 <= i__2 ? i__2 : s_rnge("mout", i__2, 
-		"twovec_", (ftnlen)286)]);
+		"twovec_", (ftnlen)287)]);
     } else {
 	ucrss_(plndef, axdef, &mout[(i__1 = i2 * 3 - 3) < 9 && 0 <= i__1 ? 
-		i__1 : s_rnge("mout", i__1, "twovec_", (ftnlen)290)]);
+		i__1 : s_rnge("mout", i__1, "twovec_", (ftnlen)291)]);
 	ucrss_(axdef, &mout[(i__1 = i2 * 3 - 3) < 9 && 0 <= i__1 ? i__1 : 
-		s_rnge("mout", i__1, "twovec_", (ftnlen)291)], &mout[(i__2 = 
+		s_rnge("mout", i__1, "twovec_", (ftnlen)292)], &mout[(i__2 = 
 		i3 * 3 - 3) < 9 && 0 <= i__2 ? i__2 : s_rnge("mout", i__2, 
-		"twovec_", (ftnlen)291)]);
+		"twovec_", (ftnlen)292)]);
     }
 
 /*     Finally, check to see that we actually got something non-zero */
@@ -300,10 +299,10 @@ static integer c__9 = 9;
 /*     only check one of them since they are related by a cross product). */
 
     if (mout[(i__1 = i2 * 3 - 3) < 9 && 0 <= i__1 ? i__1 : s_rnge("mout", 
-	    i__1, "twovec_", (ftnlen)300)] == 0. && mout[(i__2 = i2 * 3 - 2) <
+	    i__1, "twovec_", (ftnlen)301)] == 0. && mout[(i__2 = i2 * 3 - 2) <
 	     9 && 0 <= i__2 ? i__2 : s_rnge("mout", i__2, "twovec_", (ftnlen)
-	    300)] == 0. && mout[(i__3 = i2 * 3 - 1) < 9 && 0 <= i__3 ? i__3 : 
-	    s_rnge("mout", i__3, "twovec_", (ftnlen)300)] == 0.) {
+	    301)] == 0. && mout[(i__3 = i2 * 3 - 1) < 9 && 0 <= i__3 ? i__3 : 
+	    s_rnge("mout", i__3, "twovec_", (ftnlen)301)] == 0.) {
 	setmsg_("The input vectors AXDEF and PLNDEF are linearly dependent.", 
 		(ftnlen)58);
 	sigerr_("SPICE(DEPENDENTVECTORS)", (ftnlen)23);

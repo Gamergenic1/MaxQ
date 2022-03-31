@@ -242,7 +242,7 @@ static integer c__1 = 1;
 
 /*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
-/*     LBCELL     P   The SPICELIB cell lower bound. */
+/*     LBCELL     P   The SPICE cell lower bound. */
 /*     MXBEGM     P   Maximum progress report message prefix length. */
 /*     MXENDM     P   Maximum progress report message suffix length. */
 /*     WINDOW     I   A window over which a job is to be performed. */
@@ -262,15 +262,15 @@ static integer c__1 = 1;
 
 /* $ Parameters */
 
-/*     LBCELL    is the SPICELIB cell lower bound. */
+/*     LBCELL   is the SPICE cell lower bound. */
 
 /*     MXBEGM, */
-/*     MXENDM    are, respectively, the maximum lengths of the progress */
-/*               report message prefix and suffix. */
+/*     MXENDM   are, respectively, the maximum lengths of the progress */
+/*              report message prefix and suffix. */
 
 /* $ Exceptions */
 
-/*     See the individual entry points. */
+/*     1)  See the individual entry points. */
 
 /* $ Files */
 
@@ -302,7 +302,7 @@ static integer c__1 = 1;
 
 /*        GFREPI  used to set up the reporting mechanism. It lets GFRPRT */
 /*                know that some task is about to begin that involves */
-/*                interaction with some window of times.  It is used */
+/*                interaction with some window of times. It is used */
 /*                only to set up and store the constants associated with */
 /*                the reporting of the job in progress. */
 
@@ -329,40 +329,192 @@ static integer c__1 = 1;
 
 /* $ Examples */
 
-/*     1)  This example shows how to call a mid-level GF search API that */
-/*         requires as input progress reporting routines. */
+/*     The numerical results shown for these examples may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
 
-/*         If custom progress reporting routines are available, they */
-/*         can replace GFREPI, GFREPU, and GFREPF in any GF API calls. */
+/*     1) This example shows how to call a mid-level GF search API that */
+/*        requires as input progress reporting routines. */
 
-/*         The code fragment below is from the first code example in the */
-/*         header of */
+/*        If custom progress reporting routines are available, they */
+/*        can replace GFREPI, GFREPU, and GFREPF in any GF API calls. */
 
-/*            gfocce.for */
-
-/*         Only the portions of that program relevant to use of the */
-/*         progress reporting routines are copied here. Deleted portions */
-/*         of code are indicated by ellipses. */
+/*        The code example below is the first example in the header of */
+/*        GFOCCE. */
 
 
-/*              PROGRAM EX1 */
+/*        Conduct a search using the default GF progress reporting */
+/*        capability. */
 
+/*        The program will use console I/O to display a simple */
+/*        ASCII-based progress report. */
+
+/*        The program will find occultations of the Sun by the Moon as */
+/*        seen from the center of the Earth over the month December, */
+/*        2001. */
+
+/*        We use light time corrections to model apparent positions of */
+/*        Sun and Moon. Stellar aberration corrections are not specified */
+/*        because they don't affect occultation computations. */
+
+/*        Use the meta-kernel shown below to load the required SPICE */
+/*        kernels. */
+
+
+/*           KPL/MK */
+
+/*           File name: gfrprt_ex1.tm */
+
+/*           This meta-kernel is intended to support operation of SPICE */
+/*           example programs. The kernels shown here should not be */
+/*           assumed to contain adequate or correct versions of data */
+/*           required by SPICE-based user applications. */
+
+/*           In order for an application to use this meta-kernel, the */
+/*           kernels referenced here must be present in the user's */
+/*           current working directory. */
+
+/*           The names and contents of the kernels referenced */
+/*           by this meta-kernel are as follows: */
+
+/*              File name                     Contents */
+/*              ---------                     -------- */
+/*              de421.bsp                     Planetary ephemeris */
+/*              pck00008.tpc                  Planet orientation and */
+/*                                            radii */
+/*              naif0009.tls                  Leapseconds */
+
+
+/*           \begindata */
+
+/*              KERNELS_TO_LOAD = ( 'de421.bsp', */
+/*                                  'pck00008.tpc', */
+/*                                  'naif0009.tls'  ) */
+
+/*           \begintext */
+
+/*           End of meta-kernel */
+
+
+/*        Example code begins here. */
+
+
+/*              PROGRAM GFRPRT_EX1 */
 /*              IMPLICIT NONE */
 
-/*              ... */
+/*        C */
+/*        C     SPICELIB functions */
+/*        C */
+/*              INTEGER               WNCARD */
 
+/*        C */
+/*        C     SPICELIB default functions for */
+/*        C */
+/*        C        - Interrupt handling (no-op function):   GFBAIL */
+/*        C        - Search refinement:                     GFREFN */
+/*        C        - Progress report termination:           GFREPF */
+/*        C        - Progress report initialization:        GFREPI */
+/*        C        - Progress report update:                GFREPU */
+/*        C        - Search step size "get" function:       GFSTEP */
+/*        C */
+/*              LOGICAL               GFBAIL */
+/*              EXTERNAL              GFBAIL */
+
+/*              EXTERNAL              GFREFN */
 /*              EXTERNAL              GFREPI */
 /*              EXTERNAL              GFREPU */
 /*              EXTERNAL              GFREPF */
+/*              EXTERNAL              GFSTEP */
 
-/*              ... */
+/*        C */
+/*        C     Local parameters */
+/*        C */
+/*              CHARACTER*(*)         TIMFMT */
+/*              PARAMETER           ( TIMFMT = */
+/*             .   'YYYY MON DD HR:MN:SC.###### ::TDB (TDB)' ) */
+
+/*              DOUBLE PRECISION      CNVTOL */
+/*              PARAMETER           ( CNVTOL = 1.D-6 ) */
+
+/*              INTEGER               MAXWIN */
+/*              PARAMETER           ( MAXWIN = 2 * 100 ) */
+
+/*              INTEGER               TIMLEN */
+/*              PARAMETER           ( TIMLEN = 40 ) */
+
+/*              INTEGER               LBCELL */
+/*              PARAMETER           ( LBCELL = -5 ) */
+
+/*        C */
+/*        C     Local variables */
+/*        C */
+/*              CHARACTER*(TIMLEN)    WIN0 */
+/*              CHARACTER*(TIMLEN)    WIN1 */
+/*              CHARACTER*(TIMLEN)    BEGSTR */
+/*              CHARACTER*(TIMLEN)    ENDSTR */
+
+/*              DOUBLE PRECISION      CNFINE ( LBCELL : 2 ) */
+/*              DOUBLE PRECISION      ET0 */
+/*              DOUBLE PRECISION      ET1 */
+/*              DOUBLE PRECISION      LEFT */
+/*              DOUBLE PRECISION      RESULT ( LBCELL : MAXWIN ) */
+/*              DOUBLE PRECISION      RIGHT */
+
+/*              INTEGER               I */
+
+/*              LOGICAL               BAIL */
+/*              LOGICAL               RPT */
+
+/*        C */
+/*        C     Saved variables */
+/*        C */
+/*        C     The confinement and result windows CNFINE and RESULT are */
+/*        C     saved because this practice helps to prevent stack */
+/*        C     overflow. */
+/*        C */
+/*              SAVE                  CNFINE */
+/*              SAVE                  RESULT */
+
+/*        C */
+/*        C     Load kernels. */
+/*        C */
+/*              CALL FURNSH ( 'gfrprt_ex1.tm' ) */
+
+/*        C */
+/*        C     Initialize the confinement and result windows. */
+/*        C */
+/*              CALL SSIZED ( 2,      CNFINE ) */
+/*              CALL SSIZED ( MAXWIN, RESULT ) */
+
+/*        C */
+/*        C     Obtain the TDB time bounds of the confinement */
+/*        C     window, which is a single interval in this case. */
+/*        C */
+/*              WIN0 = '2001 DEC 01 00:00:00 TDB' */
+/*              WIN1 = '2002 JAN 01 00:00:00 TDB' */
+
+/*              CALL STR2ET ( WIN0, ET0 ) */
+/*              CALL STR2ET ( WIN1, ET1 ) */
+
+/*        C */
+/*        C     Insert the time bounds into the confinement */
+/*        C     window. */
+/*        C */
+/*              CALL WNINSD ( ET0, ET1, CNFINE ) */
+
+/*        C */
+/*        C     Select a 20 second step. We'll ignore any occultations */
+/*        C     lasting less than 20 seconds. */
+/*        C */
+/*              CALL GFSSTP ( 20.D0 ) */
 
 /*        C */
 /*        C     Turn on progress reporting; turn off interrupt */
 /*        C     handling. */
 /*        C */
 /*              RPT  = .TRUE. */
-/*              ... */
+/*              BAIL = .FALSE. */
 
 /*        C */
 /*        C     Perform the search. */
@@ -376,73 +528,121 @@ static integer c__1 = 1;
 /*             .              BAIL,     GFBAIL,       CNFINE,  RESULT ) */
 
 
-/*             ... */
+/*              IF ( WNCARD(RESULT) .EQ. 0 ) THEN */
 
+/*                 WRITE (*,*) 'No occultation was found.' */
 
+/*              ELSE */
 
-/*     2)  The following piece of code provides a more concrete example */
-/*         of how these routines might be used.  It is part of code that */
-/*         performs a search for the time of an occultation of one body */
-/*         by another. It is intended only for illustration and is not */
-/*         recommended for use in code that has to do real work. */
+/*                 DO I = 1, WNCARD(RESULT) */
 
-/*  C */
-/*  C     Prepare the progress reporter if appropriate. */
-/*  C */
-/*        IF ( RPT ) THEN */
-/*           CALL UDREPI ( CNFINE, 'Occultation/transit search ', */
-/*       .                         'done.'                        ) */
-/*        END IF */
+/*        C */
+/*        C           Fetch and display each occultation interval. */
+/*        C */
+/*                    CALL WNFETD ( RESULT, I, LEFT, RIGHT ) */
 
-/*  C */
-/*  C     Cycle over the intervals in the confining window. */
-/*  C */
-/*        COUNT = WNCARD(CNFINE) */
+/*                    CALL TIMOUT ( LEFT,  TIMFMT, BEGSTR ) */
+/*                    CALL TIMOUT ( RIGHT, TIMFMT, ENDSTR ) */
 
-/*        DO I = 1, COUNT */
-/*  C */
-/*  C        Retrieve the bounds for the Ith interval of the confinement */
-/*  C        window. Search this interval for occultation events. */
-/*  C        Union the result with the contents of the RESULT window. */
-/*  C */
-/*           CALL WNFETD ( CNFINE, I, START, FINISH  ) */
+/*                    WRITE (*,*) 'Interval ', I */
+/*                    WRITE (*,*) '   Start time: '//BEGSTR */
+/*                    WRITE (*,*) '   Stop time:  '//ENDSTR */
 
-/*           CALL ZZGFSOLV ( ZZGFOCST,   UDSTEP,   UDREFN,   BAIL, */
-/*    .                      UDBAIL,     CSTEP,    STEP,     START, */
-/*       .                   FINISH,     TOL,      RPT,      UDREPU, */
-/*       .                   RESULT   ) */
-
-
-/*           IF (  FAILED()  ) THEN */
-/*              CALL CHKOUT ( 'GFOCCE'  ) */
-/*              RETURN */
-/*           END IF */
-
-/*           IF ( BAIL ) THEN */
-/*  C */
-/*  C           Interrupt handling is enabled. */
-/*  C */
-/*              IF ( UDBAIL () ) THEN */
-/*  C */
-/*  C              An interrupt has been issued. Return now regardless of */
-/*  C              whether the search has been completed. */
-/*  C */
-/*                 CALL CHKOUT ( 'GFOCCE' ) */
-/*                 RETURN */
+/*                 END DO */
 
 /*              END IF */
 
-/*           END IF */
+/*              END */
 
-/*        END DO */
 
-/*  C */
-/*  C     End the progress report. */
-/*  C */
-/*        IF ( RPT ) THEN */
-/*           CALL UDREPF */
-/*        END IF */
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
 
+
+/*        Occultation/transit search 100.00% done. */
+
+/*         Interval            1 */
+/*            Start time: 2001 DEC 14 20:10:14.195952  (TDB) */
+/*            Stop time:  2001 DEC 14 21:35:50.317994  (TDB) */
+
+
+/*        Note that the progress report has the format shown below: */
+
+/*           Occultation/transit search   6.02% done. */
+
+/*        The completion percentage was updated approximately once per */
+/*        second. */
+
+
+/*     2) The following piece of code provides a more concrete example */
+/*        of how these routines might be used. It is part of code that */
+/*        performs a search for the time of an occultation of one body */
+/*        by another. It is intended only for illustration and is not */
+/*        recommended for use in code that has to do real work. */
+
+/*        C */
+/*        C     Prepare the progress reporter if appropriate. */
+/*        C */
+/*              IF ( RPT ) THEN */
+/*                 CALL UDREPI ( CNFINE, 'Occultation/transit search ', */
+/*             .                         'done.'                      ) */
+/*              END IF */
+
+/*        C */
+/*        C     Cycle over the intervals in the confining window. */
+/*        C */
+/*              COUNT = WNCARD(CNFINE) */
+
+/*              DO I = 1, COUNT */
+/*        C */
+/*        C        Retrieve the bounds for the Ith interval of the */
+/*        C        confinement window. Search this interval for */
+/*        C        occultation events. Union the result with the */
+/*        C        contents of the RESULT window. */
+/*        C */
+/*                 CALL WNFETD ( CNFINE, I, START, FINISH  ) */
+
+/*                 CALL ZZGFSOLV ( ZZGFOCST, UDSTEP, UDREFN, BAIL, */
+/*             .                   UDBAIL,   CSTEP,  STEP,   START, */
+/*             .                   FINISH,   TOL,    RPT,    UDREPU, */
+/*             .                   RESULT                          ) */
+
+
+/*                 IF (  FAILED()  ) THEN */
+/*                    CALL CHKOUT ( 'GFOCCE'  ) */
+/*                    RETURN */
+/*                 END IF */
+
+/*                 IF ( BAIL ) THEN */
+/*        C */
+/*        C           Interrupt handling is enabled. */
+/*        C */
+/*                    IF ( UDBAIL () ) THEN */
+/*        C */
+/*        C              An interrupt has been issued. Return now */
+/*        C              regardless of whether the search has been */
+/*        C              completed. */
+/*        C */
+/*                       CALL CHKOUT ( 'GFOCCE' ) */
+/*                       RETURN */
+
+/*                    END IF */
+
+/*                 END IF */
+
+/*              END DO */
+
+/*        C */
+/*        C     End the progress report. */
+/*        C */
+/*              IF ( RPT ) THEN */
+/*                 CALL UDREPF */
+/*              END IF */
+
+
+/*     3) For more concrete examples of how these routines are used in */
+/*        SPICELIB, please refer to the actual code of any of the GF API */
+/*        calls. */
 
 /* $ Restrictions */
 
@@ -454,25 +654,32 @@ static integer c__1 = 1;
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
-/*     L.S. Elson     (JPL) */
-/*     W.L. Taber     (JPL) */
-/*     I.M. Underwood (JPL) */
-/*     B.V. Semenov   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     L.S. Elson         (JPL) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
 
-/* -    SPICELIB Version 1.0.1 10-FEB-2014 (BVS) */
+/* -    SPICELIB Version 1.0.2, 27-AUG-2021 (JDR) */
 
-/*        Added declarations of IVBEG and IVEND to the Declarations */
+/*        Edited the header of all entry points and GFRPRT to comply with */
+/*        NAIF standard. */
+
+/*        Added complete example code to GFRPRT. */
+
+/* -    SPICELIB Version 1.0.1, 10-FEB-2014 (BVS) */
+
+/*        Added declarations of IVBEG and IVEND to the $Declarations */
 /*        section of the GFREPU header. */
 
-/*        Corrected declaration of WINDOW in the Declarations */
+/*        Corrected declaration of WINDOW in the $Declarations */
 /*        section and added descriptions of LBCELL to the GFREPI */
 /*        header. */
 
-/* -    SPICELIB Version 1.0.0 06-MAR-2009 (NJB) (LSE) (WLT) (IMU) */
-
+/* -    SPICELIB Version 1.0.0, 06-MAR-2009 (NJB) (LSE) (WLT) (IMU) */
 
 /* -& */
 /* $ Index_Entries */
@@ -509,7 +716,7 @@ static integer c__1 = 1;
 L_gfrepi:
 /* $ Abstract */
 
-/*     This entry point initializes a search progress report. */
+/*     Initialize a search progress report. */
 
 /* $ Disclaimer */
 
@@ -555,12 +762,12 @@ L_gfrepi:
 
 /*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
-/*     LBCELL     P   The SPICELIB cell lower bound. */
+/*     LBCELL     P   The SPICE cell lower bound. */
 /*     MXBEGM     P   Maximum progress report message prefix length. */
 /*     MXENDM     P   Maximum progress report message suffix length. */
 /*     WINDOW     I   A window over which a job is to be performed. */
-/*     BEGMSS     I   Beginning of the text portion of the output message */
-/*     ENDMSS     I   End of the text portion of the output message */
+/*     BEGMSS     I   Beginning of the text portion of output message. */
+/*     ENDMSS     I   End of the text portion of output message. */
 
 /* $ Detailed_Input */
 
@@ -569,19 +776,34 @@ L_gfrepi:
 /*              used to determine how much total time is being searched */
 /*              in order to find the events of interest. */
 
-/*     BEGMSS   is the beginning of the output message reported by the */
-/*              routine GFRPWK.  This output message has the form */
+/*     BEGMSS   is the beginning of the progress report message written */
+/*              to standard output by the GF subsystem. This output */
+/*              message has the form */
 
-/*                 BEGMSS(1:LASTNB(BEGMSS)) // ' xx.xx% ' // ENDMSS */
+/*                 BEGMSS(1:LASTNB(BEGMSS)) // ' xxx.xx% ' // ENDMSS */
 
-/*              BEGMSS must have length not greater than MXBEGM */
+/*              The total length of BEGMSS must be less than MXBEGM */
 /*              characters. All characters of BEGMSS must be printable. */
 
-/*     ENDMSS   is the last portion of the output message reported by */
-/*              the routine GFRPWK. */
+/*              For example, the progress report message created by the */
+/*              SPICELIB routine GFOCCE at the completion of a search is */
 
-/*              ENDMSS must have length not greater than MXBENM */
+/*                 Occultation/transit search 100.00% done. */
+
+/*              In this message, BEGMSS is */
+
+/*                 'Occultation/transit search' */
+
+/*     ENDMSS   is the last portion of the output message written to */
+/*              standard output by the GF subsystem. */
+
+/*              The total length of ENDMSS must be less than MXENDM */
 /*              characters. All characters of ENDMSS must be printable. */
+
+/*              In the progress report message created by GFOCCE at the */
+/*              completion of a search, ENDMSS is */
+
+/*                 'done.' */
 
 /* $ Detailed_Output */
 
@@ -589,21 +811,21 @@ L_gfrepi:
 
 /* $ Parameters */
 
-/*     LBCELL     is the SPICELIB cell lower bound. */
+/*     LBCELL   is the SPICE cell lower bound. */
 
 /*     MXBEGM, */
-/*     MXENDM    are, respectively, the maximum lengths of the progress */
-/*               report message prefix and suffix. See the INCLUDE file */
-/*               zzgf.inc for details. */
+/*     MXENDM   are, respectively, the maximum lengths of the progress */
+/*              report message prefix and suffix. See the INCLUDE file */
+/*              zzgf.inc for details. */
 
 /* $ Exceptions */
 
-/*     1) If BEGMSS has length greater than MXBEGM characters, or if */
-/*        ENDMSS has length greater than MXENDM characters, the error */
-/*        SPICE(MESSAGETOOLONG) is signaled. */
+/*     1)  If BEGMSS has length greater than MXBEGM characters, or if */
+/*         ENDMSS has length greater than MXENDM characters, the error */
+/*         SPICE(MESSAGETOOLONG) is signaled. */
 
-/*     2) If either BEGMSS or ENDMSS contains non-printing characters, */
-/*        the error SPICE(NOTPRINTABLECHARS) is signaled. */
+/*     2)  If either BEGMSS or ENDMSS contains non-printing characters, */
+/*         the error SPICE(NOTPRINTABLECHARS) is signaled. */
 
 /* $ Files */
 
@@ -613,12 +835,12 @@ L_gfrepi:
 
 /*     This entry point initializes the GF progress reporting system. It */
 /*     is called by the GF root finding utilities once at the start of */
-/*     each search pass. See the Particulars section of the main */
+/*     each search pass. See the $Particulars section of the main */
 /*     subroutine header for further details of its function. */
 
 /* $ Examples */
 
-/*     See the header of the umbrella routine GFRPRT. */
+/*     See $Examples in GFRPRT. */
 
 /* $ Restrictions */
 
@@ -630,21 +852,28 @@ L_gfrepi:
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
-/*     L.S. Elson     (JPL) */
-/*     W.L. Taber     (JPL) */
-/*     I.M. Underwood (JPL) */
-/*     B.V. Semenov   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     L.S. Elson         (JPL) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
 
-/* -    SPICELIB Version 1.0.1 10-FEB-2014 (BVS) */
+/* -    SPICELIB Version 1.0.2, 27-AUG-2021 (JDR) */
 
-/*        Corrected declaration of WINDOW in the Declarations */
-/*        section. Added description of LBCELL to the Declarations, */
-/*        Brief_I/O, and Parameters sections. */
+/*        Edited the header to comply with NAIF standard. */
 
-/* -    SPICELIB Version 1.0.0 21-FEB-2009 (NJB) (LSE) (WLT) (IMU) */
+/*        Extended description of BEGMSS and ENDMSS arguments. */
+
+/* -    SPICELIB Version 1.0.1, 10-FEB-2014 (BVS) */
+
+/*        Corrected declaration of WINDOW in the $Declarations */
+/*        section. Added description of LBCELL to the $Declarations, */
+/*        $Brief_I/O, and $Parameters sections. */
+
+/* -    SPICELIB Version 1.0.0, 21-FEB-2009 (NJB) (LSE) (WLT) (IMU) */
 
 /* -& */
 /* $ Index_Entries */
@@ -737,13 +966,13 @@ L_gfrepi:
     }
     chkout_("GFREPI", (ftnlen)6);
     return 0;
-/* $Procedure   GFREPU ( GF, progress report update ) */
+/* $Procedure GFREPU ( GF, progress report update ) */
 
 L_gfrepu:
 /* $ Abstract */
 
-/*     This entry point tells the progress reporting system */
-/*     how far a search has progressed. */
+/*     Tell the progress reporting system how far a search has */
+/*     progressed. */
 
 /* $ Disclaimer */
 
@@ -841,15 +1070,15 @@ L_gfrepu:
 
 /* $ Exceptions */
 
-/*     1) If IVBEG and IVEND are in decreasing order, the error */
-/*        SPICE(BADENDPOINTS) is signaled. */
+/*     1)  If IVBEG and IVEND are in decreasing order, the error */
+/*         SPICE(BADENDPOINTS) is signaled. */
 
-/*     2) If TIME is not in the closed interval [IVBEG, IVEND], the */
-/*        error SPICE(VALUEOUTOFRANGE) is signaled. */
+/*     2)  If TIME is not in the closed interval [IVBEG, IVEND], the */
+/*         error SPICE(VALUEOUTOFRANGE) is signaled. */
 
-/*     3) Any I/O errors resulting from writing to standard output */
-/*        will be diagnosed by routines in the call tree of this */
-/*        routine. */
+/*     3)  If an I/O error results from writing to standard output, the */
+/*         error is signaled by a routine in the call tree of this */
+/*         routine. */
 
 /* $ Files */
 
@@ -865,14 +1094,14 @@ L_gfrepu:
 
 /* $ Examples */
 
-/*     See the header of the umbrella routine GFRPRT. */
+/*     See $Examples in GFRPRT. */
 
 /* $ Restrictions */
 
-/*     This routine has no way of enforcing that the input values of */
-/*     IVBEG and IVEND are compatible with the input window passed to */
-/*     GFREPI. Callers of this routine are responsible for ensuring */
-/*     that this requirement is obeyed. */
+/*     1)  This routine has no way of enforcing that the input values of */
+/*         IVBEG and IVEND are compatible with the input window passed to */
+/*         GFREPI. Callers of this routine are responsible for ensuring */
+/*         that this requirement is obeyed. */
 
 /* $ Literature_References */
 
@@ -880,20 +1109,25 @@ L_gfrepu:
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
-/*     L.S. Elson     (JPL) */
-/*     W.L. Taber     (JPL) */
-/*     I.M. Underwood (JPL) */
-/*     B.V. Semenov   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     L.S. Elson         (JPL) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
 
-/* -    SPICELIB Version 1.0.1 10-FEB-2014 (BVS) */
+/* -    SPICELIB Version 1.0.2, 27-AUG-2021 (JDR) */
 
-/*        Added declarations of IVBEG and IVEND to the Declarations */
+/*        Edited the header to comply with NAIF standard. */
+
+/* -    SPICELIB Version 1.0.1, 10-FEB-2014 (BVS) */
+
+/*        Added declarations of IVBEG and IVEND to the $Declarations */
 /*        section. */
 
-/* -    SPICELIB Version 1.0.0 21-FEB-2009 (NJB) (LSE) (WLT) (IMU) */
+/* -    SPICELIB Version 1.0.0, 21-FEB-2009 (NJB) (LSE) (WLT) (IMU) */
 
 /* -& */
 /* $ Index_Entries */
@@ -964,7 +1198,7 @@ L_gfrepu:
     zzgfwkin_(&incr);
     chkout_("GFREPU", (ftnlen)6);
     return 0;
-/* $Procedure      GFREPF ( GF, progress report finalization ) */
+/* $Procedure GFREPF ( GF, progress report finalization ) */
 
 L_gfrepf:
 /* $ Abstract */
@@ -1030,9 +1264,9 @@ L_gfrepf:
 
 /* $ Exceptions */
 
-/*     1) Any I/O errors resulting from writing to standard output */
-/*        will be diagnosed by routines in the call tree of this */
-/*        routine. */
+/*     1)  If an I/O error results from writing to standard output, the */
+/*         error is signaled by a routine in the call tree of this */
+/*         routine. */
 
 /* $ Files */
 
@@ -1045,7 +1279,7 @@ L_gfrepf:
 
 /* $ Examples */
 
-/*     See the header of the umbrella routine GFRPRT. */
+/*     See $Examples in GFRPRT. */
 
 /* $ Restrictions */
 
@@ -1057,14 +1291,19 @@ L_gfrepf:
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
-/*     L.S. Elson     (JPL) */
-/*     W.L. Taber     (JPL) */
-/*     I.M. Underwood (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     L.S. Elson         (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
 
-/* -    SPICELIB Version 1.0.0 21-FEB-2009 (NJB) (LSE) (WLT) (IMU) */
+/* -    SPICELIB Version 1.0.1, 07-APR-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
+
+/* -    SPICELIB Version 1.0.0, 21-FEB-2009 (NJB) (LSE) (WLT) (IMU) */
 
 /* -& */
 /* $ Index_Entries */

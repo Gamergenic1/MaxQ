@@ -1,15 +1,11 @@
 /*
+
 -Procedure uddc_c ( Derivative of function less than zero, df(x)/dx < 0 )
 
 -Abstract
 
-   SPICE private routine intended solely for the support of SPICE
-   routines. Users should not call this routine directly due to the
-   volatile nature of this routine.
-
-   This routine calculates the derivative of 'udfunc' with respect 
-   to time for 'et', then determines if the derivative has a 
-   negative value.
+   Return SPICETRUE if the derivative of the callback function `udfunc'
+   at a given abscissa value is negative.
 
 -Disclaimer
 
@@ -56,13 +52,13 @@
                  SpiceDouble         x,
                  SpiceDouble         dx,
                  SpiceBoolean      * isdecr )
-                     
+
 /*
+
 -Brief_I/O
 
    VARIABLE  I/O  DESCRIPTION
    --------  ---  --------------------------------------------------
-
    udfunc     I   The routine that computes the scalar value
                   of interest.
    x          I   Independent variable of 'udfunc'.
@@ -71,79 +67,80 @@
 
 -Detailed_Input
 
-   udfunc     the routine that returns the value of the scalar quantity  
-              function of interest at X. The calling sequence for UDFUNC is: 
- 
-                 udfunc ( x, &value ); 
- 
-              where: 
- 
-                 x       the double precision value of the  
-                         independent variable of the function 
-                         at which to determine the scalar value. 
- 
-                 value   the double precision value returned by  
-                         'udfunc' at 'x'. 
- 
-              Functionally: 
- 
-                 value = udfunc ( x ) 
- 
-   x          a scalar double precision value at which to determine 
-              the derivative of 'udfunc'. 
- 
-              For many SPICE uses, 'x' will represent ephemeris time,  
-              expressed as seconds past J2000 TDB. 
- 
-  dx         a scalar double precision value representing half the  
-              interval in units of 'x' separating the evaluation 
-              values of 'udfunc'; the evaluations occur at (x + dx)  
-              and (x - dx). 
- 
-              'dx' may be negative but must be non-zero. 
+   udfunc      is the routine that returns the value of the scalar quantity
+               function of interest at `x'. The calling sequence for `udfunc'
+               is:
+
+                  udfunc ( x, &value );
+
+               where:
+
+                  x       is the double precision value of the
+                          independent variable of the function
+                          at which to determine the scalar value.
+
+                  value   is the double precision value returned by
+                          `udfunc' at `x'.
+
+               Functionally:
+
+                  value = udfunc ( x )
+
+   x           is a scalar double precision value at which to determine
+               the derivative of `udfunc'.
+
+               For many SPICE uses, `x' will represent ephemeris time,
+               expressed as seconds past J2000 TDB.
+
+   dx          is a scalar double precision value representing half the
+               interval in units of `x' separating the evaluation
+               values of `udfunc'; the evaluations occur at (x + dx)
+               and (x - dx).
+
+               `dx' may be negative but must be non-zero.
 
 -Detailed_Output
 
-   isdecr   a scalar boolean indicating if the first derivative
-            of 'udfunc' with respect to time at 'et' is less than 
-            zero.
+   isdecr      is a scalar boolean indicating if the first derivative
+               of `udfunc' with respect to time at `et' is less than
+               zero.
 
-            Functionally:
+               Functionally:
 
-              d udfunc(x) |
-              --          |  <  0
-              dx          |
-                           x
+                 d udfunc(x) |
+                 ----------- |  <  0
+                      dx     |
+                              x
 
 -Parameters
 
    None.
 
 -Exceptions
- 
-   1) A routine in the call tree of this routine signals 
-      SPICE(DIVIDEBYZERO) if DX has a value of zero. 
- 
+
+   1)  If `dx' has a value of zero, an error is signaled by a routine
+       in the call tree of this routine.
+
 -Files
- 
-   If the evaluation of 'udfunc' requires SPICE kernel data, the 
-   appropriate kernels must be loaded before calling this routine. 
- 
-      - SPK data: the calling application must load ephemeris data 
-        for the targets, observer, and any intermediate objects in  
-        a chain connecting the targets and observer for the time 
-        used in the evaluation. If aberration corrections are used,  
-        the states of target and observer relative to the solar system  
-        barycenter must be calculable from the available ephemeris  
-        data. 
- 
-      - If non-inertial reference frames are used, then PCK 
-        files, frame kernels, C-kernels, and SCLK kernels may be 
-        needed. 
- 
-   Such kernel data are normally loaded once per program run, NOT  
-   every time this routine is called.  
-   
+
+   If the evaluation of 'udfunc' requires SPICE kernel data, the
+   appropriate kernels must be loaded before calling this routine.
+
+   -  SPK data: the calling application must load ephemeris data
+      for the targets, observer, and any intermediate objects in
+      a chain connecting the targets and observer for the time
+      used in the evaluation. If aberration corrections are used,
+      the states of target and observer relative to the solar system
+      barycenter must be calculable from the available ephemeris
+      data.
+
+   -  If non-inertial reference frames are used, then PCK
+      files, frame kernels, C-kernels, and SCLK kernels may be
+      needed.
+
+   Such kernel data are normally loaded once per program run, NOT
+   every time this routine is called.
+
 -Particulars
 
    None.
@@ -162,12 +159,17 @@
 
 -Author_and_Institution
 
-   N.J. Bachman   (JPL)
-   E.D. Wright    (JPL)
- 
+   N.J. Bachman        (JPL)
+   J. Diaz del Rio     (ODC Space)
+   E.D. Wright         (JPL)
+
 -Version
 
-   -CSPICE Version 1.0.0, 31-MAR-2010 (EDW) 
+   -CSPICE Version 1.0.1, 01-NOV-2021 (JDR)
+
+       Edited the header to comply with NAIF standard.
+
+   -CSPICE Version 1.0.0, 31-MAR-2010 (EDW) (NJB)
 
 -Index_Entries
 

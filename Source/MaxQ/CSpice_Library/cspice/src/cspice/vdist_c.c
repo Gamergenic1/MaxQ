@@ -52,7 +52,7 @@
 
 -Brief_I/O
 
-   Variable  I/O  Description
+   VARIABLE  I/O  DESCRIPTION
    --------  ---  --------------------------------------------------
 
    v1,
@@ -63,12 +63,12 @@
 -Detailed_Input
 
    v1,
-   v2         are two vectors in three-dimensional space, the
-              distance between which is desired.
+   v2          are two vectors in three-dimensional space, the
+               distance between which is desired.
 
 -Detailed_Output
 
-   The function returns the distance between v1 and v2.  This is
+   The function returns the distance between v1 and v2. This is
    defined as
 
             ||  v1 - v2  ||,
@@ -96,7 +96,7 @@
       dist = vnorm_c ( diff );
 
    Using this function saves you the annoyance of declaring local
-   storage for the difference vector diff.
+   storage for the difference vector `diff'.
 
 
    The Euclidean norm of a three-dimensional vector (x, y, z) is
@@ -108,41 +108,187 @@
 
 
    This number is the distance of the point (x, y, z) from the
-   origin.  If A and B are two vectors whose components are
+   origin. If `a' and `b' are two vectors whose components are
 
-      ( A(1), A(2), A(3) )    and    ( B(1), B(2), B(3) ),
+      ( a[0], a[1], a[2] )    and    ( b[0], b[1], b[2] ),
 
-   then the distance between A and B is the norm of the difference
-   A - B, which has components
-
-
-      (  A(1) - B(1),  A(2) - B(2),  A(3) - B(3)  ).
+   then the distance between `a' and `b' is the norm of the difference
+   a - b, which has components
 
 
-   A related routine is vdistg_, which computes the distance between
+      (  a[0] - b[0],  a[1] - b[1],  a[2] - b[2]  ).
+
+
+   A related routine is vdistg_c, which computes the distance between
    two vectors of general dimension.
 
 -Examples
 
-   1)  If v1 is
+   The numerical results shown for these examples may differ across
+   platforms. The results depend on the SPICE kernels used as input,
+   the compiler and supporting libraries, and the machine specific
+   arithmetic implementation.
 
-          ( 2.0,  3.0,  0. )
+   1) Define two three-dimensional vectors and calculate the distance
+      between them.
 
-       and v2 is
-
-          ( 5.0,  7.0,  12. ),
-
-       vdist_c (v1, v2) will be 13..
+      Example code begins here.
 
 
-   2)  If VGR2 and NEP are states of the Voyager 2 spacecraft and
-       Neptune with respect to some common center at a given time
-       ET, then
+      /.
+         Program vdist_ex1
+      ./
+      #include <stdio.h>
+      #include "SpiceUsr.h"
 
-          vdist_c ( VGR2, NEP )
+      int main( )
+      {
+         /.
+         Local variables.
+         ./
+         SpiceDouble             dist;
 
-       yields the distance between the spacecraft and Neptune at time
-       ET.
+         /.
+         Define the vectors, and calculate the distance between the
+         coordinates.
+         ./
+         SpiceDouble             v1  [ 3 ]  = { 1.0, 0.0, 0.0 };
+         SpiceDouble             v2  [ 3 ]  = { 0.0, 1.0, 0.0 };
+
+         dist = vdist_c ( v1, v2 );
+         printf( " Distance between v1 and v2: %12.6f\n", dist );
+
+         return ( 0 );
+      }
+
+
+      When this program was executed on a Mac/Intel/cc/64-bit
+      platform, the output was:
+
+
+       Distance between v1 and v2:     1.414214
+
+
+   2) Given the planetocentric coordinates of a point on the surface of
+      Mars, compute the distance between that point and Phobos.
+
+      Use the meta-kernel shown below to load the required SPICE
+      kernels.
+
+
+         KPL/MK
+
+         File: vdist_ex2.tm
+
+         This meta-kernel is intended to support operation of SPICE
+         example programs. The kernels shown here should not be
+         assumed to contain adequate or correct versions of data
+         required by SPICE-based user applications.
+
+         In order for an application to use this meta-kernel, the
+         kernels referenced here must be present in the user's
+         current working directory.
+
+         The names and contents of the kernels referenced
+         by this meta-kernel are as follows:
+
+            File name                        Contents
+            ---------                        --------
+            de430.bsp                        Planetary ephemeris
+            mar097.bsp                       Mars satellite ephemeris
+            pck00010.tpc                     Planet orientation and
+                                             radii
+            naif0011.tls                     Leapseconds
+
+
+         \begindata
+
+            KERNELS_TO_LOAD = ( 'de430.bsp',
+                                'mar097.bsp',
+                                'pck00010.tpc',
+                                'naif0011.tls'  )
+
+         \begintext
+
+         End of meta-kernel
+
+
+      Example code begins here.
+
+
+      /.
+         Program vdist_ex2
+      ./
+      #include <stdio.h>
+      #include "SpiceUsr.h"
+
+      int main( )
+      {
+         /.
+         Local variables
+         ./
+         SpiceChar             * epoch;
+
+         SpiceDouble             dist;
+         SpiceDouble             et;
+         SpiceDouble             lat;
+         SpiceDouble             lon;
+         SpiceDouble             lt;
+         SpiceDouble             pos    [ 3 ];
+         SpiceDouble             radius;
+         SpiceDouble             rover  [ 3 ];
+
+         /.
+         Load the kernels.
+         ./
+         furnsh_c( "vdist_ex2.tm" );
+
+         /.
+         Define the point on the surface of Mars by its planetocentric
+         coordinates, and the epoch.
+         ./
+         epoch  = "2018-07-25 17:14";
+         lon    =    8.544377 * rpd_c( );
+         lat    =   42.880602 * rpd_c( );
+         radius = 3380.0;
+
+         /.
+         Convert that point coordinates to rectangular.
+         ./
+         latrec_c ( radius, lon, lat, rover );
+
+         /.
+         Convert the UTC epoch to ephemeris time.
+         ./
+         str2et_c ( epoch, &et );
+
+         /.
+         Compute the position of Phobos with respect to Mars in IAU_MARS
+         body-fixed reference frame.
+         ./
+         spkpos_c ( "PHOBOS", et,  "IAU_MARS", "NONE", "MARS",
+                     pos,    &lt                              );
+
+         /.
+         Compute the distance between Phobos and the point on the surface
+         of Mars.
+         ./
+         dist = vdist_c ( rover, pos );
+         printf( " Epoch: %s\n", epoch );
+         printf( " Distance between location and Phobos (km): %12.6f\n",
+                                                                  dist );
+
+         return ( 0 );
+      }
+
+
+      When this program was executed on a Mac/Intel/cc/64-bit
+      platform, the output was:
+
+
+       Epoch: 2018-07-25 17:14
+       Distance between location and Phobos (km):  7174.781393
+
 
 -Restrictions
 
@@ -154,19 +300,27 @@
 
 -Author_and_Institution
 
-   N.J. Bachman   (JPL)
+   N.J. Bachman        (JPL)
+   J. Diaz del Rio     (ODC Space)
+   E.D. Wright         (JPL)
 
 -Version
 
+   -CSPICE Version 1.2.1, 25-AUG-2021 (JDR)
+
+       Edited the header to comply with NAIF standard.
+
+       Added two complete examples to the -Examples section.
+
    -CSPICE Version 1.2.0, 22-OCT-1998 (NJB)
 
-      Made input vectors const.  Removed #include of SpiceZfc.h.
+       Made input vectors const. Removed #include of SpiceZfc.h.
 
-   -CSPICE Version 1.1.0, 06-MAR-1998   (EDW)
+   -CSPICE Version 1.1.0, 06-MAR-1998 (EDW)
 
-      Removed non printing character.
+       Removed non printing character.
 
-   -CSPICE Version 1.0.0, 08-FEB-1998   (EDW)
+   -CSPICE Version 1.0.0, 08-FEB-1998 (EDW)
 
 -Index_Entries
 

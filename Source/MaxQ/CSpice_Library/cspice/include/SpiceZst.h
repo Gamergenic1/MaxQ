@@ -56,9 +56,13 @@
 
 -Version
 
+   -CSPICE Version 7.0.0, 24-FEB-2021 (NJB)
+
+      Added prototype for function C_OptEmptyStr.
+
    -CSPICE Version 6.0.0, 10-JUL-2002 (NJB)
 
-      Added prototype for new functions C2F_MapStrArr and 
+      Added prototype for new functions C2F_MapStrArr and
       C2F_MapFixStrArr.
 
    -CSPICE Version 5.0.0, 18-MAY-2001 (WLT)
@@ -68,9 +72,9 @@
    -CSPICE Version 4.0.0, 14-FEB-2000 (NJB)
 
       Added prototype for new function C2F_CreateStrArr_Sig.
-    
+
    -CSPICE Version 3.0.0, 12-JUL-1999 (NJB)
-    
+
       Added prototype for function C2F_CreateFixStrArr.
       Added prototype for function F2C_ConvertTrStrArr.
       Removed reference in comments to C2F_CreateStrArr_Sig, which
@@ -79,7 +83,7 @@
    -CSPICE Version 2.0.1, 06-MAR-1998 (NJB)
 
       Type SpiceVoid was changed to void.
-      
+
    -CSPICE Version 2.0.1, 09-FEB-1998 (EDW)
 
       Added prototype for F2C_ConvertStrArr.
@@ -107,6 +111,10 @@
 namespace Jpl_NAIF_CSpice {
 #endif
 
+
+   ConstSpiceChar *   C_OptEmptyStr   ( ConstSpiceChar   * cStr );
+   
+
    SpiceStatus C2F_CreateStr          ( ConstSpiceChar *,
                                         SpiceInt *,
                                         SpiceChar **      );
@@ -120,7 +128,7 @@ namespace Jpl_NAIF_CSpice {
                                         ConstSpiceChar  ** cStrArr,
                                         SpiceInt         * fStrLen,
                                         SpiceChar       ** fStrArr  );
-                                        
+
    SpiceStatus C2F_CreateStrArr       ( SpiceInt,
                                         ConstSpiceChar **,
                                         SpiceInt *,
@@ -130,7 +138,7 @@ namespace Jpl_NAIF_CSpice {
                                         ConstSpiceChar  ** cStrArr,
                                         SpiceInt         * fStrLen,
                                         SpiceChar       ** fStrArr );
-                                        
+
    void        C2F_MapFixStrArr       ( ConstSpiceChar  *  caller,
                                         SpiceInt           nStr,
                                         SpiceInt           cStrLen,
@@ -195,5 +203,5 @@ namespace Jpl_NAIF_CSpice {
 #ifdef __cplusplus
 }
 #endif
-   
+
 #endif

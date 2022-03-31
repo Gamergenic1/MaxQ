@@ -598,6 +598,13 @@ static integer c__24 = 24;
 
 /* $ Version */
 
+/* -    SPICELIB Version 1.1.0, 13-OCT-2021 (NJB) (BVS) */
+
+/*        Updated entry point ZZDSKSNS to always initialize FOUND. */
+
+/*        Corrected typo in long error message in entry point ZZDSKBSS. */
+/*        Corrected comments in ZZDSKBSS and in ZZDSKSNS */
+
 /* -    SPICELIB Version 1.0.0, 08-FEB-2017 (NJB) */
 
 /*        Updated version info. */
@@ -683,23 +690,22 @@ static integer c__24 = 24;
 /*     slack. This keeps the table ordered by file number. */
 
 
-/*     The body table contains the beginning of the list of the */
-/*     stored segments for each body and the */
-/*     expense at which that list was constructed. (The expense of an */
-/*     body list is the number of segment descriptors examined */
-/*     during the construction of the list.) It also contains the */
-/*     highest and lowest file numbers searched during the construction */
-/*     of the list. */
+/*     The body table contains the beginning of the list of the stored */
+/*     segments for each body and the expense at which that list was */
+/*     constructed. (The expense of a body list is the number of segment */
+/*     descriptors examined during the construction of the list.) It */
+/*     also contains the highest and lowest file numbers searched during */
+/*     the construction of the list. */
 
 /*     All names begin with BT. */
 
-/*        INS      Body number */
+/*        BOD      Body ID code */
 /*        EXP      Expense */
 /*        HFS      Highest file (number) searched */
 /*        LFS      Lowest  file (number) searched */
 /*        BEG      Beginning of segment list */
 
-/*     NIT is the number of bodies for which segments are currently */
+/*     NBT is the number of bodies for which segments are currently */
 /*     being stored in the table. BINDEX is the index of whatever */
 /*     body is of current interest at any given time. */
 
@@ -981,13 +987,13 @@ L_zzdsklsf:
 	i__1 = nft;
 	for (i__ = findex; i__ <= i__1; ++i__) {
 	    fthan[(i__2 = i__ - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge("fthan"
-		    , i__2, "zzdskbsr_", (ftnlen)720)] = fthan[(i__3 = i__) < 
+		    , i__2, "zzdskbsr_", (ftnlen)726)] = fthan[(i__3 = i__) < 
 		    5000 && 0 <= i__3 ? i__3 : s_rnge("fthan", i__3, "zzdskb"
-		    "sr_", (ftnlen)720)];
+		    "sr_", (ftnlen)726)];
 	    ftnum[(i__2 = i__ - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge("ftnum"
-		    , i__2, "zzdskbsr_", (ftnlen)721)] = ftnum[(i__3 = i__) < 
+		    , i__2, "zzdskbsr_", (ftnlen)727)] = ftnum[(i__3 = i__) < 
 		    5000 && 0 <= i__3 ? i__3 : s_rnge("ftnum", i__3, "zzdskb"
-		    "sr_", (ftnlen)721)];
+		    "sr_", (ftnlen)727)];
 	}
 
 /*        Unlink any segments that came from this file. */
@@ -995,14 +1001,14 @@ L_zzdsklsf:
 	i__ = 1;
 	while(i__ <= nbt) {
 	    p = btbeg[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-		    "btbeg", i__1, "zzdskbsr_", (ftnlen)731)];
+		    "btbeg", i__1, "zzdskbsr_", (ftnlen)737)];
 	    while(p > 0) {
 
 /*              Find the successor of P, if any. */
 
 		nxtseg = lnknxt_(&p, stpool);
 		if (sthan[(i__1 = p - 1) < 10000 && 0 <= i__1 ? i__1 : s_rnge(
-			"sthan", i__1, "zzdskbsr_", (ftnlen)739)] == *handle) 
+			"sthan", i__1, "zzdskbsr_", (ftnlen)745)] == *handle) 
 			{
 
 /*                 The segment corresponding to node P came from */
@@ -1013,11 +1019,11 @@ L_zzdsklsf:
 
 		    lnkfsl_(&p, &p, stpool);
 		    if (p == btbeg[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 
-			    : s_rnge("btbeg", i__1, "zzdskbsr_", (ftnlen)749)]
+			    : s_rnge("btbeg", i__1, "zzdskbsr_", (ftnlen)755)]
 			    ) {
 			btbeg[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : 
 				s_rnge("btbeg", i__1, "zzdskbsr_", (ftnlen)
-				750)] = nxtseg;
+				756)] = nxtseg;
 		    }
 		}
 
@@ -1032,27 +1038,27 @@ L_zzdsklsf:
 /*           one we've deleted. */
 
 	    if (btbeg[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-		    "btbeg", i__1, "zzdskbsr_", (ftnlen)767)] <= 0) {
+		    "btbeg", i__1, "zzdskbsr_", (ftnlen)773)] <= 0) {
 		btbod[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-			"btbod", i__1, "zzdskbsr_", (ftnlen)769)] = btbod[(
+			"btbod", i__1, "zzdskbsr_", (ftnlen)775)] = btbod[(
 			i__2 = nbt - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge(
-			"btbod", i__2, "zzdskbsr_", (ftnlen)769)];
+			"btbod", i__2, "zzdskbsr_", (ftnlen)775)];
 		btexp[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-			"btexp", i__1, "zzdskbsr_", (ftnlen)770)] = btexp[(
+			"btexp", i__1, "zzdskbsr_", (ftnlen)776)] = btexp[(
 			i__2 = nbt - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge(
-			"btexp", i__2, "zzdskbsr_", (ftnlen)770)];
+			"btexp", i__2, "zzdskbsr_", (ftnlen)776)];
 		bthfs[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-			"bthfs", i__1, "zzdskbsr_", (ftnlen)771)] = bthfs[(
+			"bthfs", i__1, "zzdskbsr_", (ftnlen)777)] = bthfs[(
 			i__2 = nbt - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge(
-			"bthfs", i__2, "zzdskbsr_", (ftnlen)771)];
+			"bthfs", i__2, "zzdskbsr_", (ftnlen)777)];
 		btlfs[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-			"btlfs", i__1, "zzdskbsr_", (ftnlen)772)] = btlfs[(
+			"btlfs", i__1, "zzdskbsr_", (ftnlen)778)] = btlfs[(
 			i__2 = nbt - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge(
-			"btlfs", i__2, "zzdskbsr_", (ftnlen)772)];
+			"btlfs", i__2, "zzdskbsr_", (ftnlen)778)];
 		btbeg[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-			"btbeg", i__1, "zzdskbsr_", (ftnlen)773)] = btbeg[(
+			"btbeg", i__1, "zzdskbsr_", (ftnlen)779)] = btbeg[(
 			i__2 = nbt - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge(
-			"btbeg", i__2, "zzdskbsr_", (ftnlen)773)];
+			"btbeg", i__2, "zzdskbsr_", (ftnlen)779)];
 		--nbt;
 	    } else {
 		++i__;
@@ -1103,7 +1109,7 @@ L_zzdsklsf:
 /*           Re-map the HFS table for the Ith body. */
 
 	    j = isrchi_(&bthfs[(i__2 = i__ - 1) < 100 && 0 <= i__2 ? i__2 : 
-		    s_rnge("bthfs", i__2, "zzdskbsr_", (ftnlen)836)], &nft, 
+		    s_rnge("bthfs", i__2, "zzdskbsr_", (ftnlen)842)], &nft, 
 		    ftnum);
 
 /*           Either the highest file searched for body I is the Jth */
@@ -1112,7 +1118,7 @@ L_zzdsklsf:
 /*           BTHFS(I). */
 
 	    bthfs[(i__2 = i__ - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge("bthfs",
-		     i__2, "zzdskbsr_", (ftnlen)844)] = j;
+		     i__2, "zzdskbsr_", (ftnlen)850)] = j;
 
 /*           When the highest file searched for body I is not in the */
 /*           file table, the highest file searched has been unloaded. */
@@ -1122,7 +1128,7 @@ L_zzdsklsf:
 /*           Re-map the LFS table for the Ith body. */
 
 	    j = isrchi_(&btlfs[(i__2 = i__ - 1) < 100 && 0 <= i__2 ? i__2 : 
-		    s_rnge("btlfs", i__2, "zzdskbsr_", (ftnlen)854)], &nft, 
+		    s_rnge("btlfs", i__2, "zzdskbsr_", (ftnlen)860)], &nft, 
 		    ftnum);
 	    if (j > 0) {
 
@@ -1130,7 +1136,7 @@ L_zzdsklsf:
 /*              in the file table. */
 
 		btlfs[(i__2 = i__ - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge(
-			"btlfs", i__2, "zzdskbsr_", (ftnlen)861)] = j;
+			"btlfs", i__2, "zzdskbsr_", (ftnlen)867)] = j;
 	    } else {
 
 /*              The lowest file searched for body I is not in the */
@@ -1140,9 +1146,9 @@ L_zzdsklsf:
 /*              list. */
 
 		btlfs[(i__2 = i__ - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge(
-			"btlfs", i__2, "zzdskbsr_", (ftnlen)871)] = 0;
+			"btlfs", i__2, "zzdskbsr_", (ftnlen)877)] = 0;
 		bthfs[(i__2 = i__ - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge(
-			"bthfs", i__2, "zzdskbsr_", (ftnlen)872)] = 0;
+			"bthfs", i__2, "zzdskbsr_", (ftnlen)878)] = 0;
 	    }
 	}
 
@@ -1151,7 +1157,7 @@ L_zzdsklsf:
 	i__1 = nft;
 	for (i__ = 1; i__ <= i__1; ++i__) {
 	    ftnum[(i__2 = i__ - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge("ftnum"
-		    , i__2, "zzdskbsr_", (ftnlen)883)] = i__;
+		    , i__2, "zzdskbsr_", (ftnlen)889)] = i__;
 	}
 
 /*        Assign a new file number. */
@@ -1163,9 +1169,9 @@ L_zzdsklsf:
 
     ++nft;
     fthan[(i__1 = nft - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("fthan", i__1, 
-	    "zzdskbsr_", (ftnlen)898)] = *handle;
+	    "zzdskbsr_", (ftnlen)904)] = *handle;
     ftnum[(i__1 = nft - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("ftnum", i__1, 
-	    "zzdskbsr_", (ftnlen)899)] = next;
+	    "zzdskbsr_", (ftnlen)905)] = next;
     chkout_("ZZDSKLSF", (ftnlen)8);
     return 0;
 /* $Procedure ZZDSKUSF ( DSK, Unload shape file ) */
@@ -1338,18 +1344,18 @@ L_zzdskusf:
 /*     before wiping out the handle. */
 
     dascls_(&fthan[(i__1 = findex - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-	    "fthan", i__1, "zzdskbsr_", (ftnlen)1091)]);
+	    "fthan", i__1, "zzdskbsr_", (ftnlen)1097)]);
     --nft;
     i__1 = nft;
     for (i__ = findex; i__ <= i__1; ++i__) {
 	fthan[(i__2 = i__ - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge("fthan", 
-		i__2, "zzdskbsr_", (ftnlen)1097)] = fthan[(i__3 = i__) < 5000 
+		i__2, "zzdskbsr_", (ftnlen)1103)] = fthan[(i__3 = i__) < 5000 
 		&& 0 <= i__3 ? i__3 : s_rnge("fthan", i__3, "zzdskbsr_", (
-		ftnlen)1097)];
+		ftnlen)1103)];
 	ftnum[(i__2 = i__ - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge("ftnum", 
-		i__2, "zzdskbsr_", (ftnlen)1098)] = ftnum[(i__3 = i__) < 5000 
+		i__2, "zzdskbsr_", (ftnlen)1104)] = ftnum[(i__3 = i__) < 5000 
 		&& 0 <= i__3 ? i__3 : s_rnge("ftnum", i__3, "zzdskbsr_", (
-		ftnlen)1098)];
+		ftnlen)1104)];
     }
 
 /*     Check each body list individually. Note that the first */
@@ -1359,15 +1365,15 @@ L_zzdskusf:
     i__ = 1;
     while(i__ <= nbt) {
 	p = btbeg[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge("btbeg",
-		 i__1, "zzdskbsr_", (ftnlen)1110)];
+		 i__1, "zzdskbsr_", (ftnlen)1116)];
 	while(p > 0) {
 	    nxtseg = lnknxt_(&p, stpool);
 	    if (sthan[(i__1 = p - 1) < 10000 && 0 <= i__1 ? i__1 : s_rnge(
-		    "sthan", i__1, "zzdskbsr_", (ftnlen)1116)] == *handle) {
+		    "sthan", i__1, "zzdskbsr_", (ftnlen)1122)] == *handle) {
 		if (p == btbeg[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : 
-			s_rnge("btbeg", i__1, "zzdskbsr_", (ftnlen)1118)]) {
+			s_rnge("btbeg", i__1, "zzdskbsr_", (ftnlen)1124)]) {
 		    btbeg[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-			    "btbeg", i__1, "zzdskbsr_", (ftnlen)1119)] = 
+			    "btbeg", i__1, "zzdskbsr_", (ftnlen)1125)] = 
 			    nxtseg;
 		}
 
@@ -1384,28 +1390,28 @@ L_zzdskusf:
 /*        one we've deleted. */
 
 	if (btbeg[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge("btbeg",
-		 i__1, "zzdskbsr_", (ftnlen)1138)] <= 0) {
+		 i__1, "zzdskbsr_", (ftnlen)1144)] <= 0) {
 	    if (i__ != nbt) {
 		btbod[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-			"btbod", i__1, "zzdskbsr_", (ftnlen)1142)] = btbod[(
+			"btbod", i__1, "zzdskbsr_", (ftnlen)1148)] = btbod[(
 			i__2 = nbt - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge(
-			"btbod", i__2, "zzdskbsr_", (ftnlen)1142)];
+			"btbod", i__2, "zzdskbsr_", (ftnlen)1148)];
 		btexp[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-			"btexp", i__1, "zzdskbsr_", (ftnlen)1143)] = btexp[(
+			"btexp", i__1, "zzdskbsr_", (ftnlen)1149)] = btexp[(
 			i__2 = nbt - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge(
-			"btexp", i__2, "zzdskbsr_", (ftnlen)1143)];
+			"btexp", i__2, "zzdskbsr_", (ftnlen)1149)];
 		bthfs[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-			"bthfs", i__1, "zzdskbsr_", (ftnlen)1144)] = bthfs[(
+			"bthfs", i__1, "zzdskbsr_", (ftnlen)1150)] = bthfs[(
 			i__2 = nbt - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge(
-			"bthfs", i__2, "zzdskbsr_", (ftnlen)1144)];
+			"bthfs", i__2, "zzdskbsr_", (ftnlen)1150)];
 		btlfs[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-			"btlfs", i__1, "zzdskbsr_", (ftnlen)1145)] = btlfs[(
+			"btlfs", i__1, "zzdskbsr_", (ftnlen)1151)] = btlfs[(
 			i__2 = nbt - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge(
-			"btlfs", i__2, "zzdskbsr_", (ftnlen)1145)];
+			"btlfs", i__2, "zzdskbsr_", (ftnlen)1151)];
 		btbeg[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-			"btbeg", i__1, "zzdskbsr_", (ftnlen)1146)] = btbeg[(
+			"btbeg", i__1, "zzdskbsr_", (ftnlen)1152)] = btbeg[(
 			i__2 = nbt - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge(
-			"btbeg", i__2, "zzdskbsr_", (ftnlen)1146)];
+			"btbeg", i__2, "zzdskbsr_", (ftnlen)1152)];
 	    }
 	    --nbt;
 	} else {
@@ -1464,12 +1470,12 @@ L_zzdskbss:
 
 /*     Variable  I/O  Description */
 /*     --------  ---  -------------------------------------------------- */
+/*     BODYID     I   ID code of body. */
 
 /* $ Detailed_Input */
 
-/*     ZZDSKBSS sets up a search for segments. The four quantities below */
-/*     establish the search criteria. */
-
+/*     BODYID     is the integer ID code of the body for which a search */
+/*                is to be performed. */
 
 /* $ Detailed_Output */
 
@@ -1491,13 +1497,8 @@ L_zzdskbss:
 
 /* $ Particulars */
 
-/*     ZZDSKBSS sets up a search for segments by ZZDSKSNS. It records the */
-/*     body and time to be searched for, and whether to require */
-/*     segments containing angular velocity data. If angular velocity */
-/*     data are required, only segments containing angular velocity */
-/*     data will be returned by ZZDSKSNS. If angular velocity data are */
-/*     not required, segments returned by ZZDSKSNS may or may not contain */
-/*     angular velocity data. */
+/*     ZZDSKBSS sets up a search for segments by ZZDSKSNS. It records */
+/*     the body for which the search is to be conducted. */
 
 /*     ZZDSKBSS determines the first task that ZZDSKSNS will have to */
 /*     perform if it is called to get an applicable segment. */
@@ -1521,6 +1522,12 @@ L_zzdskbss:
 /*     I.M. Underwood (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 23-NOV-2020 (NJB) (BVS) */
+
+/*        Corrected typo in long error message. Corrected descriptions */
+/*        of inputs. Corrected description of saved information in the */
+/*        Particulars header section. */
 
 /* -    SPICELIB Version 1.0.0, 08-FEB-2017 (NJB) */
 
@@ -1575,8 +1582,8 @@ L_zzdskbss:
 /*     There must be at least one file loaded. */
 
     if (nft == 0) {
-	setmsg_("At least one DSK file needs must be loaded by ZZDSKLSF befo"
-		"re beginning a search.", (ftnlen)81);
+	setmsg_("At least one DSK file must have been loaded by ZZDSKLSF bef"
+		"ore a search can be started.", (ftnlen)87);
 	sigerr_("SPICE(NOLOADEDDSKFILES)", (ftnlen)23);
 	chkout_("ZZDSKBSS", (ftnlen)8);
 	return 0;
@@ -1767,6 +1774,13 @@ L_zzdsksns:
 
 /* $ Version */
 
+/* -    SPICELIB Version 1.1.0, 13-OCT-2021 (NJB) */
+
+/*        Relocated initialization of FOUND so it is always */
+/*        executed, even if an error state is indicated by RETURN(). */
+
+/*        Corrected inline comments describing segment search criteria. */
+
 /* -    SPICELIB Version 1.0.0, 08-FEB-2017 (NJB) */
 
 /*        Updated version info. */
@@ -1803,6 +1817,10 @@ L_zzdsksns:
 
 /* -& */
 
+/*     Nothing's been found yet. */
+
+    *found = FALSE_;
+
 /*     Standard SPICE error handling. */
 
     if (return_()) {
@@ -1816,10 +1834,6 @@ L_zzdsksns:
 	zzctrsin_(dskctr);
 	pass1 = FALSE_;
     }
-
-/*     Nothing's been found yet. */
-
-    *found = FALSE_;
 
 /*     Initialize the segment list pointer to the saved value from */
 /*     the previous pass through this routine, if any. */
@@ -1993,19 +2007,19 @@ L_zzdsksns:
 /*               a new file. */
 
 	    if (bthfs[(i__1 = bindex - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-		    "bthfs", i__1, "zzdskbsr_", (ftnlen)1796)] < ftnum[(i__2 =
+		    "bthfs", i__1, "zzdskbsr_", (ftnlen)1807)] < ftnum[(i__2 =
 		     nft - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge("ftnum", 
-		    i__2, "zzdskbsr_", (ftnlen)1796)]) {
+		    i__2, "zzdskbsr_", (ftnlen)1807)]) {
 		s_copy(status, "NEW FILES", (ftnlen)40, (ftnlen)9);
 	    } else {
 /*              If the segment list for this body is empty, make */
 /*              sure the expense is set to 0. */
 
 		if (btbeg[(i__1 = bindex - 1) < 100 && 0 <= i__1 ? i__1 : 
-			s_rnge("btbeg", i__1, "zzdskbsr_", (ftnlen)1805)] <= 
+			s_rnge("btbeg", i__1, "zzdskbsr_", (ftnlen)1816)] <= 
 			0) {
 		    btexp[(i__1 = bindex - 1) < 100 && 0 <= i__1 ? i__1 : 
-			    s_rnge("btexp", i__1, "zzdskbsr_", (ftnlen)1806)] 
+			    s_rnge("btexp", i__1, "zzdskbsr_", (ftnlen)1817)] 
 			    = 0;
 		}
 
@@ -2013,7 +2027,7 @@ L_zzdsksns:
 /*              this body. */
 
 		p = btbeg[(i__1 = bindex - 1) < 100 && 0 <= i__1 ? i__1 : 
-			s_rnge("btbeg", i__1, "zzdskbsr_", (ftnlen)1813)];
+			s_rnge("btbeg", i__1, "zzdskbsr_", (ftnlen)1824)];
 		s_copy(status, "CHECK LIST", (ftnlen)40, (ftnlen)10);
 	    }
 	} else if (s_cmp(status, "NEW BODY", (ftnlen)40, (ftnlen)8) == 0) {
@@ -2055,12 +2069,12 @@ L_zzdsksns:
 		i__1 = nbt;
 		for (i__ = 2; i__ <= i__1; ++i__) {
 		    if (btexp[(i__2 = i__ - 1) < 100 && 0 <= i__2 ? i__2 : 
-			    s_rnge("btexp", i__2, "zzdskbsr_", (ftnlen)1859)] 
+			    s_rnge("btexp", i__2, "zzdskbsr_", (ftnlen)1870)] 
 			    < minexp) {
 			cheap = i__;
 			minexp = btexp[(i__2 = i__ - 1) < 100 && 0 <= i__2 ? 
 				i__2 : s_rnge("btexp", i__2, "zzdskbsr_", (
-				ftnlen)1861)];
+				ftnlen)1872)];
 		    }
 		}
 
@@ -2069,7 +2083,7 @@ L_zzdsksns:
 /*              list. */
 
 		head = btbeg[(i__1 = cheap - 1) < 100 && 0 <= i__1 ? i__1 : 
-			s_rnge("btbeg", i__1, "zzdskbsr_", (ftnlen)1871)];
+			s_rnge("btbeg", i__1, "zzdskbsr_", (ftnlen)1882)];
 		if (head > 0) {
 		    tail = -lnkprv_(&head, stpool);
 		    lnkfsl_(&head, &tail, stpool);
@@ -2079,19 +2093,19 @@ L_zzdsksns:
 /*           Set up a table entry for the new body. */
 
 	    btbod[(i__1 = cheap - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge("btb"
-		    "od", i__1, "zzdskbsr_", (ftnlen)1885)] = svbody;
+		    "od", i__1, "zzdskbsr_", (ftnlen)1896)] = svbody;
 	    btexp[(i__1 = cheap - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge("bte"
-		    "xp", i__1, "zzdskbsr_", (ftnlen)1886)] = 0;
+		    "xp", i__1, "zzdskbsr_", (ftnlen)1897)] = 0;
 	    bthfs[(i__1 = cheap - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge("bth"
-		    "fs", i__1, "zzdskbsr_", (ftnlen)1887)] = ftnum[(i__2 = 
+		    "fs", i__1, "zzdskbsr_", (ftnlen)1898)] = ftnum[(i__2 = 
 		    nft - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge("ftnum", 
-		    i__2, "zzdskbsr_", (ftnlen)1887)];
+		    i__2, "zzdskbsr_", (ftnlen)1898)];
 	    btlfs[(i__1 = cheap - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge("btl"
-		    "fs", i__1, "zzdskbsr_", (ftnlen)1888)] = ftnum[(i__2 = 
+		    "fs", i__1, "zzdskbsr_", (ftnlen)1899)] = ftnum[(i__2 = 
 		    nft - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge("ftnum", 
-		    i__2, "zzdskbsr_", (ftnlen)1888)] + 1;
+		    i__2, "zzdskbsr_", (ftnlen)1899)] + 1;
 	    btbeg[(i__1 = cheap - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge("btb"
-		    "eg", i__1, "zzdskbsr_", (ftnlen)1889)] = 0;
+		    "eg", i__1, "zzdskbsr_", (ftnlen)1900)] = 0;
 	    bindex = cheap;
 
 /*           Now search all of the files for segments relating to */
@@ -2117,21 +2131,21 @@ L_zzdsksns:
 /*           corresponding file table entry. */
 	    findex = 1;
 	    while(bthfs[(i__1 = bindex - 1) < 100 && 0 <= i__1 ? i__1 : 
-		    s_rnge("bthfs", i__1, "zzdskbsr_", (ftnlen)1919)] >= 
+		    s_rnge("bthfs", i__1, "zzdskbsr_", (ftnlen)1930)] >= 
 		    ftnum[(i__2 = findex - 1) < 5000 && 0 <= i__2 ? i__2 : 
-		    s_rnge("ftnum", i__2, "zzdskbsr_", (ftnlen)1919)]) {
+		    s_rnge("ftnum", i__2, "zzdskbsr_", (ftnlen)1930)]) {
 		++findex;
 	    }
 	    bthfs[(i__1 = bindex - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-		    "bthfs", i__1, "zzdskbsr_", (ftnlen)1925)] = ftnum[(i__2 =
+		    "bthfs", i__1, "zzdskbsr_", (ftnlen)1936)] = ftnum[(i__2 =
 		     findex - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge("ftnum", 
-		    i__2, "zzdskbsr_", (ftnlen)1925)];
+		    i__2, "zzdskbsr_", (ftnlen)1936)];
 
 /*           Start a forward search through the current file. */
 
 	    begsch = TRUE_;
 	    dlabfs_(&fthan[(i__1 = findex - 1) < 5000 && 0 <= i__1 ? i__1 : 
-		    s_rnge("fthan", i__1, "zzdskbsr_", (ftnlen)1931)], dlalds,
+		    s_rnge("fthan", i__1, "zzdskbsr_", (ftnlen)1942)], dlalds,
 		     &fnd);
 	    if (failed_()) {
 		chkout_("ZZDSKSNS", (ftnlen)8);
@@ -2172,7 +2186,7 @@ L_zzdsksns:
 /*              Use the current DLA descriptor to look up the next one. */
 
 		dlafns_(&fthan[(i__1 = findex - 1) < 5000 && 0 <= i__1 ? i__1 
-			: s_rnge("fthan", i__1, "zzdskbsr_", (ftnlen)1975)], 
+			: s_rnge("fthan", i__1, "zzdskbsr_", (ftnlen)1986)], 
 			dlalds, dlanxt, &fnd);
 		if (fnd) {
 		    movei_(dlanxt, &c__8, dlalds);
@@ -2190,16 +2204,16 @@ L_zzdsksns:
 
 		s_copy(status, "?", (ftnlen)40, (ftnlen)1);
 		btexp[(i__1 = bindex - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-			"btexp", i__1, "zzdskbsr_", (ftnlen)1995)] = btexp[(
+			"btexp", i__1, "zzdskbsr_", (ftnlen)2006)] = btexp[(
 			i__2 = bindex - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge(
-			"btexp", i__2, "zzdskbsr_", (ftnlen)1995)] + cost;
+			"btexp", i__2, "zzdskbsr_", (ftnlen)2006)] + cost;
 	    } else {
 
 /*              Get the DSK segment descriptor for the current */
 /*              segment. */
 
 		dskgd_(&fthan[(i__1 = findex - 1) < 5000 && 0 <= i__1 ? i__1 :
-			 s_rnge("fthan", i__1, "zzdskbsr_", (ftnlen)2002)], 
+			 s_rnge("fthan", i__1, "zzdskbsr_", (ftnlen)2013)], 
 			dlalds, dsklds);
 		if (i_dnnt(&dsklds[1]) == svbody) {
 
@@ -2238,14 +2252,14 @@ L_zzdsksns:
 /*              have some files left that have not been searched. */
 	    findex = nft;
 	    while(btlfs[(i__1 = bindex - 1) < 100 && 0 <= i__1 ? i__1 : 
-		    s_rnge("btlfs", i__1, "zzdskbsr_", (ftnlen)2046)] <= 
+		    s_rnge("btlfs", i__1, "zzdskbsr_", (ftnlen)2057)] <= 
 		    ftnum[(i__2 = findex - 1) < 5000 && 0 <= i__2 ? i__2 : 
-		    s_rnge("ftnum", i__2, "zzdskbsr_", (ftnlen)2046)]) {
+		    s_rnge("ftnum", i__2, "zzdskbsr_", (ftnlen)2057)]) {
 		--findex;
 	    }
 	    begsch = TRUE_;
 	    dlabbs_(&fthan[(i__1 = findex - 1) < 5000 && 0 <= i__1 ? i__1 : 
-		    s_rnge("fthan", i__1, "zzdskbsr_", (ftnlen)2051)], dlalds,
+		    s_rnge("fthan", i__1, "zzdskbsr_", (ftnlen)2062)], dlalds,
 		     &fnd);
 	    if (failed_()) {
 		chkout_("ZZDSKSNS", (ftnlen)8);
@@ -2285,7 +2299,7 @@ L_zzdsksns:
 /*              Look up the previous segment from this file. */
 
 		dlafps_(&fthan[(i__1 = findex - 1) < 5000 && 0 <= i__1 ? i__1 
-			: s_rnge("fthan", i__1, "zzdskbsr_", (ftnlen)2093)], 
+			: s_rnge("fthan", i__1, "zzdskbsr_", (ftnlen)2104)], 
 			dlalds, dlaprv, &fnd);
 		if (fnd) {
 		    movei_(dlaprv, &c__8, dlalds);
@@ -2303,22 +2317,22 @@ L_zzdsksns:
 /*              current list. */
 
 		btlfs[(i__1 = bindex - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-			"btlfs", i__1, "zzdskbsr_", (ftnlen)2116)] = ftnum[(
+			"btlfs", i__1, "zzdskbsr_", (ftnlen)2127)] = ftnum[(
 			i__2 = findex - 1) < 5000 && 0 <= i__2 ? i__2 : 
-			s_rnge("ftnum", i__2, "zzdskbsr_", (ftnlen)2116)];
+			s_rnge("ftnum", i__2, "zzdskbsr_", (ftnlen)2127)];
 		btexp[(i__1 = bindex - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-			"btexp", i__1, "zzdskbsr_", (ftnlen)2117)] = btexp[(
+			"btexp", i__1, "zzdskbsr_", (ftnlen)2128)] = btexp[(
 			i__2 = bindex - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge(
-			"btexp", i__2, "zzdskbsr_", (ftnlen)2117)] + cost;
+			"btexp", i__2, "zzdskbsr_", (ftnlen)2128)] + cost;
 		p = btbeg[(i__1 = bindex - 1) < 100 && 0 <= i__1 ? i__1 : 
-			s_rnge("btbeg", i__1, "zzdskbsr_", (ftnlen)2118)];
+			s_rnge("btbeg", i__1, "zzdskbsr_", (ftnlen)2129)];
 		s_copy(status, "CHECK LIST", (ftnlen)40, (ftnlen)10);
 	    } else {
 
 /*              Get the DSK descriptor for this segment. */
 
 		dskgd_(&fthan[(i__1 = findex - 1) < 5000 && 0 <= i__1 ? i__1 :
-			 s_rnge("fthan", i__1, "zzdskbsr_", (ftnlen)2125)], 
+			 s_rnge("fthan", i__1, "zzdskbsr_", (ftnlen)2136)], 
 			dlalds, dsklds);
 		if (failed_()) {
 		    chkout_("ZZDSKSNS", (ftnlen)8);
@@ -2338,8 +2352,8 @@ L_zzdsksns:
 
 /*           Okay, all the new files (and maybe an old file or two) */
 /*           have been searched. Time to look at the list of segments */
-/*           stored for the body, to see if there is one applicable */
-/*           to the specified epoch and need for angular velocity data. */
+/*           stored for the body, to see if there is one that satisfies */
+/*           the search criteria. */
 
 /*           If so, return it.  If not, try another old file.  If there */
 /*           are no more old files, give up the ghost. */
@@ -2360,20 +2374,20 @@ L_zzdsksns:
 	    while(p > 0) {
 		if ((*cmpfun)(&sthan[(i__1 = p - 1) < 10000 && 0 <= i__1 ? 
 			i__1 : s_rnge("sthan", i__1, "zzdskbsr_", (ftnlen)
-			2171)], &stdlad[(i__2 = (p << 3) - 8) < 80000 && 0 <= 
+			2182)], &stdlad[(i__2 = (p << 3) - 8) < 80000 && 0 <= 
 			i__2 ? i__2 : s_rnge("stdlad", i__2, "zzdskbsr_", (
-			ftnlen)2171)], &stdskd[(i__3 = p * 24 - 24) < 240000 
+			ftnlen)2182)], &stdskd[(i__3 = p * 24 - 24) < 240000 
 			&& 0 <= i__3 ? i__3 : s_rnge("stdskd", i__3, "zzdskb"
-			"sr_", (ftnlen)2171)])) {
+			"sr_", (ftnlen)2182)])) {
 		    movei_(&stdlad[(i__1 = (p << 3) - 8) < 80000 && 0 <= i__1 
 			    ? i__1 : s_rnge("stdlad", i__1, "zzdskbsr_", (
-			    ftnlen)2173)], &c__8, dladsc);
+			    ftnlen)2184)], &c__8, dladsc);
 		    moved_(&stdskd[(i__1 = p * 24 - 24) < 240000 && 0 <= i__1 
 			    ? i__1 : s_rnge("stdskd", i__1, "zzdskbsr_", (
-			    ftnlen)2175)], &c__24, dskdsc);
+			    ftnlen)2186)], &c__24, dskdsc);
 		    *handle = sthan[(i__1 = p - 1) < 10000 && 0 <= i__1 ? 
 			    i__1 : s_rnge("sthan", i__1, "zzdskbsr_", (ftnlen)
-			    2177)];
+			    2188)];
 		    *found = TRUE_;
 
 /*                 Go ahead and move the pointer up before returning */
@@ -2382,7 +2396,7 @@ L_zzdsksns:
 
 		    savep = stpool[(i__1 = (p << 1) + 10) < 20012 && 0 <= 
 			    i__1 ? i__1 : s_rnge("stpool", i__1, "zzdskbsr_", 
-			    (ftnlen)2184)];
+			    (ftnlen)2195)];
 		    chkout_("ZZDSKSNS", (ftnlen)8);
 		    return 0;
 		}
@@ -2391,7 +2405,7 @@ L_zzdsksns:
 /*              to speed up the operation. */
 
 		p = stpool[(i__1 = (p << 1) + 10) < 20012 && 0 <= i__1 ? i__1 
-			: s_rnge("stpool", i__1, "zzdskbsr_", (ftnlen)2196)];
+			: s_rnge("stpool", i__1, "zzdskbsr_", (ftnlen)2207)];
 	    }
 
 /*           If we're still here we didn't have information for this */
@@ -2401,7 +2415,7 @@ L_zzdsksns:
 /*           Otherwise, things are hopeless, set the status that way. */
 
 	    if (btlfs[(i__1 = bindex - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-		    "btlfs", i__1, "zzdskbsr_", (ftnlen)2207)] > ftnum[0]) {
+		    "btlfs", i__1, "zzdskbsr_", (ftnlen)2218)] > ftnum[0]) {
 		s_copy(status, "OLD FILES", (ftnlen)40, (ftnlen)9);
 	    } else {
 		s_copy(status, "HOPELESS", (ftnlen)40, (ftnlen)8);
@@ -2446,7 +2460,7 @@ L_zzdsksns:
 	    for (i__ = 1; i__ <= i__1; ++i__) {
 		if (i__ != bindex) {
 		    if (btexp[(i__2 = i__ - 1) < 100 && 0 <= i__2 ? i__2 : 
-			    s_rnge("btexp", i__2, "zzdskbsr_", (ftnlen)2257)] 
+			    s_rnge("btexp", i__2, "zzdskbsr_", (ftnlen)2268)] 
 			    < minexp || cheap == 0) {
 
 /*                    This list is the cheapest seen so far, */
@@ -2457,7 +2471,7 @@ L_zzdsksns:
 			cheap = i__;
 			minexp = btexp[(i__2 = i__ - 1) < 100 && 0 <= i__2 ? 
 				i__2 : s_rnge("btexp", i__2, "zzdskbsr_", (
-				ftnlen)2266)];
+				ftnlen)2277)];
 		    }
 		}
 	    }
@@ -2468,7 +2482,7 @@ L_zzdsksns:
 /*              entering MAKE ROOM. */
 
 		if (s_cmp(stack + ((i__1 = top - 1) < 2 && 0 <= i__1 ? i__1 : 
-			s_rnge("stack", i__1, "zzdskbsr_", (ftnlen)2281)) * 
+			s_rnge("stack", i__1, "zzdskbsr_", (ftnlen)2292)) * 
 			40, "ADD TO END", (ftnlen)40, (ftnlen)10) == 0) {
 
 /*                 The segment meta-data from the current file cannot */
@@ -2491,7 +2505,7 @@ L_zzdsksns:
 
 		    head = btbeg[(i__1 = bindex - 1) < 100 && 0 <= i__1 ? 
 			    i__1 : s_rnge("btbeg", i__1, "zzdskbsr_", (ftnlen)
-			    2301)];
+			    2312)];
 		    tail = -lnkprv_(&head, stpool);
 		    node = tail;
 		    while(node > 0) {
@@ -2502,9 +2516,9 @@ L_zzdsksns:
 			prvnod = lnkprv_(&node, stpool);
 			if (sthan[(i__1 = node - 1) < 10000 && 0 <= i__1 ? 
 				i__1 : s_rnge("sthan", i__1, "zzdskbsr_", (
-				ftnlen)2313)] == fthan[(i__2 = findex - 1) < 
+				ftnlen)2324)] == fthan[(i__2 = findex - 1) < 
 				5000 && 0 <= i__2 ? i__2 : s_rnge("fthan", 
-				i__2, "zzdskbsr_", (ftnlen)2313)]) {
+				i__2, "zzdskbsr_", (ftnlen)2324)]) {
 
 /*                       This segment is from the file we were */
 /*                       searching when we ran out of room. Free */
@@ -2571,7 +2585,7 @@ L_zzdsksns:
 /*                 Note this list is non-empty. */
 
 		    p = btbeg[(i__1 = bindex - 1) < 100 && 0 <= i__1 ? i__1 : 
-			    s_rnge("btbeg", i__1, "zzdskbsr_", (ftnlen)2384)];
+			    s_rnge("btbeg", i__1, "zzdskbsr_", (ftnlen)2395)];
 		    tail = -lnkprv_(&p, stpool);
 		    lnkfsl_(&p, &tail, stpool);
 
@@ -2580,18 +2594,18 @@ L_zzdsksns:
 /*                 BODY'. */
 
 		    btexp[(i__1 = bindex - 1) < 100 && 0 <= i__1 ? i__1 : 
-			    s_rnge("btexp", i__1, "zzdskbsr_", (ftnlen)2393)] 
+			    s_rnge("btexp", i__1, "zzdskbsr_", (ftnlen)2404)] 
 			    = 0;
 		    bthfs[(i__1 = bindex - 1) < 100 && 0 <= i__1 ? i__1 : 
-			    s_rnge("bthfs", i__1, "zzdskbsr_", (ftnlen)2394)] 
+			    s_rnge("bthfs", i__1, "zzdskbsr_", (ftnlen)2405)] 
 			    = ftnum[(i__2 = nft - 1) < 5000 && 0 <= i__2 ? 
 			    i__2 : s_rnge("ftnum", i__2, "zzdskbsr_", (ftnlen)
-			    2394)];
+			    2405)];
 		    btlfs[(i__1 = bindex - 1) < 100 && 0 <= i__1 ? i__1 : 
-			    s_rnge("btlfs", i__1, "zzdskbsr_", (ftnlen)2395)] 
+			    s_rnge("btlfs", i__1, "zzdskbsr_", (ftnlen)2406)] 
 			    = ftnum[(i__2 = nft - 1) < 5000 && 0 <= i__2 ? 
 			    i__2 : s_rnge("ftnum", i__2, "zzdskbsr_", (ftnlen)
-			    2395)] + 1;
+			    2406)] + 1;
 		    s_copy(status, "OLD FILES", (ftnlen)40, (ftnlen)9);
 		}
 
@@ -2604,7 +2618,7 @@ L_zzdsksns:
 /*              list could be empty. */
 
 		head = btbeg[(i__1 = cheap - 1) < 100 && 0 <= i__1 ? i__1 : 
-			s_rnge("btbeg", i__1, "zzdskbsr_", (ftnlen)2411)];
+			s_rnge("btbeg", i__1, "zzdskbsr_", (ftnlen)2422)];
 		if (head > 0) {
 		    tail = -lnkprv_(&head, stpool);
 		    lnkfsl_(&head, &tail, stpool);
@@ -2615,30 +2629,30 @@ L_zzdsksns:
 
 		if (cheap != nbt) {
 		    btbod[(i__1 = cheap - 1) < 100 && 0 <= i__1 ? i__1 : 
-			    s_rnge("btbod", i__1, "zzdskbsr_", (ftnlen)2427)] 
+			    s_rnge("btbod", i__1, "zzdskbsr_", (ftnlen)2438)] 
 			    = btbod[(i__2 = nbt - 1) < 100 && 0 <= i__2 ? 
 			    i__2 : s_rnge("btbod", i__2, "zzdskbsr_", (ftnlen)
-			    2427)];
+			    2438)];
 		    btexp[(i__1 = cheap - 1) < 100 && 0 <= i__1 ? i__1 : 
-			    s_rnge("btexp", i__1, "zzdskbsr_", (ftnlen)2428)] 
+			    s_rnge("btexp", i__1, "zzdskbsr_", (ftnlen)2439)] 
 			    = btexp[(i__2 = nbt - 1) < 100 && 0 <= i__2 ? 
 			    i__2 : s_rnge("btexp", i__2, "zzdskbsr_", (ftnlen)
-			    2428)];
+			    2439)];
 		    bthfs[(i__1 = cheap - 1) < 100 && 0 <= i__1 ? i__1 : 
-			    s_rnge("bthfs", i__1, "zzdskbsr_", (ftnlen)2429)] 
+			    s_rnge("bthfs", i__1, "zzdskbsr_", (ftnlen)2440)] 
 			    = bthfs[(i__2 = nbt - 1) < 100 && 0 <= i__2 ? 
 			    i__2 : s_rnge("bthfs", i__2, "zzdskbsr_", (ftnlen)
-			    2429)];
+			    2440)];
 		    btlfs[(i__1 = cheap - 1) < 100 && 0 <= i__1 ? i__1 : 
-			    s_rnge("btlfs", i__1, "zzdskbsr_", (ftnlen)2430)] 
+			    s_rnge("btlfs", i__1, "zzdskbsr_", (ftnlen)2441)] 
 			    = btlfs[(i__2 = nbt - 1) < 100 && 0 <= i__2 ? 
 			    i__2 : s_rnge("btlfs", i__2, "zzdskbsr_", (ftnlen)
-			    2430)];
+			    2441)];
 		    btbeg[(i__1 = cheap - 1) < 100 && 0 <= i__1 ? i__1 : 
-			    s_rnge("btbeg", i__1, "zzdskbsr_", (ftnlen)2431)] 
+			    s_rnge("btbeg", i__1, "zzdskbsr_", (ftnlen)2442)] 
 			    = btbeg[(i__2 = nbt - 1) < 100 && 0 <= i__2 ? 
 			    i__2 : s_rnge("btbeg", i__2, "zzdskbsr_", (ftnlen)
-			    2431)];
+			    2442)];
 		}
 		if (bindex == nbt) {
 		    bindex = cheap;
@@ -2677,19 +2691,19 @@ L_zzdsksns:
 
 		lnkan_(stpool, &new__);
 		sthan[(i__1 = new__ - 1) < 10000 && 0 <= i__1 ? i__1 : s_rnge(
-			"sthan", i__1, "zzdskbsr_", (ftnlen)2478)] = fthan[(
+			"sthan", i__1, "zzdskbsr_", (ftnlen)2489)] = fthan[(
 			i__2 = findex - 1) < 5000 && 0 <= i__2 ? i__2 : 
-			s_rnge("fthan", i__2, "zzdskbsr_", (ftnlen)2478)];
+			s_rnge("fthan", i__2, "zzdskbsr_", (ftnlen)2489)];
 
 /*              Store the DLA and DSK descriptors for this segment in */
 /*              the segment table. */
 
 		movei_(dlalds, &c__8, &stdlad[(i__1 = (new__ << 3) - 8) < 
 			80000 && 0 <= i__1 ? i__1 : s_rnge("stdlad", i__1, 
-			"zzdskbsr_", (ftnlen)2483)]);
+			"zzdskbsr_", (ftnlen)2494)]);
 		moved_(dsklds, &c__24, &stdskd[(i__1 = new__ * 24 - 24) < 
 			240000 && 0 <= i__1 ? i__1 : s_rnge("stdskd", i__1, 
-			"zzdskbsr_", (ftnlen)2484)]);
+			"zzdskbsr_", (ftnlen)2495)]);
 		if (failed_()) {
 		    chkout_("ZZDSKSNS", (ftnlen)8);
 		    return 0;
@@ -2700,9 +2714,9 @@ L_zzdsksns:
 
 		lnkilb_(&new__, &btbeg[(i__1 = bindex - 1) < 100 && 0 <= i__1 
 			? i__1 : s_rnge("btbeg", i__1, "zzdskbsr_", (ftnlen)
-			2495)], stpool);
+			2506)], stpool);
 		btbeg[(i__1 = bindex - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-			"btbeg", i__1, "zzdskbsr_", (ftnlen)2496)] = new__;
+			"btbeg", i__1, "zzdskbsr_", (ftnlen)2507)] = new__;
 		s_copy(status, "RESUME", (ftnlen)40, (ftnlen)6);
 	    }
 	} else if (s_cmp(status, "ADD TO END", (ftnlen)40, (ftnlen)10) == 0) {
@@ -2723,32 +2737,32 @@ L_zzdsksns:
 
 		lnkan_(stpool, &new__);
 		sthan[(i__1 = new__ - 1) < 10000 && 0 <= i__1 ? i__1 : s_rnge(
-			"sthan", i__1, "zzdskbsr_", (ftnlen)2523)] = fthan[(
+			"sthan", i__1, "zzdskbsr_", (ftnlen)2534)] = fthan[(
 			i__2 = findex - 1) < 5000 && 0 <= i__2 ? i__2 : 
-			s_rnge("fthan", i__2, "zzdskbsr_", (ftnlen)2523)];
+			s_rnge("fthan", i__2, "zzdskbsr_", (ftnlen)2534)];
 
 /*              Store the DLA and DSK descriptors for this segment in */
 /*              the segment table. */
 
 		movei_(dlalds, &c__8, &stdlad[(i__1 = (new__ << 3) - 8) < 
 			80000 && 0 <= i__1 ? i__1 : s_rnge("stdlad", i__1, 
-			"zzdskbsr_", (ftnlen)2529)]);
+			"zzdskbsr_", (ftnlen)2540)]);
 		moved_(dsklds, &c__24, &stdskd[(i__1 = new__ * 24 - 24) < 
 			240000 && 0 <= i__1 ? i__1 : s_rnge("stdskd", i__1, 
-			"zzdskbsr_", (ftnlen)2530)]);
+			"zzdskbsr_", (ftnlen)2541)]);
 		if (failed_()) {
 		    chkout_("ZZDSKSNS", (ftnlen)8);
 		    return 0;
 		}
 		if (btbeg[(i__1 = bindex - 1) < 100 && 0 <= i__1 ? i__1 : 
-			s_rnge("btbeg", i__1, "zzdskbsr_", (ftnlen)2537)] <= 
+			s_rnge("btbeg", i__1, "zzdskbsr_", (ftnlen)2548)] <= 
 			0) {
 
 /*                 This is the first node in the list for this */
 /*                 body. */
 
 		    btbeg[(i__1 = bindex - 1) < 100 && 0 <= i__1 ? i__1 : 
-			    s_rnge("btbeg", i__1, "zzdskbsr_", (ftnlen)2542)] 
+			    s_rnge("btbeg", i__1, "zzdskbsr_", (ftnlen)2553)] 
 			    = new__;
 		} else {
 
@@ -2756,7 +2770,7 @@ L_zzdsksns:
 
 		    tail = -lnkprv_(&btbeg[(i__1 = bindex - 1) < 100 && 0 <= 
 			    i__1 ? i__1 : s_rnge("btbeg", i__1, "zzdskbsr_", (
-			    ftnlen)2548)], stpool);
+			    ftnlen)2559)], stpool);
 		    lnkila_(&tail, &new__, stpool);
 		}
 		s_copy(status, "RESUME", (ftnlen)40, (ftnlen)6);
@@ -2769,12 +2783,12 @@ L_zzdsksns:
 
 	    ++top;
 	    s_copy(stack + ((i__1 = top - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge(
-		    "stack", i__1, "zzdskbsr_", (ftnlen)2565)) * 40, doing, (
+		    "stack", i__1, "zzdskbsr_", (ftnlen)2576)) * 40, doing, (
 		    ftnlen)40, (ftnlen)40);
 	    s_copy(status, urgent, (ftnlen)40, (ftnlen)40);
 	} else if (s_cmp(status, "RESUME", (ftnlen)40, (ftnlen)6) == 0) {
 	    s_copy(status, stack + ((i__1 = top - 1) < 2 && 0 <= i__1 ? i__1 :
-		     s_rnge("stack", i__1, "zzdskbsr_", (ftnlen)2570)) * 40, (
+		     s_rnge("stack", i__1, "zzdskbsr_", (ftnlen)2581)) * 40, (
 		    ftnlen)40, (ftnlen)40);
 	    --top;
 	}

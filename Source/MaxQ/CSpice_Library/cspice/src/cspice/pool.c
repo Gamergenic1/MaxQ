@@ -16,12 +16,12 @@ static integer c__1 = 1;
 static integer c__32 = 32;
 
 /* $Procedure POOL ( Maintain a pool of kernel variables ) */
-/* Subroutine */ int pool_0_(int n__, char *kernel, integer *unit, char *
+/* Subroutine */ int pool_0_(int n__, char *fname, integer *unit, char *
 	name__, char *names, integer *nnames, char *agent, integer *n, 
 	doublereal *values, logical *found, logical *update, integer *start, 
 	integer *room, char *cvals, integer *ivals, char *type__, char *
 	uwvars, integer *uwptrs, integer *uwpool, char *uwagnt, integer *
-	usrctr, ftnlen kernel_len, ftnlen name_len, ftnlen names_len, ftnlen 
+	usrctr, ftnlen fname_len, ftnlen name_len, ftnlen names_len, ftnlen 
 	agent_len, ftnlen cvals_len, ftnlen type_len, ftnlen uwvars_len, 
 	ftnlen uwagnt_len)
 {
@@ -92,7 +92,7 @@ static integer c__32 = 32;
     static integer margin;
     extern /* Subroutine */ int remlai_(integer *, integer *, integer *, 
 	    integer *);
-    static char cvalue[132];
+    static char cvalue[132], chvals[80*15000];
     extern integer lnknfn_(integer *), lastnb_(char *, ftnlen);
     static char pnames[32*26003], begtxt[10];
     extern integer intmax_(void), intmin_(void);
@@ -101,18 +101,18 @@ static integer c__32 = 32;
 	    zzhash_(char *, ftnlen);
     static integer nmpool[52018]	/* was [2][26009] */, chpool[30012]	
 	    /* was [2][15006] */, dppool[800012]	/* was [2][400006] */;
-    static char chvals[80*15000];
     static doublereal dpvals[400000];
+    static char wtagnt[32*130015];
     extern integer lnknxt_(integer *, integer *);
     extern logical return_(void);
-    static char wtagnt[32*130015], agents[32*130021];
+    static char agents[32*130021], notify[32*130021];
     static integer wtpool[260042]	/* was [2][130021] */;
-    static char wtvars[32*26009], notify[32*130021];
+    static char wtvars[32*26009];
     static integer subctr[2];
     static char finish[2], varnam[32];
     static doublereal dvalue;
-    static integer iostat, iquote, linnum, lookat, nnodes, tofree, wtptrs[
-	    26003], varlen;
+    static integer iostat, iquote, linnum, lookat, nnodes, tofree, varlen, 
+	    wtptrs[26003];
     static logical noagnt, succes, vector;
     extern /* Subroutine */ int setmsg_(char *, ftnlen), sigerr_(char *, 
 	    ftnlen), chkout_(char *, ftnlen), zzpini_(logical *, integer *, 
@@ -120,23 +120,23 @@ static integer c__32 = 32;
 	    integer *, integer *, integer *, integer *, integer *, char *, 
 	    integer *, integer *, char *, char *, char *, char *, integer *, 
 	    ftnlen, ftnlen, ftnlen, ftnlen, ftnlen, ftnlen, ftnlen), lnkini_(
-	    integer *, integer *), rdknew_(char *, ftnlen);
+	    integer *, integer *), rdknew_(char *, ftnlen), zzrvar_(integer *,
+	     integer *, char *, integer *, integer *, doublereal *, integer *,
+	     char *, char *, logical *, ftnlen, ftnlen, ftnlen);
     static doublereal big;
-    extern /* Subroutine */ int zzrvar_(integer *, integer *, char *, integer 
-	    *, integer *, doublereal *, integer *, char *, char *, logical *, 
-	    ftnlen, ftnlen, ftnlen), cltext_(char *, ftnlen);
+    extern /* Subroutine */ int cltext_(char *, ftnlen), errint_(char *, 
+	    integer *, ftnlen);
     static logical eof;
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen), inslai_(
-	    integer *, integer *, integer *, integer *, integer *);
+    extern /* Subroutine */ int inslai_(integer *, integer *, integer *, 
+	    integer *, integer *), insrtc_(char *, char *, ftnlen, ftnlen);
     static logical chr;
-    extern /* Subroutine */ int insrtc_(char *, char *, ftnlen, ftnlen), 
-	    removc_(char *, char *, ftnlen, ftnlen), zzgpnm_(integer *, 
+    extern /* Subroutine */ int removc_(char *, char *, ftnlen, ftnlen), 
+	    zzgpnm_(integer *, integer *, char *, integer *, integer *, 
+	    doublereal *, integer *, char *, char *, logical *, integer *, 
+	    integer *, ftnlen, ftnlen, ftnlen), lnkfsl_(integer *, integer *, 
+	    integer *), zzrvbf_(char *, integer *, integer *, integer *, 
 	    integer *, char *, integer *, integer *, doublereal *, integer *, 
-	    char *, char *, logical *, integer *, integer *, ftnlen, ftnlen, 
-	    ftnlen), lnkfsl_(integer *, integer *, integer *), zzrvbf_(char *,
-	     integer *, integer *, integer *, integer *, char *, integer *, 
-	    integer *, doublereal *, integer *, char *, char *, logical *, 
-	    ftnlen, ftnlen, ftnlen, ftnlen);
+	    char *, char *, logical *, ftnlen, ftnlen, ftnlen, ftnlen);
 
 /* $ Abstract */
 
@@ -232,31 +232,31 @@ static integer c__32 = 32;
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Entry */
+/*     VARIABLE  I/O  ENTRY POINTS */
 /*     --------  ---  -------------------------------------------------- */
-/*     KERNEL     I   LDPOOL */
+/*     FNAME      I   LDPOOL */
 /*     UNIT       I   WRPOOL */
 /*     NAME       I   RTPOOL, EXPOOL, GIPOOL, GDPOOL, GCPOOL, PCPOOL, */
 /*                    PDPOOL, PIPOOL, DTPOOL, SZPOOL, DVPOOL, GNPOOL */
 /*     NAMES      I   SWPOOL */
 /*     NNAMES     I   SWPOOL */
 /*     AGENT      I   CVPOOL, DWPOOL, SWPOOL */
-/*     N         I/O  RTPOOL, GIPOOL, GCPOOL, GDPOOL, DTPOOL, PCPOOL, */
+/*     N         I-O  RTPOOL, GIPOOL, GCPOOL, GDPOOL, DTPOOL, PCPOOL, */
 /*                    PDPOOL, PIPOOL, LMPOOL, SZPOOL, GNPOOL */
-/*     VALUES    I/O  RTPOOL  GDPOOL, PDPOOL */
+/*     VALUES    I-O  RTPOOL  GDPOOL, PDPOOL */
 /*     FOUND      O   RTPOOL, EXPOOL, GIPOOL, GCPOOL, GDPOOL, DTPOOL, */
 /*                    SZPOOL, GNPOOL */
 /*     UPDATE     O   CVPOOL, ZZPCTRCK */
 /*     START      I   GIPOOL, GDPOOL, GCPOOL, GNPOOL */
 /*     ROOM       I   GIPOOL, GDPOOL, GCPOOL. GNPOOL */
-/*     CVALS     I/O  GCPOOL, PCPOOL, LMPOOL, GNPOOL */
-/*     IVALS     I/O  GIPOOL, PIPOOL */
+/*     CVALS     I-O  GCPOOL, PCPOOL, LMPOOL, GNPOOL */
+/*     IVALS     I-O  GIPOOL, PIPOOL */
 /*     TYPE       O   DTPOOL */
 /*     UWVARS     O   ZZVUPOOL */
 /*     UWPTRS     O   ZZVUPOOL */
 /*     UWPOOL     O   ZZVUPOOL */
 /*     UWAGNT     O   ZZVUPOOL */
-/*     USRCTR    I/O  ZZPCTRCK */
+/*     USRCTR    I-O  ZZPCTRCK */
 
 /*     MAXVAR     P   (All) */
 /*     MAXLEN     P   (All) */
@@ -277,88 +277,88 @@ static integer c__32 = 32;
 
 /* $ Parameters */
 
-/*     MAXVAR      is the maximum number of variables that the */
-/*                 kernel pool may contain at any one time. */
-/*                 MAXVAR should be a prime number. */
+/*     MAXVAR   is the maximum number of variables that the */
+/*              kernel pool may contain at any one time. */
+/*              MAXVAR should be a prime number. */
 
-/*                 Here's a list of primes that should make */
-/*                 it easy to upgrade MAXVAR when/if the need arises. */
+/*              Here's a list of primes that should make */
+/*              it easy to upgrade MAXVAR when/if the need arises. */
 
-/*                     103 */
-/*                     199 */
-/*                     307 */
-/*                     401 */
-/*                     503 */
-/*                     601 */
-/*                     701 */
-/*                     751 */
-/*                     811 */
-/*                     911 */
-/*                    1013 */
-/*                    1213 */
-/*                    1303 */
-/*                    1511 */
-/*                    1811 */
-/*                    1913 */
-/*                    2003 */
-/*                    2203 */
-/*                    2503 */
-/*                    2803 */
-/*                    3203 */
-/*                    3607 */
-/*                    4001 */
-/*                    4507 */
-/*                    4801 */
-/*                    5003 Current Value */
-/*                    6007 */
-/*                    6521 */
-/*                    7001 */
-/*                    7507 */
-/*                    8009 */
-/*                    8501 */
-/*                    9001 */
-/*                    9511 */
-/*                   10007 */
-/*                   10501 */
-/*                   11003 */
-/*                   11503 */
+/*                  103 */
+/*                  199 */
+/*                  307 */
+/*                  401 */
+/*                  503 */
+/*                  601 */
+/*                  701 */
+/*                  751 */
+/*                  811 */
+/*                  911 */
+/*                 1013 */
+/*                 1213 */
+/*                 1303 */
+/*                 1511 */
+/*                 1811 */
+/*                 1913 */
+/*                 2003 */
+/*                 2203 */
+/*                 2503 */
+/*                 2803 */
+/*                 3203 */
+/*                 3607 */
+/*                 4001 */
+/*                 4507 */
+/*                 4801 */
+/*                 5003 Current Value */
+/*                 6007 */
+/*                 6521 */
+/*                 7001 */
+/*                 7507 */
+/*                 8009 */
+/*                 8501 */
+/*                 9001 */
+/*                 9511 */
+/*                10007 */
+/*                10501 */
+/*                11003 */
+/*                11503 */
 
 
-/*     MAXLEN      is the maximum length of the variable names that */
-/*                 can be stored in the kernel pool (also set in */
-/*                 zzrvar.f). */
+/*     MAXLEN   is the maximum length of the variable names that */
+/*              can be stored in the kernel pool (also set in */
+/*              zzrvar.f). */
 
-/*     MAXVAL      is the maximum number of distinct values that */
-/*                 may belong to the variables in the kernel pool. */
-/*                 Each variable must have at least one value, and */
-/*                 may have any number, so long as the total number */
-/*                 does not exceed MAXVAL. MAXVAL must be at least */
-/*                 as large as MAXVAR. */
+/*     MAXVAL   is the maximum number of distinct values that */
+/*              may belong to the variables in the kernel pool. */
+/*              Each variable must have at least one value, and */
+/*              may have any number, so long as the total number */
+/*              does not exceed MAXVAL. MAXVAL must be at least */
+/*              as large as MAXVAR. */
 
-/*     MAXAGT      is the maximum number of agents that can be */
-/*                 associated with a given kernel variable. */
+/*     MAXAGT   is the maximum number of agents that can be */
+/*              associated with a given kernel variable. */
 
-/*     MAXCHR      is the maximum number of characters that can be */
-/*                 stored in a component of a string valued kernel */
-/*                 variable. */
+/*     MAXCHR   is the maximum number of characters that can be */
+/*              stored in a component of a string valued kernel */
+/*              variable. */
 
-/*     MXNOTE      is the maximum sum of the sizes of the sets of */
-/*                 agents in the range of the mapping that associates */
-/*                 with each watched kernel variable a set of agents */
-/*                 that "watch" that variable. */
+/*     MXNOTE   is the maximum sum of the sizes of the sets of */
+/*              agents in the range of the mapping that associates */
+/*              with each watched kernel variable a set of agents */
+/*              that "watch" that variable. */
 
-/*     MAXLIN      is the maximum number of character strings that */
-/*                 can be stored as data for kernel pool variables. */
+/*     MAXLIN   is the maximum number of character strings that */
+/*              can be stored as data for kernel pool variables. */
 
-/*     CTRSIZ      is the dimension of the counter array used by */
-/*                 various SPICE subsystems to uniquely identify */
-/*                 changes in their states. This parameter is */
-/*                 defined in the private include file 'zzctr.inc'. */
+/*     CTRSIZ   is the dimension of the counter array used by */
+/*              various SPICE subsystems to uniquely identify */
+/*              changes in their states. This parameter is */
+/*              defined in the private include file 'zzctr.inc'. */
 
 /* $ Exceptions */
 
-/*     1) If POOL is called directly, the error SPICE(BOGUSENTRY) is */
-/*        signaled. */
+/*     1)  If POOL is called directly, the error SPICE(BOGUSENTRY) is */
+/*         signaled. */
 
 /* $ Files */
 
@@ -427,7 +427,7 @@ static integer c__32 = 32;
 /*                          memory parameters. */
 
 /*           DVPOOL         allows deletion of a specific variable from */
-/*                          the kernel pool.  (CLPOOL deletes all */
+/*                          the kernel pool. (CLPOOL deletes all */
 /*                          variables from the kernel pool.) */
 
 /*           GNPOOL         assists in determining which variables are */
@@ -452,9 +452,9 @@ static integer c__32 = 32;
 /*     C     Store in an array the names of the kernel files whose */
 /*     C     values will be loaded into the kernel pool. */
 /*     C */
-/*           KERNEL (1) = 'AXES.KER' */
-/*           KERNEL (2) = 'GM.KER' */
-/*           KERNEL (3) = 'LEAP_SECONDS.KER' */
+/*           FNAME (1) = 'AXES.KER' */
+/*           FNAME (2) = 'GM.KER' */
+/*           FNAME (3) = 'LEAP_SECONDS.KER' */
 
 /*     C */
 /*     C     Clear the kernel pool. (This is optional.) */
@@ -466,7 +466,7 @@ static integer c__32 = 32;
 /*     C     the kernel pool. */
 /*     C */
 /*           DO I = 1, 3 */
-/*             CALL LDPOOL ( KERNEL (I) ) */
+/*             CALL LDPOOL ( FNAME (I) ) */
 /*           END DO */
 
 /*     C */
@@ -485,7 +485,6 @@ static integer c__32 = 32;
 /*     C */
 /*           CALL WRPOOL ( UNIT ) */
 
-
 /* $ Restrictions */
 
 /*     None. */
@@ -496,15 +495,27 @@ static integer c__32 = 32;
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     H.A. Neilan     (JPL) */
-/*     B.V. Semenov    (JPL) */
-/*     W.L. Taber      (JPL) */
-/*     F.S. Turner     (JPL) */
-/*     R.E. Thurman    (JPL) */
-/*     I.M. Underwood  (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     H.A. Neilan        (JPL) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     R.E. Thurman       (JPL) */
+/*     F.S. Turner        (JPL) */
+/*     I.M. Underwood     (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 10.2.0, 27-AUG-2021 (JDR) (BVS) (NJB) */
+
+/*        Changed input argument name KERNEL to FNAME in entry point */
+/*        LDPOOL for consistency with other routines. */
+
+/*        Edited the header of the umbrella routine and all its entry */
+/*        points. */
+
+/*        Updated SZPOOL $Detailed_Input section. */
 
 /* -    SPICELIB Version 10.1.0, 14-JUL-2014 (NJB) (BVS) */
 
@@ -517,7 +528,7 @@ static integer c__32 = 32;
 /*        Updated header of CLPOOL to improve the description */
 /*        of behavior of the watcher subsystem. */
 
-/*     Last update was 17-JAN-2014 (BVS) (NJB) */
+/*        Last update was 17-JAN-2014 (BVS) (NJB) */
 
 /*        Increased key POOL parameters as follows: */
 
@@ -533,7 +544,7 @@ static integer c__32 = 32;
 /*        the current POOL state counter to detect and act on the POOL */
 /*        state change. */
 
-/*        Updated Index_Entries sections of entry points PCPOOL, PDPOOL, */
+/*        Updated $Index_Entries sections of entry points PCPOOL, PDPOOL, */
 /*        and PIPOOL. */
 
 /* -    SPICELIB Version 10.0.0, 24-MAY-2010 (EDW) (NJB) */
@@ -592,8 +603,8 @@ static integer c__32 = 32;
 
 /* -    SPICELIB Version 8.3.0, 22-DEC-2004 (NJB) */
 
-/*        Fixed bug in DVPOOL.  Made corrections to comments in */
-/*        other entry points.  The updated routines are DTPOOL, */
+/*        Fixed bug in DVPOOL. Made corrections to comments in */
+/*        other entry points. The updated routines are DTPOOL, */
 /*        DVPOOL, EXPOOL, GCPOOL, GDPOOL, GIPOOL, RTPOOL. */
 
 /* -    SPICELIB Version 8.2.0, 24-JAN-2003 (BVS) */
@@ -607,7 +618,7 @@ static integer c__32 = 32;
 /*        MAXAGT is 1000. */
 
 /*        Modified Fortran output formats used in entry point WRPOOL to */
-/*        remove list-directed formatting.  This change was made to */
+/*        remove list-directed formatting. This change was made to */
 /*        work around problems with the way f2c translates list- */
 /*        directed I/O. */
 
@@ -634,7 +645,7 @@ static integer c__32 = 32;
 /* -    SPICELIB Version 7.0.0, 20-SEP-1995 (WLT) */
 
 /*        The implementation of the kernel pool was completely redone */
-/*        to improve performance in loading and fetching data.  In */
+/*        to improve performance in loading and fetching data. In */
 /*        addition the pool was upgraded so that variables may be */
 /*        either string or numeric valued. */
 
@@ -669,20 +680,20 @@ static integer c__32 = 32;
 /*       A FAILED test was inserted into the control of the DO-loop which */
 /*       reads in each kernel variable in LDPOOL. */
 
-/* -    SPICELIB Version 1.2.0, 9-MAR-1989 (HAN) */
+/* -    SPICELIB Version 1.2.0, 09-MAR-1989 (HAN) */
 
 /*        Parameters BEGDAT and BEGTXT have been moved into the */
-/*        Declarations section. */
+/*        $Declarations section. */
 
 /* -    SPICELIB Version 1.1.0, 16-FEB-1989 (IMU) (NJB) */
 
-/*        Parameters MAXVAR, MAXVAL, MAXLEN moved into Declarations. */
+/*        Parameters MAXVAR, MAXVAL, MAXLEN moved into $Declarations. */
 /*        (Actually, MAXLEN was implicitly 32 characters, and has only */
 /*        now been made an explicit---and changeable---limit.) */
 
 /*        Declaration of unused function FAILED removed. */
 
-/* -    SPICELIB Version 1.0.0, 8-JAN-1989 (IMU) */
+/* -    SPICELIB Version 1.0.0, 08-JAN-1989 (IMU) */
 
 /* -& */
 /* $ Index_Entries */
@@ -694,8 +705,8 @@ static integer c__32 = 32;
 
 /* -    SPICELIB Version 8.3.0, 22-DEC-2004 (NJB) */
 
-/*        Fixed bug in DVPOOL.  Made corrections to comments in */
-/*        other entry points.  The updated routines are DTPOOL, */
+/*        Fixed bug in DVPOOL. Made corrections to comments in */
+/*        other entry points. The updated routines are DTPOOL, */
 /*        DVPOOL, EXPOOL, GCPOOL, GDPOOL, GIPOOL, RTPOOL. */
 
 /* -    SPICELIB Version 8.2.0, 24-JAN-2003 (BVS) */
@@ -709,7 +720,7 @@ static integer c__32 = 32;
 /*        MAXAGT is 1000. */
 
 /*        Modified Fortran output formats used in entry point WRPOOL to */
-/*        remove list-directed formatting.  This change was made to */
+/*        remove list-directed formatting. This change was made to */
 /*        work around problems with the way f2c translates list- */
 /*        directed I/O. */
 
@@ -729,7 +740,7 @@ static integer c__32 = 32;
 /* -    SPICELIB Version 7.0.0, 20-SEP-1995 (WLT) */
 
 /*        The implementation of the kernel pool was completely redone */
-/*        to improve performance in loading and fetching data.  In */
+/*        to improve performance in loading and fetching data. In */
 /*        addition the pool was upgraded so that variables may be */
 /*        either string or numeric valued. */
 
@@ -742,7 +753,7 @@ static integer c__32 = 32;
 
 /*        The basic data structure used to maintain the list of */
 /*        variable names and values was replaced with a hash table */
-/*        implementation.  Data and names are accessed by means */
+/*        implementation. Data and names are accessed by means */
 /*        of a hash function and linked lists of pointers to existing */
 /*        variable names and data values. */
 
@@ -757,12 +768,12 @@ static integer c__32 = 32;
 /*        consistent with other SPICELIB practices. */
 
 /*        Finally, the revision history was upgraded so that the */
-/*        version number increases over time.  This wasn't true */
+/*        version number increases over time. This wasn't true */
 /*        before. In addition some early revision data that referred to */
 /*        pre-SPICELIB modifications were removed. This editing of */
 /*        the version numbers makes it unlikely that anyone can track */
 /*        down which previous version of this routine they have by */
-/*        looking at the version number.  The best way to determine */
+/*        looking at the version number. The best way to determine */
 /*        the routine you had previously is to compare the dates */
 /*        stored in the Version line of the routine. */
 
@@ -771,11 +782,11 @@ static integer c__32 = 32;
 /*        Increased value of parameter MAXVAL to 5000 to accommodate */
 /*        storage of SCLK coefficients in the kernel pool. */
 
-/*        Also, changed version number in previous `Revisions' entry */
-/*        from SPICELIB Version 2.0.0 to SPICELIB Version 2.0.0.  The */
-/*        last version entry in the `Version' section had been */
+/*        Also, changed version number in previous revisions entry */
+/*        from SPICELIB Version 2.0.0 to SPICELIB Version 2.0.0. The */
+/*        last version entry in the $Version section had been */
 /*        Version 1.0.0, dated later than the entry for `version 2' */
-/*        in the revisions section! */
+/*        in the $Revisions section! */
 
 /* -    SPICELIB Version 4.0.0, 12-JUN-1990 (IMU) */
 
@@ -798,16 +809,16 @@ static integer c__32 = 32;
 /*       routines returning upon entry. This meant that the routine */
 /*       RDKVAR never got a chance to set the EOF flag, which was the */
 /*       only control of the DO-loop. An infinite loop resulted in such */
-/*       cases.  The FAILED test resolves that situation. */
+/*       cases. The FAILED test resolves that situation. */
 
 /* -    SPICELIB Version 1.2.0, 9-MAR-1989 (HAN) */
 
 /*        Parameters BEGDAT and BEGTXT have been moved into the */
-/*        Declarations section. */
+/*        $Declarations section. */
 
 /* -    SPICELIB Version 1.1.0, 16-FEB-1989 (IMU) (NJB) */
 
-/*        Parameters MAXVAR, MAXVAL, MAXLEN moved into Declarations. */
+/*        Parameters MAXVAR, MAXVAL, MAXLEN moved into $Declarations. */
 /*        (Actually, MAXLEN was implicitly 32 characters, and has only */
 /*        now been made an explicit---and changeable---limit.) */
 
@@ -1147,9 +1158,11 @@ L_clpool:
 
 /* $ Exceptions */
 
-/*     1) All known agents (those established through SWPOOL) will */
-/*        be "notified" that their watched variables have been updated */
-/*        whenever CLPOOL is called. */
+/*     Error free. */
+
+/*     1)  All known agents (those established through the SPICELIB */
+/*         routine SWPOOL) will be "notified" that their watched */
+/*         variables have been updated whenever CLPOOL is called. */
 
 /* $ Files */
 
@@ -1158,68 +1171,114 @@ L_clpool:
 /* $ Particulars */
 
 /*     CLPOOL clears the pool of kernel variables maintained by */
-/*     the subroutine POOL. All the variables in the pool are deleted. */
-/*     However, all watcher information is retained. */
+/*     the kernel POOL subsystem. All the variables in the pool are */
+/*     deleted. However, all watcher information is retained. */
 
 /*     Each watched variable will be regarded as having been updated. */
 /*     Any agent associated with that variable will have a notice */
 /*     posted for it indicating that its watched variable has been */
 /*     updated. */
 
-/*     Application programs can delete watches by calling the entry */
-/*     point DWPOOL. See the header of DWPOOL for details. */
+/*     Application programs can delete watches by calling the SPICELIB */
+/*     routine DWPOOL. See the header of that routine for details. */
 
 /* $ Examples */
 
+/*     The numerical results shown for this example may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
 
-/*     The following code fragment demonstrates how the data from */
-/*     several kernel files can be loaded into a kernel pool. After the */
-/*     pool is loaded, the values in the pool are written to a kernel */
-/*     file. */
+/*     1) This code example demonstrates how to assign values to kernel */
+/*        pool variables, how to check for the existence of kernel pool */
+/*        variables and how to clear the kernel pool, i.e. how to delete */
+/*        all variable assignments loaded into the kernel pool. */
+
+/*        Place a value into the kernel pool and check for the variable */
+/*        to which the value has been assigned. Clear the kernel pool */
+/*        and check for that variable again. */
+
+/*        Example code begins here. */
 
 
-/*     C */
-/*     C     Store in an array the names of the kernel files whose */
-/*     C     values will be loaded into the kernel pool. */
-/*     C */
-/*           KERNEL (1) = 'AXES.KER' */
-/*           KERNEL (2) = 'GM.KER' */
-/*           KERNEL (3) = 'LEAP_SECONDS.KER' */
+/*              PROGRAM CLPOOL_EX1 */
+/*              IMPLICIT NONE */
 
-/*     C */
-/*     C     Clear the kernel pool. (This is optional.) */
-/*     C */
-/*           CALL CLPOOL */
+/*        C */
+/*        C     Local variables */
+/*        C */
+/*              DOUBLE PRECISION      DVALS ( 1 ) */
 
-/*     C */
-/*     C     Load the variables from the three kernel files into the */
-/*     C     the kernel pool. */
-/*     C */
-/*           DO I = 1, 3 */
-/*             CALL LDPOOL ( KERNEL (I) ) */
-/*           END DO */
+/*              INTEGER               N */
 
-/*     C */
-/*     C     We can examine the values associated with any d.p. variable */
-/*     C     in the kernel pool using GDPOOL. */
-/*     C */
-/*           CALL GDPOOL ( VARIABLE, START, ROOM, NVALS, VALUES, FOUND ) */
+/*              LOGICAL               FOUND */
 
-/*     C */
-/*     C     Open the text file 'NEWKERNEL.KER'. */
-/*     C */
-/*           CALL TXTOPN ( NEWKERNEL.KER', UNIT ) */
 
-/*     C */
-/*     C     Write the values in the kernel pool to the file. */
-/*     C */
-/*           CALL WRPOOL ( UNIT ) */
+/*        C */
+/*        C     Place a value into the kernel pool. Recall the routines */
+/*        C     for direct insertion of pool assignments have arrays for */
+/*        C     input. */
+/*        C */
+/*              DVALS( 1 ) = -666.D0 */
+/*              CALL PDPOOL ( 'TEST_VAR', 1, DVALS ) */
+
+/*        C */
+/*        C     Check for the variable assignment to TEST_VAR. */
+/*        C */
+/*              CALL GDPOOL ( 'TEST_VAR', 1, 1, N, DVALS, FOUND ) */
+
+/*              WRITE(*,'(A)') 'First call to GDPOOL:' */
+
+/*              IF ( FOUND ) THEN */
+
+/*                 WRITE(*,'(A,F8.2)') '   TEST_VAR value:', DVALS(1) */
+
+/*              ELSE */
+
+/*                 WRITE(*,'(A)') '   TEST_VAR not in kernel pool.' */
+
+/*              END IF */
+
+/*        C */
+/*        C     Now clear the kernel pool. */
+/*        C */
+/*              CALL CLPOOL () */
+
+/*        C */
+/*        C     Again, check for the TEST_VAR assignment. */
+/*        C */
+/*              CALL GDPOOL ( 'TEST_VAR', 1, 1, N, DVALS, FOUND ) */
+
+/*              WRITE(*,'(A)') 'Second call to GDPOOL:' */
+
+/*              IF ( FOUND ) THEN */
+
+/*                 WRITE(*,'(A,F6.2)') '   TEST_VAR value:', DVALS(1) */
+
+/*              ELSE */
+
+/*                 WRITE(*,'(A)') '   TEST_VAR not in kernel pool.' */
+
+/*              END IF */
+
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*        First call to GDPOOL: */
+/*           TEST_VAR value: -666.00 */
+/*        Second call to GDPOOL: */
+/*           TEST_VAR not in kernel pool. */
 
 
 /* $ Restrictions */
 
-/*     1) This routine should not be used to unload kernels that */
-/*        have been loaded via FURNSH. */
+/*     1)  This routine should not be used to unload kernels that */
+/*         have been loaded via FURNSH. */
 
 /* $ Literature_References */
 
@@ -1227,25 +1286,33 @@ L_clpool:
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     I.M. Underwood  (JPL) */
-/*     W.L. Taber      (JPL) */
-/*     B.V. Semenov    (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 8.2.1, 17-AUG-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. Added complete */
+/*        code example. */
+
+/*        Routine declared error free. */
 
 /* -    SPICELIB Version 8.2.0, 01-JUL-2014 (NJB) (BVS) */
 
 /*        Description of behavior of watcher subsystem was expanded. */
 
-/*     Last update was 30-JUL-2013 (BVS) */
+/*        Last update was 30-JUL-2013 (BVS) */
 
-/*        Updated to increment POOL state counter. */
+/*           Updated to increment POOL state counter. */
 
 /* -    SPICELIB Version 8.1.0, 19-MAR-2009 (NJB) */
 
 /*        Watcher update code was re-written for compatibility */
-/*        with new watcher system implementation. Updated Restrictions */
+/*        with new watcher system implementation. Updated $Restrictions */
 /*        header section. Updated code example to use TXTOPN. */
 
 /* -    SPICELIB Version 8.0.0, 04-JUN-1999 (WLT) */
@@ -1270,7 +1337,7 @@ L_clpool:
 /* -    SPICELIB Version 7.0.0, 20-SEP-1995 (WLT) */
 
 /*        The implementation of the kernel pool was completely redone */
-/*        to improve performance in loading and fetching data.  In */
+/*        to improve performance in loading and fetching data. In */
 /*        addition the pool was upgraded so that variables may be */
 /*        either string or numeric valued. */
 
@@ -1286,7 +1353,7 @@ L_clpool:
 /*        All entry points except POOL and CLPOOL now initialize the */
 /*        pool if it has not been done yet. */
 
-/* -    SPICELIB Version 1.0.0, 8-JAN-1989 (IMU) */
+/* -    SPICELIB Version 1.0.0, 08-JAN-1989 (IMU) */
 
 /* -& */
 /* $ Index_Entries */
@@ -1295,6 +1362,10 @@ L_clpool:
 
 /* -& */
 /* $ Revisions */
+
+/* -    SPICELIB Version 8.2.0, 01-JUL-2014 (NJB) (BVS) */
+
+/*        Updated to increment POOL state counter. */
 
 /* -    SPICELIB Version 8.1.0, 19-MAR-2009 (NJB) */
 
@@ -1320,7 +1391,7 @@ L_clpool:
 /* -    SPICELIB Version 7.0.0, 20-SEP-1995 (WLT) */
 
 /*        The implementation of the kernel pool was completely redone */
-/*        to improve performance in loading and fetching data.  In */
+/*        to improve performance in loading and fetching data. In */
 /*        addition the pool was upgraded so that variables may be */
 /*        either string or numeric valued. */
 
@@ -1339,12 +1410,12 @@ L_clpool:
 /*        consistent with other SPICELIB practices. */
 
 /*        Finally, the revision history was upgraded so that the */
-/*        version number increases over time.  This wasn't true */
+/*        version number increases over time. This wasn't true */
 /*        before. In addition some early revision data that referred to */
 /*        pre-SPICELIB modifications were removed. This editing of */
 /*        the version numbers makes it unlikely that anyone can track */
 /*        down which previous version of this routine they have by */
-/*        looking at the version number.  The best way to determine */
+/*        looking at the version number. The best way to determine */
 /*        the routine you had previously is to compare the dates */
 /*        stored in the Version line of the routine. */
 
@@ -1383,11 +1454,11 @@ L_clpool:
 
     for (i__ = 1; i__ <= 26003; ++i__) {
 	namlst[(i__1 = i__ - 1) < 26003 && 0 <= i__1 ? i__1 : s_rnge("namlst",
-		 i__1, "pool_", (ftnlen)1368)] = 0;
+		 i__1, "pool_", (ftnlen)1437)] = 0;
 	datlst[(i__1 = i__ - 1) < 26003 && 0 <= i__1 ? i__1 : s_rnge("datlst",
-		 i__1, "pool_", (ftnlen)1369)] = 0;
+		 i__1, "pool_", (ftnlen)1438)] = 0;
 	s_copy(pnames + (((i__1 = i__ - 1) < 26003 && 0 <= i__1 ? i__1 : 
-		s_rnge("pnames", i__1, "pool_", (ftnlen)1370)) << 5), " ", (
+		s_rnge("pnames", i__1, "pool_", (ftnlen)1439)) << 5), " ", (
 		ftnlen)32, (ftnlen)1);
     }
 
@@ -1404,7 +1475,7 @@ L_clpool:
 /*        associated with the Ith watched variable. */
 
 	zznwpool_(wtvars + (((i__2 = i__ + 5) < 26009 && 0 <= i__2 ? i__2 : 
-		s_rnge("wtvars", i__2, "pool_", (ftnlen)1385)) << 5), wtvars, 
+		s_rnge("wtvars", i__2, "pool_", (ftnlen)1454)) << 5), wtvars, 
 		wtptrs, wtpool, wtagnt, active, notify, agents, (ftnlen)32, (
 		ftnlen)32, (ftnlen)32, (ftnlen)32, (ftnlen)32, (ftnlen)32);
     }
@@ -1454,18 +1525,18 @@ L_ldpool:
 
 /* $ Declarations */
 
-/*     CHARACTER*(*)         KERNEL */
+/*     CHARACTER*(*)         FNAME */
 
 /* $ Brief_I/O */
 
 /*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
-/*     KERNEL     I   Name of the kernel file. */
+/*     FNAME      I   Name of the text kernel file. */
 
 /* $ Detailed_Input */
 
-/*     KERNEL     is the name of the kernel file whose variables will be */
-/*                loaded into the pool. */
+/*     FNAME    is the name of the text kernel file whose variables will */
+/*              be loaded into the pool. */
 
 /* $ Detailed_Output */
 
@@ -1477,19 +1548,19 @@ L_ldpool:
 
 /* $ Exceptions */
 
-/*     1)  Any I/O errors that occur while opening or reading a text */
-/*         kernel will be diagnosed by routines in the call tree of this */
+/*     1)  If an I/O error occurs while opening or reading a text kernel, */
+/*         the error is signaled by a routine in the call tree of this */
 /*         routine. */
 
-/*     2)  Any text kernel parsing errors will be diagnosed by routines */
-/*         in the call tree of this routine. */
+/*     2)  If any text kernel parsing error occurs, the error is signaled */
+/*         by a routine in the call tree of this routine. */
 
-/*     3)  Any kernel pool overflow errors will be diagnosed by routines */
-/*         in the call tree of this routine. */
+/*     3)  If a kernel pool overflow is detected, an error is signaled by */
+/*         a routine in the call tree of this routine. */
 
 /* $ Files */
 
-/*     The NAIF ASCII kernel file KERNEL is opened by RDKNEW. */
+/*     See FNAME in $Detailed_Input. */
 
 /* $ Particulars */
 
@@ -1497,53 +1568,112 @@ L_ldpool:
 
 /* $ Examples */
 
-/*     The following code fragment demonstrates how the data from */
-/*     several kernel files can be loaded into a kernel pool. After the */
-/*     pool is loaded, the values in the pool are written to a kernel */
-/*     file. */
+/*     The numerical results shown for this example may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
 
-/*     C */
-/*     C     Store in an array the names of the kernel files whose */
-/*     C     values will be loaded into the kernel pool. */
-/*     C */
-/*           KERNEL (1) = 'AXES.KER' */
-/*           KERNEL (2) = 'GM.KER' */
-/*           KERNEL (3) = 'LEAP_SECONDS.KER' */
+/*     1) The following program demonstrates how to load the variables */
+/*        contained in a NAIF ASCII kernel file into the kernel pool */
+/*        and how to determine the properties of a stored kernel */
+/*        variable. */
 
-/*     C */
-/*     C     Clear the kernel pool. (This is optional.) */
-/*     C */
-/*           CALL CLPOOL */
+/*        The program prompts for text kernel name and for the name of */
+/*        a kernel variable. If the variable is present in the kernel */
+/*        pool, the dimension and type of the variable are displayed. */
 
-/*     C */
-/*     C     Load the variables from the three kernel files into the */
-/*     C     the kernel pool. */
-/*     C */
-/*           DO I = 1, 3 */
-/*             CALL LDPOOL ( KERNEL (I) ) */
-/*           END DO */
 
-/*     C */
-/*     C     We can examine the values associated with any d.p. variable */
-/*     C     in the kernel pool using GDPOOL. */
-/*     C */
-/*           CALL GDPOOL ( VARIABLE, START, ROOM, NVALS, VALUES, FOUND ) */
+/*        Example code begins here. */
 
-/*     C */
-/*     C     Open the new text file 'NEWKERNEL.KER'. */
-/*     C */
-/*           CALL TXTOPN ( 'NEWKERNEL.KER', UNIT ) */
 
-/*     C */
-/*     C     Write the values in the kernel pool to the file. */
-/*     C */
-/*           CALL WRPOOL ( UNIT ) */
+/*              PROGRAM LDPOOL_EX1 */
+/*              IMPLICIT NONE */
+
+/*        C */
+/*        C     SPICELIB functions */
+/*        C */
+/*              INTEGER               RTRIM */
+
+/*        C */
+/*        C     Local constants */
+/*        C */
+/*              INTEGER               FILSIZ */
+/*              PARAMETER           ( FILSIZ = 256 ) */
+
+/*              INTEGER               KVNMLN */
+/*              PARAMETER           ( KVNMLN = 33 ) */
+
+/*        C */
+/*        C     Local variables */
+/*        C */
+/*              CHARACTER*(FILSIZ)    FNAME */
+/*              CHARACTER*(KVNMLN)    VARNAM */
+/*              CHARACTER*(1)         VTYPE */
+
+/*              INTEGER               N */
+
+/*              LOGICAL               FOUND */
+
+/*        C */
+/*        C     Prompt for the name of a text-kernel file. */
+/*        C */
+/*              CALL PROMPT ( 'Enter text-kernel name        > ', FNAME ) */
+
+/*        C */
+/*        C     Load the kernel. The same operation could be done using */
+/*        C     a FURNSH call. */
+/*        C */
+/*              CALL LDPOOL ( FNAME ) */
+
+/*              CALL PROMPT ( 'Enter name of kernel variable > ', */
+/*             .               VARNAM ) */
+
+/*              CALL DTPOOL ( VARNAM, FOUND, N, VTYPE ) */
+
+/*              IF ( FOUND ) THEN */
+/*                 WRITE(*,*) ' ' */
+/*                 WRITE(*,*) 'Properties of variable ', */
+/*             .               VARNAM(:RTRIM(VARNAM)), ':' */
+/*                 WRITE(*,*) ' ' */
+/*                 WRITE(*,*) '   Size:   ', N */
+
+/*                 IF ( VTYPE .EQ. 'C' ) THEN */
+
+/*                    WRITE(*,*) '   Type:   Character' */
+
+/*                 ELSE */
+
+/*                    WRITE(*,*) '   Type:   Numeric' */
+/*                 END IF */
+
+/*              ELSE */
+
+/*                 WRITE(*,*) VARNAM, */
+/*             .              ' is not present in the kernel pool.' */
+
+/*              END IF */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, using the PCK file gm_de431.tpc to ask for the */
+/*        variable 'BODY000_GMLIST', the output was: */
+
+
+/*        Enter text-kernel name        > gm_de431.tpc */
+/*        Enter name of kernel variable > BODY000_GMLIST */
+
+/*         Properties of variable BODY000_GMLIST: */
+
+/*            Size:             65 */
+/*            Type:   Numeric */
 
 
 /* $ Restrictions */
 
-/*     1) Normally SPICE applications should load kernels via the */
-/*        FURNSH entry point of the KEEPER routine. */
+/*     1)  Normally SPICE applications should load kernels via the */
+/*         FURNSH routine. */
 
 /* $ Literature_References */
 
@@ -1551,13 +1681,23 @@ L_ldpool:
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     R.E. Thurman    (JPL) */
-/*     I.M. Underwood  (JPL) */
-/*     W.L. Taber      (JPL) */
-/*     B.V. Semenov    (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     H.A. Neilan        (JPL) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     R.E. Thurman       (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 8.3.0, 17-AUG-2021 (JDR) */
+
+/*        Changed input argument name KERNEL to FNAME for consistency */
+/*        with other routines. */
+
+/*        Edited the header to comply with NAIF standard. */
+/*        Added complete code example. */
 
 /* -    SPICELIB Version 8.2.0, 30-JUL-2013 (BVS) */
 
@@ -1568,7 +1708,7 @@ L_ldpool:
 /*        Watcher update code was re-written for compatibility */
 /*        with new watcher system implementation. */
 
-/*        Filled out Exceptions section of header, which previously */
+/*        Filled out $Exceptions section of header, which previously */
 /*        contained only the word "None." */
 
 /*        Updated code example to use TXTOPN. */
@@ -1595,7 +1735,7 @@ L_ldpool:
 /* -    SPICELIB Version 7.0.0, 20-SEP-1995 (WLT) */
 
 /*        The implementation of the kernel pool was completely redone */
-/*        to improve performance in loading and fetching data.  In */
+/*        to improve performance in loading and fetching data. In */
 /*        addition the pool was upgraded so that variables may be */
 /*        either string or numeric valued. */
 
@@ -1623,23 +1763,23 @@ L_ldpool:
 
 /* -    SPICELIB Version 2.0.0, 18-OCT-1989 (RET) */
 
-/*       A FAILED test was inserted into the control of the DO-loop which */
-/*       reads in each kernel variable in LDPOOL. */
+/*        A FAILED test was inserted into the control of the DO-loop */
+/*        which reads in each kernel variable in LDPOOL. */
 
-/* -    SPICELIB Version 1.2.0, 9-MAR-1989 (HAN) */
+/* -    SPICELIB Version 1.2.0, 09-MAR-1989 (HAN) */
 
 /*        Parameters BEGDAT and BEGTXT have been moved into the */
-/*        Declarations section. */
+/*        $Declarations section. */
 
 /* -    SPICELIB Version 1.1.0, 16-FEB-1989 (IMU) (NJB) */
 
-/*        Parameters MAXVAR, MAXVAL, MAXLEN moved into Declarations. */
+/*        Parameters MAXVAR, MAXVAL, MAXLEN moved into $Declarations. */
 /*        (Actually, MAXLEN was implicitly 32 characters, and has only */
 /*        now been made an explicit---and changeable---limit.) */
 
 /*        Declaration of unused function FAILED removed. */
 
-/* -    SPICELIB Version 1.0.0, 8-JAN-1989 (IMU) */
+/* -    SPICELIB Version 1.0.0, 08-JAN-1989 (IMU) */
 
 /* -& */
 /* $ Index_Entries */
@@ -1665,7 +1805,7 @@ L_ldpool:
 /* -    SPICELIB Version 7.0.0, 20-SEP-1995 (WLT) */
 
 /*        The implementation of the kernel pool was completely redone */
-/*        to improve performance in loading and fetching data.  In */
+/*        to improve performance in loading and fetching data. In */
 /*        addition the pool was upgraded so that variables may be */
 /*        either string or numeric valued. */
 
@@ -1678,7 +1818,7 @@ L_ldpool:
 
 /*        The basic data structure used to maintain the list of */
 /*        variable names and values was replaced with a hash table */
-/*        implementation.  Data and names are accessed by means */
+/*        implementation. Data and names are accessed by means */
 /*        of a hash function and linked lists of pointers to existing */
 /*        variable names and data values. */
 
@@ -1693,12 +1833,12 @@ L_ldpool:
 /*        that data only when it is updated. */
 
 /*        In addition, the revision history was upgraded so that the */
-/*        version number increases over time.  This wasn't true */
+/*        version number increases over time. This wasn't true */
 /*        before. In addition some early revision data that referred to */
 /*        pre-SPICELIB modifications were removed. This editing of */
 /*        the version numbers makes it unlikely that anyone can track */
 /*        down which previous version of this routine they have by */
-/*        looking at the version number.  The best way to determine */
+/*        looking at the version number. The best way to determine */
 /*        the routine you had previously is to compare the dates */
 /*        stored in the Version line of the routine. */
 
@@ -1707,11 +1847,11 @@ L_ldpool:
 /*        Increased value of parameter MAXVAL to 5000 to accommodate */
 /*        storage of SCLK coefficients in the kernel pool. */
 
-/*        Also, changed version number in previous `Revisions' entry */
-/*        from SPICELIB Version 2.0.0 to SPICELIB Version 2.0.0.  The */
-/*        last version entry in the `Version' section had been */
+/*        Also, changed version number in previous revisions entry */
+/*        from SPICELIB Version 2.0.0 to SPICELIB Version 2.0.0. The */
+/*        last version entry in the $Version section had been */
 /*        Version 1.0.0, dated later than the entry for `version 2' */
-/*        in the revisions section! */
+/*        in the $Revisions section! */
 
 /* -    SPICELIB Version 4.0.0, 12-JUN-1990 (IMU) */
 
@@ -1734,16 +1874,16 @@ L_ldpool:
 /*       routines returning upon entry. This meant that the routine */
 /*       RDKVAR never got a chance to set the EOF flag, which was the */
 /*       only control of the DO-loop. An infinite loop resulted in such */
-/*       cases.  The FAILED test resolves that situation. */
+/*       cases. The FAILED test resolves that situation. */
 
 /* -    SPICELIB Version 1.2.0, 9-MAR-1989 (HAN) */
 
 /*        Parameters BEGDAT and BEGTXT have been moved into the */
-/*        Declarations section. */
+/*        $Declarations section. */
 
 /* -    SPICELIB Version 1.1.0, 16-FEB-1989 (IMU) (NJB) */
 
-/*        Parameters MAXVAR, MAXVAL, MAXLEN moved into Declarations. */
+/*        Parameters MAXVAR, MAXVAL, MAXLEN moved into $Declarations. */
 /*        (Actually, MAXLEN was implicitly 32 characters, and has only */
 /*        now been made an explicit---and changeable---limit.) */
 
@@ -1777,7 +1917,7 @@ L_ldpool:
 
 /*     Open the kernel file and read the first variable. */
 
-    rdknew_(kernel, kernel_len);
+    rdknew_(fname, fname_len);
     zzrvar_(namlst, nmpool, pnames, datlst, dppool, dpvals, chpool, chvals, 
 	    varnam, &eof, (ftnlen)32, (ftnlen)80, (ftnlen)32);
 
@@ -1811,7 +1951,7 @@ L_ldpool:
 /*     of the problem.  If the file has been closed already, this */
 /*     doesn't hurt anything. */
 
-    cltext_(kernel, kernel_len);
+    cltext_(fname, fname_len);
     chkout_("LDPOOL", (ftnlen)6);
     return 0;
 /* $Procedure RTPOOL ( Return the value of a pooled kernel variable ) */
@@ -1822,7 +1962,7 @@ L_rtpool:
 /*     Return the value of a kernel variable from the kernel pool. */
 
 /*     This routine is maintained only for backward compatibility. */
-/*     It should be regarded as obsolete.  Use one of the entry points */
+/*     It should be regarded as obsolete. Use one of the entry points */
 /*     GDPOOL, GIPOOL or GCPOOL in its place. */
 
 /* $ Disclaimer */
@@ -1873,26 +2013,26 @@ L_rtpool:
 /*     NAME       I   Name of the variable whose value is to be returned. */
 /*     N          O   Number of values associated with NAME. */
 /*     VALUES     O   Values associated with NAME. */
-/*     FOUND      O   True if variable is in pool. */
+/*     FOUND      O   .TRUE. if variable is in pool. */
 
 /* $ Detailed_Input */
 
-/*     NAME       is the name of the variable whose values are to be */
-/*                returned. If the variable is not in the pool, FOUND */
-/*                will be FALSE. */
+/*     NAME     is the name of the variable whose values are to be */
+/*              returned. If the variable is not in the pool, FOUND */
+/*              will be .FALSE. */
 
 /* $ Detailed_Output */
 
-/*     N          is the number of values associated with NAME. */
-/*                If NAME is not in the pool, no value is given to */
-/*                N. */
+/*     N        is the number of values associated with NAME. */
+/*              If NAME is not in the pool, no value is given to */
+/*              N. */
 
-/*     VALUES     is the array of values associated with NAME. */
-/*                If NAME is not in the pool, no values are given to */
-/*                the elements of VALUES. */
+/*     VALUES   is the array of values associated with NAME. */
+/*              If NAME is not in the pool, no values are given to */
+/*              the elements of VALUES. */
 
-/*     FOUND      is TRUE if the variable is in the pool, FALSE if it */
-/*                is not. */
+/*     FOUND    is .TRUE. if the variable is in the pool, .FALSE. if it */
+/*              is not. */
 
 /* $ Parameters */
 
@@ -1900,7 +2040,10 @@ L_rtpool:
 
 /* $ Exceptions */
 
-/*     None. */
+/*     1)  If the output argument VALUES is not large enough to hold all */
+/*         of the values of the kernel variable designated by NAME, */
+/*         then memory will be corrupted. RTPOOL cannot detect this */
+/*         error. */
 
 /* $ Files */
 
@@ -1912,7 +2055,6 @@ L_rtpool:
 
 /* $ Examples */
 
-
 /*     The following code fragment demonstrates how the data from */
 /*     several kernel files can be loaded into a kernel pool. After the */
 /*     pool is loaded, the values in the pool are written to a kernel */
@@ -1923,9 +2065,9 @@ L_rtpool:
 /*     C     Store in an array the names of the kernel files whose */
 /*     C     values will be loaded into the kernel pool. */
 /*     C */
-/*           KERNEL (1) = 'AXES.KER' */
-/*           KERNEL (2) = 'GM.KER' */
-/*           KERNEL (3) = 'LEAP_SECONDS.KER' */
+/*           FNAME (1) = 'AXES.KER' */
+/*           FNAME (2) = 'GM.KER' */
+/*           FNAME (3) = 'LEAP_SECONDS.KER' */
 
 /*     C */
 /*     C     Clear the kernel pool. (This is optional.) */
@@ -1937,7 +2079,7 @@ L_rtpool:
 /*     C     the kernel pool. */
 /*     C */
 /*           DO I = 1, 3 */
-/*             CALL LDPOOL ( KERNEL (I) ) */
+/*             CALL LDPOOL ( FNAME (I) ) */
 /*           END DO */
 
 /*     C */
@@ -1958,7 +2100,7 @@ L_rtpool:
 
 /* $ Restrictions */
 
-/*     None. */
+/*     See $Exceptions section. */
 
 /* $ Literature_References */
 
@@ -1966,9 +2108,16 @@ L_rtpool:
 
 /* $ Author_and_Institution */
 
-/*     I.M. Underwood  (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 8.1.1, 17-AUG-2021 (JDR) (NJB) */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 8.1.0, 19-MAR-2009 (NJB) */
 
@@ -2004,7 +2153,7 @@ L_rtpool:
 /* -    SPICELIB Version 7.0.0, 20-SEP-1995 (WLT) */
 
 /*        The implementation of the kernel pool was completely redone */
-/*        to improve performance in loading and fetching data.  In */
+/*        to improve performance in loading and fetching data. In */
 /*        addition the pool was upgraded so that variables may be */
 /*        either string or numeric valued. */
 
@@ -2020,7 +2169,7 @@ L_rtpool:
 /*        All entry points except POOL and CLPOOL now initialize the */
 /*        pool if it has not been done yet. */
 
-/* -    SPICELIB Version 1.0.0, 8-JAN-1989 (IMU) */
+/* -    SPICELIB Version 1.0.0, 08-JAN-1989 (IMU) */
 
 /* -& */
 /* $ Index_Entries */
@@ -2035,7 +2184,7 @@ L_rtpool:
 /*        All entry points except POOL and CLPOOL now initialize the */
 /*        pool if it has not been done yet. */
 
-/* -    SPICELIB Version 1.0.0, 8-JAN-1989 (IMU) */
+/* -    SPICELIB Version 1.0.0, 08-JAN-1989 (IMU) */
 
 /* -& */
 
@@ -2066,7 +2215,7 @@ L_rtpool:
 /*     of the conflict resolution list; this node is a positive value. */
 
     if (namlst[(i__1 = lookat - 1) < 26003 && 0 <= i__1 ? i__1 : s_rnge("nam"
-	    "lst", i__1, "pool_", (ftnlen)2102)] == 0) {
+	    "lst", i__1, "pool_", (ftnlen)2246)] == 0) {
 	*found = FALSE_;
 	chkout_("RTPOOL", (ftnlen)6);
 	return 0;
@@ -2077,20 +2226,20 @@ L_rtpool:
 /*     to this node is the one we are looking for. */
 
     node = namlst[(i__1 = lookat - 1) < 26003 && 0 <= i__1 ? i__1 : s_rnge(
-	    "namlst", i__1, "pool_", (ftnlen)2114)];
+	    "namlst", i__1, "pool_", (ftnlen)2258)];
     succes = s_cmp(name__, pnames + (((i__1 = node - 1) < 26003 && 0 <= i__1 ?
-	     i__1 : s_rnge("pnames", i__1, "pool_", (ftnlen)2115)) << 5), 
+	     i__1 : s_rnge("pnames", i__1, "pool_", (ftnlen)2259)) << 5), 
 	    name_len, (ftnlen)32) == 0;
     while(! succes) {
 	node = nmpool[(i__1 = (node << 1) + 10) < 52018 && 0 <= i__1 ? i__1 : 
-		s_rnge("nmpool", i__1, "pool_", (ftnlen)2119)];
+		s_rnge("nmpool", i__1, "pool_", (ftnlen)2263)];
 	if (node < 0) {
 	    *found = FALSE_;
 	    chkout_("RTPOOL", (ftnlen)6);
 	    return 0;
 	}
 	succes = s_cmp(name__, pnames + (((i__1 = node - 1) < 26003 && 0 <= 
-		i__1 ? i__1 : s_rnge("pnames", i__1, "pool_", (ftnlen)2129)) 
+		i__1 ? i__1 : s_rnge("pnames", i__1, "pool_", (ftnlen)2273)) 
 		<< 5), name_len, (ftnlen)32) == 0;
     }
 
@@ -2104,19 +2253,19 @@ L_rtpool:
 /*     values. */
 
     if (datlst[(i__1 = node - 1) < 26003 && 0 <= i__1 ? i__1 : s_rnge("datlst"
-	    , i__1, "pool_", (ftnlen)2142)] <= 0) {
+	    , i__1, "pool_", (ftnlen)2286)] <= 0) {
 	*found = FALSE_;
     } else {
 	*found = TRUE_;
 	*n = 0;
 	node = datlst[(i__1 = node - 1) < 26003 && 0 <= i__1 ? i__1 : s_rnge(
-		"datlst", i__1, "pool_", (ftnlen)2150)];
+		"datlst", i__1, "pool_", (ftnlen)2294)];
 	while(node > 0) {
 	    ++(*n);
 	    values[*n - 1] = dpvals[(i__1 = node - 1) < 400000 && 0 <= i__1 ? 
-		    i__1 : s_rnge("dpvals", i__1, "pool_", (ftnlen)2154)];
+		    i__1 : s_rnge("dpvals", i__1, "pool_", (ftnlen)2298)];
 	    node = dppool[(i__1 = (node << 1) + 10) < 800012 && 0 <= i__1 ? 
-		    i__1 : s_rnge("dppool", i__1, "pool_", (ftnlen)2155)];
+		    i__1 : s_rnge("dppool", i__1, "pool_", (ftnlen)2299)];
 	}
     }
     chkout_("RTPOOL", (ftnlen)6);
@@ -2126,7 +2275,8 @@ L_rtpool:
 L_expool:
 /* $ Abstract */
 
-/*     Confirm the existence of a kernel variable in the kernel pool. */
+/*     Confirm the existence of a numeric kernel variable in the kernel */
+/*     pool. */
 
 /* $ Disclaimer */
 
@@ -2171,18 +2321,18 @@ L_expool:
 
 /*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
-/*     NAME       I   Name of the variable whose value is to be returned. */
-/*     FOUND      O   True when the variable is in the pool. */
+/*     NAME       I   Name of a numeric kernel variable. */
+/*     FOUND      O   .TRUE. when the variable is in the pool. */
 
 /* $ Detailed_Input */
 
-/*     NAME       is the name of the variable whose values are to be */
-/*                returned. */
+/*     NAME     is the name of the numeric kernel variable whose */
+/*              existence in the kernel pool is to be checked. */
 
 /* $ Detailed_Output */
 
-/*     FOUND      is true whenever the specified variable is included */
-/*                in the pool. */
+/*     FOUND    is .TRUE. whenever the specified variable is included */
+/*              in the pool. */
 
 /* $ Parameters */
 
@@ -2199,16 +2349,128 @@ L_expool:
 /* $ Particulars */
 
 /*     This routine determines whether or not a numeric kernel pool */
-/*     variable exists.  It does not detect the existence of */
+/*     variable exists. It does not detect the existence of */
 /*     string valued kernel pool variables. */
 
-/*     A better routine for determining the existence of kernel pool */
-/*     variables is the entry point DTPOOL which determines the */
+/*     A better routine for determining the existence of numeric kernel */
+/*     pool variables is the routine DTPOOL which determines the */
 /*     existence, size and type of kernel pool variables. */
 
 /* $ Examples */
 
-/*     See BODFND. */
+/*     The numerical results shown for this example may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
+
+/*     1) The following code example demonstrates how to use EXPOOL */
+/*        to confirm the existence of numeric kernel pool variables. */
+/*        In the example, we will look for different variables; */
+/*        some of them numeric, some string valued and some not */
+/*        present in the kernel pool. */
+
+/*        Use the kernel shown below; an IK defining two keywords */
+/*        used to provide data for an instrument with NAIF ID -999001. */
+
+
+/*           KPL/IK */
+
+/*           File name: expool_ex1.ti */
+
+/*           The keyword below define the three frequencies used by a */
+/*           hypothetical instrument (NAIF ID -999001). They correspond */
+/*           to three filters: red, green and blue. Frequencies are */
+/*           given in micrometers. */
+
+/*           \begindata */
+
+/*              INS-999001_FREQ_RGB   = (  0.65,  0.55, 0.475 ) */
+/*              INS-999001_FREQ_UNITS = ( 'MICROMETERS'       ) */
+
+/*           \begintext */
+
+
+/*           End of IK */
+
+
+/*        Example code begins here. */
+
+
+/*              PROGRAM EXPOOL_EX1 */
+/*              IMPLICIT NONE */
+
+/*        C */
+/*        C     Local parameters. */
+/*        C */
+/*              CHARACTER*(*)         IKNAME */
+/*              PARAMETER           ( IKNAME = 'expool_ex1.ti' ) */
+
+/*              INTEGER               KPVNLN */
+/*              PARAMETER           ( KPVNLN = 32 ) */
+
+/*              INTEGER               NKPVNM */
+/*              PARAMETER           ( NKPVNM = 3  ) */
+
+/*        C */
+/*        C     Local variables. */
+/*        C */
+/*              CHARACTER*(KPVNLN)    KEYWRD ( NKPVNM ) */
+
+/*              INTEGER               I */
+
+/*              LOGICAL               FOUND */
+
+/*        C */
+/*        C     Define the variable names */
+/*        C */
+/*              DATA                  KEYWRD   / */
+/*             .                             'INS-999001_FREQ_RGB', */
+/*             .                             'NOT_IN_THE_POOL', */
+/*             .                             'INS-999001_FREQ_UNITS' / */
+
+/*        C */
+/*        C     Load the instrument kernel. */
+/*        C */
+/*              CALL FURNSH ( IKNAME ) */
+
+/*              DO I = 1, NKPVNM */
+
+/*        C */
+/*        C        Check if the variable is numeric and present */
+/*        C        in the kernel pool. */
+/*        C */
+/*                 CALL EXPOOL ( KEYWRD(I), FOUND ) */
+
+/*                 WRITE(*,*) 'Variable name: ', KEYWRD(I) */
+
+/*                 IF ( FOUND ) THEN */
+
+/*                    WRITE(*,*) '   It is numeric and exists in the ' */
+/*             .              // 'kernel pool.' */
+
+/*                 ELSE */
+
+/*                    WRITE(*,*) '   Either it is not numeric or it is ' */
+/*             .              // 'not in the kernel pool.' */
+
+/*                 END IF */
+
+/*              END DO */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*         Variable name: INS-999001_FREQ_RGB */
+/*            It is numeric and exists in the kernel pool. */
+/*         Variable name: NOT_IN_THE_POOL */
+/*            Either it is not numeric or it is not in the kernel pool. */
+/*         Variable name: INS-999001_FREQ_UNITS */
+/*            Either it is not numeric or it is not in the kernel pool. */
+
 
 /* $ Restrictions */
 
@@ -2220,9 +2482,21 @@ L_expool:
 
 /* $ Author_and_Institution */
 
-/*     I.M. Underwood  (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 8.1.1, 17-AUG-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. Added complete */
+/*        code example. */
+
+/*        Updated the header to reflect that only numeric variables */
+/*        present in the kernel pool will cause the routine to return */
+/*        .TRUE. */
 
 /* -    SPICELIB Version 8.1.0, 19-MAR-2009 (NJB) */
 
@@ -2258,7 +2532,7 @@ L_expool:
 /* -    SPICELIB Version 7.0.0, 20-SEP-1995 (WLT) */
 
 /*        The implementation of the kernel pool was completely redone */
-/*        to improve performance in loading and fetching data.  In */
+/*        to improve performance in loading and fetching data. In */
 /*        addition the pool was upgraded so that variables may be */
 /*        either string or numeric valued. */
 
@@ -2270,18 +2544,44 @@ L_expool:
 /*        All entry points except POOL and CLPOOL now initialize the */
 /*        pool if it has not been done yet. */
 
-/* -    SPICELIB Version 1.0.0, 8-JAN-1989 (IMU) */
+/* -    SPICELIB Version 1.0.0, 08-JAN-1989 (IMU) */
 
 /* -& */
 /* $ Index_Entries */
 
-/*     CONFIRM the existence of a pooled kernel variable */
+/*     CONFIRM the existence of a pooled numeric kernel variable */
 
 /* -& */
 /* $ Revisions */
 
+/* -    SPICELIB Version 8.1.0, 19-MAR-2009 (NJB) */
+
+/*        ZZPINI call was updated for compatibility */
+/*        with new watcher system implementation. */
+
+/* -    SPICELIB Version 8.0.0, 04-JUN-1999 (WLT) */
+
+/*        Added the entry points PCPOOL, PDPOOL and PIPOOL to allow */
+/*        direct insertion of data into the kernel pool without having */
+/*        to read an external file. */
+
+/*        Added the interface LMPOOL that allows SPICE */
+/*        programs to load text kernels directly from memory */
+/*        instead of requiring a text file. */
+
+/*        Added the entry point SZPOOL to return kernel pool definition */
+/*        parameters. */
+
+/*        Added the entry point DVPOOL to allow the removal of a variable */
+/*        from the kernel pool. */
+
+/*        Added the entry point GNPOOL to allow users to determine */
+/*        variables that are present in the kernel pool */
+
+/* -    SPICELIB Version 7.0.0, 20-SEP-1995 (WLT) */
+
 /*        The implementation of the kernel pool was completely redone */
-/*        to improve performance in loading and fetching data.  In */
+/*        to improve performance in loading and fetching data. In */
 /*        addition the pool was upgraded so that variables may be */
 /*        either string or numeric valued. */
 
@@ -2294,7 +2594,7 @@ L_expool:
 
 /*        The basic data structure used to maintain the list of */
 /*        variable names and values was replaced with a hash table */
-/*        implementation.  Data and names are accessed by means */
+/*        implementation. Data and names are accessed by means */
 /*        of a hash function and linked lists of pointers to existing */
 /*        variable names and data values. */
 
@@ -2302,8 +2602,6 @@ L_expool:
 
 /*        All entry points except POOL and CLPOOL now initialize the */
 /*        pool if it has not been done yet. */
-
-/* -    SPICELIB Version 1.0.0, 8-JAN-1989 (IMU) */
 
 /* -& */
 
@@ -2334,7 +2632,7 @@ L_expool:
 /*     of the conflict resolution list; this node is a positive value. */
 
     if (namlst[(i__1 = lookat - 1) < 26003 && 0 <= i__1 ? i__1 : s_rnge("nam"
-	    "lst", i__1, "pool_", (ftnlen)2392)] == 0) {
+	    "lst", i__1, "pool_", (ftnlen)2687)] == 0) {
 	*found = FALSE_;
 	chkout_("EXPOOL", (ftnlen)6);
 	return 0;
@@ -2345,20 +2643,20 @@ L_expool:
 /*     to this node is the one we are looking for. */
 
     node = namlst[(i__1 = lookat - 1) < 26003 && 0 <= i__1 ? i__1 : s_rnge(
-	    "namlst", i__1, "pool_", (ftnlen)2404)];
+	    "namlst", i__1, "pool_", (ftnlen)2699)];
     succes = s_cmp(name__, pnames + (((i__1 = node - 1) < 26003 && 0 <= i__1 ?
-	     i__1 : s_rnge("pnames", i__1, "pool_", (ftnlen)2405)) << 5), 
+	     i__1 : s_rnge("pnames", i__1, "pool_", (ftnlen)2700)) << 5), 
 	    name_len, (ftnlen)32) == 0;
     while(! succes) {
 	node = nmpool[(i__1 = (node << 1) + 10) < 52018 && 0 <= i__1 ? i__1 : 
-		s_rnge("nmpool", i__1, "pool_", (ftnlen)2409)];
+		s_rnge("nmpool", i__1, "pool_", (ftnlen)2704)];
 	if (node < 0) {
 	    *found = FALSE_;
 	    chkout_("EXPOOL", (ftnlen)6);
 	    return 0;
 	}
 	succes = s_cmp(name__, pnames + (((i__1 = node - 1) < 26003 && 0 <= 
-		i__1 ? i__1 : s_rnge("pnames", i__1, "pool_", (ftnlen)2419)) 
+		i__1 ? i__1 : s_rnge("pnames", i__1, "pool_", (ftnlen)2714)) 
 		<< 5), name_len, (ftnlen)32) == 0;
     }
 
@@ -2370,7 +2668,7 @@ L_expool:
 /*     d.p. values. */
 
     *found = datlst[(i__1 = node - 1) < 26003 && 0 <= i__1 ? i__1 : s_rnge(
-	    "datlst", i__1, "pool_", (ftnlen)2430)] > 0;
+	    "datlst", i__1, "pool_", (ftnlen)2725)] > 0;
     chkout_("EXPOOL", (ftnlen)6);
     return 0;
 /* $Procedure WRPOOL ( Write the variables in pool to a specified unit ) */
@@ -2430,8 +2728,8 @@ L_wrpool:
 
 /* $ Detailed_Input */
 
-/*     UNIT       is the logical unit to which the variables in the pool */
-/*                will be written. */
+/*     UNIT     is the logical unit to which the variables in the pool */
+/*              will be written. */
 
 /* $ Detailed_Output */
 
@@ -2443,7 +2741,8 @@ L_wrpool:
 
 /* $ Exceptions */
 
-/*     None. */
+/*     1)  If writing a variable to the output file fails due to an I/O */
+/*         error, the error SPICE(WRITEERROR) is signaled. */
 
 /* $ Files */
 
@@ -2468,7 +2767,6 @@ L_wrpool:
 
 /* $ Examples */
 
-
 /*     The following code fragment demonstrates how the data from */
 /*     several kernel files can be loaded into a kernel pool. After the */
 /*     pool is loaded, the values in the pool are written to a kernel */
@@ -2479,9 +2777,9 @@ L_wrpool:
 /*     C     Store in an array the names of the kernel files whose */
 /*     C     values will be loaded into the kernel pool. */
 /*     C */
-/*           KERNEL (1) = 'AXES.KER' */
-/*           KERNEL (2) = 'GM.KER' */
-/*           KERNEL (3) = 'LEAP_SECONDS.KER' */
+/*           FNAME (1) = 'AXES.KER' */
+/*           FNAME (2) = 'GM.KER' */
+/*           FNAME (3) = 'LEAP_SECONDS.KER' */
 
 /*     C */
 /*     C     Clear the kernel pool. (This is optional.) */
@@ -2493,7 +2791,7 @@ L_wrpool:
 /*     C     the kernel pool. */
 /*     C */
 /*           DO I = 1, 3 */
-/*             CALL LDPOOL ( KERNEL (I) ) */
+/*             CALL LDPOOL ( FNAME (I) ) */
 /*           END DO */
 
 /*     C */
@@ -2512,7 +2810,6 @@ L_wrpool:
 /*     C */
 /*           CALL WRPOOL ( UNIT ) */
 
-
 /* $ Restrictions */
 
 /*     None. */
@@ -2523,11 +2820,21 @@ L_wrpool:
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     H.A. Neilan     (JPL) */
-/*     I.M. Underwood  (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     H.A. Neilan        (JPL) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 8.1.2, 17-AUG-2021 (JDR) (BVS) */
+
+/*        Edited the header to comply with NAIF standard. */
+
+/*        Updated the $Exceptions section to document the actual error */
+/*        handling of the routine. */
 
 /* -    SPICELIB Version 8.1.1, 30-JUN-2014 (NJB) */
 
@@ -2560,9 +2867,9 @@ L_wrpool:
 /* -    SPICELIB Version 7.0.0, 20-SEP-1995 (WLT) */
 
 /*        The implementation of the kernel pool was completely redone */
-/*        to improve performance in loading and fetching data.  In */
+/*        to improve performance in loading and fetching data. In */
 /*        addition the pool was upgraded so that variables may be */
-/*        either string or numeric valued.  Both types are supported */
+/*        either string or numeric valued. Both types are supported */
 /*        by WRPOOL. */
 
 /* -    SPICELIB Version 5.0.0, 22-AUG-1990 (NJB) */
@@ -2580,20 +2887,20 @@ L_wrpool:
 /*        Added declaration of FAILED. FAILED is checked in the */
 /*        DO-loops in LDPOOL and WRPOOL to prevent infinite looping. */
 
-/* -    SPICELIB Version 1.2.0, 9-MAR-1989 (HAN) */
+/* -    SPICELIB Version 1.2.0, 09-MAR-1989 (HAN) */
 
 /*        Parameters BEGDAT and BEGTXT have been moved into the */
-/*        Declarations section. */
+/*        $Declarations section. */
 
 /* -    SPICELIB Version 1.1.0, 16-FEB-1989 (IMU) (NJB) */
 
-/*        Parameters MAXVAR, MAXVAL, MAXLEN moved into Declarations. */
+/*        Parameters MAXVAR, MAXVAL, MAXLEN moved into $Declarations. */
 /*        (Actually, MAXLEN was implicitly 32 characters, and has only */
 /*        now been made an explicit---and changeable---limit.) */
 
 /*        Declaration of unused function FAILED removed. */
 
-/* -    SPICELIB Version 1.0.0, 8-JAN-1989 (IMU) */
+/* -    SPICELIB Version 1.0.0, 08-JAN-1989 (IMU) */
 
 /* -& */
 /* $ Index_Entries */
@@ -2603,14 +2910,35 @@ L_wrpool:
 /* -& */
 /* $ Revisions */
 
+/* -    SPICELIB Version 8.0.0, 04-JUN-1999 (WLT) */
+
+/*        Added the entry points PCPOOL, PDPOOL and PIPOOL to allow */
+/*        direct insertion of data into the kernel pool without having */
+/*        to read an external file. */
+
+/*        Added the interface LMPOOL that allows SPICE */
+/*        programs to load text kernels directly from memory */
+/*        instead of requiring a text file. */
+
+/*        Added the entry point SZPOOL to return kernel pool definition */
+/*        parameters. */
+
+/*        Added the entry point DVPOOL to allow the removal of a variable */
+/*        from the kernel pool. */
+
+/*        Added the entry point GNPOOL to allow users to determine */
+/*        variables that are present in the kernel pool */
+
+/* -    SPICELIB Version 7.0.0, 20-SEP-1995 (WLT) */
+
 /*        The implementation of the kernel pool was completely redone */
-/*        to improve performance in loading and fetching data.  In */
+/*        to improve performance in loading and fetching data. In */
 /*        addition the pool was upgraded so that variables may be */
 /*        either string or numeric valued. */
 
 /*        The basic data structure used to maintain the list of */
 /*        variable names and values was replaced with a hash table */
-/*        implementation.  Data and names are accessed by means */
+/*        implementation. Data and names are accessed by means */
 /*        of a hash function and linked lists of pointers to existing */
 /*        variable names and data values. */
 
@@ -2618,12 +2946,6 @@ L_wrpool:
 
 /*        Increased value of parameter MAXVAL to 5000 to accommodate */
 /*        storage of SCLK coefficients in the kernel pool. */
-
-/*        Also, changed version number in previous `Revisions' entry */
-/*        from SPICELIB Version 2.0.0 to SPICELIB Version 2.0.0.  The */
-/*        last version entry in the `Version' section had been */
-/*        Version 1.0.0, dated later than the entry for `version 2' */
-/*        in the revisions section! */
 
 /* -    SPICELIB Version 4.0.0, 12-JUN-1990 (IMU) */
 
@@ -2646,22 +2968,20 @@ L_wrpool:
 /*       routines returning upon entry. This meant that the routine */
 /*       RDKVAR never got a chance to set the EOF flag, which was the */
 /*       only control of the DO-loop. An infinite loop resulted in such */
-/*       cases.  The FAILED test resolves that situation. */
+/*       cases. The FAILED test resolves that situation. */
 
 /* -    SPICELIB Version 1.2.0, 9-MAR-1989 (HAN) */
 
 /*        Parameters BEGDAT and BEGTXT have been moved into the */
-/*        Declarations section. */
+/*        $Declarations section. */
 
 /* -    SPICELIB Version 1.1.0, 16-FEB-1989 (IMU) (NJB) */
 
-/*        Parameters MAXVAR, MAXVAL, MAXLEN moved into Declarations. */
+/*        Parameters MAXVAR, MAXVAL, MAXLEN moved into $Declarations. */
 /*        (Actually, MAXLEN was implicitly 32 characters, and has only */
 /*        now been made an explicit---and changeable---limit.) */
 
 /*        Declaration of unused function FAILED removed. */
-
-/* -    SPICELIB Version 1.0.0, 8-JAN-1989 (IMU) */
 
 /* -& */
 
@@ -2714,13 +3034,13 @@ L100002:
 /*        Get the head of this list. */
 
 	nnode = namlst[(i__1 = k - 1) < 26003 && 0 <= i__1 ? i__1 : s_rnge(
-		"namlst", i__1, "pool_", (ftnlen)2772)];
+		"namlst", i__1, "pool_", (ftnlen)3089)];
 	while(nnode > 0) {
 	    s_copy(line, pnames + (((i__1 = nnode - 1) < 26003 && 0 <= i__1 ? 
-		    i__1 : s_rnge("pnames", i__1, "pool_", (ftnlen)2776)) << 
+		    i__1 : s_rnge("pnames", i__1, "pool_", (ftnlen)3093)) << 
 		    5), (ftnlen)132, (ftnlen)32);
 	    datahd = datlst[(i__1 = nnode - 1) < 26003 && 0 <= i__1 ? i__1 : 
-		    s_rnge("datlst", i__1, "pool_", (ftnlen)2777)];
+		    s_rnge("datlst", i__1, "pool_", (ftnlen)3094)];
 	    dp = datahd > 0;
 	    chr = datahd < 0;
 	    dnode = abs(datahd);
@@ -2730,20 +3050,20 @@ L100002:
 	    if (dp) {
 		vector = dppool[(i__1 = (dnode << 1) + 10) < 800012 && 0 <= 
 			i__1 ? i__1 : s_rnge("dppool", i__1, "pool_", (ftnlen)
-			2785)] > 0;
+			3102)] > 0;
 	    } else if (chr) {
 		vector = chpool[(i__1 = (dnode << 1) + 10) < 30012 && 0 <= 
 			i__1 ? i__1 : s_rnge("chpool", i__1, "pool_", (ftnlen)
-			2787)] > 0;
+			3104)] > 0;
 	    } else {
 		setmsg_("This error is never supposed to occur. No data was "
 			"available for the variable '#'. ", (ftnlen)83);
 		r__ = rtrim_(pnames + (((i__1 = nnode - 1) < 26003 && 0 <= 
 			i__1 ? i__1 : s_rnge("pnames", i__1, "pool_", (ftnlen)
-			2793)) << 5), (ftnlen)32);
+			3110)) << 5), (ftnlen)32);
 		errch_("#", pnames + (((i__1 = nnode - 1) < 26003 && 0 <= 
 			i__1 ? i__1 : s_rnge("pnames", i__1, "pool_", (ftnlen)
-			2794)) << 5), (ftnlen)1, r__);
+			3111)) << 5), (ftnlen)1, r__);
 		sigerr_("SPICE(BUG)", (ftnlen)10);
 		chkout_("WRPOOL", (ftnlen)6);
 		return 0;
@@ -2767,10 +3087,10 @@ L100002:
 		if (dp) {
 		    dvalue = dpvals[(i__1 = dnode - 1) < 400000 && 0 <= i__1 ?
 			     i__1 : s_rnge("dpvals", i__1, "pool_", (ftnlen)
-			    2817)];
+			    3134)];
 		    dnode = dppool[(i__1 = (dnode << 1) + 10) < 800012 && 0 <=
 			     i__1 ? i__1 : s_rnge("dppool", i__1, "pool_", (
-			    ftnlen)2818)];
+			    ftnlen)3135)];
 		} else {
 		    s_copy(cvalue, "'", (ftnlen)132, (ftnlen)1);
 		    j = 1;
@@ -2781,23 +3101,23 @@ L100002:
 
 		    i__2 = rtrim_(chvals + ((i__1 = dnode - 1) < 15000 && 0 <=
 			     i__1 ? i__1 : s_rnge("chvals", i__1, "pool_", (
-			    ftnlen)2827)) * 80, (ftnlen)80);
+			    ftnlen)3144)) * 80, (ftnlen)80);
 		    for (i__ = 1; i__ <= i__2; ++i__) {
 			++j;
 			*(unsigned char *)&cvalue[j - 1] = *(unsigned char *)&
 				chvals[((i__1 = dnode - 1) < 15000 && 0 <= 
 				i__1 ? i__1 : s_rnge("chvals", i__1, "pool_", 
-				(ftnlen)2829)) * 80 + (i__ - 1)];
+				(ftnlen)3146)) * 80 + (i__ - 1)];
 			code = *(unsigned char *)&chvals[((i__1 = dnode - 1) <
 				 15000 && 0 <= i__1 ? i__1 : s_rnge("chvals", 
-				i__1, "pool_", (ftnlen)2831)) * 80 + (i__ - 1)
+				i__1, "pool_", (ftnlen)3148)) * 80 + (i__ - 1)
 				];
 			if (code == iquote) {
 			    ++j;
 			    *(unsigned char *)&cvalue[j - 1] = *(unsigned 
 				    char *)&chvals[((i__1 = dnode - 1) < 
 				    15000 && 0 <= i__1 ? i__1 : s_rnge("chva"
-				    "ls", i__1, "pool_", (ftnlen)2835)) * 80 + 
+				    "ls", i__1, "pool_", (ftnlen)3152)) * 80 + 
 				    (i__ - 1)];
 			}
 		    }
@@ -2805,7 +3125,7 @@ L100002:
 		    *(unsigned char *)&cvalue[j - 1] = '\'';
 		    dnode = chpool[(i__2 = (dnode << 1) + 10) < 30012 && 0 <= 
 			    i__2 ? i__2 : s_rnge("chpool", i__2, "pool_", (
-			    ftnlen)2841)];
+			    ftnlen)3158)];
 		}
 
 /*              We will need to properly finish off this write with */
@@ -2890,7 +3210,7 @@ L100004:
 /*           Get the next name for this node: */
 
 	    nnode = nmpool[(i__2 = (nnode << 1) + 10) < 52018 && 0 <= i__2 ? 
-		    i__2 : s_rnge("nmpool", i__2, "pool_", (ftnlen)2890)];
+		    i__2 : s_rnge("nmpool", i__2, "pool_", (ftnlen)3207)];
 	}
 
 /*        Get the next node (if there is one). */
@@ -2989,24 +3309,24 @@ L_swpool:
 
 /* $ Detailed_Input */
 
-/*     AGENT       is the name of a routine or entry point (agency) that */
-/*                 will want to know when the kernel pool variables */
-/*                 designated by NAMES have been updated. */
+/*     AGENT    is the name of a routine or entry point (agency) that */
+/*              will want to know when the kernel pool variables */
+/*              designated by NAMES have been updated. */
 
-/*     NNAMES      is the number of kernel pool variable names that will */
-/*                 be associated with AGENT. */
+/*     NNAMES   is the number of kernel pool variable names that will */
+/*              be associated with AGENT. */
 
-/*     NAMES       is an array of names of variables in the kernel pool. */
-/*                 Whenever any of these is updated, a notice will be */
-/*                 posted for AGENT so that one can quickly check */
-/*                 whether needed data has been modified. */
+/*     NAMES    is an array of names of variables in the kernel pool. */
+/*              Whenever any of these is updated, a notice will be */
+/*              posted for AGENT so that one can quickly check */
+/*              whether needed data has been modified. */
 
-/*                 Any kernel variable may be associated with multiple */
-/*                 agents; this call adds AGENT to each set of agents */
-/*                 associated with a member of NAMES. */
+/*              Any kernel variable may be associated with multiple */
+/*              agents; this call adds AGENT to each set of agents */
+/*              associated with a member of NAMES. */
 
-/*                 The variables designated by NAMES need not exist in */
-/*                 the kernel pool at the time a watch is set. */
+/*              The variables designated by NAMES need not exist in */
+/*              the kernel pool at the time a watch is set. */
 
 /* $ Detailed_Output */
 
@@ -3018,17 +3338,16 @@ L_swpool:
 
 /* $ Exceptions */
 
-/*     1) If sufficient room is not available to hold a new kernel */
-/*        variable name, the error SPICE(KERVARSETOVERFLOW) will be */
-/*        signaled. */
+/*     1)  If sufficient room is not available to hold a new kernel */
+/*         variable name, the error SPICE(KERVARSETOVERFLOW) is signaled. */
 
-/*     2) If sufficient room is not available to hold a new agent */
-/*        name, the error SPICE(TOOMANYWATCHES) will be signaled. */
+/*     2)  If sufficient room is not available to hold a new agent */
+/*         name, the error SPICE(TOOMANYWATCHES) is signaled. */
 
-/*     3) If any kernel variable in the array NAMES is already watched */
-/*        by MAXAGT agents, and AGENT is not already associated with */
-/*        that kernel variable, the error (AGENTLISTOVERFLOW) will be */
-/*        signaled. */
+/*     3)  If any kernel variable in the array NAMES is already watched */
+/*         by MAXAGT agents, and AGENT is not already associated with */
+/*         that kernel variable, the error SPICE(AGENTLISTOVERFLOW) is */
+/*         signaled. */
 
 /* $ Files */
 
@@ -3038,7 +3357,7 @@ L_swpool:
 
 /*     The kernel pool is a convenient place to store a wide */
 /*     variety of data needed by routines in SPICELIB and routines */
-/*     that interface with SPICELIB routines.  However, when */
+/*     that interface with SPICELIB routines. However, when */
 /*     a single name has a large quantity of data associated with */
 /*     it, it becomes inefficient to constantly query the kernel */
 /*     pool for values that are not updated on a frequent basis. */
@@ -3047,15 +3366,15 @@ L_swpool:
 /*     to post a message whenever a particular value gets updated. */
 /*     In this way, a routine can quickly determine whether or not */
 /*     data it requires has been updated since the last time the */
-/*     data was accessed.  This makes it reasonable to buffer */
+/*     data was accessed. This makes it reasonable to buffer */
 /*     the data in local storage and update it only when */
 /*     a variable in the kernel pool that affects this data has */
 /*     been updated. */
 
-/*     Note that SWPOOL has a side effect.  Whenever a call to */
+/*     Note that SWPOOL has a side effect. Whenever a call to */
 /*     SWPOOL is made, the agent specified in the calling sequence */
 /*     is added to the list of agents that should be notified that */
-/*     an update of its variables has occurred.  In other words */
+/*     an update of its variables has occurred. In other words */
 /*     the code */
 
 /*         CALL SWPOOL ( AGENT, NNAMES, NAMES  ) */
@@ -3064,18 +3383,18 @@ L_swpool:
 /*     will always return UPDATE as .TRUE. */
 
 /*     This feature allows for a slightly cleaner use of SWPOOL and */
-/*     CVPOOL as shown in the example below.  Because SWPOOL */
+/*     CVPOOL as shown in the example below. Because SWPOOL */
 /*     automatically loads AGENT into the list of agents to notify of */
 /*     a kernel pool update, you do not have to include the code for */
 /*     fetching the initial values of the kernel variables in the */
-/*     initialization portion of a subroutine.  Instead, the code for */
+/*     initialization portion of a subroutine. Instead, the code for */
 /*     the first fetch from the pool is the same as the code for */
 /*     fetching when the pool is updated. */
 
 /* $ Examples */
 
 /*     Suppose that you have an application subroutine, MYTASK, that */
-/*     needs to access a large data set in the kernel pool.  If this */
+/*     needs to access a large data set in the kernel pool. If this */
 /*     data could be kept in local storage and kernel pool queries */
 /*     performed only when the data in the kernel pool has been */
 /*     updated, the routine can perform much more efficiently. */
@@ -3131,7 +3450,6 @@ L_swpool:
 
 /*           END IF */
 
-
 /* $ Restrictions */
 
 /*     None. */
@@ -3142,11 +3460,16 @@ L_swpool:
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     W.L. Taber      (JPL) */
-/*     B.V. Semenov    (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 8.2.1, 17-AUG-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 8.2.0, 30-JUL-2013 (BVS) */
 
@@ -3183,7 +3506,7 @@ L_swpool:
 /* -    SPICELIB Version 7.0.0, 20-SEP-1995 (WLT) */
 
 /*        The implementation of the kernel pool was completely redone */
-/*        to improve performance in loading and fetching data.  In */
+/*        to improve performance in loading and fetching data. In */
 /*        addition the pool was upgraded so that variables may be */
 /*        either string or numeric valued. */
 
@@ -3196,6 +3519,7 @@ L_swpool:
 
 /*     Watch for an update to a kernel pool variable */
 /*     Notify a routine of an update to a kernel pool variable */
+
 /* -& */
 /* $ Revisions */
 
@@ -3212,13 +3536,13 @@ L_swpool:
 /* -    SPICELIB Version 7.0.0, 20-SEP-1995 (WLT) */
 
 /*        The implementation of the kernel pool was completely redone */
-/*        to improve performance in loading and fetching data.  In */
+/*        to improve performance in loading and fetching data. In */
 /*        addition the pool was upgraded so that variables may be */
 /*        either string or numeric valued. */
 
 /*        The basic data structure used to maintain the list of */
 /*        variable names and values was replaced with a hash table */
-/*        implementation.  Data and names are accessed by means */
+/*        implementation. Data and names are accessed by means */
 /*        of a hash function and linked lists of pointers to existing */
 /*        variable names and data values. */
 
@@ -3230,15 +3554,14 @@ L_swpool:
 /*        that data only when it is updated. */
 
 /*        In addition, the revision history was upgraded so that the */
-/*        version number increases over time.  This wasn't true */
+/*        version number increases over time. This wasn't true */
 /*        before. In addition some early revision data that referred to */
 /*        pre-SPICELIB modifications were removed. This editing of */
 /*        the version numbers makes it unlikely that anyone can track */
 /*        down which previous version of this routine they have by */
-/*        looking at the version number.  The best way to determine */
+/*        looking at the version number. The best way to determine */
 /*        the routine you had previously is to compare the dates */
 /*        stored in the Version line of the routine. */
-
 
 /* -& */
 
@@ -3396,7 +3719,7 @@ L_swpool:
 		j = bsrchc_(names + (i__ - 1) * names_len, &i__1, wtvars + 
 			192, names_len, (ftnlen)32);
 		head = wtptrs[(i__1 = j - 1) < 26003 && 0 <= i__1 ? i__1 : 
-			s_rnge("wtptrs", i__1, "pool_", (ftnlen)3427)];
+			s_rnge("wtptrs", i__1, "pool_", (ftnlen)3749)];
 
 /*              Allocate a free node in the watch pool; append this node */
 /*              to the tail of the agent list for the kernel variable; */
@@ -3409,7 +3732,7 @@ L_swpool:
 /*              Store the agent name at index NODE in the agent list. */
 
 		s_copy(wtagnt + (((i__1 = node - 1) < 130015 && 0 <= i__1 ? 
-			i__1 : s_rnge("wtagnt", i__1, "pool_", (ftnlen)3443)) 
+			i__1 : s_rnge("wtagnt", i__1, "pool_", (ftnlen)3765)) 
 			<< 5), agent, (ftnlen)32, agent_len);
 
 /*              The insertion is complete. We update AGENTS, which is */
@@ -3468,7 +3791,7 @@ L_swpool:
 /*           Store the agent name at index NODE in the agent list. */
 
 	    s_copy(wtagnt + (((i__1 = node - 1) < 130015 && 0 <= i__1 ? i__1 :
-		     s_rnge("wtagnt", i__1, "pool_", (ftnlen)3505)) << 5), 
+		     s_rnge("wtagnt", i__1, "pool_", (ftnlen)3827)) << 5), 
 		    agent, (ftnlen)32, agent_len);
 
 /*           The insertion is complete. We update AGENTS, which is the */
@@ -3533,30 +3856,30 @@ L_cvpool:
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  DESCRIPTION */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     AGENT      I   Name of the agent to check for notices. */
 /*     UPDATE     O   .TRUE. if variables for AGENT have been updated. */
 
 /* $ Detailed_Input */
 
-/*     AGENT     is the name of a subroutine, entry point, or significant */
-/*               portion of code that needs to access variables in the */
-/*               kernel pool.  Generally this agent will buffer these */
-/*               variables internally and fetch them from the kernel */
-/*               pool only when they are updated. */
+/*     AGENT    is the name of a subroutine, entry point, or significant */
+/*              portion of code that needs to access variables in the */
+/*              kernel pool. Generally this agent will buffer these */
+/*              variables internally and fetch them from the kernel */
+/*              pool only when they are updated. */
 
 /* $ Detailed_Output */
 
-/*     UPDATE    is a logical flag that will be set to .TRUE. if the */
-/*               variables in the kernel pool that are associated with */
-/*               AGENT have been updated since the last call to CVPOOL. */
+/*     UPDATE   is a logical flag that will be set to .TRUE. if the */
+/*              variables in the kernel pool that are associated with */
+/*              AGENT have been updated since the last call to CVPOOL. */
 
-/*               UPDATE will be set to .TRUE. on the first call made for */
-/*               the specified agent, whether or not the associated */
-/*               variables have been updated since the agent was placed */
-/*               on their notification list, as long as the agent is */
-/*               associated with any watched variables. */
+/*              UPDATE will be set to .TRUE. on the first call made for */
+/*              the specified agent, whether or not the associated */
+/*              variables have been updated since the agent was placed */
+/*              on their notification list, as long as the agent is */
+/*              associated with any watched variables. */
 
 /* $ Parameters */
 
@@ -3574,7 +3897,7 @@ L_cvpool:
 
 /*     This entry point allows the calling program to determine */
 /*     whether or not variables associated with with AGENT have */
-/*     been updated.  Making use of this entry point in conjunction */
+/*     been updated. Making use of this entry point in conjunction */
 /*     with the entry point SWPOOL (set watch on pool variables) */
 /*     modules can buffer kernel pool variables they need and */
 /*     fetch values from the kernel pool only when variables have */
@@ -3583,17 +3906,17 @@ L_cvpool:
 /*     Note that the call to CVPOOL has a side effect. */
 /*     Two consecutive calls to CVPOOL with the same */
 /*     AGENT will always result in the UPDATE being .FALSE. */
-/*     on the second call.  In other words, if you embed */
+/*     on the second call. In other words, if you embed */
 /*     the following two lines of code in a piece of code */
 
 /*        CALL CVPOOL ( AGENT, UPDATE ) */
 /*        CALL CVPOOL ( AGENT, UPDATE ) */
 
-/*     and then test UPDATE, it will be FALSE.  The idea is */
+/*     and then test UPDATE, it will be .FALSE. The idea is */
 /*     that once a call to CVPOOL has been made, the */
 /*     kernel pool has performed its duty and notified the */
 /*     calling routine that one of the AGENT's variables */
-/*     has been updated.  Consequently, on the second call */
+/*     has been updated. Consequently, on the second call */
 /*     to CVPOOL above, the kernel pool will not have any */
 /*     updates to report about any of AGENT's variables. */
 
@@ -3610,7 +3933,7 @@ L_cvpool:
 
 /*     It should also be noted that any call to CVPOOL that */
 /*     occurs immediately after a call to SWPOOL will result in */
-/*     UPDATE being returned as .TRUE.  In other words, code */
+/*     UPDATE being returned as .TRUE. In other words, code */
 /*     such as shown below, will always result in the value */
 /*     of UPDATE as being returned .TRUE. */
 
@@ -3623,7 +3946,7 @@ L_cvpool:
 /* $ Examples */
 
 /*     Suppose that you have an application subroutine, MYTASK, that */
-/*     needs to access a large data set in the kernel pool.  If this */
+/*     needs to access a large data set in the kernel pool. If this */
 /*     data could be kept in local storage and kernel pool queries */
 /*     performed only when the data in the kernel pool has been */
 /*     updated, the routine can perform much more efficiently. */
@@ -3679,7 +4002,6 @@ L_cvpool:
 
 /*           END IF */
 
-
 /* $ Restrictions */
 
 /*     None. */
@@ -3690,10 +4012,15 @@ L_cvpool:
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
-/*     W.L. Taber     (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 8.1.2, 17-AUG-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 8.1.1, 30-JUN-2014 (NJB) */
 
@@ -3732,7 +4059,7 @@ L_cvpool:
 /* -    SPICELIB Version 7.0.0, 20-SEP-1995 (WLT) */
 
 /*        The implementation of the kernel pool was completely redone */
-/*        to improve performance in loading and fetching data.  In */
+/*        to improve performance in loading and fetching data. In */
 /*        addition the pool was upgraded so that variables may be */
 /*        either string or numeric valued. */
 
@@ -3748,14 +4075,40 @@ L_cvpool:
 /* -& */
 /* $ Revisions */
 
+/* -    SPICELIB Version 8.1.0, 19-MAR-2009 (NJB) */
+
+/*        ZZPINI call was updated for compatibility */
+/*        with new watcher system implementation. */
+
+/* -    SPICELIB Version 8.0.0, 04-JUN-1999 (WLT) */
+
+/*        Added the entry points PCPOOL, PDPOOL and PIPOOL to allow */
+/*        direct insertion of data into the kernel pool without having */
+/*        to read an external file. */
+
+/*        Added the interface LMPOOL that allows SPICE */
+/*        programs to load text kernels directly from memory */
+/*        instead of requiring a text file. */
+
+/*        Added the entry point SZPOOL to return kernel pool definition */
+/*        parameters. */
+
+/*        Added the entry point DVPOOL to allow the removal of a variable */
+/*        from the kernel pool. */
+
+/*        Added the entry point GNPOOL to allow users to determine */
+/*        variables that are present in the kernel pool */
+
+/* -    SPICELIB Version 7.0.0, 20-SEP-1995 (WLT) */
+
 /*        The implementation of the kernel pool was completely redone */
-/*        to improve performance in loading and fetching data.  In */
+/*        to improve performance in loading and fetching data. In */
 /*        addition the pool was upgraded so that variables may be */
 /*        either string or numeric valued. */
 
 /*        The basic data structure used to maintain the list of */
 /*        variable names and values was replaced with a hash table */
-/*        implementation.  Data and names are accessed by means */
+/*        implementation. Data and names are accessed by means */
 /*        of a hash function and linked lists of pointers to existing */
 /*        variable names and data values. */
 
@@ -3767,12 +4120,12 @@ L_cvpool:
 /*        that data only when it is updated. */
 
 /*        In addition, the revision history was upgraded so that the */
-/*        version number increases over time.  This wasn't true */
+/*        version number increases over time. This wasn't true */
 /*        before. In addition some early revision data that referred to */
 /*        pre-SPICELIB modifications were removed. This editing of */
 /*        the version numbers makes it unlikely that anyone can track */
 /*        down which previous version of this routine they have by */
-/*        looking at the version number.  The best way to determine */
+/*        looking at the version number. The best way to determine */
 /*        the routine you had previously is to compare the dates */
 /*        stored in the Version line of the routine. */
 
@@ -3866,60 +4219,62 @@ L_gcpool:
 /*     ROOM       I   The largest number of values to return. */
 /*     N          O   Number of values returned for NAME. */
 /*     CVALS      O   Values associated with NAME. */
-/*     FOUND      O   True if variable is in pool. */
+/*     FOUND      O   .TRUE. if variable is in pool. */
 
 /* $ Detailed_Input */
 
-/*     NAME       is the name of the variable whose values are to be */
-/*                returned. If the variable is not in the pool with */
-/*                character type, FOUND will be FALSE. */
+/*     NAME     is the name of the variable whose values are to be */
+/*              returned. If the variable is not in the pool with */
+/*              character type, FOUND will be .FALSE. */
 
-/*     START      is the index of the first component of NAME to return. */
-/*                If START is less than 1, it will be treated as 1.  If */
-/*                START is greater than the total number of components */
-/*                available for NAME, no values will be returned (N will */
-/*                be set to zero).  However, FOUND will still be set to */
-/*                .TRUE. */
+/*     START    is the index of the first component of NAME to return. */
+/*              If START is less than 1, it will be treated as 1. If */
+/*              START is greater than the total number of components */
+/*              available for NAME, no values will be returned (N will */
+/*              be set to zero). However, FOUND will still be set to */
+/*              .TRUE. */
 
-/*     ROOM       is the maximum number of components that should be */
-/*                returned for this variable.  (Usually it is the amount */
-/*                of ROOM available in the array CVALS). If ROOM is */
-/*                less than 1 the error 'SPICE(BADARRAYSIZE)' will be */
-/*                signaled. */
+/*     ROOM     is the maximum number of components that should be */
+/*              returned for this variable. (Usually it is the amount */
+/*              of ROOM available in the array CVALS). If ROOM is */
+/*              less than 1 the error SPICE(BADARRAYSIZE) will be */
+/*              signaled. */
 
 /* $ Detailed_Output */
 
-/*     N          is the number of values associated with NAME that */
-/*                are returned.  It will always be less than or equal */
-/*                to ROOM. */
+/*     N        is the number of values associated with NAME that */
+/*              are returned. It will always be less than or equal */
+/*              to ROOM. */
 
-/*                If NAME is not in the pool with character type, no */
-/*                value is given to N. */
+/*              If NAME is not in the pool with character type, no */
+/*              value is given to N. */
 
-/*     CVALS      is the array of values associated with NAME. */
-/*                If NAME is not in the pool with character type, no */
-/*                values are given to the elements of CVALS. */
+/*     CVALS    is the array of values associated with NAME. */
+/*              If NAME is not in the pool with character type, no */
+/*              values are given to the elements of CVALS. */
 
-/*                If the length of CVALS is less than the length of */
-/*                strings stored in the kernel pool (see MAXCHR) the */
-/*                values returned will be truncated on the right. */
+/*              If the length of CVALS is less than the length of */
+/*              strings stored in the kernel pool (see MAXCHR) the */
+/*              values returned will be truncated on the right. */
 
-/*     FOUND      is TRUE if the variable is in the pool and has */
-/*                character type, FALSE if it is not. */
+/*     FOUND    is .TRUE. if the variable is in the pool and has */
+/*              character type, .FALSE. if it is not. */
 
 /* $ Parameters */
 
-/*     None. */
+/*     MAXCHR   is the maximum number of characters that can be */
+/*              stored in a component of a string valued kernel */
+/*              variable. This value is currently 80. */
 
 /* $ Exceptions */
 
-/*     1) If the value of ROOM is less than one the error */
-/*        'SPICE(BADARRAYSIZE)' is signaled. */
+/*     1)  If the value of ROOM is less than one, the error */
+/*         SPICE(BADARRAYSIZE) is signaled. */
 
-/*     2) If CVALS has declared length less than the size of a */
-/*        string to be returned, the value will be truncated on */
-/*        the right.  See MAXCHR for the maximum stored size of */
-/*        string variables. */
+/*     2)  If CVALS has declared length less than the size of a */
+/*         string to be returned, the value will be truncated on */
+/*         the right. See MAXCHR for the maximum stored size of */
+/*         string variables. */
 
 /* $ Files */
 
@@ -3928,9 +4283,9 @@ L_gcpool:
 /* $ Particulars */
 
 /*     This routine provides the user interface to retrieving */
-/*     character data stored in the kernel pool.  This interface */
+/*     character data stored in the kernel pool. This interface */
 /*     allows you to retrieve the data associated with a variable */
-/*     in multiple accesses.  Under some circumstances this alleviates */
+/*     in multiple accesses. Under some circumstances this alleviates */
 /*     the problem of having to know in advance the maximum amount */
 /*     of space needed to accommodate all kernel variables. */
 
@@ -3942,7 +4297,6 @@ L_gcpool:
 /*     See also the entry points GDPOOL and GIPOOL. */
 
 /* $ Examples */
-
 
 /*     The following code fragment demonstrates how the data stored */
 /*     in a kernel pool variable can be retrieved in pieces. */
@@ -4008,9 +4362,16 @@ L_gcpool:
 
 /* $ Author_and_Institution */
 
-/*     W.L. Taber  (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 8.1.1, 17-AUG-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. Added MAXCHR */
+/*        description in $Parameters. */
 
 /* -    SPICELIB Version 8.1.0, 19-MAR-2009 (NJB) */
 
@@ -4044,7 +4405,7 @@ L_gcpool:
 /* -    SPICELIB Version 7.0.0, 20-SEP-1995 (WLT) */
 
 /*        The implementation of the kernel pool was completely redone */
-/*        to improve performance in loading and fetching data.  In */
+/*        to improve performance in loading and fetching data. In */
 /*        addition the pool was upgraded so that variables may be */
 /*        either string or numeric valued. */
 
@@ -4098,7 +4459,7 @@ L_gcpool:
 /*     of the conflict resolution list; this node is a positive value. */
 
     if (namlst[(i__2 = lookat - 1) < 26003 && 0 <= i__2 ? i__2 : s_rnge("nam"
-	    "lst", i__2, "pool_", (ftnlen)4189)] == 0) {
+	    "lst", i__2, "pool_", (ftnlen)4549)] == 0) {
 	*found = FALSE_;
 	chkout_("GCPOOL", (ftnlen)6);
 	return 0;
@@ -4109,20 +4470,20 @@ L_gcpool:
 /*     to this node is the one we are looking for. */
 
     node = namlst[(i__2 = lookat - 1) < 26003 && 0 <= i__2 ? i__2 : s_rnge(
-	    "namlst", i__2, "pool_", (ftnlen)4201)];
+	    "namlst", i__2, "pool_", (ftnlen)4561)];
     succes = s_cmp(name__, pnames + (((i__2 = node - 1) < 26003 && 0 <= i__2 ?
-	     i__2 : s_rnge("pnames", i__2, "pool_", (ftnlen)4202)) << 5), 
+	     i__2 : s_rnge("pnames", i__2, "pool_", (ftnlen)4562)) << 5), 
 	    name_len, (ftnlen)32) == 0;
     while(! succes) {
 	node = nmpool[(i__2 = (node << 1) + 10) < 52018 && 0 <= i__2 ? i__2 : 
-		s_rnge("nmpool", i__2, "pool_", (ftnlen)4206)];
+		s_rnge("nmpool", i__2, "pool_", (ftnlen)4566)];
 	if (node < 0) {
 	    *found = FALSE_;
 	    chkout_("GCPOOL", (ftnlen)6);
 	    return 0;
 	}
 	succes = s_cmp(name__, pnames + (((i__2 = node - 1) < 26003 && 0 <= 
-		i__2 ? i__2 : s_rnge("pnames", i__2, "pool_", (ftnlen)4216)) 
+		i__2 ? i__2 : s_rnge("pnames", i__2, "pool_", (ftnlen)4576)) 
 		<< 5), name_len, (ftnlen)32) == 0;
     }
 
@@ -4131,7 +4492,7 @@ L_gcpool:
 /*     head of a linked list of values for this NAME. */
 
     datahd = datlst[(i__2 = node - 1) < 26003 && 0 <= i__2 ? i__2 : s_rnge(
-	    "datlst", i__2, "pool_", (ftnlen)4224)];
+	    "datlst", i__2, "pool_", (ftnlen)4584)];
     if (datahd > 0) {
 	*n = 0;
 	*found = FALSE_;
@@ -4158,14 +4519,14 @@ L_gcpool:
 	    ++(*n);
 	    s_copy(cvals + (*n - 1) * cvals_len, chvals + ((i__2 = node - 1) <
 		     15000 && 0 <= i__2 ? i__2 : s_rnge("chvals", i__2, "poo"
-		    "l_", (ftnlen)4260)) * 80, cvals_len, (ftnlen)80);
+		    "l_", (ftnlen)4620)) * 80, cvals_len, (ftnlen)80);
 	    if (*n == *room) {
 		chkout_("GCPOOL", (ftnlen)6);
 		return 0;
 	    }
 	}
 	node = chpool[(i__2 = (node << 1) + 10) < 30012 && 0 <= i__2 ? i__2 : 
-		s_rnge("chpool", i__2, "pool_", (ftnlen)4269)];
+		s_rnge("chpool", i__2, "pool_", (ftnlen)4629)];
     }
     chkout_("GCPOOL", (ftnlen)6);
     return 0;
@@ -4228,42 +4589,42 @@ L_gdpool:
 /*     ROOM       I   The largest number of values to return. */
 /*     N          O   Number of values returned for NAME. */
 /*     VALUES     O   Values associated with NAME. */
-/*     FOUND      O   True if variable is in pool. */
+/*     FOUND      O   .TRUE. if variable is in pool. */
 
 /* $ Detailed_Input */
 
-/*     NAME       is the name of the variable whose values are to be */
-/*                returned. If the variable is not in the pool with */
-/*                numeric type, FOUND will be FALSE. */
+/*     NAME     is the name of the variable whose values are to be */
+/*              returned. If the variable is not in the pool with */
+/*              numeric type, FOUND will be .FALSE. */
 
-/*     START      is the index of the first component of NAME to return. */
-/*                If START is less than 1, it will be treated as 1.  If */
-/*                START is greater than the total number of components */
-/*                available for NAME, no values will be returned (N will */
-/*                be set to zero).  However, FOUND will still be set to */
-/*                .TRUE. */
+/*     START    is the index of the first component of NAME to return. */
+/*              If START is less than 1, it will be treated as 1. If */
+/*              START is greater than the total number of components */
+/*              available for NAME, no values will be returned (N will */
+/*              be set to zero). However, FOUND will still be set to */
+/*              .TRUE. */
 
-/*     ROOM       is the maximum number of components that should be */
-/*                returned for this variable.  (Usually it is the amount */
-/*                of ROOM available in the array VALUES). If ROOM is */
-/*                less than 1 the error 'SPICE(BADARRAYSIZE)' will be */
-/*                signaled. */
+/*     ROOM     is the maximum number of components that should be */
+/*              returned for this variable. (Usually it is the amount */
+/*              of ROOM available in the array VALUES). If ROOM is */
+/*              less than 1 the error SPICE(BADARRAYSIZE) will be */
+/*              signaled. */
 
 /* $ Detailed_Output */
 
-/*     N          is the number of values associated with NAME that */
-/*                are returned.  It will always be less than or equal */
-/*                to ROOM. */
+/*     N        is the number of values associated with NAME that */
+/*              are returned. It will always be less than or equal */
+/*              to ROOM. */
 
-/*                If NAME is not in the pool with numeric type, no value */
-/*                is given to N. */
+/*              If NAME is not in the pool with numeric type, no value */
+/*              is given to N. */
 
-/*     VALUES     is the array of values associated with NAME. */
-/*                If NAME is not in the pool with numeric type, no */
-/*                values are given to the elements of VALUES. */
+/*     VALUES   is the array of values associated with NAME. */
+/*              If NAME is not in the pool with numeric type, no */
+/*              values are given to the elements of VALUES. */
 
-/*     FOUND      is TRUE if the variable is in the pool and has numeric */
-/*                type, FALSE if it is not. */
+/*     FOUND    is .TRUE. if the variable is in the pool and has numeric */
+/*              type, .FALSE. if it is not. */
 
 /* $ Parameters */
 
@@ -4271,8 +4632,8 @@ L_gdpool:
 
 /* $ Exceptions */
 
-/*     1) If the value of ROOM is less than one the error */
-/*        'SPICE(BADARRAYSIZE)' is signaled. */
+/*     1)  If the value of ROOM is less than one, the error */
+/*         SPICE(BADARRAYSIZE) is signaled. */
 
 /* $ Files */
 
@@ -4281,9 +4642,9 @@ L_gdpool:
 /* $ Particulars */
 
 /*     This routine provides the user interface to retrieving */
-/*     numeric data stored in the kernel pool.  This interface */
+/*     numeric data stored in the kernel pool. This interface */
 /*     allows you to retrieve the data associated with a variable */
-/*     in multiple accesses.  Under some circumstances this alleviates */
+/*     in multiple accesses. Under some circumstances this alleviates */
 /*     the problem of having to know in advance the maximum amount */
 /*     of space needed to accommodate all kernel variables. */
 
@@ -4299,7 +4660,6 @@ L_gdpool:
 /*     See also the entry points GIPOOL and GCPOOL. */
 
 /* $ Examples */
-
 
 /*     The following code fragment demonstrates how the data stored */
 /*     in a kernel pool variable can be retrieved in pieces. */
@@ -4357,7 +4717,6 @@ L_gdpool:
 
 /*        END IF */
 
-
 /* $ Restrictions */
 
 /*     None. */
@@ -4368,9 +4727,15 @@ L_gdpool:
 
 /* $ Author_and_Institution */
 
-/*     W.L. Taber  (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 8.1.1, 17-AUG-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 8.1.0, 19-MAR-2009 (NJB) */
 
@@ -4404,7 +4769,7 @@ L_gdpool:
 /* -    SPICELIB Version 7.0.0, 20-SEP-1995 (WLT) */
 
 /*        The implementation of the kernel pool was completely redone */
-/*        to improve performance in loading and fetching data.  In */
+/*        to improve performance in loading and fetching data. In */
 /*        addition the pool was upgraded so that variables may be */
 /*        either string or numeric valued. */
 
@@ -4458,7 +4823,7 @@ L_gdpool:
 /*     of the conflict resolution list; this node is a positive value. */
 
     if (namlst[(i__2 = lookat - 1) < 26003 && 0 <= i__2 ? i__2 : s_rnge("nam"
-	    "lst", i__2, "pool_", (ftnlen)4591)] == 0) {
+	    "lst", i__2, "pool_", (ftnlen)4956)] == 0) {
 	*found = FALSE_;
 	chkout_("GDPOOL", (ftnlen)6);
 	return 0;
@@ -4469,20 +4834,20 @@ L_gdpool:
 /*     to this node is the one we are looking for. */
 
     node = namlst[(i__2 = lookat - 1) < 26003 && 0 <= i__2 ? i__2 : s_rnge(
-	    "namlst", i__2, "pool_", (ftnlen)4603)];
+	    "namlst", i__2, "pool_", (ftnlen)4968)];
     succes = s_cmp(name__, pnames + (((i__2 = node - 1) < 26003 && 0 <= i__2 ?
-	     i__2 : s_rnge("pnames", i__2, "pool_", (ftnlen)4604)) << 5), 
+	     i__2 : s_rnge("pnames", i__2, "pool_", (ftnlen)4969)) << 5), 
 	    name_len, (ftnlen)32) == 0;
     while(! succes) {
 	node = nmpool[(i__2 = (node << 1) + 10) < 52018 && 0 <= i__2 ? i__2 : 
-		s_rnge("nmpool", i__2, "pool_", (ftnlen)4608)];
+		s_rnge("nmpool", i__2, "pool_", (ftnlen)4973)];
 	if (node < 0) {
 	    *found = FALSE_;
 	    chkout_("GDPOOL", (ftnlen)6);
 	    return 0;
 	}
 	succes = s_cmp(name__, pnames + (((i__2 = node - 1) < 26003 && 0 <= 
-		i__2 ? i__2 : s_rnge("pnames", i__2, "pool_", (ftnlen)4618)) 
+		i__2 ? i__2 : s_rnge("pnames", i__2, "pool_", (ftnlen)4983)) 
 		<< 5), name_len, (ftnlen)32) == 0;
     }
 
@@ -4491,7 +4856,7 @@ L_gdpool:
 /*     head of a linked list of values for this NAME. */
 
     datahd = datlst[(i__2 = node - 1) < 26003 && 0 <= i__2 ? i__2 : s_rnge(
-	    "datlst", i__2, "pool_", (ftnlen)4626)];
+	    "datlst", i__2, "pool_", (ftnlen)4991)];
     if (datahd < 0) {
 	*n = 0;
 	*found = FALSE_;
@@ -4517,14 +4882,14 @@ L_gdpool:
 	if (k >= begin) {
 	    ++(*n);
 	    values[*n - 1] = dpvals[(i__2 = node - 1) < 400000 && 0 <= i__2 ? 
-		    i__2 : s_rnge("dpvals", i__2, "pool_", (ftnlen)4662)];
+		    i__2 : s_rnge("dpvals", i__2, "pool_", (ftnlen)5027)];
 	    if (*n == *room) {
 		chkout_("GDPOOL", (ftnlen)6);
 		return 0;
 	    }
 	}
 	node = dppool[(i__2 = (node << 1) + 10) < 800012 && 0 <= i__2 ? i__2 :
-		 s_rnge("dppool", i__2, "pool_", (ftnlen)4671)];
+		 s_rnge("dppool", i__2, "pool_", (ftnlen)5036)];
     }
     chkout_("GDPOOL", (ftnlen)6);
     return 0;
@@ -4588,44 +4953,44 @@ L_gipool:
 /*     ROOM       I   The largest number of values to return. */
 /*     N          O   Number of values returned for NAME. */
 /*     IVALS      O   Values associated with NAME. */
-/*     FOUND      O   True if variable is in pool. */
+/*     FOUND      O   .TRUE. if variable is in pool. */
 
 /* $ Detailed_Input */
 
-/*     NAME       is the name of the variable whose values are to be */
-/*                returned. If the variable is not in the pool with */
-/*                numeric type, FOUND will be FALSE. */
+/*     NAME     is the name of the variable whose values are to be */
+/*              returned. If the variable is not in the pool with */
+/*              numeric type, FOUND will be .FALSE. */
 
-/*     START      is the index of the first component of NAME to return. */
-/*                If START is less than 1, it will be treated as 1.  If */
-/*                START is greater than the total number of components */
-/*                available for NAME, no values will be returned (N will */
-/*                be set to zero).  However, FOUND will still be set to */
-/*                .TRUE. */
+/*     START    is the index of the first component of NAME to return. */
+/*              If START is less than 1, it will be treated as 1. If */
+/*              START is greater than the total number of components */
+/*              available for NAME, no values will be returned (N will */
+/*              be set to zero). However, FOUND will still be set to */
+/*              .TRUE. */
 
-/*     ROOM       is the maximum number of components that should be */
-/*                returned for this variable.  (Usually it is the amount */
-/*                of ROOM available in the array IVALS). If ROOM is */
-/*                less than 1 the error 'SPICE(BADARRAYSIZE)' will be */
-/*                signaled. */
+/*     ROOM     is the maximum number of components that should be */
+/*              returned for this variable. (Usually it is the amount */
+/*              of ROOM available in the array IVALS). If ROOM is */
+/*              less than 1 the error SPICE(BADARRAYSIZE) will be */
+/*              signaled. */
 
 /* $ Detailed_Output */
 
-/*     N          is the number of values associated with NAME that */
-/*                are returned.  It will always be less than or equal */
-/*                to ROOM. */
+/*     N        is the number of values associated with NAME that */
+/*              are returned. It will always be less than or equal */
+/*              to ROOM. */
 
-/*                If NAME is not in the pool with numeric type, no value */
-/*                is given to N. */
+/*              If NAME is not in the pool with numeric type, no value */
+/*              is given to N. */
 
-/*     IVALS      is the array of values associated with NAME. Any */
-/*                numeric value having non-zero fractional part is */
-/*                rounded to the closest integer. If NAME is not in the */
-/*                pool or does not have numeric type, no values are */
-/*                assigned to the elements of IVALS. */
+/*     IVALS    is the array of values associated with NAME. Any */
+/*              numeric value having non-zero fractional part is */
+/*              rounded to the closest integer. If NAME is not in the */
+/*              pool or does not have numeric type, no values are */
+/*              assigned to the elements of IVALS. */
 
-/*     FOUND      is TRUE if the variable is in the pool and has numeric */
-/*                type, FALSE if it is not. */
+/*     FOUND    is .TRUE. if the variable is in the pool and has numeric */
+/*              type, .FALSE. if it is not. */
 
 /* $ Parameters */
 
@@ -4633,11 +4998,11 @@ L_gipool:
 
 /* $ Exceptions */
 
-/*     1) If the value of ROOM is less than one the error */
-/*        'SPICE(BADARRAYSIZE)' is signaled. */
+/*     1)  If the value of ROOM is less than one, the error */
+/*         SPICE(BADARRAYSIZE) is signaled. */
 
-/*     2) If a value requested is outside the valid range */
-/*        of integers, the error 'SPICE(INTOUTOFRANGE)' is signaled. */
+/*     2)  If a value requested is outside the valid range */
+/*         of integers, the error SPICE(INTOUTOFRANGE) is signaled. */
 
 /* $ Files */
 
@@ -4646,9 +5011,9 @@ L_gipool:
 /* $ Particulars */
 
 /*     This routine provides the user interface for retrieving */
-/*     integer data stored in the kernel pool.  This interface */
+/*     integer data stored in the kernel pool. This interface */
 /*     allows you to retrieve the data associated with a variable */
-/*     in multiple accesses.  Under some circumstances this alleviates */
+/*     in multiple accesses. Under some circumstances this alleviates */
 /*     the problem of having to know in advance the maximum amount */
 /*     of space needed to accommodate all kernel variables. */
 
@@ -4660,7 +5025,6 @@ L_gipool:
 /*     See also the entry points GDPOOL and GCPOOL. */
 
 /* $ Examples */
-
 
 /*     The following code fragment demonstrates how the data stored */
 /*     in a kernel pool variable can be retrieved in pieces. */
@@ -4726,13 +5090,19 @@ L_gipool:
 
 /* $ Author_and_Institution */
 
-/*     W.L. Taber  (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
 
+/* -    SPICELIB Version 8.1.2, 17-AUG-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
+
 /* -    SPICELIB Version 8.1.1, 14-JUL-2014 (NJB) */
 
-/*        Updated description of IVALS in Detailed_Output */
+/*        Updated description of IVALS in $Detailed_Output */
 /*        header section. */
 
 /* -    SPICELIB Version 8.1.0, 19-MAR-2009 (NJB) */
@@ -4767,7 +5137,7 @@ L_gipool:
 /* -    SPICELIB Version 7.0.0, 20-SEP-1995 (WLT) */
 
 /*        The implementation of the kernel pool was completely redone */
-/*        to improve performance in loading and fetching data.  In */
+/*        to improve performance in loading and fetching data. In */
 /*        addition the pool was upgraded so that variables may be */
 /*        either string or numeric valued. */
 
@@ -4820,7 +5190,7 @@ L_gipool:
 /*     of the conflict resolution list; this node is a positive value. */
 
     if (namlst[(i__2 = lookat - 1) < 26003 && 0 <= i__2 ? i__2 : s_rnge("nam"
-	    "lst", i__2, "pool_", (ftnlen)4994)] == 0) {
+	    "lst", i__2, "pool_", (ftnlen)5364)] == 0) {
 	*found = FALSE_;
 	chkout_("GIPOOL", (ftnlen)6);
 	return 0;
@@ -4831,20 +5201,20 @@ L_gipool:
 /*     to this node is the one we are looking for. */
 
     node = namlst[(i__2 = lookat - 1) < 26003 && 0 <= i__2 ? i__2 : s_rnge(
-	    "namlst", i__2, "pool_", (ftnlen)5006)];
+	    "namlst", i__2, "pool_", (ftnlen)5376)];
     succes = s_cmp(name__, pnames + (((i__2 = node - 1) < 26003 && 0 <= i__2 ?
-	     i__2 : s_rnge("pnames", i__2, "pool_", (ftnlen)5007)) << 5), 
+	     i__2 : s_rnge("pnames", i__2, "pool_", (ftnlen)5377)) << 5), 
 	    name_len, (ftnlen)32) == 0;
     while(! succes) {
 	node = nmpool[(i__2 = (node << 1) + 10) < 52018 && 0 <= i__2 ? i__2 : 
-		s_rnge("nmpool", i__2, "pool_", (ftnlen)5011)];
+		s_rnge("nmpool", i__2, "pool_", (ftnlen)5381)];
 	if (node < 0) {
 	    *found = FALSE_;
 	    chkout_("GIPOOL", (ftnlen)6);
 	    return 0;
 	}
 	succes = s_cmp(name__, pnames + (((i__2 = node - 1) < 26003 && 0 <= 
-		i__2 ? i__2 : s_rnge("pnames", i__2, "pool_", (ftnlen)5021)) 
+		i__2 ? i__2 : s_rnge("pnames", i__2, "pool_", (ftnlen)5391)) 
 		<< 5), name_len, (ftnlen)32) == 0;
     }
 
@@ -4853,7 +5223,7 @@ L_gipool:
 /*     head of a linked list of values for this NAME. */
 
     datahd = datlst[(i__2 = node - 1) < 26003 && 0 <= i__2 ? i__2 : s_rnge(
-	    "datlst", i__2, "pool_", (ftnlen)5029)];
+	    "datlst", i__2, "pool_", (ftnlen)5399)];
     if (datahd < 0) {
 	*n = 0;
 	*found = FALSE_;
@@ -4884,12 +5254,12 @@ L_gipool:
 	if (k >= begin) {
 	    ++(*n);
 	    if (dpvals[(i__2 = node - 1) < 400000 && 0 <= i__2 ? i__2 : 
-		    s_rnge("dpvals", i__2, "pool_", (ftnlen)5070)] >= small &&
+		    s_rnge("dpvals", i__2, "pool_", (ftnlen)5440)] >= small &&
 		     dpvals[(i__1 = node - 1) < 400000 && 0 <= i__1 ? i__1 : 
-		    s_rnge("dpvals", i__1, "pool_", (ftnlen)5070)] <= big) {
+		    s_rnge("dpvals", i__1, "pool_", (ftnlen)5440)] <= big) {
 		ivals[*n - 1] = i_dnnt(&dpvals[(i__2 = node - 1) < 400000 && 
 			0 <= i__2 ? i__2 : s_rnge("dpvals", i__2, "pool_", (
-			ftnlen)5073)]);
+			ftnlen)5443)]);
 	    } else {
 		setmsg_("The value associated with index # of the kernel var"
 			"iable # is outside the range of integers. The value "
@@ -4897,7 +5267,7 @@ L_gipool:
 		errint_("#", &k, (ftnlen)1);
 		errch_("#", name__, (ftnlen)1, rtrim_(name__, name_len));
 		errdp_("#", &dpvals[(i__2 = node - 1) < 400000 && 0 <= i__2 ? 
-			i__2 : s_rnge("dpvals", i__2, "pool_", (ftnlen)5085)],
+			i__2 : s_rnge("dpvals", i__2, "pool_", (ftnlen)5455)],
 			 (ftnlen)1);
 		sigerr_("SPICE(INTOUTOFRANGE)", (ftnlen)20);
 		chkout_("GIPOOL", (ftnlen)6);
@@ -4909,11 +5279,11 @@ L_gipool:
 	    }
 	}
 	node = dppool[(i__2 = (node << 1) + 10) < 800012 && 0 <= i__2 ? i__2 :
-		 s_rnge("dppool", i__2, "pool_", (ftnlen)5099)];
+		 s_rnge("dppool", i__2, "pool_", (ftnlen)5469)];
     }
     chkout_("GIPOOL", (ftnlen)6);
     return 0;
-/* $Procedure      DTPOOL (Data for a kernel pool variable) */
+/* $Procedure DTPOOL (Data for a kernel pool variable) */
 
 L_dtpool:
 /* $ Abstract */
@@ -4966,31 +5336,29 @@ L_dtpool:
 /*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     NAME       I   Name of the variable whose value is to be returned. */
-/*     FOUND      O   True if variable is in pool. */
+/*     FOUND      O   .TRUE. if variable is in pool. */
 /*     N          O   Number of values returned for NAME. */
 /*     TYPE       O   Type of the variable 'C', 'N', 'X' */
 
 /* $ Detailed_Input */
 
-/*     NAME       is the name of the variable whose values are to be */
-/*                returned. */
-
+/*     NAME     is the name of the variable whose values are to be */
+/*              returned. */
 
 /* $ Detailed_Output */
 
+/*     FOUND    is .TRUE. if the variable is in the pool .FALSE. if it */
+/*              is not. */
 
-/*     FOUND      is TRUE if the variable is in the pool FALSE if it */
-/*                is not. */
+/*     N        is the number of values associated with NAME. */
+/*              If NAME is not present in the pool N will be returned */
+/*              with the value 0. */
 
-/*     N          is the number of values associated with NAME. */
-/*                If NAME is not present in the pool N will be returned */
-/*                with the value 0. */
+/*     TYPE     is the type of the variable associated with NAME. */
 
-/*     TYPE       is the type of the variable associated with NAME. */
-
-/*                    'C' if the data is character data */
-/*                    'N' if the data is numeric. */
-/*                    'X' if there is no variable NAME in the pool. */
+/*                  'C' if the data is character data */
+/*                  'N' if the data is numeric. */
+/*                  'X' if there is no variable NAME in the pool. */
 
 /* $ Parameters */
 
@@ -4998,9 +5366,10 @@ L_dtpool:
 
 /* $ Exceptions */
 
-/*     1) If the name requested is not in the kernel pool FOUND */
-/*        will be set to FALSE, N to zero and TYPE to 'X'. */
+/*     Error free. */
 
+/*     1)  If the name requested is not in the kernel pool, FOUND */
+/*         will be set to .FALSE., N to zero and TYPE to 'X'. */
 
 /* $ Files */
 
@@ -5012,34 +5381,104 @@ L_dtpool:
 /*     pool variable is present and to determine its size and type */
 /*     if it is. */
 
-
 /* $ Examples */
 
+/*     The numerical results shown for this example may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
 
-/*     The following code fragment demonstrates how to determine the */
-/*     properties of a stored kernel variable. */
+/*     1) The following program demonstrates how to determine the */
+/*        properties of a stored kernel variable. The program prompts */
+/*        for text kernel name and for the name of a kernel variable. */
+/*        If the variable is present in the kernel pool, the dimension */
+/*        and type of the variable are displayed. */
 
-/*        CALL DTPOOL ( VARNAM, FOUND, N, TYPE ) */
 
-/*        IF ( FOUND ) THEN */
+/*        Example code begins here. */
 
-/*           WRITE (*,*) 'Properties of variable: ', VARNAME */
-/*           WRITE (*,*) */
 
-/*           WRITE (*,*) '   Size: ', N */
+/*              PROGRAM DTPOOL_EX1 */
+/*              IMPLICIT NONE */
 
-/*           IF ( TYPE .EQ. 'C' ) THEN */
-/*              WRITE (*,*) '   Type: Character' */
-/*           ELSE */
-/*              WRITE (*,*) '   Type: Numeric' */
-/*           END IF */
+/*        C */
+/*        C     SPICELIB functions */
+/*        C */
+/*              INTEGER               RTRIM */
 
-/*        ELSE */
+/*        C */
+/*        C     Local constants */
+/*        C */
+/*              INTEGER               FILSIZ */
+/*              PARAMETER           ( FILSIZ = 256 ) */
 
-/*           WRITE (*,*) VARNAM(1:RTRIM(VARNAM)), ' is not present.' */
+/*              INTEGER               KVNMLN */
+/*              PARAMETER           ( KVNMLN = 33 ) */
 
-/*        END IF */
+/*        C */
+/*        C     Local variables */
+/*        C */
+/*              CHARACTER*(FILSIZ)    FNAME */
+/*              CHARACTER*(KVNMLN)    VARNAM */
+/*              CHARACTER*(1)         VTYPE */
 
+/*              INTEGER               N */
+
+/*              LOGICAL               FOUND */
+
+/*        C */
+/*        C     Prompt for the name of a text-kernel file. */
+/*        C */
+/*              CALL PROMPT ( 'Enter text-kernel name        > ', FNAME ) */
+
+/*        C */
+/*        C     Load the kernel. */
+/*        C */
+/*              CALL FURNSH ( FNAME ) */
+
+/*              CALL PROMPT ( 'Enter name of kernel variable > ', */
+/*             .               VARNAM ) */
+
+/*              CALL DTPOOL ( VARNAM, FOUND, N, VTYPE ) */
+
+/*              IF ( FOUND ) THEN */
+/*                 WRITE(*,*) ' ' */
+/*                 WRITE(*,*) 'Properties of variable ', */
+/*             .               VARNAM(:RTRIM(VARNAM)), ':' */
+/*                 WRITE(*,*) ' ' */
+/*                 WRITE(*,*) '   Size:   ', N */
+
+/*                 IF ( VTYPE .EQ. 'C' ) THEN */
+
+/*                    WRITE(*,*) '   Type:   Character' */
+
+/*                 ELSE */
+
+/*                    WRITE(*,*) '   Type:   Numeric' */
+/*                 END IF */
+
+/*              ELSE */
+
+/*                 WRITE(*,*) VARNAM, */
+/*             .              ' is not present in the kernel pool.' */
+
+/*              END IF */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, using the FK file named cas_v40.tf to ask for the */
+/*        variable 'FRAME_-82104_NAME', the output was: */
+
+
+/*        Enter text-kernel name        > cas_v40.tf */
+/*        Enter name of kernel variable > FRAME_-82104_NAME */
+
+/*         Properties of variable FRAME_-82104_NAME: */
+
+/*            Size:              1 */
+/*            Type:   Character */
 
 
 /* $ Restrictions */
@@ -5052,9 +5491,16 @@ L_dtpool:
 
 /* $ Author_and_Institution */
 
-/*     W.L. Taber  (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 8.1.1, 17-AUG-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
+/*        Added complete code example. */
 
 /* -    SPICELIB Version 8.1.0, 19-MAR-2009 (NJB) */
 
@@ -5088,7 +5534,7 @@ L_dtpool:
 /* -    SPICELIB Version 7.0.0, 20-SEP-1995 (WLT) */
 
 /*        The implementation of the kernel pool was completely redone */
-/*        to improve performance in loading and fetching data.  In */
+/*        to improve performance in loading and fetching data. In */
 /*        addition the pool was upgraded so that variables may be */
 /*        either string or numeric valued. */
 
@@ -5136,7 +5582,7 @@ L_dtpool:
 /*     of the conflict resolution list; this node is a positive value. */
 
     if (namlst[(i__2 = lookat - 1) < 26003 && 0 <= i__2 ? i__2 : s_rnge("nam"
-	    "lst", i__2, "pool_", (ftnlen)5345)] == 0) {
+	    "lst", i__2, "pool_", (ftnlen)5791)] == 0) {
 	chkout_("DTPOOL", (ftnlen)6);
 	return 0;
     }
@@ -5146,19 +5592,19 @@ L_dtpool:
 /*     to this node is the one we are looking for. */
 
     node = namlst[(i__2 = lookat - 1) < 26003 && 0 <= i__2 ? i__2 : s_rnge(
-	    "namlst", i__2, "pool_", (ftnlen)5356)];
+	    "namlst", i__2, "pool_", (ftnlen)5802)];
     succes = s_cmp(name__, pnames + (((i__2 = node - 1) < 26003 && 0 <= i__2 ?
-	     i__2 : s_rnge("pnames", i__2, "pool_", (ftnlen)5357)) << 5), 
+	     i__2 : s_rnge("pnames", i__2, "pool_", (ftnlen)5803)) << 5), 
 	    name_len, (ftnlen)32) == 0;
     while(! succes) {
 	node = nmpool[(i__2 = (node << 1) + 10) < 52018 && 0 <= i__2 ? i__2 : 
-		s_rnge("nmpool", i__2, "pool_", (ftnlen)5361)];
+		s_rnge("nmpool", i__2, "pool_", (ftnlen)5807)];
 	if (node < 0) {
 	    chkout_("DTPOOL", (ftnlen)6);
 	    return 0;
 	}
 	succes = s_cmp(name__, pnames + (((i__2 = node - 1) < 26003 && 0 <= 
-		i__2 ? i__2 : s_rnge("pnames", i__2, "pool_", (ftnlen)5370)) 
+		i__2 ? i__2 : s_rnge("pnames", i__2, "pool_", (ftnlen)5816)) 
 		<< 5), name_len, (ftnlen)32) == 0;
     }
 
@@ -5167,7 +5613,7 @@ L_dtpool:
 /*     head of a linked list of values for this NAME. */
 
     datahd = datlst[(i__2 = node - 1) < 26003 && 0 <= i__2 ? i__2 : s_rnge(
-	    "datlst", i__2, "pool_", (ftnlen)5379)];
+	    "datlst", i__2, "pool_", (ftnlen)5825)];
     if (datahd < 0) {
 	s_copy(type__, "C", type_len, (ftnlen)1);
 	*found = TRUE_;
@@ -5175,7 +5621,7 @@ L_dtpool:
 	while(node > 0) {
 	    ++(*n);
 	    node = chpool[(i__2 = (node << 1) + 10) < 30012 && 0 <= i__2 ? 
-		    i__2 : s_rnge("chpool", i__2, "pool_", (ftnlen)5389)];
+		    i__2 : s_rnge("chpool", i__2, "pool_", (ftnlen)5835)];
 	}
     } else if (datahd > 0) {
 	s_copy(type__, "N", type_len, (ftnlen)1);
@@ -5184,7 +5630,7 @@ L_dtpool:
 	while(node > 0) {
 	    ++(*n);
 	    node = dppool[(i__2 = (node << 1) + 10) < 800012 && 0 <= i__2 ? 
-		    i__2 : s_rnge("dppool", i__2, "pool_", (ftnlen)5400)];
+		    i__2 : s_rnge("dppool", i__2, "pool_", (ftnlen)5846)];
 	}
     } else if (datahd == 0) {
 	setmsg_("This is never supposed to happen.  The requested name, '#',"
@@ -5203,9 +5649,8 @@ L_dtpool:
 L_pcpool:
 /* $ Abstract */
 
-/*     This entry point provides toolkit programmers a method for */
-/*     programmatically inserting character data into the */
-/*     kernel pool. */
+/*     Provide toolkit programmers a method for programmatically */
+/*     inserting character data into the kernel pool. */
 
 /* $ Disclaimer */
 
@@ -5234,11 +5679,11 @@ L_pcpool:
 
 /* $ Required_Reading */
 
-/*      None. */
+/*     None. */
 
 /* $ Keywords */
 
-/*      POOL */
+/*     POOL */
 
 /* $ Declarations */
 
@@ -5256,13 +5701,13 @@ L_pcpool:
 
 /* $ Detailed_Input */
 
-/*     NAME       is the name of the kernel pool variable to associate */
-/*                with the values supplied in the array CVALS */
+/*     NAME     is the name of the kernel pool variable to associate */
+/*              with the values supplied in the array CVALS */
 
-/*     N          is the number of values to insert into the kernel pool. */
+/*     N        is the number of values to insert into the kernel pool. */
 
-/*     CVALS      is an array of strings to insert into the kernel */
-/*                pool. */
+/*     CVALS    is an array of strings to insert into the kernel */
+/*              pool. */
 
 /* $ Detailed_Output */
 
@@ -5274,20 +5719,21 @@ L_pcpool:
 
 /* $ Exceptions */
 
-/*     1) If NAME is already present in the kernel pool and there */
-/*        is sufficient room to hold all values supplied in CVALS, */
-/*        the old values associated with NAME will be overwritten. */
+/*     1)  If NAME is already present in the kernel pool and there */
+/*         is sufficient room to hold all values supplied in CVALS, */
+/*         the old values associated with NAME will be overwritten. */
 
-/*     2) If there is not sufficient room to insert a new variable */
-/*        into the kernel pool and NAME is not already present in */
-/*        the kernel pool, the error SPICE(KERNELPOOLFULL) is */
-/*        signaled by a routine in the call tree to this routine. */
+/*     2)  If there is not sufficient room to insert a new variable into */
+/*         the kernel pool and NAME is not already present in the kernel */
+/*         pool, an error is signaled by a routine in the call tree of */
+/*         this routine. */
 
-/*     3) If there is not sufficient room to insert the values associated */
-/*        with NAME, the error 'SPICE(NOMOREROOM)' will be signaled. */
+/*     3)  If there is not sufficient room to insert the values */
+/*         associated with NAME, the error SPICE(NOMOREROOM) is signaled. */
 
-/*     4) The error 'SPICE(BADVARNAME)' signals if the kernel pool */
-/*        variable name length exceeds MAXLEN. */
+/*     4)  If the kernel pool variable name length exceeds its maximum */
+/*         allowed length (see Kernel Required Reading, kernel.req), the */
+/*         error SPICE(BADVARNAME) is signaled. */
 
 /* $ Files */
 
@@ -5303,9 +5749,9 @@ L_pcpool:
 
 /*     Suppose that you wish to supply default values for a program */
 /*     so that it may function even in the absence of the appropriate */
-/*     text kernels.  You can use the entry points PCPOOL, PDPOOL */
+/*     text kernels. You can use the entry points PCPOOL, PDPOOL */
 /*     and PIPOOL to initialize the kernel pool with suitable */
-/*     values at program initialization.  The example below shows */
+/*     values at program initialization. The example below shows */
 /*     how you might set up various kernel pool variables that might */
 /*     be required by a program. */
 
@@ -5404,7 +5850,6 @@ L_pcpool:
 
 /*        CALL PDPOOL ( 'DELTET/DELTA_AT',  44, VALUES ) */
 
-
 /* $ Restrictions */
 
 /*     None. */
@@ -5415,16 +5860,22 @@ L_pcpool:
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     W.L. Taber      (JPL) */
-/*     B.V. Semenov    (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 9.1.1, 27-AUG-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 9.1.0, 17-JAN-2014 (BVS) (NJB) */
 
 /*        Updated to increment POOL state counter. */
-/*        Updated Index_Entries section. */
+/*        Updated $Index_Entries section. */
 
 /* -    SPICELIB Version 9.0.0, 24-MAY-2010 (EDW) */
 
@@ -5526,7 +5977,7 @@ L_pcpool:
 /*        the amount of free room in the pool. */
 
 	datahd = datlst[(i__2 = nameat - 1) < 26003 && 0 <= i__2 ? i__2 : 
-		s_rnge("datlst", i__2, "pool_", (ftnlen)5777)];
+		s_rnge("datlst", i__2, "pool_", (ftnlen)6230)];
 	if (datahd > 0) {
 
 /*           No extra strings will be freed.  We have whatever */
@@ -5542,7 +5993,7 @@ L_pcpool:
 	    while(node > 0) {
 		++tofree;
 		node = chpool[(i__2 = (node << 1) + 10) < 30012 && 0 <= i__2 ?
-			 i__2 : s_rnge("chpool", i__2, "pool_", (ftnlen)5794)]
+			 i__2 : s_rnge("chpool", i__2, "pool_", (ftnlen)6247)]
 			;
 	    }
 
@@ -5588,9 +6039,9 @@ L_pcpool:
 /*        to add data. */
 
 	datahd = datlst[(i__2 = nameat - 1) < 26003 && 0 <= i__2 ? i__2 : 
-		s_rnge("datlst", i__2, "pool_", (ftnlen)5850)];
+		s_rnge("datlst", i__2, "pool_", (ftnlen)6303)];
 	datlst[(i__2 = nameat - 1) < 26003 && 0 <= i__2 ? i__2 : s_rnge("dat"
-		"lst", i__2, "pool_", (ftnlen)5851)] = 0;
+		"lst", i__2, "pool_", (ftnlen)6304)] = 0;
 	if (datahd > 0) {
 
 /*           This variable was character type we need to */
@@ -5599,7 +6050,7 @@ L_pcpool:
 
 	    head = datahd;
 	    tail = -dppool[(i__2 = (head << 1) + 11) < 800012 && 0 <= i__2 ? 
-		    i__2 : s_rnge("dppool", i__2, "pool_", (ftnlen)5861)];
+		    i__2 : s_rnge("dppool", i__2, "pool_", (ftnlen)6314)];
 	    lnkfsl_(&head, &tail, dppool);
 	} else {
 
@@ -5608,7 +6059,7 @@ L_pcpool:
 
 	    head = -datahd;
 	    tail = -chpool[(i__2 = (head << 1) + 11) < 30012 && 0 <= i__2 ? 
-		    i__2 : s_rnge("chpool", i__2, "pool_", (ftnlen)5872)];
+		    i__2 : s_rnge("chpool", i__2, "pool_", (ftnlen)6325)];
 	    lnkfsl_(&head, &tail, chpool);
 	}
     }
@@ -5635,21 +6086,21 @@ L_pcpool:
 
 	lnkan_(chpool, &chnode);
 	if (datlst[(i__1 = nameat - 1) < 26003 && 0 <= i__1 ? i__1 : s_rnge(
-		"datlst", i__1, "pool_", (ftnlen)5907)] == 0) {
+		"datlst", i__1, "pool_", (ftnlen)6360)] == 0) {
 
 /*           There was no data for this name yet.  We make */
 /*           CHNODE be the head of the data list for this name. */
 
 	    datlst[(i__1 = nameat - 1) < 26003 && 0 <= i__1 ? i__1 : s_rnge(
-		    "datlst", i__1, "pool_", (ftnlen)5913)] = -chnode;
+		    "datlst", i__1, "pool_", (ftnlen)6366)] = -chnode;
 	} else {
 
 /*           Put this node after the tail of the current list. */
 
 	    head = -datlst[(i__1 = nameat - 1) < 26003 && 0 <= i__1 ? i__1 : 
-		    s_rnge("datlst", i__1, "pool_", (ftnlen)5920)];
+		    s_rnge("datlst", i__1, "pool_", (ftnlen)6373)];
 	    tail = -chpool[(i__1 = (head << 1) + 11) < 30012 && 0 <= i__1 ? 
-		    i__1 : s_rnge("chpool", i__1, "pool_", (ftnlen)5921)];
+		    i__1 : s_rnge("chpool", i__1, "pool_", (ftnlen)6374)];
 	    lnkila_(&tail, &chnode, chpool);
 	}
 
@@ -5658,7 +6109,7 @@ L_pcpool:
 /*        have to undo this affect when we store the data. */
 
 	s_copy(chvals + ((i__1 = chnode - 1) < 15000 && 0 <= i__1 ? i__1 : 
-		s_rnge("chvals", i__1, "pool_", (ftnlen)5932)) * 80, cvals + (
+		s_rnge("chvals", i__1, "pool_", (ftnlen)6385)) * 80, cvals + (
 		i__ - 1) * cvals_len, (ftnlen)80, cvals_len);
 
 /*        That's all for this value. It's now time to loop */
@@ -5686,9 +6137,8 @@ L_pcpool:
 L_pdpool:
 /* $ Abstract */
 
-/*     This entry point provides toolkit programmers a method for */
-/*     programmatically inserting double precision data into the */
-/*     kernel pool. */
+/*     Provide toolkit programmers a method for programmatically */
+/*     inserting double precision data into the kernel pool. */
 
 /* $ Disclaimer */
 
@@ -5717,11 +6167,11 @@ L_pdpool:
 
 /* $ Required_Reading */
 
-/*      None. */
+/*     None. */
 
 /* $ Keywords */
 
-/*      POOL */
+/*     POOL */
 
 /* $ Declarations */
 
@@ -5739,13 +6189,13 @@ L_pdpool:
 
 /* $ Detailed_Input */
 
-/*     NAME       is the name of the kernel pool variable to associate */
-/*                with the values supplied in the array VALUES */
+/*     NAME     is the name of the kernel pool variable to associate */
+/*              with the values supplied in the array VALUES */
 
-/*     N          is the number of values to insert into the kernel pool. */
+/*     N        is the number of values to insert into the kernel pool. */
 
-/*     VALUES     is an array of d.p. values to insert into the kernel */
-/*                pool. */
+/*     VALUES   is an array of d.p. values to insert into the kernel */
+/*              pool. */
 
 /* $ Detailed_Output */
 
@@ -5757,20 +6207,21 @@ L_pdpool:
 
 /* $ Exceptions */
 
-/*     1) If NAME is already present in the kernel pool and there */
-/*        is sufficient room to hold all values supplied in VALUES, */
-/*        the old values associated with NAME will be overwritten. */
+/*     1)  If NAME is already present in the kernel pool and there */
+/*         is sufficient room to hold all values supplied in VALUES, */
+/*         the old values associated with NAME will be overwritten. */
 
-/*     2) If there is not sufficient room to insert a new variable */
-/*        into the kernel pool and NAME is not already present in */
-/*        the kernel pool, the error SPICE(KERNELPOOLFULL) is */
-/*        signaled by a routine in the call tree to this routine. */
+/*     2)  If there is not sufficient room to insert a new variable into */
+/*         the kernel pool and NAME is not already present in the kernel */
+/*         pool, an error is signaled by a routine in the call tree of */
+/*         this routine. */
 
-/*     3) If there is not sufficient room to insert the values associated */
-/*        with NAME, the error 'SPICE(NOMOREROOM)' will be signaled. */
+/*     3)  If there is not sufficient room to insert the values */
+/*         associated with NAME, the error SPICE(NOMOREROOM) is signaled. */
 
-/*     4) The error 'SPICE(BADVARNAME)' signals if the kernel pool */
-/*        variable name length exceeds MAXLEN. */
+/*     4)  If the kernel pool variable name length exceeds its maximum */
+/*         allowed length (see Kernel Required Reading, kernel.req), the */
+/*         error SPICE(BADVARNAME) is signaled. */
 
 /* $ Files */
 
@@ -5785,9 +6236,9 @@ L_pdpool:
 
 /*     Suppose that you wish to supply default values for a program */
 /*     so that it may function even in the absence of the appropriate */
-/*     text kernels.  You can use the entry points PCPOOL, PDPOOL */
+/*     text kernels. You can use the entry points PCPOOL, PDPOOL */
 /*     and PIPOOL to initialize the kernel pool with suitable */
-/*     values at program initialization.  The example below shows */
+/*     values at program initialization. The example below shows */
 /*     how you might set up various kernel pool variables that might */
 /*     be required by a program. */
 
@@ -5886,7 +6337,6 @@ L_pdpool:
 
 /*        CALL PDPOOL ( 'DELTET/DELTA_AT',  44, VALUES ) */
 
-
 /* $ Restrictions */
 
 /*     None. */
@@ -5897,16 +6347,22 @@ L_pdpool:
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     W.L. Taber      (JPL) */
-/*     B.V. Semenov    (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 9.1.1, 27-AUG-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 9.1.0, 17-JAN-2014 (BVS) (NJB) */
 
 /*        Updated to increment POOL state counter. */
-/*        Updated Index_Entries section. */
+/*        Updated $Index_Entries section. */
 
 /* -    SPICELIB Version 9.0.0, 24-MAY-2010 (EDW) */
 
@@ -6008,7 +6464,7 @@ L_pdpool:
 /*        the amount of free room in the pool. */
 
 	datahd = datlst[(i__2 = nameat - 1) < 26003 && 0 <= i__2 ? i__2 : 
-		s_rnge("datlst", i__2, "pool_", (ftnlen)6314)];
+		s_rnge("datlst", i__2, "pool_", (ftnlen)6774)];
 	if (datahd < 0) {
 
 /*           No extra d.p.s will be freed.  We have whatever */
@@ -6024,7 +6480,7 @@ L_pdpool:
 	    while(node > 0) {
 		++tofree;
 		node = dppool[(i__2 = (node << 1) + 10) < 800012 && 0 <= i__2 
-			? i__2 : s_rnge("dppool", i__2, "pool_", (ftnlen)6331)
+			? i__2 : s_rnge("dppool", i__2, "pool_", (ftnlen)6791)
 			];
 	    }
 
@@ -6070,9 +6526,9 @@ L_pdpool:
 /*        to add data. */
 
 	datahd = datlst[(i__2 = nameat - 1) < 26003 && 0 <= i__2 ? i__2 : 
-		s_rnge("datlst", i__2, "pool_", (ftnlen)6387)];
+		s_rnge("datlst", i__2, "pool_", (ftnlen)6847)];
 	datlst[(i__2 = nameat - 1) < 26003 && 0 <= i__2 ? i__2 : s_rnge("dat"
-		"lst", i__2, "pool_", (ftnlen)6388)] = 0;
+		"lst", i__2, "pool_", (ftnlen)6848)] = 0;
 	if (datahd < 0) {
 
 /*           This variable was character type we need to */
@@ -6081,7 +6537,7 @@ L_pdpool:
 
 	    head = -datahd;
 	    tail = -chpool[(i__2 = (head << 1) + 11) < 30012 && 0 <= i__2 ? 
-		    i__2 : s_rnge("chpool", i__2, "pool_", (ftnlen)6398)];
+		    i__2 : s_rnge("chpool", i__2, "pool_", (ftnlen)6858)];
 	    lnkfsl_(&head, &tail, chpool);
 	} else {
 
@@ -6090,7 +6546,7 @@ L_pdpool:
 
 	    head = datahd;
 	    tail = -dppool[(i__2 = (head << 1) + 11) < 800012 && 0 <= i__2 ? 
-		    i__2 : s_rnge("dppool", i__2, "pool_", (ftnlen)6409)];
+		    i__2 : s_rnge("dppool", i__2, "pool_", (ftnlen)6869)];
 	    lnkfsl_(&head, &tail, dppool);
 	}
     }
@@ -6122,28 +6578,28 @@ L_pdpool:
 
 	lnkan_(dppool, &dpnode);
 	if (datlst[(i__1 = nameat - 1) < 26003 && 0 <= i__1 ? i__1 : s_rnge(
-		"datlst", i__1, "pool_", (ftnlen)6450)] == 0) {
+		"datlst", i__1, "pool_", (ftnlen)6910)] == 0) {
 
 /*           There was no data for this name yet.  We make */
 /*           DPNODE be the head of the data list for this name. */
 
 	    datlst[(i__1 = nameat - 1) < 26003 && 0 <= i__1 ? i__1 : s_rnge(
-		    "datlst", i__1, "pool_", (ftnlen)6456)] = dpnode;
+		    "datlst", i__1, "pool_", (ftnlen)6916)] = dpnode;
 	} else {
 
 /*           Put this node after the tail of the current list. */
 
 	    head = datlst[(i__1 = nameat - 1) < 26003 && 0 <= i__1 ? i__1 : 
-		    s_rnge("datlst", i__1, "pool_", (ftnlen)6463)];
+		    s_rnge("datlst", i__1, "pool_", (ftnlen)6923)];
 	    tail = -dppool[(i__1 = (head << 1) + 11) < 800012 && 0 <= i__1 ? 
-		    i__1 : s_rnge("dppool", i__1, "pool_", (ftnlen)6464)];
+		    i__1 : s_rnge("dppool", i__1, "pool_", (ftnlen)6924)];
 	    lnkila_(&tail, &dpnode, dppool);
 	}
 
 /*        Finally insert this data item into the numeric buffer. */
 
 	dpvals[(i__1 = dpnode - 1) < 400000 && 0 <= i__1 ? i__1 : s_rnge(
-		"dpvals", i__1, "pool_", (ftnlen)6473)] = values[i__ - 1];
+		"dpvals", i__1, "pool_", (ftnlen)6933)] = values[i__ - 1];
     }
 
 /*     One last thing, see if this variable is being watched, */
@@ -6166,8 +6622,8 @@ L_pdpool:
 L_pipool:
 /* $ Abstract */
 
-/*     This entry point provides toolkit programmers a method for */
-/*     programmatically inserting integer data into the kernel pool. */
+/*     Provide toolkit programmers a method for programmatically */
+/*     inserting integer data into the kernel pool. */
 
 /* $ Disclaimer */
 
@@ -6196,11 +6652,11 @@ L_pipool:
 
 /* $ Required_Reading */
 
-/*      None. */
+/*     None. */
 
 /* $ Keywords */
 
-/*      POOL */
+/*     POOL */
 
 /* $ Declarations */
 
@@ -6218,13 +6674,13 @@ L_pipool:
 
 /* $ Detailed_Input */
 
-/*     NAME       is the name of the kernel pool variable to associate */
-/*                with the values supplied in the array IVALS */
+/*     NAME     is the name of the kernel pool variable to associate */
+/*              with the values supplied in the array IVALS */
 
-/*     N          is the number of values to insert into the kernel pool. */
+/*     N        is the number of values to insert into the kernel pool. */
 
-/*     IVALS      is an array of integers to insert into the kernel */
-/*                pool. */
+/*     IVALS    is an array of integers to insert into the kernel */
+/*              pool. */
 
 /* $ Detailed_Output */
 
@@ -6236,20 +6692,21 @@ L_pipool:
 
 /* $ Exceptions */
 
-/*     1) If NAME is already present in the kernel pool and there */
-/*        is sufficient room to hold all values supplied in IVALS, */
-/*        the old values associated with NAME will be overwritten. */
+/*     1)  If NAME is already present in the kernel pool and there */
+/*         is sufficient room to hold all values supplied in IVALS, */
+/*         the old values associated with NAME will be overwritten. */
 
-/*     2) If there is not sufficient room to insert a new variable */
-/*        into the kernel pool and NAME is not already present in */
-/*        the kernel pool, the error SPICE(KERNELPOOLFULL) is */
-/*        signaled by a routine in the call tree to this routine. */
+/*     2)  If there is not sufficient room to insert a new variable into */
+/*         the kernel pool and NAME is not already present in the kernel */
+/*         pool, an error is signaled by a routine in the call tree of */
+/*         this routine. */
 
-/*     3) If there is not sufficient room to insert the values associated */
-/*        with NAME, the error 'SPICE(NOMOREROOM)' will be signaled. */
+/*     3)  If there is not sufficient room to insert the values */
+/*         associated with NAME, the error SPICE(NOMOREROOM) is signaled. */
 
-/*     4) The error 'SPICE(BADVARNAME)' signals if the kernel pool */
-/*        variable name length exceeds MAXLEN. */
+/*     4)  If the kernel pool variable name length exceeds its maximum */
+/*         allowed length (see Kernel Required Reading, kernel.req), the */
+/*         error SPICE(BADVARNAME) is signaled. */
 
 /* $ Files */
 
@@ -6264,9 +6721,9 @@ L_pipool:
 
 /*     Suppose that you wish to supply default values for a program */
 /*     so that it may function even in the absence of the appropriate */
-/*     text kernels.  You can use the entry points PCPOOL, PDPOOL */
+/*     text kernels. You can use the entry points PCPOOL, PDPOOL */
 /*     and PIPOOL to initialize the kernel pool with suitable */
-/*     values at program initialization.  The example below shows */
+/*     values at program initialization. The example below shows */
 /*     how you might set up various kernel pool variables that might */
 /*     be required by a program. */
 
@@ -6365,7 +6822,6 @@ L_pipool:
 
 /*        CALL PDPOOL ( 'DELTET/DELTA_AT',  44, VALUES ) */
 
-
 /* $ Restrictions */
 
 /*     None. */
@@ -6376,16 +6832,22 @@ L_pipool:
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     W.L. Taber      (JPL) */
-/*     B.V. Semenov    (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 9.1.1, 27-AUG-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 9.1.0, 17-JAN-2014 (BVS) (NJB) */
 
 /*        Updated to increment POOL state counter. */
-/*        Updated Index_Entries section. */
+/*        Updated $Index_Entries section. */
 
 /* -    SPICELIB Version 9.0.0, 24-MAY-2010 (EDW) */
 
@@ -6487,7 +6949,7 @@ L_pipool:
 /*        the amount of free room in the pool. */
 
 	datahd = datlst[(i__2 = nameat - 1) < 26003 && 0 <= i__2 ? i__2 : 
-		s_rnge("datlst", i__2, "pool_", (ftnlen)6850)];
+		s_rnge("datlst", i__2, "pool_", (ftnlen)7317)];
 	if (datahd < 0) {
 
 /*           No extra d.p.s will be freed.  We have whatever */
@@ -6503,7 +6965,7 @@ L_pipool:
 	    while(node > 0) {
 		++tofree;
 		node = dppool[(i__2 = (node << 1) + 10) < 800012 && 0 <= i__2 
-			? i__2 : s_rnge("dppool", i__2, "pool_", (ftnlen)6867)
+			? i__2 : s_rnge("dppool", i__2, "pool_", (ftnlen)7334)
 			];
 	    }
 
@@ -6549,9 +7011,9 @@ L_pipool:
 /*        to add data. */
 
 	datahd = datlst[(i__2 = nameat - 1) < 26003 && 0 <= i__2 ? i__2 : 
-		s_rnge("datlst", i__2, "pool_", (ftnlen)6922)];
+		s_rnge("datlst", i__2, "pool_", (ftnlen)7389)];
 	datlst[(i__2 = nameat - 1) < 26003 && 0 <= i__2 ? i__2 : s_rnge("dat"
-		"lst", i__2, "pool_", (ftnlen)6923)] = 0;
+		"lst", i__2, "pool_", (ftnlen)7390)] = 0;
 	if (datahd < 0) {
 
 /*           This variable was character type we need to */
@@ -6560,7 +7022,7 @@ L_pipool:
 
 	    head = -datahd;
 	    tail = -chpool[(i__2 = (head << 1) + 11) < 30012 && 0 <= i__2 ? 
-		    i__2 : s_rnge("chpool", i__2, "pool_", (ftnlen)6933)];
+		    i__2 : s_rnge("chpool", i__2, "pool_", (ftnlen)7400)];
 	    lnkfsl_(&head, &tail, chpool);
 	} else {
 
@@ -6569,7 +7031,7 @@ L_pipool:
 
 	    head = datahd;
 	    tail = -dppool[(i__2 = (head << 1) + 11) < 800012 && 0 <= i__2 ? 
-		    i__2 : s_rnge("dppool", i__2, "pool_", (ftnlen)6944)];
+		    i__2 : s_rnge("dppool", i__2, "pool_", (ftnlen)7411)];
 	    lnkfsl_(&head, &tail, dppool);
 	}
     }
@@ -6601,28 +7063,28 @@ L_pipool:
 
 	lnkan_(dppool, &dpnode);
 	if (datlst[(i__1 = nameat - 1) < 26003 && 0 <= i__1 ? i__1 : s_rnge(
-		"datlst", i__1, "pool_", (ftnlen)6985)] == 0) {
+		"datlst", i__1, "pool_", (ftnlen)7452)] == 0) {
 
 /*           There was no data for this name yet.  We make */
 /*           DPNODE be the head of the data list for this name. */
 
 	    datlst[(i__1 = nameat - 1) < 26003 && 0 <= i__1 ? i__1 : s_rnge(
-		    "datlst", i__1, "pool_", (ftnlen)6991)] = dpnode;
+		    "datlst", i__1, "pool_", (ftnlen)7458)] = dpnode;
 	} else {
 
 /*           Put this node after the tail of the current list. */
 
 	    head = datlst[(i__1 = nameat - 1) < 26003 && 0 <= i__1 ? i__1 : 
-		    s_rnge("datlst", i__1, "pool_", (ftnlen)6998)];
+		    s_rnge("datlst", i__1, "pool_", (ftnlen)7465)];
 	    tail = -dppool[(i__1 = (head << 1) + 11) < 800012 && 0 <= i__1 ? 
-		    i__1 : s_rnge("dppool", i__1, "pool_", (ftnlen)6999)];
+		    i__1 : s_rnge("dppool", i__1, "pool_", (ftnlen)7466)];
 	    lnkila_(&tail, &dpnode, dppool);
 	}
 
 /*        Finally insert this data item into the numeric buffer. */
 
 	dpvals[(i__1 = dpnode - 1) < 400000 && 0 <= i__1 ? i__1 : s_rnge(
-		"dpvals", i__1, "pool_", (ftnlen)7008)] = (doublereal) ivals[
+		"dpvals", i__1, "pool_", (ftnlen)7475)] = (doublereal) ivals[
 		i__ - 1];
     }
 
@@ -6697,10 +7159,10 @@ L_lmpool:
 
 /* $ Detailed_Input */
 
-/*     CVALS      is an array that contains lines of text that */
-/*                could serve as a SPICE text kernel. */
+/*     CVALS    is an array that contains lines of text that */
+/*              could serve as a SPICE text kernel. */
 
-/*     N          the number of entries in CVALS. */
+/*     N        is the number of entries in CVALS. */
 
 /* $ Detailed_Output */
 
@@ -6712,12 +7174,18 @@ L_lmpool:
 
 /* $ Exceptions */
 
-/*     1) All exceptions are diagnosed by routines called by the */
-/*        private routine ZZRVBF. */
+/*     1)  If any of the kernel pool variables names or their values, as */
+/*         provided in the input CVALS array, cannot be parsed, an error */
+/*         is signaled by a routine in the call tree of this routine. */
 
-/*     2) The error 'SPICE(BADVARNAME)' signals from a routine in the */
-/*        call tree of LMPOOL if a kernel pool variable name length */
-/*        exceeds MAXLEN characters (defined in pool.f). */
+/*     2)  If there is no room left in the kernel pool to store all */
+/*         variables present in the input CVALS array, an error is */
+/*         signaled by a routine in the call tree of this routine. */
+
+/*     3)  If the length of any kernel pool variable name present in the */
+/*         input CVALS array exceeds its maximum allowed length (see */
+/*         Kernel Required Reading, kernel.req), an error is signaled by */
+/*         a routine in the call tree of this routine. */
 
 /* $ Files */
 
@@ -6735,7 +7203,7 @@ L_lmpool:
 /*     to the current number of leapseconds but that you would */
 /*     still like to use a relatively recent leapseconds kernel */
 /*     without requiring users to load a leapseconds kernel into */
-/*     the program.  The example below shows how you might set up */
+/*     the program. The example below shows how you might set up */
 /*     the initialization portion of your program. */
 
 /*        INTEGER               LNSIZE */
@@ -6783,13 +7251,20 @@ L_lmpool:
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     R.E. Thurman    (JPL) */
-/*     I.M. Underwood  (JPL) */
-/*     W.L. Taber      (JPL) */
-/*     B.V. Semenov    (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 8.3.1, 17-AUG-2021 (JDR) (BVS) */
+
+/*        Edited the header to comply with NAIF standard. */
+
+/*        Updated $Exceptions section to better describe the error */
+/*        handling of this routine. */
 
 /* -    SPICELIB Version 8.3.0, 30-JUL-2013 (BVS) */
 
@@ -6946,29 +7421,55 @@ L_szpool:
 
 /* $ Detailed_Input */
 
-/*     NAME       is the name of a kernel pool size parameter. */
-/*                The following parameters may be specified. */
+/*     NAME     is the name of a kernel pool size parameter. */
+/*              The following parameters may be specified. */
 
-/*                   'MAXVAR' */
-/*                   'MAXVAL' */
-/*                   'MAXLIN' */
-/*                   'MAXCHR' */
-/*                   'MXNOTE' */
-/*                   'MAXLEN' */
-/*                   'MAXAGT' */
+/*                 'MAXVAR'    is the maximum number of variables that */
+/*                             the kernel pool may contain at any one */
+/*                             time. MAXVAR should be a prime number. */
 
-/*                See the main entry point for a description of the */
-/*                meaning of these parameters.  Note that the case */
-/*                of NAME is insignificant. */
+/*                 'MAXLEN'    is the maximum length of the variable */
+/*                             names that can be stored in the kernel */
+/*                             pool. */
+
+/*                 'MAXVAL'    is the maximum number of distinct values */
+/*                             that may belong to the variables in the */
+/*                             kernel pool. Each variable must have at */
+/*                             least one value, and may have any number, */
+/*                             so long as the total number does not */
+/*                             exceed MAXVAL. MAXVAL must be at least as */
+/*                             large as MAXVAR. */
+
+/*                 'MXNOTE'    is the maximum number of distinct */
+/*                             variable-agents pairs that can be */
+/*                             maintained by the kernel pool. (A variable */
+/*                             is "paired" with an agent, if that agent */
+/*                             is to be notified whenever the variable is */
+/*                             updated.) */
+
+/*                 'MAXAGT'    is the maximum number of agents that can */
+/*                             be kept on the distribution list for */
+/*                             notification of updates to kernel */
+/*                             variables. */
+
+/*                 'MAXCHR'    is the maximum number of characters that */
+/*                             can be stored in a component of a string */
+/*                             valued kernel variable. */
+
+/*                 'MAXLIN'    is the maximum number of character strings */
+/*                             that can be stored as data for kernel pool */
+/*                             variables. */
+
+/*              Note that the case of NAME is insignificant. */
 
 /* $ Detailed_Output */
 
-/*     N          is the value of the parameter specified by NAME. If */
-/*                NAME is not one of the items specified above, N will */
-/*                be returned with the value 0. */
+/*     N        is the value of the parameter specified by NAME. If */
+/*              NAME is not one of the items specified above, N will */
+/*              be returned with the value 0. */
 
-/*     FOUND      is TRUE if the parameter is recognized FALSE if it */
-/*                is not. */
+/*     FOUND    is .TRUE. if the parameter is recognized .FALSE. if it */
+/*              is not. */
 
 /* $ Parameters */
 
@@ -6976,8 +7477,8 @@ L_szpool:
 
 /* $ Exceptions */
 
-/*     1) If the specified parameter is not recognized the value of N */
-/*        returned will be zero and FOUND will be set to FALSE. */
+/*     1)  If the specified parameter is not recognized, the value of N */
+/*         returned will be zero and FOUND will be set to .FALSE. */
 
 /* $ Files */
 
@@ -6986,7 +7487,7 @@ L_szpool:
 /* $ Particulars */
 
 /*     This routine provides the a programmatic interface to the */
-/*     parameters used to define the kernel pool.  It is not */
+/*     parameters used to define the kernel pool. It is not */
 /*     anticipated that most kernel pool users will need to use this */
 /*     routine. */
 
@@ -7004,12 +7505,17 @@ L_szpool:
 
 /* $ Author_and_Institution */
 
-/*     W.L. Taber  (JPL) */
-/*     H.W. Taylor (ACT) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
 
-/* -    SPICELIB Version 8.0.0, 04-JUN-1999 (WLT)(HWT) */
+/* -    SPICELIB Version 1.0.1, 17-AUG-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. Updated NAME */
+/*        description to not refer to the main routine. */
+
+/* -    SPICELIB Version 1.0.0, 04-JUN-1999 (WLT) */
 
 /*        Added the entry points PCPOOL, PDPOOL and PIPOOL to allow */
 /*        direct insertion of data into the kernel pool without having */
@@ -7115,13 +7621,13 @@ L_dvpool:
 
 /* $ Detailed_Input */
 
-/*     NAME       is the name of the kernel pool variable to delete. */
-/*                The name and associated values are removed from the */
-/*                kernel pool, freeing the occupied space. */
+/*     NAME     is the name of the kernel pool variable to delete. */
+/*              The name and associated values are removed from the */
+/*              kernel pool, freeing the occupied space. */
 
-/*                If a watches are set on the variable designated by */
-/*                NAME, the corresponding agents are placed on the list */
-/*                of agents to be notified of a kernel variable update. */
+/*              If a watches are set on the variable designated by */
+/*              NAME, the corresponding agents are placed on the list */
+/*              of agents to be notified of a kernel variable update. */
 
 /* $ Detailed_Output */
 
@@ -7133,8 +7639,8 @@ L_dvpool:
 
 /* $ Exceptions */
 
-/*     1) If the specified variable is not present in the kernel pool, */
-/*        this routine simply returns.  No error is signaled. */
+/*     1)  If the specified variable is not present in the kernel pool, */
+/*         this routine simply returns. No error is signaled. */
 
 /* $ Files */
 
@@ -7152,13 +7658,13 @@ L_dvpool:
 
 /* $ Examples */
 
-/*     None. */
+/*     1)  Remove triaxial radii of Jupiter from the kernel pool. */
+
+/*            CALL DVPOOL ( 'BODY599_RADII' ) */
 
 /* $ Restrictions */
 
-/*     1) Remove triaxial radii of Jupiter from the kernel pool. */
-
-/*           CALL DVPOOL ( 'BODY599_RADII' ) */
+/*     None. */
 
 /* $ Literature_References */
 
@@ -7166,11 +7672,18 @@ L_dvpool:
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman  (JPL) */
-/*     W.L. Taber    (JPL) */
-/*     B.V. Semenov  (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 8.3.1, 17-AUG-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
+
+/*        Moved example from $Restrictions to $Examples section. */
 
 /* -    SPICELIB Version 8.3.0, 30-JUL-2013 (BVS) */
 
@@ -7183,7 +7696,7 @@ L_dvpool:
 
 /* -    SPICELIB Version 8.1.0, 22-DEC-2004 (NJB) */
 
-/*        Bug fix:  corrected logic for determining when a */
+/*        Bug fix: corrected logic for determining when a */
 /*        conflict resolution list is non-empty. */
 
 /*        Corrected an in-line comment relating to finding the */
@@ -7216,10 +7729,19 @@ L_dvpool:
 /* -& */
 /* $ Revisions */
 
+/* -    SPICELIB Version 8.3.0, 30-JUL-2013 (BVS) */
+
+/*        Updated to increment POOL state counter. */
+
+/* -    SPICELIB Version 8.2.0, 19-MAR-2009 (NJB) */
+
+/*        Watcher update code was re-written for compatibility */
+/*        with new watcher system implementation. */
+
 /* -    SPICELIB Version 8.1.0, 22-DEC-2004 (NJB) */
 
-/*        Bug fix:  corrected logic for determining when a */
-/*        conflict resolution list is non-empty.  The test */
+/*        Bug fix: corrected logic for determining when a */
+/*        conflict resolution list is non-empty. The test */
 
 /*           IF ( NAMEAT .LT. 0 ) THEN */
 
@@ -7266,7 +7788,7 @@ L_dvpool:
 /*     of the conflict resolution list; this node is a positive value. */
 
     if (namlst[(i__2 = lookat - 1) < 26003 && 0 <= i__2 ? i__2 : s_rnge("nam"
-	    "lst", i__2, "pool_", (ftnlen)7711)] == 0) {
+	    "lst", i__2, "pool_", (ftnlen)8245)] == 0) {
 	chkout_("DVPOOL", (ftnlen)6);
 	return 0;
     }
@@ -7276,19 +7798,19 @@ L_dvpool:
 /*     to this node is the one we are looking for. */
 
     nameat = namlst[(i__2 = lookat - 1) < 26003 && 0 <= i__2 ? i__2 : s_rnge(
-	    "namlst", i__2, "pool_", (ftnlen)7722)];
+	    "namlst", i__2, "pool_", (ftnlen)8256)];
     succes = s_cmp(name__, pnames + (((i__2 = nameat - 1) < 26003 && 0 <= 
-	    i__2 ? i__2 : s_rnge("pnames", i__2, "pool_", (ftnlen)7723)) << 5)
+	    i__2 ? i__2 : s_rnge("pnames", i__2, "pool_", (ftnlen)8257)) << 5)
 	    , name_len, (ftnlen)32) == 0;
     while(! succes) {
 	nameat = nmpool[(i__2 = (nameat << 1) + 10) < 52018 && 0 <= i__2 ? 
-		i__2 : s_rnge("nmpool", i__2, "pool_", (ftnlen)7727)];
+		i__2 : s_rnge("nmpool", i__2, "pool_", (ftnlen)8261)];
 	if (nameat < 0) {
 	    chkout_("DVPOOL", (ftnlen)6);
 	    return 0;
 	}
 	succes = s_cmp(name__, pnames + (((i__2 = nameat - 1) < 26003 && 0 <= 
-		i__2 ? i__2 : s_rnge("pnames", i__2, "pool_", (ftnlen)7736)) 
+		i__2 ? i__2 : s_rnge("pnames", i__2, "pool_", (ftnlen)8270)) 
 		<< 5), name_len, (ftnlen)32) == 0;
     }
 
@@ -7307,7 +7829,7 @@ L_dvpool:
 /*     is not cleaned out */
 
     s_copy(pnames + (((i__2 = nameat - 1) < 26003 && 0 <= i__2 ? i__2 : 
-	    s_rnge("pnames", i__2, "pool_", (ftnlen)7757)) << 5), " ", (
+	    s_rnge("pnames", i__2, "pool_", (ftnlen)8291)) << 5), " ", (
 	    ftnlen)32, (ftnlen)1);
 
 /*     There may be agents watching the variable we just wiped out.  If */
@@ -7384,77 +7906,78 @@ L_gnpool:
 /*     ROOM       I   The largest number of values to return. */
 /*     N          O   Number of values returned for NAME. */
 /*     CVALS      O   Kernel pool variables whose names match NAME. */
-/*     FOUND      O   True if there is at least one match. */
+/*     FOUND      O   .TRUE. if there is at least one match. */
 
 /* $ Detailed_Input */
 
-/*     NAME       is a MATCHI template which will be used when searching */
-/*                for variable names in the kernel pool.  The characters */
-/*                '*' and '%' are used for the wild string and wild */
-/*                characters respectively.  For details of string */
-/*                pattern matching see the header of the routine MATCHI. */
+/*     NAME     is a MATCHI template which will be used when searching */
+/*              for variable names in the kernel pool. The characters */
+/*              '*' and '%' are used for the wild string and wild */
+/*              characters respectively. For details of string */
+/*              pattern matching see the header of the routine MATCHI. */
 
 
-/*     START      is the index of the first variable name to return that */
-/*                matches the NAME template.  The matching names are */
-/*                assigned indices ranging from 1 to NVAR, where NVAR is */
-/*                the number of matching names.  The index of a name does */
-/*                not indicate how it compares alphabetically to another */
-/*                name. */
+/*     START    is the index of the first variable name to return that */
+/*              matches the NAME template. The matching names are */
+/*              assigned indices ranging from 1 to NVAR, where NVAR is */
+/*              the number of matching names. The index of a name does */
+/*              not indicate how it compares alphabetically to another */
+/*              name. */
 
-/*                If START is less than 1, it will be treated as 1.  If */
-/*                START is greater than the total number of matching */
-/*                variable names, no values will be returned and N will */
-/*                be set to zero.  However, FOUND will still be set to */
-/*                .TRUE. */
+/*              If START is less than 1, it will be treated as 1. If */
+/*              START is greater than the total number of matching */
+/*              variable names, no values will be returned and N will */
+/*              be set to zero. However, FOUND will still be set to */
+/*              .TRUE. */
 
 
-/*     ROOM       is the maximum number of variable names that should */
-/*                be returned for this template.  If ROOM is less than 1 */
-/*                the error 'SPICE(BADARRAYSIZE)' will be signaled. */
+/*     ROOM     is the maximum number of variable names that should */
+/*              be returned for this template. If ROOM is less than 1 */
+/*              the error SPICE(BADARRAYSIZE) will be signaled. */
 
 /* $ Detailed_Output */
 
-/*     N          is the number of variable names matching NAME that are */
-/*                returned.  It will always be less than or equal to */
-/*                ROOM. */
+/*     N        is the number of variable names matching NAME that are */
+/*              returned. It will always be less than or equal to */
+/*              ROOM. */
 
-/*                If no variable names match NAME, N is set to zero. */
-
-
-/*     CVALS      is an array of kernel pool variables whose names match */
-/*                the template NAME and which have indices ranging from */
-/*                START to START+N-1. */
-
-/*                Note that in general the names returned in CVALS are */
-/*                not sorted. */
-
-/*                If no variables match NAME, no values are assigned to */
-/*                the elements of CVALS. */
-
-/*                If the length of CVALS is less than the length of the */
-/*                variable names, the values returned will be truncated */
-/*                on the right. To ensure that names are not truncated, */
-/*                CVALS should be declared to be at least */
-/*                CHARACTER*(32). */
+/*              If no variable names match NAME, N is set to zero. */
 
 
-/*     FOUND      is TRUE if the some variable name in the kernel pool */
-/*                matches NAME, FALSE if it is not. */
+/*     CVALS    is an array of kernel pool variables whose names match */
+/*              the template NAME and which have indices ranging from */
+/*              START to START+N-1. */
+
+/*              Note that in general the names returned in CVALS are */
+/*              not sorted. */
+
+/*              If no variables match NAME, no values are assigned to */
+/*              the elements of CVALS. */
+
+/*              If the length of CVALS is less than the length of the */
+/*              variable names, the values returned will be truncated */
+/*              on the right. To ensure that names are not truncated, */
+/*              CVALS should be declared to be at least */
+/*              CHARACTER*(32). */
+
+
+/*     FOUND    is .TRUE. if the some variable name in the kernel pool */
+/*              matches NAME, .FALSE. if it is not. */
 
 /* $ Parameters */
 
-/*     None. */
+/*     MAXLEN   is the maximum length of the variable names that */
+/*              can be stored in the kernel pool. This value is */
+/*              currently 32. */
 
 /* $ Exceptions */
 
-/*     1) If the value of ROOM is less than one the error */
-/*        'SPICE(BADARRAYSIZE)' is signaled. */
+/*     1)  If the value of ROOM is less than one, the error */
+/*         SPICE(BADARRAYSIZE) is signaled. */
 
-/*     2) If CVALS has declared length less than the size of a */
-/*        name to be returned, the name will be truncated on */
-/*        the right.  See MAXCHR for the maximum stored size of */
-/*        string variables. */
+/*     2)  If CVALS has declared length less than the size of a variable */
+/*         name to be returned, the name will be truncated on the right. */
+/*         See MAXLEN for the maximum size of variable names. */
 
 /* $ Files */
 
@@ -7464,7 +7987,7 @@ L_gnpool:
 
 /*     This routine provides the user interface for retrieving the names */
 /*     of kernel pool variables. This interface allows you to retrieve */
-/*     the names matching a template via multiple accesses.  Under some */
+/*     the names matching a template via multiple accesses. Under some */
 /*     circumstances this alleviates the problem of having to know in */
 /*     advance the maximum amount of space needed to accommodate all */
 /*     matching names. */
@@ -7472,11 +7995,10 @@ L_gnpool:
 /*     However, this method of access does come with a price. It is */
 /*     always more efficient to retrieve all of the data associated with */
 /*     a kernel pool variable in one call than it is to retrieve it in */
-/*     sections.  The parameter MAXVAR defines the upper bound on the */
+/*     sections. The parameter MAXVAR defines the upper bound on the */
 /*     number of possible matching names. */
 
 /* $ Examples */
-
 
 /*     The following code fragment demonstrates how the names of kernel */
 /*     pool variables matching a template can be retrieved in pieces. */
@@ -7546,10 +8068,16 @@ L_gnpool:
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman (JPL) */
-/*     W.L. Taber   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 8.1.1, 17-AUG-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. Added MAXLEN */
+/*        description in $Parameters. */
 
 /* -    SPICELIB Version 8.1.0, 19-MAR-2009 (NJB) */
 
@@ -7621,14 +8149,14 @@ L_gnpool:
 /*        See if there is any variable associated with this hash value. */
 
 	nnode = namlst[(i__2 = k - 1) < 26003 && 0 <= i__2 ? i__2 : s_rnge(
-		"namlst", i__2, "pool_", (ftnlen)8095)];
+		"namlst", i__2, "pool_", (ftnlen)8636)];
 	while(nnode > 0) {
 
 /*           There is some name list associated with this node. See if */
 /*           it the current one matches the supplied template. */
 
 	    if (matchi_(pnames + (((i__2 = nnode - 1) < 26003 && 0 <= i__2 ? 
-		    i__2 : s_rnge("pnames", i__2, "pool_", (ftnlen)8102)) << 
+		    i__2 : s_rnge("pnames", i__2, "pool_", (ftnlen)8643)) << 
 		    5), name__, "*", "%", (ftnlen)32, name_len, (ftnlen)1, (
 		    ftnlen)1)) {
 
@@ -7642,7 +8170,7 @@ L_gnpool:
 			++(*n);
 			s_copy(cvals + (*n - 1) * cvals_len, pnames + (((i__2 
 				= nnode - 1) < 26003 && 0 <= i__2 ? i__2 : 
-				s_rnge("pnames", i__2, "pool_", (ftnlen)8115))
+				s_rnge("pnames", i__2, "pool_", (ftnlen)8656))
 				 << 5), cvals_len, (ftnlen)32);
 		    }
 
@@ -7660,7 +8188,7 @@ L_gnpool:
 /*           Get the next name for this node. */
 
 	    nnode = nmpool[(i__2 = (nnode << 1) + 10) < 52018 && 0 <= i__2 ? 
-		    i__2 : s_rnge("nmpool", i__2, "pool_", (ftnlen)8134)];
+		    i__2 : s_rnge("nmpool", i__2, "pool_", (ftnlen)8675)];
 	}
 
 /*        Advance to the next hash value. */
@@ -7723,13 +8251,13 @@ L_dwpool:
 
 /* $ Detailed_Input */
 
-/*     AGENT       is any agent name that has previously been associated */
-/*                 with a kernel pool watch via a call to SWPOOL. The */
-/*                 agent name will be deleted from the notification list */
-/*                 of every watched kernel variable. */
+/*     AGENT    is any agent name that has previously been associated */
+/*              with a kernel pool watch via a call to SWPOOL. The */
+/*              agent name will be deleted from the notification list */
+/*              of every watched kernel variable. */
 
-/*                 Watched variables whose notification lists become */
-/*                 empty will be deleted. */
+/*              Watched variables whose notification lists become */
+/*              empty will be deleted. */
 
 /* $ Detailed_Output */
 
@@ -7741,14 +8269,14 @@ L_dwpool:
 
 /* $ Exceptions */
 
-/*     1) It's not an error to delete a non-existent agent---one */
-/*        that is not present in the watcher system. A call to */
-/*        delete a non-existent agent has no effect on the state */
-/*        of the watcher system. */
+/*     1)  It's not an error to delete a non-existent agent---one */
+/*         that is not present in the watcher system. A call to */
+/*         delete a non-existent agent has no effect on the state */
+/*         of the watcher system. */
 
-/*     2) If an attempt is made to delete an agent that */
-/*        has an unchecked update, the error SPICE(UPDATEPENDING) */
-/*        is signaled. */
+/*     2)  If an attempt is made to delete an agent that */
+/*         has an unchecked update, the error SPICE(UPDATEPENDING) */
+/*         is signaled. */
 
 /* $ Files */
 
@@ -7764,7 +8292,7 @@ L_dwpool:
 /* $ Examples */
 
 /*     Suppose that you have an application subroutine, MYTASK, that */
-/*     needs to access a large data set in the kernel pool.  If this */
+/*     needs to access a large data set in the kernel pool. If this */
 /*     data could be kept in local storage and kernel pool queries */
 /*     performed only when the data in the kernel pool has been */
 /*     updated, the routine can perform much more efficiently. */
@@ -7778,8 +8306,8 @@ L_dwpool:
 
 /* $ Restrictions */
 
-/*     1) It is recommended that watches be deleted only by */
-/*        routines that established them. */
+/*     1)  It is recommended that watches be deleted only by */
+/*         routines that established them. */
 
 /* $ Literature_References */
 
@@ -7787,10 +8315,15 @@ L_dwpool:
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     B.V. Semenov    (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     B.V. Semenov       (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.1, 17-AUG-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.1.0, 11-SEP-2013 (BVS) */
 
@@ -7804,11 +8337,6 @@ L_dwpool:
 
 /*     delete kernel pool watch */
 /*     delete agent from kernel pool watch lists */
-
-/* -& */
-/* $ Revisions */
-
-/*     None. */
 
 /* -& */
 
@@ -7894,7 +8422,7 @@ L_dwpool:
 /*        the node associated with AGENT. */
 
 	node = wtptrs[(i__2 = i__ - 1) < 26003 && 0 <= i__2 ? i__2 : s_rnge(
-		"wtptrs", i__2, "pool_", (ftnlen)8392)];
+		"wtptrs", i__2, "pool_", (ftnlen)8934)];
 	nnodes = 0;
 	agnode = 0;
 	while(node > 0) {
@@ -7903,7 +8431,7 @@ L_dwpool:
 /*           Fetch the next agent for the Ith kernel variable. */
 
 	    if (s_cmp(wtagnt + (((i__2 = node - 1) < 130015 && 0 <= i__2 ? 
-		    i__2 : s_rnge("wtagnt", i__2, "pool_", (ftnlen)8402)) << 
+		    i__2 : s_rnge("wtagnt", i__2, "pool_", (ftnlen)8944)) << 
 		    5), agent, (ftnlen)32, agent_len) == 0) {
 
 /*               Save the current node. */
@@ -7923,7 +8451,7 @@ L_dwpool:
 /*           set the corresponding agent name to blank. */
 
 	    s_copy(wtagnt + (((i__2 = agnode - 1) < 130015 && 0 <= i__2 ? 
-		    i__2 : s_rnge("wtagnt", i__2, "pool_", (ftnlen)8423)) << 
+		    i__2 : s_rnge("wtagnt", i__2, "pool_", (ftnlen)8965)) << 
 		    5), " ", (ftnlen)32, (ftnlen)1);
 
 /*           If we're about to delete the head node of the agent list, */
@@ -7933,9 +8461,9 @@ L_dwpool:
 /*           below. */
 
 	    if (wtptrs[(i__2 = i__ - 1) < 26003 && 0 <= i__2 ? i__2 : s_rnge(
-		    "wtptrs", i__2, "pool_", (ftnlen)8432)] == agnode) {
+		    "wtptrs", i__2, "pool_", (ftnlen)8974)] == agnode) {
 		wtptrs[(i__2 = i__ - 1) < 26003 && 0 <= i__2 ? i__2 : s_rnge(
-			"wtptrs", i__2, "pool_", (ftnlen)8434)] = lnknxt_(&
+			"wtptrs", i__2, "pool_", (ftnlen)8976)] = lnknxt_(&
 			agnode, wtpool);
 	    }
 
@@ -7951,7 +8479,7 @@ L_dwpool:
 		nw = cardc_(wtvars, (ftnlen)32);
 		s_copy(varnam, wtvars + (((i__2 = i__ + 5) < 26009 && 0 <= 
 			i__2 ? i__2 : s_rnge("wtvars", i__2, "pool_", (ftnlen)
-			8453)) << 5), (ftnlen)32, (ftnlen)32);
+			8995)) << 5), (ftnlen)32, (ftnlen)32);
 		removc_(varnam, wtvars, (ftnlen)32, (ftnlen)32);
 
 /*              Remove the associated pointer from the pointer array. */
@@ -7994,11 +8522,13 @@ L_zzvupool:
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
-/*     routines.  Users should not call this routine directly due to the */
+/*     routines. Users should not call this routine directly due to the */
 /*     volatile nature of this routine. */
 
-/*     Delete a name from the list of agents to notify whenever a member */
-/*     of a list of kernel variables is updated. */
+/*     Return copies of certain POOL variables that are used in the */
+/*     implementation of the watcher mechanism. These variables */
+/*     comprise a data structure that maps kernel variable names to sets */
+/*     of agents watching those kernel variables. */
 
 /* $ Disclaimer */
 
@@ -8057,18 +8587,18 @@ L_zzvupool:
 
 /* $ Detailed_Output */
 
-/*     UWVARS      is a set into which the local watcher system */
-/*                 set WTVARS has been copied. */
+/*     UWVARS   is a set into which the local watcher system */
+/*              set WTVARS has been copied. */
 
-/*     UWPTRS      is an array into which the local watcher system */
-/*                 array WTPTRS has been copied. */
+/*     UWPTRS   is an array into which the local watcher system */
+/*              array WTPTRS has been copied. */
 
-/*     UWPOOL      is a doubly linked list pool into which the local */
-/*                 watcher system doubly linked list pool WTPOOL has */
-/*                 been copied. */
+/*     UWPOOL   is a doubly linked list pool into which the local */
+/*              watcher system doubly linked list pool WTPOOL has */
+/*              been copied. */
 
-/*     UWAGNT      is an array into which the local watcher system */
-/*                 array WTAGNT has been copied. */
+/*     UWAGNT   is an array into which the local watcher system */
+/*              array WTAGNT has been copied. */
 
 /* $ Parameters */
 
@@ -8076,13 +8606,13 @@ L_zzvupool:
 
 /* $ Exceptions */
 
-/*     1) If the output array UWVARS is too small to hold the */
-/*        set WTVARS, the error will be diagnosed by routines */
-/*        in the call tree of this routine. */
+/*     1)  If the output array UWVARS is too small to hold the */
+/*         set WTVARS, an error is signaled by a routine */
+/*         in the call tree of this routine. */
 
-/*     2) If any output array other than UWVARS is to small */
-/*        to hold the corresponding watch system component, */
-/*        memory corruption will occur. */
+/*     2)  If any output array other than UWVARS is to small */
+/*         to hold the corresponding watch system component, */
+/*         memory corruption will occur. */
 
 /* $ Files */
 
@@ -8105,12 +8635,12 @@ L_zzvupool:
 
 /* $ Restrictions */
 
-/*     1) This is a private routine. See $Particulars above. */
+/*     1)  This is a private routine. See $Particulars above. */
 
-/*     2) The caller must provide output arrays of adequate */
-/*        size. See the declarations of the watch system */
-/*        components in the umbrella routine POOL for size */
-/*        requirements. */
+/*     2)  The caller must provide output arrays of adequate */
+/*         size. See the declarations of the watch system */
+/*         components in the umbrella routine POOL for size */
+/*         requirements. */
 
 /* $ Literature_References */
 
@@ -8118,24 +8648,25 @@ L_zzvupool:
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     B.V. Semenov       (JPL) */
 
 /* $ Version */
 
+/* -    SPICELIB Version 1.0.2, 17-AUG-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
+
 /* -    SPICELIB Version 1.0.1, 27-MAR-2014 (BVS) */
 
-/*        Set Index_Entries to "None." to make this entry no appear in */
-/*        permutted index. */
+/*        Set $Index_Entries to "None." to make this entry no appear in */
+/*        permuted index. */
 
 /* -    SPICELIB Version 1.0.0, 19-MAR-2009 (NJB) */
 
 /* -& */
 /* $ Index_Entries */
-
-/*     None. */
-
-/* -& */
-/* $ Revisions */
 
 /*     None. */
 
@@ -8166,7 +8697,7 @@ L_zzpctrck:
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
-/*     routines.  Users should not call this routine directly due to the */
+/*     routines. Users should not call this routine directly due to the */
 /*     volatile nature of this routine. */
 
 /*     Check and update the POOL state counter tracked by a caller */
@@ -8216,32 +8747,32 @@ L_zzpctrck:
 
 /*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
-/*     USRCTR    I/O  POOL state counter tracked by the caller */
+/*     USRCTR    I-O  POOL state counter tracked by the caller */
 /*     UPDATE     O   Flag indicating if input counter was updated */
 
 /*     CTRSIZ     P   Dimension of the counter array */
 
 /* $ Detailed_Input */
 
-/*     USRCTR      is the value of the POOL state counter tracked by */
-/*                 (saved in) the caller (user) routine. */
+/*     USRCTR   is the value of the POOL state counter tracked by */
+/*              (saved in) the caller (user) routine. */
 
 /* $ Detailed_Output */
 
-/*     USRCTR      is the current POOL state counter. */
+/*     USRCTR   is the current POOL state counter. */
 
-/*     UPDATE      is the logical flag indicating whether the input POOL */
-/*                 state counter was different from the current POOL */
-/*                 state counter and, therefore, had to be updated */
-/*                 (UPDATE = .TRUE.) or if it was the same (UPDATE = */
-/*                 .FALSE.). */
+/*     UPDATE   is the logical flag indicating whether the input POOL */
+/*              state counter was different from the current POOL */
+/*              state counter and, therefore, had to be updated */
+/*              (UPDATE = .TRUE.) or if it was the same (UPDATE = */
+/*              .FALSE.). */
 
 /* $ Parameters */
 
-/*     CTRSIZ      is the dimension of the counter array used by */
-/*                 various SPICE subsystems to uniquely identify */
-/*                 changes in their states. This parameter is */
-/*                 defined in the private include file 'zzctr.inc'. */
+/*     CTRSIZ   is the dimension of the counter array used by */
+/*              various SPICE subsystems to uniquely identify */
+/*              changes in their states. This parameter is */
+/*              defined in the private include file 'zzctr.inc'. */
 
 /* $ Exceptions */
 
@@ -8327,7 +8858,7 @@ L_zzpctrck:
 
 /* $ Restrictions */
 
-/*     1) This is a private routine. See $Particulars above. */
+/*     1)  This is a private routine. See $Particulars above. */
 
 /* $ Literature_References */
 
@@ -8335,19 +8866,19 @@ L_zzpctrck:
 
 /* $ Author_and_Institution */
 
-/*     B.V. Semenov    (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     B.V. Semenov       (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.0.1, 17-AUG-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.0.0, 27-MAR-2014 (BVS) */
 
 /* -& */
 /* $ Index_Entries */
-
-/*     None. */
-
-/* -& */
-/* $ Revisions */
 
 /*     None. */
 
@@ -8362,18 +8893,18 @@ L_zzpctrck:
     return 0;
 } /* pool_ */
 
-/* Subroutine */ int pool_(char *kernel, integer *unit, char *name__, char *
+/* Subroutine */ int pool_(char *fname, integer *unit, char *name__, char *
 	names, integer *nnames, char *agent, integer *n, doublereal *values, 
 	logical *found, logical *update, integer *start, integer *room, char *
 	cvals, integer *ivals, char *type__, char *uwvars, integer *uwptrs, 
-	integer *uwpool, char *uwagnt, integer *usrctr, ftnlen kernel_len, 
+	integer *uwpool, char *uwagnt, integer *usrctr, ftnlen fname_len, 
 	ftnlen name_len, ftnlen names_len, ftnlen agent_len, ftnlen cvals_len,
 	 ftnlen type_len, ftnlen uwvars_len, ftnlen uwagnt_len)
 {
-    return pool_0_(0, kernel, unit, name__, names, nnames, agent, n, values, 
+    return pool_0_(0, fname, unit, name__, names, nnames, agent, n, values, 
 	    found, update, start, room, cvals, ivals, type__, uwvars, uwptrs, 
-	    uwpool, uwagnt, usrctr, kernel_len, name_len, names_len, 
-	    agent_len, cvals_len, type_len, uwvars_len, uwagnt_len);
+	    uwpool, uwagnt, usrctr, fname_len, name_len, names_len, agent_len,
+	     cvals_len, type_len, uwvars_len, uwagnt_len);
     }
 
 /* Subroutine */ int clpool_(void)
@@ -8386,14 +8917,14 @@ L_zzpctrck:
 	    0, (ftnint)0, (ftnint)0, (ftnint)0);
     }
 
-/* Subroutine */ int ldpool_(char *kernel, ftnlen kernel_len)
+/* Subroutine */ int ldpool_(char *fname, ftnlen fname_len)
 {
-    return pool_0_(2, kernel, (integer *)0, (char *)0, (char *)0, (integer *)
-	    0, (char *)0, (integer *)0, (doublereal *)0, (logical *)0, (
-	    logical *)0, (integer *)0, (integer *)0, (char *)0, (integer *)0, 
-	    (char *)0, (char *)0, (integer *)0, (integer *)0, (char *)0, (
-	    integer *)0, kernel_len, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)
-	    0, (ftnint)0, (ftnint)0, (ftnint)0);
+    return pool_0_(2, fname, (integer *)0, (char *)0, (char *)0, (integer *)0,
+	     (char *)0, (integer *)0, (doublereal *)0, (logical *)0, (logical 
+	    *)0, (integer *)0, (integer *)0, (char *)0, (integer *)0, (char *)
+	    0, (char *)0, (integer *)0, (integer *)0, (char *)0, (integer *)0,
+	     fname_len, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0,
+	     (ftnint)0, (ftnint)0);
     }
 
 /* Subroutine */ int rtpool_(char *name__, integer *n, doublereal *values, 

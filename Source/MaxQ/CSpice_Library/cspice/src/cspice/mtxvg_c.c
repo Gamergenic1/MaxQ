@@ -1,6 +1,6 @@
 /*
 
--Procedure  mtxvg_c ( Matrix transpose times vector, general dimension )
+-Procedure mtxvg_c ( Matrix transpose times vector, general dimension )
 
 -Abstract
 
@@ -37,7 +37,8 @@
 
 -Keywords
 
-   MATRIX,  VECTOR
+   MATRIX
+   VECTOR
 
 */
    #include <stdlib.h>
@@ -50,9 +51,10 @@
 
    void mtxvg_c ( const void   * m1,
                   const void   * v2,
-                  SpiceInt       ncol1,
+                  SpiceInt       nc1,
                   SpiceInt       nr1r2,
                   void         * vout   )
+
 /*
 
 -Brief_I/O
@@ -61,111 +63,152 @@
    --------  ---  --------------------------------------------------
    m1         I   Left-hand matrix to be multiplied.
    v2         I   Right-hand vector to be multiplied.
-   ncol1      I   Column dimension of m1 and length of vout.
-   nr1r2      I   Row dimension of m1 and length of v2.
-   vout       O   Product vector m1 transpose * v2.
+   nc1        I   Column dimension of `m1' and length of `vout'.
+   nr1r2      I   Row dimension of `m1' and length of `v2'.
+   vout       O   Product vector `m1' transpose times `v2'.
 
 -Detailed_Input
 
-   m1         is a double precision matrix of arbitrary size which
-              forms the left-hand matrix of the multiplication.
+   m1          is a double precision matrix of arbitrary size which
+               forms the left-hand matrix of the multiplication.
 
-   v2         is a double precision vector on the right of the
-              multiplication.
+   v2          is a double precision vector on the right of the
+               multiplication.
 
-   ncol1      is the column dimension of m1 and length of vout.
+   nc1         is the column dimension of `m1' and length of `vout'.
 
-   nr1r2      is the row dimension of m1 and length of v2.
+   nr1r2       is the row dimension of `m1' and length of `v2'.
 
 -Detailed_Output
 
-   vout       is the double precision vector which results from
-              the multiplication
+   vout        is the double precision vector which results from
+               the multiplication
 
-                            t
-                 vout = (m1)  x  v2
+                             t
+                  vout = (m1)  x  v2
 
-              where the superscript t denotes the transpose of a matrix.
-              vout has length ncol1.
+               where the superscript `t' denotes the transpose of a matrix.
+               `vout' has length `nc1'.
 
-              vout may overwrite m1 or v2.  Note that this capability
-              does not exist in the Fortran version of SPICELIB; in the
-              Fortran version, the output must not overwrite either
-              input.
+               `vout' may overwrite `m1' or `v2'.
 
 -Parameters
 
    None.
 
--Particulars
-
-    The code reflects precisely the following mathematical expression
-
-       For each value of the subscript i from 1 to ncol1,
-
-       vout(i) = Summation from k=1 to nr1r2 of  ( m1(k,i) * v2(k) )
-
--Examples
-
-   1)  Suppose that
-
-               | 1  2 |
-          m1 = | 1  3 |
-               | 1  4 |
-
-
-       and that
-
-               | 1 |
-          v2 = | 2 |
-               | 3 |
-
-
-       Then calling mxvg_c as shown
-
-          mtxvg_c ( m1, v2, 2, 3, vout );
-
-
-       will yield the following vector value for vout:
-
-          vout = | 6  |
-                 | 20 |
-
--Restrictions
-
-   1) The user is responsible for checking the magnitudes of the
-      elements of m1 and v2 so that a floating point overflow does
-      not occur.
-
 -Exceptions
 
-   Error free.
+   1)  If memory cannot be allocated to create the temporary matrix
+       required for the execution of the routine, the error
+       SPICE(MALLOCFAILED) is signaled.
 
 -Files
 
    None.
 
--Author_and_Institution
+-Particulars
 
-   N.J. Bachman    (JPL)
-   W.M. Owen       (JPL)
+   The code reflects precisely the following mathematical expression
+
+   For each value of the subscript `i' from 1 to `nc1',
+
+      vout(i) = Summation from k=1 to nr1r2 of  ( m1(k,i) * v2(k) )
+
+-Examples
+
+   The numerical results shown for this example may differ across
+   platforms. The results depend on the SPICE kernels used as
+   input, the compiler and supporting libraries, and the machine
+   specific arithmetic implementation.
+
+   1) Given a 3x2 matrix and a 3-vector, multiply the transpose of
+      the matrix by the vector.
+
+
+      Example code begins here.
+
+
+      /.
+         Program mtxvg_ex1
+      ./
+      #include <stdio.h>
+      #include "SpiceUsr.h"
+
+      int main( )
+      {
+
+         /.
+         Local variables.
+         ./
+         SpiceDouble          vout   [2];
+
+         /.
+         Define `m' and `vin'.
+         ./
+         SpiceDouble          m      [3][2] = { { 1.0,  2.0 },
+                                                { 1.0,  3.0 },
+                                                { 1.0,  4.0 } };
+
+         SpiceDouble          vin    [3] = { 1.0, 2.0, 3.0 };
+
+         /.
+         Multiply the transpose of `m' by `vin'.
+         ./
+         mtxvg_c ( m, vin, 2, 3, vout );
+
+         printf( "Transpose of M times VIN:\n" );
+         printf( "%10.3f %9.3f\n", vout[0], vout[1] );
+
+         return ( 0 );
+      }
+
+
+      When this program was executed on a Mac/Intel/cc/64-bit
+      platform, the output was:
+
+
+      Transpose of M times VIN:
+           6.000    20.000
+
+
+-Restrictions
+
+   1)  The user is responsible for checking the magnitudes of the
+       elements of `m1' and `v2' so that a floating point overflow does
+       not occur.
 
 -Literature_References
 
    None.
 
+-Author_and_Institution
+
+   N.J. Bachman        (JPL)
+   J. Diaz del Rio     (ODC Space)
+
 -Version
+
+   -CSPICE Version 1.3.0, 06-AUG-2021 (JDR)
+
+       Changed the input argument name "ncol1" "nc1" for consistency
+       with other routines.
+
+       Updated short error message for consistency within CSPICE wrapper
+       interface: MEMALLOCFAILED -> MALLOCFAILED.
+
+       Edited the header to comply with NAIF standard. Added complete code
+       example based on the existing example.
 
    -CSPICE Version 1.2.0, 28-AUG-2001 (NJB)
 
-      Const-qualified input arrays.
+       Const-qualified input arrays.
 
    -CSPICE Version 1.1.0, 08-FEB-1998 (NJB)
 
-      Corrected a comment describing the local macro INDEX.   Made
-      miscellaneous code format corrections.
+       Corrected a comment describing the local macro INDEX. Made
+       miscellaneous code format corrections.
 
-      Based on SPICELIB Version 1.0.1, 10-MAR-1992 (WLT)
+       Based on SPICELIB Version 1.0.1, 10-MAR-1992 (WLT)
 
 -Index_Entries
 
@@ -215,9 +258,9 @@
 
    /*
    Allocate space for a temporary copy of the output vector, which
-   has ncol1 rows.
+   has nc1 rows.
    */
-   size     =  (size_t) ( ncol1 * sizeof(SpiceDouble) );
+   size     =  (size_t) ( nc1 * sizeof(SpiceDouble) );
 
    tmpvec   =  (SpiceDouble *) malloc ( size );
 
@@ -225,7 +268,7 @@
    {
       chkin_c  ( "mtxvg_c"                                         );
       setmsg_c ( "An attempt to create a temporary vector failed." );
-      sigerr_c ( "SPICE(MEMALLOCFAILED)"                           );
+      sigerr_c ( "SPICE(MALLOCFAILED)"                             );
       chkout_c ( "mtxvg_c"                                         );
       return;
    }
@@ -250,14 +293,14 @@
    We compute index offsets using the macro INDEX.
    */
 
-   for ( row = 0;  row < ncol1;  row++ )
+   for ( row = 0;  row < nc1;  row++ )
    {
 
       innerProduct = 0.0;
 
       for ( i = 0;  i < nr1r2;  i++ )
       {
-         innerProduct  +=  loc_m1[ INDEX(ncol1, i, row  ) ] * loc_v2[i];
+         innerProduct  +=  loc_m1[ INDEX(nc1, i, row  ) ] * loc_v2[i];
       }
 
       tmpvec [ row ]  =  innerProduct;
@@ -266,7 +309,7 @@
    /*
    Move the result from tmpvec into vout.
    */
-   MOVED ( tmpvec, ncol1, vout );
+   MOVED ( tmpvec, nc1, vout );
 
    /*
    Free the temporary vector.

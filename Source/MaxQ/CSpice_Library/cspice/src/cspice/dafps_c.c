@@ -3,10 +3,10 @@
 -Procedure dafps_c ( DAF, pack summary )
 
 -Abstract
- 
-   Pack (assemble) an array summary from its double precision and 
-   integer components. 
- 
+
+   Pack (assemble) an array summary from its double precision and
+   integer components.
+
 -Disclaimer
 
    THIS SOFTWARE AND ANY RELATED MATERIALS WERE CREATED BY THE
@@ -33,14 +33,14 @@
    ACTIONS OF RECIPIENT IN THE USE OF THE SOFTWARE.
 
 -Required_Reading
- 
-   DAF 
- 
+
+   DAF
+
 -Keywords
- 
-   CONVERSION 
-   FILES 
- 
+
+   CONVERSION
+   FILES
+
 */
 
    #include "SpiceUsr.h"
@@ -54,101 +54,135 @@
                   SpiceInt             ni,
                   ConstSpiceDouble   * dc,
                   ConstSpiceInt      * ic,
-                  SpiceDouble        * sum ) 
+                  SpiceDouble        * sum )
 
 /*
 
 -Brief_I/O
- 
-   Variable  I/O  Description 
-   --------  ---  -------------------------------------------------- 
-   nd         I   Number of double precision components. 
-   ni         I   Number of integer components. 
-   dc         I   Double precision components. 
-   ic         I   Integer components. 
-   sum        O   Array summary. 
- 
+
+   VARIABLE  I/O  DESCRIPTION
+   --------  ---  --------------------------------------------------
+   nd         I   Number of double precision components.
+   ni         I   Number of integer components.
+   dc         I   Double precision components.
+   ic         I   Integer components.
+   sum        O   Array summary.
+
 -Detailed_Input
- 
-   nd          is the number of double precision components in 
-               the summary to be packed. 
- 
-   ni          is the number of integer components in the summary. 
- 
-   dc          are the double precision components of the summary. 
- 
-   ic          are the integer components of the summary. 
- 
+
+   nd          is the number of double precision components in
+               the summary to be packed.
+
+   ni          is the number of integer components in the summary.
+
+   dc          are the double precision components of the summary.
+
+   ic          are the integer components of the summary.
+
 -Detailed_Output
- 
-   sum         is an array summary containing the components in `dc' 
-               and `ic'. This identifies the contents and location of 
-               a single array within a DAF. 
- 
+
+   sum         is an array summary containing the components in `dc'
+               and `ic'. This identifies the contents and location of
+               a single array within a DAF.
+
 -Parameters
- 
-   None. 
- 
--Files
- 
-   None. 
- 
+
+   None.
+
 -Exceptions
- 
-   Error free. 
- 
-   1) If ND is zero or negative, no DP components are stored. 
- 
-   2) If NI is zero or negative, no integer components are stored. 
- 
-   3) If the total size of the summary is greater than 125 double 
-      precision words, some components may not be stored. 
- 
+
+   Error free.
+
+   1)  If `nd' is zero or negative, no DP components are stored.
+
+   2)  If `ni' is zero or negative, no integer components are stored.
+
+   3)  If the total size of the summary is greater than 125 double
+       precision words, some components may not be stored. See
+       -Particulars for details.
+
+-Files
+
+   None.
+
 -Particulars
- 
-   The components of array summaries are packed into double 
-   precision arrays for reasons outlined in [1]. Two routines, 
-   dafps_c (pack summary) and dafus_c (unpack summary) are provided 
-   for packing and unpacking summaries. 
- 
-   The total size of the summary is 
- 
-           (NI - 1) 
-      ND + -------- + 1 
-               2 
- 
-   double precision words (where ND, NI are nonnegative). 
- 
+
+   The components of array summaries are packed into double
+   precision arrays for reasons outlined in the DAF required reading.
+   Two routines, dafps_c (pack summary) and dafus_c (unpack summary)
+   are provided for packing and unpacking summaries.
+
+   The total size of the summary is
+
+           (NI - 1)
+      ND + -------- + 1
+               2
+
+   double precision words (where the sizes of `dc' and `ic', ND and NI,
+   are non-negative).
+
 -Examples
- 
- 
-   1) Replace the body ID code -999 with -1999 in every descriptor
-      of an SPK file.
+
+   The numerical results shown for this example may differ across
+   platforms. The results depend on the SPICE kernels used as
+   input, the compiler and supporting libraries, and the machine
+   specific arithmetic implementation.
+
+   1) Replace the body ID code 301 (Moon) with a test body ID,
+      e.g. -999, in every descriptor of an SPK file.
 
 
-      #include <SpiceUsr.h>
- 
-      int main ( int argc,  char **argv )
+      Example code begins here.
+
+
+      /.
+         Program dafps_ex1
+      ./
+      #include <stdio.h>
+      #include "SpiceUsr.h"
+
+      int main ( )
       {
+         /.
+         Local parameters.
+         ./
+         #define DSCSIZ          5
+         #define FILSIZ          256
+         #define MAXOBJ         1000
+
          #define ND              2
          #define NI              6
-         #define DSCSIZ          5
-         #define NEWCODE         ( -1999 )
-         #define OLDCODE         ( -999  )
+
+         #define NEWCODE         ( -999 )
+         #define OLDCODE         (  301 )
+
+         /.
+         Local variables.
+         ./
+         SPICEINT_CELL         ( ids,   MAXOBJ );
 
          SpiceBoolean            found;
 
-         SpiceInt                handle;
-         SpiceInt                ic      [ NI ];
+         SpiceChar               fname   [ FILSIZ ];
 
          SpiceDouble             dc      [ ND ];
          SpiceDouble             sum     [ DSCSIZ ];
 
+         SpiceInt                handle;
+         SpiceInt                i;
+         SpiceInt                ic      [ NI ];
+         SpiceInt                obj;
+
          /.
-         Open for writing the SPK file specified on the command line.
+         Get the SPK file name.
          ./
-         dafopw_c ( argv[1], &handle );
-      
+         prompt_c ( "Enter name of the SPK file > ", FILSIZ, fname );
+
+         /.
+         Open for writing the SPK file.
+         ./
+         dafopw_c ( fname, &handle );
+
          /.
          Search the file in forward order.
          ./
@@ -163,7 +197,7 @@
             ./
             dafgs_c ( sum  );
             dafus_c ( sum, ND, NI, dc, ic );
-          
+
             /.
             Replace ID codes if necessary.
             ./
@@ -181,13 +215,13 @@
             in the file.
             ./
             dafps_c ( ND, NI, dc, ic, sum );
-
             dafrs_c ( sum );
- 
+
             /.
             Find the next segment.
             ./
             daffna_c ( &found );
+
          }
 
          /.
@@ -195,30 +229,61 @@
          ./
          dafcls_c ( handle );
 
+         /.
+         Find the set of objects in the SPK file.
+         ./
+         spkobj_c ( fname, &ids );
+
+         printf( "Objects in the DAF file:\n\n" );
+
+         for ( i = 0;  i < card_c( &ids );  i++  )
+         {
+            obj  =  SPICE_CELL_ELEM_I( &ids, i );
+            printf( "%4d", (int)obj );
+         }
+
+         printf( "\n" );
+
          return ( 0 );
       }
- 
+
+
+      When this program was executed on a Mac/Intel/cc/64-bit
+      platform, using the SPK file named de430.bsp, the output was:
+
+
+      Enter name of the SPK file > de430.bsp
+      Objects in the DAF file:
+
+      -999   1   2   3   4   5   6   7   8   9  10 199 299 399
+
+
 -Restrictions
- 
-   None. 
- 
--Literature_References
- 
+
    None.
- 
+
+-Literature_References
+
+   None.
+
 -Author_and_Institution
- 
-   N.J. Bachman    (JPL)
-   I.M. Underwood  (JPL) 
- 
+
+   N.J. Bachman        (JPL)
+   J. Diaz del Rio     (ODC Space)
+
 -Version
- 
+
+   -CSPICE Version 1.0.1, 09-JUL-2021 (JDR)
+
+       Edited the header to comply with NAIF standard. Extended code
+       example to generate outputs and provided example's solution.
+
    -CSPICE Version 1.0.0, 23-NOV-2004 (NJB)
 
 -Index_Entries
- 
-   pack daf summary 
- 
+
+   pack DAF summary
+
 -&
 */
 

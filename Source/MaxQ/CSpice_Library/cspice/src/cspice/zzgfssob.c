@@ -9,7 +9,7 @@
 
 static integer c__6 = 6;
 static integer c__3 = 3;
-static doublereal c_b40 = 1.;
+static doublereal c_b41 = 1.;
 
 /* $Procedure      ZZGFSSOB ( GF, state of sub-observer point ) */
 /* Subroutine */ int zzgfssob_(char *method, integer *trgid, doublereal *et, 
@@ -42,10 +42,10 @@ static doublereal c_b40 = 1.;
 	    integer *, doublereal *);
     doublereal upos[3];
     extern /* Subroutine */ int zzstelab_(logical *, doublereal *, doublereal 
-	    *, doublereal *, doublereal *, doublereal *), zzcorsxf_(logical *,
-	     doublereal *, doublereal *, doublereal *);
+	    *, doublereal *, doublereal *, doublereal *), zzvalcor_(char *, 
+	    logical *, ftnlen), zzcorsxf_(logical *, doublereal *, doublereal 
+	    *, doublereal *);
     integer i__;
-    extern /* Subroutine */ int zzprscor_(char *, logical *, ftnlen);
     doublereal t;
     extern /* Subroutine */ int vaddg_(doublereal *, doublereal *, integer *, 
 	    doublereal *);
@@ -75,9 +75,9 @@ static doublereal c_b40 = 1.;
 	    sastat[6], spoint[3], srfvec[3], ssbobs[6], ssbtrg[6], trgepc;
     integer center, clssid, frclss;
     logical attblk[6], usestl;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     logical fnd;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
+    extern /* Subroutine */ int setmsg_(char *, ftnlen), sigerr_(char *, 
 	    ftnlen), namfrm_(char *, integer *, ftnlen), frinfo_(integer *, 
 	    integer *, integer *, integer *, logical *), errint_(char *, 
 	    integer *, ftnlen), spkgeo_(integer *, doublereal *, char *, 
@@ -759,6 +759,14 @@ static doublereal c_b40 = 1.;
 
 /* $ Version */
 
+/* -    SPICELIB Version 2.1.0 09-OCT-2021 (NJB) */
+
+/*        Bug fix: now returns after detecting bad aberration */
+/*        correction string. */
+
+/*        Bug fix: aberration correction strings are now parsed using */
+/*        ZZVALCOR. This improves error checking. */
+
 /* -    SPICELIB Version 2.0.0 12-MAY-2009 (NJB) */
 
 /*        Upgraded to support targets and observers having */
@@ -806,7 +814,11 @@ static doublereal c_b40 = 1.;
 
 /*     Parse the aberration correction specifier. */
 
-    zzprscor_(abcorr, attblk, abcorr_len);
+    zzvalcor_(abcorr, attblk, abcorr_len);
+    if (failed_()) {
+	chkout_("ZZGFSSOB", (ftnlen)8);
+	return 0;
+    }
     geom = attblk[0];
     uselt = attblk[1];
     usestl = attblk[2];
@@ -1013,7 +1025,7 @@ static doublereal c_b40 = 1.;
 		t = *et + ((i__ << 1) - 3) * 1.;
 		spkssb_(obsid, &t, "J2000", &obssta[(i__1 = i__ * 6 - 6) < 12 
 			&& 0 <= i__1 ? i__1 : s_rnge("obssta", i__1, "zzgfss"
-			"ob_", (ftnlen)652)], (ftnlen)5);
+			"ob_", (ftnlen)665)], (ftnlen)5);
 	    }
 	    if (failed_()) {
 		chkout_("ZZGFSSOB", (ftnlen)8);
@@ -1023,7 +1035,7 @@ static doublereal c_b40 = 1.;
 /*           Compute the observer's acceleration using a quadratic */
 /*           approximation. */
 
-	    qderiv_(&c__3, &obssta[3], &obssta[9], &c_b40, acc);
+	    qderiv_(&c__3, &obssta[3], &obssta[9], &c_b41, acc);
 	}
 
 /*        The rest of the algorithm is iterative. On the first */

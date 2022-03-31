@@ -12,7 +12,7 @@ static integer c__1 = 1;
 static integer c__0 = 0;
 static integer c__2 = 2;
 
-/* $Procedure      CKMETA ( CK ID to associated SCLK ) */
+/* $Procedure CKMETA ( CK ID to associated SCLK ) */
 /* Subroutine */ int ckmeta_(integer *ckid, char *meta, integer *idcode, 
 	ftnlen meta_len)
 {
@@ -67,9 +67,9 @@ static integer c__2 = 2;
 
 /* $ Abstract */
 
-/*     This routine returns (depending upon the users' request) */
-/*     the ID code of either the spacecraft or spacecraft clock */
-/*     associated with a C-Kernel ID code. */
+/*     Return (depending upon the user's request) the ID code of either */
+/*     the spacecraft or spacecraft clock associated with a C-Kernel ID */
+/*     code. */
 
 /* $ Disclaimer */
 
@@ -98,7 +98,8 @@ static integer c__2 = 2;
 
 /* $ Required_Reading */
 
-/*     None. */
+/*     CK */
+/*     FRAMES */
 
 /* $ Keywords */
 
@@ -164,49 +165,47 @@ static integer c__2 = 2;
 /*     --------  ---  -------------------------------------------------- */
 /*     CKID       I   The ID code for some C kernel object. */
 /*     META       I   The kind of meta data requested 'SPK' or 'SCLK' */
-/*     IDCODE     O   The ID code for the clock of the C kernel. */
+/*     IDCODE     O   The requested SCLK or spacecraft ID code. */
 
 /* $ Detailed_Input */
 
-/*     CKID        is the ID code for some object whose attitude */
-/*                 and possibly angular velocity are stored in */
-/*                 some C-kernel. */
+/*     CKID     is the ID code for some object whose attitude */
+/*              and possibly angular velocity are stored in */
+/*              some C-kernel. */
 
-/*     META        is a character string that indicates which piece */
-/*                 of meta data to fetch.  Acceptable values are */
-/*                 'SCLK' and 'SPK'. The routine is case insensitive. */
-/*                 Leading and trailing blanks are insignificant. */
-/*                 However, blanks between characters are regarded */
-/*                 as being significant and will result in the error */
-/*                 'SPICE(UNKNOWNCKMETA)' being signaled. */
+/*     META     is a character string that indicates which piece */
+/*              of meta data to fetch. Acceptable values are */
+/*              'SCLK' and 'SPK'. The routine is case insensitive. */
+/*              Leading and trailing blanks are insignificant. */
+/*              However, blanks between characters are regarded */
+/*              as being significant. */
 
 /* $ Detailed_Output */
 
-/*     IDCODE      if META is 'SCLK' then the value returned in IDCODE */
-/*                 is the "ID code" of the spacecraft clock used for */
-/*                 converting ET to TICKS and TICKS to ET for the */
-/*                 C-kernel used to represent the attitude of the */
-/*                 object with ID code CKID. */
+/*     IDCODE   if META is 'SCLK' then the value returned in IDCODE */
+/*              is the ID code of the spacecraft clock used for */
+/*              converting ET to TICKS and TICKS to ET for the */
+/*              C-kernel used to represent the attitude of the */
+/*              object with ID code CKID. */
 
-/*                 if META is 'SPK' then the value returned in IDCODE */
-/*                 is the "ID code" of the spacecraft on which the */
-/*                 platform indicated by CKID is mounted. */
+/*              If META is 'SPK' then the value returned in IDCODE is the */
+/*              ID code of the spacecraft on which the platform indicated */
+/*              by CKID is mounted. */
 
 /* $ Parameters */
 
-/*      None. */
+/*     None. */
 
 /* $ Exceptions */
 
-/*     1) If the variable META is not recognized to be one of the */
-/*        inputs 'SPK' or 'SCLK' then the error 'SPICE(UNKNOWNCKMETA)' */
-/*        will be signaled. */
+/*     1)  If the variable META is not recognized to be one of the */
+/*         inputs 'SPK' or 'SCLK', the error SPICE(UNKNOWNCKMETA) */
+/*         is signaled. */
 
-/*     2) If CKID is greater than -1000, the associated SCLK and SPK */
-/*        ID's must be in the kernel pool.  If they are not present */
-/*        a value of zero is returned for the requested item.  Zero */
-/*        is never the valid ID of a spacecraft clock or ephemeris */
-/*        object. */
+/*     2)  If CKID is greater than -1000, the associated SCLK and SPK */
+/*         IDs must be in the kernel pool. If they are not present */
+/*         a value of zero is returned for the requested item. Zero */
+/*         is never the valid ID of a spacecraft clock. */
 
 /* $ Files */
 
@@ -215,32 +214,163 @@ static integer c__2 = 2;
 /* $ Particulars */
 
 /*     This is a utility routine for mapping C-kernels to associated */
-/*     spacecraft clocks. This is needed to facilitate the writing */
-/*     of routines such as CKPG and CKGPAV. */
+/*     spacecraft clocks. */
+
+/*     An association of an SCLK ID and spacecraft ID with a CK frame */
+/*     class ID may be made by placing in a text kernel the kernel */
+/*     variable assignments */
+
+/*        CK_<ck_frame_class_ID_code>_SCLK = <ID code of SCLK> */
+/*        CK_<ck_frame_class_ID_code>_SPK  = <SPK ID code> */
+
+/*     See the Frames Required Reading section on CK frames. */
 
 /* $ Examples */
 
-/*     Suppose you would like to look up the attitude of */
-/*     an object in a C-kernel but have ET and seconds as your */
-/*     input time and tolerance. */
+/*     The numerical results shown for this example may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
 
-/*     This routine can be used in conjunction with SCE2C and */
-/*     CKGPAV to perform this task. */
+/*     1) Suppose you would like to look up the attitude of an object */
+/*        in a C-kernel but have ET and seconds as your input time and */
+/*        tolerance. */
 
-/*     CALL CKMETA ( CKID,  'SCLK'      IDCODE ) */
+/*        Use the meta-kernel shown below to load the required SPICE */
+/*        kernels. */
 
-/*     CALL SCE2C  ( IDCODE, ET,        TICKS  ) */
-/*     CALL SCE2C  ( IDCODE, ET+SECTOL, TICK2  ) */
 
-/*     TOL = TICK2 - TICKS */
+/*           KPL/MK */
 
-/*     CALL CKGPAV ( CKID, TICKS, TOL, REF, CMAT, AV, CLKOUT, FOUND ) */
+/*           File name: ckmeta_ex1.tm */
 
-/*     IF ( FOUND ) THEN */
+/*           This meta-kernel is intended to support operation of SPICE */
+/*           example programs. The kernels shown here should not be */
+/*           assumed to contain adequate or correct versions of data */
+/*           required by SPICE-based user applications. */
 
-/*        CALL SCT2E ( IDCODE, CLKOUT, ETOUT ) */
+/*           In order for an application to use this meta-kernel, the */
+/*           kernels referenced here must be present in the user's */
+/*           current working directory. */
 
-/*     END IF */
+/*           The names and contents of the kernels referenced */
+/*           by this meta-kernel are as follows: */
+
+/*              File name              Contents */
+/*              --------------------   ----------------------- */
+/*              cas00071.tsc           CASSINI SCLK */
+/*              naif0012.tls           Leapseconds */
+/*              04153_04182ca_ISS.bc   CASSINI image navigated */
+/*                                     spacecraft CK */
+
+
+/*           \begindata */
+
+/*              KERNELS_TO_LOAD = ( 'naif0012.tls', */
+/*                                  'cas00071.tsc' */
+/*                                  '04153_04182ca_ISS.bc' ) */
+
+/*           \begintext */
+
+/*           End of meta-kernel */
+
+
+/*        Example code begins here. */
+
+
+/*              PROGRAM CKMETA_EX1 */
+/*              IMPLICIT NONE */
+
+/*        C */
+/*        C     Local parameters. */
+/*        C */
+/*        C     -- The code for CASSINI spacecraft reference frame is */
+/*        C        -82000. */
+/*        C */
+/*        C     -- The reference frame we want is J2000. */
+/*        C */
+/*              CHARACTER*(*)         REF */
+/*              PARAMETER           ( REF = 'J2000' ) */
+
+/*              INTEGER               CKID */
+/*              PARAMETER           ( CKID = -82000  ) */
+
+/*        C */
+/*        C     Local variables. */
+/*        C */
+/*              DOUBLE PRECISION      AV     ( 3 ) */
+/*              DOUBLE PRECISION      CLKOUT */
+/*              DOUBLE PRECISION      CMAT   ( 3, 3 ) */
+/*              DOUBLE PRECISION      ET */
+/*              DOUBLE PRECISION      ETOUT */
+/*              DOUBLE PRECISION      SECTOL */
+/*              DOUBLE PRECISION      TICKS */
+/*              DOUBLE PRECISION      TICK2 */
+/*              DOUBLE PRECISION      TOL */
+
+/*              INTEGER               IDCODE */
+
+/*              LOGICAL               FOUND */
+
+/*        C */
+/*        C     Initial values. */
+/*        C */
+/*              DATA                  ET      / 141162208.034340D0 / */
+/*              DATA                  SECTOL  / 0.5D0 / */
+
+
+/*        C */
+/*        C     First load the CK, LSK and SCLK files. */
+/*        C */
+/*              CALL FURNSH ( 'ckmeta_ex1.tm' ) */
+
+/*        C */
+/*        C     Get the SCLK identifier of the spacecraft clock required */
+/*        C     to convert from ET to TICKS. */
+/*        C */
+/*              CALL CKMETA ( CKID, 'SCLK', IDCODE ) */
+
+/*        C */
+/*        C     Convert ET and ET+SECTOL to spacecraft clock ticks. */
+/*        C */
+/*              CALL SCE2C  ( IDCODE, ET,        TICKS  ) */
+/*              CALL SCE2C  ( IDCODE, ET+SECTOL, TICK2  ) */
+
+
+/*        C */
+/*        C     Compute the tolerance in spacecraft clock ticks. */
+/*        C */
+/*              TOL = TICK2 - TICKS */
+
+/*        C */
+/*        C     Look the attitude up. */
+/*        C */
+/*              CALL CKGPAV ( CKID, TICKS, TOL,    REF, */
+/*             .              CMAT, AV,    CLKOUT, FOUND ) */
+
+/*              WRITE(*,'(A,F20.6)')    'Input ET:            ', ET */
+
+/*              IF ( FOUND ) THEN */
+
+/*                 CALL SCT2E ( IDCODE, CLKOUT, ETOUT ) */
+/*                 WRITE(*,'(A,F20.6)') 'Attitude found at ET:', ETOUT */
+
+/*              ELSE */
+
+/*                 WRITE(*,'(A)') 'No attitude found at ET.' */
+
+/*              END IF */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*        Input ET:                141162208.034340 */
+/*        Attitude found at ET:    141162208.034586 */
+
 
 /* $ Restrictions */
 
@@ -252,11 +382,17 @@ static integer c__2 = 2;
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     B.V. Semenov    (JPL) */
-/*     W.L. Taber      (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.2.1, 07-JUN-2021 (JDR) (NJB) */
+
+/*        Edited the header to comply with NAIF standard. Added complete */
+/*        code example based on existing fragment. */
 
 /* -    SPICELIB Version 1.2.0, 06-SEP-2013 (BVS) */
 
@@ -288,10 +424,9 @@ static integer c__2 = 2;
 /* -    SPICELIB Version 1.0.1, 09-MAR-1999 (NJB) */
 
 /*        Comments referring to SCE2T have been updated to refer to */
-/*        SCE2C.  Occurrences of "id" replaced by "ID." */
+/*        SCE2C. Occurrences of "id" replaced by "ID." */
 
-/* -    SPICELIB Version 1.0.0, 4-OCT-1994 (WLT) */
-
+/* -    SPICELIB Version 1.0.0, 04-OCT-1994 (WLT) */
 
 /* -& */
 /* $ Index_Entries */
@@ -327,7 +462,7 @@ static integer c__2 = 2;
 
 	for (n = 1; n <= 30; ++n) {
 	    zzctruin_(&usrctr[(i__1 = (n << 1) - 2) < 60 && 0 <= i__1 ? i__1 :
-		     s_rnge("usrctr", i__1, "ckmeta_", (ftnlen)275)]);
+		     s_rnge("usrctr", i__1, "ckmeta_", (ftnlen)411)]);
 	}
 
 /*        Clear AGENTS array. We will use a non-blank AGENT value as the */
@@ -352,21 +487,21 @@ static integer c__2 = 2;
 /*        counter.) */
 
 	zzcvpool_(agent + (((i__1 = this__ - 1) < 30 && 0 <= i__1 ? i__1 : 
-		s_rnge("agent", i__1, "ckmeta_", (ftnlen)305)) << 5), &usrctr[
+		s_rnge("agent", i__1, "ckmeta_", (ftnlen)441)) << 5), &usrctr[
 		(i__2 = (this__ << 1) - 2) < 60 && 0 <= i__2 ? i__2 : s_rnge(
-		"usrctr", i__2, "ckmeta_", (ftnlen)305)], &update, (ftnlen)32)
+		"usrctr", i__2, "ckmeta_", (ftnlen)441)], &update, (ftnlen)32)
 		;
 	if (update || nodata) {
 	    gipool_(lookup + (((i__1 = (this__ << 1) - 2) < 60 && 0 <= i__1 ? 
-		    i__1 : s_rnge("lookup", i__1, "ckmeta_", (ftnlen)309)) << 
+		    i__1 : s_rnge("lookup", i__1, "ckmeta_", (ftnlen)445)) << 
 		    5), &c__1, &c__1, &n, &sclks[(i__2 = this__ - 1) < 30 && 
 		    0 <= i__2 ? i__2 : s_rnge("sclks", i__2, "ckmeta_", (
-		    ftnlen)309)], found, (ftnlen)32);
+		    ftnlen)445)], found, (ftnlen)32);
 	    gipool_(lookup + (((i__1 = (this__ << 1) - 1) < 60 && 0 <= i__1 ? 
-		    i__1 : s_rnge("lookup", i__1, "ckmeta_", (ftnlen)312)) << 
+		    i__1 : s_rnge("lookup", i__1, "ckmeta_", (ftnlen)448)) << 
 		    5), &c__1, &c__1, &n, &spks[(i__2 = this__ - 1) < 30 && 0 
 		    <= i__2 ? i__2 : s_rnge("spks", i__2, "ckmeta_", (ftnlen)
-		    312)], &found[1], (ftnlen)32);
+		    448)], &found[1], (ftnlen)32);
 	    if (failed_()) {
 		nodata = TRUE_;
 		chkout_("CKMETA", (ftnlen)6);
@@ -406,13 +541,13 @@ static integer c__2 = 2;
 /*        check it first to clear it. */
 
 	if (s_cmp(agent + (((i__1 = this__ - 1) < 30 && 0 <= i__1 ? i__1 : 
-		s_rnge("agent", i__1, "ckmeta_", (ftnlen)370)) << 5), " ", (
+		s_rnge("agent", i__1, "ckmeta_", (ftnlen)506)) << 5), " ", (
 		ftnlen)32, (ftnlen)1) != 0) {
 	    cvpool_(agent + (((i__1 = this__ - 1) < 30 && 0 <= i__1 ? i__1 : 
-		    s_rnge("agent", i__1, "ckmeta_", (ftnlen)371)) << 5), &
+		    s_rnge("agent", i__1, "ckmeta_", (ftnlen)507)) << 5), &
 		    update, (ftnlen)32);
 	    dwpool_(agent + (((i__1 = this__ - 1) < 30 && 0 <= i__1 ? i__1 : 
-		    s_rnge("agent", i__1, "ckmeta_", (ftnlen)372)) << 5), (
+		    s_rnge("agent", i__1, "ckmeta_", (ftnlen)508)) << 5), (
 		    ftnlen)32);
 	}
 
@@ -420,54 +555,54 @@ static integer c__2 = 2;
 /*        kernel pool variable names and the agent name. */
 
 	cks[(i__1 = this__ - 1) < 30 && 0 <= i__1 ? i__1 : s_rnge("cks", i__1,
-		 "ckmeta_", (ftnlen)379)] = *ckid;
+		 "ckmeta_", (ftnlen)515)] = *ckid;
 	orderi_(cks, &currnt, cksord);
 	intstr_(ckid, lookup + (((i__1 = (this__ << 1) - 2) < 60 && 0 <= i__1 
-		? i__1 : s_rnge("lookup", i__1, "ckmeta_", (ftnlen)383)) << 5)
+		? i__1 : s_rnge("lookup", i__1, "ckmeta_", (ftnlen)519)) << 5)
 		, (ftnlen)32);
 	prefix_("CK_", &c__0, lookup + (((i__1 = (this__ << 1) - 2) < 60 && 0 
 		<= i__1 ? i__1 : s_rnge("lookup", i__1, "ckmeta_", (ftnlen)
-		384)) << 5), (ftnlen)3, (ftnlen)32);
+		520)) << 5), (ftnlen)3, (ftnlen)32);
 /* Writing concatenation */
 	i__3[0] = 7, a__1[0] = base;
 	i__3[1] = 32, a__1[1] = lookup + (((i__2 = (this__ << 1) - 2) < 60 && 
 		0 <= i__2 ? i__2 : s_rnge("lookup", i__2, "ckmeta_", (ftnlen)
-		386)) << 5);
+		522)) << 5);
 	s_cat(agent + (((i__1 = this__ - 1) < 30 && 0 <= i__1 ? i__1 : s_rnge(
-		"agent", i__1, "ckmeta_", (ftnlen)386)) << 5), a__1, i__3, &
+		"agent", i__1, "ckmeta_", (ftnlen)522)) << 5), a__1, i__3, &
 		c__2, (ftnlen)32);
 	s_copy(lookup + (((i__1 = (this__ << 1) - 1) < 60 && 0 <= i__1 ? i__1 
-		: s_rnge("lookup", i__1, "ckmeta_", (ftnlen)387)) << 5), 
+		: s_rnge("lookup", i__1, "ckmeta_", (ftnlen)523)) << 5), 
 		lookup + (((i__2 = (this__ << 1) - 2) < 60 && 0 <= i__2 ? 
-		i__2 : s_rnge("lookup", i__2, "ckmeta_", (ftnlen)387)) << 5), 
+		i__2 : s_rnge("lookup", i__2, "ckmeta_", (ftnlen)523)) << 5), 
 		(ftnlen)32, (ftnlen)32);
 	suffix_("_SCLK", &c__0, lookup + (((i__1 = (this__ << 1) - 2) < 60 && 
 		0 <= i__1 ? i__1 : s_rnge("lookup", i__1, "ckmeta_", (ftnlen)
-		389)) << 5), (ftnlen)5, (ftnlen)32);
+		525)) << 5), (ftnlen)5, (ftnlen)32);
 	suffix_("_SPK", &c__0, lookup + (((i__1 = (this__ << 1) - 1) < 60 && 
 		0 <= i__1 ? i__1 : s_rnge("lookup", i__1, "ckmeta_", (ftnlen)
-		390)) << 5), (ftnlen)4, (ftnlen)32);
+		526)) << 5), (ftnlen)4, (ftnlen)32);
 
 /*        Set a watch for this item and fetch the current value */
 /*        from the kernel pool (if there is a value there). */
 
 	swpool_(agent + (((i__1 = this__ - 1) < 30 && 0 <= i__1 ? i__1 : 
-		s_rnge("agent", i__1, "ckmeta_", (ftnlen)396)) << 5), &c__2, 
+		s_rnge("agent", i__1, "ckmeta_", (ftnlen)532)) << 5), &c__2, 
 		lookup + (((i__2 = (this__ << 1) - 2) < 60 && 0 <= i__2 ? 
-		i__2 : s_rnge("lookup", i__2, "ckmeta_", (ftnlen)396)) << 5), 
+		i__2 : s_rnge("lookup", i__2, "ckmeta_", (ftnlen)532)) << 5), 
 		(ftnlen)32, (ftnlen)32);
 	cvpool_(agent + (((i__1 = this__ - 1) < 30 && 0 <= i__1 ? i__1 : 
-		s_rnge("agent", i__1, "ckmeta_", (ftnlen)398)) << 5), &update,
+		s_rnge("agent", i__1, "ckmeta_", (ftnlen)534)) << 5), &update,
 		 (ftnlen)32);
 	gipool_(lookup + (((i__1 = (this__ << 1) - 2) < 60 && 0 <= i__1 ? 
-		i__1 : s_rnge("lookup", i__1, "ckmeta_", (ftnlen)400)) << 5), 
+		i__1 : s_rnge("lookup", i__1, "ckmeta_", (ftnlen)536)) << 5), 
 		&c__1, &c__1, &n, &sclks[(i__2 = this__ - 1) < 30 && 0 <= 
-		i__2 ? i__2 : s_rnge("sclks", i__2, "ckmeta_", (ftnlen)400)], 
+		i__2 ? i__2 : s_rnge("sclks", i__2, "ckmeta_", (ftnlen)536)], 
 		found, (ftnlen)32);
 	gipool_(lookup + (((i__1 = (this__ << 1) - 1) < 60 && 0 <= i__1 ? 
-		i__1 : s_rnge("lookup", i__1, "ckmeta_", (ftnlen)403)) << 5), 
+		i__1 : s_rnge("lookup", i__1, "ckmeta_", (ftnlen)539)) << 5), 
 		&c__1, &c__1, &n, &spks[(i__2 = this__ - 1) < 30 && 0 <= i__2 
-		? i__2 : s_rnge("spks", i__2, "ckmeta_", (ftnlen)403)], &
+		? i__2 : s_rnge("spks", i__2, "ckmeta_", (ftnlen)539)], &
 		found[1], (ftnlen)32);
 	if (failed_()) {
 	    nodata = TRUE_;
@@ -491,26 +626,26 @@ static integer c__2 = 2;
 
     if (! found[0]) {
 	if (cks[(i__1 = this__ - 1) < 30 && 0 <= i__1 ? i__1 : s_rnge("cks", 
-		i__1, "ckmeta_", (ftnlen)435)] <= -1000) {
+		i__1, "ckmeta_", (ftnlen)571)] <= -1000) {
 	    sclks[(i__1 = this__ - 1) < 30 && 0 <= i__1 ? i__1 : s_rnge("scl"
-		    "ks", i__1, "ckmeta_", (ftnlen)437)] = cks[(i__2 = this__ 
+		    "ks", i__1, "ckmeta_", (ftnlen)573)] = cks[(i__2 = this__ 
 		    - 1) < 30 && 0 <= i__2 ? i__2 : s_rnge("cks", i__2, "ckm"
-		    "eta_", (ftnlen)437)] / 1000;
+		    "eta_", (ftnlen)573)] / 1000;
 	} else {
 	    sclks[(i__1 = this__ - 1) < 30 && 0 <= i__1 ? i__1 : s_rnge("scl"
-		    "ks", i__1, "ckmeta_", (ftnlen)441)] = 0;
+		    "ks", i__1, "ckmeta_", (ftnlen)577)] = 0;
 	}
     }
     if (! found[1]) {
 	if (cks[(i__1 = this__ - 1) < 30 && 0 <= i__1 ? i__1 : s_rnge("cks", 
-		i__1, "ckmeta_", (ftnlen)449)] <= -1000) {
+		i__1, "ckmeta_", (ftnlen)585)] <= -1000) {
 	    spks[(i__1 = this__ - 1) < 30 && 0 <= i__1 ? i__1 : s_rnge("spks",
-		     i__1, "ckmeta_", (ftnlen)451)] = cks[(i__2 = this__ - 1) 
+		     i__1, "ckmeta_", (ftnlen)587)] = cks[(i__2 = this__ - 1) 
 		    < 30 && 0 <= i__2 ? i__2 : s_rnge("cks", i__2, "ckmeta_", 
-		    (ftnlen)451)] / 1000;
+		    (ftnlen)587)] / 1000;
 	} else {
 	    spks[(i__1 = this__ - 1) < 30 && 0 <= i__1 ? i__1 : s_rnge("spks",
-		     i__1, "ckmeta_", (ftnlen)455)] = 0;
+		     i__1, "ckmeta_", (ftnlen)591)] = 0;
 	}
     }
 
@@ -518,10 +653,10 @@ static integer c__2 = 2;
 
     if (s_cmp(mymeta, "SPK", (ftnlen)7, (ftnlen)3) == 0) {
 	*idcode = spks[(i__1 = this__ - 1) < 30 && 0 <= i__1 ? i__1 : s_rnge(
-		"spks", i__1, "ckmeta_", (ftnlen)466)];
+		"spks", i__1, "ckmeta_", (ftnlen)602)];
     } else if (s_cmp(mymeta, "SCLK", (ftnlen)7, (ftnlen)4) == 0) {
 	*idcode = sclks[(i__1 = this__ - 1) < 30 && 0 <= i__1 ? i__1 : s_rnge(
-		"sclks", i__1, "ckmeta_", (ftnlen)470)];
+		"sclks", i__1, "ckmeta_", (ftnlen)606)];
     } else {
 	*idcode = 0;
 	setmsg_("The CK meta data item \"#\" is not a recognized meta data i"

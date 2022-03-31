@@ -14,7 +14,7 @@ static logical c_false = FALSE_;
 static integer c__256 = 256;
 static integer c__1024 = 1024;
 
-/* $Procedure      DASRWR ( DAS, read/write records ) */
+/* $Procedure DASRWR ( DAS, read/write records ) */
 /* Subroutine */ int dasrwr_0_(int n__, integer *handle, integer *recno, char 
 	*recc, doublereal *recd, integer *reci, integer *first, integer *last,
 	 doublereal *datad, integer *datai, char *datac, ftnlen recc_len, 
@@ -23,6 +23,9 @@ static integer c__1024 = 1024;
     /* Initialized data */
 
     static logical pass1 = TRUE_;
+    static integer rnbufi[10] = { 0,0,0,0,0,0,0,0,0,0 };
+    static integer hnbufc[10] = { 0,0,0,0,0,0,0,0,0,0 };
+    static integer hnbufd[10] = { 0,0,0,0,0,0,0,0,0,0 };
     static integer hnbufi[10] = { 0,0,0,0,0,0,0,0,0,0 };
     static logical upbufc[10] = { FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,
 	    FALSE_,FALSE_,FALSE_,FALSE_ };
@@ -33,16 +36,313 @@ static integer c__1024 = 1024;
     static integer headc = 0;
     static integer headd = 0;
     static integer headi = 0;
+    static integer usedc = 0;
     static integer unit = -1;
     static integer wrunit = -1;
-    static integer usedc = 0;
     static integer usedd = 0;
     static integer usedi = 0;
+    static char rcbufc[1024*10] = "                                         "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                       " "                                      "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                          " "                                   "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                             " "                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                " "                             "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                   " "                          "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                      " "                       "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                         " "                    "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                            " "                 "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                               " "              "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                  ";
+    static doublereal rcbufd[1280]	/* was [128][10] */ = { 0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0. 
+	    };
+    static integer rcbufi[2560]	/* was [256][10] */ = { 0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0 };
     static integer rnbufc[10] = { 0,0,0,0,0,0,0,0,0,0 };
     static integer rnbufd[10] = { 0,0,0,0,0,0,0,0,0,0 };
-    static integer rnbufi[10] = { 0,0,0,0,0,0,0,0,0,0 };
-    static integer hnbufc[10] = { 0,0,0,0,0,0,0,0,0,0 };
-    static integer hnbufd[10] = { 0,0,0,0,0,0,0,0,0,0 };
 
     /* System generated locals */
     integer i__1, i__2;
@@ -66,18 +366,13 @@ static integer c__1024 = 1024;
     extern logical failed_(void);
     extern /* Subroutine */ int dasioc_(char *, integer *, integer *, char *, 
 	    ftnlen, ftnlen), dasiod_(char *, integer *, integer *, doublereal 
-	    *, ftnlen);
-    static char rcbufc[1024*10];
-    static doublereal rcbufd[1280]	/* was [128][10] */;
-    extern /* Subroutine */ int dasioi_(char *, integer *, integer *, integer 
-	    *, ftnlen);
-    static integer rcbufi[2560]	/* was [256][10] */;
-    extern /* Subroutine */ int lnkilb_(integer *, integer *, integer *), 
-	    dassih_(integer *, char *, ftnlen), errhan_(char *, integer *, 
-	    ftnlen), lnkini_(integer *, integer *), sigerr_(char *, ftnlen), 
-	    chkout_(char *, ftnlen), setmsg_(char *, ftnlen), errint_(char *, 
-	    integer *, ftnlen), lnkfsl_(integer *, integer *, integer *), 
-	    lnkxsl_(integer *, integer *, integer *);
+	    *, ftnlen), dasioi_(char *, integer *, integer *, integer *, 
+	    ftnlen), lnkilb_(integer *, integer *, integer *), dassih_(
+	    integer *, char *, ftnlen), errhan_(char *, integer *, ftnlen), 
+	    sigerr_(char *, ftnlen), chkout_(char *, ftnlen), lnkini_(integer 
+	    *, integer *), setmsg_(char *, ftnlen), errint_(char *, integer *,
+	     ftnlen), lnkxsl_(integer *, integer *, integer *), lnkfsl_(
+	    integer *, integer *, integer *);
     extern logical return_(void);
 
 /* $ Abstract */
@@ -122,7 +417,7 @@ static integer c__1024 = 1024;
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Entry points */
+/*     VARIABLE  I/O  ENTRY POINTS */
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     I   RRD, RRI, RRC, WRD, WRI, WRC, URD, URI, URC */
 /*     RECNO      I   RRD, RRI, RRC, WRD, WRI, WRC, URD, URI, URC */
@@ -151,27 +446,27 @@ static integer c__1024 = 1024;
 
 /* $ Parameters */
 
-/*     NWD           is the number of DPs in a single DAS record */
-/*                   containing DPs. */
+/*     NWD      is the number of DPs in a single DAS record */
+/*              containing DPs. */
 
-/*     NWI           is the number of integers in a single DAS record */
-/*                   containing integers. */
+/*     NWI      is the number of integers in a single DAS record */
+/*              containing integers. */
 
-/*     NWC           is the number of characters in a single DAS record */
-/*                   containing characters. */
+/*     NWC      is the number of characters in a single DAS record */
+/*              containing characters. */
 
 /*     BUFSZD, */
 /*     BUFSZI, */
-/*     BUFSZC        are, respectively, the number of records in the */
-/*                   data buffers for double precision, integer, and */
-/*                   character records. */
+/*     BUFSZC   are, respectively, the number of records in the */
+/*              data buffers for double precision, integer, and */
+/*              character records. */
 
 /* $ Exceptions */
 
 /*     1)  If this routine is called directly, the error */
-/*         SPICE(BOGUSENTRY) will be signaled. */
+/*         SPICE(BOGUSENTRY) is signaled. */
 
-/*     See the entry points for discussions of their exceptions. */
+/*     2)  See the entry points for discussions of their exceptions. */
 
 /* $ Files */
 
@@ -182,23 +477,23 @@ static integer c__1024 = 1024;
 /* $ Particulars */
 
 /*     This suite of routines provides buffered read and write access to */
-/*     DAS files.  The purpose of this feature is to increase the */
-/*     performance of application programs that access DAS files:  in */
+/*     DAS files. The purpose of this feature is to increase the */
+/*     performance of application programs that access DAS files: in */
 /*     particular, repeated reads from or writes to a given record */
 /*     should be relatively fast, because the contents of the most */
-/*     recently accessed records are buffered in memory.  Thus DASRWR */
+/*     recently accessed records are buffered in memory. Thus DASRWR */
 /*     and its entry points act as a miniature virtual memory system for */
 /*     DAS files. */
 
 /*     These routines are intended primarily for use by other SPICELIB */
 /*     routines; users' application programs will not normally need to */
-/*     call these routines.  Writing to a DAS file with these routines */
-/*     demands a particularly circumspect approach:  it's quite easy to */
+/*     call these routines. Writing to a DAS file with these routines */
+/*     demands a particularly circumspect approach: it's quite easy to */
 /*     end up with something other than a DAS file if one misuses the */
 /*     routines. */
 
 /*     The entry points of DASRWR support writing, reading, and updating */
-/*     the records in a DAS file.  The distinction between writing and */
+/*     the records in a DAS file. The distinction between writing and */
 /*     updating is that any record may be written (as long as the record */
 /*     belongs to a file open for writing), but only existing records */
 /*     may be updated.  `Writing' a record sets the values of all of */
@@ -206,7 +501,7 @@ static integer c__1024 = 1024;
 /*     existing record may be `updated'. */
 
 /*     For each of these three operations, there are three DAS routines, */
-/*     one for each supported data type.  The names of the routines are */
+/*     one for each supported data type. The names of the routines are */
 
 /*        -- For writing:     DASWRC,  DASWRD,  DASWRI */
 /*        -- For updating:    DASURC,  DASURD,  DASURI */
@@ -214,26 +509,26 @@ static integer c__1024 = 1024;
 
 /*     Users should note that, unlike in the case of SPICELIB's DAF */
 /*     routines, the DAS routines buffer data that is written as well */
-/*     as data that is read.  Consequently a DAS file does not */
+/*     as data that is read. Consequently a DAS file does not */
 /*     necessarily yet contain, at any moment, all of the data that */
-/*     has been written to it by the DASWRx or DASURx routines.  The */
+/*     has been written to it by the DASWRx or DASURx routines. The */
 /*     written data that is buffered is written out when the need */
 /*     to buffer additional data requires it, and also when the user */
-/*     commands the closure of a file that has been written.  So, at */
+/*     commands the closure of a file that has been written. So, at */
 /*     the time a DAS file is closed, the contents of the physical file */
 /*     do reflect what has been `written' to the file by the DASWRx and */
 /*     DASURx entry points. */
 
 /*     At any time, an application program can force the DAS system to */
 /*     write to a DAS file any buffered records maintained for that */
-/*     file.  The entry point DASWBR (DAS, write buffered records) */
+/*     file. The entry point DASWBR (DAS, write buffered records) */
 /*     provides this capability. */
 
-/*     DASRWR contains three record buffers:  one of character type, */
-/*     one of double precision type, and one of integer type.  Each */
-/*     buffer has enough room for an integer number of records.  The */
+/*     DASRWR contains three record buffers: one of character type, */
+/*     one of double precision type, and one of integer type. Each */
+/*     buffer has enough room for an integer number of records. The */
 /*     sizes of the buffers are parameterized and can be increased if */
-/*     necessary.  When contemplating the revision of the buffer */
+/*     necessary. When contemplating the revision of the buffer */
 /*     sizes selected by NAIF, SPICELIB users should take note of the */
 /*     following points: */
 
@@ -245,7 +540,7 @@ static integer c__1024 = 1024;
 
 /*        -- The effect of buffer size on the speed with which an */
 /*           application executes is highly dependent on the specific */
-/*           application.  In some cases, increasing the buffer sizes */
+/*           application. In some cases, increasing the buffer sizes */
 /*           may slow the application down. */
 
 /* $ Examples */
@@ -262,12 +557,22 @@ static integer c__1024 = 1024;
 
 /* $ Author_and_Institution */
 
-/*     K.R. Gehringer (JPL) */
-/*     N.J. Bachman   (JPL) */
-/*     W.L. Taber     (JPL) */
-/*     B.V. Semenov   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 2.1.0, 07-OCT-2021 (NJB) (JDR) */
+
+/*        Added initializers for record buffers. */
+
+/*        Edited the headers of DASRWR and all its entry points to comply */
+/*        with NAIF standard. */
+
+/*        Cleaned up the $Revisions history. */
 
 /* -    SPICELIB Version 2.0.0, 05-FEB-2015 (NJB) */
 
@@ -276,20 +581,20 @@ static integer c__1024 = 1024;
 
 /* -    SPICELIB Version 1.1.1, 10-FEB-2014 (BVS) */
 
-/*        Added description of NWD, NWI, and NWC to the Parameters */
-/*        and Brief_I/O sections of the header. */
+/*        Added description of NWD, NWI, and NWC to the $Parameters */
+/*        and $Brief_I/O sections of the header. */
 
 /* -    SPICELIB Version 1.1.0, 17-NOV-1995 (NJB) */
 
 /*        Made modifications to the DASRRx routines to enhance */
-/*        efficiency.  Removed references to the function RETURN. */
+/*        efficiency. Removed references to the function RETURN. */
 
 /*        Removed weird spaces from ENTRY statements. */
 
 /* -    SPICELIB Version 1.0.1, 28-OCT-1993 (KRG) */
 
 /*        Removed references to specific DAS file open routines in the */
-/*        $ Detailed_Input section of the header for each entry point. */
+/*        $Detailed_Input section of the header for each entry point. */
 /*        This was done in order to minimize documentation changes if the */
 /*        DAS open routines ever change. */
 
@@ -303,21 +608,15 @@ static integer c__1024 = 1024;
 /* -& */
 /* $ Revisions */
 
+/* -    SPICELIB Version 2.0.0, 05-FEB-2015 (NJB) */
+
+/*        Upgraded to support handle manager integration and */
+/*        reading of non-native files. */
+
 /* -    SPICELIB Version 1.1.0, 17-NOV-1995 (NJB) */
 
 /*        Made modifications to the DASRRx routines to enhance */
-/*        efficiency.  Removed references to the function RETURN. */
-
-/*        Removed weird spaces from ENTRY statements. */
-
-/* -    SPICELIB Version 1.0.1, 28-OCT-1993 (KRG) */
-
-/*        Removed references to specific DAS file open routines in the */
-/*        $ Detailed_Input section of the header for each entry point. */
-/*        This was done in order to minimize documentation changes if the */
-/*        DAS open routines ever change. */
-
-/* -    SPICELIB Version 1.0.0, 30-JUN-1992 (NJB) (WLT) */
+/*        efficiency. Removed references to the function RETURN. */
 
 /* -& */
 
@@ -466,7 +765,7 @@ L_dasrrd:
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     I   Handle of DAS file. */
 /*     RECNO      I   Record number. */
@@ -478,55 +777,54 @@ L_dasrrd:
 
 /* $ Detailed_Input */
 
-/*     HANDLE         is the handle of an open DAS file. */
+/*     HANDLE   is the handle of an open DAS file. */
 
-/*     RECNO          is the number of a record in a DAS file. */
+/*     RECNO    is the number of a record in a DAS file. */
 
 /*     FIRST, */
-/*     LAST           are the first and last indices of a range of */
-/*                    double precision numbers to be read from the */
-/*                    indicated record.  The record contains NWD */
-/*                    double precision numbers; these have indices */
-/*                    ranging from 1 to NWD. */
+/*     LAST     are the first and last indices of a range of */
+/*              double precision numbers to be read from the */
+/*              indicated record. The record contains NWD */
+/*              double precision numbers; these have indices */
+/*              ranging from 1 to NWD. */
 
 /* $ Detailed_Output */
 
-/*     DATAD          is a double precision array containing the */
-/*                    elements FIRST through LAST of the specified */
-/*                    record.  The record element FIRST is placed */
-/*                    in DATAD(1), the record element FIRST+1 is placed */
-/*                    in DATAD(2), and so on; the record element LAST is */
-/*                    placed in DATAD(LAST-FIRST+1). */
+/*     DATAD    is a double precision array containing the */
+/*              elements FIRST through LAST of the specified */
+/*              record. The record element FIRST is placed */
+/*              in DATAD(1), the record element FIRST+1 is placed */
+/*              in DATAD(2), and so on; the record element LAST is */
+/*              placed in DATAD(LAST-FIRST+1). */
 
 /* $ Parameters */
 
-/*     NWD            is the number of DPs in a single DAS record */
-/*                    containing DPs. */
+/*     NWD      is the number of DPs in a single DAS record */
+/*              containing DPs. */
 
-/*     BUFSZD         is the number of records in the double precision */
-/*                    record buffer. */
+/*     BUFSZD   is the number of records in the double precision */
+/*              record buffer. */
 
 /* $ Exceptions */
 
-/*     1)  If the input file handle is invalid, the error will be */
-/*         diagnosed by routines called by this routine.  The */
+/*     1)  If the input file handle is invalid, an error is signaled by a */
+/*         routine in the call tree of this routine. The output argument */
+/*         DATAD will not be modified. */
+
+/*     2)  If a read operation attempted by this routine fails, an error */
+/*         is signaled by a routine in the call tree of this routine. The */
 /*         output argument DATAD will not be modified. */
 
-/*     2)  If a read operation attempted by this routine fails, the */
-/*         error will be diagnosed by routines called by this routine. */
-/*         The output argument DATAD will not be modified. */
-
-/*     3)  If a write operation attempted by this routine fails, the */
-/*         error will be diagnosed by routines called by this routine. */
-/*         The output argument DATAD will not be modified.  This routine */
-/*         may write out updated, buffered records in order to make */
-/*         room in the double precision buffer for a newly read record. */
-/*         Note that the file written to may be different than the file */
-/*         designated by HANDLE if multiple DAS files are open for */
-/*         writing. */
+/*     3)  If a write operation attempted by this routine fails, an error */
+/*         is signaled by a routine in the call tree of this routine. The */
+/*         output argument DATAD will not be modified. This routine may */
+/*         write out updated, buffered records in order to make room in */
+/*         the double precision buffer for a newly read record. Note that */
+/*         the file written to may be different than the file designated */
+/*         by HANDLE if multiple DAS files are open for writing. */
 
 /*     4)  If FIRST or LAST is not in the range [1, NWD], the error */
-/*         SPICE(INDEXOUTOFRANGE) will be signaled.  The output argument */
+/*         SPICE(INDEXOUTOFRANGE) is signaled. The output argument */
 /*         DATAD will not be modified. */
 
 /*     5)  If FIRST > LAST, this routine will return without modifying */
@@ -542,8 +840,8 @@ L_dasrrd:
 /*     this routine. */
 
 /*     This routine can be used to read from a DAS file that is open for */
-/*     reading or for writing.  Any buffered double precision record */
-/*     can be read with this routine.  In particular, records that have */
+/*     reading or for writing. Any buffered double precision record */
+/*     can be read with this routine. In particular, records that have */
 /*     been written to the DAS double precision record buffer but have */
 /*     not yet been written out to the DAS file they're intended to go */
 /*     to ARE visible to this routine. */
@@ -568,12 +866,17 @@ L_dasrrd:
 
 /* $ Author_and_Institution */
 
-/*     K.R. Gehringer (JPL) */
-/*     N.J. Bachman   (JPL) */
-/*     W.L. Taber     (JPL) */
-/*     B.V. Semenov   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 2.0.1, 22-FEB-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 2.0.0, 05-FEB-2015 (NJB) */
 
@@ -582,12 +885,12 @@ L_dasrrd:
 
 /* -    SPICELIB Version 1.1.1, 10-FEB-2014 (BVS) */
 
-/*        Added description of NWD to the Parameters and Brief_I/O */
+/*        Added description of NWD to the $Parameters and $Brief_I/O */
 /*        sections of the header. */
 
 /* -    SPICELIB Version 1.1.0, 03-NOV-1995 (NJB) */
 
-/*        Made modifications to enhance efficiency.  Removed references */
+/*        Made modifications to enhance efficiency. Removed references */
 /*        to the function RETURN. */
 
 /*        Removed weird spaces from ENTRY statement. */
@@ -595,7 +898,7 @@ L_dasrrd:
 /* -    SPICELIB Version 1.0.1, 28-OCT-1993 (KRG) */
 
 /*        Removed references to specific DAS file open routines in the */
-/*        $ Detailed_Input section of the header. This was done in order */
+/*        $Detailed_Input section of the header. This was done in order */
 /*        to minimize documentation changes if the DAS open routines ever */
 /*        change. */
 
@@ -611,8 +914,8 @@ L_dasrrd:
 
 /* -    SPICELIB Version 1.1.0, 03-NOV-1995 (NJB) */
 
-/*        Made modifications to enhance efficiency.  Removed references */
-/*        to the function RETURN.  For buffered reads, MOVED is not */
+/*        Made modifications to enhance efficiency. Removed references */
+/*        to the function RETURN. For buffered reads, MOVED is not */
 /*        called when a single word is to be read. */
 
 /*        Removed weird spaces from ENTRY statement. */
@@ -620,7 +923,7 @@ L_dasrrd:
 /* -    SPICELIB Version 1.0.1, 28-OCT-1993 (KRG) */
 
 /*        Removed references to specific DAS file open routines in the */
-/*        $ Detailed_Input section of the header. This was done in order */
+/*        $Detailed_Input section of the header. This was done in order */
 /*        to minimize documentation changes if the DAS open routines ever */
 /*        change. */
 
@@ -670,9 +973,9 @@ L_dasrrd:
     node = headd;
     while(node > 0) {
 	if (*handle == hnbufd[(i__1 = node - 1) < 10 && 0 <= i__1 ? i__1 : 
-		s_rnge("hnbufd", i__1, "dasrwr_", (ftnlen)715)] && *recno == 
+		s_rnge("hnbufd", i__1, "dasrwr_", (ftnlen)737)] && *recno == 
 		rnbufd[(i__2 = node - 1) < 10 && 0 <= i__2 ? i__2 : s_rnge(
-		"rnbufd", i__2, "dasrwr_", (ftnlen)715)]) {
+		"rnbufd", i__2, "dasrwr_", (ftnlen)737)]) {
 
 /*           Found it.  Move this record to the head of the list. */
 /*           Update our head pointer as required. */
@@ -688,12 +991,12 @@ L_dasrrd:
 	    if (*first == *last) {
 		datad[0] = rcbufd[(i__1 = *first + (node << 7) - 129) < 1280 
 			&& 0 <= i__1 ? i__1 : s_rnge("rcbufd", i__1, "dasrwr_"
-			, (ftnlen)735)];
+			, (ftnlen)757)];
 	    } else {
 		i__2 = *last - *first + 1;
 		moved_(&rcbufd[(i__1 = *first + (node << 7) - 129) < 1280 && 
 			0 <= i__1 ? i__1 : s_rnge("rcbufd", i__1, "dasrwr_", (
-			ftnlen)739)], &i__2, datad);
+			ftnlen)761)], &i__2, datad);
 	    }
 
 /*           We haven't checked in, so don't check out. */
@@ -701,7 +1004,7 @@ L_dasrrd:
 	    return 0;
 	}
 	node = poold[(i__1 = (node << 1) + 10) < 32 && 0 <= i__1 ? i__1 : 
-		s_rnge("poold", i__1, "dasrwr_", (ftnlen)750)];
+		s_rnge("poold", i__1, "dasrwr_", (ftnlen)772)];
     }
 
 /*     The record wasn't buffered.  We need to allocate entries to */
@@ -723,12 +1026,12 @@ L_dasrrd:
 /*        If the allocated buffer entry was updated, write it out. */
 
 	if (upbufd[(i__1 = node - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge("upbu"
-		"fd", i__1, "dasrwr_", (ftnlen)776)]) {
+		"fd", i__1, "dasrwr_", (ftnlen)798)]) {
 
 /*           We'll need a logical unit in order to write to the file. */
 
 	    zzddhhlu_(&hnbufd[(i__1 = node - 1) < 10 && 0 <= i__1 ? i__1 : 
-		    s_rnge("hnbufd", i__1, "dasrwr_", (ftnlen)780)], "DAS", &
+		    s_rnge("hnbufd", i__1, "dasrwr_", (ftnlen)802)], "DAS", &
 		    c_false, &wrunit, (ftnlen)3);
 	    if (failed_()) {
 		chkout_("DASRRD", (ftnlen)6);
@@ -736,9 +1039,9 @@ L_dasrrd:
 	    }
 	    dasiod_("WRITE", &wrunit, &rnbufd[(i__1 = node - 1) < 10 && 0 <= 
 		    i__1 ? i__1 : s_rnge("rnbufd", i__1, "dasrwr_", (ftnlen)
-		    787)], &rcbufd[(i__2 = (node << 7) - 128) < 1280 && 0 <= 
+		    809)], &rcbufd[(i__2 = (node << 7) - 128) < 1280 && 0 <= 
 		    i__2 ? i__2 : s_rnge("rcbufd", i__2, "dasrwr_", (ftnlen)
-		    787)], (ftnlen)5);
+		    809)], (ftnlen)5);
 	    if (failed_()) {
 		chkout_("DASRRD", (ftnlen)6);
 		return 0;
@@ -756,7 +1059,7 @@ L_dasrrd:
 /*     Try to read the record. */
 
     zzdasgrd_(handle, recno, &rcbufd[(i__1 = (node << 7) - 128) < 1280 && 0 <=
-	     i__1 ? i__1 : s_rnge("rcbufd", i__1, "dasrwr_", (ftnlen)813)]);
+	     i__1 ? i__1 : s_rnge("rcbufd", i__1, "dasrwr_", (ftnlen)835)]);
     if (failed_()) {
 	chkout_("DASRRD", (ftnlen)6);
 	return 0;
@@ -771,18 +1074,18 @@ L_dasrrd:
 
     lnkilb_(&node, &headd, poold);
     hnbufd[(i__1 = node - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge("hnbufd", i__1,
-	     "dasrwr_", (ftnlen)830)] = *handle;
+	     "dasrwr_", (ftnlen)852)] = *handle;
     rnbufd[(i__1 = node - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge("rnbufd", i__1,
-	     "dasrwr_", (ftnlen)831)] = *recno;
+	     "dasrwr_", (ftnlen)853)] = *recno;
     upbufd[(i__1 = node - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge("upbufd", i__1,
-	     "dasrwr_", (ftnlen)832)] = FALSE_;
+	     "dasrwr_", (ftnlen)854)] = FALSE_;
     headd = node;
 
 /*     Don't forget to return the requested data. */
 
     i__2 = *last - *first + 1;
     moved_(&rcbufd[(i__1 = *first + (node << 7) - 129) < 1280 && 0 <= i__1 ? 
-	    i__1 : s_rnge("rcbufd", i__1, "dasrwr_", (ftnlen)838)], &i__2, 
+	    i__1 : s_rnge("rcbufd", i__1, "dasrwr_", (ftnlen)860)], &i__2, 
 	    datad);
     chkout_("DASRRD", (ftnlen)6);
     return 0;
@@ -838,7 +1141,7 @@ L_dasrri:
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Entry points */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     I   Handle of DAS file. */
 /*     RECNO      I   Record number. */
@@ -850,53 +1153,54 @@ L_dasrri:
 
 /* $ Detailed_Input */
 
-/*     HANDLE         is the handle of an open DAS file. */
+/*     HANDLE   is the handle of an open DAS file. */
 
-/*     RECNO          is the number of a record in a DAS file. */
+/*     RECNO    is the number of a record in a DAS file. */
 
 /*     FIRST, */
-/*     LAST           are the first and last indices of a range of */
-/*                    integers to be read from the indicated record. */
-/*                    The record contains NWI integers; these have */
-/*                    indices ranging from 1 to NWI. */
+/*     LAST     are the first and last indices of a range of */
+/*              integers to be read from the indicated record. */
+/*              The record contains NWI integers; these have */
+/*              indices ranging from 1 to NWI. */
 
 /* $ Detailed_Output */
 
-/*     DATAI          is an integer array containing the elements FIRST */
-/*                    through LAST of the specified record.  The record */
-/*                    element FIRST is placed in DATAI(1), the record */
-/*                    element FIRST+1 is placed in DATAI(2), and so on; */
-/*                    the record element LAST is placed in */
-/*                    DATAI(LAST-FIRST+1). */
+/*     DATAI    is an integer array containing the elements FIRST */
+/*              through LAST of the specified record. The record */
+/*              element FIRST is placed in DATAI(1), the record */
+/*              element FIRST+1 is placed in DATAI(2), and so on; */
+/*              the record element LAST is placed in */
+/*              DATAI(LAST-FIRST+1). */
 
 /* $ Parameters */
 
-/*     NWI           is the number of integers in a single DAS record */
-/*                   containing integers. */
+/*     NWI      is the number of integers in a single DAS record */
+/*              containing integers. */
 
-/*     BUFSZI        is the number of records in the integer record */
-/*                   buffer. */
+/*     BUFSZI   is the number of records in the integer record */
+/*              buffer. */
 
 /* $ Exceptions */
 
-/*     1)  If the input file handle is invalid, the error will be */
-/*         diagnosed by routines called by this routine.  The */
+/*     1)  If the input file handle is invalid, an error is signaled */
+/*         by a routine in the call tree of this routine. The */
 /*         output argument DATAI will not be modified. */
 
-/*     2)  If a read operation attempted by this routine fails, the */
-/*         error will be diagnosed by routines called by this routine. */
+/*     2)  If a read operation attempted by this routine fails, an error */
+/*         is signaled by a routine in the call tree of this routine. */
 /*         The output argument DATAI will not be modified. */
 
-/*     3)  If a write operation attempted by this routine fails, the */
-/*         error will be diagnosed by routines called by this routine. */
-/*         The output argument DATAI will not be modified.  This routine */
-/*         may write out updated, buffered records in order to make room */
-/*         in the integer buffer for a newly read record.  Note that the */
-/*         file written to may be different than the file designated by */
-/*         HANDLE if multiple DAS files are open for writing. */
+/*     3)  If a write operation attempted by this routine fails, an */
+/*         error is signaled by a routine in the call tree of this */
+/*         routine. The output argument DATAI will not be modified. This */
+/*         routine may write out updated, buffered records in order to */
+/*         make room in the integer buffer for a newly read record. Note */
+/*         that the file written to may be different than the file */
+/*         designated by HANDLE if multiple DAS files are open for */
+/*         writing. */
 
 /*     4)  If FIRST or LAST is not in the range [1, NWI], the error */
-/*         SPICE(INDEXOUTOFRANGE) will be signaled.  The output argument */
+/*         SPICE(INDEXOUTOFRANGE) is signaled. The output argument */
 /*         DATAI will not be modified. */
 
 /*     5)  If FIRST > LAST, this routine will return without modifying */
@@ -912,8 +1216,8 @@ L_dasrri:
 /*     this routine. */
 
 /*     This routine can be used to read from a DAS file that is open for */
-/*     reading or writing.  Any buffered integer record can be read with */
-/*     this routine.  In particular, records that have been written to */
+/*     reading or writing. Any buffered integer record can be read with */
+/*     this routine. In particular, records that have been written to */
 /*     the DAS integer record buffer but have not yet been written out */
 /*     to the DAS file they're intended to go to ARE visible to this */
 /*     routine. */
@@ -938,12 +1242,18 @@ L_dasrri:
 
 /* $ Author_and_Institution */
 
-/*     K.R. Gehringer (JPL) */
-/*     N.J. Bachman   (JPL) */
-/*     W.L. Taber     (JPL) */
-/*     B.V. Semenov   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 2.0.1, 22-FEB-2021 (JDR) */
+
+/*        Updated the header to comply with NAIF standard. Cleaned up */
+/*        the $Revisions history. */
 
 /* -    SPICELIB Version 2.0.0, 05-FEB-2015 (NJB) */
 
@@ -952,12 +1262,12 @@ L_dasrri:
 
 /* -    SPICELIB Version 1.1.1, 10-FEB-2014 (BVS) */
 
-/*        Added description of NWI to the Parameters and Brief_I/O */
+/*        Added description of NWI to the $Parameters and $Brief_I/O */
 /*        sections of the header. */
 
 /* -    SPICELIB Version 1.1.0, 03-NOV-1995 (NJB) */
 
-/*        Made modifications to enhance efficiency.  Removed references */
+/*        Made modifications to enhance efficiency. Removed references */
 /*        to the function RETURN. */
 
 /*        Removed weird spaces from ENTRY statement. */
@@ -965,7 +1275,7 @@ L_dasrri:
 /* -    SPICELIB Version 1.0.1, 28-OCT-1993 (KRG) */
 
 /*        Removed references to specific DAS file open routines in the */
-/*        $ Detailed_Input section of the header. This was done in order */
+/*        $Detailed_Input section of the header. This was done in order */
 /*        to minimize documentation changes if the DAS open routines ever */
 /*        change. */
 
@@ -979,22 +1289,16 @@ L_dasrri:
 /* -& */
 /* $ Revisions */
 
+/* -    SPICELIB Version 2.0.0, 05-FEB-2015 (NJB) */
+
+/*        Upgraded to support handle manager integration and */
+/*        reading of non-native files. */
+
 /* -    SPICELIB Version 1.1.0, 03-NOV-1995 (NJB) */
 
-/*        Made modifications to enhance efficiency.  Removed references */
-/*        to the function RETURN.  For buffered reads, MOVEI is not */
+/*        Made modifications to enhance efficiency. Removed references */
+/*        to the function RETURN. For buffered reads, MOVEI is not */
 /*        called when a single word is to be read. */
-
-/*        Removed weird spaces from ENTRY statement. */
-
-/* -    SPICELIB Version 1.0.1, 28-OCT-1993 (KRG) */
-
-/*        Removed references to specific DAS file open routines in the */
-/*        $ Detailed_Input section of the header. This was done in order */
-/*        to minimize documentation changes if the DAS open routines ever */
-/*        change. */
-
-/* -    SPICELIB Version 1.0.0, 30-JUN-1992 (NJB) (WLT) */
 
 /* -& */
 
@@ -1042,9 +1346,9 @@ L_dasrri:
     node = headi;
     while(node > 0) {
 	if (*handle == hnbufi[(i__1 = node - 1) < 10 && 0 <= i__1 ? i__1 : 
-		s_rnge("hnbufi", i__1, "dasrwr_", (ftnlen)1124)] && *recno == 
+		s_rnge("hnbufi", i__1, "dasrwr_", (ftnlen)1149)] && *recno == 
 		rnbufi[(i__2 = node - 1) < 10 && 0 <= i__2 ? i__2 : s_rnge(
-		"rnbufi", i__2, "dasrwr_", (ftnlen)1124)]) {
+		"rnbufi", i__2, "dasrwr_", (ftnlen)1149)]) {
 
 
 /*           Found it.  Move this record to the head of the list. */
@@ -1061,12 +1365,12 @@ L_dasrri:
 	    if (*first == *last) {
 		datai[0] = rcbufi[(i__1 = *first + (node << 8) - 257) < 2560 
 			&& 0 <= i__1 ? i__1 : s_rnge("rcbufi", i__1, "dasrwr_"
-			, (ftnlen)1145)];
+			, (ftnlen)1170)];
 	    } else {
 		i__2 = *last - *first + 1;
 		movei_(&rcbufi[(i__1 = *first + (node << 8) - 257) < 2560 && 
 			0 <= i__1 ? i__1 : s_rnge("rcbufi", i__1, "dasrwr_", (
-			ftnlen)1149)], &i__2, datai);
+			ftnlen)1174)], &i__2, datai);
 	    }
 
 /*           We haven't checked in, so don't check out. */
@@ -1074,7 +1378,7 @@ L_dasrri:
 	    return 0;
 	}
 	node = pooli[(i__1 = (node << 1) + 10) < 32 && 0 <= i__1 ? i__1 : 
-		s_rnge("pooli", i__1, "dasrwr_", (ftnlen)1160)];
+		s_rnge("pooli", i__1, "dasrwr_", (ftnlen)1185)];
     }
 
 /*     The record wasn't buffered.  We need to allocate entries to */
@@ -1096,15 +1400,15 @@ L_dasrri:
 /*        If the allocated buffer entry was updated, write it out. */
 
 	if (upbufi[(i__1 = node - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge("upbu"
-		"fi", i__1, "dasrwr_", (ftnlen)1186)]) {
+		"fi", i__1, "dasrwr_", (ftnlen)1211)]) {
 	    zzddhhlu_(&hnbufi[(i__1 = node - 1) < 10 && 0 <= i__1 ? i__1 : 
-		    s_rnge("hnbufi", i__1, "dasrwr_", (ftnlen)1188)], "DAS", &
+		    s_rnge("hnbufi", i__1, "dasrwr_", (ftnlen)1213)], "DAS", &
 		    c_false, &wrunit, (ftnlen)3);
 	    dasioi_("WRITE", &wrunit, &rnbufi[(i__1 = node - 1) < 10 && 0 <= 
 		    i__1 ? i__1 : s_rnge("rnbufi", i__1, "dasrwr_", (ftnlen)
-		    1190)], &rcbufi[(i__2 = (node << 8) - 256) < 2560 && 0 <= 
+		    1215)], &rcbufi[(i__2 = (node << 8) - 256) < 2560 && 0 <= 
 		    i__2 ? i__2 : s_rnge("rcbufi", i__2, "dasrwr_", (ftnlen)
-		    1190)], (ftnlen)5);
+		    1215)], (ftnlen)5);
 	    if (failed_()) {
 		chkout_("DASRRI", (ftnlen)6);
 		return 0;
@@ -1122,7 +1426,7 @@ L_dasrri:
 /*     Try to read the record. */
 
     zzdasgri_(handle, recno, &rcbufi[(i__1 = (node << 8) - 256) < 2560 && 0 <=
-	     i__1 ? i__1 : s_rnge("rcbufi", i__1, "dasrwr_", (ftnlen)1216)]);
+	     i__1 ? i__1 : s_rnge("rcbufi", i__1, "dasrwr_", (ftnlen)1241)]);
     if (failed_()) {
 	chkout_("DASRRI", (ftnlen)6);
 	return 0;
@@ -1137,18 +1441,18 @@ L_dasrri:
 
     lnkilb_(&node, &headi, pooli);
     hnbufi[(i__1 = node - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge("hnbufi", i__1,
-	     "dasrwr_", (ftnlen)1233)] = *handle;
+	     "dasrwr_", (ftnlen)1258)] = *handle;
     rnbufi[(i__1 = node - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge("rnbufi", i__1,
-	     "dasrwr_", (ftnlen)1234)] = *recno;
+	     "dasrwr_", (ftnlen)1259)] = *recno;
     upbufi[(i__1 = node - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge("upbufi", i__1,
-	     "dasrwr_", (ftnlen)1235)] = FALSE_;
+	     "dasrwr_", (ftnlen)1260)] = FALSE_;
     headi = node;
 
 /*     Don't forget to return the requested data. */
 
     i__2 = *last - *first + 1;
     movei_(&rcbufi[(i__1 = *first + (node << 8) - 257) < 2560 && 0 <= i__1 ? 
-	    i__1 : s_rnge("rcbufi", i__1, "dasrwr_", (ftnlen)1241)], &i__2, 
+	    i__1 : s_rnge("rcbufi", i__1, "dasrwr_", (ftnlen)1266)], &i__2, 
 	    datai);
     chkout_("DASRRI", (ftnlen)6);
     return 0;
@@ -1204,7 +1508,7 @@ L_dasrrc:
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Entry points */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     I   Handle of DAS file. */
 /*     RECNO      I   Record number. */
@@ -1216,54 +1520,54 @@ L_dasrrc:
 
 /* $ Detailed_Input */
 
-/*     HANDLE         is the handle of an open DAS file. */
+/*     HANDLE   is the handle of an open DAS file. */
 
-/*     RECNO          is the number of a record in a DAS file. */
+/*     RECNO    is the number of a record in a DAS file. */
 
 /*     FIRST, */
-/*     LAST           are the first and last indices of a range of */
-/*                    characters to be read from the indicated record. */
-/*                    The record contains NWC characters; these have */
-/*                    indices ranging from 1 to NWC. */
+/*     LAST     are the first and last indices of a range of */
+/*              characters to be read from the indicated record. */
+/*              The record contains NWC characters; these have */
+/*              indices ranging from 1 to NWC. */
 
 /* $ Detailed_Output */
 
-/*     DATAC          is a character string containing the elements */
-/*                    FIRST through LAST of the specified record.  The */
-/*                    record element FIRST is placed in DATAC(1:1), the */
-/*                    record element FIRST+1 is placed in DATAC(2:2), */
-/*                    and so on; the record element LAST is placed in */
-/*                    DATAC( LAST-FIRST+1 : LAST-FIRST+1 ). */
+/*     DATAC    is a character string containing the elements */
+/*              FIRST through LAST of the specified record. The */
+/*              record element FIRST is placed in DATAC(1:1), the */
+/*              record element FIRST+1 is placed in DATAC(2:2), */
+/*              and so on; the record element LAST is placed in */
+/*              DATAC( LAST-FIRST+1 : LAST-FIRST+1 ). */
 
 /* $ Parameters */
 
-/*     NWC           is the number of characters in a single DAS record */
-/*                   containing characters. */
+/*     NWC      is the number of characters in a single DAS record */
+/*              containing characters. */
 
-/*     BUFSZC        is the number of records in the character record */
-/*                   buffer. */
+/*     BUFSZC   is the number of records in the character record */
+/*              buffer. */
 
 /* $ Exceptions */
 
-/*     1)  If the input file handle is invalid, the error will be */
-/*         diagnosed by routines called by this routine.  The */
+/*     1)  If the input file handle is invalid, an error is */
+/*         signaled by a routine in the call tree of this routine. The */
 /*         output argument DATAC will not be modified. */
 
-/*     2)  If a read operation attempted by this routine fails, the */
-/*         error will be diagnosed by routines called by this routine. */
+/*     2)  If a read operation attempted by this routine fails, an error */
+/*         is signaled by a routine in the call tree of this routine. */
 /*         The output argument DATAC will not be modified. */
 
-/*     3)  If a write operation attempted by this routine fails, the */
-/*         error will be diagnosed by routines called by this routine. */
-/*         The output argument DATAC will not be modified.  This routine */
-/*         may write out updated, buffered records in order to make room */
-/*         in the character buffer for a newly read record.  Note that */
-/*         the file written to may be different than the file */
+/*     3)  If a write operation attempted by this routine fails, an */
+/*         error is signaled by a routine in the call tree of this */
+/*         routine. The output argument DATAC will not be modified. This */
+/*         routine may write out updated, buffered records in order to */
+/*         make room in the character buffer for a newly read record. */
+/*         Note that the file written to may be different than the file */
 /*         designated by HANDLE if multiple DAS files are open for */
 /*         writing. */
 
 /*     4)  If FIRST or LAST is not in the range [1, NWC], the error */
-/*         SPICE(INDEXOUTOFRANGE) will be signaled.  The output argument */
+/*         SPICE(INDEXOUTOFRANGE) is signaled. The output argument */
 /*         DATAC will not be modified. */
 
 /*     5)  If FIRST > LAST, this routine will return without modifying */
@@ -1279,8 +1583,8 @@ L_dasrrc:
 /*     this routine. */
 
 /*     This routine can be used to read from a DAS file that is open for */
-/*     reading or writing.  Any buffered character record can be read */
-/*     with this routine.  In particular, records that have been */
+/*     reading or writing. Any buffered character record can be read */
+/*     with this routine. In particular, records that have been */
 /*     written to the DAS character record buffer but have not yet been */
 /*     written out to the DAS file they're intended to go to ARE */
 /*     visible to this routine. */
@@ -1305,12 +1609,18 @@ L_dasrrc:
 
 /* $ Author_and_Institution */
 
-/*     K.R. Gehringer (JPL) */
-/*     N.J. Bachman   (JPL) */
-/*     W.L. Taber     (JPL) */
-/*     B.V. Semenov   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 2.0.1, 22-FEB-2021 (JDR) */
+
+/*        Updated the header to comply with NAIF standard. Cleaned up */
+/*        the $Revisions history. */
 
 /* -    SPICELIB Version 2.0.0, 05-FEB-2015 (NJB) */
 
@@ -1318,12 +1628,12 @@ L_dasrrc:
 
 /* -    SPICELIB Version 1.1.1, 10-FEB-2014 (BVS) */
 
-/*        Added description of NWC to the Parameters and Brief_I/O */
+/*        Added description of NWC to the $Parameters and $Brief_I/O */
 /*        sections of the header. */
 
 /* -    SPICELIB Version 1.1.0, 09-NOV-1995 (NJB) */
 
-/*        Made modifications to enhance efficiency.  Removed references */
+/*        Made modifications to enhance efficiency. Removed references */
 /*        to the function RETURN. */
 
 /*        Removed weird spaces from ENTRY statement. */
@@ -1331,7 +1641,7 @@ L_dasrrc:
 /* -    SPICELIB Version 1.0.1, 28-OCT-1993 (KRG) */
 
 /*        Removed references to specific DAS file open routines in the */
-/*        $ Detailed_Input section of the header. This was done in order */
+/*        $Detailed_Input section of the header. This was done in order */
 /*        to minimize documentation changes if the DAS open routines ever */
 /*        change. */
 
@@ -1345,21 +1655,14 @@ L_dasrrc:
 /* -& */
 /* $ Revisions */
 
+/* -    SPICELIB Version 2.0.0, 05-FEB-2015 (NJB) */
+
+/*        Upgraded to support handle manager integration. */
+
 /* -    SPICELIB Version 1.1.0, 09-NOV-1995 (NJB) */
 
-/*        Made modifications to enhance efficiency.  Removed references */
+/*        Made modifications to enhance efficiency. Removed references */
 /*        to the function RETURN. */
-
-/*        Removed weird spaces from ENTRY statement. */
-
-/* -    SPICELIB Version 1.0.1, 28-OCT-1993 (KRG) */
-
-/*        Removed references to specific DAS file open routines in the */
-/*        $ Detailed_Input section of the header. This was done in order */
-/*        to minimize documentation changes if the DAS open routines ever */
-/*        change. */
-
-/* -    SPICELIB Version 1.0.0, 30-JUN-1992 (NJB) (WLT) */
 
 /* -& */
 
@@ -1405,9 +1708,9 @@ L_dasrrc:
     node = headc;
     while(node > 0) {
 	if (*handle == hnbufc[(i__1 = node - 1) < 10 && 0 <= i__1 ? i__1 : 
-		s_rnge("hnbufc", i__1, "dasrwr_", (ftnlen)1525)] && *recno == 
+		s_rnge("hnbufc", i__1, "dasrwr_", (ftnlen)1551)] && *recno == 
 		rnbufc[(i__2 = node - 1) < 10 && 0 <= i__2 ? i__2 : s_rnge(
-		"rnbufc", i__2, "dasrwr_", (ftnlen)1525)]) {
+		"rnbufc", i__2, "dasrwr_", (ftnlen)1551)]) {
 
 
 /*           Found it.  Move this record to the head of the list. */
@@ -1422,7 +1725,7 @@ L_dasrrc:
 /*           Don't forget to return the requested data. */
 
 	    s_copy(datac, rcbufc + ((((i__1 = node - 1) < 10 && 0 <= i__1 ? 
-		    i__1 : s_rnge("rcbufc", i__1, "dasrwr_", (ftnlen)1544)) <<
+		    i__1 : s_rnge("rcbufc", i__1, "dasrwr_", (ftnlen)1570)) <<
 		     10) + (*first - 1)), datac_len, *last - (*first - 1));
 
 /*           We haven't checked in, so don't check out. */
@@ -1430,7 +1733,7 @@ L_dasrrc:
 	    return 0;
 	}
 	node = poolc[(i__1 = (node << 1) + 10) < 32 && 0 <= i__1 ? i__1 : 
-		s_rnge("poolc", i__1, "dasrwr_", (ftnlen)1553)];
+		s_rnge("poolc", i__1, "dasrwr_", (ftnlen)1579)];
     }
 
 /*     The record wasn't buffered.  We need to allocate entries to */
@@ -1452,14 +1755,14 @@ L_dasrrc:
 /*        If the allocated buffer entry was updated, write it out. */
 
 	if (upbufc[(i__1 = node - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge("upbu"
-		"fc", i__1, "dasrwr_", (ftnlen)1579)]) {
+		"fc", i__1, "dasrwr_", (ftnlen)1605)]) {
 	    zzddhhlu_(&hnbufc[(i__1 = node - 1) < 10 && 0 <= i__1 ? i__1 : 
-		    s_rnge("hnbufc", i__1, "dasrwr_", (ftnlen)1581)], "DAS", &
+		    s_rnge("hnbufc", i__1, "dasrwr_", (ftnlen)1607)], "DAS", &
 		    c_false, &wrunit, (ftnlen)3);
 	    dasioc_("WRITE", &wrunit, &rnbufc[(i__1 = node - 1) < 10 && 0 <= 
 		    i__1 ? i__1 : s_rnge("rnbufc", i__1, "dasrwr_", (ftnlen)
-		    1583)], rcbufc + (((i__2 = node - 1) < 10 && 0 <= i__2 ? 
-		    i__2 : s_rnge("rcbufc", i__2, "dasrwr_", (ftnlen)1583)) <<
+		    1609)], rcbufc + (((i__2 = node - 1) < 10 && 0 <= i__2 ? 
+		    i__2 : s_rnge("rcbufc", i__2, "dasrwr_", (ftnlen)1609)) <<
 		     10), (ftnlen)5, (ftnlen)1024);
 	    if (failed_()) {
 		chkout_("DASRRC", (ftnlen)6);
@@ -1479,7 +1782,7 @@ L_dasrrc:
 
     zzddhhlu_(handle, "DAS", &c_false, &unit, (ftnlen)3);
     dasioc_("READ", &unit, recno, rcbufc + (((i__1 = node - 1) < 10 && 0 <= 
-	    i__1 ? i__1 : s_rnge("rcbufc", i__1, "dasrwr_", (ftnlen)1611)) << 
+	    i__1 ? i__1 : s_rnge("rcbufc", i__1, "dasrwr_", (ftnlen)1637)) << 
 	    10), (ftnlen)4, (ftnlen)1024);
     if (failed_()) {
 	chkout_("DASRRC", (ftnlen)6);
@@ -1495,17 +1798,17 @@ L_dasrrc:
 
     lnkilb_(&node, &headc, poolc);
     hnbufc[(i__1 = node - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge("hnbufc", i__1,
-	     "dasrwr_", (ftnlen)1628)] = *handle;
+	     "dasrwr_", (ftnlen)1654)] = *handle;
     rnbufc[(i__1 = node - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge("rnbufc", i__1,
-	     "dasrwr_", (ftnlen)1629)] = *recno;
+	     "dasrwr_", (ftnlen)1655)] = *recno;
     upbufc[(i__1 = node - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge("upbufc", i__1,
-	     "dasrwr_", (ftnlen)1630)] = FALSE_;
+	     "dasrwr_", (ftnlen)1656)] = FALSE_;
     headc = node;
 
 /*     Don't forget to return the requested data. */
 
     s_copy(datac, rcbufc + ((((i__1 = node - 1) < 10 && 0 <= i__1 ? i__1 : 
-	    s_rnge("rcbufc", i__1, "dasrwr_", (ftnlen)1636)) << 10) + (*first 
+	    s_rnge("rcbufc", i__1, "dasrwr_", (ftnlen)1662)) << 10) + (*first 
 	    - 1)), datac_len, *last - (*first - 1));
     chkout_("DASRRC", (ftnlen)6);
     return 0;
@@ -1559,7 +1862,7 @@ L_daswrd:
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     I   Handle of DAS file. */
 /*     RECNO      I   Record number. */
@@ -1569,39 +1872,39 @@ L_daswrd:
 
 /* $ Detailed_Input */
 
-/*     HANDLE         is the handle of a DAS file opened for writing. */
+/*     HANDLE   is the handle of a DAS file opened for writing. */
 
-/*     RECNO          is the number of a record in a DAS file. */
+/*     RECNO    is the number of a record in a DAS file. */
 
-/*     RECD           is an array of NWD double precision numbers.  The */
-/*                    contents of this array are to be written to the */
-/*                    physical file record having number RECNO. */
+/*     RECD     is an array of NWD double precision numbers. The */
+/*              contents of this array are to be written to the */
+/*              physical file record having number RECNO. */
 
 /* $ Detailed_Output */
 
-/*     None.   See $Particulars for a description of the action of this */
+/*     None. See $Particulars for a description of the action of this */
 /*     routine. */
 
 /* $ Parameters */
 
-/*     NWD           is the number of DPs in a single DAS record */
-/*                   containing DPs. */
+/*     NWD      is the number of DPs in a single DAS record */
+/*              containing DPs. */
 
-/*     BUFSZD        is the number of records in the double precision */
-/*                   record buffer. */
+/*     BUFSZD   is the number of records in the double precision */
+/*              record buffer. */
 
 /* $ Exceptions */
 
-/*     1)  If the input file handle is invalid, the error will be */
-/*         diagnosed by routines called by this routine.  The DAS file */
+/*     1)  If the input file handle is invalid, an error is signaled by a */
+/*         routine in the call tree of this routine. The DAS file */
 /*         designated by HANDLE will not be modified. */
 
-/*     2)  If a write operation attempted by this routine fails, the */
-/*         error will be diagnosed by routines called by this routine. */
-/*         The status of the DAS file written to is uncertain in this */
-/*         case.  Note that the file written to may be different than */
-/*         the file designated by HANDLE if multiple DAS files are open */
-/*         for writing. */
+/*     2)  If a write operation attempted by this routine fails, an error */
+/*         is signaled by a routine in the call tree of this routine. The */
+/*         status of the DAS file written to is uncertain in this case. */
+/*         Note that the file written to may be different than the file */
+/*         designated by HANDLE if multiple DAS files are open for */
+/*         writing. */
 
 /* $ Files */
 
@@ -1613,11 +1916,11 @@ L_daswrd:
 /*     this routine. */
 
 /*     This routine can be used to write to only DAS files that are open */
-/*     for writing.  Records written via this routine will always be */
+/*     for writing. Records written via this routine will always be */
 /*     buffered immediately, but may not be written to the file until */
 /*     they are cleared from the double precision buffer to make room */
 /*     for other records, or until they are explicitly forced to to be */
-/*     written via a call to DASWBR.  In any case, at the moment this */
+/*     written via a call to DASWBR. In any case, at the moment this */
 /*     routine returns, the data supplied on input may be read back by */
 /*     DASRRD or updated by DASURD. */
 
@@ -1651,12 +1954,17 @@ L_daswrd:
 
 /* $ Author_and_Institution */
 
-/*     K.R. Gehringer (JPL) */
-/*     N.J. Bachman   (JPL) */
-/*     W.L. Taber     (JPL) */
-/*     B.V. Semenov   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 2.0.1, 22-FEB-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 2.0.0, 30-JUL-2014 (NJB) */
 
@@ -1664,7 +1972,7 @@ L_daswrd:
 
 /* -    SPICELIB Version 1.0.3, 10-FEB-2014 (BVS) */
 
-/*        Added description of NWD to the Parameters and Brief_I/O */
+/*        Added description of NWD to the $Parameters and $Brief_I/O */
 /*        sections of the header. */
 
 /* -    SPICELIB Version 1.0.2, 03-NOV-1995 (NJB) */
@@ -1674,7 +1982,7 @@ L_daswrd:
 /* -    SPICELIB Version 1.0.1, 28-OCT-1993 (KRG) */
 
 /*        Removed references to specific DAS file open routines in the */
-/*        $ Detailed_Input section of the header. This was done in order */
+/*        $Detailed_Input section of the header. This was done in order */
 /*        to minimize documentation changes if the DAS open routines ever */
 /*        change. */
 
@@ -1691,7 +1999,7 @@ L_daswrd:
 /* -    SPICELIB Version 1.0.1, 28-OCT-1993 (KRG) */
 
 /*        Removed references to specific DAS file open routines in the */
-/*        $ Detailed_Input section of the header. This was done in order */
+/*        $Detailed_Input section of the header. This was done in order */
 /*        to minimize documentation changes if the DAS open routines ever */
 /*        change. */
 
@@ -1733,21 +2041,21 @@ L_daswrd:
     node = headd;
     while(node > 0) {
 	if (*handle == hnbufd[(i__1 = node - 1) < 10 && 0 <= i__1 ? i__1 : 
-		s_rnge("hnbufd", i__1, "dasrwr_", (ftnlen)1884)] && *recno == 
+		s_rnge("hnbufd", i__1, "dasrwr_", (ftnlen)1917)] && *recno == 
 		rnbufd[(i__2 = node - 1) < 10 && 0 <= i__2 ? i__2 : s_rnge(
-		"rnbufd", i__2, "dasrwr_", (ftnlen)1884)]) {
+		"rnbufd", i__2, "dasrwr_", (ftnlen)1917)]) {
 
 /*           Found it.  Update the buffered record. */
 
 	    moved_(recd, &c__128, &rcbufd[(i__1 = (node << 7) - 128) < 1280 &&
 		     0 <= i__1 ? i__1 : s_rnge("rcbufd", i__1, "dasrwr_", (
-		    ftnlen)1889)]);
+		    ftnlen)1922)]);
 
 /*           Set the update flag, indicating that this buffer entry */
 /*           has been modified. */
 
 	    upbufd[(i__1 = node - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge("upbu"
-		    "fd", i__1, "dasrwr_", (ftnlen)1895)] = TRUE_;
+		    "fd", i__1, "dasrwr_", (ftnlen)1928)] = TRUE_;
 
 /*           Put the information about this record at the head of the */
 /*           active list, if it is not already there. */
@@ -1761,7 +2069,7 @@ L_daswrd:
 	    return 0;
 	}
 	node = poold[(i__1 = (node << 1) + 10) < 32 && 0 <= i__1 ? i__1 : 
-		s_rnge("poold", i__1, "dasrwr_", (ftnlen)1914)];
+		s_rnge("poold", i__1, "dasrwr_", (ftnlen)1947)];
     }
 
 /*     The record we're writing to is not buffered.  We'll allocate */
@@ -1786,15 +2094,15 @@ L_daswrd:
 /*        If the allocated record was updated, write it out. */
 
 	if (upbufd[(i__1 = node - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge("upbu"
-		"fd", i__1, "dasrwr_", (ftnlen)1944)]) {
+		"fd", i__1, "dasrwr_", (ftnlen)1977)]) {
 	    zzddhhlu_(&hnbufd[(i__1 = node - 1) < 10 && 0 <= i__1 ? i__1 : 
-		    s_rnge("hnbufd", i__1, "dasrwr_", (ftnlen)1946)], "DAS", &
+		    s_rnge("hnbufd", i__1, "dasrwr_", (ftnlen)1979)], "DAS", &
 		    c_false, &wrunit, (ftnlen)3);
 	    dasiod_("WRITE", &wrunit, &rnbufd[(i__1 = node - 1) < 10 && 0 <= 
 		    i__1 ? i__1 : s_rnge("rnbufd", i__1, "dasrwr_", (ftnlen)
-		    1948)], &rcbufd[(i__2 = (node << 7) - 128) < 1280 && 0 <= 
+		    1981)], &rcbufd[(i__2 = (node << 7) - 128) < 1280 && 0 <= 
 		    i__2 ? i__2 : s_rnge("rcbufd", i__2, "dasrwr_", (ftnlen)
-		    1948)], (ftnlen)5);
+		    1981)], (ftnlen)5);
 	    if (failed_()) {
 		chkout_("DASWRD", (ftnlen)6);
 		return 0;
@@ -1805,18 +2113,18 @@ L_daswrd:
 /*     Now update the allocated buffer entry with the input data. */
 
     moved_(recd, &c__128, &rcbufd[(i__1 = (node << 7) - 128) < 1280 && 0 <= 
-	    i__1 ? i__1 : s_rnge("rcbufd", i__1, "dasrwr_", (ftnlen)1965)]);
+	    i__1 ? i__1 : s_rnge("rcbufd", i__1, "dasrwr_", (ftnlen)1998)]);
 
 /*     Set the update flag, indicating that this buffer entry */
 /*     has been modified. Also set the handle and record number */
 /*     entries. */
 
     upbufd[(i__1 = node - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge("upbufd", i__1,
-	     "dasrwr_", (ftnlen)1972)] = TRUE_;
+	     "dasrwr_", (ftnlen)2005)] = TRUE_;
     hnbufd[(i__1 = node - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge("hnbufd", i__1,
-	     "dasrwr_", (ftnlen)1973)] = *handle;
+	     "dasrwr_", (ftnlen)2006)] = *handle;
     rnbufd[(i__1 = node - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge("rnbufd", i__1,
-	     "dasrwr_", (ftnlen)1974)] = *recno;
+	     "dasrwr_", (ftnlen)2007)] = *recno;
 
 /*     Link this buffer entry to the head of the list. */
 
@@ -1874,7 +2182,7 @@ L_daswri:
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     I   Handle of DAS file. */
 /*     RECNO      I   Record number. */
@@ -1884,39 +2192,39 @@ L_daswri:
 
 /* $ Detailed_Input */
 
-/*     HANDLE         is the handle of a DAS file opened for writing. */
+/*     HANDLE   is the handle of a DAS file opened for writing. */
 
-/*     RECNO          is the number of a record in a DAS file. */
+/*     RECNO    is the number of a record in a DAS file. */
 
-/*     RECI           is an array of NWI integers.  The contents of this */
-/*                    array are to be written to the physical file */
-/*                    record having number RECNO. */
+/*     RECI     is an array of NWI integers. The contents of this */
+/*              array are to be written to the physical file */
+/*              record having number RECNO. */
 
 /* $ Detailed_Output */
 
-/*     None.   See $Particulars for a description of the action of this */
+/*     None. See $Particulars for a description of the action of this */
 /*     routine. */
 
 /* $ Parameters */
 
-/*     NWI           is the number of integers in a single DAS record */
-/*                   containing integers. */
+/*     NWI      is the number of integers in a single DAS record */
+/*              containing integers. */
 
-/*     BUFSZI        is the number of records in the integer record */
-/*                   buffer. */
+/*     BUFSZI   is the number of records in the integer record */
+/*              buffer. */
 
 /* $ Exceptions */
 
-/*     1)  If the input file handle is invalid, the error will be */
-/*         diagnosed by routines called by this routine.  The DAS file */
+/*     1)  If the input file handle is invalid, an error is signaled by a */
+/*         routine in the call tree of this routine. The DAS file */
 /*         designated by HANDLE will not be modified. */
 
-/*     2)  If a write operation attempted by this routine fails, the */
-/*         error will be diagnosed by routines called by this routine. */
-/*         The status of the DAS file written to is uncertain in this */
-/*         case.  Note that the file written to may be different than */
-/*         the file designated by HANDLE if multiple DAS files are open */
-/*         for writing. */
+/*     2)  If a write operation attempted by this routine fails, an error */
+/*         is signaled by a routine in the call tree of this routine. The */
+/*         status of the DAS file written to is uncertain in this case. */
+/*         Note that the file written to may be different than the file */
+/*         designated by HANDLE if multiple DAS files are open for */
+/*         writing. */
 
 /* $ Files */
 
@@ -1928,11 +2236,11 @@ L_daswri:
 /*     this routine. */
 
 /*     This routine can be used to write to only DAS files that are open */
-/*     for writing.  Records written via this routine will always be */
+/*     for writing. Records written via this routine will always be */
 /*     buffered immediately, but may not be written to the file until */
 /*     they are cleared from the integer buffer to make room for other */
 /*     records, or until they are explicitly forced to to be written via */
-/*     a call to DASWBR.  In any case, at the moment this routine */
+/*     a call to DASWBR. In any case, at the moment this routine */
 /*     returns, the data supplied on input may be read back by DASRRI */
 /*     or updated by DASURI. */
 
@@ -1965,12 +2273,17 @@ L_daswri:
 
 /* $ Author_and_Institution */
 
-/*     K.R. Gehringer (JPL) */
-/*     N.J. Bachman   (JPL) */
-/*     W.L. Taber     (JPL) */
-/*     B.V. Semenov   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 2.0.1, 22-FEB-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 2.0.0, 30-JUL-2014 (NJB) */
 
@@ -1978,7 +2291,7 @@ L_daswri:
 
 /* -    SPICELIB Version 1.0.3, 10-FEB-2014 (BVS) */
 
-/*        Added description of NWI to the Parameters and Brief_I/O */
+/*        Added description of NWI to the $Parameters and $Brief_I/O */
 /*        sections of the header. */
 
 /* -    SPICELIB Version 1.0.2, 03-NOV-1995 (NJB) */
@@ -1988,7 +2301,7 @@ L_daswri:
 /* -    SPICELIB Version 1.0.1, 28-OCT-1993 (KRG) */
 
 /*        Removed references to specific DAS file open routines in the */
-/*        $ Detailed_Input section of the header. This was done in order */
+/*        $Detailed_Input section of the header. This was done in order */
 /*        to minimize documentation changes if the DAS open routines ever */
 /*        change. */
 
@@ -2005,7 +2318,7 @@ L_daswri:
 /* -    SPICELIB Version 1.0.1, 28-OCT-1993 (KRG) */
 
 /*        Removed references to specific DAS file open routines in the */
-/*        $ Detailed_Input section of the header. This was done in order */
+/*        $Detailed_Input section of the header. This was done in order */
 /*        to minimize documentation changes if the DAS open routines ever */
 /*        change. */
 
@@ -2047,21 +2360,21 @@ L_daswri:
     node = headi;
     while(node > 0) {
 	if (*handle == hnbufi[(i__1 = node - 1) < 10 && 0 <= i__1 ? i__1 : 
-		s_rnge("hnbufi", i__1, "dasrwr_", (ftnlen)2228)] && *recno == 
+		s_rnge("hnbufi", i__1, "dasrwr_", (ftnlen)2268)] && *recno == 
 		rnbufi[(i__2 = node - 1) < 10 && 0 <= i__2 ? i__2 : s_rnge(
-		"rnbufi", i__2, "dasrwr_", (ftnlen)2228)]) {
+		"rnbufi", i__2, "dasrwr_", (ftnlen)2268)]) {
 
 /*           Found it.  Update the buffered record. */
 
 	    movei_(reci, &c__256, &rcbufi[(i__1 = (node << 8) - 256) < 2560 &&
 		     0 <= i__1 ? i__1 : s_rnge("rcbufi", i__1, "dasrwr_", (
-		    ftnlen)2233)]);
+		    ftnlen)2273)]);
 
 /*           Set the update flag, indicating that this buffer entry */
 /*           has been modified. */
 
 	    upbufi[(i__1 = node - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge("upbu"
-		    "fi", i__1, "dasrwr_", (ftnlen)2239)] = TRUE_;
+		    "fi", i__1, "dasrwr_", (ftnlen)2279)] = TRUE_;
 
 /*           Put the information about this record at the head of the */
 /*           active list, if it is not already there. */
@@ -2075,7 +2388,7 @@ L_daswri:
 	    return 0;
 	}
 	node = pooli[(i__1 = (node << 1) + 10) < 32 && 0 <= i__1 ? i__1 : 
-		s_rnge("pooli", i__1, "dasrwr_", (ftnlen)2258)];
+		s_rnge("pooli", i__1, "dasrwr_", (ftnlen)2298)];
     }
 
 /*     The record we're writing to is not buffered.  We'll allocate */
@@ -2100,15 +2413,15 @@ L_daswri:
 /*        If the allocated record was updated, write it out. */
 
 	if (upbufi[(i__1 = node - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge("upbu"
-		"fi", i__1, "dasrwr_", (ftnlen)2287)]) {
+		"fi", i__1, "dasrwr_", (ftnlen)2327)]) {
 	    zzddhhlu_(&hnbufi[(i__1 = node - 1) < 10 && 0 <= i__1 ? i__1 : 
-		    s_rnge("hnbufi", i__1, "dasrwr_", (ftnlen)2289)], "DAS", &
+		    s_rnge("hnbufi", i__1, "dasrwr_", (ftnlen)2329)], "DAS", &
 		    c_false, &wrunit, (ftnlen)3);
 	    dasioi_("WRITE", &wrunit, &rnbufi[(i__1 = node - 1) < 10 && 0 <= 
 		    i__1 ? i__1 : s_rnge("rnbufi", i__1, "dasrwr_", (ftnlen)
-		    2291)], &rcbufi[(i__2 = (node << 8) - 256) < 2560 && 0 <= 
+		    2331)], &rcbufi[(i__2 = (node << 8) - 256) < 2560 && 0 <= 
 		    i__2 ? i__2 : s_rnge("rcbufi", i__2, "dasrwr_", (ftnlen)
-		    2291)], (ftnlen)5);
+		    2331)], (ftnlen)5);
 	    if (failed_()) {
 		chkout_("DASWRI", (ftnlen)6);
 		return 0;
@@ -2119,7 +2432,7 @@ L_daswri:
 /*     Now update the allocated buffer entry with the input data. */
 
     movei_(reci, &c__256, &rcbufi[(i__1 = (node << 8) - 256) < 2560 && 0 <= 
-	    i__1 ? i__1 : s_rnge("rcbufi", i__1, "dasrwr_", (ftnlen)2308)]);
+	    i__1 ? i__1 : s_rnge("rcbufi", i__1, "dasrwr_", (ftnlen)2348)]);
 
 /*     Set the update flag, indicating that this buffer entry */
 /*     has been modified.  Also set the handle and record number */
@@ -2127,11 +2440,11 @@ L_daswri:
 
     zzddhhlu_(handle, "DAS", &c_false, &unit, (ftnlen)3);
     upbufi[(i__1 = node - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge("upbufi", i__1,
-	     "dasrwr_", (ftnlen)2317)] = TRUE_;
+	     "dasrwr_", (ftnlen)2357)] = TRUE_;
     hnbufi[(i__1 = node - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge("hnbufi", i__1,
-	     "dasrwr_", (ftnlen)2318)] = *handle;
+	     "dasrwr_", (ftnlen)2358)] = *handle;
     rnbufi[(i__1 = node - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge("rnbufi", i__1,
-	     "dasrwr_", (ftnlen)2319)] = *recno;
+	     "dasrwr_", (ftnlen)2359)] = *recno;
 
 /*     Link this buffer entry to the head of the list. */
 
@@ -2189,7 +2502,7 @@ L_daswrc:
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     I   Handle of DAS file. */
 /*     RECNO      I   Record number. */
@@ -2199,39 +2512,39 @@ L_daswrc:
 
 /* $ Detailed_Input */
 
-/*     HANDLE         is the handle of a DAS file opened for writing. */
+/*     HANDLE   is the handle of a DAS file opened for writing. */
 
-/*     RECNO          is the number of a record in a DAS file. */
+/*     RECNO    is the number of a record in a DAS file. */
 
-/*     RECC           is a string of length NWC.  The contents of this */
-/*                    string are to be written to the physical file */
-/*                    record having number RECNO. */
+/*     RECC     is a string of length NWC. The contents of this */
+/*              string are to be written to the physical file */
+/*              record having number RECNO. */
 
 /* $ Detailed_Output */
 
-/*     None.   See $Particulars for a description of the action of this */
+/*     None. See $Particulars for a description of the action of this */
 /*     routine. */
 
 /* $ Parameters */
 
-/*     NWC           is the number of characters in a single DAS record */
-/*                   containing characters. */
+/*     NWC      is the number of characters in a single DAS record */
+/*              containing characters. */
 
-/*     BUFSZC        is the number of records in the character record */
-/*                   buffer. */
+/*     BUFSZC   is the number of records in the character record */
+/*              buffer. */
 
 /* $ Exceptions */
 
-/*     1)  If the input file handle is invalid, the error will be */
-/*         diagnosed by routines called by this routine.  The DAS file */
+/*     1)  If the input file handle is invalid, an error is signaled by a */
+/*         routine in the call tree of this routine. The DAS file */
 /*         designated by HANDLE will not be modified. */
 
-/*     2)  If a write operation attempted by this routine fails, the */
-/*         error will be diagnosed by routines called by this routine. */
-/*         The status of the DAS file written to is uncertain in this */
-/*         case.  Note that the file written to may be different than */
-/*         the file designated by HANDLE if multiple DAS files are open */
-/*         for writing. */
+/*     2)  If a write operation attempted by this routine fails, an error */
+/*         is signaled by a routine in the call tree of this routine. The */
+/*         status of the DAS file written to is uncertain in this case. */
+/*         Note that the file written to may be different than the file */
+/*         designated by HANDLE if multiple DAS files are open for */
+/*         writing. */
 
 /* $ Files */
 
@@ -2243,11 +2556,11 @@ L_daswrc:
 /*     this routine. */
 
 /*     This routine can be used to write to only DAS files that are open */
-/*     for writing.  Records written via this routine will always be */
+/*     for writing. Records written via this routine will always be */
 /*     buffered immediately, but may not be written to the file until */
 /*     they are cleared from the character buffer to make room for other */
 /*     records, or until they are explicitly forced to to be written via */
-/*     a call to DASWBR.  In any case, at the moment this routine */
+/*     a call to DASWBR. In any case, at the moment this routine */
 /*     returns, the data supplied on input may be read back by DASRRC */
 /*     or updated by DASURC. */
 
@@ -2281,12 +2594,17 @@ L_daswrc:
 
 /* $ Author_and_Institution */
 
-/*     K.R. Gehringer (JPL) */
-/*     N.J. Bachman   (JPL) */
-/*     W.L. Taber     (JPL) */
-/*     B.V. Semenov   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 2.0.1, 22-FEB-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 2.0.0, 30-JUL-2014 (NJB) */
 
@@ -2294,7 +2612,7 @@ L_daswrc:
 
 /* -    SPICELIB Version 1.0.3, 10-FEB-2014 (BVS) */
 
-/*        Added description of NWC to the Parameters and Brief_I/O */
+/*        Added description of NWC to the $Parameters and $Brief_I/O */
 /*        sections of the header. */
 
 /* -    SPICELIB Version 1.0.2, 03-NOV-1995 (NJB) */
@@ -2304,7 +2622,7 @@ L_daswrc:
 /* -    SPICELIB Version 1.0.1, 28-OCT-1993 (KRG) */
 
 /*        Removed references to specific DAS file open routines in the */
-/*        $ Detailed_Input section of the header. This was done in order */
+/*        $Detailed_Input section of the header. This was done in order */
 /*        to minimize documentation changes if the DAS open routines ever */
 /*        change. */
 
@@ -2321,7 +2639,7 @@ L_daswrc:
 /* -    SPICELIB Version 1.0.1, 28-OCT-1993 (KRG) */
 
 /*        Removed references to specific DAS file open routines in the */
-/*        $ Detailed_Input section of the header. This was done in order */
+/*        $Detailed_Input section of the header. This was done in order */
 /*        to minimize documentation changes if the DAS open routines ever */
 /*        change. */
 
@@ -2363,21 +2681,21 @@ L_daswrc:
     node = headc;
     while(node > 0) {
 	if (*handle == hnbufc[(i__1 = node - 1) < 10 && 0 <= i__1 ? i__1 : 
-		s_rnge("hnbufc", i__1, "dasrwr_", (ftnlen)2574)] && *recno == 
+		s_rnge("hnbufc", i__1, "dasrwr_", (ftnlen)2621)] && *recno == 
 		rnbufc[(i__2 = node - 1) < 10 && 0 <= i__2 ? i__2 : s_rnge(
-		"rnbufc", i__2, "dasrwr_", (ftnlen)2574)]) {
+		"rnbufc", i__2, "dasrwr_", (ftnlen)2621)]) {
 
 /*           Found it.  Update the buffered record. */
 
 	    s_copy(rcbufc + (((i__1 = node - 1) < 10 && 0 <= i__1 ? i__1 : 
-		    s_rnge("rcbufc", i__1, "dasrwr_", (ftnlen)2579)) << 10), 
+		    s_rnge("rcbufc", i__1, "dasrwr_", (ftnlen)2626)) << 10), 
 		    recc, (ftnlen)1024, recc_len);
 
 /*           Set the update flag, indicating that this buffer entry */
 /*           has been modified. */
 
 	    upbufc[(i__1 = node - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge("upbu"
-		    "fc", i__1, "dasrwr_", (ftnlen)2585)] = TRUE_;
+		    "fc", i__1, "dasrwr_", (ftnlen)2632)] = TRUE_;
 
 /*           Put the information about this record at the head of the */
 /*           active list, if it is not already there. */
@@ -2391,7 +2709,7 @@ L_daswrc:
 	    return 0;
 	}
 	node = poolc[(i__1 = (node << 1) + 10) < 32 && 0 <= i__1 ? i__1 : 
-		s_rnge("poolc", i__1, "dasrwr_", (ftnlen)2604)];
+		s_rnge("poolc", i__1, "dasrwr_", (ftnlen)2651)];
     }
 
 /*     The record we're writing to is not buffered.  We'll allocate */
@@ -2416,14 +2734,14 @@ L_daswrc:
 /*        If the allocated record was updated, write it out. */
 
 	if (upbufc[(i__1 = node - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge("upbu"
-		"fc", i__1, "dasrwr_", (ftnlen)2633)]) {
+		"fc", i__1, "dasrwr_", (ftnlen)2680)]) {
 	    zzddhhlu_(&hnbufc[(i__1 = node - 1) < 10 && 0 <= i__1 ? i__1 : 
-		    s_rnge("hnbufc", i__1, "dasrwr_", (ftnlen)2635)], "DAS", &
+		    s_rnge("hnbufc", i__1, "dasrwr_", (ftnlen)2682)], "DAS", &
 		    c_false, &wrunit, (ftnlen)3);
 	    dasioc_("WRITE", &wrunit, &rnbufc[(i__1 = node - 1) < 10 && 0 <= 
 		    i__1 ? i__1 : s_rnge("rnbufc", i__1, "dasrwr_", (ftnlen)
-		    2637)], rcbufc + (((i__2 = node - 1) < 10 && 0 <= i__2 ? 
-		    i__2 : s_rnge("rcbufc", i__2, "dasrwr_", (ftnlen)2637)) <<
+		    2684)], rcbufc + (((i__2 = node - 1) < 10 && 0 <= i__2 ? 
+		    i__2 : s_rnge("rcbufc", i__2, "dasrwr_", (ftnlen)2684)) <<
 		     10), (ftnlen)5, (ftnlen)1024);
 	    if (failed_()) {
 		chkout_("DASWRC", (ftnlen)6);
@@ -2435,7 +2753,7 @@ L_daswrc:
 /*     Now update the allocated buffer entry with the input data. */
 
     s_copy(rcbufc + (((i__1 = node - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge(
-	    "rcbufc", i__1, "dasrwr_", (ftnlen)2654)) << 10), recc, (ftnlen)
+	    "rcbufc", i__1, "dasrwr_", (ftnlen)2701)) << 10), recc, (ftnlen)
 	    1024, recc_len);
 
 /*     Set the update flag, indicating that this buffer entry */
@@ -2443,11 +2761,11 @@ L_daswrc:
 /*     entries. */
 
     upbufc[(i__1 = node - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge("upbufc", i__1,
-	     "dasrwr_", (ftnlen)2661)] = TRUE_;
+	     "dasrwr_", (ftnlen)2708)] = TRUE_;
     hnbufc[(i__1 = node - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge("hnbufc", i__1,
-	     "dasrwr_", (ftnlen)2662)] = *handle;
+	     "dasrwr_", (ftnlen)2709)] = *handle;
     rnbufc[(i__1 = node - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge("rnbufc", i__1,
-	     "dasrwr_", (ftnlen)2663)] = *recno;
+	     "dasrwr_", (ftnlen)2710)] = *recno;
 
 /*     Link this buffer entry to the head of the list. */
 
@@ -2507,7 +2825,7 @@ L_dasurd:
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     I   Handle of DAS file. */
 /*     RECNO      I   Record number. */
@@ -2519,63 +2837,63 @@ L_dasurd:
 
 /* $ Detailed_Input */
 
-/*     HANDLE         is the handle of a DAS file opened for writing. */
+/*     HANDLE   is the handle of a DAS file opened for writing. */
 
-/*     RECNO          is the number of a record in a DAS file. */
+/*     RECNO    is the number of a record in a DAS file. */
 
 /*     FIRST, */
-/*     LAST           are the first and last indices of a range of */
-/*                    elements to be updated in the indicated record. */
-/*                    The record contains NWD double precision numbers; */
-/*                    these have indices ranging from 1 to NWD. */
+/*     LAST     are the first and last indices of a range of */
+/*              elements to be updated in the indicated record. */
+/*              The record contains NWD double precision numbers; */
+/*              these have indices ranging from 1 to NWD. */
 
-/*     DATAD          is a double precision array to be written to */
-/*                    elements FIRST through LAST of the specified */
-/*                    record.  The array element DATAD(1) is placed in */
-/*                    record element FIRST, the array element DATAD(2) */
-/*                    is placed in record element FIRST+1, and so on; */
-/*                    the array element DATAD(LAST-FIRST+1) is placed in */
-/*                    the record element LAST. */
+/*     DATAD    is a double precision array to be written to */
+/*              elements FIRST through LAST of the specified */
+/*              record. The array element DATAD(1) is placed in */
+/*              record element FIRST, the array element DATAD(2) */
+/*              is placed in record element FIRST+1, and so on; */
+/*              the array element DATAD(LAST-FIRST+1) is placed in */
+/*              the record element LAST. */
 
 /* $ Detailed_Output */
 
-/*     None.   See $Particulars for a description of the action of this */
+/*     None. See $Particulars for a description of the action of this */
 /*     routine. */
 
 /* $ Parameters */
 
-/*     NWD           is the number of DPs in a single DAS record */
-/*                   containing DPs. */
+/*     NWD      is the number of DPs in a single DAS record */
+/*              containing DPs. */
 
-/*     BUFSZD        is the number of records in the double precision */
-/*                   record buffer. */
+/*     BUFSZD   is the number of records in the double precision */
+/*              record buffer. */
 
 /* $ Exceptions */
 
 /*     1)  This routine may be used to update only records that have */
 /*         already been written by DASWRD or that already exist in the */
-/*         file designated by HANDLE.  Attempting to update a record */
+/*         file designated by HANDLE. Attempting to update a record */
 /*         that hasn't yet been written will cause the read operation */
 /*         performed by this routine to fail. */
 
 /*         If a read operation attempted by this routine fails for this */
-/*         or any other reason, the error will be diagnosed by routines */
-/*         called by this routine.  The indicated record will not be */
+/*         or any other reason, an error is signaled by a routine in the */
+/*         call tree of this routine. The indicated record will not be */
 /*         modified. */
 
-/*     2)  If a write operation attempted by this routine fails, the */
-/*         error will be diagnosed by routines called by this routine. */
-/*         The status of the DAS file written to is uncertain in this */
-/*         case.  Note that the file written to may be different than */
-/*         the file designated by HANDLE if multiple DAS files are open */
-/*         for writing. */
+/*     2)  If a write operation attempted by this routine fails, an error */
+/*         is signaled by a routine in the call tree of this routine. The */
+/*         status of the DAS file written to is uncertain in this case. */
+/*         Note that the file written to may be different than the file */
+/*         designated by HANDLE if multiple DAS files are open for */
+/*         writing. */
 
-/*     3)  If the input file handle is invalid, the error will be */
-/*         diagnosed by routines called by this routine.  The indicated */
-/*         record will not be modified. */
+/*     3)  If the input file handle is invalid, an error is signaled by a */
+/*         routine in the call tree of this routine. The indicated record */
+/*         will not be modified. */
 
 /*     4)  If FIRST or LAST is not in the range [1, NWD], the error */
-/*         SPICE(INDEXOUTOFRANGE) will be signaled.  The indicated */
+/*         SPICE(INDEXOUTOFRANGE) is signaled. The indicated */
 /*         record will not be modified. */
 
 /*     5)  If FIRST > LAST, this routine will return without modifying */
@@ -2593,7 +2911,7 @@ L_dasurd:
 /*     This routine can be used to update any existing record in a DAS */
 /*     file that is open for writing, or any record that has been */
 /*     `written' by DASWRD, whether or not that record has yet been */
-/*     physically written to the file it belongs to.  Records that have */
+/*     physically written to the file it belongs to. Records that have */
 /*     never been written cannot be updated. */
 
 /*     Because the DAS system buffers records that are written, multiple */
@@ -2630,12 +2948,17 @@ L_dasurd:
 
 /* $ Author_and_Institution */
 
-/*     K.R. Gehringer (JPL) */
-/*     N.J. Bachman   (JPL) */
-/*     W.L. Taber     (JPL) */
-/*     B.V. Semenov   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 2.0.1, 22-FEB-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 2.0.0, 05-FEB-2015 (NJB) */
 
@@ -2643,7 +2966,7 @@ L_dasurd:
 
 /* -    SPICELIB Version 1.0.3, 10-FEB-2014 (BVS) */
 
-/*        Added description of NWD to the Parameters and Brief_I/O */
+/*        Added description of NWD to the $Parameters and $Brief_I/O */
 /*        sections of the header. */
 
 /* -    SPICELIB Version 1.0.2, 03-NOV-1995 (NJB) */
@@ -2653,7 +2976,7 @@ L_dasurd:
 /* -    SPICELIB Version 1.0.1, 28-OCT-1993 (KRG) */
 
 /*        Removed references to specific DAS file open routines in the */
-/*        $ Detailed_Input section of the header. This was done in order */
+/*        $Detailed_Input section of the header. This was done in order */
 /*        to minimize documentation changes if the DAS open routines ever */
 /*        change. */
 
@@ -2670,7 +2993,7 @@ L_dasurd:
 /* -    SPICELIB Version 1.0.1, 28-OCT-1993 (KRG) */
 
 /*        Removed references to specific DAS file open routines in the */
-/*        $ Detailed_Input section of the header. This was done in order */
+/*        $Detailed_Input section of the header. This was done in order */
 /*        to minimize documentation changes if the DAS open routines ever */
 /*        change. */
 
@@ -2736,22 +3059,22 @@ L_dasurd:
     node = headd;
     while(node > 0) {
 	if (*handle == hnbufd[(i__1 = node - 1) < 10 && 0 <= i__1 ? i__1 : 
-		s_rnge("hnbufd", i__1, "dasrwr_", (ftnlen)2982)] && *recno == 
+		s_rnge("hnbufd", i__1, "dasrwr_", (ftnlen)3036)] && *recno == 
 		rnbufd[(i__2 = node - 1) < 10 && 0 <= i__2 ? i__2 : s_rnge(
-		"rnbufd", i__2, "dasrwr_", (ftnlen)2982)]) {
+		"rnbufd", i__2, "dasrwr_", (ftnlen)3036)]) {
 
 /*           Found it.  Update the buffered record. */
 
 	    i__2 = *last - *first + 1;
 	    moved_(datad, &i__2, &rcbufd[(i__1 = *first + (node << 7) - 129) <
 		     1280 && 0 <= i__1 ? i__1 : s_rnge("rcbufd", i__1, "dasr"
-		    "wr_", (ftnlen)2987)]);
+		    "wr_", (ftnlen)3041)]);
 
 /*           Set the update flag, indicating that this buffer entry */
 /*           has been modified. */
 
 	    upbufd[(i__1 = node - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge("upbu"
-		    "fd", i__1, "dasrwr_", (ftnlen)2993)] = TRUE_;
+		    "fd", i__1, "dasrwr_", (ftnlen)3047)] = TRUE_;
 
 /*           Put the information about this record at the head of the */
 /*           active list, if it is not already there. */
@@ -2765,7 +3088,7 @@ L_dasurd:
 	    return 0;
 	}
 	node = poold[(i__1 = (node << 1) + 10) < 32 && 0 <= i__1 ? i__1 : 
-		s_rnge("poold", i__1, "dasrwr_", (ftnlen)3012)];
+		s_rnge("poold", i__1, "dasrwr_", (ftnlen)3066)];
     }
 
 /*     The record we're writing to is not buffered.  In order to */
@@ -2791,15 +3114,15 @@ L_dasurd:
 /*        If the allocated record was updated, write it out. */
 
 	if (upbufd[(i__1 = node - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge("upbu"
-		"fd", i__1, "dasrwr_", (ftnlen)3043)]) {
+		"fd", i__1, "dasrwr_", (ftnlen)3097)]) {
 	    zzddhhlu_(&hnbufd[(i__1 = node - 1) < 10 && 0 <= i__1 ? i__1 : 
-		    s_rnge("hnbufd", i__1, "dasrwr_", (ftnlen)3045)], "DAS", &
+		    s_rnge("hnbufd", i__1, "dasrwr_", (ftnlen)3099)], "DAS", &
 		    c_false, &wrunit, (ftnlen)3);
 	    dasiod_("WRITE", &wrunit, &rnbufd[(i__1 = node - 1) < 10 && 0 <= 
 		    i__1 ? i__1 : s_rnge("rnbufd", i__1, "dasrwr_", (ftnlen)
-		    3047)], &rcbufd[(i__2 = (node << 7) - 128) < 1280 && 0 <= 
+		    3101)], &rcbufd[(i__2 = (node << 7) - 128) < 1280 && 0 <= 
 		    i__2 ? i__2 : s_rnge("rcbufd", i__2, "dasrwr_", (ftnlen)
-		    3047)], (ftnlen)5);
+		    3101)], (ftnlen)5);
 	    if (failed_()) {
 		chkout_("DASURD", (ftnlen)6);
 		return 0;
@@ -2810,7 +3133,7 @@ L_dasurd:
 /*     Now try to read the record we're going to update. */
 
     zzdasgrd_(handle, recno, &rcbufd[(i__1 = (node << 7) - 128) < 1280 && 0 <=
-	     i__1 ? i__1 : s_rnge("rcbufd", i__1, "dasrwr_", (ftnlen)3065)]);
+	     i__1 ? i__1 : s_rnge("rcbufd", i__1, "dasrwr_", (ftnlen)3119)]);
     if (failed_()) {
 	chkout_("DASURD", (ftnlen)6);
 	return 0;
@@ -2825,11 +3148,11 @@ L_dasurd:
 
     lnkilb_(&node, &headd, poold);
     hnbufd[(i__1 = node - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge("hnbufd", i__1,
-	     "dasrwr_", (ftnlen)3082)] = *handle;
+	     "dasrwr_", (ftnlen)3136)] = *handle;
     rnbufd[(i__1 = node - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge("rnbufd", i__1,
-	     "dasrwr_", (ftnlen)3083)] = *recno;
+	     "dasrwr_", (ftnlen)3137)] = *recno;
     upbufd[(i__1 = node - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge("upbufd", i__1,
-	     "dasrwr_", (ftnlen)3084)] = TRUE_;
+	     "dasrwr_", (ftnlen)3138)] = TRUE_;
     headd = node;
 
 /*     At long last, make the requested update.  Note that we don't */
@@ -2839,7 +3162,7 @@ L_dasurd:
     i__2 = *last - *first + 1;
     moved_(datad, &i__2, &rcbufd[(i__1 = *first + (node << 7) - 129) < 1280 &&
 	     0 <= i__1 ? i__1 : s_rnge("rcbufd", i__1, "dasrwr_", (ftnlen)
-	    3092)]);
+	    3146)]);
     chkout_("DASURD", (ftnlen)6);
     return 0;
 /* $Procedure DASURI ( DAS, update record, integer ) */
@@ -2894,7 +3217,7 @@ L_dasuri:
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     I   Handle of DAS file. */
 /*     RECNO      I   Record number. */
@@ -2906,63 +3229,63 @@ L_dasuri:
 
 /* $ Detailed_Input */
 
-/*     HANDLE         is the handle of a DAS file opened for writing. */
+/*     HANDLE   is the handle of a DAS file opened for writing. */
 
-/*     RECNO          is the number of a record in a DAS file. */
+/*     RECNO    is the number of a record in a DAS file. */
 
 /*     FIRST, */
-/*     LAST           are the first and last indices of a range of */
-/*                    elements to be updated in the indicated record. */
-/*                    The record contains NWI integers; these have */
-/*                    indices ranging from 1 to NWI. */
+/*     LAST     are the first and last indices of a range of */
+/*              elements to be updated in the indicated record. */
+/*              The record contains NWI integers; these have */
+/*              indices ranging from 1 to NWI. */
 
-/*     DATAI          is an integer array to be written to elements FIRST */
-/*                    through LAST of the specified record.  The array */
-/*                    element DATAI(1) is placed in record element FIRST, */
-/*                    the array element DATAI(2) is placed in record */
-/*                    element FIRST+1, and so on; the array element */
-/*                    DATAI(LAST-FIRST+1) is placed in the record element */
-/*                    LAST. */
+/*     DATAI    is an integer array to be written to elements FIRST */
+/*              through LAST of the specified record. The array */
+/*              element DATAI(1) is placed in record element FIRST, */
+/*              the array element DATAI(2) is placed in record */
+/*              element FIRST+1, and so on; the array element */
+/*              DATAI(LAST-FIRST+1) is placed in the record element */
+/*              LAST. */
 
 /* $ Detailed_Output */
 
-/*     None.   See $Particulars for a description of the action of this */
+/*     None. See $Particulars for a description of the action of this */
 /*     routine. */
 
 /* $ Parameters */
 
-/*     NWI           is the number of integers in a single DAS record */
-/*                   containing integers. */
+/*     NWI      is the number of integers in a single DAS record */
+/*              containing integers. */
 
-/*     BUFSZI        is the number of records in the integer record */
-/*                   buffer. */
+/*     BUFSZI   is the number of records in the integer record */
+/*              buffer. */
 
 /* $ Exceptions */
 
 /*     1)  This routine may be used to update only records that have */
 /*         already been written by DASWRI or that already exist in the */
-/*         file designated by HANDLE.  Attempting to update a record */
+/*         file designated by HANDLE. Attempting to update a record */
 /*         that hasn't yet been written will cause the read operation */
 /*         performed by this routine to fail. */
 
 /*         If a read operation attempted by this routine fails for this */
-/*         or any other reason, the error will be diagnosed by routines */
-/*         called by this routine.  The indicated record will not be */
+/*         or any other reason, an error is signaled by a routine in the */
+/*         call tree of this routine. The indicated record will not be */
 /*         modified. */
 
-/*     2)  If a write operation attempted by this routine fails, the */
-/*         error will be diagnosed by routines called by this routine. */
-/*         The status of the DAS file written to is uncertain in this */
-/*         case.  Note that the file written to may be different than */
-/*         the file designated by HANDLE if multiple DAS files are open */
-/*         for writing. */
+/*     2)  If a write operation attempted by this routine fails, an error */
+/*         is signaled by a routine in the call tree of this routine. The */
+/*         status of the DAS file written to is uncertain in this case. */
+/*         Note that the file written to may be different than the file */
+/*         designated by HANDLE if multiple DAS files are open for */
+/*         writing. */
 
-/*     3)  If the input file handle is invalid, the error will be */
-/*         diagnosed by routines called by this routine.  The indicated */
-/*         record will not be modified. */
+/*     3)  If the input file handle is invalid, an error is signaled by a */
+/*         routine in the call tree of this routine. The indicated record */
+/*         will not be modified. */
 
 /*     4)  If FIRST or LAST is not in the range [1, NWI], the error */
-/*         SPICE(INDEXOUTOFRANGE) will be signaled.  The indicated */
+/*         SPICE(INDEXOUTOFRANGE) is signaled. The indicated */
 /*         record will not be modified. */
 
 /*     5)  If FIRST > LAST, this routine will return without modifying */
@@ -2980,7 +3303,7 @@ L_dasuri:
 /*     This routine can be used to update any existing record in a DAS */
 /*     file that is open for writing, or any record that has been */
 /*     `written' by DASWRI, whether or not that record has yet been */
-/*     physically written to the file it belongs to.  Records that have */
+/*     physically written to the file it belongs to. Records that have */
 /*     never been written cannot be updated. */
 
 /*     Because the DAS system buffers records that are written, multiple */
@@ -3017,12 +3340,17 @@ L_dasuri:
 
 /* $ Author_and_Institution */
 
-/*     K.R. Gehringer (JPL) */
-/*     N.J. Bachman   (JPL) */
-/*     W.L. Taber     (JPL) */
-/*     B.V. Semenov   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 2.0.1, 22-FEB-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 2.0.0, 05-FEB-2015 (NJB) */
 
@@ -3030,7 +3358,7 @@ L_dasuri:
 
 /* -    SPICELIB Version 1.0.3, 10-FEB-2014 (BVS) */
 
-/*        Added description of NWI to the Parameters and Brief_I/O */
+/*        Added description of NWI to the $Parameters and $Brief_I/O */
 /*        sections of the header. */
 
 /* -    SPICELIB Version 1.0.2, 03-NOV-1995 (NJB) */
@@ -3040,7 +3368,7 @@ L_dasuri:
 /* -    SPICELIB Version 1.0.1, 28-OCT-1993 (KRG) */
 
 /*        Removed references to specific DAS file open routines in the */
-/*        $ Detailed_Input section of the header. This was done in order */
+/*        $Detailed_Input section of the header. This was done in order */
 /*        to minimize documentation changes if the DAS open routines ever */
 /*        change. */
 
@@ -3057,7 +3385,7 @@ L_dasuri:
 /* -    SPICELIB Version 1.0.1, 28-OCT-1993 (KRG) */
 
 /*        Removed references to specific DAS file open routines in the */
-/*        $ Detailed_Input section of the header. This was done in order */
+/*        $Detailed_Input section of the header. This was done in order */
 /*        to minimize documentation changes if the DAS open routines ever */
 /*        change. */
 
@@ -3123,22 +3451,22 @@ L_dasuri:
     node = headi;
     while(node > 0) {
 	if (*handle == hnbufi[(i__1 = node - 1) < 10 && 0 <= i__1 ? i__1 : 
-		s_rnge("hnbufi", i__1, "dasrwr_", (ftnlen)3406)] && *recno == 
+		s_rnge("hnbufi", i__1, "dasrwr_", (ftnlen)3467)] && *recno == 
 		rnbufi[(i__2 = node - 1) < 10 && 0 <= i__2 ? i__2 : s_rnge(
-		"rnbufi", i__2, "dasrwr_", (ftnlen)3406)]) {
+		"rnbufi", i__2, "dasrwr_", (ftnlen)3467)]) {
 
 /*           Found it.  Update the buffered record. */
 
 	    i__2 = *last - *first + 1;
 	    movei_(datai, &i__2, &rcbufi[(i__1 = *first + (node << 8) - 257) <
 		     2560 && 0 <= i__1 ? i__1 : s_rnge("rcbufi", i__1, "dasr"
-		    "wr_", (ftnlen)3411)]);
+		    "wr_", (ftnlen)3472)]);
 
 /*           Set the update flag, indicating that this buffer entry */
 /*           has been modified. */
 
 	    upbufi[(i__1 = node - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge("upbu"
-		    "fi", i__1, "dasrwr_", (ftnlen)3417)] = TRUE_;
+		    "fi", i__1, "dasrwr_", (ftnlen)3478)] = TRUE_;
 
 /*           Put the information about this record at the head of the */
 /*           active list, if it is not already there. */
@@ -3152,7 +3480,7 @@ L_dasuri:
 	    return 0;
 	}
 	node = pooli[(i__1 = (node << 1) + 10) < 32 && 0 <= i__1 ? i__1 : 
-		s_rnge("pooli", i__1, "dasrwr_", (ftnlen)3436)];
+		s_rnge("pooli", i__1, "dasrwr_", (ftnlen)3497)];
     }
 
 /*     The record we're writing to is not buffered.  We'll allocate */
@@ -3177,15 +3505,15 @@ L_dasuri:
 /*        If the allocated record was updated, write it out. */
 
 	if (upbufi[(i__1 = node - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge("upbu"
-		"fi", i__1, "dasrwr_", (ftnlen)3465)]) {
+		"fi", i__1, "dasrwr_", (ftnlen)3526)]) {
 	    zzddhhlu_(&hnbufi[(i__1 = node - 1) < 10 && 0 <= i__1 ? i__1 : 
-		    s_rnge("hnbufi", i__1, "dasrwr_", (ftnlen)3467)], "DAS", &
+		    s_rnge("hnbufi", i__1, "dasrwr_", (ftnlen)3528)], "DAS", &
 		    c_false, &wrunit, (ftnlen)3);
 	    dasioi_("WRITE", &wrunit, &rnbufi[(i__1 = node - 1) < 10 && 0 <= 
 		    i__1 ? i__1 : s_rnge("rnbufi", i__1, "dasrwr_", (ftnlen)
-		    3469)], &rcbufi[(i__2 = (node << 8) - 256) < 2560 && 0 <= 
+		    3530)], &rcbufi[(i__2 = (node << 8) - 256) < 2560 && 0 <= 
 		    i__2 ? i__2 : s_rnge("rcbufi", i__2, "dasrwr_", (ftnlen)
-		    3469)], (ftnlen)5);
+		    3530)], (ftnlen)5);
 	    if (failed_()) {
 		chkout_("DASURI", (ftnlen)6);
 		return 0;
@@ -3196,7 +3524,7 @@ L_dasuri:
 /*     Now try to read the record we're going to update. */
 
     zzdasgri_(handle, recno, &rcbufi[(i__1 = (node << 8) - 256) < 2560 && 0 <=
-	     i__1 ? i__1 : s_rnge("rcbufi", i__1, "dasrwr_", (ftnlen)3486)]);
+	     i__1 ? i__1 : s_rnge("rcbufi", i__1, "dasrwr_", (ftnlen)3547)]);
     if (failed_()) {
 	chkout_("DASURI", (ftnlen)6);
 	return 0;
@@ -3211,11 +3539,11 @@ L_dasuri:
 
     lnkilb_(&node, &headi, pooli);
     hnbufi[(i__1 = node - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge("hnbufi", i__1,
-	     "dasrwr_", (ftnlen)3503)] = *handle;
+	     "dasrwr_", (ftnlen)3564)] = *handle;
     rnbufi[(i__1 = node - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge("rnbufi", i__1,
-	     "dasrwr_", (ftnlen)3504)] = *recno;
+	     "dasrwr_", (ftnlen)3565)] = *recno;
     upbufi[(i__1 = node - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge("upbufi", i__1,
-	     "dasrwr_", (ftnlen)3505)] = TRUE_;
+	     "dasrwr_", (ftnlen)3566)] = TRUE_;
     headi = node;
 
 /*     At long last, make the requested update.  Note that we don't */
@@ -3225,7 +3553,7 @@ L_dasuri:
     i__2 = *last - *first + 1;
     movei_(datai, &i__2, &rcbufi[(i__1 = *first + (node << 8) - 257) < 2560 &&
 	     0 <= i__1 ? i__1 : s_rnge("rcbufi", i__1, "dasrwr_", (ftnlen)
-	    3513)]);
+	    3574)]);
     chkout_("DASURI", (ftnlen)6);
     return 0;
 /* $Procedure DASURC ( DAS, update record, character ) */
@@ -3280,7 +3608,7 @@ L_dasurc:
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     I   Handle of DAS file. */
 /*     RECNO      I   Record number. */
@@ -3292,63 +3620,63 @@ L_dasurc:
 
 /* $ Detailed_Input */
 
-/*     HANDLE         is the handle of a DAS file opened for writing. */
+/*     HANDLE   is the handle of a DAS file opened for writing. */
 
-/*     RECNO          is the number of a record in a DAS file. */
+/*     RECNO    is the number of a record in a DAS file. */
 
 /*     FIRST, */
-/*     LAST           are the first and last indices of a range of */
-/*                    elements to be updated in the indicated record. */
-/*                    The record contains NWC characters; these have */
-/*                    indices ranging from 1 to NWC. */
+/*     LAST     are the first and last indices of a range of */
+/*              elements to be updated in the indicated record. */
+/*              The record contains NWC characters; these have */
+/*              indices ranging from 1 to NWC. */
 
-/*     DATAC          is a character string to be written to elements */
-/*                    FIRST through LAST of the specified record.  The */
-/*                    character DATAC(1:1) is placed in record element */
-/*                    FIRST, the character DATAC(2) is placed in record */
-/*                    element FIRST+1, and so on; the character */
-/*                    DATAC(LAST-FIRST+1) is placed in the record element */
-/*                    LAST. */
+/*     DATAC    is a character string to be written to elements */
+/*              FIRST through LAST of the specified record. The */
+/*              character DATAC(1:1) is placed in record element */
+/*              FIRST, the character DATAC(2) is placed in record */
+/*              element FIRST+1, and so on; the character */
+/*              DATAC(LAST-FIRST+1) is placed in the record element */
+/*              LAST. */
 
 /* $ Detailed_Output */
 
-/*     None.   See $Particulars for a description of the action of this */
+/*     None. See $Particulars for a description of the action of this */
 /*     routine. */
 
 /* $ Parameters */
 
-/*     NWC           is the number of characters in a single DAS record */
-/*                   containing characters. */
+/*     NWC      is the number of characters in a single DAS record */
+/*              containing characters. */
 
-/*     BUFSZC        is the number of records in the character record */
-/*                   buffer. */
+/*     BUFSZC   is the number of records in the character record */
+/*              buffer. */
 
 /* $ Exceptions */
 
 /*     1)  This routine may be used to update only records that have */
 /*         already been written by DASWRC or that already exist in the */
-/*         file designated by HANDLE.  Attempting to update a record */
+/*         file designated by HANDLE. Attempting to update a record */
 /*         that hasn't yet been written will cause the read operation */
 /*         performed by this routine to fail. */
 
 /*         If a read operation attempted by this routine fails for this */
-/*         or any other reason, the error will be diagnosed by routines */
-/*         called by this routine.  The indicated record will not be */
+/*         or any other reason, an error is signaled by a routine in the */
+/*         call tree of this routine. The indicated record will not be */
 /*         modified. */
 
-/*     2)  If a write operation attempted by this routine fails, the */
-/*         error will be diagnosed by routines called by this routine. */
-/*         The status of the DAS file written to is uncertain in this */
-/*         case.  Note that the file written to may be different than */
-/*         the file designated by HANDLE if multiple DAS files are open */
-/*         for writing. */
+/*     2)  If a write operation attempted by this routine fails, an error */
+/*         is signaled by a routine in the call tree of this routine. The */
+/*         status of the DAS file written to is uncertain in this case. */
+/*         Note that the file written to may be different than the file */
+/*         designated by HANDLE if multiple DAS files are open for */
+/*         writing. */
 
-/*     3)  If the input file handle is invalid, the error will be */
-/*         diagnosed by routines called by this routine.  The indicated */
-/*         record will not be modified. */
+/*     3)  If the input file handle is invalid, an error is signaled by a */
+/*         routine in the call tree of this routine. The indicated record */
+/*         will not be modified. */
 
 /*     4)  If FIRST or LAST is not in the range [1, NWC], the error */
-/*         SPICE(INDEXOUTOFRANGE) will be signaled.  The indicated */
+/*         SPICE(INDEXOUTOFRANGE) is signaled. The indicated */
 /*         record will not be modified. */
 
 /*     5)  If FIRST > LAST, this routine will return without modifying */
@@ -3366,7 +3694,7 @@ L_dasurc:
 /*     This routine can be used to update any existing record in a DAS */
 /*     file that is open for writing, or any record that has been */
 /*     `written' by DASWRC, whether or not that record has yet been */
-/*     physically written to the file it belongs to.  Records that have */
+/*     physically written to the file it belongs to. Records that have */
 /*     never been written cannot be updated. */
 
 /*     Because the DAS system buffers records that are written, multiple */
@@ -3408,12 +3736,17 @@ L_dasurc:
 
 /* $ Author_and_Institution */
 
-/*     K.R. Gehringer (JPL) */
-/*     N.J. Bachman   (JPL) */
-/*     W.L. Taber     (JPL) */
-/*     B.V. Semenov   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 2.0.1, 22-FEB-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 2.0.0, 05-FEB-2015 (NJB) */
 
@@ -3421,7 +3754,7 @@ L_dasurc:
 
 /* -    SPICELIB Version 1.0.3, 10-FEB-2014 (BVS) */
 
-/*        Added description of NWC to the Parameters and Brief_I/O */
+/*        Added description of NWC to the $Parameters and $Brief_I/O */
 /*        sections of the header. */
 
 /* -    SPICELIB Version 1.0.2, 03-NOV-1995 (NJB) */
@@ -3431,7 +3764,7 @@ L_dasurc:
 /* -    SPICELIB Version 1.0.1, 28-OCT-1993 (KRG) */
 
 /*        Removed references to specific DAS file open routines in the */
-/*        $ Detailed_Input section of the header. This was done in order */
+/*        $Detailed_Input section of the header. This was done in order */
 /*        to minimize documentation changes if the DAS open routines ever */
 /*        change. */
 
@@ -3448,7 +3781,7 @@ L_dasurc:
 /* -    SPICELIB Version 1.0.1, 28-OCT-1993 (KRG) */
 
 /*        Removed references to specific DAS file open routines in the */
-/*        $ Detailed_Input section of the header. This was done in order */
+/*        $Detailed_Input section of the header. This was done in order */
 /*        to minimize documentation changes if the DAS open routines ever */
 /*        change. */
 
@@ -3514,21 +3847,21 @@ L_dasurc:
     node = headc;
     while(node > 0) {
 	if (*handle == hnbufc[(i__1 = node - 1) < 10 && 0 <= i__1 ? i__1 : 
-		s_rnge("hnbufc", i__1, "dasrwr_", (ftnlen)3833)] && *recno == 
+		s_rnge("hnbufc", i__1, "dasrwr_", (ftnlen)3901)] && *recno == 
 		rnbufc[(i__2 = node - 1) < 10 && 0 <= i__2 ? i__2 : s_rnge(
-		"rnbufc", i__2, "dasrwr_", (ftnlen)3833)]) {
+		"rnbufc", i__2, "dasrwr_", (ftnlen)3901)]) {
 
 /*           Found it.  Update the buffered record. */
 
 	    s_copy(rcbufc + ((((i__1 = node - 1) < 10 && 0 <= i__1 ? i__1 : 
-		    s_rnge("rcbufc", i__1, "dasrwr_", (ftnlen)3838)) << 10) + 
+		    s_rnge("rcbufc", i__1, "dasrwr_", (ftnlen)3906)) << 10) + 
 		    (*first - 1)), datac, *last - (*first - 1), datac_len);
 
 /*           Set the update flag, indicating that this buffer entry */
 /*           has been modified. */
 
 	    upbufc[(i__1 = node - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge("upbu"
-		    "fc", i__1, "dasrwr_", (ftnlen)3844)] = TRUE_;
+		    "fc", i__1, "dasrwr_", (ftnlen)3912)] = TRUE_;
 
 /*           Put the information about this record at the head of the */
 /*           active list, if it is not already there. */
@@ -3542,7 +3875,7 @@ L_dasurc:
 	    return 0;
 	}
 	node = poolc[(i__1 = (node << 1) + 10) < 32 && 0 <= i__1 ? i__1 : 
-		s_rnge("poolc", i__1, "dasrwr_", (ftnlen)3863)];
+		s_rnge("poolc", i__1, "dasrwr_", (ftnlen)3931)];
     }
 
 /*     The record we're writing to is not buffered.  We'll allocate */
@@ -3567,14 +3900,14 @@ L_dasurc:
 /*        If the allocated record was updated, write it out. */
 
 	if (upbufc[(i__1 = node - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge("upbu"
-		"fc", i__1, "dasrwr_", (ftnlen)3892)]) {
+		"fc", i__1, "dasrwr_", (ftnlen)3960)]) {
 	    zzddhhlu_(&hnbufc[(i__1 = node - 1) < 10 && 0 <= i__1 ? i__1 : 
-		    s_rnge("hnbufc", i__1, "dasrwr_", (ftnlen)3895)], "DAS", &
+		    s_rnge("hnbufc", i__1, "dasrwr_", (ftnlen)3963)], "DAS", &
 		    c_false, &wrunit, (ftnlen)3);
 	    dasioc_("WRITE", &wrunit, &rnbufc[(i__1 = node - 1) < 10 && 0 <= 
 		    i__1 ? i__1 : s_rnge("rnbufc", i__1, "dasrwr_", (ftnlen)
-		    3897)], rcbufc + (((i__2 = node - 1) < 10 && 0 <= i__2 ? 
-		    i__2 : s_rnge("rcbufc", i__2, "dasrwr_", (ftnlen)3897)) <<
+		    3965)], rcbufc + (((i__2 = node - 1) < 10 && 0 <= i__2 ? 
+		    i__2 : s_rnge("rcbufc", i__2, "dasrwr_", (ftnlen)3965)) <<
 		     10), (ftnlen)5, (ftnlen)1024);
 	    if (failed_()) {
 		chkout_("DASURC", (ftnlen)6);
@@ -3587,7 +3920,7 @@ L_dasurc:
 
     zzddhhlu_(handle, "DAS", &c_false, &unit, (ftnlen)3);
     dasioc_("READ", &unit, recno, rcbufc + (((i__1 = node - 1) < 10 && 0 <= 
-	    i__1 ? i__1 : s_rnge("rcbufc", i__1, "dasrwr_", (ftnlen)3916)) << 
+	    i__1 ? i__1 : s_rnge("rcbufc", i__1, "dasrwr_", (ftnlen)3984)) << 
 	    10), (ftnlen)4, (ftnlen)1024);
     if (failed_()) {
 	chkout_("DASURC", (ftnlen)6);
@@ -3603,11 +3936,11 @@ L_dasurc:
 
     lnkilb_(&node, &headc, poolc);
     hnbufc[(i__1 = node - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge("hnbufc", i__1,
-	     "dasrwr_", (ftnlen)3933)] = *handle;
+	     "dasrwr_", (ftnlen)4001)] = *handle;
     rnbufc[(i__1 = node - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge("rnbufc", i__1,
-	     "dasrwr_", (ftnlen)3934)] = *recno;
+	     "dasrwr_", (ftnlen)4002)] = *recno;
     upbufc[(i__1 = node - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge("upbufc", i__1,
-	     "dasrwr_", (ftnlen)3935)] = TRUE_;
+	     "dasrwr_", (ftnlen)4003)] = TRUE_;
     headc = node;
 
 /*     At long last, make the requested update.  Note that we don't */
@@ -3615,7 +3948,7 @@ L_dasurc:
 /*     automatically before or at the time the file is closed. */
 
     s_copy(rcbufc + ((((i__1 = node - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge(
-	    "rcbufc", i__1, "dasrwr_", (ftnlen)3943)) << 10) + (*first - 1)), 
+	    "rcbufc", i__1, "dasrwr_", (ftnlen)4011)) << 10) + (*first - 1)), 
 	    datac, *last - (*first - 1), datac_len);
     chkout_("DASURC", (ftnlen)6);
     return 0;
@@ -3624,7 +3957,7 @@ L_dasurc:
 L_daswbr:
 /* $ Abstract */
 
-/*     Write out all buffered records of a specified file. */
+/*     Write out all buffered records of a specified DAS file. */
 
 /* $ Disclaimer */
 
@@ -3667,18 +4000,19 @@ L_daswbr:
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Entry points */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     I   Handle of DAS file. */
 
 /* $ Detailed_Input */
 
-/*     HANDLE         is the handle of a DAS file opened for writing. */
+/*     HANDLE   is the handle of a DAS file opened for writing. */
 
 /* $ Detailed_Output */
 
-/*     None.   See $Particulars for a description of the action of this */
-/*     routine. */
+/*     None. */
+
+/*     See $Particulars for a description of the action of this routine. */
 
 /* $ Parameters */
 
@@ -3686,14 +4020,14 @@ L_daswbr:
 
 /* $ Exceptions */
 
-/*     1)  If the input file handle is invalid, the error will be */
-/*         diagnosed by routines called by this routine.  The indicated */
+/*     1)  If the input file handle is invalid, an error is signaled */
+/*         by a routine in the call tree of this routine. The indicated */
 /*         file will not be modified. */
 
-/*     2)  If a write operation attempted by this routine fails, the */
-/*         error will be diagnosed by routines called by this routine. */
-/*         The status of the DAS file written to is uncertain in this */
-/*         case. */
+/*     2)  If a write operation attempted by this routine fails, an */
+/*         error is signaled by a routine in the call tree of this */
+/*         routine. The status of the DAS file written to is uncertain */
+/*         in this case. */
 
 /* $ Files */
 
@@ -3702,26 +4036,27 @@ L_daswbr:
 /* $ Particulars */
 
 /*     This routine writes buffered records out to the DAS file to which */
-/*     they correspond.  After the records are written, the buffer */
-/*     elements used to store them are deallocated. */
+/*     they correspond. */
 
-/*     Because the DAS system buffers records that are written as well */
-/*     as those that are read, data supplied to the DASWRx and DASURx */
+/*     Because the DAS system buffers records that are written as well as */
+/*     those that are read, data supplied to the DAS add data (DASADC, */
+/*     DASADD, DASADI) and DAS update data (DASUDC, DASUDD, DASUDI) */
 /*     routines on input has not necessarily been physically written to */
 /*     the DAS file specified by the caller of those routines, at the */
-/*     time those routines return.  Before closing a DAS file that has */
-/*     been opened for writing, the DAS system must write out to the */
-/*     file any updated records present in the DAS buffers.  The SPICELIB */
-/*     routine DASCLS uses this routine to perform this function.  The */
-/*     SPICELIB routines DASACR and DASRCR, which respectively add */
-/*     comment records to or delete comment records from a DAS file, use */
-/*     this routine to ensure that the DASRWR record buffers don't */
-/*     become out of sync with the file they operate upon. */
+/*     time those routines return. Before closing a DAS file that has */
+/*     been opened for writing, the DAS system must write out to the file */
+/*     any updated records present in the DAS buffers. The SPICELIB */
+/*     routine DASCLS uses this routine to perform this function. The */
+/*     routines DASAC and DASDC, through the use of the SPICELIB routines */
+/*     DASACR and DASRCR, which respectively add comment records to or */
+/*     delete comment records from a DAS file, use this routine to ensure */
+/*     that the SPICELIB routine DASRWR record buffers don't become out */
+/*     of sync with the file they operate upon. */
 
 /*     In addition, this routine can be used by application programs */
-/*     that create or update DAS files.  The reason for calling this */
+/*     that create or update DAS files. The reason for calling this */
 /*     routine directly would be to provide a measure of safety when */
-/*     writing a very large file:  if the file creation or update were */
+/*     writing a very large file: if the file creation or update were */
 /*     interrupted, the amount of work lost due to the loss of buffered, */
 /*     unwritten records could be reduced. */
 
@@ -3730,31 +4065,291 @@ L_daswbr:
 
 /* $ Examples */
 
-/*     1)  Supply a series of double precision records to DASWRD, */
-/*         then force a physical write of those records to the file. */
+/*     The numerical results shown for this example may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
 
-/*            DO RECNO = 77, 100 */
+/*     1) Write a DAS file by adding data to it over multiple passes. */
+/*        Avoid spending time on file segregation between writes. */
 
-/*               CALL FILLD  ( DBLE(RECNO), NWD,      RECD ) */
-/*               CALL DASWRD ( HANDLE,      RECNO,    RECD ) */
+/*        Each pass opens the file, adds character, double precision, */
+/*        and integer data to the file, writes out buffered data by */
+/*        calling DASWBR, and closes the file without segregating the */
+/*        data by calling DASLLC. */
 
-/*            END DO */
+/*        The program also checks the file: after the final write, */
+/*        the program reads the data and compares it to expected values. */
 
-/*            CALL DASWBR ( HANDLE ) */
+/*        Note that most user-oriented applications should segregate a */
+/*        DAS file after writing it, since this greatly enhances file */
+/*        reading efficiency. The technique demonstrated here may be */
+/*        useful for cases in which a file will be written via many */
+/*        small data additions, and in which the file is read between */
+/*        write operations. */
 
 
-/*     2)  This is the same as example (1), except we force a physical */
-/*         write by closing the file. */
+/*        Example code begins here. */
 
-/*            DO RECNO = 77, 100 */
 
-/*               CALL FILLD  ( DBLE(RECNO), NWD,      RECD ) */
-/*               CALL DASWRD ( HANDLE,      RECNO,    RECD ) */
+/*              PROGRAM DASWBR_EX1 */
+/*              IMPLICIT NONE */
 
-/*            END DO */
+/*        C */
+/*        C     Local parameters */
+/*        C */
+/*              INTEGER               FILSIZ */
+/*              PARAMETER           ( FILSIZ = 255 ) */
 
-/*            CALL DASCLS ( HANDLE ) */
+/*              INTEGER               FTYPLN */
+/*              PARAMETER           ( FTYPLN = 3 ) */
 
+/*              INTEGER               CHRLEN */
+/*              PARAMETER           ( CHRLEN = 50 ) */
+
+/*              INTEGER               IBUFSZ */
+/*              PARAMETER           ( IBUFSZ = 20 ) */
+
+/*              INTEGER               DBUFSZ */
+/*              PARAMETER           ( DBUFSZ = 30 ) */
+
+/*        C */
+/*        C     Local variables */
+/*        C */
+/*              CHARACTER*(CHRLEN)    CHRBUF */
+/*              CHARACTER*(FILSIZ)    FNAME */
+/*              CHARACTER*(FTYPLN)    FTYPE */
+/*              CHARACTER*(CHRLEN)    XCHRBF */
+
+/*              DOUBLE PRECISION      DPBUF  ( DBUFSZ ) */
+/*              DOUBLE PRECISION      XDPBUF ( DBUFSZ ) */
+
+/*              INTEGER               FIRSTC */
+/*              INTEGER               FIRSTD */
+/*              INTEGER               FIRSTI */
+/*              INTEGER               HANDLE */
+/*              INTEGER               I */
+/*              INTEGER               INTBUF ( IBUFSZ ) */
+/*              INTEGER               J */
+/*              INTEGER               LASTC */
+/*              INTEGER               LASTD */
+/*              INTEGER               LASTI */
+/*              INTEGER               NCALL */
+/*              INTEGER               NCOMR */
+/*              INTEGER               NPASS */
+/*              INTEGER               PASSNO */
+/*              INTEGER               XINTBF ( IBUFSZ ) */
+
+
+/*        C */
+/*        C     Initial values */
+/*        C */
+/*              DATA                  FNAME  / 'daswbr_ex1.das' / */
+/*              DATA                  FTYPE  / 'ANG' / */
+/*              DATA                  NCALL  / 1000  / */
+/*              DATA                  NCOMR  / 10    / */
+/*              DATA                  NPASS  / 3     / */
+
+/*        C */
+/*        C     Open a new DAS file. We'll allocate NCOMR records */
+/*        C     for comments. The file type is not one of the standard */
+/*        C     types recognized by SPICE; however it can be used to */
+/*        C     ensure the database file is of the correct type. */
+/*        C */
+/*        C     We'll use the file name as the internal file name. */
+/*        C */
+/*              CALL DASONW ( FNAME, FTYPE, FNAME, NCOMR, HANDLE ) */
+
+/*        C */
+/*        C     Add data of character, integer, and double precision */
+/*        C     types to the file in interleaved fashion. We'll add to */
+/*        C     the file over NPASS "passes," in each of which we close */
+/*        C     the file after writing. */
+/*        C */
+/*              DO PASSNO = 1, NPASS */
+
+/*                 IF ( PASSNO .GT. 1 ) THEN */
+
+/*                    WRITE (*,*) 'Opening file for write access...' */
+
+/*                    CALL DASOPW( FNAME, HANDLE ) */
+
+/*                 END IF */
+
+/*                 DO I = 1, NCALL */
+/*        C */
+/*        C           Add string data to the file. */
+/*        C */
+/*                    CHRBUF = 'Character value #' */
+/*                    CALL REPMI( CHRBUF, '#', I, CHRBUF ) */
+
+/*                    CALL DASADC ( HANDLE, CHRLEN, 1, CHRLEN, CHRBUF ) */
+
+/*        C */
+/*        C           Add double precision data to the file. */
+/*        C */
+/*                    DO J = 1, DBUFSZ */
+/*                       DPBUF(J) = DBLE( 100000000*PASSNO + 100*I + J ) */
+/*                    END DO */
+
+/*                    CALL DASADD ( HANDLE, DBUFSZ, DPBUF ) */
+
+/*        C */
+/*        C           Add integer data to the file. */
+/*        C */
+/*                    DO J = 1, IBUFSZ */
+/*                       INTBUF(J) = 100000000*PASSNO  +  100 * I  +  J */
+/*                    END DO */
+
+/*                    CALL DASADI ( HANDLE, IBUFSZ, INTBUF ) */
+
+/*                 END DO */
+
+/*        C */
+/*        C        Write buffered data to the file. */
+/*        C */
+/*                 WRITE (*,*) 'Writing buffered data...' */
+/*                 CALL DASWBR ( HANDLE ) */
+
+/*        C */
+/*        C        Close the file without segregating it. */
+/*        C */
+/*                 WRITE (*,*) 'Closing DAS file...' */
+/*                 CALL DASLLC ( HANDLE ) */
+
+/*              END DO */
+
+/*              WRITE (*,*) 'File write is done.' */
+
+/*        C */
+/*        C     Check file contents. */
+/*        C */
+/*              CALL DASOPR( FNAME, HANDLE ) */
+
+/*        C */
+/*        C     Read data from the file; compare to expected values. */
+/*        C */
+/*        C     Initialize end addresses. */
+/*        C */
+/*              LASTC = 0 */
+/*              LASTD = 0 */
+/*              LASTI = 0 */
+
+/*              DO PASSNO = 1, NPASS */
+
+/*                 DO I = 1, NCALL */
+
+/*        C */
+/*        C           Check string data. */
+/*        C */
+/*                    XCHRBF = 'Character value #' */
+/*                    CALL REPMI( XCHRBF, '#', I, XCHRBF ) */
+
+/*                    FIRSTC = LASTC + 1 */
+/*                    LASTC  = LASTC + CHRLEN */
+
+/*                    CALL DASRDC ( HANDLE, FIRSTC, LASTC, */
+/*             .                    1,      CHRLEN, CHRBUF ) */
+
+/*                    IF ( CHRBUF .NE. XCHRBF ) THEN */
+/*                       WRITE (*,*) 'Character data mismatch: ' */
+/*                       WRITE (*,*) 'PASS     = ', PASSNO */
+/*                       WRITE (*,*) 'I        = ', I */
+/*                       WRITE (*,*) 'Expected = ', XCHRBF */
+/*                       WRITE (*,*) 'Actual   = ', CHRBUF */
+/*                       STOP */
+/*                    END IF */
+
+/*        C */
+/*        C           Check double precision data. */
+/*        C */
+/*                    DO J = 1, DBUFSZ */
+/*                       XDPBUF(J) = DBLE(   100000000*PASSNO */
+/*             .                           + 100*I + J        ) */
+/*                    END DO */
+
+/*                    FIRSTD = LASTD + 1 */
+/*                    LASTD  = LASTD + DBUFSZ */
+
+/*                    CALL DASRDD ( HANDLE, FIRSTD, LASTD, DPBUF ) */
+
+/*                    DO J = 1, DBUFSZ */
+
+/*                       IF ( DPBUF(J) .NE. XDPBUF(J) ) THEN */
+
+/*                          WRITE (*,*) */
+/*             .                   'Double precision data mismatch: ' */
+/*                          WRITE (*,*) 'PASS     = ', PASSNO */
+/*                          WRITE (*,*) 'I        = ', I */
+/*                          WRITE (*,*) 'J        = ', J */
+/*                          WRITE (*,*) 'Expected = ', XDPBUF(J) */
+/*                          WRITE (*,*) 'Actual   = ', DPBUF(J) */
+/*                          STOP */
+
+/*                       END IF */
+
+/*                    END DO */
+
+/*        C */
+/*        C           Check integer data. */
+/*        C */
+/*                    DO J = 1, IBUFSZ */
+/*                       XINTBF(J) = 100000000*PASSNO  +  100 * I  +  J */
+/*                    END DO */
+
+/*                    FIRSTI = LASTI + 1 */
+/*                    LASTI  = LASTI + IBUFSZ */
+
+/*                    CALL DASRDI ( HANDLE, FIRSTI, LASTI, INTBUF ) */
+
+/*                    DO J = 1, IBUFSZ */
+
+/*                       IF ( INTBUF(J) .NE. XINTBF(J) ) THEN */
+
+/*                          WRITE (*,*) 'Integer data mismatch: ' */
+/*                          WRITE (*,*) 'PASS     = ', PASSNO */
+/*                          WRITE (*,*) 'I        = ', I */
+/*                          WRITE (*,*) 'J        = ', J */
+/*                          WRITE (*,*) 'Expected = ', XINTBF(J) */
+/*                          WRITE (*,*) 'Actual   = ', INTBUF(J) */
+/*                          STOP */
+
+/*                       END IF */
+
+/*                    END DO */
+
+/*                 END DO */
+
+/*              END DO */
+
+/*              WRITE (*,*) 'File check is done.' */
+
+/*        C */
+/*        C     Close the file. */
+/*        C */
+/*              CALL DASCLS ( HANDLE ) */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*         Writing buffered data... */
+/*         Closing DAS file... */
+/*         Opening file for write access... */
+/*         Writing buffered data... */
+/*         Closing DAS file... */
+/*         Opening file for write access... */
+/*         Writing buffered data... */
+/*         Closing DAS file... */
+/*         File write is done. */
+/*         File check is done. */
+
+
+/*        Note that after run completion, a new DAS file exists in the */
+/*        output directory. */
 
 /* $ Restrictions */
 
@@ -3766,12 +4361,20 @@ L_daswbr:
 
 /* $ Author_and_Institution */
 
-/*     K.R. Gehringer (JPL) */
-/*     N.J. Bachman   (JPL) */
-/*     W.L. Taber     (JPL) */
-/*     B.V. Semenov   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 2.0.1, 19-MAY-2021 (NJB) (JDR) */
+
+/*        Edited the header to comply with NAIF standard. Added complete */
+/*        code example. */
+
+/*        Updated $Particulars in order to provide information about the */
+/*        high level APIs that actually use this routine. */
 
 /* -    SPICELIB Version 2.0.0, 30-JUL-2014 (NJB) */
 
@@ -3784,7 +4387,7 @@ L_daswbr:
 /* -    SPICELIB Version 1.0.1, 28-OCT-1993 (KRG) */
 
 /*        Removed references to specific DAS file open routines in the */
-/*        $ Detailed_Input section of the header. This was done in order */
+/*        $Detailed_Input section of the header. This was done in order */
 /*        to minimize documentation changes if the DAS open routines ever */
 /*        change. */
 
@@ -3801,7 +4404,7 @@ L_daswbr:
 /* -    SPICELIB Version 1.0.1, 28-OCT-1993 (KRG) */
 
 /*        Removed references to specific DAS file open routines in the */
-/*        $ Detailed_Input section of the header. This was done in order */
+/*        $Detailed_Input section of the header. This was done in order */
 /*        to minimize documentation changes if the DAS open routines ever */
 /*        change. */
 
@@ -3849,16 +4452,16 @@ L_daswbr:
     node = headd;
     while(node > 0) {
 	if (*handle == hnbufd[(i__1 = node - 1) < 10 && 0 <= i__1 ? i__1 : 
-		s_rnge("hnbufd", i__1, "dasrwr_", (ftnlen)4200)]) {
+		s_rnge("hnbufd", i__1, "dasrwr_", (ftnlen)4540)]) {
 
 /*           This record belongs to the file of interest, so write the */
 /*           the record out. */
 
 	    dasiod_("WRITE", &wrunit, &rnbufd[(i__1 = node - 1) < 10 && 0 <= 
 		    i__1 ? i__1 : s_rnge("rnbufd", i__1, "dasrwr_", (ftnlen)
-		    4205)], &rcbufd[(i__2 = (node << 7) - 128) < 1280 && 0 <= 
+		    4545)], &rcbufd[(i__2 = (node << 7) - 128) < 1280 && 0 <= 
 		    i__2 ? i__2 : s_rnge("rcbufd", i__2, "dasrwr_", (ftnlen)
-		    4205)], (ftnlen)5);
+		    4545)], (ftnlen)5);
 	    if (failed_()) {
 		chkout_("DASWBR", (ftnlen)6);
 		return 0;
@@ -3871,7 +4474,7 @@ L_daswbr:
 /*           buffer elements. */
 
 	    next = poold[(i__1 = (node << 1) + 10) < 32 && 0 <= i__1 ? i__1 : 
-		    s_rnge("poold", i__1, "dasrwr_", (ftnlen)4222)];
+		    s_rnge("poold", i__1, "dasrwr_", (ftnlen)4562)];
 	    if (node == headd) {
 		headd = next;
 	    }
@@ -3883,7 +4486,7 @@ L_daswbr:
 /*           Just get the next node. */
 
 	    node = poold[(i__1 = (node << 1) + 10) < 32 && 0 <= i__1 ? i__1 : 
-		    s_rnge("poold", i__1, "dasrwr_", (ftnlen)4237)];
+		    s_rnge("poold", i__1, "dasrwr_", (ftnlen)4577)];
 	}
     }
 
@@ -3892,16 +4495,16 @@ L_daswbr:
     node = headi;
     while(node > 0) {
 	if (*handle == hnbufi[(i__1 = node - 1) < 10 && 0 <= i__1 ? i__1 : 
-		s_rnge("hnbufi", i__1, "dasrwr_", (ftnlen)4252)]) {
+		s_rnge("hnbufi", i__1, "dasrwr_", (ftnlen)4592)]) {
 
 /*           This record belongs to the file of interest, so write the */
 /*           the record out. */
 
 	    dasioi_("WRITE", &wrunit, &rnbufi[(i__1 = node - 1) < 10 && 0 <= 
 		    i__1 ? i__1 : s_rnge("rnbufi", i__1, "dasrwr_", (ftnlen)
-		    4257)], &rcbufi[(i__2 = (node << 8) - 256) < 2560 && 0 <= 
+		    4597)], &rcbufi[(i__2 = (node << 8) - 256) < 2560 && 0 <= 
 		    i__2 ? i__2 : s_rnge("rcbufi", i__2, "dasrwr_", (ftnlen)
-		    4257)], (ftnlen)5);
+		    4597)], (ftnlen)5);
 	    if (failed_()) {
 		chkout_("DASWBR", (ftnlen)6);
 		return 0;
@@ -3914,7 +4517,7 @@ L_daswbr:
 /*           buffer elements. */
 
 	    next = pooli[(i__1 = (node << 1) + 10) < 32 && 0 <= i__1 ? i__1 : 
-		    s_rnge("pooli", i__1, "dasrwr_", (ftnlen)4274)];
+		    s_rnge("pooli", i__1, "dasrwr_", (ftnlen)4614)];
 	    if (node == headi) {
 		headi = next;
 	    }
@@ -3926,7 +4529,7 @@ L_daswbr:
 /*           Just get the next node. */
 
 	    node = pooli[(i__1 = (node << 1) + 10) < 32 && 0 <= i__1 ? i__1 : 
-		    s_rnge("pooli", i__1, "dasrwr_", (ftnlen)4289)];
+		    s_rnge("pooli", i__1, "dasrwr_", (ftnlen)4629)];
 	}
     }
 
@@ -3935,15 +4538,15 @@ L_daswbr:
     node = headc;
     while(node > 0) {
 	if (*handle == hnbufc[(i__1 = node - 1) < 10 && 0 <= i__1 ? i__1 : 
-		s_rnge("hnbufc", i__1, "dasrwr_", (ftnlen)4304)]) {
+		s_rnge("hnbufc", i__1, "dasrwr_", (ftnlen)4644)]) {
 
 /*           This record belongs to the file of interest, so write the */
 /*           the record out. */
 
 	    dasioc_("WRITE", &wrunit, &rnbufc[(i__1 = node - 1) < 10 && 0 <= 
 		    i__1 ? i__1 : s_rnge("rnbufc", i__1, "dasrwr_", (ftnlen)
-		    4309)], rcbufc + (((i__2 = node - 1) < 10 && 0 <= i__2 ? 
-		    i__2 : s_rnge("rcbufc", i__2, "dasrwr_", (ftnlen)4309)) <<
+		    4649)], rcbufc + (((i__2 = node - 1) < 10 && 0 <= i__2 ? 
+		    i__2 : s_rnge("rcbufc", i__2, "dasrwr_", (ftnlen)4649)) <<
 		     10), (ftnlen)5, (ftnlen)1024);
 	    if (failed_()) {
 		chkout_("DASWBR", (ftnlen)6);
@@ -3957,7 +4560,7 @@ L_daswbr:
 /*           buffer elements. */
 
 	    next = poolc[(i__1 = (node << 1) + 10) < 32 && 0 <= i__1 ? i__1 : 
-		    s_rnge("poolc", i__1, "dasrwr_", (ftnlen)4326)];
+		    s_rnge("poolc", i__1, "dasrwr_", (ftnlen)4666)];
 	    if (node == headc) {
 		headc = next;
 	    }
@@ -3969,7 +4572,7 @@ L_daswbr:
 /*           Just get the next node. */
 
 	    node = poolc[(i__1 = (node << 1) + 10) < 32 && 0 <= i__1 ? i__1 : 
-		    s_rnge("poolc", i__1, "dasrwr_", (ftnlen)4341)];
+		    s_rnge("poolc", i__1, "dasrwr_", (ftnlen)4681)];
 	}
     }
     chkout_("DASWBR", (ftnlen)6);

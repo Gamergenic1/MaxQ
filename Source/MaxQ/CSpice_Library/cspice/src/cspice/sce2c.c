@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      SCE2C ( ET to continuous SCLK ticks ) */
+/* $Procedure SCE2C ( ET to continuous SCLK ticks ) */
 /* Subroutine */ int sce2c_(integer *sc, doublereal *et, doublereal *sclkdp)
 {
     /* System generated locals */
@@ -52,7 +52,9 @@
 
 /* $ Required_Reading */
 
+/*     CK */
 /*     SCLK */
+/*     SPK */
 /*     TIME */
 
 /* $ Keywords */
@@ -63,33 +65,33 @@
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     SC         I   NAIF spacecraft ID code. */
 /*     ET         I   Ephemeris time, seconds past J2000. */
 /*     SCLKDP     O   SCLK, encoded as ticks since spacecraft clock */
-/*                    start.  SCLKDP need not be integral. */
+/*                    start. SCLKDP need not be integral. */
 
 /* $ Detailed_Input */
 
-/*     SC             is a NAIF integer code for a spacecraft whose */
-/*                    encoded SCLK value at the epoch specified by ET is */
-/*                    desired. */
+/*     SC       is a NAIF integer code for a spacecraft whose */
+/*              encoded SCLK value at the epoch specified by ET is */
+/*              desired. */
 
-/*     ET             is an epoch, specified as ephemeris seconds past */
-/*                    J2000. */
+/*     ET       is an epoch, specified as ephemeris seconds past */
+/*              J2000. */
 
 /* $ Detailed_Output */
 
-/*     SCLKDP         is an encoded spacecraft clock value.  SCLKDP is */
-/*                    an encoded representation of the total number */
-/*                    of spacecraft clock ticks measured from the time */
-/*                    the spacecraft clock started to the epoch ET: */
-/*                    partition information IS reflected in the encoded */
-/*                    value. */
+/*     SCLKDP   is an encoded spacecraft clock value. SCLKDP is */
+/*              an encoded representation of the total number */
+/*              of spacecraft clock ticks measured from the time */
+/*              the spacecraft clock started to the epoch ET: */
+/*              partition information IS reflected in the encoded */
+/*              value. */
 
-/*                    SCLKDP may be non-integral:  SCLKDP is NOT */
-/*                    rounded to the nearest whole tick. */
+/*              SCLKDP may be non-integral:  SCLKDP is NOT */
+/*              rounded to the nearest whole tick. */
 
 /* $ Parameters */
 
@@ -97,21 +99,20 @@
 
 /* $ Exceptions */
 
-/*     1)  This routine assumes that that an SCLK kernel appropriate */
-/*         to the spacecraft clock identified by the input argument SC */
-/*         has been loaded.  If an SCLK kernel has not been loaded, */
-/*         does not contain all of the required data, or contains */
-/*         invalid data, error diagnoses will be performed by routines */
-/*         called by this routine.  The output argument SCLKDP will not */
-/*         be modified. */
+/*     1)  If an SCLK kernel has not been loaded, does not contain all of */
+/*         the required data, or contains invalid data, an error is */
+/*         signaled by a routine in the call tree of this routine. The */
+/*         output argument SCLKDP will not be modified. This routine */
+/*         assumes that that an SCLK kernel appropriate to the spacecraft */
+/*         clock identified by the input argument SC has been loaded. */
 
-/*     2)  When using SCLK kernels that map SCLK to a time system other */
-/*         than ET (also called barycentric dynamical time---`TDB'), it */
-/*         is necessary to have a leapseconds kernel loaded at the time */
-/*         this routine is called.  If a leapseconds kernel is required */
-/*         for conversion between SCLK and ET but is not loaded, the */
-/*         error will be diagnosed by routines called by this routine. */
-/*         The output argument SCLKDP will not be modified. */
+/*     2)  If a leapseconds kernel is required for conversion between */
+/*         SCLK and ET but is not loaded, an error is signaled by a */
+/*         routine in the call tree of this routine. The output argument */
+/*         SCLKDP will not be modified. When using SCLK kernels that map */
+/*         SCLK to a time system other than ET (also called barycentric */
+/*         dynamical time---`TDB'), it is necessary to have a leapseconds */
+/*         kernel loaded at the time this routine is called. */
 
 /*         The time system that an SCLK kernel maps SCLK to is indicated */
 /*         by the variable SCLK_TIME_SYSTEM_nn in the kernel, where nn */
@@ -121,13 +122,13 @@
 
 /*     3)  If the clock type for the spacecraft clock identified by */
 /*         SC is not supported by this routine, the error */
-/*         SPICE(NOTSUPPORTED) is signalled.  The output argument SCLKDP */
+/*         SPICE(NOTSUPPORTED) is signaled. The output argument SCLKDP */
 /*         will not be modified. */
 
 /*     4)  If the input ET value is not representable as an encoded */
 /*         spacecraft clock value for the spacecraft clock identified by */
-/*         SC, the error will be diagnosed by routines called by this */
-/*         routine.  The output argument SCLKDP will not be modified. */
+/*         SC, an error is signaled by a routine in the call tree of this */
+/*         routine. The output argument SCLKDP will not be modified. */
 
 /* $ Files */
 
@@ -146,7 +147,7 @@
 
 /*     The advantage of encoded SCLK, as opposed to character string */
 /*     representations of SCLK, is that encoded SCLK values are easy to */
-/*     perform arithmetic operations on.  Also, working with encoded SCLK */
+/*     perform arithmetic operations on. Also, working with encoded SCLK */
 /*     reduces the overhead of repeated conversion of  character strings */
 /*     to integers or double precision numbers. */
 
@@ -164,7 +165,7 @@
 /*         ephemeris time. */
 
 /*            During program initialization, load the leapseconds and */
-/*            SCLK kernels.  We will pretend that these files are named */
+/*            SCLK kernels. We will pretend that these files are named */
 /*            "LEAPSECONDS.KER" and "GLLSCLK.KER".  To use this code */
 /*            fragment, you must substitute the actual names of these */
 /*            kernel files for the names used here. */
@@ -241,15 +242,23 @@
 
 /* $ Literature_References */
 
-/*     [1]  CK Required Reading */
-
-/*     [2]  SPK Required Reading */
+/*     None. */
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 13-APR-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. Moved the */
+/*        required readings present in $Literature_References section to */
+/*        $Required_Reading. */
 
 /* -    SPICELIB Version 1.0.1, 22-AUG-2006 (EDW) */
 

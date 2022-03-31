@@ -3,9 +3,9 @@
 -Procedure orderc_c ( Order of a character array )
 
 -Abstract
- 
-   Determine the order of elements in an array of character strings. 
- 
+
+   Determine the order of elements in an array of character strings.
+
 -Disclaimer
 
    THIS SOFTWARE AND ANY RELATED MATERIALS WERE CREATED BY THE
@@ -32,13 +32,14 @@
    ACTIONS OF RECIPIENT IN THE USE OF THE SOFTWARE.
 
 -Required_Reading
- 
-   None. 
- 
+
+   None.
+
 -Keywords
- 
-   ARRAY,  SORT 
- 
+
+   ARRAY
+   SORT
+
 */
 
    #include "SpiceUsr.h"
@@ -48,126 +49,214 @@
    #undef    orderc_c
 
 
-   void orderc_c ( SpiceInt      lenvals,
+   void orderc_c ( SpiceInt      arrlen,
                    const void  * array,
                    SpiceInt      ndim,
-                   SpiceInt    * iorder  ) 
+                   SpiceInt    * iorder  )
 
 /*
 
 -Brief_I/O
- 
-   VARIABLE  I/O  DESCRIPTION 
-   --------  ---  -------------------------------------------------- 
-   lenvals    I   String length.
-   array      I   Input array. 
-   ndim       I   Dimension of array. 
-   iorder     O   Order vector for array. 
- 
+
+   VARIABLE  I/O  DESCRIPTION
+   --------  ---  --------------------------------------------------
+   arrlen     I   String length.
+   array      I   Input array.
+   ndim       I   Dimension of array.
+   iorder     O   Order vector for array.
+
 -Detailed_Input
- 
-   lenvals     is the declared length of the strings in the input
-               string array, including null terminators.  The input   
-               array should be declared with dimension 
 
-                  [ndim][lenvals]
+   arrlen      is the declared length of the strings in the input
+               string array, including null terminators. The input
+               array should be declared with dimension
 
-   array       is the input array. 
- 
-   ndim        is the number of elements in the input array. 
- 
+                  [ndim][arrlen]
+
+   array       is the input array.
+
+   ndim        is the number of elements in the input array.
+
 -Detailed_Output
- 
-   iorder      is the order vector for the input array. 
-               iorder[0] is the index of the smallest element 
-               of array; iorder[1] is the index of the next 
-               smallest; and so on. Strings are ordered according 
-               to the ASCII collating sequence.  Trailing white space
+
+   iorder      is the order vector for the input array.
+               iorder[0] is the index of the smallest element
+               of array; iorder[1] is the index of the next
+               smallest; and so on. Strings are ordered according
+               to the ASCII collating sequence. Trailing white space
                is ignored when comparing strings.
 
                The elements of iorder range from zero to ndim-1.
- 
--Parameters
- 
-   None. 
- 
--Exceptions
- 
-   1) If the input string pointer is null, the error
-      SPICE(NULLPOINTER) will be signaled.
- 
-   2) If the input array string's length is less than 2, the error
-      SPICE(STRINGTOOSHORT) will be signaled.
 
-   3) If ndim < 1, this routine returns immediately.  This case is not 
-      considered an error.
+-Parameters
+
+   None.
+
+-Exceptions
+
+   1)  If ndim < 1, this routine returns immediately. This case is not
+       considered an error.
+
+   2)  If the `array' input array pointer is null, the error
+       SPICE(NULLPOINTER) is signaled.
+
+   3)  If the `array' input array strings have length less than two
+       characters, the error SPICE(STRINGTOOSHORT) is signaled.
 
 -Files
- 
-   None. 
- 
+
+   None.
+
 -Particulars
- 
-   orderc_c finds the index of the smallest element of the input 
-   array. This becomes the first element of the order vector. 
-   The process is repeated for the rest of the elements. 
- 
-   The order vector returned by orderc_c may be used by any of 
-   the reord* routines to sort sets of related arrays, as shown 
-   in the example below. 
- 
+
+   orderc_c finds the index of the smallest element of the input
+   array. This becomes the first element of the order vector.
+   The process is repeated for the rest of the elements.
+
+   The order vector returned by orderc_c may be used by any of
+   the reord* routines to sort sets of related arrays, as shown
+   in the example below.
+
 -Examples
- 
-   In the following example, the order and reord routines are 
-   used to sort four related arrays (containing the names, 
-   masses, integer ID codes, and visual magnitudes for a group   
-   of satellites). This is representative of the typical use of 
-   these routines. 
+
+   The numerical results shown for this example may differ across
+   platforms. The results depend on the SPICE kernels used as
+   input, the compiler and supporting libraries, and the machine
+   specific arithmetic implementation.
+
+   1) Sort four related arrays containing the names, masses,
+      integer ID codes, and flags indicating whether they have
+      a ring system, for a group of planets.
 
 
-       #include "SpiceUsr.h"
-           .
-           .
-           .
-       /.
-       Sort the object arrays by name. 
-       ./ 
-       
-       orderc_c ( namlen, names, n,  iorder ); 
- 
-       reordc_c ( iorder, n, namlen, names  );
-       reordd_c ( iorder, n,         masses ); 
-       reordi_c ( iorder, n,         codes  ); 
-       reordd_c ( iorder, n,         vmags  );    
+      Example code begins here.
+
+
+      /.
+         Program orderc_ex1
+      ./
+      #include <stdio.h>
+      #include "SpiceUsr.h"
+
+      int main( )
+      {
+
+         /.
+         Local constants.
+         ./
+         #define NDIM         8
+         #define STRLEN       8
+
+         /.
+         Local variables.
+         ./
+
+         SpiceInt             i;
+         SpiceInt             iorder [NDIM];
+
+         /.
+         Set the arrays containing the names, masses (given as
+         ratios to of Solar GM to barycenter GM), integer ID
+         codes, and flags indicating whether they have a ring
+         system.
+         ./
+         SpiceChar            names  [NDIM][STRLEN] = {
+                                 "MERCURY", "VENUS",  "EARTH",  "MARS",
+                                 "JUPITER", "SATURN", "URANUS", "NEPTUNE" };
+
+         SpiceDouble          masses [NDIM] = {     22032.080,   324858.599,
+                                                   398600.436,    42828.314,
+                                                126712767.881, 37940626.068,
+                                                  5794559.128,  6836534.065 };
+
+         SpiceInt             codes  [NDIM] = { 199, 299, 399, 499,
+                                                599, 699, 799, 899 };
+
+         SpiceBoolean         rings  [NDIM] = { SPICEFALSE, SPICEFALSE,
+                                                SPICEFALSE, SPICEFALSE,
+                                                SPICETRUE,  SPICETRUE,
+                                                SPICETRUE,  SPICETRUE  };
+
+         /.
+         Sort the object arrays by name.
+         ./
+         orderc_c ( STRLEN, names, NDIM,   iorder );
+
+         reordc_c ( iorder, NDIM,  STRLEN, names  );
+         reordd_c ( iorder, NDIM,  masses         );
+         reordi_c ( iorder, NDIM,  codes          );
+         reordl_c ( iorder, NDIM,  rings          );
+
+         /.
+         Output the resulting table.
+         ./
+         printf( " Planet   Mass(GMS/GM)  ID Code  Rings?\n" );
+         printf( "-------  -------------  -------  ------\n" );
+
+         for ( i = 0; i < NDIM; i++ )
+         {
+
+            printf( "%-7s %14.3f %8d %4d\n",
+                    names[i], masses[i], codes[i], rings[i] );
+
+         }
+
+         return ( 0 );
+      }
+
+
+      When this program was executed on a Mac/Intel/cc/64-bit
+      platform, the output was:
+
+
+       Planet   Mass(GMS/GM)  ID Code  Rings?
+      -------  -------------  -------  ------
+      EARTH       398600.436      399    0
+      JUPITER  126712767.881      599    1
+      MARS         42828.314      499    0
+      MERCURY      22032.080      199    0
+      NEPTUNE    6836534.065      899    1
+      SATURN    37940626.068      699    1
+      URANUS     5794559.128      799    1
+      VENUS       324858.599      299    0
 
 
 -Restrictions
-  
+
    1)  String comparisons performed by this routine are Fortran-style:
        trailing blanks in the input array or key value are ignored.
        This gives consistent behavior with CSPICE code generated by
        the f2c translator, as well as with the Fortran SPICE Toolkit.
-      
+
        Note that this behavior is not identical to that of the ANSI
        C library functions strcmp and strncmp.
-  
--Author_and_Institution
- 
-   N.J. Bachman    (JPL)
-   I.M. Underwood  (JPL) 
- 
+
 -Literature_References
- 
-   None. 
- 
+
+   None.
+
+-Author_and_Institution
+
+   N.J. Bachman        (JPL)
+   J. Diaz del Rio     (ODC Space)
+   I.M. Underwood      (JPL)
+
 -Version
- 
+
+   -CSPICE Version 1.1.0, 04-AUG-2021 (JDR)
+
+       Changed input argument name "lenvals" to "arrlen" for consistency
+       with other routines.
+
+       Edited the header to comply with NAIF standard.
+       Added complete code example.
+
    -CSPICE Version 1.0.0, 18-JUL-2002 (NJB) (IMU)
 
 -Index_Entries
- 
-   order of a character array 
- 
+
+   order of a character array
+
 -&
 */
 
@@ -178,7 +267,7 @@
    Local variables
    */
    SpiceChar             * fCvalsArr;
-   
+
    SpiceInt                fCvalsLen;
    SpiceInt                i;
 
@@ -189,26 +278,26 @@
    chkin_c ( "orderc_c" );
 
    /*
-   Return immediately if the array dimension is non-positive. 
+   Return immediately if the array dimension is non-positive.
    */
-   if ( ndim < 1 ) 
+   if ( ndim < 1 )
    {
       chkout_c ( "orderc_c" );
       return;
    }
 
    /*
-   Make sure the input pointer for the string array is non-null 
-   and that the length lenvals is sufficient.  
+   Make sure the input pointer for the string array is non-null
+   and that the length arrlen is sufficient.
    */
-   CHKOSTR ( CHK_STANDARD, "orderc_c", array, lenvals );
-   
+   CHKOSTR ( CHK_STANDARD, "orderc_c", array, arrlen );
+
 
    /*
    Create a Fortran-style string array.
    */
-   C2F_MapStrArr ( "orderc_c", 
-                   ndim, lenvals, array, &fCvalsLen, &fCvalsArr );
+   C2F_MapStrArr ( "orderc_c",
+                   ndim, arrlen, array, &fCvalsLen, &fCvalsArr );
 
    if ( failed_c() )
    {
@@ -237,7 +326,7 @@
    for ( i = 0;  i < ndim;  i++ )
    {
       --iorder[i];
-   } 
+   }
 
 
    chkout_c ( "orderc_c" );

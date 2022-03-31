@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      APPNDI ( Append an item to an integer cell ) */
+/* $Procedure APPNDI ( Append an item to an integer cell ) */
 /* Subroutine */ int appndi_(integer *item, integer *cell)
 {
     extern integer cardi_(integer *);
@@ -61,30 +61,38 @@
 /*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     ITEM       I   The item to append. */
-/*     CELL      I/O  The cell to which ITEM will be appended. */
+/*     CELL      I-O  The cell to which ITEM will be appended. */
 
 /* $ Detailed_Input */
 
-/*     ITEM       is an integer value which is to be appended to CELL. */
+/*     ITEM     is an integer value which is to be appended to CELL. */
 
-/*     CELL       is an integer cell to which ITEM will be appended. */
+/*     CELL     is an integer SPICE cell to which ITEM will be */
+/*              appended. */
 
 /* $ Detailed_Output */
 
-/*     CELL       is an integer cell in which the last element is ITEM. */
+/*     CELL     is the input cell with ITEM appended. ITEM is the last */
+/*              member of CELL. */
 
 /* $ Parameters */
 
 /*     None. */
 
+/* $ Exceptions */
+
+/*     1)  If the input cell has invalid cardinality, an error is */
+/*         signaled by a routine in the call tree of this routine. */
+
+/*     2)  If the input cell has invalid size, an error is signaled by a */
+/*         routine in the call tree of this routine. */
+
+/*     3)  If the cell is not big enough to accommodate the addition */
+/*         of a new element, the error SPICE(CELLTOOSMALL) is signaled. */
+
 /* $ Files */
 
 /*     None. */
-
-/* $ Exceptions */
-
-/*     1) If the cell is not big enough to accommodate the addition */
-/*        of a new element, the error SPICE(CELLTOOSMALL) is signaled. */
 
 /* $ Particulars */
 
@@ -92,30 +100,106 @@
 
 /* $ Examples */
 
-/*      In the following example, the element 34 is appended to */
-/*      the integer cell NUMBERS. */
+/*     The numerical results shown for this example may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
 
-/*      Before appending 34, the cell contains: */
+/*     1) Create a cell for fifteen elements, add a first element to */
+/*        it and then append several more integer numbers. Validate */
+/*        the cell into a set and print the result. */
 
-/*      NUMBERS (1) =  1 */
-/*      NUMBERS (2) =  1 */
-/*      NUMBERS (3) =  2 */
-/*      NUMBERS (4) =  3 */
-/*      NUMBERS (5) =  5 */
-/*      NUMBERS (6) =  8 */
-/*      NUMBERS (7) = 13 */
-/*      NUMBERS (8) = 21 */
 
-/*      The call */
+/*        Example code begins here. */
 
-/*        CALL APPNDI ( 34, NUMBERS ) */
 
-/*      appends the element 34 at the location NUMBERS (9), and the */
-/*      cardinality is updated. */
+/*              PROGRAM APPNDI_EX1 */
+/*              IMPLICIT NONE */
 
-/*      If the cell is not big enough to accommodate the addition of */
-/*      the item, an error is signaled. In this case, the cell is not */
-/*      altered. */
+/*        C */
+/*        C     SPICELIB functions. */
+/*        C */
+/*              INTEGER                 CARDI */
+
+/*        C */
+/*        C     Local constants. */
+/*        C */
+/*              INTEGER                 LBCELL */
+/*              PARAMETER             ( LBCELL = -5 ) */
+
+/*              INTEGER                 LISTSZ */
+/*              PARAMETER             ( LISTSZ = 9  ) */
+
+/*              INTEGER                 SIZE */
+/*              PARAMETER             ( SIZE   = 15 ) */
+
+/*        C */
+/*        C     Local variables. */
+/*        C */
+/*              INTEGER                 A      ( LBCELL:SIZE ) */
+
+/*              INTEGER                 I */
+/*              INTEGER                 ITEMS  ( LISTSZ      ) */
+
+/*        C */
+/*        C     Set the list of integers to be appended to the cell. */
+/*        C */
+/*              DATA                    ITEMS /  3,  1,  1 , 2, 5, */
+/*             .                                 8, 21, 13, 34    / */
+
+/*        C */
+/*        C     Initialize the cell. */
+/*        C */
+/*              CALL SSIZEI ( SIZE, A ) */
+
+/*        C */
+/*        C     Add a single item to the new cell. */
+/*        C */
+/*              CALL APPNDI ( 0, A ) */
+
+/*        C */
+/*        C     Now insert a list of items. */
+/*        C */
+/*              DO I= 1, LISTSZ */
+
+/*                 CALL APPNDI ( ITEMS(I), A ) */
+
+/*              END DO */
+
+/*        C */
+/*        C     Output the original contents of cell A. */
+/*        C */
+/*              WRITE(*,*) 'Items in original cell A:' */
+/*              WRITE(*,'(15I6)') ( A(I), I = 1, CARDI ( A ) ) */
+
+/*        C */
+/*        C     Validate the set: remove duplicates and sort the */
+/*        C     elements. */
+/*        C */
+/*              CALL VALIDI ( SIZE, CARDI( A ), A ) */
+
+/*        C */
+/*        C     Output the contents of the set A. */
+/*        C */
+/*              WRITE(*,*) 'Items in cell A after VALIDI (now a set):' */
+/*              WRITE(*,'(15I6)') ( A(I), I = 1, CARDI ( A ) ) */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*         Items in original cell A: */
+/*             0     3     1     1     2     5     8    21    13    34 */
+/*         Items in cell A after VALIDI (now a set): */
+/*             0     1     2     3     5     8    13    21    34 */
+
+
+/*        Note that if the cell is not big enough to accommodate the */
+/*        addition of an item, an error is signaled. In this case, the */
+/*        cell is not altered. */
 
 /* $ Restrictions */
 
@@ -127,10 +211,22 @@
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     H.A. Neilan     (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     H.A. Neilan        (JPL) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 27-AUG-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. Added complete */
+/*        code example. */
+
+/*        Improved the documentation of CELL in $Detailed_Input and */
+/*        $Detailed_Output. Added entries #1 and #2 to $Exceptions. */
 
 /* -    SPICELIB Version 1.0.2, 31-JUL-2002 (NJB) */
 

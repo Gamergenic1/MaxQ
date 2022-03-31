@@ -9,7 +9,7 @@
 
 static integer c__1 = 1;
 
-/* $Procedure      SYPUTC ( Set the values associated with a symbol ) */
+/* $Procedure SYPUTC ( Set the values associated with a symbol ) */
 /* Subroutine */ int syputc_(char *name__, char *values, integer *n, char *
 	tabsym, integer *tabptr, char *tabval, ftnlen name_len, ftnlen 
 	values_len, ftnlen tabsym_len, ftnlen tabval_len)
@@ -93,64 +93,66 @@ static integer c__1 = 1;
 /*                    be put into the symbol table. */
 /*     VALUES     I   Values to be associated with the symbol NAME. */
 /*     N          I   Number of values in VALUES. */
-
 /*     TABSYM, */
 /*     TABPTR, */
-/*     TABVAL    I/O  Components of the symbol table. */
+/*     TABVAL    I-O  Components of the symbol table. */
 
 /* $ Detailed_Input */
 
-/*     NAME       is the name of the symbol whose associated values are */
-/*                to be set. If NAME has values associated with it, */
-/*                they are removed, and the elements of VALUES become */
-/*                the values associated with NAME. If NAME is not in the */
-/*                symbol table, a new symbol is created, provided there */
-/*                is room in the symbol table. */
+/*     NAME     is the name of the symbol whose associated values are */
+/*              to be set. */
 
-/*     VALUES     are the new values associated with the symbol NAME. */
+/*              If NAME has values associated with it, they are removed, */
+/*              and the elements of VALUES become the values associated */
+/*              with NAME. If NAME is not in the symbol table, a new */
+/*              symbol is created, provided there is room in the symbol */
+/*              table. */
 
-/*     N          is the number of elements in the VALUES array. */
+/*     VALUES   are the new values associated with the symbol NAME. */
+
+/*     N        is the number of elements in the VALUES array. */
 
 /*     TABSYM, */
 /*     TABPTR, */
-/*     TABVAL     are the components of a character symbol table. */
+/*     TABVAL   are the components of a character symbol table. */
 
 /* $ Detailed_Output */
 
 /*     TABSYM, */
 /*     TABPTR, */
-/*     TABVAL     are the components of a character symbol table. */
-/*                If NAME has values associated with it, they are */
-/*                removed, and the elements of VALUES become the */
-/*                values associated with NAME. If NAME is not in the */
-/*                symbol table, a new symbol is created, provided */
-/*                there is room in the symbol table. */
+/*     TABVAL   are the components of a character symbol table. */
+
+/*              If NAME has values associated with it, they are removed, */
+/*              and the elements of VALUES become the values associated */
+/*              with NAME. If NAME is not in the symbol table, a new */
+/*              symbol is created, provided there is room in the symbol */
+/*              table. */
 
 /* $ Parameters */
 
 /*     None. */
 
+/* $ Exceptions */
+
+/*     1)  If the addition of a new symbol causes an overflow in the */
+/*         name table, the error SPICE(NAMETABLEFULL) is signaled. */
+
+/*     2)  If the addition of a new symbol causes an overflow in the */
+/*         pointer table, the error SPICE(POINTERTABLEFULL) is signaled. */
+
+/*     3)  If the addition of new values causes an overflow in the */
+/*         value table, the error SPICE(VALUETABLEFULL) is signaled. */
+
+/*     4)  If N < 1, the error SPICE(INVALIDARGUMENT) is signaled. */
+
 /* $ Files */
 
 /*     None. */
 
-/* $ Exceptions */
-
-/*     1) If the addition of a new symbol causes an overflow in the */
-/*        name table, the error SPICE(NAMETABLEFULL) is signalled. */
-
-/*     2) If the addition of a new symbol causes an overflow in the */
-/*        pointer table, the error SPICE(POINTERTABLEFULL) is signalled. */
-
-/*     3) If the addition of new values causes an overflow in the */
-/*        value table, the error SPICE(VALUETABLEFULL) is signalled. */
-
-/*     4) If N < 1, the error SPICE(INVALIDARGUMENT) is signalled. */
-
 /* $ Particulars */
 
-/*     This subroutine is like SYSETC, but SYPUTC allows several values */
-/*     to be associated with a symbol.                   ------- */
+/*     This subroutine is like SYSETC, but SYPUTC allows **several** */
+/*     values to be associated with a symbol. */
 
 /*     If NAME has values associated with it, they are removed, and */
 /*     the elements of VALUES become the values associated with NAME. */
@@ -173,7 +175,7 @@ static integer c__1 = 1;
 
 /*     the call */
 
-/*     CALL SYPUTC ( 'EINSTEIN', VALUES, 3, TABSYM, TABPTR, TABVAL ) */
+/*        CALL SYPUTC ( 'EINSTEIN', VALUES, 3, TABSYM, TABPTR, TABVAL ) */
 
 /*     modifies the contents of the symbol table to be: */
 
@@ -186,7 +188,7 @@ static integer c__1 = 1;
 
 /*     The call, */
 
-/*     CALL SYPUTC ( 'PAULI', VALUES, 3, TABSYM, TABPTR, TABVAL ) */
+/*        CALL SYPUTC ( 'PAULI', VALUES, 3, TABSYM, TABPTR, TABVAL ) */
 
 /*     modifies the contents of the symbol table to be: */
 
@@ -212,30 +214,31 @@ static integer c__1 = 1;
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     H.A. Neilan     (JPL) */
-/*     I.M. Underwood  (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     H.A. Neilan        (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
 
-/* -     SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+/* -    SPICELIB Version 1.1.0, 08-APR-2021 (JDR) */
 
-/*         Comment section for permuted index source lines was added */
-/*         following the header. */
+/*        Added IMPLICIT NONE statement. */
 
-/* -     SPICELIB Version 1.0.0, 31-JAN-1990 (IMU) (HAN) */
+/*        Edited the header to comply with NAIF standard. Removed */
+/*        unnecessary $Revisions section. */
+
+/* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+
+/*        Comment section for permuted index source lines was added */
+/*        following the header. */
+
+/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (IMU) (HAN) */
 
 /* -& */
 /* $ Index_Entries */
 
 /*     set the values associated with a symbol */
-
-/* -& */
-/* $ Revisions */
-
-/* -     Beta Version 1.1.0, 17-FEB-1989 (NJB) */
-
-/*         Declaration of the unused variable I removed. */
 
 /* -& */
 

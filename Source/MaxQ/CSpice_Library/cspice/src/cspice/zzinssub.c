@@ -107,7 +107,7 @@
 
 /*     Error Free. */
 
-/*     1) If LOC is less than 1 it is treateds as having value 1. */
+/*     1) If LOC is less than 1 it is treated as having value 1. */
 
 /*     2) If LOC is greater than LEN(IN) + 1, it is treated as if */
 /*        it had value LEN(IN) + 1. */
@@ -149,6 +149,10 @@
 
 /*     None. */
 
+/* $ Literature_References */
+
+/*     None. */
+
 /* $ Author_and_Institution */
 
 /*     N.J. Bachman    (JPL) */
@@ -156,11 +160,11 @@
 /*     I.M. Underwood  (JPL) */
 /*     W.L. Taber      (JPL) */
 
-/* $ Literature_References */
-
-/*     None. */
-
 /* $ Version */
+
+/* -    SPICELIB Version 1.0.1, 03-OCT-2021 (NJB) */
+
+/*        Reordered header sections. Corrected typos in comments. */
 
 /* -    SPICELIB Version 1.0.0, 12-AUG-1996 (WLT) */
 
@@ -193,7 +197,7 @@
 /* -    Beta Version 2.0.0, 4-JAN-1989 (HAN) */
 
 /*        If the location at which the substring is to be inserted is */
-/*        not in the interval [1, LEN(IN)+1], an error is signalled. */
+/*        not in the interval [1, LEN(IN)+1], an error is signaled. */
 /*        Locations not within that interval refer to non-existent */
 /*        characters positions. (To append to the string, set the */
 /*        location equal to LEN(IN)+1.) */

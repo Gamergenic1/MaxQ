@@ -128,11 +128,12 @@
                                1)  The boundary vectors must be
                                    contained within a right circular
                                    cone of angular radius less than
-                                   than (pi/2) - MARGIN radians; in
-                                   other words, there must be a vector
+                                   than (pi/2) - SPICE_GF_MARGIN radians;
+                                   in other words, there must be a vector
                                    A such that all boundary vectors
                                    have angular separation from A of
-                                   less than (pi/2)-MARGIN radians.
+                                   less than (pi/2)-SPICE_GF_MARGIN
+                                   radians.
  
                                2)  There must be a pair of boundary
                                    vectors U, V such that all other
@@ -143,10 +144,10 @@
                                    orthogonal projections onto a plane
                                    normal to this plane such that the
                                    projections have angular separation
-                                   of at least 2*MARGIN radians from
-                                   the plane spanned by U and V.
+                                   of at least 2*SPICE_GF_MARGIN radians
+                                   from the plane spanned by U and V.
 
-                               MARGIN is currently set to 1.D-12.
+                               SPICE_GF_MARGIN is currently set to 1.e-12.
          
 
       Occultation parameters
@@ -248,26 +249,31 @@
 
 -Author_and_Institution
 
-   N.J. Bachman    (JPL)
-   L.S. Elson      (JPL)
+   N.J. Bachman        (JPL)
+   J. Diaz del Rio     (ODC Space)
+   L.S. Elson          (JPL)
 
 -Version
 
+   -CSPICE Version 2.1.2, 05-FEB-2020 (JDR)
+
+       Corrected description of parameter SPICE_GF_MARGIN.
+
    -CSPICE Version 2.1.1, 29-NOV-2016 (NJB)
 
-      Corrected description of parameter SPICE_GF_SPSHAP.
+       Corrected description of parameter SPICE_GF_SPSHAP.
 
    -CSPICE Version 2.1.0, 23-FEB-2012 (NJB)
 
-      Added parameters:
+       Added parameters:
       
-         SPICE_GF_NWILUM
-         SPICE_GF_NWRR
-         SPICE_GF_NWPA
+          SPICE_GF_NWILUM
+          SPICE_GF_NWRR
+          SPICE_GF_NWPA
 
    -CSPICE Version 2.0.0, 23-JUN-2009 (NJB)
 
-      Added parameter for maximum length of FOV shape string.
+       Added parameter for maximum length of FOV shape string.
 
    -CSPICE Version 1.0.0, 11-MAR-2009 (NJB)
 

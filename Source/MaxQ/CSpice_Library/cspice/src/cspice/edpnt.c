@@ -79,20 +79,20 @@
 
 /* $ Detailed_Input */
 
-/*     P          is a non-zero point in three-dimensional space. */
+/*     P        is a non-zero point in three-dimensional space. */
 
 /*     A, */
 /*     B, */
-/*     C          are, respectively, the semi-axis lengths of a triaxial */
-/*                ellipsoid in the X, Y, and Z directions. The axes of */
-/*                the ellipsoid are aligned with the axes of the */
-/*                Cartesian coordinate system. */
+/*     C        are, respectively, the semi-axis lengths of a triaxial */
+/*              ellipsoid in the X, Y, and Z directions. The axes of */
+/*              the ellipsoid are aligned with the axes of the */
+/*              Cartesian coordinate system. */
 
 /* $ Detailed_Output */
 
-/*     EP         is the result of scaling the input point P so that */
-/*                it lies on the surface of the triaxial ellipsoid */
-/*                defined by the input semi-axis lengths. */
+/*     EP       is the result of scaling the input point P so that */
+/*              it lies on the surface of the triaxial ellipsoid */
+/*              defined by the input semi-axis lengths. */
 
 /* $ Parameters */
 
@@ -128,56 +128,62 @@
 /*     specific arithmetic implementation. */
 
 
-/*     1)  Find the surface intercept point on an ellipsoid having radii */
+/*     1) Find the surface intercept point on an ellipsoid having radii */
 
 /*            ( 3, 2, 1 ) */
 
-/*         of the ray emanating from the origin and having direction */
-/*         vector */
+/*        of the ray emanating from the origin and having direction */
+/*        vector */
 
 /*            ( 1, 1, 1 ) */
 
 
-/*     Example code begins here. */
+/*        Example code begins here. */
 
 
-/*           PROGRAM EX1 */
-/*           IMPLICIT NONE */
+/*              PROGRAM EDPNT_EX1 */
+/*              IMPLICIT NONE */
 
-/*           CHARACTER*(*)         FMT1 */
-/*           PARAMETER           ( FMT1 = '(A,3F17.14)' ) */
+/*              CHARACTER*(*)         FMT1 */
+/*              PARAMETER           ( FMT1 = '(A,F18.14)'  ) */
 
-/*           DOUBLE PRECISION      A */
-/*           DOUBLE PRECISION      B */
-/*           DOUBLE PRECISION      C */
-/*           DOUBLE PRECISION      V      ( 3 ) */
-/*           DOUBLE PRECISION      EP     ( 3 ) */
-/*           DOUBLE PRECISION      LEVEL */
+/*              CHARACTER*(*)         FMT3 */
+/*              PARAMETER           ( FMT3 = '(A,3F18.14)' ) */
 
-/*           A = 3.D0 */
-/*           B = 2.D0 */
-/*           C = 1.D0 */
+/*              DOUBLE PRECISION      A */
+/*              DOUBLE PRECISION      B */
+/*              DOUBLE PRECISION      C */
+/*              DOUBLE PRECISION      V      ( 3 ) */
+/*              DOUBLE PRECISION      EP     ( 3 ) */
+/*              DOUBLE PRECISION      LEVEL */
 
-/*           CALL VPACK ( 1.D0, 1.D0, 1.D0, V ) */
+/*              A = 3.D0 */
+/*              B = 2.D0 */
+/*              C = 1.D0 */
 
-/*           CALL EDPNT ( V, A, B, C, EP ) */
+/*              CALL VPACK ( 1.D0, 1.D0, 1.D0, V ) */
 
-/*           WRITE (*,FMT1) 'EP    = ', EP */
-/*     C */
-/*     C     Verify that EP is on the ellipsoid. */
-/*     C */
-/*           LEVEL = (EP(1)/A)**2 + (EP(2)/B)**2 + (EP(3)/C)**2 */
+/*              CALL EDPNT ( V, A, B, C, EP ) */
 
-/*           WRITE (*,FMT1) 'LEVEL = ', LEVEL */
+/*              WRITE (*,FMT3) 'EP    = ', EP */
 
-/*           END */
+/*        C */
+/*        C     Verify that EP is on the ellipsoid. */
+/*        C */
+/*              LEVEL = (EP(1)/A)**2 + (EP(2)/B)**2 + (EP(3)/C)**2 */
+
+/*              WRITE (*,FMT1) 'LEVEL = ', LEVEL */
+
+/*              END */
 
 
-/*     When this program was executed on a PC/Linux/gfortran 64-bit */
-/*     platform, the output was: */
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
 
-/*        EP    =  0.85714285714286 0.85714285714286 0.85714285714286 */
-/*        LEVEL =  1.00000000000000 */
+
+/*        EP    =   0.85714285714286  0.85714285714286  0.85714285714286 */
+/*        LEVEL =   1.00000000000000 */
+
 
 /* $ Restrictions */
 
@@ -189,10 +195,15 @@
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     E.D. Wright     (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 2.0.1, 09-JUL-2020 (JDR) */
+
+/*        Minor edits to the header and code example. */
 
 /* -    SPICELIB Version 2.0.0, 19-APR-2016 (NJB) (EDW) */
 

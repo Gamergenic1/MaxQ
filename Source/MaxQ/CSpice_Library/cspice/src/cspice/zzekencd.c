@@ -701,8 +701,8 @@ static integer c__500 = 500;
 
 /*     If a parse error occurs, either the outputs ERROR, ERRMSG, and */
 /*     ERRPTR will be set by routines called by this routine, or an */
-/*     error will be signalled by routines called by this routine. */
-/*     Under normal circumstances, no errors will be signalled. */
+/*     error will be signaled by routines called by this routine. */
+/*     Under normal circumstances, no errors will be signaled. */
 
 /* $ Files */
 
@@ -737,6 +737,10 @@ static integer c__500 = 500;
 /*     N.J. Bachman   (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 4.0.1, 03-OCT-2021 (NJB) */
+
+/*        Corrected typos in comments. */
 
 /* -    Beta Version 4.0.0, 10-OCT-1995 (NJB) */
 

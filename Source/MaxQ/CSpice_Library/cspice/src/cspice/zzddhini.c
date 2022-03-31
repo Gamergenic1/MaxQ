@@ -132,6 +132,10 @@ static integer c__4 = 4;
 
 /* $ Version */
 
+/* -    SPICELIB Version 2.6.0, 28-NOV-2021 (BVS) */
+
+/*        Updated for MAC-OSX-M1-64BIT-CLANG_C. */
+
 /* -    SPICELIB Version 2.5.0, 10-MAR-2014 (BVS) */
 
 /*        Updated for SUN-SOLARIS-64BIT-INTEL. */
@@ -392,11 +396,11 @@ static integer c__4 = 4;
 
 /*     See the include file 'zzddhman.inc'. */
 
-/* $ Files */
+/* $ Exceptions */
 
 /*     None. */
 
-/* $ Exceptions */
+/* $ Files */
 
 /*     None. */
 
@@ -413,15 +417,20 @@ static integer c__4 = 4;
 
 /*     None. */
 
-/* $ Author_and_Institution */
-
-/*     F.S. Turner     (JPL) */
-
 /* $ Literature_References */
 
 /*     None. */
 
+/* $ Author_and_Institution */
+
+/*     F.S. Turner     (JPL) */
+
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 03-OCT-2021 (NJB) */
+
+/*        Corrected typo in long error message. Reordered header */
+/*        sections. */
 
 /* -    SPICELIB Version 1.0.0, 13-AUGUST-2001 (FST) */
 
@@ -462,7 +471,7 @@ static integer c__4 = 4;
     *natbff = isrchc_(tmpstr, &c__4, strbff, (ftnlen)8, strbff_len);
     if (*natbff == 0) {
 	chkin_("ZZDDHINI", (ftnlen)8);
-	setmsg_("The binary file format, '#', is not supported by this veris"
+	setmsg_("The binary file format, '#', is not supported by this versi"
 		"on of the toolkit. This is a serious problem, contact NAIF.", 
 		(ftnlen)118);
 	errch_("#", tmpstr, (ftnlen)1, (ftnlen)8);
@@ -504,7 +513,7 @@ static integer c__4 = 4;
 	    if (supbff[i__ - 1] == 0) {
 		chkin_("ZZDDHINI", (ftnlen)8);
 		setmsg_("The binary file format, '#', is not supported by th"
-			"is verison of the toolkit. This is a serious problem"
+			"is version of the toolkit. This is a serious problem"
 			", contact NAIF.            ", (ftnlen)130);
 		errch_("#", tmpstr, (ftnlen)1, (ftnlen)8);
 		sigerr_("SPICE(BUG)", (ftnlen)10);

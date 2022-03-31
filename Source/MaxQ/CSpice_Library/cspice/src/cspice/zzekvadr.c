@@ -40,9 +40,9 @@ static integer c__10 = 10;
 
 /* $ Abstract */
 
-/*     Given a union of EK join row sets and a row vector index, */
-/*     compute the EK scratch area base address of the row vector having */
-/*     the specified index.  Also return the base address of the row */
+/*     Compute the EK scratch area base address of the row vector having */
+/*     a specified index, given a union of EK join row sets and a row */
+/*     vector index. Also return the base address of the row */
 /*     vector's parent segment vector. */
 
 /* $ Disclaimer */
@@ -112,7 +112,7 @@ static integer c__10 = 10;
 /*     1)  This is an umbrella routine which contains declarations */
 /*         for its entry points.  This routine should never be called */
 /*         directly.  If it is, the error SPICE(BOGUSENTRY) will be */
-/*         signalled. */
+/*         signaled. */
 
 /*     See the entry points for discussions of the exceptions specific */
 /*     to those entry points. */
@@ -241,6 +241,10 @@ static integer c__10 = 10;
 /*     N.J. Bachman   (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.0.2, 01-OCT-2021 (NJB) */
+
+/*        Updated header Abstract section. Corrected typos in comments. */
 
 /* -    SPICELIB Version 1.0.1, 06-SEP-2006 (NJB) */
 
@@ -398,27 +402,27 @@ L_zzekvset:
 /* $ Exceptions */
 
 /*     1)  If the join row set count is less than 1 or greater than */
-/*         MXJRS, the error SPICE(INVALIDCOUNT) is signalled. */
+/*         MXJRS, the error SPICE(INVALIDCOUNT) is signaled. */
 
 /*     2)  If any base address is less than zero or greater than TOP, */
 /*         the EK scratch area stack top, the error */
-/*         SPICE(BADADDRESS) is signalled. */
+/*         SPICE(BADADDRESS) is signaled. */
 
 /*     3)  If the table count for any join row set is less than 1 or */
 /*         greater than MXJOIN, the error SPICE(INVALIDCOUNT) is */
-/*         signalled. */
+/*         signaled. */
 
 /*     4)  If the table count for any join row set unequal to the count */
 /*         for the first join row set, the error SPICE(INVALIDCOUNT) is */
-/*         signalled. */
+/*         signaled. */
 
 /*     5)  If any join row set has a row vector count that is less than */
 /*         zero or greater than TOP, the EK scratch area stack top, the */
-/*         error SPICE(BADADDRESS) is signalled. */
+/*         error SPICE(BADADDRESS) is signaled. */
 
 /*     6)  If any join row set has a segment vector count that is less */
 /*         than zero or greater than TOP, the EK scratch area stack top, */
-/*         the error SPICE(BADADDRESS) is signalled. */
+/*         the error SPICE(BADADDRESS) is signaled. */
 
 /* $ Files */
 
@@ -428,7 +432,7 @@ L_zzekvset:
 /* $ Particulars */
 
 /*     This routine speeds up EK row vectors address calculations by */
-/*     centralizating the activities that need be performed only once */
+/*     centralizing the activities that need be performed only once */
 /*     for a series of address  calculations for a given join row set */
 /*     union. */
 
@@ -494,7 +498,7 @@ L_zzekvset:
 	    return 0;
 	}
 	svbas[(i__2 = i__ - 1) < 200 && 0 <= i__2 ? i__2 : s_rnge("svbas", 
-		i__2, "zzekvadr_", (ftnlen)526)] = bases[i__ - 1];
+		i__2, "zzekvadr_", (ftnlen)530)] = bases[i__ - 1];
     }
 
 /*     Validate and save the table count.  It's an error for this */
@@ -551,16 +555,16 @@ L_zzekvset:
 	}
 	if (i__ < *njrs) {
 	    begidx[(i__2 = i__) < 200 && 0 <= i__2 ? i__2 : s_rnge("begidx", 
-		    i__2, "zzekvadr_", (ftnlen)598)] = begidx[(i__3 = i__ - 1)
+		    i__2, "zzekvadr_", (ftnlen)602)] = begidx[(i__3 = i__ - 1)
 		     < 200 && 0 <= i__3 ? i__3 : s_rnge("begidx", i__3, "zze"
-		    "kvadr_", (ftnlen)598)] + j;
+		    "kvadr_", (ftnlen)602)] + j;
 	}
     }
 
 /*     Retain the index of the last row vector. */
 
     maxrwv = begidx[(i__1 = *njrs - 1) < 200 && 0 <= i__1 ? i__1 : s_rnge(
-	    "begidx", i__1, "zzekvadr_", (ftnlen)608)] + j;
+	    "begidx", i__1, "zzekvadr_", (ftnlen)612)] + j;
 
 /*     Save the base addresses of the row vectors in each join row set. */
 /*     Validate the segment vector counts while we're at it. */
@@ -580,7 +584,7 @@ L_zzekvset:
 	    return 0;
 	}
 	rbas[(i__2 = i__ - 1) < 200 && 0 <= i__2 ? i__2 : s_rnge("rbas", i__2,
-		 "zzekvadr_", (ftnlen)633)] = addrss + nsv * (ntabs + 2);
+		 "zzekvadr_", (ftnlen)637)] = addrss + nsv * (ntabs + 2);
     }
 
 /*     Retain the count of join row sets in the union. */
@@ -674,7 +678,7 @@ L_zzekvcal:
 
 /*     1)  If the input index is less than 1 or greater than */
 /*         the highest index in the join row set union being addressed, */
-/*         the error SPICE(INVALIDINDEX) is signalled. */
+/*         the error SPICE(INVALIDINDEX) is signaled. */
 
 /* $ Files */
 
@@ -744,12 +748,12 @@ L_zzekvcal:
 /*     the augmented row vector size. */
 
     reloff = (*rwvidx - begidx[(i__1 = jrsidx - 1) < 200 && 0 <= i__1 ? i__1 :
-	     s_rnge("begidx", i__1, "zzekvadr_", (ftnlen)814)]) * (ntabs + 1);
+	     s_rnge("begidx", i__1, "zzekvadr_", (ftnlen)818)]) * (ntabs + 1);
 
 /*     Find the base address of the row vector. */
 
     *rwvbas = rbas[(i__1 = jrsidx - 1) < 200 && 0 <= i__1 ? i__1 : s_rnge(
-	    "rbas", i__1, "zzekvadr_", (ftnlen)819)] + reloff;
+	    "rbas", i__1, "zzekvadr_", (ftnlen)823)] + reloff;
 
 /*     Compute the base address of the parent segment vector.  The base- */
 /*     relative address of the segment vector is stored at the end of the */
@@ -759,7 +763,7 @@ L_zzekvcal:
     i__2 = *rwvbas + ntabs + 1;
     zzeksrd_(&i__1, &i__2, sgvbas);
     *sgvbas = svbas[(i__1 = jrsidx - 1) < 200 && 0 <= i__1 ? i__1 : s_rnge(
-	    "svbas", i__1, "zzekvadr_", (ftnlen)828)] + *sgvbas;
+	    "svbas", i__1, "zzekvadr_", (ftnlen)832)] + *sgvbas;
     return 0;
 } /* zzekvadr_ */
 

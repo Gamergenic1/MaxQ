@@ -11,7 +11,7 @@ static integer c__0 = 0;
 static doublereal c_b22 = 10.;
 static integer c__1 = 1;
 
-/* $Procedure      ET2UTC ( Ephemeris Time to UTC ) */
+/* $Procedure ET2UTC ( Ephemeris Time to UTC ) */
 /* Subroutine */ int et2utc_(doublereal *et, char *format, integer *prec, 
 	char *utcstr, ftnlen format_len, ftnlen utcstr_len)
 {
@@ -66,8 +66,8 @@ static integer c__1 = 1;
 
 /* $ Abstract */
 
-/*      Convert an input time from ephemeris seconds past J2000 */
-/*      to Calendar, Day-of-Year, or Julian Date format, UTC. */
+/*     Convert an input time from ephemeris seconds past J2000 */
+/*     to Calendar, Day-of-Year, or Julian Date format, UTC. */
 
 /* $ Disclaimer */
 
@@ -96,86 +96,84 @@ static integer c__1 = 1;
 
 /* $ Required_Reading */
 
-/*      TIME */
+/*     TIME */
 
 /* $ Keywords */
 
-/*      TIME */
+/*     TIME */
 
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*      VARIABLE  I/O  DESCRIPTION */
-/*      --------  ---  -------------------------------------------------- */
-/*      ET         I   Epoch, given in ephemeris seconds past J2000. */
-/*      FORMAT     I   Format of output epoch. */
-/*      PREC       I   Digits of precision in fractional seconds or days. */
-/*      UTCSTR     O   Output time string, UTC. */
+/*     VARIABLE  I/O  DESCRIPTION */
+/*     --------  ---  -------------------------------------------------- */
+/*     ET         I   Epoch, given in ephemeris seconds past J2000. */
+/*     FORMAT     I   Format of output epoch. */
+/*     PREC       I   Digits of precision in fractional seconds or days. */
+/*     UTCSTR     O   Output time string, UTC. */
 
 /* $ Detailed_Input */
 
-/*      ET          is the input epoch, ephemeris seconds past J2000. */
+/*     ET       is the input epoch, ephemeris seconds past J2000. */
 
-/*      FORMAT      is the format of the output time string. It may be */
-/*                  any of the following: */
+/*     FORMAT   is the format of the output time string. It may be */
+/*              any of the following: */
 
+/*                 'C'      Calendar format, UTC. */
 
-/*                    'C'      Calendar format, UTC. */
+/*                 'D'      Day-of-Year format, UTC. */
 
-/*                    'D'      Day-of-Year format, UTC. */
+/*                 'J'      Julian Date format, UTC. */
 
-/*                    'J'      Julian Date format, UTC. */
+/*                 'ISOC'   ISO Calendar format, UTC. */
 
-/*                    'ISOC'   ISO Calendar format, UTC. */
+/*                 'ISOD'   ISO Day-of-Year format, UTC. */
 
-/*                    'ISOD'   ISO Day-of-Year format, UTC. */
-
-/*      PREC        is the number of digits of precision to which */
-/*                  fractional seconds (for Calendar and Day-of-Year */
-/*                  formats) or days (for Julian Date format) are to */
-/*                  be computed. If PREC is zero or smaller, no decimal */
-/*                  point is appended to the output string. If PREC is */
-/*                  greater than 14, it is treated as 14. */
+/*     PREC     is the number of digits of precision to which */
+/*              fractional seconds (for Calendar and Day-of-Year */
+/*              formats) or days (for Julian Date format) are to */
+/*              be computed. If PREC is zero or smaller, no decimal */
+/*              point is appended to the output string. If PREC is */
+/*              greater than 14, it is treated as 14. */
 
 /* $ Detailed_Output */
 
-/*      UTCSTR      is the output time string equivalent to the input */
-/*                  epoch, in the specified format.  Some examples are */
-/*                  shown below. */
+/*     UTCSTR   is the output time string equivalent to the input */
+/*              epoch, in the specified format. Some examples are */
+/*              shown below. */
 
-/*                        'C'      '1986 APR 12 16:31:09.814' */
-/*                        'D'      '1986-102 // 16:31:12.814' */
-/*                        'J'      'JD 2446533.18834276' */
-/*                        'ISOC'   '1987-04-12T16:31:12.814' */
-/*                        'ISOD'   '1987-102T16:31:12.814' */
+/*                 'C'      '1986 APR 12 16:31:09.814' */
+/*                 'D'      '1986-102 // 16:31:12.814' */
+/*                 'J'      'JD 2446533.18834276' */
+/*                 'ISOC'   '1987-04-12T16:31:12.814' */
+/*                 'ISOD'   '1987-102T16:31:12.814' */
 
-/*                  If an error occurs, UTCSTR is not changed. */
+/*              If an error occurs, UTCSTR is not changed. */
 
-/*                  Fractional seconds, or for Julian dates, fractional */
-/*                  days, are rounded to the precision level specified */
-/*                  by the input argument PREC. */
+/*              Fractional seconds, or for Julian dates, fractional */
+/*              days, are rounded to the precision level specified */
+/*              by the input argument PREC. */
 
-/*                  UTCSTR should be declared to be at least */
-/*                  20 + PREC characters in length to ensure */
-/*                  sufficient room to hold calendar strings */
-/*                  for modern epochs.  For epochs prior to */
-/*                  1000 A.D. at least 24 + PREC characters in */
-/*                  length are required to hold the output */
-/*                  calendar string. */
+/*              UTCSTR should be declared to be at least */
+/*              20 + PREC characters in length to ensure */
+/*              sufficient room to hold calendar strings */
+/*              for modern epochs. For epochs prior to */
+/*              1000 A.D. at least 24 + PREC characters in */
+/*              length are required to hold the output */
+/*              calendar string. */
 
-/*                  For epochs prior to 1000 A.D. Jan 1 calendar */
-/*                  and day of year formats are returned with the */
-/*                  era (A.D. or B.C.) attached to the year.  For */
-/*                  example */
+/*              For epochs prior to 1000 A.D. Jan 1 calendar */
+/*              and day of year formats are returned with the */
+/*              era (A.D. or B.C.) attached to the year. For */
+/*              example */
 
-/*                       '877 A.D. MAR 17 13:29:11.829' */
-/*                       '471 B.C. Jan 01 12:00:00.000' */
-/*                       '471 B.C. 001 // 12:00:00.000' */
+/*                 '877 A.D. MAR 17 13:29:11.829' */
+/*                 '471 B.C. Jan 01 12:00:00.000' */
+/*                 '471 B.C. 001 // 12:00:00.000' */
 
-/*                  ISO formats do not support the inclusion of an era. */
-/*                  For years prior to 1 A.D. an error will be signaled */
-/*                  if ISO format has been requested. */
-
+/*              ISO formats do not support the inclusion of an era. */
+/*              For years prior to 1 A.D. an error will be signaled */
+/*              if ISO format has been requested. */
 
 /* $ Parameters */
 
@@ -183,46 +181,46 @@ static integer c__1 = 1;
 
 /* $ Exceptions */
 
-/*     1) If the format for the output string is not recognized, the */
-/*        error SPICE(INVALIDTIMEFORMAT) is signaled. */
+/*     1)  If the format for the output string is not recognized, the */
+/*         error SPICE(INVALIDTIMEFORMAT) is signaled. */
 
-/*     2) If PREC is less than or equal to zero, it is treated as */
-/*        zero.  If PREC is greater than 14, it is treated as 14. */
+/*     2)  If PREC is less than or equal to zero, it is treated as */
+/*         zero. If PREC is greater than 14, it is treated as 14. */
 
-/*     3) If one of the ISO formats is specified (ISOC or ISOD) but */
-/*        the year corresponding to ET is prior to 1  A.D. on the */
-/*        Gregorian Calendar, the error SPICE(YEAROUTOFRANGE) will */
-/*        be signaled. */
+/*     3)  If one of the ISO formats is specified (ISOC or ISOD) but the */
+/*         year corresponding to ET is prior to 1 A.D. on the Gregorian */
+/*         Calendar, the error SPICE(YEAROUTOFRANGE) is signaled. */
 
-/*     4) Epochs prior to 15 Oct, 1582 on the Gregorian calendar (the */
-/*        calendar commonly used in western societies) are returned in */
-/*        the "extended" Gregorian Calendar.  To convert epochs to the */
-/*        Julian calendar see the entry point GR2JUL in the routine */
-/*        JUL2GR. */
+/*     4)  Epochs prior to 15 Oct, 1582 on the Gregorian calendar (the */
+/*         calendar commonly used in western societies) are returned in */
+/*         the "extended" Gregorian Calendar. To convert epochs to the */
+/*         Julian calendar see the SPICELIB routine GR2JUL. */
 
-/*     5) This routine does not attempt to account for variations */
-/*        in the length of the second that were in effect prior */
-/*        to Jan 1, 1972.  For days prior to that date, we assume */
-/*        there are exactly 86400 ephemeris seconds. Consequently */
-/*        the UTC Gregorian calendar strings produced for epochs */
-/*        prior to Jan 1, 1972 differ from the corresponding */
-/*        TDB calendar strings by approximately 41.18 seconds. */
-/*        (TDB Gregorian calendar strings are produced by the */
-/*        routine ETCAL). */
+/*     5)  This routine does not attempt to account for variations */
+/*         in the length of the second that were in effect prior */
+/*         to Jan 1, 1972. For days prior to that date, we assume */
+/*         there are exactly 86400 ephemeris seconds. Consequently */
+/*         the UTC Gregorian calendar strings produced for epochs */
+/*         prior to Jan 1, 1972 differ from the corresponding */
+/*         TDB calendar strings by approximately 41.18 seconds. */
+/*         (TDB Gregorian calendar strings are produced by the */
+/*         routine ETCAL). */
 
-/*     6) If a leapseconds kernel has not been loaded prior to calling */
-/*        this routine, an error will be signaled by a routine in the */
-/*        call tree of this routine. */
+/*     6)  If a leapseconds kernel has not been loaded prior to calling */
+/*         this routine, an error is signaled by a routine in the */
+/*         call tree of this routine. */
 
 /* $ Files */
 
-/*     None. */
+/*     A leapseconds kernel must be loaded via FURNSH prior to calling */
+/*     this routine. The kernel need be loaded only once during a program */
+/*     run. */
 
 /* $ Particulars */
 
 /*     This routine handles the task of converting a double precision */
 /*     representation of an epoch to a character string suitable for */
-/*     human consumption.  The more general routine TIMOUT may also be */
+/*     human consumption. The more general routine TIMOUT may also be */
 /*     used to convert ET to time strings. */
 
 /* $ Examples */
@@ -251,19 +249,29 @@ static integer c__1 = 1;
 
 /* $ Literature_References */
 
-/*     Jesperson and Fitz-Randolph, From Sundials to Atomic Clocks, */
-/*     Dover Publications, New York, 1977. */
+/*     [1]  J. Jespersen and J. Fitz-Randolph, "From Sundials to Atomic */
+/*          Clocks, Understanding Time and Frequency," Dover */
+/*          Publications, Inc. New York, 1982. */
 
 /* $ Author_and_Institution */
 
-/*     C.H. Acton      (JPL) */
-/*     N.J. Bachman    (JPL) */
-/*     B.V. Semenov    (JPL) */
-/*     W.L. Taber      (JPL) */
-/*     W.M. Owen       (JPL) */
-/*     I.M. Underwood  (JPL) */
+/*     C.H. Acton         (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
+/*     J.M. Lynch         (JPL) */
+/*     W.M. Owen          (JPL) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 3.0.5, 24-AUG-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. Extended $Files */
+/*        section. */
 
 /* -    SPICELIB Version 3.0.4, 06-APR-2009 (NJB) */
 
@@ -273,7 +281,7 @@ static integer c__1 = 1;
 
 /* -    SPICELIB Version 3.0.3, 28-JAN-2008 (BVS) */
 
-/*        Fixed typo in the ISOC example string in Detailed_Output. */
+/*        Fixed typo in the ISOC example string in $Detailed_Output. */
 
 /* -    SPICELIB Version 3.0.2, 29-JUL-2003 (NJB) (CHA) */
 
@@ -312,9 +320,9 @@ static integer c__1 = 1;
 
 /* -    SPICELIB Version 2.0.0, 21-MAR-1991 (NJB) (JML) */
 
-/*        Two bugs involving rounding errors were corrected.  One of */
+/*        Two bugs involving rounding errors were corrected. One of */
 /*        the bugs caused conversion errors of magnitude as large as */
-/*        1 second.  See $Revisions for details. */
+/*        1 second. See $Revisions for details. */
 
 /* -    SPICELIB Version 1.0.0, 31-JAN-1990 (WMO) (IMU) */
 
@@ -326,136 +334,134 @@ static integer c__1 = 1;
 /* -& */
 /* $ Revisions */
 
-/* -      SPICELIB Version 3.0.0, 13-MAR-1995 (WLT) */
+/* -    SPICELIB Version 3.0.0, 13-MAR-1996 (WLT) */
 
-/*          The construction of the numerical components of the */
-/*          output string are now handled by the SPICELIB routine */
-/*          TTRANS. */
+/*        The construction of the numerical components of the */
+/*        output string are now handled by the SPICELIB routine */
+/*        TTRANS. */
 
-/*          In addition the routine now supports the era associated */
-/*          with an epoch (B.C. or A.D.) */
+/*        In addition the routine now supports the era associated */
+/*        with an epoch (B.C. or A.D.) */
 
-/* -      SPICELIB Version 2.1.0, 11-JUL-1995 (KRG) */
+/* -    SPICELIB Version 2.1.0, 11-JUL-1995 (KRG) */
 
-/*          Removed some potential compile warnings that could be caused */
-/*          by truncation of double precision values to integers through */
-/*          a direct assignment. The direct assignment has been replaced */
-/*          with a call to the intrinsic function IDINT. */
+/*        Removed some potential compile warnings that could be */
+/*        caused by truncation of double precision values to */
+/*        integers through a direct assignment. The direct */
+/*        assignment has been replaced with a call to the */
+/*        intrinsic function IDINT. */
 
-/* -      SPICELIB Version 2.0.1, 10-MAR-1992 (WLT) */
+/* -    SPICELIB Version 2.0.1, 10-MAR-1992 (WLT) */
 
-/*          Comment section for permuted index source lines was added */
-/*          following the header. */
+/*        Comment section for permuted index source lines was */
+/*        added following the header. */
 
-/* -      SPICELIB Version 2.0.0, 21-MAR-1991 (NJB) (JML) */
+/* -    SPICELIB Version 2.0.0, 21-MAR-1991 (NJB) (JML) */
 
-/*       1) In the previous version of this routine, the algorithm */
-/*          that was used permitted inconsistent conversion of the */
-/*          integer and fractional parts of the UTC value corresponding */
-/*          to the input ET value. */
+/*        1) In the previous version of this routine, the algorithm */
+/*        that was used permitted inconsistent conversion of the */
+/*        integer and fractional parts of the UTC value */
+/*        corresponding to the input ET value. */
 
-/*          In the case where rounding the double precision UTC time */
-/*          corresponding to the input ET value to PREC decimal places */
-/*          resulted in a carry (to the integer portion of the UTC */
-/*          value), the integer portion of the UTC value was treated */
-/*          correctly, but the fraction was not always rounded correctly. */
-/*          The specific case where the problem occurred was when the */
-/*          input ET value mapped to a UTC time having a fractional */
-/*          part that rounded up to 1.0 when rounded PREC decimal places, */
-/*          but that did not round up to 1.0 when rounded to the nearest */
-/*          PREC+1 decimal places.  The set of such fractions can be */
-/*          represented as */
+/*           In the case where rounding the double precision UTC */
+/*           time corresponding to the input ET value to PREC */
+/*           decimal places resulted in a carry (to the integer */
+/*           portion of the UTC value), the integer portion of the */
+/*           UTC value was treated correctly, but the fraction was */
+/*           not always rounded correctly. The specific case where */
+/*           the problem occurred was when the input ET value */
+/*           mapped to a UTC time having a fractional part that */
+/*           rounded up to 1.0 when rounded PREC decimal places, */
+/*           but that did not round up to 1.0 when rounded to the */
+/*           nearest PREC+1 decimal places. The set of such */
+/*           fractions can be represented as */
 
-/*             { 1 - EPSILON :      EPSILON  <  5 * ( 10 ** -(PREC+1) ) */
-/*                                           - */
-/*                             and */
+/*             { 1 - EPSILON :      EPSILON  <  5 * ( 10 ** */
+/*             -(PREC+1) ) - and */
 
-/*                                  EPSILON  >  5 * ( 10 ** -(PREC+2) ) */
+/*                                  EPSILON  >  5 * ( 10 ** */
+/*                                  -(PREC+2) ) */
 
 /*                                                                     } */
 
-/*          For example, if the input ET mapped to the UTC time */
+/*           For example, if the input ET mapped to the UTC time */
 
-/*             2 JAN 1991 00:34:12.99994, */
+/*              2 JAN 1991 00:34:12.99994, */
 
-/*          then a call to this routine with PREC set to 3 would result */
-/*          in the output */
+/*           then a call to this routine with PREC set to 3 would */
+/*           result in the output */
 
-/*             2 JAN 1991 00:34:13.999 */
+/*              2 JAN 1991 00:34:13.999 */
 
-/*          instead of the correct value */
+/*           instead of the correct value */
 
-/*             2 JAN 1991 00:34:13.000 */
+/*              2 JAN 1991 00:34:13.000 */
 
-/*          On the other hand, if the input ET mapped to the UTC time */
+/*           On the other hand, if the input ET mapped to the UTC */
+/*           time */
 
-/*             2 JAN 1991 00:34:12.99996, */
+/*              2 JAN 1991 00:34:12.99996, */
 
-/*          then a call to this routine with PREC set to 3 would result */
-/*          in the correct output. */
+/*           then a call to this routine with PREC set to 3 would */
+/*           result in the correct output. */
 
+/*           This error was apparently difficult to generate: it */
+/*           has never been reported by any SPICELIB users, and was */
+/*           eventually discovered by NAIF staff. */
 
-/*          This error was apparently difficult to generate:  it has */
-/*          never been reported by any SPICELIB users, and was eventually */
-/*          discovered by NAIF staff. */
+/*        2) The second bug is somewhat less severe, as far as the */
+/*        magnitude of the error is concerned. However, it's */
+/*        easier to generate this error. Namely, in some cases, */
+/*        the fractional part of the input ET value is rounded to */
+/*        PREC SIGNIFICANT DIGITS, rather than to PREC decimal */
+/*        places. The effect of this is that the fraction is */
+/*        occasionally truncated rather than rounded. For example, */
+/*        the ET value equivalent to the UTC string */
 
+/*              1991 JAN 2 00:34:12.0009 */
 
+/*           would be converted to */
 
-/*       2) The second bug is somewhat less severe, as far as the */
-/*          magnitude of the error is concerned.  However, it's easier */
-/*          to generate this error.  Namely, in some cases, the */
-/*          fractional part of the input ET value is rounded to PREC */
-/*          SIGNIFICANT DIGITS, rather than to PREC decimal places. */
-/*          The effect of this is that the fraction is occasionally */
-/*          truncated rather than rounded.  For example, the ET value */
-/*          equivalent to the UTC string */
+/*              1991 JAN 2 00:34:12.000 */
 
-/*             1991 JAN 2 00:34:12.0009 */
+/*           instead of the correct value */
 
-/*          would be converted to */
+/*              1991 JAN 2 00:34:12.001 */
 
-/*             1991 JAN 2 00:34:12.000 */
+/*           when the input argument PREC was set equal to 3. */
 
-/*          instead of the correct value */
+/*        The modifications made to solve these problems are as */
+/*        follows: */
 
-/*             1991 JAN 2 00:34:12.001 */
+/*           1)  The input ET value, after conversion to `UTC */
+/*               seconds past 2000', is broken up into the sum of a */
+/*               whole number of seconds and a non-negative, */
+/*               fractional number of seconds. The fact that the */
+/*               fractional part is non-negative simplifies the */
+/*               conversion of the fraction. */
 
-/*          when the input argument PREC was set equal to 3. */
+/*           2)  The fraction is rounded to PREC decimal places--- */
+/*               that is, to the nearest integer multiple of */
+/*               10**(-PREC). If the rounding results in a carry, */
+/*               the whole number portion of the time value is */
+/*               incremented by 1 second. After this step, the */
+/*               whole number of seconds correctly accounts for */
+/*               any necessary rounding of the fraction. */
 
+/*           3)  The whole number portion of the time value is */
+/*           passed through the inverse Muller-Wimberly algorithm */
+/*           to obtain years, months, days, hours, minutes, and */
+/*           whole seconds. A small fraction is added to the whole */
+/*           number to prevent round-off error from occurring when */
+/*           divisions are performed. */
 
-
-/*          The modifications made to solve these problems are as */
-/*          follows: */
-
-/*             1)  The input ET value, after conversion to `UTC seconds */
-/*                 past 2000', is broken up into the sum of a whole */
-/*                 number of seconds and a non-negative, fractional */
-/*                 number of seconds.  The fact that the fractional */
-/*                 part is non-negative simplifies the conversion of the */
-/*                 fraction. */
-
-/*             2)  The fraction is rounded to PREC decimal places--- */
-/*                 that is, to the nearest integer multiple of */
-/*                 10**(-PREC).  If the rounding results in a carry, */
-/*                 the whole number portion of the time value is */
-/*                 incremented by 1 second.  After this step, the */
-/*                 whole number of seconds correctly accounts for */
-/*                 any necessary rounding of the fraction. */
-
-/*             3)  The whole number portion of the time value is passed */
-/*                 through the inverse Muller-Wimberly algorithm to */
-/*                 obtain years, months, days, hours, minutes, and */
-/*                 whole seconds.  A small fraction is added to the */
-/*                 whole number to prevent round-off error from occurring */
-/*                 when divisions are performed. */
-
-/*             4)  The fraction is converted to a string using the */
-/*                 SPICELIB routine DPSTRF.  To ensure that DPSTRF */
-/*                 produces an output string containing PREC decimal */
-/*                 places, an integer is added to the fraction value */
-/*                 before supplying it to DPSTRF.  This integer */
-/*                 `anchors' the first significant digit of the input */
-/*                 value in the units place. */
+/*           4)  The fraction is converted to a string using the */
+/*               SPICELIB routine DPSTRF. To ensure that DPSTRF */
+/*               produces an output string containing PREC decimal */
+/*               places, an integer is added to the fraction value */
+/*               before supplying it to DPSTRF. This integer */
+/*               `anchors' the first significant digit of the input */
+/*               value in the units place. */
 
 /* -& */
 
@@ -618,7 +624,7 @@ static integer c__1 = 1;
 	if (s_cmp(fmt, "C", (ftnlen)4, (ftnlen)1) == 0) {
 	    s_copy(endstr, " MMM 00 00:00:00", (ftnlen)80, (ftnlen)16);
 	    s_copy(endstr + 1, mthnam + ((i__1 = month - 1) < 12 && 0 <= i__1 
-		    ? i__1 : s_rnge("mthnam", i__1, "et2utc_", (ftnlen)650)) *
+		    ? i__1 : s_rnge("mthnam", i__1, "et2utc_", (ftnlen)658)) *
 		     3, (ftnlen)3, (ftnlen)3);
 
 /*           ... and then fill in the day portion of the string. */

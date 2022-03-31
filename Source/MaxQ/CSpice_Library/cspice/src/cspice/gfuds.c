@@ -83,8 +83,8 @@ static logical c_false = FALSE_;
 
 /* $ Keywords */
 
-/*     EVENT */
 /*     EPHEMERIS */
+/*     EVENT */
 /*     SEARCH */
 /*     WINDOW */
 
@@ -530,7 +530,7 @@ static logical c_false = FALSE_;
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     LBCELL     P   SPICE Cell lower bound. */
 /*     CNVTOL     P   Convergence tolerance. */
@@ -549,221 +549,229 @@ static logical c_false = FALSE_;
 /*     CNFINE     I   SPICE window to which the search is confined. */
 /*     MW         I   Size of workspace windows. */
 /*     NW         I   Number of workspace windows. */
-/*     WORK       I   Array containing workspace windows. */
+/*     WORK       O   Array containing workspace windows. */
 /*     RESULT    I-O  SPICE window containing results. */
 
 /* $ Detailed_Input */
 
-/*     UDFUNS     the routine that returns the value of the scalar */
-/*                quantity of interest at time ET. The calling sequence */
-/*                for UDFUNS is: */
+/*     UDFUNS   is the routine that returns the value of the scalar */
+/*              quantity of interest at time ET. The calling sequence for */
+/*              UDFUNS is: */
 
-/*                   CALL UDFUNS ( ET, VALUE ) */
+/*                 CALL UDFUNS ( ET, VALUE ) */
 
-/*                where: */
+/*              where: */
 
-/*                   ET      a double precision value representing */
-/*                           ephemeris time, expressed as seconds past */
-/*                           J2000 TDB, at which to determine the scalar */
-/*                           value. */
+/*                 ET      is a double precision value representing */
+/*                         ephemeris time, expressed as seconds past */
+/*                         J2000 TDB, at which to determine the scalar */
+/*                         value. */
 
-/*                   VALUE   is the value of the scalar quantity */
-/*                           at ET. */
+/*                 VALUE   is the value of the scalar quantity at ET. */
 
-/*     UDQDEC     the name of the routine that determines if the scalar */
-/*                quantity calculated by UDFUNS is decreasing. */
-/*                The calling sequence of UDQDEC is: */
+/*     UDQDEC   is the name of the routine that determines if the scalar */
+/*              quantity calculated by UDFUNS is decreasing. The calling */
+/*              sequence of UDQDEC is: */
 
-/*                   CALL UDQDEC ( UDFUNS, ET, ISDECR ) */
+/*                 CALL UDQDEC ( UDFUNS, ET, ISDECR ) */
 
-/*                where: */
+/*              where: */
 
-/*                   UDFUNS   the name of the scalar function as */
-/*                            defined above. */
+/*                 UDFUNS   is the name of the scalar function as defined */
+/*                          above. */
 
-/*                   ET       a double precision value representing */
-/*                            ephemeris time, expressed as seconds past */
-/*                            J2000 TDB, at which to determine the time */
-/*                            derivative of UDFUNS. */
+/*                 ET       is a double precision value representing */
+/*                          ephemeris time, expressed as seconds past */
+/*                          J2000 TDB, at which to determine the time */
+/*                          derivative of UDFUNS. */
 
-/*                   ISDECR   a logical return indicating whether */
-/*                            or not the scalar value returned by UDFUNS */
-/*                            is decreasing. ISDECR returns true if the */
-/*                            time derivative of UDFUNS at ET is */
-/*                            negative. */
+/*                 ISDECR   is a logical output variable indicating */
+/*                          whether or not the scalar value returned by */
+/*                          UDFUNS is decreasing. ISDECR returns .TRUE. */
+/*                          if the time derivative of UDFUNS at ET is */
+/*                          negative. */
 
-/*     RELATE     the scalar string comparison operator indicating */
-/*                the numeric constraint of interest. Values are: */
+/*     RELATE   is the scalar string comparison operator indicating */
+/*              the numeric constraint of interest. Values are: */
 
-/*                   '>'       value of scalar quantity greater than some */
-/*                             reference (REFVAL). */
+/*                 '>'        value of scalar quantity greater than some */
+/*                            reference (REFVAL). */
 
-/*                   '='       value of scalar quantity equal to some */
-/*                             reference (REFVAL). */
+/*                 '='        value of scalar quantity equal to some */
+/*                            reference (REFVAL). */
 
-/*                   '<'       value of scalar quantity less than some */
-/*                             reference (REFVAL). */
+/*                 '<'        value of scalar quantity less than some */
+/*                            reference (REFVAL). */
 
-/*                   'ABSMAX'  The scalar quantity is at an absolute */
-/*                             maximum. */
+/*                 'ABSMAX'   The scalar quantity is at an absolute */
+/*                            maximum. */
 
-/*                   'ABSMIN'  The scalar quantity is at an absolute */
-/*                              minimum. */
+/*                 'ABSMIN'   The scalar quantity is at an absolute */
+/*                            minimum. */
 
-/*                   'LOCMAX'  The scalar quantity is at a local */
-/*                             maximum. */
+/*                 'LOCMAX'   The scalar quantity is at a local */
+/*                            maximum. */
 
-/*                   'LOCMIN'  The scalar quantity is at a local */
-/*                             minimum. */
+/*                 'LOCMIN'   The scalar quantity is at a local */
+/*                            minimum. */
 
-/*                The caller may indicate that the region of interest */
-/*                is the set of time intervals where the quantity is */
-/*                within a specified distance of an absolute extremum. */
-/*                The argument ADJUST (described below) is used to */
-/*                specified this distance. */
+/*              The caller may indicate that the region of interest */
+/*              is the set of time intervals where the quantity is */
+/*              within a specified distance of an absolute extremum. */
+/*              The argument ADJUST (described below) is used to */
+/*              specified this distance. */
 
-/*                Local extrema are considered to exist only in the */
-/*                interiors of the intervals comprising the confinement */
-/*                window:  a local extremum cannot exist at a boundary */
-/*                point of the confinement window. */
+/*              Local extrema are considered to exist only in the */
+/*              interiors of the intervals comprising the confinement */
+/*              window:  a local extremum cannot exist at a boundary */
+/*              point of the confinement window. */
 
-/*                RELATE is insensitive to case, leading and */
-/*                trailing blanks. */
+/*              RELATE is insensitive to case, leading and */
+/*              trailing blanks. */
 
-/*     REFVAL     is the reference value used to define an equality or */
-/*                inequality to  satisfied by the scalar quantity. */
-/*                The units of REFVAL are those of the scalar quantity. */
+/*     REFVAL   is the reference value used to define an equality or */
+/*              inequality to  satisfied by the scalar quantity. */
+/*              The units of REFVAL are those of the scalar quantity. */
 
-/*     ADJUST     the amount by which the quantity is allowed to vary */
-/*                from an absolute extremum. */
+/*     ADJUST   is the amount by which the quantity is allowed to vary */
+/*              from an absolute extremum. */
 
-/*                If the search is for an absolute minimum is performed, */
-/*                the resulting window contains time intervals when the */
-/*                geometric quantity value has values between */
-/*                ABSMIN and ABSMIN + ADJUST. */
+/*              If the search is for an absolute minimum is performed, */
+/*              the resulting window contains time intervals when the */
+/*              geometric quantity value has values between ABSMIN and */
+/*              ABSMIN + ADJUST. */
 
-/*                If the search is for an absolute maximum, the */
-/*                corresponding range is  between ABSMAX - ADJUST and */
-/*                ABSMAX. */
+/*              If the search is for an absolute maximum, the */
+/*              corresponding range is between ABSMAX - ADJUST and */
+/*              ABSMAX. */
 
-/*                ADJUST is not used for searches for local extrema, */
-/*                equality or inequality conditions and must have value */
-/*                zero for such searches. */
+/*              ADJUST is not used for searches for local extrema, */
+/*              equality or inequality conditions and must have value */
+/*              zero for such searches. */
 
-/*     STEP       the double precision time step size to use in */
-/*                the search. */
+/*     STEP     is the double precision time step size to use in */
+/*              the search. */
 
-/*                STEP must be short enough to for a search using this */
-/*                step size to locate the time intervals where the */
-/*                scalar quantity function is monotone increasing or */
-/*                decreasing. However, STEP must not be *too* short, */
-/*                or the search will take an unreasonable amount of time. */
+/*              STEP must be short enough to for a search using this */
+/*              step size to locate the time intervals where the */
+/*              scalar quantity function is monotone increasing or */
+/*              decreasing. However, STEP must not be *too* short, */
+/*              or the search will take an unreasonable amount of time. */
 
-/*                The choice of STEP affects the completeness but not */
-/*                the precision of solutions found by this routine; the */
-/*                precision is controlled by the convergence tolerance. */
-/*                See the discussion of the parameter CNVTOL for */
-/*                details. */
+/*              The choice of STEP affects the completeness but not */
+/*              the precision of solutions found by this routine; the */
+/*              precision is controlled by the convergence tolerance. */
+/*              See the discussion of the parameter CNVTOL for */
+/*              details. */
 
-/*                STEP has units of TDB seconds. */
+/*              STEP has units of TDB seconds. */
 
-/*     CNFINE     is a SPICE window that confines the time period over */
-/*                which the specified search is conducted. CNFINE may */
-/*                consist of a single interval or a collection of */
-/*                intervals. */
+/*     CNFINE   is a SPICE window that confines the time period over */
+/*              which the specified search is conducted. CNFINE may */
+/*              consist of a single interval or a collection of */
+/*              intervals. */
 
-/*                In some cases the confinement window can be used to */
-/*                greatly reduce the time period that must be searched */
-/*                for the desired solution. See the Particulars section */
-/*                below for further discussion. */
+/*              In some cases the confinement window can be used to */
+/*              greatly reduce the time period that must be searched */
+/*              for the desired solution. See the $Particulars section */
+/*              below for further discussion. */
 
-/*                See the Examples section below for a code example */
-/*                that shows how to create a confinement window. */
+/*              See the $Examples section below for a code example */
+/*              that shows how to create a confinement window. */
 
-/*                CNFINE must be initialized by the caller via the */
-/*                SPICELIB routine SSIZED. */
+/*              CNFINE must be initialized by the caller via the */
+/*              SPICELIB routine SSIZED. */
 
-/*     MW         is a parameter specifying the length of the SPICE */
-/*                windows in the workspace array WORK (see description */
-/*                below) used by this routine. */
+/*              Certain computations can expand the time window over */
+/*              which UDFUNS and UDQDEC require data. See $Particulars */
+/*              for details. */
 
-/*                MW should be set to a number at least twice as large */
-/*                as the maximum number of intervals required by any */
-/*                workspace window. In many cases, it's not necessary to */
-/*                compute an accurate estimate of how many intervals are */
-/*                needed; rather, the user can pick a size considerably */
-/*                larger than what's really required. */
+/*     MW       is a parameter specifying the length of the SPICE */
+/*              windows in the workspace array WORK (see description */
+/*              below) used by this routine. */
 
-/*                However, since excessively large arrays can prevent */
-/*                applications from compiling, linking, or running */
-/*                properly, sometimes MW must be set according to */
-/*                the actual workspace requirement. A rule of thumb */
-/*                for the number of intervals NINTVLS needed is */
+/*              MW should be set to a number at least twice as large */
+/*              as the maximum number of intervals required by any */
+/*              workspace window. In many cases, it's not necessary to */
+/*              compute an accurate estimate of how many intervals are */
+/*              needed; rather, the user can pick a size considerably */
+/*              larger than what's really required. */
 
-/*                   NINTVLS  =  2*N  +  ( M / STEP ) */
+/*              However, since excessively large arrays can prevent */
+/*              applications from compiling, linking, or running */
+/*              properly, sometimes MW must be set according to */
+/*              the actual workspace requirement. A rule of thumb */
+/*              for the number of intervals NINTVLS needed is */
 
-/*                where */
+/*                 NINTVLS  =  2*N  +  ( M / STEP ) */
 
-/*                   N     is the number of intervals in the confinement */
-/*                         window */
+/*              where */
 
-/*                   M     is the measure of the confinement window, in */
-/*                         units of seconds */
+/*                 N     is the number of intervals in the confinement */
+/*                       window */
 
-/*                   STEP  is the search step size in seconds */
+/*                 M     is the measure of the confinement window, in */
+/*                       units of seconds */
 
-/*                MW should then be set to */
+/*                 STEP  is the search step size in seconds */
 
-/*                   2 * NINTVLS */
+/*              MW should then be set to */
 
-/*     NW         is a parameter specifying the number of SPICE windows */
-/*                in the workspace array WORK (see description below) */
-/*                used by this routine.  (The reason this dimension is */
-/*                an input argument is that this allows run-time */
-/*                error checking to be performed.) */
+/*                 2 * NINTVLS */
 
-/*                NW must be at least as large as the parameter NWUDS. */
+/*     NW       is a parameter specifying the number of SPICE windows */
+/*              in the workspace array WORK (see description below) */
+/*              used by this routine. (The reason this dimension is */
+/*              an input argument is that this allows run-time */
+/*              error checking to be performed.) */
 
-/*     WORK       is an array used to store workspace windows. This */
-/*                array should be declared by the caller as shown: */
+/*              NW must be at least as large as the parameter NWUDS. */
 
-/*                    DOUBLE PRECISION     WORK ( LBCELL : MW,  NW ) */
+/*     RESULT   is a double precision SPICE window which will contain */
+/*              the search results. RESULT must be declared and */
+/*              initialized with sufficient size to capture the full */
+/*              set of time intervals within the search region on which */
+/*              the specified condition is satisfied. */
 
-/*                WORK need not be initialized by the caller. */
+/*              RESULT must be initialized by the caller via the */
+/*              SPICELIB routine SSIZED. */
 
-/*     RESULT     a double precision SPICE window which will contain the */
-/*                search results. RESULT must be declared and initialized */
-/*                with sufficient size to capture the full set of time */
-/*                intervals within the search region on which the */
-/*                specified constraint is satisfied. */
-
-/*                RESULT must be initialized by the caller via the */
-/*                SPICELIB routine SSIZED. */
-
-/*                If RESULT is non-empty on input, its contents */
-/*                will be discarded before GFUDS conducts its search. */
+/*              If RESULT is non-empty on input, its contents will be */
+/*              discarded before GFUDS conducts its search. */
 
 /* $ Detailed_Output */
 
-/*     WORK       the input workspace array, modified by this */
-/*                routine. */
+/*     WORK     is an array used to store workspace windows. */
 
-/*     RESULT     is a SPICE window containing the time intervals within */
-/*                the confinement window, during which the specified */
-/*                condition on the scalar quantity is met. */
+/*              This array should be declared by the caller as shown: */
 
-/*                If the search is for local extrema, or for absolute */
-/*                extrema with ADJUST set to zero, then normally each */
-/*                interval of RESULT will be a singleton: the left and */
-/*                right endpoints of each interval will be identical. */
+/*                  DOUBLE PRECISION     WORK ( LBCELL : MW,  NW ) */
 
-/*                If no times within the confinement window satisfy the */
-/*                search, RESULT will be returned with a cardinality */
-/*                of zero. */
+/*              WORK need not be initialized by the caller. */
+
+/*              WORK is modified by this routine. The caller should */
+/*              re-initialize this array before attempting to use it for */
+/*              any other purpose. */
+
+/*     RESULT   is a SPICE window containing the time intervals within */
+/*              the confinement window, during which the specified */
+/*              condition on the scalar quantity is met. */
+
+/*              The endpoints of the time intervals comprising RESULT are */
+/*              interpreted as seconds past J2000 TDB. */
+
+/*              If the search is for local extrema, or for absolute */
+/*              extrema with ADJUST set to zero, then normally each */
+/*              interval of RESULT will be a singleton: the left and */
+/*              right endpoints of each interval will be identical. */
+
+/*              If no times within the confinement window satisfy the */
+/*              search criteria, RESULT will be returned with a */
+/*              cardinality of zero. */
 
 /* $ Parameters */
 
-/*     LBCELL   the integer value defining the lower bound for */
+/*     LBCELL   is the integer value defining the lower bound for */
 /*              SPICE Cell arrays (a SPICE window is a kind of cell). */
 
 /*     CNVTOL   is the convergence tolerance used for finding */
@@ -793,9 +801,9 @@ static logical c_false = FALSE_;
 /*         to run unacceptably slowly and in some cases, find spurious */
 /*         roots. */
 
-/*         This routine does not diagnose invalid step sizes, except */
-/*         that if the step size is non-positive, the error */
-/*         SPICE(INVALIDSTEP) is signaled. */
+/*         This routine does not diagnose invalid step sizes, except that */
+/*         if the step size is non-positive, an error is signaled by a */
+/*         routine in the call tree of this routine. */
 
 /*     2)  Due to numerical errors, in particular, */
 
@@ -809,36 +817,39 @@ static logical c_false = FALSE_;
 /*         slightly contract RESULT using the window routine WNCOND. */
 
 /*     3)  If the workspace window size MW is less than 2 or not an even */
-/*         value, the error SPICE(INVALIDDIMENSION) will signal. If the */
-/*         size of the workspace is too small, an error is signaled by a */
-/*         routine in the call tree of this routine. */
+/*         value, the error SPICE(INVALIDDIMENSION) is signaled. */
 
-/*     4)  If the size of the SPICE window RESULT is less than 2 or */
-/*         not an even value, the error SPICE(INVALIDDIMENSION) will */
-/*         signal. If RESULT has insufficient capacity to contain the */
-/*         number of intervals on which the specified condition */
-/*         is met, the error will be diagnosed by a routine in the call */
+/*     4)  If the number of workspace windows NW is too small for the */
+/*         required search, an error is signaled by a routine in the call */
 /*         tree of this routine. */
 
-/*     5)  If the window count NW is less than NWUDS, the error */
-/*         SPICE(INVALIDDIMENSION) will be signaled. */
+/*     5)  If the size of the SPICE window RESULT is less than 2 or not */
+/*         an even value, the error SPICE(INVALIDDIMENSION) is signaled. */
 
-/*     6)  If an error (typically cell overflow) occurs during */
-/*         window arithmetic, the error will be diagnosed by a routine */
+/*     6)  If RESULT has insufficient capacity to contain the */
+/*         number of intervals on which the specified condition */
+/*         is met, an error is signaled by a routine in the call */
+/*         tree of this routine. */
+
+/*     7)  If the window count NW is less than NWUDS, the error */
+/*         SPICE(INVALIDDIMENSION) is signaled. */
+
+/*     8)  If an error (typically cell overflow) occurs during */
+/*         window arithmetic, the error is signaled by a routine */
 /*         in the call tree of this routine. */
 
-/*     7)  If the relational operator RELATE is not recognized, an */
+/*     9)  If the relational operator RELATE is not recognized, an */
 /*         error is signaled by a routine in the call tree of this */
 /*         routine. */
 
-/*     8)  If ADJUST is negative, the error SPICE(VALUEOUTOFRANGE) will */
-/*         signal from a routine in the call tree of this routine. */
+/*     10) If ADJUST is negative, an error is signaled by a routine in */
+/*         the call tree of this routine. */
 
-/*         A non-zero value for ADJUST when RELATE has any value other */
-/*         than "ABSMIN" or "ABSMAX" causes the error SPICE(INVALIDVALUE) */
-/*         to signal from a routine in the call tree of this routine. */
+/*     11) If a non-zero value is provided for ADJUST when RELATE has any */
+/*         value other than 'ABSMIN' or 'ABSMAX', an error is signaled by */
+/*         a routine in the call tree of this routine. */
 
-/*     9)  If required ephemerides or other kernel data are not */
+/*     12) If required ephemerides or other kernel data are not */
 /*         available, an error is signaled by a routine in the call tree */
 /*         of this routine. */
 
@@ -849,17 +860,21 @@ static logical c_false = FALSE_;
 
 /*     If the scalar function requires access to ephemeris data: */
 
-/*        - SPK data: ephemeris data for any body over the */
-/*          time period defined by the confinement window must be */
-/*          loaded. If aberration corrections are used, the states of */
-/*          target and observer relative to the solar system barycenter */
-/*          must be calculable from the available ephemeris data. */
-/*          Typically ephemeris data are made available by loading one */
-/*          or more SPK files via FURNSH. */
+/*     -  SPK data: ephemeris data for any body over the */
+/*        time period defined by the confinement window must be */
+/*        loaded. If aberration corrections are used, the states of */
+/*        target and observer relative to the solar system barycenter */
+/*        must be calculable from the available ephemeris data. */
+/*        Typically ephemeris data are made available by loading one */
+/*        or more SPK files via FURNSH. */
 
-/*        - If non-inertial reference frames are used, then PCK */
-/*          files, frame kernels, C-kernels, and SCLK kernels may be */
-/*          needed. */
+/*     -  If non-inertial reference frames are used, then PCK */
+/*        files, frame kernels, C-kernels, and SCLK kernels may be */
+/*        needed. */
+
+/*     -  Certain computations can expand the time window over which */
+/*        UDFUNS and UDQDEC require data; such data must be provided by */
+/*        loaded kernels. See $Particulars for details. */
 
 /*     In all cases, kernel data are normally loaded once per program */
 /*     run, NOT every time this routine is called. */
@@ -886,7 +901,7 @@ static logical c_false = FALSE_;
 
 /*     using the library routine UDDF to numerically calculate the */
 /*     derivative of UDFUNS using a three-point estimation. */
-/*     Please see the Examples section for an example of GFDECR use. */
+/*     Please see the $Examples section for an example of GFDECR use. */
 
 /*           SUBROUTINE GFDECR ( UDFUNS, ET, ISDECR ) */
 /*           IMPLICIT NONE */
@@ -922,8 +937,9 @@ static logical c_false = FALSE_;
 /*     of the solution set for any inequality constraint is contained in */
 /*     the union of */
 
-/*        - the set of points where an equality constraint is met */
-/*        - the boundary points of the confinement window */
+/*     -  the set of points where an equality constraint is met */
+
+/*     -  the boundary points of the confinement window */
 
 /*     the solutions of both equality and inequality constraints can be */
 /*     found easily once the monotone windows have been found. */
@@ -1013,19 +1029,57 @@ static logical c_false = FALSE_;
 /*     to reduce the size of the time period over which a relatively */
 /*     slow search of interest must be performed. */
 
+/*     Certain user-defined computations may expand the window over */
+/*     which computations are performed. Here "expansion" of a window by */
+/*     an amount "T" means that the left endpoint of each interval */
+/*     comprising the window is shifted left by T, the right endpoint of */
+/*     each interval is shifted right by T, and any overlapping */
+/*     intervals are merged. Note that the input window CNFINE itself is */
+/*     not modified. */
+
+/*     If a search uses an equality constraint, the time window over */
+/*     which the functions UDFUNS and UDQDEC are called is expanded by 1 */
+/*     second. */
+
+/*     Computation of observer-target states by SPKEZR or SPKEZ, using */
+/*     stellar aberration corrections, requires the state of the */
+/*     observer, relative to the solar system barycenter, to be computed */
+/*     at times offset from the input time by +/- 1 second. If the input */
+/*     time ET is used by UDFUNS or UDQDEC to compute such a state, the */
+/*     window over which the observer state is computed is expanded by */
+/*     1 second. */
+
+/*     The window expansions described above are additive: if both */
+/*     conditions apply, the window expansion amount is the sum of the */
+/*     individual amounts. */
+
+/*     When light time corrections are used in the computation of */
+/*     observer-target states, expansion of the search window also */
+/*     affects the set of times at which the light time-corrected states */
+/*     of the targets are computed. */
+
+/*     In addition to the possible expansion of the search window that */
+/*     occurs when both an equality constraint and stellar aberration */
+/*     corrections are used, round-off error should be taken into */
+/*     account when the need for data availability is analyzed. */
+
 /* $ Examples */
 
-/*     The numerical results shown for these examples may differ across */
+/*     The numerical results shown for this example may differ across */
 /*     platforms. The results depend on the SPICE kernels used as */
 /*     input, the compiler and supporting libraries, and the machine */
 /*     specific arithmetic implementation. */
 
-/*     Use the meta-kernel shown below to load the required SPICE */
-/*     kernels. */
+/*     1) Conduct a search on the range-rate of the vector from the Sun */
+/*        to the Moon. Define a function to calculate the value. */
+
+/*        Use the meta-kernel shown below to load the required SPICE */
+/*        kernels. */
+
 
 /*           KPL/MK */
 
-/*           File name: standard.tm */
+/*           File name: gfuds_ex1.tm */
 
 /*           This meta-kernel is intended to support operation of SPICE */
 /*           example programs. The kernels shown here should not be */
@@ -1036,6 +1090,16 @@ static logical c_false = FALSE_;
 /*           kernels referenced here must be present in the user's */
 /*           current working directory. */
 
+/*           The names and contents of the kernels referenced */
+/*           by this meta-kernel are as follows: */
+
+/*              File name                     Contents */
+/*              ---------                     -------- */
+/*              de414.bsp                     Planetary ephemeris */
+/*              pck00008.tpc                  Planet orientation and */
+/*                                            radii */
+/*              naif0009.tls                  Leapseconds */
+
 
 /*           \begindata */
 
@@ -1045,359 +1109,394 @@ static logical c_false = FALSE_;
 
 /*           \begintext */
 
-/*     Conduct a search on the range-rate of the vector from the Sun */
-/*     to the Moon. Define a function to calculate the value. */
-
-/*        Code: */
-
-/*           PROGRAM GFUDS_T */
-/*           IMPLICIT NONE */
-
-/*     C */
-/*     C     Include GF parameter declarations: */
-/*     C */
-/*           INCLUDE 'gf.inc' */
-
-/*           EXTERNAL     GFQ */
-/*           EXTERNAL     GFDECR */
-
-/*     C */
-/*     C     SPICELIB functions */
-/*     C */
-/*           DOUBLE PRECISION      SPD */
-/*           DOUBLE PRECISION      DVNORM */
-/*           INTEGER               WNCARD */
-
-/*     C */
-/*     C     Local parameters */
-/*     C */
-/*           INTEGER               LBCELL */
-/*           PARAMETER           ( LBCELL = -5 ) */
-
-/*     C */
-/*     C     Use the parameter MAXWIN for both the result window size */
-/*     C     and the workspace size. */
-/*     C */
-/*           INTEGER               MAXWIN */
-/*           PARAMETER           ( MAXWIN = 20000 ) */
-
-/*     C */
-/*     C     Length of strings: */
-/*     C */
-/*           INTEGER               TIMLEN */
-/*           PARAMETER           ( TIMLEN = 26 ) */
-
-/*           INTEGER               NLOOPS */
-/*           PARAMETER           ( NLOOPS = 7 ) */
-
-/*     C */
-/*     C     Local variables */
-/*     C */
-/*           CHARACTER*(TIMLEN)    TIMSTR */
-/*           CHARACTER*(TIMLEN)    RELATE (NLOOPS) */
-
-/*           DOUBLE PRECISION      ADJUST */
-/*           DOUBLE PRECISION      CNFINE ( LBCELL : 2 ) */
-/*           DOUBLE PRECISION      DRDT */
-/*           DOUBLE PRECISION      ET0 */
-/*           DOUBLE PRECISION      ET1 */
-/*           DOUBLE PRECISION      FINISH */
-/*           DOUBLE PRECISION      LT */
-/*           DOUBLE PRECISION      POS    ( 6 ) */
-/*           DOUBLE PRECISION      REFVAL */
-/*           DOUBLE PRECISION      RESULT ( LBCELL : MAXWIN ) */
-/*           DOUBLE PRECISION      START */
-/*           DOUBLE PRECISION      STEP */
-/*           DOUBLE PRECISION      WORK   ( LBCELL : MAXWIN, NWUDS ) */
-
-/*           INTEGER               I */
-/*           INTEGER               J */
-
-
-/*           DATA                  RELATE / '=', */
-/*          .                               '<', */
-/*          .                               '>', */
-/*          .                               'LOCMIN', */
-/*          .                               'ABSMIN', */
-/*          .                               'LOCMAX', */
-/*          .                               'ABSMAX'  / */
-
-/*     C */
-/*     C     Load kernels. */
-/*     C */
-/*           CALL FURNSH ( 'standard.tm' ) */
-
-/*     C */
-/*     C     Initialize windows. */
-/*     C */
-/*           CALL SSIZED ( MAXWIN, RESULT ) */
-/*           CALL SSIZED ( 2,      CNFINE ) */
-
-/*           CALL SCARDD ( 0,      CNFINE ) */
-
-/*     C */
-/*     C     Store the time bounds of our search interval in */
-/*     C     the confinement window. */
-/*     C */
-/*           CALL STR2ET ( '2007 JAN 1', ET0 ) */
-/*           CALL STR2ET ( '2007 APR 1', ET1 ) */
-
-/*           CALL WNINSD ( ET0, ET1, CNFINE ) */
-
-/*     C */
-/*     C     Search using a step size of 1 day (in units of seconds). */
-/*     C     The reference value is .3365 km/s - a range rate value known */
-/*     C     to exist during the confinement window. We're not using the */
-/*     C     adjustment feature, so we set ADJUST to zero. */
-/*     C */
-/*           STEP   = SPD() */
-/*           REFVAL = .3365D0 */
-/*           ADJUST = 0.D0 */
+/*           End of meta-kernel */
+
+
+/*        Example code begins here. */
+
+
+/*              PROGRAM GFUDS_EX1 */
+/*              IMPLICIT NONE */
+
+/*        C */
+/*        C     Include GF parameter declarations: */
+/*        C */
+/*              INCLUDE 'gf.inc' */
+
+/*        C */
+/*        C     User defined external routines */
+/*        C */
+/*              EXTERNAL     GFQ */
+/*              EXTERNAL     GFDECR */
+
+/*        C */
+/*        C     SPICELIB functions */
+/*        C */
+/*              DOUBLE PRECISION      SPD */
+/*              DOUBLE PRECISION      DVNORM */
+/*              INTEGER               WNCARD */
+
+/*        C */
+/*        C     Local parameters */
+/*        C */
+/*              INTEGER               LBCELL */
+/*              PARAMETER           ( LBCELL = -5 ) */
+
+/*        C */
+/*        C     Use the parameter MAXWIN for both the result window size */
+/*        C     and the workspace size. */
+/*        C */
+/*              INTEGER               MAXWIN */
+/*              PARAMETER           ( MAXWIN = 20000 ) */
+
+/*        C */
+/*        C     Length of strings: */
+/*        C */
+/*              INTEGER               TIMLEN */
+/*              PARAMETER           ( TIMLEN = 26 ) */
+
+/*              INTEGER               NLOOPS */
+/*              PARAMETER           ( NLOOPS = 7 ) */
+
+/*        C */
+/*        C     Local variables */
+/*        C */
+/*              CHARACTER*(TIMLEN)    TIMSTR */
+/*              CHARACTER*(TIMLEN)    RELATE (NLOOPS) */
+
+/*              DOUBLE PRECISION      ADJUST */
+/*              DOUBLE PRECISION      CNFINE ( LBCELL : 2 ) */
+/*              DOUBLE PRECISION      DRDT */
+/*              DOUBLE PRECISION      ET0 */
+/*              DOUBLE PRECISION      ET1 */
+/*              DOUBLE PRECISION      FINISH */
+/*              DOUBLE PRECISION      LT */
+/*              DOUBLE PRECISION      POS    ( 6 ) */
+/*              DOUBLE PRECISION      REFVAL */
+/*              DOUBLE PRECISION      RESULT ( LBCELL : MAXWIN ) */
+/*              DOUBLE PRECISION      START */
+/*              DOUBLE PRECISION      STEP */
+/*              DOUBLE PRECISION      WORK   ( LBCELL : MAXWIN, NWUDS ) */
+
+/*              INTEGER               I */
+/*              INTEGER               J */
+
+/*        C */
+/*        C     Saved variables */
+/*        C */
+/*        C     The confinement, workspace and result windows CNFINE, */
+/*        C     WORK and RESULT are saved because this practice helps to */
+/*        C     prevent stack overflow. */
+/*        C */
+/*              SAVE                  CNFINE */
+/*              SAVE                  RESULT */
+/*              SAVE                  WORK */
+
+/*              DATA                  RELATE / '=', */
+/*             .                               '<', */
+/*             .                               '>', */
+/*             .                               'LOCMIN', */
+/*             .                               'ABSMIN', */
+/*             .                               'LOCMAX', */
+/*             .                               'ABSMAX'  / */
+
+/*        C */
+/*        C     Load kernels. */
+/*        C */
+/*              CALL FURNSH ( 'gfuds_ex1.tm' ) */
+
+/*        C */
+/*        C     Initialize windows. */
+/*        C */
+/*              CALL SSIZED ( MAXWIN, RESULT ) */
+/*              CALL SSIZED ( 2,      CNFINE ) */
 
-/*           DO J=1, NLOOPS */
+/*              CALL SCARDD ( 0,      CNFINE ) */
 
-/*              WRITE(*,*) 'Relation condition: ', RELATE(J) */
+/*        C */
+/*        C     Store the time bounds of our search interval in */
+/*        C     the confinement window. */
+/*        C */
+/*              CALL STR2ET ( '2007 JAN 1', ET0 ) */
+/*              CALL STR2ET ( '2007 APR 1', ET1 ) */
 
-/*     C */
-/*     C        Perform the search. The SPICE window RESULT contains */
-/*     C        the set of times when the condition is met. */
-/*     C */
-/*              CALL GFUDS ( GFQ,       GFDECR, */
-/*          .                RELATE(J), REFVAL,  ADJUST, STEP, CNFINE, */
-/*          .                MAXWIN,    NWUDS,   WORK,   RESULT ) */
+/*              CALL WNINSD ( ET0, ET1, CNFINE ) */
 
+/*        C */
+/*        C     Search using a step size of 1 day (in units of seconds). */
+/*        C     The reference value is .3365 km/s - a range rate value */
+/*        C     known to exist during the confinement window. We're not */
+/*        C     using the adjustment feature, so we set ADJUST to zero. */
+/*        C */
+/*              STEP   = SPD() */
+/*              REFVAL = .3365D0 */
+/*              ADJUST = 0.D0 */
 
-/*     C */
-/*     C        Display the results. */
-/*     C */
-/*              IF ( WNCARD(RESULT) .EQ. 0 ) THEN */
+/*              DO J=1, NLOOPS */
 
-/*                 WRITE (*, '(A)') 'Result window is empty.' */
+/*                 WRITE(*,*) 'Relation condition: ', RELATE(J) */
 
-/*              ELSE */
+/*        C */
+/*        C        Perform the search. The SPICE window RESULT contains */
+/*        C        the set of times when the condition is met. */
+/*        C */
+/*                 CALL GFUDS ( GFQ,    GFDECR, RELATE(J), */
+/*             .                REFVAL, ADJUST,      STEP, CNFINE, */
+/*             .                MAXWIN,  NWUDS,      WORK, RESULT ) */
 
-/*                 DO I = 1, WNCARD(RESULT) */
-/*     C */
-/*     C              Fetch the endpoints of the Ith interval */
-/*     C              of the result window. */
-/*     C */
-/*                    CALL WNFETD ( RESULT, I, START, FINISH ) */
 
-/*                    CALL SPKEZR ( 'MOON',  START, 'J2000', 'NONE', */
-/*          .                       'SUN', POS,   LT              ) */
-/*                    DRDT = DVNORM(POS) */
+/*        C */
+/*        C        Display the results. */
+/*        C */
+/*                 IF ( WNCARD(RESULT) .EQ. 0 ) THEN */
 
-/*                    CALL TIMOUT ( START, 'YYYY-MON-DD HR:MN:SC.###', */
-/*          .                       TIMSTR                            ) */
+/*                    WRITE (*, '(A)') 'Result window is empty.' */
 
-/*                    WRITE (*, '(A,F16.9)' ) 'Start time, drdt = '// */
-/*          .                                 TIMSTR, DRDT */
+/*                 ELSE */
 
-/*                    CALL SPKEZR ( 'MOON',  FINISH, 'J2000', 'NONE', */
-/*          .                       'SUN', POS,     LT              ) */
-/*                    DRDT = DVNORM(POS) */
+/*                    DO I = 1, WNCARD(RESULT) */
 
-/*                    CALL TIMOUT ( FINISH, 'YYYY-MON-DD HR:MN:SC.###', */
-/*          .                       TIMSTR                            ) */
+/*        C */
+/*        C              Fetch the endpoints of the Ith interval */
+/*        C              of the result window. */
+/*        C */
+/*                       CALL WNFETD ( RESULT, I, START, FINISH ) */
 
-/*                    WRITE (*, '(A,F16.9)' ) 'Stop time,  drdt = '// */
-/*          .                              TIMSTR, DRDT */
-/*                 END DO */
+/*                       CALL SPKEZR ( 'MOON',  START, 'J2000', 'NONE', */
+/*             .                       'SUN', POS,   LT               ) */
+/*                       DRDT = DVNORM(POS) */
 
-/*              END IF */
+/*                       CALL TIMOUT ( START, */
+/*             .                       'YYYY-MON-DD HR:MN:SC.###', */
+/*             .                       TIMSTR                     ) */
 
-/*              WRITE(*,*) ' ' */
+/*                       WRITE (*, '(A,F16.9)' ) 'Start time, drdt = '// */
+/*             .                                 TIMSTR, DRDT */
 
-/*           END DO */
+/*                       CALL SPKEZR ( 'MOON',  FINISH, 'J2000', 'NONE', */
+/*             .                       'SUN', POS,     LT              ) */
+/*                       DRDT = DVNORM(POS) */
 
-/*           END */
+/*                       CALL TIMOUT ( FINISH, */
+/*             .                       'YYYY-MON-DD HR:MN:SC.###', */
+/*             .                       TIMSTR                    ) */
 
+/*                       WRITE (*, '(A,F16.9)' ) 'Stop time,  drdt = '// */
+/*             .                              TIMSTR, DRDT */
+/*                    END DO */
 
+/*                 END IF */
 
-/*     C-Procedure GFQ */
+/*                 WRITE(*,*) ' ' */
 
-/*           SUBROUTINE GFQ ( ET, VALUE ) */
-/*           IMPLICIT NONE */
+/*              END DO */
 
-/*     C- Abstract */
-/*     C */
-/*     C     User defined geometric quantity function. In this case, */
-/*     C     the range from the sun to the Moon at TDB time ET. */
-/*     C */
+/*              END */
 
-/*           DOUBLE PRECISION      ET */
-/*           DOUBLE PRECISION      VALUE */
 
-/*     C */
-/*     C     Local variables. */
-/*     C */
-/*           INTEGER               TARG */
-/*           INTEGER               OBS */
 
-/*           CHARACTER*(12)        REF */
-/*           CHARACTER*(12)        ABCORR */
+/*        C-Procedure GFQ */
 
-/*           DOUBLE PRECISION      STATE ( 6 ) */
-/*           DOUBLE PRECISION      LT */
-/*           DOUBLE PRECISION      DVNORM */
+/*              SUBROUTINE GFQ ( ET, VALUE ) */
+/*              IMPLICIT NONE */
 
-/*     C */
-/*     C     Initialization. Retrieve the vector from the Sun to */
-/*     C     the Moon in the J2000 frame, without aberration */
-/*     C     correction. */
-/*     C */
-/*           TARG   = 301 */
-/*           REF    = 'J2000' */
-/*           ABCORR = 'NONE' */
-/*           OBS    = 10 */
-
-/*           CALL SPKEZ ( TARG, ET, REF, ABCORR, OBS, STATE, LT ) */
-
-/*     C */
-/*     C     Calculate the scalar range rate corresponding the */
-/*     C     STATE vector. */
-/*     C */
-/*           VALUE = DVNORM( STATE ) */
-
-/*           END */
-
-
-
-
-/*     C-Procedure GFDECR */
-
-/*           SUBROUTINE GFDECR ( UDFUNS, ET, ISDECR ) */
-/*           IMPLICIT NONE */
-
-/*     C- Abstract */
-/*     C */
-/*     C     User defined function to detect if the function derivative */
-/*     C     is negative (the function is decreasing) at TDB time ET. */
-/*     C */
-
-/*           EXTERNAL              UDFUNS */
-/*           EXTERNAL              UDDF */
-
-/*           DOUBLE PRECISION      ET */
-/*           LOGICAL               ISDECR */
-
-/*           DOUBLE PRECISION      DT */
-
-/*           DT = 1.D0 */
-
-/*     C */
-/*     C     Determine if GFQ is decreasing at ET. */
-/*     C */
-/*     C     UDDC - the default GF function to determine if */
-/*     C                the derivative of the user defined */
-/*     C                function is negative at ET. */
-/*     C */
-/*     C     UDFUNS - the user defined scalar quantity function. */
-/*     C */
-/*           CALL UDDC ( UDFUNS, ET, DT, ISDECR ) */
-
-/*           END */
-
-/*     The program outputs: */
-
-/*      Relation condition: = */
-/*     Start time, drdt = 2007-JAN-02 00:35:19.574       0.336500000 */
-/*     Stop time,  drdt = 2007-JAN-02 00:35:19.574       0.336500000 */
-/*     Start time, drdt = 2007-JAN-19 22:04:54.899       0.336500000 */
-/*     Stop time,  drdt = 2007-JAN-19 22:04:54.899       0.336500000 */
-/*     Start time, drdt = 2007-FEB-01 23:30:13.428       0.336500000 */
-/*     Stop time,  drdt = 2007-FEB-01 23:30:13.428       0.336500000 */
-/*     Start time, drdt = 2007-FEB-17 11:10:46.540       0.336500000 */
-/*     Stop time,  drdt = 2007-FEB-17 11:10:46.540       0.336500000 */
-/*     Start time, drdt = 2007-MAR-04 15:50:19.929       0.336500000 */
-/*     Stop time,  drdt = 2007-MAR-04 15:50:19.929       0.336500000 */
-/*     Start time, drdt = 2007-MAR-18 09:59:05.959       0.336500000 */
-/*     Stop time,  drdt = 2007-MAR-18 09:59:05.959       0.336500000 */
-
-/*      Relation condition: < */
-/*     Start time, drdt = 2007-JAN-02 00:35:19.574       0.336500000 */
-/*     Stop time,  drdt = 2007-JAN-19 22:04:54.899       0.336500000 */
-/*     Start time, drdt = 2007-FEB-01 23:30:13.428       0.336500000 */
-/*     Stop time,  drdt = 2007-FEB-17 11:10:46.540       0.336500000 */
-/*     Start time, drdt = 2007-MAR-04 15:50:19.929       0.336500000 */
-/*     Stop time,  drdt = 2007-MAR-18 09:59:05.959       0.336500000 */
-
-/*      Relation condition: > */
-/*     Start time, drdt = 2007-JAN-01 00:00:00.000       0.515522367 */
-/*     Stop time,  drdt = 2007-JAN-02 00:35:19.574       0.336500000 */
-/*     Start time, drdt = 2007-JAN-19 22:04:54.899       0.336500000 */
-/*     Stop time,  drdt = 2007-FEB-01 23:30:13.428       0.336500000 */
-/*     Start time, drdt = 2007-FEB-17 11:10:46.540       0.336500000 */
-/*     Stop time,  drdt = 2007-MAR-04 15:50:19.929       0.336500000 */
-/*     Start time, drdt = 2007-MAR-18 09:59:05.959       0.336500000 */
-/*     Stop time,  drdt = 2007-APR-01 00:00:00.000       0.793546222 */
-
-/*      Relation condition: LOCMIN */
-/*     Start time, drdt = 2007-JAN-11 07:03:58.988      -0.803382743 */
-/*     Stop time,  drdt = 2007-JAN-11 07:03:58.988      -0.803382743 */
-/*     Start time, drdt = 2007-FEB-10 06:26:15.439      -0.575837623 */
-/*     Stop time,  drdt = 2007-FEB-10 06:26:15.439      -0.575837623 */
-/*     Start time, drdt = 2007-MAR-12 03:28:36.404      -0.441800446 */
-/*     Stop time,  drdt = 2007-MAR-12 03:28:36.404      -0.441800446 */
-
-/*      Relation condition: ABSMIN */
-/*     Start time, drdt = 2007-JAN-11 07:03:58.988      -0.803382743 */
-/*     Stop time,  drdt = 2007-JAN-11 07:03:58.988      -0.803382743 */
-
-/*      Relation condition: LOCMAX */
-/*     Start time, drdt = 2007-JAN-26 02:27:33.766       1.154648992 */
-/*     Stop time,  drdt = 2007-JAN-26 02:27:33.766       1.154648992 */
-/*     Start time, drdt = 2007-FEB-24 09:35:07.816       1.347132236 */
-/*     Stop time,  drdt = 2007-FEB-24 09:35:07.816       1.347132236 */
-/*     Start time, drdt = 2007-MAR-25 17:26:56.150       1.428141707 */
-/*     Stop time,  drdt = 2007-MAR-25 17:26:56.150       1.428141707 */
-
-/*      Relation condition: ABSMAX */
-/*     Start time, drdt = 2007-MAR-25 17:26:56.150       1.428141707 */
-/*     Stop time,  drdt = 2007-MAR-25 17:26:56.150       1.428141707 */
+/*        C- Abstract */
+/*        C */
+/*        C     User defined geometric quantity function. In this case, */
+/*        C     the range from the sun to the Moon at TDB time ET. */
+/*        C */
+
+/*              DOUBLE PRECISION      ET */
+/*              DOUBLE PRECISION      VALUE */
+
+/*        C */
+/*        C     Local variables. */
+/*        C */
+/*              INTEGER               TARG */
+/*              INTEGER               OBS */
+
+/*              CHARACTER*(12)        REF */
+/*              CHARACTER*(12)        ABCORR */
+
+/*              DOUBLE PRECISION      STATE ( 6 ) */
+/*              DOUBLE PRECISION      LT */
+/*              DOUBLE PRECISION      DVNORM */
+
+/*        C */
+/*        C     Initialization. Retrieve the vector from the Sun to */
+/*        C     the Moon in the J2000 frame, without aberration */
+/*        C     correction. */
+/*        C */
+/*              TARG   = 301 */
+/*              REF    = 'J2000' */
+/*              ABCORR = 'NONE' */
+/*              OBS    = 10 */
+
+/*              CALL SPKEZ ( TARG, ET, REF, ABCORR, OBS, STATE, LT ) */
+
+/*        C */
+/*        C     Calculate the scalar range rate corresponding the */
+/*        C     STATE vector. */
+/*        C */
+/*              VALUE = DVNORM( STATE ) */
+
+/*              END */
+
+
+
+
+/*        C-Procedure GFDECR */
+
+/*              SUBROUTINE GFDECR ( UDFUNS, ET, ISDECR ) */
+/*              IMPLICIT NONE */
+
+/*        C- Abstract */
+/*        C */
+/*        C     User defined function to detect if the function */
+/*        C     derivative is negative (the function is decreasing) */
+/*        C     at TDB time ET. */
+/*        C */
+
+/*              EXTERNAL              UDFUNS */
+/*              EXTERNAL              UDDF */
+
+/*              DOUBLE PRECISION      ET */
+/*              LOGICAL               ISDECR */
+
+/*              DOUBLE PRECISION      DT */
+
+/*              DT = 1.D0 */
+
+/*        C */
+/*        C     Determine if GFQ is decreasing at ET. */
+/*        C */
+/*        C     UDDC - the default GF function to determine if */
+/*        C                the derivative of the user defined */
+/*        C                function is negative at ET. */
+/*        C */
+/*        C     UDFUNS - the user defined scalar quantity function. */
+/*        C */
+/*              CALL UDDC ( UDFUNS, ET, DT, ISDECR ) */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*         Relation condition: = */
+/*        Start time, drdt = 2007-JAN-02 00:35:19.574       0.336500000 */
+/*        Stop time,  drdt = 2007-JAN-02 00:35:19.574       0.336500000 */
+/*        Start time, drdt = 2007-JAN-19 22:04:54.899       0.336500000 */
+/*        Stop time,  drdt = 2007-JAN-19 22:04:54.899       0.336500000 */
+/*        Start time, drdt = 2007-FEB-01 23:30:13.428       0.336500000 */
+/*        Stop time,  drdt = 2007-FEB-01 23:30:13.428       0.336500000 */
+/*        Start time, drdt = 2007-FEB-17 11:10:46.540       0.336500000 */
+/*        Stop time,  drdt = 2007-FEB-17 11:10:46.540       0.336500000 */
+/*        Start time, drdt = 2007-MAR-04 15:50:19.929       0.336500000 */
+/*        Stop time,  drdt = 2007-MAR-04 15:50:19.929       0.336500000 */
+/*        Start time, drdt = 2007-MAR-18 09:59:05.959       0.336500000 */
+/*        Stop time,  drdt = 2007-MAR-18 09:59:05.959       0.336500000 */
+
+/*         Relation condition: < */
+/*        Start time, drdt = 2007-JAN-02 00:35:19.574       0.336500000 */
+/*        Stop time,  drdt = 2007-JAN-19 22:04:54.899       0.336500000 */
+/*        Start time, drdt = 2007-FEB-01 23:30:13.428       0.336500000 */
+/*        Stop time,  drdt = 2007-FEB-17 11:10:46.540       0.336500000 */
+/*        Start time, drdt = 2007-MAR-04 15:50:19.929       0.336500000 */
+/*        Stop time,  drdt = 2007-MAR-18 09:59:05.959       0.336500000 */
+
+/*         Relation condition: > */
+/*        Start time, drdt = 2007-JAN-01 00:00:00.000       0.515522367 */
+/*        Stop time,  drdt = 2007-JAN-02 00:35:19.574       0.336500000 */
+/*        Start time, drdt = 2007-JAN-19 22:04:54.899       0.336500000 */
+/*        Stop time,  drdt = 2007-FEB-01 23:30:13.428       0.336500000 */
+/*        Start time, drdt = 2007-FEB-17 11:10:46.540       0.336500000 */
+/*        Stop time,  drdt = 2007-MAR-04 15:50:19.929       0.336500000 */
+/*        Start time, drdt = 2007-MAR-18 09:59:05.959       0.336500000 */
+/*        Stop time,  drdt = 2007-APR-01 00:00:00.000       0.793546222 */
+
+/*         Relation condition: LOCMIN */
+/*        Start time, drdt = 2007-JAN-11 07:03:58.988      -0.803382743 */
+/*        Stop time,  drdt = 2007-JAN-11 07:03:58.988      -0.803382743 */
+/*        Start time, drdt = 2007-FEB-10 06:26:15.438      -0.575837623 */
+/*        Stop time,  drdt = 2007-FEB-10 06:26:15.438      -0.575837623 */
+/*        Start time, drdt = 2007-MAR-12 03:28:36.404      -0.441800446 */
+/*        Stop time,  drdt = 2007-MAR-12 03:28:36.404      -0.441800446 */
+
+/*         Relation condition: ABSMIN */
+/*        Start time, drdt = 2007-JAN-11 07:03:58.988      -0.803382743 */
+/*        Stop time,  drdt = 2007-JAN-11 07:03:58.988      -0.803382743 */
+
+/*         Relation condition: LOCMAX */
+/*        Start time, drdt = 2007-JAN-26 02:27:33.767       1.154648992 */
+/*        Stop time,  drdt = 2007-JAN-26 02:27:33.767       1.154648992 */
+/*        Start time, drdt = 2007-FEB-24 09:35:07.816       1.347132236 */
+/*        Stop time,  drdt = 2007-FEB-24 09:35:07.816       1.347132236 */
+/*        Start time, drdt = 2007-MAR-25 17:26:56.150       1.428141707 */
+/*        Stop time,  drdt = 2007-MAR-25 17:26:56.150       1.428141707 */
+
+/*         Relation condition: ABSMAX */
+/*        Start time, drdt = 2007-MAR-25 17:26:56.150       1.428141707 */
+/*        Stop time,  drdt = 2007-MAR-25 17:26:56.150       1.428141707 */
+
 
 /* $ Restrictions */
 
-/*     1) Any kernel files required by this routine must be loaded */
-/*        (normally via the SPICELIB routine FURNSH) before this routine */
-/*        is called. */
+/*     1)  Any kernel files required by this routine must be loaded */
+/*         (normally via the SPICELIB routine FURNSH) before this routine */
+/*         is called. */
 
 /* $ Literature_References */
 
-/*    None. */
+/*     None. */
 
 /* $ Author_and_Institution */
 
-/*    N.J. Bachman   (JPL) */
-/*    E.D. Wright    (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
 
-/* -   SPICELIB Version 1.1.0, 15-JUL-2014 (EDW) */
+/* -    SPICELIB Version 1.1.1, 21-OCT-2021 (JDR) (NJB) */
 
-/*       Correction to description of UDQDEC to show UDFUNS as */
-/*       an argument. */
+/*        Edited the header to comply with NAIF standard. */
 
-/*       Edit to comments to correct search description. */
+/*        Updated description of WORK and RESULT arguments in $Brief_I/O, */
+/*        $Detailed_Input and $Detailed_Output. */
 
-/*       Implemented use of ZZHOLDD to allow user to alter convergence */
-/*       tolerance. */
+/*        Added SAVE statements for CNFINE, WORK and RESULT variables in */
+/*        code example. */
 
-/*       Removed the STEP > 0 error check. The GFSSTP call includes */
-/*       the check. */
+/*        Updated header to describe use of expanded confinement window. */
 
-/*       Removed ZZGFREF call. That call now occurs in ZZGFRELX. Update */
-/*       to ZZGFRELX argument list to reflect this change in */
-/*       functionality. */
+/* -    SPICELIB Version 1.1.0, 15-JUL-2014 (EDW) */
 
-/*       Added RETURN() check. */
+/*        Correction to description of UDQDEC to show UDFUNS as */
+/*        an argument. */
 
-/* -   SPICELIB Version 1.0.0  16-FEB-2010 (EDW) */
+/*        Edit to comments to correct search description. */
+
+/*        Implemented use of ZZHOLDD to allow user to alter convergence */
+/*        tolerance. */
+
+/*        Removed the STEP > 0 error check. The GFSSTP call includes */
+/*        the check. */
+
+/*        Removed ZZGFREF call. That call now occurs in ZZGFRELX. Update */
+/*        to ZZGFRELX argument list to reflect this change in */
+/*        functionality. */
+
+/*        Added RETURN() check. */
+
+/* -    SPICELIB Version 1.0.0, 16-FEB-2010 (EDW) (NJB) */
 
 /* -& */
 /* $ Index_Entries */
 
-/*   GF user defined scalar function search */
+/*     GF user defined scalar function search */
 
 /* -& */
 

@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      FN2LUN ( Map name of open file to its logical unit. ) */
+/* $Procedure FN2LUN ( Map name of open file to its logical unit. ) */
 /* Subroutine */ int fn2lun_(char *filnam, integer *lunit, ftnlen filnam_len)
 {
     /* System generated locals */
@@ -27,7 +27,7 @@
 
 /* $ Abstract */
 
-/*      Map the name of an open file to its associated logical unit. */
+/*     Map the name of an open file to its associated logical unit. */
 
 /* $ Disclaimer */
 
@@ -60,7 +60,7 @@
 
 /* $ Keywords */
 
-/*      FILES */
+/*     FILES */
 
 /* $ Declarations */
 /* $ Brief_I/O */
@@ -85,23 +85,22 @@
 
 /*     None. */
 
-
 /* $ Exceptions */
 
-/*     1) If the filename is blank, the error SPICE(BLANKFILENAME) will */
-/*        be signalled. */
+/*     1)  If the filename is blank, the error SPICE(BLANKFILENAME) is */
+/*         signaled. */
 
-/*     2) If an error occurs during the execution of the Fortran INQUIRE */
-/*        statement, the error SPICE(INQUIREFAILED) is signalled. */
+/*     2)  If an error occurs during the execution of the Fortran INQUIRE */
+/*         statement, the error SPICE(INQUIREFAILED) is signaled. */
 
-/*     3) If the filename is not associated with an open file, the */
-/*        error SPICE(FILENOTOPEN) will be signalled. */
+/*     3)  If the filename is not associated with an open file, the */
+/*         error SPICE(FILENOTOPEN) is signaled. */
 
-/*     4) If the filename is not associated with an existing file, the */
-/*        error SPICE(FILEDOESNOTEXIST) will be signalled. */
+/*     4)  If the filename is not associated with an existing file, the */
+/*         error SPICE(FILEDOESNOTEXIST) is signaled. */
 
-/*     5) In the event of an error the contents of the variable LUNIT */
-/*        are not defined, and should not be used. */
+/*     5)  In the event of an error the contents of the variable LUNIT */
+/*         are not defined, and should not be used. */
 
 /* $ Files */
 
@@ -126,15 +125,22 @@
 
 /*     None. */
 
-/* $ Author_and_Institution */
-
-/*     K.R. Gehringer  (JPL) */
-
 /* $ Literature_References */
 
 /*     None. */
 
+/* $ Author_and_Institution */
+
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
+
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 12-AUG-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.0.0, 16-AUG-1994 (KRG) */
 

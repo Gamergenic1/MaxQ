@@ -3,10 +3,10 @@
 -Procedure lx4sgn_c (Scan for signed integer)
 
 -Abstract
- 
-   Scan a string from a specified starting position for the 
-   end of a signed integer.  
- 
+
+   Scan a string from a specified starting position for the
+   end of a signed integer.
+
 -Disclaimer
 
    THIS SOFTWARE AND ANY RELATED MATERIALS WERE CREATED BY THE
@@ -33,13 +33,13 @@
    ACTIONS OF RECIPIENT IN THE USE OF THE SOFTWARE.
 
 -Required_Reading
- 
-   None. 
- 
+
+   None.
+
 -Keywords
- 
-   PARSING 
- 
+
+   PARSING
+
 */
 
    #include "SpiceUsr.h"
@@ -50,34 +50,34 @@
    void lx4sgn_c ( ConstSpiceChar   * string,
                    SpiceInt           first,
                    SpiceInt         * last,
-                   SpiceInt         * nchar  ) 
+                   SpiceInt         * nchar  )
 
 /*
 
 -Brief_I/O
- 
-   VARIABLE  I/O  DESCRIPTION 
-   --------  ---  -------------------------------------------------- 
+
+   VARIABLE  I/O  DESCRIPTION
+   --------  ---  --------------------------------------------------
    string     I   Any character string.
    first      I   First character to scan from in string.
    last       O   Last character that is part of a signed integer.
-   nchar      O   Number of characters in the signed integer. 
- 
+   nchar      O   Number of characters in the signed integer.
+
 -Detailed_Input
- 
-   string      is any character string. 
- 
-   first       is the location in the string to beginning scanning 
-               for a signed integer.  It is assumed that the 
-               signed integer begins at first.  
+
+   string      is any character string.
+
+   first       is the location in the string to beginning scanning
+               for a signed integer. It is assumed that the
+               signed integer begins at first.
 
                The normal range of first is 0 : strlen(string)-1.
- 
+
 -Detailed_Output
- 
+
    last        is the last character at or after first such that the
                substring ranging from string[first] through
-               string[last] is a signed integer.  If there is no such
+               string[last] is a signed integer. If there is no such
                substring, last will be returned with the value first-1.
 
                If a signed integer is found, last will be in the
@@ -85,54 +85,54 @@
 
 
    nchar       is the number of characters in the signed integer that
-               begins at index first and ends at last.  If there is no
+               begins at index first and ends at last. If there is no
                such string nchar will be given the value 0.
- 
+
 -Parameters
- 
-   None. 
- 
+
+   None.
+
 -Exceptions
-  
-   1) If first is beyond either end of the string, then 
-      last will be returned with the value first-1 and nchar 
-      will be returned with the value 0. 
- 
-   2) If string[first] is not part of a signed integer then last 
-      will be returned with the value first-1 and nchar will be 
-      returned with the value 0. 
 
-   3) If the input string pointer is null, the error SPICE(NULLPOINTER)
-      will be signaled.
+   1)  If `first' is beyond either end of the string, then `last' will be
+       returned with the value first-1 and `nchar' will be returned
+       with the value 0.
 
-   4) If the input string has length zero, last will be set to first-1
-      and nchar will be set to zero.  This case is not considered an
-      error.
- 
+   2)  If string[first] is not part of a signed integer
+       then `last' will be returned with the value first-1 and `nchar'
+       will be returned with the value 0.
+
+   3)  If the `string' input string pointer is null, the error
+       SPICE(NULLPOINTER) is signaled.
+
+   4)  If the input string has length zero, `last' will be set to first-1
+       and `nchar' will be set to zero. This case is not considered an
+       error.
+
 -Files
- 
-   None. 
- 
+
+   None.
+
 -Particulars
 
    This routine allows you to scan forward in a string to locate a
    signed integer that begins on the input character at index first.
    Note that all unsigned integers are included in the list of signed
-   integers.  The signed integers may in addition have a leading plus
+   integers. The signed integers may in addition have a leading plus
    ('+') or minus ('-') sign.
- 
+
 -Examples
- 
-   1) Suppose you believe that a string has the form 
- 
-         X%Y%Z 
- 
+
+   1) Suppose you believe that a string has the form
+
+         X%Y%Z
+
       where X, Y, and Z are signed integers of some unknown length and
       % stands for any character that cannot occur in a signed integer.
       You could use this routine to locate the signed integers in the
-      string as shown below.  We'll keep track of the beginning and
+      string as shown below. We'll keep track of the beginning and
       ending of the signed integers in the integer arrays b and e.
- 
+
 
          #include <string.h>
          #include "SpiceUsr.h"
@@ -159,39 +159,43 @@
             }
             else
             {
-               first++;  
+               first++;
             }
          }
-          
 
 -Restrictions
- 
-   None. 
- 
--Author_and_Institution
- 
-   N.J. Bachman    (JPL)
-   W.L. Taber      (JPL) 
- 
+
+   None.
+
 -Literature_References
- 
-   None. 
- 
+
+   None.
+
+-Author_and_Institution
+
+   N.J. Bachman        (JPL)
+   J. Diaz del Rio     (ODC Space)
+   W.L. Taber          (JPL)
+
 -Version
- 
+
+   -CSPICE Version 1.0.1, 04-AUG-2021 (JDR)
+
+       Edited the header to comply with NAIF standard.
+
    -CSPICE Version 1.0.0, 18-AUG-2002 (NJB) (WLT)
 
 -Index_Entries
- 
-   Scan a string for a signed integer. 
- 
+
+   Scan a string for a signed integer.
+
 -&
 */
 
 { /* Begin lx4sgn_c */
 
    /*
-   Local variables 
+   Local variables
    */
    SpiceInt                locFirst;
    SpiceInt                len;
@@ -206,7 +210,7 @@
 
 
    /*
-   We're done if the input string has zero length. 
+   We're done if the input string has zero length.
    */
    len = strlen(string);
 
@@ -220,12 +224,12 @@
 
 
    /*
-   Map first to a Fortran-style index. 
+   Map first to a Fortran-style index.
    */
    locFirst = first + 1;
 
    /*
-   Call the f2c'd routine. 
+   Call the f2c'd routine.
    */
    lx4sgn_ ( ( char    * ) string,
              ( integer * ) &locFirst,
@@ -234,7 +238,7 @@
              ( ftnlen    ) len      );
 
    /*
-   Map last to a C-style index. 
+   Map last to a C-style index.
    */
 
    (*last)--;

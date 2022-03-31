@@ -685,25 +685,26 @@ static integer c__1 = 1;
     static integer endrec, loccch;
     extern /* Subroutine */ int cleari_(integer *, integer *);
     static char locdas[128];
-    static integer loccrc, dirrec[256];
+    static integer dirrec[256], loccrc;
     static char locifn[60];
     extern integer lnknfn_(integer *);
     static char format[8], idword[8], locfmt[8];
     static integer fhlist[5006], findex, inqsta, iostat, dsctyp, ldrmax, 
-	    locrrc, locrch, maxadr, number, nxtdir;
+	    locrrc, locrch, maxadr, number;
     extern integer lnknxt_(integer *, integer *);
     extern logical return_(void);
-    static integer nxtrec;
+    static integer nxtdir, nxtrec;
     extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), lnkini_(integer *, integer *);
+	    ftnlen);
     static integer curtyp;
-    extern /* Subroutine */ int ssizei_(integer *, integer *), setmsg_(char *,
-	     ftnlen), errint_(char *, integer *, ftnlen), lnkilb_(integer *, 
-	    integer *, integer *), insrti_(integer *, integer *), dasioi_(
-	    char *, integer *, integer *, integer *, ftnlen), lnkfsl_(integer 
-	    *, integer *, integer *);
+    extern /* Subroutine */ int lnkini_(integer *, integer *), ssizei_(
+	    integer *, integer *), setmsg_(char *, ftnlen), errint_(char *, 
+	    integer *, ftnlen), lnkilb_(integer *, integer *, integer *), 
+	    insrti_(integer *, integer *), dasioi_(char *, integer *, integer 
+	    *, integer *, ftnlen);
     static integer prvtyp;
-    extern /* Subroutine */ int removi_(integer *, integer *);
+    extern /* Subroutine */ int lnkfsl_(integer *, integer *, integer *), 
+	    removi_(integer *, integer *);
     static char acc[10];
     extern /* Subroutine */ int errfnm_(char *, integer *, ftnlen);
     static integer fnb, loc, new__, pos;
@@ -754,13 +755,62 @@ static integer c__1 = 1;
 /*     UTILITY */
 
 /* $ Declarations */
+/* $ Abstract */
 
-/*     Include file das.inc */
+/*     This file contains public, global parameter declarations */
+/*     for the SPICELIB Direct Access Segregated (DAS) subsystem. */
 
-/*     This include file declares public parameters for the DAS */
-/*     subsystem. */
+/* $ Disclaimer */
 
-/*        Version 1.0.0 10-FEB-2017 (NJB) */
+/*     THIS SOFTWARE AND ANY RELATED MATERIALS WERE CREATED BY THE */
+/*     CALIFORNIA INSTITUTE OF TECHNOLOGY (CALTECH) UNDER A U.S. */
+/*     GOVERNMENT CONTRACT WITH THE NATIONAL AERONAUTICS AND SPACE */
+/*     ADMINISTRATION (NASA). THE SOFTWARE IS TECHNOLOGY AND SOFTWARE */
+/*     PUBLICLY AVAILABLE UNDER U.S. EXPORT LAWS AND IS PROVIDED "AS-IS" */
+/*     TO THE RECIPIENT WITHOUT WARRANTY OF ANY KIND, INCLUDING ANY */
+/*     WARRANTIES OF PERFORMANCE OR MERCHANTABILITY OR FITNESS FOR A */
+/*     PARTICULAR USE OR PURPOSE (AS SET FORTH IN UNITED STATES UCC */
+/*     SECTIONS 2312-2313) OR FOR ANY PURPOSE WHATSOEVER, FOR THE */
+/*     SOFTWARE AND RELATED MATERIALS, HOWEVER USED. */
+
+/*     IN NO EVENT SHALL CALTECH, ITS JET PROPULSION LABORATORY, OR NASA */
+/*     BE LIABLE FOR ANY DAMAGES AND/OR COSTS, INCLUDING, BUT NOT */
+/*     LIMITED TO, INCIDENTAL OR CONSEQUENTIAL DAMAGES OF ANY KIND, */
+/*     INCLUDING ECONOMIC DAMAGE OR INJURY TO PROPERTY AND LOST PROFITS, */
+/*     REGARDLESS OF WHETHER CALTECH, JPL, OR NASA BE ADVISED, HAVE */
+/*     REASON TO KNOW, OR, IN FACT, SHALL KNOW OF THE POSSIBILITY. */
+
+/*     RECIPIENT BEARS ALL RISK RELATING TO QUALITY AND PERFORMANCE OF */
+/*     THE SOFTWARE AND ANY RELATED MATERIALS, AND AGREES TO INDEMNIFY */
+/*     CALTECH AND NASA FOR ALL THIRD-PARTY CLAIMS RESULTING FROM THE */
+/*     ACTIONS OF RECIPIENT IN THE USE OF THE SOFTWARE. */
+
+/* $ Required_Reading */
+
+/*     DAS */
+
+/* $ Keywords */
+
+/*     None. */
+
+/* $ Restrictions */
+
+/*     None. */
+
+/* $ Author_and_Institution */
+
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+
+/* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 07-APR-2020 (JDR) */
+
+/*        Added CHARDT, DPDT and INTDT parameters. */
+
+/* -    SPICELIB Version 1.0.0, 10-FEB-2017 (NJB) */
+
+/* -& */
 
 /*     Parameter declarations follow. */
 
@@ -782,8 +832,21 @@ static integer c__1 = 1;
 /*        -- NWD double precision numbers. */
 /*        -- NWI integers. */
 /*        -- NWC characters. */
+
 /*     These parameters are named to enhance ease of maintenance of */
 /*     the code; the values should not be changed. */
+
+/*     DAS data type specifiers used in all DAS routines that require */
+/*     a data type either as input or to extract data from an output */
+/*     array. */
+
+/*     CHARDT, */
+/*     DPDT, */
+/*     INTDT    are data type specifiers which indicate CHARACTER, */
+/*              DOUBLE PRECISION, and INTEGER respectively. These */
+/*              parameters are used in all DAS routines that require a */
+/*              data type specifier. */
+
 
 /*     End of include file das.inc */
 
@@ -868,183 +931,182 @@ static integer c__1 = 1;
 /*     Source:      NAIF Program */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Entry points */
+/*     VARIABLE  I/O  ENTRY POINTS */
 /*     --------  ---  -------------------------------------------------- */
-/*     FNAME     I,O  OPR, OPW, ONW, OPN (Obsolete), HFN, FNH */
+/*     FNAME     I-O  OPR, OPW, ONW, OPN (Obsolete), HFN, FNH */
 /*     FTYPE      I   ONW */
 /*     IFNAME     I   ONW, OPN (Obsolete) */
-/*     SUM       I,O  UFS, HFS */
-/*     HANDLE    I,O  OPR, OPW, ONW, OPN (Obsolete), OPS, LLC, HLU, LUH, */
+/*     HANDLE    I-O  OPR, OPW, ONW, OPN (Obsolete), OPS, LLC, HLU, LUH, */
 /*                    HFN, FNH, HAM, SIH */
-/*     UNIT      I,O  HLU, LUH */
-/*     FREE      I,O  HFS, UFS */
-/*     LASTLA    I,O  HFS, UFS */
-/*     LASTRC    I,O  HFS, UFS */
-/*     LASTWD    I,O  HFS, UFS */
+/*     UNIT      I-O  HLU, LUH */
+/*     FREE      I-O  HFS, UFS */
+/*     LASTLA    I-O  HFS, UFS */
+/*     LASTRC    I-O  HFS, UFS */
+/*     LASTWD    I-O  HFS, UFS */
 /*     NRESVR     O   HFS */
 /*     NRESVC     O   HFS */
 /*     NCOMR      O   HFS */
 /*     NCOMC      O   HFS */
 /*     FHSET      O   HOF */
-/*     ACCESS    I,O  SIH, HAM */
+/*     ACCESS    I-O  SIH, HAM */
 /*     RECL       P   OPR, OPW, ONW, OPN (Obsolete) */
 /*     FTSIZE     P   OPR, OPW, ONW, OPN (Obsolete), LLC, HLU, LUH, HFN, */
 /*                    FNH */
 
 /* $ Detailed_Input */
 
-/*     FNAME       on input is the name of a DAS file to be opened, or */
-/*                 the name of a DAS file about which some information */
-/*                 (handle, logical unit) is requested. */
+/*     FNAME    on input is the name of a DAS file to be opened, or */
+/*              the name of a DAS file about which some information */
+/*              (handle, logical unit) is requested. */
 
-/*     FTYPE       on input is a code for the type of data that is */
-/*                 contained in the DAS file. This code has no meaning or */
-/*                 interpretation at the level of the DAS file */
-/*                 architecture, but is provided as a convenience for */
-/*                 higher level software. The maximum length for the file */
-/*                 type is four (4) characters. If the input string is */
-/*                 longer than four characters, the first nonblank */
-/*                 character and its three, at most, immediate successors */
-/*                 will be used as the file type. The file type may not */
-/*                 contain nonprinting characters, and it IS case */
-/*                 sensitive. */
+/*     FTYPE    on input is a code for the type of data that is */
+/*              contained in the DAS file. This code has no meaning or */
+/*              interpretation at the level of the DAS file */
+/*              architecture, but is provided as a convenience for */
+/*              higher level software. The maximum length for the file */
+/*              type is four (4) characters. If the input string is */
+/*              longer than four characters, the first nonblank */
+/*              character and its three, at most, immediate successors */
+/*              will be used as the file type. The file type may not */
+/*              contain nonprinting characters, and it IS case */
+/*              sensitive. */
 
-/*     IFNAME      is the internal file name for a DAS file to be */
-/*                 created. */
+/*     IFNAME   is the internal file name for a DAS file to be */
+/*              created. */
 
-/*     HANDLE      on input is the handle of a DAS file about which some */
-/*                 information (file name, logical unit) is requested, */
-/*                 or the handle of a DAS file to be closed. */
+/*     HANDLE   on input is the handle of a DAS file about which some */
+/*              information (file name, logical unit) is requested, */
+/*              or the handle of a DAS file to be closed. */
 
-/*     UNIT        on input is the logical unit connected to a DAS file */
-/*                 about which some information (file name, handle) is */
-/*                 requested. */
+/*     UNIT     on input is the logical unit connected to a DAS file */
+/*              about which some information (file name, handle) is */
+/*              requested. */
 
-/*     FREE        is the Fortran record number of the first free record */
-/*                 in a specified DAS file. */
+/*     FREE     is the Fortran record number of the first free record */
+/*              in a specified DAS file. */
 
-/*     LASTLA      is an array containing the highest current logical */
-/*                 addresses, in the specified DAS file, of data of */
-/*                 character, double precision, and integer types, in */
-/*                 that order. */
+/*     LASTLA   is an array containing the highest current logical */
+/*              addresses, in the specified DAS file, of data of */
+/*              character, double precision, and integer types, in */
+/*              that order. */
 
-/*     LASTRC      is an array containing the Fortran record numbers, in */
-/*                 the specified DAS file, of the directory records */
-/*                 containing the current last descriptors of clusters */
-/*                 of character, double precision, and integer data */
-/*                 records, in that order. */
+/*     LASTRC   is an array containing the Fortran record numbers, in */
+/*              the specified DAS file, of the directory records */
+/*              containing the current last descriptors of clusters */
+/*              of character, double precision, and integer data */
+/*              records, in that order. */
 
-/*     LASTWD      is an array containing the word positions, in the */
-/*                 specified DAS file, of the current last descriptors */
-/*                 of clusters of character, double precision, and */
-/*                 integer data records, in that order. */
+/*     LASTWD   is an array containing the word positions, in the */
+/*              specified DAS file, of the current last descriptors */
+/*              of clusters of character, double precision, and */
+/*              integer data records, in that order. */
 
-/*     ACCESS      is the type of access for which a DAS file is open. */
-/*                 The values of ACCESS may be */
+/*     ACCESS   is the type of access for which a DAS file is open. */
+/*              The values of ACCESS may be */
 
-/*                    'READ' */
-/*                    'WRITE' */
+/*                 'READ' */
+/*                 'WRITE' */
 
-/*                 Leading and trailing blanks are ignored, and case */
-/*                 is not significant. */
+/*              Leading and trailing blanks are ignored, and case */
+/*              is not significant. */
 
-/*                 DAS files that are open for writing may also be read. */
+/*              DAS files that are open for writing may also be read. */
 
 /* $ Detailed_Output */
 
-/*     FNAME       on output is the name of a DAS file for which */
-/*                 the corresponding handle or logical unit has been */
-/*                 supplied. */
+/*     FNAME    on output is the name of a DAS file for which */
+/*              the corresponding handle or logical unit has been */
+/*              supplied. */
 
+/*     HANDLE   on output is the handle of a DAS file for which */
+/*              the corresponding file name or logical unit has been */
+/*              supplied. */
 
-/*     HANDLE      on output is the handle of a DAS file for which */
-/*                 the corresponding file name or logical unit has been */
-/*                 supplied. */
+/*     UNIT     on output is the logical unit connected to a DAS file */
+/*              for which the corresponding file name or handle has */
+/*              been supplied. */
 
-/*     UNIT        on output is the logical unit connected to a DAS file */
-/*                 for which the corresponding file name or handle has */
-/*                 been supplied. */
+/*     FREE     is the Fortran record number of the first free record */
+/*              in a specified DAS file. */
 
-/*     FREE        is the Fortran record number of the first free record */
-/*                 in a specified DAS file. */
+/*     LASTLA   is an array containing the highest current logical */
+/*              addresses, in the specified DAS file, of data of */
+/*              character, double precision, and integer types, in */
+/*              that order. */
 
-/*     LASTLA      is an array containing the highest current logical */
-/*                 addresses, in the specified DAS file, of data of */
-/*                 character, double precision, and integer types, in */
-/*                 that order. */
+/*     LASTRC   is an array containing the Fortran record numbers, in */
+/*              the specified DAS file, of the directory records */
+/*              containing the current last descriptors of clusters */
+/*              of character, double precision, and integer data */
+/*              records, in that order. */
 
-/*     LASTRC      is an array containing the Fortran record numbers, in */
-/*                 the specified DAS file, of the directory records */
-/*                 containing the current last descriptors of clusters */
-/*                 of character, double precision, and integer data */
-/*                 records, in that order. */
+/*     LASTWD   is an array containing the word positions, in the */
+/*              specified DAS file, of the current last descriptors */
+/*              of clusters of character, double precision, and */
+/*              integer data records, in that order. */
 
-/*     LASTWD      is an array containing the word positions, in the */
-/*                 specified DAS file, of the current last descriptors */
-/*                 of clusters of character, double precision, and */
-/*                 integer data records, in that order. */
+/*     NRESVR   is the number of reserved records in a specified DAS */
+/*              file. */
 
-/*     NRESVR      is the number of reserved records in a specified DAS */
-/*                 file. */
+/*     NRESVC   is the number of characters in use in the reserved */
+/*              record area of a specified DAS file. */
 
-/*     NRESVC      is the number of characters in use in the reserved */
-/*                 record area of a specified DAS file. */
+/*     NCOMR    is the number of comment records in a specified DAS */
+/*              file. */
 
-/*     NCOMR       is the number of comment records in a specified DAS */
-/*                 file. */
+/*     NCOMC    is the number of characters in use in the comment area */
+/*              of a specified DAS file. */
 
-/*     NCOMC       is the number of characters in use in the comment area */
-/*                 of a specified DAS file. */
-
-/*     FHSET       is a SPICELIB set containing the handles of the */
-/*                 currently open DAS files. */
+/*     FHSET    is a SPICE set containing the handles of the */
+/*              currently open DAS files. */
 
 /* $ Parameters */
 
-/*     RECL        is the record length of a DAS file. Each record */
-/*                 must be large enough to hold the greatest of NWI */
-/*                 integers, NWD double precision numbers, or NWC */
-/*                 characters, whichever is greater.  The units in which */
-/*                 the record length must be specified vary from */
-/*                 environment to environment. For example, VAX Fortran */
-/*                 requires record lengths to be specified in longwords, */
-/*                 where two longwords equal one double precision */
-/*                 number. */
+/*     RECL     is the record length of a DAS file. Each record */
+/*              must be large enough to hold the greatest of NWI */
+/*              integers, NWD double precision numbers, or NWC */
+/*              characters, whichever is greater. The units in which */
+/*              the record length must be specified vary from */
+/*              environment to environment. For example, VAX Fortran */
+/*              requires record lengths to be specified in longwords, */
+/*              where two longwords equal one double precision */
+/*              number. */
 
-/*     FTSIZE      is the maximum number of DAS files that a user can */
-/*                 have open simultaneously. This includes any files used */
-/*                 by the DAS system when closing files opened with write */
-/*                 access. Currently, DASCLS (via DASSDR) opens a scratch */
-/*                 DAS file using DASOPS to segregate (sort by data */
-/*                 type) the records in the DAS file being closed. */
-/*                 Segregating the data by type improves the speed of */
-/*                 access to the data. */
+/*     FTSIZE   is the maximum number of DAS files that a user can */
+/*              have open simultaneously. This includes any files used */
+/*              by the DAS system when closing files opened with write */
+/*              access. Currently, DASCLS (via DASSDR) opens a scratch */
+/*              DAS file using DASOPS to segregate (sort by data */
+/*              type) the records in the DAS file being closed. */
+/*              Segregating the data by type improves the speed of */
+/*              access to the data. */
 
-/*                 In order to avoid the possibility of overflowing the */
-/*                 DAS file table we recommend, when at least one DAS */
-/*                 file is open with write access, that users of this */
-/*                 software limit themselves to at most FTSIZE - 2  other */
-/*                 open DAS files. If no files are to be open with write */
-/*                 access, then users may open FTSIZE files with no */
-/*                 possibility of overflowing the DAS file table. */
+/*              In order to avoid the possibility of overflowing the */
+/*              DAS file table we recommend, when at least one DAS */
+/*              file is open with write access, that users of this */
+/*              software limit themselves to at most FTSIZE - 2  other */
+/*              open DAS files. If no files are to be open with write */
+/*              access, then users may open FTSIZE files with no */
+/*              possibility of overflowing the DAS file table. */
 
 /* $ Exceptions */
 
-/*     1) If DASFM is called directly, the error SPICE(BOGUSENTRY) */
-/*        is signaled. */
+/*     1)  If DASFM is called directly, the error SPICE(BOGUSENTRY) */
+/*         is signaled. */
 
-/*     2) See entry points DASOPR, DASOPW, DASONW, DASOPN, DASOPS, */
-/*        DASLLC, DASHFS, DASUFS, DASHLU, DASLUH, DASHFN, DASFNH, DASHOF, */
-/*        and DASSIH for exceptions specific to those entry points. */
+/*     2)  See entry points DASOPR, DASOPW, DASONW, DASOPN, DASOPS, */
+/*         DASLLC, DASHFS, DASUFS, DASHLU, DASLUH, DASHFN, DASFNH, */
+/*         DASHOF, and DASSIH for exceptions specific to those entry */
+/*         points. */
 
 /* $ Files */
 
 /*     This set of routines is intended to support the creation, */
 /*     updating, and reading of Fortran direct access files that */
-/*     conform to the DAS file format.  This format is described in */
+/*     conform to the DAS file format. This format is described in */
 /*     detail in the DAS Required Reading. */
 
-/*     See FTSIZE in the $ Parameters section for a description of a */
+/*     See FTSIZE in the $Parameters section for a description of a */
 /*     potential problem with overflowing the DAS file table when at */
 /*     least one DAS file is opened with write access. */
 
@@ -1087,12 +1149,12 @@ static integer c__1 = 1;
 /*     Several files may be opened for use simultaneously. (This makes */
 /*     it convenient to combine data from several files to produce a */
 /*     single result, or to route subsets of data from a single source */
-/*     to multiple DAS files.)  As each DAS file is opened, it is */
+/*     to multiple DAS files.) As each DAS file is opened, it is */
 /*     assigned a file handle, which is used to keep track of the file */
 /*     internally, and which is used by the calling program to refer to */
 /*     the file in all subsequent calls to DAS routines. */
 
-/*     DAS files may be opened for either read or write access.  Files */
+/*     DAS files may be opened for either read or write access. Files */
 /*     open for read access may not be changed in any way. Files opened */
 /*     for write access may be both read from and written to. */
 
@@ -1110,24 +1172,24 @@ static integer c__1 = 1;
 /*     compatibility, but its use in new software development is strongly */
 /*     discouraged. */
 
-/*     Entry point DASOPS creates a new scratch DAS file.  As with new */
+/*     Entry point DASOPS creates a new scratch DAS file. As with new */
 /*     permanent files, these files are opened for write access.  DAS */
 /*     files opened by DASOPS are automatically deleted when they are */
 /*     closed. */
 
 /*     Entry point DASLLC is used by DASCLS ( DAS, close file ) to close */
 /*     an open DAS file and update DASFM's bookkeeping information */
-/*     accordingly.  DASCLS provides the only official means of closing */
+/*     accordingly. DASCLS provides the only official means of closing */
 /*     a DAS file that is currently open. Closing a DAS file any other */
 /*     way (for example, by determining its logical unit and using the */
 /*     Fortran CLOSE statement directly) may affect your calling program */
-/*     in mysterious ways.  Normally, DASLLC should not be called by */
+/*     in mysterious ways. Normally, DASLLC should not be called by */
 /*     non-SPICELIB routines; these should call DASCLS instead. */
 
 /*     Entry point DASHFS allows you to obtain a file summary for any */
 /*     DAS file that is currently open, without calling DASRFR to */
-/*     re-read the file record.  Entry point DASUFS can be used to */
-/*     update a file summary at run-time.  Normally, there is no */
+/*     re-read the file record. Entry point DASUFS can be used to */
+/*     update a file summary at run-time. Normally, there is no */
 /*     need for routines outside of SPICELIB to modify a DAS file's */
 /*     summary. */
 
@@ -1135,7 +1197,7 @@ static integer c__1 = 1;
 /*     a DAS file has been opened for. */
 
 /*     Entry point DASHOF allows you to determine which DAS files are */
-/*     open at any time.  In particular, you can use DASHOF to determine */
+/*     open at any time. In particular, you can use DASHOF to determine */
 /*     whether any file handle points to an open DAS file. */
 
 /*     Entry point DASSIH signals errors when it is supplied with invalid */
@@ -1150,15 +1212,16 @@ static integer c__1 = 1;
 
 /* $ Examples */
 
-/*     See entry points DASOPR, DASOPW, DASONW, DASOPN (Obsolete), */
-/*     DASLLC, DASHFS, DASUFS, DASHLU, DASLUH, DASHFN, DASFNH, DASHAM, */
-/*     DASHOF, and DASSIH for examples specific to those entry points. */
+/*     See $Examples in entry points DASOPR, DASOPW, DASONW, */
+/*     DASOPN (Obsolete), DASLLC, DASHFS, DASUFS, DASHLU, DASLUH, */
+/*     DASHFN, DASFNH, DASHAM, DASHOF, and DASSIH for examples specific */
+/*     to those entry points. */
 
 /* $ Restrictions */
 
-/*     1) The value of parameter RECL may need to be changed when DASFM */
-/*        and its entry points are ported to a new environment (CPU and */
-/*        compiler). */
+/*     1)  The value of parameter RECL may need to be changed when DASFM */
+/*         and its entry points are ported to a new environment (CPU and */
+/*         compiler). */
 
 /* $ Literature_References */
 
@@ -1166,14 +1229,29 @@ static integer c__1 = 1;
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     K.R. Gehringer  (JPL) */
-/*     H.A. Neilan     (JPL) */
-/*     W.L. Taber      (JPL) */
-/*     F.S. Turner     (JPL) */
-/*     I.M. Underwood  (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
+/*     H.A. Neilan        (JPL) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     F.S. Turner        (JPL) */
+/*     I.M. Underwood     (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 8.1.0, 28-NOV-2021 (BVS) */
+
+/*        Updated for MAC-OSX-M1-64BIT-CLANG_C. */
+
+/* -    SPICELIB Version 8.0.1, 24-AUG-2021 (JDR) */
+
+/*        Edited the header of the DASFM umbrella routine and all its */
+/*        entry points. */
+
+/*        Removed non-existent argument "SUM" from the umbrella's */
+/*        $Brief_I/O section. */
 
 /* -    SPICELIB Version 8.0.0, 06-APR-2016 (NJB) */
 
@@ -1188,7 +1266,7 @@ static integer c__1 = 1;
 /*           Corrected miscellaneous spelling errors in comments */
 /*           throughout this file. */
 
-/* -    SPICELIB Version 7.24.0 10-APR-2014 (NJB) */
+/* -    SPICELIB Version 7.24.0, 10-APR-2014 (NJB) */
 
 /*        Added initializers for file table arrays. This was done */
 /*        to suppress compiler warnings. Deleted declaration of */
@@ -1313,7 +1391,7 @@ static integer c__1 = 1;
 
 /* -    SPICELIB Version 6.0.2, 21-FEB-2003 (NJB) */
 
-/*        Corrected inline comment in DASLLC:  determination of */
+/*        Corrected inline comment in DASLLC: determination of */
 /*        whether file is open is done by searching the handle column of */
 /*        the file table, not the unit column. */
 
@@ -1331,40 +1409,40 @@ static integer c__1 = 1;
 
 /*        See their headers and code for the details of the changes. */
 
-/*        Bug fix:  removed local buffering of the DAS file ID word */
+/*        Bug fix: removed local buffering of the DAS file ID word */
 /*        and the internal file name, as this was causing DASWFR */
 /*        to exhibit improper behavior. */
 
-/*        Bug fix:  missing call to CHKIN was added to an error */
-/*        handling branch in entry point DASUFS.  This call is */
+/*        Bug fix: missing call to CHKIN was added to an error */
+/*        handling branch in entry point DASUFS. This call is */
 /*        required because DASUFS uses discovery check-in. */
 
 /* -    SPICELIB Version 5.0.4, 08-OCT-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitly given.  New */
+/*        environments are now explicitly given. New */
 /*        environments are WIN-NT */
 
 /* -    SPICELIB Version 5.0.3, 16-SEP-1999 (NJB) */
 
-/*        CSPICE environments were added.  Some typos were corrected. */
+/*        CSPICE environments were added. Some typos were corrected. */
 
 /* -    SPICELIB Version 5.0.2, 28-JUL-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitly given.  New */
+/*        environments are now explicitly given. New */
 /*        environments are PC-DIGITAL, SGI-O32 and SGI-N32. */
 
 /* -    SPICELIB Version 5.0.1, 18-MAR-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitly given.  Previously, */
+/*        environments are now explicitly given. Previously, */
 /*        environments such as SUN-SUNOS and SUN-SOLARIS were implied */
 /*        by the environment label SUN. */
 
 /* -    SPICELIB Version 5.0.0, 05-APR-1998 (NJB) */
 
-/*        Added references to the PC-LINUX environment.  Repaired some */
+/*        Added references to the PC-LINUX environment. Repaired some */
 /*        format errors involving placement of comment markers in */
 /*        column 1. */
 
@@ -1374,11 +1452,11 @@ static integer c__1 = 1;
 
 /* -    SPICELIB Version 4.0.0, 31-AUG-1995 (NJB) */
 
-/*        Changed argument list of the entry point DASONW.  The input */
+/*        Changed argument list of the entry point DASONW. The input */
 /*        argument NCOMR, which indicates the number of comment records */
 /*        to reserve, was added to the argument list. */
 
-/* -    SPICELIB Version 3.1.0, 5-JAN-1995 (HAN) */
+/* -    SPICELIB Version 3.1.0, 05-JAN-1995 (HAN) */
 
 /*        Removed Sun Solaris environment since it is now the same */
 /*        as the Sun OS 4.1.x environment. */
@@ -1431,12 +1509,12 @@ static integer c__1 = 1;
 /*        FTP Validation: */
 
 /*        The file record now contains a sequence of characters */
-/*        commonly corrupted by improper FTP transfers.  These */
+/*        commonly corrupted by improper FTP transfers. These */
 /*        characters will be examined by the handle manager when */
 /*        existing files are opened. */
 
 /*        FTIDW and FTIFN have been removed from the elements of */
-/*        the DAS file table.  Their presence and use in DASUFS */
+/*        the DAS file table. Their presence and use in DASUFS */
 /*        was causing DASWFR difficulties in updating the internal */
 /*        filename under situations where changes to the comment and */
 /*        reserved record parameters in the file record were updated. */
@@ -1451,9 +1529,9 @@ static integer c__1 = 1;
 
 /*           1) Added variable FTYPE to the SUBROUTINE declaration, and */
 /*              added appropriate entries for this variable in the */
-/*              $Brief_I/O and $ Detailed_Input sections of the header. */
+/*              $Brief_I/O and $Detailed_Input sections of the header. */
 
-/*           2) Removed erroneous references to OPC from the $ Brief_I/O */
+/*           2) Removed erroneous references to OPC from the $Brief_I/O */
 /*              section. */
 
 /*           3) Added a new entry point, DASONW, which will support the */
@@ -1462,7 +1540,7 @@ static integer c__1 = 1;
 /*              makes the entry point DASOPN obsolete. */
 
 /*           4) Added a description of the new entry point DASONW to the */
-/*              $ Particulars section. Also added a statement that the */
+/*              $Particulars section. Also added a statement that the */
 /*              entry point DASOPN has been made obsolete by this new */
 /*              entry point, and its use in new code development is */
 /*              discouraged. */
@@ -1500,7 +1578,7 @@ static integer c__1 = 1;
 /*              to obtain information about a file in the entry points: */
 /*              DASOPR, DASOPW, DASONW, and DASOPN. */
 
-/*          12) Modified the description of FTSIZE in the $ Parameters */
+/*          12) Modified the description of FTSIZE in the $Parameters */
 /*              section to reflect the possibility of overflowing the */
 /*              DAS file table when at least one DAS file had been */
 /*              opened with write access. */
@@ -1748,21 +1826,21 @@ L_dasopr:
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     FNAME      I   Name of a DAS file to be opened. */
 /*     HANDLE     O   Handle assigned to the opened DAS file. */
 
 /* $ Detailed_Input */
 
-/*     FNAME       is the name of a DAS file to be opened with read */
-/*                 access. */
+/*     FNAME    is the name of a DAS file to be opened with read */
+/*              access. */
 
 /* $ Detailed_Output */
 
-/*     HANDLE      is the handle that is  associated with the file. This */
-/*                 handle is used to identify the file in subsequent */
-/*                 calls to other DAS routines. */
+/*     HANDLE   is the handle that is  associated with the file. This */
+/*              handle is used to identify the file in subsequent */
+/*              calls to other DAS routines. */
 
 /* $ Parameters */
 
@@ -1770,37 +1848,38 @@ L_dasopr:
 
 /* $ Exceptions */
 
-/*     1) If the input filename is blank, the error SPICE(BLANKFILENAME) */
-/*        will be signaled. */
+/*     1)  If the input filename is blank, the error */
+/*         SPICE(BLANKFILENAME) is signaled. */
 
-/*     2) If the specified file does not exist, the error */
-/*        SPICE(FILENOTFOUND) will be signaled. */
+/*     2)  If the specified file does not exist, the error */
+/*         SPICE(FILENOTFOUND) is signaled. */
 
-/*     3) If the specified file has already been opened for read */
-/*        access, the handle already associated with the file is */
-/*        returned. */
+/*     3)  If the specified file has already been opened for read */
+/*         access, the handle already associated with the file is */
+/*         returned. */
 
-/*     4) If the specified file has already been opened for write */
-/*        access, the error SPICE(DASRWCONFLICT) is signaled. */
+/*     4)  If the specified file has already been opened for write */
+/*         access, the error SPICE(DASRWCONFLICT) is signaled. */
 
-/*     5) If the specified file has already been opened by a non-DAS */
-/*        routine, the error SPICE(DASIMPROPOPEN) is signaled. */
+/*     5)  If the specified file has already been opened by a non-DAS */
+/*         routine, the error SPICE(DASIMPROPOPEN) is signaled. */
 
-/*     6) If the specified file cannot be opened without exceeding */
-/*        the maximum allowed number of open DAS files, the error */
-/*        SPICE(DASFTFULL) is signaled. */
+/*     6)  If the specified file cannot be opened without exceeding */
+/*         the maximum allowed number of open DAS files, the error */
+/*         SPICE(DASFTFULL) is signaled. */
 
-/*     7) If the named file cannot be opened properly, the error */
-/*        SPICE(DASOPENFAIL) is signaled. */
+/*     7)  If the named file cannot be opened properly, an error is */
+/*         signaled by a routine in the call tree of this routine. */
 
-/*     8) If the file record cannot be read, the error */
-/*        SPICE(FILEREADFAILED) will be signaled. */
+/*     8)  If the file record cannot be read, the error */
+/*         SPICE(FILEREADFAILED) is signaled. */
 
-/*     9) If the specified file is not a DAS file, as indicated by the */
-/*        file's ID word, the error SPICE(NOTADASFILE) is signaled. */
+/*     9)  If the specified file is not a DAS file, as indicated by the */
+/*         file's ID word, an error is signaled by a routine in the call */
+/*         tree of this routine. */
 
-/*    10) If no logical units are available, the error will be */
-/*        signaled by routines called by this routine. */
+/*     10) If no logical units are available, an error is signaled */
+/*         by a routine in the call tree of this routine. */
 
 /* $ Files */
 
@@ -1813,9 +1892,140 @@ L_dasopr:
 
 /* $ Examples */
 
-/*     1)  Open the existing DAS file TEST.DAS for reading. */
+/*     The numerical results shown for this example may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
 
-/*            CALL DASOPR ( 'TEST.DAS', HANDLE ) */
+/*     1) Dump several parameters from the first DLA segment of a DSK */
+/*        file. Note that DSK files are based on DAS. The segment is */
+/*        assumed to be of type 2. */
+
+/*        Example code begins here. */
+
+
+/*              PROGRAM DASOPR_EX1 */
+/*              IMPLICIT NONE */
+
+/*              INCLUDE 'dla.inc' */
+/*              INCLUDE 'dskdsc.inc' */
+/*              INCLUDE 'dsk02.inc' */
+
+/*        C */
+/*        C     Local parameters */
+/*        C */
+/*              INTEGER               FILSIZ */
+/*              PARAMETER           ( FILSIZ = 255 ) */
+
+/*              INTEGER               LNSIZE */
+/*              PARAMETER           ( LNSIZE = 80 ) */
+
+/*        C */
+/*        C     Local variables */
+/*        C */
+/*              CHARACTER*(FILSIZ)    DSK */
+/*              CHARACTER*(LNSIZE)    OUTLIN */
+
+/*              DOUBLE PRECISION      VOXORI ( 3 ) */
+/*              DOUBLE PRECISION      VOXSIZ */
+/*              DOUBLE PRECISION      VTXBDS ( 2, 3 ) */
+
+/*              INTEGER               CGSCAL */
+/*              INTEGER               DLADSC ( DLADSZ ) */
+/*              INTEGER               HANDLE */
+/*              INTEGER               NP */
+/*              INTEGER               NV */
+/*              INTEGER               NVXTOT */
+/*              INTEGER               VGREXT ( 3 ) */
+/*              INTEGER               VOXNPL */
+/*              INTEGER               VOXNPT */
+/*              INTEGER               VTXNPL */
+
+/*              LOGICAL               FOUND */
+
+
+/*        C */
+/*        C     Prompt for the name of the DSK to read. */
+/*        C */
+/*              CALL PROMPT ( 'Enter DSK name > ', DSK ) */
+/*        C */
+/*        C     Open the DSK file for read access. */
+/*        C     We use the DAS-level interface for */
+/*        C     this function. */
+/*        C */
+/*              CALL DASOPR ( DSK, HANDLE ) */
+
+/*        C */
+/*        C     Begin a forward search through the */
+/*        C     kernel, treating the file as a DLA. */
+/*        C     In this example, it's a very short */
+/*        C     search. */
+/*        C */
+/*              CALL DLABFS ( HANDLE, DLADSC, FOUND ) */
+
+/*              IF ( .NOT. FOUND ) THEN */
+/*        C */
+/*        C        We arrive here only if the kernel */
+/*        C        contains no segments.  This is */
+/*        C        unexpected, but we're prepared for it. */
+/*        C */
+/*                 CALL SETMSG ( 'No segments found ' */
+/*             .   //            'in DSK file #.'    ) */
+/*                 CALL ERRCH  ( '#',  DSK           ) */
+/*                 CALL SIGERR ( 'SPICE(NODATA)'     ) */
+
+/*              END IF */
+
+/*        C */
+/*        C     If we made it this far, DLADSC is the */
+/*        C     DLA descriptor of the first segment. */
+/*        C */
+/*        C     Read and display type 2 bookkeeping data. */
+/*        C */
+/*              CALL DSKB02 ( HANDLE, DLADSC, NV,     NP,     NVXTOT, */
+/*             .              VTXBDS, VOXSIZ, VOXORI, VGREXT, CGSCAL, */
+/*             .              VTXNPL, VOXNPT, VOXNPL                 ) */
+
+/*        C */
+/*        C     Show vertex and plate counts. */
+/*        C */
+/*              OUTLIN = 'Number of vertices:                 #' */
+/*              CALL REPMI  ( OUTLIN, '#', NV, OUTLIN ) */
+/*              CALL TOSTDO ( OUTLIN ) */
+
+/*              OUTLIN = 'Number of plates:                   #' */
+/*              CALL REPMI  ( OUTLIN, '#', NP, OUTLIN ) */
+/*              CALL TOSTDO ( OUTLIN ) */
+
+/*              OUTLIN = 'Voxel edge length (km):             #' */
+/*              CALL REPMF  ( OUTLIN, '#', VOXSIZ, 6, 'E', OUTLIN ) */
+/*              CALL TOSTDO ( OUTLIN ) */
+
+/*              OUTLIN = 'Number of voxels:                   #' */
+/*              CALL REPMI  ( OUTLIN, '#', NVXTOT, OUTLIN ) */
+/*              CALL TOSTDO ( OUTLIN ) */
+
+/*        C */
+/*        C     Close the kernel.  This isn't necessary in a stand- */
+/*        C     alone program, but it's good practice in subroutines */
+/*        C     because it frees program and system resources. */
+/*        C */
+/*              CALL DASCLS ( HANDLE ) */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, using the DSK file named phobos512.bds, the output */
+/*        was: */
+
+
+/*        Enter DSK name > phobos512.bds */
+/*        Number of vertices:                 1579014 */
+/*        Number of plates:                   3145728 */
+/*        Voxel edge length (km):             1.04248E-01 */
+/*        Number of voxels:                   11914500 */
+
 
 /* $ Restrictions */
 
@@ -1827,13 +2037,25 @@ L_dasopr:
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     K.R. Gehringer  (JPL) */
-/*     W.L. Taber      (JPL) */
-/*     F.S. Turner     (JPL) */
-/*     I.M. Underwood  (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
+/*     H.A. Neilan        (JPL) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     F.S. Turner        (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 8.0.1, 19-JUL-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
+/*        Added code example using example from DSKB02. */
+
+/*        Updated $Exceptions entries #7 and #9: error handling for the */
+/*        DAS open failure and "file is not a DAS file" cases is now */
+/*        performed by lower level code (ZZDDHOPN). */
 
 /* -    SPICELIB Version 8.0.0, 30-JUL-2014 (NJB) */
 
@@ -1850,38 +2072,38 @@ L_dasopr:
 /* -    SPICELIB Version 6.0.0, 14-DEC-2001 (FST) */
 
 /*        The DAS file ID word and internal file name are no longer */
-/*        buffered by this routine.  See DASFM's Revisions section */
+/*        buffered by this routine. See DASFM's $Revisions section */
 /*        for details. */
 
 /* -    SPICELIB Version 5.0.4, 08-OCT-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitly given.  New */
+/*        environments are now explicitly given. New */
 /*        environments are WIN-NT */
 
 /* -    SPICELIB Version 5.0.3, 16-SEP-1999 (NJB) */
 
-/*        CSPICE environments were added.  Some typos were corrected. */
+/*        CSPICE environments were added. Some typos were corrected. */
 
 /* -    SPICELIB Version 5.0.2, 28-JUL-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitly given.  New */
+/*        environments are now explicitly given. New */
 /*        environments are PC-DIGITAL, SGI-O32 and SGI-N32. */
 
 /* -    SPICELIB Version 5.0.1, 18-MAR-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitly given.  Previously, */
+/*        environments are now explicitly given. Previously, */
 /*        environments such as SUN-SUNOS and SUN-SOLARIS were implied */
 /*        by the environment label SUN. */
 
 /* -    SPICELIB Version 3.0.0, 15-JUN-1994 (KRG) */
 
 /*        Modified the entry point to use the new file ID format which */
-/*        contains a mnemonic code for the data type.  Added error */
-/*        checks on file names.  Fixed bug involving use of sign of */
-/*        file handles.  Improved some error messages.  (delete rest) */
+/*        contains a mnemonic code for the data type. Added error */
+/*        checks on file names. Fixed bug involving use of sign of */
+/*        file handles. Improved some error messages. (delete rest) */
 
 /* -    SPICELIB Version 2.0.0, 11-APR-1994 (HAN) */
 
@@ -1899,6 +2121,10 @@ L_dasopr:
 
 /* -& */
 /* $ Revisions */
+
+/* -    SPICELIB Version 8.0.0, 30-JUL-2014 (NJB) */
+
+/*        Now uses DAF/DAS handle manager subsystem. */
 
 /* -    SPICELIB Version 7.0.0, 28-SEP-2005 (NJB) */
 
@@ -1994,7 +2220,7 @@ L_dasopr:
     found = FALSE_;
     while(! found && findex > 0) {
 	if (fthan[(i__1 = findex - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-		"fthan", i__1, "dasfm_", (ftnlen)1401)] == *handle) {
+		"fthan", i__1, "dasfm_", (ftnlen)1567)] == *handle) {
 	    found = TRUE_;
 	} else {
 	    findex = lnknxt_(&findex, pool);
@@ -2006,11 +2232,11 @@ L_dasopr:
 /*        of links to this file. */
 
 	ftlnk[(i__1 = findex - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("ftlnk",
-		 i__1, "dasfm_", (ftnlen)1414)] = ftlnk[(i__2 = findex - 1) < 
+		 i__1, "dasfm_", (ftnlen)1580)] = ftlnk[(i__2 = findex - 1) < 
 		5000 && 0 <= i__2 ? i__2 : s_rnge("ftlnk", i__2, "dasfm_", (
-		ftnlen)1414)] + 1;
+		ftnlen)1580)] + 1;
 	*handle = fthan[(i__1 = findex - 1) < 5000 && 0 <= i__1 ? i__1 : 
-		s_rnge("fthan", i__1, "dasfm_", (ftnlen)1415)];
+		s_rnge("fthan", i__1, "dasfm_", (ftnlen)1581)];
 
 /*        There's nothing else to do. */
 
@@ -2048,11 +2274,11 @@ L_dasopr:
     lnkilb_(&new__, &fthead, pool);
     fthead = new__;
     fthan[(i__1 = fthead - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("fthan", 
-	    i__1, "dasfm_", (ftnlen)1460)] = *handle;
+	    i__1, "dasfm_", (ftnlen)1626)] = *handle;
     ftacc[(i__1 = fthead - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("ftacc", 
-	    i__1, "dasfm_", (ftnlen)1461)] = 1;
+	    i__1, "dasfm_", (ftnlen)1627)] = 1;
     ftlnk[(i__1 = fthead - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("ftlnk", 
-	    i__1, "dasfm_", (ftnlen)1462)] = 1;
+	    i__1, "dasfm_", (ftnlen)1628)] = 1;
 
 /*     Fill in the file summary. We already know how many reserved */
 /*     records and comment records there are. To find the number of the */
@@ -2062,15 +2288,15 @@ L_dasopr:
 /*     the DAS file have been segregated. */
 
     cleari_(&c__14, &ftsum[(i__1 = fthead * 14 - 14) < 70000 && 0 <= i__1 ? 
-	    i__1 : s_rnge("ftsum", i__1, "dasfm_", (ftnlen)1472)]);
+	    i__1 : s_rnge("ftsum", i__1, "dasfm_", (ftnlen)1638)]);
     ftsum[(i__1 = fthead * 14 - 14) < 70000 && 0 <= i__1 ? i__1 : s_rnge(
-	    "ftsum", i__1, "dasfm_", (ftnlen)1474)] = locrrc;
+	    "ftsum", i__1, "dasfm_", (ftnlen)1640)] = locrrc;
     ftsum[(i__1 = fthead * 14 - 13) < 70000 && 0 <= i__1 ? i__1 : s_rnge(
-	    "ftsum", i__1, "dasfm_", (ftnlen)1475)] = locrch;
+	    "ftsum", i__1, "dasfm_", (ftnlen)1641)] = locrch;
     ftsum[(i__1 = fthead * 14 - 12) < 70000 && 0 <= i__1 ? i__1 : s_rnge(
-	    "ftsum", i__1, "dasfm_", (ftnlen)1476)] = loccrc;
+	    "ftsum", i__1, "dasfm_", (ftnlen)1642)] = loccrc;
     ftsum[(i__1 = fthead * 14 - 11) < 70000 && 0 <= i__1 ? i__1 : s_rnge(
-	    "ftsum", i__1, "dasfm_", (ftnlen)1477)] = loccch;
+	    "ftsum", i__1, "dasfm_", (ftnlen)1643)] = loccch;
 
 /*     We'll find the values for each data type separately. */
 
@@ -2085,14 +2311,14 @@ L_dasopr:
 /*        record of the current type. */
 
 	ldrec[(i__1 = type__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("ldrec", 
-		i__1, "dasfm_", (ftnlen)1493)] = 0;
+		i__1, "dasfm_", (ftnlen)1659)] = 0;
 
 /*        Find the last directory containing a descriptor of a */
 /*        record cluster of the current type. */
 
 	zzdasgri_(handle, &nrec, dirrec);
 	maxadr = dirrec[(i__1 = (type__ << 1) + 1) < 256 && 0 <= i__1 ? i__1 :
-		 s_rnge("dirrec", i__1, "dasfm_", (ftnlen)1501)];
+		 s_rnge("dirrec", i__1, "dasfm_", (ftnlen)1667)];
 	nxtdir = dirrec[1];
 	while(nxtdir > 0) {
 
@@ -2106,10 +2332,10 @@ L_dasopr:
 		return 0;
 	    }
 	    if (dirrec[(i__1 = (type__ << 1) + 1) < 256 && 0 <= i__1 ? i__1 : 
-		    s_rnge("dirrec", i__1, "dasfm_", (ftnlen)1519)] > 0) {
+		    s_rnge("dirrec", i__1, "dasfm_", (ftnlen)1685)] > 0) {
 		maxadr = dirrec[(i__1 = (type__ << 1) + 1) < 256 && 0 <= i__1 
 			? i__1 : s_rnge("dirrec", i__1, "dasfm_", (ftnlen)
-			1521)];
+			1687)];
 		nrec = nxtdir;
 	    }
 	    nxtdir = dirrec[1];
@@ -2122,15 +2348,15 @@ L_dasopr:
 /*        MAXADR is the maximum logical address of TYPE. */
 
 	ftsum[(i__1 = type__ + 5 + fthead * 14 - 15) < 70000 && 0 <= i__1 ? 
-		i__1 : s_rnge("ftsum", i__1, "dasfm_", (ftnlen)1537)] = 
+		i__1 : s_rnge("ftsum", i__1, "dasfm_", (ftnlen)1703)] = 
 		maxadr;
 	if (maxadr > 0) {
 	    ftsum[(i__1 = type__ + 8 + fthead * 14 - 15) < 70000 && 0 <= i__1 
-		    ? i__1 : s_rnge("ftsum", i__1, "dasfm_", (ftnlen)1540)] = 
+		    ? i__1 : s_rnge("ftsum", i__1, "dasfm_", (ftnlen)1706)] = 
 		    nrec;
 	} else {
 	    ftsum[(i__1 = type__ + 8 + fthead * 14 - 15) < 70000 && 0 <= i__1 
-		    ? i__1 : s_rnge("ftsum", i__1, "dasfm_", (ftnlen)1542)] = 
+		    ? i__1 : s_rnge("ftsum", i__1, "dasfm_", (ftnlen)1708)] = 
 		    0;
 	}
 
@@ -2158,31 +2384,31 @@ L_dasopr:
 /*           cluster. */
 
 	    last = dirrec[(i__1 = type__ << 1) < 256 && 0 <= i__1 ? i__1 : 
-		    s_rnge("dirrec", i__1, "dasfm_", (ftnlen)1570)] - 1;
+		    s_rnge("dirrec", i__1, "dasfm_", (ftnlen)1736)] - 1;
 	    dsctyp = dirrec[8];
 	    prvtyp = prev[(i__1 = dsctyp - 1) < 3 && 0 <= i__1 ? i__1 : 
-		    s_rnge("prev", i__1, "dasfm_", (ftnlen)1572)];
+		    s_rnge("prev", i__1, "dasfm_", (ftnlen)1738)];
 	    endrec = nrec;
 	    pos = 9;
 	    while(last < maxadr) {
 		++pos;
 		if (dirrec[(i__1 = pos - 1) < 256 && 0 <= i__1 ? i__1 : 
-			s_rnge("dirrec", i__1, "dasfm_", (ftnlen)1580)] > 0) {
+			s_rnge("dirrec", i__1, "dasfm_", (ftnlen)1746)] > 0) {
 		    curtyp = next[(i__1 = prvtyp - 1) < 3 && 0 <= i__1 ? i__1 
-			    : s_rnge("next", i__1, "dasfm_", (ftnlen)1581)];
+			    : s_rnge("next", i__1, "dasfm_", (ftnlen)1747)];
 		} else {
 		    curtyp = prev[(i__1 = prvtyp - 1) < 3 && 0 <= i__1 ? i__1 
-			    : s_rnge("prev", i__1, "dasfm_", (ftnlen)1583)];
+			    : s_rnge("prev", i__1, "dasfm_", (ftnlen)1749)];
 		}
 		if (curtyp == type__) {
 		    last += nw[(i__1 = type__ - 1) < 3 && 0 <= i__1 ? i__1 : 
-			    s_rnge("nw", i__1, "dasfm_", (ftnlen)1587)] * (
+			    s_rnge("nw", i__1, "dasfm_", (ftnlen)1753)] * (
 			    i__3 = dirrec[(i__2 = pos - 1) < 256 && 0 <= i__2 
 			    ? i__2 : s_rnge("dirrec", i__2, "dasfm_", (ftnlen)
-			    1587)], abs(i__3));
+			    1753)], abs(i__3));
 		}
 		endrec += (i__2 = dirrec[(i__1 = pos - 1) < 256 && 0 <= i__1 ?
-			 i__1 : s_rnge("dirrec", i__1, "dasfm_", (ftnlen)1590)
+			 i__1 : s_rnge("dirrec", i__1, "dasfm_", (ftnlen)1756)
 			], abs(i__2));
 		prvtyp = curtyp;
 	    }
@@ -2193,18 +2419,18 @@ L_dasopr:
 
 	    ftsum[(i__1 = type__ + 11 + fthead * 14 - 15) < 70000 && 0 <= 
 		    i__1 ? i__1 : s_rnge("ftsum", i__1, "dasfm_", (ftnlen)
-		    1599)] = pos;
+		    1765)] = pos;
 	    ldrec[(i__1 = type__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("ldrec"
-		    , i__1, "dasfm_", (ftnlen)1600)] = endrec;
+		    , i__1, "dasfm_", (ftnlen)1766)] = endrec;
 	} else {
 
 /*           There's no data of TYPE in the file. */
 
 	    ftsum[(i__1 = type__ + 11 + fthead * 14 - 15) < 70000 && 0 <= 
 		    i__1 ? i__1 : s_rnge("ftsum", i__1, "dasfm_", (ftnlen)
-		    1607)] = 0;
+		    1773)] = 0;
 	    ldrec[(i__1 = type__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("ldrec"
-		    , i__1, "dasfm_", (ftnlen)1608)] = 0;
+		    , i__1, "dasfm_", (ftnlen)1774)] = 0;
 	}
     }
 
@@ -2226,7 +2452,7 @@ L_dasopr:
 /*     Now NREC is the last directory record. */
 
     ftsum[(i__1 = fthead * 14 - 10) < 70000 && 0 <= i__1 ? i__1 : s_rnge(
-	    "ftsum", i__1, "dasfm_", (ftnlen)1642)] = max(ldrmax,nrec) + 1;
+	    "ftsum", i__1, "dasfm_", (ftnlen)1808)] = max(ldrmax,nrec) + 1;
 
 /*     Insert the new handle into our handle set. */
 
@@ -2281,21 +2507,21 @@ L_dasopw:
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     FNAME      I   Name of a DAS file to be opened. */
 /*     HANDLE     O   Handle assigned to the opened DAS file. */
 
 /* $ Detailed_Input */
 
-/*     FNAME       is the name of a DAS file to be opened with write */
-/*                 access. */
+/*     FNAME    is the name of a DAS file to be opened with write */
+/*              access. */
 
 /* $ Detailed_Output */
 
-/*     HANDLE      is the handle that is associated with the file. This */
-/*                 handle is used to identify the file in subsequent */
-/*                 calls to other DAS routines. */
+/*     HANDLE   is the handle that is associated with the file. This */
+/*              handle is used to identify the file in subsequent */
+/*              calls to other DAS routines. */
 
 /* $ Parameters */
 
@@ -2303,34 +2529,34 @@ L_dasopw:
 
 /* $ Exceptions */
 
-/*     1) If the input filename is blank, the error SPICE(BLANKFILENAME) */
-/*        will be signaled. */
+/*     1)  If the input filename is blank, an error is signaled by a */
+/*         routine in the call tree of this routine. */
 
-/*     2) If the specified file does not exist, the error */
-/*        SPICE(FILENOTFOUND) will be signaled. */
+/*     2)  If the specified file does not exist, an error is signaled by */
+/*         a routine in the call tree of this routine. */
 
-/*     3) If the specified file has already been opened, either by */
-/*        the DAS file routines or by other code, the error */
-/*        SPICE(DASOPENCONFLICT) is signaled.  Note that this */
-/*        response is not paralleled by DASOPR, which allows you */
-/*        to open a DAS file for reading even if it is already open for */
-/*        reading. */
+/*     3)  If the specified file has already been opened, either by the */
+/*         DAS file routines or by other code, an error is signaled by a */
+/*         routine in the call tree of this routine. Note that this */
+/*         response is not paralleled by DASOPR, which allows you to open */
+/*         a DAS file for reading even if it is already open for reading. */
 
-/*     4) If the specified file cannot be opened without exceeding */
-/*        the maximum allowed number of open DAS files, the error */
-/*        SPICE(DASFTFULL) is signaled. */
+/*     4)  If the specified file cannot be opened without exceeding */
+/*         the maximum allowed number of open DAS files, the error */
+/*         SPICE(DASFTFULL) is signaled. */
 
-/*     5) If the specified file cannot be opened properly, the error */
-/*        SPICE(DASOPENFAIL) is signaled. */
+/*     5)  If the specified file cannot be opened properly, an error */
+/*         is signaled by a routine in the call tree of this routine. */
 
-/*     6) If the file record cannot be read, the error */
-/*        SPICE(FILEREADFAILED) will be signaled. */
+/*     6)  If the file record cannot be read, an error is signaled by a */
+/*         routine in the call tree of this routine. */
 
-/*     7) If the specified file is not a DAS file, as indicated by the */
-/*        file's ID word, the error SPICE(NOTADASFILE) is signaled. */
+/*     7)  If the specified file is not a DAS file, as indicated by the */
+/*         file's ID word, an error is signaled by a routine in the call */
+/*         tree of this routine. */
 
-/*     8) If no logical units are available, the error will be */
-/*        signaled by routines called by this routine. */
+/*     8)  If no logical units are available, an error is signaled */
+/*         by a routine in the call tree of this routine. */
 
 /* $ Files */
 
@@ -2343,10 +2569,172 @@ L_dasopw:
 
 /* $ Examples */
 
-/*     1)  Open the existing DAS file TEST.DAS in order to add data */
-/*         to it. */
+/*     The numerical results shown for this example may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
 
-/*            CALL DASOPW ( 'TEST.DAS', HANDLE ) */
+/*     1) Create a new DAS file containing 200 integer addresses set */
+/*        to zero. Re-open the file for write access again, and write */
+/*        to its addresses 1 through 200 in random-access fashion by */
+/*        updating the file. */
+
+
+/*        Example code begins here. */
+
+
+/*              PROGRAM DASOPW_EX1 */
+/*              IMPLICIT NONE */
+
+/*        C */
+/*        C     Local Parameters */
+/*        C */
+/*              CHARACTER*(*)         DASNAM */
+/*              PARAMETER           ( DASNAM   = 'dasopw_ex1.das' ) */
+
+/*              INTEGER               IDATLN */
+/*              PARAMETER           ( IDATLN = 200 ) */
+
+/*              INTEGER               TYPELN */
+/*              PARAMETER           ( TYPELN = 4   ) */
+
+/*        C */
+/*        C     Local Variables */
+/*        C */
+/*              CHARACTER*(TYPELN)    TYPE */
+
+/*              INTEGER               HANDLE */
+/*              INTEGER               I */
+/*              INTEGER               IDATA   ( IDATLN ) */
+/*              INTEGER               J */
+
+/*        C */
+/*        C     Open a new DAS file. Reserve no comment records. */
+/*        C */
+/*              TYPE = 'TEST' */
+/*              CALL DASONW ( DASNAM, TYPE,  'TEST/DASOPW_EX1', */
+/*             .              0,      HANDLE                  ) */
+
+/*        C */
+/*        C     Append 200 integers to the file; after the data are */
+/*        C     present, we're free to update it in any order we */
+/*        C     please. (CLEARI zeros out an integer array.) */
+/*        C */
+/*              CALL CLEARI (         IDATLN, IDATA ) */
+/*              CALL DASADI ( HANDLE, IDATLN, IDATA ) */
+
+/*        C */
+/*        C     Close the file. */
+/*        C */
+/*              CALL DASCLS ( HANDLE ) */
+
+/*        C */
+/*        C     Open the file again for writing. */
+/*        C */
+/*              CALL DASOPW ( DASNAM, HANDLE ) */
+
+/*        C */
+/*        C     Reset the data array, and read the data into it. */
+/*        C */
+/*              CALL FILLI  ( -1, IDATLN, IDATA ) */
+/*              CALL DASRDI ( HANDLE,  1, IDATLN, IDATA ) */
+
+/*        C */
+/*        C     Print the contents of the file before updating it. */
+/*        C */
+/*              WRITE(*,*) 'Contents of ' // DASNAM // ' before update:' */
+/*              WRITE(*,*) ' ' */
+/*              DO I = 1, 20 */
+/*                 WRITE (*,'(10I5)') (IDATA((I-1)*10+J), J = 1, 10) */
+/*              END DO */
+
+/*        C */
+/*        C     Now the integer logical addresses 1:200 can be */
+/*        C     written to in random-access fashion. We'll fill them */
+/*        C     in reverse order. */
+/*        C */
+/*              DO I = IDATLN, 1, -1 */
+/*                 CALL DASUDI ( HANDLE, I, I, I ) */
+/*              END DO */
+
+/*        C */
+/*        C     Close the file. */
+/*        C */
+/*              CALL DASCLS ( HANDLE ) */
+
+/*        C */
+/*        C     Now make sure that we updated the file properly. */
+/*        C     Open the file for reading and dump the contents */
+/*        C     of the integer logical addresses 1:200. */
+/*        C */
+/*              CALL DASOPR ( DASNAM, HANDLE ) */
+
+/*              CALL CLEARI (             IDATLN, IDATA ) */
+/*              CALL DASRDI ( HANDLE,  1, IDATLN, IDATA ) */
+
+/*              WRITE(*,*) ' ' */
+/*              WRITE(*,*) 'Contents of ' // DASNAM // ' after update:' */
+/*              WRITE(*,*) ' ' */
+/*              DO I = 1, 20 */
+/*                 WRITE (*,'(10I5)') (IDATA((I-1)*10+J), J = 1, 10) */
+/*              END DO */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*         Contents of dasopw_ex1.das before update: */
+
+/*            0    0    0    0    0    0    0    0    0    0 */
+/*            0    0    0    0    0    0    0    0    0    0 */
+/*            0    0    0    0    0    0    0    0    0    0 */
+/*            0    0    0    0    0    0    0    0    0    0 */
+/*            0    0    0    0    0    0    0    0    0    0 */
+/*            0    0    0    0    0    0    0    0    0    0 */
+/*            0    0    0    0    0    0    0    0    0    0 */
+/*            0    0    0    0    0    0    0    0    0    0 */
+/*            0    0    0    0    0    0    0    0    0    0 */
+/*            0    0    0    0    0    0    0    0    0    0 */
+/*            0    0    0    0    0    0    0    0    0    0 */
+/*            0    0    0    0    0    0    0    0    0    0 */
+/*            0    0    0    0    0    0    0    0    0    0 */
+/*            0    0    0    0    0    0    0    0    0    0 */
+/*            0    0    0    0    0    0    0    0    0    0 */
+/*            0    0    0    0    0    0    0    0    0    0 */
+/*            0    0    0    0    0    0    0    0    0    0 */
+/*            0    0    0    0    0    0    0    0    0    0 */
+/*            0    0    0    0    0    0    0    0    0    0 */
+/*            0    0    0    0    0    0    0    0    0    0 */
+
+/*         Contents of dasopw_ex1.das after update: */
+
+/*            1    2    3    4    5    6    7    8    9   10 */
+/*           11   12   13   14   15   16   17   18   19   20 */
+/*           21   22   23   24   25   26   27   28   29   30 */
+/*           31   32   33   34   35   36   37   38   39   40 */
+/*           41   42   43   44   45   46   47   48   49   50 */
+/*           51   52   53   54   55   56   57   58   59   60 */
+/*           61   62   63   64   65   66   67   68   69   70 */
+/*           71   72   73   74   75   76   77   78   79   80 */
+/*           81   82   83   84   85   86   87   88   89   90 */
+/*           91   92   93   94   95   96   97   98   99  100 */
+/*          101  102  103  104  105  106  107  108  109  110 */
+/*          111  112  113  114  115  116  117  118  119  120 */
+/*          121  122  123  124  125  126  127  128  129  130 */
+/*          131  132  133  134  135  136  137  138  139  140 */
+/*          141  142  143  144  145  146  147  148  149  150 */
+/*          151  152  153  154  155  156  157  158  159  160 */
+/*          161  162  163  164  165  166  167  168  169  170 */
+/*          171  172  173  174  175  176  177  178  179  180 */
+/*          181  182  183  184  185  186  187  188  189  190 */
+/*          191  192  193  194  195  196  197  198  199  200 */
+
+
+/*        Note that after run completion, a new DAS file exists in the */
+/*        output directory. */
 
 /* $ Restrictions */
 
@@ -2358,13 +2746,25 @@ L_dasopw:
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     K.R. Gehringer  (JPL) */
-/*     W.L. Taber      (JPL) */
-/*     F.S. Turner     (JPL) */
-/*     I.M. Underwood  (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     F.S. Turner        (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 8.0.1, 19-JUL-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
+/*        Added complete code example. */
+
+/*        Updated $Exceptions #3 -- short error message is */
+/*        SPICE(FILEOPENCONFLICT) -- #5 and #7 -- error handling for */
+/*        the DAS open failure and "file is not a DAS file" cases is */
+/*        now performed by lower level code (ZZDDHOPN). */
 
 /* -    SPICELIB Version 8.0.0, 30-JUL-2014 (NJB) */
 
@@ -2381,29 +2781,29 @@ L_dasopw:
 /* -    SPICELIB Version 6.0.0, 14-DEC-2001 (FST) */
 
 /*        The DAS file ID word and internal file name are no longer */
-/*        buffered by this routine.  See DASFM's Revisions section */
+/*        buffered by this routine. See DASFM's $Revisions section */
 /*        for details. */
 
 /* -    SPICELIB Version 5.0.4, 08-OCT-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitly given.  New */
+/*        environments are now explicitly given. New */
 /*        environments are WIN-NT */
 
 /* -    SPICELIB Version 5.0.3, 16-SEP-1999 (NJB) */
 
-/*        CSPICE environments were added.  Some typos were corrected. */
+/*        CSPICE environments were added. Some typos were corrected. */
 
 /* -    SPICELIB Version 5.0.2, 28-JUL-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitly given.  New */
+/*        environments are now explicitly given. New */
 /*        environments are PC-DIGITAL, SGI-O32 and SGI-N32. */
 
 /* -    SPICELIB Version 5.0.1, 18-MAR-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitly given.  Previously, */
+/*        environments are now explicitly given. Previously, */
 /*        environments such as SUN-SUNOS and SUN-SOLARIS were implied */
 /*        by the environment label SUN. */
 
@@ -2422,6 +2822,10 @@ L_dasopw:
 
 /* -& */
 /* $ Revisions */
+
+/* -    SPICELIB Version 8.0.0, 30-JUL-2014 (NJB) */
+
+/*        Now uses DAF/DAS handle manager subsystem. */
 
 /* -    SPICELIB Version 7.0.0, 28-SEP-2005 (NJB) */
 
@@ -2509,11 +2913,11 @@ L_dasopw:
     lnkilb_(&new__, &fthead, pool);
     fthead = new__;
     fthan[(i__1 = fthead - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("fthan", 
-	    i__1, "dasfm_", (ftnlen)1948)] = *handle;
+	    i__1, "dasfm_", (ftnlen)2295)] = *handle;
     ftacc[(i__1 = fthead - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("ftacc", 
-	    i__1, "dasfm_", (ftnlen)1949)] = 2;
+	    i__1, "dasfm_", (ftnlen)2296)] = 2;
     ftlnk[(i__1 = fthead - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("ftlnk", 
-	    i__1, "dasfm_", (ftnlen)1950)] = 1;
+	    i__1, "dasfm_", (ftnlen)2297)] = 1;
 
 /*     Fill in the file summary. We already know how many reserved */
 /*     records and comment records there are. To find the number of the */
@@ -2523,15 +2927,15 @@ L_dasopw:
 /*     the DAS file have been segregated. */
 
     cleari_(&c__14, &ftsum[(i__1 = fthead * 14 - 14) < 70000 && 0 <= i__1 ? 
-	    i__1 : s_rnge("ftsum", i__1, "dasfm_", (ftnlen)1960)]);
+	    i__1 : s_rnge("ftsum", i__1, "dasfm_", (ftnlen)2307)]);
     ftsum[(i__1 = fthead * 14 - 14) < 70000 && 0 <= i__1 ? i__1 : s_rnge(
-	    "ftsum", i__1, "dasfm_", (ftnlen)1962)] = locrrc;
+	    "ftsum", i__1, "dasfm_", (ftnlen)2309)] = locrrc;
     ftsum[(i__1 = fthead * 14 - 13) < 70000 && 0 <= i__1 ? i__1 : s_rnge(
-	    "ftsum", i__1, "dasfm_", (ftnlen)1963)] = locrch;
+	    "ftsum", i__1, "dasfm_", (ftnlen)2310)] = locrch;
     ftsum[(i__1 = fthead * 14 - 12) < 70000 && 0 <= i__1 ? i__1 : s_rnge(
-	    "ftsum", i__1, "dasfm_", (ftnlen)1964)] = loccrc;
+	    "ftsum", i__1, "dasfm_", (ftnlen)2311)] = loccrc;
     ftsum[(i__1 = fthead * 14 - 11) < 70000 && 0 <= i__1 ? i__1 : s_rnge(
-	    "ftsum", i__1, "dasfm_", (ftnlen)1965)] = loccch;
+	    "ftsum", i__1, "dasfm_", (ftnlen)2312)] = loccch;
 
 /*     We'll need the logical unit connected to the file, so */
 /*     we can read the file's directory records. */
@@ -2555,14 +2959,14 @@ L_dasopw:
 /*        record of the current type. */
 
 	ldrec[(i__1 = type__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("ldrec", 
-		i__1, "dasfm_", (ftnlen)1992)] = 0;
+		i__1, "dasfm_", (ftnlen)2339)] = 0;
 
 /*        Find the last directory containing a descriptor of a */
 /*        record cluster of the current type. */
 
 	zzdasgri_(handle, &nrec, dirrec);
 	maxadr = dirrec[(i__1 = (type__ << 1) + 1) < 256 && 0 <= i__1 ? i__1 :
-		 s_rnge("dirrec", i__1, "dasfm_", (ftnlen)2000)];
+		 s_rnge("dirrec", i__1, "dasfm_", (ftnlen)2347)];
 	nxtdir = dirrec[1];
 	while(nxtdir > 0) {
 
@@ -2576,10 +2980,10 @@ L_dasopw:
 		return 0;
 	    }
 	    if (dirrec[(i__1 = (type__ << 1) + 1) < 256 && 0 <= i__1 ? i__1 : 
-		    s_rnge("dirrec", i__1, "dasfm_", (ftnlen)2018)] > 0) {
+		    s_rnge("dirrec", i__1, "dasfm_", (ftnlen)2365)] > 0) {
 		maxadr = dirrec[(i__1 = (type__ << 1) + 1) < 256 && 0 <= i__1 
 			? i__1 : s_rnge("dirrec", i__1, "dasfm_", (ftnlen)
-			2020)];
+			2367)];
 		nrec = nxtdir;
 	    }
 	    nxtdir = dirrec[1];
@@ -2592,15 +2996,15 @@ L_dasopw:
 /*        MAXADR is the maximum logical address of TYPE. */
 
 	ftsum[(i__1 = type__ + 5 + fthead * 14 - 15) < 70000 && 0 <= i__1 ? 
-		i__1 : s_rnge("ftsum", i__1, "dasfm_", (ftnlen)2036)] = 
+		i__1 : s_rnge("ftsum", i__1, "dasfm_", (ftnlen)2383)] = 
 		maxadr;
 	if (maxadr > 0) {
 	    ftsum[(i__1 = type__ + 8 + fthead * 14 - 15) < 70000 && 0 <= i__1 
-		    ? i__1 : s_rnge("ftsum", i__1, "dasfm_", (ftnlen)2039)] = 
+		    ? i__1 : s_rnge("ftsum", i__1, "dasfm_", (ftnlen)2386)] = 
 		    nrec;
 	} else {
 	    ftsum[(i__1 = type__ + 8 + fthead * 14 - 15) < 70000 && 0 <= i__1 
-		    ? i__1 : s_rnge("ftsum", i__1, "dasfm_", (ftnlen)2041)] = 
+		    ? i__1 : s_rnge("ftsum", i__1, "dasfm_", (ftnlen)2388)] = 
 		    0;
 	}
 
@@ -2628,31 +3032,31 @@ L_dasopw:
 /*           cluster. */
 
 	    last = dirrec[(i__1 = type__ << 1) < 256 && 0 <= i__1 ? i__1 : 
-		    s_rnge("dirrec", i__1, "dasfm_", (ftnlen)2069)] - 1;
+		    s_rnge("dirrec", i__1, "dasfm_", (ftnlen)2416)] - 1;
 	    dsctyp = dirrec[8];
 	    prvtyp = prev[(i__1 = dsctyp - 1) < 3 && 0 <= i__1 ? i__1 : 
-		    s_rnge("prev", i__1, "dasfm_", (ftnlen)2071)];
+		    s_rnge("prev", i__1, "dasfm_", (ftnlen)2418)];
 	    endrec = nrec;
 	    pos = 9;
 	    while(last < maxadr) {
 		++pos;
 		if (dirrec[(i__1 = pos - 1) < 256 && 0 <= i__1 ? i__1 : 
-			s_rnge("dirrec", i__1, "dasfm_", (ftnlen)2079)] > 0) {
+			s_rnge("dirrec", i__1, "dasfm_", (ftnlen)2426)] > 0) {
 		    curtyp = next[(i__1 = prvtyp - 1) < 3 && 0 <= i__1 ? i__1 
-			    : s_rnge("next", i__1, "dasfm_", (ftnlen)2080)];
+			    : s_rnge("next", i__1, "dasfm_", (ftnlen)2427)];
 		} else {
 		    curtyp = prev[(i__1 = prvtyp - 1) < 3 && 0 <= i__1 ? i__1 
-			    : s_rnge("prev", i__1, "dasfm_", (ftnlen)2082)];
+			    : s_rnge("prev", i__1, "dasfm_", (ftnlen)2429)];
 		}
 		if (curtyp == type__) {
 		    last += nw[(i__1 = type__ - 1) < 3 && 0 <= i__1 ? i__1 : 
-			    s_rnge("nw", i__1, "dasfm_", (ftnlen)2086)] * (
+			    s_rnge("nw", i__1, "dasfm_", (ftnlen)2433)] * (
 			    i__3 = dirrec[(i__2 = pos - 1) < 256 && 0 <= i__2 
 			    ? i__2 : s_rnge("dirrec", i__2, "dasfm_", (ftnlen)
-			    2086)], abs(i__3));
+			    2433)], abs(i__3));
 		}
 		endrec += (i__2 = dirrec[(i__1 = pos - 1) < 256 && 0 <= i__1 ?
-			 i__1 : s_rnge("dirrec", i__1, "dasfm_", (ftnlen)2089)
+			 i__1 : s_rnge("dirrec", i__1, "dasfm_", (ftnlen)2436)
 			], abs(i__2));
 		prvtyp = curtyp;
 	    }
@@ -2663,18 +3067,18 @@ L_dasopw:
 
 	    ftsum[(i__1 = type__ + 11 + fthead * 14 - 15) < 70000 && 0 <= 
 		    i__1 ? i__1 : s_rnge("ftsum", i__1, "dasfm_", (ftnlen)
-		    2098)] = pos;
+		    2445)] = pos;
 	    ldrec[(i__1 = type__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("ldrec"
-		    , i__1, "dasfm_", (ftnlen)2099)] = endrec;
+		    , i__1, "dasfm_", (ftnlen)2446)] = endrec;
 	} else {
 
 /*           There's no data of TYPE in the file. */
 
 	    ftsum[(i__1 = type__ + 11 + fthead * 14 - 15) < 70000 && 0 <= 
 		    i__1 ? i__1 : s_rnge("ftsum", i__1, "dasfm_", (ftnlen)
-		    2106)] = 0;
+		    2453)] = 0;
 	    ldrec[(i__1 = type__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("ldrec"
-		    , i__1, "dasfm_", (ftnlen)2107)] = 0;
+		    , i__1, "dasfm_", (ftnlen)2454)] = 0;
 	}
     }
 
@@ -2696,7 +3100,7 @@ L_dasopw:
 /*     Now NREC is the last directory record. */
 
     ftsum[(i__1 = fthead * 14 - 10) < 70000 && 0 <= i__1 ? i__1 : s_rnge(
-	    "ftsum", i__1, "dasfm_", (ftnlen)2141)] = max(ldrmax,nrec) + 1;
+	    "ftsum", i__1, "dasfm_", (ftnlen)2488)] = max(ldrmax,nrec) + 1;
 
 /*     Insert the new handle into our handle set. */
 
@@ -2754,51 +3158,48 @@ L_dasonw:
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     FNAME      I   Name of a DAS file to be opened. */
-/*     FTYPE      I   Mnemonic code for type of data in the DAF file. */
+/*     FTYPE      I   Mnemonic code for type of data in the DAS file. */
 /*     IFNAME     I   Internal file name. */
 /*     NCOMR      I   Number of comment records to allocate. */
 /*     HANDLE     O   Handle assigned to the opened DAS file. */
 
 /* $ Detailed_Input */
 
-/*     FNAME       is the name of a new DAS file to be created (and */
-/*                 consequently opened for write access). */
+/*     FNAME    is the name of a new DAS file to be created (and */
+/*              consequently opened for write access). */
 
-/*     FTYPE       is a code for type of data placed into a DAS file. */
-/*                 The first nonblank character and the three (3), or */
-/*                 fewer, characters immediately following it, giving */
-/*                 four (4) characters, are used to represent the type of */
-/*                 the data placed in the DAF file. This is provided as a */
-/*                 convenience for higher level software. It is an error */
-/*                 if this string is blank. Also, the file type may not */
-/*                 contain any nonprinting characters. When written to */
-/*                 the DAS file, the value for the type IS case */
-/*                 sensitive. */
+/*     FTYPE    is a string indicating the type of data placed into a DAS */
+/*              file. The first nonblank character and the three, or */
+/*              fewer, characters immediately following it are stored as */
+/*              the part of the file's ID word following the forward */
+/*              slash. It is an error if FTYPE is blank. */
 
-/*                 NAIF has reserved for its own use file types */
-/*                 consisting of the upper case letters (A-Z) and the */
-/*                 digits 0-9. NAIF recommends lower case or mixed case */
-/*                 file types be used by all others in order to avoid any */
-/*                 conflicts with NAIF file types. */
+/*              The file type may not contain any nonprinting characters. */
+/*              FTYPE is case sensitive. */
 
-/*     IFNAME      is the internal file name for the new file.  The name */
-/*                 may contain as many as 60 characters.  This should */
-/*                 uniquely identify the file. */
+/*              NAIF has reserved for its own use file types */
+/*              consisting of the upper case letters (A-Z) and the */
+/*              digits 0-9. NAIF recommends lower case or mixed case */
+/*              file types be used by all others in order to avoid any */
+/*              conflicts with NAIF file types. */
 
+/*     IFNAME   is a string containing the internal file name for the new */
+/*              file. The name may contain as many as 60 characters. This */
+/*              should uniquely identify the file. */
 
-/*     NCOMR       is the number of comment records to allocate. */
-/*                 Allocating comment records at file creation time may */
-/*                 reduce the likelihood of having to expand the */
-/*                 comment area later. */
+/*     NCOMR    is the number of comment records to allocate. */
+/*              Allocating comment records at file creation time may */
+/*              reduce the likelihood of having to expand the */
+/*              comment area later. */
 
 /* $ Detailed_Output */
 
-/*     HANDLE      is the file handle associated with the file. This */
-/*                 handle is used to identify the file in subsequent */
-/*                 calls to other DAS routines. */
+/*     HANDLE   is the file handle associated with the file. This */
+/*              handle is used to identify the file in subsequent */
+/*              calls to other DAS routines. */
 
 /* $ Parameters */
 
@@ -2806,33 +3207,30 @@ L_dasonw:
 
 /* $ Exceptions */
 
-/*     1) If the input filename is blank, the error SPICE(BLANKFILENAME) */
-/*        is signaled. */
+/*     1)  If the input filename is blank, the error */
+/*         SPICE(BLANKFILENAME) is signaled. */
 
-/*     2) If the specified file cannot be opened without exceeding */
-/*        the maximum allowed number of open DAS files, the error */
-/*        SPICE(DASFTFULL) is signaled.  No file will be created. */
+/*     2)  If the specified file cannot be opened without exceeding */
+/*         the maximum allowed number of open DAS files, the error */
+/*         SPICE(DASFTFULL) is signaled. No file will be created. */
 
-/*     3) If the file cannot be opened properly, the error */
-/*        SPICE(DASOPENFAIL) is signaled.  No file will be created. */
+/*     3)  If the file cannot be opened properly, an error is signaled */
+/*         by a routine in the call tree of this routine. No file will */
+/*         be created. */
 
-/*     4) If the initial records in the file cannot be written, the */
-/*        error is diagnosed by routines called by this routine.  No */
-/*        file will be created. */
+/*     4)  If the initial records in the file cannot be written, an */
+/*         error is signaled by a routine in the call tree of this */
+/*         routine. No file will be created. */
 
-/*     5) If no logical units are available, the error will be */
-/*        signaled by routines called by this routine.  No file will be */
-/*        created. */
+/*     5)  If the file type is blank, the error SPICE(BLANKFILETYPE) is */
+/*         signaled. */
 
-/*     6) If the file type is blank, the error SPICE(BLANKFILETYPE) will */
-/*        be signaled. */
+/*     6)  If the file type contains nonprinting characters---decimal */
+/*         0-31 and 127-255---, the error SPICE(ILLEGALCHARACTER) is */
+/*         signaled. */
 
-/*     7) If the file type contains nonprinting characters, decimal */
-/*        0-31 and 127-255, the error SPICE(ILLEGALCHARACTER) is */
-/*        signaled. */
-
-/*     8) If the number of comment records allocated NCOMR is negative, */
-/*        the error SPICE(INVALIDCOUNT) is signaled. */
+/*     7)  If the number of comment records allocated NCOMR is negative, */
+/*         the error SPICE(INVALIDCOUNT) is signaled. */
 
 /* $ Files */
 
@@ -2848,15 +3246,121 @@ L_dasonw:
 
 /* $ Examples */
 
-/*     1)  Create a new DAS file, using an internal file name that */
-/*         attempts to serve as an unique identifier, and give the file a */
-/*         type of 'TEST'. */
+/*     The numerical results shown for this example may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
 
-/*            FNAME  =  'TEST.DAS' */
-/*            FTYPE  =  'TEST' */
-/*            IFNAME =  'TEST.DAS/NAIF/NJB/11-NOV-1992-20:12:20' */
+/*     1) Create a new DAS file and add 200 integers to it. Close the */
+/*        file, then re-open it and read the data back out. */
 
-/*            CALL DASONW ( FNAME, FTYPE, IFNAME, 0, HANDLE ) */
+
+/*        Example code begins here. */
+
+
+/*              PROGRAM DASONW_EX1 */
+/*              IMPLICIT NONE */
+
+/*        C */
+/*        C     Local parameters. */
+/*        C */
+/*              CHARACTER*(*)         FNAME */
+/*              PARAMETER           ( FNAME = 'dasonw_ex1.das' ) */
+
+/*        C */
+/*        C     Local variables. */
+/*        C */
+/*              CHARACTER*(4)         TYPE */
+
+/*              INTEGER               DATA   ( 200 ) */
+
+/*              INTEGER               HANDLE */
+/*              INTEGER               I */
+/*              INTEGER               J */
+
+/*        C */
+/*        C     Open a new DAS file. Use the file name as the internal */
+/*        C     file name, and reserve no records for comments. */
+/*        C */
+/*              TYPE = 'TEST' */
+/*              CALL DASONW ( FNAME, TYPE, FNAME, 0, HANDLE ) */
+
+/*        C */
+/*        C     Fill the array DATA with the integers 1 through */
+/*        C     100, and add this array to the file. */
+/*        C */
+/*              DO I = 1, 100 */
+/*                 DATA(I) = I */
+/*              END DO */
+
+/*              CALL DASADI ( HANDLE, 100, DATA ) */
+
+/*        C */
+/*        C     Now append the array DATA to the file again. */
+/*        C */
+/*              CALL DASADI ( HANDLE, 100, DATA ) */
+
+/*        C */
+/*        C     Close the file. */
+/*        C */
+/*              CALL DASCLS ( HANDLE ) */
+
+/*        C */
+/*        C     Now verify the addition of data by opening the */
+/*        C     file for read access and retrieving the data. */
+/*        C */
+/*              CALL DASOPR ( FNAME, HANDLE ) */
+/*              CALL DASRDI ( HANDLE, 1, 200, DATA ) */
+
+/*        C */
+/*        C     Dump the data to the screen.  We should see the */
+/*        C     sequence  1, 2, ..., 100, 1, 2, ... , 100. */
+/*        C */
+/*              WRITE (*,*) ' ' */
+/*              WRITE (*,*) 'Data from "', FNAME, '":' */
+/*              WRITE (*,*) ' ' */
+/*              DO I = 1, 20 */
+/*                 WRITE (*,'(10I5)') (DATA((I-1)*10+J), J = 1, 10) */
+/*              END DO */
+
+/*        C */
+/*        C     Close the file. */
+/*        C */
+/*              CALL DASCLS ( HANDLE ) */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*         Data from "dasonw_ex1.das": */
+
+/*            1    2    3    4    5    6    7    8    9   10 */
+/*           11   12   13   14   15   16   17   18   19   20 */
+/*           21   22   23   24   25   26   27   28   29   30 */
+/*           31   32   33   34   35   36   37   38   39   40 */
+/*           41   42   43   44   45   46   47   48   49   50 */
+/*           51   52   53   54   55   56   57   58   59   60 */
+/*           61   62   63   64   65   66   67   68   69   70 */
+/*           71   72   73   74   75   76   77   78   79   80 */
+/*           81   82   83   84   85   86   87   88   89   90 */
+/*           91   92   93   94   95   96   97   98   99  100 */
+/*            1    2    3    4    5    6    7    8    9   10 */
+/*           11   12   13   14   15   16   17   18   19   20 */
+/*           21   22   23   24   25   26   27   28   29   30 */
+/*           31   32   33   34   35   36   37   38   39   40 */
+/*           41   42   43   44   45   46   47   48   49   50 */
+/*           51   52   53   54   55   56   57   58   59   60 */
+/*           61   62   63   64   65   66   67   68   69   70 */
+/*           71   72   73   74   75   76   77   78   79   80 */
+/*           81   82   83   84   85   86   87   88   89   90 */
+/*           91   92   93   94   95   96   97   98   99  100 */
+
+
+/*        Note that after run completion, a new DAS file exists in the */
+/*        output directory. */
 
 /* $ Restrictions */
 
@@ -2868,13 +3372,22 @@ L_dasonw:
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     K.R. Gehringer  (JPL) */
-/*     W.L. Taber      (JPL) */
-/*     F.S. Turner     (JPL) */
-/*     I.M. Underwood  (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     F.S. Turner        (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 7.0.1, 19-JUL-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
+/*        Added complete code example. */
+
+/*        Updated $Exceptions entry #3: error handling for the DAS open */
+/*        failure is now performed by lower level code (ZZDDHOPN). */
 
 /* -    SPICELIB Version 7.0.0, 26-FEB-2015 (NJB) */
 
@@ -2887,7 +3400,7 @@ L_dasonw:
 /* -    SPICELIB Version 6.0.0, 11-DEC-2001 (FST) */
 
 /*        The DAS file ID word and internal file name are no longer */
-/*        buffered by this routine.  See DASFM's Revisions section */
+/*        buffered by this routine. See DASFM's $Revisions section */
 /*        for details. */
 
 /*        The entry point was modified to insert the FTP validation */
@@ -2896,29 +3409,29 @@ L_dasonw:
 /* -    SPICELIB Version 5.0.4, 08-OCT-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitly given.  New */
+/*        environments are now explicitly given. New */
 /*        environments are WIN-NT */
 
 /* -    SPICELIB Version 5.0.3, 16-SEP-1999 (NJB) */
 
-/*        CSPICE environments were added.  Some typos were corrected. */
+/*        CSPICE environments were added. Some typos were corrected. */
 
 /* -    SPICELIB Version 5.0.2, 28-JUL-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitly given.  New */
+/*        environments are now explicitly given. New */
 /*        environments are PC-DIGITAL, SGI-O32 and SGI-N32. */
 
 /* -    SPICELIB Version 5.0.1, 18-MAR-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitly given.  Previously, */
+/*        environments are now explicitly given. Previously, */
 /*        environments such as SUN-SUNOS and SUN-SOLARIS were implied */
 /*        by the environment label SUN. */
 
 /* -    SPICELIB Version 2.0.0, 31-AUG-1995 (NJB) */
 
-/*        Changed argument list of the entry point DASONW.  The input */
+/*        Changed argument list of the entry point DASONW. The input */
 /*        argument NCOMR, which indicates the number of comment records */
 /*        to reserve, was added to the argument list. */
 
@@ -2935,7 +3448,7 @@ L_dasonw:
 
 /* -    SPICELIB Version 6.0.0, 11-DEC-2001 (NJB) (FST) */
 
-/*        See the Revisions section under DASFM for a discussion of */
+/*        See the $Revisions section under DASFM for a discussion of */
 /*        the various changes made for this version. */
 
 /* -& */
@@ -3112,17 +3625,17 @@ L100001:
 
     fthead = new__;
     cleari_(&c__14, &ftsum[(i__1 = fthead * 14 - 14) < 70000 && 0 <= i__1 ? 
-	    i__1 : s_rnge("ftsum", i__1, "dasfm_", (ftnlen)2596)]);
+	    i__1 : s_rnge("ftsum", i__1, "dasfm_", (ftnlen)3055)]);
     fthan[(i__1 = fthead - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("fthan", 
-	    i__1, "dasfm_", (ftnlen)2598)] = *handle;
+	    i__1, "dasfm_", (ftnlen)3057)] = *handle;
     ftacc[(i__1 = fthead - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("ftacc", 
-	    i__1, "dasfm_", (ftnlen)2599)] = 2;
+	    i__1, "dasfm_", (ftnlen)3058)] = 2;
     ftlnk[(i__1 = fthead - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("ftlnk", 
-	    i__1, "dasfm_", (ftnlen)2600)] = 1;
+	    i__1, "dasfm_", (ftnlen)3059)] = 1;
     ftsum[(i__1 = fthead * 14 - 10) < 70000 && 0 <= i__1 ? i__1 : s_rnge(
-	    "ftsum", i__1, "dasfm_", (ftnlen)2601)] = *ncomr + 3;
+	    "ftsum", i__1, "dasfm_", (ftnlen)3060)] = *ncomr + 3;
     ftsum[(i__1 = fthead * 14 - 12) < 70000 && 0 <= i__1 ? i__1 : s_rnge(
-	    "ftsum", i__1, "dasfm_", (ftnlen)2602)] = *ncomr;
+	    "ftsum", i__1, "dasfm_", (ftnlen)3061)] = *ncomr;
 
 /*     Insert the new handle into our handle set. */
 
@@ -3181,7 +3694,7 @@ L_dasopn:
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     FNAME      I   Name of a DAS file to be opened. */
 /*     IFNAME     I   Internal file name. */
@@ -3189,18 +3702,18 @@ L_dasopn:
 
 /* $ Detailed_Input */
 
-/*     FNAME       is the name of a new DAS file to be created (and */
-/*                 consequently opened for write access). */
+/*     FNAME    is the name of a new DAS file to be created (and */
+/*              consequently opened for write access). */
 
-/*     IFNAME      is the internal file name for the new file.  The name */
-/*                 may contain as many as 60 characters.  This should */
-/*                 uniquely identify the file. */
+/*     IFNAME   is the internal file name for the new file. The name */
+/*              may contain as many as 60 characters. This should */
+/*              uniquely identify the file. */
 
 /* $ Detailed_Output */
 
-/*     HANDLE      is the file handle associated with the file. This */
-/*                 handle is used to identify the file in subsequent */
-/*                 calls to other DAS routines. */
+/*     HANDLE   is the file handle associated with the file. This */
+/*              handle is used to identify the file in subsequent */
+/*              calls to other DAS routines. */
 
 /* $ Parameters */
 
@@ -3208,23 +3721,24 @@ L_dasopn:
 
 /* $ Exceptions */
 
-/*     1) If the input filename is blank, the error SPICE(BLANKFILENAME) */
-/*        will be signaled. */
+/*     1)  If the input filename is blank, the error */
+/*         SPICE(BLANKFILENAME) is signaled. */
 
-/*     2) If the specified file cannot be opened without exceeding */
-/*        the maximum allowed number of open DAS files, the error */
-/*        SPICE(DASFTFULL) is signaled.  No file will be created. */
+/*     2)  If the specified file cannot be opened without exceeding */
+/*         the maximum allowed number of open DAS files, the error */
+/*         SPICE(DASFTFULL) is signaled. No file will be created. */
 
-/*     3) If the file cannot be opened properly, the error */
-/*        SPICE(DASOPENFAIL) is signaled.  No file will be created. */
+/*     3)  If the file cannot be opened properly, an error is signaled */
+/*         by a routine in the call tree of this routine. No file will */
+/*         be created. */
 
-/*     4) If the initial records in the file cannot be written, the */
-/*        error is diagnosed by routines called by this routine.  No */
-/*        file will be created. */
+/*     4)  If the initial records in the file cannot be written, an */
+/*         error is signaled by a routine in the call tree of this */
+/*         routine. No file will be created. */
 
-/*     5) If no logical units are available, the error will be */
-/*        signaled by routines called by this routine.  No file will be */
-/*        created. */
+/*     5)  If no logical units are available, an error is signaled by a */
+/*         routine in the call tree of this routine. No file will be */
+/*         created. */
 
 /* $ Files */
 
@@ -3241,13 +3755,121 @@ L_dasopn:
 
 /* $ Examples */
 
-/*     1)  Create a new DAS file, using an internal file name that */
-/*         attempts to serve as an unique identifier. */
+/*     The numerical results shown for this example may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
 
-/*            FNAME    =  'TEST.DAS' */
-/*            IFNAME   =  'TEST.DAS/NAIF/NJB/11-NOV-1992-20:12:20' */
+/*     1) Create a new DAS file and add 200 integers to it. Close the */
+/*        file, then re-open it and read the data back out. */
 
-/*            CALL DASOPN ( FNAME, IFNAME, HANDLE ) */
+
+/*        Example code begins here. */
+
+
+/*              PROGRAM DASOPN_EX1 */
+/*              IMPLICIT NONE */
+
+/*        C */
+/*        C     Local parameters. */
+/*        C */
+/*              CHARACTER*(*)         FNAME */
+/*              PARAMETER           ( FNAME = 'dasopn_ex1.das' ) */
+
+/*        C */
+/*        C     Local variables. */
+/*        C */
+/*              CHARACTER*(4)         TYPE */
+
+/*              INTEGER               DATA   ( 200 ) */
+
+/*              INTEGER               HANDLE */
+/*              INTEGER               I */
+/*              INTEGER               J */
+
+/*        C */
+/*        C     Open a new DAS file. Use the file name as the internal */
+/*        C     file name. */
+/*        C */
+/*              TYPE = 'TEST' */
+/*              CALL DASOPN ( FNAME, FNAME, HANDLE ) */
+
+/*        C */
+/*        C     Fill the array DATA with the integers 1 through */
+/*        C     100, and add this array to the file. */
+/*        C */
+/*              DO I = 1, 100 */
+/*                 DATA(I) = I */
+/*              END DO */
+
+/*              CALL DASADI ( HANDLE, 100, DATA ) */
+
+/*        C */
+/*        C     Now append the array DATA to the file again. */
+/*        C */
+/*              CALL DASADI ( HANDLE, 100, DATA ) */
+
+/*        C */
+/*        C     Close the file. */
+/*        C */
+/*              CALL DASCLS ( HANDLE ) */
+
+/*        C */
+/*        C     Now verify the addition of data by opening the */
+/*        C     file for read access and retrieving the data. */
+/*        C */
+/*              CALL DASOPR ( FNAME, HANDLE ) */
+/*              CALL DASRDI ( HANDLE, 1, 200, DATA ) */
+
+/*        C */
+/*        C     Dump the data to the screen.  We should see the */
+/*        C     sequence  1, 2, ..., 100, 1, 2, ... , 100. */
+/*        C */
+/*              WRITE (*,*) ' ' */
+/*              WRITE (*,*) 'Data from "', FNAME, '":' */
+/*              WRITE (*,*) ' ' */
+/*              DO I = 1, 20 */
+/*                 WRITE (*,'(10I5)') (DATA((I-1)*10+J), J = 1, 10) */
+/*              END DO */
+
+/*        C */
+/*        C     Close the file. */
+/*        C */
+/*              CALL DASCLS ( HANDLE ) */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*         Data from "dasopn_ex1.das": */
+
+/*            1    2    3    4    5    6    7    8    9   10 */
+/*           11   12   13   14   15   16   17   18   19   20 */
+/*           21   22   23   24   25   26   27   28   29   30 */
+/*           31   32   33   34   35   36   37   38   39   40 */
+/*           41   42   43   44   45   46   47   48   49   50 */
+/*           51   52   53   54   55   56   57   58   59   60 */
+/*           61   62   63   64   65   66   67   68   69   70 */
+/*           71   72   73   74   75   76   77   78   79   80 */
+/*           81   82   83   84   85   86   87   88   89   90 */
+/*           91   92   93   94   95   96   97   98   99  100 */
+/*            1    2    3    4    5    6    7    8    9   10 */
+/*           11   12   13   14   15   16   17   18   19   20 */
+/*           21   22   23   24   25   26   27   28   29   30 */
+/*           31   32   33   34   35   36   37   38   39   40 */
+/*           41   42   43   44   45   46   47   48   49   50 */
+/*           51   52   53   54   55   56   57   58   59   60 */
+/*           61   62   63   64   65   66   67   68   69   70 */
+/*           71   72   73   74   75   76   77   78   79   80 */
+/*           81   82   83   84   85   86   87   88   89   90 */
+/*           91   92   93   94   95   96   97   98   99  100 */
+
+
+/*        Note that after run completion, a new DAS file exists in the */
+/*        output directory. */
 
 /* $ Restrictions */
 
@@ -3259,13 +3881,23 @@ L_dasopn:
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     K.R. Gehringer  (JPL) */
-/*     W.L. Taber      (JPL) */
-/*     F.S. Turner     (JPL) */
-/*     I.M. Underwood  (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     F.S. Turner        (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 7.0.1, 19-JUL-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
+/*        Added complete code example. */
+
+/*        Updated $Exceptions entry #3: error handling for the DAS open */
+/*        failure is now performed by lower level code (ZZDDHOPN). */
 
 /* -    SPICELIB Version 7.0.0, 30-JUL-2014 (NJB) */
 
@@ -3278,7 +3910,7 @@ L_dasopn:
 /* -    SPICELIB Version 6.0.0, 11-DEC-2001 (FST) */
 
 /*        The DAS file ID word and internal file name are no longer */
-/*        buffered by this routine.  See DASFM's Revisions section */
+/*        buffered by this routine. See DASFM's $Revisions section */
 /*        for details. */
 
 /*        This entry point was modified to insert the FTP validation */
@@ -3287,23 +3919,23 @@ L_dasopn:
 /* -    SPICELIB Version 5.0.4, 08-OCT-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitly given.  New */
+/*        environments are now explicitly given. New */
 /*        environments are WIN-NT */
 
 /* -    SPICELIB Version 5.0.3, 16-SEP-1999 (NJB) */
 
-/*        CSPICE environments were added.  Some typos were corrected. */
+/*        CSPICE environments were added. Some typos were corrected. */
 
 /* -    SPICELIB Version 5.0.2, 28-JUL-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitly given.  New */
+/*        environments are now explicitly given. New */
 /*        environments are PC-DIGITAL, SGI-O32 and SGI-N32. */
 
 /* -    SPICELIB Version 5.0.1, 18-MAR-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitly given.  Previously, */
+/*        environments are now explicitly given. Previously, */
 /*        environments such as SUN-SUNOS and SUN-SOLARIS were implied */
 /*        by the environment label SUN. */
 
@@ -3312,7 +3944,7 @@ L_dasopn:
 /*        The effect of this routine is unchanged. It still uses the ID */
 /*        word 'NAIF/DAS'. This is for backward compatibility only. */
 
-/*        Added statements to the $ Abstract and $ Particulars sections */
+/*        Added statements to the $Abstract and $Particulars sections */
 /*        to document that this entry is now considered to be obsolete, */
 /*        and that it has been superseded by the entry point DASONW. */
 
@@ -3331,9 +3963,13 @@ L_dasopn:
 /* -& */
 /* $ Revisions */
 
+/* -    SPICELIB Version 7.0.0, 30-JUL-2014 (NJB) */
+
+/*        Now uses DAF/DAS handle manager subsystem. */
+
 /* -    SPICELIB Version 6.0.0, 11-DEC-2001 (FST) */
 
-/*        See the Revisions section under DASFM for a discussion */
+/*        See the $Revisions section under DASFM for a discussion */
 /*        of the changes made for this version. */
 
 /* -& */
@@ -3461,15 +4097,15 @@ L_dasopn:
 
     fthead = new__;
     cleari_(&c__14, &ftsum[(i__1 = fthead * 14 - 14) < 70000 && 0 <= i__1 ? 
-	    i__1 : s_rnge("ftsum", i__1, "dasfm_", (ftnlen)2978)]);
+	    i__1 : s_rnge("ftsum", i__1, "dasfm_", (ftnlen)3563)]);
     fthan[(i__1 = fthead - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("fthan", 
-	    i__1, "dasfm_", (ftnlen)2980)] = *handle;
+	    i__1, "dasfm_", (ftnlen)3565)] = *handle;
     ftacc[(i__1 = fthead - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("ftacc", 
-	    i__1, "dasfm_", (ftnlen)2981)] = 2;
+	    i__1, "dasfm_", (ftnlen)3566)] = 2;
     ftlnk[(i__1 = fthead - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("ftlnk", 
-	    i__1, "dasfm_", (ftnlen)2982)] = 1;
+	    i__1, "dasfm_", (ftnlen)3567)] = 1;
     ftsum[(i__1 = fthead * 14 - 10) < 70000 && 0 <= i__1 ? i__1 : s_rnge(
-	    "ftsum", i__1, "dasfm_", (ftnlen)2983)] = 3;
+	    "ftsum", i__1, "dasfm_", (ftnlen)3568)] = 3;
 
 /*     Insert the new handle into our handle set. */
 
@@ -3524,7 +4160,7 @@ L_dasops:
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     O   Handle assigned to a scratch DAS file. */
 
@@ -3534,37 +4170,53 @@ L_dasops:
 
 /* $ Detailed_Output */
 
-/*     HANDLE      is the file handle associated with the scratch file */
-/*                 opened by this routine.  This handle is used to */
-/*                 identify the file in subsequent calls to other DAS */
-/*                 routines. */
+/*     HANDLE   is the file handle associated with the scratch file */
+/*              opened by this routine. This handle is used to */
+/*              identify the file in subsequent calls to other DAS */
+/*              routines. */
 
 /* $ Parameters */
 
-/*     None. */
+/*     FTSIZE   is the maximum number of DAS files that a user can have */
+/*              open simultaneously. This includes any files used by the */
+/*              DAS system when closing files opened with write access. */
+/*              Currently, DASCLS (via the SPICELIB routine DASSDR) opens */
+/*              a scratch DAS file using DASOPS to segregate (sort by */
+/*              data type) the records in the DAS file being closed. */
+/*              Segregating the data by type improves the speed of access */
+/*              to the data. */
+
+/*              In order to avoid the possibility of overflowing the */
+/*              DAS file table we recommend, when at least one DAS */
+/*              file is open with write access, that users of this */
+/*              software limit themselves to at most FTSIZE - 2 other */
+/*              open DAS files. If no files are to be open with write */
+/*              access, then users may open FTSIZE files with no */
+/*              possibility of overflowing the DAS file table. */
 
 /* $ Exceptions */
 
-/*     1) If the specified file cannot be opened without exceeding */
-/*        the maximum allowed number of open DAS files, the error */
-/*        SPICE(DASFTFULL) is signaled.  No file will be created. */
+/*     1)  If the specified file cannot be opened without exceeding */
+/*         the maximum allowed number of open DAS files, the error */
+/*         SPICE(DASFTFULL) is signaled. No file will be created. */
 
-/*     2) If file cannot be opened properly, the error */
-/*        SPICE(DASOPENFAIL) is signaled.  No file will be created. */
+/*     2)  If file cannot be opened properly, an error is signaled by a */
+/*         routine in the call tree of this routine. No file will be */
+/*         created. */
 
-/*     3) If the initial records in the file cannot be written, the */
-/*        error SPICE(DASWRITEFAIL) is signaled.  No file will be */
-/*        created. */
+/*     3)  If the initial records in the file cannot be written, the */
+/*         error SPICE(DASWRITEFAIL) is signaled. No file will be */
+/*         created. */
 
-/*     4) If no logical units are available, the error will be */
-/*        signaled by routines called by this routine.  No file will be */
-/*        created. */
+/*     4)  If no logical units are available, an error is signaled by a */
+/*         routine in the call tree of this routine. No file will be */
+/*         created. */
 
 /* $ Files */
 
 /*     See output argument HANDLE. */
 
-/*     See FTSIZE in the $ Parameters section for a description of a */
+/*     See FTSIZE in the $Parameters section for a description of a */
 /*     potential problem with overflowing the DAS file table when at */
 /*     least one DAS file is opened with write access. */
 
@@ -3575,14 +4227,86 @@ L_dasops:
 
 /*     The DAS files created by this routine have initialized file */
 /*     records. The file type for a DAS scratch file is 'SCR ', so the */
-/*     file type 'SCR ' is not available for general use. */
+/*     file type 'SCR ' is not available for general use. As with new */
+/*     permanent files, these files are opened for write access. DAS */
+/*     files opened by DASOPS are automatically deleted when they are */
+/*     closed. */
 
 /* $ Examples */
 
-/*     1)  Create a scratch DAS file to use as a temporary storage */
-/*         area. */
+/*     The numerical results shown for this example may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
 
-/*            CALL DASOPS ( HANDLE ) */
+/*     1) Create a DAS scratch file containing 10 integers, 5 double */
+/*        precision numbers, and 4 characters, then print the logical */
+/*        address ranges in use. */
+
+
+/*        Example code begins here. */
+
+
+/*              PROGRAM DASOPS_EX1 */
+/*              IMPLICIT NONE */
+
+/*        C */
+/*        C     Local variables. */
+/*        C */
+/*              INTEGER               HANDLE */
+/*              INTEGER               I */
+/*              INTEGER               LASTC */
+/*              INTEGER               LASTD */
+/*              INTEGER               LASTI */
+
+/*        C */
+/*        C     Use a scratch file, since there's no reason to keep */
+/*        C     the file. */
+/*        C */
+/*              CALL DASOPS ( HANDLE ) */
+
+/*              DO I = 1, 10 */
+/*                 CALL DASADI ( HANDLE, 1, I ) */
+/*              END DO */
+
+/*              DO I = 1, 5 */
+/*                 CALL DASADD ( HANDLE, 1, DBLE(I) ) */
+/*              END DO */
+
+/*        C */
+/*        C     Add character data to the file. DAS character data are */
+/*        C     treated as a character array, not as a string. The */
+/*        C     following call adds only the first 4 characters to the */
+/*        C     DAS file. */
+/*        C */
+/*              CALL DASADC ( HANDLE, 4, 1, 4, 'SPUDWXY' ) */
+
+/*        C */
+/*        C     Now check the logical address ranges. */
+/*        C */
+/*              CALL DASLLA ( HANDLE, LASTC, LASTD, LASTI ) */
+
+/*              WRITE (*,*) 'Last character address in use: ', LASTC */
+/*              WRITE (*,*) 'Last d.p. address in use     : ', LASTD */
+/*              WRITE (*,*) 'Last integer address in use  : ', LASTI */
+
+/*        C */
+/*        C     Scratch files are automatically deleted when they are */
+/*        C     closed. */
+/*        C */
+/*              CALL DASCLS ( HANDLE ) */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*         Last character address in use:            4 */
+/*         Last d.p. address in use     :            5 */
+/*         Last integer address in use  :           10 */
+
 
 /* $ Restrictions */
 
@@ -3594,12 +4318,26 @@ L_dasops:
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     K.R. Gehringer  (JPL) */
-/*     W.L. Taber      (JPL) */
-/*     I.M. Underwood  (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 7.0.1, 19-JUL-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. Added complete */
+/*        code example. */
+
+/*        Extended $Particulars section to indicate that scratch files */
+/*        are deleted when they are closed. */
+
+/*        Updated $Exceptions entry #2: error handling for the DAS open */
+/*        failure is now performed by lower level code (ZZDDHOPN), and */
+/*        added FTSIZE parameter description. */
 
 /* -    SPICELIB Version 7.0.0, 07-APR-2016 (NJB) */
 
@@ -3612,23 +4350,23 @@ L_dasops:
 /* -    SPICELIB Version 5.0.4, 08-OCT-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitly given.  New */
+/*        environments are now explicitly given. New */
 /*        environments are WIN-NT */
 
 /* -    SPICELIB Version 5.0.3, 16-SEP-1999 (NJB) */
 
-/*        CSPICE environments were added.  Some typos were corrected. */
+/*        CSPICE environments were added. Some typos were corrected. */
 
 /* -    SPICELIB Version 5.0.2, 28-JUL-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitly given.  New */
+/*        environments are now explicitly given. New */
 /*        environments are PC-DIGITAL, SGI-O32 and SGI-N32. */
 
 /* -    SPICELIB Version 5.0.1, 18-MAR-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitly given.  Previously, */
+/*        environments are now explicitly given. Previously, */
 /*        environments such as SUN-SUNOS and SUN-SOLARIS were implied */
 /*        by the environment label SUN. */
 
@@ -3647,7 +4385,7 @@ L_dasops:
 
 /* -    SPICELIB Version 1.1.0, 04-MAY-1993 (NJB) */
 
-/*        Bug fix:  removed file name variable from error message. */
+/*        Bug fix: removed file name variable from error message. */
 
 /* -    SPICELIB Version 1.0.0, 11-NOV-1992 (NJB) (WLT) (IMU) */
 
@@ -3692,7 +4430,7 @@ L_dasops:
 
 /* -    SPICELIB Version 1.1.0, 04-MAY-1993 (NJB) */
 
-/*        Bug fix:  removed unneeded file name variable FNAME from */
+/*        Bug fix: removed unneeded file name variable FNAME from */
 /*        error message. */
 
 /* -& */
@@ -3795,15 +4533,15 @@ L_dasops:
 /*     the first directory. */
 
     cleari_(&c__14, &ftsum[(i__1 = fthead * 14 - 14) < 70000 && 0 <= i__1 ? 
-	    i__1 : s_rnge("ftsum", i__1, "dasfm_", (ftnlen)3344)]);
+	    i__1 : s_rnge("ftsum", i__1, "dasfm_", (ftnlen)4034)]);
     fthan[(i__1 = fthead - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("fthan", 
-	    i__1, "dasfm_", (ftnlen)3346)] = *handle;
+	    i__1, "dasfm_", (ftnlen)4036)] = *handle;
     ftacc[(i__1 = fthead - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("ftacc", 
-	    i__1, "dasfm_", (ftnlen)3347)] = 2;
+	    i__1, "dasfm_", (ftnlen)4037)] = 2;
     ftlnk[(i__1 = fthead - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("ftlnk", 
-	    i__1, "dasfm_", (ftnlen)3348)] = 1;
+	    i__1, "dasfm_", (ftnlen)4038)] = 1;
     ftsum[(i__1 = fthead * 14 - 10) < 70000 && 0 <= i__1 ? i__1 : s_rnge(
-	    "ftsum", i__1, "dasfm_", (ftnlen)3349)] = 3;
+	    "ftsum", i__1, "dasfm_", (ftnlen)4039)] = 3;
 
 /*     Insert the new handle into our handle set. */
 
@@ -3815,7 +4553,8 @@ L_dasops:
 L_dasllc:
 /* $ Abstract */
 
-/*     Close the DAS file associated with a given handle. */
+/*     Close the DAS file associated with a given handle, without */
+/*     flushing buffered data or segregating the file. */
 
 /* $ Disclaimer */
 
@@ -3857,18 +4596,19 @@ L_dasllc:
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     I   Handle of a DAS file to be closed. */
 
 /* $ Detailed_Input */
 
-/*     HANDLE      is the handle of a previously opened DAS file. */
+/*     HANDLE   is the handle of a previously opened DAS file. */
 
 /* $ Detailed_Output */
 
-/*     None.  See $Particulars for a description of the effect of this */
-/*     routine. */
+/*     None. */
+
+/*     See $Particulars for a description of the effect of this routine. */
 
 /* $ Parameters */
 
@@ -3876,8 +4616,9 @@ L_dasllc:
 
 /* $ Exceptions */
 
-/*     1) If the specified handle does not belong to a DAS file */
-/*        that is currently open, nothing happens. */
+/*     1)  If the specified handle does not belong to a DAS file that is */
+/*         currently open, this routine returns without signaling an */
+/*         error. */
 
 /* $ Files */
 
@@ -3886,14 +4627,14 @@ L_dasllc:
 /* $ Particulars */
 
 /*     Normally, routines outside of SPICELIB will not need to call this */
-/*     routine.  Application programs should close DAS files by calling */
-/*     the SPICELIB routine DASCLS.  This routine is a lower-level */
+/*     routine. Application programs should close DAS files by calling */
+/*     the SPICELIB routine DASCLS. This routine is a lower-level */
 /*     routine that is called by DASCLS, but (obviously) does not have */
 /*     the full functionality of DASCLS. */
 
-/*     This routine closes a DAS file and updates DASFM's bookkeeping */
-/*     information on open DAS files.  Because DASFM and its entry */
-/*     points must keep track of what files are open at any given time, */
+/*     This routine closes a DAS file and updates the DAS file manager's */
+/*     bookkeeping information on open DAS files. Because the DAS file */
+/*     manager must keep track of which files are open at any given time, */
 /*     it is important that DAS files be closed only with DASCLS or */
 /*     DASLLC, to prevent the remaining DAS routines from failing, */
 /*     sometimes mysteriously. */
@@ -3910,33 +4651,290 @@ L_dasllc:
 
 /* $ Examples */
 
-/*     1)  Here's how DASCLS uses this routine: */
+/*     The numerical results shown for this example may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
+
+/*     1) Write a DAS file by adding data to it over multiple passes. */
+/*        Avoid spending time on file segregation between writes. */
+
+/*        Each pass opens the file, adds character, double precision, */
+/*        and integer data to the file, writes out buffered data by */
+/*        calling DASWBR, and closes the file without segregating the */
+/*        data by calling DASLLC. */
+
+/*        The program also checks the file: after the final write, */
+/*        the program reads the data and compares it to expected values. */
+
+/*        Note that most user-oriented applications should segregate a */
+/*        DAS file after writing it, since this greatly enhances file */
+/*        reading efficiency. The technique demonstrated here may be */
+/*        useful for cases in which a file will be written via many */
+/*        small data additions, and in which the file is read between */
+/*        write operations. */
 
 
-/*            C */
-/*            C     If the file is open for writing, flush any buffered */
-/*            C     records that belong to it. */
-/*            C */
-/*                  CALL DASHAM ( HANDLE, METHOD ) */
+/*        Example code begins here. */
 
-/*                  IF ( METHOD .EQ. WRITE ) THEN */
 
-/*                     Make sure that all updated, buffered records are */
-/*                     written out to the indicated file. */
+/*              PROGRAM DASLLC_EX1 */
+/*              IMPLICIT NONE */
 
-/*                     CALL DASWBR ( HANDLE ) */
+/*        C */
+/*        C     Local parameters */
+/*        C */
+/*              INTEGER               FILSIZ */
+/*              PARAMETER           ( FILSIZ = 255 ) */
 
-/*                     Segregate the data records in the file according */
-/*                     to data type. */
+/*              INTEGER               FTYPLN */
+/*              PARAMETER           ( FTYPLN = 3 ) */
 
-/*                     CALL DASSDR ( HANDLE ) */
+/*              INTEGER               CHRLEN */
+/*              PARAMETER           ( CHRLEN = 50 ) */
 
-/*                  END IF */
+/*              INTEGER               IBUFSZ */
+/*              PARAMETER           ( IBUFSZ = 20 ) */
 
-/*            C */
-/*            C     Close the file. */
-/*            C */
-/*                  CALL DASLLC ( HANDLE ) */
+/*              INTEGER               DBUFSZ */
+/*              PARAMETER           ( DBUFSZ = 30 ) */
+
+/*        C */
+/*        C     Local variables */
+/*        C */
+/*              CHARACTER*(CHRLEN)    CHRBUF */
+/*              CHARACTER*(FILSIZ)    FNAME */
+/*              CHARACTER*(FTYPLN)    FTYPE */
+/*              CHARACTER*(CHRLEN)    XCHRBF */
+
+/*              DOUBLE PRECISION      DPBUF  ( DBUFSZ ) */
+/*              DOUBLE PRECISION      XDPBUF ( DBUFSZ ) */
+
+/*              INTEGER               FIRSTC */
+/*              INTEGER               FIRSTD */
+/*              INTEGER               FIRSTI */
+/*              INTEGER               HANDLE */
+/*              INTEGER               I */
+/*              INTEGER               INTBUF ( IBUFSZ ) */
+/*              INTEGER               J */
+/*              INTEGER               LASTC */
+/*              INTEGER               LASTD */
+/*              INTEGER               LASTI */
+/*              INTEGER               NCALL */
+/*              INTEGER               NCOMR */
+/*              INTEGER               NPASS */
+/*              INTEGER               PASSNO */
+/*              INTEGER               XINTBF ( IBUFSZ ) */
+
+
+/*        C */
+/*        C     Initial values */
+/*        C */
+/*              DATA                  FNAME  / 'dasllc_ex1.das' / */
+/*              DATA                  FTYPE  / 'ANG' / */
+/*              DATA                  NCALL  / 1000  / */
+/*              DATA                  NCOMR  / 10    / */
+/*              DATA                  NPASS  / 3     / */
+
+/*        C */
+/*        C     Open a new DAS file. We'll allocate NCOMR records */
+/*        C     for comments. The file type is not one of the standard */
+/*        C     types recognized by SPICE; however it can be used to */
+/*        C     ensure the database file is of the correct type. */
+/*        C */
+/*        C     We'll use the file name as the internal file name. */
+/*        C */
+/*              CALL DASONW ( FNAME, FTYPE, FNAME, NCOMR, HANDLE ) */
+
+/*        C */
+/*        C     Add data of character, integer, and double precision */
+/*        C     types to the file in interleaved fashion. We'll add to */
+/*        C     the file over NPASS "passes," in each of which we close */
+/*        C     the file after writing. */
+/*        C */
+/*              DO PASSNO = 1, NPASS */
+
+/*                 IF ( PASSNO .GT. 1 ) THEN */
+
+/*                    WRITE (*,*) 'Opening file for write access...' */
+
+/*                    CALL DASOPW( FNAME, HANDLE ) */
+
+/*                 END IF */
+
+/*                 DO I = 1, NCALL */
+/*        C */
+/*        C           Add string data to the file. */
+/*        C */
+/*                    CHRBUF = 'Character value #' */
+/*                    CALL REPMI( CHRBUF, '#', I, CHRBUF ) */
+
+/*                    CALL DASADC ( HANDLE, CHRLEN, 1, CHRLEN, CHRBUF ) */
+
+/*        C */
+/*        C           Add double precision data to the file. */
+/*        C */
+/*                    DO J = 1, DBUFSZ */
+/*                       DPBUF(J) = DBLE( 100000000*PASSNO + 100*I + J ) */
+/*                    END DO */
+
+/*                    CALL DASADD ( HANDLE, DBUFSZ, DPBUF ) */
+
+/*        C */
+/*        C           Add integer data to the file. */
+/*        C */
+/*                    DO J = 1, IBUFSZ */
+/*                       INTBUF(J) = 100000000*PASSNO  +  100 * I  +  J */
+/*                    END DO */
+
+/*                    CALL DASADI ( HANDLE, IBUFSZ, INTBUF ) */
+
+/*                 END DO */
+
+/*        C */
+/*        C        Write buffered data to the file. */
+/*        C */
+/*                 WRITE (*,*) 'Writing buffered data...' */
+/*                 CALL DASWBR ( HANDLE ) */
+
+/*        C */
+/*        C        Close the file without segregating it. */
+/*        C */
+/*                 WRITE (*,*) 'Closing DAS file...' */
+/*                 CALL DASLLC ( HANDLE ) */
+
+/*              END DO */
+
+/*              WRITE (*,*) 'File write is done.' */
+
+/*        C */
+/*        C     Check file contents. */
+/*        C */
+/*              CALL DASOPR( FNAME, HANDLE ) */
+
+/*        C */
+/*        C     Read data from the file; compare to expected values. */
+/*        C */
+/*        C     Initialize end addresses. */
+/*        C */
+/*              LASTC = 0 */
+/*              LASTD = 0 */
+/*              LASTI = 0 */
+
+/*              DO PASSNO = 1, NPASS */
+
+/*                 DO I = 1, NCALL */
+/*        C */
+/*        C           Check string data. */
+/*        C */
+/*                    XCHRBF = 'Character value #' */
+/*                    CALL REPMI( XCHRBF, '#', I, XCHRBF ) */
+
+/*                    FIRSTC = LASTC + 1 */
+/*                    LASTC  = LASTC + CHRLEN */
+
+/*                    CALL DASRDC ( HANDLE, FIRSTC, LASTC, */
+/*             .                    1,      CHRLEN, CHRBUF ) */
+
+/*                    IF ( CHRBUF .NE. XCHRBF ) THEN */
+/*                       WRITE (*,*) 'Character data mismatch: ' */
+/*                       WRITE (*,*) 'PASS     = ', PASSNO */
+/*                       WRITE (*,*) 'I        = ', I */
+/*                       WRITE (*,*) 'Expected = ', XCHRBF */
+/*                       WRITE (*,*) 'Actual   = ', CHRBUF */
+/*                       STOP */
+/*                    END IF */
+
+/*        C */
+/*        C           Check double precision data. */
+/*        C */
+/*                    DO J = 1, DBUFSZ */
+/*                       XDPBUF(J) = DBLE(   100000000*PASSNO */
+/*             .                           + 100*I + J        ) */
+/*                    END DO */
+
+/*                    FIRSTD = LASTD + 1 */
+/*                    LASTD  = LASTD + DBUFSZ */
+
+/*                    CALL DASRDD ( HANDLE, FIRSTD, LASTD, DPBUF ) */
+
+/*                    DO J = 1, DBUFSZ */
+
+/*                       IF ( DPBUF(J) .NE. XDPBUF(J) ) THEN */
+
+/*                          WRITE (*,*) */
+/*             .                      'Double precision data mismatch: ' */
+/*                          WRITE (*,*) 'PASS     = ', PASSNO */
+/*                          WRITE (*,*) 'I        = ', I */
+/*                          WRITE (*,*) 'J        = ', J */
+/*                          WRITE (*,*) 'Expected = ', XDPBUF(J) */
+/*                          WRITE (*,*) 'Actual   = ', DPBUF(J) */
+/*                          STOP */
+
+/*                       END IF */
+
+/*                    END DO */
+
+/*        C */
+/*        C           Check integer data. */
+/*        C */
+/*                    DO J = 1, IBUFSZ */
+/*                       XINTBF(J) = 100000000*PASSNO  +  100 * I  +  J */
+/*                    END DO */
+
+/*                    FIRSTI = LASTI + 1 */
+/*                    LASTI  = LASTI + IBUFSZ */
+
+/*                    CALL DASRDI ( HANDLE, FIRSTI, LASTI, INTBUF ) */
+
+/*                    DO J = 1, IBUFSZ */
+
+/*                       IF ( INTBUF(J) .NE. XINTBF(J) ) THEN */
+
+/*                          WRITE (*,*) 'Integer data mismatch: ' */
+/*                          WRITE (*,*) 'PASS     = ', PASSNO */
+/*                          WRITE (*,*) 'I        = ', I */
+/*                          WRITE (*,*) 'J        = ', J */
+/*                          WRITE (*,*) 'Expected = ', XINTBF(J) */
+/*                          WRITE (*,*) 'Actual   = ', INTBUF(J) */
+/*                          STOP */
+
+/*                       END IF */
+
+/*                    END DO */
+
+/*                 END DO */
+
+/*              END DO */
+
+/*              WRITE (*,*) 'File check is done.' */
+
+/*        C */
+/*        C     Close the file. */
+/*        C */
+/*              CALL DASCLS ( HANDLE ) */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*         Writing buffered data... */
+/*         Closing DAS file... */
+/*         Opening file for write access... */
+/*         Writing buffered data... */
+/*         Closing DAS file... */
+/*         Opening file for write access... */
+/*         Writing buffered data... */
+/*         Closing DAS file... */
+/*         File write is done. */
+/*         File check is done. */
+
+
+/*        Note that after run completion, a new DAS file exists in the */
+/*        output directory. */
 
 /* $ Restrictions */
 
@@ -3948,25 +4946,32 @@ L_dasllc:
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     K.R. Gehringer  (JPL) */
-/*     W.L. Taber      (JPL) */
-/*     I.M. Underwood  (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 7.0.1, 19-JUL-2021 (NJB) (JDR) */
+
+/*        Updated the header to comply with NAIF standard. Added */
+/*        complete code example. */
 
 /* -    SPICELIB Version 7.0.0, 30-JUL-2014 (NJB) */
 
 /*        Now uses DAF/DAS handle manager subsystem. */
 
-/* -    SPICELIB Version 6.0.3 10-APR-2014 (NJB) */
+/* -    SPICELIB Version 6.0.3, 10-APR-2014 (NJB) */
 
 /*        Corrected header comments: routine that flushes */
 /*        written, buffered records is DASWBR, not DASWUR. */
 
 /* -    SPICELIB Version 6.0.2, 21-FEB-2003 (NJB) */
 
-/*        Corrected inline comment:  determination of whether file */
+/*        Corrected inline comment: determination of whether file */
 /*        is open is done by searching the handle column of the file */
 /*        table, not the unit column. */
 
@@ -3977,30 +4982,30 @@ L_dasllc:
 /* -    SPICELIB Version 5.0.4, 08-OCT-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitly given.  New */
+/*        environments are now explicitly given. New */
 /*        environments are WIN-NT */
 
 /* -    SPICELIB Version 5.0.3, 16-SEP-1999 (NJB) */
 
-/*        CSPICE environments were added.  Some typos were corrected. */
+/*        CSPICE environments were added. Some typos were corrected. */
 
 /* -    SPICELIB Version 5.0.2, 28-JUL-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitly given.  New */
+/*        environments are now explicitly given. New */
 /*        environments are PC-DIGITAL, SGI-O32 and SGI-N32. */
 
 /* -    SPICELIB Version 5.0.1, 18-MAR-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitly given.  Previously, */
+/*        environments are now explicitly given. Previously, */
 /*        environments such as SUN-SUNOS and SUN-SOLARIS were implied */
 /*        by the environment label SUN. */
 
 /* -    SPICELIB Version 1.0.1, 01-NOV-1993 (KRG) */
 
 /*        Removed references to specific DAS file open routines in the */
-/*        $ Detailed_Input section of the header. This was done in order */
+/*        $Detailed_Input section of the header. This was done in order */
 /*        to minimize documentation changes if these open routines ever */
 /*        change. */
 
@@ -4017,7 +5022,7 @@ L_dasllc:
 /* -    SPICELIB Version 1.0.1, 01-NOV-1993 (KRG) */
 
 /*        Removed references to specific DAS file open routines in the */
-/*        $ Detailed_Input section of the header. This was done in order */
+/*        $Detailed_Input section of the header. This was done in order */
 /*        to minimize documentation changes if these open routines ever */
 /*        change. */
 
@@ -4047,7 +5052,7 @@ L_dasllc:
     found = FALSE_;
     while(! found && findex > 0) {
 	if (fthan[(i__1 = findex - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-		"fthan", i__1, "dasfm_", (ftnlen)3611)] == *handle) {
+		"fthan", i__1, "dasfm_", (ftnlen)4570)] == *handle) {
 	    found = TRUE_;
 	} else {
 	    findex = lnknxt_(&findex, pool);
@@ -4061,11 +5066,11 @@ L_dasllc:
 
     if (found) {
 	ftlnk[(i__1 = findex - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("ftlnk",
-		 i__1, "dasfm_", (ftnlen)3627)] = ftlnk[(i__2 = findex - 1) < 
+		 i__1, "dasfm_", (ftnlen)4586)] = ftlnk[(i__2 = findex - 1) < 
 		5000 && 0 <= i__2 ? i__2 : s_rnge("ftlnk", i__2, "dasfm_", (
-		ftnlen)3627)] - 1;
+		ftnlen)4586)] - 1;
 	if (ftlnk[(i__1 = findex - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-		"ftlnk", i__1, "dasfm_", (ftnlen)3629)] == 0) {
+		"ftlnk", i__1, "dasfm_", (ftnlen)4588)] == 0) {
 
 /*           Close this file and delete it from the active list. */
 /*           If this was the head node of the list, the head node */
@@ -4124,11 +5129,12 @@ L_dashfs:
 
 /* $ Keywords */
 
-/*     CONVERSION */
 /*     DAS */
 /*     FILES */
 
 /* $ Declarations */
+
+/*     IMPLICIT NONE */
 
 /*     INTEGER               HANDLE */
 /*     INTEGER               NRESVR */
@@ -4142,7 +5148,7 @@ L_dashfs:
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     I   Handle of a DAS file. */
 /*     NRESVR     O   Number of reserved records in file. */
@@ -4156,50 +5162,59 @@ L_dashfs:
 
 /* $ Detailed_Input */
 
-/*     HANDLE      is the handle of a previously opened DAS file. */
+/*     HANDLE   is the handle of a previously opened DAS file. The file */
+/*              may be open for read or write access. */
 
 /* $ Detailed_Output */
 
-/*     NRESVR      is the number of reserved records in a specified DAS */
-/*                 file. */
+/*     NRESVR   is the number of reserved records in a specified DAS */
+/*              file. */
 
-/*     NRESVC      is the number of characters in use in the reserved */
-/*                 record area of a specified DAS file. */
+/*     NRESVC   is the number of characters in use in the reserved record */
+/*              area of a specified DAS file. */
 
-/*     NCOMR       is the number of comment records in a specified DAS */
-/*                 file. */
+/*     NCOMR    is the number of comment records in a specified DAS file. */
 
-/*     NCOMC       is the number of characters in use in the comment area */
-/*                 of a specified DAS file. */
+/*     NCOMC    is the number of characters in use in the comment area of */
+/*              a specified DAS file. */
 
-/*     FREE        is the Fortran record number of the first free record */
-/*                 in a specified DAS file. */
+/*     FREE     is the 1-based record number of the first free record in */
+/*              a specified DAS file. */
 
-/*     LASTLA      is an array containing the highest current logical */
-/*                 addresses, in the specified DAS file, of data of */
-/*                 character, double precision, and integer types, in */
-/*                 that order. */
+/*     LASTLA   is an array containing the highest current 1-based */
+/*              logical addresses, in the specified DAS file, of data of */
+/*              character, double precision, and integer types, in that */
+/*              order. */
 
-/*     LASTRC      is an array containing the Fortran record numbers, in */
-/*                 the specified DAS file, of the directory records */
-/*                 containing the current last descriptors of clusters */
-/*                 of character, double precision, and integer data */
-/*                 records, in that order. */
+/*     LASTRC   is an array containing the 1-based record numbers, in the */
+/*              specified DAS file, of the directory records containing */
+/*              the current last descriptors of clusters of character, */
+/*              double precision, and integer data records, in that */
+/*              order. */
 
-/*     LASTWD      is an array containing the word positions, in the */
-/*                 specified DAS file, of the current last descriptors */
-/*                 of clusters of character, double precision, and */
-/*                 integer data records, in that order. */
+/*     LASTWD   is an array containing the 1-based word indices, within */
+/*              the respective descriptor records identified by the */
+/*              elements of LASTRC, of the current last descriptors of */
+/*              clusters of character, double precision, and integer data */
+/*              records, in that order. */
 
 /* $ Parameters */
 
-/*     None. */
+/*     See INCLUDE file das.inc for declarations and descriptions of */
+/*     parameters used throughout the DAS system. */
+
+/*     CHARDT, */
+/*     DPDT, */
+/*     INTDT    are data type specifiers that indicate CHARACTER, */
+/*              DOUBLE PRECISION, and INTEGER respectively. These */
+/*              parameters are used in all DAS routines that require a */
+/*              data type specifier. */
 
 /* $ Exceptions */
 
-/*     1) If the specified handle does not belong to any file that is */
-/*        currently known to be open, the error SPICE(DASNOSUCHHANDLE) */
-/*        is signaled. */
+/*     1)  If the specified handle does not belong to any file that is */
+/*         currently known to be open, the error SPICE(DASNOSUCHHANDLE) */
+/*         is signaled. */
 
 /* $ Files */
 
@@ -4207,75 +5222,295 @@ L_dashfs:
 
 /* $ Particulars */
 
-/*     The quantities NRESVR, NRESRC, NCOMR, NCOMC, FREE, LASTLA, */
-/*     LASTRC, and LASTWD define the `state' of a DAS file, and in */
-/*     particular the state of the directory structure of the file. */
-/*     This information is needed by other DAS routines, but application */
-/*     programs will usually have no need for it.  The one exception is */
-/*     the array of `last' logical addresses LASTLA:  these addresses */
-/*     indicate how many words of data of each type are contained in the */
-/*     specified DAS file.  The elements of LASTLA can be conveniently */
-/*     retrieved by calling DASLLA. */
+/*     The quantities */
+
+/*        NRESVR */
+/*        NRESVC */
+/*        NCOMR */
+/*        NCOMC */
+/*        FREE */
+/*        LASTLA */
+/*        LASTRC */
+/*        LASTWD */
+
+/*     define the "state" of a DAS file, and in particular the state of */
+/*     the directory structure of the file. This information is needed by */
+/*     other DAS routines, but application programs will usually have no */
+/*     need for it. The one exception is the array of "last" logical */
+/*     addresses LASTLA: these addresses indicate how many words of data */
+/*     of each type are contained in the specified DAS file. The elements */
+/*     of LASTLA can be conveniently retrieved by calling DASLLA. */
 
 /* $ Examples */
 
-/*     1)  Dump the data from a DAS file. */
+/*     The numerical results shown for this example may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
 
-/*            C */
-/*            C     Open the DAS file for reading. */
-/*            C */
-/*                  CALL DASOPR ( FILE, HANDLE ) */
+/*     1) Create a DAS file containing 10 integers, 5 double precision */
+/*        numbers, and 4 characters. Print the summary of the file and */
+/*        dump its contents. */
 
-/*            C */
-/*            C     Obtain the file summary. */
-/*            C */
-/*                  CALL DASHFS ( HANDLE, */
-/*                 .              NRESVR, */
-/*                 .              RRESVC, */
-/*                 .              NCOMR, */
-/*                 .              NCOMC, */
-/*                 .              FREE, */
-/*                 .              LASTLA, */
-/*                 .              LASTRC, */
-/*                 .              LASTWD ) */
 
-/*            C */
-/*            C     Read the integers and dump them. */
-/*            C */
-/*                  DO I = 1, LASTLA(INT) */
-/*                     CALL DASRDI ( HANDLE, I, I, N ) */
-/*                     WRITE (*,*) N */
-/*                  END DO */
+/*        Example code begins here. */
 
-/*            C */
-/*            C     Now the d.p. numbers: */
-/*            C */
-/*                  DO I = 1, LASTLA(DP) */
-/*                     CALL DASRDD ( HANDLE, I, I, X ) */
-/*                     WRITE (*,*) X */
-/*                  END DO */
 
-/*            C */
-/*            C     Now the characters.  In this case, we read the */
-/*            C     data a line at a time. */
-/*            C */
-/*                  FIRST   =  0 */
-/*                  LAST    =  0 */
-/*                  REMAIN  =  LASTLA(CHAR) */
+/*              PROGRAM DASHFS_EX1 */
+/*              IMPLICIT NONE */
 
-/*                  DO WHILE ( REMAIN .GT. 0 ) */
+/*              INCLUDE 'das.inc' */
 
-/*                     NREAD = MIN ( LINLEN, REMAIN ) */
-/*                     FIRST = LAST + 1 */
-/*                     LAST  = LAST + NREAD */
+/*        C */
+/*        C     Local parameters. */
+/*        C */
+/*              CHARACTER*(*)         FNAME */
+/*              PARAMETER           ( FNAME = 'dashfs_ex1.das' ) */
 
-/*                     CALL DASRDC ( HANDLE, FIRST, LAST, LINE ) */
+/*              INTEGER               IFNMLN */
+/*              PARAMETER           ( IFNMLN = 60 ) */
 
-/*                     WRITE (*,*) LINE(:NREAD) */
+/*              INTEGER               LINLEN */
+/*              PARAMETER           ( LINLEN = 2  ) */
 
-/*                     REMAIN = REMAIN - NREAD */
+/*        C */
+/*        C     Local variables. */
+/*        C */
+/*              CHARACTER*(IFNMLN)    IFNAME */
+/*              CHARACTER*(4)         TYPE */
+/*              CHARACTER*(LINLEN)    LINE */
 
-/*                  END DO */
+/*              DOUBLE PRECISION      X */
+
+/*              INTEGER               FIRST */
+/*              INTEGER               FREE */
+/*              INTEGER               HANDLE */
+/*              INTEGER               I */
+/*              INTEGER               LAST */
+/*              INTEGER               LASTLA ( 3 ) */
+/*              INTEGER               LASTRC ( 3 ) */
+/*              INTEGER               LASTWD ( 3 ) */
+/*              INTEGER               N */
+/*              INTEGER               NCOMC */
+/*              INTEGER               NCOMR */
+/*              INTEGER               NREAD */
+/*              INTEGER               NRESVC */
+/*              INTEGER               NRESVR */
+/*              INTEGER               REMAIN */
+
+/*        C */
+/*        C     Open a new DAS file. Reserve no records for comments. */
+/*        C */
+/*              TYPE   = 'TEST' */
+/*              IFNAME = 'TEST.DAS/NAIF/NJB/11-NOV-1992-20:12:20' */
+
+/*              CALL DASONW ( FNAME, TYPE, IFNAME, 0, HANDLE ) */
+
+/*        C */
+/*        C     Obtain the file summary. */
+/*        C */
+/*              CALL DASHFS ( HANDLE, NRESVR, NRESVC, NCOMR, NCOMC, */
+/*             .              FREE,   LASTLA, LASTRC, LASTWD       ) */
+
+/*        C */
+/*        C     Print the summary of the new file. */
+/*        C */
+/*              WRITE(*,*) 'Summary before adding data:' */
+/*              WRITE(*,*) '   Number of reserved records     :', NRESVR */
+/*              WRITE(*,*) '   Characters in reserved records :', NRESVC */
+/*              WRITE(*,*) '   Number of comment records      :', NCOMR */
+/*              WRITE(*,*) '   Characters in comment area     :', NCOMC */
+/*              WRITE(*,*) '   Number of first free record    :', FREE */
+/*              WRITE(*,*) '   Last logical character address :', */
+/*             .                                          LASTLA(CHARDT) */
+/*              WRITE(*,*) '   Last logical d.p. address      :', */
+/*             .                                          LASTLA(DPDT) */
+/*              WRITE(*,*) '   Last logical integer address   :', */
+/*             .                                          LASTLA(INTDT) */
+/*              WRITE(*,*) '   Last character descriptor      :', */
+/*             .                                          LASTRC(CHARDT) */
+/*              WRITE(*,*) '   Last d.p descriptor            :', */
+/*             .                                          LASTRC(DPDT) */
+/*              WRITE(*,*) '   Last integer descriptor        :', */
+/*             .                                          LASTRC(INTDT) */
+/*              WRITE(*,*) '   Character word position in desc:', */
+/*             .                                          LASTWD(CHARDT) */
+/*              WRITE(*,*) '   d.p. word position in desc     :', */
+/*             .                                          LASTWD(DPDT) */
+/*              WRITE(*,*) '   Integer word position in desc  :', */
+/*             .                                          LASTWD(INTDT) */
+/*              WRITE(*,*) */
+
+/*        C */
+/*        C     Add the data. */
+/*        C */
+/*              DO I = 1, 10 */
+/*                 CALL DASADI ( HANDLE, 1, I ) */
+/*              END DO */
+
+/*              DO I = 1, 5 */
+/*                 CALL DASADD ( HANDLE, 1, DBLE(I) ) */
+/*              END DO */
+
+/*        C */
+/*        C     Add character data to the file. DAS character data are */
+/*        C     treated as a character array, not as a string. The */
+/*        C     following call adds only the first 4 characters to the */
+/*        C     DAS file. */
+/*        C */
+/*              CALL DASADC ( HANDLE, 4, 1, 4, 'SPUDWXY' ) */
+
+/*        C */
+/*        C     Close the file and open it for reading. */
+/*        C */
+/*              CALL DASCLS ( HANDLE        ) */
+/*              CALL DASOPR ( FNAME, HANDLE ) */
+
+/*        C */
+/*        C     Obtain again the file summary. */
+/*        C */
+/*              CALL DASHFS ( HANDLE, NRESVR, NRESVC, NCOMR, NCOMC, */
+/*             .              FREE,   LASTLA, LASTRC, LASTWD       ) */
+
+/*              WRITE(*,*) 'Summary after adding data:' */
+/*              WRITE(*,*) '   Number of reserved records     :', NRESVR */
+/*              WRITE(*,*) '   Characters in reserved records :', NRESVC */
+/*              WRITE(*,*) '   Number of comment records      :', NCOMR */
+/*              WRITE(*,*) '   Characters in comment area     :', NCOMC */
+/*              WRITE(*,*) '   Number of first free record    :', FREE */
+/*              WRITE(*,*) '   Last logical character address :', */
+/*             .                                          LASTLA(CHARDT) */
+/*              WRITE(*,*) '   Last logical d.p. address      :', */
+/*             .                                          LASTLA(DPDT) */
+/*              WRITE(*,*) '   Last logical integer address   :', */
+/*             .                                          LASTLA(INTDT) */
+/*              WRITE(*,*) '   Last character descriptor      :', */
+/*             .                                          LASTRC(CHARDT) */
+/*              WRITE(*,*) '   Last d.p descriptor            :', */
+/*             .                                          LASTRC(DPDT) */
+/*              WRITE(*,*) '   Last integer descriptor        :', */
+/*             .                                          LASTRC(INTDT) */
+/*              WRITE(*,*) '   Character word position in desc:', */
+/*             .                                          LASTWD(CHARDT) */
+/*              WRITE(*,*) '   d.p. word position in desc     :', */
+/*             .                                          LASTWD(DPDT) */
+/*              WRITE(*,*) '   Integer word position in desc  :', */
+/*             .                                          LASTWD(INTDT) */
+/*              WRITE(*,*) */
+
+/*        C */
+/*        C     Read the integers and dump them. */
+/*        C */
+/*              WRITE(*,*) 'Integer data in the DAS file:' */
+/*              DO I = 1, LASTLA(INTDT) */
+/*                 CALL DASRDI ( HANDLE, I, I, N ) */
+/*                 WRITE (*,*) '   ', N */
+/*              END DO */
+
+/*        C */
+/*        C     Now the d.p. numbers: */
+/*        C */
+/*              WRITE(*,*) */
+/*              WRITE(*,*) 'Double precision data in the DAS file:' */
+/*              DO I = 1, LASTLA(DPDT) */
+/*                 CALL DASRDD ( HANDLE, I, I, X ) */
+/*                 WRITE (*,*) '   ', X */
+/*              END DO */
+
+/*        C */
+/*        C     Now the characters. In this case, we read the */
+/*        C     data one line at a time. */
+/*        C */
+/*              FIRST   =  0 */
+/*              LAST    =  0 */
+/*              REMAIN  =  LASTLA(CHARDT) */
+
+/*              WRITE(*,*) */
+/*              WRITE(*,*) 'Character data in the DAS file:' */
+/*              DO WHILE ( REMAIN .GT. 0 ) */
+
+/*                 NREAD = MIN ( LINLEN, REMAIN ) */
+/*                 FIRST = LAST + 1 */
+/*                 LAST  = LAST + NREAD */
+
+/*                 CALL DASRDC ( HANDLE, FIRST, LAST, 1, LINLEN, LINE ) */
+
+/*                 WRITE (*,*) '   ', LINE(:NREAD) */
+
+/*                 REMAIN = REMAIN - NREAD */
+
+/*              END DO */
+
+/*        C */
+/*        C     Close the file. */
+/*        C */
+/*              CALL DASCLS ( HANDLE ) */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*         Summary before adding data: */
+/*            Number of reserved records     :           0 */
+/*            Characters in reserved records :           0 */
+/*            Number of comment records      :           0 */
+/*            Characters in comment area     :           0 */
+/*            Number of first free record    :           3 */
+/*            Last logical character address :           0 */
+/*            Last logical d.p. address      :           0 */
+/*            Last logical integer address   :           0 */
+/*            Last character descriptor      :           0 */
+/*            Last d.p descriptor            :           0 */
+/*            Last integer descriptor        :           0 */
+/*            Character word position in desc:           0 */
+/*            d.p. word position in desc     :           0 */
+/*            Integer word position in desc  :           0 */
+
+/*         Summary after adding data: */
+/*            Number of reserved records     :           0 */
+/*            Characters in reserved records :           0 */
+/*            Number of comment records      :           0 */
+/*            Characters in comment area     :           0 */
+/*            Number of first free record    :           6 */
+/*            Last logical character address :           4 */
+/*            Last logical d.p. address      :           5 */
+/*            Last logical integer address   :          10 */
+/*            Last character descriptor      :           2 */
+/*            Last d.p descriptor            :           2 */
+/*            Last integer descriptor        :           2 */
+/*            Character word position in desc:          10 */
+/*            d.p. word position in desc     :          11 */
+/*            Integer word position in desc  :          12 */
+
+/*         Integer data in the DAS file: */
+/*                       1 */
+/*                       2 */
+/*                       3 */
+/*                       4 */
+/*                       5 */
+/*                       6 */
+/*                       7 */
+/*                       8 */
+/*                       9 */
+/*                      10 */
+
+/*         Double precision data in the DAS file: */
+/*               1.0000000000000000 */
+/*               2.0000000000000000 */
+/*               3.0000000000000000 */
+/*               4.0000000000000000 */
+/*               5.0000000000000000 */
+
+/*         Character data in the DAS file: */
+/*            SP */
+/*            UD */
+
+
+/*        Note that after run completion, a new DAS file exists in the */
+/*        output directory. */
 
 /* $ Restrictions */
 
@@ -4287,11 +5522,21 @@ L_dashfs:
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     K.R. Gehringer  (JPL) */
-/*     W.L. Taber      (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 6.0.2, 19-JUL-2021 (JDR) */
+
+/*        Updated the header to comply with NAIF standard. Added */
+/*        complete code example. */
+
+/*        Described the public parameters used together with this module */
+/*        in the $Parameters section. */
 
 /* -    SPICELIB Version 6.0.1, 17-JUL-2002 (BVS) */
 
@@ -4300,30 +5545,30 @@ L_dashfs:
 /* -    SPICELIB Version 5.0.4, 08-OCT-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitly given.  New */
+/*        environments are now explicitly given. New */
 /*        environments are WIN-NT */
 
 /* -    SPICELIB Version 5.0.3, 16-SEP-1999 (NJB) */
 
-/*        CSPICE environments were added.  Some typos were corrected. */
+/*        CSPICE environments were added. Some typos were corrected. */
 
 /* -    SPICELIB Version 5.0.2, 28-JUL-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitly given.  New */
+/*        environments are now explicitly given. New */
 /*        environments are PC-DIGITAL, SGI-O32 and SGI-N32. */
 
 /* -    SPICELIB Version 5.0.1, 18-MAR-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitly given.  Previously, */
+/*        environments are now explicitly given. Previously, */
 /*        environments such as SUN-SUNOS and SUN-SOLARIS were implied */
 /*        by the environment label SUN. */
 
 /* -    SPICELIB Version 1.0.1, 01-NOV-1993 (KRG) */
 
 /*        Removed references to specific DAS file open routines in the */
-/*        $ Detailed_Input section of the header. This was done in order */
+/*        $Detailed_Input section of the header. This was done in order */
 /*        to minimize documentation changes if these open routines ever */
 /*        change. */
 
@@ -4334,13 +5579,14 @@ L_dashfs:
 
 /*     return the file summary of a DAS file */
 /*     find the amount of data in a DAS file */
+
 /* -& */
 /* $ Revisions */
 
 /* -    SPICELIB Version 1.0.1, 01-NOV-1993 (KRG) */
 
 /*        Removed references to specific DAS file open routines in the */
-/*        $ Detailed_Input section of the header. This was done in order */
+/*        $Detailed_Input section of the header. This was done in order */
 /*        to minimize documentation changes if these open routines ever */
 /*        change. */
 
@@ -4367,7 +5613,7 @@ L_dashfs:
     found = FALSE_;
     while(! found && findex > 0) {
 	if (fthan[(i__1 = findex - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-		"fthan", i__1, "dasfm_", (ftnlen)3959)] == *handle) {
+		"fthan", i__1, "dasfm_", (ftnlen)5162)] == *handle) {
 	    found = TRUE_;
 	} else {
 	    findex = lnknxt_(&findex, pool);
@@ -4378,28 +5624,28 @@ L_dashfs:
 /*        Give the caller the current summary from the file table. */
 
 	*nresvr = ftsum[(i__1 = findex * 14 - 14) < 70000 && 0 <= i__1 ? i__1 
-		: s_rnge("ftsum", i__1, "dasfm_", (ftnlen)3972)];
+		: s_rnge("ftsum", i__1, "dasfm_", (ftnlen)5175)];
 	*nresvc = ftsum[(i__1 = findex * 14 - 13) < 70000 && 0 <= i__1 ? i__1 
-		: s_rnge("ftsum", i__1, "dasfm_", (ftnlen)3973)];
+		: s_rnge("ftsum", i__1, "dasfm_", (ftnlen)5176)];
 	*ncomr = ftsum[(i__1 = findex * 14 - 12) < 70000 && 0 <= i__1 ? i__1 :
-		 s_rnge("ftsum", i__1, "dasfm_", (ftnlen)3974)];
+		 s_rnge("ftsum", i__1, "dasfm_", (ftnlen)5177)];
 	*ncomc = ftsum[(i__1 = findex * 14 - 11) < 70000 && 0 <= i__1 ? i__1 :
-		 s_rnge("ftsum", i__1, "dasfm_", (ftnlen)3975)];
+		 s_rnge("ftsum", i__1, "dasfm_", (ftnlen)5178)];
 	*free = ftsum[(i__1 = findex * 14 - 10) < 70000 && 0 <= i__1 ? i__1 : 
-		s_rnge("ftsum", i__1, "dasfm_", (ftnlen)3976)];
+		s_rnge("ftsum", i__1, "dasfm_", (ftnlen)5179)];
 	for (i__ = 1; i__ <= 3; ++i__) {
 	    lastla[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("lastla",
-		     i__1, "dasfm_", (ftnlen)3979)] = ftsum[(i__2 = i__ + 5 + 
+		     i__1, "dasfm_", (ftnlen)5182)] = ftsum[(i__2 = i__ + 5 + 
 		    findex * 14 - 15) < 70000 && 0 <= i__2 ? i__2 : s_rnge(
-		    "ftsum", i__2, "dasfm_", (ftnlen)3979)];
+		    "ftsum", i__2, "dasfm_", (ftnlen)5182)];
 	    lastrc[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("lastrc",
-		     i__1, "dasfm_", (ftnlen)3980)] = ftsum[(i__2 = i__ + 8 + 
+		     i__1, "dasfm_", (ftnlen)5183)] = ftsum[(i__2 = i__ + 8 + 
 		    findex * 14 - 15) < 70000 && 0 <= i__2 ? i__2 : s_rnge(
-		    "ftsum", i__2, "dasfm_", (ftnlen)3980)];
+		    "ftsum", i__2, "dasfm_", (ftnlen)5183)];
 	    lastwd[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("lastwd",
-		     i__1, "dasfm_", (ftnlen)3981)] = ftsum[(i__2 = i__ + 11 
+		     i__1, "dasfm_", (ftnlen)5184)] = ftsum[(i__2 = i__ + 11 
 		    + findex * 14 - 15) < 70000 && 0 <= i__2 ? i__2 : s_rnge(
-		    "ftsum", i__2, "dasfm_", (ftnlen)3981)];
+		    "ftsum", i__2, "dasfm_", (ftnlen)5184)];
 	}
     } else {
 	setmsg_("There is no DAS file open with handle = #", (ftnlen)41);
@@ -4464,7 +5710,7 @@ L_dasufs:
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     I   Handle of an open DAS file. */
 /*     NRESVR     I   Number of reserved records in file. */
@@ -4478,42 +5724,42 @@ L_dasufs:
 
 /* $ Detailed_Input */
 
-/*     HANDLE      is the handle of a previously opened DAS file. */
+/*     HANDLE   is the handle of a previously opened DAS file. */
 
-/*     NRESVR      is the number of reserved records in a specified DAS */
-/*                 file. */
+/*     NRESVR   is the number of reserved records in a specified DAS */
+/*              file. */
 
-/*     NRESVC      is the number of characters in use in the reserved */
-/*                 record area of a specified DAS file. */
+/*     NRESVC   is the number of characters in use in the reserved */
+/*              record area of a specified DAS file. */
 
-/*     NCOMR       is the number of comment records in a specified DAS */
-/*                 file. */
+/*     NCOMR    is the number of comment records in a specified DAS */
+/*              file. */
 
-/*     NCOMC       is the number of characters in use in the comment area */
-/*                 of a specified DAS file. */
+/*     NCOMC    is the number of characters in use in the comment area */
+/*              of a specified DAS file. */
 
-/*     FREE        is the Fortran record number of the first free record */
-/*                 in a specified DAS file. */
+/*     FREE     is the Fortran record number of the first free record */
+/*              in a specified DAS file. */
 
-/*     LASTLA      is an array containing the highest current logical */
-/*                 addresses, in the specified DAS file, of data of */
-/*                 character, double precision, and integer types, in */
-/*                 that order. */
+/*     LASTLA   is an array containing the highest current logical */
+/*              addresses, in the specified DAS file, of data of */
+/*              character, double precision, and integer types, in */
+/*              that order. */
 
-/*     LASTRC      is an array containing the Fortran record numbers, in */
-/*                 the specified DAS file, of the directory records */
-/*                 containing the current last descriptors of clusters */
-/*                 of character, double precision, and integer data */
-/*                 records, in that order. */
+/*     LASTRC   is an array containing the Fortran record numbers, in */
+/*              the specified DAS file, of the directory records */
+/*              containing the current last descriptors of clusters */
+/*              of character, double precision, and integer data */
+/*              records, in that order. */
 
-/*     LASTWD      is an array containing the word positions, in the */
-/*                 specified DAS file, of the current last descriptors */
-/*                 of clusters of character, double precision, and */
-/*                 integer data records, in that order. */
+/*     LASTWD   is an array containing the word positions, in the */
+/*              specified DAS file, of the current last descriptors */
+/*              of clusters of character, double precision, and */
+/*              integer data records, in that order. */
 
 /* $ Detailed_Output */
 
-/*     None.  See $Particulars for a description of the effect of this */
+/*     None. See $Particulars for a description of the effect of this */
 /*     routine. */
 
 /* $ Parameters */
@@ -4522,19 +5768,19 @@ L_dasufs:
 
 /* $ Exceptions */
 
-/*     1) If the specified handle does not belong to any file that is */
-/*        currently known to be open, the error SPICE(DASNOSUCHHANDLE) */
-/*        is signaled. */
+/*     1)  If the specified handle does not belong to any file that is */
+/*         currently known to be open, the error SPICE(DASNOSUCHHANDLE) */
+/*         is signaled. */
 
-/*     2) If the specified handle is not open for WRITE access, the */
-/*        error SPICE(DASINVALIDACCESS) is signaled. */
+/*     2)  If the specified handle is not open for WRITE access, the */
+/*         error SPICE(DASINVALIDACCESS) is signaled. */
 
-/*     3) If this routine's attempts to read the DAS file record */
-/*        fail before an update, the error SPICE(DASREADFAIL) is */
-/*        signaled. */
+/*     3)  If this routine's attempts to read the DAS file record */
+/*         fail before an update, the error SPICE(DASREADFAIL) is */
+/*         signaled. */
 
-/*     4) If the attempt to write to the DAS file record fails, the */
-/*        error SPICE(DASWRITEFAIL) is signaled. */
+/*     4)  If the attempt to write to the DAS file record fails, the */
+/*         error SPICE(DASWRITEFAIL) is signaled. */
 
 /* $ Files */
 
@@ -4601,12 +5847,18 @@ L_dasufs:
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     K.R. Gehringer  (JPL) */
-/*     W.L. Taber      (JPL) */
-/*     F.S. Turner     (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     F.S. Turner        (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 7.1.1, 19-JUL-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 7.1.0, 07-OCT-2015 (NJB) */
 
@@ -4618,7 +5870,7 @@ L_dasufs:
 
 /* -    SPICELIB Version 6.1.0, 26-SEP-2005 (NJB) */
 
-/*        Bug fix:  file name is now correctly inserted into long */
+/*        Bug fix: file name is now correctly inserted into long */
 /*        error message generated when target file is not open for */
 /*        write access. */
 
@@ -4628,41 +5880,41 @@ L_dasufs:
 
 /* -    SPICELIB Version 6.0.0, 15-OCT-2001 (FST) (NJB) */
 
-/*        Bug fix:  this routine now reads the file record */
-/*        before attempting to update it.  The buffered values */
+/*        Bug fix: this routine now reads the file record */
+/*        before attempting to update it. The buffered values */
 /*        of IDWORD and IFN are no longer present. */
 
-/*        Bug fix:  missing call to CHKIN was added to an error */
-/*        handling branch in entry point DASUFS.  This call is */
+/*        Bug fix: missing call to CHKIN was added to an error */
+/*        handling branch in entry point DASUFS. This call is */
 /*        required because DASUFS uses discovery check-in. */
 
 /* -    SPICELIB Version 5.0.4, 08-OCT-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitly given.  New */
+/*        environments are now explicitly given. New */
 /*        environments are WIN-NT */
 
 /* -    SPICELIB Version 5.0.3, 16-SEP-1999 (NJB) */
 
-/*        CSPICE environments were added.  Some typos were corrected. */
+/*        CSPICE environments were added. Some typos were corrected. */
 
 /* -    SPICELIB Version 5.0.2, 28-JUL-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitly given.  New */
+/*        environments are now explicitly given. New */
 /*        environments are PC-DIGITAL, SGI-O32 and SGI-N32. */
 
 /* -    SPICELIB Version 5.0.1, 18-MAR-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitly given.  Previously, */
+/*        environments are now explicitly given. Previously, */
 /*        environments such as SUN-SUNOS and SUN-SOLARIS were implied */
 /*        by the environment label SUN. */
 
 /* -    SPICELIB Version 1.0.1, 01-NOV-1993 (KRG) */
 
 /*        Removed references to specific DAS file open routines in the */
-/*        $ Detailed_Input section of the header. This was done in order */
+/*        $Detailed_Input section of the header. This was done in order */
 /*        to minimize documentation changes if these open routines ever */
 /*        change. */
 
@@ -4678,20 +5930,20 @@ L_dasufs:
 
 /* -    SPICELIB Version 6.1.0, 26-SEP-2005 (NJB) */
 
-/*        Bug fix:  file name is now correctly inserted into long */
+/*        Bug fix: file name is now correctly inserted into long */
 /*        error message generated when target file is not open for */
 /*        write access. */
 
 /* -    SPICELIB Version 5.1.0, 15-OCT-2001 (NJB) */
 
-/*        Bug fix:  missing call to CHKIN was added to an error */
-/*        handling branch in entry point DASUFS.  This call is */
+/*        Bug fix: missing call to CHKIN was added to an error */
+/*        handling branch in entry point DASUFS. This call is */
 /*        required because DASUFS uses discovery check-in. */
 
 /* -    SPICELIB Version 1.0.1, 01-NOV-1993 (KRG) */
 
 /*        Removed references to specific DAS file open routines in the */
-/*        $ Detailed_Input section of the header. This was done in order */
+/*        $Detailed_Input section of the header. This was done in order */
 /*        to minimize documentation changes if these open routines ever */
 /*        change. */
 
@@ -4720,7 +5972,7 @@ L_dasufs:
     found = FALSE_;
     while(! found && findex > 0) {
 	if (fthan[(i__1 = findex - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-		"fthan", i__1, "dasfm_", (ftnlen)4326)] == *handle) {
+		"fthan", i__1, "dasfm_", (ftnlen)5537)] == *handle) {
 	    found = TRUE_;
 	} else {
 	    findex = lnknxt_(&findex, pool);
@@ -4741,7 +5993,7 @@ L_dasufs:
 /*        open for read access only. */
 
 	if (ftacc[(i__1 = findex - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-		"ftacc", i__1, "dasfm_", (ftnlen)4350)] != 2) {
+		"ftacc", i__1, "dasfm_", (ftnlen)5561)] != 2) {
 	    setmsg_("DAS file not open for writing. Handle = #, file = '#'.", 
 		    (ftnlen)54);
 	    errint_("#", handle, (ftnlen)1);
@@ -4756,13 +6008,13 @@ L_dasufs:
 /*        counts in the file record.  Otherwise, leave the file alone. */
 
 	if (*nresvr != ftsum[(i__1 = findex * 14 - 14) < 70000 && 0 <= i__1 ? 
-		i__1 : s_rnge("ftsum", i__1, "dasfm_", (ftnlen)4367)] || *
+		i__1 : s_rnge("ftsum", i__1, "dasfm_", (ftnlen)5578)] || *
 		nresvc != ftsum[(i__2 = findex * 14 - 13) < 70000 && 0 <= 
-		i__2 ? i__2 : s_rnge("ftsum", i__2, "dasfm_", (ftnlen)4367)] 
+		i__2 ? i__2 : s_rnge("ftsum", i__2, "dasfm_", (ftnlen)5578)] 
 		|| *ncomr != ftsum[(i__3 = findex * 14 - 12) < 70000 && 0 <= 
-		i__3 ? i__3 : s_rnge("ftsum", i__3, "dasfm_", (ftnlen)4367)] 
+		i__3 ? i__3 : s_rnge("ftsum", i__3, "dasfm_", (ftnlen)5578)] 
 		|| *ncomc != ftsum[(i__5 = findex * 14 - 11) < 70000 && 0 <= 
-		i__5 ? i__5 : s_rnge("ftsum", i__5, "dasfm_", (ftnlen)4367)]) 
+		i__5 ? i__5 : s_rnge("ftsum", i__5, "dasfm_", (ftnlen)5578)]) 
 		{
 
 /*           Read the file record. */
@@ -4899,28 +6151,28 @@ L100003:
 /*        Update the file table. */
 
 	ftsum[(i__1 = findex * 14 - 14) < 70000 && 0 <= i__1 ? i__1 : s_rnge(
-		"ftsum", i__1, "dasfm_", (ftnlen)4441)] = *nresvr;
+		"ftsum", i__1, "dasfm_", (ftnlen)5652)] = *nresvr;
 	ftsum[(i__1 = findex * 14 - 13) < 70000 && 0 <= i__1 ? i__1 : s_rnge(
-		"ftsum", i__1, "dasfm_", (ftnlen)4442)] = *nresvc;
+		"ftsum", i__1, "dasfm_", (ftnlen)5653)] = *nresvc;
 	ftsum[(i__1 = findex * 14 - 12) < 70000 && 0 <= i__1 ? i__1 : s_rnge(
-		"ftsum", i__1, "dasfm_", (ftnlen)4443)] = *ncomr;
+		"ftsum", i__1, "dasfm_", (ftnlen)5654)] = *ncomr;
 	ftsum[(i__1 = findex * 14 - 11) < 70000 && 0 <= i__1 ? i__1 : s_rnge(
-		"ftsum", i__1, "dasfm_", (ftnlen)4444)] = *ncomc;
+		"ftsum", i__1, "dasfm_", (ftnlen)5655)] = *ncomc;
 	ftsum[(i__1 = findex * 14 - 10) < 70000 && 0 <= i__1 ? i__1 : s_rnge(
-		"ftsum", i__1, "dasfm_", (ftnlen)4445)] = *free;
+		"ftsum", i__1, "dasfm_", (ftnlen)5656)] = *free;
 	for (i__ = 1; i__ <= 3; ++i__) {
 	    ftsum[(i__1 = i__ + 5 + findex * 14 - 15) < 70000 && 0 <= i__1 ? 
-		    i__1 : s_rnge("ftsum", i__1, "dasfm_", (ftnlen)4448)] = 
+		    i__1 : s_rnge("ftsum", i__1, "dasfm_", (ftnlen)5659)] = 
 		    lastla[(i__2 = i__ - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge(
-		    "lastla", i__2, "dasfm_", (ftnlen)4448)];
+		    "lastla", i__2, "dasfm_", (ftnlen)5659)];
 	    ftsum[(i__1 = i__ + 8 + findex * 14 - 15) < 70000 && 0 <= i__1 ? 
-		    i__1 : s_rnge("ftsum", i__1, "dasfm_", (ftnlen)4449)] = 
+		    i__1 : s_rnge("ftsum", i__1, "dasfm_", (ftnlen)5660)] = 
 		    lastrc[(i__2 = i__ - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge(
-		    "lastrc", i__2, "dasfm_", (ftnlen)4449)];
+		    "lastrc", i__2, "dasfm_", (ftnlen)5660)];
 	    ftsum[(i__1 = i__ + 11 + findex * 14 - 15) < 70000 && 0 <= i__1 ? 
-		    i__1 : s_rnge("ftsum", i__1, "dasfm_", (ftnlen)4450)] = 
+		    i__1 : s_rnge("ftsum", i__1, "dasfm_", (ftnlen)5661)] = 
 		    lastwd[(i__2 = i__ - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge(
-		    "lastwd", i__2, "dasfm_", (ftnlen)4450)];
+		    "lastwd", i__2, "dasfm_", (ftnlen)5661)];
 	}
     } else {
 	setmsg_("There is no file open with handle = #", (ftnlen)37);
@@ -4982,19 +6234,19 @@ L_dashlu:
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     I   Handle of a DAS file. */
 /*     UNIT       O   Corresponding logical unit. */
 
 /* $ Detailed_Input */
 
-/*     HANDLE      is the handle of a previously opened DAS file. */
+/*     HANDLE   is the handle of a previously opened DAS file. */
 
 /* $ Detailed_Output */
 
-/*     UNIT        is the Fortran logical unit to which the file is */
-/*                 connected. */
+/*     UNIT     is the Fortran logical unit to which the file is */
+/*              connected. */
 
 /* $ Parameters */
 
@@ -5002,9 +6254,9 @@ L_dashlu:
 
 /* $ Exceptions */
 
-/*     1) If the specified handle does not belong to any file that is */
-/*        currently known to be open, the error SPICE(DASNOSUCHHANDLE) */
-/*        is signaled. */
+/*     1)  If the specified handle does not belong to any file that is */
+/*         currently known to be open, the error SPICE(DASNOSUCHHANDLE) */
+/*         is signaled. */
 
 /* $ Files */
 
@@ -5013,7 +6265,7 @@ L_dashlu:
 /* $ Particulars */
 
 /*     This routine is a utility used by the DAS system to support */
-/*     file I/O.  DASHLU may also prove useful to general SPICELIB */
+/*     file I/O. DASHLU may also prove useful to general SPICELIB */
 /*     users for constructing error messages. */
 
 /* $ Examples */
@@ -5025,21 +6277,21 @@ L_dashlu:
 
 /* $ Restrictions */
 
-/*     1) Successfully invoking this module has the side effect of */
-/*        locking UNIT to HANDLE.  This 'lock' guarantees until */
-/*        HANDLE is closed (or unlocked) that the file associated */
-/*        with HANDLE is always open and attached to logical unit */
-/*        UNIT.  To unlock a handle without closing the file, use */
-/*        ZZDDHUNL, an entry point in the handle manager umbrella, */
-/*        ZZDDHMAN. */
+/*     1)  Successfully invoking this module has the side effect of */
+/*         locking UNIT to HANDLE. This 'lock' guarantees until */
+/*         HANDLE is closed (or unlocked) that the file associated */
+/*         with HANDLE is always open and attached to logical unit */
+/*         UNIT. To unlock a handle without closing the file, use */
+/*         ZZDDHUNL, an entry point in the handle manager umbrella, */
+/*         ZZDDHMAN. */
 
-/*        The system can lock at most UTSIZE-SCRUNT-RSVUNT */
-/*        simultaneously (see the include file 'zzddhman.inc' for */
-/*        specific values of these parameters), but unnecessarily */
-/*        locking handles to their logical units may cause performance */
-/*        degradation.  The handle manager will have fewer logical */
-/*        units to utilize when disconnecting and reconnecting */
-/*        loaded files. */
+/*         The system can lock at most UTSIZE-SCRUNT-RSVUNT */
+/*         simultaneously (see the include file 'zzddhman.inc' for */
+/*         specific values of these parameters), but unnecessarily */
+/*         locking handles to their logical units may cause performance */
+/*         degradation. The handle manager will have fewer logical */
+/*         units to utilize when disconnecting and reconnecting */
+/*         loaded files. */
 
 /* $ Literature_References */
 
@@ -5047,12 +6299,19 @@ L_dashlu:
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     W.L. Taber      (JPL) */
-/*     F.S. Turner     (JPL) */
-/*     I.M. Underwood  (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     F.S. Turner        (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 7.0.1, 19-JUL-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 7.0.0, 04-FEB-2015 (NJB) (FST) */
 
@@ -5066,30 +6325,30 @@ L_dashlu:
 /* -    SPICELIB Version 5.0.4, 08-OCT-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitly given.  New */
+/*        environments are now explicitly given. New */
 /*        environments are WIN-NT */
 
 /* -    SPICELIB Version 5.0.3, 16-SEP-1999 (NJB) */
 
-/*        CSPICE environments were added.  Some typos were corrected. */
+/*        CSPICE environments were added. Some typos were corrected. */
 
 /* -    SPICELIB Version 5.0.2, 28-JUL-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitly given.  New */
+/*        environments are now explicitly given. New */
 /*        environments are PC-DIGITAL, SGI-O32 and SGI-N32. */
 
 /* -    SPICELIB Version 5.0.1, 18-MAR-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitly given.  Previously, */
+/*        environments are now explicitly given. Previously, */
 /*        environments such as SUN-SUNOS and SUN-SOLARIS were implied */
 /*        by the environment label SUN. */
 
 /* -    SPICELIB Version 1.0.1, 01-NOV-1993 (KRG) */
 
 /*        Removed references to specific DAS file open routines in the */
-/*        $ Detailed_Input section of the header. This was done in order */
+/*        $Detailed_Input section of the header. This was done in order */
 /*        to minimize documentation changes if these open routines ever */
 /*        change. */
 
@@ -5106,7 +6365,7 @@ L_dashlu:
 /* -    SPICELIB Version 1.0.1, 01-NOV-1993 (KRG) */
 
 /*        Removed references to specific DAS file open routines in the */
-/*        $ Detailed_Input section of the header. This was done in order */
+/*        $Detailed_Input section of the header. This was done in order */
 /*        to minimize documentation changes if these open routines ever */
 /*        change. */
 
@@ -5136,7 +6395,7 @@ L_dashlu:
     found = FALSE_;
     while(! found && findex > 0) {
 	if (fthan[(i__1 = findex - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-		"fthan", i__1, "dasfm_", (ftnlen)4685)] == *handle) {
+		"fthan", i__1, "dasfm_", (ftnlen)5906)] == *handle) {
 	    found = TRUE_;
 	} else {
 	    findex = lnknxt_(&findex, pool);
@@ -5205,19 +6464,19 @@ L_dasluh:
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     UNIT       I   Logical unit connected to a DAS file. */
 /*     HANDLE     O   Corresponding handle. */
 
 /* $ Detailed_Input */
 
-/*     UNIT        is the logical unit to which a DAS file has been */
-/*                 connected when it was opened. */
+/*     UNIT     is the logical unit to which a DAS file has been */
+/*              connected when it was opened. */
 
 /* $ Detailed_Output */
 
-/*     HANDLE      is the handle associated with the file. */
+/*     HANDLE   is the handle associated with the file. */
 
 /* $ Parameters */
 
@@ -5225,9 +6484,9 @@ L_dasluh:
 
 /* $ Exceptions */
 
-/*     1) If the specified unit is not connected to any DAS file that is */
-/*        currently known to be open, the error SPICE(DASNOSUCHUNIT) */
-/*        is signaled. */
+/*     1)  If the specified unit is not connected to any DAS file that is */
+/*         currently known to be open, the error SPICE(DASNOSUCHUNIT) */
+/*         is signaled. */
 
 /* $ Files */
 
@@ -5237,7 +6496,7 @@ L_dasluh:
 
 /*     It is unlikely, but possible, that a calling program would know */
 /*     the logical unit to which a file is connected without knowing the */
-/*     handle associated with the file.  DASLUH is provided mostly for */
+/*     handle associated with the file. DASLUH is provided mostly for */
 /*     completeness. */
 
 /* $ Examples */
@@ -5260,12 +6519,18 @@ L_dasluh:
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     K.R. Gehringer  (JPL) */
-/*     W.L. Taber      (JPL) */
-/*     I.M. Underwood  (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 7.0.1, 19-JUL-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 7.0.0, 30-JUL-2014 (NJB) */
 
@@ -5279,30 +6544,30 @@ L_dasluh:
 /* -    SPICELIB Version 5.0.4, 08-OCT-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitly given.  New */
+/*        environments are now explicitly given. New */
 /*        environments are WIN-NT */
 
 /* -    SPICELIB Version 5.0.3, 16-SEP-1999 (NJB) */
 
-/*        CSPICE environments were added.  Some typos were corrected. */
+/*        CSPICE environments were added. Some typos were corrected. */
 
 /* -    SPICELIB Version 5.0.2, 28-JUL-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitly given.  New */
+/*        environments are now explicitly given. New */
 /*        environments are PC-DIGITAL, SGI-O32 and SGI-N32. */
 
 /* -    SPICELIB Version 5.0.1, 18-MAR-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitly given.  Previously, */
+/*        environments are now explicitly given. Previously, */
 /*        environments such as SUN-SUNOS and SUN-SOLARIS were implied */
 /*        by the environment label SUN. */
 
 /* -    SPICELIB Version 1.0.1, 01-NOV-1993 (KRG) */
 
 /*        Removed references to specific DAS file open routines in the */
-/*        $ Detailed_Input section of the header. This was done in order */
+/*        $Detailed_Input section of the header. This was done in order */
 /*        to minimize documentation changes if these open routines ever */
 /*        change. */
 
@@ -5319,7 +6584,7 @@ L_dasluh:
 /* -    SPICELIB Version 1.0.1, 01-NOV-1993 (KRG) */
 
 /*        Removed references to specific DAS file open routines in the */
-/*        $ Detailed_Input section of the header. This was done in order */
+/*        $Detailed_Input section of the header. This was done in order */
 /*        to minimize documentation changes if these open routines ever */
 /*        change. */
 
@@ -5401,19 +6666,19 @@ L_dashfn:
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     I   Handle of a DAS file. */
 /*     FNAME      O   Corresponding file name. */
 
 /* $ Detailed_Input */
 
-/*     HANDLE      is the handle of a previously opened DAS file. */
+/*     HANDLE   is the handle of a previously opened DAS file. */
 
 /* $ Detailed_Output */
 
-/*     FNAME       is the name of the DAS file associated with the input */
-/*                 file handle. */
+/*     FNAME    is the name of the DAS file associated with the input */
+/*              file handle. */
 
 /* $ Parameters */
 
@@ -5421,9 +6686,12 @@ L_dashfn:
 
 /* $ Exceptions */
 
-/*     1) If the specified handle does not belong to any file that is */
-/*        currently known to be open, the error SPICE(DASNOSUCHHANDLE) */
-/*        is signaled. */
+/*     1)  If the specified handle does not belong to any file that is */
+/*         currently known to be open, the error SPICE(DASNOSUCHHANDLE) */
+/*         is signaled. */
+
+/*     2)  If FNAME string is too short to contain the output string, */
+/*         the name is truncated on the right. */
 
 /* $ Files */
 
@@ -5440,26 +6708,69 @@ L_dashfn:
 
 /* $ Examples */
 
-/*     In the following code fragment, the name of a DAS file is */
-/*     recovered using the handle associated with the file. */
+/*     The numerical results shown for this example may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
 
-/*        CALL DASOPR ( 'sample.DAS', HANDLE ) */
-/*         . */
-/*         . */
+/*     1) In the following program, the name of a DAS file is */
+/*        recovered using the handle associated with the file. */
 
-/*        CALL DASHFN ( HANDLE, FNAME ) */
 
-/*     Depending on the circumstances (operating system, compiler, */
-/*     default directory) the value of FNAME might resemble any of */
-/*     the following: */
+/*        Use the DSK kernel below as input DAS file for the example. */
 
-/*        'USER$DISK:[WYATT.IMAGES]SAMPLE.DAS;4' */
+/*           phobos512.bds */
 
-/*        '/wyatt/images/sample.DAS' */
 
-/*        'A:\IMAGES\SAMPLE.DAS' */
+/*        Example code begins here. */
 
-/*     On the other hand, it might not. */
+
+/*              PROGRAM DASHFN_EX1 */
+/*              IMPLICIT NONE */
+
+/*        C */
+/*        C     SPICELIB functions */
+/*        C */
+/*              INTEGER               RTRIM */
+
+/*        C */
+/*        C     Local constants */
+/*        C */
+/*              CHARACTER*(*)         DAS */
+/*              PARAMETER           ( DAS    = 'phobos512.bds' ) */
+
+/*              INTEGER               FILSIZ */
+/*              PARAMETER           ( FILSIZ = 256 ) */
+
+/*        C */
+/*        C     Local variables */
+/*        C */
+/*              CHARACTER*(FILSIZ)    FNAME */
+
+/*              INTEGER               HANDLE */
+
+/*        C */
+/*        C     Open the DAS file for read access. */
+/*        C */
+/*              CALL DASOPR ( DAS, HANDLE ) */
+
+/*        C */
+/*        C     Map the handle to a file name. */
+/*        C */
+/*              CALL DASHFN ( HANDLE, FNAME ) */
+
+/*              WRITE(*,*) 'DAS file name = <', FNAME(:RTRIM(FNAME)), */
+/*             .           '>.' */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*         DAS file name = <phobos512.bds>. */
+
 
 /* $ Restrictions */
 
@@ -5471,12 +6782,20 @@ L_dashfn:
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     K.R. Gehringer  (JPL) */
-/*     W.L. Taber      (JPL) */
-/*     I.M. Underwood  (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 7.0.1, 19-JUL-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. Added complete */
+/*        code example. Extended $Exceptions section to describe what */
+/*        happens in case of output string being too short. */
 
 /* -    SPICELIB Version 7.0.0, 30-JUL-2014 (NJB) */
 
@@ -5490,30 +6809,30 @@ L_dashfn:
 /* -    SPICELIB Version 5.0.4, 08-OCT-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitly given.  New */
+/*        environments are now explicitly given. New */
 /*        environments are WIN-NT */
 
 /* -    SPICELIB Version 5.0.3, 16-SEP-1999 (NJB) */
 
-/*        CSPICE environments were added.  Some typos were corrected. */
+/*        CSPICE environments were added. Some typos were corrected. */
 
 /* -    SPICELIB Version 5.0.2, 28-JUL-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitly given.  New */
+/*        environments are now explicitly given. New */
 /*        environments are PC-DIGITAL, SGI-O32 and SGI-N32. */
 
 /* -    SPICELIB Version 5.0.1, 18-MAR-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitly given.  Previously, */
+/*        environments are now explicitly given. Previously, */
 /*        environments such as SUN-SUNOS and SUN-SOLARIS were implied */
 /*        by the environment label SUN. */
 
 /* -    SPICELIB Version 1.0.1, 01-NOV-1993 (KRG) */
 
 /*        Removed references to specific DAS file open routines in the */
-/*        $ Detailed_Input section of the header. This was done in order */
+/*        $Detailed_Input section of the header. This was done in order */
 /*        to minimize documentation changes if these open routines ever */
 /*        change. */
 
@@ -5530,7 +6849,7 @@ L_dashfn:
 /* -    SPICELIB Version 1.0.1, 01-NOV-1993 (KRG) */
 
 /*        Removed references to specific DAS file open routines in the */
-/*        $ Detailed_Input section of the header. This was done in order */
+/*        $Detailed_Input section of the header. This was done in order */
 /*        to minimize documentation changes if these open routines ever */
 /*        change. */
 
@@ -5560,7 +6879,7 @@ L_dashfn:
     found = FALSE_;
     while(! found && findex > 0) {
 	if (fthan[(i__1 = findex - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-		"fthan", i__1, "dasfm_", (ftnlen)5147)] == *handle) {
+		"fthan", i__1, "dasfm_", (ftnlen)6433)] == *handle) {
 	    found = TRUE_;
 	} else {
 	    findex = lnknxt_(&findex, pool);
@@ -5643,18 +6962,18 @@ L_dasfnh:
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     FNAME      I   Name of a DAS file. */
 /*     HANDLE     O   Corresponding handle. */
 
 /* $ Detailed_Input */
 
-/*     FNAME       is the name of a previously opened DAS file. */
+/*     FNAME    is the name of a previously opened DAS file. */
 
 /* $ Detailed_Output */
 
-/*     HANDLE      is the handle associated with the file. */
+/*     HANDLE   is the handle associated with the file. */
 
 /* $ Parameters */
 
@@ -5662,8 +6981,8 @@ L_dasfnh:
 
 /* $ Exceptions */
 
-/*     1) If the specified name does not specify any DAS file currently */
-/*        known to be open, the error SPICE(DASNOSUCHFILE) is signaled. */
+/*     1)  If the specified name does not specify any DAS file currently */
+/*         known to be open, the error SPICE(DASNOSUCHFILE) is signaled. */
 
 /* $ Files */
 
@@ -5699,11 +7018,18 @@ L_dasfnh:
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     W.L. Taber      (JPL) */
-/*     I.M. Underwood  (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 7.0.1, 19-JUL-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 7.0.0, 30-JUL-2014 (NJB) */
 
@@ -5717,30 +7043,30 @@ L_dasfnh:
 /* -    SPICELIB Version 5.0.4, 08-OCT-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitly given.  New */
+/*        environments are now explicitly given. New */
 /*        environments are WIN-NT */
 
 /* -    SPICELIB Version 5.0.3, 16-SEP-1999 (NJB) */
 
-/*        CSPICE environments were added.  Some typos were corrected. */
+/*        CSPICE environments were added. Some typos were corrected. */
 
 /* -    SPICELIB Version 5.0.2, 28-JUL-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitly given.  New */
+/*        environments are now explicitly given. New */
 /*        environments are PC-DIGITAL, SGI-O32 and SGI-N32. */
 
 /* -    SPICELIB Version 5.0.1, 18-MAR-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitly given.  Previously, */
+/*        environments are now explicitly given. Previously, */
 /*        environments such as SUN-SUNOS and SUN-SOLARIS were implied */
 /*        by the environment label SUN. */
 
 /* -    SPICELIB Version 1.0.1, 01-NOV-1993 (KRG) */
 
 /*        Removed references to specific DAS file open routines in the */
-/*        $ Detailed_Input section of the header. This was done in order */
+/*        $Detailed_Input section of the header. This was done in order */
 /*        to minimize documentation changes if these open routines ever */
 /*        change. */
 
@@ -5757,7 +7083,7 @@ L_dasfnh:
 /* -    SPICELIB Version 1.0.1, 01-NOV-1993 (KRG) */
 
 /*        Removed references to specific DAS file open routines in the */
-/*        $ Detailed_Input section of the header. This was done in order */
+/*        $Detailed_Input section of the header. This was done in order */
 /*        to minimize documentation changes if these open routines ever */
 /*        change. */
 
@@ -5788,12 +7114,12 @@ L_dasfnh:
     }
     chkout_("DASFNH", (ftnlen)6);
     return 0;
-/* $Procedure      DASHOF ( DAS, handles of open files ) */
+/* $Procedure DASHOF ( DAS, handles of open files ) */
 
 L_dashof:
 /* $ Abstract */
 
-/*     Return a SPICELIB set containing the handles of all currently */
+/*     Return a SPICE set containing the handles of all currently */
 /*     open DAS files. */
 
 /* $ Disclaimer */
@@ -5840,7 +7166,7 @@ L_dashof:
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     FHSET      O   A set containing handles of currently open DAS */
 /*                    files. */
@@ -5851,8 +7177,8 @@ L_dashof:
 
 /* $ Detailed_Output */
 
-/*     FHSET          is a SPICELIB set containing the file handles of */
-/*                    all currently open DAS files. */
+/*     FHSET    is a SPICE set containing the file handles of */
+/*              all currently open DAS files. */
 
 /* $ Parameters */
 
@@ -5860,12 +7186,12 @@ L_dashof:
 
 /* $ Exceptions */
 
-/*     1)  If the set FHSET is not initialized, the error will be */
-/*         diagnosed by routines called by this routine. */
+/*     1)  If the set FHSET is not initialized, an error is signaled by a */
+/*         routine in the call tree of this routine. */
 
 /*     2)  If the set FHSET is too small to accommodate the set of */
-/*         handles to be returned, the error will be diagnosed by */
-/*         routines called by this routine. */
+/*         handles to be returned, an error is signaled by a routine in */
+/*         the call tree of this routine. */
 
 /* $ Files */
 
@@ -5874,7 +7200,7 @@ L_dashof:
 /* $ Particulars */
 
 /*     This routine allows subroutines to test DAS file handles for */
-/*     validity before using them.  Many DAS operations that rely on */
+/*     validity before using them. Many DAS operations that rely on */
 /*     handles to identify DAS files cause errors to be signaled if */
 /*     the handles are invalid. */
 
@@ -5912,12 +7238,17 @@ L_dashof:
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     K.R. Gehringer  (JPL) */
-/*     W.L. Taber      (JPL) */
-/*     I.M. Underwood  (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 6.0.2, 19-JUL-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 6.0.1, 17-JUL-2002 (BVS) */
 
@@ -5926,23 +7257,23 @@ L_dashof:
 /* -    SPICELIB Version 5.0.4, 08-OCT-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitly given.  New */
+/*        environments are now explicitly given. New */
 /*        environments are WIN-NT */
 
 /* -    SPICELIB Version 5.0.3, 16-SEP-1999 (NJB) */
 
-/*        CSPICE environments were added.  Some typos were corrected. */
+/*        CSPICE environments were added. Some typos were corrected. */
 
 /* -    SPICELIB Version 5.0.2, 28-JUL-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitly given.  New */
+/*        environments are now explicitly given. New */
 /*        environments are PC-DIGITAL, SGI-O32 and SGI-N32. */
 
 /* -    SPICELIB Version 5.0.1, 18-MAR-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitly given.  Previously, */
+/*        environments are now explicitly given. Previously, */
 /*        environments such as SUN-SUNOS and SUN-SOLARIS were implied */
 /*        by the environment label SUN. */
 
@@ -5976,7 +7307,7 @@ L_dashof:
     copyi_(fhlist, fhset);
     chkout_("DASHOF", (ftnlen)6);
     return 0;
-/* $Procedure      DASSIH ( DAS, signal invalid handles ) */
+/* $Procedure DASSIH ( DAS, signal invalid handles ) */
 
 L_dassih:
 /* $ Abstract */
@@ -6028,39 +7359,39 @@ L_dassih:
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     I   HANDLE to be validated. */
 /*     ACCESS     I   String indicating access type. */
 
 /* $ Detailed_Input */
 
-/*     HANDLE         is a DAS file handle to validate.  For HANDLE to be */
-/*                    considered valid, it must specify a DAS file that */
-/*                    is open for the type of access specified by the */
-/*                    input argument ACCESS. */
+/*     HANDLE   is a DAS file handle to validate. For HANDLE to be */
+/*              considered valid, it must specify a DAS file that */
+/*              is open for the type of access specified by the */
+/*              input argument ACCESS. */
 
 
-/*     ACCESS         is a string indicating the type of access that */
-/*                    the DAS file specified by the input argument HANDLE */
-/*                    must be open for.  The values of ACCESS may be */
+/*     ACCESS   is a string indicating the type of access that */
+/*              the DAS file specified by the input argument HANDLE */
+/*              must be open for. The values of ACCESS may be */
 
-/*                       'READ'      File must be open for read access */
-/*                                   by DAS routines.  DAS files opened */
-/*                                   for read or write access may be */
-/*                                   read. */
+/*                 'READ'      File must be open for read access */
+/*                             by DAS routines. DAS files opened */
+/*                             for read or write access may be */
+/*                             read. */
 
-/*                       'WRITE'     File must be open for write access */
-/*                                   by DAS routines.  Note that files */
-/*                                   open for write access may be read as */
-/*                                   well as written. */
+/*                 'WRITE'     File must be open for write access */
+/*                             by DAS routines. Note that files */
+/*                             open for write access may be read as */
+/*                             well as written. */
 
-/*                    Leading and trailing blanks in ACCESS are ignored, */
-/*                    and case is not significant. */
+/*              Leading and trailing blanks in ACCESS are ignored, */
+/*              and case is not significant. */
 
 /* $ Detailed_Output */
 
-/*     None.  See $Particulars for a description of the effect of this */
+/*     None. See $Particulars for a description of the effect of this */
 /*     routine. */
 
 /* $ Parameters */
@@ -6080,16 +7411,16 @@ L_dassih:
 
 /*     This routine signals the error SPICE(DASINVALIDACCESS) if the */
 /*     DAS designated by the input argument HANDLE is not open */
-/*     for the specified type of access.  If HANDLE does not designate */
+/*     for the specified type of access. If HANDLE does not designate */
 /*     an open DAS file, the error SPICE(DASNOSUCHHANDLE) is signaled. */
 
 /*     This routine allows subroutines to test file handles for */
 /*     validity before attempting to access the files they designate, */
 /*     or before performing operations on the handles themselves, such */
-/*     as finding the name of the file designated by a handle.  This */
+/*     as finding the name of the file designated by a handle. This */
 /*     routine should be used in situations where the appropriate action */
 /*     to take upon determining that a handle is invalid is to signal */
-/*     an error.  DASSIH centralizes the error response for this type of */
+/*     an error. DASSIH centralizes the error response for this type of */
 /*     error in a single routine. */
 
 /*     In cases where it is necessary to determine the validity of a */
@@ -6100,7 +7431,7 @@ L_dassih:
 /* $ Examples */
 
 /*     1)  Make sure that a file handle designates a DAS file that can */
-/*         be read.  Signal an error if not. */
+/*         be read. Signal an error if not. */
 
 /*         Note that if a DAS file is open for reading or writing, read */
 /*         access is allowed. */
@@ -6121,16 +7452,22 @@ L_dassih:
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     K.R. Gehringer  (JPL) */
-/*     W.L. Taber      (JPL) */
-/*     I.M. Underwood  (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
 
+/* -    SPICELIB Version 6.1.1, 19-JUL-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
+
 /* -    SPICELIB Version 6.1.0, 26-SEP-2005 (NJB) */
 
-/*        Local variable DAS was renamed to DASFIL.  This */
+/*        Local variable DAS was renamed to DASFIL. This */
 /*        was done to avoid future conflict with parameters */
 /*        in zzddhman.inc. */
 
@@ -6141,30 +7478,30 @@ L_dassih:
 /* -    SPICELIB Version 5.0.4, 08-OCT-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitly given.  New */
+/*        environments are now explicitly given. New */
 /*        environments are WIN-NT */
 
 /* -    SPICELIB Version 5.0.3, 16-SEP-1999 (NJB) */
 
-/*        CSPICE environments were added.  Some typos were corrected. */
+/*        CSPICE environments were added. Some typos were corrected. */
 
 /* -    SPICELIB Version 5.0.2, 28-JUL-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitly given.  New */
+/*        environments are now explicitly given. New */
 /*        environments are PC-DIGITAL, SGI-O32 and SGI-N32. */
 
 /* -    SPICELIB Version 5.0.1, 18-MAR-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitly given.  Previously, */
+/*        environments are now explicitly given. Previously, */
 /*        environments such as SUN-SUNOS and SUN-SOLARIS were implied */
 /*        by the environment label SUN. */
 
 /* -    SPICELIB Version 1.0.1, 01-NOV-1993 (KRG) */
 
 /*        Removed references to specific DAS file open routines in the */
-/*        $ Detailed_Input section of the header. This was done in order */
+/*        $Detailed_Input section of the header. This was done in order */
 /*        to minimize documentation changes if these open routines ever */
 /*        change. */
 
@@ -6181,14 +7518,14 @@ L_dassih:
 
 /* -    SPICELIB Version 6.1.0, 26-SEP-2005 (NJB) */
 
-/*        Local variable DAS was renamed to DASFIL.  This */
+/*        Local variable DAS was renamed to DASFIL. This */
 /*        was done to avoid future conflict with parameters */
 /*        in zzddhman.inc. */
 
 /* -    SPICELIB Version 1.0.1, 01-NOV-1993 (KRG) */
 
 /*        Removed references to specific DAS file open routines in the */
-/*        $ Detailed_Input section of the header. This was done in order */
+/*        $Detailed_Input section of the header. This was done in order */
 /*        to minimize documentation changes if these open routines ever */
 /*        change. */
 
@@ -6245,7 +7582,7 @@ L_dassih:
 	found = FALSE_;
 	while(! found && findex > 0) {
 	    if (fthan[(i__1 = findex - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-		    "fthan", i__1, "dasfm_", (ftnlen)5873)] == *handle) {
+		    "fthan", i__1, "dasfm_", (ftnlen)7181)] == *handle) {
 		found = TRUE_;
 	    } else {
 		findex = lnknxt_(&findex, pool);
@@ -6257,7 +7594,7 @@ L_dassih:
 
 	if (s_cmp(acc, "WRITE", (ftnlen)10, (ftnlen)5) == 0 && ftacc[(i__1 = 
 		findex - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("ftacc", i__1,
-		 "dasfm_", (ftnlen)5885)] != 2) {
+		 "dasfm_", (ftnlen)7193)] != 2) {
 
 /*           If the access type is 'WRITE', the DAS file must be open */
 /*           for writing. */
@@ -6277,7 +7614,7 @@ L_dassih:
 
     chkout_("DASSIH", (ftnlen)6);
     return 0;
-/* $Procedure      DASHAM ( DAS, handle to access method ) */
+/* $Procedure DASHAM ( DAS, handle to access method ) */
 
 L_dasham:
 /* $ Abstract */
@@ -6326,30 +7663,30 @@ L_dasham:
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     I   HANDLE of a DAS file. */
 /*     ACCESS     O   String indicating allowed access method. */
 
 /* $ Detailed_Input */
 
-/*     HANDLE      is the handle of a previously opened DAS file. */
+/*     HANDLE   is the handle of a previously opened DAS file. */
 
 /* $ Detailed_Output */
 
-/*     ACCESS         is a string indicating the type of access that */
-/*                    the DAS file specified by the input argument HANDLE */
-/*                    is open for.  The values of ACCESS may be */
+/*     ACCESS   is a string indicating the type of access that */
+/*              the DAS file specified by the input argument HANDLE */
+/*              is open for. The values of ACCESS may be */
 
-/*                       'READ'      File is open for read access by DAS */
-/*                                   routines.  Both the data area and */
-/*                                   the comment area may be read.  The */
-/*                                   file may not be modified. */
+/*                 'READ'      File is open for read access by DAS */
+/*                             routines. Both the data area and */
+/*                             the comment area may be read. The */
+/*                             file may not be modified. */
 
-/*                       'WRITE'     File is open for write access by */
-/*                                   DAS routines.  Files open for */
-/*                                   write access may be read as well as */
-/*                                   written. */
+/*                 'WRITE'     File is open for write access by */
+/*                             DAS routines. Files open for */
+/*                             write access may be read as well as */
+/*                             written. */
 
 /* $ Parameters */
 
@@ -6358,7 +7695,7 @@ L_dasham:
 /* $ Exceptions */
 
 /*     1)  If the input handle is invalid, the error SPICE(INVALIDHANDLE) */
-/*         is signaled.  ACCESS is not modified. */
+/*         is signaled. ACCESS is not modified. */
 
 /* $ Files */
 
@@ -6372,7 +7709,7 @@ L_dasham:
 /* $ Examples */
 
 /*     1)  Make sure that a file handle designates a DAS file that can */
-/*         be read.  Signal an error if not. */
+/*         be read. Signal an error if not. */
 
 /*         Note that if a DAS file is open for reading or writing, read */
 /*         access is allowed. */
@@ -6393,12 +7730,18 @@ L_dasham:
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     K.R. Gehringer  (JPL) */
-/*     W.L. Taber      (JPL) */
-/*     I.M. Underwood  (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 6.0.2, 19-JUL-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 6.0.1, 17-JUL-2002 (BVS) */
 
@@ -6407,30 +7750,30 @@ L_dasham:
 /* -    SPICELIB Version 5.0.4, 08-OCT-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitly given.  New */
+/*        environments are now explicitly given. New */
 /*        environments are WIN-NT */
 
 /* -    SPICELIB Version 5.0.3, 16-SEP-1999 (NJB) */
 
-/*        CSPICE environments were added.  Some typos were corrected. */
+/*        CSPICE environments were added. Some typos were corrected. */
 
 /* -    SPICELIB Version 5.0.2, 28-JUL-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitly given.  New */
+/*        environments are now explicitly given. New */
 /*        environments are PC-DIGITAL, SGI-O32 and SGI-N32. */
 
 /* -    SPICELIB Version 5.0.1, 18-MAR-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitly given.  Previously, */
+/*        environments are now explicitly given. Previously, */
 /*        environments such as SUN-SUNOS and SUN-SOLARIS were implied */
 /*        by the environment label SUN. */
 
 /* -    SPICELIB Version 1.0.1, 01-NOV-1993 (KRG) */
 
 /*        Removed references to specific DAS file open routines in the */
-/*        $ Detailed_Input and $ Output sections of the header. This was */
+/*        $Detailed_Input and $ Output sections of the header. This was */
 /*        done in order to minimize documentation changes if these open */
 /*        routines ever change. */
 
@@ -6447,7 +7790,7 @@ L_dasham:
 /* -    SPICELIB Version 1.0.1, 01-NOV-1993 (KRG) */
 
 /*        Removed references to specific DAS file open routines in the */
-/*        $ Detailed_Input and $ Output sections of the header. This was */
+/*        $Detailed_Input and $ Output sections of the header. This was */
 /*        done in order to minimize documentation changes if these open */
 /*        routines ever change. */
 
@@ -6477,7 +7820,7 @@ L_dasham:
     found = FALSE_;
     while(! found && findex > 0) {
 	if (fthan[(i__1 = findex - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-		"fthan", i__1, "dasfm_", (ftnlen)6124)] == *handle) {
+		"fthan", i__1, "dasfm_", (ftnlen)7440)] == *handle) {
 	    found = TRUE_;
 	} else {
 	    findex = lnknxt_(&findex, pool);
@@ -6496,7 +7839,7 @@ L_dasham:
 /*     argument accordingly. */
 
     if (ftacc[(i__1 = findex - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("ftacc",
-	     i__1, "dasfm_", (ftnlen)6147)] == 1) {
+	     i__1, "dasfm_", (ftnlen)7463)] == 1) {
 	s_copy(access, "READ", access_len, (ftnlen)4);
     } else {
 	s_copy(access, "WRITE", access_len, (ftnlen)5);

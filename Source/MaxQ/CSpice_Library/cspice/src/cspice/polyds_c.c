@@ -4,8 +4,8 @@
 
 -Abstract
 
-   Compute the value of a polynomial and it's first
-   n derivatives at the value t.
+   Compute the value of a polynomial and its first
+   `nderiv' derivatives at the value `t'.
 
 -Disclaimer
 
@@ -16,7 +16,7 @@
    PUBLICLY AVAILABLE UNDER U.S. EXPORT LAWS AND IS PROVIDED "AS-IS"
    TO THE RECIPIENT WITHOUT WARRANTY OF ANY KIND, INCLUDING ANY
    WARRANTIES OF PERFORMANCE OR MERCHANTABILITY OR FITNESS FOR A
-   PARTICULAR USE OR PURPOSE (AS set_c FORTH IN UNITED STATES UCC
+   PARTICULAR USE OR PURPOSE (AS SET FORTH IN UNITED STATES UCC
    SECTIONS 2312-2313) OR FOR ANY PURPOSE WHATSOEVER, FOR THE
    SOFTWARE AND RELATED MATERIALS, HOWEVER USED.
 
@@ -38,9 +38,9 @@
 
 -Keywords
 
-    INTERPOLATION
-    MATH
-    POLYNOMIAL
+   INTERPOLATION
+   MATH
+   POLYNOMIAL
 
 */
 
@@ -58,162 +58,187 @@
 
 -Brief_I/O
 
-    VARIABLE  I/O  DESCRIPTION
-    --------  ---  --------------------------------------------------
-    coeffs     I   Coefficients of the polynomial to be evaluated.
-    deg        I   Degree of the polynomial to be evaluated.
-    nderiv     I   Number of derivatives to compute.
-    t          I   Point to evaluate the polynomial and derivatives
-    p          O   Value of polynomial and derivatives.
+   VARIABLE  I/O  DESCRIPTION
+   --------  ---  --------------------------------------------------
+   coeffs     I   Coefficients of the polynomial to be evaluated.
+   deg        I   Degree of the polynomial to be evaluated.
+   nderiv     I   Number of derivatives to compute.
+   t          I   Point to evaluate the polynomial and derivatives
+   p          O   Value of polynomial and derivatives.
 
 -Detailed_Input
 
-    coeffs     contains the coefficients of the polynomial that is
+   coeffs      are the coefficients of the polynomial that is
                to be evaluated. The first element of this array
                should be the constant term, the second element the
                linear coefficient, the third term the quadratic
                coefficient, and so on. The number of coefficients
-               supplied should be one more than deg.
+               supplied should be one more than `deg'.
 
-               f(x) = coeffs[0] + coeffs[1]*x + coeffs[2]*x^2 +
-                      coeffs[3]*x^3 + ... + coeffs[deg]*x^deg
+                  f(x) =   coeffs[0] + coeffs[1]*x + coeffs[2]*x^2
 
-    deg        is the degree of the polynomial to be evaluated. deg
+                         + coeffs[3]*x^4 + ... + coeffs[deg]*x^deg
+
+   deg         is the degree of the polynomial to be evaluated. `deg'
                should be one less than the number of coefficients
                supplied.
 
-    nderiv     is the number of derivatives to compute. If nderiv
+   nderiv      is the number of derivatives to compute. If `nderiv'
                is zero, only the polynomial will be evaluated. If
                nderiv = 1, then the polynomial and its first
                derivative will be evaluated, and so on. If the value
-               of nderiv is negative, the routine returns
+               of `nderiv' is negative, the routine returns
                immediately.
 
-    t          is the point at which the polynomial and its
+   t           is the point at which the polynomial and its
                derivatives should be evaluated.
 
 -Detailed_Output
 
-    p          is an array containing the value of the polynomial and
-               its derivatives evaluated at t. The first element of
-               the array contains the value of p at t. The second
+   p           is an array containing the value of the polynomial and
+               its derivatives evaluated at `t'. The first element of
+               the array contains the value of `p' at `t'. The second
                element of the array contains the value of the first
-               derivative of p at t and so on. The nderiv + 1'st
+               derivative of `p' at `t' and so on. The nderiv + 1'st
                element of the array contains the nderiv'th derivative
-               of p evaluated at t.
+               of `p' evaluated at `t'.
 
 -Parameters
 
-    None.
+   None.
 
 -Exceptions
 
-   Error free
+   Error free.
 
-   1) If nderiv is less than zero, the routine simply returns
+   1)  If `nderiv' is less than zero, the routine simply returns.
 
-   2) If the degree of the polynomial is less than 0, the routine
-      simply returns.
+   2)  If the degree of the polynomial is less than 0, the routine
+       returns the first nderiv+1 elements of `p' set to 0.
 
 -Files
 
-    None.
+   None.
 
 -Particulars
 
-    This routine uses the user supplied coefficients (coeffs)
-    to evaluate a polynomial (having these coefficients) and its
-    derivatives at the point t. The zero'th derivative of the
-    polynomial is regarded as the polynomial itself.
+   This routine uses the user supplied coefficients (coeffs)
+   to evaluate a polynomial (having these coefficients) and its
+   derivatives at the point `t'. The zero'th derivative of the
+   polynomial is regarded as the polynomial itself.
 
 -Examples
 
-   Example:
-   
-      For the polynomial
-   
+   The numerical results shown for this example may differ across
+   platforms. The results depend on the SPICE kernels used as
+   input, the compiler and supporting libraries, and the machine
+   specific arithmetic implementation.
+
+   1) For the polynomial
+
          f(x) = 1 + 3*x + 0.5*x^2 + x^3 + 0.5*x^4 - x^5 + x^6
-   
+
       the coefficient set
-   
-      Degree  coeffs
-      ------  ------
-      0       1
-      1       3
-      2       0.5
-      3       1
-      4       0.5
-      5      -1
-      6       1
-   
-      Suppose t = 1.0
-   
-      We expect:
-   
-      Derivative Number     t = 1
-      ------------------    -----
-      f(x)         0        6
-      f'(x)        1        10
-      f''(x)       2        23
-      f'''(x)      3        78
+
+         Degree  coeffs
+         ------  ------
+         0       1
+         1       3
+         2       0.5
+         3       1
+         4       0.5
+         5      -1
+         6       1
+
+      Compute the value of the polynomial and it's first
+      3 derivatives at the value t = 1.0. We expect:
+
+         Derivative Number     t = 1
+         ------------------    -----
+         f(x)         0        6
+         f'(x)        1        10
+         f''(x)       2        23
+         f'''(x)      3        78
 
 
+      Example code begins here.
+
+
+      /.
+         Program polyds_ex1
+      ./
       #include <stdio.h>
       #include "SpiceUsr.h"
 
-      int main()
-         {
+      int main( )
+      {
+
+         /.
+         Local constants.
+         ./
+         #define NDERIV       3
 
          /.
          Local variables.
          ./
+         SpiceDouble      p      [ NDERIV + 1 ];
+         SpiceInt         i;
+
          SpiceDouble      coeffs [] = { 1., 3., 0.5, 1., 0.5, -1., 1. };
-         SpiceInt         deg    = 6;
-         SpiceInt         nderiv = 3;
-         SpiceDouble      t      = 1.;
+         SpiceDouble      t         = 1.;
 
-         /. Dimension p as nderiv + 1. ./
-         SpiceDouble      p [ 4 ];
+         SpiceInt         deg       = 6;
 
-         int              i;
+         polyds_c ( coeffs, deg, NDERIV, t, p );
 
-         polyds_c ( coeffs, deg, nderiv, t, p );
-
-         for ( i=0; i<=nderiv; i++ )
-            {
-            printf( "p = %lf\n", p[i] );
-            }
-
-         return(0);
+         for ( i = 0; i <= NDERIV; i++ )
+         {
+            printf( "P = %f\n", p[i] );
          }
 
-   The program outputs:
+         return ( 0 );
+      }
 
-      p = 6.000000
-      p = 10.000000
-      p = 23.000000
-      p = 78.000000
+
+      When this program was executed on a Mac/Intel/cc/64-bit
+      platform, the output was:
+
+
+      P = 6.000000
+      P = 10.000000
+      P = 23.000000
+      P = 78.000000
+
 
 -Restrictions
 
-    Depending on the coefficients the user should be careful when
-    taking high order derivatives. As the example shows, these
-    can get big in a hurry. In general the coefficients of the
-    derivatives of a polynomial grow at a rate greater
-    than N! (N factorial).
+   1)  Depending on the coefficients the user should be careful when
+       taking high order derivatives. As the example shows, these
+       can get big in a hurry. In general the coefficients of the
+       derivatives of a polynomial grow at a rate greater
+       than N! (N factorial).
 
 -Literature_References
 
-    None.
+   None.
 
 -Author_and_Institution
 
-    W.L. Taber      (JPL)
-    E.D. Wright     (JPL)
+   J. Diaz del Rio     (ODC Space)
+   W.L. Taber          (JPL)
+   E.D. Wright         (JPL)
 
 -Version
 
-   -CSPICE Version 1.0.0, 24-AUG-2015 (EDW)
+   -CSPICE Version 1.1.0, 04-AUG-2021 (JDR)
+
+       Removed unnecessary Standard SPICE error handling calls to
+       register/unregister this routine in the error handling
+       subsystem; this routine is Error free.
+
+       Updated the header to comply with NAIF standard.
+
+   -CSPICE Version 1.0.0, 24-AUG-2015 (EDW) (WLT)
 
 -Index_Entries
 
@@ -225,37 +250,16 @@
 { /* Begin polyds_c */
 
    /*
-   Local constants
+   Error free: no error tracing required.
    */
-
 
    /*
-   Local macros
+   Call the f2c'd Fortran routine.
    */
-
-
-   /*
-   Local variables
-   */
-
-
-   /*
-   Static variables
-   */
-
-
-   /*
-   Participate in error tracing.
-   */
-
-   chkin_c ( "polyds_c" );
-
-   polyds_( ( doublereal * ) coeffs,
-            ( integer    * ) &deg,
-            ( integer    * ) &nderiv,
-            ( doublereal * ) &t,
-            ( doublereal * ) p );
-
-   chkout_c ( "polyds_c" );
+   polyds_ (  ( doublereal * )  coeffs,
+              ( integer    * ) &deg,
+              ( integer    * ) &nderiv,
+              ( doublereal * ) &t,
+              ( doublereal * )  p      );
 
 } /* End polyds_c */

@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure            OPSGNI  ( Opposite Sign Integers ) */
+/* $Procedure OPSGNI  ( Opposite Sign Integers ) */
 logical opsgni_(integer *x, integer *y)
 {
     /* System generated locals */
@@ -13,7 +13,7 @@ logical opsgni_(integer *x, integer *y)
 
 /* $ Abstract */
 
-/*     Function: true if the input arguments have opposite signs. */
+/*     Return .TRUE. if two given integer numbers have opposite signs. */
 
 /* $ Disclaimer */
 
@@ -55,20 +55,31 @@ logical opsgni_(integer *x, integer *y)
 /*     --------  ---  -------------------------------------------------- */
 /*     X          I   An integer. */
 /*     Y          I   An integer. */
-/*     OPSGNI     O   .TRUE. when X and Y have opposite signs. */
+
+/*     The function returns .TRUE. when the integer numbers X and Y have */
+/*     opposite signs. */
 
 /* $ Detailed_Input */
 
-/*     X      is any integer number. */
+/*     X        is any integer number. */
 
-/*     Y      is any integer number. */
+/*     Y        is any integer number. */
 
 /* $ Detailed_Output */
 
-/*     OPSGNI is returned as .TRUE. if one of the pair X,Y is positive */
-/*            and the other is negative. */
+/*     The function returns .TRUE. if one of the pair X,Y is positive and */
+/*     the other is negative. If either of the two values is zero, OPSGNI */
+/*     will be .FALSE. */
 
 /* $ Parameters */
+
+/*     None. */
+
+/* $ Exceptions */
+
+/*     Error free. */
+
+/* $ Files */
 
 /*     None. */
 
@@ -109,23 +120,25 @@ logical opsgni_(integer *x, integer *y)
 
 /*     None. */
 
-/* $ Exceptions */
-
-/*     Error free. */
-
-/* $ Files */
+/* $ Literature_References */
 
 /*     None. */
 
 /* $ Author_and_Institution */
 
-/*     W.L. Taber      (JPL) */
-
-/* $ Literature_References */
-
-/*     None. */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 26-OCT-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. Extended */
+/*        $Detailed_Output section to indicate the output value for */
+/*        the case of either input being zero. */
 
 /* -    SPICELIB Version 1.0.2, 07-NOV-2005 (BVS) */
 

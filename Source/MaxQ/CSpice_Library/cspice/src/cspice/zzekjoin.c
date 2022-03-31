@@ -651,18 +651,18 @@ static integer c__0 = 0;
 
 /* $ Exceptions */
 
-/*     1)  If the number of constaints NCNSTR is out of range, the */
-/*         error SPICE(INVALIDCOUNT) is signalled. */
+/*     1)  If the number of constraints NCNSTR is out of range, the */
+/*         error SPICE(INVALIDCOUNT) is signaled. */
 
 /*     2)  If the table count in either input join row set is out of */
-/*         range, the error SPICE(INVALIDCOUNT) is signalled. */
+/*         range, the error SPICE(INVALIDCOUNT) is signaled. */
 
 /*     3)  If the sum of the table counts of the input join row sets is */
-/*         too large, the error SPICE(INVALIDCOUNT) is signalled. */
+/*         too large, the error SPICE(INVALIDCOUNT) is signaled. */
 
 /*     4)  If either of cross product table indices for the input */
 /*         constraints is out of range, the error SPICE(INVALIDINDEX) is */
-/*         signalled. */
+/*         signaled. */
 
 /* $ Files */
 
@@ -677,7 +677,7 @@ static integer c__0 = 0;
 /*     result of a table join, subject to constraints.  A join of */
 /*     n tables, subject to constraints, may be computed by joining */
 /*     the join of the first n-1 tables with the nth table; such a */
-/*     procedure is the typical application evisioned for this routine. */
+/*     procedure is the typical application envisioned for this routine. */
 
 /*     Since all EK rows belong to segments, the set of rows formed by */
 /*     taking the Cartesian product of two tables is actually the union */
@@ -726,6 +726,10 @@ static integer c__0 = 0;
 /*     N.J. Bachman   (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.0.2, 02-OCT-2021 (NJB) */
+
+/*        Corrected typos in comments. */
 
 /* -    SPICELIB Version 1.0.1, 20-JUL-1998 (NJB) */
 
@@ -907,7 +911,7 @@ static integer c__0 = 0;
 	    i__4 = *jbase2 + offset + 1;
 	    i__5 = *jbase2 + offset + nt2;
 	    zzeksrd_(&i__4, &i__5, &segvec[(i__3 = nt1) < 10 && 0 <= i__3 ? 
-		    i__3 : s_rnge("segvec", i__3, "zzekjoin_", (ftnlen)516)]);
+		    i__3 : s_rnge("segvec", i__3, "zzekjoin_", (ftnlen)520)]);
 
 /*           Write this segment vector to the output join row set. */
 
@@ -965,7 +969,7 @@ static integer c__0 = 0;
 
 		++nr3;
 		rowvec[(i__3 = nt3) < 11 && 0 <= i__3 ? i__3 : s_rnge("rowvec"
-			, i__3, "zzekjoin_", (ftnlen)584)] = sgvbas;
+			, i__3, "zzekjoin_", (ftnlen)588)] = sgvbas;
 
 /*              Add this vector to the output join row set.  Get the */
 /*              next row vector. */

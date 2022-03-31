@@ -49,9 +49,7 @@
 
 -Brief_I/O
 
-   VARIABLE  I/O              DESCRIPTION
-   --------  ---  --------------------------------------------------
-   jyear_c    O   The number of seconds/julian year
+   The function returns the number of seconds per julian year.
 
 -Detailed_Input
 
@@ -59,33 +57,9 @@
 
 -Detailed_Output
 
-   The function returns the number of seconds per julian
-   year.
+   The function returns the number of seconds per julian year.
 
 -Parameters
-
-   None.
-
--Particulars
-
-   The julian year is often used as a fundamental unit
-   of time when dealing with ephemeris data.  For this
-   reason its value in terms of ephemeris seconds is
-   recorded in this function.
-
--Examples
-
-   Suppose you wish to compute the number of julian centuries
-   that have elapsed since the ephemeris epoch J1950 (beginning
-   of the julian year 1950) at a particular ET epoch.  The
-   following lines of code will do the trick.
-
-
-      century = ( et - unitim_c ( j1950_c(), "JED", "ET" ) );
-      century = century / ( 100.0 * jyear_c() );
-
-
--Restrictions
 
    None.
 
@@ -97,20 +71,135 @@
 
    None.
 
--Author_and_Institution
+-Particulars
 
-   E.D. Wright     (JPL)
-   W.L. Taber      (JPL)
+   The julian year is often used as a fundamental unit of time when
+   dealing with ephemeris data. For this reason its value in terms of
+   ephemeris seconds is recorded in this function.
+
+-Examples
+
+   The numerical results shown for these examples may differ across
+   platforms. The results depend on the SPICE kernels used as
+   input, the compiler and supporting libraries, and the machine
+   specific arithmetic implementation.
+
+   1) Display the number of seconds in a Julian year.
+
+      Example code begins here.
+
+
+      /.
+         Program jyear_ex1
+      ./
+      #include <stdio.h>
+      #include "SpiceUsr.h"
+
+      int main( )
+      {
+         /.
+         Display the number of seconds in a Julian Year, in 16.3 floating
+         point format
+         ./
+         printf ( "Seconds per Julian year: %16.3f\n", jyear_c() );
+
+         return ( 0 );
+      }
+
+
+      When this program was executed on a Mac/Intel/cc/64-bit
+      platform, the output was:
+
+
+      Seconds per Julian year:     31557600.000
+
+
+   2) Suppose you wish to compute the number of julian centuries
+      that have elapsed since the ephemeris epoch J1950 (beginning
+      of the julian year 1950) at a particular UTC epoch.
+
+      Use the LSK kernel below to load the leap seconds and time
+      constants required for the conversions.
+
+         naif0012.tls
+
+
+      Example code begins here.
+
+
+      /.
+         Program jyear_ex2
+      ./
+      #include <stdio.h>
+      #include "SpiceUsr.h"
+
+      int main( )
+      {
+         /.
+         Local constants.
+         ./
+         #define        UTCSTR        "2044-JUL-31"
+
+         /.
+         Local variables.
+         ./
+         SpiceDouble             et;
+         SpiceDouble             centur;
+
+         /.
+         Load the LSK file.
+         ./
+         furnsh_c ( "naif0012.tls" );
+
+         /.
+         Convert input UTC string to Ephemeris Time.
+         ./
+         str2et_c ( UTCSTR, &et );
+         printf ( "Input ephemeris time      : %16.3f\n", et );
+
+
+         centur = ( et - unitim_c ( j1950_c(), "JED", "ET" ) );
+         centur = centur / ( 100.0 * jyear_c() );
+
+         printf ( "Centuries past J1950 epoch: %16.10f\n", centur );
+
+         return ( 0 );
+
+      }
+
+
+      When this program was executed on a Mac/Intel/cc/64-bit
+      platform, the output was:
+
+
+      Input ephemeris time      :   1406808069.183
+      Centuries past J1950 epoch:     0.9457905763
+
+
+-Restrictions
+
+   None.
 
 -Literature_References
 
-   Explanatory Supplement to the Astronomical Almanac.
-   Page 8. University Science Books, 20 Edgehill Road,
-   Mill Valley, CA 94941
+   [1]  P. Kenneth Seidelmann (Ed.), "Explanatory Supplement to the
+        Astronomical Almanac," Page 8, University Science Books,
+        1992.
+
+-Author_and_Institution
+
+   J. Diaz del Rio     (ODC Space)
+   W.L. Taber          (JPL)
+   E.D. Wright         (JPL)
 
 -Version
 
-   -CSPICE Version 1.0.0, 08-FEB-1998 (EDW)
+   -CSPICE Version 1.0.1, 06-JUL-2021 (JDR)
+
+       Edited the header to comply with NAIF standard. Added complete
+       code examples.
+
+   -CSPICE Version 1.0.0, 08-FEB-1998 (EDW) (WLT)
 
 -Index_Entries
 

@@ -9,7 +9,7 @@
 
 static integer c__1 = 1;
 
-/* $Procedure      RDTEXT ( Read a line from a text file ) */
+/* $Procedure RDTEXT ( Read a line from a text file ) */
 /* Subroutine */ int rdtext_0_(int n__, char *file, char *line, logical *eof, 
 	ftnlen file_len, ftnlen line_len)
 {
@@ -92,7 +92,7 @@ static integer c__1 = 1;
 /* $ Brief_I/O */
 
 /*     VARIABLE  I/O  DESCRIPTION */
-/*     --------  ---  --------------------------------------------------- */
+/*     --------  ---  -------------------------------------------------- */
 /*     FILE       I   Name of text file. */
 /*     LINE       O   Next line from the text file. */
 /*     EOF        O   End-of-file indicator. */
@@ -101,92 +101,92 @@ static integer c__1 = 1;
 
 /* $ Detailed_Input */
 
-/*     FILE        is the name of the text file from which the next */
-/*                 line is to be read. If the file is not currently */
-/*                 open, it is opened with a logical unit determined */
-/*                 at run time, and the first line of the file is */
-/*                 returned. Otherwise, the next line not yet read */
-/*                 from the file is read and returned. */
+/*     FILE     is the name of the text file from which the next */
+/*              line is to be read. If the file is not currently */
+/*              open, it is opened with a logical unit determined */
+/*              at run time, and the first line of the file is */
+/*              returned. Otherwise, the next line not yet read */
+/*              from the file is read and returned. */
 
 /* $ Detailed_Output */
 
-/*     LINE        is next line of text in the specified file. */
-/*                 If the end of the file is reached, LINE is blank. */
+/*     LINE     is next line of text in the specified file. */
+/*              If the end of the file is reached, LINE is blank. */
 
-/*     EOF         is true when the end of the file is reached, and is */
-/*                 otherwise false. */
+/*     EOF      is .TRUE. when the end of the file is reached, and is */
+/*              otherwise .FALSE. */
 
 /* $ Parameters */
 
-/*     MAXOPN      is the maximum number of files that can be kept */
-/*                 open simultaneously by RDTEXT. */
+/*     MAXOPN   is the maximum number of files that can be kept */
+/*              open simultaneously by RDTEXT. */
 
-/*                 VAX: */
+/*              VAX: */
 
-/*                  The default number of files that can be open at one */
-/*                  time during a user's process is determined by the */
-/*                  value of FILLM. This number is usually 20, but it */
-/*                  may be changed by a user with sufficient privileges. */
+/*                 The default number of files that can be open at one */
+/*                 time during a user's process is determined by the */
+/*                 value of FILLM. This number is usually 20, but it */
+/*                 may be changed by a user with sufficient privileges. */
 
-/*                 IBM PC / Microsoft FORTRAN 5.0: */
+/*              IBM PC / Microsoft FORTRAN 5.0: */
 
-/*                  The default value for the maximum number of files */
-/*                  open at one time is 20. This value may be changed */
-/*                  by modifying the appropriate startup files as */
-/*                  specified in the reference documentation. */
+/*                 The default value for the maximum number of files */
+/*                 open at one time is 20. This value may be changed */
+/*                 by modifying the appropriate startup files as */
+/*                 specified in the reference documentation. */
 
-/*                 IBM PC / Linux / Fort77: */
+/*              IBM PC / Linux / Fort77: */
 
-/*                  An experiment showed that a program can */
-/*                  simultaneiously open one file for each available */
-/*                  logical unit; this amounts to 96 files. */
+/*                 An experiment showed that a program can */
+/*                 simultaneously open one file for each available */
+/*                 logical unit; this amounts to 96 files. */
 
-/*                 Sun / Sun FORTRAN: */
+/*              Sun / Sun FORTRAN: */
 
-/*                  "The maximum number of logical units that a program */
-/*                  can have open at one time is the same as the SunOS */
-/*                  system limit, currently 64." */
+/*                 "The maximum number of logical units that a program */
+/*                 can have open at one time is the same as the SunOS */
+/*                 system limit, currently 64." */
 
-/*                 HP-UX 9000/750, FORTRAN/9000 Series 700 computers and */
-/*                 Silicon Graphics: */
+/*              HP-UX 9000/750, FORTRAN/9000 Series 700 computers and */
+/*              Silicon Graphics: */
 
-/*                  NAIF used a program to determine this value. Also, */
-/*                  the values can be found by executing the command */
-/*                  "man limits" and reading the value for OPEN_MAX. */
-/*                  This value is listed as 60, but two units are used */
-/*                  for standard output and standard error. */
+/*                 NAIF used a program to determine this value. Also, */
+/*                 the values can be found by executing the command */
+/*                 "man limits" and reading the value for OPEN_MAX. */
+/*                 This value is listed as 60, but two units are used */
+/*                 for standard output and standard error. */
 
-/*                 DEC Alpha-OSF/1: */
+/*              DEC Alpha-OSF/1: */
 
-/*                  The comment in the output from the command */
-/*                  "man limits" stated that the value of OPEN_MAX was */
-/*                  64, but that it was "OBSOLETE, sysconf() interface */
-/*                  should be used". Looking into sysconf did not produce */
-/*                  any numbers, so the value is set at 20 because it */
-/*                  works! */
+/*                 The comment in the output from the command */
+/*                 "man limits" stated that the value of OPEN_MAX was */
+/*                 64, but that it was "OBSOLETE, sysconf() interface */
+/*                 should be used". Looking into sysconf did not produce */
+/*                 any numbers, so the value is set at 20 because it */
+/*                 works! */
 
-/*                 NeXT/Absoft Fortran: */
+/*              NeXT/Absoft Fortran: */
 
-/*                  We couldn't find any documentation that addressed */
-/*                  this value, so we set it to 20. */
+/*                 We couldn't find any documentation that addressed */
+/*                 this value, so we set it to 20. */
 
 
-/*     MAXLEN      is the maximum length of the file names that may */
-/*                 used to identify the files opened by RDTEXT. */
+/*     MAXLEN   is the maximum length of the file names that may */
+/*              used to identify the files opened by RDTEXT. */
 
 /* $ Exceptions */
 
-/*     1) If too many files are open already, the error */
-/*        SPICE(TOOMANYFILESOPEN) is signalled. */
+/*     1)  If too many files are open already, the error */
+/*         SPICE(TOOMANYFILESOPEN) is signaled. */
 
-/*     2) If the attempt to open the file fails, the error */
-/*        SPICE(FILEOPENFAILED) is signalled. */
+/*     2)  If the attempt to open the file fails, the error */
+/*         SPICE(FILEOPENFAILED) is signaled. */
 
-/*     3) If the attempt to read from the file fails, the error */
-/*        SPICE(FILEREADFAILED) is signalled. */
+/*     3)  If the attempt to read from the file fails, the error */
+/*         SPICE(FILEREADFAILED) is signaled. */
 
-/*     4) If the attempt to "inquire" the status of the file fails, */
-/*        the error SPICE(INQUIREFAILED) is signalled. */
+/*     4)  If the attempt to "inquire" the status of the file fails, */
+/*         the error SPICE(INQUIREFAILED) is signaled. */
 
 /* $ Files */
 
@@ -200,7 +200,7 @@ static integer c__1 = 1;
 /*     Otherwise, the next line not yet read from the file is returned. */
 
 /*     If the end of the file is reached, a blank line is returned, */
-/*     the end-of-file indicator is true, and the file is closed. */
+/*     the end-of-file indicator is .TRUE., and the file is closed. */
 
 /*     Several files may be opened and read simultaneously. Thus, */
 /*     you may begin reading from one file before the end of another */
@@ -238,53 +238,67 @@ static integer c__1 = 1;
 
 /* $ Restrictions */
 
-/*     1) The values of MAXOPN and MAXLEN should not exceed any */
-/*        corresponding limits imposed by the operating system. */
+/*     1)  The values of MAXOPN and MAXLEN should not exceed any */
+/*         corresponding limits imposed by the operating system. */
 
-/*     2) If the input file is a print file, the carriage control */
-/*        character at the beginning of a given line will be considered */
-/*        part of the line. (Text files have no carriage control */
-/*        characters.) */
+/*     2)  If the input file is a print file, the carriage control */
+/*         character at the beginning of a given line will be considered */
+/*         part of the line. (Text files have no carriage control */
+/*         characters.) */
 
-/*     3) In order to avoid access violations, the VAX/VMS version of */
-/*        RDTEXT uses the VAX READONLY qualifier to open files. This */
-/*        must be removed or replaced when the routine is ported to */
-/*        non-VAX/VMS systems. */
+/*     3)  In order to avoid access violations, the VAX/VMS version of */
+/*         RDTEXT uses the VAX READONLY qualifier to open files. This */
+/*         must be removed or replaced when the routine is ported to */
+/*         non-VAX/VMS systems. */
 
 /*     4)  On VAX systems, caution should be exercised when using */
-/*         multiple logical names to point to the same file.  Logical */
+/*         multiple logical names to point to the same file. Logical */
 /*         name translation supporting execution of the Fortran */
 /*         INQUIRE statement does not appear to work reliably in all */
 /*         cases, which may lead this routine to believe that different */
-/*         logical names indicate different files.  The specific problem */
+/*         logical names indicate different files. The specific problem */
 /*         that has been observed is that logical names that include */
 /*         disk specifications are not always recognized as pointing */
 /*         to the file they actually name. */
 
 /* $ Literature_References */
 
-/*     1. "VAX/VMS Guide to VAX/VMS System Management and Daily */
-/*        Operations", Digital Equipment Corporation, September 1984, */
-/*        Section 6.1.7, page 6-6. */
+/*     [1]  "VAX/VMS Guide to VAX/VMS System Management and Daily */
+/*          Operations", Section 6.1.7, p 6-6, Digital Equipment */
+/*          Corporation, September 1984. */
 
-/*     2. "Microsoft FORTRAN Reference", Microsoft Corporation */
-/*        1989, Section C.3, page 404. */
+/*     [2]  "Microsoft FORTRAN Reference", Section C.3, p 404, Microsoft */
+/*          Corporation, 1989. */
 
-/*     3. "Sun FORTRAN Programmer's Guide", Sun Microsystems, */
-/*        Revision A of 6 May 1988, Section 7.2, page 73. */
+/*     [3]  "Sun FORTRAN Programmer's Guide", Section 7.2, p 73, Sun */
+/*          Microsystems, Revision A, 6 May 1988. */
 
-/*     4. The Unix Man Pages for limits on the HP and Silicon Graphics. */
-/*        The value of OPEN_MAX refers to the number of files a process */
-/*        can have open. */
+/*     [4]  "The Unix Man Pages," for limits on the HP and Silicon */
+/*          Graphics. The value of OPEN_MAX refers to the number of files */
+/*          a process can have open. */
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     H.A. Neilan     (JPL) */
-/*     M.J. Spencer    (JPL) */
-/*     I.M. Underwood  (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     H.A. Neilan        (JPL) */
+/*     B.V. Semenov       (JPL) */
+/*     M.J. Spencer       (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 6.27.0, 28-NOV-2021 (BVS) */
+
+/*        Updated for MAC-OSX-M1-64BIT-CLANG_C. */
+
+/* -    SPICELIB Version 6.26.0, 13-AUG-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 6.25.0, 10-MAR-2014 (BVS) */
 
@@ -399,23 +413,23 @@ static integer c__1 = 1;
 /* -    SPICELIB Version 6.0.4, 08-OCT-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitely given.  New */
+/*        environments are now explicitly given. New */
 /*        environments are WIN-NT */
 
 /* -    SPICELIB Version 6.0.3, 16-SEP-1999 (NJB) */
 
-/*        CSPICE environments were added.  Some typos were corrected. */
+/*        CSPICE environments were added. Some typos were corrected. */
 
 /* -    SPICELIB Version 6.0.2, 28-JUL-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitly given.  New */
+/*        environments are now explicitly given. New */
 /*        environments are PC-DIGITAL, SGI-O32 and SGI-N32. */
 
 /* -    SPICELIB Version 6.0.1, 18-MAR-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitly given.  Previously, */
+/*        environments are now explicitly given. Previously, */
 /*        environments such as SUN-SUNOS and SUN-SOLARIS were implied */
 /*        by the environment label SUN. */
 
@@ -423,12 +437,12 @@ static integer c__1 = 1;
 
 /*        Module was updated for the PC-LINUX platform. */
 
-/* -    SPICELIB Version 5.0.0, 9-NOV-1993 (HAN) */
+/* -    SPICELIB Version 5.0.0, 09-NOV-1993 (HAN) */
 
-/*         Module was updated to include the values for MAXLEN and */
-/*         MAXOPN and the appropriate OPEN statement for the Silicon */
-/*         Graphics, DEC Alpha-OSF/1, and NeXT platforms. The previous */
-/*         value of 256 for Unix platforms was changed to 255. */
+/*        Module was updated to include the values for MAXLEN and */
+/*        MAXOPN and the appropriate OPEN statement for the Silicon */
+/*        Graphics, DEC Alpha-OSF/1, and NeXT platforms. The previous */
+/*        value of 256 for Unix platforms was changed to 255. */
 
 /* -    SPICELIB Version 4.1.0, 12-OCT-1992 (HAN) */
 
@@ -447,7 +461,7 @@ static integer c__1 = 1;
 /* -    SPICELIB Version 3.0.0, 19-JUL-1991 (NJB) */
 
 /*        Version 2.0.0 of RDTEXT produced a Fortran run-time error */
-/*        if the input argument FILE was blank.  This has been */
+/*        if the input argument FILE was blank. This has been */
 /*        repaired. */
 
 /* -    SPICELIB Version 2.0.0, 26-MAR-1991 (MJS) (NJB) */
@@ -459,7 +473,7 @@ static integer c__1 = 1;
 
 /* -    SPICELIB Version 1.0.1, 20-MAR-1990 (HAN) */
 
-/*        Parameters section was updated to include the values */
+/*        $Parameters section was updated to include the values */
 /*        of MAXOPN for several machines. Sources of these values */
 /*        are listed in the Literature References section. */
 
@@ -479,10 +493,10 @@ static integer c__1 = 1;
 
 /* -    SPICELIB Version 5.0.0, 9-NOV-1993 (HAN) */
 
-/*         Module was updated to include the values for MAXLEN and */
-/*         MAXOPN and the appropriate OPEN statement for the Silicon */
-/*         Graphics, DEC Alpha-OSF/1, and NeXT platforms. The previous */
-/*         value of 256 for Unix platforms was changed to 255. */
+/*        Module was updated to include the values for MAXLEN and */
+/*        MAXOPN and the appropriate OPEN statement for the Silicon */
+/*        Graphics, DEC Alpha-OSF/1, and NeXT platforms. The previous */
+/*        value of 256 for Unix platforms was changed to 255. */
 
 /* -    SPICELIB Version 4.1.0, 12-OCT-1992 (HAN) */
 
@@ -493,7 +507,7 @@ static integer c__1 = 1;
 /*        create the source file for a specific environment given a */
 /*        master source file. */
 
-/* -    SPICELIB Version 4.0.0, 26-MAY-1992 (MJS) */
+/* -    SPICELIB Version 4.0.0, 20-MAY-1992 (MJS) */
 
 /*        The variable INDEX was saved. Prior to this fix, when RDTEXT */
 /*        closed a file, INDEX was used without being assigned a value. */
@@ -503,42 +517,41 @@ static integer c__1 = 1;
 /* -    SPICELIB Version 3.0.0, 19-JUL-1991 (NJB) */
 
 /*        Version 2.0.0 of RDTEXT produced a Fortran run-time error */
-/*        if the input argument FILE was blank.  This has been */
+/*        if the input argument FILE was blank. This has been */
 /*        repaired. */
 
 /* -    SPICELIB Version 2.0.0, 26-MAR-1991 (MJS) (NJB) */
 
-/*       In past versions when an end of file was reached or when error */
-/*       occured while reading the text file, LINE was returned with */
-/*       its previous value. Now LINE is returned with blanks, in */
-/*       accordance with the specifications given in the header. */
-/*       The variable N, representing the number of files currently */
-/*       open, was initialized to zero. */
+/*        In past versions when an end of file was reached or when error */
+/*        occurred while reading the text file, LINE was returned with */
+/*        its previous value. Now LINE is returned with blanks, in */
+/*        accordance with the specifications given in the header. */
+/*        The variable N, representing the number of files currently */
+/*        open, was initialized to zero. */
 
-/*       The method of checking whether the file to be read is one */
-/*       already opened for reading by this routine has been improved. */
-/*       Formerly, the input file name was compared against a list of */
-/*       names of routines already opened by RDTEXT.  If the input name */
-/*       pointed to a file that had been opened using a different name, */
-/*       RDTEXT would not recognize that the new name pointed to a file */
-/*       that was already open.  The technique used now greatly reduces */
-/*       the chance of such an error.  The input file name is compared */
-/*       to the previous input file name, and if the names do not agree, */
-/*       an INQUIRE is performed to test whether the file named by the */
-/*       input file name is already open.  Only if this INQUIRE */
-/*       indicates that the file is not already open will RDTEXT attempt */
-/*       to open the file. */
+/*        The method of checking whether the file to be read is one */
+/*        already opened for reading by this routine has been improved. */
+/*        Formerly, the input file name was compared against a list of */
+/*        names of routines already opened by RDTEXT. If the input name */
+/*        pointed to a file that had been opened using a different name, */
+/*        RDTEXT would not recognize that the new name pointed to a file */
+/*        that was already open. The technique used now greatly reduces */
+/*        the chance of such an error. The input file name is compared */
+/*        to the previous input file name, and if the names do not agree, */
+/*        an INQUIRE is performed to test whether the file named by the */
+/*        input file name is already open. Only if this INQUIRE */
+/*        indicates that the file is not already open will RDTEXT attempt */
+/*        to open the file. */
 
 /* -    Beta Version 1.1.0, 17-FEB-1989 (IMU) (NJB) */
 
-/*       The primary change was the addition of error handling. */
-/*       At the same time, the parameters MAXOPN and MAXLEN were */
-/*       moved into the calling sequence.  The call to IOERR was */
-/*       replaced by a call to SETMSG.  The declaration of the unused */
-/*       function FAILED was deleted. Finally, all internal references */
-/*       to the entry point WRTEXT (which was dropped when the routine */
-/*       left OPTLIB) were removed. */
-
+/*        The primary change was the addition of error handling. */
+/*        At the same time, the parameters MAXOPN and MAXLEN were */
+/*        moved into the calling sequence. The call to IOERR was */
+/*        replaced by a call to SETMSG. The declaration of the unused */
+/*        function FAILED was deleted. Finally, all internal references */
+/*        to the entry point WRTEXT (which was dropped when the routine */
+/*        left OPTLIB) were removed. */
 
 /* -& */
 
@@ -675,12 +688,12 @@ static integer c__1 = 1;
 
 	    ++n;
 	    units[(i__1 = n - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge("units", 
-		    i__1, "rdtext_", (ftnlen)659)] = unit;
+		    i__1, "rdtext_", (ftnlen)675)] = unit;
 	    index = n;
 	}
 	s_copy(lstfil, file, (ftnlen)128, file_len);
 	lstunt = units[(i__1 = index - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge(
-		"units", i__1, "rdtext_", (ftnlen)665)];
+		"units", i__1, "rdtext_", (ftnlen)681)];
     }
 
 /*     This is the easy part. Read the next line from the file. */
@@ -710,15 +723,15 @@ L100001:
     if (iostat != 0) {
 	cl__1.cerr = 0;
 	cl__1.cunit = units[(i__1 = index - 1) < 20 && 0 <= i__1 ? i__1 : 
-		s_rnge("units", i__1, "rdtext_", (ftnlen)689)];
+		s_rnge("units", i__1, "rdtext_", (ftnlen)705)];
 	cl__1.csta = 0;
 	f_clos(&cl__1);
 	i__1 = n;
 	for (i__ = index + 1; i__ <= i__1; ++i__) {
 	    units[(i__2 = i__ - 2) < 20 && 0 <= i__2 ? i__2 : s_rnge("units", 
-		    i__2, "rdtext_", (ftnlen)692)] = units[(i__3 = i__ - 1) < 
+		    i__2, "rdtext_", (ftnlen)708)] = units[(i__3 = i__ - 1) < 
 		    20 && 0 <= i__3 ? i__3 : s_rnge("units", i__3, "rdtext_", 
-		    (ftnlen)692)];
+		    (ftnlen)708)];
 	}
 	--n;
 
@@ -743,7 +756,7 @@ L100001:
     }
     chkout_("RDTEXT", (ftnlen)6);
     return 0;
-/* $Procedure  CLTEXT ( Close a text file opened by RDTEXT) */
+/* $Procedure CLTEXT ( Close a text file opened by RDTEXT) */
 
 L_cltext:
 /* $ Abstract */
@@ -781,11 +794,14 @@ L_cltext:
 
 /* $ Keywords */
 
-/*     FILES,  TEXT */
+/*     FILES */
+/*     TEXT */
 
 /* $ Declarations */
 
-/*     None. */
+/*     IMPLICIT NONE */
+
+/*     CHARACTER*(*)       FILE */
 
 /* $ Brief_I/O */
 
@@ -795,8 +811,8 @@ L_cltext:
 
 /* $ Detailed_Input */
 
-/*     FILE        is the name of a text file which is currently */
-/*                 opened for reading or writing by RDTEXT. */
+/*     FILE     is the name of a text file which is currently */
+/*              opened for reading or writing by RDTEXT. */
 
 /* $ Detailed_Output */
 
@@ -808,8 +824,8 @@ L_cltext:
 
 /* $ Exceptions */
 
-/*     1) If the attempt to "inquire" the status of the file fails, */
-/*        the error SPICE(INQUIREFAILED) is signalled. */
+/*     1)  If the attempt to "inquire" the status of the file fails, */
+/*         the error SPICE(INQUIREFAILED) is signaled. */
 
 /* $ Files */
 
@@ -828,11 +844,11 @@ L_cltext:
 /* $ Restrictions */
 
 /*     1)  On VAX systems, caution should be exercised when using */
-/*         multiple logical names to point to the same file.  Logical */
+/*         multiple logical names to point to the same file. Logical */
 /*         name translation supporting execution of the Fortran */
 /*         INQUIRE statement does not appear to work reliably in all */
 /*         cases, which may lead this routine to believe that different */
-/*         logical names indicate different files.  The specific problem */
+/*         logical names indicate different files. The specific problem */
 /*         that has been observed is that logical names that include */
 /*         disk specifications are not always recognized as pointing */
 /*         to the file they actually name. */
@@ -843,12 +859,20 @@ L_cltext:
 
 /* $ Author_and_Institution */
 
-/*     W.L. Taber      (JPL) */
-/*     N.J. Bachman    (JPL) */
-/*     M.J. Spencer    (JPL) */
-/*     I.M. Underwood  (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     B.V. Semenov       (JPL) */
+/*     M.J. Spencer       (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 6.1.0, 03-JUN-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 6.0.5, 17-JUL-2002 (BVS) */
 
@@ -857,19 +881,19 @@ L_cltext:
 /* -    SPICELIB Version 6.0.4, 08-OCT-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitely given.  New */
+/*        environments are now explicitly given. New */
 /*        environments are WIN-NT */
 
 /* -    SPICELIB Version 6.0.2, 28-JUL-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitly given.  New */
+/*        environments are now explicitly given. New */
 /*        environments are PC-DIGITAL, SGI-O32 and SGI-N32. */
 
 /* -    SPICELIB Version 6.0.1, 18-MAR-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitly given.  Previously, */
+/*        environments are now explicitly given. Previously, */
 /*        environments such as SUN-SUNOS and SUN-SOLARIS were implied */
 /*        by the environment label SUN. */
 
@@ -887,7 +911,7 @@ L_cltext:
 /* -    SPICELIB Version 2.0.0, 26-MAR-1991 (MJS) (NJB) */
 
 /*        Method of recognizing whether input file name points to */
-/*        a file opened by RDTEXT has been improved.  Header indentation */
+/*        a file opened by RDTEXT has been improved. Header indentation */
 /*        fixed. */
 
 /* -    SPICELIB Version 1.0.0, 31-JAN-1990 (IMU) */
@@ -900,6 +924,10 @@ L_cltext:
 /* -& */
 /* $ Revisions */
 
+/* -    SPICELIB Version 6.1.0, 03-JUN-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
 /* -    SPICELIB Version 3.0.0, 27-SEP-1994 (WLT) */
 
 /*        The check of RETURN was removed so that routines that need */
@@ -909,19 +937,18 @@ L_cltext:
 /* -    SPICELIB Version 2.0.0, 26-MAR-1991 (MJS) (NJB) */
 
 /*        Method of recognizing whether input file name points to */
-/*        a file opened by RDTEXT has been improved.  Formerly, CLTEXT */
+/*        a file opened by RDTEXT has been improved. Formerly, CLTEXT */
 /*        compared the input file name to a list of names of files */
-/*        opened by RDTEXT.  If the input name pointed to a file that */
+/*        opened by RDTEXT. If the input name pointed to a file that */
 /*        had been opened using a different name, CLTEXT would not */
 /*        recognize that the new name pointed to a file that was already */
-/*        open.  The technique used now greatly reduces the chance of */
-/*        such an error.  Now, and INQUIRE is performed to obtain the */
+/*        open. The technique used now greatly reduces the chance of */
+/*        such an error. Now, and INQUIRE is performed to obtain the */
 /*        unit number attached to the file named by the input file name. */
 /*        If this unit is attached to a file opened by RDTEXT, CLTEXT */
 /*        will close that file. */
 
 /*        Header indentation was fixed. */
-
 
 /* -    Beta Version 1.1.0, 8-JAN-1989 (IMU) */
 
@@ -970,11 +997,11 @@ L_cltext:
     if (index > 0) {
 	cl__1.cerr = 0;
 	cl__1.cunit = units[(i__1 = index - 1) < 20 && 0 <= i__1 ? i__1 : 
-		s_rnge("units", i__1, "rdtext_", (ftnlen)952)];
+		s_rnge("units", i__1, "rdtext_", (ftnlen)982)];
 	cl__1.csta = 0;
 	f_clos(&cl__1);
 	if (units[(i__1 = index - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge("units"
-		, i__1, "rdtext_", (ftnlen)954)] == lstunt) {
+		, i__1, "rdtext_", (ftnlen)984)] == lstunt) {
 	    s_copy(lstfil, " ", (ftnlen)128, (ftnlen)1);
 	}
 
@@ -984,9 +1011,9 @@ L_cltext:
 	i__1 = n;
 	for (i__ = index + 1; i__ <= i__1; ++i__) {
 	    units[(i__2 = i__ - 2) < 20 && 0 <= i__2 ? i__2 : s_rnge("units", 
-		    i__2, "rdtext_", (ftnlen)963)] = units[(i__3 = i__ - 1) < 
+		    i__2, "rdtext_", (ftnlen)993)] = units[(i__3 = i__ - 1) < 
 		    20 && 0 <= i__3 ? i__3 : s_rnge("units", i__3, "rdtext_", 
-		    (ftnlen)963)];
+		    (ftnlen)993)];
 	}
 	--n;
     }

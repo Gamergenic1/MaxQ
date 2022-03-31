@@ -3,10 +3,10 @@
 -Procedure vprjpi_c ( Vector projection onto plane, inverted )
 
 -Abstract
- 
-   Find the vector in a specified plane that maps to a specified 
-   vector in another plane under orthogonal projection. 
- 
+
+   Find the vector in a specified plane that maps to a specified
+   vector in another plane under orthogonal projection.
+
 -Disclaimer
 
    THIS SOFTWARE AND ANY RELATED MATERIALS WERE CREATED BY THE
@@ -33,16 +33,16 @@
    ACTIONS OF RECIPIENT IN THE USE OF THE SOFTWARE.
 
 -Required_Reading
- 
-   PLANES 
- 
+
+   PLANES
+
 -Keywords
- 
-   GEOMETRY 
-   MATH 
-   PLANE 
-   VECTOR 
- 
+
+   GEOMETRY
+   MATH
+   PLANE
+   VECTOR
+
 */
    #include <math.h>
    #include "SpiceUsr.h"
@@ -53,188 +53,195 @@
                    ConstSpicePlane   * projpl,
                    ConstSpicePlane   * invpl,
                    SpiceDouble         vout   [3],
-                   SpiceBoolean      * found       ) 
+                   SpiceBoolean      * found       )
 
 /*
 
 -Brief_I/O
- 
-   Variable  I/O  Description 
-   --------  ---  -------------------------------------------------- 
-   vin        I   The projected vector. 
-   projpl     I   Plane containing vin. 
-   invpl      I   Plane containing inverse image of vin. 
-   vout       O   Inverse projection of vin. 
-   found      O   Flag indicating whether vout could be calculated. 
- 
+
+   VARIABLE  I/O  DESCRIPTION
+   --------  ---  --------------------------------------------------
+   vin        I   The projected vector.
+   projpl     I   Plane containing `vin'.
+   invpl      I   Plane containing inverse image of `vin'.
+   vout       O   Inverse projection of `vin'.
+   found      O   Flag indicating whether `vout' could be calculated.
+
 -Detailed_Input
- 
-   vin, 
-   projpl, 
-   invpl          are, respectively, a 3-vector, a CSPICE plane 
-                  containing the vector, and a CSPICE plane 
-                  containing the inverse image of the vector under 
-                  orthogonal projection onto projpl. 
- 
+
+   vin,
+   projpl,
+   invpl       are, respectively, a 3-vector, a SPICE plane
+               containing the vector, and a SPICE plane
+               containing the inverse image of the vector under
+               orthogonal projection onto `projpl'.
+
 -Detailed_Output
- 
-   vout           is the inverse orthogonal projection of vin.  This 
-                  is the vector lying in the plane invpl whose 
-                  orthogonal projection onto the plane projpl is 
-                  vin.  vout is valid only when found (defined below) 
-                  is SPICETRUE. Otherwise, vout is undefined. 
- 
-   found          indicates whether the inverse orthogonal projection 
-                  of vin could be computed.  found is SPICETRUE if so, 
-                  SPICEFALSE otherwise. 
- 
+
+   vout        is the inverse orthogonal projection of `vin'. This
+               is the vector lying in the plane `invpl' whose
+               orthogonal projection onto the plane `projpl' is
+               `vin'. `vout' is valid only when `found' (defined below)
+               is SPICETRUE. Otherwise, `vout' is undefined.
+
+   found       indicates whether the inverse orthogonal projection
+               of `vin' could be computed. `found' is SPICETRUE if so,
+               SPICEFALSE otherwise.
+
 -Parameters
- 
-   None. 
- 
+
+   None.
+
 -Exceptions
- 
-   1)  If the geometric planes defined by projpl and invpl are 
-       orthogonal, or nearly so, the inverse orthogonal projection 
-       of vin may be undefined or have magnitude too large to 
-       represent with double precision numbers.  In either such 
-       case, found will be set to SPICEFALSE. 
- 
-   2)  Even when found is SPICETRUE, vout may be a vector of extremely 
-       large magnitude, perhaps so large that it is impractical to 
-       compute with it.  It's up to you to make sure that this 
-       situation does not occur in your application of this routine. 
- 
+
+   1)  If the normal vector of either input plane does not have unit
+       length (allowing for round-off error), the error
+       SPICE(NONUNITNORMAL) is signaled by a routine in the call tree
+       of this routine.
+
+   2)  If the geometric planes defined by `projpl' and `invpl' are
+       orthogonal, or nearly so, the inverse orthogonal projection
+       of `vin' may be undefined or have magnitude too large to
+       represent with double precision numbers. In either such
+       case, `found' will be set to SPICEFALSE.
+
+   3)  Even when `found' is SPICETRUE, `vout' may be a vector of extremely
+       large magnitude, perhaps so large that it is impractical to
+       compute with it. It's up to you to make sure that this
+       situation does not occur in your application of this routine.
+
 -Files
- 
-   None. 
- 
+
+   None.
+
 -Particulars
- 
-   Projecting a vector orthogonally onto a plane can be thought of 
-   as finding the closest vector in the plane to the original vector. 
-   This `closest vector' always exists; it may be coincident with the 
-   original vector.  Inverting an orthogonal projection means finding 
-   the vector in a specified plane whose orthogonal projection onto 
-   a second specified plane is a specified vector.  The vector whose 
-   projection is the specified vector is the inverse projection of 
-   the specified vector, also called the `inverse image under 
-   orthogonal projection' of the specified vector.  This routine 
-   finds the inverse orthogonal projection of a vector onto a plane. 
- 
-   Related routines are vprjp_c, which projects a vector onto a plane 
-   orthogonally, and vproj_c, which projects a vector onto another 
-   vector orthogonally. 
- 
+
+   Projecting a vector orthogonally onto a plane can be thought of
+   as finding the closest vector in the plane to the original vector.
+   This "closest vector" always exists; it may be coincident with the
+   original vector. Inverting an orthogonal projection means finding
+   the vector in a specified plane whose orthogonal projection onto
+   a second specified plane is a specified vector. The vector whose
+   projection is the specified vector is the inverse projection of
+   the specified vector, also called the "inverse image under
+   orthogonal projection" of the specified vector. This routine
+   finds the inverse orthogonal projection of a vector onto a plane.
+
+   Related routines are vprjp_c, which projects a vector onto a plane
+   orthogonally, and vproj_c, which projects a vector onto another
+   vector orthogonally.
+
 -Examples
- 
-   1)   Suppose 
- 
-           vin    =  ( 0.0, 1.0, 0.0 ), 
- 
-        and that projpl has normal vector 
- 
-           projn  =  ( 0.0, 0.0, 1.0 ). 
- 
-        Also, let's suppose that invpl has normal vector and constant 
- 
-           invn   =  ( 0.0, 2.0, 2.0 ) 
-           invc   =    4.0. 
- 
-        Then vin lies on the y-axis in the x-y plane, and we want to 
-        find the vector vout lying in invpl such that the orthogonal 
-        projection of vout the x-y plane is vin.  Let the notation 
-        < a, b > indicate the inner product of vectors a and b. 
-        Since every point x in invpl satisfies the equation 
- 
-           <  x,  (0.0, 2.0, 2.0)  >  =  4.0, 
- 
-        we can verify by inspection that the vector 
- 
-           ( 0.0, 1.0, 1.0 ) 
- 
-        is in invpl and differs from vin by a multiple of projn.  So 
- 
-           ( 0.0, 1.0, 1.0 ) 
- 
-        must be vout. 
- 
-        To find this result using CSPICE, we can create the 
-        CSPICE planes projpl and invpl using the code fragment 
- 
-           nvp2pl_c  ( projn,  vin,  &projpl ); 
-           nvc2pl_c  ( invn,   invc, &invpl  ); 
- 
-        and then perform the inverse projection using the call 
- 
+
+   1)   Suppose
+
+           vin    =  ( 0.0, 1.0, 0.0 ),
+
+        and that projpl has normal vector
+
+           projn  =  ( 0.0, 0.0, 1.0 ).
+
+        Also, let's suppose that invpl has normal vector and constant
+
+           invn   =  ( 0.0, 2.0, 2.0 )
+           invc   =    4.0.
+
+        Then vin lies on the y-axis in the x-y plane, and we want to
+        find the vector vout lying in invpl such that the orthogonal
+        projection of vout the x-y plane is vin. Let the notation
+        < a, b > indicate the inner product of vectors a and b.
+        Since every point x in invpl satisfies the equation
+
+           <  x,  (0.0, 2.0, 2.0)  >  =  4.0,
+
+        we can verify by inspection that the vector
+
+           ( 0.0, 1.0, 1.0 )
+
+        is in invpl and differs from vin by a multiple of projn. So
+
+           ( 0.0, 1.0, 1.0 )
+
+        must be vout.
+
+        To find this result using CSPICE, we can create the
+        SPICE planes projpl and invpl using the code fragment
+
+           nvp2pl_c  ( projn,  vin,  &projpl );
+           nvc2pl_c  ( invn,   invc, &invpl  );
+
+        and then perform the inverse projection using the call
+
            vprjpi_c ( vin, &projpl, &invpl, vout );
- 
-        vprjpi_c will return the value 
- 
+
+        vprjpi_c will return the value
+
            vout = ( 0.0, 1.0, 1.0 );
- 
+
 -Restrictions
- 
-   None. 
- 
+
+   1)  It is recommended that the input planes be created by one of
+       the CSPICE routines
+
+          nvc2pl_c ( Normal vector and constant to plane )
+          nvp2pl_c ( Normal vector and point to plane    )
+          psv2pl_c ( Point and spanning vectors to plane )
+
+       In any case each input plane must have a unit length normal
+       vector and a plane constant consistent with the normal
+       vector.
+
 -Literature_References
- 
-   [1] `Calculus and Analytic Geometry', Thomas and Finney. 
- 
+
+   [1]  G. Thomas and R. Finney, "Calculus and Analytic Geometry,"
+        7th Edition, Addison Wesley, 1988.
+
 -Author_and_Institution
- 
-   N.J. Bachman   (JPL) 
- 
+
+   N.J. Bachman        (JPL)
+   J. Diaz del Rio     (ODC Space)
+
 -Version
- 
+
+   -CSPICE Version 1.1.1, 25-AUG-2021 (JDR) (NJB)
+
+       Edited the header to comply with NAIF standard.
+
+       Added entry #1 to -Exceptions section, and entry #1 to -Restrictions.
+
    -CSPICE Version 1.1.0, 05-APR-2004 (NJB)
- 
-      Computation of LIMIT was re-structured to avoid
-      run-time underflow warnings on some platforms.
+
+       Computation of LIMIT was re-structured to avoid
+       run-time underflow warnings on some platforms.
 
    -CSPICE Version 1.0.0, 05-MAR-1999 (NJB)
 
 -Index_Entries
- 
-   vector projection onto plane inverted 
- 
--&
-*/
 
-
-/*
--Revisions
-
-   -CSPICE Version 1.1.0, 05-APR-2004 (NJB)
-
-      Computation of LIMIT was re-structured to avoid run-time
-      underflow warnings on some platforms. In the revised code,
-      BOUND/dpmax_c() is never scaled by a number having absolute value
-      < 1.
+   vector projection onto plane inverted
 
 -&
 */
-
 
 { /* Begin vprjpi_c */
 
    /*
    Local constants
    */
- 
+
    /*
    BOUND is used to bound the magnitudes of the numbers that we
    try to take the reciprocal of, since we can't necessarily invert
    any non-zero number.  We won't try to invert any numbers with
    magnitude less than
- 
+
       BOUND / dpmax_c()
- 
+
    BOUND is chosen somewhat arbitrarily....
    */
-   
+
    #define BOUND      10.0
- 
+
 
 
    /*
@@ -254,21 +261,21 @@
    /*
    Participate in error tracing.
    */
-   
-   if ( return_c() ) 
-   {  
+
+   if ( return_c() )
+   {
       return;
    }
-   
+
    chkin_c ( "vprjpi_c" );
 
- 
+
    /*
    Unpack the planes.
    */
    pl2nvc_c ( projpl, projn, &projc );
    pl2nvc_c ( invpl,  invn,  &invc  );
- 
+
    /*
    We'll first discuss the computation of VOUT in the nominal case,
    and then deal with the exceptional cases.
@@ -305,18 +312,18 @@
    divide-by-zero error or an overflow of mult.  In either case, we
    will avoid carrying out the division, and we'll set found to
    SPICEFALSE.
-   
- 
+
+
    Compute the numerator and denominator of the right side of (2).
    */
-   
+
    numer  =  invc - vdot_c ( vin,   invn );
    denom  =         vdot_c ( projn, invn );
-   
- 
+
+
    /*
    If the magnitude of the denominator is greater than
-   
+
                          BOUND
       limit  =  abs (  ---------- * numer  ),
                         dpmax_c()
@@ -332,7 +339,7 @@
    both zero by insisting on strict inequality in the comparison of
    denom and limit:
    */
- 
+
    if ( fabs(numer) < 1.0 )
    {
       limit  =  fabs ( BOUND / dpmax_c() );
@@ -341,11 +348,11 @@
    {
       limit  =  fabs (  ( BOUND / dpmax_c() ) * numer  );
    }
- 
+
    *found  =  ( fabs (denom) > limit );
-   
-   
-   if ( *found )  
+
+
+   if ( *found )
    {
       /*
       We'll compute vout after all.
@@ -359,4 +366,3 @@
    chkout_c ( "vprjpi_c" );
 
 } /* End vprjpi_c */
-

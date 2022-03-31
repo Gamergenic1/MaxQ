@@ -12,8 +12,8 @@ static integer c__6 = 6;
 static integer c__0 = 0;
 
 /* $Procedure SPCOPN ( SPK or CK, open new file ) */
-/* Subroutine */ int spcopn_(char *spc, char *ifname, integer *handle, ftnlen 
-	spc_len, ftnlen ifname_len)
+/* Subroutine */ int spcopn_(char *fname, char *ifname, integer *handle, 
+	ftnlen fname_len, ftnlen ifname_len)
 {
     extern /* Subroutine */ int chkin_(char *, ftnlen), dafopn_(char *, 
 	    integer *, integer *, char *, integer *, integer *, ftnlen, 
@@ -51,6 +51,7 @@ static integer c__0 = 0;
 
 /* $ Required_Reading */
 
+/*     DAF */
 /*     SPC */
 
 /* $ Keywords */
@@ -61,24 +62,24 @@ static integer c__0 = 0;
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
-/*     SPC        I   Name of SPK or CK file to be created. */
+/*     FNAME      I   Name of SPK or CK file to be created. */
 /*     IFNAME     I   Internal file name. */
 /*     HANDLE     O   Handle of new SPK or CK file. */
 
 /* $ Detailed_Input */
 
-/*     SPC         is the name of a new SPK or CK file to be created. */
+/*     FNAME    is the name of a new SPK or CK file to be created. */
 
-/*     IFNAME      is the internal file name of the file to be created. */
-/*                 IFNAME may contain up to 60 characters. */
+/*     IFNAME   is the internal file name of the file to be created. */
+/*              IFNAME may contain up to 60 characters. */
 
 /* $ Detailed_Output */
 
-/*     HANDLE      is the file handle assigned to the new file. This */
-/*                 should be used to refer to the file in all subsequent */
-/*                 calls to DAF and SPC routines. */
+/*     HANDLE   is the file handle assigned to the new file. This */
+/*              should be used to refer to the file in all subsequent */
+/*              calls to DAF and SPC routines. */
 
 /* $ Parameters */
 
@@ -86,56 +87,56 @@ static integer c__0 = 0;
 
 /* $ Exceptions */
 
-/*     SPK and CK files are Double Precision Array Files (DAFs).  High */
-/*     level SPK, CK, and SPC routines use lower level DAF routines to */
-/*     open, close, read, write, and search a DAF.  Any parameters or */
-/*     limitations in the DAF specification also apply to SPK and CK */
-/*     files.  Refer to the on-line DAF Required Reading (also called */
-/*     the DAF Specification and User's Guide) for details. */
+/*     1)  If the specified file cannot be opened without exceeding the */
+/*         maximum number of files, an error is signaled by a routine in */
+/*         the call tree of this routine. */
 
-/*     Although SPCOPN does not signal any errors directly, it does call */
-/*     a routine that signals errors for the following exceptional cases: */
+/*     2)  If the specified file cannot be opened without exceeding the */
+/*         maximum number of DAF files, an error is signaled by a routine */
+/*         in the call tree of this routine. */
 
-/*     1) If the limit is exceeded for the number of DAFs open for */
-/*        write access at any one time, */
+/*     3)  If an I/O error occurs in the process of opening the file, */
+/*         the error is signaled by a routine in the call tree of this */
+/*         routine. */
 
-/*     2) If the limit is exceeded for the maximum number of files open */
-/*        at any one time, */
+/*     4)  If (for some reason) the initial records in the file cannot be */
+/*         written, an error is signaled by a routine in the call tree of */
+/*         this routine. */
 
-/*     3) If the file cannot be opened properly, or */
+/*     5)  If no logical units are available, an error is signaled by a */
+/*         routine in the call tree of this routine. */
 
-/*     4) If the initial records in the file cannot be written. */
+/*     6)  If the file name is blank or otherwise inappropriate, an error */
+/*         is signaled by a routine in the call tree of this routine. */
 
 /* $ Files */
 
-/*     See argument SPC above. */
+/*     See argument FNAME above. */
 
 /* $ Particulars */
 
-/*     SPCOPN opens a new SPK or CK file.  It is identical to DAFOPN */
-/*     except SPCOPN defines several of the inputs that DAFOPN */
-/*     requires and which specify that the DAF to be opened is an */
-/*     SPK or CK file.  Use DAFCLS to close any DAF including SPK */
-/*     and CK files. */
+/*     SPCOPN opens a new SPK or CK file. It is identical to DAFOPN */
+/*     except SPCOPN defines several of the inputs that DAFOPN requires */
+/*     and which specify that the DAF to be opened is an SPK or CK file. */
+/*     Use DAFCLS to close any DAF including SPK and CK files. */
 
-/*     SPCOPN, is not to be confused with the routines that load */
-/*     and unload files to and from a buffer for use by the readers */
-/*     such as SPKLEF (SPK, load ephemeris file) and CKLPF (CK, */
-/*     load pointing file).  The loading and unloading routines */
-/*     open and close the files internally, so there is no need to */
-/*     call SPCOPN when loading or unloading SPK or CK files. */
+/*     SPCOPN, is not to be confused with the routines that load and */
+/*     unload files to and from a buffer for use by the readers such as */
+/*     SPKLEF (SPK, load ephemeris file) and CKLPF (CK, load pointing */
+/*     file). The loading and unloading routines open and close the files */
+/*     internally, so there is no need to call SPCOPN when loading or */
+/*     unloading SPK or CK files. */
 
 /* $ Examples */
 
 /*     In the following code fragment, SPCOPN opens a new file, */
-/*     to which an array is then added.  GETDAT is a ficticious */
+/*     to which an array is then added. GETDAT is a ficticious */
 /*     non-SPICELIB routine whose function is to get the array data. */
 /*     DAFBNA begins a new array, DAFADA adds data to an array, */
 /*     and DAFENA ends a new array. */
 
-/*               CALL SPCOPN  ( SPC, IFNAME, HANDLE ) */
-
-/*               CALL DAFBNA  ( HANDLE, SUM, NAME ) */
+/*               CALL SPCOPN  ( FNAME,  IFNAME, HANDLE ) */
+/*               CALL DAFBNA  ( HANDLE, SUM,    NAME   ) */
 
 /*               CALL GETDAT  ( N, DATA, FOUND ) */
 
@@ -160,9 +161,23 @@ static integer c__0 = 0;
 
 /* $ Author_and_Institution */
 
-/*     J.E. McLean    (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     J.E. McLean        (JPL) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 19-APR-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. Changed input argument name */
+/*        "SPC" to "FNAME" for consistency with other routines. */
+
+/*        Edited the header to comply with NAIF standard. Updated the */
+/*        $Exceptions section to cover all errors detected by this */
+/*        routine and remove unnecessary introduction referencing DAF */
+/*        required reading. */
+
+/*        Added DAF required reading to $Required_Reading. */
 
 /* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
 
@@ -174,7 +189,7 @@ static integer c__0 = 0;
 /* -& */
 /* $ Index_Entries */
 
-/*     open new spk or ck file */
+/*     open new SPK or CK file */
 
 /* -& */
 
@@ -203,7 +218,8 @@ static integer c__0 = 0;
 /*     ND and NI which are specific to SPK and CK.  We'll not */
 /*     reserve any records. */
 
-    dafopn_(spc, &c__2, &c__6, ifname, &c__0, handle, spc_len, ifname_len);
+    dafopn_(fname, &c__2, &c__6, ifname, &c__0, handle, fname_len, ifname_len)
+	    ;
     chkout_("SPCOPN", (ftnlen)6);
     return 0;
 } /* spcopn_ */

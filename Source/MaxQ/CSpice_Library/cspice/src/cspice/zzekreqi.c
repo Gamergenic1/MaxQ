@@ -447,7 +447,7 @@ static integer c__15 = 15;
 /* $ Exceptions */
 
 /*     1)  If the input name is not recognized, the error */
-/*         SPICE(INVALIDNAME) is signalled.  The encoded query is not */
+/*         SPICE(INVALIDNAME) is signaled.  The encoded query is not */
 /*         modified. */
 
 /* $ Files */
@@ -475,6 +475,10 @@ static integer c__15 = 15;
 /*     N.J. Bachman       (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.0.1, 03-OCT-2021 (NJB) */
+
+/*        Corrected typos in comments. */
 
 /* -    Beta Version 1.0.0, 17-OCT-1995 (NJB) */
 
@@ -515,7 +519,7 @@ static integer c__15 = 15;
 /*     Do the deed. */
 
     *value = eqryi[namidx[(i__1 = i__ - 1) < 15 && 0 <= i__1 ? i__1 : s_rnge(
-	    "namidx", i__1, "zzekreqi_", (ftnlen)191)] + 5];
+	    "namidx", i__1, "zzekreqi_", (ftnlen)195)] + 5];
     return 0;
 } /* zzekreqi_ */
 

@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      KEPLEQ ( Kepler's Equation - Equinoctial Version ) */
+/* $Procedure KEPLEQ ( Solve Kepler's Equation --- Equinoctial Form ) */
 doublereal kepleq_(doublereal *ml, doublereal *h__, doublereal *k)
 {
     /* System generated locals */
@@ -25,8 +25,7 @@ doublereal kepleq_(doublereal *ml, doublereal *h__, doublereal *k)
 
 /* $ Abstract */
 
-/*    This function solves the equinoctial version of Kepler's */
-/*    equation. */
+/*     Solve the equinoctial version of Kepler's equation. */
 
 /* $ Disclaimer */
 
@@ -66,52 +65,61 @@ doublereal kepleq_(doublereal *ml, doublereal *h__, doublereal *k)
 
 /*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
-/*     ML         I   Mean longitude */
-/*     H          I   h component of equinoctial elements */
-/*     K          I   k component of equinoctial elements */
+/*     ML         I   Mean longitude. */
+/*     H          I   h component of equinoctial elements. */
+/*     K          I   k component of equinoctial elements. */
+
+/*     The function returns the solution to the equinoctial version of */
+/*     Kepler's equation, given the mean longitude and the h and k */
+/*     components of the equinoctial elements. */
 
 /* $ Detailed_Input */
 
-/*     ML         mean longitude of some body following two body */
-/*                motion.  (Mean longitude = Mean anomaly + argument */
-/*                of periapse + longitude of ascending node.) */
+/*     ML       is the mean longitude of some body following two body */
+/*              motion. (Mean longitude = Mean anomaly + argument of */
+/*              periapse + longitude of ascending node.) */
 
-/*     H          The h component of the equinoctial element set */
-/*                ( h = ECC*SIN( arg of periapse + long ascending node) ) */
+/*     H        is the h component of the equinoctial element set */
+/*              ( h = ECC*SIN( arg of periapse + long ascending node) ) */
 
-/*     K          The k component of the equinoctial element set */
-/*                ( k = ECC*COS( arg of periapse + long ascending node) ) */
-
-/*     Note that ECC = DSQRT ( K*K + H*H ) */
+/*     K        is the k component of the equinoctial element set */
+/*              ( k = ECC*COS( arg of periapse + long ascending node) ) */
 
 /* $ Detailed_Output */
 
-/*     The function returns the value of F such that */
-/*     ML = F + h*COS(F) - k*SIN(F) */
+/*     The function returns the solution to the equinoctial version of */
+/*     Kepler's equation, given the mean longitude and the h and k */
+/*     components of the equinoctial elements. */
+
+/*     The solution is the value of F such that */
+
+/*        ML = F + H * COS(F) - K * SIN(F) */
+
+/*     Note that ECC = DSQRT ( K*K + H*H ) */
 
 /* $ Parameters */
 
 /*     None. */
 
+/* $ Exceptions */
+
+/*     1)  If the sum of the squares of H and K is not less than .9, */
+/*         the error SPICE(ECCOUTOFBOUNDS) is signaled. */
+
+/*     2)  If the iteration for a solution to the equinoctial Kepler's */
+/*         equation does not converge in 10 or fewer steps, the error */
+/*         SPICE(NOCONVERGENCE) is signaled. */
+
 /* $ Files */
 
 /*     None. */
-
-/* $ Exceptions */
-
-/*     1) If the sum of the squares of F and K is not less than .9 */
-/*        the error 'SPICE(ECCOUTOFBOUNDS)' will be signalled. */
-
-/*     2) If the iteration for a solution to the equinoctial Kepler's */
-/*        equation does not converge in 10 or fewer steps, the error */
-/*        'SPICE(NOCONVERGENCE)' is signalled. */
 
 /* $ Particulars */
 
 /*     This routine solves the equinoctial element version of */
 /*     Kepler's equation. */
 
-/*        ML = F + h*COS(F) - k*SIN(F) */
+/*        ML = F + H * COS(F) - K * SIN(F) */
 
 /*     Here F is an offset from the eccentric anomaly E. */
 
@@ -127,20 +135,25 @@ doublereal kepleq_(doublereal *ml, doublereal *h__, doublereal *k)
 
 /*     None. */
 
-/* $ Author_and_Institution */
-
-/*     W.L. Taber      (JPL) */
-
 /* $ Literature_References */
 
-/*     "Optical Navigation Program Mathematical Models" JPL */
-/*     Engineering Memorandum 314-513.  By William M. Owen */
-/*     August 9, 1991. */
+/*     [1]  W. Owen and R. Vaughan, "Optical Navigation Program */
+/*          Mathematical Models," JPL Engineering Memorandum 314-513, */
+/*          August 9, 1991. */
+
+/* $ Author_and_Institution */
+
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
 
-/* -    SPICELIB Version 1.0.0, 11-DEC-1996 (WLT) */
+/* -    SPICELIB Version 1.0.1, 26-AUG-2021 (JDR) */
 
+/*        Edited the header to comply with NAIF standard. Updated */
+/*        $Procedure section for consistency with KPSOLV routine. */
+
+/* -    SPICELIB Version 1.0.0, 11-DEC-1996 (WLT) */
 
 /* -& */
 /* $ Index_Entries */
@@ -197,7 +210,7 @@ doublereal kepleq_(doublereal *ml, doublereal *h__, doublereal *k)
 
 /*     Finally if we let */
 
-/* C                                       -                    - */
+/*                                        -                    - */
 /*                                       |  DCOS(ML)  -DSIN(ML) | */
 /*      EVEC =  [ EX  EY ] = [ -H  K ] * |  DSIN(ML)   DCOS(ML) | */
 /*                                        -                    - */

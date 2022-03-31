@@ -10,7 +10,7 @@
 static integer c__2 = 2;
 static integer c__6 = 6;
 
-/* $Procedure  SPKR02 ( SPK, read record from segment, type 2 ) */
+/* $Procedure SPKR02 ( SPK, read record from segment, type 2 ) */
 /* Subroutine */ int spkr02_(integer *handle, doublereal *descr, doublereal *
 	et, doublereal *record)
 {
@@ -75,7 +75,7 @@ static integer c__6 = 6;
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     I   File handle. */
 /*     DESCR      I   Segment descriptor. */
@@ -85,48 +85,47 @@ static integer c__6 = 6;
 /* $ Detailed_Input */
 
 /*     HANDLE, */
-/*     DESCR       are the file handle and segment descriptor for */
-/*                 an SPK segment of type 2. */
+/*     DESCR    are the file handle and segment descriptor for */
+/*              an SPK segment of type 2. */
 
-/*     ET          is an epoch for which a data record from the */
-/*                 specified segment is required. ET is expressed as */
-/*                 seconds past J2000 TDB. */
-
+/*     ET       is an epoch for which a data record from the */
+/*              specified segment is required. ET is expressed as */
+/*              seconds past J2000 TDB. */
 
 /* $ Detailed_Output */
 
-/*     RECORD      is an array of data from the specified segment which, */
-/*                 when evaluated at epoch ET, will give the state */
-/*                 (position and velocity) of the target body identified */
-/*                 by the input segment descriptor. The descriptor */
-/*                 specifies the center of motion and reference frame of */
-/*                 the state. */
+/*     RECORD   is an array of data from the specified segment which, */
+/*              when evaluated at epoch ET, will give the state */
+/*              (position and velocity) of the target body identified */
+/*              by the input segment descriptor. The descriptor */
+/*              specifies the center of motion and reference frame of */
+/*              the state. */
 
-/*                 The structure of the record is as follows: */
+/*              The structure of the record is as follows: */
 
-/*                    +--------------------------------------+ */
-/*                    | record size (excluding this element) | */
-/*                    +--------------------------------------+ */
-/*                    | Coverage interval midpoint           | */
-/*                    +--------------------------------------+ */
-/*                    | Coverage interval radius             | */
-/*                    +--------------------------------------+ */
-/*                    | Coeffs for X position component      | */
-/*                    +--------------------------------------+ */
-/*                    | Coeffs for Y position component      | */
-/*                    +--------------------------------------+ */
-/*                    | Coeffs for Z position component      | */
-/*                    +--------------------------------------+ */
+/*                 +--------------------------------------+ */
+/*                 | record size (excluding this element) | */
+/*                 +--------------------------------------+ */
+/*                 | Coverage interval midpoint           | */
+/*                 +--------------------------------------+ */
+/*                 | Coverage interval radius             | */
+/*                 +--------------------------------------+ */
+/*                 | Coeffs for X position component      | */
+/*                 +--------------------------------------+ */
+/*                 | Coeffs for Y position component      | */
+/*                 +--------------------------------------+ */
+/*                 | Coeffs for Z position component      | */
+/*                 +--------------------------------------+ */
 
-/*                 In the above record */
+/*              In the above record */
 
-/*                    - Times are expressed as seconds past J2000 TDB. */
-/*                    - Position components have units of km. */
+/*                 - Times are expressed as seconds past J2000 TDB. */
+/*                 - Position components have units of km. */
 
-/*                 RECORD must be declared by the caller with size large */
-/*                 enough to accommodate the largest record that can be */
-/*                 returned by this routine. See the INCLUDE file */
-/*                 spkrec.inc for the correct record length. */
+/*              RECORD must be declared by the caller with size large */
+/*              enough to accommodate the largest record that can be */
+/*              returned by this routine. See the INCLUDE file */
+/*              spkrec.inc for the correct record length. */
 
 /* $ Parameters */
 
@@ -134,8 +133,8 @@ static integer c__6 = 6;
 
 /* $ Exceptions */
 
-/*     1) Any errors that occur while looking up SPK data will be */
-/*        diagnosed by routines in the call tree of this routine. */
+/*     1)  If an error occurs while looking up SPK data, the error is */
+/*         signaled by a routine in the call tree of this routine. */
 
 /* $ Files */
 
@@ -150,9 +149,9 @@ static integer c__6 = 6;
 /* $ Examples */
 
 /*     The data returned by the SPKRnn routine is in its rawest form, */
-/*     taken directly from the segment.  As such, it will be meaningless */
+/*     taken directly from the segment. As such, it will be meaningless */
 /*     to a user unless he/she understands the structure of the data type */
-/*     completely.  Given that understanding, however, the SPKRxx */
+/*     completely. Given that understanding, however, the SPKRxx */
 /*     routines might be used to "dump" and check segment data for a */
 /*     particular epoch. */
 
@@ -183,14 +182,24 @@ static integer c__6 = 6;
 
 /* $ Literature_References */
 
-/*     NAIF Document 168.0, "S- and P- Kernel (SPK) Specification and */
-/*     User's Guide" */
+/*     None. */
 
 /* $ Author_and_Institution */
 
-/*     I.M. Underwood  (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     H.A. Neilan        (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.2, 14-APR-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. Moved SPK */
+/*        required reading from $Literature_References to */
+/*        $Required_Reading section. */
 
 /* -    SPICELIB Version 1.1.1, 18-JAN-2014 (NJB) */
 
@@ -208,7 +217,7 @@ static integer c__6 = 6;
 
 /* -    SPICELIB Version 1.0.2, 23-AUG-1991 (HAN) */
 
-/*        SPK02 was removed from the Required_Reading section of the */
+/*        SPK02 was removed from the $Required_Reading section of the */
 /*        header. The information in the SPK02 Required Reading file */
 /*        is now part of the SPK Required Reading file. */
 
@@ -221,7 +230,7 @@ static integer c__6 = 6;
 /* -& */
 /* $ Index_Entries */
 
-/*     read record from type_2 spk segment */
+/*     read record from type_2 SPK segment */
 
 /* -& */
 

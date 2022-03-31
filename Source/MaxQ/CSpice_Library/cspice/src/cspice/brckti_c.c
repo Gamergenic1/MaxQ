@@ -1,14 +1,14 @@
 /*
 
--Procedure brckti_c (Bracket an integer value within an interval)
+-Procedure brckti_c ( Bracket an integer value within an interval )
 
 -Abstract
- 
-   Bracket a number. That is, given a number and an acceptable 
-   interval, make sure that the number is contained in the 
-   interval. (If the number is already in the interval, leave it 
-    alone. If not, set it to the nearest endpoint of the interval.) 
- 
+
+   Bracket an integer number. That is, given a number and an
+   acceptable interval, make sure that the number is contained in the
+   interval. (If the number is already in the interval, leave it
+   alone. If not, set it to the nearest endpoint of the interval.)
+
 -Disclaimer
 
    THIS SOFTWARE AND ANY RELATED MATERIALS WERE CREATED BY THE
@@ -35,149 +35,302 @@
    ACTIONS OF RECIPIENT IN THE USE OF THE SOFTWARE.
 
 -Required_Reading
- 
-   None. 
- 
--Keywords
 
    None.
-    
+
+-Keywords
+
+   INTERVALS
+   NUMBERS
+   UTILITY
+
 */
 
    #include "SpiceUsr.h"
 
 
-   SpiceInt brckti_c ( SpiceInt  number, 
+   SpiceInt brckti_c ( SpiceInt  number,
                        SpiceInt  end1,
                        SpiceInt  end2   )
+
 /*
 
 -Brief_I/O
 
-   VARIABLE  I/O  DESCRIPTION 
-   --------  ---  -------------------------------------------------- 
-   number     I   Number to be bracketed. 
-   end1       I   One of the bracketing endpoints for number. 
-   end2       I   The other bracketing endpoint for number. 
-  
-   The function returns the bracketed number.    
- 
+   VARIABLE  I/O  DESCRIPTION
+   --------  ---  --------------------------------------------------
+   number     I   Number to be bracketed.
+   end1       I   One of the bracketing endpoints for `number'.
+   end2       I   The other bracketing endpoint for `number'.
+
+   The function returns the bracketed number.
+
 -Detailed_Input
 
-   number      is the number to be bracketed. That is, the 
-               value of number is constrained to lie in the 
-               interval bounded by end1 and end2. 
+   number      is the number to be bracketed. That is, the
+               value of `number' is constrained to lie in the
+               interval bounded by `end1' and `end2'.
 
-   end1, 
-   end2        are the lower and upper bounds for number. The 
-               order is not important. 
- 
+   end1,
+   end2        are the lower and upper bounds for `number'. The
+               order is not important.
+
 -Detailed_Output
- 
-   The function returnes the input number, if it was already in the 
-   interval provided. Otherwise the returned value is the nearest 
-   bound of the interval. 
- 
+
+   The function returns the bracketed number. That is `number', if it
+   was already in the interval provided. Otherwise the returned
+   value is the nearest bound of the interval.
+
 -Parameters
- 
-   None. 
- 
+
+   None.
+
 -Exceptions
- 
-   Error free. 
- 
+
+   Error free.
+
 -Files
- 
-   None. 
- 
+
+   None.
+
 -Particulars
- 
-   This routine provides a shorthand notation for code fragments 
-   like the following 
 
-      #include "SpiceUsr.h"
-            .
-            .
-            .
-      if ( number < end 1 )
-      {
-         number = end1;
-      }
-      else if ( number > end2 )
-      {
-         number = end2;
-      }
-      
+   This routine provides a shorthand notation for code fragments
+   like the following:
 
-   which occur frequently during the processing of program inputs. 
- 
+      if ( end1 < end2 )
+      {
+         if ( number < end1 )
+         {
+            number = end1;
+         }
+         else if ( number > end2 )
+         {
+            number = end2;
+         }
+      }
+      else
+      {
+         if ( number < end2 )
+         {
+            number = end2;
+         }
+         else if ( number > end1 )
+         {
+            number = end1;
+         }
+      }
+
+   which occur frequently during the processing of program inputs.
+
 -Examples
- 
-    The following illustrates the operation of brckti_c. 
- 
-          brckti_c (  -1,   1,  10 )  =  1.0; 
-          brckti_c (  29,   1,  10 )  = 10.0; 
-          brckti_c (   3, -10,  10 )  =  3.0; 
-          brckti_c (   3, -10,  -1 )  = -1.0; 
- 
-    The following code fragment illustrates a typical use for brckti_c. 
- 
-       #include "SpiceUsr.h"
-            .
-            .
-            .
-       /.
-       Number of time steps must be in the range 1-10. 
-       ./    
-       
-       prompt_c ( "Enter number of time steps > ", 80, nStr );
-       
-       prsint_c ( nStr, &n );
-       
-       nstep = brckti_c ( n, 1, 10 );
-       
+
+   The numerical results shown for these examples may differ across
+   platforms. The results depend on the SPICE kernels used as
+   input, the compiler and supporting libraries, and the machine
+   specific arithmetic implementation.
+
+   1) The following code example illustrates the operation of
+      brckti_c.
+
+      Example code begins here.
+
+
+      /.
+         Program brckti_ex1
+      ./
+      #include <stdio.h>
+      #include "SpiceUsr.h"
+
+      int main( )
+      {
+
+         /.
+         Local parameters.
+         ./
+         #define LISTSZ       4
+
+         /.
+         Local variables.
+         ./
+         SpiceInt             i;
+
+         /.
+         Set the values for the example.
+         ./
+         SpiceInt             end1   [LISTSZ] = {  1,  1,  10, -10 };
+         SpiceInt             end2   [LISTSZ] = { 10, 10, -10,  -1 };
+         SpiceInt             number [LISTSZ] = { -1, 29,   3,   3 };
+
+         printf( "Number  End1  End2  Bracketed\n" );
+         printf( "------  ----  ----  ---------\n" );
+
+         for ( i = 0; i < LISTSZ; i++ )
+         {
+
+            printf( "%6d %5d %5d %10d\n",
+                    number[i], end1[i], end2[i],
+                    brckti_c ( number[i], end1[i], end2[i] ) );
+
+         }
+
+         return ( 0 );
+      }
+
+
+      When this program was executed on a Mac/Intel/cc/64-bit
+      platform, the output was:
+
+
+      Number  End1  End2  Bracketed
+      ------  ----  ----  ---------
+          -1     1    10          1
+          29     1    10         10
+           3    10   -10          3
+           3   -10    -1         -1
+
+
+   2) The following code example illustrates a typical use for
+      brckti_c: force an identifier to be within a range. Note that
+      this code assumes that the user provided value is a valid
+      integer number.
+
+
+      Example code begins here.
+
+
+      /.
+         Program brckti_ex2
+      ./
+      #include <stdio.h>
+      #include "SpiceUsr.h"
+
+      int main( )
+      {
+
+         /.
+         Local parameters.
+         ./
+         #define KWDSZ        31
+
+         /.
+         Local variables.
+         ./
+         SpiceChar            usrin  [KWDSZ];
+
+         SpiceInt             codein;
+         SpiceInt             codeok;
+
+         /.
+         Prompt the user for the code identifier.
+         ./
+         prompt_c ( "Enter object code: ", KWDSZ, usrin );
+
+         /.
+         Convert the user input to integer.
+         ./
+         prsint_c ( usrin, &codein );
+
+         /.
+         Object code must be in the range 701-705.
+         ./
+         codeok = brckti_c ( codein, 701, 705 );
+
+         /.
+         Display confirmation message.
+         ./
+         if ( codein != codeok )
+         {
+            printf( "Provided object code %3d is out of range (701-705).\n",
+                                                               (int)codein );
+         }
+         else
+         {
+            printf( "Provided object code %3d is in range (701-705).\n",
+                                                           (int)codein );
+         }
+
+         return ( 0 );
+      }
+
+
+      When this program was executed on a Mac/Intel/cc/64-bit
+      platform, using "710" as user provided input, the output was:
+
+
+      Enter object code: 710
+      Provided object code 710 is out of range (701-705).
+
 
 -Restrictions
- 
-   None. 
- 
--Author_and_Institution
- 
-   N.J. Bachman    (JPL)
-   W.L. Taber      (JPL) 
-   I.M. Underwood  (JPL) 
- 
+
+   None.
+
 -Literature_References
- 
-   None. 
- 
+
+   None.
+
+-Author_and_Institution
+
+   N.J. Bachman        (JPL)
+   J. Diaz del Rio     (ODC Space)
+   B.V. Semenov        (JPL)
+   W.L. Taber          (JPL)
+   I.M. Underwood      (JPL)
+   E.D. Wright         (JPL)
+
 -Version
+
+   -CSPICE Version 1.1.0, 10-AUG-2021 (JDR) (BVS)
+
+       BUG FIX: corrected to make the order of endpoints not important
+       as stated in the description.
+
+       Edited the header to comply with NAIF standard. Added complete
+       code examples based on existing fragments.
+
+       Updated code fragment in -Particulars to show that the
+       order of endpoints is not important.
 
    -CSPICE Version 1.0.1, 11-NOV-2006 (EDW)
 
-      Added "None." text to Keywords section, required for
+      Added "None." text to -Keywords section, required for
       API doc script (cspicehtml.pl) integrity checks.
- 
+
    -CSPICE Version 1.0.0, 16-AUG-1999 (NJB) (WLT) (IMU)
 
 -Index_Entries
- 
-   bracket an integer value within an interval 
- 
+
+   bracket an integer value within an interval
+
 -&
 */
 
 { /* Begin brckti_c */
 
-   if ( number < end1 )
+   if ( end1 < end2 )
    {
-      return ( end1 );
+      if ( number < end1 )
+      {
+         return ( end1 );
+      }
+      else if ( number > end2 )
+      {
+         return ( end2 );
+      }
    }
-   else if ( number > end2 )
+   else
    {
-      return ( end2 );
+      if ( number < end2 )
+      {
+         return ( end2 );
+      }
+      else if ( number > end1 )
+      {
+         return ( end1 );
+      }
    }
-   
+
    return ( number );
-      
+
 } /* End brckti_c */

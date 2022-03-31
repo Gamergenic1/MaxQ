@@ -160,6 +160,10 @@ static integer c__1 = 1;
 
 /* $ Version */
 
+/* -    SPICELIB Version 2.6.0, 28-NOV-2021 (BVS) */
+
+/*        Updated for MAC-OSX-M1-64BIT-CLANG_C. */
+
 /* -    SPICELIB Version 2.5.0, 10-MAR-2014 (BVS) */
 
 /*        Updated for SUN-SOLARIS-64BIT-INTEL. */
@@ -370,97 +374,99 @@ static integer c__1 = 1;
 
 /* $ Brief_I/O */
 
-/*      VARIABLE  I/O  DESCRIPTION */
-/*      --------  ---  -------------------------------------------------- */
-/*      FILE       I   The name of a file to be examined. */
-/*      ARCH       O   The architecture of the kernel file. */
-/*      KERTYP     O   The type of the kernel file. */
+/*     VARIABLE  I/O  DESCRIPTION */
+/*     --------  ---  -------------------------------------------------- */
+/*     FILE       I   The name of a file to be examined. */
+/*     ARCH       O   The architecture of the kernel file. */
+/*     KERTYP     O   The type of the kernel file. */
 
 /* $ Detailed_Input */
 
-/*     FILE        is the name of a SPICE kernel file whose architecture */
-/*                 and type are desired. */
+/*     FILE     is the name of a SPICE kernel file whose architecture */
+/*              and type are desired. */
 
 /* $ Detailed_Output */
 
-/*     ARCH        is the file architecture of the SPICE kernel file */
-/*                 specified be FILE. If the architecture cannot be */
-/*                 determined or is not recognized the value '?' is */
-/*                 returned. */
+/*     ARCH     is the file architecture of the SPICE kernel file */
+/*              specified by FILE. If the architecture cannot be */
+/*              determined or is not recognized the value '?' is */
+/*              returned. */
 
-/*                 Architectures currently recognized are: */
+/*              Architectures currently recognized are: */
 
-/*                    DAF - The file is based on the DAF architecture. */
-/*                    DAS - The file is based on the DAS architecture. */
-/*                    XFR - The file is in a SPICE transfer file format. */
-/*                    DEC - The file is an old SPICE decimal text file. */
-/*                    ASC -- An ASCII text file. */
-/*                    KPL -- Kernel Pool File (i.e., a text kernel) */
-/*                    TXT -- An ASCII text file. */
-/*                    TE1 -- Text E-Kernel type 1. */
-/*                     ?  - The architecture could not be determined. */
+/*                 DAF -- The file is based on the DAF architecture. */
+/*                 DAS -- The file is based on the DAS architecture. */
+/*                 XFR -- The file is in a SPICE transfer file format. */
+/*                 DEC -- The file is an old SPICE decimal text file. */
+/*                 ASC -- An ASCII text file. */
+/*                 KPL -- Kernel Pool File (i.e., a text kernel) */
+/*                 TXT -- An ASCII text file. */
+/*                 TE1 -- Text E-Kernel type 1. */
+/*                 ?   -- The architecture could not be determined. */
 
-/*                 This variable must be at least 3 characters long. */
+/*              This variable must be at least 3 characters long. */
 
-/*     KERTYP      is the type of the SPICE kernel file. If the type */
-/*                 can not be determined the value '?' is returned. */
+/*     KERTYP   is the type of the SPICE kernel file. If the type */
+/*              can not be determined the value '?' is returned. */
 
-/*                 Kernel file types may be any sequence of at most four */
-/*                 printing characters. NAIF has reserved for its use */
-/*                 types which contain all upper case letters. */
+/*              Kernel file types may be any sequence of at most four */
+/*              printing characters. NAIF has reserved for its use */
+/*              types which contain all upper case letters. */
 
-/*                 A file type of 'PRE' means that the file is a */
-/*                 pre-release file. */
+/*              A file type of 'PRE' means that the file is a */
+/*              pre-release file. */
 
-/*                 This variable may be at most 4 characters long. */
+/*              This variable may be at most 4 characters long. */
 
 /* $ Parameters */
 
-/*     RECL        is the record length of a binary kernel file. Each */
-/*                 record must be large enough to hold 128 double */
-/*                 precision numbers. The units in which the record */
-/*                 length must be specified vary from environment to */
-/*                 environment. For example, VAX Fortran requires */
-/*                 record lengths to be specified in longwords, */
-/*                 where two longwords equal one double precision */
-/*                 number. */
+/*     RECL     is the record length of a binary kernel file. Each */
+/*              record must be large enough to hold 128 double */
+/*              precision numbers. The units in which the record */
+/*              length must be specified vary from environment to */
+/*              environment. For example, VAX Fortran requires */
+/*              record lengths to be specified in longwords, */
+/*              where two longwords equal one double precision */
+/*              number. */
 
 /* $ Exceptions */
 
-/*      1) If the filename specified is blank, then the error */
+/*     1)  If the filename specified is blank, the error */
 /*         SPICE(BLANKFILENAME) is signaled. */
 
-/*      2) If any inquire on the filename specified by FILE fails for */
-/*         some reason, the error SPICE(INQUIREERROR) is signaled. */
+/*     2)  If any inquire on the filename specified by FILE, required to */
+/*         obtain information about the physical file, fails for some */
+/*         reason, the error SPICE(INQUIREERROR) is signaled. */
 
-/*      3) If the file specified by FILE does not exist, the error */
+/*     3)  If the file specified by FILE does not exist, the error */
 /*         SPICE(FILENOTFOUND) is signaled. */
 
-/*      4) If the file specified by FILE is already open but not through */
+/*     4)  If the file specified by FILE is already open but not through */
 /*         SPICE interfaces, the error SPICE(EXTERNALOPEN) is signaled. */
 
-/*      5) If an attempt to open the file specified by FILE fails when */
+/*     5)  If an attempt to open the file specified by FILE fails when */
 /*         this routine requires that it succeed, the error */
 /*         SPICE(FILEOPENFAILED) is signaled. */
 
-/*      6) If an attempt to read the file specified by FILE fails when */
+/*     6)  If an attempt to read the file specified by FILE fails when */
 /*         this routine requires that it succeed, the error */
 /*         SPICE(FILEREADFAILED) is signaled. */
 
-/*      7) Routines in the call tree of this routine may trap and */
-/*         signal errors. */
+/*     7)  If an issue is detected during the opening the input file or */
+/*         the process to determine its architecture and type, an error */
+/*         is signaled by a routine in the call tree of this routine. */
 
-/*      8) If the ID word in a DAF based kernel is NAIF/DAF, then the */
+/*     8)  If the ID word in a DAF based kernel is 'NAIF/DAF', then the */
 /*         algorithm GETFAT uses to distinguish between CK and SPK */
 /*         kernels may result in an indeterminate KERTYP if the SPK or */
 /*         CK files have invalid first segments. */
 
 /* $ Files */
 
-/*     The SPICE kernel file specified by FILE is examined by this */
-/*     routine to determine its architecture and type.  If the file */
-/*     named by FILE is not connected to a logical unit or loaded */
-/*     in the handle manager, this routine will OPEN and CLOSE it. */
+/*     The SPICE kernel file specified by FILE is opened and then */
+/*     closed by this routine to determine its file architecture and */
+/*     type. Filenames of open files should not be passed to this */
+/*     routine. */
 
 /* $ Particulars */
 
@@ -469,39 +475,212 @@ static integer c__1 = 1;
 
 /* $ Examples */
 
-/*     Suppose you wish to write a single routine for loading binary */
-/*     kernels. You can use this routine to determine the type of the */
-/*     file and  then pass the file to the appropriate low level file */
-/*     loader to handle the actual loading of the file. */
+/*     The numerical results shown for this example may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
 
-/*        CALL GETFAT ( FILE, ARCH, KERTYP ) */
+/*     1) Determine the file architecture and file type of all the */
+/*        kernels loaded through a meta-kernel, and of a kernel in */
+/*        transfer format. */
 
-/*        IF ( KERTYP .EQ. 'SPK' ) THEN */
+/*        Use the SPK kernel below to provide an example of a kernel in */
+/*        transfer format. */
 
-/*           CALL SPKLEF ( FILE, HANDLE ) */
+/*           earthstns_itrf93_050714.xsp */
 
-/*        ELSE IF ( KERTYP .EQ. 'CK' ) THEN */
 
-/*           CALL CKLPF ( FILE, HANDLE ) */
+/*        Use the meta-kernel shown below to load the other types of */
+/*        SPICE kernels. */
 
-/*        ELSE IF ( KERTYP .EQ. 'EK' ) THEN */
 
-/*           CALL EKLEF ( FILE, HANDLE ) */
+/*           KPL/MK */
 
-/*        ELSE */
+/*           File: getfat_ex1.tm */
 
-/*           WRITE (*,*) 'The file could not be identified as a known' */
-/*           WRITE (*,*) 'kernel type.  Did you load the wrong file' */
-/*           WRITE (*,*) 'by mistake?' */
+/*           This meta-kernel is intended to support operation of SPICE */
+/*           example programs. The kernels shown here should not be */
+/*           assumed to contain adequate or correct versions of data */
+/*           required by SPICE-based user applications. */
 
-/*        END IF */
+/*           In order for an application to use this meta-kernel, the */
+/*           kernels referenced here must be present in the user's */
+/*           current working directory. */
+
+/*           The names and contents of the kernels referenced */
+/*           by this meta-kernel are as follows: */
+
+/*              File name                        Contents */
+/*              ---------                        -------- */
+/*              de430.bsp                        Planetary ephemeris */
+/*              mar097.bsp                       Mars satellite ephemeris */
+/*              pck00010.tpc                     Planet orientation and */
+/*                                               radii */
+/*              naif0011.tls                     Leapseconds */
+/*              mgs_moc_v20.ti                   MGS MOC instrument */
+/*                                               parameters */
+/*              mgs_sclkscet_00061.tsc           MGS SCLK coefficients */
+/*              mgs_sc_ext12.bc                  MGS s/c bus attitude */
+/*              mgs_ext12_ipng_mgs95j.bsp        MGS ephemeris */
+/*              megr90n000cb_plate.bds           Plate model based on */
+/*                                               MEGDR DEM, resolution */
+/*                                               4 pixels/degree. */
+
+/*           \begindata */
+
+/*              KERNELS_TO_LOAD = ( 'de430.bsp', */
+/*                                  'mar097.bsp', */
+/*                                  'pck00010.tpc', */
+/*                                  'naif0011.tls', */
+/*                                  'mgs_moc_v20.ti', */
+/*                                  'mgs_sclkscet_00061.tsc', */
+/*                                  'mgs_sc_ext12.bc', */
+/*                                  'mgs_ext12_ipng_mgs95j.bsp', */
+/*                                  'megr90n000cb_plate.bds'      ) */
+/*           \begintext */
+
+/*           End of meta-kernel */
+
+
+/*        Example code begins here. */
+
+
+/*              PROGRAM GETFAT_EX1 */
+/*              IMPLICIT NONE */
+
+/*        C */
+/*        C     Local parameters. */
+/*        C */
+/*              INTEGER               ARCHLN */
+/*              PARAMETER           ( ARCHLN = 4 ) */
+
+/*              INTEGER               FILSIZ */
+/*              PARAMETER           ( FILSIZ = 256 ) */
+
+/*              INTEGER               KTYPLN */
+/*              PARAMETER           ( KTYPLN = 5 ) */
+
+/*        C */
+/*        C     Local variables. */
+/*        C */
+/*              CHARACTER*(ARCHLN)    ARCH */
+/*              CHARACTER*(FILSIZ)    FNAME */
+/*              CHARACTER*(28)        FNAME1 */
+/*              CHARACTER*(KTYPLN)    KTYPE */
+/*              CHARACTER*(FILSIZ)    SOURCE */
+
+/*              INTEGER               COUNT */
+/*              INTEGER               HANDLE */
+/*              INTEGER               I */
+
+/*              LOGICAL               FOUND */
+
+/*        C */
+/*        C     Check the file architecture and type of an SPK */
+/*        C     in transfer format. */
+/*        C */
+/*              FNAME1 = 'earthstns_itrf93_050714.xsp' */
+
+/*              CALL GETFAT ( FNAME1, ARCH, KTYPE ) */
+
+/*              WRITE(*,*) 'File name     : ', FNAME1 */
+/*              WRITE(*,*) '  Architecture: ', ARCH */
+/*              WRITE(*,*) '  Kernel type : ', KTYPE */
+/*              WRITE(*,*) ' ' */
+
+/*        C */
+/*        C     Load the kernels. */
+/*        C */
+/*              CALL FURNSH ( 'getfat_ex1.tm' ) */
+
+/*        C */
+/*        C     Get the file architecture and kernel type for each of */
+/*        C     the kernels in the kernel pool. */
+/*        C */
+/*              CALL KTOTAL ( 'ALL', COUNT ) */
+
+/*              DO I= 1, COUNT */
+
+/*                 CALL KDATA ( I,     'ALL', FNAME, KTYPE, SOURCE, */
+/*             .                HANDLE, FOUND                      ) */
+
+/*                 CALL GETFAT ( FNAME, ARCH, KTYPE ) */
+
+/*                 WRITE(*,*) 'File name     : ', FNAME */
+/*                 WRITE(*,*) '  Source      : ', SOURCE */
+/*                 WRITE(*,*) '  Architecture: ', ARCH */
+/*                 WRITE(*,*) '  Kernel type : ', KTYPE */
+/*                 WRITE(*,*) ' ' */
+
+/*              END DO */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*         File name     : earthstns_itrf93_050714.xsp */
+/*           Architecture: XFR */
+/*           Kernel type : DAF */
+
+/*         File name     : getfat_ex1.tm */
+/*           Source      : */
+/*           Architecture: KPL */
+/*           Kernel type : MK */
+
+/*         File name     : de430.bsp */
+/*           Source      : getfat_ex1.tm */
+/*           Architecture: DAF */
+/*           Kernel type : SPK */
+
+/*         File name     : mar097.bsp */
+/*           Source      : getfat_ex1.tm */
+/*           Architecture: DAF */
+/*           Kernel type : SPK */
+
+/*         File name     : pck00010.tpc */
+/*           Source      : getfat_ex1.tm */
+/*           Architecture: KPL */
+/*           Kernel type : PCK */
+
+/*         File name     : naif0011.tls */
+/*           Source      : getfat_ex1.tm */
+/*           Architecture: KPL */
+/*           Kernel type : LSK */
+
+/*         File name     : mgs_moc_v20.ti */
+/*           Source      : getfat_ex1.tm */
+/*           Architecture: KPL */
+/*           Kernel type : IK */
+
+/*         File name     : mgs_sclkscet_00061.tsc */
+/*           Source      : getfat_ex1.tm */
+/*           Architecture: KPL */
+/*           Kernel type : SCLK */
+
+/*         File name     : mgs_sc_ext12.bc */
+/*           Source      : getfat_ex1.tm */
+/*           Architecture: DAF */
+/*           Kernel type : CK */
+
+/*         File name     : mgs_ext12_ipng_mgs95j.bsp */
+/*           Source      : getfat_ex1.tm */
+/*           Architecture: DAF */
+/*           Kernel type : SPK */
+
+/*         File name     : megr90n000cb_plate.bds */
+/*           Source      : getfat_ex1.tm */
+/*           Architecture: DAS */
+/*           Kernel type : DSK */
 
 
 /* $ Restrictions */
 
-/*     1) In order to properly determine the type of DAF based binary */
-/*        kernels, the routine requires that their first segments and */
-/*        the meta data necessary to address them are valid. */
+/*     1)  In order to properly determine the type of DAF based binary */
+/*         kernels, the routine requires that their first segments and */
+/*         the meta data necessary to address them are valid. */
 
 /* $ Literature_References */
 
@@ -509,13 +688,25 @@ static integer c__1 = 1;
 
 /* $ Author_and_Institution */
 
-/*     K.R. Gehringer  (JPL) */
-/*     H.A. Neilan     (JPL) */
-/*     W.L. Taber      (JPL) */
-/*     F.S. Turner     (JPL) */
-/*     E.D. Wright     (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
+/*     H.A. Neilan        (JPL) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     F.S. Turner        (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 5.1.0, 28-NOV-2021 (BVS) */
+
+/*        Updated for MAC-OSX-M1-64BIT-CLANG_C. */
+
+/* -    SPICELIB Version 5.0.1, 07-AUG-2020 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. Added complete */
+/*        code example to $Examples section. */
 
 /* -    SPICELIB Version 5.0.0, 05-FEB-2015 (NJB) */
 
@@ -655,23 +846,23 @@ static integer c__1 = 1;
 /* -    SPICELIB Version 3.1.4, 08-OCT-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitly given.  New */
+/*        environments are now explicitly given. New */
 /*        environments are WIN-NT */
 
 /* -    SPICELIB Version 3.1.3, 22-SEP-1999 (NJB) */
 
-/*        CSPICE environments were added.  Some typos were corrected. */
+/*        CSPICE environments were added. Some typos were corrected. */
 
 /* -    SPICELIB Version 3.1.2, 28-JUL-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitly given.  New */
+/*        environments are now explicitly given. New */
 /*        environments are PC-DIGITAL, SGI-O32 and SGI-N32. */
 
 /* -    SPICELIB Version 3.1.1, 18-MAR-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitly given.  Previously, */
+/*        environments are now explicitly given. Previously, */
 /*        environments such as SUN-SUNOS and SUN-SOLARIS were implied */
 /*        by the environment label SUN. */
 
@@ -685,27 +876,27 @@ static integer c__1 = 1;
 
 /*        Module was updated for the PC-LINUX platform. */
 
-/* -     SPICELIB Version 2.0.0, 19-DEC-1995 (KRG) */
+/* -    SPICELIB Version 2.0.0, 19-DEC-1995 (KRG) */
 
-/*         Added several new features to the subroutine: */
+/*        Added several new features to the subroutine: */
 
 /*         - Error handling has been enhanced. */
 /*         - Several new file architectures have been added. */
 
-/*         Removed the mention of 1000 characters as a candidate for the */
-/*         record length of a file. */
+/*        Removed the mention of 1000 characters as a candidate for the */
+/*        record length of a file. */
 
-/*         Added the exception for a blank filename to the header. The */
-/*         error is signaled, but it was not listed in the header. */
+/*        Added the exception for a blank filename to the header. The */
+/*        error is signaled, but it was not listed in the header. */
 
-/*         Added IOSTAT values to the appropriate error messages. */
+/*        Added IOSTAT values to the appropriate error messages. */
 
-/*         Non-printing characters are replaced with blanks in the ID */
-/*         word when it is read. This deals with the case where a */
-/*         platform allows a text file to be opened as an unformatted */
-/*         file and the ID word does not completely fill 8 characters. */
+/*        Non-printing characters are replaced with blanks in the ID */
+/*        word when it is read. This deals with the case where a */
+/*        platform allows a text file to be opened as an unformatted */
+/*        file and the ID word does not completely fill 8 characters. */
 
-/* -    SPICELIB Version 1.4.0, 5-JAN-1995 (HAN) */
+/* -    SPICELIB Version 1.4.0, 05-JAN-1995 (HAN) */
 
 /*        Removed ENV11 since it is now the same as ENV2. */
 /*        Removed ENV10 since it is the same as the VAX environment. */
@@ -715,18 +906,18 @@ static integer c__1 = 1;
 /*        Added two new environments, DEC Alpha/OpenVMS and */
 /*        Sun/Solaris, to the source master file. */
 
-/* -     SPICELIB Version 1.2.0, 25-MAR-1994 (HAN) */
+/* -    SPICELIB Version 1.2.0, 25-MAR-1994 (HAN) */
 
-/*         Added two new environments, DEC Alpha/OpenVMS and */
-/*         Sun/Solaris, to the source master file. */
+/*        Added two new environments, DEC Alpha/OpenVMS and */
+/*        Sun/Solaris, to the source master file. */
 
-/* -     SPICELIB Version 1.1.0, 25-MAR-1994 (HAN) */
+/* -    SPICELIB Version 1.1.0, 25-MAR-1994 (HAN) */
 
-/*         Modified master source code file to use READONLY on platforms */
-/*         that support it. Also, changed some local declaration comment */
-/*         lines to match the standard NAIF template. */
+/*        Modified master source code file to use READONLY on platforms */
+/*        that support it. Also, changed some local declaration comment */
+/*        lines to match the standard NAIF template. */
 
-/* -     SPICELIB Version 1.0.0, 24-JUL-1993 (WLT) (HAN) (KRG) */
+/* -    SPICELIB Version 1.0.0, 24-JUL-1993 (WLT) (HAN) (KRG) */
 
 /* -& */
 /* $ Index_Entries */
@@ -736,44 +927,44 @@ static integer c__1 = 1;
 /* -& */
 /* $ Revisions */
 
-/* -    SPICELIB Version 4.0.0, 22-AUG-2001 (WLT) (FST) */
+/* -    SPICELIB Version 4.0.0, 22-AUG-2001 (WLT) (FST) (EDW) */
 
 /*        Added code so that the architecture and type of open binary */
-/*        SPICE kernels can be determined.  This uses the new DAF/DAS */
+/*        SPICE kernels can be determined. This uses the new DAF/DAS */
 /*        handle manager as well as examination of handles of open DAS */
-/*        files.  Currently the handle manager deals only with DAF */
+/*        files. Currently the handle manager deals only with DAF */
 /*        files. This routine should be updated again when the DAS */
 /*        system is integrated with the handle manager. */
 
 /*        Some slight changes were required to support ZZDDHFNH on */
-/*        the VAX environment.  This resulted in the addition of */
+/*        the VAX environment. This resulted in the addition of */
 /*        the logical USEFNH that is set to true in most */
 /*        environments, and never used again other than to allow */
 /*        the invocation of the ZZDDHFNH module. */
 
-/* -     SPICELIB Version 2.0.0, 19-DEC-1995 (KRG) */
+/* -    SPICELIB Version 2.0.0, 19-DEC-1995 (KRG) */
 
-/*         Added several new features to the subroutine: */
+/*        Added several new features to the subroutine: */
 
 /*         - Error handling has been enhanced. */
 /*         - Several new file architectures have been added. */
 
-/*         Removed the mention of 1000 characters as a candidate for the */
-/*         record length of a file. It seems unlikely that we will */
-/*         encounter an environment where 1000 characters of storage is */
-/*         larger than the storage necessary for 128 double precision */
-/*         numbers; typically there are 8 characters per double precision */
-/*         number, yielding 1024 characters. */
+/*        Removed the mention of 1000 characters as a candidate for the */
+/*        record length of a file. It seems unlikely that we will */
+/*        encounter an environment where 1000 characters of storage is */
+/*        larger than the storage necessary for 128 double precision */
+/*        numbers; typically there are 8 characters per double precision */
+/*        number, yielding 1024 characters. */
 
-/*         Added the exception for a blank filename to the header. The */
-/*         error is signaled, but it was not listed in the header. */
+/*        Added the exception for a blank filename to the header. The */
+/*        error is signaled, but it was not listed in the header. */
 
-/*         Added IOSTAT values to the appropriate error messages. */
+/*        Added IOSTAT values to the appropriate error messages. */
 
-/*         Non-printing characters are replaced with blanks in the ID */
-/*         word when it is read. This deals with the case where a */
-/*         platform allows a text file to be opened as an unformatted */
-/*         file and the ID word does not completely fill 8 characters. */
+/*        Non-printing characters are replaced with blanks in the ID */
+/*        word when it is read. This deals with the case where a */
+/*        platform allows a text file to be opened as an unformatted */
+/*        file and the ID word does not completely fill 8 characters. */
 
 /* -& */
 

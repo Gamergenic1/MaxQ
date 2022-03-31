@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure            SETD ( Compare double precision sets ) */
+/* $Procedure SETD ( Compare double precision sets ) */
 logical setd_(doublereal *a, char *op, doublereal *b, ftnlen op_len)
 {
     /* System generated locals */
@@ -26,7 +26,8 @@ logical setd_(doublereal *a, char *op, doublereal *b, ftnlen op_len)
 
 /* $ Abstract */
 
-/*     Given a relational operator, compare two double precision sets. */
+/*     Compare two double precision sets, as indicated by a relational */
+/*     operator. */
 
 /* $ Disclaimer */
 
@@ -55,158 +56,166 @@ logical setd_(doublereal *a, char *op, doublereal *b, ftnlen op_len)
 
 /* $ Required_Reading */
 
-/*     CELLS, SETS */
+/*     CELLS */
+/*     SETS */
 
 /* $ Keywords */
 
-/*     CELLS, SETS */
+/*     CELLS */
+/*     SETS */
 
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*      VARIABLE  I/O  DESCRIPTION */
-/*      --------  ---  -------------------------------------------------- */
-/*      A          I   First set. */
-/*      OP         I   Comparison operator. */
-/*      B          I   Second set. */
+/*     VARIABLE  I/O  DESCRIPTION */
+/*     --------  ---  -------------------------------------------------- */
+/*     A          I   First set. */
+/*     OP         I   Comparison operator. */
+/*     B          I   Second set. */
 
-/*      The function returns the result of the comparison: A (OP) B. */
+/*     The function returns the result of the comparison: A (OP) B. */
 
 /* $ Detailed_Input */
 
+/*     A        is a set. */
 
-/*      A           is a set. */
 
+/*     OP       is a comparison operator, indicating the way in */
+/*              which the input sets are to be compared. OP may */
+/*              be any of the following: */
 
-/*      OP          is a comparison operator, indicating the way in */
-/*                  which the input sets are to be compared. OP may */
-/*                  be any of the following: */
+/*                  Operator             Meaning */
+/*                  --------  ------------------------------------- */
+/*                    '='     A = B is .TRUE. if A and B are equal */
+/*                            (contain the same elements). */
 
-/*                      Operator             Meaning */
-/*                      --------  ------------------------------------- */
-/*                        '='     A = B is true if A and B are equal */
-/*                                (contain the same elements). */
+/*                    '<>'    A <> B is .TRUE. if A and B are not */
+/*                            equal. */
 
-/*                        '<>'    A <> B is true if A and B are not */
-/*                                equal. */
+/*                    '<='    A <= B is .TRUE. if A is a subset of B. */
 
-/*                        '<='    A <= B is true if A is a subset of B. */
+/*                    '<'     A < B is .TRUE. if A is a proper subset */
+/*                            of B. */
 
-/*                        '<'     A < B is true if A is a proper subset */
-/*                                of B. */
+/*                    '>='    A >= B is .TRUE. if B is a subset of A. */
 
-/*                        '>='    A >= B is true if B is a subset of A. */
+/*                    '>'     A > B is .TRUE. if B is a proper subset */
+/*                            of A. */
 
-/*                        '>'     A > B is true if B is a proper subset */
-/*                                of A. */
+/*                    '&'     A & B is .TRUE. if A and B have one or */
+/*                            more elements in common. (The */
+/*                            intersection of the two sets in */
+/*                            non-empty.) */
 
-/*                        '&'     A & B is true if A and B have one or */
-/*                                more elements in common. (The */
-/*                                intersection of the two sets in */
-/*                                non-empty.) */
+/*                    '~'     A ~ B is .TRUE. if A and B are disjoint */
+/*                            sets. */
 
-/*                        '~'     A ~ B is true if A and B are disjoint */
-/*                                sets. */
-
-/*      B           is a set. */
+/*     B        is a set. */
 
 /* $ Detailed_Output */
 
-/*      The function returns the result of the comparison: A (OP) B. */
+/*     The function returns the result of the comparison: A (OP) B. */
 
 /* $ Parameters */
 
 /*     None. */
 
-/* $ Particulars */
-
-/*      None. */
-
-/* $ Examples */
-
-/*      1) In the following example, SETx is used to repeat an operation */
-/*         for as long as the integer set FINISHED remains a proper */
-/*         subset of the integer set PLANNED. */
-
-/*            DO WHILE ( SETx ( FINISHED, '<', PLANNED ) ) */
-/*               . */
-/*               . */
-/*            END DO */
-
-
-/*      2) In the following example, let the integer sets A, B, and C */
-/*         contain the elements listed below. Let E be an empty integer */
-/*         set. */
-
-/*              A        B        C */
-/*            ---      ---      --- */
-/*              1        1        1 */
-/*              2        3        3 */
-/*              3 */
-/*              4 */
-
-/*      Then all of the following expressions are true. */
-
-/*            SETI ( B, '=',  C )      "B is equal to C" */
-/*            SETI ( A, '<>', C )      "A is not equal to C" */
-/*            SETI ( A, '>',  B )      "A is a proper superset of B" */
-/*            SETI ( B, '<=', C )      "B is a subset of C" */
-/*            SETI ( C, '<=', B )      "C is a subset of B" */
-/*            SETI ( A, '<=', A )      "A is a subset of A" */
-/*            SETI ( E, '<=', B )      "E is a subset of B" */
-/*            SETI ( E, '<',  B )      "E is a proper subset of B" */
-/*            SETI ( E, '<=', E )      "E is a subset of E" */
-/*            SETI ( A, '&',  B )      "A has elements in common with B." */
-/*            SETI ( B, '&',  C )      "B has elements in common with C." */
-
-/*      And all of the following are false. */
-
-/*            SETI ( B, '<>',  C )      "B is not equal to C" */
-/*            SETI ( A, '=',   C )      "A is equal to C" */
-/*            SETI ( A, '<',   B )      "A is a proper subset of B" */
-/*            SETI ( B, '<',   C )      "B is a proper subset of C" */
-/*            SETI ( B, '>=',  A )      "B is a superset of A" */
-/*            SETI ( A, '>',   A )      "A is a proper superset of A" */
-/*            SETI ( E, '>=',  A )      "E is a superset of A" */
-/*            SETI ( E, '<',   E )      "E is a proper subset of E" */
-/*            SETI ( A, '~',   B )      "A and B are disjoint sets." */
-
-/* $ Restrictions */
-
-/*      None. */
-
 /* $ Exceptions */
 
-/*      If the set relational operator is not recognized, the error */
-/*      SPICE(INVALIDOPERATION) is signalled. */
+/*     1)  If the set relational operator is not recognized, the error */
+/*         SPICE(INVALIDOPERATION) is signaled. */
 
 /* $ Files */
 
-/*      None. */
+/*     None. */
+
+/* $ Particulars */
+
+/*     None. */
+
+/* $ Examples */
+
+/*     1) In the following example, SETx is used to repeat an operation */
+/*        for as long as the integer set FINISHED remains a proper */
+/*        subset of the integer set PLANNED. */
+
+/*           DO WHILE ( SETx ( FINISHED, '<', PLANNED ) ) */
+/*              . */
+/*              . */
+/*           END DO */
+
+
+/*     2) In the following example, let the integer sets A, B, and C */
+/*        contain the elements listed below. Let E be an empty integer */
+/*        set. */
+
+/*             A        B        C */
+/*           ---      ---      --- */
+/*             1        1        1 */
+/*             2        3        3 */
+/*             3 */
+/*             4 */
+
+/*     Then all of the following expressions are true. */
+
+/*           SETI ( B, '=',  C )      "B is equal to C" */
+/*           SETI ( A, '<>', C )      "A is not equal to C" */
+/*           SETI ( A, '>',  B )      "A is a proper superset of B" */
+/*           SETI ( B, '<=', C )      "B is a subset of C" */
+/*           SETI ( C, '<=', B )      "C is a subset of B" */
+/*           SETI ( A, '<=', A )      "A is a subset of A" */
+/*           SETI ( E, '<=', B )      "E is a subset of B" */
+/*           SETI ( E, '<',  B )      "E is a proper subset of B" */
+/*           SETI ( E, '<=', E )      "E is a subset of E" */
+/*           SETI ( A, '&',  B )      "A has elements in common with B." */
+/*           SETI ( B, '&',  C )      "B has elements in common with C." */
+
+/*     And all of the following are false. */
+
+/*           SETI ( B, '<>',  C )      "B is not equal to C" */
+/*           SETI ( A, '=',   C )      "A is equal to C" */
+/*           SETI ( A, '<',   B )      "A is a proper subset of B" */
+/*           SETI ( B, '<',   C )      "B is a proper subset of C" */
+/*           SETI ( B, '>=',  A )      "B is a superset of A" */
+/*           SETI ( A, '>',   A )      "A is a proper superset of A" */
+/*           SETI ( E, '>=',  A )      "E is a superset of A" */
+/*           SETI ( E, '<',   E )      "E is a proper subset of E" */
+/*           SETI ( A, '~',   B )      "A and B are disjoint sets." */
+
+/* $ Restrictions */
+
+/*     None. */
 
 /* $ Literature_References */
 
-/*      None. */
+/*     None. */
 
 /* $ Author_and_Institution */
 
-/*      H.A. Neilan     (JPL) */
-/*      W.L. Taber      (JPL) */
-/*      I.M. Underwood  (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     H.A. Neilan        (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
 
+/* -    SPICELIB Version 1.2.0, 20-AUG-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
+
 /* -    SPICELIB Version 1.1.0, 17-MAY-1994 (HAN) */
 
-/*       Set the default function value to either 0, 0.0D0, .FALSE., */
-/*       or blank depending on the type of the function. */
+/*        Set the default function value to either 0, 0.0D0, .FALSE., */
+/*        or blank depending on the type of the function. */
 
 /* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
 
-/*        Comment section for permuted index source lines was added */
-/*        following the header. */
+/*         Comment section for permuted index source lines was added */
+/*         following the header. */
 
-/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (WLT) (IMU) */
+/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (WLT) (IMU) (HAN) */
 
 /* -& */
 /* $ Index_Entries */
@@ -225,7 +234,7 @@ logical setd_(doublereal *a, char *op, doublereal *b, ftnlen op_len)
 /*       difference of the sets is no longer computed. */
 
 /*       The new routine recognizes two new operators, '~' and '&'. */
-/*       If the operator is not recognized, an error is now signalled. */
+/*       If the operator is not recognized, an error is now signaled. */
 
 /* -& */
 
@@ -268,7 +277,7 @@ logical setd_(doublereal *a, char *op, doublereal *b, ftnlen op_len)
 /*     is a subset of another, if they are equal, etc, one can just */
 /*     inspect the two lists. */
 
-/*     We can mimick this in an algorithm.  The main trick is to figure */
+/*     We can mimic this in an algorithm.  The main trick is to figure */
 /*     out how to list the sets in this way.  Once we know how to */
 /*     list them, we can simply adapt the listing algorithm to get */
 /*     a comparison algorithm. */

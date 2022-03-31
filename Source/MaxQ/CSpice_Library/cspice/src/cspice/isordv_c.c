@@ -3,10 +3,10 @@
 -Procedure isordv_c ( Is array an order vector? )
 
 -Abstract
- 
-   Determine whether an array of n items contains the integers 
-   0 through n-1. 
- 
+
+   Determine whether an array of n items contains the integers
+   0 through n-1.
+
 -Disclaimer
 
    THIS SOFTWARE AND ANY RELATED MATERIALS WERE CREATED BY THE
@@ -33,15 +33,15 @@
    ACTIONS OF RECIPIENT IN THE USE OF THE SOFTWARE.
 
 -Required_Reading
- 
-   None. 
- 
+
+   None.
+
 -Keywords
- 
-   SEARCH 
-   SORT 
-   UTILITY 
- 
+
+   SEARCH
+   SORT
+   UTILITY
+
 */
 
    #include "SpiceUsr.h"
@@ -50,54 +50,56 @@
    #undef    isordv_c
 
    SpiceBoolean isordv_c ( ConstSpiceInt  * array,
-                           SpiceInt         n      ) 
+                           SpiceInt         n      )
 
 /*
 
 -Brief_I/O
- 
-   Variable  I/O  Description 
-   --------  ---  -------------------------------------------------- 
-   array      I   Array of integers. 
-   n          I   Number of integers in array. 
- 
-   The function returns SPICETRUE if the array contains the integers 
-   0 through n-1, otherwise it returns SPICEFALSE. 
- 
--Detailed_Input
- 
-   array      is an array of integers.  Often this will be an array 
-              that is a candidate order vector to be passed to 
-              a routine for re-ordering some parallel array. 
- 
-   n          is the number of elements in array. 
- 
--Detailed_Output
- 
-   The function returns SPICETRUE if the array contains the integers 
-   1 through n.  Otherwise it returns SPICEFALSE. 
- 
--Parameters
- 
-   None. 
- 
--Exceptions
-  
-   1) If n < 1, the function returns SPICEFALSE.
 
-   2) If memory is not available to create a local copy of the order
-      vector, the error SPICE(MALLOCFAILED) is signaled.
- 
+   VARIABLE  I/O  DESCRIPTION
+   --------  ---  --------------------------------------------------
+   array      I   Array of integers.
+   n          I   Number of integers in array.
+
+   The function returns SPICETRUE if the array contains the integers
+   0 through n-1, otherwise it returns SPICEFALSE.
+
+-Detailed_Input
+
+   array       is an array of integers. Often this will be an array
+               that is a candidate order vector to be passed to
+               a routine for re-ordering some parallel array.
+
+   n           is the number of elements in array.
+
+-Detailed_Output
+
+   The function returns SPICETRUE if the array contains the integers
+   1 through n. Otherwise it returns SPICEFALSE.
+
+-Parameters
+
+   None.
+
+-Exceptions
+
+   1)  If n < 1, the function returns SPICEFALSE.
+
+   2)  If memory cannot be allocated to create the temporary variable
+       required for the execution of the underlying Fortran routine,
+       the error SPICE(MALLOCFAILED) is signaled. The function
+       returns the value SPICEFALSE.
+
 -Files
- 
-   None. 
- 
+
+   None.
+
 -Particulars
- 
-   This function provides a simple means of determining whether 
-   or not an array of n integers contains exactly the integers 
-   0 through n-1.  An array with this property is called an
-   "order vector."  Order vectors are returned by the CSPICE
+
+   This function provides a simple means of determining whether
+   or not an array of n integers contains exactly the integers
+   0 through n-1. An array with this property is called an
+   "order vector." Order vectors are returned by the CSPICE
    routines
 
       orderc_c
@@ -110,66 +112,71 @@
       reordd_c
       reordi_c
       reordl_c
- 
+
 -Examples
- 
-   1) Suppose you wished to reorder an array of strings based upon 
-      a ranking array supplied by a user.  If the ranking array 
-      contains any duplicates or refers to indices that are out 
-      of the range of valid indices for the array of strings, 
-      the attempt to reorder the array of strings cannot succeed. 
-      Its usually better to detect such a possibility before 
-      you begin trying to reorder the array of strings.  This routine 
-      will detect the error. 
- 
-      The code fragment below illustrates this idea. 
- 
+
+   1) Suppose you wished to reorder an array of strings based upon
+      a ranking array supplied by a user. If the ranking array
+      contains any duplicates or refers to indices that are out
+      of the range of valid indices for the array of strings,
+      the attempt to reorder the array of strings cannot succeed.
+      Its usually better to detect such a possibility before
+      you begin trying to reorder the array of strings. This routine
+      will detect the error.
+
+      The code fragment below illustrates this idea.
+
          #include "SpiceUsr.h"
-                  . 
-                  . 
-                  . 
-           
-         if ( isordv_c ( ordvec, n ) )  
+                  .
+                  .
+                  .
+
+         if ( isordv_c ( ordvec, n ) )
          {
-            ...reorder the input array of strings 
- 
+            ...reorder the input array of strings
+
             reordc_c ( ordvec, n, lenvals, strings );
          }
-         else 
-         { 
-            ...state the problem and let the user decide what 
-            to do about it. 
-                  . 
-                  . 
-                  . 
-         } 
-  
--Restrictions
- 
-   None. 
- 
--Literature_References
- 
-   None. 
- 
--Author_and_Institution
- 
-   N.J. Bachman   (JPL) 
-   W.L. Taber     (JPL) 
-   I.M. Underwood (JPL) 
- 
--Version
- 
-   -CSPICE Version 1.1.0, 16-FEB-2005 (NJB)  
+         else
+         {
+            ...state the problem and let the user decide what
+            to do about it.
+                  .
+                  .
+                  .
+         }
 
-      Bug fix:  dynamic memory is now freed.
+-Restrictions
+
+   None.
+
+-Literature_References
+
+   None.
+
+-Author_and_Institution
+
+   N.J. Bachman        (JPL)
+   J. Diaz del Rio     (ODC Space)
+   W.L. Taber          (JPL)
+   I.M. Underwood      (JPL)
+
+-Version
+
+   -CSPICE Version 1.1.1, 03-AUG-2021 (JDR)
+
+       Edited the header to comply with NAIF standard.
+
+   -CSPICE Version 1.1.0, 16-FEB-2005 (NJB)
+
+       Bug fix: dynamic memory is now freed.
 
    -CSPICE Version 1.0.0, 10-JUL-2002 (NJB) (WLT) (IMU)
 
 -Index_Entries
- 
-   test whether an integer array is an order vector 
- 
+
+   test whether an integer array is an order vector
+
 -&
 */
 
@@ -177,7 +184,7 @@
 
 
    /*
-   Local variables 
+   Local variables
    */
    SpiceBoolean            retval;
 
@@ -194,9 +201,9 @@
    Initialize the return value.
    */
    retval = SPICEFALSE;
-   
+
    /*
-   Nothing to check if the array is empty. 
+   Nothing to check if the array is empty.
    */
    if ( n < 1 )
    {
@@ -214,7 +221,7 @@
 
    if ( ordvec == 0 )
    {
-      chkin_c  ( "isordv_c"                                ); 
+      chkin_c  ( "isordv_c"                                );
       setmsg_c ( "Failure on malloc call to create array "
                  "for Fortran-style order vector.  Tried "
                  "to allocate # bytes."                    );
@@ -238,8 +245,3 @@
    return ( retval );
 
 } /* End isordv_c */
-
-
-
-
-

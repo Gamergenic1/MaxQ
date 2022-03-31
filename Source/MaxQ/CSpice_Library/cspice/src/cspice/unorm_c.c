@@ -3,9 +3,9 @@
 -Procedure unorm_c ( Unit vector and norm, 3 dimensional )
 
 -Abstract
- 
-   Normalize a double precision 3-vector and return its magnitude. 
- 
+
+   Normalize a double precision 3-vector and return its magnitude.
+
 -Disclaimer
 
    THIS SOFTWARE AND ANY RELATED MATERIALS WERE CREATED BY THE
@@ -32,13 +32,13 @@
    ACTIONS OF RECIPIENT IN THE USE OF THE SOFTWARE.
 
 -Required_Reading
- 
-   None. 
- 
+
+   None.
+
 -Keywords
- 
-   VECTOR 
- 
+
+   VECTOR
+
 */
 
    #include "SpiceUsr.h"
@@ -47,86 +47,163 @@
 
    void unorm_c ( ConstSpiceDouble     v1[3],
                   SpiceDouble          vout[3],
-                  SpiceDouble        * vmag    ) 
+                  SpiceDouble        * vmag    )
 
 /*
 
 -Brief_I/O
- 
-   VARIABLE  I/O  DESCRIPTION 
-   --------  ---  -------------------------------------------------- 
-   v1         I     Vector to be normalized. 
-   vout       O     Unit vector v1 / |v1|. 
-                    If v1 is the zero vector, then vout will also 
-                    be zero. vout can overwrite v1. 
-   vmag       O     Magnitude of v1, i.e. |v1|. 
- 
+
+   VARIABLE  I/O  DESCRIPTION
+   --------  ---  --------------------------------------------------
+   v1         I     Vector to be normalized.
+   vout       O     Unit vector v1 / |v1|.
+   vmag       O     Magnitude of v1, i.e. |v1|.
+
 -Detailed_Input
- 
-   v1      This variable may contain any 3-vector, including the 
-            zero vector. 
- 
+
+   v1          is an arbitrary 3-vector, including the
+               zero vector.
+
 -Detailed_Output
- 
-   vout    This variable contains the unit vector in the direction 
-           of v1.  If v1 is the zero vector, then vout will also be 
-           the zero vector. 
-   vmag    This is the magnitude of v1. 
- 
+
+   vout        is the unit vector in the direction  of `v1'. If `v1' is
+               the zero vector, then `vout' will also be the zero
+               vector.
+
+   vmag        is the magnitude of `v1'.
+
 -Parameters
- 
-   None. 
- 
--Particulars
- 
-   unorm_c references a function called vnorm_c (which itself is 
-   numerically stable) to calculate the norm of the input vector v1. 
-   If the norm is equal to zero, then each component of the output 
-   vector vout is set to zero.  Otherwise, vout is calculated by 
-   dividing v1 by the norm. 
- 
--Examples
- 
-   The following table shows how selected v1 implies vout and mag. 
- 
-   v1                    vout                   mag 
-   ------------------    ------------------     ------ 
-   (5, 12, 0)            (5/13, 12/13, 0)       13 
-   (1D-7, 2D-7, 2D-7)    (1/3, 2/3, 2/3)        3D-7 
- 
--Restrictions
- 
-   None 
- 
+
+   None.
+
 -Exceptions
- 
-   Error free. 
- 
+
+   Error free.
+
 -Files
- 
-   None 
- 
--Author_and_Institution
- 
-   W.M. Owen       (JPL) 
-   W.L. Taber      (JPL) 
- 
+
+   None.
+
+-Particulars
+
+   unorm_c references a function called vnorm_c (which itself is
+   numerically stable) to calculate the norm of the input vector `v1'.
+   If the norm is equal to zero, then each component of the output
+   vector `vout' is set to zero. Otherwise, `vout' is calculated by
+   dividing `v1' by the norm.
+
+-Examples
+
+   The numerical results shown for this example may differ across
+   platforms. The results depend on the SPICE kernels used as
+   input, the compiler and supporting libraries, and the machine
+   specific arithmetic implementation.
+
+   1) Define a set of vectors and compute their corresponding unit
+      vector and magnitude.
+
+
+      Example code begins here.
+
+
+      /.
+         Program unorm_ex1
+      ./
+      #include <stdio.h>
+      #include "SpiceUsr.h"
+
+      int main( )
+      {
+
+         /.
+         Local parameters.
+         ./
+         #define SETSIZ       2
+
+         /.
+         Local variables.
+         ./
+         SpiceDouble          vmag;
+         SpiceDouble          vout   [3];
+
+         SpiceInt             i;
+
+         /.
+         Define the vector set.
+         ./
+         SpiceDouble          seta   [SETSIZ][3] = {
+                                   {5.0,  12.0,  0.0},
+                                   {1.e-7,  2.e-7, 2.e-7} };
+
+         /.
+         Calculate the unit vectors and magnitudes.
+         ./
+         for ( i = 0; i < SETSIZ; i++ )
+         {
+
+            unorm_c ( seta[i], vout, &vmag );
+
+            printf( "Vector     :  %12.8f %12.8f %12.8f\n",
+                         seta[i][0], seta[i][1], seta[i][2] );
+            printf( "Unit vector:  %12.8f %12.8f %12.8f\n",
+                                  vout[0], vout[1], vout[2] );
+            printf( "Magnitude  :  %12.8f\n", vmag );
+            printf( " \n" );
+
+         }
+
+         return ( 0 );
+      }
+
+
+      When this program was executed on a Mac/Intel/cc/64-bit
+      platform, the output was:
+
+
+      Vector     :    5.00000000  12.00000000   0.00000000
+      Unit vector:    0.38461538   0.92307692   0.00000000
+      Magnitude  :   13.00000000
+
+      Vector     :    0.00000010   0.00000020   0.00000020
+      Unit vector:    0.33333333   0.66666667   0.66666667
+      Magnitude  :    0.00000030
+
+
+-Restrictions
+
+   None.
+
 -Literature_References
- 
-   None 
- 
+
+   None.
+
+-Author_and_Institution
+
+   N.J. Bachman        (JPL)
+   J. Diaz del Rio     (ODC Space)
+   W.M. Owen           (JPL)
+   W.L. Taber          (JPL)
+   E.D. Wright         (JPL)
+
 -Version
- 
+
+   -CSPICE Version 1.1.1, 10-AUG-2021 (JDR)
+
+       Updated the header to comply with NAIF standard. Added
+       complete code example to -Examples section.
+
+       Header sections have been reordered.
+
    -CSPICE Version 1.1.0, 22-OCT-1998 (NJB)
 
-      Made input vector const.
-      
-   CSPICE Version 1.0.0, 17-OCT-1997   (EDW)
+       Made input vector const.
+
+   -CSPICE Version 1.0.0, 17-OCT-1997 (EDW) (WMO) (WLT)
 
 -Index_Entries
- 
-   3-dimensional unit vector and norm 
- 
+
+   3-dimensional unit vector and norm
+
 -&
 */
 

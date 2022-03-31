@@ -11,28 +11,125 @@ static integer c__200 = 200;
 static integer c__1 = 1;
 static integer c__2 = 2;
 static integer c__9 = 9;
-static doublereal c_b101 = -1.;
+static doublereal c_b120 = -1.;
 static integer c__3 = 3;
 static integer c__4 = 4;
 static integer c__14 = 14;
 
-/* $Procedure      TKFRAM (Text kernel frame transformation ) */
-/* Subroutine */ int tkfram_(integer *id, doublereal *rot, integer *frame, 
-	logical *found)
+/* $Procedure TKFRAM ( TK frame, find position rotation ) */
+/* Subroutine */ int tkfram_(integer *frcode, doublereal *rot, integer *frame,
+	 logical *found)
 {
     /* Initialized data */
 
     static integer at = 0;
+    static doublereal buffd[1800]	/* was [9][200] */ = { 0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0. };
+    static integer buffi[200]	/* was [1][200] */ = { 0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 };
     static logical first = TRUE_;
+    static integer idents[200]	/* was [1][200] */ = { 0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 };
 
     /* System generated locals */
     address a__1[2];
     integer i__1, i__2[2], i__3;
 
     /* Builtin functions */
+    integer s_rnge(char *, integer, char *, integer);
     /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
-    integer s_rnge(char *, integer, char *, integer), s_cmp(char *, char *, 
-	    ftnlen, ftnlen);
+    integer s_cmp(char *, char *, ftnlen, ftnlen);
     /* Subroutine */ int s_cat(char *, char **, integer *, integer *, ftnlen);
 
     /* Local variables */
@@ -47,9 +144,7 @@ static integer c__14 = 14;
     static doublereal qtmp[4];
     extern /* Subroutine */ int eul2m_(doublereal *, doublereal *, doublereal 
 	    *, integer *, integer *, integer *, doublereal *);
-    static integer i__, n, r__;
-    static doublereal buffd[1800]	/* was [9][200] */;
-    static integer buffi[200]	/* was [1][200] */, oldid;
+    static integer i__, n, r__, oldid;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     static char agent[32];
     extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen), 
@@ -61,7 +156,8 @@ static integer c__14 = 14;
     extern integer lnktl_(integer *, integer *);
     static char idstr[32];
     extern integer rtrim_(char *, ftnlen);
-    static char versn[8], units[32];
+    static char units[32];
+    static logical found1, found2;
     static integer ar;
     extern logical failed_(void), badkpv_(char *, char *, char *, integer *, 
 	    integer *, char *, ftnlen, ftnlen, ftnlen, ftnlen);
@@ -76,21 +172,20 @@ static integer c__14 = 14;
     static char altnat[32];
     extern /* Subroutine */ int lnkini_(integer *, integer *);
     extern integer lnknfn_(integer *);
-    static integer idents[200]	/* was [1][200] */;
     extern /* Subroutine */ int gcpool_(char *, integer *, integer *, integer 
 	    *, char *, logical *, ftnlen, ftnlen), gdpool_(char *, integer *, 
 	    integer *, integer *, doublereal *, logical *, ftnlen), sigerr_(
 	    char *, ftnlen), gipool_(char *, integer *, integer *, integer *, 
 	    integer *, logical *, ftnlen), chkout_(char *, ftnlen), sharpr_(
 	    doublereal *), dtpool_(char *, logical *, integer *, char *, 
-	    ftnlen, ftnlen), setmsg_(char *, ftnlen);
+	    ftnlen, ftnlen);
     static doublereal matrix[9]	/* was [3][3] */;
-    extern /* Subroutine */ int cvpool_(char *, logical *, ftnlen), dwpool_(
-	    char *, ftnlen), errint_(char *, integer *, ftnlen), vsclip_(
-	    doublereal *, doublereal *);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen), cvpool_(char *, 
+	    logical *, ftnlen), dwpool_(char *, ftnlen), errint_(char *, 
+	    integer *, ftnlen);
     static doublereal quatrn[4];
-    extern /* Subroutine */ int convrt_(doublereal *, char *, char *, 
-	    doublereal *, ftnlen, ftnlen);
+    extern /* Subroutine */ int vsclip_(doublereal *, doublereal *), convrt_(
+	    doublereal *, char *, char *, doublereal *, ftnlen, ftnlen);
     extern logical return_(void);
     extern /* Subroutine */ int q2m_(doublereal *, doublereal *), intstr_(
 	    integer *, char *, ftnlen), swpool_(char *, integer *, char *, 
@@ -100,8 +195,8 @@ static integer c__14 = 14;
 
 /* $ Abstract */
 
-/*     This routine returns the rotation from the input frame */
-/*     specified by ID to the associated frame given by FRAME. */
+/*     Find the position rotation matrix from a Text Kernel (TK) frame */
+/*     with the specified frame class ID to its base frame. */
 
 /* $ Disclaimer */
 
@@ -141,74 +236,87 @@ static integer c__14 = 14;
 
 /*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  ---------------------------------------------- */
-/*     ID         I   Class identification code for the instrument */
-/*     ROT        O   The rotation from ID to FRAME. */
-/*     FRAME      O   The integer code of some reference frame. */
-/*     FOUND      O   TRUE if the rotation could be determined. */
+/*     FRCODE     I   Frame class ID of a TK frame. */
+/*     ROT        O   Rotation matrix from TK frame to frame FRAME. */
+/*     FRAME      O   Frame ID of the base reference. */
+/*     FOUND      O   .TRUE. if the rotation could be determined. */
 
 /* $ Detailed_Input */
 
-/*     ID          The identification code used to specify an */
-/*                 instrument in the SPICE system. */
+/*     FRCODE   is the unique frame class ID of the TK frame for which */
+/*              data is being requested. For TK frames the frame class */
+/*              ID is always equal to the frame ID. */
 
 /* $ Detailed_Output */
 
-/*     ROT         is a rotation matrix that gives the transformation */
-/*                 from the frame specified by ID to the frame */
-/*                 specified by FRAME. */
+/*     ROT      is a position rotation matrix that converts positions */
+/*              relative to the TK frame given by its frame class ID, */
+/*              FRCODE, to positions relative to the base frame given by */
+/*              its frame ID, FRAME. */
 
-/*     FRAME       is the id code of the frame used to define the */
-/*                 orientation of the frame given by ID.  ROT gives */
-/*                 the transformation from the IF frame to */
-/*                 the frame specified by FRAME. */
+/*              Thus, if a position S has components x,y,z in the TK */
+/*              frame, then S has components x', y', z' in the base */
+/*              frame. */
 
-/*     FOUND       is a logical indicating whether or not a frame */
-/*                 definition for frame ID was constructed from */
-/*                 kernel pool data.  If ROT and FRAME were constructed */
-/*                 FOUND will be returned with the value TRUE. */
-/*                 Otherwise it will be returned with the value FALSE. */
+/*                 .-  -.     .-     -. .- -. */
+/*                 | x' |     |       | | x | */
+/*                 | y' |  =  |  ROT  | | y | */
+/*                 | z' |     |       | | z | */
+/*                 `-  -'     `-     -' `- -' */
+
+
+/*     FRAME    is the ID code of the base reference frame to which ROT */
+/*              will transform positions. */
+
+/*     FOUND    is a logical indicating whether or not a frame definition */
+/*              for the TK frame with the frame class ID, FRCODE, was */
+/*              constructed from kernel pool data. If ROT and FRAME were */
+/*              constructed, FOUND will be returned with the value .TRUE. */
+/*              Otherwise it will be returned with the value .FALSE. */
 
 /* $ Parameters */
 
-/*     BUFSIZ      is the number of rotation, frame id pairs that */
-/*                 can have their instance data buffered for the */
-/*                 sake of improving run-time performance.  This */
-/*                 value MUST be positive and should probably be */
-/*                 at least 10. */
+/*     BUFSIZ   is the number of rotation, frame class ID pairs that can */
+/*              have their instance data buffered for the sake of */
+/*              improving run-time performance. This value MUST be */
+/*              positive and should probably be at least 10. */
 
 /* $ Exceptions */
 
-/*     1)  If some instance value associated with this frame */
-/*         cannot be located, or does not have the proper type */
-/*         or dimension, the error will be diagnosed by the */
-/*         routine BADKPV. In such a case FOUND will be set to .FALSE. */
+/*     1)  If some kernel variable associated with this frame is not */
+/*         present in the kernel pool, or does not have the proper type */
+/*         or dimension, an error is signaled by a routine in the call */
+/*         tree of this routine. In such a case FOUND will be set to */
+/*         .FALSE. */
 
-/*     2)  If the input ID has the value 0, the error */
-/*         SPICE(ZEROFRAMEID) will be signaled. FOUND will be set */
-/*         to FALSE. */
+/*     2)  If the input FRCODE has the value 0, the error */
+/*         SPICE(ZEROFRAMEID) is signaled. FOUND will be set to .FALSE. */
 
-/*     3)  If the name of the frame corresponding to ID cannot be */
-/*         determined, the error 'SPICE(INCOMPLETEFRAME)' is signaled. */
+/*     3)  If the name of the frame corresponding to FRCODE cannot be */
+/*         determined, the error SPICE(INCOMPLETEFRAME) is signaled. */
 
-/*     4)  If the frame given by ID is defined relative to a frame */
-/*         that is unrecognized, the error SPICE(BADFRAMESPEC) */
-/*         will be signaled.  FOUND will be set to FALSE. */
+/*     4)  If the frame given by FRCODE is defined relative to a frame */
+/*         that is unrecognized, the error SPICE(BADFRAMESPEC) is */
+/*         signaled. FOUND will be set to .FALSE. */
 
-/*     5)  If the kernel pool specification for ID is not one of */
-/*         MATRIX, ANGLES, or QUATERNION, then the error */
-/*         SPICE(UNKNOWNFRAMESPEC) will be signaled. FOUND will be */
-/*         set to FALSE. */
+/*     5)  If the kernel pool specification for the frame given by */
+/*         FRCODE is not one of 'MATRIX', 'ANGLES' or 'QUATERNION', */
+/*         the error SPICE(UNKNOWNFRAMESPEC) is signaled. FOUND will be */
+/*         set to .FALSE. */
 
-/*     6)  If the frame ID is equal to the relative frame ID (i.e. the */
-/*         frame is defined relative to itself), the error */
-/*         SPICE(BADFRAMESPEC2) will be signaled.  FOUND will be set to */
-/*         FALSE. */
+/*     6)  If the frame FRCODE is equal to the relative frame ID (i.e. */
+/*         the frame is defined relative to itself), the error */
+/*         SPICE(BADFRAMESPEC2) is signaled. FOUND will be set to .FALSE. */
+
+/*     7)  If name-based and ID-based forms of any TKFRAME_ keyword */
+/*         are detected in the kernel pool at the same time, the error */
+/*         SPICE(COMPETINGFRAMESPEC) is signaled. FOUND will be set to */
+/*         .FALSE. */
 
 /* $ Files */
 
-/*     This routine makes use of the loaded text kernels to */
-/*     determine the rotation from a constant offset frame */
-/*     to its defining frame. */
+/*     This routine makes use of the loaded text kernels to determine */
+/*     the rotation from a constant offset TK frame to its base frame. */
 
 /* $ Particulars */
 
@@ -217,61 +325,135 @@ static integer c__14 = 14;
 /*     frame. This rotation is derived from data stored in the kernel */
 /*     pool. */
 
-/*     It is considered to be an low level routine that */
-/*     will need to be called directly only by persons performing */
-/*     high volume processing. */
+/*     This routine is intended to be used as a low level routine by the */
+/*     frame system software. However, you could use this routine to */
+/*     directly retrieve the rotation from an fixed offset TK frame to */
+/*     its base frame. */
 
 /* $ Examples */
 
-/*     This is intended to be used as a low level routine by */
-/*     the frame system software.  However, you could use this */
-/*     routine to directly retrieve the rotation from an offset */
-/*     frame to its relative frame.  One instance in which you */
-/*     might do this is if you have a properly specified topocentric */
-/*     frame for some site on earth and you wish to determine */
-/*     the geodetic latitude and longitude of the site.  Here's how. */
+/*     The numerical results shown for this example may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
 
-/*        Suppose the name of the topocentric frame is: 'MYTOPO'. */
-/*        First we get the id-code of the topocentric frame. */
+/*     1) Compute the rotation from the DSS-34 topocentric frame to */
+/*        its base Earth body-fixed frame and use it to determine the */
+/*        geodetic latitude and longitude of the DSS-34 site. */
 
-/*        CALL NAMFRM ( 'MYTOPO', FRCODE ) */
 
-/*        Next get the rotation from the topocentric frame to */
-/*        the bodyfixed frame. */
+/*        Use the FK kernel below to load the required topocentric */
+/*        reference frame definition for the DSS-34 site. */
 
-/*        CALL TKFRAM ( FRCODE, ROT, FRAME, FOUND ) */
+/*           earth_topo_050714.tf */
 
-/*        Make sure the topoframe is relative to one of the earth */
-/*        fixed frames. */
 
-/*        CALL FRMNAM( FRAME, TEST ) */
+/*        Example code begins here. */
 
-/*        IF (       TEST .NE. 'IAU_EARTH' */
-/*       .     .AND. TEST .NE. 'EARTH_FIXED' */
-/*       .     .AND. TEST .NE. 'ITRF93'  ) THEN */
 
-/*           WRITE (*,*) 'The frame MYTOPO does not appear to be ' */
-/*           WRITE (*,*) 'defined relative to an earth fixed frame.' */
-/*           STOP */
+/*              PROGRAM TKFRAM_EX1 */
+/*              IMPLICIT NONE */
 
-/*        END IF */
+/*        C */
+/*        C     SPICELIB functions. */
+/*        C */
+/*              DOUBLE PRECISION      DPR */
 
-/*        Things look ok. Get the location of the Z-axis in the */
-/*        topocentric frame. */
+/*        C */
+/*        C     Local parameters */
+/*        C */
+/*              CHARACTER*(*)         MYTOPO */
+/*              PARAMETER           ( MYTOPO = 'DSS-34_TOPO' ) */
 
-/*        Z(1) = ROT(1,3) */
-/*        Z(2) = ROT(2,3) */
-/*        Z(3) = ROT(3,3) */
+/*              INTEGER               MXFRLN */
+/*              PARAMETER           ( MXFRLN = 26 ) */
 
-/*        Convert the Z vector to latitude longitude and radius. */
+/*        C */
+/*        C     Local variables */
+/*        C */
+/*              CHARACTER*(MXFRLN)    FRNAME */
 
-/*        CALL RECLAT ( Z, LAT, LONG, RAD ) */
+/*              DOUBLE PRECISION      LAT */
+/*              DOUBLE PRECISION      LON */
+/*              DOUBLE PRECISION      RAD */
+/*              DOUBLE PRECISION      ROT   ( 3, 3 ) */
+/*              DOUBLE PRECISION      Z     ( 3    ) */
 
-/*        WRITE (*,*) 'The geodetic coordinates of the center of' */
-/*        WRITE (*,*) 'the topographic frame are: ' */
-/*        WRITE (*,*) */
-/*        WRITE (*,*) 'Latitude  (deg): ', LAT *DPR() */
-/*        WRITE (*,*) 'Longitude (deg): ', LONG*DPR() */
+/*              INTEGER               FRAME */
+/*              INTEGER               FRCODE */
+
+/*              LOGICAL               FOUND */
+
+/*        C */
+/*        C     Load the FK that contains the topocentric reference */
+/*        C     frame definition for DSS-34. */
+/*        C */
+/*              CALL FURNSH ( 'earth_topo_050714.tf' ) */
+
+/*        C */
+/*        C     The name of the topocentric frame is MYTOPO. */
+/*        C     First we get the ID code of the topocentric frame. */
+/*        C */
+/*              CALL NAMFRM ( MYTOPO, FRCODE ) */
+
+/*        C */
+/*        C     Next get the rotation from the topocentric frame to */
+/*        C     the body-fixed frame. We can use the TK frame ID in */
+/*        C     place of the TK frame class ID in this call because */
+/*        C     for TK frames these IDs are identical. */
+/*        C */
+/*              CALL TKFRAM ( FRCODE, ROT, FRAME, FOUND ) */
+
+/*        C */
+/*        C     Make sure the topocentric frame is relative to one of */
+/*        C     the Earth fixed frames. */
+/*        C */
+/*              CALL FRMNAM( FRAME, FRNAME ) */
+
+/*              IF (       FRNAME .NE. 'IAU_EARTH' */
+/*             .     .AND. FRNAME .NE. 'EARTH_FIXED' */
+/*             .     .AND. FRNAME .NE. 'ITRF93'  ) THEN */
+
+/*                 WRITE (*,*) 'The frame ', MYTOPO, */
+/*             .               ' does not appear to be ' */
+/*                 WRITE (*,*) 'defined relative to an ' */
+/*             .            // 'Earth fixed frame.' */
+/*                 STOP */
+
+/*              END IF */
+
+/*        C */
+/*        C     Things look ok. Get the location of the Z-axis in the */
+/*        C     topocentric frame. */
+/*        C */
+/*              Z(1) = ROT(1,3) */
+/*              Z(2) = ROT(2,3) */
+/*              Z(3) = ROT(3,3) */
+
+/*        C */
+/*        C     Convert the Z vector to latitude, longitude and radius. */
+/*        C */
+/*              CALL RECLAT ( Z, RAD, LAT, LON ) */
+
+/*              WRITE (*,'(A)') 'The geodetic coordinates of the center' */
+/*              WRITE (*,'(A)') 'of the topographic frame are:' */
+/*              WRITE (*,*) */
+/*              WRITE (*,'(A,F20.13)') '   Latitude  (deg): ', LAT*DPR() */
+/*              WRITE (*,'(A,F20.13)') '   Longitude (deg): ', LON*DPR() */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*        The geodetic coordinates of the center */
+/*        of the topographic frame are: */
+
+/*           Latitude  (deg):    148.9819650021110 */
+/*           Longitude (deg):    -35.3984778756552 */
+
 
 /* $ Restrictions */
 
@@ -283,11 +465,58 @@ static integer c__14 = 14;
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     B.V. Semenov    (JPL) */
-/*     W.L. Taber      (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     F.S. Turner        (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 2.3.0, 20-AUG-2021 (JDR) (BVS) (NJB) */
+
+/*        BUG FIX: the routine now signals an error if it detects */
+/*        name-based and ID-based forms of any TKFRAME_ keyword present */
+/*        in the POOL at the same time. This prevents name-based */
+/*        keywords from frame definitions loaded with lower priority */
+/*        from being used instead of ID-based keywords from frame */
+/*        definitions loaded with higher priority. */
+
+/*        BUG FIX: when failing to fetch any frame keywords from the */
+/*        POOL or for any other reason, the routine now always returns */
+/*        FOUND = .FALSE. Previously FOUND could be set to .TRUE. by a */
+/*        DTPOOL call preceding the failure. */
+
+/*        BUG FIX: when failing due to a frame defined relative to */
+/*        itself or due to an unrecognized _SPEC, the routine now always */
+/*        returns FRAME = 0. Previously FRAME was set to the _RELATIVE */
+/*        keyword. */
+
+/*        BUG FIX: the misspelled short error message */
+/*        SPICE(INCOMPLETEFRAME) was corrected. The message had been */
+/*        spelled correctly in header comments but not in the code. */
+
+/*        Changed to return ROT as identity for all failures; previously */
+/*        it was returned this way only for some failures. */
+
+/*        Changed the input argument name ID to FRCODE for consistency */
+/*        with other routines. */
+
+/*        Fixed minor typo on the UNKNOWNFRAMESPEC long error message. */
+
+/*        Edited the header to comply with NAIF standard and modern */
+/*        SPICE CK and frames terminology. */
+
+/*        Added complete code example based on existing fragments. */
+
+/*        Construction of kernel variable names now uses trimmed */
+/*        strings in order to suppress gfortran compile warnings. */
+
+/*        Added DATA statements to initialize BUFFI, BUFFD, and IDENTS. */
+/*        This change suppresses ftnchek warnings for variables possibly */
+/*        not initialized before use. It is not a bug fix. */
+
+/*        Minor inline comment typos were corrected. */
 
 /* -    SPICELIB Version 2.2.0, 08-JAN-2014 (BVS) */
 
@@ -315,8 +544,8 @@ static integer c__14 = 14;
 /* -    SPICELIB Version 1.1.0, 21-NOV-2001 (FST) */
 
 /*        Updated this routine to dump the buffer of frame ID codes */
-/*        it saves when it or one of the modules in its call tree signals */
-/*        an error.  This fixes a bug where a frame's ID code is */
+/*        it saves when it or one of the modules in its call tree */
+/*        signals an error. This fixes a bug where a frame's ID code is */
 /*        buffered, but the matrix and kernel pool watcher were not set */
 /*        properly. */
 
@@ -327,14 +556,6 @@ static integer c__14 = 14;
 
 /*     Fetch the rotation and frame of a text kernel frame */
 /*     Fetch the rotation and frame of a constant offset frame */
-
-/* -& */
-/* $ Revisions */
-
-/* -    SPICELIB Version 1.2.0, 09-SEP-2005 (NJB) */
-
-/*        Updated to remove non-standard use of duplicate arguments */
-/*        in CONVRT, UCRSS, VHATG and VSCL calls. */
 
 /* -& */
 
@@ -367,7 +588,6 @@ static integer c__14 = 14;
 
     if (first) {
 	first = FALSE_;
-	s_copy(versn, "1.0.0", (ftnlen)8, (ftnlen)5);
 	lnkini_(&c__200, pool);
     }
 
@@ -386,7 +606,7 @@ static integer c__14 = 14;
 
 /*     Check the ID to make sure it is non-zero. */
 
-    if (*id == 0) {
+    if (*frcode == 0) {
 	lnkini_(&c__200, pool);
 	setmsg_("Frame identification codes are required to be non-zero.  Yo"
 		"u've specified a frame with ID value zero. ", (ftnlen)102);
@@ -412,7 +632,7 @@ static integer c__14 = 14;
 
 	tail = lnktl_(&at, pool);
 	oldid = idents[(i__1 = tail - 1) < 200 && 0 <= i__1 ? i__1 : s_rnge(
-		"idents", i__1, "tkfram_", (ftnlen)426)];
+		"idents", i__1, "tkfram_", (ftnlen)560)];
 
 /*        Create the name of the agent associated with the old */
 /*        frame. */
@@ -424,7 +644,7 @@ static integer c__14 = 14;
 
 /*     Look up the address of the instance data. */
 
-    idnt[0] = *id;
+    idnt[0] = *frcode;
     locati_(idnt, &c__1, idents, pool, &at, &buffrd);
     if (full && ! buffrd) {
 
@@ -453,25 +673,25 @@ static integer c__14 = 14;
 /*     Construct the name of the agent associated with the */
 /*     requested frame.  (Each frame has its own agent). */
 
-    intstr_(id, idstr, (ftnlen)32);
-    frmnam_(id, frname, (ftnlen)32);
+    intstr_(frcode, idstr, (ftnlen)32);
+    frmnam_(frcode, frname, (ftnlen)32);
     if (s_cmp(frname, " ", (ftnlen)32, (ftnlen)1) == 0) {
 	lnkini_(&c__200, pool);
-	setmsg_("The Text Kernel (TK) frame with id-code # does not have a r"
+	setmsg_("The Text Kernel (TK) frame with ID code # does not have a r"
 		"ecognized name. ", (ftnlen)75);
-	errint_("#", id, (ftnlen)1);
-	sigerr_("SPICE(INCOMPLETFRAME)", (ftnlen)21);
+	errint_("#", frcode, (ftnlen)1);
+	sigerr_("SPICE(INCOMPLETEFRAME)", (ftnlen)22);
 	chkout_("TKFRAM", (ftnlen)6);
 	return 0;
     }
 /* Writing concatenation */
     i__2[0] = 8, a__1[0] = "TKFRAME_";
-    i__2[1] = 32, a__1[1] = idstr;
+    i__2[1] = rtrim_(idstr, (ftnlen)32), a__1[1] = idstr;
     s_cat(agent, a__1, i__2, &c__2, (ftnlen)32);
     r__ = rtrim_(agent, (ftnlen)32);
 /* Writing concatenation */
     i__2[0] = 8, a__1[0] = "TKFRAME_";
-    i__2[1] = 32, a__1[1] = frname;
+    i__2[1] = rtrim_(frname, (ftnlen)32), a__1[1] = frname;
     s_cat(altnat, a__1, i__2, &c__2, (ftnlen)32);
     ar = rtrim_(altnat, (ftnlen)32);
 
@@ -492,25 +712,25 @@ static integer c__14 = 14;
 /*        information from the local buffer. */
 
 	rot[0] = buffd[(i__1 = at * 9 - 9) < 1800 && 0 <= i__1 ? i__1 : 
-		s_rnge("buffd", i__1, "tkfram_", (ftnlen)519)];
+		s_rnge("buffd", i__1, "tkfram_", (ftnlen)653)];
 	rot[1] = buffd[(i__1 = at * 9 - 8) < 1800 && 0 <= i__1 ? i__1 : 
-		s_rnge("buffd", i__1, "tkfram_", (ftnlen)520)];
+		s_rnge("buffd", i__1, "tkfram_", (ftnlen)654)];
 	rot[2] = buffd[(i__1 = at * 9 - 7) < 1800 && 0 <= i__1 ? i__1 : 
-		s_rnge("buffd", i__1, "tkfram_", (ftnlen)521)];
+		s_rnge("buffd", i__1, "tkfram_", (ftnlen)655)];
 	rot[3] = buffd[(i__1 = at * 9 - 6) < 1800 && 0 <= i__1 ? i__1 : 
-		s_rnge("buffd", i__1, "tkfram_", (ftnlen)522)];
+		s_rnge("buffd", i__1, "tkfram_", (ftnlen)656)];
 	rot[4] = buffd[(i__1 = at * 9 - 5) < 1800 && 0 <= i__1 ? i__1 : 
-		s_rnge("buffd", i__1, "tkfram_", (ftnlen)523)];
+		s_rnge("buffd", i__1, "tkfram_", (ftnlen)657)];
 	rot[5] = buffd[(i__1 = at * 9 - 4) < 1800 && 0 <= i__1 ? i__1 : 
-		s_rnge("buffd", i__1, "tkfram_", (ftnlen)524)];
+		s_rnge("buffd", i__1, "tkfram_", (ftnlen)658)];
 	rot[6] = buffd[(i__1 = at * 9 - 3) < 1800 && 0 <= i__1 ? i__1 : 
-		s_rnge("buffd", i__1, "tkfram_", (ftnlen)525)];
+		s_rnge("buffd", i__1, "tkfram_", (ftnlen)659)];
 	rot[7] = buffd[(i__1 = at * 9 - 2) < 1800 && 0 <= i__1 ? i__1 : 
-		s_rnge("buffd", i__1, "tkfram_", (ftnlen)526)];
+		s_rnge("buffd", i__1, "tkfram_", (ftnlen)660)];
 	rot[8] = buffd[(i__1 = at * 9 - 1) < 1800 && 0 <= i__1 ? i__1 : 
-		s_rnge("buffd", i__1, "tkfram_", (ftnlen)527)];
+		s_rnge("buffd", i__1, "tkfram_", (ftnlen)661)];
 	*frame = buffi[(i__1 = at - 1) < 200 && 0 <= i__1 ? i__1 : s_rnge(
-		"buffi", i__1, "tkfram_", (ftnlen)529)];
+		"buffi", i__1, "tkfram_", (ftnlen)663)];
     } else {
 
 /*        Determine how the frame is specified and what it */
@@ -539,15 +759,41 @@ static integer c__14 = 14;
 /*        See if the friendlier version of the kernel pool variables */
 /*        are available. */
 
+/*        If both forms are present, we signal an error. */
+
 	for (i__ = 1; i__ <= 2; ++i__) {
+	    dtpool_(item + (((i__1 = i__ - 1) < 14 && 0 <= i__1 ? i__1 : 
+		    s_rnge("item", i__1, "tkfram_", (ftnlen)686)) << 5), &
+		    found1, &n, type__, (ftnlen)32, (ftnlen)1);
 	    dtpool_(alt + (((i__1 = i__ - 1) < 14 && 0 <= i__1 ? i__1 : 
-		    s_rnge("alt", i__1, "tkfram_", (ftnlen)550)) << 5), found,
-		     &n, type__, (ftnlen)32, (ftnlen)1);
-	    if (*found) {
+		    s_rnge("alt", i__1, "tkfram_", (ftnlen)687)) << 5), &
+		    found2, &n, type__, (ftnlen)32, (ftnlen)1);
+	    if (found1 && found2) {
+		lnkini_(&c__200, pool);
+		*frame = 0;
+		ident_(rot);
+		setmsg_("Frame name-based and frame ID-based text kernel (fi"
+			"xed-offset) frame definition keywords '#' and '#' ar"
+			"e both present in the POOL. Most likely this is beca"
+			"use loaded text kernels contain competing definition"
+			"s of the '#' frame using different keyword styles, w"
+			"hich is not allowed. ", (ftnlen)280);
+		errch_("#", item + (((i__1 = i__ - 1) < 14 && 0 <= i__1 ? 
+			i__1 : s_rnge("item", i__1, "tkfram_", (ftnlen)704)) 
+			<< 5), (ftnlen)1, (ftnlen)32);
+		errch_("#", alt + (((i__1 = i__ - 1) < 14 && 0 <= i__1 ? i__1 
+			: s_rnge("alt", i__1, "tkfram_", (ftnlen)705)) << 5), 
+			(ftnlen)1, (ftnlen)32);
+		errch_("#", frname, (ftnlen)1, (ftnlen)32);
+		sigerr_("SPICE(COMPETINGFRAMESPEC)", (ftnlen)25);
+		chkout_("TKFRAM", (ftnlen)6);
+		return 0;
+	    }
+	    if (found2) {
 		s_copy(item + (((i__1 = i__ - 1) < 14 && 0 <= i__1 ? i__1 : 
-			s_rnge("item", i__1, "tkfram_", (ftnlen)553)) << 5), 
+			s_rnge("item", i__1, "tkfram_", (ftnlen)713)) << 5), 
 			alt + (((i__3 = i__ - 1) < 14 && 0 <= i__3 ? i__3 : 
-			s_rnge("alt", i__3, "tkfram_", (ftnlen)553)) << 5), (
+			s_rnge("alt", i__3, "tkfram_", (ftnlen)713)) << 5), (
 			ftnlen)32, (ftnlen)32);
 	    }
 	}
@@ -572,16 +818,17 @@ static integer c__14 = 14;
 	gcpool_(item + 32, &c__1, &c__1, &n, name__, &fnd, (ftnlen)32, (
 		ftnlen)32);
 
-/*        Look up the id-code for this frame. */
+/*        Look up the ID code for this frame. */
 
 	namfrm_(name__, frame, (ftnlen)32);
 	if (*frame == 0) {
 	    lnkini_(&c__200, pool);
+	    ident_(rot);
 	    setmsg_("The frame to which frame # is relatively defined is not"
 		    " recognized. The kernel pool specification of the relati"
 		    "ve frame is '#'.  This is not a recognized frame. ", (
 		    ftnlen)161);
-	    errint_("#", id, (ftnlen)1);
+	    errint_("#", frcode, (ftnlen)1);
 	    errch_("#", name__, (ftnlen)1, (ftnlen)32);
 	    sigerr_("SPICE(BADFRAMESPEC)", (ftnlen)19);
 	    chkout_("TKFRAM", (ftnlen)6);
@@ -592,13 +839,15 @@ static integer c__14 = 14;
 /*        frame ID. If they are the same, SPICE will go into an */
 /*        indefinite loop. */
 
-	if (*frame == *id) {
+	if (*frame == *frcode) {
 	    lnkini_(&c__200, pool);
+	    *frame = 0;
+	    ident_(rot);
 	    setmsg_("Bad fixed offset frame specification: the frame '#' (fr"
 		    "ame ID #) is defined relative to itself. SPICE cannot wo"
 		    "rk with such frames. ", (ftnlen)132);
 	    errch_("#", name__, (ftnlen)1, (ftnlen)32);
-	    errint_("#", id, (ftnlen)1);
+	    errint_("#", frcode, (ftnlen)1);
 	    sigerr_("SPICE(BADFRAMESPEC2)", (ftnlen)20);
 	    chkout_("TKFRAM", (ftnlen)6);
 	    return 0;
@@ -617,6 +866,8 @@ static integer c__14 = 14;
 /*           We give preference to the kernel pool variable */
 /*           TKFRAME_<name>_MATRIX if it is available. */
 
+/*           If both forms are present, we signal an error. */
+
 /* Writing concatenation */
 	    i__2[0] = r__, a__1[0] = agent;
 	    i__2[1] = 7, a__1[1] = "_MATRIX";
@@ -625,8 +876,26 @@ static integer c__14 = 14;
 	    i__2[0] = ar, a__1[0] = altnat;
 	    i__2[1] = 7, a__1[1] = "_MATRIX";
 	    s_cat(alt + 64, a__1, i__2, &c__2, (ftnlen)32);
-	    dtpool_(alt + 64, found, &n, type__, (ftnlen)32, (ftnlen)1);
-	    if (*found) {
+	    dtpool_(item + 64, &found1, &n, type__, (ftnlen)32, (ftnlen)1);
+	    dtpool_(alt + 64, &found2, &n, type__, (ftnlen)32, (ftnlen)1);
+	    if (found1 && found2) {
+		lnkini_(&c__200, pool);
+		*frame = 0;
+		ident_(rot);
+		setmsg_("Frame name-based and frame ID-based text kernel (fi"
+			"xed-offset) frame definition keywords '#' and '#' ar"
+			"e both present in the POOL. Most likely this is beca"
+			"use loaded text kernels contain competing definition"
+			"s of the '#' frame using different keyword styles, w"
+			"hich is not allowed. ", (ftnlen)280);
+		errch_("#", item + 64, (ftnlen)1, (ftnlen)32);
+		errch_("#", alt + 64, (ftnlen)1, (ftnlen)32);
+		errch_("#", frname, (ftnlen)1, (ftnlen)32);
+		sigerr_("SPICE(COMPETINGFRAMESPEC)", (ftnlen)25);
+		chkout_("TKFRAM", (ftnlen)6);
+		return 0;
+	    }
+	    if (found2) {
 		s_copy(item + 64, alt + 64, (ftnlen)32, (ftnlen)32);
 	    }
 	    if (badkpv_("TKFRAM", item + 64, "=", &c__9, &c__1, "N", (ftnlen)
@@ -653,10 +922,10 @@ static integer c__14 = 14;
 /*           the sense of the second and third columns if necessary. */
 
 	    if (vdot_(&rot[3], &matrix[3]) < 0.) {
-		vsclip_(&c_b101, &rot[3]);
+		vsclip_(&c_b120, &rot[3]);
 	    }
 	    if (vdot_(&rot[6], &matrix[6]) < 0.) {
-		vsclip_(&c_b101, &rot[6]);
+		vsclip_(&c_b120, &rot[6]);
 	    }
 	} else if (s_cmp(spec, "ANGLES", (ftnlen)32, (ftnlen)6) == 0) {
 
@@ -693,15 +962,42 @@ static integer c__14 = 14;
 /*           Again, we give preference to the more friendly form */
 /*           of TKFRAME specification. */
 
+/*           If both forms are present, we signal an error. */
+
 	    for (i__ = 3; i__ <= 5; ++i__) {
+		dtpool_(item + (((i__1 = i__ - 1) < 14 && 0 <= i__1 ? i__1 : 
+			s_rnge("item", i__1, "tkfram_", (ftnlen)892)) << 5), &
+			found1, &n, type__, (ftnlen)32, (ftnlen)1);
 		dtpool_(alt + (((i__1 = i__ - 1) < 14 && 0 <= i__1 ? i__1 : 
-			s_rnge("alt", i__1, "tkfram_", (ftnlen)703)) << 5), 
-			found, &n, type__, (ftnlen)32, (ftnlen)1);
-		if (*found) {
+			s_rnge("alt", i__1, "tkfram_", (ftnlen)893)) << 5), &
+			found2, &n, type__, (ftnlen)32, (ftnlen)1);
+		if (found1 && found2) {
+		    lnkini_(&c__200, pool);
+		    *frame = 0;
+		    ident_(rot);
+		    setmsg_("Frame name-based and frame ID-based text kernel"
+			    " (fixed-offset) frame definition keywords '#' an"
+			    "d '#' are both present in the POOL. Most likely "
+			    "this is because loaded text kernels contain comp"
+			    "eting definitions of the '#' frame using differe"
+			    "nt keyword styles, which is not allowed. ", (
+			    ftnlen)280);
+		    errch_("#", item + (((i__1 = i__ - 1) < 14 && 0 <= i__1 ? 
+			    i__1 : s_rnge("item", i__1, "tkfram_", (ftnlen)
+			    910)) << 5), (ftnlen)1, (ftnlen)32);
+		    errch_("#", alt + (((i__1 = i__ - 1) < 14 && 0 <= i__1 ? 
+			    i__1 : s_rnge("alt", i__1, "tkfram_", (ftnlen)911)
+			    ) << 5), (ftnlen)1, (ftnlen)32);
+		    errch_("#", frname, (ftnlen)1, (ftnlen)32);
+		    sigerr_("SPICE(COMPETINGFRAMESPEC)", (ftnlen)25);
+		    chkout_("TKFRAM", (ftnlen)6);
+		    return 0;
+		}
+		if (found2) {
 		    s_copy(item + (((i__1 = i__ - 1) < 14 && 0 <= i__1 ? i__1 
-			    : s_rnge("item", i__1, "tkfram_", (ftnlen)706)) <<
+			    : s_rnge("item", i__1, "tkfram_", (ftnlen)919)) <<
 			     5), alt + (((i__3 = i__ - 1) < 14 && 0 <= i__3 ? 
-			    i__3 : s_rnge("alt", i__3, "tkfram_", (ftnlen)706)
+			    i__3 : s_rnge("alt", i__3, "tkfram_", (ftnlen)919)
 			    ) << 5), (ftnlen)32, (ftnlen)32);
 		}
 	    }
@@ -725,11 +1021,16 @@ static integer c__14 = 14;
 
 	    for (i__ = 1; i__ <= 3; ++i__) {
 		convrt_(&angles[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : 
-			s_rnge("angles", i__1, "tkfram_", (ftnlen)735)], 
+			s_rnge("angles", i__1, "tkfram_", (ftnlen)948)], 
 			units, "RADIANS", &tempd, (ftnlen)32, (ftnlen)7);
 		angles[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(
-			"angles", i__1, "tkfram_", (ftnlen)736)] = tempd;
+			"angles", i__1, "tkfram_", (ftnlen)949)] = tempd;
 	    }
+
+/*           Compute the rotation from instrument frame to CK frame. */
+
+	    eul2m_(angles, &angles[1], &angles[2], axes, &axes[1], &axes[2], 
+		    rot);
 	    if (failed_()) {
 		lnkini_(&c__200, pool);
 		*frame = 0;
@@ -737,17 +1038,14 @@ static integer c__14 = 14;
 		chkout_("TKFRAM", (ftnlen)6);
 		return 0;
 	    }
-
-/*           Compute the rotation from instrument frame to CK frame. */
-
-	    eul2m_(angles, &angles[1], &angles[2], axes, &axes[1], &axes[2], 
-		    rot);
 	} else if (s_cmp(spec, "QUATERNION", (ftnlen)32, (ftnlen)10) == 0) {
 
 /*           Look up the quaternion and convert it to a rotation */
 /*           matrix. Again there are two possible variables that */
 /*           may point to the quaternion. We give preference to */
 /*           the form TKFRAME_<name>_Q over the form TKFRAME_<id>_Q. */
+
+/*           If both forms are present, we signal an error. */
 
 /* Writing concatenation */
 	    i__2[0] = r__, a__1[0] = agent;
@@ -757,8 +1055,26 @@ static integer c__14 = 14;
 	    i__2[0] = ar, a__1[0] = altnat;
 	    i__2[1] = 2, a__1[1] = "_Q";
 	    s_cat(alt + 64, a__1, i__2, &c__2, (ftnlen)32);
-	    dtpool_(alt + 64, found, &n, type__, (ftnlen)32, (ftnlen)1);
-	    if (*found) {
+	    dtpool_(item + 64, &found1, &n, type__, (ftnlen)32, (ftnlen)1);
+	    dtpool_(alt + 64, &found2, &n, type__, (ftnlen)32, (ftnlen)1);
+	    if (found1 && found2) {
+		lnkini_(&c__200, pool);
+		*frame = 0;
+		ident_(rot);
+		setmsg_("Frame name-based and frame ID-based text kernel (fi"
+			"xed-offset) frame definition keywords '#' and '#' ar"
+			"e both present in the POOL. Most likely this is beca"
+			"use loaded text kernels contain competing definition"
+			"s of the '#' frame using different keyword styles, w"
+			"hich is not allowed. ", (ftnlen)280);
+		errch_("#", item + 64, (ftnlen)1, (ftnlen)32);
+		errch_("#", alt + 64, (ftnlen)1, (ftnlen)32);
+		errch_("#", frname, (ftnlen)1, (ftnlen)32);
+		sigerr_("SPICE(COMPETINGFRAMESPEC)", (ftnlen)25);
+		chkout_("TKFRAM", (ftnlen)6);
+		return 0;
+	    }
+	    if (found2) {
 		s_copy(item + 64, alt + 64, (ftnlen)32, (ftnlen)32);
 	    }
 	    if (badkpv_("TKFRAM", item + 64, "=", &c__4, &c__1, "N", (ftnlen)
@@ -783,15 +1099,15 @@ static integer c__14 = 14;
 /*           the toolkit. */
 
 	    lnkini_(&c__200, pool);
+	    *frame = 0;
+	    ident_(rot);
 	    setmsg_("The frame specification \"# = '#'\" is not one of the r"
-		    "econized means of specifying a text-kernel constant offs"
-		    "et frame (as of version # of the routine TKFRAM). This m"
-		    "ay reflect a typographical error or may indicate that yo"
-		    "u need to consider updating your version of the SPICE to"
-		    "olkit. ", (ftnlen)284);
+		    "ecognized means of specifying a text-kernel constant off"
+		    "set frame. This may reflect a typographical error or may"
+		    " indicate that you need to consider updating your versio"
+		    "n of the SPICE toolkit. ", (ftnlen)245);
 	    errch_("#", item, (ftnlen)1, (ftnlen)32);
 	    errch_("#", spec, (ftnlen)1, (ftnlen)32);
-	    errch_("#", versn, (ftnlen)1, (ftnlen)8);
 	    sigerr_("SPICE(UNKNOWNFRAMESPEC)", (ftnlen)23);
 	    chkout_("TKFRAM", (ftnlen)6);
 	    return 0;
@@ -800,25 +1116,25 @@ static integer c__14 = 14;
 /*        Buffer the identifier, relative frame and rotation matrix. */
 
 	buffd[(i__1 = at * 9 - 9) < 1800 && 0 <= i__1 ? i__1 : s_rnge("buffd",
-		 i__1, "tkfram_", (ftnlen)819)] = rot[0];
+		 i__1, "tkfram_", (ftnlen)1054)] = rot[0];
 	buffd[(i__1 = at * 9 - 8) < 1800 && 0 <= i__1 ? i__1 : s_rnge("buffd",
-		 i__1, "tkfram_", (ftnlen)820)] = rot[1];
+		 i__1, "tkfram_", (ftnlen)1055)] = rot[1];
 	buffd[(i__1 = at * 9 - 7) < 1800 && 0 <= i__1 ? i__1 : s_rnge("buffd",
-		 i__1, "tkfram_", (ftnlen)821)] = rot[2];
+		 i__1, "tkfram_", (ftnlen)1056)] = rot[2];
 	buffd[(i__1 = at * 9 - 6) < 1800 && 0 <= i__1 ? i__1 : s_rnge("buffd",
-		 i__1, "tkfram_", (ftnlen)822)] = rot[3];
+		 i__1, "tkfram_", (ftnlen)1057)] = rot[3];
 	buffd[(i__1 = at * 9 - 5) < 1800 && 0 <= i__1 ? i__1 : s_rnge("buffd",
-		 i__1, "tkfram_", (ftnlen)823)] = rot[4];
+		 i__1, "tkfram_", (ftnlen)1058)] = rot[4];
 	buffd[(i__1 = at * 9 - 4) < 1800 && 0 <= i__1 ? i__1 : s_rnge("buffd",
-		 i__1, "tkfram_", (ftnlen)824)] = rot[5];
+		 i__1, "tkfram_", (ftnlen)1059)] = rot[5];
 	buffd[(i__1 = at * 9 - 3) < 1800 && 0 <= i__1 ? i__1 : s_rnge("buffd",
-		 i__1, "tkfram_", (ftnlen)825)] = rot[6];
+		 i__1, "tkfram_", (ftnlen)1060)] = rot[6];
 	buffd[(i__1 = at * 9 - 2) < 1800 && 0 <= i__1 ? i__1 : s_rnge("buffd",
-		 i__1, "tkfram_", (ftnlen)826)] = rot[7];
+		 i__1, "tkfram_", (ftnlen)1061)] = rot[7];
 	buffd[(i__1 = at * 9 - 1) < 1800 && 0 <= i__1 ? i__1 : s_rnge("buffd",
-		 i__1, "tkfram_", (ftnlen)827)] = rot[8];
+		 i__1, "tkfram_", (ftnlen)1062)] = rot[8];
 	buffi[(i__1 = at - 1) < 200 && 0 <= i__1 ? i__1 : s_rnge("buffi", 
-		i__1, "tkfram_", (ftnlen)829)] = *frame;
+		i__1, "tkfram_", (ftnlen)1064)] = *frame;
 
 /*        If these were not previously buffered, we need to set */
 /*        a watch on the various items that might be used to define */
@@ -892,6 +1208,8 @@ static integer c__14 = 14;
     }
     if (failed_()) {
 	lnkini_(&c__200, pool);
+	*frame = 0;
+	ident_(rot);
 	chkout_("TKFRAM", (ftnlen)6);
 	return 0;
     }

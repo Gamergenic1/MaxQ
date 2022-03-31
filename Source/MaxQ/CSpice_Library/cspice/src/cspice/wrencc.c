@@ -96,48 +96,47 @@ static integer c__1 = 1;
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
-/*      UNIT      I    Fortran unit number of output text file. */
-/*      N         I    Number of characters to encode and write. */
-/*      DATA      I    List of characters to encode and write. */
+/*     UNIT      I    Fortran unit number of output text file. */
+/*     N         I    Number of characters to encode and write. */
+/*     DATA      I    List of characters to encode and write. */
 
 /* $ Detailed_Input */
 
-/*     UNIT     The Fortran unit number for a previously opened text */
+/*     UNIT     is the Fortran unit number for a previously opened text */
 /*              file. All writing will begin at the CURRENT POSITION */
 /*              in the text file. */
 
-/*     N        The number of data items, characters, to be encoded and */
-/*              written to the text file attached to UNIT. */
+/*     N        is the number of data items, characters, to be encoded */
+/*              and written to the text file attached to UNIT. */
 
-/*     DATA     List of characters to be encoded and written to the */
-/*              text file attached to UNIT. */
+/*     DATA     is the list of characters to be encoded and written to */
+/*              the text file attached to UNIT. */
 
 /* $ Detailed_Output */
 
-/*     See the Particulars section for a description of the effect of */
+/*     See the $Particulars section for a description of the effect of */
 /*     this routine. */
 
 /* $ Parameters */
 
-/*      None. */
+/*     None. */
 
 /* $ Exceptions */
 
-/*     1)   If N, the number of data items, is not positive, the error */
-/*          SPICE(INVALIDARGUMENT) will be signalled. */
+/*     1)  If N, the number of data items, is not positive, the error */
+/*         SPICE(INVALIDARGUMENT) is signaled. */
 
-/*     2)   If an error occurs while writing to the text file attached */
-/*          to unit UNIT, the error SPICE(FILEWRITEFAILED) will be */
-/*          signalled. */
+/*     2)  If an error occurs while writing to the text file attached */
+/*         to unit UNIT, the error SPICE(FILEWRITEFAILED) is signaled. */
 
-/*     3)   If the Fortran logical unit UNIT is not defined, the results */
-/*          of this routine are unpredictable. */
+/*     3)  If the Fortran logical unit UNIT is not defined, the results */
+/*         of this routine are unpredictable. */
 
 /* $ Files */
 
-/*     See the description of UNIT in the Detailed_Input section. */
+/*     See the description of UNIT in the $Detailed_Input section. */
 
 /* $ Particulars */
 
@@ -353,10 +352,22 @@ static integer c__1 = 1;
 
 /* $ Author_and_Institution */
 
-/*     K.R. Gehringer (JPL) */
-/*     F.S. Turner    (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
+/*     B.V. Semenov       (JPL) */
+/*     F.S. Turner        (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.30.0, 28-NOV-2021 (BVS) */
+
+/*        Updated for MAC-OSX-M1-64BIT-CLANG_C. */
+
+/* -    SPICELIB Version 1.29.0, 03-JUN-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.28.0, 10-MAR-2014 (BVS) */
 
@@ -472,7 +483,7 @@ static integer c__1 = 1;
 /*        The list directed write was changed to a formatted write using */
 /*        the specifier FMT='(A)'. This was done in order to prevent a */
 /*        space from appearing as the first character on each line of the */
-/*        file for certian computer platforms. */
+/*        file for certain computer platforms. */
 
 /* -    SPICELIB Version 1.1.0, 08-MAR-1993 (KRG) */
 
@@ -485,7 +496,7 @@ static integer c__1 = 1;
 /* -& */
 /* $ Index_Entries */
 
-/*      encode and write characters to a text file */
+/*     encode and write characters to a text file */
 
 /* -& */
 /* $ Revisions */
@@ -640,27 +651,27 @@ static integer c__1 = 1;
 		i__1 = encpos;
 		s_copy(encchr + i__1, hexdig + ((i__2 = hibits) < 16 && 0 <= 
 			i__2 ? i__2 : s_rnge("hexdig", i__2, "wrencc_", (
-			ftnlen)664)), encpos + 1 - i__1, (ftnlen)1);
+			ftnlen)680)), encpos + 1 - i__1, (ftnlen)1);
 		i__1 = encpos + 1;
 		s_copy(encchr + i__1, hexdig + ((i__2 = lobits) < 16 && 0 <= 
 			i__2 ? i__2 : s_rnge("hexdig", i__2, "wrencc_", (
-			ftnlen)665)), encpos + 2 - i__1, (ftnlen)1);
+			ftnlen)681)), encpos + 2 - i__1, (ftnlen)1);
 	    } else if (room == 1) {
 		i__1 = encpos;
 		s_copy(encchr + i__1, hexdig + ((i__2 = hibits) < 16 && 0 <= 
 			i__2 ? i__2 : s_rnge("hexdig", i__2, "wrencc_", (
-			ftnlen)669)), encpos + 1 - i__1, (ftnlen)1);
+			ftnlen)685)), encpos + 1 - i__1, (ftnlen)1);
 		*(unsigned char *)lftovr = *(unsigned char *)&hexdig[(i__1 = 
 			lobits) < 16 && 0 <= i__1 ? i__1 : s_rnge("hexdig", 
-			i__1, "wrencc_", (ftnlen)670)];
+			i__1, "wrencc_", (ftnlen)686)];
 		*(unsigned char *)&lftovr[1] = ' ';
 	    } else {
 		*(unsigned char *)lftovr = *(unsigned char *)&hexdig[(i__1 = 
 			hibits) < 16 && 0 <= i__1 ? i__1 : s_rnge("hexdig", 
-			i__1, "wrencc_", (ftnlen)675)];
+			i__1, "wrencc_", (ftnlen)691)];
 		*(unsigned char *)&lftovr[1] = *(unsigned char *)&hexdig[(
 			i__1 = lobits) < 16 && 0 <= i__1 ? i__1 : s_rnge(
-			"hexdig", i__1, "wrencc_", (ftnlen)676)];
+			"hexdig", i__1, "wrencc_", (ftnlen)692)];
 	    }
 
 /*           Increment the character buffer pointers, including the */

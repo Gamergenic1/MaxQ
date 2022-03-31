@@ -369,11 +369,15 @@ static integer c__0 = 0;
 
 /* $ Version */
 
+/* -    SPICELIB version 2.0.1 01-OCT-2021 (NJB) */
+
+/*        Fixed typo in comments. */
+
 /* -    SPICELIB version 2.0.0 21-APR-2014 (EDW) */
 
 /*        Added BOGUSENTRY error check to call ZZGFRRU. */
 
-/*        Additioned ZZGFRRX entry point for test family */
+/*        Added ZZGFRRX entry point for test family */
 /*        retrieval of values saved by ZZGFRRIN. */
 
 /*        Code edits to implement use of ZZGFRELX. */

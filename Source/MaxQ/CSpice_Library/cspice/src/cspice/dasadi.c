@@ -9,9 +9,21 @@
 
 static integer c__3 = 3;
 
-/* $Procedure      DASADI ( DAS, add data, integer ) */
+/* $Procedure DASADI ( DAS, add data, integer ) */
 /* Subroutine */ int dasadi_(integer *handle, integer *n, integer *data)
 {
+    /* Initialized data */
+
+    static integer record[256] = { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0 };
+
     /* System generated locals */
     integer i__1, i__2;
 
@@ -27,7 +39,7 @@ static integer c__3 = 3;
     extern /* Subroutine */ int dascud_(integer *, integer *, integer *), 
 	    dashfs_(integer *, integer *, integer *, integer *, integer *, 
 	    integer *, integer *, integer *, integer *);
-    integer record[256], lastla[3];
+    integer lastla[3];
     extern /* Subroutine */ int dasuri_(integer *, integer *, integer *, 
 	    integer *, integer *);
     integer lastrc[3], clsize;
@@ -80,7 +92,7 @@ static integer c__3 = 3;
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     I   DAS file handle. */
 /*     N          I   Number of integers to add to DAS file. */
@@ -88,19 +100,20 @@ static integer c__3 = 3;
 
 /* $ Detailed_Input */
 
-/*     HANDLE         is a file handle of a DAS file opened for writing. */
+/*     HANDLE   is a file handle of a DAS file opened for writing. */
 
-/*     N              is a the number of integer `words' to */
-/*                    add to the DAS file specified by HANDLE. */
+/*     N        is the number of integer "words" to add to the DAS file */
+/*              specified by HANDLE. */
 
-/*     DATA           is an array of integers to be added to the */
-/*                    specified DAS file.  Elements 1 through N are */
-/*                    appended to the integer data in the file. */
+/*     DATA     is an array of integers to be added to the specified DAS */
+/*              file. Elements 1 through N are appended to the integer */
+/*              data in the file. */
 
 /* $ Detailed_Output */
 
-/*     None.  See $Particulars for a description of the effect of this */
-/*     routine. */
+/*     None. */
+
+/*     See $Particulars for a description of the effect of this routine. */
 
 /* $ Parameters */
 
@@ -108,15 +121,15 @@ static integer c__3 = 3;
 
 /* $ Exceptions */
 
-/*     1)  If the input file handle is invalid, the error will be */
-/*         diagnosed by routines called by this routine. */
+/*     1)  If the input file handle is invalid, an error is signaled by a */
+/*         routine in the call tree of this routine. */
 
-/*     2)  If an I/O error occurs during the data addition attempted */
-/*         by this routine, the error will be diagnosed by routines */
-/*         called by this routine. */
+/*     2)  If an I/O error occurs during the data addition attempted by */
+/*         this routine, the error is signaled by a routine in the call */
+/*         tree of this routine. */
 
-/*     3)  If the input count N is less than 1, no data will be */
-/*         added to the specified DAS file. */
+/*     3)  If the input count N is less than 1, no data will be added to */
+/*         the specified DAS file. No error will be signaled. */
 
 /* $ Files */
 
@@ -124,12 +137,12 @@ static integer c__3 = 3;
 
 /* $ Particulars */
 
-/*     This routine adds integer data to a DAS file by `appending' it */
-/*     after any integer data already in the file.  The sense in which */
-/*     the data is `appended' is that the data will occupy a range of */
+/*     This routine adds integer data to a DAS file by "appending" them */
+/*     after any integer data already in the file. The sense in which */
+/*     the data are "appended" is that the data will occupy a range of */
 /*     logical addresses for integer data that immediately follow the */
 /*     last logical address of a integer that is occupied at the time */
-/*     this routine is called.  The diagram below illustrates this */
+/*     this routine is called. The diagram below illustrates this */
 /*     addition: */
 
 /*        +-------------------------+ */
@@ -152,79 +165,139 @@ static integer c__3 = 3;
 
 
 /*     The logical organization of the integers in the DAS file is */
-/*     independent of the order of addition to the file or physical */
-/*     location of any data of double precision or character type. */
+/*     independent of the location in the file of any data of double */
+/*     precision or character type. */
 
 /*     The actual physical write operations that add the input array */
-/*     DATA to the indicated DAS file may not take place before this */
-/*     routine returns, since the DAS system buffers data that is */
-/*     written as well as data that is read.  In any case, the data */
+/*     DATA to the indicated DAS file might not take place before this */
+/*     routine returns, since the DAS system buffers data that are */
+/*     written as well as data that are read. In any case, the data */
 /*     will be flushed to the file at the time the file is closed, if */
-/*     not earlier.  A physical write of all buffered records can be */
+/*     not earlier. A physical write of all buffered records can be */
 /*     forced by calling the SPICELIB routine DASWBR (DAS, write */
 /*     buffered records). */
 
 /*     In order to update integer logical addresses that already contain */
-/*     data, the SPICELIB routine DASUDI ( DAS update data, integer ) */
+/*     data, the SPICELIB routine DASUDI (DAS update data, integer) */
 /*     should be used. */
 
 /* $ Examples */
 
-/*     1)  Create the new DAS file TEST.DAS and add 200 integers to it. */
-/*         Close the file, then re-open it and read the data back out. */
+/*     The numerical results shown for this example may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
+
+/*     1) Create a new DAS file and add 200 integers to it. Close the */
+/*        file, then re-open it and read the data back out. */
 
 
-/*                  PROGRAM TEST_ADD */
+/*        Example code begins here. */
 
-/*                  CHARACTER*(4)         TYPE */
 
-/*                  INTEGER               DATA   ( 200 ) */
+/*              PROGRAM DASADI_EX1 */
+/*              IMPLICIT NONE */
 
-/*                  INTEGER               HANDLE */
-/*                  INTEGER               I */
-/*            C */
-/*            C     Open a new DAS file.  Use the file name as */
-/*            C     the internal file name. */
-/*            C */
-/*                  TYPE = 'TEST' */
-/*                  CALL DASONW ( 'TEST.DAS', TYPE, 'TEST.DAS', HANDLE ) */
+/*        C */
+/*        C     Local parameters. */
+/*        C */
+/*              CHARACTER*(*)         FNAME */
+/*              PARAMETER           ( FNAME = 'dasadi_ex1.das' ) */
 
-/*            C */
-/*            C     Fill the array DATA with the integers 1 through */
-/*            C     100, and add this array to the file. */
-/*            C */
-/*                  DO I = 1, 100 */
-/*                     DATA(I) = I */
-/*                  END DO */
+/*              CHARACTER*(*)         TYPE */
+/*              PARAMETER           ( TYPE  = 'TEST' ) */
 
-/*                  CALL DASADI ( HANDLE, 100, DATA ) */
+/*        C */
+/*        C     Local variables. */
+/*        C */
+/*              INTEGER               DATA   ( 200 ) */
 
-/*            C */
-/*            C     Now append the array DATA to the file again. */
-/*            C */
-/*                  CALL DASADI ( HANDLE, 100, DATA ) */
+/*              INTEGER               HANDLE */
+/*              INTEGER               I */
+/*              INTEGER               J */
 
-/*            C */
-/*            C     Close the file. */
-/*            C */
-/*                  CALL DASCLS ( HANDLE ) */
+/*        C */
+/*        C     Open a new DAS file. Use the file name as the internal */
+/*        C     file name, and reserve no records for comments. */
+/*        C */
+/*              CALL DASONW ( FNAME, TYPE, FNAME, 0, HANDLE ) */
 
-/*            C */
-/*            C     Now verify the addition of data by opening the */
-/*            C     file for read access and retrieving the data. */
-/*            C */
-/*                  CALL DASRDI ( HANDLE, 1, 200, DATA ) */
+/*        C */
+/*        C     Fill the array DATA with the integers 1 through */
+/*        C     100, and add this array to the file. */
+/*        C */
+/*              DO I = 1, 100 */
+/*                 DATA(I) = I */
+/*              END DO */
 
-/*            C */
-/*            C     Dump the data to the screen.  We should see the */
-/*            C     sequence  1, 2, ..., 100, 1, 2, ... , 100. */
-/*            C */
-/*                  WRITE (*,*) ' ' */
-/*                  WRITE (*,*) 'Data from TEST.DAS: ' */
-/*                  WRITE (*,*) ' ' */
-/*                  WRITE (*,*) DATA */
+/*              CALL DASADI ( HANDLE, 100, DATA ) */
 
-/*                  END */
+/*        C */
+/*        C     Now append the array DATA to the file again. */
+/*        C */
+/*              CALL DASADI ( HANDLE, 100, DATA ) */
+
+/*        C */
+/*        C     Close the file. */
+/*        C */
+/*              CALL DASCLS ( HANDLE ) */
+
+/*        C */
+/*        C     Now verify the addition of data by opening the */
+/*        C     file for read access and retrieving the data. */
+/*        C */
+/*              CALL DASOPR ( FNAME, HANDLE ) */
+/*              CALL DASRDI ( HANDLE, 1, 200, DATA ) */
+
+/*        C */
+/*        C     Dump the data to the screen.  We should see the */
+/*        C     sequence  1, 2, ..., 100, 1, 2, ... , 100. */
+/*        C */
+/*              WRITE (*,*) */
+/*              WRITE (*,*) 'Data from "', FNAME, '":' */
+/*              WRITE (*,*) */
+/*              DO I = 1, 20 */
+/*                 WRITE (*,'(10I5)') (DATA((I-1)*10+J), J = 1, 10) */
+/*              END DO */
+
+/*        C */
+/*        C     Close the file. */
+/*        C */
+/*              CALL DASCLS ( HANDLE ) */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*         Data from "dasadi_ex1.das": */
+
+/*            1    2    3    4    5    6    7    8    9   10 */
+/*           11   12   13   14   15   16   17   18   19   20 */
+/*           21   22   23   24   25   26   27   28   29   30 */
+/*           31   32   33   34   35   36   37   38   39   40 */
+/*           41   42   43   44   45   46   47   48   49   50 */
+/*           51   52   53   54   55   56   57   58   59   60 */
+/*           61   62   63   64   65   66   67   68   69   70 */
+/*           71   72   73   74   75   76   77   78   79   80 */
+/*           81   82   83   84   85   86   87   88   89   90 */
+/*           91   92   93   94   95   96   97   98   99  100 */
+/*            1    2    3    4    5    6    7    8    9   10 */
+/*           11   12   13   14   15   16   17   18   19   20 */
+/*           21   22   23   24   25   26   27   28   29   30 */
+/*           31   32   33   34   35   36   37   38   39   40 */
+/*           41   42   43   44   45   46   47   48   49   50 */
+/*           51   52   53   54   55   56   57   58   59   60 */
+/*           61   62   63   64   65   66   67   68   69   70 */
+/*           71   72   73   74   75   76   77   78   79   80 */
+/*           81   82   83   84   85   86   87   88   89   90 */
+/*           91   92   93   94   95   96   97   98   99  100 */
+
+
+/*        Note that after run completion, a new DAS file exists in the */
+/*        output directory. */
 
 /* $ Restrictions */
 
@@ -236,20 +309,36 @@ static integer c__3 = 3;
 
 /* $ Author_and_Institution */
 
-/*     K.R. Gehringer (JPL) */
-/*     N.J. Bachman   (JPL) */
-/*     W.L. Taber     (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
 
-/* -    SPICELIB Version 1.2.0 10-APR-2014 (NJB) */
+/* -    SPICELIB Version 1.3.0, 07-OCT-2021 (JDR) (NJB) */
+
+/*        Added IMPLICIT NONE statement. Updated the code to prevent */
+/*        DASCUD from being called with a negative number of integer */
+/*        words when the input count N is negative. */
+
+/*        Made local variable RECORD a saved variable which is */
+/*        initialized by a DATA statement. */
+
+/*        Bug fix: added FAILED call after DASHFS call. */
+
+/*        Edited the header to comply with NAIF standard. Fixed */
+/*        bugs in the code example and modified the output presentation */
+/*        to comply with the maximum line length for header comments. */
+
+/* -    SPICELIB Version 1.2.0, 10-APR-2014 (NJB) */
 
 /*        Deleted declarations of unused parameters. */
 
 /*        Corrected header comments: routine that flushes */
 /*        written, buffered records is DASWBR, not DASWUR. */
 
-/* -    SPICELIB Version 1.1.1 19-DEC-1995 (NJB) */
+/* -    SPICELIB Version 1.1.1, 19-DEC-1995 (NJB) */
 
 /*        Corrected title of permuted index entry section. */
 
@@ -258,11 +347,11 @@ static integer c__3 = 3;
 /*        Test of FAILED() added to loop termination conditions. */
 
 /*        Removed references to specific DAS file open routines in the */
-/*        $ Detailed_Input section of the header. This was done in order */
+/*        $Detailed_Input section of the header. This was done in order */
 /*        to minimize documentation changes if the DAS open routines ever */
 /*        change. */
 
-/*        Modified the $ Examples section to demonstrate the new ID word */
+/*        Modified the $Examples section to demonstrate the new ID word */
 /*        format which includes a file type and to include a call to the */
 /*        new routine DASONW, open new, which makes use of the file */
 /*        type. Also, a variable for the type of the file to be created */
@@ -274,12 +363,13 @@ static integer c__3 = 3;
 /* $ Index_Entries */
 
 /*     add integer data to a DAS file */
+
 /* -& */
 /* $ Revisions */
 
 /* -    SPICELIB Version 1.1.0, 12-MAY-1994 (KRG) (NJB) */
 
-/*        Test of FAILED() added to loop termination condition.  Without */
+/*        Test of FAILED() added to loop termination condition. Without */
 /*        this test, an infinite loop could result if DASA2L, DASURI or */
 /*        DASWRI signaled an error inside the loop. */
 
@@ -294,18 +384,27 @@ static integer c__3 = 3;
 /*     Local variables */
 
 
+/*     Saved variables */
+
+
+/*     Initial values */
+
+
 /*     Standard SPICE error handling. */
 
     if (return_()) {
 	return 0;
-    } else {
-	chkin_("DASADI", (ftnlen)6);
     }
+    chkin_("DASADI", (ftnlen)6);
 
 /*     Get the file summary for this DAS. */
 
     dashfs_(handle, &nresvr, &nresvc, &ncomr, &ncomc, &free, lastla, lastrc, 
 	    lastwd);
+    if (failed_()) {
+	chkout_("DASADI", (ftnlen)6);
+	return 0;
+    }
     lasti = lastla[2];
 
 /*     We will keep track of the location that we wish to write to */
@@ -387,11 +486,11 @@ static integer c__3 = 3;
 	}
     }
 
-/*     Update the DAS file directories to reflect the addition of N */
+/*     Update the DAS file directories to reflect the addition of NWRITN */
 /*     integer words.  DASCUD will also update the file summary */
 /*     accordingly. */
 
-    dascud_(handle, &c__3, n);
+    dascud_(handle, &c__3, &nwritn);
     chkout_("DASADI", (ftnlen)6);
     return 0;
 } /* dasadi_ */

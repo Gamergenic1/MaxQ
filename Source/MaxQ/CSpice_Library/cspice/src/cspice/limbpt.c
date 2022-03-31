@@ -11,10 +11,10 @@ static integer c__100 = 100;
 static integer c__1 = 1;
 static integer c__3 = 3;
 static integer c__2000 = 2000;
-static doublereal c_b121 = -1.;
+static doublereal c_b116 = -1.;
 static integer c__0 = 0;
-static doublereal c_b124 = 0.;
-static doublereal c_b129 = 1.;
+static doublereal c_b119 = 0.;
+static doublereal c_b124 = 1.;
 
 /* $Procedure LIMBPT ( Limb points on an extended object ) */
 /* Subroutine */ int limbpt_(char *method, char *target, doublereal *et, char 
@@ -28,6 +28,7 @@ static doublereal c_b129 = 1.;
     /* Initialized data */
 
     static logical first = TRUE_;
+    static logical xmit = FALSE_;
     static char prvcor[5] = "     ";
     static char prvloc[25] = "                         ";
     static char prvmth[500] = "                                             "
@@ -79,7 +80,9 @@ static doublereal c_b129 = 1.;
 	    integer *, char *, integer *, char *, char *, logical *, integer *
 	    , integer *, char *, char *, ftnlen, ftnlen, ftnlen, ftnlen, 
 	    ftnlen), zzraysfx_(doublereal *, doublereal *, doublereal *, 
-	    doublereal *, logical *), chkin_(char *, ftnlen);
+	    doublereal *, logical *);
+    doublereal s;
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
     doublereal epoch;
     static integer shape;
     extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen), 
@@ -93,15 +96,13 @@ static doublereal c_b129 = 1.;
     doublereal xform[9]	/* was [3][3] */;
     extern doublereal vnorm_(doublereal *);
     static integer nsurf;
+    extern logical vzero_(doublereal *);
     extern /* Subroutine */ int vcrss_(doublereal *, doublereal *, doublereal 
 	    *);
-    extern logical vzero_(doublereal *);
-    extern /* Subroutine */ int ucrss_(doublereal *, doublereal *, doublereal 
-	    *);
     doublereal prvlt;
-    extern /* Subroutine */ int vrotv_(doublereal *, doublereal *, doublereal 
-	    *, doublereal *), el2cgv_(doublereal *, doublereal *, doublereal *
-	    , doublereal *);
+    extern /* Subroutine */ int ucrss_(doublereal *, doublereal *, doublereal 
+	    *), vrotv_(doublereal *, doublereal *, doublereal *, doublereal *)
+	    , el2cgv_(doublereal *, doublereal *, doublereal *, doublereal *);
     static logical svfnd1, svfnd2;
     static integer svctr1[2];
     doublereal cp[3];
@@ -118,7 +119,7 @@ static doublereal c_b129 = 1.;
     extern logical return_(void);
     char lmbstr[20], nrmloc[25], shpstr[9];
     static char subtyp[20];
-    char svlstr[20], trmstr[20];
+    char trmstr[20];
     doublereal center[3], cortrg[3], cutnml[3], enorml[3], epoint[3], ipoint[
 	    3], isrfvc[3], plnvec[3];
     static doublereal pntbuf[6000]	/* was [3][2000] */;
@@ -151,9 +152,10 @@ static doublereal c_b129 = 1.;
 	    doublereal *, doublereal *, doublereal *, logical *), spkssb_(
 	    integer *, doublereal *, char *, doublereal *, ftnlen), spkgps_(
 	    integer *, doublereal *, char *, integer *, doublereal *, 
-	    doublereal *, ftnlen), stelab_(doublereal *, doublereal *, 
-	    doublereal *), pxform_(char *, char *, doublereal *, doublereal *,
-	     ftnlen, ftnlen), mxv_(doublereal *, doublereal *, doublereal *);
+	    doublereal *, ftnlen), stlabx_(doublereal *, doublereal *, 
+	    doublereal *), stelab_(doublereal *, doublereal *, doublereal *), 
+	    pxform_(char *, char *, doublereal *, doublereal *, ftnlen, 
+	    ftnlen), mxv_(doublereal *, doublereal *, doublereal *);
 
 /* $ Abstract */
 
@@ -219,8 +221,8 @@ static doublereal c_b129 = 1.;
 /* $ Abstract */
 
 /*     The parameters below form an enumerated list of the recognized */
-/*     frame types.  They are: INERTL, PCK, CK, TK, DYN.  The meanings */
-/*     are outlined below. */
+/*     frame types. They are: INERTL, PCK, CK, TK, DYN, SWTCH, and ALL. */
+/*     The meanings are outlined below. */
 
 /* $ Disclaimer */
 
@@ -270,6 +272,11 @@ static doublereal c_b129 = 1.;
 /*                 definition depends on parameters supplied via a */
 /*                 frame kernel. */
 
+/*     SWTCH       is a "switch" frame. These frames have orientation */
+/*                 defined by their alignment with base frames selected */
+/*                 from a prioritized list. The base frames optionally */
+/*                 have associated time intervals of applicability. */
+
 /*     ALL         indicates any of the above classes. This parameter */
 /*                 is used in APIs that fetch information about frames */
 /*                 of a specified class. */
@@ -278,6 +285,7 @@ static doublereal c_b129 = 1.;
 /* $ Author_and_Institution */
 
 /*     N.J. Bachman    (JPL) */
+/*     B.V. Semenov    (JPL) */
 /*     W.L. Taber      (JPL) */
 
 /* $ Literature_References */
@@ -285,6 +293,11 @@ static doublereal c_b129 = 1.;
 /*     None. */
 
 /* $ Version */
+
+/* -    SPICELIB Version 5.0.0, 08-OCT-2020 (NJB) (BVS) */
+
+/*       The parameter SWTCH was added to support the switch */
+/*       frame class. */
 
 /* -    SPICELIB Version 4.0.0, 08-MAY-2012 (NJB) */
 
@@ -700,7 +713,7 @@ static doublereal c_b129 = 1.;
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     METHOD     I   Computation method. */
 /*     TARGET     I   Name of target body. */
@@ -765,12 +778,12 @@ static doublereal c_b129 = 1.;
 /*                    If multiple surfaces are specified, their names */
 /*                    or IDs must be separated by commas. */
 
-/*                    See the Particulars section below for details */
+/*                    See the $Particulars section below for details */
 /*                    concerning use of DSK data. */
 
 /*                    This is the highest-accuracy method supported by */
 /*                    this subroutine. It generally executes much more */
-/*                    slowly than the GUIDED method described below. */
+/*                    slowly than the 'GUIDED' method described below. */
 
 
 /*                'GUIDED/DSK/UNPRIORITIZED[/SURFACES = <surface list>]' */
@@ -784,9 +797,9 @@ static doublereal c_b129 = 1.;
 /*                    point candidates lie in a given cutting */
 /*                    half-plane, the outermost one is chosen. */
 
-/*                    This method may be used only with the CENTER */
+/*                    This method may be used only with the 'CENTER' */
 /*                    aberration correction locus (see the description */
-/*                    of REFLOC below). */
+/*                    of CORLOC below). */
 
 /*                    Limb points generated by this method are */
 /*                    approximations; they are generally not true */
@@ -799,11 +812,11 @@ static doublereal c_b129 = 1.;
 /*                'GUIDED/ELLIPSOID' */
 
 /*                    Both of these methods generate limb points on the */
-/*                    target body's reference ellipsoid. The TANGENT */
+/*                    target body's reference ellipsoid. The 'TANGENT' */
 /*                    option may be used with any aberration correction */
-/*                    locus, while the GUIDED option may be used only */
-/*                    with the CENTER locus (see the description of */
-/*                    REFLOC below). */
+/*                    locus, while the 'GUIDED' option may be used only */
+/*                    with the 'CENTER' locus (see the description of */
+/*                    CORLOC below). */
 
 /*                    When the locus is set to 'CENTER', these methods */
 /*                    produce the same results. */
@@ -829,422 +842,470 @@ static doublereal c_b129 = 1.;
 /*                    "MARS MEGDR128PIXEL/DEG" */
 
 
-/*     TARGET      is the name of the target body. The target body is */
-/*                 an extended ephemeris object. */
+/*     TARGET   is the name of the target body. The target body is */
+/*              an extended ephemeris object. */
 
-/*                 The string TARGET is case-insensitive, and leading */
-/*                 and trailing blanks in TARGET are not significant. */
-/*                 Optionally, you may supply a string containing the */
-/*                 integer ID code for the object. For example both */
-/*                 'MOON' and '301' are legitimate strings that indicate */
-/*                 the Moon is the target body. */
+/*              The string TARGET is case-insensitive, and leading */
+/*              and trailing blanks in TARGET are not significant. */
+/*              Optionally, you may supply a string containing the */
+/*              integer ID code for the object. For example both */
+/*              'MOON' and '301' are legitimate strings that indicate */
+/*              the Moon is the target body. */
 
-/*                 When the target body's surface is represented by a */
-/*                 tri-axial ellipsoid, this routine assumes that a */
-/*                 kernel variable representing the ellipsoid's radii is */
-/*                 present in the kernel pool. Normally the kernel */
-/*                 variable would be defined by loading a PCK file. */
-
-
-/*     ET          is the epoch of participation of the observer, */
-/*                 expressed as TDB seconds past J2000 TDB: ET is */
-/*                 the epoch at which the observer's state is computed. */
-
-/*                 When aberration corrections are not used, ET is also */
-/*                 the epoch at which the position and orientation of */
-/*                 the target body are computed. */
-
-/*                 When aberration corrections are used, the position */
-/*                 and orientation of the target body are computed at */
-/*                 ET-LT, where LT is the one-way light time between the */
-/*                 aberration correction locus and the observer. The */
-/*                 locus is specified by the input argument CORLOC. */
-/*                 See the descriptions of ABCORR and CORLOC below for */
-/*                 details. */
+/*              When the target body's surface is represented by a */
+/*              tri-axial ellipsoid, this routine assumes that a */
+/*              kernel variable representing the ellipsoid's radii is */
+/*              present in the kernel pool. Normally the kernel */
+/*              variable would be defined by loading a PCK file. */
 
 
-/*     FIXREF      is the name of a body-fixed reference frame centered */
-/*                 on the target body. FIXREF may be any such frame */
-/*                 supported by the SPICE system, including built-in */
-/*                 frames (documented in the Frames Required Reading) */
-/*                 and frames defined by a loaded frame kernel (FK). The */
-/*                 string FIXREF is case-insensitive, and leading and */
-/*                 trailing blanks in FIXREF are not significant. */
+/*     ET       is the epoch of participation of the observer, */
+/*              expressed as TDB seconds past J2000 TDB: ET is */
+/*              the epoch at which the observer's state is computed. */
 
-/*                 The output limb points in the array POINTS and the */
-/*                 output observer-target tangent vectors in the array */
-/*                 TANGTS are expressed relative to this reference frame. */
+/*              When aberration corrections are not used, ET is also */
+/*              the epoch at which the position and orientation of */
+/*              the target body are computed. */
 
-
-/*     ABCORR      indicates the aberration corrections to be applied */
-/*                 when computing the target's position and orientation. */
-/*                 Corrections are applied at the location specified by */
-/*                 the aberration correction locus argument CORLOC, */
-/*                 which is described below. */
-
-/*                 For remote sensing applications, where apparent limb */
-/*                 points seen by the observer are desired, normally */
-/*                 either of the corrections */
-
-/*                    'LT+S' */
-/*                    'CN+S' */
-
-/*                 should be used. The correction 'NONE' may be suitable */
-/*                 for cases in which the target is very small and the */
-/*                 observer is close to, and has small velocity relative */
-/*                 to, the target (e.g. comet Churyumov-Gerasimenko and */
-/*                 the Rosetta Orbiter). */
-
-/*                 These and the other supported options are described */
-/*                 below. ABCORR may be any of the following: */
-
-/*                    'NONE'     Apply no correction. Return the */
-/*                               geometric limb points on the target */
-/*                               body. */
-
-/*                 Let LT represent the one-way light time between the */
-/*                 observer and the aberration correction locus. The */
-/*                 following values of ABCORR apply to the "reception" */
-/*                 case in which photons depart from the locus at the */
-/*                 light-time corrected epoch ET-LT and *arrive* at the */
-/*                 observer's location at ET: */
+/*              When aberration corrections are used, the position */
+/*              and orientation of the target body are computed at */
+/*              ET-LT, where LT is the one-way light time between the */
+/*              aberration correction locus and the observer. The */
+/*              locus is specified by the input argument CORLOC. */
+/*              See the descriptions of ABCORR and CORLOC below for */
+/*              details. */
 
 
-/*                    'LT'       Correct for one-way light time (also */
-/*                               called "planetary aberration") using a */
-/*                               Newtonian formulation. This correction */
-/*                               yields the locus at the moment it */
-/*                               emitted photons arriving at the */
-/*                               observer at ET. */
+/*     FIXREF   is the name of a body-fixed reference frame centered */
+/*              on the target body. FIXREF may be any such frame */
+/*              supported by the SPICE system, including built-in */
+/*              frames (documented in the Frames Required Reading) */
+/*              and frames defined by a loaded frame kernel (FK). The */
+/*              string FIXREF is case-insensitive, and leading and */
+/*              trailing blanks in FIXREF are not significant. */
 
-/*                               The light time correction uses an */
-/*                               iterative solution of the light time */
-/*                               equation. The solution invoked by the */
-/*                               'LT' option uses one iteration. */
-
-/*                               Both the target position as seen by the */
-/*                               observer, and rotation of the target */
-/*                               body, are corrected for light time. */
-
-/*                    'LT+S'     Correct for one-way light time and */
-/*                               stellar aberration using a Newtonian */
-/*                               formulation. This option modifies the */
-/*                               locus obtained with the 'LT' option to */
-/*                               account for the observer's velocity */
-/*                               relative to the solar system */
-/*                               barycenter. These corrections yield */
-/*                               points on the apparent limb. */
-
-/*                    'CN'       Converged Newtonian light time */
-/*                               correction. In solving the light time */
-/*                               equation, the 'CN' correction iterates */
-/*                               until the solution converges. Both the */
-/*                               position and rotation of the target */
-/*                               body are corrected for light time. */
-
-/*                    'CN+S'     Converged Newtonian light time and */
-/*                               stellar aberration corrections. This */
-/*                               option produces a solution that is at */
-/*                               least as accurate at that obtainable */
-/*                               with the `LT+S' option. Whether the */
-/*                               'CN+S' solution is substantially more */
-/*                               accurate depends on the geometry of the */
-/*                               participating objects and on the */
-/*                               accuracy of the input data. In all */
-/*                               cases this routine will execute more */
-/*                               slowly when a converged solution is */
-/*                               computed. */
+/*              The output limb points in the array POINTS and the */
+/*              output observer-target tangent vectors in the array */
+/*              TANGTS are expressed relative to this reference frame. */
 
 
-/*     CORLOC      is a string specifying the aberration correction */
-/*                 locus: the point or set of points for which */
-/*                 aberration corrections are performed. CORLOC may be */
-/*                 assigned the values: */
+/*     ABCORR   indicates the aberration corrections to be applied */
+/*              when computing the target's position and orientation. */
+/*              Corrections are applied at the location specified by */
+/*              the aberration correction locus argument CORLOC, */
+/*              which is described below. */
 
-/*                    'CENTER' */
+/*              For remote sensing applications, where apparent limb */
+/*              points seen by the observer are desired, normally */
+/*              either of the corrections */
 
-/*                        Light time and stellar aberration corrections */
-/*                        are applied to the vector from the observer to */
-/*                        the center of the target body. The one way */
-/*                        light time from the target center to the */
-/*                        observer is used to determine the epoch at */
-/*                        which the target body orientation is computed. */
+/*                 'LT+S' */
+/*                 'CN+S' */
 
-/*                        This choice is appropriate for small target */
-/*                        objects for which the light time from the */
-/*                        surface to the observer varies little across */
-/*                        the entire target. It may also be appropriate */
-/*                        for large, nearly ellipsoidal targets when the */
-/*                        observer is very far from the target. */
+/*              should be used. The correction 'NONE' may be suitable */
+/*              for cases in which the target is very small and the */
+/*              observer is close to, and has small velocity relative */
+/*              to, the target (e.g. comet Churyumov-Gerasimenko and */
+/*              the Rosetta Orbiter). */
 
-/*                        Computation speed for this option is faster */
-/*                        than for the ELLIPSOID LIMB option. */
+/*              These and the other supported options are described */
+/*              below. ABCORR may be any of the following: */
 
-/*                    'ELLIPSOID LIMB' */
+/*                 'NONE'     Apply no correction. Return the */
+/*                            geometric limb points on the target */
+/*                            body. */
 
-/*                        Light time and stellar aberration corrections */
-/*                        are applied to individual limb points on the */
-/*                        reference ellipsoid. For a limb point on the */
-/*                        surface described by topographic data, lying */
-/*                        in a specified cutting half-plane, the unique */
-/*                        reference ellipsoid limb point in the same */
-/*                        half-plane is used as the locus of the */
-/*                        aberration corrections. */
-
-/*                        This choice is appropriate for large target */
-/*                        objects for which the light time from the limb */
-/*                        to the observer is significantly different */
-/*                        from the light time from the target center to */
-/*                        the observer. */
-
-/*                        Because aberration corrections are repeated for */
-/*                        individual limb points, computational speed for */
-/*                        this option is relatively slow. */
+/*              Let LT represent the one-way light time between the */
+/*              observer and the aberration correction locus. The */
+/*              following values of ABCORR apply to the "reception" */
+/*              case in which photons depart from the locus at the */
+/*              light-time corrected epoch ET-LT and *arrive* at the */
+/*              observer's location at ET: */
 
 
-/*     OBSRVR      is the name of the observing body. The observing body */
-/*                 is an ephemeris object: it typically is a spacecraft, */
-/*                 the earth, or a surface point on the earth. OBSRVR is */
-/*                 case-insensitive, and leading and trailing blanks in */
-/*                 OBSRVR are not significant. Optionally, you may */
-/*                 supply a string containing the integer ID code for */
-/*                 the object. For example both 'MOON' and '301' are */
-/*                 legitimate strings that indicate the Moon is the */
-/*                 observer. */
+/*                 'LT'       Correct for one-way light time (also */
+/*                            called "planetary aberration") using a */
+/*                            Newtonian formulation. This correction */
+/*                            yields the locus at the moment it */
+/*                            emitted photons arriving at the */
+/*                            observer at ET. */
+
+/*                            The light time correction uses an */
+/*                            iterative solution of the light time */
+/*                            equation. The solution invoked by the */
+/*                            'LT' option uses two iterations. */
+
+/*                            Both the target position as seen by the */
+/*                            observer, and rotation of the target */
+/*                            body, are corrected for light time. */
+
+/*                 'LT+S'     Correct for one-way light time and */
+/*                            stellar aberration using a Newtonian */
+/*                            formulation. This option modifies the */
+/*                            locus obtained with the 'LT' option to */
+/*                            account for the observer's velocity */
+/*                            relative to the solar system */
+/*                            barycenter. These corrections yield */
+/*                            points on the apparent limb. */
+
+/*                 'CN'       Converged Newtonian light time */
+/*                            correction. In solving the light time */
+/*                            equation, the 'CN' correction iterates */
+/*                            until the solution converges. Both the */
+/*                            position and rotation of the target */
+/*                            body are corrected for light time. */
+
+/*                 'CN+S'     Converged Newtonian light time and */
+/*                            stellar aberration corrections. This */
+/*                            option produces a solution that is at */
+/*                            least as accurate at that obtainable */
+/*                            with the 'LT+S' option. Whether the */
+/*                            'CN+S' solution is substantially more */
+/*                            accurate depends on the geometry of the */
+/*                            participating objects and on the */
+/*                            accuracy of the input data. In all */
+/*                            cases this routine will execute more */
+/*                            slowly when a converged solution is */
+/*                            computed. */
+
+/*              The following values of ABCORR apply to the */
+/*              "transmission" case in which photons depart from the */
+/*              observer's location at ET and arrive at the aberration */
+/*              correction locus at the light-time corrected epoch */
+/*              ET+LT: */
+
+/*                 'XLT'      Correct for one-way light time (also */
+/*                            called "planetary aberration") using a */
+/*                            Newtonian formulation. This correction */
+/*                            yields the locus at the moment it */
+/*                            receives photons departing from the */
+/*                            observer at ET. */
+
+/*                            The light time correction uses an */
+/*                            iterative solution of the light time */
+/*                            equation. The solution invoked by the */
+/*                            'LT' option uses two iterations. */
+
+/*                            Both the target position as seen by the */
+/*                            observer, and rotation of the target */
+/*                            body, are corrected for light time. */
+
+/*                 'XLT+S'    Correct for one-way transmission light */
+/*                            time and stellar aberration using a */
+/*                            Newtonian formulation. This option */
+/*                            modifies the locus obtained with the 'XLT' */
+/*                            option to account for the observer's */
+/*                            velocity relative to the solar system */
+/*                            barycenter. These corrections yield points */
+/*                            on the apparent limb. */
+
+/*                 'XCN'      Converged transmission Newtonian light */
+/*                            time correction. In solving the light time */
+/*                            equation, the 'XCN' correction iterates */
+/*                            until the solution converges. Both the */
+/*                            position and rotation of the target body */
+/*                            are corrected for light time. */
+
+/*                 'XCN+S'    Converged transmission Newtonian light */
+/*                            time and stellar aberration corrections. */
+/*                            This option produces a solution that is at */
+/*                            least as accurate at that obtainable with */
+/*                            the `XLT+S' option. Whether the 'XCN+S' */
+/*                            solution is substantially more accurate */
+/*                            depends on the geometry of the */
+/*                            participating objects and on the accuracy */
+/*                            of the input data. In all cases this */
+/*                            routine will execute more slowly when a */
+/*                            converged solution is computed. */
+
+
+/*     CORLOC   is a string specifying the aberration correction */
+/*              locus: the point or set of points for which */
+/*              aberration corrections are performed. CORLOC may be */
+/*              assigned the values: */
+
+/*                 'CENTER' */
+
+/*                     Light time and stellar aberration corrections */
+/*                     are applied to the vector from the observer to */
+/*                     the center of the target body. The one way */
+/*                     light time from the target center to the */
+/*                     observer is used to determine the epoch at */
+/*                     which the target body orientation is computed. */
+
+/*                     This choice is appropriate for small target */
+/*                     objects for which the light time from the */
+/*                     surface to the observer varies little across */
+/*                     the entire target. It may also be appropriate */
+/*                     for large, nearly ellipsoidal targets when the */
+/*                     observer is very far from the target. */
+
+/*                     Computation speed for this option is faster */
+/*                     than for the 'ELLIPSOID LIMB' option. */
+
+/*                 'ELLIPSOID LIMB' */
+
+/*                     Light time and stellar aberration corrections */
+/*                     are applied to individual limb points on the */
+/*                     reference ellipsoid. For a limb point on the */
+/*                     surface described by topographic data, lying */
+/*                     in a specified cutting half-plane, the unique */
+/*                     reference ellipsoid limb point in the same */
+/*                     half-plane is used as the locus of the */
+/*                     aberration corrections. */
+
+/*                     This choice is appropriate for large target */
+/*                     objects for which the light time from the limb */
+/*                     to the observer is significantly different */
+/*                     from the light time from the target center to */
+/*                     the observer. */
+
+/*                     Because aberration corrections are repeated for */
+/*                     individual limb points, computational speed for */
+/*                     this option is relatively slow. */
+
+
+/*     OBSRVR   is the name of the observing body. The observing body */
+/*              is an ephemeris object: it typically is a spacecraft, */
+/*              the earth, or a surface point on the earth. OBSRVR is */
+/*              case-insensitive, and leading and trailing blanks in */
+/*              OBSRVR are not significant. Optionally, you may */
+/*              supply a string containing the integer ID code for */
+/*              the object. For example both 'MOON' and '301' are */
+/*              legitimate strings that indicate the Moon is the */
+/*              observer. */
 
 
 /*     REFVEC, */
 /*     ROLSTP, */
-/*     NCUTS       are, respectively, a reference vector, a roll step */
-/*                 angle, and a count of cutting half-planes. */
+/*     NCUTS    are, respectively, a reference vector, a roll step */
+/*              angle, and a count of cutting half-planes. */
 
-/*                 REFVEC defines the first of a sequence of cutting */
-/*                 half-planes in which limb points are to be found. */
-/*                 Each cutting half-plane has as its edge the line */
-/*                 containing the observer-target vector; the first */
-/*                 half-plane contains REFVEC. */
+/*              REFVEC defines the first of a sequence of cutting */
+/*              half-planes in which limb points are to be found. */
+/*              Each cutting half-plane has as its edge the line */
+/*              containing the observer-target vector; the first */
+/*              half-plane contains REFVEC. */
 
-/*                 REFVEC is expressed in the body-fixed reference frame */
-/*                 designated by FIXREF. */
+/*              REFVEC is expressed in the body-fixed reference frame */
+/*              designated by FIXREF. */
 
-/*                 ROLSTP is an angular step by which to roll the */
-/*                 cutting half-planes about the observer-target vector. */
-/*                 The first half-plane is aligned with REFVEC; the Ith */
-/*                 half-plane is rotated from REFVEC about the */
-/*                 observer-target vector in the counter-clockwise */
-/*                 direction by (I-1)*ROLSTP. Units are radians. */
-/*                 ROLSTP should be set to */
+/*              ROLSTP is an angular step by which to roll the */
+/*              cutting half-planes about the observer-target vector. */
+/*              The first half-plane is aligned with REFVEC; the Ith */
+/*              half-plane is rotated from REFVEC about the */
+/*              observer-target vector in the counter-clockwise */
+/*              direction by (I-1)*ROLSTP. Units are radians. */
+/*              ROLSTP should be set to */
 
-/*                    2*pi/NCUTS */
+/*                 2*pi/NCUTS */
 
-/*                 to generate an approximately uniform distribution of */
-/*                 limb points along the limb. */
+/*              to generate an approximately uniform distribution of */
+/*              limb points along the limb. */
 
-/*                 NCUTS is the number of cutting half-planes used to */
-/*                 find limb points; the angular positions of */
-/*                 consecutive half-planes increase in the positive */
-/*                 sense (counterclockwise) about the target-observer */
-/*                 vector and are distributed roughly equally about that */
-/*                 vector: each half-plane has angular separation of */
-/*                 approximately */
+/*              NCUTS is the number of cutting half-planes used to */
+/*              find limb points; the angular positions of */
+/*              consecutive half-planes increase in the positive */
+/*              sense (counterclockwise) about the target-observer */
+/*              vector and are distributed roughly equally about that */
+/*              vector: each half-plane has angular separation of */
+/*              approximately */
 
-/*                    ROLSTP radians */
+/*                 ROLSTP radians */
 
-/*                 from each of its neighbors. When the aberration */
-/*                 correction locus is set to 'CENTER', the angular */
-/*                 separation is the value above, up to round-off. When */
-/*                 the locus is 'ELLIPSOID LIMB', the separations are */
-/*                 less uniform due to differences in the aberration */
-/*                 corrections used for the respective limb points. */
+/*              from each of its neighbors. When the aberration */
+/*              correction locus is set to 'CENTER', the angular */
+/*              separation is the value above, up to round-off. When */
+/*              the locus is 'ELLIPSOID LIMB', the separations are */
+/*              less uniform due to differences in the aberration */
+/*              corrections used for the respective limb points. */
 
 
 /*     SCHSTP, */
-/*     SOLTOL      are used only for DSK-based surfaces. These inputs */
-/*                 are, respectively, the search angular step size and */
-/*                 solution convergence tolerance used to find tangent */
-/*                 rays and associated limb points within each cutting */
-/*                 half plane. These values are used when the METHOD */
-/*                 argument includes the TANGENT option. In this case, */
-/*                 limb points are found by a two-step search process: */
+/*     SOLTOL   are used only for DSK-based surfaces. These inputs */
+/*              are, respectively, the search angular step size and */
+/*              solution convergence tolerance used to find tangent */
+/*              rays and associated limb points within each cutting */
+/*              half plane. These values are used when the METHOD */
+/*              argument includes the 'TANGENT' option. In this case, */
+/*              limb points are found by a two-step search process: */
 
-/*                    1) Bracketing: starting with the direction */
-/*                       opposite the observer-target vector, rays */
-/*                       emanating from the observer are generated */
-/*                       within the half-plane at successively greater */
-/*                       angular separations from the initial direction, */
-/*                       where the increment of angular separation is */
-/*                       SCHSTP. The rays are tested for intersection */
-/*                       with the target surface. When a transition */
-/*                       between non-intersection to intersection is */
-/*                       found, the angular separation of a tangent ray */
-/*                       has been bracketed. */
+/*                 1) Bracketing: starting with the direction */
+/*                    opposite the observer-target vector, rays */
+/*                    emanating from the observer are generated */
+/*                    within the half-plane at successively greater */
+/*                    angular separations from the initial direction, */
+/*                    where the increment of angular separation is */
+/*                    SCHSTP. The rays are tested for intersection */
+/*                    with the target surface. When a transition */
+/*                    between non-intersection to intersection is */
+/*                    found, the angular separation of a tangent ray */
+/*                    has been bracketed. */
 
-/*                    2) Root finding: each time a tangent ray is */
-/*                       bracketed, a search is done to find the angular */
-/*                       separation from the starting direction at which */
-/*                       a tangent ray exists. The search terminates */
-/*                       when successive rays are separated by no more */
-/*                       than SOLTOL. When the search converges, the */
-/*                       last ray-surface intersection point found in */
-/*                       the convergence process is considered to be a */
-/*                       limb point. */
-
-
-/*                  SCHSTP and SOLTOL have units of radians. */
-
-/*                  Target bodies with simple surfaces---for example, */
-/*                  convex shapes---will have a single limb point within */
-/*                  each cutting half-plane. For such surfaces, SCHSTP */
-/*                  can be set large enough so that only one bracketing */
-/*                  step is taken. A value greater than pi, for example */
-/*                  4.D0, is recommended. */
-
-/*                  Target bodies with complex surfaces can have */
-/*                  multiple limb points within a given cutting */
-/*                  half-plane. To find all limb points, SCHSTP must be */
-/*                  set to a value smaller than the angular separation */
-/*                  of any two limb points in any cutting half-plane, */
-/*                  where the vertex of the angle is the observer. */
-/*                  SCHSTP must not be too small, or the search will be */
-/*                  excessively slow. */
-
-/*                  For both kinds of surfaces, SOLTOL must be chosen so */
-/*                  that the results will have the desired precision. */
-/*                  Note that the choice of SOLTOL required to meet a */
-/*                  specified bound on limb point height errors depends */
-/*                  on the observer-target distance. */
+/*                 2) Root finding: each time a tangent ray is */
+/*                    bracketed, a search is done to find the angular */
+/*                    separation from the starting direction at which */
+/*                    a tangent ray exists. The search terminates */
+/*                    when successive rays are separated by no more */
+/*                    than SOLTOL. When the search converges, the */
+/*                    last ray-surface intersection point found in */
+/*                    the convergence process is considered to be a */
+/*                    limb point. */
 
 
-/*     MAXN         is the maximum number of limb points that can be */
-/*                  stored in the output array POINTS. */
+/*               SCHSTP and SOLTOL have units of radians. */
 
+/*               Target bodies with simple surfaces---for example, */
+/*               convex shapes---will have a single limb point within */
+/*               each cutting half-plane. For such surfaces, SCHSTP */
+/*               can be set large enough so that only one bracketing */
+/*               step is taken. A value greater than pi, for example */
+/*               4.D0, is recommended. */
+
+/*               Target bodies with complex surfaces can have */
+/*               multiple limb points within a given cutting */
+/*               half-plane. To find all limb points, SCHSTP must be */
+/*               set to a value smaller than the angular separation */
+/*               of any two limb points in any cutting half-plane, */
+/*               where the vertex of the angle is the observer. */
+/*               SCHSTP must not be too small, or the search will be */
+/*               excessively slow. */
+
+/*               For both kinds of surfaces, SOLTOL must be chosen so */
+/*               that the results will have the desired precision. */
+/*               Note that the choice of SOLTOL required to meet a */
+/*               specified bound on limb point height errors depends */
+/*               on the observer-target distance. */
+
+
+/*     MAXN     is the maximum number of limb points that can be */
+/*              stored in the output array POINTS. */
 
 /* $ Detailed_Output */
 
+/*     NPTS     is an array of counts of limb points within the */
+/*              specified set of cutting half-planes. The Ith */
+/*              element of NPTS is the limb point count in the Ith */
+/*              half-plane. NPTS should be declared with length */
+/*              at least NCUTS. */
 
-/*     NPTS         is an array of counts of limb points within the */
-/*                  specified set of cutting half-planes. The Ith */
-/*                  element of NPTS is the limb point count in the Ith */
-/*                  half-plane. NPTS should be declared with length */
-/*                  at least NCUTS. */
-
-/*                  For most target bodies, there will be one limb point */
-/*                  per half-plane. For complex target shapes, the limb */
-/*                  point count in a given half-plane can be greater */
-/*                  than one (see example 3 below), and it can be zero. */
-
-
-/*     POINTS       is an array containing the limb points found by this */
-/*                  routine. Sets of limb points associated with */
-/*                  half-planes are ordered by the indices of the */
-/*                  half-planes in which they're found. The limb points */
-/*                  in a given half-plane are ordered by decreasing */
-/*                  angular separation from the observer-target */
-/*                  direction; the outermost limb point in a given */
-/*                  half-plane is the first of that set. */
-
-/*                  The limb points for the half-plane containing REFVEC */
-/*                  occupy array elements */
-
-/*                     POINTS(1,1) through POINTS(3,NPTS(1)) */
-
-/*                  Limb points for the second half plane occupy */
-/*                  elements */
-
-/*                     POINTS(1, NPTS(1)+1       ) through */
-/*                     POINTS(3, NPTS(1)+NPTS(2) ) */
-
-/*                  and so on. */
-
-/*                  POINTS should be declared with dimensions */
-
-/*                     ( 3, MAXN ) */
-
-/*                  Limb points are expressed in the reference frame */
-/*                  designated by FIXREF. For each limb point, the */
-/*                  orientation of the frame is evaluated at the epoch */
-/*                  corresponding to the limb point; the epoch is */
-/*                  provided in the output array EPOCHS (described */
-/*                  below). */
-
-/*                  Units of the limb points are km. */
+/*              For most target bodies, there will be one limb point */
+/*              per half-plane. For complex target shapes, the limb */
+/*              point count in a given half-plane can be greater */
+/*              than one (see example 3 below), and it can be zero. */
 
 
-/*     EPOCHS       is an array of epochs associated with the limb */
-/*                  points, accounting for light time if aberration */
-/*                  corrections are used. EPOCHS contains one element */
-/*                  for each limb point. EPOCHS should be declared */
-/*                  with length */
+/*     POINTS   is an array containing the limb points found by this */
+/*              routine. Sets of limb points associated with */
+/*              half-planes are ordered by the indices of the */
+/*              half-planes in which they're found. The limb points */
+/*              in a given half-plane are ordered by decreasing */
+/*              angular separation from the observer-target */
+/*              direction; the outermost limb point in a given */
+/*              half-plane is the first of that set. */
 
-/*                     MAXN */
+/*              The limb points for the half-plane containing REFVEC */
+/*              occupy array elements */
 
-/*                  The element */
+/*                 POINTS(1,1) through POINTS(3,NPTS(1)) */
 
-/*                     EPOCHS(I) */
+/*              Limb points for the second half plane occupy */
+/*              elements */
 
-/*                  is associated with the limb point */
+/*                 POINTS(1, NPTS(1)+1       ) through */
+/*                 POINTS(3, NPTS(1)+NPTS(2) ) */
 
-/*                     POINTS(J,I), J = 1 to 3 */
+/*              and so on. */
 
-/*                  If CORLOC is set to 'CENTER', all values of EPOCHS */
-/*                  will be the epoch associated with the target body */
-/*                  center. That is, if aberration corrections are used, */
-/*                  and if LT is the one-way light time from the target */
-/*                  center to the observer, the elements of EPOCHS will */
-/*                  all be set to */
+/*              POINTS should be declared with dimensions */
 
-/*                     ET - LT */
+/*                 ( 3, MAXN ) */
 
-/*                  If CORLOC is set to 'ELLIPSOID LIMB', all values of */
-/*                  EPOCHS for the limb points in a given half plane */
-/*                  will be those for the reference ellipsoid limb point */
-/*                  in that half plane. That is, if aberration */
-/*                  corrections are used, and if LT(I) is the one-way */
-/*                  light time to the observer from the reference */
-/*                  ellipsoid limb point in the Ith half plane, the */
-/*                  elements of EPOCHS for that half plane will all be */
-/*                  set to */
+/*              Limb points are expressed in the reference frame */
+/*              designated by FIXREF. For each limb point, the */
+/*              orientation of the frame is evaluated at the epoch */
+/*              corresponding to the limb point; the epoch is */
+/*              provided in the output array EPOCHS (described */
+/*              below). */
 
-/*                     ET - LT(I) */
-
-/*                  When the target shape is given by DSK data, there */
-/*                  normally will be a small difference in the light */
-/*                  time between an actual limb point and that implied */
-/*                  by the corresponding element of EPOCHS. See the */
-/*                  description of TANGTS below. */
+/*              Units of the limb points are km. */
 
 
-/*     TANGTS       is an array of tangent vectors connecting the */
-/*                  observer to the limb points. The tangent vectors are */
-/*                  expressed in the frame designated by FIXREF. For the */
-/*                  Ith vector, the orientation of the frame is */
-/*                  evaluated at the Ith epoch provided in the output */
-/*                  array EPOCHS (described above). */
+/*     EPOCHS   is an array of epochs associated with the limb */
+/*              points, accounting for light time if aberration */
+/*              corrections are used. EPOCHS contains one element */
+/*              for each limb point. EPOCHS should be declared */
+/*              with length */
 
-/*                  TANGTS should be declared with dimensions */
+/*                 MAXN */
 
-/*                     ( 3, MAXN ) */
+/*              The element */
 
-/*                  The elements */
+/*                 EPOCHS(I) */
 
-/*                     TANGTS(J,I), J = 1 to 3 */
+/*              is associated with the limb point */
 
-/*                  are associated with the limb point */
+/*                 POINTS(J,I), J = 1 to 3 */
 
-/*                     POINTS(J,I), J = 1 to 3 */
+/*              If CORLOC is set to 'CENTER', all values of EPOCHS */
+/*              will be the epoch associated with the target body */
+/*              center. That is, if aberration corrections are used, */
+/*              and if LT is the one-way light time from the target */
+/*              center to the observer, the elements of EPOCHS will */
+/*              all be set to */
 
-/*                  Units of the tangent vectors are km. */
+/*                 ET - LT */
 
-/*                  When the target shape is given by DSK data, there */
-/*                  normally will be a small difference in the light */
-/*                  time between an actual limb point and that implied */
-/*                  by the corresponding element of EPOCHS. This */
-/*                  difference will affect the orientation of the target */
-/*                  body-fixed frame and the output tangent vectors */
-/*                  returned in the array TANGTS. All other factors */
-/*                  being equal, the error in the tangent vector due to */
-/*                  the light time error is proportional to the */
-/*                  observer-target distance. */
+/*              If CORLOC is set to 'ELLIPSOID LIMB', all values of */
+/*              EPOCHS for the limb points in a given half plane */
+/*              will be those for the reference ellipsoid limb point */
+/*              in that half plane. That is, if aberration */
+/*              corrections are used, and if LT(I) is the one-way */
+/*              light time to the observer from the reference */
+/*              ellipsoid limb point in the Ith half plane, the */
+/*              elements of EPOCHS for that half plane will all be */
+/*              set to */
+
+/*                 ET - LT(I) */
+
+/*              When the target shape is given by DSK data, there */
+/*              normally will be a small difference in the light */
+/*              time between an actual limb point and that implied */
+/*              by the corresponding element of EPOCHS. See the */
+/*              description of TANGTS below. */
+
+
+/*     TANGTS   is an array of tangent vectors connecting the */
+/*              observer to the limb points. The tangent vectors are */
+/*              expressed in the frame designated by FIXREF. For the */
+/*              Ith vector, the orientation of the frame is */
+/*              evaluated at the Ith epoch provided in the output */
+/*              array EPOCHS (described above). */
+
+/*              TANGTS should be declared with dimensions */
+
+/*                 ( 3, MAXN ) */
+
+/*              The elements */
+
+/*                 TANGTS(J,I), J = 1 to 3 */
+
+/*              are associated with the limb point */
+
+/*                 POINTS(J,I), J = 1 to 3 */
+
+/*              Units of the tangent vectors are km. */
+
+/*              When the target shape is given by DSK data, there */
+/*              normally will be a small difference in the light */
+/*              time between an actual limb point and that implied */
+/*              by the corresponding element of EPOCHS. This */
+/*              difference will affect the orientation of the target */
+/*              body-fixed frame and the output tangent vectors */
+/*              returned in the array TANGTS. All other factors */
+/*              being equal, the error in the tangent vector due to */
+/*              the light time error is proportional to the */
+/*              observer-target distance. */
 
 /* $ Parameters */
 
@@ -1252,10 +1313,9 @@ static doublereal c_b129 = 1.;
 
 /* $ Exceptions */
 
-/*     1)  If the specified aberration correction is unrecognized, the */
-/*         error will be signaled by a routine in the call tree of this */
-/*         routine. If transmission corrections are commanded, the error */
-/*         SPICE(INVALIDOPTION) will be signaled. */
+/*     1)  If the specified aberration correction is unrecognized, an */
+/*         error is signaled by a routine in the call tree of this */
+/*         routine. */
 
 /*     2)  If either the target or observer input strings cannot be */
 /*         converted to an integer ID code, the error */
@@ -1274,93 +1334,90 @@ static doublereal c_b129 = 1.;
 /*         the error SPICE(INVALIDFRAME) is signaled. */
 
 /*     6)  If the input argument METHOD is not recognized, the error */
-/*         SPICE(INVALIDMETHOD) is signaled by this routine, or the */
-/*         error is signaled by a routine in the call tree of this */
-/*         routine. */
+/*         SPICE(INVALIDMETHOD) is signaled by either this routine or a */
+/*         routine in the call tree of this routine. */
 
 /*     7)  If METHOD contains an invalid limb type, the error */
-/*         SPICE(INVALIDLIMBTYPE) will be signaled. */
+/*         SPICE(INVALIDLIMBTYPE) is signaled. */
 
 /*     8)  If the target and observer have distinct identities but are */
-/*         at the same location the error SPICE(NOSEPARATION) is */
+/*         at the same location, the error SPICE(NOSEPARATION) is */
 /*         signaled. */
 
 /*     9)  If insufficient ephemeris data have been loaded prior to */
-/*         calling LIMBPT, the error will be signaled by a routine in */
+/*         calling LIMBPT, an error is signaled by a routine in */
 /*         the call tree of this routine. When light time correction is */
 /*         used, sufficient ephemeris data must be available to */
 /*         propagate the states of both observer and target to the solar */
 /*         system barycenter. */
 
-/*    10)  If the computation method requires an ellipsoidal target */
-/*         shape and triaxial radii of the target body have not been */
-/*         loaded into the kernel pool prior to calling LIMBPT, the */
-/*         error will be diagnosed and signaled by a routine in the call */
-/*         tree of this routine. */
-
-/*         If the radii are available in the kernel pool but the count */
-/*         of radii values is not three, the error SPICE(BADRADIUSCOUNT) */
-/*         will be signaled. */
+/*     10) If the computation method requires an ellipsoidal target shape */
+/*         and triaxial radii of the target body have not been loaded */
+/*         into the kernel pool prior to calling LIMBPT, an error is */
+/*         signaled by a routine in the call tree of this routine. */
 
 /*         When the target shape is modeled by topographic data, radii */
 /*         of the reference triaxial ellipsoid are still required if */
 /*         the aberration correction locus is ELLIPSOID LIMB or if */
 /*         the limb point generation method is GUIDED. */
 
-/*    11)  The target must be an extended body. If the target body's */
-/*         shape is modeled as an ellipsoid, and if any of the radii of */
-/*         the target body are non-positive, the error will be diagnosed */
-/*         and signaled by routines in the call tree of this routine. */
+/*     11) If the radii are available in the kernel pool but the count */
+/*         of radii values is not three, the error SPICE(BADRADIUSCOUNT) */
+/*         is signaled. */
 
-/*    12)  If PCK data specifying the target body-fixed frame */
-/*         orientation have not been loaded prior to calling LIMBPT, */
-/*         the error will be diagnosed and signaled by a routine in the */
-/*         call tree of this routine. */
+/*     12) If the target body's shape is modeled as an ellipsoid, and if */
+/*         any of the radii of the target body are non-positive, an error */
+/*         is signaled by a routine in the call tree of this routine. The */
+/*         target must be an extended body. */
 
-/*    13)  If METHOD specifies that the target surface is represented by */
+/*     13) If PCK data specifying the target body-fixed frame orientation */
+/*         have not been loaded prior to calling LIMBPT, an error is */
+/*         signaled by a routine in the call tree of this routine. */
+
+/*     14) If METHOD specifies that the target surface is represented by */
 /*         DSK data, and no DSK files are loaded for the specified */
-/*         target, the error is signaled by a routine in the call tree */
+/*         target, an error is signaled by a routine in the call tree */
 /*         of this routine. */
 
-/*    14)  If the array bound MAXN is less than 1, the error */
-/*         SPICE(INVALIDSIZE) will be signaled. */
+/*     15) If the array bound MAXN is less than 1, the error */
+/*         SPICE(INVALIDSIZE) is signaled. */
 
-/*    15)  If the number of cutting half-planes specified by NCUTS */
+/*     16) If the number of cutting half-planes specified by NCUTS */
 /*         is negative or greater than MAXN, the error */
-/*         SPICE(INVALIDCOUNT) will be signaled. */
+/*         SPICE(INVALIDCOUNT) is signaled. */
 
-/*    16)  If the aberration correction locus is not recognized, the */
-/*         error SPICE(INVALIDLOCUS) will be signaled. */
+/*     17) If the aberration correction locus is not recognized, the */
+/*         error SPICE(INVALIDLOCUS) is signaled. */
 
-/*    17)  If the aberration correction locus is 'ELLIPSOID LIMB' */
+/*     18) If the aberration correction locus is 'ELLIPSOID LIMB' */
 /*         but limb type is not 'TANGENT', the error */
-/*         SPICE(BADLIMBLOCUSMIX) will be signaled. */
+/*         SPICE(BADLIMBLOCUSMIX) is signaled. */
 
-/*    18)  If the reference vector REFVEC is the zero vector, the */
-/*         error SPICE(ZEROVECTOR) will be signaled. */
+/*     19) If the reference vector REFVEC is the zero vector, the */
+/*         error SPICE(ZEROVECTOR) is signaled. */
 
-/*    19)  If the reference vector REFVEC and the observer target */
+/*     20) If the reference vector REFVEC and the observer target */
 /*         vector are linearly dependent, the error */
-/*         SPICE(DEGENERATECASE) will be signaled. */
+/*         SPICE(DEGENERATECASE) is signaled. */
 
-/*    20)  If the limb computation uses the target ellipsoid limb */
+/*     21) If the limb computation uses the target ellipsoid limb */
 /*         plane, and the limb plane normal and reference vector */
 /*         REFVEC are linearly dependent, the error */
-/*         SPICE(DEGENERATECASE) will be signaled. */
+/*         SPICE(DEGENERATECASE) is signaled. */
 
-/*    21)  If the limb points cannot all be stored in the output POINTS */
-/*         array, the error SPICE(OUTOFROOM) will be signaled. */
+/*     22) If the limb points cannot all be stored in the output POINTS */
+/*         array, the error SPICE(OUTOFROOM) is signaled. */
 
-/*    22)  If the surface is represented by DSK data, and if the search */
-/*         step is non-positive, the error SPICE(INVALIDSEARCHSTEP) will */
-/*         be signaled. */
+/*     23) If the surface is represented by DSK data, and if the search */
+/*         step is non-positive, the error SPICE(INVALIDSEARCHSTEP) is */
+/*         signaled. */
 
-/*    23)  If the surface is represented by DSK data, and if the search */
+/*     24) If the surface is represented by DSK data, and if the search */
 /*         tolerance is non-positive, the error SPICE(INVALIDTOLERANCE) */
-/*         will be signaled. */
+/*         is signaled. */
 
-/*    24)  If the roll step is non-positive and NCUTS is greater */
-/*         than 1, the error SPICE(INVALIDROLLSTEP) will be signaled. */
+/*     25) If the roll step is non-positive and NCUTS is greater */
+/*         than 1, the error SPICE(INVALIDROLLSTEP) is signaled. */
 
 /* $ Files */
 
@@ -1369,74 +1426,72 @@ static doublereal c_b129 = 1.;
 
 /*     The following data are required: */
 
-/*        - SPK data: ephemeris data for target and observer must be */
-/*          loaded. If aberration corrections are used, the states of */
-/*          target and observer relative to the solar system barycenter */
-/*          must be calculable from the available ephemeris data. */
-/*          Typically ephemeris data are made available by loading one */
-/*          or more SPK files via FURNSH. */
+/*     -  SPK data: ephemeris data for target and observer must be */
+/*        loaded. If aberration corrections are used, the states of */
+/*        target and observer relative to the solar system barycenter */
+/*        must be calculable from the available ephemeris data. */
+/*        Typically ephemeris data are made available by loading one */
+/*        or more SPK files via FURNSH. */
 
-/*        - Target body orientation data: these may be provided in a text */
-/*          or binary PCK file. In some cases, target body orientation */
-/*          may be provided by one more more CK files. In either case, */
-/*          data are made available by loading the files via FURNSH. */
+/*     -  Target body orientation data: these may be provided in a text */
+/*        or binary PCK file. In some cases, target body orientation */
+/*        may be provided by one more more CK files. In either case, */
+/*        data are made available by loading the files via FURNSH. */
 
-/*        - Shape data for the target body: */
+/*     -  Shape data for the target body: */
 
-/*            PCK data: */
+/*           PCK data: */
 
-/*               If the target body shape is modeled as an ellipsoid, */
-/*               triaxial radii for the target body must be loaded into */
-/*               the kernel pool. Typically this is done by loading a */
-/*               text PCK file via FURNSH. */
+/*              If the target body shape is modeled as an ellipsoid, */
+/*              triaxial radii for the target body must be loaded into */
+/*              the kernel pool. Typically this is done by loading a */
+/*              text PCK file via FURNSH. */
 
-/*               Triaxial radii are also needed if the target shape is */
-/*               modeled by DSK data but one or both of the GUIDED limb */
-/*               definition method or the ELLIPSOID LIMB aberration */
-/*               correction locus are selected. */
+/*              Triaxial radii are also needed if the target shape is */
+/*              modeled by DSK data but one or both of the GUIDED limb */
+/*              definition method or the ELLIPSOID LIMB aberration */
+/*              correction locus are selected. */
 
-/*            DSK data: */
+/*           DSK data: */
 
-/*               If the target shape is modeled by DSK data, DSK files */
-/*               containing topographic data for the target body must be */
-/*               loaded. If a surface list is specified, data for at */
-/*               least one of the listed surfaces must be loaded. */
+/*              If the target shape is modeled by DSK data, DSK files */
+/*              containing topographic data for the target body must be */
+/*              loaded. If a surface list is specified, data for at */
+/*              least one of the listed surfaces must be loaded. */
 
 /*     The following data may be required: */
 
-/*        - Frame data: if a frame definition is required to convert the */
-/*          observer and target states to the body-fixed frame of the */
-/*          target, that definition must be available in the kernel */
-/*          pool. Typically the definition is supplied by loading a */
-/*          frame kernel via FURNSH. */
+/*     -  Frame data: if a frame definition is required to convert the */
+/*        observer and target states to the body-fixed frame of the */
+/*        target, that definition must be available in the kernel */
+/*        pool. Typically the definition is supplied by loading a */
+/*        frame kernel via FURNSH. */
 
-/*        - Surface name-ID associations: if surface names are specified */
-/*          in `method', the association of these names with their */
-/*          corresponding surface ID codes must be established by */
-/*          assignments of the kernel variables */
+/*     -  Surface name-ID associations: if surface names are specified */
+/*        in `method', the association of these names with their */
+/*        corresponding surface ID codes must be established by */
+/*        assignments of the kernel variables */
 
-/*             NAIF_SURFACE_NAME */
-/*             NAIF_SURFACE_CODE */
-/*             NAIF_SURFACE_BODY */
+/*           NAIF_SURFACE_NAME */
+/*           NAIF_SURFACE_CODE */
+/*           NAIF_SURFACE_BODY */
 
-/*          Normally these associations are made by loading a text */
-/*          kernel containing the necessary assignments. An example */
-/*          of such a set of assignments is */
+/*        Normally these associations are made by loading a text */
+/*        kernel containing the necessary assignments. An example */
+/*        of such a set of assignments is */
 
-/*             NAIF_SURFACE_NAME += 'Mars MEGDR 128 PIXEL/DEG' */
-/*             NAIF_SURFACE_CODE += 1 */
-/*             NAIF_SURFACE_BODY += 499 */
+/*           NAIF_SURFACE_NAME += 'Mars MEGDR 128 PIXEL/DEG' */
+/*           NAIF_SURFACE_CODE += 1 */
+/*           NAIF_SURFACE_BODY += 499 */
 
-/*        - SCLK data: if the target body's orientation is provided by */
-/*          CK files, an associated SCLK kernel must be loaded. */
+/*     -  SCLK data: if the target body's orientation is provided by */
+/*        CK files, an associated SCLK kernel must be loaded. */
 
 
 /*     In all cases, kernel data are normally loaded once per program */
 /*     run, NOT every time this routine is called. */
 
-
 /* $ Particulars */
-
 
 /*     Using DSK data */
 /*     ============== */
@@ -1556,11 +1611,9 @@ static doublereal c_b129 = 1.;
 /*        An example of a METHOD argument that could be constructed */
 /*        using one of the surface lists above is */
 
-/*      'TANGENT/DSK/UNPRIORITIZED/SURFACES= "Mars MEGDR 64 PIXEL/DEG",3' */
-
+/*     'TANGENT/DSK/UNPRIORITIZED/SURFACES= "Mars MEGDR 64 PIXEL/DEG",3' */
 
 /* $ Examples */
-
 
 /*     The numerical results shown for these examples may differ across */
 /*     platforms. The results depend on the SPICE kernels used as */
@@ -1591,7 +1644,7 @@ static doublereal c_b129 = 1.;
 /*        the number of cuts and the number of resulting limb points */
 /*        would be much greater. */
 
-/*        Use the meta-kernel below to load the required SPICE */
+/*        Use the meta-kernel shown below to load the required SPICE */
 /*        kernels. */
 
 
@@ -1623,249 +1676,246 @@ static doublereal c_b129 = 1.;
 /*                                               Phobos plate model */
 /*           \begindata */
 
-/*              PATH_SYMBOLS    = 'GEN' */
-/*              PATH_VALUES     = '/ftp/pub/naif/generic_kernels' */
-
 /*              KERNELS_TO_LOAD = ( 'de430.bsp', */
 /*                                  'mar097.bsp', */
 /*                                  'pck00010.tpc', */
 /*                                  'naif0011.tls', */
-/*                                  '$GEN/dsk/phobos/phobos512.bds' ) */
+/*                                  'phobos512.bds' ) */
 /*           \begintext */
 
+/*           End of meta-kernel */
 
 
-/*     Example code begins here. */
+/*        Example code begins here. */
 
 
-/*     C */
-/*     C     LIMBPT example 1 */
-/*     C */
-/*     C        Find limb points on Phobos as seen from Mars. */
-/*     C */
-/*     C        Compute limb points using the tangent definition. */
-/*     C        Perform aberration corrections for the target center. */
-/*     C        Use both ellipsoid and DSK shape models. */
-/*     C */
-/*           PROGRAM EX1 */
-/*           IMPLICIT NONE */
-/*     C */
-/*     C     SPICELIB functions */
-/*     C */
-/*           DOUBLE PRECISION      DPR */
-/*           DOUBLE PRECISION      PI */
+/*        C */
+/*        C     LIMBPT example 1 */
+/*        C */
+/*        C        Find limb points on Phobos as seen from Mars. */
+/*        C */
+/*        C        Compute limb points using the tangent definition. */
+/*        C        Perform aberration corrections for the target center. */
+/*        C        Use both ellipsoid and DSK shape models. */
+/*        C */
+/*              PROGRAM LIMBPT_EX1 */
+/*              IMPLICIT NONE */
+/*        C */
+/*        C     SPICELIB functions */
+/*        C */
+/*              DOUBLE PRECISION      DPR */
+/*              DOUBLE PRECISION      PI */
 
-/*     C */
-/*     C     Local parameters */
-/*     C */
-/*           CHARACTER*(*)         META */
-/*           PARAMETER           ( META   = 'limbpt_ex1.tm' ) */
+/*        C */
+/*        C     Local parameters */
+/*        C */
+/*              CHARACTER*(*)         META */
+/*              PARAMETER           ( META   = 'limbpt_ex1.tm' ) */
 
-/*           CHARACTER*(*)         FM1 */
-/*           PARAMETER           ( FM1     =  '(A,F21.9)' ) */
+/*              CHARACTER*(*)         FM1 */
+/*              PARAMETER           ( FM1     =  '(A,F20.9)' ) */
 
-/*           CHARACTER*(*)         FM2 */
-/*           PARAMETER           ( FM2     =  '(1X,3F21.9)' ) */
+/*              CHARACTER*(*)         FM2 */
+/*              PARAMETER           ( FM2     =  '(1X,3F20.9)' ) */
 
-/*           INTEGER               BDNMLN */
-/*           PARAMETER           ( BDNMLN = 36 ) */
+/*              INTEGER               BDNMLN */
+/*              PARAMETER           ( BDNMLN = 36 ) */
 
-/*           INTEGER               FRNMLN */
-/*           PARAMETER           ( FRNMLN = 32 ) */
+/*              INTEGER               FRNMLN */
+/*              PARAMETER           ( FRNMLN = 32 ) */
 
-/*           INTEGER               CORLEN */
-/*           PARAMETER           ( CORLEN = 20 ) */
+/*              INTEGER               CORLEN */
+/*              PARAMETER           ( CORLEN = 20 ) */
 
-/*           INTEGER               MTHLEN */
-/*           PARAMETER           ( MTHLEN = 50 ) */
+/*              INTEGER               MTHLEN */
+/*              PARAMETER           ( MTHLEN = 50 ) */
 
-/*           INTEGER               NMETH */
-/*           PARAMETER           ( NMETH  = 2 ) */
+/*              INTEGER               NMETH */
+/*              PARAMETER           ( NMETH  = 2 ) */
 
-/*           INTEGER               MAXN */
-/*           PARAMETER           ( MAXN = 10000 ) */
+/*              INTEGER               MAXN */
+/*              PARAMETER           ( MAXN = 10000 ) */
 
-/*     C */
-/*     C     Local variables */
-/*     C */
-/*           CHARACTER*(CORLEN)    ABCORR */
-/*           CHARACTER*(CORLEN)    CORLOC */
-/*           CHARACTER*(FRNMLN)    FIXREF */
-/*           CHARACTER*(MTHLEN)    METHOD ( NMETH ) */
-/*           CHARACTER*(BDNMLN)    OBSRVR */
-/*           CHARACTER*(BDNMLN)    TARGET */
+/*        C */
+/*        C     Local variables */
+/*        C */
+/*              CHARACTER*(CORLEN)    ABCORR */
+/*              CHARACTER*(CORLEN)    CORLOC */
+/*              CHARACTER*(FRNMLN)    FIXREF */
+/*              CHARACTER*(MTHLEN)    METHOD ( NMETH ) */
+/*              CHARACTER*(BDNMLN)    OBSRVR */
+/*              CHARACTER*(BDNMLN)    TARGET */
 
-/*           DOUBLE PRECISION      DELROL */
-/*           DOUBLE PRECISION      ET */
-/*           DOUBLE PRECISION      POINTS ( 3, MAXN ) */
-/*           DOUBLE PRECISION      ROLL */
-/*           DOUBLE PRECISION      SCHSTP */
-/*           DOUBLE PRECISION      SOLTOL */
-/*           DOUBLE PRECISION      TANGTS ( 3, MAXN ) */
-/*           DOUBLE PRECISION      TRGEPS ( MAXN ) */
-/*           DOUBLE PRECISION      Z      ( 3 ) */
+/*              DOUBLE PRECISION      DELROL */
+/*              DOUBLE PRECISION      ET */
+/*              DOUBLE PRECISION      POINTS ( 3, MAXN ) */
+/*              DOUBLE PRECISION      ROLL */
+/*              DOUBLE PRECISION      SCHSTP */
+/*              DOUBLE PRECISION      SOLTOL */
+/*              DOUBLE PRECISION      TANGTS ( 3, MAXN ) */
+/*              DOUBLE PRECISION      TRGEPS ( MAXN ) */
+/*              DOUBLE PRECISION      Z      ( 3 ) */
 
-/*           INTEGER               I */
-/*           INTEGER               J */
-/*           INTEGER               K */
-/*           INTEGER               M */
-/*           INTEGER               NCUTS */
-/*           INTEGER               NPTS   ( MAXN ) */
-/*           INTEGER               START */
+/*              INTEGER               I */
+/*              INTEGER               J */
+/*              INTEGER               K */
+/*              INTEGER               M */
+/*              INTEGER               NCUTS */
+/*              INTEGER               NPTS   ( MAXN ) */
+/*              INTEGER               START */
 
-/*     C */
-/*     C     Initial values */
-/*     C */
-/*           DATA                  METHOD / */
-/*          .                        'TANGENT/ELLIPSOID', */
-/*          .                        'TANGENT/DSK/UNPRIORITIZED' */
-/*          .                             / */
-/*           DATA                  Z      / 0.D0, 0.D0, 1.D0 / */
-/*     C */
-/*     C     Load kernel files via the meta-kernel. */
-/*     C */
-/*           CALL FURNSH ( META ) */
-/*     C */
-/*     C     Set target, observer, and target body-fixed, */
-/*     C     body-centered reference frame. */
-/*     C */
-/*           OBSRVR = 'MARS' */
-/*           TARGET = 'PHOBOS' */
-/*           FIXREF = 'IAU_PHOBOS' */
-/*     C */
-/*     C     Set aberration correction and correction locus. */
-/*     C */
-/*           ABCORR = 'CN+S' */
-/*           CORLOC = 'CENTER' */
-/*     C */
-/*     C     Convert the UTC request time string seconds past */
-/*     C     J2000, TDB. */
-/*     C */
-/*           CALL STR2ET ( '2008 AUG 11 00:00:00', ET ) */
-/*     C */
-/*     C     Compute a set of limb points using light time and */
-/*     C     stellar aberration corrections. Use both ellipsoid */
-/*     C     and DSK shape models. Use a step size of 100 */
-/*     C     microradians to ensure we don't miss the limb. */
-/*     C     Set the convergence tolerance to 100 nanoradians, */
-/*     C     which will limit the height error to about 1 meter. */
-/*     C     Compute 3 limb points for each computation method. */
-/*     C */
-/*           SCHSTP = 1.D-4 */
-/*           SOLTOL = 1.D-7 */
-/*           NCUTS  = 3 */
-
-/*           WRITE (*,*) ' ' */
-/*           WRITE (*,*) 'Observer:       '//OBSRVR */
-/*           WRITE (*,*) 'Target:         '//TARGET */
-/*           WRITE (*,*) 'Frame:          '//FIXREF */
-/*           WRITE (*,*) ' ' */
-/*           WRITE (*,*) 'Number of cuts: ', NCUTS */
-/*           WRITE (*,*) ' ' */
-
-/*           DELROL = 2*PI() / NCUTS */
-
-/*           DO I = 1, NMETH */
-
-/*              CALL LIMBPT ( METHOD(I), TARGET, ET,     FIXREF, */
-/*          .                 ABCORR,    CORLOC, OBSRVR, Z, */
-/*          .                 DELROL,    NCUTS,  SCHSTP, SOLTOL, */
-/*          .                 MAXN,      NPTS,   POINTS, TRGEPS, */
-/*          .                 TANGTS                            ) */
-/*     C */
-/*     C        Write the results. */
-/*     C */
-/*              WRITE(*,*) ' ' */
-/*              WRITE(*,*) 'Computation method = ', METHOD(I) */
-/*              WRITE(*,*) 'Locus              = ', CORLOC */
-/*              WRITE(*,*) ' ' */
-
-
-/*              START  = 0 */
-
-/*              DO J = 1, NCUTS */
-
-/*                 ROLL = (J-1) * DELROL */
-
-/*                 WRITE(*,*)   ' ' */
-/*                 WRITE(*,FM1) '  Roll angle (deg) = ', ROLL * DPR() */
-/*                 WRITE(*,FM1) '     Target epoch  = ', TRGEPS(J) */
-/*                 WRITE(*,*)   '    Number of limb points at this ' */
-/*          .      //           'roll angle: ', */
-/*          .                   NPTS(J) */
-
-/*                 WRITE (*,*) '      Limb points' */
-
-/*                 DO K = 1, NPTS(J) */
-/*                    WRITE (*,FM2) ( POINTS(M,K+START), M = 1, 3 ) */
-/*                 END DO */
-
-/*                 START = START + NPTS(J) */
-
-/*              END DO */
+/*        C */
+/*        C     Initial values */
+/*        C */
+/*              DATA                  METHOD / */
+/*             .                        'TANGENT/ELLIPSOID', */
+/*             .                        'TANGENT/DSK/UNPRIORITIZED' */
+/*             .                             / */
+/*              DATA                  Z      / 0.D0, 0.D0, 1.D0 / */
+/*        C */
+/*        C     Load kernel files via the meta-kernel. */
+/*        C */
+/*              CALL FURNSH ( META ) */
+/*        C */
+/*        C     Set target, observer, and target body-fixed, */
+/*        C     body-centered reference frame. */
+/*        C */
+/*              OBSRVR = 'MARS' */
+/*              TARGET = 'PHOBOS' */
+/*              FIXREF = 'IAU_PHOBOS' */
+/*        C */
+/*        C     Set aberration correction and correction locus. */
+/*        C */
+/*              ABCORR = 'CN+S' */
+/*              CORLOC = 'CENTER' */
+/*        C */
+/*        C     Convert the UTC request time string seconds past */
+/*        C     J2000, TDB. */
+/*        C */
+/*              CALL STR2ET ( '2008 AUG 11 00:00:00', ET ) */
+/*        C */
+/*        C     Compute a set of limb points using light time and */
+/*        C     stellar aberration corrections. Use both ellipsoid */
+/*        C     and DSK shape models. Use a step size of 100 */
+/*        C     microradians to ensure we don't miss the limb. */
+/*        C     Set the convergence tolerance to 100 nanoradians, */
+/*        C     which will limit the height error to about 1 meter. */
+/*        C     Compute 3 limb points for each computation method. */
+/*        C */
+/*              SCHSTP = 1.D-4 */
+/*              SOLTOL = 1.D-7 */
+/*              NCUTS  = 3 */
 
 /*              WRITE (*,*) ' ' */
+/*              WRITE (*,*) 'Observer:       '//OBSRVR */
+/*              WRITE (*,*) 'Target:         '//TARGET */
+/*              WRITE (*,*) 'Frame:          '//FIXREF */
+/*              WRITE (*,*) ' ' */
+/*              WRITE (*,*) 'Number of cuts: ', NCUTS */
+/*              WRITE (*,*) ' ' */
 
-/*           END DO */
-/*           END */
+/*              DELROL = 2*PI() / NCUTS */
 
+/*              DO I = 1, NMETH */
 
-/*     When this program was executed on a PC/Linux/gfortran 64-bit */
-/*     platform, the output was: */
-
-
-/*        Observer:       MARS */
-/*        Target:         PHOBOS */
-/*        Frame:          IAU_PHOBOS */
-
-/*        Number of cuts:            3 */
-
-
-/*        Computation method = TANGENT/ELLIPSOID */
-/*        Locus              = CENTER */
-
-
-/*         Roll angle (deg) =           0.000000000 */
-/*            Target epoch  =   271684865.152078211 */
-/*            Number of limb points at this roll angle:            1 */
-/*              Limb points */
-/*                  0.016445326         -0.000306114          9.099992715 */
-
-/*         Roll angle (deg) =         120.000000000 */
-/*            Target epoch  =   271684865.152078211 */
-/*            Number of limb points at this roll angle:            1 */
-/*              Limb points */
-/*                 -0.204288375         -9.235230829         -5.333237706 */
-
-/*         Roll angle (deg) =         240.000000000 */
-/*            Target epoch  =   271684865.152078211 */
-/*            Number of limb points at this roll angle:            1 */
-/*              Limb points */
-/*                  0.242785221          9.234520095         -5.333231253 */
+/*                 CALL LIMBPT ( METHOD(I), TARGET, ET,     FIXREF, */
+/*             .                 ABCORR,    CORLOC, OBSRVR, Z, */
+/*             .                 DELROL,    NCUTS,  SCHSTP, SOLTOL, */
+/*             .                 MAXN,      NPTS,   POINTS, TRGEPS, */
+/*             .                 TANGTS                            ) */
+/*        C */
+/*        C        Write the results. */
+/*        C */
+/*                 WRITE(*,*) ' ' */
+/*                 WRITE(*,*) 'Computation method = ', METHOD(I) */
+/*                 WRITE(*,*) 'Locus              = ', CORLOC */
+/*                 WRITE(*,*) ' ' */
 
 
-/*        Computation method = TANGENT/DSK/UNPRIORITIZED */
-/*        Locus              = CENTER */
+/*                 START  = 0 */
+
+/*                 DO J = 1, NCUTS */
+
+/*                    ROLL = (J-1) * DELROL */
+
+/*                    WRITE(*,*)   ' ' */
+/*                    WRITE(*,FM1) '  Roll angle (deg) = ', ROLL * DPR() */
+/*                    WRITE(*,FM1) '     Target epoch  = ', TRGEPS(J) */
+/*                    WRITE(*,*)   '    Number of limb points at this ' */
+/*             .      //           'roll angle: ', */
+/*             .                   NPTS(J) */
+
+/*                    WRITE (*,*) '      Limb points' */
+
+/*                    DO K = 1, NPTS(J) */
+/*                       WRITE (*,FM2) ( POINTS(M,K+START), M = 1, 3 ) */
+/*                    END DO */
+
+/*                    START = START + NPTS(J) */
+
+/*                 END DO */
+
+/*                 WRITE (*,*) ' ' */
+
+/*              END DO */
+/*              END */
 
 
-/*         Roll angle (deg) =           0.000000000 */
-/*            Target epoch  =   271684865.152078211 */
-/*            Number of limb points at this roll angle:            1 */
-/*              Limb points */
-/*                 -0.398901673          0.007425178          9.973720555 */
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
 
-/*         Roll angle (deg) =         120.000000000 */
-/*            Target epoch  =   271684865.152078211 */
-/*            Number of limb points at this roll angle:            1 */
-/*              Limb points */
-/*                 -0.959300281         -8.537573427         -4.938700447 */
 
-/*         Roll angle (deg) =         240.000000000 */
-/*            Target epoch  =   271684865.152078211 */
-/*            Number of limb points at this roll angle:            1 */
-/*              Limb points */
-/*                 -1.380536729          9.714334047         -5.592916790 */
+/*         Observer:       MARS */
+/*         Target:         PHOBOS */
+/*         Frame:          IAU_PHOBOS */
 
+/*         Number of cuts:            3 */
+
+
+/*         Computation method = TANGENT/ELLIPSOID */
+/*         Locus              = CENTER */
+
+
+/*          Roll angle (deg) =          0.000000000 */
+/*             Target epoch  =  271684865.152078211 */
+/*             Number of limb points at this roll angle:            1 */
+/*               Limb points */
+/*                  0.016445326        -0.000306114         9.099992715 */
+
+/*          Roll angle (deg) =        120.000000000 */
+/*             Target epoch  =  271684865.152078211 */
+/*             Number of limb points at this roll angle:            1 */
+/*               Limb points */
+/*                 -0.204288375        -9.235230829        -5.333237706 */
+
+/*          Roll angle (deg) =        240.000000000 */
+/*             Target epoch  =  271684865.152078211 */
+/*             Number of limb points at this roll angle:            1 */
+/*               Limb points */
+/*                  0.242785221         9.234520095        -5.333231253 */
+
+
+/*         Computation method = TANGENT/DSK/UNPRIORITIZED */
+/*         Locus              = CENTER */
+
+
+/*          Roll angle (deg) =          0.000000000 */
+/*             Target epoch  =  271684865.152078211 */
+/*             Number of limb points at this roll angle:            1 */
+/*               Limb points */
+/*                 -0.398901673         0.007425178         9.973720555 */
+
+/*          Roll angle (deg) =        120.000000000 */
+/*             Target epoch  =  271684865.152078211 */
+/*             Number of limb points at this roll angle:            1 */
+/*               Limb points */
+/*                 -0.959300281        -8.537573427        -4.938700447 */
+
+/*          Roll angle (deg) =        240.000000000 */
+/*             Target epoch  =  271684865.152078211 */
+/*             Number of limb points at this roll angle:            1 */
+/*               Limb points */
+/*                 -1.380536729         9.714334047        -5.592916790 */
 
 
 /*     2) Find apparent limb points on Mars as seen from the earth. */
@@ -1899,7 +1949,8 @@ static doublereal c_b129 = 1.;
 /*        the number of cuts and the number of resulting limb points */
 /*        would be much greater. */
 
-/*        Use the meta-kernel shown below. */
+/*        Use the meta-kernel shown below to load the required SPICE */
+/*        kernels. */
 
 
 /*           KPL/MK */
@@ -1923,7 +1974,7 @@ static doublereal c_b129 = 1.;
 /*              de430.bsp                        Planetary ephemeris */
 /*              mar097.bsp                       Mars satellite ephemeris */
 /*              pck00010.tpc                     Planet orientation and */
-/*                           radii */
+/*                                               radii */
 /*              naif0011.tls                     Leapseconds */
 /*              megr90n000cb_plate.bds           DSK plate model based on */
 /*                                               MGS MOLAR MEGDR DEM, */
@@ -1939,389 +1990,390 @@ static doublereal c_b129 = 1.;
 /*                                  'megr90n000cb_plate.bds' ) */
 /*           \begintext */
 
+/*           End of meta-kernel */
 
 
-/*     Example code begins here. */
+/*        Example code begins here. */
 
 
-/*     C */
-/*     C     LIMBPT example 2 */
-/*     C */
-/*     C        Find limb points on Mars as seen from the earth. */
-/*     C */
-/*     C        Compute limb points using both the tangent and */
-/*     C        "guided" definitions. */
-/*     C */
-/*     C        For the tangent limb points, perform aberration */
-/*     C        corrections for the reference ellipsoid limb. */
-/*     C */
-/*     C        Check limb points by computing emission angles at */
-/*     C        each point. */
-/*     C */
-/*     C        Use both ellipsoid and DSK shape models. */
-/*     C */
-/*           PROGRAM EX2 */
-/*           IMPLICIT NONE */
-/*     C */
-/*     C     SPICELIB functions */
-/*     C */
-/*           DOUBLE PRECISION      DPR */
-/*           DOUBLE PRECISION      PI */
-/*           DOUBLE PRECISION      VDIST */
-/*           DOUBLE PRECISION      VNORM */
-/*     C */
-/*     C     Local parameters */
-/*     C */
-/*           CHARACTER*(*)         META */
-/*           PARAMETER           ( META    = 'limbpt_ex2.tm' ) */
+/*        C */
+/*        C     LIMBPT example 2 */
+/*        C */
+/*        C        Find limb points on Mars as seen from the earth. */
+/*        C */
+/*        C        Compute limb points using both the tangent and */
+/*        C        "guided" definitions. */
+/*        C */
+/*        C        For the tangent limb points, perform aberration */
+/*        C        corrections for the reference ellipsoid limb. */
+/*        C */
+/*        C        Check limb points by computing emission angles at */
+/*        C        each point. */
+/*        C */
+/*        C        Use both ellipsoid and DSK shape models. */
+/*        C */
+/*              PROGRAM LIMBPT_EX2 */
+/*              IMPLICIT NONE */
+/*        C */
+/*        C     SPICELIB functions */
+/*        C */
+/*              DOUBLE PRECISION      DPR */
+/*              DOUBLE PRECISION      PI */
+/*              DOUBLE PRECISION      VDIST */
+/*              DOUBLE PRECISION      VNORM */
+/*        C */
+/*        C     Local parameters */
+/*        C */
+/*              CHARACTER*(*)         META */
+/*              PARAMETER           ( META    = 'limbpt_ex2.tm' ) */
 
-/*           CHARACTER*(*)         FM1 */
-/*           PARAMETER           ( FM1     =  '(A,F21.9)' ) */
+/*              CHARACTER*(*)         FM1 */
+/*              PARAMETER           ( FM1     =  '(A,F20.9)' ) */
 
-/*           INTEGER               BDNMLN */
-/*           PARAMETER           ( BDNMLN = 36 ) */
+/*              INTEGER               BDNMLN */
+/*              PARAMETER           ( BDNMLN = 36 ) */
 
-/*           INTEGER               FRNMLN */
-/*           PARAMETER           ( FRNMLN = 32 ) */
+/*              INTEGER               FRNMLN */
+/*              PARAMETER           ( FRNMLN = 32 ) */
 
-/*           INTEGER               CORLEN */
-/*           PARAMETER           ( CORLEN = 20 ) */
+/*              INTEGER               CORLEN */
+/*              PARAMETER           ( CORLEN = 20 ) */
 
-/*           INTEGER               MTHLEN */
-/*           PARAMETER           ( MTHLEN = 50 ) */
+/*              INTEGER               MTHLEN */
+/*              PARAMETER           ( MTHLEN = 50 ) */
 
-/*           INTEGER               NMETH */
-/*           PARAMETER           ( NMETH  = 3 ) */
+/*              INTEGER               NMETH */
+/*              PARAMETER           ( NMETH  = 3 ) */
 
-/*           INTEGER               MAXN */
-/*           PARAMETER           ( MAXN   = 100 ) */
-/*     C */
-/*     C     Local variables */
-/*     C */
-/*           CHARACTER*(CORLEN)    ABCORR */
-/*           CHARACTER*(CORLEN)    CORLOC ( NMETH ) */
-/*           CHARACTER*(FRNMLN)    FIXREF */
-/*           CHARACTER*(MTHLEN)    ILUMTH ( NMETH ) */
-/*           CHARACTER*(BDNMLN)    OBSRVR */
-/*           CHARACTER*(BDNMLN)    TARGET */
-/*           CHARACTER*(MTHLEN)    METHOD ( NMETH ) */
+/*              INTEGER               MAXN */
+/*              PARAMETER           ( MAXN   = 100 ) */
+/*        C */
+/*        C     Local variables */
+/*        C */
+/*              CHARACTER*(CORLEN)    ABCORR */
+/*              CHARACTER*(CORLEN)    CORLOC ( NMETH ) */
+/*              CHARACTER*(FRNMLN)    FIXREF */
+/*              CHARACTER*(MTHLEN)    ILUMTH ( NMETH ) */
+/*              CHARACTER*(BDNMLN)    OBSRVR */
+/*              CHARACTER*(BDNMLN)    TARGET */
+/*              CHARACTER*(MTHLEN)    METHOD ( NMETH ) */
 
-/*           DOUBLE PRECISION      ALT */
-/*           DOUBLE PRECISION      DELROL */
-/*           DOUBLE PRECISION      DIST */
-/*           DOUBLE PRECISION      EMISSN */
-/*           DOUBLE PRECISION      ET */
-/*           DOUBLE PRECISION      F */
-/*           DOUBLE PRECISION      LAT */
-/*           DOUBLE PRECISION      LON */
-/*           DOUBLE PRECISION      LT */
-/*           DOUBLE PRECISION      PHASE */
-/*           DOUBLE PRECISION      POINTS ( 3, MAXN ) */
-/*           DOUBLE PRECISION      SVPNTS ( 3, MAXN ) */
-/*           DOUBLE PRECISION      POS    ( 3 ) */
-/*           DOUBLE PRECISION      RADII  ( 3 ) */
-/*           DOUBLE PRECISION      RE */
-/*           DOUBLE PRECISION      ROLL */
-/*           DOUBLE PRECISION      RP */
-/*           DOUBLE PRECISION      SCHSTP */
-/*           DOUBLE PRECISION      SOLAR */
-/*           DOUBLE PRECISION      SOLTOL */
-/*           DOUBLE PRECISION      SRFVEC ( 3 ) */
-/*           DOUBLE PRECISION      TANGTS ( 3, MAXN ) */
-/*           DOUBLE PRECISION      TRGEPC */
-/*           DOUBLE PRECISION      TRGEPS ( MAXN ) */
-/*           DOUBLE PRECISION      Z      ( 3 ) */
+/*              DOUBLE PRECISION      ALT */
+/*              DOUBLE PRECISION      DELROL */
+/*              DOUBLE PRECISION      DIST */
+/*              DOUBLE PRECISION      EMISSN */
+/*              DOUBLE PRECISION      ET */
+/*              DOUBLE PRECISION      F */
+/*              DOUBLE PRECISION      LAT */
+/*              DOUBLE PRECISION      LON */
+/*              DOUBLE PRECISION      LT */
+/*              DOUBLE PRECISION      PHASE */
+/*              DOUBLE PRECISION      POINTS ( 3, MAXN ) */
+/*              DOUBLE PRECISION      SVPNTS ( 3, MAXN ) */
+/*              DOUBLE PRECISION      POS    ( 3 ) */
+/*              DOUBLE PRECISION      RADII  ( 3 ) */
+/*              DOUBLE PRECISION      RE */
+/*              DOUBLE PRECISION      ROLL */
+/*              DOUBLE PRECISION      RP */
+/*              DOUBLE PRECISION      SCHSTP */
+/*              DOUBLE PRECISION      SOLAR */
+/*              DOUBLE PRECISION      SOLTOL */
+/*              DOUBLE PRECISION      SRFVEC ( 3 ) */
+/*              DOUBLE PRECISION      TANGTS ( 3, MAXN ) */
+/*              DOUBLE PRECISION      TRGEPC */
+/*              DOUBLE PRECISION      TRGEPS ( MAXN ) */
+/*              DOUBLE PRECISION      Z      ( 3 ) */
 
-/*           INTEGER               I */
-/*           INTEGER               J */
-/*           INTEGER               K */
-/*           INTEGER               M */
-/*           INTEGER               N */
-/*           INTEGER               NCUTS */
-/*           INTEGER               NPTS   ( MAXN ) */
-/*           INTEGER               START */
+/*              INTEGER               I */
+/*              INTEGER               J */
+/*              INTEGER               K */
+/*              INTEGER               M */
+/*              INTEGER               N */
+/*              INTEGER               NCUTS */
+/*              INTEGER               NPTS   ( MAXN ) */
+/*              INTEGER               START */
 
-/*     C */
-/*     C     Initial values */
-/*     C */
-/*           DATA                  CORLOC / */
-/*          .                        'ELLIPSOID LIMB', */
-/*          .                        'ELLIPSOID LIMB', */
-/*          .                        'CENTER' */
-/*          .                             / */
+/*        C */
+/*        C     Initial values */
+/*        C */
+/*              DATA                  CORLOC / */
+/*             .                        'ELLIPSOID LIMB', */
+/*             .                        'ELLIPSOID LIMB', */
+/*             .                        'CENTER' */
+/*             .                             / */
 
-/*           DATA                  ILUMTH / */
-/*          .                        'ELLIPSOID', */
-/*          .                        'DSK/UNPRIORITIZED', */
-/*          .                        'DSK/UNPRIORITIZED' */
-/*          .                             / */
+/*              DATA                  ILUMTH / */
+/*             .                        'ELLIPSOID', */
+/*             .                        'DSK/UNPRIORITIZED', */
+/*             .                        'DSK/UNPRIORITIZED' */
+/*             .                             / */
 
-/*           DATA                  METHOD / */
-/*          .                        'TANGENT/ELLIPSOID', */
-/*          .                        'TANGENT/DSK/UNPRIORITIZED', */
-/*          .                        'GUIDED/DSK/UNPRIORITIZED' */
-/*          .                             / */
+/*              DATA                  METHOD / */
+/*             .                        'TANGENT/ELLIPSOID', */
+/*             .                        'TANGENT/DSK/UNPRIORITIZED', */
+/*             .                        'GUIDED/DSK/UNPRIORITIZED' */
+/*             .                             / */
 
-/*           DATA                  Z      / 0.D0, 0.D0, 1.D0 / */
-/*     C */
-/*     C     Load kernel files via the meta-kernel. */
-/*     C */
-/*           CALL FURNSH ( META ) */
-/*     C */
-/*     C     Set target, observer, and target body-fixed, body-centered */
-/*     C     reference frame. */
-/*     C */
-/*           OBSRVR = 'EARTH' */
-/*           TARGET = 'MARS' */
-/*           FIXREF = 'IAU_MARS' */
-/*     C */
-/*     C     Set the aberration correction. We'll set the */
-/*     C     correction locus below. */
-/*     C */
-/*           ABCORR = 'CN+S' */
-/*     C */
-/*     C     Convert the UTC request time string seconds past */
-/*     C     J2000, TDB. */
-/*     C */
-/*           CALL STR2ET ( '2008 AUG 11 00:00:00', ET ) */
-/*     C */
-/*     C     Look up the target body's radii. We'll use these to */
-/*     C     convert Cartesian to planetographic coordinates. Use */
-/*     C     the radii to compute the flattening coefficient of */
-/*     C     the reference ellipsoid. */
-/*     C */
-/*           CALL BODVRD ( TARGET, 'RADII', 3, N, RADII ) */
-/*     C */
-/*     C     Compute the flattening coefficient for planetodetic */
-/*     C     coordinates */
-/*     C */
-/*           RE = RADII(1) */
-/*           RP = RADII(3) */
-/*           F  = ( RE - RP ) / RE */
-/*     C */
-/*     C     Compute a set of limb points using light time and */
-/*     C     stellar aberration corrections. Use both ellipsoid */
-/*     C     and DSK shape models. */
-/*     C */
-/*     C     Obtain the observer-target distance at ET. */
-/*     C */
-/*           CALL SPKPOS ( TARGET, ET,  'J2000', ABCORR, */
-/*          .              OBSRVR, POS, LT              ) */
-/*           DIST = VNORM( POS ) */
-/*     C */
-/*     C     Set the angular step size so that a single step will */
-/*     C     be taken in the root bracketing process; that's all */
-/*     C     that is needed since we don't expect to have multiple */
-/*     C     limb points in any cutting half-plane. */
-/*     C */
-/*           SCHSTP = 4.D0 */
-/*     C */
-/*     C     Set the convergence tolerance to minimize the height */
-/*     C     error. We can't achieve the 1 millimeter precision */
-/*     C     suggested by the formula because the earth-Mars */
-/*     C     distance is about 3.5e8 km. Compute 3 limb points */
-/*     C     for each computation method. */
-/*     C */
-/*           SOLTOL = 1.D-6/DIST */
-/*     C */
-/*     C     Set the number of cutting half-planes and roll step. */
-/*     C */
-/*           NCUTS  = 3 */
-/*           DELROL = 2*PI() / NCUTS */
+/*              DATA                  Z      / 0.D0, 0.D0, 1.D0 / */
+/*        C */
+/*        C     Load kernel files via the meta-kernel. */
+/*        C */
+/*              CALL FURNSH ( META ) */
+/*        C */
+/*        C     Set target, observer, and target body-fixed, */
+/*        C     body-centered reference frame. */
+/*        C */
+/*              OBSRVR = 'EARTH' */
+/*              TARGET = 'MARS' */
+/*              FIXREF = 'IAU_MARS' */
+/*        C */
+/*        C     Set the aberration correction. We'll set the */
+/*        C     correction locus below. */
+/*        C */
+/*              ABCORR = 'CN+S' */
+/*        C */
+/*        C     Convert the UTC request time string seconds past */
+/*        C     J2000, TDB. */
+/*        C */
+/*              CALL STR2ET ( '2008 AUG 11 00:00:00', ET ) */
+/*        C */
+/*        C     Look up the target body's radii. We'll use these to */
+/*        C     convert Cartesian to planetographic coordinates. Use */
+/*        C     the radii to compute the flattening coefficient of */
+/*        C     the reference ellipsoid. */
+/*        C */
+/*              CALL BODVRD ( TARGET, 'RADII', 3, N, RADII ) */
+/*        C */
+/*        C     Compute the flattening coefficient for planetodetic */
+/*        C     coordinates */
+/*        C */
+/*              RE = RADII(1) */
+/*              RP = RADII(3) */
+/*              F  = ( RE - RP ) / RE */
+/*        C */
+/*        C     Compute a set of limb points using light time and */
+/*        C     stellar aberration corrections. Use both ellipsoid */
+/*        C     and DSK shape models. */
+/*        C */
+/*        C     Obtain the observer-target distance at ET. */
+/*        C */
+/*              CALL SPKPOS ( TARGET, ET,  'J2000', ABCORR, */
+/*             .              OBSRVR, POS, LT              ) */
+/*              DIST = VNORM( POS ) */
+/*        C */
+/*        C     Set the angular step size so that a single step will */
+/*        C     be taken in the root bracketing process; that's all */
+/*        C     that is needed since we don't expect to have multiple */
+/*        C     limb points in any cutting half-plane. */
+/*        C */
+/*              SCHSTP = 4.D0 */
+/*        C */
+/*        C     Set the convergence tolerance to minimize the height */
+/*        C     error. We can't achieve the 1 millimeter precision */
+/*        C     suggested by the formula because the earth-Mars */
+/*        C     distance is about 3.5e8 km. Compute 3 limb points */
+/*        C     for each computation method. */
+/*        C */
+/*              SOLTOL = 1.D-6/DIST */
+/*        C */
+/*        C     Set the number of cutting half-planes and roll step. */
+/*        C */
+/*              NCUTS  = 3 */
+/*              DELROL = 2*PI() / NCUTS */
 
-/*           WRITE (*,*) ' ' */
-/*           WRITE (*,*) 'Observer:       '//OBSRVR */
-/*           WRITE (*,*) 'Target:         '//TARGET */
-/*           WRITE (*,*) 'Frame:          '//FIXREF */
-/*           WRITE (*,*) ' ' */
-/*           WRITE (*,*) 'Number of cuts: ', NCUTS */
-
-
-/*           DO I = 1, NMETH */
-
-/*              CALL LIMBPT ( METHOD(I), TARGET,    ET,     FIXREF, */
-/*          .                 ABCORR,    CORLOC(I), OBSRVR, Z, */
-/*          .                 DELROL,    NCUTS,     SCHSTP, SOLTOL, */
-/*          .                 MAXN,      NPTS,      POINTS, TRGEPS, */
-/*          .                 TANGTS                                ) */
-/*     C */
-/*     C        Write the results. */
-/*     C */
-/*              WRITE(*,*) ' ' */
-/*              WRITE(*,*) 'Computation method = ', METHOD(I) */
-/*              WRITE(*,*) 'Locus              = ', CORLOC(I) */
+/*              WRITE (*,*) ' ' */
+/*              WRITE (*,*) 'Observer:       '//OBSRVR */
+/*              WRITE (*,*) 'Target:         '//TARGET */
+/*              WRITE (*,*) 'Frame:          '//FIXREF */
+/*              WRITE (*,*) ' ' */
+/*              WRITE (*,*) 'Number of cuts: ', NCUTS */
 
 
-/*              START  = 0 */
+/*              DO I = 1, NMETH */
 
-/*              DO J = 1, NCUTS */
+/*                 CALL LIMBPT ( METHOD(I), TARGET,    ET,     FIXREF, */
+/*             .                 ABCORR,    CORLOC(I), OBSRVR, Z, */
+/*             .                 DELROL,    NCUTS,     SCHSTP, SOLTOL, */
+/*             .                 MAXN,      NPTS,      POINTS, TRGEPS, */
+/*             .                 TANGTS                                ) */
+/*        C */
+/*        C        Write the results. */
+/*        C */
+/*                 WRITE(*,*) ' ' */
+/*                 WRITE(*,*) 'Computation method = ', METHOD(I) */
+/*                 WRITE(*,*) 'Locus              = ', CORLOC(I) */
 
-/*                 ROLL = (J-1) * DELROL */
 
-/*                 WRITE(*,*)   ' ' */
-/*                 WRITE(*,FM1) '   Roll angle (deg) = ', ROLL * DPR() */
-/*                 WRITE(*,FM1) '     Target epoch   = ', TRGEPS(J) */
-/*                 WRITE(*,*)   '    Number of limb points at this ' */
-/*          .      //           'roll angle: ', */
-/*          .                   NPTS(J) */
+/*                 START  = 0 */
 
-/*                 DO K = 1, NPTS(J) */
+/*                 DO J = 1, NCUTS */
 
-/*                    WRITE (*,*) '    Limb point planetodetic ' */
-/*          .         //          'coordinates:' */
+/*                    ROLL = (J-1) * DELROL */
 
-/*                    CALL RECGEO ( POINTS(1,K+START), RE,  F, */
-/*          .                       LON,               LAT, ALT ) */
+/*                    WRITE(*,*)   ' ' */
+/*                    WRITE(*,FM1) '   Roll angle (deg) = ', ROLL * DPR() */
+/*                    WRITE(*,FM1) '     Target epoch   = ', TRGEPS(J) */
+/*                    WRITE(*,*)   '    Number of limb points at this ' */
+/*             .      //           'roll angle: ', */
+/*             .                   NPTS(J) */
 
-/*                    WRITE (*,FM1) '      Longitude      (deg): ', */
-/*          .                       LON*DPR() */
-/*                    WRITE (*,FM1) '      Latitude       (deg): ', */
-/*          .                       LAT*DPR() */
-/*                    WRITE (*,FM1) '      Altitude        (km): ', */
-/*          .                       ALT */
+/*                    DO K = 1, NPTS(J) */
 
-/*     C */
-/*     C              Get illumination angles for this limb point. */
-/*     C */
-/*                    M = K+START */
+/*                       WRITE (*,*) '    Limb point planetodetic ' */
+/*             .         //          'coordinates:' */
 
-/*                    CALL ILUMIN ( ILUMTH,      TARGET, ET, */
-/*          .                       FIXREF,      ABCORR, OBSRVR, */
-/*          .                       POINTS(1,M), TRGEPC, SRFVEC, */
-/*          .                       PHASE,       SOLAR,  EMISSN  ) */
+/*                       CALL RECGEO ( POINTS(1,K+START), RE,  F, */
+/*             .                       LON,               LAT, ALT ) */
 
-/*                    WRITE (*,FM1) '      Emission angle (deg): ', */
-/*          .                     EMISSN * DPR() */
+/*                       WRITE (*,FM1) '      Longitude      (deg): ', */
+/*             .                       LON*DPR() */
+/*                       WRITE (*,FM1) '      Latitude       (deg): ', */
+/*             .                       LAT*DPR() */
+/*                       WRITE (*,FM1) '      Altitude        (km): ', */
+/*             .                       ALT */
 
-/*                    IF ( I .EQ. 2 ) THEN */
+/*        C */
+/*        C              Get illumination angles for this limb point. */
+/*        C */
+/*                       M = K+START */
 
-/*                       CALL VEQU ( POINTS(1,M), SVPNTS(1,M) ) */
+/*                       CALL ILUMIN ( ILUMTH,      TARGET, ET, */
+/*             .                       FIXREF,      ABCORR, OBSRVR, */
+/*             .                       POINTS(1,M), TRGEPC, SRFVEC, */
+/*             .                       PHASE,       SOLAR,  EMISSN  ) */
 
-/*                    ELSE IF ( I .EQ. 3  ) THEN */
+/*                       WRITE (*,FM1) '      Emission angle (deg): ', */
+/*             .                     EMISSN * DPR() */
 
-/*                       DIST = VDIST( POINTS(1,M), SVPNTS(1,M) ) */
+/*                       IF ( I .EQ. 2 ) THEN */
 
-/*                       WRITE (*,FM1) */
-/*          .            '      Distance error  (km): ', DIST */
-/*                    END IF */
+/*                          CALL VEQU ( POINTS(1,M), SVPNTS(1,M) ) */
 
+/*                       ELSE IF ( I .EQ. 3  ) THEN */
+
+/*                          DIST = VDIST( POINTS(1,M), SVPNTS(1,M) ) */
+
+/*                          WRITE (*,FM1) */
+/*             .            '      Distance error  (km): ', DIST */
+/*                       END IF */
+
+
+/*                    END DO */
+
+/*                    START = START + NPTS(J) */
 
 /*                 END DO */
 
-/*                 START = START + NPTS(J) */
+/*                 WRITE (*,*) ' ' */
 
 /*              END DO */
-
-/*              WRITE (*,*) ' ' */
-
-/*           END DO */
-/*           END */
+/*              END */
 
 
-/*     When this program was executed on a PC/Linux/gfortran 64-bit */
-/*     platform, the output was: */
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
 
 
-/*        Observer:       EARTH */
-/*        Target:         MARS */
-/*        Frame:          IAU_MARS */
+/*         Observer:       EARTH */
+/*         Target:         MARS */
+/*         Frame:          IAU_MARS */
 
-/*        Number of cuts:            3 */
+/*         Number of cuts:            3 */
 
-/*        Computation method = TANGENT/ELLIPSOID */
-/*        Locus              = ELLIPSOID LIMB */
+/*         Computation method = TANGENT/ELLIPSOID */
+/*         Locus              = ELLIPSOID LIMB */
 
-/*          Roll angle (deg) =           0.000000000 */
-/*            Target epoch   =   271683700.368869901 */
-/*            Number of limb points at this roll angle:            1 */
-/*            Limb point planetodetic coordinates: */
-/*             Longitude      (deg):         -19.302258950 */
-/*             Latitude       (deg):          64.005620446 */
-/*             Altitude        (km):          -0.000000000 */
-/*             Emission angle (deg):          90.000000000 */
+/*           Roll angle (deg) =          0.000000000 */
+/*             Target epoch   =  271683700.368869901 */
+/*             Number of limb points at this roll angle:            1 */
+/*             Limb point planetodetic coordinates: */
+/*              Longitude      (deg):        -19.302258950 */
+/*              Latitude       (deg):         64.005620446 */
+/*              Altitude        (km):         -0.000000000 */
+/*              Emission angle (deg):         90.000000000 */
 
-/*          Roll angle (deg) =         120.000000000 */
-/*            Target epoch   =   271683700.368948162 */
-/*            Number of limb points at this roll angle:            1 */
-/*            Limb point planetodetic coordinates: */
-/*             Longitude      (deg):          85.029135674 */
-/*             Latitude       (deg):         -26.912378799 */
-/*             Altitude        (km):           0.000000000 */
-/*             Emission angle (deg):          90.000000000 */
+/*           Roll angle (deg) =        120.000000000 */
+/*             Target epoch   =  271683700.368948162 */
+/*             Number of limb points at this roll angle:            1 */
+/*             Limb point planetodetic coordinates: */
+/*              Longitude      (deg):         85.029135674 */
+/*              Latitude       (deg):        -26.912378799 */
+/*              Altitude        (km):          0.000000000 */
+/*              Emission angle (deg):         90.000000000 */
 
-/*          Roll angle (deg) =         240.000000000 */
-/*            Target epoch   =   271683700.368949771 */
-/*            Number of limb points at this roll angle:            1 */
-/*            Limb point planetodetic coordinates: */
-/*             Longitude      (deg):        -123.633654215 */
-/*             Latitude       (deg):         -26.912378799 */
-/*             Altitude        (km):          -0.000000000 */
-/*             Emission angle (deg):          90.000000000 */
-
-
-/*        Computation method = TANGENT/DSK/UNPRIORITIZED */
-/*        Locus              = ELLIPSOID LIMB */
-
-/*          Roll angle (deg) =           0.000000000 */
-/*            Target epoch   =   271683700.368869901 */
-/*            Number of limb points at this roll angle:            1 */
-/*            Limb point planetodetic coordinates: */
-/*             Longitude      (deg):         -19.302258950 */
-/*             Latitude       (deg):          63.893637269 */
-/*             Altitude        (km):          -3.667553936 */
-/*             Emission angle (deg):          90.112271887 */
-
-/*          Roll angle (deg) =         120.000000000 */
-/*            Target epoch   =   271683700.368948162 */
-/*            Number of limb points at this roll angle:            1 */
-/*            Limb point planetodetic coordinates: */
-/*             Longitude      (deg):          85.434644179 */
-/*             Latitude       (deg):         -26.705411231 */
-/*             Altitude        (km):          -0.044832377 */
-/*             Emission angle (deg):          89.583080113 */
-
-/*          Roll angle (deg) =         240.000000000 */
-/*            Target epoch   =   271683700.368949771 */
-/*            Number of limb points at this roll angle:            1 */
-/*            Limb point planetodetic coordinates: */
-/*             Longitude      (deg):        -123.375003954 */
-/*             Latitude       (deg):         -27.043096556 */
-/*             Altitude        (km):           3.695628339 */
-/*             Emission angle (deg):          90.265135303 */
+/*           Roll angle (deg) =        240.000000000 */
+/*             Target epoch   =  271683700.368949771 */
+/*             Number of limb points at this roll angle:            1 */
+/*             Limb point planetodetic coordinates: */
+/*              Longitude      (deg):       -123.633654215 */
+/*              Latitude       (deg):        -26.912378799 */
+/*              Altitude        (km):         -0.000000000 */
+/*              Emission angle (deg):         90.000000000 */
 
 
-/*        Computation method = GUIDED/DSK/UNPRIORITIZED */
-/*        Locus              = CENTER */
+/*         Computation method = TANGENT/DSK/UNPRIORITIZED */
+/*         Locus              = ELLIPSOID LIMB */
 
-/*          Roll angle (deg) =           0.000000000 */
-/*            Target epoch   =   271683700.368922532 */
-/*            Number of limb points at this roll angle:            1 */
-/*            Limb point planetodetic coordinates: */
-/*             Longitude      (deg):         -19.302259163 */
-/*             Latitude       (deg):          64.005910146 */
-/*             Altitude        (km):          -3.676424552 */
-/*             Emission angle (deg):          89.999998824 */
-/*             Distance error  (km):           6.664218206 */
+/*           Roll angle (deg) =          0.000000000 */
+/*             Target epoch   =  271683700.368869901 */
+/*             Number of limb points at this roll angle:            1 */
+/*             Limb point planetodetic coordinates: */
+/*              Longitude      (deg):        -19.302258950 */
+/*              Latitude       (deg):         63.893637269 */
+/*              Altitude        (km):         -3.667553936 */
+/*              Emission angle (deg):         90.112271887 */
 
-/*          Roll angle (deg) =         120.000000000 */
-/*            Target epoch   =   271683700.368922532 */
-/*            Number of limb points at this roll angle:            1 */
-/*            Limb point planetodetic coordinates: */
-/*             Longitude      (deg):          85.029135793 */
-/*             Latitude       (deg):         -26.912405352 */
-/*             Altitude        (km):          -0.328988915 */
-/*             Emission angle (deg):          89.999999843 */
-/*             Distance error  (km):          24.686472808 */
+/*           Roll angle (deg) =        120.000000000 */
+/*             Target epoch   =  271683700.368948162 */
+/*             Number of limb points at this roll angle:            1 */
+/*             Limb point planetodetic coordinates: */
+/*              Longitude      (deg):         85.434644188 */
+/*              Latitude       (deg):        -26.705411228 */
+/*              Altitude        (km):         -0.044832392 */
+/*              Emission angle (deg):         89.583080105 */
 
-/*          Roll angle (deg) =         240.000000000 */
-/*            Target epoch   =   271683700.368922532 */
-/*            Number of limb points at this roll angle:            1 */
-/*            Limb point planetodetic coordinates: */
-/*             Longitude      (deg):        -123.633653487 */
-/*             Latitude       (deg):         -26.912086524 */
-/*             Altitude        (km):           3.626058850 */
-/*             Emission angle (deg):          90.000001307 */
-/*             Distance error  (km):          15.716034625 */
+/*           Roll angle (deg) =        240.000000000 */
+/*             Target epoch   =  271683700.368949771 */
+/*             Number of limb points at this roll angle:            1 */
+/*             Limb point planetodetic coordinates: */
+/*              Longitude      (deg):       -123.375003954 */
+/*              Latitude       (deg):        -27.043096556 */
+/*              Altitude        (km):          3.695628339 */
+/*              Emission angle (deg):         90.265135303 */
+
+
+/*         Computation method = GUIDED/DSK/UNPRIORITIZED */
+/*         Locus              = CENTER */
+
+/*           Roll angle (deg) =          0.000000000 */
+/*             Target epoch   =  271683700.368922532 */
+/*             Number of limb points at this roll angle:            1 */
+/*             Limb point planetodetic coordinates: */
+/*              Longitude      (deg):        -19.302259163 */
+/*              Latitude       (deg):         64.005910146 */
+/*              Altitude        (km):         -3.676424552 */
+/*              Emission angle (deg):         89.999998824 */
+/*              Distance error  (km):          6.664218206 */
+
+/*           Roll angle (deg) =        120.000000000 */
+/*             Target epoch   =  271683700.368922532 */
+/*             Number of limb points at this roll angle:            1 */
+/*             Limb point planetodetic coordinates: */
+/*              Longitude      (deg):         85.029135793 */
+/*              Latitude       (deg):        -26.912405352 */
+/*              Altitude        (km):         -0.328988915 */
+/*              Emission angle (deg):         89.999999843 */
+/*              Distance error  (km):         24.686473322 */
+
+/*           Roll angle (deg) =        240.000000000 */
+/*             Target epoch   =  271683700.368922532 */
+/*             Number of limb points at this roll angle:            1 */
+/*             Limb point planetodetic coordinates: */
+/*              Longitude      (deg):       -123.633653487 */
+/*              Latitude       (deg):        -26.912086524 */
+/*              Altitude        (km):          3.626058850 */
+/*              Emission angle (deg):         90.000001307 */
+/*              Distance error  (km):         15.716034625 */
 
 
 /*     3) Find apparent limb points on comet Churyumov-Gerasimenko */
@@ -2335,334 +2387,316 @@ static doublereal c_b129 = 1.;
 /*        Use the CENTER aberration correction locus since the */
 /*        light time difference across the object is small. */
 
-/*        Use the meta-kernel shown below. */
-
-
-/*          KPL/MK */
-
-/*          File: limbpt_ex3.tm */
-
-/*          This meta-kernel is intended to support operation of SPICE */
-/*          example programs. The kernels shown here should not be */
-/*          assumed to contain adequate or correct versions of data */
-/*          required by SPICE-based user applications. */
-
-/*          In order for an application to use this meta-kernel, the */
-/*          paths of the kernels referenced here must be adjusted to */
-/*          be compatible with the user's host computer directory */
-/*          structure. */
-
-/*          The names and contents of the kernels referenced */
-/*          by this meta-kernel are as follows: */
-
-/*            File name                          Contents */
-/*            ---------                          -------- */
-/*            DE405.BSP                          Planetary ephemeris */
-/*            NAIF0011.TLS                       Leapseconds */
-/*            ROS_CG_M004_NSPCESA_N_V1.BDS       DSK plate model based on */
-/*                                               Rosetta NAVCAM data */
-/*            RORB_DV_145_01_______00216.BSP     Rosetta orbiter */
-/*                                               ephemeris */
-/*            CORB_DV_145_01_______00216.BSP     Comet Churyumov- */
-/*                                               Gerasimenko ephemeris */
-/*            ROS_CG_RAD_V10.TPC                 Comet Churyumov- */
-/*                                               Gerasimenko radii */
-/*            ROS_V25.TF                         Comet C-G frame kernel */
-/*                                               (includes SCLK */
-/*                                               parameters) */
-/*            CATT_DV_145_01_______00216.BC      Comet C-G C-kernel */
-
-
-/*          \begindata */
-
-/*             PATH_VALUES     = ( */
-
-/*                '/ftp/pub/naif/pds/data/+' */
-/*                'ro_rl-e_m_a_c-spice-6-v1.0/rossp_1000/DATA' */
-
-/*                               ) */
-
-/*             PATH_SYMBOLS    = ( */
-
-/*                'KERNELS' */
-/*                               ) */
-
-/*             KERNELS_TO_LOAD = ( */
-
-/*                '$KERNELS/SPK/DE405.BSP' */
-/*                '$KERNELS/LSK/NAIF0011.TLS' */
-/*                '$KERNELS/SPK/RORB_DV_145_01_______00216.BSP' */
-/*                '$KERNELS/SPK/CORB_DV_145_01_______00216.BSP' */
-/*                '$KERNELS/PCK/ROS_CG_RAD_V10.TPC' */
-/*                '$KERNELS/FK/ROS_V25.TF' */
-/*                '$KERNELS/CK/CATT_DV_145_01_______00216.BC' */
-/*                '$KERNELS/DSK/ROS_CG_M004_NSPCESA_N_V1.BDS' */
-
-/*                               ) */
-/*          \begintext */
-
-
-/*     Example code begins here. */
-
-
-/*       C */
-/*       C     LIMBPT example 3 */
-/*       C */
-/*       C        Find limb points on comet Churyumov-Gerasimenko */
-/*       C        as seen from the Rosetta orbiter. */
-/*       C */
-/*       C        Compute limb points using the tangent definition. */
-/*       C        Perform aberration corrections for the target center. */
-/*       C        Use both ellipsoid and DSK shape models. */
-/*       C */
-/*       C        Display only limb points lying in half-planes that */
-/*       C        contain multiple limb points. */
-/*       C */
-/*             PROGRAM EX3 */
-/*             IMPLICIT NONE */
-/*       C */
-/*       C     SPICELIB functions */
-/*       C */
-/*             DOUBLE PRECISION      DPR */
-/*             DOUBLE PRECISION      PI */
-/*             DOUBLE PRECISION      RPD */
-/*             DOUBLE PRECISION      VNORM */
-/*       C */
-/*       C     Local parameters */
-/*       C */
-/*             CHARACTER*(*)         META */
-/*             PARAMETER           ( META   = 'limbpt_ex3.tm' ) */
-
-/*             CHARACTER*(*)         FM1 */
-/*             PARAMETER           ( FM1     =  '(A,F21.9)' ) */
-
-/*             CHARACTER*(*)         FM2 */
-/*             PARAMETER           ( FM2     =  '(1X,3F21.9)' ) */
-
-/*             INTEGER               BDNMLN */
-/*             PARAMETER           ( BDNMLN = 36 ) */
-
-/*             INTEGER               FRNMLN */
-/*             PARAMETER           ( FRNMLN = 32 ) */
-
-/*             INTEGER               CORLEN */
-/*             PARAMETER           ( CORLEN = 20 ) */
-
-/*             INTEGER               MTHLEN */
-/*             PARAMETER           ( MTHLEN = 50 ) */
-
-/*             INTEGER               MAXN */
-/*             PARAMETER           ( MAXN = 1000 ) */
-/*       C */
-/*       C     Local variables */
-/*       C */
-/*             CHARACTER*(CORLEN)    ABCORR */
-/*             CHARACTER*(CORLEN)    CORLOC */
-/*             CHARACTER*(FRNMLN)    FIXREF */
-/*             CHARACTER*(MTHLEN)    METHOD */
-/*             CHARACTER*(BDNMLN)    OBSRVR */
-/*             CHARACTER*(BDNMLN)    TARGET */
-
-/*             DOUBLE PRECISION      ANGLE */
-/*             DOUBLE PRECISION      AXIS   ( 3 ) */
-/*             DOUBLE PRECISION      DELROL */
-/*             DOUBLE PRECISION      ET */
-/*             DOUBLE PRECISION      LT */
-/*             DOUBLE PRECISION      POINTS ( 3, MAXN ) */
-/*             DOUBLE PRECISION      REFVEC ( 3 ) */
-/*             DOUBLE PRECISION      ROLL */
-/*             DOUBLE PRECISION      SCHSTP */
-/*             DOUBLE PRECISION      SOLTOL */
-/*             DOUBLE PRECISION      TANGTS ( 3, MAXN ) */
-/*             DOUBLE PRECISION      TRGEPS ( MAXN ) */
-/*             DOUBLE PRECISION      TRGPOS ( 3 ) */
-/*             DOUBLE PRECISION      XVEC   ( 3 ) */
-
-/*             INTEGER               I */
-/*             INTEGER               J */
-/*             INTEGER               K */
-/*             INTEGER               NCUTS */
-/*             INTEGER               NPTS   ( MAXN ) */
-/*             INTEGER               START */
-/*       C */
-/*       C     Initial values */
-/*       C */
-/*             DATA                  METHOD / */
-/*            .                        'TANGENT/DSK/UNPRIORITIZED' */
-/*            .                             / */
-/*             DATA                  XVEC   / 1.D0, 0.D0, 0.D0 / */
-/*       C */
-/*       C     Load kernel files via the meta-kernel. */
-/*       C */
-/*             CALL FURNSH ( META ) */
-/*       C */
-/*       C     Set target, observer, and target body-fixed, */
-/*       C     body-centered reference frame. */
-/*       C */
-/*             OBSRVR = 'ROSETTA' */
-/*             TARGET = 'CHURYUMOV-GERASIMENKO' */
-/*             FIXREF = '67P/C-G_CK' */
-/*       C */
-/*       C     Set aberration correction and correction locus. */
-/*       C */
-/*             ABCORR = 'CN+S' */
-/*             CORLOC = 'CENTER' */
-/*       C */
-/*       C     Convert the UTC request time string seconds past */
-/*       C     J2000, TDB. */
-/*       C */
-/*             CALL STR2ET ( '2015 MAY 10 00:00:00', ET ) */
-/*       C */
-/*       C     Compute a set of limb points using light time and */
-/*       C     stellar aberration corrections. Use a step size */
-/*       C     corresponding to a 10 meter height error to ensure */
-/*       C     we don't miss the limb. Set the convergence tolerance */
-/*       C     to 1/100 of this amount, which will limit the height */
-/*       C     convergence error to about 10 cm. */
-/*       C */
-/*             CALL SPKPOS ( TARGET, ET,     FIXREF, ABCORR, */
-/*            .              OBSRVR, TRGPOS, LT             ) */
-
-
-/*             SCHSTP = 1.D-2  / VNORM(TRGPOS) */
-/*             SOLTOL = SCHSTP / 100.D0 */
-
-/*       C */
-/*       C     Set the reference vector to the start of a */
-/*       C     region of the roll domain on which we know */
-/*       C     (from an external computation) that we'll */
-/*       C     find multiple limb points in some half planes. */
-/*       C     Compute 30 limb points, starting with the */
-/*       C     half-plane containing the reference vector. */
-/*       C */
-/*             CALL VMINUS ( TRGPOS, AXIS ) */
-
-/*             ANGLE = 310.0D0 * RPD() */
-
-/*             CALL VROTV  ( XVEC, AXIS, ANGLE, REFVEC ) */
-
-/*             NCUTS  = 30 */
-/*             DELROL = 2*PI() / 1000 */
-
-/*             WRITE (*,*) ' ' */
-/*             WRITE (*,*) 'Observer:       '//OBSRVR */
-/*             WRITE (*,*) 'Target:         '//TARGET */
-/*             WRITE (*,*) 'Frame:          '//FIXREF */
-/*             WRITE (*,*) ' ' */
-/*             WRITE (*,*) 'Number of cuts: ', NCUTS */
-/*             WRITE (*,*) ' ' */
-
-/*             CALL LIMBPT ( METHOD, TARGET, ET,     FIXREF, */
-/*            .              ABCORR, CORLOC, OBSRVR, REFVEC, */
-/*            .              DELROL, NCUTS,  SCHSTP, SOLTOL, */
-/*            .              MAXN,   NPTS,   POINTS, TRGEPS, */
-/*            .              TANGTS                          ) */
-/*       C */
-/*       C     Write the results. */
-/*       C */
-/*             WRITE(*,*) ' ' */
-/*             WRITE(*,*) 'Computation method = ', METHOD */
-/*             WRITE(*,*) 'Locus              = ', CORLOC */
-/*             WRITE(*,*) ' ' */
-
-/*             START  = 0 */
-
-/*             DO I = 1, NCUTS */
-
-/*                ROLL = (I-1) * DELROL */
-
-/*                IF ( NPTS(I) .GT. 1 ) THEN */
-
-/*                   WRITE(*,*)   ' ' */
-/*                   WRITE(*,FM1) '  Roll angle (deg) = ', ROLL * DPR() */
-/*                   WRITE(*,FM1) '     Target epoch  = ', TRGEPS(I) */
-/*                   WRITE(*,*)   '    Number of limb points at this ' */
-/*            .      //           'roll angle: ', */
-/*            .                   NPTS(I) */
-
-/*                   WRITE (*,*) '      Limb points' */
-
-/*                   DO J = 1, NPTS(I) */
-/*                      WRITE (*,FM2) ( POINTS(K,J+START), K = 1, 3 ) */
-/*                   END DO */
-
-/*                END IF */
-
-/*                START = START + NPTS(I) */
-
-/*             END DO */
-/*             WRITE (*,*) ' ' */
-
-/*             END */
-
-
-/*     When this program was executed on a PC/Linux/gfortran 64-bit */
-/*     platform, the output was (only the first three and last three */
-/*     limb points are shown here): */
-
-
-/*      Observer:       ROSETTA */
-/*      Target:         CHURYUMOV-GERASIMENKO */
-/*      Frame:          67P/C-G_CK */
-
-/*      Number of cuts:           30 */
-
-
-/*      Computation method = TANGENT/DSK/UNPRIORITIZED */
-/*      Locus              = CENTER */
-
-
-/*       Roll angle (deg) =           0.000000000 */
-/*          Target epoch  =   484488067.184933782 */
-/*          Number of limb points at this roll angle:            3 */
-/*            Limb points */
-/*                1.320416231         -0.347379011          1.445260615 */
-/*                0.970350318          0.201685071          0.961996205 */
-/*                0.436720618          0.048224590          0.442280714 */
-
-/*       Roll angle (deg) =           0.360000000 */
-/*          Target epoch  =   484488067.184933782 */
-/*          Number of limb points at this roll angle:            3 */
-/*            Limb points */
-/*                1.330290293         -0.352340416          1.438802587 */
-/*                0.965481808          0.202131806          0.946190003 */
-/*                0.453917030          0.082062880          0.447624224 */
-
-/*       Roll angle (deg) =           0.720000000 */
-/*          Target epoch  =   484488067.184933782 */
-/*          Number of limb points at this roll angle:            3 */
-/*            Limb points */
-/*                1.339037339         -0.357848188          1.431256926 */
-/*                0.962159098          0.192370269          0.934342086 */
-/*                0.459160821          0.082273840          0.447880429 */
-
-/*        ... */
-
-
-/*       Roll angle (deg) =           9.720000000 */
-/*          Target epoch  =   484488067.184933782 */
-/*          Number of limb points at this roll angle:            3 */
-/*            Limb points */
-/*                1.568112677         -0.674947784          1.254880628 */
-/*                0.709857306         -0.111495634          0.547778706 */
-/*                0.491633785         -0.142729847          0.386229224 */
-
-/*       Roll angle (deg) =          10.080000000 */
-/*          Target epoch  =   484488067.184933782 */
-/*          Number of limb points at this roll angle:            3 */
-/*            Limb points */
-/*                1.585230837         -0.663993935          1.249957484 */
-/*                0.633077981         -0.300058272          0.502702168 */
-/*                0.254736344         -0.760250955          0.266785439 */
-
-/*       Roll angle (deg) =          10.440000000 */
-/*          Target epoch  =   484488067.184933782 */
-/*          Number of limb points at this roll angle:            3 */
-/*            Limb points */
-/*                1.599387477         -0.661757808          1.243621216 */
-/*                0.633255406         -0.293319746          0.495438969 */
-/*                0.271959251         -0.761967204          0.274619198 */
-
+/*        Use the meta-kernel shown below to load the required SPICE */
+/*        kernels. */
+
+
+/*           KPL/MK */
+
+/*           File: limbpt_ex3.tm */
+
+/*           This meta-kernel is intended to support operation of SPICE */
+/*           example programs. The kernels shown here should not be */
+/*           assumed to contain adequate or correct versions of data */
+/*           required by SPICE-based user applications. */
+
+/*           In order for an application to use this meta-kernel, the */
+/*           paths of the kernels referenced here must be adjusted to */
+/*           be compatible with the user's host computer directory */
+/*           structure. */
+
+/*           The names and contents of the kernels referenced */
+/*           by this meta-kernel are as follows: */
+
+/*              File name                         Contents */
+/*              ---------                         -------- */
+/*              DE405.BSP                         Planetary ephemeris */
+/*              NAIF0011.TLS                      Leapseconds */
+/*              ROS_CG_M004_NSPCESA_N_V1.BDS      DSK plate model based */
+/*                                                on Rosetta NAVCAM data */
+/*              RORB_DV_145_01_______00216.BSP    Rosetta orbiter */
+/*                                                ephemeris */
+/*              CORB_DV_145_01_______00216.BSP    Comet Churyumov- */
+/*                                                Gerasimenko ephemeris */
+/*              ROS_CG_RAD_V10.TPC                Comet Churyumov- */
+/*                                                Gerasimenko radii */
+/*              ROS_V25.TF                        Comet C-G frame kernel */
+/*                                                (includes SCLK */
+/*                                                parameters) */
+/*              CATT_DV_145_01_______00216.BC     Comet C-G C-kernel */
+
+
+/*                \begindata */
+
+/*             KERNELS_TO_LOAD = ( 'DE405.BSP' */
+/*                                 'NAIF0011.TLS', */
+/*                                 'RORB_DV_145_01_______00216.BSP', */
+/*                                 'CORB_DV_145_01_______00216.BSP', */
+/*                                 'ROS_CG_RAD_V10.TPC', */
+/*                                 'ROS_V25.TF', */
+/*                                 'CATT_DV_145_01_______00216.BC', */
+/*                                 'ROS_CG_M004_NSPCESA_N_V1.BDS'   ) */
+/*                \begintext */
+
+/*                End of meta-kernel */
+
+
+/*        Example code begins here. */
+
+
+/*        C */
+/*        C     LIMBPT example 3 */
+/*        C */
+/*        C        Find limb points on comet Churyumov-Gerasimenko */
+/*        C        as seen from the Rosetta orbiter. */
+/*        C */
+/*        C        Compute limb points using the tangent definition. */
+/*        C        Perform aberration corrections for the target center. */
+/*        C        Use both ellipsoid and DSK shape models. */
+/*        C */
+/*        C        Display only limb points lying in half-planes that */
+/*        C        contain multiple limb points. */
+/*        C */
+/*              PROGRAM LIMBPT_EX3 */
+/*              IMPLICIT NONE */
+/*        C */
+/*        C     SPICELIB functions */
+/*        C */
+/*              DOUBLE PRECISION      DPR */
+/*              DOUBLE PRECISION      PI */
+/*              DOUBLE PRECISION      RPD */
+/*              DOUBLE PRECISION      VNORM */
+/*        C */
+/*        C     Local parameters */
+/*        C */
+/*              CHARACTER*(*)         META */
+/*              PARAMETER           ( META   = 'limbpt_ex3.tm' ) */
+
+/*              CHARACTER*(*)         FM1 */
+/*              PARAMETER           ( FM1     =  '(A,F20.9)' ) */
+
+/*              CHARACTER*(*)         FM2 */
+/*              PARAMETER           ( FM2     =  '(1X,3F20.9)' ) */
+
+/*              INTEGER               BDNMLN */
+/*              PARAMETER           ( BDNMLN = 36 ) */
+
+/*              INTEGER               FRNMLN */
+/*              PARAMETER           ( FRNMLN = 32 ) */
+
+/*              INTEGER               CORLEN */
+/*              PARAMETER           ( CORLEN = 20 ) */
+
+/*              INTEGER               MTHLEN */
+/*              PARAMETER           ( MTHLEN = 50 ) */
+
+/*              INTEGER               MAXN */
+/*              PARAMETER           ( MAXN = 1000 ) */
+/*        C */
+/*        C     Local variables */
+/*        C */
+/*              CHARACTER*(CORLEN)    ABCORR */
+/*              CHARACTER*(CORLEN)    CORLOC */
+/*              CHARACTER*(FRNMLN)    FIXREF */
+/*              CHARACTER*(MTHLEN)    METHOD */
+/*              CHARACTER*(BDNMLN)    OBSRVR */
+/*              CHARACTER*(BDNMLN)    TARGET */
+
+/*              DOUBLE PRECISION      ANGLE */
+/*              DOUBLE PRECISION      AXIS   ( 3 ) */
+/*              DOUBLE PRECISION      DELROL */
+/*              DOUBLE PRECISION      ET */
+/*              DOUBLE PRECISION      LT */
+/*              DOUBLE PRECISION      POINTS ( 3, MAXN ) */
+/*              DOUBLE PRECISION      REFVEC ( 3 ) */
+/*              DOUBLE PRECISION      ROLL */
+/*              DOUBLE PRECISION      SCHSTP */
+/*              DOUBLE PRECISION      SOLTOL */
+/*              DOUBLE PRECISION      TANGTS ( 3, MAXN ) */
+/*              DOUBLE PRECISION      TRGEPS ( MAXN ) */
+/*              DOUBLE PRECISION      TRGPOS ( 3 ) */
+/*              DOUBLE PRECISION      XVEC   ( 3 ) */
+
+/*              INTEGER               I */
+/*              INTEGER               J */
+/*              INTEGER               K */
+/*              INTEGER               NCUTS */
+/*              INTEGER               NPTS   ( MAXN ) */
+/*              INTEGER               START */
+/*        C */
+/*        C     Initial values */
+/*        C */
+/*              DATA                  METHOD / */
+/*             .                        'TANGENT/DSK/UNPRIORITIZED' */
+/*             .                             / */
+/*              DATA                  XVEC   / 1.D0, 0.D0, 0.D0 / */
+/*        C */
+/*        C     Load kernel files via the meta-kernel. */
+/*        C */
+/*              CALL FURNSH ( META ) */
+/*        C */
+/*        C     Set target, observer, and target body-fixed, */
+/*        C     body-centered reference frame. */
+/*        C */
+/*              OBSRVR = 'ROSETTA' */
+/*              TARGET = 'CHURYUMOV-GERASIMENKO' */
+/*              FIXREF = '67P/C-G_CK' */
+/*        C */
+/*        C     Set aberration correction and correction locus. */
+/*        C */
+/*              ABCORR = 'CN+S' */
+/*              CORLOC = 'CENTER' */
+/*        C */
+/*        C     Convert the UTC request time string seconds past */
+/*        C     J2000, TDB. */
+/*        C */
+/*              CALL STR2ET ( '2015 MAY 10 00:00:00', ET ) */
+/*        C */
+/*        C     Compute a set of limb points using light time and */
+/*        C     stellar aberration corrections. Use a step size */
+/*        C     corresponding to a 10 meter height error to ensure */
+/*        C     we don't miss the limb. Set the convergence tolerance */
+/*        C     to 1/100 of this amount, which will limit the height */
+/*        C     convergence error to about 10 cm. */
+/*        C */
+/*              CALL SPKPOS ( TARGET, ET,     FIXREF, ABCORR, */
+/*             .              OBSRVR, TRGPOS, LT             ) */
+
+
+/*              SCHSTP = 1.D-2  / VNORM(TRGPOS) */
+/*              SOLTOL = SCHSTP / 100.D0 */
+
+/*        C */
+/*        C     Set the reference vector to the start of a */
+/*        C     region of the roll domain on which we know */
+/*        C     (from an external computation) that we'll */
+/*        C     find multiple limb points in some half planes. */
+/*        C     Compute 6 limb points, starting with the */
+/*        C     half-plane containing the reference vector. */
+/*        C */
+/*              CALL VMINUS ( TRGPOS, AXIS ) */
+
+/*              ANGLE = 310.0D0 * RPD() */
+
+/*              CALL VROTV  ( XVEC, AXIS, ANGLE, REFVEC ) */
+
+/*              NCUTS  = 6 */
+/*              DELROL = 2*PI() / 1000 */
+
+/*              WRITE (*,*) ' ' */
+/*              WRITE (*,*) 'Observer:       '//OBSRVR */
+/*              WRITE (*,*) 'Target:         '//TARGET */
+/*              WRITE (*,*) 'Frame:          '//FIXREF */
+/*              WRITE (*,*) ' ' */
+/*              WRITE (*,*) 'Number of cuts: ', NCUTS */
+/*              WRITE (*,*) ' ' */
+
+/*              CALL LIMBPT ( METHOD, TARGET, ET,     FIXREF, */
+/*             .              ABCORR, CORLOC, OBSRVR, REFVEC, */
+/*             .              DELROL, NCUTS,  SCHSTP, SOLTOL, */
+/*             .              MAXN,   NPTS,   POINTS, TRGEPS, */
+/*             .              TANGTS                          ) */
+/*        C */
+/*        C     Write the results. */
+/*        C */
+/*              WRITE(*,*) ' ' */
+/*              WRITE(*,*) 'Computation method = ', METHOD */
+/*              WRITE(*,*) 'Locus              = ', CORLOC */
+/*              WRITE(*,*) ' ' */
+
+/*              START  = 0 */
+
+/*              DO I = 1, NCUTS */
+
+/*                 ROLL = (I-1) * DELROL */
+
+/*                 IF ( NPTS(I) .GT. 1 ) THEN */
+
+/*                    WRITE(*,*)   ' ' */
+/*                    WRITE(*,FM1) '  Roll angle (deg) = ', ROLL * DPR() */
+/*                    WRITE(*,FM1) '     Target epoch  = ', TRGEPS(I) */
+/*                    WRITE(*,*)   '    Number of limb points at this ' */
+/*             .      //           'roll angle: ', */
+/*             .                   NPTS(I) */
+
+/*                    WRITE (*,*) '      Limb points' */
+
+/*                    DO J = 1, NPTS(I) */
+/*                       WRITE (*,FM2) ( POINTS(K,J+START), K = 1, 3 ) */
+/*                    END DO */
+
+/*                 END IF */
+
+/*                 START = START + NPTS(I) */
+
+/*              END DO */
+/*              WRITE (*,*) ' ' */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*         Observer:       ROSETTA */
+/*         Target:         CHURYUMOV-GERASIMENKO */
+/*         Frame:          67P/C-G_CK */
+
+/*         Number of cuts:            6 */
+
+
+/*         Computation method = TANGENT/DSK/UNPRIORITIZED */
+/*         Locus              = CENTER */
+
+
+/*          Roll angle (deg) =          0.000000000 */
+/*             Target epoch  =  484488067.184933782 */
+/*             Number of limb points at this roll angle:            3 */
+/*               Limb points */
+/*                  1.320416231        -0.347379011         1.445260615 */
+/*                  0.970350318         0.201685071         0.961996205 */
+/*                  0.436720618         0.048224590         0.442280714 */
+
+/*          Roll angle (deg) =          0.360000000 */
+/*             Target epoch  =  484488067.184933782 */
+/*             Number of limb points at this roll angle:            3 */
+/*               Limb points */
+/*                  1.330290293        -0.352340416         1.438802587 */
+/*                  0.965481808         0.202131806         0.946190003 */
+/*                  0.453917030         0.082062880         0.447624224 */
+
+/*          Roll angle (deg) =          0.720000000 */
+/*             Target epoch  =  484488067.184933782 */
+/*             Number of limb points at this roll angle:            3 */
+/*               Limb points */
+/*                  1.339037339        -0.357848188         1.431256926 */
+/*                  0.962159098         0.192370269         0.934342086 */
+/*                  0.459160821         0.082273840         0.447880429 */
+
+/*          Roll angle (deg) =          1.080000000 */
+/*             Target epoch  =  484488067.184933782 */
+/*             Number of limb points at this roll angle:            3 */
+/*               Limb points */
+/*                  1.346729151        -0.365488231         1.423051540 */
+/*                  0.960760394         0.183652804         0.924323093 */
+/*                  0.464582286         0.084076587         0.447930141 */
+
+/*          Roll angle (deg) =          1.440000000 */
+/*             Target epoch  =  484488067.184933782 */
+/*             Number of limb points at this roll angle:            3 */
+/*               Limb points */
+/*                  1.351235771        -0.380664224         1.413164272 */
+/*                  0.960268777         0.176953543         0.914876859 */
+/*                  0.466284590         0.079312729         0.445564308 */
+
+/*          Roll angle (deg) =          1.800000000 */
+/*             Target epoch  =  484488067.184933782 */
+/*             Number of limb points at this roll angle:            3 */
+/*               Limb points */
+/*                  1.358042184        -0.390349186         1.404421386 */
+/*                  0.959495690         0.170340551         0.905212642 */
+/*                  0.370611049        -0.167047205         0.395076979 */
 
 
 /* $ Restrictions */
@@ -2679,11 +2713,32 @@ static doublereal c_b129 = 1.;
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
 
 /* $ Version */
 
-/* -    SPICELIB Version 1.0.0 08-MAR-2017 (NJB) */
+/* -    SPICELIB Version 2.0.0, 01-NOV-2021 (NJB) (JDR) */
+
+/*        Added support for transmission aberration corrections. */
+
+/*        Bug fix: deleted a computation of TMPVEC that had no effect. */
+
+/*        Bug fix: PRVCOR is no longer set to blank before */
+/*        ABCORR is parsed. */
+
+/*        Bug fix: corrected long error message for an unsupported */
+/*        limb type used with the ELLIPSOID LIMB locus. */
+
+/*        Corrected description of iteration count for non-converged */
+/*        corrections. */
+
+/*        Edited the header to comply with NAIF standard. Reduced */
+/*        the number of cuts to present in the output in Example #3. */
+/*        Modified output format in all examples to comply with the */
+/*        maximum line length of header comments. */
+
+/* -    SPICELIB Version 1.0.0, 08-MAR-2017 (NJB) */
 
 /*        Based on original version 14-NOV-2015 (NJB) */
 
@@ -2771,28 +2826,11 @@ static doublereal c_b129 = 1.;
     }
     if (first || s_cmp(abcorr, prvcor, abcorr_len, (ftnlen)5) != 0) {
 
-/*        Make sure the results of this block won't be reused */
-/*        if we bail out due to an error. */
-
-	s_copy(prvcor, " ", (ftnlen)5, (ftnlen)1);
-
 /*        The aberration correction flag differs from the value it */
 /*        had on the previous call, if any. Analyze the new flag. */
 
 	zzvalcor_(abcorr, attblk, abcorr_len);
 	if (failed_()) {
-	    chkout_("LIMBPT", (ftnlen)6);
-	    return 0;
-	}
-
-/*        In this routine, we don't allow transmission corrections. */
-
-	if (attblk[4]) {
-	    setmsg_("Aberration correction # calls for transmission-style co"
-		    "rrections. These are not supported for limb finding.", (
-		    ftnlen)107);
-	    errch_("#", abcorr, (ftnlen)1, abcorr_len);
-	    sigerr_("SPICE(INVALIDOPTION)", (ftnlen)20);
 	    chkout_("LIMBPT", (ftnlen)6);
 	    return 0;
 	}
@@ -2809,15 +2847,29 @@ static doublereal c_b129 = 1.;
 
 
 /*        The above definitions are consistent with those used by */
-/*        ZZPRSCOR. */
+/*        ZZVALCOR. */
 
 	uselt = attblk[1];
 	usecn = attblk[3];
 	usestl = attblk[2];
+	xmit = attblk[4];
 
 /*        The aberration correction flag is valid; save it. */
 
 	s_copy(prvcor, abcorr, (ftnlen)5, abcorr_len);
+    }
+
+/*     Set the sign S prefixing LT in expression for light time- */
+/*     corrected epochs associated with limb points. */
+
+    if (uselt) {
+	if (xmit) {
+	    s = 1.;
+	} else {
+	    s = -1.;
+	}
+    } else {
+	s = 0.;
     }
 
 /*     Obtain integer codes for the target and observer. */
@@ -3157,7 +3209,6 @@ static doublereal c_b129 = 1.;
 
 /*     Set up activities are complete at this point. */
 
-
 /*     Find limb points on the target. */
 
     cleari_(ncuts, npts);
@@ -3213,7 +3264,7 @@ static doublereal c_b129 = 1.;
 	}
 
 /*        If we're using an ellipsoidal shape model, or if */
-/*        we're using the "guided" limb option. find the */
+/*        we're using the "guided" limb option, find the */
 /*        limb parameters of the reference ellipsoid. */
 
 	if (shape == 1 || lmbtyp == 2) {
@@ -3229,7 +3280,7 @@ static doublereal c_b129 = 1.;
 /*           AXIS. */
 
 	    if (vdot_(enorml, axis) < 0.) {
-		vsclip_(&c_b121, enorml);
+		vsclip_(&c_b116, enorml);
 	    }
 	    if (shape == 2) {
 
@@ -3278,7 +3329,7 @@ static doublereal c_b129 = 1.;
 /*                 Note that the evaluation epoch for the surface is */
 /*                 optionally corrected for light time. */
 
-		    zztangnt_(&c__0, &c_b124, &shape, &trgcde, &nsurf, srflst,
+		    zztangnt_(&c__0, &c_b119, &shape, &trgcde, &nsurf, srflst,
 			     &fxfcde, &trgepc, plnvec, axis, schstp, soltol, 
 			    result, pntbuf);
 		    if (failed_()) {
@@ -3315,7 +3366,7 @@ static doublereal c_b129 = 1.;
 /*                 invisible from the interior of the target. */
 
 		    d__1 = maxrad * 3.;
-		    vlcom_(&c_b129, center, &d__1, edir, rayvtx);
+		    vlcom_(&c_b124, center, &d__1, edir, rayvtx);
 		    vminus_(edir, raydir);
 		    zzraysfx_(rayvtx, raydir, &trgepc, pntbuf, &fnd);
 		    if (failed_()) {
@@ -3406,10 +3457,10 @@ static doublereal c_b129 = 1.;
 	    i__2 = npts[i__ - 1];
 	    for (j = 1; j <= i__2; ++j) {
 		vequ_(&pntbuf[(i__3 = j * 3 - 3) < 6000 && 0 <= i__3 ? i__3 : 
-			s_rnge("pntbuf", i__3, "limbpt_", (ftnlen)3186)], &
+			s_rnge("pntbuf", i__3, "limbpt_", (ftnlen)3225)], &
 			points[to * 3 - 3]);
 		vsub_(&pntbuf[(i__3 = j * 3 - 3) < 6000 && 0 <= i__3 ? i__3 : 
-			s_rnge("pntbuf", i__3, "limbpt_", (ftnlen)3187)], 
+			s_rnge("pntbuf", i__3, "limbpt_", (ftnlen)3226)], 
 			axis, &tangts[to * 3 - 3]);
 		epochs[to - 1] = trgepc;
 		++to;
@@ -3426,8 +3477,13 @@ static doublereal c_b129 = 1.;
 
 	if (lmbtyp != 1) {
 	    setmsg_("Limb type <#> is not supported for the # aberration cor"
-		    "rection locus.", (ftnlen)69);
-	    errch_("#", svlstr, (ftnlen)1, (ftnlen)20);
+		    "rection locus. Only the TANGENT limb type is supported f"
+		    "or this locus.", (ftnlen)125);
+	    if (lmbtyp == 2) {
+		errch_("#", "GUIDED", (ftnlen)1, (ftnlen)6);
+	    } else {
+		errint_("#", &lmbtyp, (ftnlen)1);
+	    }
 	    errch_("#", corloc, (ftnlen)1, corloc_len);
 	    sigerr_("SPICE(BADLIMBLOCUSMIX)", (ftnlen)22);
 	    chkout_("LIMBPT", (ftnlen)6);
@@ -3473,7 +3529,7 @@ static doublereal c_b129 = 1.;
 /*                 LT was set either prior to this loop or */
 /*                 during the previous loop iteration. */
 
-		    d__1 = *et - lt;
+		    d__1 = *et + s * lt;
 		    epoch = touchd_(&d__1);
 		    spkgps_(&trgcde, &epoch, "J2000", &c__0, ssbtrg, &ssblt, (
 			    ftnlen)5);
@@ -3497,7 +3553,11 @@ static doublereal c_b129 = 1.;
 /*                       correction by using the correction applicable */
 /*                       to the target center. */
 
-			    stelab_(ptarg, &stobs[3], stlpos);
+			    if (xmit) {
+				stlabx_(ptarg, &stobs[3], stlpos);
+			    } else {
+				stelab_(ptarg, &stobs[3], stlpos);
+			    }
 			} else {
 
 /*                       We apply the correction found for the previous */
@@ -3553,7 +3613,7 @@ static doublereal c_b129 = 1.;
 /*                 AXIS. */
 
 		    if (vdot_(enorml, axis) < 0.) {
-			vsclip_(&c_b121, enorml);
+			vsclip_(&c_b116, enorml);
 		    }
 
 /*                 Let CUTNML be a vector normal to the current cutting */
@@ -3612,9 +3672,12 @@ static doublereal c_b129 = 1.;
 /*                    frame and compute the stellar aberration */
 /*                    correction that applies to this vector. */
 
-			stelab_(isrfvc, &stobs[3], stlpos);
+			if (xmit) {
+			    stlabx_(isrfvc, &stobs[3], stlpos);
+			} else {
+			    stelab_(isrfvc, &stobs[3], stlpos);
+			}
 			vsub_(stlpos, isrfvc, stloff);
-			mxv_(xform, stloff, tmpvec);
 		    }
 
 /*                 Compute the light time to the limb point. */
@@ -3644,7 +3707,7 @@ static doublereal c_b129 = 1.;
 
 		mxv_(xform, cortrg, tmpvec);
 		vminus_(tmpvec, axis);
-		epoch = *et - lt;
+		epoch = *et + s * lt;
 	    } else {
 
 /*              This is the geometric case. */
@@ -3687,7 +3750,7 @@ static doublereal c_b129 = 1.;
 /*              AXIS. */
 
 		if (vdot_(enorml, axis) < 0.) {
-		    vsclip_(&c_b121, enorml);
+		    vsclip_(&c_b116, enorml);
 		}
 
 /*              Let CUTNML be a vector normal to the current cutting */
@@ -3749,7 +3812,7 @@ static doublereal c_b129 = 1.;
 /*              Note that the evaluation epoch for the surface is */
 /*              corrected for light time. */
 
-		zztangnt_(&c__0, &c_b124, &shape, &trgcde, &nsurf, srflst, &
+		zztangnt_(&c__0, &c_b119, &shape, &trgcde, &nsurf, srflst, &
 			fxfcde, &epoch, plnvec, axis, schstp, soltol, result, 
 			pntbuf);
 		if (failed_()) {
@@ -3790,10 +3853,10 @@ static doublereal c_b129 = 1.;
 	    i__2 = npts[i__ - 1];
 	    for (j = 1; j <= i__2; ++j) {
 		vequ_(&pntbuf[(i__3 = j * 3 - 3) < 6000 && 0 <= i__3 ? i__3 : 
-			s_rnge("pntbuf", i__3, "limbpt_", (ftnlen)3653)], &
+			s_rnge("pntbuf", i__3, "limbpt_", (ftnlen)3706)], &
 			points[to * 3 - 3]);
 		vsub_(&pntbuf[(i__3 = j * 3 - 3) < 6000 && 0 <= i__3 ? i__3 : 
-			s_rnge("pntbuf", i__3, "limbpt_", (ftnlen)3654)], 
+			s_rnge("pntbuf", i__3, "limbpt_", (ftnlen)3707)], 
 			axis, &tangts[to * 3 - 3]);
 		epochs[to - 1] = epoch;
 		++to;

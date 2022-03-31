@@ -13,7 +13,7 @@ static integer c__5 = 5;
 static integer c__2 = 2;
 static integer c__6 = 6;
 
-/* $Procedure      CKBSR ( C-kernel, buffer segments for readers ) */
+/* $Procedure CKBSR ( C-kernel, buffer segments for readers ) */
 /* Subroutine */ int ckbsr_0_(int n__, char *fname, integer *handle, integer *
 	inst, doublereal *sclkdp, doublereal *tol, logical *needav, 
 	doublereal *descr, char *segid, logical *found, ftnlen fname_len, 
@@ -40,7 +40,7 @@ static integer c__6 = 6;
 
     /* Local variables */
     integer head, tail;
-    static doublereal itlb[100], itub[100];
+    static doublereal itlb[5000], itub[5000];
     integer cost;
     static doublereal reqt;
     integer i__, j;
@@ -48,7 +48,7 @@ static integer c__6 = 6;
     integer cheap, p;
     extern /* Subroutine */ int dafgs_(doublereal *);
     static doublereal alpha, omega;
-    static integer itbeg[100], slbeg;
+    static integer itbeg[5000], slbeg;
     extern /* Subroutine */ int chkin_(char *, ftnlen), dafps_(integer *, 
 	    integer *, doublereal *, integer *, doublereal *);
     static integer fthan[5000];
@@ -57,13 +57,13 @@ static integer c__6 = 6;
     static integer sticd[600000]	/* was [6][100000] */;
     extern doublereal dpmin_(void), dpmax_(void);
     extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
-    static integer ithfs[100], sthan[100000];
+    static integer ithfs[5000], sthan[100000];
     extern /* Subroutine */ int dafus_(doublereal *, integer *, integer *, 
 	    doublereal *, integer *);
-    static integer itlfs[100];
+    static integer itlfs[5000];
     extern /* Subroutine */ int lnkan_(integer *, integer *);
     extern integer lnktl_(integer *, integer *);
-    static integer itins[100], ftnum[5000], itexp[100];
+    static integer itins[5000], ftnum[5000], itexp[5000];
     extern /* Subroutine */ int daffna_(logical *), dafbbs_(integer *), 
 	    daffpa_(logical *);
     extern logical failed_(void);
@@ -77,7 +77,7 @@ static integer c__6 = 6;
     extern /* Subroutine */ int lnkilb_(integer *, integer *, integer *);
     extern integer isrchi_(integer *, integer *, integer *);
     static integer iindex;
-    static logical itchkp[100];
+    static logical itchkp[5000];
     extern /* Subroutine */ int lnkini_(integer *, integer *);
     extern integer lnknfn_(integer *);
     static logical newsch;
@@ -88,14 +88,14 @@ static integer c__6 = 6;
     extern /* Subroutine */ int setmsg_(char *, ftnlen);
     static char stidnt[40*100000];
     char urgent[40];
-    static doublereal itprvd[500]	/* was [5][100] */;
-    static integer itprvf[100];
+    static doublereal itprvd[25000]	/* was [5][5000] */;
+    static integer itprvf[5000];
     integer nxtseg;
     extern integer lnkprv_(integer *, integer *);
-    static char itprvi[40*100];
+    static char itprvi[40*5000];
     extern integer lnknxt_(integer *, integer *);
     extern logical return_(void);
-    static integer itprvh[100], itruex[100], stpool[200012]	/* was [2][
+    static integer itprvh[5000], itruex[5000], stpool[200012]	/* was [2][
 	    100006] */, scinst;
     extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     doublereal dcd[2];
@@ -146,88 +146,69 @@ static integer c__6 = 6;
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Entry points */
+/*     VARIABLE  I/O  ENTRY POINTS */
 /*     --------  ---  -------------------------------------------------- */
 /*     FNAME      I   CKLPF */
-/*     HANDLE    I,O  CKLPF, CKUPF, CKSNS */
+/*     HANDLE    I-O  CKLPF, CKUPF, CKSNS */
 /*     INST       I   CKBSS */
 /*     SCLKDP     I   CKBSS */
 /*     TOL        I   CKBSS */
 /*     NEEDAV     I   CKBSS */
 /*     DESCR      O   CKSNS */
 /*     SEGID      O   CKSNS */
-/*     FOUND      O   CKSNS */
+/*     FOUND      O   CKSNS, CKHAVE */
 
 /* $ Detailed_Input */
 
-/*     FNAME      is the name of a binary C-kernel file to be loaded. */
+/*     FNAME    is the name of a binary C-kernel file to be loaded. */
 
-/*     HANDLE     on input is the handle of a binary C-kernel file to be */
-/*                unloaded. */
+/*     HANDLE   on input, is the handle of a binary C-kernel file to be */
+/*              unloaded. */
 
+/*     INST     is the NAIF ID of an instrument. */
 
-/*     The purpose of entry points CKBSS and CKSNS is to search for */
-/*     segments in CK files matching certain criteria. The four */
-/*     quantities below establish these search criteria. */
+/*     SCLKDP   is an encoded spacecraft clock time. */
 
+/*     TOL      is a time tolerance, measured in the same units as */
+/*              encoded spacecraft clock. */
 
-/*     INST       is the NAIF ID of an instrument. */
+/*     NEEDAV   indicates whether or not angular velocity data are */
+/*              required. */
 
-/*     SCLKDP     is an encoded spacecraft clock time. */
-
-/*     TOL        is a time tolerance, measured in the same units as */
-/*                encoded spacecraft clock. */
-
-/*     NEEDAV     indicates whether or not angular velocity data are */
-/*                required. */
-
-/*                If true, only segments containing pointing and angular */
-/*                velocity data will be checked. If false, segments */
-/*                containing just pointing data will also be considered. */
-
-
-/*     A segment matches the CKBSS/CKSNS search criteria when the */
-/*     following statements are true. */
-
-/*        1) INST matches the instrument number for the segment. */
-
-/*        2) The time interval [SCLKDP - TOL, SCLKDP + TOL] intersects */
-/*           the time interval of the segment. */
-
-/*        3) If angular velocity data are required, as indicated by */
-/*           NEEDAV, the segment contains angular velocity data. */
-
+/*              If .TRUE., only segments containing pointing and angular */
+/*              velocity data will be checked. If .FALSE., segments */
+/*              containing just pointing data will also be considered. */
 
 /* $ Detailed_Output */
 
-/*     HANDLE     on output is the handle of the C-kernel file */
-/*                containing a located segment. */
+/*     HANDLE   on output, is the handle of the C-kernel file */
+/*              containing a located segment. */
 
-/*     DESCR      is the packed descriptor of a located segment. */
+/*     DESCR    is the packed descriptor of a located segment. */
 
-/*     SEGID      is the identifier of a located segment. */
+/*     SEGID    is the identifier of a located segment. */
 
-/*     FOUND      indicates whether a requested segment was found or not. */
+/*     FOUND    indicates whether a requested segment was found or not. */
 
 /* $ Parameters */
 
-/*     FTSIZE     is the maximum number of pointing files that can */
-/*                be loaded by CKLPF at any given time for use by the */
-/*                readers. */
+/*     FTSIZE   is the maximum number of pointing files that can */
+/*              be loaded by CKLPF at any given time for use by the */
+/*              readers. */
 
-/*     ITSIZE     is the maximum number of instruments whose segments */
-/*                are buffered by CKSNS. */
+/*     ITSIZE   is the maximum number of instruments whose segments */
+/*              are buffered by CKSNS. */
 
-/*     STSIZE     is the maximum number of segments that can be buffered */
-/*                at any given time by CKSNS. */
+/*     STSIZE   is the maximum number of segments that can be buffered */
+/*              at any given time by CKSNS. */
 
 /* $ Exceptions */
 
-/*     1) If CKBSR is called directly, the error SPICE(CKBOGUSENTRY) */
-/*        is signaled. */
+/*     1)  If CKBSR is called directly, the error SPICE(CKBOGUSENTRY) */
+/*         is signaled. */
 
-/*     2) See entry points CKLPF, CKUPF, CKBSS, and CKSNS for exceptions */
-/*        specific to them. */
+/*     2)  See entry points CKLPF, CKUPF, CKBSS, and CKSNS for */
+/*         exceptions specific to them. */
 
 /* $ Files */
 
@@ -243,6 +224,7 @@ static integer c__6 = 6;
 /*        CKUPF       Unload pointing file. */
 /*        CKBSS       Begin search for segment. */
 /*        CKSNS       Select next segment. */
+/*        CKHAVE      Determine whether or not any CKs are loaded. */
 
 /*     Before a file can be read by the C-kernel readers, it must be */
 /*     loaded by CKLPF, which among other things load the file into */
@@ -260,16 +242,37 @@ static integer c__6 = 6;
 /*     A file may be removed from the list of files for potential */
 /*     searching by unloading it via a call to CKUPF. */
 
-/*     CKBSS and CKSNS are used together to search through loaded files */
-/*     for segments. */
+/*     The purpose of entry points CKBSS and CKSNS is to search for */
+/*     segments in CK files matching certain criteria, which is */
+/*     established based on CKBSS input arguments INST, SCLKDP, TOL and */
+/*     NEEDAV. These two routines are used together to search through */
+/*     all loaded CK files for segments. */
 
-/*     CKBSS sets up the search. You tell it the instrument and time */
-/*     that you are interested in, and whether you require segments */
-/*     containing angular velocity data. */
+/*     CKBSS sets up a search for segments by CKSNS. It records the */
+/*     instrument and time to be searched for, and whether to require */
+/*     segments containing angular velocity data. If angular velocity */
+/*     data are required, only segments containing angular velocity */
+/*     data will be returned by CKSNS. If angular velocity data are */
+/*     not required, segments returned by CKSNS may or may not contain */
+/*     angular velocity data. */
+
+/*     CKBSS determines the first task that CKSNS will have to perform */
+/*     if it is called to get an applicable segment. */
 
 /*     CKSNS finds segments matching the search criteria set up by */
 /*     CKBSS. Last-loaded files get searched first, and individual files */
 /*     are searched backwards. */
+
+/*     A segment matches the CKBSS/CKSNS search criteria when the */
+/*     following statements are true. */
+
+/*        1) INST matches the instrument number for the segment. */
+
+/*        2) The time interval [SCLKDP - TOL, SCLKDP + TOL] intersects */
+/*           the time interval of the segment. */
+
+/*        3) If angular velocity data are required, as indicated by */
+/*           NEEDAV, the segment contains angular velocity data. */
 
 /*     When an applicable segment is found, CKSNS returns that segment's */
 /*     descriptor and identifier, along with the handle of the file */
@@ -284,180 +287,303 @@ static integer c__6 = 6;
 
 /* $ Examples */
 
-/*     Suppose that pointing data for the Voyager 2 narrow angle camera */
-/*     for a certain interval of time are contained in three separate */
-/*     files:  ORIGINAL.CK contains an original complete set of pointing */
-/*     data and UPDATE_1.CK and UPDATE_2.CK contain two separate pointing */
-/*     updates for certain pictures in the same time period. */
+/*     The numerical results shown for this example may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
 
-/*     In the following example, pointing from the C-kernel is extracted */
-/*     in two different ways for the purpose of comparing the two */
-/*     updates: */
+/*     1) Suppose that pointing data for the Viking Orbiter 2 scan */
+/*        platform orientation for a certain interval of time are */
+/*        contained in three separate files, one containing data for the */
+/*        original SEDR (Supplemental Experiment Data Record) files, */
+/*        contains the complete set of pointing data and another two */
+/*        which contain two separate pointing updates based on */
+/*        reconstruction, one of them containing discrete data, and the */
+/*        other continuous pointing data. */
 
-/*     First, the original pointing file and one of the update files are */
-/*     both loaded and pointing is retrieved for all of the pictures. */
-/*     The update file is searched through first, and if no data for the */
-/*     desired picture is located, then the original file provides the */
-/*     requested pointing. */
+/*        In the following example, pointing from the C-kernel is */
+/*        extracted in two different ways for the purpose of comparing */
+/*        the two updates: */
 
-/*     Then, the first update file is unloaded, the second update file */
-/*     is loaded, and the same search is performed, as above. */
+/*        First, the original pointing file and one of the update files */
+/*        are both loaded and pointing is retrieved for all of the */
+/*        pictures. The update file is searched through first, and if */
+/*        no data for the desired picture is located, then the original */
+/*        file provides the requested pointing. */
 
-/*     Throughout the two searches, a fictitious non-SPICELIB routine */
-/*     named WRTABL writes an entry into a table that contains */
-/*     the pointing of the camera and the file from which the pointing */
-/*     came, if such pointing was found.  WRERR, another fictitious, */
-/*     non-SPICELIB routine writes an error message if no such pointing */
-/*     was found. */
-
-/*     It is assumed that an array (FDS) exists that contains character */
-/*     representations of the spacecraft clock time for each picture, */
-/*     and that there are NPICS pictures. */
-
-/*           INTEGER               NPICS */
-/*           PARAMETER           ( NPICS = 100 ) */
-
-/*           INTEGER               HANDLE */
-/*           INTEGER               HNORIG */
-/*           INTEGER               HUPDT */
-/*           INTEGER               UPDATE */
-/*           INTEGER               INST */
-/*           INTEGER               SC */
-/*           INTEGER               I */
-
-/*           DOUBLE PRECISION      DESCR    (    5 ) */
-/*           DOUBLE PRECISION      SCLKDP */
-/*           DOUBLE PRECISION      TOL */
-/*           DOUBLE PRECISION      CLKOUT */
-/*           DOUBLE PRECISION      CMAT     ( 3, 3 ) */
-/*           DOUBLE PRECISION      AV       (    3 ) */
-
-/*           CHARACTER*(12)        FDS      ( NPICS ) */
-/*           CHARACTER*(25)        FNAME */
-/*           CHARACTER*(40)        SEGID */
-/*           CHARACTER*(12)        OUTFDS */
-/*           CHARACTER*(12)        TOLSTR */
-/*           CHARACTER*(25)        UDFILE   (    2 ) */
-
-/*           LOGICAL               PFOUND */
-/*           LOGICAL               SFOUND */
-/*           LOGICAL               NEEDAV */
+/*        Then, the first update file is unloaded, the second update */
+/*        file is loaded, and the same search is performed, as above. */
 
 
-/*           UDFILE ( 1 ) = 'UPDATE_1.CK' */
-/*           UDFILE ( 2 ) = 'UPDATE_2.CK' */
+/*        Use the CK kernel below to load the Viking Orbiter 2 scan */
+/*        platform orientation containing a combination of data from */
+/*        SEDR files. */
 
-/*     C */
-/*     C     The NAIF integer ID codes for the Voyager 2 spacecraft */
-/*     C     and the narrow angle camera on Voyager 2 are -32 and */
-/*     C     -32001, respectively. */
-/*     C */
-/*           SC           = -32 */
-/*           INST         = -32001 */
-/*     C */
-/*     C     Load the Voyager SCLK file. */
-/*     C */
-/*           CALL FURNSH ( 'VG2_SCLK.TSC' ) */
-
-/*     C */
-/*     C     Allow a time tolerance of 400 line counts.  Convert */
-/*     C     the tolerance to 'ticks', the units of encoded spacecraft */
-/*     C     clock time. */
-/*     C */
-/*           TOLSTR  = '0:00:400' */
-/*           CALL SCTIKS ( SC, TOLSTR, TOL ) */
-
-/*     C */
-/*     C     Don't care about angular velocity data. */
-/*     C */
-/*           NEEDAV = .FALSE. */
-
-/*     C */
-/*     C     Load the original CK file first. */
-/*     C */
-/*           CALL CKLPF ( 'ORIGINAL.CK', HNORIG ) */
+/*           vo2_sedr_ck2.bc */
 
 
-/*           DO UPDATE = 1, 2 */
-/*     C */
-/*     C        Load the update file.  Last-loaded files get searched */
-/*     C        first, so the update file will be searched before */
-/*     C        the original file. */
-/*     C */
-/*              CALL CKLPF ( UDFILE ( UPDATE ), HUPDT ) */
+/*        Use the CK kernel below to load the Viking Orbiter 2 scan */
+/*        platform orientation discrete data reconstructed during */
+/*        cartographic image registration by S. Wu, USGS. */
 
-/*              DO I = 1, NPICS */
+/*           vo2_swu.bc */
 
-/*     C */
-/*     C           Encode the character string representation of */
-/*     C           spacecraft clock time in FDS. */
-/*     C */
-/*                 CALL SCENCD ( SC, FDS( I ), SCLKDP ) */
 
-/*     C */
-/*     C           Begin a search for this instrument and time, and */
-/*     C           get the first applicable segment. */
-/*     C */
-/*                 CALL CKBSS ( INST,   SCLKDP, TOL,   NEEDAV  ) */
-/*                 CALL CKSNS ( HANDLE, DESCR,  SEGID, SFOUND  ) */
+/*        Use the CK kernel below to load the Viking Orbiter 2 scan */
+/*        platform orientation discrete data reconstructed during */
+/*        cartographic image registration by S. Wu, USGS, where each */
+/*        discrete pointing instance was "expanded" into a 2 second */
+/*        window. */
 
-/*     C */
-/*     C           Keep trying candidate segments until a segment can */
-/*     C           produce a pointing instance within the specified */
-/*     C           time tolerance of SCLKDP, the encoded spacecraft */
-/*     C           clock time. */
-/*     C */
-/*                 PFOUND = .FALSE. */
+/*           vo2_swu_ck2.bc */
 
-/*                 DO WHILE (  SFOUND .AND. ( .NOT. PFOUND )  ) */
 
-/*                    CALL CKPFS ( HANDLE, DESCR, SCLKDP, TOL,  NEEDAV, */
-/*          .                      CMAT,   AV,    CLKOUT, PFOUND       ) */
+/*        Use the meta-kernel shown below to load the required SPICE */
+/*        kernels. */
 
-/*                    IF ( PFOUND ) THEN */
 
-/*     C                 Get the name of the file from whence the */
-/*     C                 pointing instance came, decode the spacecraft */
-/*     C                 clock time associated with the instance, and */
-/*     C                 write the results to the table. */
-/*     C */
-/*                       CALL DAFHFN ( HANDLE, FNAME          ) */
-/*                       CALL SCDECD ( SC,     CLKOUT, OUTFDS ) */
+/*           KPL/MK */
 
-/*                       CALL WRTABL ( FDS( I ), OUTFDS, CMAT, FNAME ) */
+/*           File name: ckbsr_ex1.tm */
 
-/*                    ELSE */
-/*     C */
-/*     C                 Look for another candidate segment. */
-/*     C */
-/*                       CALL CKSNS ( HANDLE, DESCR, SEGID, SFOUND ) */
+/*           This meta-kernel is intended to support operation of SPICE */
+/*           example programs. The kernels shown here should not be */
+/*           assumed to contain adequate or correct versions of data */
+/*           required by SPICE-based user applications. */
+
+/*           In order for an application to use this meta-kernel, the */
+/*           kernels referenced here must be present in the user's */
+/*           current working directory. */
+
+/*           The names and contents of the kernels referenced */
+/*           by this meta-kernel are as follows: */
+
+/*              File name                     Contents */
+/*              ---------                     -------- */
+/*              vo2_fict.tsc                  Viking 2 SCLK */
+/*              naif0012.tls                  Leapseconds */
+
+
+/*           \begindata */
+
+/*              KERNELS_TO_LOAD = ( 'vo2_fict.tsc', */
+/*                                  'naif0012.tls'  ) */
+
+/*           \begintext */
+
+/*           End of meta-kernel */
+
+
+/*        Example code begins here. */
+
+
+/*              PROGRAM CKBSR_EX1 */
+/*              IMPLICIT NONE */
+
+/*        C */
+/*        C     Local parameters. */
+/*        C */
+/*              INTEGER               NPICS */
+/*              PARAMETER           ( NPICS  = 5  ) */
+
+/*              INTEGER               TIMLEN */
+/*              PARAMETER           ( TIMLEN = 24 ) */
+
+
+/*        C */
+/*        C     Local variables. */
+/*        C */
+/*              INTEGER               HANDLE */
+/*              INTEGER               HNORIG */
+/*              INTEGER               HUPDT */
+/*              INTEGER               UPDATE */
+/*              INTEGER               INST */
+/*              INTEGER               SC */
+/*              INTEGER               I */
+
+/*              DOUBLE PRECISION      ET */
+/*              DOUBLE PRECISION      DESCR    (    5 ) */
+/*              DOUBLE PRECISION      SCLKDP */
+/*              DOUBLE PRECISION      TOL */
+/*              DOUBLE PRECISION      CLKOUT */
+/*              DOUBLE PRECISION      CMAT     ( 3, 3 ) */
+/*              DOUBLE PRECISION      AV       (    3 ) */
+
+/*              CHARACTER*(TIMLEN)    FDS      ( NPICS ) */
+/*              CHARACTER*(25)        FNAME */
+/*              CHARACTER*(40)        SEGID */
+/*              CHARACTER*(16)        OUTFDS */
+/*              CHARACTER*(14)        TOLSTR */
+/*              CHARACTER*(25)        UDFILE   (    2 ) */
+
+/*              LOGICAL               PFOUND */
+/*              LOGICAL               SFOUND */
+/*              LOGICAL               NEEDAV */
+
+/*        C */
+/*        C     Set the times for the pictures. */
+/*        C */
+/*              DATA                  FDS / */
+/*             .                 '1976 OCT 31 22:07:21.000', */
+/*             .                 '1977-JAN-09 18:33:13.707', */
+/*             .                 '1977 APR 24 11:48:05.000', */
+/*             .                 '1977 JUN 07 00:13:15.000', */
+/*             .                 '1977-AUG-07 14:55:12.019' / */
+
+
+/*              UDFILE ( 1 ) = 'vo2_swu.bc' */
+/*              UDFILE ( 2 ) = 'vo2_swu_ck2.bc' */
+
+/*        C */
+/*        C     The NAIF integer ID codes for the Viking Orbiter 2 */
+/*        C     spacecraft and scan platform on Viking Orbiter 2 are */
+/*        C     -30 and -30000, respectively. */
+/*        C */
+/*              SC           = -30 */
+/*              INST         = -30000 */
+
+/*        C */
+/*        C     Load the LSK and Viking 2 SCLK files. */
+/*        C */
+/*              CALL FURNSH ( 'ckbsr_ex1.tm' ) */
+
+/*        C */
+/*        C     Allow a time tolerance of 500 milliseconds.  Convert */
+/*        C     the tolerance to 'ticks', the units of encoded */
+/*        C     spacecraft clock time. */
+/*        C */
+/*              TOLSTR  = '0.500' */
+/*              CALL SCTIKS ( SC, TOLSTR, TOL ) */
+
+/*        C */
+/*        C     Don't care about angular velocity data. */
+/*        C */
+/*              NEEDAV = .FALSE. */
+
+/*        C */
+/*        C     Load the original CK file first. */
+/*        C */
+/*              CALL CKLPF ( 'vo2_sedr_ck2.bc', HNORIG ) */
+
+/*        C */
+/*        C     Write banner. */
+/*        C */
+/*              WRITE(*,'(A)') '     Input UTC time       ' */
+/*             .            // 'Pointing found in      SCLK time' */
+/*              WRITE(*,'(A)') '------------------------  ' */
+/*             .            // '-----------------  ----------------' */
+
+/*              DO UPDATE = 1, 2 */
+/*        C */
+/*        C        Load the update file.  Last-loaded files get searched */
+/*        C        first, so the update file will be searched before */
+/*        C        the original file. */
+/*        C */
+/*                 CALL CKLPF ( UDFILE ( UPDATE ), HUPDT ) */
+
+/*                 DO I = 1, NPICS */
+
+/*        C */
+/*        C           Encode the character string representation of */
+/*        C           spacecraft clock time in FDS. */
+/*        C */
+/*                    CALL STR2ET ( FDS( I ) , ET  ) */
+/*                    CALL SCE2C  ( SC, ET, SCLKDP ) */
+
+/*        C */
+/*        C           Begin a search for this instrument and time, and */
+/*        C           get the first applicable segment. */
+/*        C */
+/*                    CALL CKBSS ( INST,   SCLKDP, TOL,   NEEDAV  ) */
+/*                    CALL CKSNS ( HANDLE, DESCR,  SEGID, SFOUND  ) */
+
+/*        C */
+/*        C           Keep trying candidate segments until a segment can */
+/*        C           produce a pointing instance within the specified */
+/*        C           time tolerance of SCLKDP, the encoded spacecraft */
+/*        C           clock time. */
+/*        C */
+/*                    PFOUND = .FALSE. */
+/*                    DO WHILE (  SFOUND .AND. ( .NOT. PFOUND )  ) */
+
+/*                       CALL CKPFS ( HANDLE, DESCR,  SCLKDP, */
+/*             .                      TOL,    NEEDAV, CMAT, */
+/*             .                      AV,     CLKOUT, PFOUND ) */
+
+/*                       IF ( PFOUND ) THEN */
+
+/*        C */
+/*        C                 Get the name of the file from whence the */
+/*        C                 pointing instance came, decode the */
+/*        C                 spacecraft clock time associated with the */
+/*        C                 instance, and write the results to the */
+/*        C                 table. */
+/*        C */
+/*                          CALL DAFHFN ( HANDLE, FNAME          ) */
+/*                          CALL SCDECD ( SC,     CLKOUT, OUTFDS ) */
+
+/*                          WRITE(*,'(A,2X,A17,2X,A)') FDS( I ), FNAME, */
+/*             .                                       OUTFDS */
+
+/*                       ELSE */
+
+/*        C */
+/*        C                 Look for another candidate segment. */
+/*        C */
+/*                          CALL CKSNS ( HANDLE, DESCR, SEGID, SFOUND ) */
+
+/*                       END IF */
+
+/*                    END DO */
+
+/*                    IF ( .NOT. PFOUND ) THEN */
+
+/*                       WRITE(*,'(A)') FDS( I ) // '  pointing not ' */
+/*             .                     // 'found in any file.' */
 
 /*                    END IF */
 
 /*                 END DO */
 
-/*                 IF ( .NOT. PFOUND ) THEN */
+/*                 WRITE(*,*) ' ' */
 
-/*                    CALL WRERR ( FDS( I ) ) */
-
-/*                 END IF */
+/*        C */
+/*        C        Unload the update file. The original file stays */
+/*        C        loaded. */
+/*        C */
+/*                 CALL CKUPF  ( HUPDT ) */
 
 /*              END DO */
 
-/*     C */
-/*     C        Unload the update file.  The original file stays loaded. */
-/*     C */
-/*              CALL CKUPF  ( HUPDT ) */
+/*              END */
 
-/*           END DO */
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*             Input UTC time       Pointing found in      SCLK time */
+/*        ------------------------  -----------------  ---------------- */
+/*        1976 OCT 31 22:07:21.000  vo2_sedr_ck2.bc    1/0026345241.000 */
+/*        1977-JAN-09 18:33:13.707  vo2_swu.bc         1/0032380394.707 */
+/*        1977 APR 24 11:48:05.000  vo2_sedr_ck2.bc    1/0041428086.000 */
+/*        1977 JUN 07 00:13:15.000  pointing not found in any file. */
+/*        1977-AUG-07 14:55:12.019  vo2_sedr_ck2.bc    1/0050511313.019 */
+
+/*        1976 OCT 31 22:07:21.000  vo2_sedr_ck2.bc    1/0026345241.000 */
+/*        1977-JAN-09 18:33:13.707  vo2_swu_ck2.bc     1/0032380394.707 */
+/*        1977 APR 24 11:48:05.000  vo2_sedr_ck2.bc    1/0041428086.000 */
+/*        1977 JUN 07 00:13:15.000  pointing not found in any file. */
+/*        1977-AUG-07 14:55:12.019  vo2_swu_ck2.bc     1/0050511313.019 */
+
 
 /* $ Restrictions */
 
-/*     1) If Fortran I/O errors occur while searching a loaded CK */
-/*        file, the internal state of this suite of routines may */
-/*        be corrupted.  It may be possible to correct the state */
-/*        by unloading the pertinent CK files and then re-loading */
-/*        them. */
+/*     1)  If Fortran I/O errors occur while searching a loaded CK */
+/*         file, the internal state of this suite of routines may */
+/*         be corrupted. It may be possible to correct the state */
+/*         by unloading the pertinent CK files and then re-loading */
+/*         them. */
 
 /* $ Literature_References */
 
@@ -465,15 +591,30 @@ static integer c__6 = 6;
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
-/*     J.M. Lynch     (JPL) */
-/*     J.E. McLean    (JPL) */
-/*     B.V. Semenov   (JPL) */
-/*     M.J. Spencer   (JPL) */
-/*     R.E. Thurman   (JPL) */
-/*     I.M. Underwood (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     J.M. Lynch         (JPL) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     R.E. Thurman       (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 5.1.0, 25-OCT-2021 (JDR) (BVS) (NJB) */
+
+/*        Increased ITSIZE (from 100 to 5000). */
+
+/*        Updated entry point CKSNS to always initialize FOUND. */
+
+/*        Edited the header of umbrella routine CKBSR, and all entry */
+/*        points to comply with NAIF standard. Created complete code */
+/*        example from existing fragments in CKBSR $Examples section. */
+
+/*        Added references to CKHAVE entry point in CKBSR header. */
+
+/*        Moved details related to search criteria and conditions to meet */
+/*        it from the $Detailed_Input to $Particulars. */
 
 /* -    SPICELIB Version 5.0.1, 30-JAN-2017 (NJB) */
 
@@ -512,13 +653,13 @@ static integer c__6 = 6;
 
 /* -    SPICELIB Version 4.3.1, 28-FEB-2008 (BVS) */
 
-/*        Corrected the contents of the Required_Reading section */
+/*        Corrected the contents of the $Required_Reading section */
 /*        of the CKHAVE entry point header. */
 
 /* -    SPICELIB Version 4.3.0, 23-OCT-2005 (NJB) */
 
 /*        Updated to remove non-standard use of duplicate arguments in */
-/*        MOVED calls in entry points CKUPF and CKSNS.  Replaced header */
+/*        MOVED calls in entry points CKUPF and CKSNS. Replaced header */
 /*        reference to LDPOOL with reference to FURNSH. */
 
 /* -    SPICELIB Version 4.2.0, 30-DEC-2004 (NJB) */
@@ -537,7 +678,7 @@ static integer c__6 = 6;
 /*           2) An algorithm change has eliminated a bug caused by not */
 /*              updating the current instrument index when instrument */
 /*              table entries having empty segment lists were compressed */
-/*              out of the instrument table.  Previously the instrument */
+/*              out of the instrument table. Previously the instrument */
 /*              table pointer IINDEX could go stale after the */
 /*              compression. */
 
@@ -561,7 +702,7 @@ static integer c__6 = 6;
 
 /*        The segment list cost algorithm was modified slightly: */
 /*        the contribution of a file search to the cost of a list */
-/*        is included only when the file search is completed.  The */
+/*        is included only when the file search is completed. The */
 /*        cost of finding the re-use interval is accounted for when */
 /*        unbuffered searches are required. */
 
@@ -600,7 +741,7 @@ static integer c__6 = 6;
 /*        so that it can now be compiled. */
 
 /*     4) The length of the elements in the array of segment */
-/*        indentifiers ( STIDNT ) was changed from 56 to 40. */
+/*        identifiers ( STIDNT ) was changed from 56 to 40. */
 
 /* -    SPICELIB Version 1.1.1, 10-MAR-1992 (WLT) */
 
@@ -619,7 +760,7 @@ static integer c__6 = 6;
 /* -& */
 /* $ Index_Entries */
 
-/*     buffer ck segments for readers */
+/*     buffer CK segments for readers */
 
 /* -& */
 /* $ Revisions */
@@ -642,7 +783,7 @@ static integer c__6 = 6;
 /* -    SPICELIB Version 4.3.0, 23-OCT-2005 (NJB) */
 
 /*        Updated to remove non-standard use of duplicate arguments in */
-/*        MOVED calls in entry points CKUPF and CKSNS.  Replaced header */
+/*        MOVED calls in entry points CKUPF and CKSNS. Replaced header */
 /*        reference to LDPOOL with reference to FURNSH. */
 
 /* -    SPICELIB Version 4.2.0, 30-DEC-2004 (NJB) */
@@ -661,7 +802,7 @@ static integer c__6 = 6;
 /*           2) An algorithm change has eliminated a bug caused by not */
 /*              updating the current instrument index when instrument */
 /*              table entries having empty segment lists were compressed */
-/*              out of the instrument.  Previously the instrument table */
+/*              out of the instrument. Previously the instrument table */
 /*              pointer IINDEX could go stale after the compression. */
 
 /*           3) When a already loaded kernel is re-opened with DAFOPR, */
@@ -680,14 +821,14 @@ static integer c__6 = 6;
 
 /*        The "re-use interval" feature was introduced to improve speed */
 /*        in the case where repeated, consecutive requests are satisfied */
-/*        by the same segment.  For each instrument, the associated */
+/*        by the same segment. For each instrument, the associated */
 /*        re-use interval marks the time interval containing the previous */
 /*        request time for which the previously returned segment provides */
 /*        the  highest-priority data available. */
 
 /*        The segment list cost algorithm was modified slightly: */
 /*        the contribution of a file search to the cost of a list */
-/*        is included only when the file search is completed.  The */
+/*        is included only when the file search is completed. The */
 /*        cost of finding the re-use interval is accounted for when */
 /*        unbuffered searches are required. */
 
@@ -710,20 +851,20 @@ static integer c__6 = 6;
 
 /* -    SPICELIB Version 2.0.0, 25-NOV-1992 (JML) */
 
-/*     1) When loading a file, CKLPF now checks if the file table is */
-/*        full only after determining that the file is not currently */
-/*        loaded. Previously, if the file table was full and an attempt */
-/*        was made to reload a file, an error was signaled. A new */
-/*        exception was added as a result of this change. */
+/*        1) When loading a file, CKLPF now checks if the file table is */
+/*           full only after determining that the file is not currently */
+/*           loaded. Previously, if the file table was full and an */
+/*           attempt was made to reload a file, an error was signaled. A */
+/*           new exception was added as a result of this change. */
 
-/*     2) A bug in the way that CKLPF and CKUPF clean up the instrument */
-/*        tables after a file is unloaded was fixed. */
+/*        2) A bug in the way that CKLPF and CKUPF clean up the */
+/*           instrument tables after a file is unloaded was fixed. */
 
-/*     3) Variable declarations were added to the example program */
-/*        so that it can now be compiled. */
+/*        3) Variable declarations were added to the example program */
+/*           so that it can now be compiled. */
 
-/*     4) The length of the elements in the array of segment */
-/*        indentifiers ( STIDNT ) was changed from 56 to 40. */
+/*        4) The length of the elements in the array of segment */
+/*           identifiers ( STIDNT ) was changed from 56 to 40. */
 
 /* -    SPICELIB Version 1.1.0, 01-NOV-1990 (JML) */
 
@@ -915,12 +1056,12 @@ static integer c__6 = 6;
     sigerr_("SPICE(CKBOGUSENTRY)", (ftnlen)19);
     chkout_("CKBSR", (ftnlen)5);
     return 0;
-/* $Procedure CKLPF ( C-kernel, load pointing file ) */
+/* $Procedure CKLPF ( CK, load pointing file ) */
 
 L_cklpf:
 /* $ Abstract */
 
-/*     Load a CK pointing file for use by the CK readers.  Return that */
+/*     Load a CK pointing file for use by the CK readers. Return that */
 /*     file's handle, to be used by other CK routines to refer to the */
 /*     file. */
 
@@ -965,7 +1106,7 @@ L_cklpf:
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     FNAME      I   Name of the CK file to be loaded. */
 /*     HANDLE     O   Loaded file's handle. */
@@ -973,62 +1114,74 @@ L_cklpf:
 
 /* $ Detailed_Input */
 
-/*     FNAME      is the name of a C-kernel file to be loaded. */
+/*     FNAME    is the name of a C-kernel file to be loaded. */
 
 /* $ Detailed_Output */
 
-/*     HANDLE     is an integer handle assigned to the file upon loading. */
-/*                Almost every other CK routine will subsequently use */
-/*                this number to refer to the file. */
+/*     HANDLE   is an integer handle assigned to the file upon loading. */
+/*              Almost every other CK routine will subsequently use */
+/*              this number to refer to the file. */
 
 /* $ Parameters */
 
-/*     FTSIZE     is the maximum number of CK files that may */
-/*                be loaded simultaneously under any circumstances. */
-/*                FTSIZE is currently set to match the maximum number */
-/*                of DAF files that may be loaded simultaneously. */
+/*     FTSIZE   is the maximum number of CK files that may */
+/*              be loaded simultaneously under any circumstances. */
+/*              FTSIZE is currently set to match the maximum number */
+/*              of DAF files that may be loaded simultaneously. */
 
 /* $ Exceptions */
 
-/*     1) If an attempt is made to open more DAF files than is specified */
-/*        by the parameter FTSIZE in DAFAH, an error is signaled by a */
-/*        routine in the call tree of this routine. */
+/*     1)  If an attempt is made to load more DAF files than is */
+/*         specified by the parameter FTSIZE in DAF system, an error */
+/*         is signaled by a routine in the call tree of this routine. */
 
-/*     2) If an attempt is made to load more files than is specified */
-/*        by the local parameter FTSIZE, and if the DAF system has */
-/*        room to load another file, the error SPICE(CKTOOMANYFILES) */
-/*        signaled.  The current setting of FTSIZE does not allow this */
-/*        situation to arise:  the DAF system will trap the error */
-/*        before this routine has the chance. */
+/*     2)  If an attempt is made to load more files than is specified */
+/*         by the parameter FTSIZE in the CK subsystem, and if the DAF */
+/*         system has room to load another file, the error */
+/*         SPICE(CKTOOMANYFILES) is signaled. The current setting of */
+/*         FTSIZE does not allow this situation to arise: the DAF */
+/*         system will trap the error before this routine has the */
+/*         chance. */
 
-/*     3) If the file specified by FNAME can not be opened, an error */
-/*        is signaled by a routine that this routine calls. */
+/*     3)  If the file specified by FNAME can not be opened, an error */
+/*         is signaled by a routine in the call tree of this routine. */
 
-/*     4) If the file specified by FNAME has already been loaded, */
-/*        it will become the "last-loaded" file.  The readers */
-/*        search the last-loaded file first. */
+/*     4)  If the file specified by FNAME has already been loaded, */
+/*         it will become the "last-loaded" file. The readers */
+/*         search the last-loaded file first. */
 
 /* $ Files */
 
-/*     The C-kernel file specified by FNAME is loaded.  The file is */
-/*     assigned an integer handle by CKLPF.  Other CK routines will refer */
+/*     The C-kernel file specified by FNAME is loaded. The file is */
+/*     assigned an integer handle by CKLPF. Other CK routines will refer */
 /*     to this file by its handle. */
 
 /* $ Particulars */
 
-/*     See Particulars above, in CKBSR. */
+/*     Before a file can be read by the C-kernel readers, it must be */
+/*     loaded by CKLPF, which among other things load the file into */
+/*     the DAF subsystem. */
+
+/*     Up to FTSIZE files may be loaded for use simultaneously, and a */
+/*     file only has to be loaded once to become a potential search */
+/*     target for any number of subsequent reads. */
+
+/*     Once a C-kernel has been loaded, it is assigned a file */
+/*     handle, which is used to keep track of the file internally, and */
+/*     which is used by the calling program to refer to the file in all */
+/*     subsequent calls to CK routines. */
 
 /*     If there is room for a new file, CKLPF opens the file for */
-/*     reading.  This routine must be called prior to a call to CKGP or */
+/*     reading. This routine must be called prior to a call to CKGP or */
 /*     CKGPAV. */
 
 /*     CK readers search files loaded with CKLPF in the reverse order */
-/*     in which they were loaded.  That is, last-loaded files are */
+/*     in which they were loaded. That is, last-loaded files are */
 /*     searched first. */
 
 /* $ Examples */
 
-/*     See the Example above, in CKBSR. */
+/*     See $Examples in CKBSR. */
 
 /* $ Restrictions */
 
@@ -1040,14 +1193,19 @@ L_cklpf:
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
-/*     J.M. Lynch     (JPL) */
-/*     J.E. McLean    (JPL) */
-/*     M.J. Spencer   (JPL) */
-/*     R.E. Thurman   (JPL) */
-/*     I.M. Underwood (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     J.M. Lynch         (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     R.E. Thurman       (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 5.0.2, 25-OCT-2021 (JDR) */
+
+/*        Updated the header to comply with NAIF standard. Extended */
+/*        $Particulars section. */
 
 /* -    SPICELIB Version 5.0.1, 30-JAN-2017 (NJB) */
 
@@ -1069,10 +1227,10 @@ L_cklpf:
 
 /*        2) This routine now resets all file numbers when */
 /*           the next file number reaches INTMAX()-1, thereby avoiding */
-/*           arithmetic overflow.  The numbers in the file table */
+/*           arithmetic overflow. The numbers in the file table */
 /*           are replaced with consecutive integers in the range */
 /*           1 : NFT, such that the ordering of the numbers is not */
-/*           changed.  The HFS and LFS arrays are updated accordingly. */
+/*           changed. The HFS and LFS arrays are updated accordingly. */
 
 /*        Also, the flags indicating validity of the re-use intervals */
 /*        are set to .FALSE. here. */
@@ -1088,13 +1246,13 @@ L_cklpf:
 
 /* -    SPICELIB Version 2.0.0, 25-NOV-1992 (JML) */
 
-/*     1) When loading a file, CKLPF now checks if the file table is */
+/*        When loading a file, CKLPF now checks if the file table is */
 /*        full only after determining that the file is not currently */
 /*        loaded. Previously, if the file table was full and an attempt */
-/*        was made to reload a file, an error was signaled.  A new */
+/*        was made to reload a file, an error was signaled. A new */
 /*        exception was added as a result of this change. */
 
-/*     2) A bug in the way that CKLPF and CKUPF clean up the instrument */
+/*        A bug in the way that CKLPF and CKUPF clean up the instrument */
 /*        tables after a file is unloaded was fixed. */
 
 /* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
@@ -1107,7 +1265,7 @@ L_cklpf:
 /* -& */
 /* $ Index_Entries */
 
-/*     load ck pointing file */
+/*     load CK pointing file */
 
 /* -& */
 /* $ Revisions */
@@ -1122,10 +1280,10 @@ L_cklpf:
 
 /*        2) This routine now resets all file numbers when */
 /*           the next file number reaches INTMAX()-1, thereby avoiding */
-/*           arithmetic overflow.  The numbers in the file table */
+/*           arithmetic overflow. The numbers in the file table */
 /*           are replaced with consecutive integers in the range */
 /*           1 : NFT, such that the ordering of the numbers is not */
-/*           changed.  The HFS and LFS arrays are updated accordingly. */
+/*           changed. The HFS and LFS arrays are updated accordingly. */
 /*           HFS and LFS entries that have gone stale are set to zero. */
 
 /*        Also, the flags indicating validity of the re-use intervals */
@@ -1135,13 +1293,13 @@ L_cklpf:
 
 /*        Temp version for testing purposes. */
 
-/*     1) When loading a file, CKLPF now checks if the file table is */
+/*        When loading a file, CKLPF now checks if the file table is */
 /*        full only after determining that the file is not currently */
 /*        loaded. Previously, if the file table was full and an attempt */
-/*        was made to reload a file, an error was signaled.  A new */
+/*        was made to reload a file, an error was signaled. A new */
 /*        exception was added as a result of this change. */
 
-/*     2) A bug in the way that CKLPF and CKUPF clean up the instrument */
+/*        A bug in the way that CKLPF and CKUPF clean up the instrument */
 /*        tables after a file is unloaded was fixed. */
 
 /*        If as the result of loading a file that was previously loaded, */
@@ -1220,8 +1378,8 @@ L_cklpf:
 
     i__1 = nit;
     for (i__ = 1; i__ <= i__1; ++i__) {
-	itchkp[(i__2 = i__ - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge("itchkp", 
-		i__2, "ckbsr_", (ftnlen)1316)] = FALSE_;
+	itchkp[(i__2 = i__ - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge("itchkp", 
+		i__2, "ckbsr_", (ftnlen)1474)] = FALSE_;
     }
 
 /*     Nothing works unless at least one file has been loaded, so this */
@@ -1260,28 +1418,28 @@ L_cklpf:
 	i__1 = nft;
 	for (i__ = findex; i__ <= i__1; ++i__) {
 	    fthan[(i__2 = i__ - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge("fthan"
-		    , i__2, "ckbsr_", (ftnlen)1360)] = fthan[(i__3 = i__) < 
+		    , i__2, "ckbsr_", (ftnlen)1518)] = fthan[(i__3 = i__) < 
 		    5000 && 0 <= i__3 ? i__3 : s_rnge("fthan", i__3, "ckbsr_",
-		     (ftnlen)1360)];
+		     (ftnlen)1518)];
 	    ftnum[(i__2 = i__ - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge("ftnum"
-		    , i__2, "ckbsr_", (ftnlen)1361)] = ftnum[(i__3 = i__) < 
+		    , i__2, "ckbsr_", (ftnlen)1519)] = ftnum[(i__3 = i__) < 
 		    5000 && 0 <= i__3 ? i__3 : s_rnge("ftnum", i__3, "ckbsr_",
-		     (ftnlen)1361)];
+		     (ftnlen)1519)];
 	}
 
 /*        Unlink any segments that came from this file. */
 
 	i__ = 1;
 	while(i__ <= nit) {
-	    p = itbeg[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-		    "itbeg", i__1, "ckbsr_", (ftnlen)1371)];
+	    p = itbeg[(i__1 = i__ - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
+		    "itbeg", i__1, "ckbsr_", (ftnlen)1529)];
 	    while(p > 0) {
 
 /*              Find the successor of P, if any. */
 
 		nxtseg = lnknxt_(&p, stpool);
 		if (sthan[(i__1 = p - 1) < 100000 && 0 <= i__1 ? i__1 : 
-			s_rnge("sthan", i__1, "ckbsr_", (ftnlen)1379)] == *
+			s_rnge("sthan", i__1, "ckbsr_", (ftnlen)1537)] == *
 			handle) {
 
 /*                 The segment corresponding to node P came from */
@@ -1291,11 +1449,11 @@ L_cklpf:
 /*                 make the successor of P the head of the list. */
 
 		    lnkfsl_(&p, &p, stpool);
-		    if (p == itbeg[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 
-			    : s_rnge("itbeg", i__1, "ckbsr_", (ftnlen)1389)]) 
-			    {
-			itbeg[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : 
-				s_rnge("itbeg", i__1, "ckbsr_", (ftnlen)1390)]
+		    if (p == itbeg[(i__1 = i__ - 1) < 5000 && 0 <= i__1 ? 
+			    i__1 : s_rnge("itbeg", i__1, "ckbsr_", (ftnlen)
+			    1547)]) {
+			itbeg[(i__1 = i__ - 1) < 5000 && 0 <= i__1 ? i__1 : 
+				s_rnge("itbeg", i__1, "ckbsr_", (ftnlen)1548)]
 				 = nxtseg;
 		    }
 		}
@@ -1310,8 +1468,8 @@ L_cklpf:
 /*           instrument in the table into the space occupied by the */
 /*           one we've deleted. */
 
-	    if (itbeg[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-		    "itbeg", i__1, "ckbsr_", (ftnlen)1407)] <= 0) {
+	    if (itbeg[(i__1 = i__ - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
+		    "itbeg", i__1, "ckbsr_", (ftnlen)1565)] <= 0) {
 
 /*              Because all of the re-use intervals are invalid, we need */
 /*              not copy the saved items associated with them.  The */
@@ -1326,26 +1484,26 @@ L_cklpf:
 /*                 ITRUEX */
 /*                 ITUB */
 
-		itins[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-			"itins", i__1, "ckbsr_", (ftnlen)1422)] = itins[(i__2 
-			= nit - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge("itins",
-			 i__2, "ckbsr_", (ftnlen)1422)];
-		itexp[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-			"itexp", i__1, "ckbsr_", (ftnlen)1423)] = itexp[(i__2 
-			= nit - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge("itexp",
-			 i__2, "ckbsr_", (ftnlen)1423)];
-		ithfs[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-			"ithfs", i__1, "ckbsr_", (ftnlen)1424)] = ithfs[(i__2 
-			= nit - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge("ithfs",
-			 i__2, "ckbsr_", (ftnlen)1424)];
-		itlfs[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-			"itlfs", i__1, "ckbsr_", (ftnlen)1425)] = itlfs[(i__2 
-			= nit - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge("itlfs",
-			 i__2, "ckbsr_", (ftnlen)1425)];
-		itbeg[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-			"itbeg", i__1, "ckbsr_", (ftnlen)1426)] = itbeg[(i__2 
-			= nit - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge("itbeg",
-			 i__2, "ckbsr_", (ftnlen)1426)];
+		itins[(i__1 = i__ - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
+			"itins", i__1, "ckbsr_", (ftnlen)1580)] = itins[(i__2 
+			= nit - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge("itins"
+			, i__2, "ckbsr_", (ftnlen)1580)];
+		itexp[(i__1 = i__ - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
+			"itexp", i__1, "ckbsr_", (ftnlen)1581)] = itexp[(i__2 
+			= nit - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge("itexp"
+			, i__2, "ckbsr_", (ftnlen)1581)];
+		ithfs[(i__1 = i__ - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
+			"ithfs", i__1, "ckbsr_", (ftnlen)1582)] = ithfs[(i__2 
+			= nit - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge("ithfs"
+			, i__2, "ckbsr_", (ftnlen)1582)];
+		itlfs[(i__1 = i__ - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
+			"itlfs", i__1, "ckbsr_", (ftnlen)1583)] = itlfs[(i__2 
+			= nit - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge("itlfs"
+			, i__2, "ckbsr_", (ftnlen)1583)];
+		itbeg[(i__1 = i__ - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
+			"itbeg", i__1, "ckbsr_", (ftnlen)1584)] = itbeg[(i__2 
+			= nit - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge("itbeg"
+			, i__2, "ckbsr_", (ftnlen)1584)];
 		--nit;
 	    } else {
 		++i__;
@@ -1391,16 +1549,16 @@ L_cklpf:
 
 /*           Re-map the HFS table for the Ith instrument. */
 
-	    j = isrchi_(&ithfs[(i__2 = i__ - 1) < 100 && 0 <= i__2 ? i__2 : 
-		    s_rnge("ithfs", i__2, "ckbsr_", (ftnlen)1485)], &nft, 
+	    j = isrchi_(&ithfs[(i__2 = i__ - 1) < 5000 && 0 <= i__2 ? i__2 : 
+		    s_rnge("ithfs", i__2, "ckbsr_", (ftnlen)1643)], &nft, 
 		    ftnum);
 	    if (j > 0) {
 
 /*              The highest file searched for instrument I is the Jth */
 /*              file in the file table. */
 
-		ithfs[(i__2 = i__ - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge(
-			"ithfs", i__2, "ckbsr_", (ftnlen)1492)] = j;
+		ithfs[(i__2 = i__ - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge(
+			"ithfs", i__2, "ckbsr_", (ftnlen)1650)] = j;
 	    } else {
 
 /*              The highest file searched for instrument I is not in the */
@@ -1409,22 +1567,22 @@ L_cklpf:
 /*              files appear to be "new" when a lookup for instrument */
 /*              I is performed. */
 
-		ithfs[(i__2 = i__ - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge(
-			"ithfs", i__2, "ckbsr_", (ftnlen)1502)] = 0;
+		ithfs[(i__2 = i__ - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge(
+			"ithfs", i__2, "ckbsr_", (ftnlen)1660)] = 0;
 	    }
 
 /*           Re-map the LFS table for the Ith instrument. */
 
-	    j = isrchi_(&itlfs[(i__2 = i__ - 1) < 100 && 0 <= i__2 ? i__2 : 
-		    s_rnge("itlfs", i__2, "ckbsr_", (ftnlen)1509)], &nft, 
+	    j = isrchi_(&itlfs[(i__2 = i__ - 1) < 5000 && 0 <= i__2 ? i__2 : 
+		    s_rnge("itlfs", i__2, "ckbsr_", (ftnlen)1667)], &nft, 
 		    ftnum);
 	    if (j > 0) {
 
 /*              The lowest file searched for instrument I is the Jth file */
 /*              in the file table. */
 
-		itlfs[(i__2 = i__ - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge(
-			"itlfs", i__2, "ckbsr_", (ftnlen)1516)] = j;
+		itlfs[(i__2 = i__ - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge(
+			"itlfs", i__2, "ckbsr_", (ftnlen)1674)] = j;
 	    } else {
 
 /*              The lowest file searched for instrument I is not in the */
@@ -1433,10 +1591,10 @@ L_cklpf:
 /*              highest file searched to force reconstruction of the */
 /*              list. */
 
-		itlfs[(i__2 = i__ - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge(
-			"itlfs", i__2, "ckbsr_", (ftnlen)1526)] = 0;
-		ithfs[(i__2 = i__ - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge(
-			"ithfs", i__2, "ckbsr_", (ftnlen)1527)] = 0;
+		itlfs[(i__2 = i__ - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge(
+			"itlfs", i__2, "ckbsr_", (ftnlen)1684)] = 0;
+		ithfs[(i__2 = i__ - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge(
+			"ithfs", i__2, "ckbsr_", (ftnlen)1685)] = 0;
 	    }
 	}
 
@@ -1445,7 +1603,7 @@ L_cklpf:
 	i__1 = nft;
 	for (i__ = 1; i__ <= i__1; ++i__) {
 	    ftnum[(i__2 = i__ - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge("ftnum"
-		    , i__2, "ckbsr_", (ftnlen)1538)] = i__;
+		    , i__2, "ckbsr_", (ftnlen)1696)] = i__;
 	}
 
 /*        Assign a new file number. */
@@ -1457,12 +1615,12 @@ L_cklpf:
 
     ++nft;
     fthan[(i__1 = nft - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("fthan", i__1, 
-	    "ckbsr_", (ftnlen)1553)] = *handle;
+	    "ckbsr_", (ftnlen)1711)] = *handle;
     ftnum[(i__1 = nft - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("ftnum", i__1, 
-	    "ckbsr_", (ftnlen)1554)] = next;
+	    "ckbsr_", (ftnlen)1712)] = next;
     chkout_("CKLPF", (ftnlen)5);
     return 0;
-/* $Procedure CKUPF ( C-kernel, Unload pointing file ) */
+/* $Procedure CKUPF ( CK, Unload pointing file ) */
 
 L_ckupf:
 /* $ Abstract */
@@ -1510,13 +1668,14 @@ L_ckupf:
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     I   Handle of CK file to be unloaded */
 
 /* $ Detailed_Input */
 
-/*     HANDLE     Integer handle assigned to the file upon loading. */
+/*     HANDLE   is the integer handle assigned to the CK file upon */
+/*              loading. */
 
 /* $ Detailed_Output */
 
@@ -1528,8 +1687,8 @@ L_ckupf:
 
 /* $ Exceptions */
 
-/*     1) Unloading a file that has not been loaded is a no-op. */
-/*        No error is signaled. */
+/*     1)  Unloading a file that has not been loaded is a no-op. */
+/*         No error is signaled. */
 
 /* $ Files */
 
@@ -1537,15 +1696,13 @@ L_ckupf:
 
 /* $ Particulars */
 
-/*     See Particulars section above, in CKBSR. */
-
 /*     Unloading a file with CKUPF removes that file from consideration */
-/*     by the CK readers.  In doing so, it frees up space for another */
+/*     by the CK readers. In doing so, it frees up space for another */
 /*     file to be loaded. */
 
 /* $ Examples */
 
-/*     See the Example above, in CKBSR. */
+/*     See $Examples in CKBSR. */
 
 /* $ Restrictions */
 
@@ -1557,12 +1714,18 @@ L_ckupf:
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
-/*     J.M. Lynch     (JPL) */
-/*     R.E. Thurman   (JPL) */
-/*     I.M. Underwood (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     J.M. Lynch         (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     R.E. Thurman       (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 4.3.2, 16-JUL-2020 (JDR) */
+
+/*        Updated the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 4.3.1, 30-JAN-2017 (NJB) */
 
@@ -1583,15 +1746,15 @@ L_ckupf:
 
 /*        Bug fixes: */
 
-/*        1) This routine now calls RETURN() on entry and */
-/*           returns if so directed. */
+/*           1) This routine now calls RETURN() on entry and */
+/*              returns if so directed. */
 
 /*        Also, the flags indicating validity of those re-use intervals */
 /*        whose data comes from the unloaded file are set to .FALSE. */
 
 /* -    SPICELIB Version 4.0.0, 17-FEB-2000 (WLT) */
 
-/*        Added the Entry point CKHAVE */
+/*        Added the Entry point CKHAVE. */
 
 /* -    SPICELIB Version 3.0.0, 03-MAR-1999 (WLT) */
 
@@ -1600,7 +1763,7 @@ L_ckupf:
 
 /* -    SPICELIB Version 2.0.0, 25-NOV-1992 (JML) */
 
-/*     1) A bug in the way that CKLPF and CKUPF clean up the instrument */
+/*        A bug in the way that CKLPF and CKUPF clean up the instrument */
 /*        tables after a file is unloaded was fixed. */
 
 /* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
@@ -1613,7 +1776,7 @@ L_ckupf:
 /* -& */
 /* $ Index_Entries */
 
-/*     unload ck pointing file */
+/*     unload CK pointing file */
 
 /* -& */
 /* $ Revisions */
@@ -1633,53 +1796,53 @@ L_ckupf:
 
 /*        Bug fixes: */
 
-/*        1) This routine now calls RETURN() on entry and */
-/*           returns if so directed. */
+/*           1) This routine now calls RETURN() on entry and */
+/*              returns if so directed. */
 
 /*        Also, the flags indicating validity of those re-use intervals */
 /*        whose data comes from the unloaded file are set to .FALSE. */
 
 /* -    SPICELIB Version 2.0.0, 25-NOV-1992 (JML) */
 
-/*     1) A bug in the way that CKLPF and CKUPF clean up the instrument */
-/*        tables after a file is unloaded was fixed. */
+/*        1) A bug in the way that CKLPF and CKUPF clean up the */
+/*           instrument tables after a file is unloaded was fixed. */
 
-/*        If as the result of unloading a file there are no more */
-/*        segments buffered for a particular instrument, the counter */
-/*        variable for the instruments in the instrument table is no */
-/*        longer incremented. */
+/*           If as the result of unloading a file there are no more */
+/*           segments buffered for a particular instrument, the counter */
+/*           variable for the instruments in the instrument table is no */
+/*           longer incremented. */
 
-/*        The following code fragment changed: */
+/*           The following code fragment changed: */
 
-/*           IF ( ITBEG( I ) .EQ. 0 ) THEN */
+/*              IF ( ITBEG( I ) .EQ. 0 ) THEN */
 
-/*              . */
-/*              . */
-/*              . */
-/*              NIT = NIT - 1 */
+/*                 . */
+/*                 . */
+/*                 . */
+/*                 NIT = NIT - 1 */
 
-/*           END IF */
-
-/*           I = I + 1 */
-
-/*        This is the fix: */
-
-/*           IF ( ITBEG( I ) .EQ. 0 ) THEN */
-
-/*              . */
-/*              . */
-/*              . */
-/*              NIT = NIT - 1 */
-
-/*           ELSE */
+/*              END IF */
 
 /*              I = I + 1 */
 
-/*           END IF */
+/*           This is the fix: */
+
+/*              IF ( ITBEG( I ) .EQ. 0 ) THEN */
+
+/*                 . */
+/*                 . */
+/*                 . */
+/*                 NIT = NIT - 1 */
+
+/*              ELSE */
+
+/*                 I = I + 1 */
+
+/*              END IF */
 
 /* -    Beta Version 1.0.1, 29-AUG-1990 (MJS) (JEM) */
 
-/*        Comments were updated. */
+/*         Comments were updated. */
 
 /* -    Beta Version 1.0.0, 07-SEP-1990 (RET) (IMU) */
 
@@ -1724,18 +1887,18 @@ L_ckupf:
 /*     before wiping out the handle. */
 
     dafcls_(&fthan[(i__1 = findex - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-	    "fthan", i__1, "ckbsr_", (ftnlen)1835)]);
+	    "fthan", i__1, "ckbsr_", (ftnlen)2001)]);
     --nft;
     i__1 = nft;
     for (i__ = findex; i__ <= i__1; ++i__) {
 	fthan[(i__2 = i__ - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge("fthan", 
-		i__2, "ckbsr_", (ftnlen)1841)] = fthan[(i__3 = i__) < 5000 && 
+		i__2, "ckbsr_", (ftnlen)2007)] = fthan[(i__3 = i__) < 5000 && 
 		0 <= i__3 ? i__3 : s_rnge("fthan", i__3, "ckbsr_", (ftnlen)
-		1841)];
+		2007)];
 	ftnum[(i__2 = i__ - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge("ftnum", 
-		i__2, "ckbsr_", (ftnlen)1842)] = ftnum[(i__3 = i__) < 5000 && 
+		i__2, "ckbsr_", (ftnlen)2008)] = ftnum[(i__3 = i__) < 5000 && 
 		0 <= i__3 ? i__3 : s_rnge("ftnum", i__3, "ckbsr_", (ftnlen)
-		1842)];
+		2008)];
     }
 
 /*     Check each instrument list individually. Note that the first */
@@ -1744,16 +1907,17 @@ L_ckupf:
 
     i__ = 1;
     while(i__ <= nit) {
-	p = itbeg[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge("itbeg",
-		 i__1, "ckbsr_", (ftnlen)1854)];
+	p = itbeg[(i__1 = i__ - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("itbeg"
+		, i__1, "ckbsr_", (ftnlen)2020)];
 	while(p > 0) {
 	    nxtseg = lnknxt_(&p, stpool);
 	    if (sthan[(i__1 = p - 1) < 100000 && 0 <= i__1 ? i__1 : s_rnge(
-		    "sthan", i__1, "ckbsr_", (ftnlen)1860)] == *handle) {
-		if (p == itbeg[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : 
-			s_rnge("itbeg", i__1, "ckbsr_", (ftnlen)1862)]) {
-		    itbeg[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-			    "itbeg", i__1, "ckbsr_", (ftnlen)1863)] = nxtseg;
+		    "sthan", i__1, "ckbsr_", (ftnlen)2026)] == *handle) {
+		if (p == itbeg[(i__1 = i__ - 1) < 5000 && 0 <= i__1 ? i__1 : 
+			s_rnge("itbeg", i__1, "ckbsr_", (ftnlen)2028)]) {
+		    itbeg[(i__1 = i__ - 1) < 5000 && 0 <= i__1 ? i__1 : 
+			    s_rnge("itbeg", i__1, "ckbsr_", (ftnlen)2029)] = 
+			    nxtseg;
 		}
 
 /*              Free this segment table entry. */
@@ -1768,63 +1932,63 @@ L_ckupf:
 /*        instrument in the table into the space occupied by the */
 /*        one we've deleted. */
 
-	if (itbeg[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge("itbeg",
-		 i__1, "ckbsr_", (ftnlen)1882)] <= 0) {
+	if (itbeg[(i__1 = i__ - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("itbeg"
+		, i__1, "ckbsr_", (ftnlen)2048)] <= 0) {
 	    if (i__ != nit) {
-		itins[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-			"itins", i__1, "ckbsr_", (ftnlen)1886)] = itins[(i__2 
-			= nit - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge("itins",
-			 i__2, "ckbsr_", (ftnlen)1886)];
-		itexp[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-			"itexp", i__1, "ckbsr_", (ftnlen)1887)] = itexp[(i__2 
-			= nit - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge("itexp",
-			 i__2, "ckbsr_", (ftnlen)1887)];
-		ithfs[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-			"ithfs", i__1, "ckbsr_", (ftnlen)1888)] = ithfs[(i__2 
-			= nit - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge("ithfs",
-			 i__2, "ckbsr_", (ftnlen)1888)];
-		itlfs[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-			"itlfs", i__1, "ckbsr_", (ftnlen)1889)] = itlfs[(i__2 
-			= nit - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge("itlfs",
-			 i__2, "ckbsr_", (ftnlen)1889)];
-		itbeg[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-			"itbeg", i__1, "ckbsr_", (ftnlen)1890)] = itbeg[(i__2 
-			= nit - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge("itbeg",
-			 i__2, "ckbsr_", (ftnlen)1890)];
-		itlb[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-			"itlb", i__1, "ckbsr_", (ftnlen)1891)] = itlb[(i__2 = 
-			nit - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge("itlb", 
-			i__2, "ckbsr_", (ftnlen)1891)];
-		itub[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-			"itub", i__1, "ckbsr_", (ftnlen)1892)] = itub[(i__2 = 
-			nit - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge("itub", 
-			i__2, "ckbsr_", (ftnlen)1892)];
-		itprvf[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-			"itprvf", i__1, "ckbsr_", (ftnlen)1893)] = itprvf[(
-			i__2 = nit - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge(
-			"itprvf", i__2, "ckbsr_", (ftnlen)1893)];
-		itprvh[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-			"itprvh", i__1, "ckbsr_", (ftnlen)1894)] = itprvh[(
-			i__2 = nit - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge(
-			"itprvh", i__2, "ckbsr_", (ftnlen)1894)];
-		s_copy(itprvi + ((i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : 
-			s_rnge("itprvi", i__1, "ckbsr_", (ftnlen)1895)) * 40, 
-			itprvi + ((i__2 = nit - 1) < 100 && 0 <= i__2 ? i__2 :
-			 s_rnge("itprvi", i__2, "ckbsr_", (ftnlen)1895)) * 40,
-			 (ftnlen)40, (ftnlen)40);
-		itchkp[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-			"itchkp", i__1, "ckbsr_", (ftnlen)1896)] = itchkp[(
-			i__2 = nit - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge(
-			"itchkp", i__2, "ckbsr_", (ftnlen)1896)];
-		itruex[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-			"itruex", i__1, "ckbsr_", (ftnlen)1897)] = itruex[(
-			i__2 = nit - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge(
-			"itruex", i__2, "ckbsr_", (ftnlen)1897)];
-		moved_(&itprvd[(i__1 = nit * 5 - 5) < 500 && 0 <= i__1 ? i__1 
-			: s_rnge("itprvd", i__1, "ckbsr_", (ftnlen)1899)], &
-			c__5, &itprvd[(i__2 = i__ * 5 - 5) < 500 && 0 <= i__2 
-			? i__2 : s_rnge("itprvd", i__2, "ckbsr_", (ftnlen)
-			1899)]);
+		itins[(i__1 = i__ - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
+			"itins", i__1, "ckbsr_", (ftnlen)2052)] = itins[(i__2 
+			= nit - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge("itins"
+			, i__2, "ckbsr_", (ftnlen)2052)];
+		itexp[(i__1 = i__ - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
+			"itexp", i__1, "ckbsr_", (ftnlen)2053)] = itexp[(i__2 
+			= nit - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge("itexp"
+			, i__2, "ckbsr_", (ftnlen)2053)];
+		ithfs[(i__1 = i__ - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
+			"ithfs", i__1, "ckbsr_", (ftnlen)2054)] = ithfs[(i__2 
+			= nit - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge("ithfs"
+			, i__2, "ckbsr_", (ftnlen)2054)];
+		itlfs[(i__1 = i__ - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
+			"itlfs", i__1, "ckbsr_", (ftnlen)2055)] = itlfs[(i__2 
+			= nit - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge("itlfs"
+			, i__2, "ckbsr_", (ftnlen)2055)];
+		itbeg[(i__1 = i__ - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
+			"itbeg", i__1, "ckbsr_", (ftnlen)2056)] = itbeg[(i__2 
+			= nit - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge("itbeg"
+			, i__2, "ckbsr_", (ftnlen)2056)];
+		itlb[(i__1 = i__ - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
+			"itlb", i__1, "ckbsr_", (ftnlen)2057)] = itlb[(i__2 = 
+			nit - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge("itlb", 
+			i__2, "ckbsr_", (ftnlen)2057)];
+		itub[(i__1 = i__ - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
+			"itub", i__1, "ckbsr_", (ftnlen)2058)] = itub[(i__2 = 
+			nit - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge("itub", 
+			i__2, "ckbsr_", (ftnlen)2058)];
+		itprvf[(i__1 = i__ - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
+			"itprvf", i__1, "ckbsr_", (ftnlen)2059)] = itprvf[(
+			i__2 = nit - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge(
+			"itprvf", i__2, "ckbsr_", (ftnlen)2059)];
+		itprvh[(i__1 = i__ - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
+			"itprvh", i__1, "ckbsr_", (ftnlen)2060)] = itprvh[(
+			i__2 = nit - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge(
+			"itprvh", i__2, "ckbsr_", (ftnlen)2060)];
+		s_copy(itprvi + ((i__1 = i__ - 1) < 5000 && 0 <= i__1 ? i__1 :
+			 s_rnge("itprvi", i__1, "ckbsr_", (ftnlen)2061)) * 40,
+			 itprvi + ((i__2 = nit - 1) < 5000 && 0 <= i__2 ? 
+			i__2 : s_rnge("itprvi", i__2, "ckbsr_", (ftnlen)2061))
+			 * 40, (ftnlen)40, (ftnlen)40);
+		itchkp[(i__1 = i__ - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
+			"itchkp", i__1, "ckbsr_", (ftnlen)2062)] = itchkp[(
+			i__2 = nit - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge(
+			"itchkp", i__2, "ckbsr_", (ftnlen)2062)];
+		itruex[(i__1 = i__ - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
+			"itruex", i__1, "ckbsr_", (ftnlen)2063)] = itruex[(
+			i__2 = nit - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge(
+			"itruex", i__2, "ckbsr_", (ftnlen)2063)];
+		moved_(&itprvd[(i__1 = nit * 5 - 5) < 25000 && 0 <= i__1 ? 
+			i__1 : s_rnge("itprvd", i__1, "ckbsr_", (ftnlen)2065)]
+			, &c__5, &itprvd[(i__2 = i__ * 5 - 5) < 25000 && 0 <= 
+			i__2 ? i__2 : s_rnge("itprvd", i__2, "ckbsr_", (
+			ftnlen)2065)]);
 	    }
 	    --nit;
 	} else {
@@ -1840,18 +2004,18 @@ L_ckupf:
 
     i__1 = nit;
     for (i__ = 1; i__ <= i__1; ++i__) {
-	if (itchkp[(i__2 = i__ - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge("itch"
-		"kp", i__2, "ckbsr_", (ftnlen)1922)]) {
-	    if (itprvh[(i__2 = i__ - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge(
-		    "itprvh", i__2, "ckbsr_", (ftnlen)1924)] == *handle) {
-		itchkp[(i__2 = i__ - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge(
-			"itchkp", i__2, "ckbsr_", (ftnlen)1925)] = FALSE_;
+	if (itchkp[(i__2 = i__ - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge("itc"
+		"hkp", i__2, "ckbsr_", (ftnlen)2088)]) {
+	    if (itprvh[(i__2 = i__ - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge(
+		    "itprvh", i__2, "ckbsr_", (ftnlen)2090)] == *handle) {
+		itchkp[(i__2 = i__ - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge(
+			"itchkp", i__2, "ckbsr_", (ftnlen)2091)] = FALSE_;
 	    }
 	}
     }
     chkout_("CKUPF", (ftnlen)5);
     return 0;
-/* $Procedure CKBSS ( C-kernel, begin search for segment ) */
+/* $Procedure CKBSS ( CK, begin search for segment ) */
 
 L_ckbss:
 /* $ Abstract */
@@ -1902,7 +2066,7 @@ L_ckbss:
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     INST       I   Spacecraft and instrument ID. */
 /*     SCLKDP     I   Encoded spacecraft clock time. */
@@ -1911,35 +2075,19 @@ L_ckbss:
 
 /* $ Detailed_Input */
 
-/*     CKBSS sets up a search for segments. The four quantities below */
-/*     establish the search criteria. */
+/*     INST     is the NAIF ID of an instrument. */
 
+/*     SCLKDP   is an encoded spacecraft clock time. */
 
-/*     INST       is the NAIF ID of an instrument. */
+/*     TOL      is a time tolerance, measured in the same units as */
+/*              encoded spacecraft clock. */
 
-/*     SCLKDP     is an encoded spacecraft clock time. */
+/*     NEEDAV   indicates whether or not angular velocity data is */
+/*              required. */
 
-/*     TOL        is a time tolerance, measured in the same units as */
-/*                encoded spacecraft clock. */
-
-/*     NEEDAV     indicates whether or not angular velocity data is */
-/*                required. */
-
-/*                If true, only segments containing pointing and angular */
-/*                velocity data will be checked. If false, segments */
-/*                containing just pointing data will also be considered. */
-
-
-/*     A segment matches the CKBSS/CKSNS search criteria when the */
-/*     following statements are true. */
-
-/*        1) INST matches the instrument number for the segment. */
-
-/*        2) The time interval [SCLKDP - TOL, SCLKDP + TOL] intersects */
-/*           the time interval of the segment. */
-
-/*        3) If angular velocity data is required, as indicated by */
-/*           NEEDAV, the segment contains angular velocity data. */
+/*              If .TRUE., only segments containing pointing and angular */
+/*              velocity data will be checked. If .FALSE., segments */
+/*              containing just pointing data will also be considered. */
 
 /* $ Detailed_Output */
 
@@ -1951,8 +2099,8 @@ L_ckbss:
 
 /* $ Exceptions */
 
-/*     1) If no files have been loaded, the error SPICE(NOLOADEDFILES) */
-/*        is signaled. */
+/*     1)  If no files have been loaded, the error SPICE(NOLOADEDFILES) */
+/*         is signaled. */
 
 /* $ Files */
 
@@ -1972,9 +2120,20 @@ L_ckbss:
 /*     CKBSS determines the first task that CKSNS will have to perform */
 /*     if it is called to get an applicable segment. */
 
+/*     A segment matches the CKBSS/CKSNS search criteria when the */
+/*     following statements are true. */
+
+/*        1) INST matches the instrument number for the segment. */
+
+/*        2) The time interval [SCLKDP - TOL, SCLKDP + TOL] intersects */
+/*           the time interval of the segment. */
+
+/*        3) If angular velocity data is required, as indicated by */
+/*           NEEDAV, the segment contains angular velocity data. */
+
 /* $ Examples */
 
-/*     See Examples in CKBSR. */
+/*     See $Examples in CKBSR. */
 
 /* $ Restrictions */
 
@@ -1986,13 +2145,22 @@ L_ckbss:
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
-/*     M.J. Spencer   (JPL) */
-/*     J.E. McLean    (JPL) */
-/*     R.E. Thurman   (JPL) */
-/*     I.M. Underwood (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
+/*     R.E. Thurman       (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 4.1.2, 13-JAN-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
+
+/*        Moved details related to search criteria and conditions to meet */
+/*        it from the $Detailed_Input to $Particulars. */
+
+/*        Fixed typo in the long error message ('needs must' -> 'must'). */
 
 /* -    SPICELIB Version 4.1.1, 30-JAN-2017 (NJB) */
 
@@ -2002,12 +2170,12 @@ L_ckbss:
 
 /*        Updated to support new doubly-linked list implementation: */
 /*        partial segment list that cannot be buffered is now */
-/*        deallocated here rather than in CKSNS.  Minor changes to */
+/*        deallocated here rather than in CKSNS. Minor changes to */
 /*        comments were made as well. */
 
 /* -    SPICELIB Version 4.0.0, 17-FEB-2000 (WLT) */
 
-/*        Added the Entry point CKHAVE */
+/*        Added the Entry point CKHAVE. */
 
 /* -    SPICELIB Version 3.0.0, 03-MAR-1999 (WLT) */
 
@@ -2024,7 +2192,7 @@ L_ckbss:
 /* -& */
 /* $ Index_Entries */
 
-/*     begin search for ck segment */
+/*     begin search for CK segment */
 
 /* -& */
 /* $ Revisions */
@@ -2033,7 +2201,7 @@ L_ckbss:
 
 /*        Updated to support new doubly-linked list implementation: */
 /*        partial segment list that cannot be buffered is now */
-/*        deallocated here rather than in CKSNS.  Minor changes to */
+/*        deallocated here rather than in CKSNS. Minor changes to */
 /*        comments were made as well. */
 
 /* -    Beta Version 1.1.0, 28-AUG-1990 (MJS) (JEM) */
@@ -2085,8 +2253,8 @@ L_ckbss:
 /*     There must be at least one file loaded. */
 
     if (nft == 0) {
-	setmsg_("At least one CK file needs must be loaded by CKLPF before b"
-		"eginning a search.", (ftnlen)77);
+	setmsg_("At least one CK file must be loaded by CKLPF before beginni"
+		"ng a search.", (ftnlen)71);
 	sigerr_("SPICE(NOLOADEDFILES)", (ftnlen)20);
 	chkout_("CKBSS", (ftnlen)5);
 	return 0;
@@ -2122,8 +2290,8 @@ L_cksns:
 /* $ Abstract */
 
 /*     Search through loaded files to find a segment matching the */
-/*     requested instrument, time, and need for angular velocity. */
-/*     Buffer segment descriptors, identifiers, and handles in the */
+/*     requested instrument, time, and need for angular velocity, */
+/*     buffering segment descriptors, identifiers, and handles in the */
 /*     process to minimize file reads. */
 
 /* $ Disclaimer */
@@ -2169,12 +2337,12 @@ L_cksns:
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     O   Handle of file containing the applicable segment. */
 /*     DESCR      O   Descriptor of the applicable segment. */
 /*     SEGID      O   Identifier of the applicable segment. */
-/*     FOUND      O   True if a segment was found. */
+/*     FOUND      O   .TRUE. if a segment was found. */
 
 /* $ Detailed_Input */
 
@@ -2182,18 +2350,18 @@ L_cksns:
 
 /* $ Detailed_Output */
 
-/*     HANDLE     is an integer handle of the file containing the */
-/*                segment matching the instrument and time */
-/*                specifications made in the last call to CKBSS. */
+/*     HANDLE   is an integer handle of the file containing the */
+/*              segment matching the instrument and time */
+/*              specifications made in the last call to CKBSS. */
 
 /*     DESCR, */
-/*     SEGID      are the descriptor and identifier of the segment found */
-/*                which matches the instrument and time specifications */
-/*                made in the last call to CKBSS. */
+/*     SEGID    are the descriptor and identifier of the segment found */
+/*              which matches the instrument and time specifications */
+/*              made in the last call to CKBSS. */
 
-/*     FOUND      is true if an applicable segment was found.  False */
-/*                otherwise.  If FOUND is false, the values of the */
-/*                other arguments are meaningless. */
+/*     FOUND    is .TRUE. if an applicable segment was found, .FALSE. */
+/*              otherwise. If FOUND is .FALSE., the values of the */
+/*              other arguments are meaningless. */
 
 /* $ Parameters */
 
@@ -2201,12 +2369,12 @@ L_cksns:
 
 /* $ Exceptions */
 
-/*     1) If CKSNS is called without CKBSS ever having been called, */
-/*        the error 'SPICE(CALLCKBSSFIRST)' is signaled. */
+/*     1)  If CKSNS is called without CKBSS ever having been called, */
+/*         the error SPICE(CALLCKBSSFIRST) is signaled. */
 
-/*     2) If no segment is found that matches the search criteria, */
-/*        FOUND is set to false, but the values of HANDLE, DESCR, */
-/*        and SEGID will be meaningless. */
+/*     2)  If no segment is found that matches the search criteria, */
+/*         FOUND is set to .FALSE., but the values of HANDLE, DESCR, */
+/*         and SEGID will be meaningless. */
 
 /* $ Files */
 
@@ -2216,7 +2384,7 @@ L_cksns:
 /* $ Particulars */
 
 /*     CKSNS is used to locate segments based on the search criteria */
-/*     established by the most recent call to CKBSS.  When a segment */
+/*     established by the most recent call to CKBSS. When a segment */
 /*     is found it will have the following characteristics: */
 
 /*        1) Its instrument will match the instrument specified in the */
@@ -2252,16 +2420,16 @@ L_cksns:
 
 /* $ Examples */
 
-/*     See Examples in CKBSR. */
+/*     See $Examples in CKBSR. */
 
 /* $ Restrictions */
 
-/*     1) This subroutine assumes that a search has been initiated by */
-/*        a call to CKBSS. */
+/*     1)  This subroutine assumes that a search has been initiated by */
+/*         a call to CKBSS. */
 
-/*     2) When a CK file is loaded or unloaded, a new search must */
-/*        be started via a call to CKBSS before this routine may */
-/*        be called. */
+/*     2)  When a CK file is loaded or unloaded, a new search must */
+/*         be started via a call to CKBSS before this routine may */
+/*         be called. */
 
 /* $ Literature_References */
 
@@ -2269,13 +2437,21 @@ L_cksns:
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
-/*     J.E. McLean    (JPL) */
-/*     M.J. Spencer   (JPL) */
-/*     R.E. Thurman   (JPL) */
-/*     I.M. Underwood (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     J.M. Lynch         (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     R.E. Thurman       (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 4.6.0, 13-OCT-2021 (JDR) (NJB) */
+
+/*        Edited the header to comply with NAIF standard. */
+
+/*        Relocated initialization of FOUND so it is always */
+/*        executed, even if an error state is indicated by RETURN(). */
 
 /* -    SPICELIB Version 4.5.1, 30-JAN-2017 (NJB) */
 
@@ -2305,7 +2481,7 @@ L_cksns:
 /*           2) An algorithm change has eliminated a bug caused by not */
 /*              updating the current instrument index when instrument */
 /*              table entries  having empty segment lists were compressed */
-/*              out of the instrument table.  Previously the instrument */
+/*              out of the instrument table. Previously the instrument */
 /*              table pointer IINDEX could go stale after the */
 /*              compression. */
 
@@ -2318,7 +2494,7 @@ L_cksns:
 
 /*        The segment list cost algorithm was modified slightly: */
 /*        the contribution of a file search to the cost of a list */
-/*        is included only when the file search is completed.  The */
+/*        is included only when the file search is completed. The */
 /*        cost of finding the re-use interval is accounted for when */
 /*        unbuffered searches are required. */
 
@@ -2335,7 +2511,7 @@ L_cksns:
 
 /* -    SPICELIB Version 4.0.0, 17-FEB-2000 (WLT) */
 
-/*        Added the Entry point CKHAVE */
+/*        Added the Entry point CKHAVE. */
 
 /* -    SPICELIB Version 3.0.0, 03-MAR-1999 (WLT) */
 
@@ -2359,7 +2535,7 @@ L_cksns:
 /* -& */
 /* $ Index_Entries */
 
-/*     select next ck segment */
+/*     select next CK segment */
 
 /* -& */
 /* $ Revisions */
@@ -2388,7 +2564,7 @@ L_cksns:
 /*           2) An algorithm change has eliminated a bug caused by not */
 /*              updating the current instrument index when instrument */
 /*              table entries  having empty segment lists were compressed */
-/*              out of the instrument table.  Previously the instrument */
+/*              out of the instrument table. Previously the instrument */
 /*              table pointer IINDEX could go stale after the */
 /*              compression. */
 
@@ -2401,7 +2577,7 @@ L_cksns:
 
 /*        The segment list cost algorithm was modified slightly: */
 /*        the contribution of a file search to the cost of a list */
-/*        is included only when the file search is completed.  The */
+/*        is included only when the file search is completed. The */
 /*        cost of finding the re-use interval is accounted for when */
 /*        unbuffered searches are required. */
 
@@ -2439,17 +2615,16 @@ L_cksns:
 
 /* -& */
 
+/*     Nothing's been found yet. */
+
+    *found = FALSE_;
+
 /*     Standard SPICE error handling. */
 
     if (return_()) {
 	return 0;
-    } else {
-	chkin_("CKSNS", (ftnlen)5);
     }
-
-/*     Nothing's been found yet. */
-
-    *found = FALSE_;
+    chkin_("CKSNS", (ftnlen)5);
 
 /*     Initialize the segment list pointer to the saved value from */
 /*     the previous pass through this routine, if any. */
@@ -2646,10 +2821,10 @@ L_cksns:
 /*               of code as the result of finishing the read of */
 /*               a new file. */
 
-	    if (ithfs[(i__1 = iindex - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-		    "ithfs", i__1, "ckbsr_", (ftnlen)2775)] < ftnum[(i__2 = 
+	    if (ithfs[(i__1 = iindex - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
+		    "ithfs", i__1, "ckbsr_", (ftnlen)2954)] < ftnum[(i__2 = 
 		    nft - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge("ftnum", 
-		    i__2, "ckbsr_", (ftnlen)2775)]) {
+		    i__2, "ckbsr_", (ftnlen)2954)]) {
 		s_copy(status, "NEW FILES", (ftnlen)40, (ftnlen)9);
 	    } else {
 
@@ -2657,8 +2832,8 @@ L_cksns:
 /*              previous request will also satisfy the current */
 /*              request.  Check whether this is the case. */
 
-		if (itchkp[(i__1 = iindex - 1) < 100 && 0 <= i__1 ? i__1 : 
-			s_rnge("itchkp", i__1, "ckbsr_", (ftnlen)2785)]) {
+		if (itchkp[(i__1 = iindex - 1) < 5000 && 0 <= i__1 ? i__1 : 
+			s_rnge("itchkp", i__1, "ckbsr_", (ftnlen)2964)]) {
 
 /*                 The previous segment found for the current instrument */
 /*                 is a viable candidate for the current request.  See */
@@ -2670,11 +2845,11 @@ L_cksns:
 /*                 because one or both endpoints may belong to */
 /*                 higher-priority segments. */
 
-		    if (reqt > itlb[(i__1 = iindex - 1) < 100 && 0 <= i__1 ? 
+		    if (reqt > itlb[(i__1 = iindex - 1) < 5000 && 0 <= i__1 ? 
 			    i__1 : s_rnge("itlb", i__1, "ckbsr_", (ftnlen)
-			    2797)] + savtol && reqt < itub[(i__2 = iindex - 1)
-			     < 100 && 0 <= i__2 ? i__2 : s_rnge("itub", i__2, 
-			    "ckbsr_", (ftnlen)2797)] - savtol) {
+			    2976)] + savtol && reqt < itub[(i__2 = iindex - 1)
+			     < 5000 && 0 <= i__2 ? i__2 : s_rnge("itub", i__2,
+			     "ckbsr_", (ftnlen)2976)] - savtol) {
 
 /*                    The request time falls into the portion of */
 /*                    the re-use interval that isn't blocked by */
@@ -2682,33 +2857,33 @@ L_cksns:
 /*                    those segments is extended in either direction */
 /*                    by TOL. */
 
-			if (! avneed || itprvf[(i__1 = iindex - 1) < 100 && 0 
-				<= i__1 ? i__1 : s_rnge("itprvf", i__1, "ckb"
-				"sr_", (ftnlen)2806)] != 0) {
+			if (! avneed || itprvf[(i__1 = iindex - 1) < 5000 && 
+				0 <= i__1 ? i__1 : s_rnge("itprvf", i__1, 
+				"ckbsr_", (ftnlen)2985)] != 0) {
 
 /*                       This segment has angular velocity if we */
 /*                       need it.  The segment satisfies the */
 /*                       request. */
 
-			    *handle = itprvh[(i__1 = iindex - 1) < 100 && 0 <=
-				     i__1 ? i__1 : s_rnge("itprvh", i__1, 
-				    "ckbsr_", (ftnlen)2813)];
-			    s_copy(segid, itprvi + ((i__1 = iindex - 1) < 100 
-				    && 0 <= i__1 ? i__1 : s_rnge("itprvi", 
-				    i__1, "ckbsr_", (ftnlen)2814)) * 40, 
+			    *handle = itprvh[(i__1 = iindex - 1) < 5000 && 0 
+				    <= i__1 ? i__1 : s_rnge("itprvh", i__1, 
+				    "ckbsr_", (ftnlen)2992)];
+			    s_copy(segid, itprvi + ((i__1 = iindex - 1) < 
+				    5000 && 0 <= i__1 ? i__1 : s_rnge("itprvi"
+				    , i__1, "ckbsr_", (ftnlen)2993)) * 40, 
 				    segid_len, (ftnlen)40);
-			    moved_(&itprvd[(i__1 = iindex * 5 - 5) < 500 && 0 
-				    <= i__1 ? i__1 : s_rnge("itprvd", i__1, 
-				    "ckbsr_", (ftnlen)2816)], &c__5, descr);
+			    moved_(&itprvd[(i__1 = iindex * 5 - 5) < 25000 && 
+				    0 <= i__1 ? i__1 : s_rnge("itprvd", i__1, 
+				    "ckbsr_", (ftnlen)2995)], &c__5, descr);
 			    *found = TRUE_;
 
 /*                       We can only use the re-use interval once on */
 /*                       a given search.  If this search is continued, */
 /*                       we'll have to check the list.  Prepare now. */
 
-			    savep = itbeg[(i__1 = iindex - 1) < 100 && 0 <= 
+			    savep = itbeg[(i__1 = iindex - 1) < 5000 && 0 <= 
 				    i__1 ? i__1 : s_rnge("itbeg", i__1, "ckb"
-				    "sr_", (ftnlen)2825)];
+				    "sr_", (ftnlen)3004)];
 			    s_copy(status, "CHECK LIST", (ftnlen)40, (ftnlen)
 				    10);
 			    chkout_("CKSNS", (ftnlen)5);
@@ -2725,15 +2900,15 @@ L_cksns:
 /*                 unbuffered segment providing data for re-use, subtract */
 /*                 that component from the expense. */
 
-		    itexp[(i__1 = iindex - 1) < 100 && 0 <= i__1 ? i__1 : 
-			    s_rnge("itexp", i__1, "ckbsr_", (ftnlen)2844)] = 
-			    itexp[(i__2 = iindex - 1) < 100 && 0 <= i__2 ? 
+		    itexp[(i__1 = iindex - 1) < 5000 && 0 <= i__1 ? i__1 : 
+			    s_rnge("itexp", i__1, "ckbsr_", (ftnlen)3023)] = 
+			    itexp[(i__2 = iindex - 1) < 5000 && 0 <= i__2 ? 
 			    i__2 : s_rnge("itexp", i__2, "ckbsr_", (ftnlen)
-			    2844)] - itruex[(i__3 = iindex - 1) < 100 && 0 <= 
-			    i__3 ? i__3 : s_rnge("itruex", i__3, "ckbsr_", (
-			    ftnlen)2844)];
-		    itruex[(i__1 = iindex - 1) < 100 && 0 <= i__1 ? i__1 : 
-			    s_rnge("itruex", i__1, "ckbsr_", (ftnlen)2845)] = 
+			    3023)] - itruex[(i__3 = iindex - 1) < 5000 && 0 <=
+			     i__3 ? i__3 : s_rnge("itruex", i__3, "ckbsr_", (
+			    ftnlen)3023)];
+		    itruex[(i__1 = iindex - 1) < 5000 && 0 <= i__1 ? i__1 : 
+			    s_rnge("itruex", i__1, "ckbsr_", (ftnlen)3024)] = 
 			    0;
 
 /*                 The re-use interval becomes invalid if it didn't */
@@ -2751,26 +2926,26 @@ L_cksns:
 
 /*                 Carry on with the usual search algorithm. */
 
-		    itchkp[(i__1 = iindex - 1) < 100 && 0 <= i__1 ? i__1 : 
-			    s_rnge("itchkp", i__1, "ckbsr_", (ftnlen)2863)] = 
+		    itchkp[(i__1 = iindex - 1) < 5000 && 0 <= i__1 ? i__1 : 
+			    s_rnge("itchkp", i__1, "ckbsr_", (ftnlen)3042)] = 
 			    FALSE_;
 		}
 
 /*              If the segment list for this instrument is empty, make */
 /*              sure the expense is reset to 0. */
 
-		if (itbeg[(i__1 = iindex - 1) < 100 && 0 <= i__1 ? i__1 : 
-			s_rnge("itbeg", i__1, "ckbsr_", (ftnlen)2871)] == 0) {
-		    itexp[(i__1 = iindex - 1) < 100 && 0 <= i__1 ? i__1 : 
-			    s_rnge("itexp", i__1, "ckbsr_", (ftnlen)2872)] = 
+		if (itbeg[(i__1 = iindex - 1) < 5000 && 0 <= i__1 ? i__1 : 
+			s_rnge("itbeg", i__1, "ckbsr_", (ftnlen)3050)] == 0) {
+		    itexp[(i__1 = iindex - 1) < 5000 && 0 <= i__1 ? i__1 : 
+			    s_rnge("itexp", i__1, "ckbsr_", (ftnlen)3051)] = 
 			    0;
 		}
 
 /*              Prepare to look at the first segment in the list for */
 /*              this instrument. */
 
-		p = itbeg[(i__1 = iindex - 1) < 100 && 0 <= i__1 ? i__1 : 
-			s_rnge("itbeg", i__1, "ckbsr_", (ftnlen)2879)];
+		p = itbeg[(i__1 = iindex - 1) < 5000 && 0 <= i__1 ? i__1 : 
+			s_rnge("itbeg", i__1, "ckbsr_", (ftnlen)3058)];
 		s_copy(status, "CHECK LIST", (ftnlen)40, (ftnlen)10);
 	    }
 	} else if (s_cmp(status, "NEW INSTRUMENT", (ftnlen)40, (ftnlen)14) == 
@@ -2796,7 +2971,7 @@ L_cksns:
 /*           However, trying to handle this special case there was */
 /*           just more trouble than it was worth. */
 
-	    if (nit < 100) {
+	    if (nit < 5000) {
 
 /*              If the instrument table isn't full, the cheapest place is */
 /*              just the next unused row of the table. */
@@ -2812,13 +2987,13 @@ L_cksns:
 		minexp = itexp[0];
 		i__1 = nit;
 		for (i__ = 2; i__ <= i__1; ++i__) {
-		    if (itexp[(i__2 = i__ - 1) < 100 && 0 <= i__2 ? i__2 : 
-			    s_rnge("itexp", i__2, "ckbsr_", (ftnlen)2926)] < 
+		    if (itexp[(i__2 = i__ - 1) < 5000 && 0 <= i__2 ? i__2 : 
+			    s_rnge("itexp", i__2, "ckbsr_", (ftnlen)3105)] < 
 			    minexp) {
 			cheap = i__;
-			minexp = itexp[(i__2 = i__ - 1) < 100 && 0 <= i__2 ? 
+			minexp = itexp[(i__2 = i__ - 1) < 5000 && 0 <= i__2 ? 
 				i__2 : s_rnge("itexp", i__2, "ckbsr_", (
-				ftnlen)2928)];
+				ftnlen)3107)];
 		    }
 		}
 
@@ -2826,8 +3001,8 @@ L_cksns:
 /*              least expensive instrument, we put them back on the free */
 /*              list. */
 
-		head = itbeg[(i__1 = cheap - 1) < 100 && 0 <= i__1 ? i__1 : 
-			s_rnge("itbeg", i__1, "ckbsr_", (ftnlen)2938)];
+		head = itbeg[(i__1 = cheap - 1) < 5000 && 0 <= i__1 ? i__1 : 
+			s_rnge("itbeg", i__1, "ckbsr_", (ftnlen)3117)];
 		if (head > 0) {
 		    tail = -lnkprv_(&head, stpool);
 		    lnkfsl_(&head, &tail, stpool);
@@ -2836,22 +3011,22 @@ L_cksns:
 
 /*           Set up a table entry for the new instrument. */
 
-	    itins[(i__1 = cheap - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge("iti"
-		    "ns", i__1, "ckbsr_", (ftnlen)2952)] = scinst;
-	    itexp[(i__1 = cheap - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge("ite"
-		    "xp", i__1, "ckbsr_", (ftnlen)2953)] = 0;
-	    ithfs[(i__1 = cheap - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge("ith"
-		    "fs", i__1, "ckbsr_", (ftnlen)2954)] = ftnum[(i__2 = nft - 
-		    1) < 5000 && 0 <= i__2 ? i__2 : s_rnge("ftnum", i__2, 
-		    "ckbsr_", (ftnlen)2954)];
-	    itlfs[(i__1 = cheap - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge("itl"
-		    "fs", i__1, "ckbsr_", (ftnlen)2955)] = ftnum[(i__2 = nft - 
-		    1) < 5000 && 0 <= i__2 ? i__2 : s_rnge("ftnum", i__2, 
-		    "ckbsr_", (ftnlen)2955)] + 1;
-	    itbeg[(i__1 = cheap - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge("itb"
-		    "eg", i__1, "ckbsr_", (ftnlen)2956)] = 0;
-	    itchkp[(i__1 = cheap - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-		    "itchkp", i__1, "ckbsr_", (ftnlen)2957)] = FALSE_;
+	    itins[(i__1 = cheap - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
+		    "itins", i__1, "ckbsr_", (ftnlen)3131)] = scinst;
+	    itexp[(i__1 = cheap - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
+		    "itexp", i__1, "ckbsr_", (ftnlen)3132)] = 0;
+	    ithfs[(i__1 = cheap - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
+		    "ithfs", i__1, "ckbsr_", (ftnlen)3133)] = ftnum[(i__2 = 
+		    nft - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge("ftnum", 
+		    i__2, "ckbsr_", (ftnlen)3133)];
+	    itlfs[(i__1 = cheap - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
+		    "itlfs", i__1, "ckbsr_", (ftnlen)3134)] = ftnum[(i__2 = 
+		    nft - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge("ftnum", 
+		    i__2, "ckbsr_", (ftnlen)3134)] + 1;
+	    itbeg[(i__1 = cheap - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
+		    "itbeg", i__1, "ckbsr_", (ftnlen)3135)] = 0;
+	    itchkp[(i__1 = cheap - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
+		    "itchkp", i__1, "ckbsr_", (ftnlen)3136)] = FALSE_;
 	    iindex = cheap;
 
 /*           The following items associated with the re-use interval */
@@ -2869,21 +3044,22 @@ L_cksns:
 /*           help prevent compilation warnings from zealous */
 /*           compilers. */
 
-	    itruex[(i__1 = cheap - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-		    "itruex", i__1, "ckbsr_", (ftnlen)2976)] = 0;
-	    itlb[(i__1 = cheap - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge("itlb",
-		     i__1, "ckbsr_", (ftnlen)2977)] = dpmin_();
-	    itub[(i__1 = cheap - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge("itub",
-		     i__1, "ckbsr_", (ftnlen)2978)] = dpmax_();
-	    itprvf[(i__1 = cheap - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-		    "itprvf", i__1, "ckbsr_", (ftnlen)2979)] = 0;
-	    itprvh[(i__1 = cheap - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-		    "itprvh", i__1, "ckbsr_", (ftnlen)2980)] = 0;
-	    s_copy(itprvi + ((i__1 = cheap - 1) < 100 && 0 <= i__1 ? i__1 : 
-		    s_rnge("itprvi", i__1, "ckbsr_", (ftnlen)2981)) * 40, 
+	    itruex[(i__1 = cheap - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
+		    "itruex", i__1, "ckbsr_", (ftnlen)3155)] = 0;
+	    itlb[(i__1 = cheap - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("itlb"
+		    , i__1, "ckbsr_", (ftnlen)3156)] = dpmin_();
+	    itub[(i__1 = cheap - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("itub"
+		    , i__1, "ckbsr_", (ftnlen)3157)] = dpmax_();
+	    itprvf[(i__1 = cheap - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
+		    "itprvf", i__1, "ckbsr_", (ftnlen)3158)] = 0;
+	    itprvh[(i__1 = cheap - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
+		    "itprvh", i__1, "ckbsr_", (ftnlen)3159)] = 0;
+	    s_copy(itprvi + ((i__1 = cheap - 1) < 5000 && 0 <= i__1 ? i__1 : 
+		    s_rnge("itprvi", i__1, "ckbsr_", (ftnlen)3160)) * 40, 
 		    " ", (ftnlen)40, (ftnlen)1);
-	    cleard_(&c__5, &itprvd[(i__1 = cheap * 5 - 5) < 500 && 0 <= i__1 ?
-		     i__1 : s_rnge("itprvd", i__1, "ckbsr_", (ftnlen)2982)]);
+	    cleard_(&c__5, &itprvd[(i__1 = cheap * 5 - 5) < 25000 && 0 <= 
+		    i__1 ? i__1 : s_rnge("itprvd", i__1, "ckbsr_", (ftnlen)
+		    3161)]);
 
 /*           Now search all of the files for segments relating to */
 /*           this instrument. */
@@ -2907,18 +3083,18 @@ L_cksns:
 /*           Find the next file to search; set FINDEX to the */
 /*           corresponding file table entry. */
 	    findex = 1;
-	    while(ithfs[(i__1 = iindex - 1) < 100 && 0 <= i__1 ? i__1 : 
-		    s_rnge("ithfs", i__1, "ckbsr_", (ftnlen)3011)] >= ftnum[(
+	    while(ithfs[(i__1 = iindex - 1) < 5000 && 0 <= i__1 ? i__1 : 
+		    s_rnge("ithfs", i__1, "ckbsr_", (ftnlen)3190)] >= ftnum[(
 		    i__2 = findex - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge(
-		    "ftnum", i__2, "ckbsr_", (ftnlen)3011)]) {
+		    "ftnum", i__2, "ckbsr_", (ftnlen)3190)]) {
 		++findex;
 	    }
-	    ithfs[(i__1 = iindex - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-		    "ithfs", i__1, "ckbsr_", (ftnlen)3017)] = ftnum[(i__2 = 
+	    ithfs[(i__1 = iindex - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
+		    "ithfs", i__1, "ckbsr_", (ftnlen)3196)] = ftnum[(i__2 = 
 		    findex - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge("ftnum", 
-		    i__2, "ckbsr_", (ftnlen)3017)];
+		    i__2, "ckbsr_", (ftnlen)3196)];
 	    dafbfs_(&fthan[(i__1 = findex - 1) < 5000 && 0 <= i__1 ? i__1 : 
-		    s_rnge("fthan", i__1, "ckbsr_", (ftnlen)3019)]);
+		    s_rnge("fthan", i__1, "ckbsr_", (ftnlen)3198)]);
 	    if (failed_()) {
 		chkout_("CKSNS", (ftnlen)5);
 		return 0;
@@ -2953,10 +3129,10 @@ L_cksns:
 /*              whether we're ready to check the list. */
 
 		s_copy(status, "?", (ftnlen)40, (ftnlen)1);
-		itexp[(i__1 = iindex - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-			"itexp", i__1, "ckbsr_", (ftnlen)3061)] = itexp[(i__2 
-			= iindex - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge(
-			"itexp", i__2, "ckbsr_", (ftnlen)3061)] + cost;
+		itexp[(i__1 = iindex - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
+			"itexp", i__1, "ckbsr_", (ftnlen)3240)] = itexp[(i__2 
+			= iindex - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge(
+			"itexp", i__2, "ckbsr_", (ftnlen)3240)] + cost;
 	    } else {
 		dafgs_(descr);
 		dafus_(descr, &c__2, &c__6, dcd, icd);
@@ -2996,14 +3172,14 @@ L_cksns:
 /*              this instrument, didn't find an applicable segment and */
 /*              have some files left that have not been searched. */
 	    findex = nft;
-	    while(itlfs[(i__1 = iindex - 1) < 100 && 0 <= i__1 ? i__1 : 
-		    s_rnge("itlfs", i__1, "ckbsr_", (ftnlen)3113)] <= ftnum[(
+	    while(itlfs[(i__1 = iindex - 1) < 5000 && 0 <= i__1 ? i__1 : 
+		    s_rnge("itlfs", i__1, "ckbsr_", (ftnlen)3292)] <= ftnum[(
 		    i__2 = findex - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge(
-		    "ftnum", i__2, "ckbsr_", (ftnlen)3113)]) {
+		    "ftnum", i__2, "ckbsr_", (ftnlen)3292)]) {
 		--findex;
 	    }
 	    dafbbs_(&fthan[(i__1 = findex - 1) < 5000 && 0 <= i__1 ? i__1 : 
-		    s_rnge("fthan", i__1, "ckbsr_", (ftnlen)3117)]);
+		    s_rnge("fthan", i__1, "ckbsr_", (ftnlen)3296)]);
 	    if (failed_()) {
 		chkout_("CKSNS", (ftnlen)5);
 		return 0;
@@ -3044,16 +3220,16 @@ L_cksns:
 /*              instrument to be the current file, and go check the */
 /*              current list. */
 
-		itlfs[(i__1 = iindex - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-			"itlfs", i__1, "ckbsr_", (ftnlen)3163)] = ftnum[(i__2 
+		itlfs[(i__1 = iindex - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
+			"itlfs", i__1, "ckbsr_", (ftnlen)3342)] = ftnum[(i__2 
 			= findex - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge(
-			"ftnum", i__2, "ckbsr_", (ftnlen)3163)];
-		itexp[(i__1 = iindex - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-			"itexp", i__1, "ckbsr_", (ftnlen)3164)] = itexp[(i__2 
-			= iindex - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge(
-			"itexp", i__2, "ckbsr_", (ftnlen)3164)] + cost;
-		p = itbeg[(i__1 = iindex - 1) < 100 && 0 <= i__1 ? i__1 : 
-			s_rnge("itbeg", i__1, "ckbsr_", (ftnlen)3165)];
+			"ftnum", i__2, "ckbsr_", (ftnlen)3342)];
+		itexp[(i__1 = iindex - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
+			"itexp", i__1, "ckbsr_", (ftnlen)3343)] = itexp[(i__2 
+			= iindex - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge(
+			"itexp", i__2, "ckbsr_", (ftnlen)3343)] + cost;
+		p = itbeg[(i__1 = iindex - 1) < 5000 && 0 <= i__1 ? i__1 : 
+			s_rnge("itbeg", i__1, "ckbsr_", (ftnlen)3344)];
 		s_copy(status, "CHECK LIST", (ftnlen)40, (ftnlen)10);
 	    } else {
 		dafgs_(descr);
@@ -3095,10 +3271,10 @@ L_cksns:
 /*           If we're resuming a search, the re-use interval is invalid. */
 
 	    if (newsch) {
-		itlb[(i__1 = iindex - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-			"itlb", i__1, "ckbsr_", (ftnlen)3220)] = dpmin_();
-		itub[(i__1 = iindex - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-			"itub", i__1, "ckbsr_", (ftnlen)3221)] = dpmax_();
+		itlb[(i__1 = iindex - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
+			"itlb", i__1, "ckbsr_", (ftnlen)3399)] = dpmin_();
+		itub[(i__1 = iindex - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
+			"itub", i__1, "ckbsr_", (ftnlen)3400)] = dpmax_();
 	    }
 	    while(p > 0) {
 		if (newsch) {
@@ -3108,68 +3284,68 @@ L_cksns:
 
 		    if (reqt > stdcd[(i__1 = (p << 1) - 1) < 200000 && 0 <= 
 			    i__1 ? i__1 : s_rnge("stdcd", i__1, "ckbsr_", (
-			    ftnlen)3232)]) {
+			    ftnlen)3411)]) {
 
 /*                    REQT is to the right of the coverage interval of */
 /*                    this segment.  Trim the re-use interval on the */
 /*                    left, if necessary. */
 
 /* Computing MAX */
-			d__1 = itlb[(i__2 = iindex - 1) < 100 && 0 <= i__2 ? 
+			d__1 = itlb[(i__2 = iindex - 1) < 5000 && 0 <= i__2 ? 
 				i__2 : s_rnge("itlb", i__2, "ckbsr_", (ftnlen)
-				3238)], d__2 = stdcd[(i__3 = (p << 1) - 1) < 
+				3417)], d__2 = stdcd[(i__3 = (p << 1) - 1) < 
 				200000 && 0 <= i__3 ? i__3 : s_rnge("stdcd", 
-				i__3, "ckbsr_", (ftnlen)3238)];
-			itlb[(i__1 = iindex - 1) < 100 && 0 <= i__1 ? i__1 : 
-				s_rnge("itlb", i__1, "ckbsr_", (ftnlen)3238)] 
+				i__3, "ckbsr_", (ftnlen)3417)];
+			itlb[(i__1 = iindex - 1) < 5000 && 0 <= i__1 ? i__1 : 
+				s_rnge("itlb", i__1, "ckbsr_", (ftnlen)3417)] 
 				= max(d__1,d__2);
 		    } else if (reqt < stdcd[(i__1 = (p << 1) - 2) < 200000 && 
 			    0 <= i__1 ? i__1 : s_rnge("stdcd", i__1, "ckbsr_",
-			     (ftnlen)3241)]) {
+			     (ftnlen)3420)]) {
 
 /*                    REQT is to the left of the coverage interval of */
 /*                    this segment.  Trim the re-use interval on the */
 /*                    right, if necessary. */
 
 /* Computing MIN */
-			d__1 = itub[(i__2 = iindex - 1) < 100 && 0 <= i__2 ? 
+			d__1 = itub[(i__2 = iindex - 1) < 5000 && 0 <= i__2 ? 
 				i__2 : s_rnge("itub", i__2, "ckbsr_", (ftnlen)
-				3247)], d__2 = stdcd[(i__3 = (p << 1) - 2) < 
+				3426)], d__2 = stdcd[(i__3 = (p << 1) - 2) < 
 				200000 && 0 <= i__3 ? i__3 : s_rnge("stdcd", 
-				i__3, "ckbsr_", (ftnlen)3247)];
-			itub[(i__1 = iindex - 1) < 100 && 0 <= i__1 ? i__1 : 
-				s_rnge("itub", i__1, "ckbsr_", (ftnlen)3247)] 
+				i__3, "ckbsr_", (ftnlen)3426)];
+			itub[(i__1 = iindex - 1) < 5000 && 0 <= i__1 ? i__1 : 
+				s_rnge("itub", i__1, "ckbsr_", (ftnlen)3426)] 
 				= min(d__1,d__2);
 		    }
 		}
 		if (omega >= stdcd[(i__1 = (p << 1) - 2) < 200000 && 0 <= 
 			i__1 ? i__1 : s_rnge("stdcd", i__1, "ckbsr_", (ftnlen)
-			3254)] && alpha <= stdcd[(i__2 = (p << 1) - 1) < 
+			3433)] && alpha <= stdcd[(i__2 = (p << 1) - 1) < 
 			200000 && 0 <= i__2 ? i__2 : s_rnge("stdcd", i__2, 
-			"ckbsr_", (ftnlen)3254)]) {
+			"ckbsr_", (ftnlen)3433)]) {
 
 /*                 The segment coverage interval intersects the request */
 /*                 interval ALPHA:OMEGA. */
 
 		    if (! avneed || sticd[(i__1 = p * 6 - 3) < 600000 && 0 <= 
 			    i__1 ? i__1 : s_rnge("sticd", i__1, "ckbsr_", (
-			    ftnlen)3260)] != 0) {
+			    ftnlen)3439)] != 0) {
 
 /*                    This segment satisfies the request. */
 
 			dafps_(&c__2, &c__6, &stdcd[(i__1 = (p << 1) - 2) < 
 				200000 && 0 <= i__1 ? i__1 : s_rnge("stdcd", 
-				i__1, "ckbsr_", (ftnlen)3264)], &sticd[(i__2 =
+				i__1, "ckbsr_", (ftnlen)3443)], &sticd[(i__2 =
 				 p * 6 - 6) < 600000 && 0 <= i__2 ? i__2 : 
-				s_rnge("sticd", i__2, "ckbsr_", (ftnlen)3264)]
+				s_rnge("sticd", i__2, "ckbsr_", (ftnlen)3443)]
 				, descr);
 			s_copy(segid, stidnt + ((i__1 = p - 1) < 100000 && 0 
 				<= i__1 ? i__1 : s_rnge("stidnt", i__1, "ckb"
-				"sr_", (ftnlen)3267)) * 40, segid_len, (ftnlen)
+				"sr_", (ftnlen)3446)) * 40, segid_len, (ftnlen)
 				40);
 			*handle = sthan[(i__1 = p - 1) < 100000 && 0 <= i__1 ?
 				 i__1 : s_rnge("sthan", i__1, "ckbsr_", (
-				ftnlen)3268)];
+				ftnlen)3447)];
 			*found = TRUE_;
 
 /*                    If the segment actually contains the request */
@@ -3180,56 +3356,56 @@ L_cksns:
 
 			if (newsch && reqt > stdcd[(i__1 = (p << 1) - 2) < 
 				200000 && 0 <= i__1 ? i__1 : s_rnge("stdcd", 
-				i__1, "ckbsr_", (ftnlen)3278)] && reqt < 
+				i__1, "ckbsr_", (ftnlen)3457)] && reqt < 
 				stdcd[(i__2 = (p << 1) - 1) < 200000 && 0 <= 
 				i__2 ? i__2 : s_rnge("stdcd", i__2, "ckbsr_", 
-				(ftnlen)3278)]) {
+				(ftnlen)3457)]) {
 
 /*                       Set the re-use interval for the current */
 /*                       instrument. */
 
 /* Computing MAX */
-			    d__1 = itlb[(i__2 = iindex - 1) < 100 && 0 <= 
+			    d__1 = itlb[(i__2 = iindex - 1) < 5000 && 0 <= 
 				    i__2 ? i__2 : s_rnge("itlb", i__2, "ckbs"
-				    "r_", (ftnlen)3285)], d__2 = stdcd[(i__3 = 
+				    "r_", (ftnlen)3464)], d__2 = stdcd[(i__3 = 
 				    (p << 1) - 2) < 200000 && 0 <= i__3 ? 
 				    i__3 : s_rnge("stdcd", i__3, "ckbsr_", (
-				    ftnlen)3285)];
-			    itlb[(i__1 = iindex - 1) < 100 && 0 <= i__1 ? 
+				    ftnlen)3464)];
+			    itlb[(i__1 = iindex - 1) < 5000 && 0 <= i__1 ? 
 				    i__1 : s_rnge("itlb", i__1, "ckbsr_", (
-				    ftnlen)3285)] = max(d__1,d__2);
+				    ftnlen)3464)] = max(d__1,d__2);
 /* Computing MIN */
-			    d__1 = itub[(i__2 = iindex - 1) < 100 && 0 <= 
+			    d__1 = itub[(i__2 = iindex - 1) < 5000 && 0 <= 
 				    i__2 ? i__2 : s_rnge("itub", i__2, "ckbs"
-				    "r_", (ftnlen)3286)], d__2 = stdcd[(i__3 = 
+				    "r_", (ftnlen)3465)], d__2 = stdcd[(i__3 = 
 				    (p << 1) - 1) < 200000 && 0 <= i__3 ? 
 				    i__3 : s_rnge("stdcd", i__3, "ckbsr_", (
-				    ftnlen)3286)];
-			    itub[(i__1 = iindex - 1) < 100 && 0 <= i__1 ? 
+				    ftnlen)3465)];
+			    itub[(i__1 = iindex - 1) < 5000 && 0 <= i__1 ? 
 				    i__1 : s_rnge("itub", i__1, "ckbsr_", (
-				    ftnlen)3286)] = min(d__1,d__2);
+				    ftnlen)3465)] = min(d__1,d__2);
 
 /*                       Save the returned output items, in case this */
 /*                       segment may satisfy the next request. */
 
-			    itprvh[(i__1 = iindex - 1) < 100 && 0 <= i__1 ? 
+			    itprvh[(i__1 = iindex - 1) < 5000 && 0 <= i__1 ? 
 				    i__1 : s_rnge("itprvh", i__1, "ckbsr_", (
-				    ftnlen)3292)] = *handle;
-			    s_copy(itprvi + ((i__1 = iindex - 1) < 100 && 0 <=
-				     i__1 ? i__1 : s_rnge("itprvi", i__1, 
-				    "ckbsr_", (ftnlen)3293)) * 40, segid, (
+				    ftnlen)3471)] = *handle;
+			    s_copy(itprvi + ((i__1 = iindex - 1) < 5000 && 0 
+				    <= i__1 ? i__1 : s_rnge("itprvi", i__1, 
+				    "ckbsr_", (ftnlen)3472)) * 40, segid, (
 				    ftnlen)40, segid_len);
-			    itprvf[(i__1 = iindex - 1) < 100 && 0 <= i__1 ? 
+			    itprvf[(i__1 = iindex - 1) < 5000 && 0 <= i__1 ? 
 				    i__1 : s_rnge("itprvf", i__1, "ckbsr_", (
-				    ftnlen)3294)] = sticd[(i__2 = p * 6 - 3) <
+				    ftnlen)3473)] = sticd[(i__2 = p * 6 - 3) <
 				     600000 && 0 <= i__2 ? i__2 : s_rnge(
-				    "sticd", i__2, "ckbsr_", (ftnlen)3294)];
+				    "sticd", i__2, "ckbsr_", (ftnlen)3473)];
 			    moved_(descr, &c__5, &itprvd[(i__1 = iindex * 5 - 
-				    5) < 500 && 0 <= i__1 ? i__1 : s_rnge(
-				    "itprvd", i__1, "ckbsr_", (ftnlen)3296)]);
-			    itchkp[(i__1 = iindex - 1) < 100 && 0 <= i__1 ? 
+				    5) < 25000 && 0 <= i__1 ? i__1 : s_rnge(
+				    "itprvd", i__1, "ckbsr_", (ftnlen)3475)]);
+			    itchkp[(i__1 = iindex - 1) < 5000 && 0 <= i__1 ? 
 				    i__1 : s_rnge("itchkp", i__1, "ckbsr_", (
-				    ftnlen)3298)] = TRUE_;
+				    ftnlen)3477)] = TRUE_;
 			}
 
 /*                    Go ahead and move the pointer up before returning */
@@ -3238,7 +3414,7 @@ L_cksns:
 
 			savep = stpool[(i__1 = (p << 1) + 10) < 200012 && 0 <=
 				 i__1 ? i__1 : s_rnge("stpool", i__1, "ckbsr_"
-				, (ftnlen)3307)];
+				, (ftnlen)3486)];
 
 /*                    Indicate the first pass of this search has been */
 /*                    completed. */
@@ -3253,7 +3429,7 @@ L_cksns:
 /*              to speed up the operation. */
 
 		p = stpool[(i__1 = (p << 1) + 10) < 200012 && 0 <= i__1 ? 
-			i__1 : s_rnge("stpool", i__1, "ckbsr_", (ftnlen)3325)]
+			i__1 : s_rnge("stpool", i__1, "ckbsr_", (ftnlen)3504)]
 			;
 	    }
 
@@ -3263,8 +3439,8 @@ L_cksns:
 /*           If there are more files, search them. */
 /*           Otherwise, things are hopeless, set the status that way. */
 
-	    if (itlfs[(i__1 = iindex - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-		    "itlfs", i__1, "ckbsr_", (ftnlen)3336)] > ftnum[0]) {
+	    if (itlfs[(i__1 = iindex - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
+		    "itlfs", i__1, "ckbsr_", (ftnlen)3515)] > ftnum[0]) {
 		s_copy(status, "OLD FILES", (ftnlen)40, (ftnlen)9);
 	    } else {
 		s_copy(status, "HOPELESS", (ftnlen)40, (ftnlen)8);
@@ -3308,8 +3484,8 @@ L_cksns:
 	    i__1 = nit;
 	    for (i__ = 1; i__ <= i__1; ++i__) {
 		if (i__ != iindex) {
-		    if (itexp[(i__2 = i__ - 1) < 100 && 0 <= i__2 ? i__2 : 
-			    s_rnge("itexp", i__2, "ckbsr_", (ftnlen)3385)] < 
+		    if (itexp[(i__2 = i__ - 1) < 5000 && 0 <= i__2 ? i__2 : 
+			    s_rnge("itexp", i__2, "ckbsr_", (ftnlen)3564)] < 
 			    minexp || cheap == 0) {
 
 /*                    This list is the cheapest seen so far, */
@@ -3318,9 +3494,9 @@ L_cksns:
 /*                    a candidate for removal as any. */
 
 			cheap = i__;
-			minexp = itexp[(i__2 = i__ - 1) < 100 && 0 <= i__2 ? 
+			minexp = itexp[(i__2 = i__ - 1) < 5000 && 0 <= i__2 ? 
 				i__2 : s_rnge("itexp", i__2, "ckbsr_", (
-				ftnlen)3394)];
+				ftnlen)3573)];
 		    }
 		}
 	    }
@@ -3331,7 +3507,7 @@ L_cksns:
 /*              entering MAKE ROOM. */
 
 		if (s_cmp(stack + ((i__1 = top - 1) < 2 && 0 <= i__1 ? i__1 : 
-			s_rnge("stack", i__1, "ckbsr_", (ftnlen)3409)) * 40, 
+			s_rnge("stack", i__1, "ckbsr_", (ftnlen)3588)) * 40, 
 			"ADD TO END", (ftnlen)40, (ftnlen)10) == 0) {
 
 /*                 The segment meta-data from the current file cannot */
@@ -3354,8 +3530,8 @@ L_cksns:
 /*                 Return the current list to the segment table pool. */
 /*                 Note this list is non-empty. */
 
-		    p = itbeg[(i__1 = iindex - 1) < 100 && 0 <= i__1 ? i__1 : 
-			    s_rnge("itbeg", i__1, "ckbsr_", (ftnlen)3432)];
+		    p = itbeg[(i__1 = iindex - 1) < 5000 && 0 <= i__1 ? i__1 :
+			     s_rnge("itbeg", i__1, "ckbsr_", (ftnlen)3611)];
 		    tail = -lnkprv_(&p, stpool);
 		    lnkfsl_(&p, &tail, stpool);
 
@@ -3363,20 +3539,20 @@ L_cksns:
 /*                 initiate an 'OLD FILES' search, just as in 'NEW */
 /*                 INSTRUMENT'. */
 
-		    itbeg[(i__1 = iindex - 1) < 100 && 0 <= i__1 ? i__1 : 
-			    s_rnge("itbeg", i__1, "ckbsr_", (ftnlen)3441)] = 
+		    itbeg[(i__1 = iindex - 1) < 5000 && 0 <= i__1 ? i__1 : 
+			    s_rnge("itbeg", i__1, "ckbsr_", (ftnlen)3620)] = 
 			    0;
-		    itexp[(i__1 = iindex - 1) < 100 && 0 <= i__1 ? i__1 : 
-			    s_rnge("itexp", i__1, "ckbsr_", (ftnlen)3442)] = 
+		    itexp[(i__1 = iindex - 1) < 5000 && 0 <= i__1 ? i__1 : 
+			    s_rnge("itexp", i__1, "ckbsr_", (ftnlen)3621)] = 
 			    0;
-		    ithfs[(i__1 = iindex - 1) < 100 && 0 <= i__1 ? i__1 : 
-			    s_rnge("ithfs", i__1, "ckbsr_", (ftnlen)3443)] = 
+		    ithfs[(i__1 = iindex - 1) < 5000 && 0 <= i__1 ? i__1 : 
+			    s_rnge("ithfs", i__1, "ckbsr_", (ftnlen)3622)] = 
 			    ftnum[(i__2 = nft - 1) < 5000 && 0 <= i__2 ? i__2 
-			    : s_rnge("ftnum", i__2, "ckbsr_", (ftnlen)3443)];
-		    itlfs[(i__1 = iindex - 1) < 100 && 0 <= i__1 ? i__1 : 
-			    s_rnge("itlfs", i__1, "ckbsr_", (ftnlen)3444)] = 
+			    : s_rnge("ftnum", i__2, "ckbsr_", (ftnlen)3622)];
+		    itlfs[(i__1 = iindex - 1) < 5000 && 0 <= i__1 ? i__1 : 
+			    s_rnge("itlfs", i__1, "ckbsr_", (ftnlen)3623)] = 
 			    ftnum[(i__2 = nft - 1) < 5000 && 0 <= i__2 ? i__2 
-			    : s_rnge("ftnum", i__2, "ckbsr_", (ftnlen)3444)] 
+			    : s_rnge("ftnum", i__2, "ckbsr_", (ftnlen)3623)] 
 			    + 1;
 		    s_copy(status, "OLD FILES", (ftnlen)40, (ftnlen)9);
 		}
@@ -3389,8 +3565,8 @@ L_cksns:
 /*              Return this cheapest list to the segment pool.  This */
 /*              list could be empty. */
 
-		head = itbeg[(i__1 = cheap - 1) < 100 && 0 <= i__1 ? i__1 : 
-			s_rnge("itbeg", i__1, "ckbsr_", (ftnlen)3460)];
+		head = itbeg[(i__1 = cheap - 1) < 5000 && 0 <= i__1 ? i__1 : 
+			s_rnge("itbeg", i__1, "ckbsr_", (ftnlen)3639)];
 		if (head > 0) {
 		    tail = -lnkprv_(&head, stpool);
 		    lnkfsl_(&head, &tail, stpool);
@@ -3400,60 +3576,64 @@ L_cksns:
 /*              the final entry in the table. */
 
 		if (cheap != nit) {
-		    itins[(i__1 = cheap - 1) < 100 && 0 <= i__1 ? i__1 : 
-			    s_rnge("itins", i__1, "ckbsr_", (ftnlen)3476)] = 
-			    itins[(i__2 = nit - 1) < 100 && 0 <= i__2 ? i__2 :
-			     s_rnge("itins", i__2, "ckbsr_", (ftnlen)3476)];
-		    itexp[(i__1 = cheap - 1) < 100 && 0 <= i__1 ? i__1 : 
-			    s_rnge("itexp", i__1, "ckbsr_", (ftnlen)3477)] = 
-			    itexp[(i__2 = nit - 1) < 100 && 0 <= i__2 ? i__2 :
-			     s_rnge("itexp", i__2, "ckbsr_", (ftnlen)3477)];
-		    ithfs[(i__1 = cheap - 1) < 100 && 0 <= i__1 ? i__1 : 
-			    s_rnge("ithfs", i__1, "ckbsr_", (ftnlen)3478)] = 
-			    ithfs[(i__2 = nit - 1) < 100 && 0 <= i__2 ? i__2 :
-			     s_rnge("ithfs", i__2, "ckbsr_", (ftnlen)3478)];
-		    itlfs[(i__1 = cheap - 1) < 100 && 0 <= i__1 ? i__1 : 
-			    s_rnge("itlfs", i__1, "ckbsr_", (ftnlen)3479)] = 
-			    itlfs[(i__2 = nit - 1) < 100 && 0 <= i__2 ? i__2 :
-			     s_rnge("itlfs", i__2, "ckbsr_", (ftnlen)3479)];
-		    itbeg[(i__1 = cheap - 1) < 100 && 0 <= i__1 ? i__1 : 
-			    s_rnge("itbeg", i__1, "ckbsr_", (ftnlen)3480)] = 
-			    itbeg[(i__2 = nit - 1) < 100 && 0 <= i__2 ? i__2 :
-			     s_rnge("itbeg", i__2, "ckbsr_", (ftnlen)3480)];
-		    itlb[(i__1 = cheap - 1) < 100 && 0 <= i__1 ? i__1 : 
-			    s_rnge("itlb", i__1, "ckbsr_", (ftnlen)3481)] = 
-			    itlb[(i__2 = nit - 1) < 100 && 0 <= i__2 ? i__2 : 
-			    s_rnge("itlb", i__2, "ckbsr_", (ftnlen)3481)];
-		    itub[(i__1 = cheap - 1) < 100 && 0 <= i__1 ? i__1 : 
-			    s_rnge("itub", i__1, "ckbsr_", (ftnlen)3482)] = 
-			    itub[(i__2 = nit - 1) < 100 && 0 <= i__2 ? i__2 : 
-			    s_rnge("itub", i__2, "ckbsr_", (ftnlen)3482)];
-		    itprvh[(i__1 = cheap - 1) < 100 && 0 <= i__1 ? i__1 : 
-			    s_rnge("itprvh", i__1, "ckbsr_", (ftnlen)3483)] = 
-			    itprvh[(i__2 = nit - 1) < 100 && 0 <= i__2 ? i__2 
-			    : s_rnge("itprvh", i__2, "ckbsr_", (ftnlen)3483)];
-		    s_copy(itprvi + ((i__1 = cheap - 1) < 100 && 0 <= i__1 ? 
+		    itins[(i__1 = cheap - 1) < 5000 && 0 <= i__1 ? i__1 : 
+			    s_rnge("itins", i__1, "ckbsr_", (ftnlen)3655)] = 
+			    itins[(i__2 = nit - 1) < 5000 && 0 <= i__2 ? i__2 
+			    : s_rnge("itins", i__2, "ckbsr_", (ftnlen)3655)];
+		    itexp[(i__1 = cheap - 1) < 5000 && 0 <= i__1 ? i__1 : 
+			    s_rnge("itexp", i__1, "ckbsr_", (ftnlen)3656)] = 
+			    itexp[(i__2 = nit - 1) < 5000 && 0 <= i__2 ? i__2 
+			    : s_rnge("itexp", i__2, "ckbsr_", (ftnlen)3656)];
+		    ithfs[(i__1 = cheap - 1) < 5000 && 0 <= i__1 ? i__1 : 
+			    s_rnge("ithfs", i__1, "ckbsr_", (ftnlen)3657)] = 
+			    ithfs[(i__2 = nit - 1) < 5000 && 0 <= i__2 ? i__2 
+			    : s_rnge("ithfs", i__2, "ckbsr_", (ftnlen)3657)];
+		    itlfs[(i__1 = cheap - 1) < 5000 && 0 <= i__1 ? i__1 : 
+			    s_rnge("itlfs", i__1, "ckbsr_", (ftnlen)3658)] = 
+			    itlfs[(i__2 = nit - 1) < 5000 && 0 <= i__2 ? i__2 
+			    : s_rnge("itlfs", i__2, "ckbsr_", (ftnlen)3658)];
+		    itbeg[(i__1 = cheap - 1) < 5000 && 0 <= i__1 ? i__1 : 
+			    s_rnge("itbeg", i__1, "ckbsr_", (ftnlen)3659)] = 
+			    itbeg[(i__2 = nit - 1) < 5000 && 0 <= i__2 ? i__2 
+			    : s_rnge("itbeg", i__2, "ckbsr_", (ftnlen)3659)];
+		    itlb[(i__1 = cheap - 1) < 5000 && 0 <= i__1 ? i__1 : 
+			    s_rnge("itlb", i__1, "ckbsr_", (ftnlen)3660)] = 
+			    itlb[(i__2 = nit - 1) < 5000 && 0 <= i__2 ? i__2 :
+			     s_rnge("itlb", i__2, "ckbsr_", (ftnlen)3660)];
+		    itub[(i__1 = cheap - 1) < 5000 && 0 <= i__1 ? i__1 : 
+			    s_rnge("itub", i__1, "ckbsr_", (ftnlen)3661)] = 
+			    itub[(i__2 = nit - 1) < 5000 && 0 <= i__2 ? i__2 :
+			     s_rnge("itub", i__2, "ckbsr_", (ftnlen)3661)];
+		    itprvh[(i__1 = cheap - 1) < 5000 && 0 <= i__1 ? i__1 : 
+			    s_rnge("itprvh", i__1, "ckbsr_", (ftnlen)3662)] = 
+			    itprvh[(i__2 = nit - 1) < 5000 && 0 <= i__2 ? 
+			    i__2 : s_rnge("itprvh", i__2, "ckbsr_", (ftnlen)
+			    3662)];
+		    s_copy(itprvi + ((i__1 = cheap - 1) < 5000 && 0 <= i__1 ? 
 			    i__1 : s_rnge("itprvi", i__1, "ckbsr_", (ftnlen)
-			    3484)) * 40, itprvi + ((i__2 = nit - 1) < 100 && 
+			    3663)) * 40, itprvi + ((i__2 = nit - 1) < 5000 && 
 			    0 <= i__2 ? i__2 : s_rnge("itprvi", i__2, "ckbsr_"
-			    , (ftnlen)3484)) * 40, (ftnlen)40, (ftnlen)40);
-		    itprvf[(i__1 = cheap - 1) < 100 && 0 <= i__1 ? i__1 : 
-			    s_rnge("itprvf", i__1, "ckbsr_", (ftnlen)3485)] = 
-			    itprvf[(i__2 = nit - 1) < 100 && 0 <= i__2 ? i__2 
-			    : s_rnge("itprvf", i__2, "ckbsr_", (ftnlen)3485)];
-		    itchkp[(i__1 = cheap - 1) < 100 && 0 <= i__1 ? i__1 : 
-			    s_rnge("itchkp", i__1, "ckbsr_", (ftnlen)3486)] = 
-			    itchkp[(i__2 = nit - 1) < 100 && 0 <= i__2 ? i__2 
-			    : s_rnge("itchkp", i__2, "ckbsr_", (ftnlen)3486)];
-		    itruex[(i__1 = cheap - 1) < 100 && 0 <= i__1 ? i__1 : 
-			    s_rnge("itruex", i__1, "ckbsr_", (ftnlen)3487)] = 
-			    itruex[(i__2 = nit - 1) < 100 && 0 <= i__2 ? i__2 
-			    : s_rnge("itruex", i__2, "ckbsr_", (ftnlen)3487)];
-		    moved_(&itprvd[(i__1 = nit * 5 - 5) < 500 && 0 <= i__1 ? 
-			    i__1 : s_rnge("itprvd", i__1, "ckbsr_", (ftnlen)
-			    3489)], &c__5, &itprvd[(i__2 = cheap * 5 - 5) < 
-			    500 && 0 <= i__2 ? i__2 : s_rnge("itprvd", i__2, 
-			    "ckbsr_", (ftnlen)3489)]);
+			    , (ftnlen)3663)) * 40, (ftnlen)40, (ftnlen)40);
+		    itprvf[(i__1 = cheap - 1) < 5000 && 0 <= i__1 ? i__1 : 
+			    s_rnge("itprvf", i__1, "ckbsr_", (ftnlen)3664)] = 
+			    itprvf[(i__2 = nit - 1) < 5000 && 0 <= i__2 ? 
+			    i__2 : s_rnge("itprvf", i__2, "ckbsr_", (ftnlen)
+			    3664)];
+		    itchkp[(i__1 = cheap - 1) < 5000 && 0 <= i__1 ? i__1 : 
+			    s_rnge("itchkp", i__1, "ckbsr_", (ftnlen)3665)] = 
+			    itchkp[(i__2 = nit - 1) < 5000 && 0 <= i__2 ? 
+			    i__2 : s_rnge("itchkp", i__2, "ckbsr_", (ftnlen)
+			    3665)];
+		    itruex[(i__1 = cheap - 1) < 5000 && 0 <= i__1 ? i__1 : 
+			    s_rnge("itruex", i__1, "ckbsr_", (ftnlen)3666)] = 
+			    itruex[(i__2 = nit - 1) < 5000 && 0 <= i__2 ? 
+			    i__2 : s_rnge("itruex", i__2, "ckbsr_", (ftnlen)
+			    3666)];
+		    moved_(&itprvd[(i__1 = nit * 5 - 5) < 25000 && 0 <= i__1 ?
+			     i__1 : s_rnge("itprvd", i__1, "ckbsr_", (ftnlen)
+			    3668)], &c__5, &itprvd[(i__2 = cheap * 5 - 5) < 
+			    25000 && 0 <= i__2 ? i__2 : s_rnge("itprvd", i__2,
+			     "ckbsr_", (ftnlen)3668)]);
 		}
 		if (iindex == nit) {
 		    iindex = cheap;
@@ -3491,17 +3671,17 @@ L_cksns:
 
 		lnkan_(stpool, &new__);
 		sthan[(i__1 = new__ - 1) < 100000 && 0 <= i__1 ? i__1 : 
-			s_rnge("sthan", i__1, "ckbsr_", (ftnlen)3535)] = 
+			s_rnge("sthan", i__1, "ckbsr_", (ftnlen)3714)] = 
 			fthan[(i__2 = findex - 1) < 5000 && 0 <= i__2 ? i__2 :
-			 s_rnge("fthan", i__2, "ckbsr_", (ftnlen)3535)];
+			 s_rnge("fthan", i__2, "ckbsr_", (ftnlen)3714)];
 		dafgn_(stidnt + ((i__1 = new__ - 1) < 100000 && 0 <= i__1 ? 
-			i__1 : s_rnge("stidnt", i__1, "ckbsr_", (ftnlen)3537))
+			i__1 : s_rnge("stidnt", i__1, "ckbsr_", (ftnlen)3716))
 			 * 40, (ftnlen)40);
 		dafus_(descr, &c__2, &c__6, &stdcd[(i__1 = (new__ << 1) - 2) <
 			 200000 && 0 <= i__1 ? i__1 : s_rnge("stdcd", i__1, 
-			"ckbsr_", (ftnlen)3539)], &sticd[(i__2 = new__ * 6 - 
+			"ckbsr_", (ftnlen)3718)], &sticd[(i__2 = new__ * 6 - 
 			6) < 600000 && 0 <= i__2 ? i__2 : s_rnge("sticd", 
-			i__2, "ckbsr_", (ftnlen)3539)]);
+			i__2, "ckbsr_", (ftnlen)3718)]);
 		if (failed_()) {
 		    chkout_("CKSNS", (ftnlen)5);
 		    return 0;
@@ -3510,11 +3690,11 @@ L_cksns:
 /*              If the current list is empty, this append operation */
 /*              is a no-op. */
 
-		lnkilb_(&new__, &itbeg[(i__1 = iindex - 1) < 100 && 0 <= i__1 
-			? i__1 : s_rnge("itbeg", i__1, "ckbsr_", (ftnlen)3550)
-			], stpool);
-		itbeg[(i__1 = iindex - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-			"itbeg", i__1, "ckbsr_", (ftnlen)3551)] = new__;
+		lnkilb_(&new__, &itbeg[(i__1 = iindex - 1) < 5000 && 0 <= 
+			i__1 ? i__1 : s_rnge("itbeg", i__1, "ckbsr_", (ftnlen)
+			3729)], stpool);
+		itbeg[(i__1 = iindex - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
+			"itbeg", i__1, "ckbsr_", (ftnlen)3730)] = new__;
 		s_copy(status, "RESUME", (ftnlen)40, (ftnlen)6);
 	    }
 	} else if (s_cmp(status, "ADD TO END", (ftnlen)40, (ftnlen)10) == 0) {
@@ -3535,37 +3715,37 @@ L_cksns:
 
 		lnkan_(stpool, &new__);
 		sthan[(i__1 = new__ - 1) < 100000 && 0 <= i__1 ? i__1 : 
-			s_rnge("sthan", i__1, "ckbsr_", (ftnlen)3578)] = 
+			s_rnge("sthan", i__1, "ckbsr_", (ftnlen)3757)] = 
 			fthan[(i__2 = findex - 1) < 5000 && 0 <= i__2 ? i__2 :
-			 s_rnge("fthan", i__2, "ckbsr_", (ftnlen)3578)];
+			 s_rnge("fthan", i__2, "ckbsr_", (ftnlen)3757)];
 		dafgn_(stidnt + ((i__1 = new__ - 1) < 100000 && 0 <= i__1 ? 
-			i__1 : s_rnge("stidnt", i__1, "ckbsr_", (ftnlen)3580))
+			i__1 : s_rnge("stidnt", i__1, "ckbsr_", (ftnlen)3759))
 			 * 40, (ftnlen)40);
 		dafus_(descr, &c__2, &c__6, &stdcd[(i__1 = (new__ << 1) - 2) <
 			 200000 && 0 <= i__1 ? i__1 : s_rnge("stdcd", i__1, 
-			"ckbsr_", (ftnlen)3582)], &sticd[(i__2 = new__ * 6 - 
+			"ckbsr_", (ftnlen)3761)], &sticd[(i__2 = new__ * 6 - 
 			6) < 600000 && 0 <= i__2 ? i__2 : s_rnge("sticd", 
-			i__2, "ckbsr_", (ftnlen)3582)]);
+			i__2, "ckbsr_", (ftnlen)3761)]);
 		if (failed_()) {
 		    chkout_("CKSNS", (ftnlen)5);
 		    return 0;
 		}
-		if (itbeg[(i__1 = iindex - 1) < 100 && 0 <= i__1 ? i__1 : 
-			s_rnge("itbeg", i__1, "ckbsr_", (ftnlen)3589)] <= 0) {
+		if (itbeg[(i__1 = iindex - 1) < 5000 && 0 <= i__1 ? i__1 : 
+			s_rnge("itbeg", i__1, "ckbsr_", (ftnlen)3768)] <= 0) {
 
 /*                 This is the first node in the list for this */
 /*                 instrument. */
 
-		    itbeg[(i__1 = iindex - 1) < 100 && 0 <= i__1 ? i__1 : 
-			    s_rnge("itbeg", i__1, "ckbsr_", (ftnlen)3594)] = 
+		    itbeg[(i__1 = iindex - 1) < 5000 && 0 <= i__1 ? i__1 : 
+			    s_rnge("itbeg", i__1, "ckbsr_", (ftnlen)3773)] = 
 			    new__;
 		} else {
 
 /*                 Link the new node to the tail of the list. */
 
-		    tail = -lnkprv_(&itbeg[(i__1 = iindex - 1) < 100 && 0 <= 
+		    tail = -lnkprv_(&itbeg[(i__1 = iindex - 1) < 5000 && 0 <= 
 			    i__1 ? i__1 : s_rnge("itbeg", i__1, "ckbsr_", (
-			    ftnlen)3600)], stpool);
+			    ftnlen)3779)], stpool);
 		    lnkila_(&tail, &new__, stpool);
 		}
 		s_copy(status, "RESUME", (ftnlen)40, (ftnlen)6);
@@ -3586,21 +3766,21 @@ L_cksns:
 /*           At this point, we need to initialize the cost of */
 /*           the re-use interval. */
 
-	    itruex[(i__1 = iindex - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-		    "itruex", i__1, "ckbsr_", (ftnlen)3625)] = 0;
+	    itruex[(i__1 = iindex - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
+		    "itruex", i__1, "ckbsr_", (ftnlen)3804)] = 0;
 
 /*           Find the portion of the current instrument's segment list */
 /*           which comes from the current file of interest.  SLBEG */
 /*           will point to the beginning of this sublist. */
 
-	    slbeg = itbeg[(i__1 = iindex - 1) < 100 && 0 <= i__1 ? i__1 : 
-		    s_rnge("itbeg", i__1, "ckbsr_", (ftnlen)3632)];
+	    slbeg = itbeg[(i__1 = iindex - 1) < 5000 && 0 <= i__1 ? i__1 : 
+		    s_rnge("itbeg", i__1, "ckbsr_", (ftnlen)3811)];
 	    fndhan = FALSE_;
 	    while(! fndhan && slbeg > 0) {
 		fndhan = sthan[(i__1 = slbeg - 1) < 100000 && 0 <= i__1 ? 
-			i__1 : s_rnge("sthan", i__1, "ckbsr_", (ftnlen)3637)] 
+			i__1 : s_rnge("sthan", i__1, "ckbsr_", (ftnlen)3816)] 
 			== fthan[(i__2 = findex - 1) < 5000 && 0 <= i__2 ? 
-			i__2 : s_rnge("fthan", i__2, "ckbsr_", (ftnlen)3637)];
+			i__2 : s_rnge("fthan", i__2, "ckbsr_", (ftnlen)3816)];
 		if (! fndhan) {
 
 /*                 Get the next node.  We avoid LNKNXT here in order */
@@ -3608,7 +3788,7 @@ L_cksns:
 
 		    slbeg = stpool[(i__1 = (slbeg << 1) + 10) < 200012 && 0 <=
 			     i__1 ? i__1 : s_rnge("stpool", i__1, "ckbsr_", (
-			    ftnlen)3644)];
+			    ftnlen)3823)];
 		}
 	    }
 
@@ -3637,20 +3817,20 @@ L_cksns:
 /*              corresponding instrument table entry should be set to */
 /*              a non-positive value to indicate an empty segment list. */
 
-		if (p == itbeg[(i__1 = iindex - 1) < 100 && 0 <= i__1 ? i__1 :
-			 s_rnge("itbeg", i__1, "ckbsr_", (ftnlen)3678)]) {
-		    itbeg[(i__1 = iindex - 1) < 100 && 0 <= i__1 ? i__1 : 
-			    s_rnge("itbeg", i__1, "ckbsr_", (ftnlen)3680)] = 
+		if (p == itbeg[(i__1 = iindex - 1) < 5000 && 0 <= i__1 ? i__1 
+			: s_rnge("itbeg", i__1, "ckbsr_", (ftnlen)3857)]) {
+		    itbeg[(i__1 = iindex - 1) < 5000 && 0 <= i__1 ? i__1 : 
+			    s_rnge("itbeg", i__1, "ckbsr_", (ftnlen)3859)] = 
 			    0;
 
 /*                 Also in this case, we must initialize the time */
 /*                 bounds for this instrument. */
 
-		    itlb[(i__1 = iindex - 1) < 100 && 0 <= i__1 ? i__1 : 
-			    s_rnge("itlb", i__1, "ckbsr_", (ftnlen)3686)] = 
+		    itlb[(i__1 = iindex - 1) < 5000 && 0 <= i__1 ? i__1 : 
+			    s_rnge("itlb", i__1, "ckbsr_", (ftnlen)3865)] = 
 			    dpmin_();
-		    itub[(i__1 = iindex - 1) < 100 && 0 <= i__1 ? i__1 : 
-			    s_rnge("itub", i__1, "ckbsr_", (ftnlen)3687)] = 
+		    itub[(i__1 = iindex - 1) < 5000 && 0 <= i__1 ? i__1 : 
+			    s_rnge("itub", i__1, "ckbsr_", (ftnlen)3866)] = 
 			    dpmax_();
 		}
 		s_copy(status, "CHECK PARTIAL LIST", (ftnlen)40, (ftnlen)18);
@@ -3683,48 +3863,48 @@ L_cksns:
 /*                 Every segment seen from the current file contributes */
 /*                 to the expense of the re-use interval. */
 
-		    itruex[(i__1 = iindex - 1) < 100 && 0 <= i__1 ? i__1 : 
-			    s_rnge("itruex", i__1, "ckbsr_", (ftnlen)3726)] = 
-			    itruex[(i__2 = iindex - 1) < 100 && 0 <= i__2 ? 
+		    itruex[(i__1 = iindex - 1) < 5000 && 0 <= i__1 ? i__1 : 
+			    s_rnge("itruex", i__1, "ckbsr_", (ftnlen)3905)] = 
+			    itruex[(i__2 = iindex - 1) < 5000 && 0 <= i__2 ? 
 			    i__2 : s_rnge("itruex", i__2, "ckbsr_", (ftnlen)
-			    3726)] + 1;
+			    3905)] + 1;
 
 /*                 Trim the re-use interval if the request time lies */
 /*                 outside the coverage of the current segment. */
 
 		    if (reqt > stdcd[(i__1 = (p << 1) - 1) < 200000 && 0 <= 
 			    i__1 ? i__1 : s_rnge("stdcd", i__1, "ckbsr_", (
-			    ftnlen)3732)]) {
+			    ftnlen)3911)]) {
 
 /*                    REQT is to the right of the coverage interval of */
 /*                    this segment.  Trim the re-use interval on the */
 /*                    left, if necessary. */
 
 /* Computing MAX */
-			d__1 = itlb[(i__2 = iindex - 1) < 100 && 0 <= i__2 ? 
+			d__1 = itlb[(i__2 = iindex - 1) < 5000 && 0 <= i__2 ? 
 				i__2 : s_rnge("itlb", i__2, "ckbsr_", (ftnlen)
-				3738)], d__2 = stdcd[(i__3 = (p << 1) - 1) < 
+				3917)], d__2 = stdcd[(i__3 = (p << 1) - 1) < 
 				200000 && 0 <= i__3 ? i__3 : s_rnge("stdcd", 
-				i__3, "ckbsr_", (ftnlen)3738)];
-			itlb[(i__1 = iindex - 1) < 100 && 0 <= i__1 ? i__1 : 
-				s_rnge("itlb", i__1, "ckbsr_", (ftnlen)3738)] 
+				i__3, "ckbsr_", (ftnlen)3917)];
+			itlb[(i__1 = iindex - 1) < 5000 && 0 <= i__1 ? i__1 : 
+				s_rnge("itlb", i__1, "ckbsr_", (ftnlen)3917)] 
 				= max(d__1,d__2);
 		    } else if (reqt < stdcd[(i__1 = (p << 1) - 2) < 200000 && 
 			    0 <= i__1 ? i__1 : s_rnge("stdcd", i__1, "ckbsr_",
-			     (ftnlen)3741)]) {
+			     (ftnlen)3920)]) {
 
 /*                    REQT is to the left of the coverage interval of */
 /*                    this segment.  Trim the re-use interval on the */
 /*                    right, if necessary. */
 
 /* Computing MIN */
-			d__1 = itub[(i__2 = iindex - 1) < 100 && 0 <= i__2 ? 
+			d__1 = itub[(i__2 = iindex - 1) < 5000 && 0 <= i__2 ? 
 				i__2 : s_rnge("itub", i__2, "ckbsr_", (ftnlen)
-				3747)], d__2 = stdcd[(i__3 = (p << 1) - 2) < 
+				3926)], d__2 = stdcd[(i__3 = (p << 1) - 2) < 
 				200000 && 0 <= i__3 ? i__3 : s_rnge("stdcd", 
-				i__3, "ckbsr_", (ftnlen)3747)];
-			itub[(i__1 = iindex - 1) < 100 && 0 <= i__1 ? i__1 : 
-				s_rnge("itub", i__1, "ckbsr_", (ftnlen)3747)] 
+				i__3, "ckbsr_", (ftnlen)3926)];
+			itub[(i__1 = iindex - 1) < 5000 && 0 <= i__1 ? i__1 : 
+				s_rnge("itub", i__1, "ckbsr_", (ftnlen)3926)] 
 				= min(d__1,d__2);
 		    }
 		}
@@ -3733,33 +3913,33 @@ L_cksns:
 
 		if (omega >= stdcd[(i__1 = (p << 1) - 2) < 200000 && 0 <= 
 			i__1 ? i__1 : s_rnge("stdcd", i__1, "ckbsr_", (ftnlen)
-			3756)] && alpha <= stdcd[(i__2 = (p << 1) - 1) < 
+			3935)] && alpha <= stdcd[(i__2 = (p << 1) - 1) < 
 			200000 && 0 <= i__2 ? i__2 : s_rnge("stdcd", i__2, 
-			"ckbsr_", (ftnlen)3756)]) {
+			"ckbsr_", (ftnlen)3935)]) {
 
 /*                 The segment coverage interval intersects the request */
 /*                 interval ALPHA:OMEGA. */
 
 		    if (! avneed || sticd[(i__1 = p * 6 - 3) < 600000 && 0 <= 
 			    i__1 ? i__1 : s_rnge("sticd", i__1, "ckbsr_", (
-			    ftnlen)3762)] != 0) {
+			    ftnlen)3941)] != 0) {
 
 /*                    This segment satisfies the request.  Set the */
 /*                    output arguments. */
 
 			dafps_(&c__2, &c__6, &stdcd[(i__1 = (p << 1) - 2) < 
 				200000 && 0 <= i__1 ? i__1 : s_rnge("stdcd", 
-				i__1, "ckbsr_", (ftnlen)3767)], &sticd[(i__2 =
+				i__1, "ckbsr_", (ftnlen)3946)], &sticd[(i__2 =
 				 p * 6 - 6) < 600000 && 0 <= i__2 ? i__2 : 
-				s_rnge("sticd", i__2, "ckbsr_", (ftnlen)3767)]
+				s_rnge("sticd", i__2, "ckbsr_", (ftnlen)3946)]
 				, descr);
 			s_copy(segid, stidnt + ((i__1 = p - 1) < 100000 && 0 
 				<= i__1 ? i__1 : s_rnge("stidnt", i__1, "ckb"
-				"sr_", (ftnlen)3770)) * 40, segid_len, (ftnlen)
+				"sr_", (ftnlen)3949)) * 40, segid_len, (ftnlen)
 				40);
 			*handle = sthan[(i__1 = p - 1) < 100000 && 0 <= i__1 ?
 				 i__1 : s_rnge("sthan", i__1, "ckbsr_", (
-				ftnlen)3771)];
+				ftnlen)3950)];
 			*found = TRUE_;
 
 /*                    If this is the first pass performed for the */
@@ -3774,68 +3954,68 @@ L_cksns:
 
 			if (newsch && reqt > stdcd[(i__1 = (p << 1) - 2) < 
 				200000 && 0 <= i__1 ? i__1 : s_rnge("stdcd", 
-				i__1, "ckbsr_", (ftnlen)3785)] && reqt < 
+				i__1, "ckbsr_", (ftnlen)3964)] && reqt < 
 				stdcd[(i__2 = (p << 1) - 1) < 200000 && 0 <= 
 				i__2 ? i__2 : s_rnge("stdcd", i__2, "ckbsr_", 
-				(ftnlen)3785)]) {
+				(ftnlen)3964)]) {
 
 /*                       Adjust the re-use interval for the current */
 /*                       instrument. */
 
 /* Computing MAX */
-			    d__1 = itlb[(i__2 = iindex - 1) < 100 && 0 <= 
+			    d__1 = itlb[(i__2 = iindex - 1) < 5000 && 0 <= 
 				    i__2 ? i__2 : s_rnge("itlb", i__2, "ckbs"
-				    "r_", (ftnlen)3792)], d__2 = stdcd[(i__3 = 
+				    "r_", (ftnlen)3971)], d__2 = stdcd[(i__3 = 
 				    (p << 1) - 2) < 200000 && 0 <= i__3 ? 
 				    i__3 : s_rnge("stdcd", i__3, "ckbsr_", (
-				    ftnlen)3792)];
-			    itlb[(i__1 = iindex - 1) < 100 && 0 <= i__1 ? 
+				    ftnlen)3971)];
+			    itlb[(i__1 = iindex - 1) < 5000 && 0 <= i__1 ? 
 				    i__1 : s_rnge("itlb", i__1, "ckbsr_", (
-				    ftnlen)3792)] = max(d__1,d__2);
+				    ftnlen)3971)] = max(d__1,d__2);
 /* Computing MIN */
-			    d__1 = itub[(i__2 = iindex - 1) < 100 && 0 <= 
+			    d__1 = itub[(i__2 = iindex - 1) < 5000 && 0 <= 
 				    i__2 ? i__2 : s_rnge("itub", i__2, "ckbs"
-				    "r_", (ftnlen)3793)], d__2 = stdcd[(i__3 = 
+				    "r_", (ftnlen)3972)], d__2 = stdcd[(i__3 = 
 				    (p << 1) - 1) < 200000 && 0 <= i__3 ? 
 				    i__3 : s_rnge("stdcd", i__3, "ckbsr_", (
-				    ftnlen)3793)];
-			    itub[(i__1 = iindex - 1) < 100 && 0 <= i__1 ? 
+				    ftnlen)3972)];
+			    itub[(i__1 = iindex - 1) < 5000 && 0 <= i__1 ? 
 				    i__1 : s_rnge("itub", i__1, "ckbsr_", (
-				    ftnlen)3793)] = min(d__1,d__2);
+				    ftnlen)3972)] = min(d__1,d__2);
 
 /*                       Save the returned output items, in case this */
 /*                       segment may satisfy the next request. */
 
-			    itprvh[(i__1 = iindex - 1) < 100 && 0 <= i__1 ? 
+			    itprvh[(i__1 = iindex - 1) < 5000 && 0 <= i__1 ? 
 				    i__1 : s_rnge("itprvh", i__1, "ckbsr_", (
-				    ftnlen)3798)] = *handle;
-			    s_copy(itprvi + ((i__1 = iindex - 1) < 100 && 0 <=
-				     i__1 ? i__1 : s_rnge("itprvi", i__1, 
-				    "ckbsr_", (ftnlen)3799)) * 40, segid, (
+				    ftnlen)3977)] = *handle;
+			    s_copy(itprvi + ((i__1 = iindex - 1) < 5000 && 0 
+				    <= i__1 ? i__1 : s_rnge("itprvi", i__1, 
+				    "ckbsr_", (ftnlen)3978)) * 40, segid, (
 				    ftnlen)40, segid_len);
-			    itprvf[(i__1 = iindex - 1) < 100 && 0 <= i__1 ? 
+			    itprvf[(i__1 = iindex - 1) < 5000 && 0 <= i__1 ? 
 				    i__1 : s_rnge("itprvf", i__1, "ckbsr_", (
-				    ftnlen)3800)] = sticd[(i__2 = p * 6 - 3) <
+				    ftnlen)3979)] = sticd[(i__2 = p * 6 - 3) <
 				     600000 && 0 <= i__2 ? i__2 : s_rnge(
-				    "sticd", i__2, "ckbsr_", (ftnlen)3800)];
+				    "sticd", i__2, "ckbsr_", (ftnlen)3979)];
 			    moved_(descr, &c__5, &itprvd[(i__1 = iindex * 5 - 
-				    5) < 500 && 0 <= i__1 ? i__1 : s_rnge(
-				    "itprvd", i__1, "ckbsr_", (ftnlen)3802)]);
-			    itchkp[(i__1 = iindex - 1) < 100 && 0 <= i__1 ? 
+				    5) < 25000 && 0 <= i__1 ? i__1 : s_rnge(
+				    "itprvd", i__1, "ckbsr_", (ftnlen)3981)]);
+			    itchkp[(i__1 = iindex - 1) < 5000 && 0 <= i__1 ? 
 				    i__1 : s_rnge("itchkp", i__1, "ckbsr_", (
-				    ftnlen)3804)] = TRUE_;
+				    ftnlen)3983)] = TRUE_;
 
 /*                       Update the expense of the list to reflect */
 /*                       the cost of locating this segment. */
 
-			    itexp[(i__1 = iindex - 1) < 100 && 0 <= i__1 ? 
+			    itexp[(i__1 = iindex - 1) < 5000 && 0 <= i__1 ? 
 				    i__1 : s_rnge("itexp", i__1, "ckbsr_", (
-				    ftnlen)3809)] = itexp[(i__2 = iindex - 1) 
-				    < 100 && 0 <= i__2 ? i__2 : s_rnge("itexp"
-				    , i__2, "ckbsr_", (ftnlen)3809)] + itruex[
-				    (i__3 = iindex - 1) < 100 && 0 <= i__3 ? 
-				    i__3 : s_rnge("itruex", i__3, "ckbsr_", (
-				    ftnlen)3809)];
+				    ftnlen)3988)] = itexp[(i__2 = iindex - 1) 
+				    < 5000 && 0 <= i__2 ? i__2 : s_rnge("ite"
+				    "xp", i__2, "ckbsr_", (ftnlen)3988)] + 
+				    itruex[(i__3 = iindex - 1) < 5000 && 0 <= 
+				    i__3 ? i__3 : s_rnge("itruex", i__3, 
+				    "ckbsr_", (ftnlen)3988)];
 			}
 
 /*                    We've set the re-use interval. */
@@ -3849,7 +4029,7 @@ L_cksns:
 
 			savep = stpool[(i__1 = (p << 1) + 10) < 200012 && 0 <=
 				 i__1 ? i__1 : s_rnge("stpool", i__1, "ckbsr_"
-				, (ftnlen)3822)];
+				, (ftnlen)4001)];
 
 /*                    We cannot free the partial list yet, because */
 /*                    we may return to search it again if the current */
@@ -3876,7 +4056,7 @@ L_cksns:
 /*              segment in the list. */
 
 		p = stpool[(i__1 = (p << 1) + 10) < 200012 && 0 <= i__1 ? 
-			i__1 : s_rnge("stpool", i__1, "ckbsr_", (ftnlen)3851)]
+			i__1 : s_rnge("stpool", i__1, "ckbsr_", (ftnlen)4030)]
 			;
 	    }
 
@@ -3919,11 +4099,11 @@ L_cksns:
 /*                    Each segment found contributes to the expense of */
 /*                    the re-use interval. */
 
-			itruex[(i__1 = iindex - 1) < 100 && 0 <= i__1 ? i__1 :
-				 s_rnge("itruex", i__1, "ckbsr_", (ftnlen)
-				3899)] = itruex[(i__2 = iindex - 1) < 100 && 
+			itruex[(i__1 = iindex - 1) < 5000 && 0 <= i__1 ? i__1 
+				: s_rnge("itruex", i__1, "ckbsr_", (ftnlen)
+				4078)] = itruex[(i__2 = iindex - 1) < 5000 && 
 				0 <= i__2 ? i__2 : s_rnge("itruex", i__2, 
-				"ckbsr_", (ftnlen)3899)] + 1;
+				"ckbsr_", (ftnlen)4078)] + 1;
 		    }
 		    dafgs_(descr);
 		    dafus_(descr, &c__2, &c__6, dcd, icd);
@@ -3945,12 +4125,12 @@ L_cksns:
 /*                          on the left, if necessary. */
 
 /* Computing MAX */
-				d__1 = itlb[(i__2 = iindex - 1) < 100 && 0 <= 
-					i__2 ? i__2 : s_rnge("itlb", i__2, 
-					"ckbsr_", (ftnlen)3926)];
-				itlb[(i__1 = iindex - 1) < 100 && 0 <= i__1 ? 
-					i__1 : s_rnge("itlb", i__1, "ckbsr_", 
-					(ftnlen)3926)] = max(d__1,dcd[1]);
+				d__1 = itlb[(i__2 = iindex - 1) < 5000 && 0 <=
+					 i__2 ? i__2 : s_rnge("itlb", i__2, 
+					"ckbsr_", (ftnlen)4105)];
+				itlb[(i__1 = iindex - 1) < 5000 && 0 <= i__1 ?
+					 i__1 : s_rnge("itlb", i__1, "ckbsr_",
+					 (ftnlen)4105)] = max(d__1,dcd[1]);
 			    } else if (reqt < dcd[0]) {
 
 /*                          REQT is to the left of the coverage interval */
@@ -3958,12 +4138,12 @@ L_cksns:
 /*                          on the right, if necessary. */
 
 /* Computing MIN */
-				d__1 = itub[(i__2 = iindex - 1) < 100 && 0 <= 
-					i__2 ? i__2 : s_rnge("itub", i__2, 
-					"ckbsr_", (ftnlen)3935)];
-				itub[(i__1 = iindex - 1) < 100 && 0 <= i__1 ? 
-					i__1 : s_rnge("itub", i__1, "ckbsr_", 
-					(ftnlen)3935)] = min(d__1,dcd[0]);
+				d__1 = itub[(i__2 = iindex - 1) < 5000 && 0 <=
+					 i__2 ? i__2 : s_rnge("itub", i__2, 
+					"ckbsr_", (ftnlen)4114)];
+				itub[(i__1 = iindex - 1) < 5000 && 0 <= i__1 ?
+					 i__1 : s_rnge("itub", i__1, "ckbsr_",
+					 (ftnlen)4114)] = min(d__1,dcd[0]);
 			    }
 			}
 
@@ -3983,7 +4163,7 @@ L_cksns:
 				dafgn_(segid, segid_len);
 				*handle = fthan[(i__1 = findex - 1) < 5000 && 
 					0 <= i__1 ? i__1 : s_rnge("fthan", 
-					i__1, "ckbsr_", (ftnlen)3959)];
+					i__1, "ckbsr_", (ftnlen)4138)];
 				*found = TRUE_;
 				if (newsch) {
 
@@ -3991,60 +4171,60 @@ L_cksns:
 /*                             instrument. */
 
 /* Computing MAX */
-				    d__1 = itlb[(i__2 = iindex - 1) < 100 && 
+				    d__1 = itlb[(i__2 = iindex - 1) < 5000 && 
 					    0 <= i__2 ? i__2 : s_rnge("itlb", 
-					    i__2, "ckbsr_", (ftnlen)3967)];
-				    itlb[(i__1 = iindex - 1) < 100 && 0 <= 
+					    i__2, "ckbsr_", (ftnlen)4146)];
+				    itlb[(i__1 = iindex - 1) < 5000 && 0 <= 
 					    i__1 ? i__1 : s_rnge("itlb", i__1,
-					     "ckbsr_", (ftnlen)3967)] = max(
+					     "ckbsr_", (ftnlen)4146)] = max(
 					    d__1,dcd[0]);
 /* Computing MIN */
-				    d__1 = itub[(i__2 = iindex - 1) < 100 && 
+				    d__1 = itub[(i__2 = iindex - 1) < 5000 && 
 					    0 <= i__2 ? i__2 : s_rnge("itub", 
-					    i__2, "ckbsr_", (ftnlen)3968)];
-				    itub[(i__1 = iindex - 1) < 100 && 0 <= 
+					    i__2, "ckbsr_", (ftnlen)4147)];
+				    itub[(i__1 = iindex - 1) < 5000 && 0 <= 
 					    i__1 ? i__1 : s_rnge("itub", i__1,
-					     "ckbsr_", (ftnlen)3968)] = min(
+					     "ckbsr_", (ftnlen)4147)] = min(
 					    d__1,dcd[1]);
 
 /*                             Save the returned output items, in case */
 /*                             this segment may satisfy the next request. */
 
-				    itprvh[(i__1 = iindex - 1) < 100 && 0 <= 
+				    itprvh[(i__1 = iindex - 1) < 5000 && 0 <= 
 					    i__1 ? i__1 : s_rnge("itprvh", 
-					    i__1, "ckbsr_", (ftnlen)3974)] = *
+					    i__1, "ckbsr_", (ftnlen)4153)] = *
 					    handle;
 				    s_copy(itprvi + ((i__1 = iindex - 1) < 
-					    100 && 0 <= i__1 ? i__1 : s_rnge(
+					    5000 && 0 <= i__1 ? i__1 : s_rnge(
 					    "itprvi", i__1, "ckbsr_", (ftnlen)
-					    3975)) * 40, segid, (ftnlen)40, 
+					    4154)) * 40, segid, (ftnlen)40, 
 					    segid_len);
-				    itprvf[(i__1 = iindex - 1) < 100 && 0 <= 
+				    itprvf[(i__1 = iindex - 1) < 5000 && 0 <= 
 					    i__1 ? i__1 : s_rnge("itprvf", 
-					    i__1, "ckbsr_", (ftnlen)3976)] = 
+					    i__1, "ckbsr_", (ftnlen)4155)] = 
 					    icd[3];
 				    moved_(descr, &c__5, &itprvd[(i__1 = 
-					    iindex * 5 - 5) < 500 && 0 <= 
+					    iindex * 5 - 5) < 25000 && 0 <= 
 					    i__1 ? i__1 : s_rnge("itprvd", 
-					    i__1, "ckbsr_", (ftnlen)3978)]);
-				    itchkp[(i__1 = iindex - 1) < 100 && 0 <= 
+					    i__1, "ckbsr_", (ftnlen)4157)]);
+				    itchkp[(i__1 = iindex - 1) < 5000 && 0 <= 
 					    i__1 ? i__1 : s_rnge("itchkp", 
-					    i__1, "ckbsr_", (ftnlen)3981)] = 
+					    i__1, "ckbsr_", (ftnlen)4160)] = 
 					    TRUE_;
 
 /*                             Update the expense of the list to reflect */
 /*                             cost of locating this segment. */
 
-				    itexp[(i__1 = iindex - 1) < 100 && 0 <= 
+				    itexp[(i__1 = iindex - 1) < 5000 && 0 <= 
 					    i__1 ? i__1 : s_rnge("itexp", 
-					    i__1, "ckbsr_", (ftnlen)3987)] = 
-					    itexp[(i__2 = iindex - 1) < 100 &&
-					     0 <= i__2 ? i__2 : s_rnge("itexp"
-					    , i__2, "ckbsr_", (ftnlen)3987)] 
-					    + itruex[(i__3 = iindex - 1) < 
-					    100 && 0 <= i__3 ? i__3 : s_rnge(
-					    "itruex", i__3, "ckbsr_", (ftnlen)
-					    3987)];
+					    i__1, "ckbsr_", (ftnlen)4166)] = 
+					    itexp[(i__2 = iindex - 1) < 5000 
+					    && 0 <= i__2 ? i__2 : s_rnge(
+					    "itexp", i__2, "ckbsr_", (ftnlen)
+					    4166)] + itruex[(i__3 = iindex - 
+					    1) < 5000 && 0 <= i__3 ? i__3 : 
+					    s_rnge("itruex", i__3, "ckbsr_", (
+					    ftnlen)4166)];
 				}
 
 /*                          The re-use interval is set. */
@@ -4088,15 +4268,15 @@ L_cksns:
 		if (findex > 0) {
 		    dafbbs_(&fthan[(i__1 = findex - 1) < 5000 && 0 <= i__1 ? 
 			    i__1 : s_rnge("fthan", i__1, "ckbsr_", (ftnlen)
-			    4036)]);
+			    4215)]);
 		    daffpa_(&fnd);
 		}
 	    }
 
 /*           There's nothing nowhere if you get to here. */
 
-	    itruex[(i__1 = iindex - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-		    "itruex", i__1, "ckbsr_", (ftnlen)4046)] = 0;
+	    itruex[(i__1 = iindex - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
+		    "itruex", i__1, "ckbsr_", (ftnlen)4225)] = 0;
 	    s_copy(status, "HOPELESS", (ftnlen)40, (ftnlen)8);
 	} else if (s_cmp(status, "SUSPEND", (ftnlen)40, (ftnlen)7) == 0) {
 
@@ -4106,12 +4286,12 @@ L_cksns:
 
 	    ++top;
 	    s_copy(stack + ((i__1 = top - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge(
-		    "stack", i__1, "ckbsr_", (ftnlen)4057)) * 40, doing, (
+		    "stack", i__1, "ckbsr_", (ftnlen)4236)) * 40, doing, (
 		    ftnlen)40, (ftnlen)40);
 	    s_copy(status, urgent, (ftnlen)40, (ftnlen)40);
 	} else if (s_cmp(status, "RESUME", (ftnlen)40, (ftnlen)6) == 0) {
 	    s_copy(status, stack + ((i__1 = top - 1) < 2 && 0 <= i__1 ? i__1 :
-		     s_rnge("stack", i__1, "ckbsr_", (ftnlen)4062)) * 40, (
+		     s_rnge("stack", i__1, "ckbsr_", (ftnlen)4241)) * 40, (
 		    ftnlen)40, (ftnlen)40);
 	    --top;
 	}
@@ -4128,10 +4308,10 @@ L_cksns:
 /*     interval is zeroed out. */
 
     if (iindex > 0) {
-	itchkp[(i__1 = iindex - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge("itchkp"
-		, i__1, "ckbsr_", (ftnlen)4083)] = FALSE_;
-	itruex[(i__1 = iindex - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge("itruex"
-		, i__1, "ckbsr_", (ftnlen)4084)] = 0;
+	itchkp[(i__1 = iindex - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("itch"
+		"kp", i__1, "ckbsr_", (ftnlen)4262)] = FALSE_;
+	itruex[(i__1 = iindex - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("itru"
+		"ex", i__1, "ckbsr_", (ftnlen)4263)] = 0;
     }
 
 /*     For safety, indicate the first pass of this search has been */
@@ -4141,7 +4321,7 @@ L_cksns:
     newsch = FALSE_;
     chkout_("CKSNS", (ftnlen)5);
     return 0;
-/* $Procedure      CKHAVE ( C-kernels --- Have some ) */
+/* $Procedure CKHAVE ( CK --- Are there any loaded? ) */
 
 L_ckhave:
 /* $ Abstract */
@@ -4180,7 +4360,7 @@ L_ckhave:
 
 /* $ Keywords */
 
-/*     C-KERNEL */
+/*     CK */
 
 /* $ Declarations */
 
@@ -4190,7 +4370,7 @@ L_ckhave:
 
 /*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
-/*     FOUND      O   TRUE if at least one C-kernel is loaded. */
+/*     FOUND      O   .TRUE. if at least one C-kernel is loaded. */
 
 /* $ Detailed_Input */
 
@@ -4198,9 +4378,9 @@ L_ckhave:
 
 /* $ Detailed_Output */
 
-/*     FOUND      is returned with the value TRUE if at least one */
-/*                C-kernel is currently loaded.  Otherwise it returns */
-/*                the value FALSE. */
+/*     FOUND    is returned with the value .TRUE. if at least one */
+/*              C-kernel is currently loaded. Otherwise it returns */
+/*              the value .FALSE. */
 
 /* $ Parameters */
 
@@ -4223,23 +4403,62 @@ L_ckhave:
 
 /* $ Examples */
 
-/*     Suppose you want to call on of the C-kernel readers, but wish */
-/*     to handle the exceptional case of "no kernels loaded" so that */
-/*     the SPICELIB exception handling mechanism is avoided in the */
-/*     case of an empty set of loaded kernels.  The code fragment */
-/*     below shows how you might do this: */
+/*     The numerical results shown for this example may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
 
-/*        CALL CKHAVE ( LOADED ) */
+/*     1) Suppose you want to call one of the C-kernel readers, but wish */
+/*        to handle the exceptional case of "no kernels loaded" so that */
+/*        the SPICE exception handling mechanism is avoided in the case */
+/*        of an empty set of loaded kernels. The code example below */
+/*        shows how you might do this. */
 
-/*        IF ( LOADED ) THEN */
 
-/*           CALL CKGP ( ... ) */
+/*        Example code begins here. */
 
-/*        ELSE */
 
-/*           take some kind of "reasonable action" */
+/*              PROGRAM CKHAVE_EX1 */
+/*              IMPLICIT NONE */
 
-/*        END IF */
+/*        C */
+/*        C     Local variables. */
+/*        C */
+/*              LOGICAL               LOADED */
+
+/*        C */
+/*        C     We have not loaded any CK. */
+/*        C */
+/*              CALL CKHAVE ( LOADED ) */
+
+/*              IF ( LOADED ) THEN */
+
+/*        C */
+/*        C        Here we could be calling CK readers. For this */
+/*        C        example, just display a message indicating that */
+/*        C        at least one CK has been loaded. */
+/*        C */
+/*                 WRITE(*,*) 'At least one CK has been loaded. ' */
+/*             .          //  'You may call CK readers.' */
+
+/*              ELSE */
+
+/*                 WRITE(*,*) 'No CK has been loaded.' */
+/*                 WRITE(*,*) 'Calling CK readers will result in an ' */
+/*             .          //  'error.' */
+
+/*              END IF */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*         No CK has been loaded. */
+/*         Calling CK readers will result in an error. */
+
 
 /* $ Restrictions */
 
@@ -4251,9 +4470,17 @@ L_ckhave:
 
 /* $ Author_and_Institution */
 
-/*     W.L. Taber      (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 4.0.4, 16-JUL-2020 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. Added complete */
+/*        code example based on existing example code fragment. */
 
 /* -    SPICELIB Version 4.0.3, 30-JAN-2017 (NJB) */
 
@@ -4261,7 +4488,7 @@ L_ckhave:
 
 /* -    SPICELIB Version 4.0.2, 28-FEB-2008 (BVS) */
 
-/*        Corrected the contents of the Required_Reading section. */
+/*        Corrected the contents of the $Required_Reading section. */
 
 /* -    SPICELIB Version 4.0.1, 31-OCT-2001 (NJB) */
 
@@ -4269,10 +4496,9 @@ L_ckhave:
 
 /* -    SPICELIB Version 4.0.0, 17-FEB-2000 (WLT) */
 
-/*        Added the Entry point CKHAVE */
+/*        Added the Entry point CKHAVE. */
 
 /* -    SPICELIB Version 3.0.0, 03-MAR-1999 (WLT) */
-
 
 /* -& */
 /* $ Index_Entries */

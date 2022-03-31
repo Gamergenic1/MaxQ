@@ -1,6 +1,6 @@
 /*
 
--Procedure vminug_c ( Minus V, "-V", general dimension )
+-Procedure vminug_c ( Negate vector, "-v", general dimension )
 
 -Abstract
 
@@ -33,11 +33,11 @@
 
 -Required_Reading
 
-    None.
+   None.
 
 -Keywords
 
-    VECTOR
+   VECTOR
 
 */
 
@@ -52,53 +52,26 @@
 
 -Brief_I/O
 
-    VARIABLE  I/O  DESCRIPTION
-    --------  ---  --------------------------------------------------
-     vin       I   ndim-dimensional double precision vector to
-                   be negated.
-     ndim      I   Dimension of vin (and also vout).
-     vout      O   ndim-dimensional double precision vector equal to
-                   -vin.
+   VARIABLE  I/O  DESCRIPTION
+   --------  ---  --------------------------------------------------
+   vin        I   n-dimensional vector to be negated.
+   ndim       I   Dimension of `vin' (and also `vout').
+   vout       O   Negated vector -v1.
 
 -Detailed_Input
 
-    vin      double precision vector of arbitrary size.
+   vin         is any double precision vector of arbitrary size.
 
-    ndim     the dimension of vin and vout.
+   ndim        is the dimension of `vin' and `vout'.
 
 -Detailed_Output
 
-    vout    a double precision vector which contains the negation
-            of vin. vout may overwrite vin.
+   vout        is a n-dimensional double precision vector which
+               contains the negation of `vin'. `vout' may overwrite `vin'.
 
 -Parameters
 
-    None.
-
--Particulars
-
-    For each value of the index i from 1 to ndim, vminug_c negates vin
-    by the expression:
-
-    vout[i] = - vin[i];
-
--Examples
-
-    Let vin = [ -10.0, 15.0, -5.0, 20.0 ]
-
-    The call
-
-    vminug_c ( vin, 4, vin )
-
-    negates all of the components of the vector VIN, and overwrites
-    the original components. The vector VIN then contains the
-    components
-
-    vin = [ 10.0, -15.0, 5.0, -20.0 ]
-
--Restrictions
-
-    None.
+   None.
 
 -Exceptions
 
@@ -106,20 +79,119 @@
 
 -Files
 
-    None.
+   None.
 
--Author_and_Institution
+-Particulars
 
-    W.M. Owen       (JPL)
-    E.D. Wright     (JPL)
+   For each value of the index `i' from 0 to ndim-1, vminug_c negates `vin'
+   by the expression:
+
+      vout[i] = -vin[i];
+
+   No error checking is performed since overflow can occur ONLY if
+   the dynamic range of positive floating point numbers is not the
+   same size as the dynamic range of negative floating point numbers
+   AND at least one component of `vin' falls outside the common range.
+   The likelihood of this occurring is so small as to be of no
+   concern.
+
+-Examples
+
+   The numerical results shown for this example may differ across
+   platforms. The results depend on the SPICE kernels used as
+   input, the compiler and supporting libraries, and the machine
+   specific arithmetic implementation.
+
+   1) Define a set of n-dimensional vectors and negate each of them.
+
+
+      Example code begins here.
+
+
+      /.
+         Program vminug_ex1
+      ./
+      #include <stdio.h>
+      #include "SpiceUsr.h"
+
+      int main( )
+      {
+
+         /.
+         Local parameters.
+         ./
+         #define NDIM         4
+         #define SETSIZ       2
+
+         /.
+         Local variables.
+         ./
+         SpiceDouble          vout   [NDIM];
+
+         SpiceInt             i;
+
+         /.
+         Define a set of n-dimensional vectors.
+         ./
+         SpiceDouble          vin    [SETSIZ][NDIM] = {
+                                   { -10.0, 15.0, -5.0, 20.0 },
+                                   {   0.0,  0.0,  0.0,  0.0 } };
+
+         /.
+         Negate each vector
+         ./
+         for ( i = 0; i < SETSIZ; i++ )
+         {
+
+            vminug_c ( vin[i], NDIM, vout );
+
+            printf( "Input vector  :  %6.1f %6.1f %6.1f %6.1f\n",
+                       vin[i][0], vin[i][1], vin[i][2], vin[i][3] );
+            printf( "Negated vector:  %6.1f %6.1f %6.1f %6.1f\n",
+                               vout[0], vout[1], vout[2], vout[3] );
+            printf( "\n" );
+
+         }
+
+         return ( 0 );
+      }
+
+
+      When this program was executed on a Mac/Intel/cc/64-bit
+      platform, the output was:
+
+
+      Input vector  :   -10.0   15.0   -5.0   20.0
+      Negated vector:    10.0  -15.0    5.0  -20.0
+
+      Input vector  :     0.0    0.0    0.0    0.0
+      Negated vector:    -0.0   -0.0   -0.0   -0.0
+
+
+-Restrictions
+
+   None.
 
 -Literature_References
 
-    None.
+   None.
+
+-Author_and_Institution
+
+   J. Diaz del Rio     (ODC Space)
+   W.M. Owen           (JPL)
+   E.D. Wright         (JPL)
 
 -Version
 
-   -CSPICE Version 1.0.0, 29-JUN-1999
+   -CSPICE Version 1.0.1, 13-AUG-2021 (JDR)
+
+       Edited the header to comply with NAIF standard. Added complete
+       code example based on existing example.
+
+       Extended -Particulars section.
+
+   -CSPICE Version 1.0.0, 29-JUN-1999 (EDW) (WMO)
 
 -Index_Entries
 

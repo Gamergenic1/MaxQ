@@ -11,8 +11,8 @@ static integer c__2 = 2;
 static integer c__6 = 6;
 
 /* $Procedure PCKCOV ( PCK, coverage ) */
-/* Subroutine */ int pckcov_(char *pck, integer *idcode, doublereal *cover, 
-	ftnlen pck_len)
+/* Subroutine */ int pckcov_(char *pckfnm, integer *idcode, doublereal *cover,
+	 ftnlen pckfnm_len)
 {
     /* Builtin functions */
     integer s_cmp(char *, char *, ftnlen, ftnlen);
@@ -85,50 +85,45 @@ static integer c__6 = 6;
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
-/*     PCK        I   Name of PCK file. */
+/*     PCKFNM     I   Name of PCK file. */
 /*     IDCODE     I   Class ID code of PCK reference frame. */
-/*     COVER     I/O  Window giving coverage in PCK for IDCODE. */
+/*     COVER     I-O  Window giving coverage in PCKFNM for IDCODE. */
 
 /* $ Detailed_Input */
 
-/*     PCK            is the name of a binary PCK file. */
+/*     PCKFNM   is the name of a binary PCK file. */
 
-/*     IDCODE         is the integer frame class ID code of a PCK */
-/*                    reference frame for which data are expected to */
-/*                    exist in the specified PCK file. */
+/*     IDCODE   is the integer frame class ID code of a PCK reference */
+/*              frame for which data are expected to exist in the */
+/*              specified PCK file. */
 
-/*     COVER          is an initialized SPICELIB window data structure. */
-/*                    COVER optionally may contain coverage data on */
-/*                    input; on output, the data already present in */
-/*                    COVER will be combined with coverage found for the */
-/*                    reference frame designated by IDCODE in the file */
-/*                    PCK. */
+/*     COVER    is an initialized SPICE window data structure. COVER */
+/*              optionally may contain coverage data on input; on output, */
+/*              the data already present in COVER will be combined with */
+/*              coverage found for the reference frame designated by */
+/*              IDCODE in the file PCKFNM. */
 
-/*                    If COVER contains no data on input, its size and */
-/*                    cardinality still must be initialized. */
+/*              If COVER contains no data on input, its size and */
+/*              cardinality still must be initialized. */
 
 /* $ Detailed_Output */
 
-/*     COVER          is a SPICELIB window data structure which */
-/*                    represents the merged coverage for the reference */
-/*                    frame having frame class ID IDCODE. This is the */
-/*                    set of time intervals for which data for IDCODE */
-/*                    are present in the file PCK, merged with the set */
-/*                    of time intervals present in COVER on input.  The */
-/*                    merged coverage is represented as the union of one */
-/*                    or more disjoint time intervals. The window COVER */
-/*                    contains the pairs of endpoints of these */
-/*                    intervals. */
+/*     COVER    is a SPICE window data structure which represents the */
+/*              merged coverage for the reference frame having frame */
+/*              class ID IDCODE. This is the set of time intervals for */
+/*              which data for IDCODE are present in the file PCKFNM, */
+/*              merged with the set of time intervals present in COVER on */
+/*              input. The merged coverage is represented as the union of */
+/*              one or more disjoint time intervals. The window COVER */
+/*              contains the pairs of endpoints of these intervals. */
 
-/*                    The interval endpoints contained in COVER are */
-/*                    ephemeris times, expressed as seconds past J2000 */
-/*                    TDB. */
+/*              The interval endpoints contained in COVER are ephemeris */
+/*              times, expressed as seconds past J2000 TDB. */
 
-/*                    See the Examples section below for a complete */
-/*                    example program showing how to retrieve the */
-/*                    endpoints from COVER. */
+/*              See the $Examples section below for a complete example */
+/*              program showing how to retrieve the endpoints from COVER. */
 
 /* $ Parameters */
 
@@ -140,19 +135,19 @@ static integer c__6 = 6;
 /*         SPICE(INVALIDFORMAT) is signaled. */
 
 /*     2)  If the input file is not a transfer file but has architecture */
-/*         other than DAF, the error SPICE(BADARCHTYPE) is signaled. */
+/*         other than DAF, the error SPICE(INVALIDARCHTYPE) is signaled. */
 
-/*     3)  If the input file is a binary DAF file of type other than */
-/*         PCK, the error SPICE(BADFILETYPE) is signaled. */
+/*     3)  If the input file is a binary DAF file of type other than PCK, */
+/*         the error SPICE(INVALIDFILETYPE) is signaled. */
 
-/*     4)  If the PCK file cannot be opened or read, the error will */
-/*         be diagnosed by routines called by this routine. The output */
+/*     4)  If the PCK file cannot be opened or read, an error is signaled */
+/*         by a routine in the call tree of this routine. The output */
 /*         window will not be modified. */
 
 /*     5)  If the size of the output window argument COVER is */
 /*         insufficient to contain the actual number of intervals in the */
-/*         coverage window for IDCODE, the error will be diagnosed by */
-/*         routines called by this routine. */
+/*         coverage window for IDCODE, an error is signaled by a routine */
+/*         in the call tree of this routine. */
 
 /* $ Files */
 
@@ -161,20 +156,28 @@ static integer c__6 = 6;
 /* $ Particulars */
 
 /*     This routine provides an API via which applications can determine */
-/*     the coverage a specified PCK file provides for a specified */
-/*     PCK class reference frame. */
+/*     the coverage a specified PCK file provides for a specified PCK */
+/*     class reference frame. */
 
 /* $ Examples */
 
-/*     1)  This example demonstrates combined usage of PCKCOV and the */
-/*         related PCK utility PCKOBJ. */
+/*     The numerical results shown for these examples may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
 
-/*         Display the coverage for each object in a specified PCK file. */
-/*         Find the set of objects in the file; for each object, find */
-/*         and display the coverage. */
+/*     1) This example demonstrates combined usage of PCKCOV and the */
+/*        related PCK utility PCKFRM. */
+
+/*        Display the coverage for each object in a specified PCK file. */
+/*        Find the set of objects in the file; for each object, find */
+/*        and display the coverage. */
 
 
-/*              PROGRAM IDCOV */
+/*        Example code begins here. */
+
+
+/*              PROGRAM PCKCOV_EX1 */
 /*              IMPLICIT NONE */
 
 /*        C */
@@ -211,7 +214,7 @@ static integer c__6 = 6;
 /*        C     Local variables */
 /*        C */
 /*              CHARACTER*(FILSIZ)    LSK */
-/*              CHARACTER*(FILSIZ)    PCK */
+/*              CHARACTER*(FILSIZ)    PCKFNM */
 /*              CHARACTER*(TIMLEN)    TIMSTR */
 
 /*              DOUBLE PRECISION      B */
@@ -234,7 +237,7 @@ static integer c__6 = 6;
 /*        C */
 /*        C     Get name of PCK file. */
 /*        C */
-/*              CALL PROMPT ( 'Name of PCK file           > ', PCK ) */
+/*              CALL PROMPT ( 'Name of PCK file           > ', PCKFNM ) */
 
 /*        C */
 /*        C     Initialize the set IDS. */
@@ -249,7 +252,7 @@ static integer c__6 = 6;
 /*        C */
 /*        C     Find the set of frames in the PCK file. */
 /*        C */
-/*              CALL PCKFRM ( PCK, IDS ) */
+/*              CALL PCKFRM ( PCKFNM, IDS ) */
 
 /*        C */
 /*        C     We want to display the coverage for each frame.  Loop */
@@ -257,13 +260,14 @@ static integer c__6 = 6;
 /*        C     for each item in the set, and display the coverage. */
 /*        C */
 /*              DO I = 1, CARDI( IDS ) */
+
 /*        C */
 /*        C        Find the coverage window for the current frame. */
 /*        C        Empty the coverage window each time so */
 /*        C        we don't include data for the previous frame. */
 /*        C */
-/*                 CALL SCARDD ( 0,   COVER ) */
-/*                 CALL PCKCOV ( PCK, IDS(I), COVER ) */
+/*                 CALL SCARDD ( 0,      COVER ) */
+/*                 CALL PCKCOV ( PCKFNM, IDS(I), COVER ) */
 
 /*        C */
 /*        C        Get the number of intervals in the coverage */
@@ -282,10 +286,12 @@ static integer c__6 = 6;
 /*        C        times to TDB calendar strings. */
 /*        C */
 /*                 DO J = 1, NIV */
+
 /*        C */
 /*        C           Get the endpoints of the Jth interval. */
 /*        C */
 /*                    CALL WNFETD ( COVER, J, B, E ) */
+
 /*        C */
 /*        C           Convert the endpoints to TDB calendar */
 /*        C           format time strings and display them. */
@@ -314,12 +320,73 @@ static integer c__6 = 6;
 /*              END */
 
 
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, using the LSK file named naif0012.tls, and the PCK */
+/*        file named earth_720101_070426.bpc, the output was: */
+
+
+/*        Name of leapseconds kernel > naif0012.tls */
+/*        Name of PCK file           > earth_720101_070426.bpc */
+/*         ======================================== */
+/*         Coverage for reference frame         3000 */
+
+/*         Interval:            1 */
+/*         Start:    1962 JAN 20 00:00:41.184 (TDB) */
+/*         Stop:     2007 APR 26 00:01:05.185 (TDB) */
+
+/*         ======================================== */
+
+
 /*     2) Find the coverage for the frame designated by IDCODE */
 /*        provided by the set of PCK files loaded via a metakernel. */
-/*        (The metakernel must also specify a leapseconds kernel.) */
 
-/*              PROGRAM METCOV */
+/*        Use the meta-kernel shown below to load the required SPICE */
+/*        kernels. */
+
+
+/*           KPL/MK */
+
+/*           File name: pckcov_ex2.tm */
+
+/*           This meta-kernel is intended to support operation of SPICE */
+/*           example programs. The kernels shown here should not be */
+/*           assumed to contain adequate or correct versions of data */
+/*           required by SPICE-based user applications. */
+
+/*           In order for an application to use this meta-kernel, the */
+/*           kernels referenced here must be present in the user's */
+/*           current working directory. */
+
+/*           The names and contents of the kernels referenced */
+/*           by this meta-kernel are as follows: */
+
+/*              File name                        Contents */
+/*              ---------                        -------- */
+/*              earth_720101_070426.bpc          Earth historical */
+/*                                               binary PCK */
+/*              earth_070425_370426_predict.bpc  Earth predicted */
+/*                                               binary PCK */
+/*              naif0012.tls                     Leapseconds */
+
+
+/*           \begindata */
+
+/*           KERNELS_TO_LOAD = ( 'earth_070425_370426_predict.bpc', */
+/*                               'earth_720101_070426.bpc', */
+/*                               'naif0012.tls'                    ) */
+
+
+/*           \begintext */
+
+/*           End of meta-kernel. */
+
+
+/*        Example code begins here. */
+
+
+/*              PROGRAM PCKCOV_EX2 */
 /*              IMPLICIT NONE */
+
 /*        C */
 /*        C     SPICELIB functions */
 /*        C */
@@ -422,10 +489,12 @@ static integer c__6 = 6;
 /*        C     times to TDB calendar strings. */
 /*        C */
 /*              DO I = 1, NIV */
+
 /*        C */
 /*        C        Get the endpoints of the Ith interval. */
 /*        C */
 /*                 CALL WNFETD ( COVER, I, B, E ) */
+
 /*        C */
 /*        C        Convert the endpoints to TDB calendar */
 /*        C        format time strings and display them. */
@@ -450,10 +519,26 @@ static integer c__6 = 6;
 /*              END */
 
 
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, using the meta-kernel named pckcov_ex2.tm provided */
+/*        above to find the coverage window for the ITRF93 frame using */
+/*        its ID code, '3000', the output was: */
+
+
+/*        Enter name of metakernel > pckcov_ex2.tm */
+/*        Enter ID code            > 3000 */
+
+/*         Coverage for frame         3000 */
+
+/*         Interval:            1 */
+/*         Start:    1962 JAN 20 00:00:41.184 (TDB) */
+/*         Stop:     2037 JUL 17 00:01:05.183 (TDB) */
+
+
 /* $ Restrictions */
 
-/*     1) If an error occurs while this routine is updating the window */
-/*        COVER, the window may be corrupted. */
+/*     1)  If an error occurs while this routine is updating the window */
+/*         COVER, the window may be corrupted. */
 
 /* $ Literature_References */
 
@@ -461,25 +546,38 @@ static integer c__6 = 6;
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
 
-/* -    SPICELIB Version 1.1.1, 03-JAN-2014 (NJB0 (EDW) */
+/* -    SPICELIB Version 1.2.0, 08-OCT-2021 (JDR) (NJB) */
+
+/*        Changed input argument name "PCK" to "PCKFNM" for consistency */
+/*        with other routines. */
+
+/*        Bug fix: added call to FAILED after call to GETFAT. */
+
+/*        Edited the header to comply with NAIF standard. */
+/*        Added examples' solution. */
+
+/*        Corrected short error message in entries #2 and #3 in */
+/*        $Exceptions section. */
+
+/* -    SPICELIB Version 1.1.1, 03-JAN-2014 (NJB) (EDW) */
 
 /*        Updated index entries. */
 
-/*     Last update was 03-JAN-2014 (EDW) */
-
-/*        Minor edits to Procedure; clean trailing whitespace. */
+/*        Minor edits to $Procedure; clean trailing whitespace. */
 
 /* -    SPICELIB Version 1.0.0, 30-NOV-2007 (NJB) */
 
 /* -& */
 /* $ Index_Entries */
 
-/*     get coverage window for binary pck reference frame */
-/*     get coverage start and stop time for binary pck frame */
+/*     get coverage window for binary PCK reference frame */
+/*     get coverage start and stop time for binary PCK frame */
 
 /* -& */
 
@@ -502,13 +600,17 @@ static integer c__6 = 6;
 /*     See whether GETFAT thinks we've got a binary PCK file. */
 /*     If not, indicate the specific problem. */
 
-    getfat_(pck, arch, kertyp, pck_len, (ftnlen)80, (ftnlen)80);
+    getfat_(pckfnm, arch, kertyp, pckfnm_len, (ftnlen)80, (ftnlen)80);
+    if (failed_()) {
+	chkout_("PCKCOV", (ftnlen)6);
+	return 0;
+    }
     if (s_cmp(arch, "XFR", (ftnlen)80, (ftnlen)3) == 0) {
 	setmsg_("Input file # has architecture #. The file must be a binary "
 		"PCK file to be readable by this routine.  If the input file "
 		"is an PCK file in transfer format, run TOBIN on the file to "
 		"convert it to binary format.", (ftnlen)207);
-	errch_("#", pck, (ftnlen)1, pck_len);
+	errch_("#", pckfnm, (ftnlen)1, pckfnm_len);
 	errch_("#", arch, (ftnlen)1, (ftnlen)80);
 	sigerr_("SPICE(INVALIDFORMAT)", (ftnlen)20);
 	chkout_("PCKCOV", (ftnlen)6);
@@ -520,7 +622,7 @@ static integer c__6 = 6;
 		"ry PCK file, the problem may be due to the file being an old"
 		" non-native file lacking binary file format information. It'"
 		"s also possible the file has been corrupted.", (ftnlen)343);
-	errch_("#", pck, (ftnlen)1, pck_len);
+	errch_("#", pckfnm, (ftnlen)1, pckfnm_len);
 	errch_("#", arch, (ftnlen)1, (ftnlen)80);
 	sigerr_("SPICE(INVALIDARCHTYPE)", (ftnlen)22);
 	chkout_("PCKCOV", (ftnlen)6);
@@ -532,7 +634,7 @@ static integer c__6 = 6;
 		"le being an old non-native file lacking binary file format i"
 		"nformation. It's also possible the file has been corrupted.", 
 		(ftnlen)298);
-	errch_("#", pck, (ftnlen)1, pck_len);
+	errch_("#", pckfnm, (ftnlen)1, pckfnm_len);
 	errch_("#", kertyp, (ftnlen)1, (ftnlen)80);
 	sigerr_("SPICE(INVALIDFILETYPE)", (ftnlen)22);
 	chkout_("PCKCOV", (ftnlen)6);
@@ -541,7 +643,7 @@ static integer c__6 = 6;
 
 /*     Open the file for reading. */
 
-    dafopr_(pck, &handle, pck_len);
+    dafopr_(pckfnm, &handle, pckfnm_len);
     if (failed_()) {
 	chkout_("PCKCOV", (ftnlen)6);
 	return 0;

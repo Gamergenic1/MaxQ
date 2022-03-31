@@ -10,7 +10,7 @@
 static integer c__1 = 1;
 static integer c__0 = 0;
 
-/* $Procedure  DRDPGR ( Derivative of rectangular w.r.t. planetographic ) */
+/* $Procedure DRDPGR ( Derivative of rectangular w.r.t. planetographic ) */
 /* Subroutine */ int drdpgr_(char *body, doublereal *lon, doublereal *lat, 
 	doublereal *alt, doublereal *re, doublereal *f, doublereal *jacobi, 
 	ftnlen body_len)
@@ -60,8 +60,8 @@ static integer c__0 = 0;
 
 /* $ Abstract */
 
-/*     This routine computes the Jacobian matrix of the transformation */
-/*     from planetographic to rectangular coordinates. */
+/*     Compute the Jacobian matrix of the transformation from */
+/*     planetographic to rectangular coordinates. */
 
 /* $ Disclaimer */
 
@@ -154,7 +154,7 @@ static integer c__0 = 0;
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     BODY       I   Name of body with which coordinates are associated. */
 /*     LON        I   Planetographic longitude of a point (radians). */
@@ -166,76 +166,76 @@ static integer c__0 = 0;
 
 /* $ Detailed_Input */
 
-/*     BODY       Name of the body with which the planetographic */
-/*                coordinate system is associated. */
+/*     BODY     is the name of the body with which the planetographic */
+/*              coordinate system is associated. */
 
-/*                BODY is used by this routine to look up from the */
-/*                kernel pool the prime meridian rate coefficient giving */
-/*                the body's spin sense.  See the Files and Particulars */
-/*                header sections below for details. */
+/*              BODY is used by this routine to look up from the */
+/*              kernel pool the prime meridian rate coefficient giving */
+/*              the body's spin sense. See the $Files and $Particulars */
+/*              header sections below for details. */
 
-/*     LON        Planetographic longitude of the input point.  This is */
-/*                the angle between the prime meridian and the meridian */
-/*                containing the input point.  For bodies having */
-/*                prograde (aka direct) rotation, the direction of */
-/*                increasing longitude is positive west:  from the +X */
-/*                axis of the rectangular coordinate system toward the */
-/*                -Y axis.  For bodies having retrograde rotation, the */
-/*                direction of increasing longitude is positive east: */
-/*                from the +X axis toward the +Y axis. */
+/*     LON      is the planetographic longitude of the input point. This */
+/*              is the angle between the prime meridian and the meridian */
+/*              containing the input point. For bodies having prograde */
+/*              (aka direct) rotation, the direction of increasing */
+/*              longitude is positive west: from the +X axis of the */
+/*              rectangular coordinate system toward the -Y axis. For */
+/*              bodies having retrograde rotation, the direction of */
+/*              increasing longitude is positive east: from the +X axis */
+/*              toward the +Y axis. */
 
-/*                The earth, moon, and sun are exceptions: */
-/*                planetographic longitude is measured positive east for */
-/*                these bodies. */
+/*              The earth, moon, and sun are exceptions: */
+/*              planetographic longitude is measured positive east for */
+/*              these bodies. */
 
-/*                The default interpretation of longitude by this */
-/*                and the other planetographic coordinate conversion */
-/*                routines can be overridden; see the discussion in */
-/*                Particulars below for details. */
+/*              The default interpretation of longitude by this */
+/*              and the other planetographic coordinate conversion */
+/*              routines can be overridden; see the discussion in */
+/*              $Particulars below for details. */
 
-/*                Longitude is measured in radians. On input, the range */
-/*                of longitude is unrestricted. */
+/*              Longitude is measured in radians. On input, the range */
+/*              of longitude is unrestricted. */
 
-/*     LAT        Planetographic latitude of the input point.  For a */
-/*                point P on the reference spheroid, this is the angle */
-/*                between the XY plane and the outward normal vector at */
-/*                P. For a point P not on the reference spheroid, the */
-/*                planetographic latitude is that of the closest point */
-/*                to P on the spheroid. */
+/*     LAT      is the planetographic latitude of the input point. For a */
+/*              point P on the reference spheroid, this is the angle */
+/*              between the XY plane and the outward normal vector at */
+/*              P. For a point P not on the reference spheroid, the */
+/*              planetographic latitude is that of the closest point */
+/*              to P on the spheroid. */
 
-/*                Latitude is measured in radians.  On input, the */
-/*                range of latitude is unrestricted. */
+/*              Latitude is measured in radians. On input, the */
+/*              range of latitude is unrestricted. */
 
-/*     ALT        Altitude of point above the reference spheroid. */
-/*                Units of ALT must match those of RE. */
+/*     ALT      is the altitude of point above the reference spheroid. */
+/*              Units of ALT must match those of RE. */
 
-/*     RE         Equatorial radius of a reference spheroid.  This */
-/*                spheroid is a volume of revolution:  its horizontal */
-/*                cross sections are circular.  The shape of the */
-/*                spheroid is defined by an equatorial radius RE and */
-/*                a polar radius RP.  Units of RE must match those of */
-/*                ALT. */
+/*     RE       is the equatorial radius of a reference spheroid. This */
+/*              spheroid is a volume of revolution: its horizontal */
+/*              cross sections are circular. The shape of the */
+/*              spheroid is defined by an equatorial radius RE and */
+/*              a polar radius RP. Units of RE must match those of */
+/*              ALT. */
 
-/*     F          Flattening coefficient = */
+/*     F        is the flattening coefficient = */
 
-/*                   (RE-RP) / RE */
+/*                 (RE-RP) / RE */
 
-/*                where RP is the polar radius of the spheroid, and the */
-/*                units of RP match those of RE. */
+/*              where RP is the polar radius of the spheroid, and the */
+/*              units of RP match those of RE. */
 
 /* $ Detailed_Output */
 
-/*     JACOBI     is the matrix of partial derivatives of the conversion */
-/*                from planetographic to rectangular coordinates.  It */
-/*                has the form */
+/*     JACOBI   is the matrix of partial derivatives of the conversion */
+/*              from planetographic to rectangular coordinates. It */
+/*              has the form */
 
-/*                   .-                              -. */
-/*                   |  DX/DLON   DX/DLAT   DX/DALT   | */
-/*                   |  DY/DLON   DY/DLAT   DY/DALT   | */
-/*                   |  DZ/DLON   DZ/DLAT   DZ/DALT   | */
-/*                   `-                              -' */
+/*                 .-                              -. */
+/*                 |  DX/DLON   DX/DLAT   DX/DALT   | */
+/*                 |  DY/DLON   DY/DLAT   DY/DALT   | */
+/*                 |  DZ/DLON   DZ/DLAT   DZ/DALT   | */
+/*                 `-                              -' */
 
-/*                evaluated at the input values of LON, LAT and ALT. */
+/*              evaluated at the input values of LON, LAT and ALT. */
 
 /* $ Parameters */
 
@@ -243,45 +243,45 @@ static integer c__0 = 0;
 
 /* $ Exceptions */
 
-/*     1) If the body name BODY cannot be mapped to a NAIF ID code, */
-/*        and if BODY is not a string representation of an integer, */
-/*        the error SPICE(IDCODENOTFOUND) will be signaled. */
+/*     1)  If the body name BODY cannot be mapped to a NAIF ID code, */
+/*         and if BODY is not a string representation of an integer, */
+/*         the error SPICE(IDCODENOTFOUND) is signaled. */
 
-/*     2) If the kernel variable */
+/*     2)  If the kernel variable */
 
-/*           BODY<ID code>_PGR_POSITIVE_LON */
+/*            BODY<ID code>_PGR_POSITIVE_LON */
 
-/*        is present in the kernel pool but has a value other */
-/*        than one of */
+/*         is present in the kernel pool but has a value other */
+/*         than one of */
 
-/*            'EAST' */
-/*            'WEST' */
+/*             'EAST' */
+/*             'WEST' */
 
-/*        the error SPICE(INVALIDOPTION) will be signaled.  Case */
-/*        and blanks are ignored when these values are interpreted. */
+/*         the error SPICE(INVALIDOPTION) is signaled. Case */
+/*         and blanks are ignored when these values are interpreted. */
 
-/*     3) If polynomial coefficients for the prime meridian of BODY */
-/*        are not available in the kernel pool, and if the kernel */
-/*        variable BODY<ID code>_PGR_POSITIVE_LON is not present in */
-/*        the kernel pool, the error SPICE(MISSINGDATA) will be signaled. */
+/*     3)  If polynomial coefficients for the prime meridian of BODY */
+/*         are not available in the kernel pool, and if the kernel */
+/*         variable BODY<ID code>_PGR_POSITIVE_LON is not present in */
+/*         the kernel pool, the error SPICE(MISSINGDATA) is signaled. */
 
-/*     4) If the equatorial radius is non-positive, the error */
-/*        SPICE(VALUEOUTOFRANGE) is signaled. */
+/*     4)  If the equatorial radius is non-positive, the error */
+/*         SPICE(VALUEOUTOFRANGE) is signaled. */
 
-/*     5) If the flattening coefficient is greater than or equal to one, */
-/*        the error SPICE(VALUEOUTOFRANGE) is signaled. */
+/*     5)  If the flattening coefficient is greater than or equal to one, */
+/*         the error SPICE(VALUEOUTOFRANGE) is signaled. */
 
 /* $ Files */
 
 /*     This routine expects a kernel variable giving BODY's prime */
 /*     meridian angle as a function of time to be available in the */
-/*     kernel pool.  Normally this item is provided by loading a PCK */
-/*     file.  The required kernel variable is named */
+/*     kernel pool. Normally this item is provided by loading a PCK */
+/*     file. The required kernel variable is named */
 
 /*        BODY<body ID>_PM */
 
 /*     where <body ID> represents a string containing the NAIF integer */
-/*     ID code for BODY.  For example, if BODY is 'JUPITER', then */
+/*     ID code for BODY. For example, if BODY is 'JUPITER', then */
 /*     the name of the kernel variable containing the prime meridian */
 /*     angle coefficients is */
 
@@ -297,12 +297,12 @@ static integer c__0 = 0;
 /*     also is normally defined via loading a text kernel. When this */
 /*     variable is present in the kernel pool, the prime meridian */
 /*     coefficients for BODY are not required by this routine. See the */
-/*     Particulars section below for details. */
+/*     $Particulars section for details. */
 
 /* $ Particulars */
 
 /*     It is often convenient to describe the motion of an object in the */
-/*     planetographic coordinate system.  However, when performing */
+/*     planetographic coordinate system. However, when performing */
 /*     vector computations it's hard to beat rectangular coordinates. */
 
 /*     To transform states given with respect to planetographic */
@@ -330,12 +330,12 @@ static integer c__0 = 0;
 
 
 /*     In the planetographic coordinate system, longitude is defined */
-/*     using the spin sense of the body.  Longitude is positive to the */
+/*     using the spin sense of the body. Longitude is positive to the */
 /*     west if the spin is prograde and positive to the east if the spin */
-/*     is retrograde.  The spin sense is given by the sign of the first */
+/*     is retrograde. The spin sense is given by the sign of the first */
 /*     degree term of the time-dependent polynomial for the body's prime */
 /*     meridian Euler angle "W":  the spin is retrograde if this term is */
-/*     negative and prograde otherwise.  For the sun, planets, most */
+/*     negative and prograde otherwise. For the sun, planets, most */
 /*     natural satellites, and selected asteroids, the polynomial */
 /*     expression for W may be found in a SPICE PCK kernel. */
 
@@ -376,18 +376,61 @@ static integer c__0 = 0;
 
 /* $ Examples */
 
-/*     Numerical results shown for this example may differ between */
-/*     platforms as the results depend on the SPICE kernels used as */
-/*     input and the machine specific arithmetic implementation. */
+/*     The numerical results shown for this example may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
 
 
-/*         Find the planetographic state of the earth as seen from */
-/*         Mars in the J2000 reference frame at January 1, 2005 TDB. */
-/*         Map this state back to rectangular coordinates as a check. */
+/*     1) Find the planetographic state of the earth as seen from */
+/*        Mars in the J2000 reference frame at January 1, 2005 TDB. */
+/*        Map this state back to rectangular coordinates as a check. */
+
+/*        Use the meta-kernel shown below to load the required SPICE */
+/*        kernels. */
 
 
-/*              PROGRAM EX1 */
+/*           KPL/MK */
+
+/*           File name: drdpgr_ex1.tm */
+
+/*           This meta-kernel is intended to support operation of SPICE */
+/*           example programs. The kernels shown here should not be */
+/*           assumed to contain adequate or correct versions of data */
+/*           required by SPICE-based user applications. */
+
+/*           In order for an application to use this meta-kernel, the */
+/*           kernels referenced here must be present in the user's */
+/*           current working directory. */
+
+/*           The names and contents of the kernels referenced */
+/*           by this meta-kernel are as follows: */
+
+/*              File name                     Contents */
+/*              ---------                     -------- */
+/*              de421.bsp                     Planetary ephemeris */
+/*              pck00008.tpc                  Planet orientation and */
+/*                                            radii */
+/*              naif0009.tls                  Leapseconds */
+
+
+/*           \begindata */
+
+/*              KERNELS_TO_LOAD = ( 'de421.bsp', */
+/*                                  'pck00008.tpc', */
+/*                                  'naif0009.tls'  ) */
+
+/*           \begintext */
+
+/*           End of meta-kernel */
+
+
+/*        Example code begins here. */
+
+
+/*              PROGRAM DRDPGR_EX1 */
 /*              IMPLICIT NONE */
+
 /*        C */
 /*        C     SPICELIB functions */
 /*        C */
@@ -411,22 +454,12 @@ static integer c__0 = 0;
 /*              DOUBLE PRECISION      STATE  ( 6 ) */
 
 /*              INTEGER               N */
-/*        C */
-/*        C     Load a PCK file containing a triaxial */
-/*        C     ellipsoidal shape model and orientation */
-/*        C     data for Mars. */
-/*        C */
-/*              CALL FURNSH ( 'pck00008.tpc' ) */
 
 /*        C */
-/*        C     Load an SPK file giving ephemerides of earth and Mars. */
+/*        C     Load SPK, PCK, and LSK kernels, use a meta kernel for */
+/*        C     convenience. */
 /*        C */
-/*              CALL FURNSH ( 'de405.bsp' ) */
-
-/*        C */
-/*        C     Load a leapseconds kernel to support time conversion. */
-/*        C */
-/*              CALL FURNSH ( 'naif0007.tls' ) */
+/*              CALL FURNSH ( 'drdpgr_ex1.tm' ) */
 
 /*        C */
 /*        C     Look up the radii for Mars.  Although we */
@@ -527,51 +560,51 @@ static integer c__0 = 0;
 /*              END */
 
 
-/*        Output from this program should be similar to the following */
-/*        (rounding and formatting differ across platforms): */
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
 
 
-/*           Rectangular coordinates: */
+/*         Rectangular coordinates: */
 
-/*             X (km)                 =   146039732. */
-/*             Y (km)                 =   278546607. */
-/*             Z (km)                 =   119750315. */
+/*           X (km)                 =    146039733.67043769 */
+/*           Y (km)                 =    278546605.40670651 */
+/*           Z (km)                 =    119750317.58721757 */
 
-/*           Rectangular velocity: */
+/*         Rectangular velocity: */
 
-/*             dX/dt (km/s)           =  -47.0428824 */
-/*             dY/dt (km/s)           =   9.07021778 */
-/*             dZ/dt (km/s)           =   4.75656274 */
+/*           dX/dt (km/s)           =   -47.043272004450600 */
+/*           dY/dt (km/s)           =    9.0732615496727291 */
+/*           dZ/dt (km/s)           =    4.7579169009979010 */
 
-/*           Ellipsoid shape parameters: */
+/*         Ellipsoid shape parameters: */
 
-/*             Equatorial radius (km) =   3396.19 */
-/*             Polar radius      (km) =   3376.2 */
-/*             Flattening coefficient =   0.00588600756 */
+/*           Equatorial radius (km) =    3396.1900000000001 */
+/*           Polar radius      (km) =    3376.1999999999998 */
+/*           Flattening coefficient =    5.8860075555255261E-003 */
 
-/*           Planetographic coordinates: */
+/*         Planetographic coordinates: */
 
-/*             Longitude (deg)        =   297.667659 */
-/*             Latitude  (deg)        =   20.844504 */
-/*             Altitude  (km)         =   336531825. */
+/*           Longitude (deg)        =    297.66765938292673 */
+/*           Latitude  (deg)        =    20.844504443932596 */
+/*           Altitude  (km)         =    336531825.52621418 */
 
-/*           Planetographic velocity: */
+/*         Planetographic velocity: */
 
-/*             d Longitude/dt (deg/s) =  -8.35738632E-06 */
-/*             d Latitude/dt  (deg/s) =   1.59349355E-06 */
-/*             d Altitude/dt  (km/s)  =  -11.2144327 */
+/*           d Longitude/dt (deg/s) =   -8.3577066632519065E-006 */
+/*           d Latitude/dt  (deg/s) =    1.5935566850478802E-006 */
+/*           d Altitude/dt  (km/s)  =   -11.211600779360412 */
 
-/*           Rectangular coordinates from inverse mapping: */
+/*         Rectangular coordinates from inverse mapping: */
 
-/*             X (km)                 =   146039732. */
-/*             Y (km)                 =   278546607. */
-/*             Z (km)                 =   119750315. */
+/*           X (km)                 =    146039733.67043760 */
+/*           Y (km)                 =    278546605.40670651 */
+/*           Z (km)                 =    119750317.58721757 */
 
-/*           Rectangular velocity from inverse mapping: */
+/*         Rectangular velocity from inverse mapping: */
 
-/*             dX/dt (km/s)           =  -47.0428824 */
-/*             dY/dt (km/s)           =   9.07021778 */
-/*             dZ/dt (km/s)           =   4.75656274 */
+/*           dX/dt (km/s)           =   -47.043272004450600 */
+/*           dY/dt (km/s)           =    9.0732615496727167 */
+/*           dZ/dt (km/s)           =    4.7579169009978992 */
 
 
 /* $ Restrictions */
@@ -584,11 +617,17 @@ static integer c__0 = 0;
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
-/*     B.V. Semenov   (JPL) */
-/*     W.L. Taber     (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.1, 12-AUG-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard.. */
+/*        Modified code example to use meta-kernel to load kernels. */
 
 /* -    SPICELIB Version 1.1.0, 21-SEP-2013 (BVS) */
 
@@ -603,11 +642,6 @@ static integer c__0 = 0;
 /* $ Index_Entries */
 
 /*     Jacobian of rectangular w.r.t. planetographic coordinates */
-
-/* -& */
-/* $ Revisions */
-
-/*     None. */
 
 /* -& */
 
@@ -779,9 +813,9 @@ static integer c__0 = 0;
 
     for (i__ = 1; i__ <= 3; ++i__) {
 	jacobi[(i__1 = i__ - 1) < 9 && 0 <= i__1 ? i__1 : s_rnge("jacobi", 
-		i__1, "drdpgr_", (ftnlen)793)] = sense * jacobi[(i__2 = i__ - 
+		i__1, "drdpgr_", (ftnlen)826)] = sense * jacobi[(i__2 = i__ - 
 		1) < 9 && 0 <= i__2 ? i__2 : s_rnge("jacobi", i__2, "drdpgr_",
-		 (ftnlen)793)];
+		 (ftnlen)826)];
     }
     chkout_("DRDPGR", (ftnlen)6);
     return 0;

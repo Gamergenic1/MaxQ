@@ -10,7 +10,7 @@
 static integer c__1 = 1;
 static logical c_true = TRUE_;
 
-/* $Procedure      DPFMT ( Format a double precision number ) */
+/* $Procedure DPFMT ( Format a double precision number ) */
 /* Subroutine */ int dpfmt_(doublereal *x, char *pictur, char *str, ftnlen 
 	pictur_len, ftnlen str_len)
 {
@@ -52,8 +52,8 @@ static logical c_true = TRUE_;
 
 /* $ Abstract */
 
-/*     Using a picture, create a formatted string that represents a */
-/*     double precision number. */
+/*     Create a formatted string that represents a double precision */
+/*     number, using a format picture. */
 
 /* $ Disclaimer */
 
@@ -93,7 +93,7 @@ static logical c_true = TRUE_;
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     X          I   a double precision number. */
 /*     PICTUR     I   a string describing the appearance of the output */
@@ -101,92 +101,92 @@ static logical c_true = TRUE_;
 
 /* $ Detailed_Input */
 
-/*     X          is any double precision number. */
+/*     X        is any double precision number. */
 
-/*     PICTUR     is a string used to describe the format of the */
-/*                output string.  There are four special characters */
-/*                recognized by DPFMT --- a leading + or -, a leading */
-/*                zero ( '0' ) or a zero that follows a leading + or -, */
-/*                and the first decimal point of the string. */
+/*     PICTUR   is a string used to describe the format of the */
+/*              output string. There are four special characters */
+/*              recognized by DPFMT --- a leading + or -, a leading */
+/*              zero ( '0' ) or a zero that follows a leading + or -, */
+/*              and the first decimal point of the string. */
 
-/*                All other non-blank characters are regarded as */
-/*                equivalent.  The picture ends at the first blank */
-/*                character.  The effects associated with the various */
-/*                characters in a picture are spelled out in the */
-/*                description of the output STRING. */
+/*              All other non-blank characters are regarded as */
+/*              equivalent. The picture ends at the first blank */
+/*              character. The effects associated with the various */
+/*              characters in a picture are spelled out in the */
+/*              description of the output STRING. */
 
-/*                The following pictures are treated as errors. */
+/*              The following pictures are treated as errors. */
 
-/*                ' ', '+', '-', '.', '+.', '-.' */
+/*              ' ', '+', '-', '.', '+.', '-.' */
 
 /* $ Detailed_Output */
 
-/*     STRING     is a string representing X that matches the input */
-/*                picture.  The format of STRING is governed by PICTUR. */
-/*                It will represent X rounded to the level of precision */
-/*                specified by PICTUR. */
+/*     STRING   is a string representing X that matches the input */
+/*              picture. The format of STRING is governed by PICTUR. */
+/*              It will represent X rounded to the level of precision */
+/*              specified by PICTUR. */
 
-/*                If the first character of the picture is a minus sign, */
-/*                the first character in the output string will be */
-/*                a blank if the number is non-negative, a minus sign */
-/*                if the number is negative. */
+/*              If the first character of the picture is a minus sign, */
+/*              the first character in the output string will be */
+/*              a blank if the number is non-negative, a minus sign */
+/*              if the number is negative. */
 
-/*                If the first character of the picture is a plus sign, */
-/*                the first character of the output string will be a */
-/*                plus if the number is positive, a blank if the number */
-/*                is zero, and a minus sign if the number is negative. */
+/*              If the first character of the picture is a plus sign, */
+/*              the first character of the output string will be a */
+/*              plus if the number is positive, a blank if the number */
+/*              is zero, and a minus sign if the number is negative. */
 
-/*                If the first character of the string is NOT a sign */
-/*                (plus or minus) the first character of the output */
-/*                string will be a minus sign if the number is negative */
-/*                and will be the first character of the integer part */
-/*                of the number otherwise. */
+/*              If the first character of the string is NOT a sign */
+/*              (plus or minus) the first character of the output */
+/*              string will be a minus sign if the number is negative */
+/*              and will be the first character of the integer part */
+/*              of the number otherwise. */
 
-/*                The integer portion of STRING will contain the same */
-/*                number of characters as appear before the decimal */
-/*                point (or last character if there is no decimal */
-/*                point) but after a leading + or -. */
+/*              The integer portion of STRING will contain the same */
+/*              number of characters as appear before the decimal */
+/*              point (or last character if there is no decimal */
+/*              point) but after a leading + or -. */
 
-/*                If the picture begins with any of the following */
+/*              If the picture begins with any of the following */
 
-/*                   '+0', '-0', or '0' */
+/*                 '+0', '-0', or '0' */
 
-/*                it is said to have a leading zero.  If a picture has */
-/*                a leading zero and the integer portion is not large */
-/*                enough to fill up the integer space specified by */
-/*                PICTUR, STRING will be zero padded from the sign (if */
-/*                one is required) up to the first character of the */
-/*                integer part of the number. */
+/*              it is said to have a leading zero. If a picture has */
+/*              a leading zero and the integer portion is not large */
+/*              enough to fill up the integer space specified by */
+/*              PICTUR, STRING will be zero padded from the sign (if */
+/*              one is required) up to the first character of the */
+/*              integer part of the number. */
 
-/*                If picture does NOT have a leading zero and the */
-/*                integer portion is not large enough to fill up the */
-/*                space specified by PICTUR, STRING will be blank */
-/*                padded on the left between the sign (if one is */
-/*                required) and the first character of the integer part */
-/*                of the number. */
+/*              If picture does NOT have a leading zero and the */
+/*              integer portion is not large enough to fill up the */
+/*              space specified by PICTUR, STRING will be blank */
+/*              padded on the left between the sign (if one is */
+/*              required) and the first character of the integer part */
+/*              of the number. */
 
-/*                If a decimal point ( '.' ) is present in PICTUR it */
-/*                will be present following the integer portion of */
-/*                STRING. Moreover, the decimal portion of STRING will */
-/*                contain the same number of digits as there are */
-/*                non-blank characters following the decimal point in */
-/*                PICTUR.  However, only the first 14 digits starting */
-/*                with the first non-zero digit are meaningful. */
+/*              If a decimal point ( '.' ) is present in PICTUR it */
+/*              will be present following the integer portion of */
+/*              STRING. Moreover, the decimal portion of STRING will */
+/*              contain the same number of digits as there are */
+/*              non-blank characters following the decimal point in */
+/*              PICTUR. However, only the first 14 digits starting */
+/*              with the first non-zero digit are meaningful. */
 
-/*                If the format specified by PICTUR does not provide */
-/*                enough room for the integer portion of X, the routine */
-/*                determines whether or not the number of characters */
-/*                present in the picture is sufficient to create a */
-/*                representation for X using scientific notation.  If */
-/*                so, the output is displayed using scientific notation */
-/*                (leading signs, if they are present in PICTUR, will */
-/*                also appear in STRING).   If the format specified by */
-/*                PICTUR is too short to accommodate scientific */
-/*                notation, the output string is filled with '*' to the */
-/*                same length as the length of PICTUR.  Leading signs */
-/*                are not preserved in this overflow case. */
+/*              If the format specified by PICTUR does not provide */
+/*              enough room for the integer portion of X, the routine */
+/*              determines whether or not the number of characters */
+/*              present in the picture is sufficient to create a */
+/*              representation for X using scientific notation. If */
+/*              so, the output is displayed using scientific notation */
+/*              (leading signs, if they are present in PICTUR, will */
+/*              also appear in STRING).   If the format specified by */
+/*              PICTUR is too short to accommodate scientific */
+/*              notation, the output string is filled with '*' to the */
+/*              same length as the length of PICTUR. Leading signs */
+/*              are not preserved in this overflow case. */
 
-/*                STRING may overwrite PICTUR. */
+/*              STRING may overwrite PICTUR. */
 
 /* $ Parameters */
 
@@ -194,17 +194,16 @@ static logical c_true = TRUE_;
 
 /* $ Exceptions */
 
-/*     1) A picture that begins with a blank will cause the error */
-/*        'SPICE(NOPICTURE)' to be signalled. */
+/*     1)  If PICTUR begins with a blank, the error SPICE(NOPICTURE) is */
+/*         signaled. */
 
-/*     2) A picture that consists only of '+', '-', '.', '+.' or '-.' */
-/*        are regarded are regarded as errors (there's no significant */
-/*        component to the picture.)  These pictures cause the error */
-/*        'SPICE(BADPICTURE)' to be signalled. */
+/*     2)  If PICTUR consists only of '+', '-', '.', '+.' or '-.' are */
+/*         regarded as invalid (there's no significant component to the */
+/*         picture.) therefore, the error SPICE(BADPICTURE) is signaled. */
 
-/*     3) If the length of STR is less than the length of the first */
-/*        non-blank portion of PICTUR, the error 'SPICE(OUTPUTTOOSHORT)' */
-/*        will be signalled. */
+/*     3)  If the length of STR is less than the length of the first */
+/*         non-blank portion of PICTUR, the error SPICE(OUTPUTTOOSHORT) */
+/*         is signaled. */
 
 /* $ Files */
 
@@ -220,11 +219,11 @@ static logical c_true = TRUE_;
 /*     Note that the process of converting a double precision number */
 /*     to a string, in not precisely invertible even if the string */
 /*     contains all of the significant figures allowed by this */
-/*     routine.  You should not anticipate that the string produced */
+/*     routine. You should not anticipate that the string produced */
 /*     by this routine can be "read" into a double precision number */
 /*     to reproduce the double precision number X. To the level of */
 /*     accuracy implied by the string representation, they will be */
-/*     the same.  But, they are unlikely to have the same internal */
+/*     the same. But, they are unlikely to have the same internal */
 /*     binary representation. */
 
 /* $ Examples */
@@ -293,33 +292,35 @@ static logical c_true = TRUE_;
 
 /* $ Author_and_Institution */
 
-/*     W.L. Taber      (JPL) */
-/*     B.V. Semenov    (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.0.3, 27-OCT-2021 (JDR) (EDW) (NJB) */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.0.2, 31-JAN-2008 (BVS) */
 
 /*        Removed non-standard end-of-declarations marker */
 /*        'C%&END_DECLARATIONS' from comments. */
 
-/* -    Spicelib Version 1.0.1, 22-JUN-1998 (WLT) */
+/* -    SPICELIB Version 1.0.1, 22-JUN-1998 (WLT) */
 
 /*        A number of typographical and grammatical errors */
 /*        were corrected in the header. */
 
-/* -    Spicelib Version 1.0.0, 17-SEP-1996 (WLT) */
+/* -    SPICELIB Version 1.0.0, 17-SEP-1996 (WLT) */
 
 /* -& */
 /* $ Index_Entries */
 
 /*     format a string representing a d.p. number */
 /*     string from a d.p. number and format picture */
-
-/* -& */
-/* $ Revisions */
-
-/*     None. */
 
 /* -& */
 
@@ -342,8 +343,8 @@ static logical c_true = TRUE_;
 
     if (lastch == 0) {
 	chkin_("DPFMT", (ftnlen)5);
-	setmsg_("The format picture must begin with a non-blank character.  "
-		"The picture supplied was began with a blank.", (ftnlen)103);
+	setmsg_("The format picture must begin with a non-blank character. T"
+		"he picture supplied was begun with a blank.", (ftnlen)102);
 	sigerr_("SPICE(NOPICTURE)", (ftnlen)16);
 	chkout_("DPFMT", (ftnlen)5);
 	return 0;
@@ -373,9 +374,9 @@ static logical c_true = TRUE_;
     } else if (lastch > i_len(str, str_len)) {
 	chkin_("DPFMT", (ftnlen)5);
 	setmsg_("The output string is not long enough to accommodate a numbe"
-		"r formatted according the the supplied format picture.  The "
-		"output string has length #.  The output picture '#' requires"
-		" # characters. ", (ftnlen)194);
+		"r formatted according to the supplied format picture. The ou"
+		"tput string has length #. The output picture '#' requires # "
+		"characters. ", (ftnlen)191);
 	i__1 = i_len(str, str_len);
 	errint_("#", &i__1, (ftnlen)1);
 	errch_("#", pictur, (ftnlen)1, lastch);

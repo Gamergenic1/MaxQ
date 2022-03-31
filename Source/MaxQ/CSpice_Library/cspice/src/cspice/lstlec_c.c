@@ -3,11 +3,10 @@
 -Procedure lstlec_c ( Last character element less than or equal to. )
 
 -Abstract
- 
-   Given a character string and an ordered array of character 
-   strings, find the index of the largest array element less than 
-   or equal to the given string. 
- 
+
+   Find the index of the largest array element less than or equal to
+   a given character string in an ordered array of character strings.
+
 -Disclaimer
 
    THIS SOFTWARE AND ANY RELATED MATERIALS WERE CREATED BY THE
@@ -34,13 +33,14 @@
    ACTIONS OF RECIPIENT IN THE USE OF THE SOFTWARE.
 
 -Required_Reading
- 
-   None. 
- 
+
+   None.
+
 -Keywords
- 
-   SEARCH,  ARRAY 
- 
+
+   ARRAY
+   SEARCH
+
 */
 
    #include "SpiceUsr.h"
@@ -51,91 +51,105 @@
    #undef    lstlec_c
 
    SpiceInt lstlec_c ( ConstSpiceChar  * string,
-                       SpiceInt          n,   
-                       SpiceInt          lenvals,
-                       const void      * array   ) 
+                       SpiceInt          n,
+                       SpiceInt          arrlen,
+                       const void      * array   )
+
 /*
 
 -Brief_I/O
- 
-   VARIABLE  I/O  DESCRIPTION 
-   --------  ---  -------------------------------------------------- 
+
+   VARIABLE  I/O  DESCRIPTION
+   --------  ---  --------------------------------------------------
    string     I   Upper bound value to search against.
-   n          I   Number elements in array.
-   lenvals    I   String length.
+   n          I   Number of elements in `array'.
+   arrlen     I   Declared length of the strings in `array'.
    array      I   Array of possible lower bounds.
 
-   The function returns the index of the last element of array that
-   is lexically less than or equal to string. 
- 
+   The function returns the index of the last element of `array' that
+   is lexically less than or equal to `string'.
+
 -Detailed_Input
- 
-   string      is a string acting as an upper bound:  the array element
-               that is lexically the greatest element less than or
-               equal to string is to be found.  Trailing blanks in this
+
+   string      is a string acting as an upper bound: the element of
+               `array' that is lexically the greatest element less than or
+               equal to `string' is to be found. Trailing blanks in this
                bound value are not significant.
 
-   n           is the dimension of the array. 
+   n           is the total number of elements in `array'.
 
-   lenvals     is the declared length of the strings in the input
-               string array, including null terminators.  The input   
-               array should be declared with dimension 
+   arrlen      is the declared length of the strings in the input
+               string array, including null terminators. The input
+               array should be declared with dimension
 
-                  [n][lenvals]
+                  [n][arrlen]
 
-   array       is the array of character strings to be searched.
-               Trailing blanks in the strings in this array are not
-               significant. The strings must be sorted in
-               non-decreasing order. The elements of array need not be
-               distinct.
+   array       is an array of character strings to be searched. Trailing
+               blanks in the strings in this array are not significant.
+               The strings in `array' must be sorted in non-decreasing
+               order. The elements of `array' need not be distinct.
 
- 
 -Detailed_Output
- 
-   The function returns the index of the highest-indexed element in the 
-   input array that is less than or equal to string.  The routine assumes
-   the array elements are sorted in non-decreasing order.
- 
-   If all elements of the input array are greater than the specified 
-   upper bound string, the function returns -1. 
+
+   The function returns the index of the highest-indexed element in
+   the input array that is lexically less than or equal to `string'.
+   The routine assumes the array elements are sorted in
+   non-decreasing order.
+
+   Indices range from 0 to n-1.
+
+   If all elements of `array' are lexically greater than `string', the
+   routine returns the value -1. If `n' is less than or equal to zero,
+   the routine returns the value -1.
 
 -Parameters
- 
-   None. 
- 
+
+   None.
+
 -Exceptions
-  
-   1) If ndim < 1 the function value is -1.  This is not considered
-      an error.
 
-   2) If input key value pointer is null, the error SPICE(NULLPOINTER) will 
-      be signaled.  The function returns -1.
- 
-   3) The input key value may have length zero.  This case is not
-      considered an error.
+   1)  If `n' is less than or equal to zero, the function returns -1.
+       This case is not treated as an error.
 
-   4) If the input array pointer is null,  the error SPICE(NULLPOINTER) will 
-      be signaled.  The function returns -1.
+   2)  If the input array is not sorted in non-decreasing order, the
+       output of this routine is undefined. No error is signaled.
 
-   5) If the input array string's length is less than 2, the error
-      SPICE(STRINGTOOSHORT) will be signaled.  The function returns -1.
-  
+   3)  If the `string' input string pointer is null, the error
+       SPICE(NULLPOINTER) is signaled. The function returns the value
+       -1.
+
+   4)  If the `array' input array pointer is null, the error
+       SPICE(NULLPOINTER) is signaled. The function returns the value
+       -1.
+
+   5)  If the `array' input array strings have length less than two
+       characters, the error SPICE(STRINGTOOSHORT) is signaled. The
+       function returns the value -1.
+
 -Files
- 
-   None. 
+
+   None.
 
 -Particulars
- 
-   Note:  If you need to find the first element of the array that is
-          greater than string, simply add 1 to the result returned by
-          this function and check to see if the result is within the
-          array bounds given by n.
- 
+
+   This routine uses a binary search algorithm and so requires
+   at most on the order of
+
+      log (n)
+         2
+
+   steps to compute the value of lstlec_c.
+
+   Note: If you need to find the first element of the array that is
+   lexically greater than `string', simply add 1 to the result returned
+   by this function and check to see if the result is within the
+   array bounds given by `n'.
+
 -Examples
 
-   Let array be a character array of dimension 
+   Let array be a character array of dimension
 
-      [5][lenvals]
+      [5][arrlen]
 
    which contains the following elements:
 
@@ -147,43 +161,54 @@
 
    Then
 
-      lstlec_c ( "NEWTON",   5, lenvals, array )    ==   4
-      lstlec_c ( "EINSTEIN", 5, lenvals, array )    ==   1
-      lstlec_c ( "GALILEO",  5, lenvals, array )    ==   3
-      lstlec_c ( "Galileo",  5, lenvals, array )    ==   3
-      lstlec_c ( "BETHE",    5, lenvals, array )    ==  -1
+      lstlec_c ( "NEWTON",   5, arrlen, array )    ==   4
+      lstlec_c ( "EINSTEIN", 5, arrlen, array )    ==   1
+      lstlec_c ( "GALILEO",  5, arrlen, array )    ==   3
+      lstlec_c ( "Galileo",  5, arrlen, array )    ==   3
+      lstlec_c ( "BETHE",    5, arrlen, array )    ==  -1
 
 -Restrictions
-  
-   1)  The input array is assumed to be sorted in increasing order. If 
-       this condition is not met, the results of bsrchc_c are unpredictable.
+
+   1)  If the sequence of character strings in the input array `array'
+       is not non-decreasing, the program will run to completion but
+       the index found will not mean anything.
 
    2)  String comparisons performed by this routine are Fortran-style:
        trailing blanks in the input array or key value are ignored.
        This gives consistent behavior with CSPICE code generated by
        the f2c translator, as well as with the Fortran SPICE Toolkit.
-      
+
        Note that this behavior is not identical to that of the ANSI
        C library functions strcmp and strncmp.
-  
+
 -Literature_References
- 
-   None. 
- 
+
+   None.
+
 -Author_and_Institution
- 
-   N.J. Bachman    (JPL) 
-   H.A. Neilan     (JPL) 
-   W.L. Taber      (JPL) 
- 
+
+   N.J. Bachman        (JPL)
+   J. Diaz del Rio     (ODC Space)
+   H.A. Neilan         (JPL)
+   W.L. Taber          (JPL)
+
 -Version
- 
+
+   -CSPICE Version 1.1.0, 01-NOV-2021 (JDR)
+
+       Changed the input argument name "lenvals" to "arrlen" for consistency
+       with other routines.
+
+       Edited the header to comply with NAIF standard. Improved
+       -Detailed_Input, -Detailed_Output, -Particulars, -Exceptions and
+       -Restrictions sections.
+
    -CSPICE Version 1.0.0, 22-JUL-2002 (NJB) (HAN) (WLT)
 
 -Index_Entries
- 
-   last character element less_than_or_equal_to 
- 
+
+   last character element less_than_or_equal_to
+
 -&
 */
 
@@ -191,16 +216,16 @@
 
 
    /*
-   f2c library utility prototypes 
+   f2c library utility prototypes
    */
-   logical          l_ge   (char *a, char *b, ftnlen la, ftnlen lb ); 
-   logical          l_le   (char *a, char *b, ftnlen la, ftnlen lb ); 
-   logical          l_lt   (char *a, char *b, ftnlen la, ftnlen lb ); 
+   logical          l_ge   (char *a, char *b, ftnlen la, ftnlen lb );
+   logical          l_le   (char *a, char *b, ftnlen la, ftnlen lb );
+   logical          l_lt   (char *a, char *b, ftnlen la, ftnlen lb );
 
    /*
-   Local macros 
+   Local macros
    */
-   #define ARRAY( i )     (  ( (SpiceChar *)array ) + (i)*lenvals  )
+   #define ARRAY( i )     (  ( (SpiceChar *)array ) + (i)*arrlen  )
 
 
    /*
@@ -218,39 +243,39 @@
    /*
    Use discovery check-in.
 
-   Return immediately if the array dimension is non-positive. 
+   Return immediately if the array dimension is non-positive.
    */
-   if ( n < 1 ) 
+   if ( n < 1 )
    {
       return ( -1 );
    }
 
    /*
-   Make sure the pointer for the key value is non-null 
-   and that the length is adequate.  
+   Make sure the pointer for the key value is non-null
+   and that the length is adequate.
    */
    CHKPTR_VAL ( CHK_DISCOVER, "lstlec_c", string, -1 );
 
-   
+
    /*
-   Make sure the pointer for the string array is non-null 
-   and that the length lenvals is sufficient.  
+   Make sure the pointer for the string array is non-null
+   and that the length arrlen is sufficient.
    */
-   CHKOSTR_VAL ( CHK_DISCOVER, "lstlec_c", array, lenvals, -1 );   
+   CHKOSTR_VAL ( CHK_DISCOVER, "lstlec_c", array, arrlen, -1 );
 
 
    /*
    Return if none of the array's elements are less than or equal to
-   the key value. 
+   the key value.
    */
    keylen = strlen(string);
 
    begin  = 0;
    end    = n - 1;
 
-   if (  l_lt( ( char * )string, 
-               ( char * )ARRAY(begin), 
-               ( ftnlen )keylen, 
+   if (  l_lt( ( char * )string,
+               ( char * )ARRAY(begin),
+               ( ftnlen )keylen,
                ( ftnlen )strlen(ARRAY(begin)) )  )
    {
       return ( -1 );
@@ -259,11 +284,11 @@
 
    /*
    Return if the key string is greater than or equal to
-   all of the array's elements. 
+   all of the array's elements.
    */
-   if (  l_ge( ( char * )string, 
-               ( char * )ARRAY(end), 
-               ( ftnlen )keylen, 
+   if (  l_ge( ( char * )string,
+               ( char * )ARRAY(end),
+               ( ftnlen )keylen,
                ( ftnlen )strlen(ARRAY(end)) )  )
    {
       return ( end );
@@ -271,7 +296,7 @@
 
 
    /*
-   Do a binary search for the specified key value. 
+   Do a binary search for the specified key value.
 
    At this point, string is greater than or equal to the first element
    of array and strictly less than the last element of array.
@@ -281,18 +306,18 @@
    while ( items > 2 )
    {
       /*
-      Check the middle element. 
+      Check the middle element.
       */
       j      = items / 2;
       middle = begin + j;
 
- 
+
       /*
       Narrow the search area.
       */
-      if (  l_le ( (char    * ) ARRAY(middle),  
+      if (  l_le ( (char    * ) ARRAY(middle),
                    (char    * ) string,
-                   (ftnlen    ) lenvals-1,
+                   (ftnlen    ) arrlen-1,
                    (ftnlen    ) keylen        )  )
       {
          /*
@@ -308,14 +333,14 @@
       items = end - begin + 1;
 
       /*
-      At this point, string is greater than or equal to the array element 
+      At this point, string is greater than or equal to the array element
       at index begin and strictly less than the element at index end.
       */
    }
 
    /*
    The element at index begin is the winner.
-   */   
+   */
    return ( begin );
 
 

@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      RECRAD ( Rectangular coordinates to RA and DEC ) */
+/* $Procedure RECRAD ( Rectangular coordinates to RA and DEC ) */
 /* Subroutine */ int recrad_(doublereal *rectan, doublereal *range, 
 	doublereal *ra, doublereal *dec)
 {
@@ -49,7 +49,8 @@
 
 /* $ Keywords */
 
-/*     CONVERSION,  COORDINATES */
+/*     CONVERSION */
+/*     COORDINATES */
 
 /* $ Declarations */
 /* $ Brief_I/O */
@@ -63,31 +64,31 @@
 
 /* $ Detailed_Input */
 
-/*     RECTAN     The rectangular coordinates of a point. */
+/*     RECTAN   are the rectangular coordinates of a point. */
 
 /* $ Detailed_Output */
 
-/*     RANGE      is the distance of the point from the origin. */
+/*     RANGE    is the distance of the point from the origin. */
 
-/*                The units associated with RANGE are those */
-/*                associated with the input RECTAN. */
-
-
-/*     RA         is the right ascension of RECTAN.  This is the angular */
-/*                distance measured toward the east from the prime */
-/*                meridian to the meridian containing the input point. */
-/*                The direction of increasing right ascension is from */
-/*                the +X axis towards the +Y axis. */
-
-/*                RA is output in radians.  The range of RA is [0, 2*pi]. */
+/*              The units associated with RANGE are those */
+/*              associated with the input RECTAN. */
 
 
-/*     DEC        is the declination of RECTAN.  This is the angle from */
-/*                the XY plane of the ray from the origin through the */
-/*                point. */
+/*     RA       is the right ascension of RECTAN. This is the angular */
+/*              distance measured toward the east from the prime */
+/*              meridian to the meridian containing the input point. */
+/*              The direction of increasing right ascension is from */
+/*              the +X axis towards the +Y axis. */
 
-/*                DEC is output in radians.  The range of DEC is */
-/*                [-pi/2, pi/2]. */
+/*              RA is output in radians. The range of RA is [0, 2*pi]. */
+
+
+/*     DEC      is the declination of RECTAN. This is the angle from */
+/*              the XY plane of the ray from the origin through the */
+/*              point. */
+
+/*              DEC is output in radians. The range of DEC is */
+/*              [-pi/2, pi/2]. */
 
 /* $ Parameters */
 
@@ -97,11 +98,11 @@
 
 /*     Error free. */
 
-/*     1) If the X and Y components of RECTAN are both zero, the */
-/*        right ascension is set to zero. */
+/*     1)  If the X and Y components of RECTAN are both zero, the */
+/*         right ascension is set to zero. */
 
-/*     2) If RECTAN is the zero vector, right ascension and declination */
-/*        are both set to zero. */
+/*     2)  If RECTAN is the zero vector, right ascension and declination */
+/*         are both set to zero. */
 
 /* $ Files */
 
@@ -130,9 +131,9 @@
 /*        C */
 /*        C     We use the SPICELIB routine PXFORM to obtain the */
 /*        C     transformation  matrix for converting vectors between */
-/*        C     the B1950 and J2000 reference frames.  Since */
+/*        C     the B1950 and J2000 reference frames. Since */
 /*        C     both frames are inertial, the input time value we */
-/*        C     supply to PXFORM is arbitrary.  We choose zero */
+/*        C     supply to PXFORM is arbitrary. We choose zero */
 /*        C     seconds past the J2000 epoch. */
 /*        C */
 /*              CALL PXFORM ( 'B1950', 'J2000', 0.D0, MTRANS ) */
@@ -145,26 +146,33 @@
 /*        C */
 /*              CALL RECRAD ( V2000, R, RA, DEC ) */
 
-
 /* $ Restrictions */
 
 /*     None. */
-
-/* $ Author_and_Institution */
-
-/*     C.H. Acton      (JPL) */
-/*     N.J. Bachman    (JPL) */
-/*     H.A. Neilan     (JPL) */
 
 /* $ Literature_References */
 
 /*     None. */
 
+/* $ Author_and_Institution */
+
+/*     C.H. Acton         (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     H.A. Neilan        (JPL) */
+/*     W.L. Taber         (JPL) */
+
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 12-AUG-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.0.2, 30-JUL-2003 (NJB) (CHA) */
 
-/*        Various header changes were made to improve clarity.  Some */
+/*        Various header changes were made to improve clarity. Some */
 /*        minor header corrections were made. */
 
 /* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */

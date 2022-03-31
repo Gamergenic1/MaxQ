@@ -111,10 +111,6 @@
 
 /*     None. */
 
-/* $ Files */
-
-/*     None. */
-
 /* $ Exceptions */
 
 /*     Error free. */
@@ -124,6 +120,10 @@
 
 /*     2) IF N is 1 OUTPUT will be returned as M_1 where M_1 is */
 /*        the matrix defined above in the description of OUTPUT. */
+
+/* $ Files */
+
+/*     None. */
 
 /* $ Particulars */
 
@@ -171,18 +171,21 @@
 
 /*     None. */
 
-/* $ Author_and_Institution */
-
-/*     W.L. Taber      (JPL) */
-
 /* $ Literature_References */
 
 /*     None. */
 
+/* $ Author_and_Institution */
+
+/*     W.L. Taber      (JPL) */
+
 /* $ Version */
 
-/* -    SPICELIB Version 1.0.0, 19-SEP-1995 (WLT) */
+/* -    SPICELIB Version 1.0.1, 03-OCT-2021 (NJB) */
 
+/*        Reordered header sections. Corrected typo in comments. */
+
+/* -    SPICELIB Version 1.0.0, 19-SEP-1995 (WLT) */
 
 /* -& */
 
@@ -202,7 +205,7 @@
 	for (j = 1; j <= 3; ++j) {
 	    for (k = 1; k <= 3; ++k) {
 		output[(i__1 = j + k * 6 - 7) < 36 && 0 <= i__1 ? i__1 : 
-			s_rnge("output", i__1, "zzmsxf_", (ftnlen)208)] = 
+			s_rnge("output", i__1, "zzmsxf_", (ftnlen)211)] = 
 			matrix[j + 35] * matrix[(k + 6) * 6 - 42] + matrix[j 
 			+ 41] * matrix[(k + 6) * 6 - 41] + matrix[j + 47] * 
 			matrix[(k + 6) * 6 - 40];
@@ -211,7 +214,7 @@
 	for (j = 4; j <= 6; ++j) {
 	    for (k = 1; k <= 3; ++k) {
 		output[(i__1 = j + k * 6 - 7) < 36 && 0 <= i__1 ? i__1 : 
-			s_rnge("output", i__1, "zzmsxf_", (ftnlen)217)] = 
+			s_rnge("output", i__1, "zzmsxf_", (ftnlen)220)] = 
 			matrix[j + 35] * matrix[(k + 6) * 6 - 42] + matrix[j 
 			+ 41] * matrix[(k + 6) * 6 - 41] + matrix[j + 47] * 
 			matrix[(k + 6) * 6 - 40] + matrix[j + 53] * matrix[(k 
@@ -222,7 +225,7 @@
 	for (j = 1; j <= 3; ++j) {
 	    for (k = 4; k <= 6; ++k) {
 		output[(i__1 = j + k * 6 - 7) < 36 && 0 <= i__1 ? i__1 : 
-			s_rnge("output", i__1, "zzmsxf_", (ftnlen)228)] = 0.;
+			s_rnge("output", i__1, "zzmsxf_", (ftnlen)231)] = 0.;
 	    }
 	}
 	for (j = 4; j <= 6; ++j) {
@@ -230,9 +233,9 @@
 	    for (k = 4; k <= 6; ++k) {
 		m = k - 3;
 		output[(i__1 = j + k * 6 - 7) < 36 && 0 <= i__1 ? i__1 : 
-			s_rnge("output", i__1, "zzmsxf_", (ftnlen)236)] = 
+			s_rnge("output", i__1, "zzmsxf_", (ftnlen)239)] = 
 			output[(i__2 = l + m * 6 - 7) < 36 && 0 <= i__2 ? 
-			i__2 : s_rnge("output", i__2, "zzmsxf_", (ftnlen)236)]
+			i__2 : s_rnge("output", i__2, "zzmsxf_", (ftnlen)239)]
 			;
 	    }
 	}
@@ -250,7 +253,7 @@
 	for (j = 1; j <= 3; ++j) {
 	    for (k = 1; k <= 3; ++k) {
 		temp[(i__1 = j + (k + put * 6) * 6 - 43) < 72 && 0 <= i__1 ? 
-			i__1 : s_rnge("temp", i__1, "zzmsxf_", (ftnlen)257)] =
+			i__1 : s_rnge("temp", i__1, "zzmsxf_", (ftnlen)260)] =
 			 matrix[j + 35] * matrix[(k + 6) * 6 - 42] + matrix[j 
 			+ 41] * matrix[(k + 6) * 6 - 41] + matrix[j + 47] * 
 			matrix[(k + 6) * 6 - 40];
@@ -262,7 +265,7 @@
 	for (j = 4; j <= 6; ++j) {
 	    for (k = 1; k <= 3; ++k) {
 		temp[(i__1 = j + (k + put * 6) * 6 - 43) < 72 && 0 <= i__1 ? 
-			i__1 : s_rnge("temp", i__1, "zzmsxf_", (ftnlen)268)] =
+			i__1 : s_rnge("temp", i__1, "zzmsxf_", (ftnlen)271)] =
 			 matrix[j + 35] * matrix[(k + 6) * 6 - 42] + matrix[j 
 			+ 41] * matrix[(k + 6) * 6 - 41] + matrix[j + 47] * 
 			matrix[(k + 6) * 6 - 40] + matrix[j + 53] * matrix[(k 
@@ -271,7 +274,7 @@
 	    }
 	}
 
-/*        We don't bother to comput the upper right hand 3x3 portion */
+/*        We don't bother to compute the upper right hand 3x3 portion */
 /*        of the matrix since it is always zero. */
 
 /*        Finally we could copy the lower right hand 3x3 portion of the */
@@ -295,22 +298,22 @@
 	i__1 = *n - 1;
 	for (i__ = 3; i__ <= i__1; ++i__) {
 
-/*           First the uppper left hand portion of the product. */
+/*           First the upper left hand portion of the product. */
 
 	    for (j = 1; j <= 3; ++j) {
 		for (k = 1; k <= 3; ++k) {
 		    temp[(i__2 = j + (k + put * 6) * 6 - 43) < 72 && 0 <= 
 			    i__2 ? i__2 : s_rnge("temp", i__2, "zzmsxf_", (
-			    ftnlen)306)] = matrix[j + (i__ * 6 + 1) * 6 - 43] 
+			    ftnlen)309)] = matrix[j + (i__ * 6 + 1) * 6 - 43] 
 			    * temp[(i__3 = (k + get * 6) * 6 - 42) < 72 && 0 
 			    <= i__3 ? i__3 : s_rnge("temp", i__3, "zzmsxf_", (
-			    ftnlen)306)] + matrix[j + (i__ * 6 + 2) * 6 - 43] 
+			    ftnlen)309)] + matrix[j + (i__ * 6 + 2) * 6 - 43] 
 			    * temp[(i__4 = (k + get * 6) * 6 - 41) < 72 && 0 
 			    <= i__4 ? i__4 : s_rnge("temp", i__4, "zzmsxf_", (
-			    ftnlen)306)] + matrix[j + (i__ * 6 + 3) * 6 - 43] 
+			    ftnlen)309)] + matrix[j + (i__ * 6 + 3) * 6 - 43] 
 			    * temp[(i__5 = (k + get * 6) * 6 - 40) < 72 && 0 
 			    <= i__5 ? i__5 : s_rnge("temp", i__5, "zzmsxf_", (
-			    ftnlen)306)];
+			    ftnlen)309)];
 		}
 	    }
 
@@ -320,25 +323,25 @@
 		for (k = 1; k <= 3; ++k) {
 		    temp[(i__2 = j + (k + put * 6) * 6 - 43) < 72 && 0 <= 
 			    i__2 ? i__2 : s_rnge("temp", i__2, "zzmsxf_", (
-			    ftnlen)318)] = matrix[j + (i__ * 6 + 1) * 6 - 43] 
+			    ftnlen)321)] = matrix[j + (i__ * 6 + 1) * 6 - 43] 
 			    * temp[(i__3 = (k + get * 6) * 6 - 42) < 72 && 0 
 			    <= i__3 ? i__3 : s_rnge("temp", i__3, "zzmsxf_", (
-			    ftnlen)318)] + matrix[j + (i__ * 6 + 2) * 6 - 43] 
+			    ftnlen)321)] + matrix[j + (i__ * 6 + 2) * 6 - 43] 
 			    * temp[(i__4 = (k + get * 6) * 6 - 41) < 72 && 0 
 			    <= i__4 ? i__4 : s_rnge("temp", i__4, "zzmsxf_", (
-			    ftnlen)318)] + matrix[j + (i__ * 6 + 3) * 6 - 43] 
+			    ftnlen)321)] + matrix[j + (i__ * 6 + 3) * 6 - 43] 
 			    * temp[(i__5 = (k + get * 6) * 6 - 40) < 72 && 0 
 			    <= i__5 ? i__5 : s_rnge("temp", i__5, "zzmsxf_", (
-			    ftnlen)318)] + matrix[j + (i__ * 6 + 4) * 6 - 43] 
+			    ftnlen)321)] + matrix[j + (i__ * 6 + 4) * 6 - 43] 
 			    * temp[(i__6 = (k + get * 6) * 6 - 39) < 72 && 0 
 			    <= i__6 ? i__6 : s_rnge("temp", i__6, "zzmsxf_", (
-			    ftnlen)318)] + matrix[j + (i__ * 6 + 5) * 6 - 43] 
+			    ftnlen)321)] + matrix[j + (i__ * 6 + 5) * 6 - 43] 
 			    * temp[(i__7 = (k + get * 6) * 6 - 38) < 72 && 0 
 			    <= i__7 ? i__7 : s_rnge("temp", i__7, "zzmsxf_", (
-			    ftnlen)318)] + matrix[j + (i__ * 6 + 6) * 6 - 43] 
+			    ftnlen)321)] + matrix[j + (i__ * 6 + 6) * 6 - 43] 
 			    * temp[(i__8 = (k + get * 6) * 6 - 37) < 72 && 0 
 			    <= i__8 ? i__8 : s_rnge("temp", i__8, "zzmsxf_", (
-			    ftnlen)318)];
+			    ftnlen)321)];
 		}
 	    }
 
@@ -358,16 +361,16 @@
 	for (j = 1; j <= 3; ++j) {
 	    for (k = 1; k <= 3; ++k) {
 		output[(i__1 = j + k * 6 - 7) < 36 && 0 <= i__1 ? i__1 : 
-			s_rnge("output", i__1, "zzmsxf_", (ftnlen)347)] = 
+			s_rnge("output", i__1, "zzmsxf_", (ftnlen)350)] = 
 			matrix[j + (*n * 6 + 1) * 6 - 43] * temp[(i__2 = (k + 
 			get * 6) * 6 - 42) < 72 && 0 <= i__2 ? i__2 : s_rnge(
-			"temp", i__2, "zzmsxf_", (ftnlen)347)] + matrix[j + (*
+			"temp", i__2, "zzmsxf_", (ftnlen)350)] + matrix[j + (*
 			n * 6 + 2) * 6 - 43] * temp[(i__3 = (k + get * 6) * 6 
 			- 41) < 72 && 0 <= i__3 ? i__3 : s_rnge("temp", i__3, 
-			"zzmsxf_", (ftnlen)347)] + matrix[j + (*n * 6 + 3) * 
+			"zzmsxf_", (ftnlen)350)] + matrix[j + (*n * 6 + 3) * 
 			6 - 43] * temp[(i__4 = (k + get * 6) * 6 - 40) < 72 &&
 			 0 <= i__4 ? i__4 : s_rnge("temp", i__4, "zzmsxf_", (
-			ftnlen)347)];
+			ftnlen)350)];
 	    }
 	}
 
@@ -376,24 +379,24 @@
 	for (j = 4; j <= 6; ++j) {
 	    for (k = 1; k <= 3; ++k) {
 		output[(i__1 = j + k * 6 - 7) < 36 && 0 <= i__1 ? i__1 : 
-			s_rnge("output", i__1, "zzmsxf_", (ftnlen)358)] = 
+			s_rnge("output", i__1, "zzmsxf_", (ftnlen)361)] = 
 			matrix[j + (*n * 6 + 1) * 6 - 43] * temp[(i__2 = (k + 
 			get * 6) * 6 - 42) < 72 && 0 <= i__2 ? i__2 : s_rnge(
-			"temp", i__2, "zzmsxf_", (ftnlen)358)] + matrix[j + (*
+			"temp", i__2, "zzmsxf_", (ftnlen)361)] + matrix[j + (*
 			n * 6 + 2) * 6 - 43] * temp[(i__3 = (k + get * 6) * 6 
 			- 41) < 72 && 0 <= i__3 ? i__3 : s_rnge("temp", i__3, 
-			"zzmsxf_", (ftnlen)358)] + matrix[j + (*n * 6 + 3) * 
+			"zzmsxf_", (ftnlen)361)] + matrix[j + (*n * 6 + 3) * 
 			6 - 43] * temp[(i__4 = (k + get * 6) * 6 - 40) < 72 &&
 			 0 <= i__4 ? i__4 : s_rnge("temp", i__4, "zzmsxf_", (
-			ftnlen)358)] + matrix[j + (*n * 6 + 4) * 6 - 43] * 
+			ftnlen)361)] + matrix[j + (*n * 6 + 4) * 6 - 43] * 
 			temp[(i__5 = (k + get * 6) * 6 - 39) < 72 && 0 <= 
 			i__5 ? i__5 : s_rnge("temp", i__5, "zzmsxf_", (ftnlen)
-			358)] + matrix[j + (*n * 6 + 5) * 6 - 43] * temp[(
+			361)] + matrix[j + (*n * 6 + 5) * 6 - 43] * temp[(
 			i__6 = (k + get * 6) * 6 - 38) < 72 && 0 <= i__6 ? 
-			i__6 : s_rnge("temp", i__6, "zzmsxf_", (ftnlen)358)] 
+			i__6 : s_rnge("temp", i__6, "zzmsxf_", (ftnlen)361)] 
 			+ matrix[j + (*n * 6 + 6) * 6 - 43] * temp[(i__7 = (k 
 			+ get * 6) * 6 - 37) < 72 && 0 <= i__7 ? i__7 : 
-			s_rnge("temp", i__7, "zzmsxf_", (ftnlen)358)];
+			s_rnge("temp", i__7, "zzmsxf_", (ftnlen)361)];
 	    }
 	}
 
@@ -402,7 +405,7 @@
 	for (j = 1; j <= 3; ++j) {
 	    for (k = 4; k <= 6; ++k) {
 		output[(i__1 = j + k * 6 - 7) < 36 && 0 <= i__1 ? i__1 : 
-			s_rnge("output", i__1, "zzmsxf_", (ftnlen)371)] = 0.;
+			s_rnge("output", i__1, "zzmsxf_", (ftnlen)374)] = 0.;
 	    }
 	}
 
@@ -414,9 +417,9 @@
 	    for (k = 4; k <= 6; ++k) {
 		m = k - 3;
 		output[(i__1 = j + k * 6 - 7) < 36 && 0 <= i__1 ? i__1 : 
-			s_rnge("output", i__1, "zzmsxf_", (ftnlen)384)] = 
+			s_rnge("output", i__1, "zzmsxf_", (ftnlen)387)] = 
 			output[(i__2 = l + m * 6 - 7) < 36 && 0 <= i__2 ? 
-			i__2 : s_rnge("output", i__2, "zzmsxf_", (ftnlen)384)]
+			i__2 : s_rnge("output", i__2, "zzmsxf_", (ftnlen)387)]
 			;
 	    }
 	}
@@ -428,19 +431,19 @@
 	for (i__ = 1; i__ <= 6; ++i__) {
 	    for (j = 1; j <= 6; ++j) {
 		output[(i__1 = j + i__ * 6 - 7) < 36 && 0 <= i__1 ? i__1 : 
-			s_rnge("output", i__1, "zzmsxf_", (ftnlen)398)] = 
+			s_rnge("output", i__1, "zzmsxf_", (ftnlen)401)] = 
 			matrix[j + (i__ + 6) * 6 - 43];
 	    }
 	}
     } else if (*n <= 0) {
 	for (j = 1; j <= 6; ++j) {
 	    output[(i__1 = j + j * 6 - 7) < 36 && 0 <= i__1 ? i__1 : s_rnge(
-		    "output", i__1, "zzmsxf_", (ftnlen)407)] = 1.;
+		    "output", i__1, "zzmsxf_", (ftnlen)410)] = 1.;
 	    for (k = j + 1; k <= 6; ++k) {
 		output[(i__1 = j + k * 6 - 7) < 36 && 0 <= i__1 ? i__1 : 
-			s_rnge("output", i__1, "zzmsxf_", (ftnlen)410)] = 0.;
+			s_rnge("output", i__1, "zzmsxf_", (ftnlen)413)] = 0.;
 		output[(i__1 = k + j * 6 - 7) < 36 && 0 <= i__1 ? i__1 : 
-			s_rnge("output", i__1, "zzmsxf_", (ftnlen)411)] = 0.;
+			s_rnge("output", i__1, "zzmsxf_", (ftnlen)414)] = 0.;
 	    }
 	}
     }
