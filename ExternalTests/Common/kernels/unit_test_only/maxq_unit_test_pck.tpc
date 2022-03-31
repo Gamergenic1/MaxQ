@@ -18,9 +18,9 @@ Unreal Engine 5.
         BODY9995_CONSTANTS_JED_EPOCH   =   0
         BODY9995_GM            = (      0.1                     )
         BODY9995_RADII         = (   1000.     1000.    1000.   )
-        BODY9995_POLE_RA       = (    -90.0       0.0      0.0  )
-        BODY9995_POLE_DEC      = (      0.0       0.0      0.0  )
-        BODY9995_PM            = (      0.0     360.0      0.0  )
+        BODY9995_POLE_RA       = (    -75.0       0.0      0.0  )
+        BODY9995_POLE_DEC      = (    +30.0       0.0      0.0  )
+        BODY9995_PM            = (     10.0     360.0      0.0  )
         BODY9995_LONG_AXIS     = (      0.0                     )
         BODY9995_BADVALUE2     = (   2001.     2002.  )
         BODY9995_BADVALUE4     = (   4001.     4002.    4003.   4004.  )
@@ -34,7 +34,7 @@ Unreal Engine 5.
         BODY9994_GM            = (      0.01                    )
         BODY9994_RADII         = (    123.45    123.45   123.   )
         BODY9994_POLE_RA       = (    -90.0       0.0      0.0  )
-        BODY9994_POLE_DEC      = (     90.0       0.0      0.0  )
+        BODY9994_POLE_DEC      = (    +90.0       0.0      0.0  )
         BODY9994_PM            = (      0.0    3600.0      0.0  )
         BODY9994_LONG_AXIS     = (      0.0                     )
         \begintext
@@ -47,7 +47,7 @@ Unreal Engine 5.
         BODY9993_GM            = (      0.001                   )
         BODY9993_RADII         = (     22.22     22.22   20.00  )
         BODY9993_POLE_RA       = (    -90.0       0.0      0.0  )
-        BODY9993_POLE_DEC      = (     90.0       0.0      0.0  )
+        BODY9993_POLE_DEC      = (    +90.0       0.0      0.0  )
         BODY9993_PM            = (     90.0      36.0      0.0  )
         BODY9993_LONG_AXIS     = (      0.0                     )
         \begintext

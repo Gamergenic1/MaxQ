@@ -38,7 +38,7 @@ TEST(FSAngleTest, OneRadian_Is_RadiansOne) {
 
     FSAngle angle(1.5);
 
-    EXPECT_DOUBLE_EQ(angle.radians(), 1.5);
+    EXPECT_DOUBLE_EQ(angle.AsRadians(), 1.5);
 }
 
 TEST(FSAngleTest, OneRadianAsSpiceDouble_Is_One) {

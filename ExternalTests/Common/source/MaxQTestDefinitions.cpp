@@ -9,6 +9,7 @@
 
 #include "MaxQTestDefinitions.h"
 
+// Pi value, for independence from OS, Platform, or SPICE while testing.
 #define PI_MACRO 3.1415926535897932384626433832795028841971693993751058209749445923078164
 
 const double pi = (double)PI_MACRO;
