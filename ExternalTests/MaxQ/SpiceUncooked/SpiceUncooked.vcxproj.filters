@@ -1,0 +1,501 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="test.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Common">
+      <UniqueIdentifier>{6c3834d3-c435-4bc8-bcff-5d2f7406d755}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common\Include">
+      <UniqueIdentifier>{b1c3a40d-fcd9-411a-93e2-adb39507849d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UE5Dependencies">
+      <UniqueIdentifier>{a7bac805-509e-465d-aa4f-79f50c7c1017}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MaxQDepenencies">
+      <UniqueIdentifier>{4b370e3d-94ab-406a-918c-80ae00b9c08f}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\Common\include\UE5HostDefs.h">
+      <Filter>Common\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Common\include\SpiceHostDefs.h">
+      <Filter>Common\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Common\include\SpiceUncookedHostDefs.h">
+      <Filter>Common\Include</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-ActorPickerMode.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-AddContentDialog.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-AdvancedPreviewScene.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-Analytics.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-AnalyticsET.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-AnimationCore.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-AnimationModifiers.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-AnimGraph.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-AnimGraphRuntime.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-AppFramework.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-ApplicationCore.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-AssetRegistry.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-AssetTagsEditor.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-AssetTools.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-AudioExtensions.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-AudioMixer.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-AudioMixerCore.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-AudioPlatformConfiguration.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-AugmentedReality.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-AVIWriter.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-BlueprintEditorLibrary.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-BlueprintGraph.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-BuildSettings.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-Chaos.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-CinematicCamera.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-ClassViewer.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-ClothingSystemEditorInterface.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-ClothingSystemRuntimeCommon.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-ClothingSystemRuntimeInterface.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-CommonMenuExtensions.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-ContentBrowser.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-ContentBrowserData.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-Core.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-CoreUObject.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-CrunchCompression.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-CurveEditor.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-DataLayerEditor.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-DerivedDataCache.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-DesktopPlatform.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-DeveloperSettings.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-DeveloperToolSettings.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-DirectoryWatcher.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-EditorAnalyticsSession.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-EditorConfig.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-EditorFramework.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-EditorInteractiveToolsFramework.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-EditorStyle.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-EditorSubsystem.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-EditorWidgets.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-Engine.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-EngineMessages.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-EngineSettings.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-Foliage.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-GameplayTags.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-GameProjectGeneration.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-GraphEditor.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-HardwareTargeting.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-HeadMountedDisplay.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-HierarchicalLODUtilities.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-HTTP.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-HTTPServer.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-IESFile.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-ImageCore.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-ImageWriteQueue.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-InputCore.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-InteractiveToolsFramework.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-InterchangeCore.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-InterchangeEngine.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-IoStoreUtilities.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-Json.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-JsonUtilities.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-Kismet.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-KismetCompiler.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-KismetWidgets.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-Landscape.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-LevelEditor.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-LevelSequence.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-LiveLinkInterface.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-Localization.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-MaterialBaking.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-MaterialEditor.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-MaterialShaderQualitySettings.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-MaterialUtilities.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-Media.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-MediaAssets.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-MediaUtils.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-MeshDescription.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-MeshUtilitiesCommon.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-MovieScene.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-MovieSceneCapture.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-MovieSceneTools.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-MovieSceneTracks.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-MRMesh.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-NavigationSystem.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-Navmesh.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-NetCore.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-PacketHandler.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-PakFile.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-PakFileUtilities.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-PerfCounters.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-PhysicsCore.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-PIEPreviewDeviceProfileSelector.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-PIEPreviewDeviceSpecification.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-Projects.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-PropertyAccess.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-PropertyEditor.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-PropertyPath.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-RawMesh.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-ReliabilityHandlerComponent.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-RenderCore.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-Renderer.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-RHI.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-RSA.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-SandboxFile.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-SceneDepthPickerMode.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-SceneOutliner.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-ScriptDisassembler.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-Sequencer.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-SequenceRecorder.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-SerializedRecorderInterface.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-SharedSettingsWidgets.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-SignalProcessing.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-SkeletalMeshUtilitiesCommon.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-Slate.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-SlateCore.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-Sockets.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-SoundFieldRendering.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-SourceControl.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-SourceControlWindows.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-SSL.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-StaticMeshDescription.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-StatsViewer.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-StatusBar.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-SwarmInterface.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-TextureUtilitiesCommon.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-TimeManagement.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-ToolMenus.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-TraceLog.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-TypedElementFramework.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-TypedElementRuntime.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-UELibSampleRate.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-UMG.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-UnrealAudio.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-UnrealEd.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-UnrealEdMessages.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-ViewportInteraction.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-Voronoi.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-VREditor.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-WidgetCarousel.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\UnrealEditor-XmlParser.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\libfbxsdk.dll">
+      <Filter>UE5Dependencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="..\..\..\Binaries\Win64\UnrealEditor-Spice.dll">
+      <Filter>MaxQDepenencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="..\..\..\Binaries\Win64\UnrealEditor-Spice.pdb">
+      <Filter>MaxQDepenencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="..\..\..\Binaries\Win64\UnrealEditor-SpiceUncooked.dll">
+      <Filter>MaxQDepenencies</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="..\..\..\Binaries\Win64\UnrealEditor-SpiceUncooked.pdb">
+      <Filter>MaxQDepenencies</Filter>
+    </CopyFileToFolders>
+  </ItemGroup>
+</Project>

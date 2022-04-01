@@ -89,7 +89,6 @@ ExternalTests/MaxQ/Spice/x64/*
 ExternalTests/MaxQ/SpiceUncooked/x64/*
 ExternalTests/MaxQ/SpiceEditor/x64/*
 ExternalTests/MaxQ/Spice_Library/x64/*
-*.filters
-ExternalTests/MaxQ/Spice_Library/Spice_Library.vcxproj.user
 *.user
+!ExternalTests/MaxQ/Spice/Spice.vcxproj.user
 Spice.sln
