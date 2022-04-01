@@ -479,7 +479,7 @@ static inline FSDimensionlessVector operator-(const FSDimensionlessVector& value
     return FSDimensionlessVector(-value.x, -value.y, -value.z);
 }
 
-static inline FSDimensionlessVector operator-(FSDimensionlessVector& lhs, const FSDimensionlessVector& rhs){
+static inline FSDimensionlessVector operator-(const FSDimensionlessVector& lhs, const FSDimensionlessVector& rhs){
 
     return FSDimensionlessVector(lhs.x - rhs.x, lhs.y - rhs.y, lhs.z - rhs.z);
 }
