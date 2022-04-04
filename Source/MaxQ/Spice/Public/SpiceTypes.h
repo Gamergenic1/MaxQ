@@ -1131,6 +1131,16 @@ static inline FSAngularRate& operator-=(FSAngularRate& lhs, const FSAngularRate&
     return lhs;
 }
 
+static inline bool operator==(const FSAngularRate& lhs, const FSAngularRate& rhs) {
+
+    return lhs.AsSpiceDouble() == rhs.AsSpiceDouble();
+}
+
+static inline bool operator!=(const FSAngularRate& lhs, const FSAngularRate& rhs) {
+
+    return !(lhs == rhs);
+}
+
 
 USTRUCT(BlueprintType)
 struct SPICE_API FSComplexScalar
@@ -1692,7 +1702,6 @@ static inline FSAngularVelocity operator*(const FSAngularVelocity& lhs, double r
     return FSAngularVelocity(lhs.x * rhs, lhs.y * rhs, lhs.z * rhs);
 }
 
-
 static inline FSAngularVelocity& operator+=(FSAngularVelocity& lhs, const FSAngularVelocity& rhs) {
 
     lhs.x += rhs.x;
@@ -1708,6 +1717,19 @@ static inline FSAngularVelocity& operator-=(FSAngularVelocity& lhs, const FSAngu
     lhs.z -= rhs.z;
     return lhs;
 }
+
+// The equality operator is useful for unit tests.
+static inline bool operator==(const FSAngularVelocity& lhs, const FSAngularVelocity& rhs) {
+
+    return lhs.x == rhs.x && lhs.y == rhs.y && lhs.z == rhs.z;
+}
+
+// The equality operator is used primarily for unit tests.
+static inline bool operator!=(const FSAngularVelocity& lhs, const FSAngularVelocity& rhs) {
+
+    return !(lhs == rhs);
+}
+
 
 
 USTRUCT(BlueprintType)
@@ -3648,6 +3670,12 @@ struct SPICE_API FSPKType5Observation
         state = FSStateVector();
     }
 
+    FSPKType5Observation(const FSEphemerisTime& _et, const FSStateVector& _state)
+    {
+        et = _et;
+        state = _state;
+    }
+
 
     FSPKType5Observation(
         double _et,
@@ -4869,7 +4897,8 @@ public:
 
     template<> static FVector Swizzle<FSAngularVelocity>(const FSAngularVelocity& value)
     {
-        return FVector((float)value.x.radiansPerSecond, (float)value.y.radiansPerSecond, (float)value.z.radiansPerSecond);
+        // (Going from RHS/LHS negates angular velocities...)
+        return FVector(-(float)value.y.radiansPerSecond, -(float)value.x.radiansPerSecond, -(float)value.z.radiansPerSecond);
     }
 
     // From UE to SPICE
@@ -4892,7 +4921,8 @@ public:
 
     template<> static void Swizzle<FSAngularVelocity>(const FVector& in, FSAngularVelocity& out)
     {
-        out = FSAngularVelocity(FSAngularRate(in.Y), FSAngularRate(in.X), FSAngularRate(in.Z));
+        // (Going from LHS/RHS negates angular velocities...)
+        out = FSAngularVelocity(FSAngularRate(-in.Y), FSAngularRate(-in.X), FSAngularRate(-in.Z));
     }
 
 
