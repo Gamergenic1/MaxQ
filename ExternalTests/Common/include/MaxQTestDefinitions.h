@@ -31,5 +31,6 @@ extern const FSStateVector state_target_9993_center_9995_eclipj2000_et0;
 extern const FSStateVector state_target_9994_center_9995_j2000_et0;
 extern const FSStateVector state_target_9993_center_9994_j2000_et0;
 extern const FSStateVector state_target_9993_center_9995_j2000_et0;
-bool IsNear(const FSStateVector& state1, const FSStateVector& state2, double rtol = 0.00001, double vtol = 0.00000001);
+bool IsNear(const FSStateVector&  state1, const FSStateVector& state2, double rtol = 0.00001, double vtol = 0.00000001);
+bool IsNear(const FSDimensionlessVector&  vector1, const FSDimensionlessVector& vector2, double tol = 0.00001);
 

@@ -44,6 +44,12 @@ bool IsNear(const FSStateVector& state1, const FSStateVector& state2, double rto
     return delta.r.Magnitude() < rtol && delta.v.Magnitude() < vtol;
 }
 
+bool IsNear(const FSDimensionlessVector& vector1, const FSDimensionlessVector& vector2, double tol)
+{
+    FSDimensionlessVector delta = vector2 - vector1;
+    return delta.Magnitude() < tol;
+}
+
 #if 0
 const FString fileName = TEXT("celestialmath_unit_test_spk.bsp");
 const FString Ref = TEXT("ECLIPJ2000");

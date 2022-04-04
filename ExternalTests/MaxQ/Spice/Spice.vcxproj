@@ -86,10 +86,21 @@
     <ClCompile Include="USpiceTypes\FSTwoLineElements.cpp" />
     <ClCompile Include="USpiceTypes\FSVelocityVector.cpp" />
     <ClCompile Include="USpiceTypes\FSWindowSegment.cpp" />
+    <ClCompile Include="USpiceTypes\USpiceTypes_Conv_QuatToSQuaternion.cpp" />
+    <ClCompile Include="USpiceTypes\USpiceTypes_Conv_SAngularVelocityToVector.cpp" />
+    <ClCompile Include="USpiceTypes\USpiceTypes_Conv_SDimensionlessVectorToVector.cpp" />
+    <ClCompile Include="USpiceTypes\USpiceTypes_Conv_SDistanceVectorToVector.cpp" />
+    <ClCompile Include="USpiceTypes\USpiceTypes_Conv_SQuaternionToQuat.cpp" />
+    <ClCompile Include="USpiceTypes\USpiceTypes_Conv_SVelocityVectorToVector.cpp" />
+    <ClCompile Include="USpiceTypes\USpiceTypes_Conv_VectorToSAngularVelocity.cpp" />
+    <ClCompile Include="USpiceTypes\USpiceTypes_Conv_VectorToSDimensionlessVector.cpp" />
+    <ClCompile Include="USpiceTypes\USpiceTypes_Conv_VectorToSDistanceVector.cpp" />
+    <ClCompile Include="USpiceTypes\USpiceTypes_Conv_VectorToSVelocityVector.cpp" />
     <ClCompile Include="USpiceTypes\USpiceTypes_normalize0to360.cpp" />
     <ClCompile Include="USpiceTypes\USpiceTypes_normalize180to180.cpp" />
     <ClCompile Include="USpiceTypes\USpiceTypes_normalizePiToPi.cpp" />
     <ClCompile Include="USpiceTypes\USpiceTypes_normalizeZeroToTwoPi.cpp" />
+    <ClCompile Include="USpice\axisar.cpp" />
     <ClCompile Include="USpice\bodvrd_distance_vector.cpp" />
     <ClCompile Include="USpice\bodvrd_mass.cpp" />
     <ClCompile Include="USpice\clear_all.cpp" />
@@ -109,12 +120,15 @@
     <ClCompile Include="USpice\prop2b.cpp" />
     <ClCompile Include="USpice\pxform.cpp" />
     <ClCompile Include="USpice\q2m.cpp" />
+    <ClCompile Include="USpice\raxisa.cpp" />
+    <ClCompile Include="USpice\rotate.cpp" />
     <ClCompile Include="USpice\spkcvt.cpp" />
     <ClCompile Include="USpice\spkezr.cpp" />
     <ClCompile Include="USpice\spkpos.cpp" />
     <ClCompile Include="USpice\sxform.cpp" />
     <ClCompile Include="USpice\unload.cpp" />
     <ClCompile Include="USpice\vcrss.cpp" />
+    <ClCompile Include="USpice\vrotv.cpp" />
     <ClCompile Include="USpice\xf2rav.cpp" />
   </ItemGroup>
   <ItemGroup>

@@ -266,6 +266,48 @@
     <ClCompile Include="USpice\init_all.cpp">
       <Filter>USpice</Filter>
     </ClCompile>
+    <ClCompile Include="USpiceTypes\USpiceTypes_Conv_VectorToSDimensionlessVector.cpp">
+      <Filter>USpiceTypes</Filter>
+    </ClCompile>
+    <ClCompile Include="USpiceTypes\USpiceTypes_Conv_VectorToSDistanceVector.cpp">
+      <Filter>USpiceTypes</Filter>
+    </ClCompile>
+    <ClCompile Include="USpiceTypes\USpiceTypes_Conv_VectorToSVelocityVector.cpp">
+      <Filter>USpiceTypes</Filter>
+    </ClCompile>
+    <ClCompile Include="USpiceTypes\USpiceTypes_Conv_VectorToSAngularVelocity.cpp">
+      <Filter>USpiceTypes</Filter>
+    </ClCompile>
+    <ClCompile Include="USpiceTypes\USpiceTypes_Conv_SAngularVelocityToVector.cpp">
+      <Filter>USpiceTypes</Filter>
+    </ClCompile>
+    <ClCompile Include="USpiceTypes\USpiceTypes_Conv_SVelocityVectorToVector.cpp">
+      <Filter>USpiceTypes</Filter>
+    </ClCompile>
+    <ClCompile Include="USpiceTypes\USpiceTypes_Conv_SDimensionlessVectorToVector.cpp">
+      <Filter>USpiceTypes</Filter>
+    </ClCompile>
+    <ClCompile Include="USpiceTypes\USpiceTypes_Conv_SDistanceVectorToVector.cpp">
+      <Filter>USpiceTypes</Filter>
+    </ClCompile>
+    <ClCompile Include="USpiceTypes\USpiceTypes_Conv_SQuaternionToQuat.cpp">
+      <Filter>USpiceTypes</Filter>
+    </ClCompile>
+    <ClCompile Include="USpiceTypes\USpiceTypes_Conv_QuatToSQuaternion.cpp">
+      <Filter>USpiceTypes</Filter>
+    </ClCompile>
+    <ClCompile Include="USpice\rotate.cpp">
+      <Filter>USpice</Filter>
+    </ClCompile>
+    <ClCompile Include="USpice\axisar.cpp">
+      <Filter>USpice</Filter>
+    </ClCompile>
+    <ClCompile Include="USpice\raxisa.cpp">
+      <Filter>USpice</Filter>
+    </ClCompile>
+    <ClCompile Include="USpice\vrotv.cpp">
+      <Filter>USpice</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
