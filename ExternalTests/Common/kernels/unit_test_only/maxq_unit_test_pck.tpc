@@ -29,8 +29,8 @@ Unreal Engine 5.
 ------- 'FAKEBODY9994'
 
         \begindata
-        BODY9995_CONSTANTS_REF_FRAME   =   1
-        BODY9995_CONSTANTS_JED_EPOCH   =   0
+        BODY9994_CONSTANTS_REF_FRAME   =   1
+        BODY9994_CONSTANTS_JED_EPOCH   =   0
         BODY9994_GM            = (      0.01                    )
         BODY9994_RADII         = (    123.45    123.45   123.   )
         BODY9994_POLE_RA       = (    -90.0       0.0      0.0  )
@@ -42,8 +42,8 @@ Unreal Engine 5.
 ------- 'FAKEBODY9993'
 
         \begindata
-        BODY9995_CONSTANTS_REF_FRAME   =   17
-        BODY9995_CONSTANTS_JED_EPOCH   =   0
+        BODY9993_CONSTANTS_REF_FRAME   =   17
+        BODY9993_CONSTANTS_JED_EPOCH   =   0
         BODY9993_GM            = (      0.001                   )
         BODY9993_RADII         = (     22.22     22.22   20.00  )
         BODY9993_POLE_RA       = (    -90.0       0.0      0.0  )

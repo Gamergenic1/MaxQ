@@ -165,7 +165,7 @@ TEST(sxform_test, 9994_Is_RotatingPM_65) {
     PM = FSAngle(USpiceTypes::normalizeZeroToTwoPi(PM.AsRadians()));
 
     // Mathematically, there is no rotation due to Dec or RA... And RA/PM rotate about the same Axis... so we only know the SUM of RA (-90) plus PM, we cannot isolate them...
-    EXPECT_NEAR(USpiceTypes::normalize180to180(PM.AsDegrees() + RA.AsDegrees() - (fractionalRotationAtEpoch * 360. - 90.)), 0, 0.0000001);
+    EXPECT_NEAR(USpiceTypes::normalize180to180(PM.AsDegrees() + RA.AsDegrees() - (fractionalRotationAtEpoch * 360. - 90.)), 0, 0.00001);
     EXPECT_EQ(Dec.AsDegrees(), +90.);
 
     // The angular velocity of the transformation... since the north pole is aligned with the Z+ axis, the av is (0,0,w)
