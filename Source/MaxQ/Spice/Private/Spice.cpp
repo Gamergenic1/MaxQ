@@ -7,6 +7,13 @@
 
 #include "Spice.h"
 #include "SpiceUtilities.h"
+#include "Misc/Paths.h"
+
+// Set the working directory locally inside furnsh?
+// This allows meta-kernels to load files in the same directory.
+#if PLATFORM_WINDOWS
+#define SET_WORKING_DIRECTORY_IN_FURNSH 1
+#endif
 
 PRAGMA_PUSH_PLATFORM_DEFAULT_PACKING
 extern "C"
@@ -85,9 +92,30 @@ void USpice::furnsh(
     const FString& file
 )
 {
-    auto path = TCHAR_TO_ANSI(*toPath(file));
-    furnsh_c(path);
+    FString fullPathToFile = toPath(file);
 
+#ifdef SET_WORKING_DIRECTORY_IN_FURNSH
+    // Get the current working directory...
+    TCHAR buffer[WINDOWS_MAX_PATH];
+    TCHAR* oldWorkingDirectory = _tgetcwd(buffer, sizeof(buffer)/sizeof(buffer[0]));
+
+    // Trim the file name to just the full directory path...
+    FString fullPathToDirectory = FPaths::GetPath(fullPathToFile);
+    
+    // Set the current working directory
+    _tchdir(*fullPathToDirectory);
+#endif
+
+    furnsh_c(TCHAR_TO_ANSI(*fullPathToFile));
+
+#ifdef SET_WORKING_DIRECTORY_IN_FURNSH
+    // Reset the working directory to prior state...
+    if (oldWorkingDirectory)
+    {
+        _tchdir(oldWorkingDirectory);
+    }
+#endif
+    
     ErrorCheck(ResultCode, ErrorMessage);
 }
 
