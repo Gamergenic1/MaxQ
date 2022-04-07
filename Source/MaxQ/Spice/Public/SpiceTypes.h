@@ -4909,6 +4909,9 @@ public:
     // Vectors...
     // --------------
 
+#pragma warning( push )
+#pragma warning( disable : 4499 )
+
     // From SPICE to UE
     template<typename T> static FVector Swizzle(const T& value);
 
@@ -4958,6 +4961,7 @@ public:
         out = FSAngularVelocity(FSAngularRate(-in.Y), FSAngularRate(-in.X), FSAngularRate(-in.Z));
     }
 
+#pragma warning( pop )
 
     // Quaternions...
     // --------------
