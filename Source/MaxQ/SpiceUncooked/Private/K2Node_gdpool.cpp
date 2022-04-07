@@ -29,7 +29,9 @@ UK2Node_gdpool::UK2Node_gdpool()
     OperationsMap = TMap<FName, FK2OperationNOutput>();
 
     auto op = DoubleOp(); op.FullName = op.ShortName.ToString() + "\nReturn value from the kernel pool"; OperationsMap.Emplace(op.ShortName, op);
+    op = RealOp(); op.FullName = op.ShortName.ToString() + "\nReturn value from the kernel pool"; OperationsMap.Emplace(op.ShortName, op);
     op = ArrayDoubleOp(); op.FullName = op.ShortName.ToString() + "\nReturn value from the kernel pool"; OperationsMap.Emplace(op.ShortName, op);
+    op = ArrayRealOp(); op.FullName = op.ShortName.ToString() + "\nReturn value from the kernel pool"; OperationsMap.Emplace(op.ShortName, op);
     op = SDimensionlessVectorOp(); op.FullName = op.ShortName.ToString() + "\nReturn value from the kernel pool"; OperationsMap.Emplace(op.ShortName, op);
     op = SMassConstantOp(); op.FullName = op.ShortName.ToString() + "\nReturn value from the kernel pool"; OperationsMap.Emplace(op.ShortName, op);
     op = SDistanceOp(); op.FullName = op.ShortName.ToString() + "\nReturn value from the kernel pool"; OperationsMap.Emplace(op.ShortName, op);
@@ -167,9 +169,21 @@ SPICEUNCOOKED_API FK2OperationNOutput UK2Node_gdpool::DoubleOp()
     return v;
 }
 
+SPICEUNCOOKED_API FK2OperationNOutput UK2Node_gdpool::RealOp()
+{
+    static auto v = FK2OperationNOutput(FName("gdpool Real"), FName("gdpool_double_K2"), FK2Type::Real());
+    return v;
+}
+
 SPICEUNCOOKED_API FK2OperationNOutput UK2Node_gdpool::ArrayDoubleOp()
 {
     static auto v = FK2OperationNOutput(FName("gdpool Array(Double)"), FName("gdpool_array_K2"), FK2Type::DoubleArray());
+    return v;
+}
+
+SPICEUNCOOKED_API FK2OperationNOutput UK2Node_gdpool::ArrayRealOp()
+{
+    static auto v = FK2OperationNOutput(FName("gdpool Array(Real)"), FName("gdpool_array_K2"), FK2Type::RealArray());
     return v;
 }
 
