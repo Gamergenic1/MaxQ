@@ -22,9 +22,21 @@ SPICEUNCOOKED_API FK2Type FK2Type::Double()
     return Double;
 }
 
+SPICEUNCOOKED_API FK2Type FK2Type::Real()
+{
+    static FK2Type Real = FK2Type(FName("Real"), UEdGraphSchema_K2::PC_Real);
+    return Real;
+}
+
 SPICEUNCOOKED_API FK2Type FK2Type::DoubleArray()
 {
     static FK2Type ArrayDouble = FK2Type(FName("Array(Double)"), UEdGraphSchema_K2::PC_Double, EPinContainerType::Array);
+    return ArrayDouble;
+}
+
+SPICEUNCOOKED_API FK2Type FK2Type::RealArray()
+{
+    static FK2Type ArrayDouble = FK2Type(FName("Array(Real)"), UEdGraphSchema_K2::PC_Real, EPinContainerType::Array);
     return ArrayDouble;
 }
 

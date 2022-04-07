@@ -517,6 +517,13 @@ static inline FSDimensionlessVector& operator-=(FSDimensionlessVector& lhs, cons
     return lhs;
 }
 
+static inline FSDimensionlessVector& operator*=(FSDimensionlessVector& lhs, double rhs) {
+
+    lhs.x *= rhs;
+    lhs.y *= rhs;
+    lhs.z *= rhs;
+    return lhs;
+}
 
 #define FSDistance_km_to_M (1000.)
 #define FSDistance_M_to_km (1./FSDistance_km_to_M)
@@ -626,6 +633,12 @@ static inline FSDistance operator*(double lhs, const FSDistance& rhs)
 static inline FSDistance operator*(const FSDistance& lhs, double rhs)
 {
     return FSDistance(lhs.km * rhs);
+}
+
+static inline FSDistance& operator*=(FSDistance& lhs, double rhs) {
+
+    lhs.km *= rhs;
+    return lhs;
 }
 
 static inline bool operator==(const FSDistance& lhs, const FSDistance& rhs)
@@ -775,6 +788,25 @@ static inline FSDistanceVector& operator-=(FSDistanceVector& lhs, const FSDistan
     lhs.y -= rhs.y;
     lhs.z -= rhs.z;
     return lhs;
+}
+
+static inline FSDistanceVector& operator*=(FSDistanceVector& lhs, double rhs) {
+
+    lhs.x *= rhs;
+    lhs.y *= rhs;
+    lhs.z *= rhs;
+    return lhs;
+}
+
+static inline bool operator==(const FSDistanceVector& lhs, const FSDistanceVector& rhs)
+{
+    return (lhs.x == rhs.x) && (lhs.y == rhs.y) && (lhs.z == rhs.z);
+}
+
+
+static inline bool operator!=(const FSDistanceVector& lhs, const FSDistanceVector& rhs)
+{
+    return !(lhs == rhs);
 }
 
 static inline FSDimensionlessVector operator/(const FSDistanceVector& lhs, const FSDistanceVector& rhs)
@@ -1044,6 +1076,12 @@ static inline FSAngle& operator-=(FSAngle& lhs, const FSAngle& rhs) {
     return lhs;
 }
 
+static inline FSAngle& operator*=(FSAngle& lhs, double rhs) {
+
+    lhs = FSAngle(lhs.AsSpiceDouble() * rhs);
+    return lhs;
+}
+
 
 USTRUCT(BlueprintType)
 struct SPICE_API FSAngularRate
@@ -1140,6 +1178,7 @@ static inline bool operator!=(const FSAngularRate& lhs, const FSAngularRate& rhs
 
     return !(lhs == rhs);
 }
+
 
 
 USTRUCT(BlueprintType)
@@ -1366,6 +1405,10 @@ static inline FSDistance operator*(const FSSpeed& lhs, const FSEphemerisPeriod& 
     return FSDistance(lhs.kmps * rhs.seconds);
 }
 
+static inline FSAngularRate operator/(const FSAngle& lhs, const FSEphemerisPeriod& rhs)
+{
+    return FSAngularRate(lhs.AsRadians() / rhs.AsSeconds());
+}
 
 USTRUCT(BlueprintType, Meta = (ToolTip = "Rectangular  coordinates (DX, DY, DZ)"))
 struct SPICE_API FSVelocityVector
@@ -1478,19 +1521,9 @@ static inline FSDistanceVector operator*(const FSVelocityVector& lhs, const FSEp
     return FSDistanceVector(rhs * lhs.dx, rhs * lhs.dy, rhs * lhs.dz);
 }
 
-static inline bool operator==(const FSDistanceVector& lhs, const FSDistanceVector& rhs)
-{
-    return (lhs.x == rhs.x) && (lhs.y == rhs.y) && (lhs.z == rhs.z);
-}
-
 static inline bool operator==(const FSVelocityVector& lhs, const FSVelocityVector& rhs)
 {
     return (lhs.dx == rhs.dx) && (lhs.dy == rhs.dy) && (lhs.dz == rhs.dz);
-}
-
-static inline bool operator!=(const FSDistanceVector& lhs, const FSDistanceVector& rhs)
-{
-    return !(lhs == rhs);
 }
 
 static inline bool operator!=(const FSVelocityVector& lhs, const FSVelocityVector& rhs)

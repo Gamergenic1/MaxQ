@@ -56,7 +56,9 @@ private:
 private:
     static FK2OperationNOutput WildcardOp();
     static FK2OperationNOutput DoubleOp();
+    static FK2OperationNOutput RealOp();
     static FK2OperationNOutput ArrayDoubleOp();
+    static FK2OperationNOutput ArrayRealOp();
     static FK2OperationNOutput SDimensionlessVectorOp();
     static FK2OperationNOutput SMassConstantOp();
     static FK2OperationNOutput SDistanceOp();

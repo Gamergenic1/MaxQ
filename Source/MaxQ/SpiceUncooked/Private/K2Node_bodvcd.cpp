@@ -29,7 +29,9 @@ UK2Node_bodvcd::UK2Node_bodvcd()
     OperationsMap = TMap<FName, FK2OperationNOutput>();
 
     auto op = DoubleOp(); op.FullName = op.ShortName.ToString() + "\nReturn value from the kernel pool"; OperationsMap.Emplace(op.ShortName, op);
+    op = RealOp(); op.FullName = op.ShortName.ToString() + "\nReturn value from the kernel pool"; OperationsMap.Emplace(op.ShortName, op);
     op = ArrayDoubleOp(); op.FullName = op.ShortName.ToString() + "\nReturn value from the kernel pool"; OperationsMap.Emplace(op.ShortName, op);
+    op = ArrayRealOp(); op.FullName = op.ShortName.ToString() + "\nReturn value from the kernel pool"; OperationsMap.Emplace(op.ShortName, op);
     op = SDimensionlessVectorOp(); op.FullName = op.ShortName.ToString() + "\nReturn value from the kernel pool"; OperationsMap.Emplace(op.ShortName, op);
     op = SMassConstantOp(); op.FullName = op.ShortName.ToString() + "\nReturn value from the kernel pool"; OperationsMap.Emplace(op.ShortName, op);
     op = SDistanceOp(); op.FullName = op.ShortName.ToString() + "\nReturn value from the kernel pool"; OperationsMap.Emplace(op.ShortName, op);
@@ -156,9 +158,21 @@ SPICEUNCOOKED_API FK2OperationNOutput UK2Node_bodvcd::DoubleOp()
     return v;
 }
 
+SPICEUNCOOKED_API FK2OperationNOutput UK2Node_bodvcd::RealOp()
+{
+    static auto v = FK2OperationNOutput(FName("bodvcd Real"), FName("bodvcd_double_K2"), FK2Type::Real());
+    return v;
+}
+
 SPICEUNCOOKED_API FK2OperationNOutput UK2Node_bodvcd::ArrayDoubleOp()
 {
     static auto v = FK2OperationNOutput(FName("bodvcd Array(Double)"), FName("bodvcd_array_K2"), FK2Type::DoubleArray());
+    return v;
+}
+
+SPICEUNCOOKED_API FK2OperationNOutput UK2Node_bodvcd::ArrayRealOp()
+{
+    static auto v = FK2OperationNOutput(FName("bodvcd Array(Real)"), FName("bodvcd_array_K2"), FK2Type::RealArray());
     return v;
 }
 

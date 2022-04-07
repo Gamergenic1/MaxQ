@@ -96,7 +96,9 @@ struct FK2Type
 
     static SPICEUNCOOKED_API FK2Type Wildcard();
     static SPICEUNCOOKED_API FK2Type Double();
+    static SPICEUNCOOKED_API FK2Type Real();
     static SPICEUNCOOKED_API FK2Type DoubleArray();
+    static SPICEUNCOOKED_API FK2Type RealArray();
     static SPICEUNCOOKED_API FK2Type SDimensionlessVector();
     static SPICEUNCOOKED_API FK2Type SMassConstant();
     static SPICEUNCOOKED_API FK2Type SDistance();
