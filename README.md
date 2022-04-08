@@ -39,5 +39,8 @@ MaxQ documentation:
 https://maxq.gamergenic.com/  
 
 Walkthrough of project development:  
-https://gamedevtricks.com/tags/third-party-libs-series/  
+https://gamedevtricks.com/tags/third-party-libs-series/
+
+## Implementation Principles
+See [PRINCIPLES](PRINCIPLES.md) file.
 
