@@ -464,7 +464,6 @@ struct SPICE_API FSDimensionlessVector
     static void Normalize(FSDimensionlessVector& vector);
     
     FSDimensionlessVector Normalized() const;
-    void Normalized(FSDimensionlessVector& v) const;
 
     double Magnitude() const;
 
@@ -713,6 +712,11 @@ struct SPICE_API FSDistanceVector
         vector.x = x.AsSpiceDouble();
         vector.y = y.AsSpiceDouble();
         vector.z = z.AsSpiceDouble();
+    }
+
+    inline FSDimensionlessVector AsKilometers() const
+    {
+        return FSDimensionlessVector(x.AsKilometers(), y.AsKilometers(), z.AsKilometers());
     }
 
     inline void CopyTo(double(&xyz)[3]) const
@@ -1117,6 +1121,10 @@ struct SPICE_API FSAngularRate
     inline double AsRadiansPerSecond() const { return radiansPerSecond; }
     double AsDegreesPerSecond() const;
 
+    static inline FSAngularRate FromSpiceDouble(double SpiceDouble) { return FSAngularRate(SpiceDouble); }
+    static inline FSAngularRate FromRadiansPerSecond(double RadiansPerSecond) { return FSAngularRate(RadiansPerSecond); }
+    static FSAngularRate FromDegreesPerSecond(double DegreesPerSecond);
+
     static const FSAngularRate Zero;
 };
 
@@ -1461,6 +1469,11 @@ struct SPICE_API FSVelocityVector
         vector.z = dz.AsSpiceDouble();
     }
 
+    inline FSDimensionlessVector AsKilometersPerSecond() const
+    {
+        return FSDimensionlessVector(dx.AsKilometersPerSecond(), dy.AsKilometersPerSecond(), dz.AsKilometersPerSecond());
+    }
+
     inline void CopyTo(double(&xyz)[3]) const
     {
         xyz[0] = dx.kmps;
@@ -1682,6 +1695,16 @@ struct SPICE_API FSAngularVelocity
         vector.x = x.AsSpiceDouble();
         vector.y = y.AsSpiceDouble();
         vector.z = z.AsSpiceDouble();
+    }
+
+    FSDimensionlessVector AsRadiansPerSecond() const
+    {
+        return FSDimensionlessVector(x.AsRadiansPerSecond(), y.AsRadiansPerSecond(), z.AsRadiansPerSecond());
+    }
+
+    static FSAngularVelocity FromRadiansPerSecond(const FSDimensionlessVector& RadsPerSec)
+    {
+        return FSAngularVelocity(RadsPerSec);
     }
 
     void CopyTo(double(&_av)[3]) const
@@ -4917,24 +4940,24 @@ public:
 
     template<> static FVector Swizzle<FSDimensionlessVector>(const FSDimensionlessVector& value)
     {
-        return FVector((float)value.y, (float)value.x, (float)value.z);
+        return FVector((FVector::FReal)value.y, (FVector::FReal)value.x, (FVector::FReal)value.z);
 
     }
 
     template<> static FVector Swizzle<FSDistanceVector>(const FSDistanceVector& value)
     {
-        return FVector((float)value.y.km, (float)value.x.km, (float)value.z.km);
+        return FVector((FVector::FReal)value.y.km, (FVector::FReal)value.x.km, (FVector::FReal)value.z.km);
     }
 
     template<> static FVector Swizzle<FSVelocityVector>(const FSVelocityVector& value)
     {
-        return FVector((float)value.dy.kmps, (float)value.dx.kmps, (float)value.dz.kmps);
+        return FVector((FVector::FReal)value.dy.kmps, (FVector::FReal)value.dx.kmps, (FVector::FReal)value.dz.kmps);
     }
 
     template<> static FVector Swizzle<FSAngularVelocity>(const FSAngularVelocity& value)
     {
         // (Going from RHS/LHS negates angular velocities...)
-        return FVector(-(float)value.y.radiansPerSecond, -(float)value.x.radiansPerSecond, -(float)value.z.radiansPerSecond);
+        return FVector(-(FVector::FReal)value.y.radiansPerSecond, -(FVector::FReal)value.x.radiansPerSecond, -(FVector::FReal)value.z.radiansPerSecond);
     }
 
     // From UE to SPICE
@@ -4970,7 +4993,7 @@ public:
     {
         double x=0., y = 0., z = 0., w = 0.;
         value.QENG(w, x, y, z);
-        return FQuat((float)y, (float)x, (float)z, (float)w);
+        return FQuat((FVector::FReal)y, (FVector::FReal)x, (FVector::FReal)z, (FVector::FReal)w);
     }
 
     // From UE to SPICE

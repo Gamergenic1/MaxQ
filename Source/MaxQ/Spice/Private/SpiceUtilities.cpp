@@ -22,9 +22,6 @@ namespace SpiceUtilities
     const double twopi  = (double)twopi_c();
     const double dpr    = (double)dpr_c();
     const double rpd    = (double)rpd_c();
-
-    const float rpdf = (float)rpd;
-    const float dprf    = (float)dpr;
 }
 
 FString toPath(const FString& file)
