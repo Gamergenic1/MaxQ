@@ -75,6 +75,12 @@ double FSAngularRate::AsDegreesPerSecond() const
     return radiansPerSecond * dpr_c();
 }
 
+FSAngularRate FSAngularRate::FromDegreesPerSecond(double DegreesPerSecond)
+{
+    return FSAngularRate(DegreesPerSecond * rpd_c());
+}
+
+
 
 void FSDimensionlessVector::Normalize()
 {
@@ -98,10 +104,7 @@ FSDimensionlessVector FSDimensionlessVector::Normalized() const
     return FSDimensionlessVector(xyz);
 }
 
-void FSDimensionlessVector::Normalized(FSDimensionlessVector& v) const
-{
-    v = Normalized();
-}
+
 
 
 FSDimensionlessVector FSDistanceVector::Normalized() const

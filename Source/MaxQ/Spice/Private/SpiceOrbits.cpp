@@ -223,9 +223,9 @@ void USpiceOrbits::MakeSPKObservation(
 
 void USpiceOrbits::RenderDebugEllipse(const UWorld* world, const FSEllipse& ellipse, const FTransform& localTransform, const FColor& color, float thickness)
 {
-    for (float theta = 0.f; theta <= 360.f; )
+    for (double theta = 0.f; theta <= 360.f; )
     {
-        float rads = rpdf * theta;
+        float rads = rpd * theta;
         double _cos = cos(rads);
         double _sin = sin(rads);
         FVector  p1 = localTransform.TransformPosition(
@@ -235,7 +235,7 @@ void USpiceOrbits::RenderDebugEllipse(const UWorld* world, const FSEllipse& elli
 
         theta += 0.25f;
 
-        rads = rpdf * theta;
+        rads = rpd * theta;
         _cos = cos(rads);
         _sin = sin(rads);
 
@@ -253,11 +253,11 @@ void USpiceOrbits::RenderDebugEllipse(const UWorld* world, const FSEllipse& elli
 
 void USpiceOrbits::RenderDebugHyperbola(const UWorld* world, const FSEllipse& ellipse, const FTransform& localTransform, const FColor& color, float thickness)
 {
-    float sign = 1.f;
+    double sign = 1.;
 
-    for (float theta =-360.f; theta <= 360.f; )
+    for (double theta =-360.; theta <= 360.; )
     {
-        float rads = rpdf * theta;
+        double rads = rpd * theta;
         double _cosh = sign * cosh(rads);
         double _sinh = sign * sinh(rads);
         FVector  p1 = localTransform.TransformPosition(
@@ -265,11 +265,11 @@ void USpiceOrbits::RenderDebugHyperbola(const UWorld* world, const FSEllipse& el
                 ellipse.center + _cosh * ellipse.v_major + _sinh * ellipse.v_minor
             ));
 
-        theta += 0.25f;
+        theta += 0.25;
 
         // It's not efficient to recalculate since we just calculated it last iteration...
         // ...But this is a debug function anyways
-        rads = rpdf * theta;
+        rads = rpd * theta;
         _cosh = sign * cosh(rads);
         _sinh = sign * sinh(rads);
 
@@ -282,8 +282,8 @@ void USpiceOrbits::RenderDebugHyperbola(const UWorld* world, const FSEllipse& el
     }
 
     {
-        float theta = -30000;
-        float rads = rpdf * theta;
+        double theta = -30000.;
+        double rads = rpd * theta;
         double _cosh = sign * cosh(rads);
         double _sinh = sign * sinh(rads);
         FVector  p1 = localTransform.TransformPosition(
@@ -291,11 +291,11 @@ void USpiceOrbits::RenderDebugHyperbola(const UWorld* world, const FSEllipse& el
                 ellipse.center + _cosh * ellipse.v_major + _sinh * ellipse.v_minor
             ));
 
-        theta = -360.f;
+        theta = -360.;
 
         // It's not efficient to recalculate since we just calculated it last iteration...
         // ...But this is a debug function anyways
-        rads = rpdf * theta;
+        rads = rpd * theta;
         _cosh = sign * cosh(rads);
         _sinh = sign * sinh(rads);
 
@@ -308,8 +308,8 @@ void USpiceOrbits::RenderDebugHyperbola(const UWorld* world, const FSEllipse& el
     }
 
     {
-        float theta = 360.f;
-        float rads = rpdf * theta;
+        double theta = 360.;
+        double rads = rpd * theta;
         double _cosh = sign * cosh(rads);
         double _sinh = sign * sinh(rads);
         FVector  p1 = localTransform.TransformPosition(
@@ -321,7 +321,7 @@ void USpiceOrbits::RenderDebugHyperbola(const UWorld* world, const FSEllipse& el
 
         // It's not efficient to recalculate since we just calculated it last iteration...
         // ...But this is a debug function anyways
-        rads = rpdf * theta;
+        rads = rpd * theta;
         _cosh = sign * cosh(rads);
         _sinh = sign * sinh(rads);
 

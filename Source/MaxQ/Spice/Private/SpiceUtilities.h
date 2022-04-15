@@ -26,9 +26,6 @@ namespace SpiceUtilities
     extern const double twopi;
     extern const double dpr;
     extern const double rpd;
-
-    extern const float dprf;
-    extern const float rpdf;
 }
 
 // Utilities useful when interacting with CSPICE
