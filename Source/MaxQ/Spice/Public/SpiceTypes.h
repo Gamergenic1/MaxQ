@@ -860,6 +860,16 @@ struct SPICE_API FSSpeed
         return *this;
     }
 
+    static inline FSSpeed FromKilometersPerSecond(double KilometersPerSecond)
+    {
+        return FSSpeed(KilometersPerSecond);
+    }
+
+    static inline FSSpeed FromMetersPerSecond(double MetersPerSecond)
+    {
+        return FSSpeed(MetersPerSecond * FSDistance_M_to_km);
+    }
+
     static const FSSpeed Zero;
     static const FSSpeed OneKmps;
 };
@@ -1296,6 +1306,11 @@ struct SPICE_API FSEphemerisPeriod
     /// <returns>Seconds</returns>
     inline double AsSpiceDouble() const { return seconds; }
     inline double AsSeconds() const { return seconds; }
+
+    static inline FSEphemerisPeriod FromSeconds(double InSeconds)
+    {
+        return FSEphemerisPeriod(InSeconds);
+    }
 
     static const FSEphemerisPeriod Zero;
     static const FSEphemerisPeriod Day;
@@ -3861,7 +3876,7 @@ public:
     }
 
     FSTwoLineElements(
-        double(_elems)[10]
+        double(&_elems)[10]
     )
     {
         elems.Init(0., 10);
@@ -3869,7 +3884,7 @@ public:
         FMemory::Memcpy(elems.GetData(), _elems, 10 * sizeof(double));
     }
 
-    void CopyTo(double(_elems)[10]) const;
+    void CopyTo(double(&_elems)[10]) const;
 
     FSAngle M0() const { return FSAngle(elems[XMO]); }
     FSAngularRate N() const { return FSAngularRate(elems[XNO]/60.); }
@@ -3889,13 +3904,13 @@ public:
     {
     }
 
-    FSTLEGeophysicalConstants(double(_geophs)[8])
+    FSTLEGeophysicalConstants(double(&_geophs)[8])
     {
         geophs.Init(0., 8);
         FMemory::Memcpy(geophs.GetData(), _geophs, 8 * sizeof(double));
     }
 
-    void CopyTo(double(_geophs)[8]) const;
+    void CopyTo(double(&_geophs)[8]) const;
 };
 
 
