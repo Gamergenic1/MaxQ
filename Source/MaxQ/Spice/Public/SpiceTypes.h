@@ -585,10 +585,6 @@ public:
     static const FSDistance OneMeter;
 };
 
-// Don't leak preprocessor definitions, which may affect jumbo/unity builds.
-#undef FSDistance_km_to_M
-#undef FSDistance_M_to_km
-
 static inline bool operator<(const FSDistance& lhs, const FSDistance& rhs)
 {
     return lhs.km < rhs.km;
@@ -5163,3 +5159,7 @@ public:
             ))
     static FSQuaternion Conv_SRotationMatrixToSQuaternion(const FSRotationMatrix& value);
 };
+
+// Don't leak preprocessor definitions, which may affect jumbo/unity builds.
+#undef FSDistance_km_to_M
+#undef FSDistance_M_to_km
