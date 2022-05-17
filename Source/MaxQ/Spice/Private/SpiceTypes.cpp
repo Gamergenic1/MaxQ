@@ -740,11 +740,11 @@ const char* USpiceTypes::toString(ES_CoordinateName coord)
 }
 
 
-void FSTwoLineElements::CopyTo(double(_elems)[10]) const
+void FSTwoLineElements::CopyTo(double(&_elems)[10]) const
 {
     if (elems.Num() == 10)
     {
-        FMemory::Memcpy(_elems, elems.GetData(),sizeof(_elems));
+        FMemory::Memcpy(_elems, elems.GetData(),sizeof(double[10]));
     }
     else
     {
@@ -755,11 +755,11 @@ void FSTwoLineElements::CopyTo(double(_elems)[10]) const
 }
 
 
-void FSTLEGeophysicalConstants::CopyTo(double(_geophs)[8]) const
+void FSTLEGeophysicalConstants::CopyTo(double(&_geophs)[8]) const
 {
     if (geophs.Num() == 8)
     {
-        FMemory::Memcpy(_geophs, geophs.GetData(), sizeof(double));
+        FMemory::Memcpy(_geophs, geophs.GetData(), sizeof(double[8]));
     }
     else
     {
