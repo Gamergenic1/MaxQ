@@ -7,7 +7,7 @@ if not exist "%1\src\cspice\zzsecprt.c" (
 
 SET _CL_=/nologo /Zi
 SET _LINK_=/NOLOGO /MD /DEBUG
-cd "%1"
+cd /D "%1"
 
 echo push
 pushd .
