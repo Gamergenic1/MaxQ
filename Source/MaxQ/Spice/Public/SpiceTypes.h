@@ -985,9 +985,9 @@ public:
     // Let's use the CSPICE version of pi.  Since this is a header file, and we
     // don't want other modules to require the spice headers to use this module,
     // we'll need to bounce the constructor definitions out to a cpp file.
-    inline FSAngle();
+    FSAngle();
 
-    inline FSAngle(double __radians);
+    FSAngle(double __radians);
 
 
     inline FSAngle(const FSAngle& other)
@@ -3810,7 +3810,7 @@ struct SPICE_API FSPKType15Observation
     {
         epoch = _epoch;
         tp = _tp;
-        pa = pa;
+        pa = _pa;
         p = _p;
         ecc = _ecc;
         j2flg = _j2flg;
@@ -4946,23 +4946,23 @@ public:
     // From SPICE to UE
     template<typename T> static FVector Swizzle(const T& value);
 
-    template<> static FVector Swizzle<FSDimensionlessVector>(const FSDimensionlessVector& value)
+    template<> FVector Swizzle<FSDimensionlessVector>(const FSDimensionlessVector& value)
     {
         return FVector((FVector::FReal)value.y, (FVector::FReal)value.x, (FVector::FReal)value.z);
 
     }
 
-    template<> static FVector Swizzle<FSDistanceVector>(const FSDistanceVector& value)
+    template<> FVector Swizzle<FSDistanceVector>(const FSDistanceVector& value)
     {
         return FVector((FVector::FReal)value.y.km, (FVector::FReal)value.x.km, (FVector::FReal)value.z.km);
     }
 
-    template<> static FVector Swizzle<FSVelocityVector>(const FSVelocityVector& value)
+    template<> FVector Swizzle<FSVelocityVector>(const FSVelocityVector& value)
     {
         return FVector((FVector::FReal)value.dy.kmps, (FVector::FReal)value.dx.kmps, (FVector::FReal)value.dz.kmps);
     }
 
-    template<> static FVector Swizzle<FSAngularVelocity>(const FSAngularVelocity& value)
+    template<> FVector Swizzle<FSAngularVelocity>(const FSAngularVelocity& value)
     {
         // (Going from RHS/LHS negates angular velocities...)
         return FVector(-(FVector::FReal)value.y.radiansPerSecond, -(FVector::FReal)value.x.radiansPerSecond, -(FVector::FReal)value.z.radiansPerSecond);
@@ -4971,22 +4971,22 @@ public:
     // From UE to SPICE
     template<typename T> static void Swizzle(const FVector& in, T& out);
     
-    template<> static void Swizzle<FSDimensionlessVector>(const FVector& in,  FSDimensionlessVector& out)
+    template<> void Swizzle<FSDimensionlessVector>(const FVector& in,  FSDimensionlessVector& out)
     {
         out = FSDimensionlessVector(in.Y, in.X, in.Z);
     }
 
-    template<> static void Swizzle<FSDistanceVector>(const FVector& in, FSDistanceVector& out)
+    template<> void Swizzle<FSDistanceVector>(const FVector& in, FSDistanceVector& out)
     {
         out = FSDistanceVector(in.Y, in.X, in.Z);
     }
 
-    template<> static void Swizzle<FSVelocityVector>(const FVector& in, FSVelocityVector& out)
+    template<> void Swizzle<FSVelocityVector>(const FVector& in, FSVelocityVector& out)
     {
         out = FSVelocityVector(in.Y, in.X, in.Z);
     }
 
-    template<> static void Swizzle<FSAngularVelocity>(const FVector& in, FSAngularVelocity& out)
+    template<> void Swizzle<FSAngularVelocity>(const FVector& in, FSAngularVelocity& out)
     {
         // (Going from LHS/RHS negates angular velocities...)
         out = FSAngularVelocity(FSAngularRate(-in.Y), FSAngularRate(-in.X), FSAngularRate(-in.Z));

@@ -56,7 +56,7 @@ struct FK2Conversion
         Out = FK2Type(other.Out);
     }
 
-    FK2Conversion& FK2Conversion::operator= (const FK2Conversion& other)
+    FK2Conversion& operator= (const FK2Conversion& other)
     {
         // self-assignment guard
         if (this == &other)

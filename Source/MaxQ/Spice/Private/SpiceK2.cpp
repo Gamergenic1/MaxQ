@@ -6,6 +6,7 @@
 // GitHub:         https://github.com/Gamergenic1/MaxQ/ 
 
 #include "SpiceK2.h"
+#include "SpicePlatformDefs.h"
 #include "Spice.h"
 #include "SpiceUtilities.h"
 
@@ -16,7 +17,6 @@ extern "C"
 }
 PRAGMA_POP_PLATFORM_DEFAULT_PACKING
 
-#define StackAlloc _alloca
 
 
 double USpiceK2::bodvrd_double_K2(

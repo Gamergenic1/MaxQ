@@ -60,7 +60,7 @@ struct FK2Type
         Container = other.Container;
     }
 
-    FK2Type& FK2Type::operator= (const FK2Type& other)
+    FK2Type& operator= (const FK2Type& other)
     {
         // self-assignment guard
         if (this == &other)

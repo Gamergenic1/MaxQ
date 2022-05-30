@@ -5,8 +5,6 @@
 // Documentation:  https://maxq.gamergenic.com/
 // GitHub:         https://github.com/Gamergenic1/MaxQ/ 
 
-#pragma once
-
 #include "K2Type.h"
 
 

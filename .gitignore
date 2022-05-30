@@ -82,3 +82,4 @@ Content/Spice/Common/*
 Content/Simple/*
 Content/Common/*
 ExternalTests/*
+*.DS_Store

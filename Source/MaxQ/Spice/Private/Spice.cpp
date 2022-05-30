@@ -6,14 +6,9 @@
 // GitHub:         https://github.com/Gamergenic1/MaxQ/ 
 
 #include "Spice.h"
+#include "SpicePlatformDefs.h"
 #include "SpiceUtilities.h"
 #include "Misc/Paths.h"
-
-// Set the working directory locally inside furnsh?
-// This allows meta-kernels to load files in the same directory.
-#if PLATFORM_WINDOWS
-#define SET_WORKING_DIRECTORY_IN_FURNSH 1
-#endif
 
 PRAGMA_PUSH_PLATFORM_DEFAULT_PACKING
 extern "C"
@@ -25,13 +20,11 @@ extern "C"
 }
 PRAGMA_POP_PLATFORM_DEFAULT_PACKING
 
-
 // Local #defines
 // UE has build acceleration that concatenates multiple source files.
 // A historical problem with that is #defines leaking from one cpp to the next.
 // If these were moved to a .h file they couldn't be #undefed at the end.
 // May need a little rewrite for any platforms that don't support stack allocations.
-#define StackAlloc _alloca
 #define LONG_MESSAGE_MAX_LENGTH 1841
 
 
@@ -189,13 +182,13 @@ void USpice::init_all()
     clear_all();
 
     char szBuffer[LONG_MESSAGE_MAX_LENGTH];
-    strcpy_s(szBuffer, "SHORT,LONG");
+    SpiceStringCopy(szBuffer, "SHORT,LONG");
     errprt_c("SET", sizeof(szBuffer), szBuffer);
 
-    strcpy_s(szBuffer, "REPORT");
+    SpiceStringCopy(szBuffer, "REPORT");
     erract_c("SET", sizeof(szBuffer), szBuffer);
 
-    strcpy_s(szBuffer, "NULL");
+    SpiceStringCopy(szBuffer, "NULL");
     errdev_c("SET", sizeof(szBuffer), szBuffer);
 
     UnexpectedErrorCheck();
@@ -238,20 +231,20 @@ Exceptions
 */
 void USpice::get_erract(ES_ErrorAction& Result)
 {
-    char szBuffer[WINDOWS_MAX_PATH];
+    char szBuffer[SPICE_MAX_PATH];
     ZeroOut(szBuffer);
 
-    erract_c("GET", WINDOWS_MAX_PATH, szBuffer);
+    erract_c("GET", SPICE_MAX_PATH, szBuffer);
 
-    if (!_stricmp(szBuffer, "REPORT"))
+    if (!SpiceStringCompare(szBuffer, "REPORT"))
     {
         Result = ES_ErrorAction::Report;
     }
-    else if (!_stricmp(szBuffer, "RETURN"))
+    else if (!SpiceStringCompare(szBuffer, "RETURN"))
     {
         Result = ES_ErrorAction::Return;
     }
-    else if (!_stricmp(szBuffer, "IGNORE"))
+    else if (!SpiceStringCompare(szBuffer, "IGNORE"))
     {
         Result = ES_ErrorAction::Ignore;
     }
@@ -267,22 +260,22 @@ void USpice::get_erract(ES_ErrorAction& Result)
 
 void USpice::set_erract(ES_ErrorAction Action)
 {
-    char szAction[WINDOWS_MAX_PATH];
+    char szAction[SPICE_MAX_PATH];
 
     switch (Action)
     {
     case ES_ErrorAction::Report:
-        strcpy_s(szAction, "REPORT");
+        SpiceStringCopy(szAction, "REPORT");
         break;
     case ES_ErrorAction::Return:
-        strcpy_s(szAction, "RETURN");
+        SpiceStringCopy(szAction, "RETURN");
         break;
     case ES_ErrorAction::Ignore:
-        strcpy_s(szAction, "IGNORE");
+        SpiceStringCopy(szAction, "IGNORE");
         break;
     case ES_ErrorAction::Abort:
     default:
-        strcpy_s(szAction, "ABORT");
+        SpiceStringCopy(szAction, "ABORT");
         break;
     }
 
@@ -316,16 +309,16 @@ Exceptions
 
 void USpice::get_errdev(ES_ErrorDevice& device)
 {
-    char szBuffer[WINDOWS_MAX_PATH];
+    char szBuffer[SPICE_MAX_PATH];
     ZeroOut(szBuffer);
 
     errdev_c("GET", sizeof(szBuffer), szBuffer);
 
-    if (!_stricmp(szBuffer, "NULL"))
+    if (!SpiceStringCompare(szBuffer, "NULL"))
     {
         device = ES_ErrorDevice::Null;
     }
-    else if (!_stricmp(szBuffer, "SCREEN"))
+    else if (!SpiceStringCompare(szBuffer, "SCREEN"))
     {
         device = ES_ErrorDevice::Screen;
     }
@@ -362,28 +355,28 @@ Exceptions
 
 void USpice::set_errdev(ES_ErrorDevice Device, const FString& LogFilePath)
 {
-    char szBuffer[WINDOWS_MAX_PATH];
+    char szBuffer[SPICE_MAX_PATH];
     ZeroOut(szBuffer);
 
     if ((uint8)Device & (uint8)ES_ErrorDevice::LogFile)
     {
-        strcpy_s(szBuffer, TCHAR_TO_ANSI(*LogFilePath));
+        SpiceStringCopy(szBuffer, TCHAR_TO_ANSI(*LogFilePath));
     }
     else
     {
         switch (Device)
         {
         case ES_ErrorDevice::Screen:
-            strcpy_s(szBuffer, "SCREEN");
+            SpiceStringCopy(szBuffer, "SCREEN");
             break;
         case ES_ErrorDevice::Null:
         default:
-            strcpy_s(szBuffer, "NULL");
+            SpiceStringCopy(szBuffer, "NULL");
             break;
         }
     }
 
-    errdev_c("SET", WINDOWS_MAX_PATH, szBuffer);
+    errdev_c("SET", SPICE_MAX_PATH, szBuffer);
 
     UnexpectedErrorCheck();
 }
@@ -412,10 +405,10 @@ Exceptions
 
 void USpice::get_errprt(FString& message)
 {
-    char szBuffer[WINDOWS_MAX_PATH];
+    char szBuffer[SPICE_MAX_PATH];
     ZeroOut(szBuffer);
 
-    errprt_c("GET", WINDOWS_MAX_PATH, szBuffer);
+    errprt_c("GET", SPICE_MAX_PATH, szBuffer);
     message = FString(szBuffer);
 
     UnexpectedErrorCheck();
@@ -444,7 +437,7 @@ Exceptions
 */
 void USpice::set_errprt(ES_Items items)
 {
-    char szBuffer[WINDOWS_MAX_PATH];
+    char szBuffer[SPICE_MAX_PATH];
     ZeroOut(szBuffer);
 
     if ((uint8)items & (uint8)ES_Items::Default)
@@ -455,29 +448,29 @@ void USpice::set_errprt(ES_Items items)
     bool commaPrepened = false;
     if ((uint8)items & (uint8)ES_Items::Short)
     {
-        if (commaPrepened) strcpy_s(szBuffer, ", ");
-        strcpy_s(szBuffer, "SHORT");
+        if (commaPrepened) SpiceStringConcat(szBuffer, ", ");
+        SpiceStringConcat(szBuffer, "SHORT");
         commaPrepened |= true;
     }
 
     if ((uint8)items & (uint8)ES_Items::Explain)
     {
-        if (commaPrepened) strcpy_s(szBuffer, ", ");
-        strcpy_s(szBuffer, "EXPLAIN");
+        if (commaPrepened) SpiceStringConcat(szBuffer, ", ");
+        SpiceStringConcat(szBuffer, "EXPLAIN");
         commaPrepened |= true;
     }
 
     if ((uint8)items & (uint8)ES_Items::Long)
     {
-        if (commaPrepened) strcpy_s(szBuffer, ", ");
-        strcpy_s(szBuffer, "LONG");
+        if (commaPrepened) SpiceStringConcat(szBuffer, ", ");
+        SpiceStringConcat(szBuffer, "LONG");
         commaPrepened |= true;
     }
 
     if ((uint8)items & (uint8)ES_Items::Traceback)
     {
-        if (commaPrepened) strcpy_s(szBuffer, ", ");
-        strcpy_s(szBuffer, "TRACEBACK");
+        if (commaPrepened) SpiceStringConcat(szBuffer, ", ");
+        SpiceStringConcat(szBuffer, "TRACEBACK");
         commaPrepened |= true;
     }
 
@@ -648,14 +641,14 @@ void USpice::bodc2n(
     FString& name
 )
 {
-    SpiceChar szBuffer[WINDOWS_MAX_PATH];
+    SpiceChar szBuffer[SPICE_MAX_PATH];
     ZeroOut(szBuffer);
 
     SpiceBoolean _found = SPICEFALSE;
 
     bodc2n_c(
         (SpiceInt)code,
-        WINDOWS_MAX_PATH,
+        SPICE_MAX_PATH,
         szBuffer,
         &_found
     );
@@ -1994,7 +1987,7 @@ void USpice::dafac(
     {
         SpiceChar* lineBuffer = _buffer + maxCommentLineLength * i;
         // NOTE:!!  Assumes SpiceChar == char!!   should assert sizeof(SpiceChar) == 1.
-        strncpy_s(lineBuffer, maxCommentLineLength, TCHAR_TO_ANSI(*comments[i]), maxCommentLineLength);
+        SpiceStringCopy3(lineBuffer, maxCommentLineLength, TCHAR_TO_ANSI(*comments[i]));
     }
 
     // Inputs
@@ -2076,7 +2069,7 @@ void USpice::dafec(
 
     // Buffer stuff...
     SpiceInt _bufsiz = 20;
-    SpiceInt _lenout = WINDOWS_MAX_PATH;
+    SpiceInt _lenout = SPICE_MAX_PATH;
     SpiceInt _n = 0;
     void* _buffer;
 
@@ -2831,7 +2824,7 @@ void USpice::etcal(
 )
 {
     // Buffers
-    SpiceChar szBuffer[WINDOWS_MAX_PATH];
+    SpiceChar szBuffer[SPICE_MAX_PATH];
     ZeroOut(szBuffer);
 
     // Inputs
@@ -2923,29 +2916,29 @@ void USpice::et2lst(
 )
 {
     // Buffers
-    SpiceChar szTime[WINDOWS_MAX_PATH];
+    SpiceChar szTime[SPICE_MAX_PATH];
     ZeroOut(szTime);
 
-    SpiceChar szAmPm[WINDOWS_MAX_PATH];
+    SpiceChar szAmPm[SPICE_MAX_PATH];
     ZeroOut(szAmPm);
 
     // Inputs
     SpiceDouble        _et = et.seconds;
     SpiceInt           _body = body;
     SpiceDouble        _lon = lon.AsSpiceDouble();
-    SpiceChar* _type;
+    ConstSpiceChar* _type;
     SpiceInt           _timlen = sizeof(szTime);
     SpiceInt           _ampmlen = sizeof(szAmPm);
     switch (type)
     {
     case ES_LongitudeType::Planetocentric:
-        _type = "PLANETOCENTRIC";
+        _type = (ConstSpiceChar*)"PLANETOCENTRIC";
         break;
     case ES_LongitudeType::Planetographic:
-        _type = "PLANETOGRAPHIC";
+        _type = (ConstSpiceChar*)"PLANETOGRAPHIC";
         break;
     default:
-        _type = "";
+        _type = (ConstSpiceChar*)"";
         break;
     }
 
@@ -3025,7 +3018,7 @@ void USpice::et2utc(
 )
 {
     // Buffers
-    SpiceChar szUtc[WINDOWS_MAX_PATH];
+    SpiceChar szUtc[SPICE_MAX_PATH];
     ZeroOut(szUtc);
 
     // Inputs
@@ -3115,7 +3108,6 @@ void USpice::eul2m(
    radians, not x radians.  Applying the matrix to a vector yields
    the vector's representation relative to the rotated coordinate
    system
-/*
 * Exceptions
 
    All erroneous inputs are diagnosed by routines in the call
@@ -3205,10 +3197,10 @@ void USpice::getelm(
     )
 {
     SpiceInt     _frstyr = frstyr;
-    SpiceInt     _lineln = WINDOWS_MAX_PATH;
-    SpiceChar    _lines[2][WINDOWS_MAX_PATH];
-    strcpy_s(_lines[0], TCHAR_TO_ANSI(*firstLine));
-    strcpy_s(_lines[1], TCHAR_TO_ANSI(*secondLine));
+    SpiceInt     _lineln = SPICE_MAX_PATH;
+    SpiceChar    _lines[2][SPICE_MAX_PATH];
+    SpiceStringCopy(_lines[0], TCHAR_TO_ANSI(*firstLine));
+    SpiceStringCopy(_lines[1], TCHAR_TO_ANSI(*secondLine));
 
     SpiceDouble _epoch = 0;
     SpiceDouble _elems[10]; ZeroOut(_elems);
@@ -3367,7 +3359,7 @@ void USpice::gcpool(
     ConstSpiceChar* _name = TCHAR_TO_ANSI(*name);
     SpiceInt        _start = start;
     SpiceInt        _room = room;
-    SpiceInt        _lenout = WINDOWS_MAX_PATH;
+    SpiceInt        _lenout = SPICE_MAX_PATH;
     // Outputs
     SpiceInt        _n = 0;
     size_t buffer_size = _lenout * _room * sizeof(SpiceChar);
@@ -3447,14 +3439,14 @@ void USpice::frmnam(
     FString& frname
 )
 {
-    SpiceChar szBuffer[WINDOWS_MAX_PATH];
+    SpiceChar szBuffer[SPICE_MAX_PATH];
     ZeroOut(szBuffer);
 
     // Input
     SpiceInt   _frcode = (SpiceInt)frcode;
    
     // Outputs
-    SpiceInt   _lenout = WINDOWS_MAX_PATH;
+    SpiceInt   _lenout = SPICE_MAX_PATH;
     SpiceChar* _frname = szBuffer;
 
     // Invocation
@@ -3804,14 +3796,14 @@ void USpice::getfat(
 {
     ConstSpiceChar* _file = TCHAR_TO_ANSI(*toPath(fileRelativePath));
     
-    SpiceChar szArchBuffer[WINDOWS_MAX_PATH];
+    SpiceChar szArchBuffer[SPICE_MAX_PATH];
     ZeroOut(szArchBuffer);
     
-    SpiceChar szTypeBuffer[WINDOWS_MAX_PATH];
+    SpiceChar szTypeBuffer[SPICE_MAX_PATH];
     ZeroOut(szTypeBuffer);
     
-    SpiceInt        _arclen = WINDOWS_MAX_PATH;
-    SpiceInt        _typlen = WINDOWS_MAX_PATH;
+    SpiceInt        _arclen = SPICE_MAX_PATH;
+    SpiceInt        _typlen = SPICE_MAX_PATH;
     SpiceChar*      _arch = szArchBuffer;
     SpiceChar*      _type = szTypeBuffer;
 
@@ -4987,7 +4979,7 @@ void USpice::gnpool(
     ConstSpiceChar* _name = TCHAR_TO_ANSI(*name);
     SpiceInt        _start = start;
     SpiceInt        _room = room;
-    SpiceInt        _lenout = WINDOWS_MAX_PATH;
+    SpiceInt        _lenout = SPICE_MAX_PATH;
     // Outputs
     SpiceInt        _n = 0;
     size_t buffer_size = _lenout * _room * sizeof(SpiceChar);
@@ -5392,7 +5384,7 @@ void USpice::timout(
     const FString& pictur
 )
 {
-    SpiceChar szBuffer[WINDOWS_MAX_PATH];
+    SpiceChar szBuffer[SPICE_MAX_PATH];
     ZeroOut(szBuffer);
 
     timout_c(et.seconds, TCHAR_TO_ANSI(*pictur), sizeof(szBuffer), szBuffer);
@@ -5418,7 +5410,7 @@ void USpice::tparse(
 )
 {
     // Buffer
-    SpiceChar szBuffer[WINDOWS_MAX_PATH];
+    SpiceChar szBuffer[SPICE_MAX_PATH];
     ZeroOut(szBuffer);
 
     // Inputs
@@ -5432,7 +5424,7 @@ void USpice::tparse(
 
     tparse_c(_string, _lenout, &_sp2000, _errmsg);
 
-    if (strnlen_s(_errmsg, _lenout))
+    if (SpiceStringLengthN(_errmsg, _lenout))
     {
         ErrorMessage = FString(_errmsg);
         ResultCode = ES_ResultCode::Error;
@@ -7285,7 +7277,7 @@ void USpice::pcpool_list(
         const FString& fstringValue = cvals[i];
         const char* src = TCHAR_TO_ANSI(*fstringValue);
         char* dest = (char*)buffer + i * string_size;
-        strcpy_s(dest, buffer_size, src);
+        SpiceStringCopy3(dest, buffer_size, src);
     }
 
     // Inputs
@@ -8322,7 +8314,7 @@ void USpice::scdecd(
 )
 {
     // Buffers
-    SpiceChar szBuffer[WINDOWS_MAX_PATH];  ZeroOut(szBuffer);
+    SpiceChar szBuffer[SPICE_MAX_PATH];  ZeroOut(szBuffer);
 
     // Inputs
     SpiceInt    _sc = sc;
@@ -8444,7 +8436,7 @@ void USpice::sce2s(
 )
 {
     // Buffers
-    SpiceChar szBuffer[WINDOWS_MAX_PATH];  ZeroOut(szBuffer);
+    SpiceChar szBuffer[SPICE_MAX_PATH];  ZeroOut(szBuffer);
 
     // Inputs
     SpiceInt    _sc = sc;
@@ -8619,7 +8611,7 @@ void USpice::scfmt(
 )
 {
     // Buffers
-    SpiceChar szBuffer[WINDOWS_MAX_PATH];  ZeroOut(szBuffer);
+    SpiceChar szBuffer[SPICE_MAX_PATH];  ZeroOut(szBuffer);
 
     // Inputs
     SpiceInt    _sc = sc;
@@ -10535,10 +10527,10 @@ void USpice::surfpt(
     SpiceDouble _c = c.AsSpiceDouble();
     // Output
     SpiceDouble _point[3];  ZeroOut(_point);
-    SpiceBoolean* _found = false;
+    SpiceBoolean _found = false;
 
     // Invocation
-    surfpt_c(_positn, _u, _a, _b, _c, _point, _found);
+    surfpt_c(_positn, _u, _a, _b, _c, _point, &_found);
 
     // Return Value
     point = FSDistanceVector(_point);
@@ -10774,17 +10766,17 @@ void USpice::tpictr(
 )
 {
     // Buffers
-    SpiceChar szPictur[WINDOWS_MAX_PATH];
+    SpiceChar szPictur[SPICE_MAX_PATH];
     ZeroOut(szPictur);
-    SpiceChar szErrmsg[WINDOWS_MAX_PATH];
+    SpiceChar szErrmsg[SPICE_MAX_PATH];
     ZeroOut(szErrmsg);
 
     // Input
     ConstSpiceChar* _sample = TCHAR_TO_ANSI(*sample);
     
     // Outputs
-    SpiceInt         _pictln = WINDOWS_MAX_PATH;
-    SpiceInt         _errmln = WINDOWS_MAX_PATH;
+    SpiceInt         _pictln = SPICE_MAX_PATH;
+    SpiceInt         _errmln = SPICE_MAX_PATH;
     SpiceChar* _pictur = szPictur;
     SpiceBoolean _ok = SPICEFALSE;
     SpiceChar* _errmsg = szErrmsg;
