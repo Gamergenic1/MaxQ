@@ -6,6 +6,7 @@
 // GitHub:         https://github.com/Gamergenic1/MaxQ/ 
 
 #include "SpiceTypes.h"
+#include "SpicePlatformDefs.h"
 #include "Spice.h"
 #include "SpiceUtilities.h"
 
@@ -952,11 +953,11 @@ FSEphemerisTime USpiceTypes::Conv_StringToSEpheremisTime(const FString& time)
 
 FString USpiceTypes::Conv_SEpheremisTimeToString(const FSEphemerisTime& et)
 {
-    SpiceChar sz[WINDOWS_MAX_PATH];
+    SpiceChar sz[SPICE_MAX_PATH];
     memset(sz, 0, sizeof(sz));
 
-    et2utc_c(et.AsSpiceDouble(), "C", 3, WINDOWS_MAX_PATH, sz);
-    strcat_s(sz, " UTC");
+    et2utc_c(et.AsSpiceDouble(), "C", 3, SPICE_MAX_PATH, sz);
+    SpiceStringConcat(sz, " UTC");
 
     // Do not reset any error state, the downstream computation will detect the signal if the string failed to convert.
     UnexpectedErrorCheck(false);
@@ -1923,8 +1924,13 @@ FString USpiceTypes::formatAngle(const double degrees, ES_AngleFormat format)
         streamObj << std::setfill(L'0') << std::setw(floatFormatPrecision + 2) << std::fixed << std::setprecision(floatFormatPrecision);
         streamObj << (degrees / 360. * twopi_c());
     }
-
+    
+#if PLATFORM_WINDOWS
     return FString(streamObj.str().c_str());
+#else
+    const wchar_t* str = streamObj.str().c_str();
+    return FString((WIDECHAR*)str);
+#endif
 }
 
 

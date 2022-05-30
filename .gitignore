@@ -92,3 +92,4 @@ ExternalTests/MaxQ/Spice_Library/x64/*
 *.user
 !ExternalTests/MaxQ/Spice/Spice.vcxproj.user
 Spice.sln
+*.DS_Store

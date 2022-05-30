@@ -69,7 +69,7 @@ struct FK2OperationNOutput
         Selector = other.Selector;
     }
 
-    FK2OperationNOutput& FK2OperationNOutput::operator= (const FK2OperationNOutput& other)
+    FK2OperationNOutput& operator= (const FK2OperationNOutput& other)
     {
         // self-assignment guard
         if (this == &other)

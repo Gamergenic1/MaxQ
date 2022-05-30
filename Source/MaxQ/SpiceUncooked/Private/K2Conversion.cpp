@@ -5,8 +5,6 @@
 // Documentation:  https://maxq.gamergenic.com/
 // GitHub:         https://github.com/Gamergenic1/MaxQ/ 
 
-#pragma once
-
 #include "K2Conversion.h"
 
 SPICEUNCOOKED_API FK2Conversion FK2Conversion::None() {

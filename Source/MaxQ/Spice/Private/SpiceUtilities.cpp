@@ -7,6 +7,7 @@
 
 #include "SpiceUtilities.h"
 #include "CoreMinimal.h"
+#include "SpicePlatformDefs.h"
 
 // Local #defines
 // UE has build acceleration that concatenates multiple source files.
@@ -14,7 +15,6 @@
 // If these were moved to a .h file they couldn't be #undefed at the end.
 // May need a little rewrite for any platforms that don't support stack allocations.
 #define LONG_MESSAGE_MAX_LENGTH 1841
-#define StackAlloc _alloca
 
 namespace SpiceUtilities
 {
@@ -103,7 +103,7 @@ uint8 ErrorCheck(ES_ResultCode& ResultCode, FString& ErrorMessage)
         szBuffer[0] = '\0';
         getmsg_c("LONG", sizeof(szBuffer), szBuffer);
 
-        if (!strnlen_s(szBuffer, sizeof(szBuffer)))
+        if (!SpiceStringLengthN(szBuffer, sizeof(szBuffer)))
         {
             szBuffer[0] = '\0';
             getmsg_c("SHORT", sizeof(szBuffer), szBuffer);
@@ -131,7 +131,7 @@ uint8 UnexpectedErrorCheck(bool bReset)
         szBuffer[0] = '\0';
         getmsg_c("LONG", sizeof(szBuffer), szBuffer);
 
-        if (!strnlen_s(szBuffer, sizeof(szBuffer)))
+        if (!SpiceStringLengthN(szBuffer, sizeof(szBuffer)))
         {
             szBuffer[0] = '\0';
             getmsg_c("SHORT", sizeof(szBuffer), szBuffer);

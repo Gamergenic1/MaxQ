@@ -34,7 +34,7 @@ public class SpiceTarget : TargetRules
             // Note :  If the step fails, since it's a prebuild step, these rules will not be rebuilt.
             // So, don't cause a failure here, if you're iterating on these rules.
             // Also, changes to the invocation won't be seen until the following build!
-            System.Console.WriteLine("Rebuilding cspice toolkit lib");
+            System.Console.WriteLine("Rebuilding cspice toolkit lib: {0}", pathToCSpiceLib);
             targetRules.PreBuildSteps.Add("$(ProjectDir)\\" + RelativePathToCSpiceToolkit + "makeall_ue.bat \"$(ProjectDir)\\" + RelativePathToCSpiceToolkit + "\"");
         }
         else

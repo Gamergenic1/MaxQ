@@ -28,6 +28,12 @@ public class CSpice_Library : ModuleRules
             PublicDefinitions.Add("OMIT_BLANK_CC");
             PublicDefinitions.Add("NON_ANSI_STDIO");
         }
+        else if (Target.Platform == UnrealTargetPlatform.Mac)
+        {
+//            PublicDefinitions.Add("MSDOS");
+//            PublicDefinitions.Add("OMIT_BLANK_CC");
+//            PublicDefinitions.Add("NON_ANSI_STDIO");
+        }
         /*
         Add conditionals for any other platforms you want to support via recompilation here:
         else if (Target.Platform == UnrealTargetPlatform.XXXX)
@@ -59,7 +65,14 @@ public class CSpice_Library : ModuleRules
 
     static public string CSpiceLibPath(ReadOnlyTargetRules targetRules)
     {
-        string relativePathToCSpiceLib = "Source\\MaxQ\\CSpice_Library\\lib\\" + targetRules.Platform.ToString() + "\\cspice.lib";
+        string libName = "\\cspice.lib";
+        
+        if (targetRules.Platform == UnrealTargetPlatform.Mac)
+        {
+            libName = "/cspice.a";
+        }
+        
+        string relativePathToCSpiceLib = "Source/MaxQ/CSpice_Library/lib/" + targetRules.Platform.ToString() + libName;
 
         return Path.Combine(targetRules.ProjectFile.Directory.FullName, relativePathToCSpiceLib);
     }
