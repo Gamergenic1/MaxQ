@@ -20,6 +20,7 @@
 #define SpiceStringCompare _stricmp
 #define SpiceStringLengthN strnlen_s
 #define SPICE_MAX_PATH WINDOWS_MAX_PATH
+#define SpiceStaticPartialTemplate static
 #elif PLATFORM_MAC
 #include <string.h>
 #define StackAlloc alloca
@@ -32,4 +33,5 @@
 #define SPICE_MAX_PATH 255
 #define PRAGMA_PUSH_PLATFORM_DEFAULT_PACKING
 #define PRAGMA_POP_PLATFORM_DEFAULT_PACKING
+#define SpiceStaticPartialTemplate 
 #endif
