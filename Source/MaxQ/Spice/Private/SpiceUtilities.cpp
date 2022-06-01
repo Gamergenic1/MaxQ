@@ -152,4 +152,3 @@ uint8 UnexpectedErrorCheck(bool bReset)
 // Don't leak #define's
 // UE has Unity-build-acceleration which concatenates multiple source files
 #undef LONG_MESSAGE_MAX_LENGTH
-#undef StackAlloc 

@@ -180,8 +180,8 @@ void USpice::init_all()
 {
     reset_c();
     clear_all();
-
     char szBuffer[LONG_MESSAGE_MAX_LENGTH];
+    
     SpiceStringCopy(szBuffer, "SHORT,LONG");
     errprt_c("SET", sizeof(szBuffer), szBuffer);
 
@@ -12313,4 +12313,3 @@ void USpice::xpose(
 // Don't leak #define's
 // UE has Unity-build-acceleration which concatenates multiple source files
 #undef LONG_MESSAGE_MAX_LENGTH 
-#undef StackAlloc 
