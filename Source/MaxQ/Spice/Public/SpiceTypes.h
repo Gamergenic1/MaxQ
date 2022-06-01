@@ -4224,27 +4224,27 @@ public:
 
     static int FloatFormatPrecision;
 
-    UFUNCTION(BlueprintCallable, Category = "Spice|Api|Stringifier", meta = (ToolTip = "Set precision used to format floating point values"))
+    UFUNCTION(BlueprintCallable, Category = "MaxQ|Stringifier", meta = (ToolTip = "Set precision used to format floating point values"))
     static void SetFloatToStringPrecision(int _floatPrintPrecision);
 
-    UFUNCTION(BlueprintPure, Category = "Spice|Api|Stringifier", meta = (ToolTip = "double to string (uses SetFloatToStringPrecision)", CompactNodeTitle = "$"))
+    UFUNCTION(BlueprintPure, Category = "MaxQ|Stringifier", meta = (ToolTip = "double to string (uses SetFloatToStringPrecision)", CompactNodeTitle = "$"))
     static FString FormatDouble(double value);
 
-    UFUNCTION(BlueprintPure, Category = "Spice|Api|Stringifier", meta = (ToolTip = "double to string", CompactNodeTitle = "$"))
+    UFUNCTION(BlueprintPure, Category = "MaxQ|Stringifier", meta = (ToolTip = "double to string", CompactNodeTitle = "$"))
     static FString FormatDoublePrecisely(double value, int precision = 12);
 
-    UFUNCTION(BlueprintPure, Category = "Spice|Api|Stringifier", meta = (ToolTip = "SAngle to string", CompactNodeTitle = "$"))
+    UFUNCTION(BlueprintPure, Category = "MaxQ|Stringifier", meta = (ToolTip = "SAngle to string", CompactNodeTitle = "$"))
     static FString FormatAngle(const FSAngle& value, ES_AngleFormat format = ES_AngleFormat::DD);
 
-    UFUNCTION(BlueprintPure, Category = "Spice|Api|Stringifier", meta = (ToolTip = "SLongLat to string", CompactNodeTitle = "$"))
+    UFUNCTION(BlueprintPure, Category = "MaxQ|Stringifier", meta = (ToolTip = "SLongLat to string", CompactNodeTitle = "$"))
     static FString FormatLonLat(const FSLonLat& value, const FString& separator = TEXT(", "), ES_AngleFormat format = ES_AngleFormat::DD);
 
-    UFUNCTION(BlueprintPure, Category = "Spice|Api|Stringifier", meta = (ToolTip = "Right Ascension, Declination to string", CompactNodeTitle = "$"))
+    UFUNCTION(BlueprintPure, Category = "MaxQ|Stringifier", meta = (ToolTip = "Right Ascension, Declination to string", CompactNodeTitle = "$"))
     static FString FormatRADec(const FSAngle& rightAscension, const FSAngle& declination, const FString& separator = TEXT(", "));
 
     /// <summary>Converts a distance to a double (kilometers)</summary>
     UFUNCTION(BlueprintPure, 
-        Category = "Spice|Api|Types",
+        Category = "MaxQ|Types",
         meta = (
             BlueprintAutocast,
             CompactNodeTitle = "To double (km)",
@@ -4256,7 +4256,7 @@ public:
 
     /// <summary>Converts a double (kilometers) to a distance</summary>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Types",
+        Category = "MaxQ|Types",
         meta = (
             BlueprintAutocast,
             CompactNodeTitle = "From double (km)",
@@ -4268,7 +4268,7 @@ public:
 
     /// <summary>Converts a speed to a double (kilometers/sec)</summary>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Types",
+        Category = "MaxQ|Types",
         meta = (
             BlueprintAutocast,
             CompactNodeTitle = "to double (km/s)",
@@ -4280,7 +4280,7 @@ public:
 
     /// <summary>Converts a double (kilometers/sec) to a speed</summary>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Types",
+        Category = "MaxQ|Types",
         meta = (
             BlueprintAutocast,
             CompactNodeTitle = "from double (km/s)",
@@ -4292,7 +4292,7 @@ public:
 
     /// <summary>Converts a speed to a double (kilometers/sec)</summary>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Types",
+        Category = "MaxQ|Types",
         meta = (
             BlueprintAutocast,
             CompactNodeTitle = "to double (rads)",
@@ -4304,7 +4304,7 @@ public:
 
     /// <summary>Converts a double (kilometers/sec) to a speed</summary>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Types",
+        Category = "MaxQ|Types",
         meta = (
             BlueprintAutocast,
             CompactNodeTitle = "from double (rads)",
@@ -4316,7 +4316,7 @@ public:
 
     /// <summary>Converts a speed to a double (kilometers/sec)</summary>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Types",
+        Category = "MaxQ|Types",
         meta = (
             BlueprintAutocast,
             CompactNodeTitle = "to double (rads/s)",
@@ -4328,7 +4328,7 @@ public:
 
     /// <summary>Converts a double (kilometers/sec) to a speed</summary>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Types",
+        Category = "MaxQ|Types",
         meta = (
             BlueprintAutocast,
             CompactNodeTitle = "from double (rads/s)",
@@ -4340,7 +4340,7 @@ public:
 
     /// <summary>Converts an ephemeris time to a double (sec past J2000)</summary>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Types",
+        Category = "MaxQ|Types",
         meta = (
             BlueprintAutocast,
             CompactNodeTitle = "to double (sec)",
@@ -4351,7 +4351,7 @@ public:
     );
 
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Types",
+        Category = "MaxQ|Types",
         meta = (
             BlueprintAutocast,
             ShortToolTip = "String to Epheremis Time.",
@@ -4360,7 +4360,7 @@ public:
     static FSEphemerisTime Conv_StringToSEpheremisTime(const FString& time);
 
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Types",
+        Category = "MaxQ|Types",
         meta = (
             BlueprintAutocast,
             CompactNodeTitle = "$",
@@ -4369,7 +4369,7 @@ public:
     static FString Conv_SEpheremisTimeToString(const FSEphemerisTime& et);
 
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Types",
+        Category = "MaxQ|Types",
         meta = (
             BlueprintAutocast,
             CompactNodeTitle = "$",
@@ -4381,7 +4381,7 @@ public:
 
     /// <summary>Converts a double (sec past J2000) to an ephemeris time</summary>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Types",
+        Category = "MaxQ|Types",
         meta = (
             BlueprintAutocast,
             CompactNodeTitle = "from double (sec)",
@@ -4393,7 +4393,7 @@ public:
 
     /// <summary>Converts an ephemeris period to a double (sec)</summary>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Types",
+        Category = "MaxQ|Types",
         meta = (
             BlueprintAutocast,
             CompactNodeTitle = "to double (sec)",
@@ -4405,7 +4405,7 @@ public:
 
     /// <summary>Converts a double (sec) to an ephemeris period</summary>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Types",
+        Category = "MaxQ|Types",
         meta = (
             BlueprintAutocast,
             CompactNodeTitle = "from double (sec)",
@@ -4417,7 +4417,7 @@ public:
 
     /// <summary>Converts a mass constant to a double</summary>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Types",
+        Category = "MaxQ|Types",
         meta = (
             BlueprintAutocast,
             CompactNodeTitle = "to double",
@@ -4429,7 +4429,7 @@ public:
 
     /// <summary>Converts a double to a mass constant</summary>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Types",
+        Category = "MaxQ|Types",
         meta = (
             BlueprintAutocast,
             CompactNodeTitle = "from double",
@@ -4441,7 +4441,7 @@ public:
 
     /// <summary>Converts a velocity vector to a dimensionless vector (km/sec)</summary>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Types",
+        Category = "MaxQ|Types",
         meta = (
             BlueprintAutocast,
             CompactNodeTitle = "to dim'less (km/sec)",
@@ -4453,7 +4453,7 @@ public:
 
     /// <summary>Converts a dimensionless vector to a velocity vector (km/sec)</summary>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Types",
+        Category = "MaxQ|Types",
         meta = (
             BlueprintAutocast,
             CompactNodeTitle = "from dim'less (km/sec)",
@@ -4465,7 +4465,7 @@ public:
 
     /// <summary>Converts an euler angle vector (rads) to a dimensionless vector</summary>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Types",
+        Category = "MaxQ|Types",
         meta = (
             BlueprintAutocast,
             ToolTip = "Converts an euler angle vector (rads) to a dimensionless vector"
@@ -4476,7 +4476,7 @@ public:
 
     /// <summary>Converts a dimensionless vector (rad) to an euler angle vector</summary>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Types",
+        Category = "MaxQ|Types",
         meta = (
             BlueprintAutocast,
             ToolTip = "Converts a dimensionless vector (rad) to an euler angle vector"
@@ -4487,7 +4487,7 @@ public:
 
     /// <summary>Converts an angular velocity vector to a dimensionless vector (km/sec)</summary>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Types",
+        Category = "MaxQ|Types",
         meta = (
             BlueprintAutocast,
             ToolTip = "Converts an angular velocity vector to a dimensionless vector (rad/sec)"
@@ -4498,7 +4498,7 @@ public:
 
     /// <summary>Converts a dimensionless vector (km/sec) to an angular velocity vector</summary>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Types",
+        Category = "MaxQ|Types",
         meta = (
             BlueprintAutocast,
             ToolTip = "Converts a dimensionless vector (km/sec) to an angular velocity vector"
@@ -4509,7 +4509,7 @@ public:
 
     /// <summary>Converts a distance vector to a dimensionless vector (km)</summary>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Types",
+        Category = "MaxQ|Types",
         meta = (
             BlueprintAutocast,
             CompactNodeTitle = "to dim'less (km)",
@@ -4521,7 +4521,7 @@ public:
 
     /// <summary>Converts a dimensionless vector (double precision) to a distance vector</summary>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Types",
+        Category = "MaxQ|Types",
         meta = (
             BlueprintAutocast,
             CompactNodeTitle = "from dim'less (km)",
@@ -4532,7 +4532,7 @@ public:
     );
 
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Types",
+        Category = "MaxQ|Types",
         meta = (
             BlueprintAutocast,
             ToolTip = "Converts a dimensionless vector (double precision) to a rectangular state vector"
@@ -4542,7 +4542,7 @@ public:
     );
 
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Types",
+        Category = "MaxQ|Types",
         meta = (
             BlueprintAutocast,
             ToolTip = "Converts a dimensionless vector (double precision) to a cylindrical state vector"
@@ -4552,7 +4552,7 @@ public:
     );
 
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Types",
+        Category = "MaxQ|Types",
         meta = (
             BlueprintAutocast,
             ToolTip = "Converts a dimensionless vector (double precision) to a latitudinal state vector"
@@ -4562,7 +4562,7 @@ public:
     );
 
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Types",
+        Category = "MaxQ|Types",
         meta = (
             BlueprintAutocast,
             ToolTip = "Converts a dimensionless vector (double precision) to a spherical state vector"
@@ -4572,7 +4572,7 @@ public:
     );
 
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Types",
+        Category = "MaxQ|Types",
         meta = (
             BlueprintAutocast,
             ToolTip = "Converts a dimensionless vector (double precision) to a geodetic state vector"
@@ -4583,7 +4583,7 @@ public:
 
 
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Types",
+        Category = "MaxQ|Types",
         meta = (
             BlueprintAutocast,
             ToolTip = "Converts a dimensionless vector (double precision) to a planetographic state vector"
@@ -4593,7 +4593,7 @@ public:
     );
 
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Types",
+        Category = "MaxQ|Types",
         meta = (
             BlueprintAutocast,
             ToolTip = "Converts a rectangular state vector to a dimensionless vector (double precision)"
@@ -4603,7 +4603,7 @@ public:
     );
 
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Types",
+        Category = "MaxQ|Types",
         meta = (
             BlueprintAutocast,
             ToolTip = "Converts a cylindrical  state vector to a dimensionless vector (double precision)"
@@ -4613,7 +4613,7 @@ public:
     );
 
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Types",
+        Category = "MaxQ|Types",
         meta = (
             BlueprintAutocast,
             ToolTip = "Converts a latitudinal state vector to a dimensionless vector (double precision)"
@@ -4623,7 +4623,7 @@ public:
     );
 
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Types",
+        Category = "MaxQ|Types",
         meta = (
             BlueprintAutocast,
             ToolTip = "Converts a spherical state vector to a dimensionless vector (double precision)"
@@ -4633,7 +4633,7 @@ public:
     );
 
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Types",
+        Category = "MaxQ|Types",
         meta = (
             BlueprintAutocast,
             ToolTip = "Converts a geodetic state vector to a dimensionless vector (double precision)"
@@ -4643,7 +4643,7 @@ public:
     );
 
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Types",
+        Category = "MaxQ|Types",
         meta = (
             BlueprintAutocast,
             ToolTip = "Converts a planetographic state vector to a dimensionless vector (double precision)"
@@ -4652,284 +4652,284 @@ public:
         const FSPlanetographicStateVector& value
     );
 
-    UFUNCTION(BlueprintPure, Category = "Spice|Api|Debug", meta = (BlueprintAutocast, ToolTip = "stringifier", Keywords = "string", CompactNodeTitle = "$"))
+    UFUNCTION(BlueprintPure, Category = "MaxQ|Debug", meta = (BlueprintAutocast, ToolTip = "stringifier", Keywords = "string", CompactNodeTitle = "$"))
     static FString Conv_SAngleToString (const FSAngle& value);
 
-    UFUNCTION(BlueprintPure, Category = "Spice|Api|Debug", meta = (BlueprintAutocast, ToolTip = "stringifier", Keywords = "string", CompactNodeTitle = "$"))
+    UFUNCTION(BlueprintPure, Category = "MaxQ|Debug", meta = (BlueprintAutocast, ToolTip = "stringifier", Keywords = "string", CompactNodeTitle = "$"))
     static FString Conv_SDistanceToString(const FSDistance& value);
 
-    UFUNCTION(BlueprintPure, Category = "Spice|Api|Debug", meta = (BlueprintAutocast, ToolTip = "stringifier", Keywords = "string", CompactNodeTitle = "$"))
+    UFUNCTION(BlueprintPure, Category = "MaxQ|Debug", meta = (BlueprintAutocast, ToolTip = "stringifier", Keywords = "string", CompactNodeTitle = "$"))
     static FString Conv_SDistanceVectorToString(const FSDistanceVector& value);
 
-    UFUNCTION(BlueprintPure, Category = "Spice|Api|Debug", meta = (BlueprintAutocast, ToolTip = "stringifier", Keywords = "string", CompactNodeTitle = "$"))
+    UFUNCTION(BlueprintPure, Category = "MaxQ|Debug", meta = (BlueprintAutocast, ToolTip = "stringifier", Keywords = "string", CompactNodeTitle = "$"))
     static FString Conv_SVelocityVectorToString(const FSVelocityVector& value);
 
-    UFUNCTION(BlueprintPure, Category = "Spice|Api|Debug", meta = (BlueprintAutocast, ToolTip = "stringifier", Keywords = "string", CompactNodeTitle = "$"))
+    UFUNCTION(BlueprintPure, Category = "MaxQ|Debug", meta = (BlueprintAutocast, ToolTip = "stringifier", Keywords = "string", CompactNodeTitle = "$"))
     static FString Conv_SStateVectorToString(const FSStateVector& value);
 
-    UFUNCTION(BlueprintPure, Category = "Spice|Api|Debug", meta = (BlueprintAutocast, ToolTip = "stringifier", Keywords = "string", CompactNodeTitle = "$"))
+    UFUNCTION(BlueprintPure, Category = "MaxQ|Debug", meta = (BlueprintAutocast, ToolTip = "stringifier", Keywords = "string", CompactNodeTitle = "$"))
     static FString Conv_SLonLatToString(const FSLonLat& value);
 
-    UFUNCTION(BlueprintPure, Category = "Spice|Api|Debug", meta = (BlueprintAutocast, ToolTip = "stringifier", Keywords = "string", CompactNodeTitle = "$"))
+    UFUNCTION(BlueprintPure, Category = "MaxQ|Debug", meta = (BlueprintAutocast, ToolTip = "stringifier", Keywords = "string", CompactNodeTitle = "$"))
     static FString Conv_SSpeedToString(const FSSpeed& value);
 
-    UFUNCTION(BlueprintPure, Category = "Spice|Api|Debug", meta = (BlueprintAutocast, ToolTip = "stringifier", Keywords = "string", CompactNodeTitle = "$"))
+    UFUNCTION(BlueprintPure, Category = "MaxQ|Debug", meta = (BlueprintAutocast, ToolTip = "stringifier", Keywords = "string", CompactNodeTitle = "$"))
     static FString Conv_SAngularRateToString(const FSAngularRate& value);
 
-    UFUNCTION(BlueprintPure, Category = "Spice|Api|Debug", meta = (BlueprintAutocast, ToolTip = "stringifier", Keywords = "string", CompactNodeTitle = "$"))
+    UFUNCTION(BlueprintPure, Category = "MaxQ|Debug", meta = (BlueprintAutocast, ToolTip = "stringifier", Keywords = "string", CompactNodeTitle = "$"))
     static FString Conv_SDimensionlessVectorToString(const FSDimensionlessVector& value);
 
-    UFUNCTION(BlueprintPure, Category = "Spice|Api|Debug", meta = (BlueprintAutocast, ToolTip = "stringifier", Keywords = "string", CompactNodeTitle = "$"))
+    UFUNCTION(BlueprintPure, Category = "MaxQ|Debug", meta = (BlueprintAutocast, ToolTip = "stringifier", Keywords = "string", CompactNodeTitle = "$"))
     static FString Conv_SDimensionlessStateVectorToString(const FSDimensionlessStateVector& value);
 
-    UFUNCTION(BlueprintPure, Category = "Spice|Api|Debug", meta = (BlueprintAutocast, ToolTip = "stringifier", Keywords = "string", CompactNodeTitle = "$"))
+    UFUNCTION(BlueprintPure, Category = "MaxQ|Debug", meta = (BlueprintAutocast, ToolTip = "stringifier", Keywords = "string", CompactNodeTitle = "$"))
     static FString Conv_SPlanetographicStateVectorToString(const FSPlanetographicStateVector& value);
 
-    UFUNCTION(BlueprintPure, Category = "Spice|Api|Debug", meta = (BlueprintAutocast, ToolTip = "stringifier", Keywords = "string", CompactNodeTitle = "$"))
+    UFUNCTION(BlueprintPure, Category = "MaxQ|Debug", meta = (BlueprintAutocast, ToolTip = "stringifier", Keywords = "string", CompactNodeTitle = "$"))
     static FString Conv_SGeodeticStateVectorToString(const FSGeodeticStateVector& value);
 
-    UFUNCTION(BlueprintPure, Category = "Spice|Api|Debug", meta = (BlueprintAutocast, ToolTip = "stringifier", Keywords = "string", CompactNodeTitle = "$"))
+    UFUNCTION(BlueprintPure, Category = "MaxQ|Debug", meta = (BlueprintAutocast, ToolTip = "stringifier", Keywords = "string", CompactNodeTitle = "$"))
     static FString Conv_SSphericalStateVectorToString(const FSSphericalStateVector& value);
 
-    UFUNCTION(BlueprintPure, Category = "Spice|Api|Debug", meta = (BlueprintAutocast, ToolTip = "stringifier", Keywords = "string", CompactNodeTitle = "$"))
+    UFUNCTION(BlueprintPure, Category = "MaxQ|Debug", meta = (BlueprintAutocast, ToolTip = "stringifier", Keywords = "string", CompactNodeTitle = "$"))
     static FString Conv_SLatitudinalStateVectorToString(const FSLatitudinalStateVector& value);
 
-    UFUNCTION(BlueprintPure, Category = "Spice|Api|Debug", meta = (BlueprintAutocast, ToolTip = "stringifier", Keywords = "string", CompactNodeTitle = "$"))
+    UFUNCTION(BlueprintPure, Category = "MaxQ|Debug", meta = (BlueprintAutocast, ToolTip = "stringifier", Keywords = "string", CompactNodeTitle = "$"))
     static FString Conv_SCylindricalStateVectorToString(const FSCylindricalStateVector& value);
 
-    UFUNCTION(BlueprintPure, Category = "Spice|Api|Debug", meta = (BlueprintAutocast, ToolTip = "stringifier", Keywords = "string", CompactNodeTitle = "$"))
+    UFUNCTION(BlueprintPure, Category = "MaxQ|Debug", meta = (BlueprintAutocast, ToolTip = "stringifier", Keywords = "string", CompactNodeTitle = "$"))
     static FString Conv_SPlanetographicVectorToString(const FSPlanetographicVector& value);
 
-    UFUNCTION(BlueprintPure, Category = "Spice|Api|Debug", meta = (BlueprintAutocast, ToolTip = "stringifier", Keywords = "string", CompactNodeTitle = "$"))
+    UFUNCTION(BlueprintPure, Category = "MaxQ|Debug", meta = (BlueprintAutocast, ToolTip = "stringifier", Keywords = "string", CompactNodeTitle = "$"))
     static FString Conv_SGeodeticVectorToString(const FSGeodeticVector& value);
 
-    UFUNCTION(BlueprintPure, Category = "Spice|Api|Debug", meta = (BlueprintAutocast, ToolTip = "stringifier", Keywords = "string", CompactNodeTitle = "$"))
+    UFUNCTION(BlueprintPure, Category = "MaxQ|Debug", meta = (BlueprintAutocast, ToolTip = "stringifier", Keywords = "string", CompactNodeTitle = "$"))
     static FString Conv_SSphericalVectorToString(const FSSphericalVector& value);
 
-    UFUNCTION(BlueprintPure, Category = "Spice|Api|Debug", meta = (BlueprintAutocast, ToolTip = "stringifier", Keywords = "string", CompactNodeTitle = "$"))
+    UFUNCTION(BlueprintPure, Category = "MaxQ|Debug", meta = (BlueprintAutocast, ToolTip = "stringifier", Keywords = "string", CompactNodeTitle = "$"))
     static FString Conv_SLatitudinalVectorToString(const FSLatitudinalVector& value);
 
-    UFUNCTION(BlueprintPure, Category = "Spice|Api|Debug", meta = (BlueprintAutocast, ToolTip = "stringifier", Keywords = "string", CompactNodeTitle = "$"))
+    UFUNCTION(BlueprintPure, Category = "MaxQ|Debug", meta = (BlueprintAutocast, ToolTip = "stringifier", Keywords = "string", CompactNodeTitle = "$"))
     static FString Conv_SCylindricalVectorToString(const FSCylindricalVector& value);
 
-    UFUNCTION(BlueprintPure, Category = "Spice|Api|Debug", meta = (BlueprintAutocast, ToolTip = "stringifier", Keywords = "string", CompactNodeTitle = "$"))
+    UFUNCTION(BlueprintPure, Category = "MaxQ|Debug", meta = (BlueprintAutocast, ToolTip = "stringifier", Keywords = "string", CompactNodeTitle = "$"))
     static FString Conv_SPlanetographicVectorRatesToString(const FSPlanetographicVectorRates& value);
 
-    UFUNCTION(BlueprintPure, Category = "Spice|Api|Debug", meta = (BlueprintAutocast, ToolTip = "stringifier", Keywords = "string", CompactNodeTitle = "$"))
+    UFUNCTION(BlueprintPure, Category = "MaxQ|Debug", meta = (BlueprintAutocast, ToolTip = "stringifier", Keywords = "string", CompactNodeTitle = "$"))
     static FString Conv_SGeodeticVectorRatesToString(const FSGeodeticVectorRates& value);
 
-    UFUNCTION(BlueprintPure, Category = "Spice|Api|Debug", meta = (BlueprintAutocast, ToolTip = "stringifier", Keywords = "string", CompactNodeTitle = "$"))
+    UFUNCTION(BlueprintPure, Category = "MaxQ|Debug", meta = (BlueprintAutocast, ToolTip = "stringifier", Keywords = "string", CompactNodeTitle = "$"))
     static FString Conv_SSphericalVectorRatesToString(const FSSphericalVectorRates& value);
 
-    UFUNCTION(BlueprintPure, Category = "Spice|Api|Debug", meta = (BlueprintAutocast, ToolTip = "stringifier", Keywords = "string", CompactNodeTitle = "$"))
+    UFUNCTION(BlueprintPure, Category = "MaxQ|Debug", meta = (BlueprintAutocast, ToolTip = "stringifier", Keywords = "string", CompactNodeTitle = "$"))
     static FString Conv_SLatitudinaVectorRatesToString(const FSLatitudinalVectorRates& value);
 
-    UFUNCTION(BlueprintPure, Category = "Spice|Api|Debug", meta = (BlueprintAutocast, ToolTip = "stringifier", Keywords = "string", CompactNodeTitle = "$"))
+    UFUNCTION(BlueprintPure, Category = "MaxQ|Debug", meta = (BlueprintAutocast, ToolTip = "stringifier", Keywords = "string", CompactNodeTitle = "$"))
     static FString Conv_SCylindricalVectorRatesToString(const FSCylindricalVectorRates& value);
 
-    UFUNCTION(BlueprintPure, Category = "Spice|Api|Debug", meta = (BlueprintAutocast, ToolTip = "stringifier", Keywords = "string", CompactNodeTitle = "$"))
+    UFUNCTION(BlueprintPure, Category = "MaxQ|Debug", meta = (BlueprintAutocast, ToolTip = "stringifier", Keywords = "string", CompactNodeTitle = "$"))
     static FString Conv_SConicElementsToString(const FSConicElements& value);
 
 
     /* Multiplication (A * B) */
-    UFUNCTION(BlueprintPure, meta = (DisplayName = "matrix * matrix", CompactNodeTitle = "*", Keywords = "* multiply"), Category = "Spice|Math|Rotation")
+    UFUNCTION(BlueprintPure, meta = (DisplayName = "matrix * matrix", CompactNodeTitle = "*", Keywords = "* multiply"), Category = "MaxQ|Math|Rotation")
     static FSRotationMatrix Multiply_SRotationMatrixSRotationMatrix(const FSRotationMatrix& A, const FSRotationMatrix& B);
 
-    UFUNCTION(BlueprintPure, meta = (DisplayName = "matrix * vector", CompactNodeTitle = "m*vec", Keywords = "* multiply"), Category = "Spice|Math|Rotation")
+    UFUNCTION(BlueprintPure, meta = (DisplayName = "matrix * vector", CompactNodeTitle = "m*vec", Keywords = "* multiply"), Category = "MaxQ|Math|Rotation")
     static FSDimensionlessVector MultiplyVec_SRotationMatrixSDimensionlessVector(const FSRotationMatrix& A, const FSDimensionlessVector& B);
 
-    UFUNCTION(BlueprintPure, meta = (DisplayName = "matrix * distance", CompactNodeTitle = "m*dist", Keywords = "* multiply"), Category = "Spice|Math|Rotation")
+    UFUNCTION(BlueprintPure, meta = (DisplayName = "matrix * distance", CompactNodeTitle = "m*dist", Keywords = "* multiply"), Category = "MaxQ|Math|Rotation")
     static FSDistanceVector MultiplyDist_SRotationMatrixSDistanceVector(const FSRotationMatrix& A, const FSDistanceVector& B);
 
-    UFUNCTION(BlueprintPure, meta = (DisplayName = "matrix * velocity", CompactNodeTitle = "m*vel", Keywords = "* multiply"), Category = "Spice|Math|Rotation")
+    UFUNCTION(BlueprintPure, meta = (DisplayName = "matrix * velocity", CompactNodeTitle = "m*vel", Keywords = "* multiply"), Category = "MaxQ|Math|Rotation")
     static FSVelocityVector MultiplyVel_SRotationMatrixVelocityVector(const FSRotationMatrix& A, const FSVelocityVector& B);
 
-    UFUNCTION(BlueprintPure, meta = (DisplayName = "quaterion * quaterion", CompactNodeTitle = "*", Keywords = "* multiply"), Category = "Spice|Math|Rotation")
+    UFUNCTION(BlueprintPure, meta = (DisplayName = "quaterion * quaterion", CompactNodeTitle = "*", Keywords = "* multiply"), Category = "MaxQ|Math|Rotation")
     static FSQuaternion Multiply_SQuaternionSQuaternion(const FSQuaternion& A, const FSQuaternion& B);
 
 
     /* Addition (A + B) */
-    UFUNCTION(BlueprintPure, meta = (DisplayName = "time + period", CompactNodeTitle = "+", Keywords = "+ add plus"), Category = "Spice|Math|Time")
+    UFUNCTION(BlueprintPure, meta = (DisplayName = "time + period", CompactNodeTitle = "+", Keywords = "+ add plus"), Category = "MaxQ|Math|Time")
     static FSEphemerisTime Add_SEphemerisTimeSEphemerisPeriod(const FSEphemerisTime& A, const FSEphemerisPeriod& B);
 
     /* Addition (A + B) */
-    UFUNCTION(BlueprintPure, meta = (DisplayName = "period + time", CompactNodeTitle = "+", Keywords = "+ add plus"), Category = "Spice|Math|Time")
+    UFUNCTION(BlueprintPure, meta = (DisplayName = "period + time", CompactNodeTitle = "+", Keywords = "+ add plus"), Category = "MaxQ|Math|Time")
     static FSEphemerisTime Add_SEphemerisPeriodSEphemerisTime(const FSEphemerisPeriod& A, const FSEphemerisTime& B);
 
     /** Returns true if A is greater than B (A > B) */
-    UFUNCTION(BlueprintPure, meta = (DisplayName = "SEphemerisTime > SEphemerisTime", CompactNodeTitle = ">", Keywords = "> greater"), Category = "Spice|Math|DateTime")
+    UFUNCTION(BlueprintPure, meta = (DisplayName = "SEphemerisTime > SEphemerisTime", CompactNodeTitle = ">", Keywords = "> greater"), Category = "MaxQ|Math|DateTime")
     static bool Greater_SEphemerisTimeSEphemerisTime(const FSEphemerisTime& A, const FSEphemerisTime& B);
 
     /** Returns true if A is less than B (A < B) */
-    UFUNCTION(BlueprintPure, meta = (DisplayName = "SEphemerisTime < SEphemerisTime", CompactNodeTitle = "<", Keywords = "< less"), Category = "Spice|Math|DateTime")
+    UFUNCTION(BlueprintPure, meta = (DisplayName = "SEphemerisTime < SEphemerisTime", CompactNodeTitle = "<", Keywords = "< less"), Category = "MaxQ|Math|DateTime")
     static bool Less_SEphemerisTimeSEphemerisTime(const FSEphemerisTime& A, const FSEphemerisTime& B);
 
     /* Addition (A + B) */
-    UFUNCTION(BlueprintPure, meta = (DisplayName = "period + period", CompactNodeTitle = "+", Keywords = "+ add plus", CommutativeAssociativeBinaryOperator = "true"), Category = "Spice|Math|Time")
+    UFUNCTION(BlueprintPure, meta = (DisplayName = "period + period", CompactNodeTitle = "+", Keywords = "+ add plus", CommutativeAssociativeBinaryOperator = "true"), Category = "MaxQ|Math|Time")
     static FSEphemerisPeriod Add_SEphemerisPeriodSEphemerisPeriod(const FSEphemerisPeriod& A, const FSEphemerisPeriod& B);
 
     /* Subtraction (A - B) */
-    UFUNCTION(BlueprintPure, meta = (DisplayName = "time - time", CompactNodeTitle = "-", Keywords = "- subtract minus"), Category = "Spice|Math|Time")
+    UFUNCTION(BlueprintPure, meta = (DisplayName = "time - time", CompactNodeTitle = "-", Keywords = "- subtract minus"), Category = "MaxQ|Math|Time")
     static FSEphemerisPeriod Subtract_SEphemerisTimeSEphemerisTime(const FSEphemerisTime& A, const FSEphemerisTime& B);
 
     /* Multiplication (A * B) */
-    UFUNCTION(BlueprintPure, meta = (DisplayName = "double * period", CompactNodeTitle = "*", Keywords = "* multiply"), Category = "Spice|Math|Time")
+    UFUNCTION(BlueprintPure, meta = (DisplayName = "double * period", CompactNodeTitle = "*", Keywords = "* multiply"), Category = "MaxQ|Math|Time")
     static FSEphemerisPeriod Multiply_DoubleSEphemerisPeriod(double A, const FSEphemerisPeriod& B);
 
     /* Multiplication (A * B) */
-    UFUNCTION(BlueprintPure, meta = (DisplayName = "period * double", CompactNodeTitle = "*", Keywords = "* multiply"), Category = "Spice|Math|Time")
+    UFUNCTION(BlueprintPure, meta = (DisplayName = "period * double", CompactNodeTitle = "*", Keywords = "* multiply"), Category = "MaxQ|Math|Time")
     static FSEphemerisPeriod Multiply_SEphemerisPeriodDouble(const FSEphemerisPeriod& A, double B);
 
     /* Division (A / B) */
-    UFUNCTION(BlueprintPure, meta = (DisplayName = "period / double", CompactNodeTitle = "/", Keywords = "/ divide"), Category = "Spice|Math|Time")
+    UFUNCTION(BlueprintPure, meta = (DisplayName = "period / double", CompactNodeTitle = "/", Keywords = "/ divide"), Category = "MaxQ|Math|Time")
     static FSEphemerisPeriod Divide_SEphemerisPeriodDouble(const FSEphemerisPeriod& A, double B);
 
     /* Ratio (A / B) */
-    UFUNCTION(BlueprintPure, meta = (DisplayName = "period ratio", CompactNodeTitle = "ratio", Keywords = "/ divide"), Category = "Spice|Math|Time")
+    UFUNCTION(BlueprintPure, meta = (DisplayName = "period ratio", CompactNodeTitle = "ratio", Keywords = "/ divide"), Category = "MaxQ|Math|Time")
     static double Ratio_SEphemerisPeriod(const FSEphemerisPeriod& A, const FSEphemerisPeriod& B);
 
     /* Modulo (A % B) */
-    UFUNCTION(BlueprintPure, meta = (DisplayName = "period % (double)", CompactNodeTitle = "%", Keywords = "% modulus"), Category = "Spice|Math|Time")
+    UFUNCTION(BlueprintPure, meta = (DisplayName = "period % (double)", CompactNodeTitle = "%", Keywords = "% modulus"), Category = "MaxQ|Math|Time")
     static FSEphemerisPeriod Modulus_SEphemerisPeriodDouble(const FSEphemerisPeriod& A, double B);
 
     //////////////////////
     /* Multiplication (A * B) */
-    UFUNCTION(BlueprintPure, meta = (DisplayName = "distance * double", CompactNodeTitle = "*", Keywords = "* multiply"), Category = "Spice|Math|Distance")
+    UFUNCTION(BlueprintPure, meta = (DisplayName = "distance * double", CompactNodeTitle = "*", Keywords = "* multiply"), Category = "MaxQ|Math|Distance")
     static FSDistance Multiply_SDistanceDouble(const FSDistance& A, double B);
 
     /* Multiplication (A * B) */
-    UFUNCTION(BlueprintPure, meta = (DisplayName = "double * distance", CompactNodeTitle = "*", Keywords = "* multiply"), Category = "Spice|Math|Distance")
+    UFUNCTION(BlueprintPure, meta = (DisplayName = "double * distance", CompactNodeTitle = "*", Keywords = "* multiply"), Category = "MaxQ|Math|Distance")
     static FSDistance Multiply_DoubleSDistance(double A, const FSDistance& B);
 
     /* Division (A / B) */
-    UFUNCTION(BlueprintPure, meta = (DisplayName = "distance / double", CompactNodeTitle = "/", Keywords = "/ divide"), Category = "Spice|Math|Distance")
+    UFUNCTION(BlueprintPure, meta = (DisplayName = "distance / double", CompactNodeTitle = "/", Keywords = "/ divide"), Category = "MaxQ|Math|Distance")
     static FSDistance Divide_SDistanceDouble(const FSDistance& A, double B);
 
     /* Ratio (A / B) */
-    UFUNCTION(BlueprintPure, meta = (DisplayName = "distance ratio", CompactNodeTitle = "ratio", Keywords = "/ divide"), Category = "Spice|Math|Distance")
+    UFUNCTION(BlueprintPure, meta = (DisplayName = "distance ratio", CompactNodeTitle = "ratio", Keywords = "/ divide"), Category = "MaxQ|Math|Distance")
     static double Ratio_SDistance(const FSDistance& A, const FSDistance& B);
 
     /* Subtraction (A - B) */
-    UFUNCTION(BlueprintPure, meta = (DisplayName = "distance - distance", CompactNodeTitle = "-", Keywords = "- subtract minus"), Category = "Spice|Math|Distance")
+    UFUNCTION(BlueprintPure, meta = (DisplayName = "distance - distance", CompactNodeTitle = "-", Keywords = "- subtract minus"), Category = "MaxQ|Math|Distance")
     static FSDistance Subtract_SDistanceSDistance(const FSDistance& A, const FSDistance& B);
 
     /*  Addition (A + B) */
-    UFUNCTION(BlueprintPure, meta = (DisplayName = "distance + distance", CompactNodeTitle = "+", Keywords = "+ add plus", CommutativeAssociativeBinaryOperator = "true"), Category = "Spice|Math|Distance")
+    UFUNCTION(BlueprintPure, meta = (DisplayName = "distance + distance", CompactNodeTitle = "+", Keywords = "+ add plus", CommutativeAssociativeBinaryOperator = "true"), Category = "MaxQ|Math|Distance")
     static FSDistance Add_SDistanceSDistance(const FSDistance& A, const FSDistance& B);
 
     /** Returns true if A is less than B (A < B) */
-    UFUNCTION(BlueprintPure, meta = (DisplayName = "SDistance < SDistance", CompactNodeTitle = "<", Keywords = "< less"), Category = "Spice|Math|DateTime")
+    UFUNCTION(BlueprintPure, meta = (DisplayName = "SDistance < SDistance", CompactNodeTitle = "<", Keywords = "< less"), Category = "MaxQ|Math|DateTime")
     static bool Less_SDistanceSDistance(const FSDistance& A, const FSDistance& B);
 
     //////////////////////
-    UFUNCTION(BlueprintPure, meta = (DisplayName = "distance vector * double vector", CompactNodeTitle = "*", Keywords = "* multiply"), Category = "Spice|Math|Distance")
+    UFUNCTION(BlueprintPure, meta = (DisplayName = "distance vector * double vector", CompactNodeTitle = "*", Keywords = "* multiply"), Category = "MaxQ|Math|Distance")
     static FSDistanceVector Multiply_SDistanceVectorDouble(const FSDistanceVector& A, double B);
     
-    UFUNCTION(BlueprintPure, meta = (DisplayName = "double vector * distance vector", CompactNodeTitle = "*", Keywords = "* multiply"), Category = "Spice|Math|Distance")
+    UFUNCTION(BlueprintPure, meta = (DisplayName = "double vector * distance vector", CompactNodeTitle = "*", Keywords = "* multiply"), Category = "MaxQ|Math|Distance")
     static FSDistanceVector Multiply_DoubleSDistanceVector(double A, const FSDistanceVector& B);
     
-    UFUNCTION(BlueprintPure, meta = (DisplayName = "distance - distance", CompactNodeTitle = "-", Keywords = "- subtract minus"), Category = "Spice|Math|Distance")
+    UFUNCTION(BlueprintPure, meta = (DisplayName = "distance - distance", CompactNodeTitle = "-", Keywords = "- subtract minus"), Category = "MaxQ|Math|Distance")
     static FSDistanceVector Subtract_DoubleSDistanceVector(const FSDistanceVector& A, const FSDistanceVector& B);
     
-    UFUNCTION(BlueprintPure, meta = (DisplayName = "distance vector + distance vector", CompactNodeTitle = "+", Keywords = "+ add plus", CommutativeAssociativeBinaryOperator = "true"), Category = "Spice|Math|Distance")
+    UFUNCTION(BlueprintPure, meta = (DisplayName = "distance vector + distance vector", CompactNodeTitle = "+", Keywords = "+ add plus", CommutativeAssociativeBinaryOperator = "true"), Category = "MaxQ|Math|Distance")
     static FSDistanceVector Add_DoubleSDistanceVector(const FSDistanceVector& A, const FSDistanceVector& B);
 
-    UFUNCTION(BlueprintPure, meta = (DisplayName = "ratio distance vector", CompactNodeTitle = "ratio", Keywords = "/ divide"), Category = "Spice|Math|Distance")
+    UFUNCTION(BlueprintPure, meta = (DisplayName = "ratio distance vector", CompactNodeTitle = "ratio", Keywords = "/ divide"), Category = "MaxQ|Math|Distance")
     static FSDimensionlessVector Ratio_SDistanceVector(const FSDistanceVector& A, const FSDistanceVector& B);
 
-    UFUNCTION(BlueprintPure, meta = (DisplayName = "distance vector / distance vector", CompactNodeTitle = "/", Keywords = "/ divide"), Category = "Spice|Math|Distance")
+    UFUNCTION(BlueprintPure, meta = (DisplayName = "distance vector / distance vector", CompactNodeTitle = "/", Keywords = "/ divide"), Category = "MaxQ|Math|Distance")
     static FSDistanceVector Divide_SDistanceVectorSDimensionlessVector(const FSDistanceVector& A, const FSDimensionlessVector& B);
 
     //////////////////////
     /* Multiplication (A * B) */
-    UFUNCTION(BlueprintPure, meta = (DisplayName = "speed * double", CompactNodeTitle = "*", Keywords = "* multiply"), Category = "Spice|Math|Speed")
+    UFUNCTION(BlueprintPure, meta = (DisplayName = "speed * double", CompactNodeTitle = "*", Keywords = "* multiply"), Category = "MaxQ|Math|Speed")
     static FSSpeed Multiply_SSpeedDouble(const FSSpeed& A, double B);
 
     /* Multiplication (A * B) */
-    UFUNCTION(BlueprintPure, meta = (DisplayName = "double * speed", CompactNodeTitle = "*", Keywords = "* multiply"), Category = "Spice|Math|Speed")
+    UFUNCTION(BlueprintPure, meta = (DisplayName = "double * speed", CompactNodeTitle = "*", Keywords = "* multiply"), Category = "MaxQ|Math|Speed")
     static FSSpeed Multiply_DoubleSSpeed(double A, const FSSpeed& B);
 
     /* Division (A / B) */
-    UFUNCTION(BlueprintPure, meta = (DisplayName = "speed / double", CompactNodeTitle = "/", Keywords = "/ divide"), Category = "Spice|Math|Speed")
+    UFUNCTION(BlueprintPure, meta = (DisplayName = "speed / double", CompactNodeTitle = "/", Keywords = "/ divide"), Category = "MaxQ|Math|Speed")
     static FSSpeed Divide_SSpeedDouble(FSSpeed A, double B);
 
     /* Ratio (A / B) */
-    UFUNCTION(BlueprintPure, meta = (DisplayName = "speed ratio", CompactNodeTitle = "ratio", Keywords = "/ divide"), Category = "Spice|Math|Speed")
+    UFUNCTION(BlueprintPure, meta = (DisplayName = "speed ratio", CompactNodeTitle = "ratio", Keywords = "/ divide"), Category = "MaxQ|Math|Speed")
     static double Ratio_SSpeed(const FSSpeed& A, const FSSpeed& B);
 
     /* Subtraction (A - B) */
-    UFUNCTION(BlueprintPure, meta = (DisplayName = "speed - speed", CompactNodeTitle = "-", Keywords = "- subtract minus"), Category = "Spice|Math|Speed")
+    UFUNCTION(BlueprintPure, meta = (DisplayName = "speed - speed", CompactNodeTitle = "-", Keywords = "- subtract minus"), Category = "MaxQ|Math|Speed")
     static FSSpeed Subtract_SSpeedSSpeed(const FSSpeed& A, const FSSpeed& B);
 
     /*  Addition (A + B) */
-    UFUNCTION(BlueprintPure, meta = (DisplayName = "speed + speed", CompactNodeTitle = "+", Keywords = "+ add plus", CommutativeAssociativeBinaryOperator = "true"), Category = "Spice|Math|Speed")
+    UFUNCTION(BlueprintPure, meta = (DisplayName = "speed + speed", CompactNodeTitle = "+", Keywords = "+ add plus", CommutativeAssociativeBinaryOperator = "true"), Category = "MaxQ|Math|Speed")
     static FSSpeed Add_SSpeedSSpeed(const FSSpeed& A, const FSSpeed& B);
 
     //////////////////////
     //////////////////////
     /* Multiplication (A * B) */
-    UFUNCTION(BlueprintPure, meta = (DisplayName = "angle * double", CompactNodeTitle = "*", Keywords = "* multiply"), Category = "Spice|Math|Angle")
+    UFUNCTION(BlueprintPure, meta = (DisplayName = "angle * double", CompactNodeTitle = "*", Keywords = "* multiply"), Category = "MaxQ|Math|Angle")
     static FSAngle Multiply_SAngleDouble(const FSAngle& A, double B);
 
     /* Division (A / B) */
-    UFUNCTION(BlueprintPure, meta = (DisplayName = "angle / double", CompactNodeTitle = "/", Keywords = "/ divide"), Category = "Spice|Math|Angle")
+    UFUNCTION(BlueprintPure, meta = (DisplayName = "angle / double", CompactNodeTitle = "/", Keywords = "/ divide"), Category = "MaxQ|Math|Angle")
     static FSAngle Divide_SAngleDouble(const FSAngle A, double B);
 
     /* Ratio (A / B) */
-    UFUNCTION(BlueprintPure, meta = (DisplayName = "angle ratio", CompactNodeTitle = "ratio", Keywords = "/ divide"), Category = "Spice|Math|Angle")
+    UFUNCTION(BlueprintPure, meta = (DisplayName = "angle ratio", CompactNodeTitle = "ratio", Keywords = "/ divide"), Category = "MaxQ|Math|Angle")
     static double Ratio_SAngle(const FSAngle& A, const FSAngle& B);
 
     /* Subtraction (A - B) */
-    UFUNCTION(BlueprintPure, meta = (DisplayName = "angle - angle", CompactNodeTitle = "-", Keywords = "- subtract minus"), Category = "Spice|Math|Angle")
+    UFUNCTION(BlueprintPure, meta = (DisplayName = "angle - angle", CompactNodeTitle = "-", Keywords = "- subtract minus"), Category = "MaxQ|Math|Angle")
     static FSAngle Subtract_SAngleSAngle(const FSAngle& A, const FSAngle& B);
 
     /*  Addition (A + B) */
-    UFUNCTION(BlueprintPure, meta = (DisplayName = "angle + angle", CompactNodeTitle = "+", Keywords = "+ add plus", CommutativeAssociativeBinaryOperator = "true"), Category = "Spice|Math|Angle")
+    UFUNCTION(BlueprintPure, meta = (DisplayName = "angle + angle", CompactNodeTitle = "+", Keywords = "+ add plus", CommutativeAssociativeBinaryOperator = "true"), Category = "MaxQ|Math|Angle")
     static FSAngle Add_SAngleSAngle(const FSAngle& A, const FSAngle& B);
 
 
     /* Multiplication (A * B) */
-    UFUNCTION(BlueprintPure, meta = (DisplayName = "velocity * double", CompactNodeTitle = "*", Keywords = "* multiply"), Category = "Spice|Math|Velocity")
+    UFUNCTION(BlueprintPure, meta = (DisplayName = "velocity * double", CompactNodeTitle = "*", Keywords = "* multiply"), Category = "MaxQ|Math|Velocity")
     static FSVelocityVector Multiply_SVelocityVectorDouble(const FSVelocityVector& A, double B);
 
     /* Multiplication (A * B) */
-    UFUNCTION(BlueprintPure, meta = (DisplayName = "double * velocity", CompactNodeTitle = "*", Keywords = "* multiply"), Category = "Spice|Math|Velocity")
+    UFUNCTION(BlueprintPure, meta = (DisplayName = "double * velocity", CompactNodeTitle = "*", Keywords = "* multiply"), Category = "MaxQ|Math|Velocity")
     static FSVelocityVector Multiply_DoubleSVelocityVector(double A, const FSVelocityVector& B);
 
     /* Division (A / B) */
-    UFUNCTION(BlueprintPure, meta = (DisplayName = "velocity / double", CompactNodeTitle = "/", Keywords = "/ divide"), Category = "Spice|Math|Velocity")
+    UFUNCTION(BlueprintPure, meta = (DisplayName = "velocity / double", CompactNodeTitle = "/", Keywords = "/ divide"), Category = "MaxQ|Math|Velocity")
     static FSVelocityVector Divide_SVelocityVectorDouble(const FSVelocityVector& A, double B);
 
     /* Ratio (A / B) */
-    UFUNCTION(BlueprintPure, meta = (DisplayName = "velocity ratio", CompactNodeTitle = "ratio", Keywords = "/ divide"), Category = "Spice|Math|Velocity")
+    UFUNCTION(BlueprintPure, meta = (DisplayName = "velocity ratio", CompactNodeTitle = "ratio", Keywords = "/ divide"), Category = "MaxQ|Math|Velocity")
     static FSDimensionlessVector Ratio_SVelocityVector(const FSVelocityVector& A, const FSVelocityVector& B);
 
     /* Subtraction (A - B) */
-    UFUNCTION(BlueprintPure, meta = (DisplayName = "velocity - velocity", CompactNodeTitle = "-", Keywords = "- subtract minus"), Category = "Spice|Math|Velocity")
+    UFUNCTION(BlueprintPure, meta = (DisplayName = "velocity - velocity", CompactNodeTitle = "-", Keywords = "- subtract minus"), Category = "MaxQ|Math|Velocity")
     static FSVelocityVector Subtract_SVelocityVectorSVelocityVector(const FSVelocityVector& A, const FSVelocityVector& B);
 
     /*  Addition (A + B) */
-    UFUNCTION(BlueprintPure, meta = (DisplayName = "velocity + velocity", CompactNodeTitle = "+", Keywords = "+ add plus", CommutativeAssociativeBinaryOperator = "true"), Category = "Spice|Math|Velocity")
+    UFUNCTION(BlueprintPure, meta = (DisplayName = "velocity + velocity", CompactNodeTitle = "+", Keywords = "+ add plus", CommutativeAssociativeBinaryOperator = "true"), Category = "MaxQ|Math|Velocity")
     static FSVelocityVector Add_SVelocityVectorSVelocityVector(const FSVelocityVector& A, const FSVelocityVector& B);
 
 
-    UFUNCTION(BlueprintPure, Category = "Spice|Math|Time", meta = (ToolTip = "Creates a simple ephemeris time window"))
+    UFUNCTION(BlueprintPure, Category = "MaxQ|Math|Time", meta = (ToolTip = "Creates a simple ephemeris time window"))
     static void SingleEtWindow(
         const FSEphemerisTime& et0,
         const FSEphemerisTime& et1,
         TArray<FSEphemerisTimeWindowSegment>& Window
     );
 
-    UFUNCTION(BlueprintPure, Category = "Spice|Math|Angle", meta = (ToolTip = "Converts degrees to an angle"))
+    UFUNCTION(BlueprintPure, Category = "MaxQ|Math|Angle", meta = (ToolTip = "Converts degrees to an angle"))
     static void Degrees2Angle(FSAngle& angle, double degrees = 0.);
 
-    UFUNCTION(BlueprintPure, Category = "Spice|Math|Angle", meta = (ToolTip = "Converts an angle to degrees"))
+    UFUNCTION(BlueprintPure, Category = "MaxQ|Math|Angle", meta = (ToolTip = "Converts an angle to degrees"))
     static void Angle2Degrees(const FSAngle& angle, double& degrees);
 
-    UFUNCTION(BlueprintPure, Category = "Spice|Math|Angle", meta = (ToolTip = "Converts radians to an angle"))
+    UFUNCTION(BlueprintPure, Category = "MaxQ|Math|Angle", meta = (ToolTip = "Converts radians to an angle"))
     static void Radians2Angle(FSAngle& angle, double radians = 0.);
 
-    UFUNCTION(BlueprintPure, Category = "Spice|Math|Angle", meta = (ToolTip = "Converts an angle to radians"))
+    UFUNCTION(BlueprintPure, Category = "MaxQ|Math|Angle", meta = (ToolTip = "Converts an angle to radians"))
     static void Angle2Radians(const FSAngle& angle, double& radians);
     
     /*
@@ -5016,7 +5016,7 @@ public:
 
 
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Types",
+        Category = "MaxQ|Types",
         meta = (
             BlueprintAutocast,
             CompactNodeTitle = "To UE Vec",
@@ -5027,7 +5027,7 @@ public:
         );
 
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Types",
+        Category = "MaxQ|Types",
         meta = (
             BlueprintAutocast,
             CompactNodeTitle = "To UE Vec",
@@ -5038,7 +5038,7 @@ public:
         );
 
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Types",
+        Category = "MaxQ|Types",
         meta = (
             BlueprintAutocast,
             CompactNodeTitle = "To UE Vec",
@@ -5049,7 +5049,7 @@ public:
         );
 
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Types",
+        Category = "MaxQ|Types",
         meta = (
             BlueprintAutocast,
             CompactNodeTitle = "From UE Vec",
@@ -5060,7 +5060,7 @@ public:
         );
 
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Types",
+        Category = "MaxQ|Types",
         meta = (
             BlueprintAutocast,
             CompactNodeTitle = "From UE Vec",
@@ -5071,7 +5071,7 @@ public:
         );
 
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Types",
+        Category = "MaxQ|Types",
         meta = (
             BlueprintAutocast,
             CompactNodeTitle = "From UE Vec",
@@ -5083,7 +5083,7 @@ public:
 
 
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Types",
+        Category = "MaxQ|Types",
         meta = (
             BlueprintAutocast,
             CompactNodeTitle = "From UE Vec",
@@ -5094,7 +5094,7 @@ public:
     );
 
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Types",
+        Category = "MaxQ|Types",
         meta = (
             BlueprintAutocast,
             CompactNodeTitle = "To UE Vec",
@@ -5105,7 +5105,7 @@ public:
     );
 
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Types",
+        Category = "MaxQ|Types",
         meta = (
             BlueprintAutocast,
             CompactNodeTitle = "$",
@@ -5116,7 +5116,7 @@ public:
     );
 
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Types",
+        Category = "MaxQ|Types",
         meta = (
             BlueprintAutocast,
             CompactNodeTitle = "$",
@@ -5128,7 +5128,7 @@ public:
 
 
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Types",
+        Category = "MaxQ|Types",
         meta = (
             BlueprintAutocast,
             CompactNodeTitle = "To UE Quat",
@@ -5138,7 +5138,7 @@ public:
 
     /// <summary>Demotes a quaternion to a UE FQuat</summary>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Types",
+        Category = "MaxQ|Types",
         meta = (
             BlueprintAutocast,
             CompactNodeTitle = "From UE Quat",
@@ -5147,7 +5147,7 @@ public:
     static FSQuaternion Conv_QuatToSQuaternion(const FQuat& value);
 
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Types",
+        Category = "MaxQ|Types",
         meta = (
             BlueprintAutocast,
             CompactNodeTitle = "To SQuaternion",
@@ -5156,7 +5156,7 @@ public:
     static FSRotationMatrix Conv_SQuaternionToSRotationMatrix(const FSQuaternion& value);
 
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Types",
+        Category = "MaxQ|Types",
         meta = (
             BlueprintAutocast,
             CompactNodeTitle = "To SQuaternion",

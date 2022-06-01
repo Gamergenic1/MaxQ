@@ -21,7 +21,7 @@ class SPICE_API USpiceK2 : public UBlueprintFunctionLibrary
 public:
 
     // bodvrd support
-    UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly, meta = (ExpandEnumAsExecs = "ResultCode"))
+    UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly, Category = "MaxQ|Internal", meta = (ExpandEnumAsExecs = "ResultCode"))
     static double bodvrd_double_K2(
         ES_ResultCode& ResultCode,
         FString& ErrorMessage,
@@ -29,7 +29,7 @@ public:
         const FString& item
     );
 
-    UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly, meta = (ExpandEnumAsExecs = "ResultCode"))
+    UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly, Category = "MaxQ|Internal", meta = (ExpandEnumAsExecs = "ResultCode"))
     static FSDimensionlessVector bodvrd_vector_K2(
         ES_ResultCode& ResultCode,
         FString& ErrorMessage,
@@ -37,7 +37,7 @@ public:
         const FString& item
     );
 
-    UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly, meta = (ExpandEnumAsExecs = "ResultCode"))
+    UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly, Category = "MaxQ|Internal", meta = (ExpandEnumAsExecs = "ResultCode"))
     static TArray<double> bodvrd_array_K2(
         ES_ResultCode& ResultCode,
         FString& ErrorMessage,
@@ -46,7 +46,7 @@ public:
     );
 
     // bodvcd support
-    UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly, meta = (ExpandEnumAsExecs = "ResultCode"))
+    UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly, Category = "MaxQ|Internal", meta = (ExpandEnumAsExecs = "ResultCode"))
     static double bodvcd_double_K2(
         ES_ResultCode& ResultCode,
         FString& ErrorMessage,
@@ -54,7 +54,7 @@ public:
         const FString& item
     );
 
-    UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly, meta = (ExpandEnumAsExecs = "ResultCode"))
+    UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly, Category = "MaxQ|Internal", meta = (ExpandEnumAsExecs = "ResultCode"))
     static FSDimensionlessVector bodvcd_vector_K2(
         ES_ResultCode& ResultCode,
         FString& ErrorMessage,
@@ -62,7 +62,7 @@ public:
         const FString& item
     );
 
-    UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly, meta = (ExpandEnumAsExecs = "ResultCode"))
+    UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly, Category = "MaxQ|Internal", meta = (ExpandEnumAsExecs = "ResultCode"))
     static TArray<double> bodvcd_array_K2(
         ES_ResultCode& ResultCode,
         FString& ErrorMessage,
@@ -70,21 +70,21 @@ public:
         const FString& item
     );
 
-    UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly, meta = (ExpandEnumAsExecs = "ResultCode"))
+    UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly, Category = "MaxQ|Internal", meta = (ExpandEnumAsExecs = "ResultCode"))
     static double gdpool_double_K2(
         ES_ResultCode& ResultCode,
         FString& ErrorMessage,
         const FString& name
     );
 
-    UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly, meta = (ExpandEnumAsExecs = "ResultCode"))
+    UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly, Category = "MaxQ|Internal", meta = (ExpandEnumAsExecs = "ResultCode"))
     static FSDimensionlessVector gdpool_vector_K2(
         ES_ResultCode& ResultCode,
         FString& ErrorMessage,
         const FString& name
     );
 
-    UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly, meta = (ExpandEnumAsExecs = "ResultCode"))
+    UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly, Category = "MaxQ|Internal", meta = (ExpandEnumAsExecs = "ResultCode"))
     static TArray<double> gdpool_array_K2(
         ES_ResultCode& ResultCode,
         FString& ErrorMessage,
@@ -93,45 +93,45 @@ public:
     );
 
     // output converters
-    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly)
+    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "MaxQ|Internal")
     static FSEphemerisTime Conv_DoubleToSEphemerisTime_K2(double value);
 
-    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly)
+    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "MaxQ|Internal")
     static FSEphemerisPeriod Conv_DoubleToSEphemerisPeriod_K2(double value);
 
-    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly)
+    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "MaxQ|Internal")
     static FSMassConstant Conv_DoubleToSMassConstant_K2(double value);
 
-    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly)
+    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "MaxQ|Internal")
     static FSDistance Conv_DoubleToSDistance_K2(double value);
 
-    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly)
+    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "MaxQ|Internal")
     static FSAngle Conv_DegreesToSAngle_K2(double value);
 
-    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly)
+    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "MaxQ|Internal")
     static FSAngle Conv_RadiansToSAngle_K2(double value);
 
-    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly)
+    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "MaxQ|Internal")
     static FSAngularRate Conv_DegreesPersecondToSAngularRate_K2(double value);
 
-    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly)
+    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "MaxQ|Internal")
     static FSAngularRate Conv_RadiansPersecondToSAngularRate_K2(double value);
 
-    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly)
+    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "MaxQ|Internal")
     static FSAngularRate Conv_MinutesPerTurnToSAngularRate_K2(double value);
 
-    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly)
+    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "MaxQ|Internal")
     static FSDistanceVector Conv_SDimensionlessVectorToSDistanceVector_K2(const FSDimensionlessVector& value);
 
-    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly)
+    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "MaxQ|Internal")
     static FSVelocityVector Conv_SDimensionlessVectorToSVelocityVector_K2(const FSDimensionlessVector& value);
 
-    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly)
+    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "MaxQ|Internal")
     static FSDistance Conv_SDimensionlessVector_X_ToSDistance_K2(const FSDimensionlessVector& value);
     
-    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly)
+    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "MaxQ|Internal")
     static FSDistance Conv_SDimensionlessVector_Y_ToSDistance_K2(const FSDimensionlessVector& value);
 
-    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly)
+    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "MaxQ|Internal")
     static FSDistance Conv_SDimensionlessVector_Z_ToSDistance_K2(const FSDimensionlessVector& value);
 };

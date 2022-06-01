@@ -24,7 +24,7 @@ public:
 public:
     /// <summary>Converts a distance to a double (kilometers)</summary>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Orbits",
+        Category = "MaxQ|Orbits",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             ToolTip = "Evaluates an orbit, while transforming frames if needed"
@@ -42,7 +42,7 @@ public:
 
     /// <summary>Converts a distance to a double (kilometers)</summary>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Orbits",
+        Category = "MaxQ|Orbits",
         meta = (
             ToolTip = "Computes an ellipse from Conic elements"
             ))
@@ -59,7 +59,7 @@ public:
     // For staic orbits this better than rendering orbits, slightly, because
     // you can cache the ellipse and forget about it.
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Debug|Orbits", 
+        Category = "MaxQ|Debug|Orbits", 
         meta = (
             DevelopmentOnly,
             ToolTip = "Renders an ellipse in debug lines",
@@ -76,7 +76,7 @@ public:
 
     /// <summary>Renders an orbit in debug lines</summary>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Debug|Orbits",
+        Category = "MaxQ|Debug|Orbits",
         meta = (
             AutoCreateRefTerm = "et",
             DevelopmentOnly,
@@ -95,7 +95,7 @@ public:
     );
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Debug|Orbits",
+        Category = "MaxQ|Debug|Orbits",
         meta = (
             ToolTip = "Creates an SPK Observation from an orbit"
             ))
