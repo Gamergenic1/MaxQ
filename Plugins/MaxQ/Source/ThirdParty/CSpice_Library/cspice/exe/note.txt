@@ -1,0 +1,25 @@
+Note, the fillowing files are part of the cspice toolkit, but were not submitted to source control.
+
+brief.exe
+chronos.exe
+ckbrief.exe
+commnt.exe
+dskbrief.exe
+dskexp.exe
+frmdiff.exe
+inspekt.exe
+mkdsk.exe
+mkspk.exe
+msopck.exe
+simple.exe
+spacit.exe
+spkdiff.exe
+spkmerge.exe
+states.exe
+subpt.exe
+tictoc.exe
+tobin.exe
+toxfr.exe
+version.exe
+
+It is perfectly fine to unpack the original toolkit files to this location.

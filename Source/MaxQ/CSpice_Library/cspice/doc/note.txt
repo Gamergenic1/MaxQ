@@ -1,3 +1,0 @@
-Note:
-
-The original cspice toolkit doc files were not checked into source control.   It is perfectly fine to unzip the toolkit doc files to this location.

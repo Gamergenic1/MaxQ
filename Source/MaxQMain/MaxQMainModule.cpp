@@ -9,5 +9,5 @@
 #include "MaxQMainModule.h"
 #include "Modules/ModuleManager.h"
 
-IMPLEMENT_GAME_MODULE(FMaxQMainModule, MaxQMain);
+IMPLEMENT_PRIMARY_GAME_MODULE(FMaxQMainModule, MaxQMain, MaxQ);
 

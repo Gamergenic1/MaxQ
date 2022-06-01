@@ -13,8 +13,8 @@ using System.IO;
 
 public class SpiceTarget : TargetRules
 {
-    public const string RelativePathToCSpiceToolkit = "Source\\MaxQ\\CSpice_Library\\cspice\\";
-    public const string RelativePathToCSpiceLib = "Source\\MaxQ\\CSpice_Library\\lib\\Win64\\cspice.lib";
+    public const string RelativePathToCSpiceToolkit = "Plugins/MaxQ/Source/ThirdParty/CSpice_Library/cspice/";
+    public const string RelativePathToCSpiceLib = "Plugins/MaxQ/Source/ThirdParty/CSpice_Library/lib/Win64/cspice.lib";
 
     public SpiceTarget(TargetInfo Target) : base(Target)
     {

@@ -5,21 +5,6 @@
 	"Description": "",
 	"Modules": [
 		{
-			"Name": "Spice",
-			"Type": "Runtime",
-			"LoadingPhase": "PreDefault"
-		},
-		{
-			"Name": "SpiceUncooked",
-			"Type": "UncookedOnly",
-			"LoadingPhase": "PreDefault"
-		},
-		{
-			"Name": "SpiceEditor",
-			"Type": "Editor",
-			"LoadingPhase": "Default"
-		},
-		{
 			"Name": "MaxQMain",
 			"Type": "Runtime",
 			"LoadingPhase": "Default"
@@ -29,6 +14,14 @@
 		{
 			"Name": "GLTFImporter",
 			"Enabled": true
+		},
+		{
+			"Name": "MaxQ",
+			"Enabled": true,
+			"SupportedTargetPlatforms": [
+				"Win64",
+				"Mac"
+			]
 		},
 		{
 			"Name": "Bridge",
