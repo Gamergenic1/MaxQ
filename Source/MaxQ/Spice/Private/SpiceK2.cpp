@@ -355,4 +355,3 @@ FSDistance USpiceK2::Conv_SDimensionlessVector_Z_ToSDistance_K2(const FSDimensio
     return value.z;
 }
 
-#undef StackAlloc

@@ -30,9 +30,7 @@ public class CSpice_Library : ModuleRules
         }
         else if (Target.Platform == UnrealTargetPlatform.Mac)
         {
-//            PublicDefinitions.Add("MSDOS");
-//            PublicDefinitions.Add("OMIT_BLANK_CC");
-//            PublicDefinitions.Add("NON_ANSI_STDIO");
+            PublicDefinitions.Add("CSPICE_MAC_OSX_INTEL_64BIT_GCC");
         }
         /*
         Add conditionals for any other platforms you want to support via recompilation here:
