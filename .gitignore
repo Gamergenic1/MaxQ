@@ -74,8 +74,8 @@ Plugins/*/Intermediate/*
 DerivedDataCache/*
 
 # Project specific
-!Source/MaxQ/CSpice_Library/lib/win64/cspice.lib
-!Source/MaxQ/CSpice_Library/lib/Mac/cspice.a
+!Plugins/MaxQ/Source/ThirdParty/CSpice_Library/lib/win64/cspice.lib
+!Plugins/MaxQ/Source/ThirdParty/CSpice_Library/lib/Mac/cspice.a
 
 # Branch specific
 Content/Spice/Simple/*
