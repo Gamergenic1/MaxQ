@@ -13,6 +13,6 @@ public class MaxQMain : ModuleRules
 	public MaxQMain(ReadOnlyTargetRules Target) : base(Target)
 	{
         PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine" });
-        PrivateDependencyModuleNames.AddRange(new string[] { "Spice", "SpiceUncooked", "SpiceEditor" });
+        PrivateDependencyModuleNames.AddRange(new string[] { "Spice" });
 	}
 }

@@ -5,26 +5,19 @@
 	"Description": "",
 	"Modules": [
 		{
-			"Name": "Spice",
-			"Type": "Runtime",
-			"LoadingPhase": "PreDefault"
-		},
-		{
-			"Name": "SpiceUncooked",
-			"Type": "UncookedOnly",
-			"LoadingPhase": "PreDefault"
-		},
-		{
-			"Name": "SpiceEditor",
-			"Type": "Editor",
-			"LoadingPhase": "Default"
-		},
-		{
 			"Name": "MaxQMain",
 			"Type": "Runtime",
 			"LoadingPhase": "Default"
 		}
 	],
 	"Plugins": [
+		{
+			"Name": "MaxQ",
+			"Enabled": true,
+			"SupportedTargetPlatforms": [
+				"Win64",
+				"Mac"
+			]
+		}
 	]
 }
