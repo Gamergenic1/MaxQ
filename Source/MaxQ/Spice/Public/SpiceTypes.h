@@ -8,6 +8,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "SpicePlatformDefs.h"
 #include "SpiceTypes.generated.h"
 
 UENUM(BlueprintType)
@@ -4946,23 +4947,23 @@ public:
     // From SPICE to UE
     template<typename T> static FVector Swizzle(const T& value);
 
-    template<> FVector Swizzle<FSDimensionlessVector>(const FSDimensionlessVector& value)
+    template<> SpiceStaticPartialTemplate FVector Swizzle<FSDimensionlessVector>(const FSDimensionlessVector& value)
     {
         return FVector((FVector::FReal)value.y, (FVector::FReal)value.x, (FVector::FReal)value.z);
 
     }
 
-    template<> FVector Swizzle<FSDistanceVector>(const FSDistanceVector& value)
+    template<> SpiceStaticPartialTemplate FVector Swizzle<FSDistanceVector>(const FSDistanceVector& value)
     {
         return FVector((FVector::FReal)value.y.km, (FVector::FReal)value.x.km, (FVector::FReal)value.z.km);
     }
 
-    template<> FVector Swizzle<FSVelocityVector>(const FSVelocityVector& value)
+    template<> SpiceStaticPartialTemplate FVector Swizzle<FSVelocityVector>(const FSVelocityVector& value)
     {
         return FVector((FVector::FReal)value.dy.kmps, (FVector::FReal)value.dx.kmps, (FVector::FReal)value.dz.kmps);
     }
 
-    template<> FVector Swizzle<FSAngularVelocity>(const FSAngularVelocity& value)
+    template<> SpiceStaticPartialTemplate FVector Swizzle<FSAngularVelocity>(const FSAngularVelocity& value)
     {
         // (Going from RHS/LHS negates angular velocities...)
         return FVector(-(FVector::FReal)value.y.radiansPerSecond, -(FVector::FReal)value.x.radiansPerSecond, -(FVector::FReal)value.z.radiansPerSecond);
@@ -4971,22 +4972,22 @@ public:
     // From UE to SPICE
     template<typename T> static void Swizzle(const FVector& in, T& out);
     
-    template<> void Swizzle<FSDimensionlessVector>(const FVector& in,  FSDimensionlessVector& out)
+    template<> SpiceStaticPartialTemplate void Swizzle<FSDimensionlessVector>(const FVector& in,  FSDimensionlessVector& out)
     {
         out = FSDimensionlessVector(in.Y, in.X, in.Z);
     }
 
-    template<> void Swizzle<FSDistanceVector>(const FVector& in, FSDistanceVector& out)
+    template<> SpiceStaticPartialTemplate void Swizzle<FSDistanceVector>(const FVector& in, FSDistanceVector& out)
     {
         out = FSDistanceVector(in.Y, in.X, in.Z);
     }
 
-    template<> void Swizzle<FSVelocityVector>(const FVector& in, FSVelocityVector& out)
+    template<> SpiceStaticPartialTemplate void Swizzle<FSVelocityVector>(const FVector& in, FSVelocityVector& out)
     {
         out = FSVelocityVector(in.Y, in.X, in.Z);
     }
 
-    template<> void Swizzle<FSAngularVelocity>(const FVector& in, FSAngularVelocity& out)
+    template<> SpiceStaticPartialTemplate void Swizzle<FSAngularVelocity>(const FVector& in, FSAngularVelocity& out)
     {
         // (Going from LHS/RHS negates angular velocities...)
         out = FSAngularVelocity(FSAngularRate(-in.Y), FSAngularRate(-in.X), FSAngularRate(-in.Z));

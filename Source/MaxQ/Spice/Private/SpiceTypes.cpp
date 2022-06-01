@@ -6,7 +6,6 @@
 // GitHub:         https://github.com/Gamergenic1/MaxQ/ 
 
 #include "SpiceTypes.h"
-#include "SpicePlatformDefs.h"
 #include "Spice.h"
 #include "SpiceUtilities.h"
 

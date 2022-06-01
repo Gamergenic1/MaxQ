@@ -27,5 +27,5 @@ public:
 };
 static OnLoad StaticInitializer;
 
-IMPLEMENT_GAME_MODULE(FSpiceModule, Spice);
+IMPLEMENT_MODULE(FSpiceModule, Spice);
 
