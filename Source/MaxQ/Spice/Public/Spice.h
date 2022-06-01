@@ -52,7 +52,7 @@ class SPICE_API USpice : public UBlueprintFunctionLibrary
 
 public:
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Utility|Kernel",
+        Category = "MaxQ|Utility|Kernel",
         meta = (
             Keywords = "UTILITY",
             ExpandEnumAsExecs = "ResultCode",
@@ -66,7 +66,7 @@ public:
         );
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Kernel",
+        Category = "MaxQ|Kernel",
         meta = (
             Keywords = "UTILITY",
             ExpandEnumAsExecs = "ResultCode",
@@ -90,7 +90,7 @@ public:
     );
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Kernel",
+        Category = "MaxQ|Kernel",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "UTILITY",
@@ -103,7 +103,7 @@ public:
     );
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Utility|Kernel",
+        Category = "MaxQ|Utility|Kernel",
         meta = (
             Keywords = "UTILITY",
             ToolTip = "Join a path to a list of paths"
@@ -115,7 +115,7 @@ public:
     );
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Kernel",
+        Category = "MaxQ|Kernel",
         meta = (
             Keywords = "UTILITY",
             ToolTip = "Clear all kernel file / kernel pool"
@@ -123,7 +123,7 @@ public:
     static void clear_all();
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Kernel",
+        Category = "MaxQ|Kernel",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "UTILITY",
@@ -136,7 +136,7 @@ public:
     );
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Kernel",
+        Category = "MaxQ|Kernel",
         meta = (
             Keywords = "UTILITY",
             ToolTip = "reset/init cspice"
@@ -144,7 +144,7 @@ public:
     static void init_all();
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Error",
+        Category = "MaxQ|Error",
         meta = (
             Keywords = "ERROR",
             ToolTip = "Get Default Error Action"
@@ -152,7 +152,7 @@ public:
     static void get_erract(ES_ErrorAction& Result);
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Error",
+        Category = "MaxQ|Error",
         meta = (
             Keywords = "ERROR",
             ToolTip = "Get Error Output Device Name"
@@ -160,7 +160,7 @@ public:
     static void get_errdev(ES_ErrorDevice& device);
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Error",
+        Category = "MaxQ|Error",
         meta = (
             Keywords = "ERROR",
             ToolTip = "Get Error Output Items"
@@ -168,7 +168,7 @@ public:
     static void get_errprt(FString& OutMessage);
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Error",
+        Category = "MaxQ|Error",
         meta = (
             Keywords = "ERROR",
             ToolTip = "Set Default Error"
@@ -176,7 +176,7 @@ public:
     static void set_erract(ES_ErrorAction actionToSet);
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Error",
+        Category = "MaxQ|Error",
         meta = (
             Keywords = "ERROR",
             ToolTip = "Set Error Output Device Name"
@@ -184,7 +184,7 @@ public:
     static void set_errdev(ES_ErrorDevice Device, const FString& LogFilePath);
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Error",
+        Category = "MaxQ|Error",
         meta = (
             Keywords = "ERROR",
             ToolTip = "Set Error Output Items"
@@ -192,7 +192,7 @@ public:
     static void set_errprt(ES_Items items);
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Error",
+        Category = "MaxQ|Error",
         meta = (
             Keywords = "ERROR",
             ToolTip = "Reset Error Status"
@@ -206,7 +206,7 @@ public:
     /// <returns></returns>
     UFUNCTION(
         BlueprintPure,
-        Category = "Spice|Api|Rotation",
+        Category = "MaxQ|Rotation",
         meta = (
             Keywords = "MATRIX, ROTATION",
             ShortToolTip = "Axis and angle to rotation",
@@ -220,7 +220,7 @@ public:
 
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Time",
+        Category = "MaxQ|Time",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "FRAMES, PCK, SPK, TIME",
@@ -246,7 +246,7 @@ public:
 
     UFUNCTION(
         BlueprintPure,
-        Category = "Spice|Api|Coordinates",
+        Category = "MaxQ|Coordinates",
         meta = (
             Keywords = "CONVERSION, COORDINATES",
             ShortToolTip = "AZ/EL to rectangular coordinates",
@@ -263,7 +263,7 @@ public:
 
     /// <summary>Body name to ID code translation</summary>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Kernel",
+        Category = "MaxQ|Kernel",
         meta = (
             Keywords = "CONSTANTS",
             ExpandEnumAsExecs = "found",
@@ -277,7 +277,7 @@ public:
 
     /// <summary>Body name to ID code translation</summary>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|NAIF IDs",
+        Category = "MaxQ|NAIF IDs",
         meta = (
             Keywords = "BODY, CONVERSION",
             ExpandEnumAsExecs = "found",
@@ -291,7 +291,7 @@ public:
 
     /// <summary>Body name to ID code translation</summary>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|NAIF IDs",
+        Category = "MaxQ|NAIF IDs",
         meta = (
             ExpandEnumAsExecs = "found",
             Keywords = "BODY, CONVERSION, ID, NAME, UTILITY",
@@ -306,7 +306,7 @@ public:
 
     /// <summary>Body name to ID code translation</summary>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|NAIF IDs",
+        Category = "MaxQ|NAIF IDs",
         meta = (
             ExpandEnumAsExecs = "found",
             Keywords = "BODY, CONVERSION, ID, NAME",
@@ -327,7 +327,7 @@ public:
     /// <param name="values">[out] Values</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly,
-        Category = "Spice|Api|Deprecated",
+        Category = "MaxQ|Deprecated",
         meta = (
             DeprecationMessage = "Bodvcd is obolete, use the K2Node_bodvcd (bodcrd) instead",
             ExpandEnumAsExecs = "ResultCode",
@@ -344,7 +344,7 @@ public:
     );
 
     UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly,
-        Category = "Spice|Api|Deprecated",
+        Category = "MaxQ|Deprecated",
         meta = (
             DeprecationMessage = "Bodvcd is obolete, use the K2Node_bodvcd (bodvcd) instead",
             ExpandEnumAsExecs = "ResultCode",
@@ -361,7 +361,7 @@ public:
     );
 
     UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly,
-        Category = "Spice|Api|Deprecated",
+        Category = "MaxQ|Deprecated",
         meta = (
             DeprecationMessage = "Bodvcd is obolete, use the K2Node_bodvcd (bodvcd) instead",
             ExpandEnumAsExecs = "ResultCode",
@@ -378,7 +378,7 @@ public:
     );
 
     UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly,
-        Category = "Spice|Api|Deprecated",
+        Category = "MaxQ|Deprecated",
         meta = (
             DeprecationMessage = "Bodvcd is obolete, use the K2Node_bodcrd (bodcrd) instead",
             ExpandEnumAsExecs = "ResultCode",
@@ -404,7 +404,7 @@ public:
     /// <returns></returns>
     // Bodvrd is obolete, in favor of K2Node_bodvrd
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Deprecated", BlueprintInternalUseOnly,
+        Category = "MaxQ|Deprecated", BlueprintInternalUseOnly,
         meta = (
             DeprecationMessage = "Bodvrd is obolete, use the K2Node_bodvrd (bodvrd) instead",
             ExpandEnumAsExecs = "ResultCode",
@@ -421,7 +421,7 @@ public:
     );
 
     UFUNCTION(BlueprintCallable, 
-        Category = "Spice|Api|Deprecated", BlueprintInternalUseOnly,
+        Category = "MaxQ|Deprecated", BlueprintInternalUseOnly,
         meta = (
             DeprecationMessage = "Bodvrd is obolete, use the K2Node_bodvrd (bodvrd) instead",
             ExpandEnumAsExecs = "ResultCode",
@@ -439,7 +439,7 @@ public:
     );
 
     UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly,
-        Category = "Spice|Api|Deprecated",
+        Category = "MaxQ|Deprecated",
         meta = (
             DeprecationMessage = "Bodvrd is obolete, use the K2Node_bodvrd (bodvrd) instead",
             ExpandEnumAsExecs = "ResultCode",
@@ -457,7 +457,7 @@ public:
     );
     
     UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly,
-        Category = "Spice|Api|Deprecated",
+        Category = "MaxQ|Deprecated",
         meta = (
             DeprecationMessage = "Bodvrd is obolete, use the K2Node_bodvrd (bodvrd) instead",
             ExpandEnumAsExecs = "ResultCode",
@@ -475,7 +475,7 @@ public:
     );
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Search",
+        Category = "MaxQ|Search",
         meta = (
             Keywords = "ARRAY, SEARCH",
             ShortToolTip = "Binary search for a double precision value",
@@ -490,7 +490,7 @@ public:
     /// <param name="handle">[in] Handle of the CK file to be closed</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Ellipses",
+        Category = "MaxQ|Ellipses",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "ELLIPSE, GEOMETRY",
@@ -511,7 +511,7 @@ public:
     /// <param name="handle">[in] Handle of the CK file to be closed</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|CK",
+        Category = "MaxQ|CK",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "CK",
@@ -534,7 +534,7 @@ public:
     /// <param name="cover">[out] Window giving coverage for `idcode'</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|CK",
+        Category = "MaxQ|CK",
         meta = (
             AutoCreateRefTerm = "merge_to",
             Keywords = "POINTING, TIME, UTILITY",
@@ -558,7 +558,7 @@ public:
 
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|CK",
+        Category = "MaxQ|CK",
         meta = (
             Keywords = "POINTING",
             ExpandEnumAsExecs = "found",
@@ -577,7 +577,7 @@ public:
 
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|CK",
+        Category = "MaxQ|CK",
         meta = (
             Keywords = "POINTING",
             ExpandEnumAsExecs = "found",
@@ -605,7 +605,7 @@ public:
     /// <param name="found">[out] True when requested pointing is available</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|CK",
+        Category = "MaxQ|CK",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "POINTING",
@@ -635,7 +635,7 @@ public:
     /// <param name="found">[out] True when requested pointing is available</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|CK",
+        Category = "MaxQ|CK",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "POINTING",
@@ -661,7 +661,7 @@ public:
     /// <param name="handle">[out] Loaded file's handle</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|CK",
+        Category = "MaxQ|CK",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "POINTING",
@@ -680,7 +680,7 @@ public:
     /// <param name="ids">[in/out] Set of ID codes of objects in CK file</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|CK",
+        Category = "MaxQ|CK",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "POINTING, UTILITY",
@@ -701,7 +701,7 @@ public:
     /// <param name="handle">[out] The handle of the opened CK file</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|CK",
+        Category = "MaxQ|CK",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "POINTING",
@@ -721,7 +721,7 @@ public:
     /// <param name="handle">[in] Handle of CK file to be unloaded</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|CK",
+        Category = "MaxQ|CK",
         meta = (
             Keywords = "POINTING",
             ShortToolTip = "C-kernel, Unload pointing file",
@@ -745,7 +745,7 @@ public:
     /// <param name="avvs">[in] Angular velocity vectors</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|CK",
+        Category = "MaxQ|CK",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "POINTING, UTILITY",
@@ -781,7 +781,7 @@ public:
     /// <param name="rates">[in] Number of seconds per tick for each interval</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|CK",
+        Category = "MaxQ|CK",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "POINTING, UTILITY",
@@ -816,7 +816,7 @@ public:
     /// <param name="starts">[in] Encoded SCLK interval start times</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|CK",
+        Category = "MaxQ|CK",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "POINTING, UTILITY",
@@ -856,7 +856,7 @@ public:
     /// <param name="starts">[in] Encoded SCLK interval start times</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|CK",
+        Category = "MaxQ|CK",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "POINTING, UTILITY",
@@ -883,7 +883,7 @@ public:
     /// <summary>Return the speed of light in a vacuum (IAU official value, in km / sec)</summary>
     /// <returns>The function returns the IAU official value for the speed of light in vacuo : 299792.458 km / sec</returns>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Constants",
+        Category = "MaxQ|Constants",
         meta = (
             Keywords = "CONSTANTS",
             ShortToolTip = "C, Speed of light in a vacuum",
@@ -900,7 +900,7 @@ public:
       */
     UFUNCTION(
         BlueprintCallable,
-        Category = "Spice|Api|Ephemeris",
+        Category = "MaxQ|Ephemeris",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "CONIC, EPHEMERIS",
@@ -916,7 +916,7 @@ public:
     );
 
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Coordinates",
+        Category = "MaxQ|Coordinates",
         meta = (
             Keywords = "CONVERSION, COORDINATES",
             ShortToolTip = "Cylindrical to latitudinal",
@@ -935,7 +935,7 @@ public:
     /// <returns></returns>
     UFUNCTION(
         BlueprintCallable,
-        Category = "Spice|Api|Units",
+        Category = "MaxQ|Units",
         meta = (
             Keywords = "CONVERSION, UNITS",
             ExpandEnumAsExecs = "ResultCode",
@@ -958,7 +958,7 @@ public:
     /// <returns></returns>
     UFUNCTION(
         BlueprintCallable,
-        Category = "Spice|Api|DAF",
+        Category = "MaxQ|DAF",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "FILES, UTILITY",
@@ -974,7 +974,7 @@ public:
 
     UFUNCTION(
         BlueprintCallable,
-        Category = "Spice|Api|DSK",
+        Category = "MaxQ|DSK",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "COVERAGE, TOPOGRAPHY",
@@ -990,7 +990,7 @@ public:
 
     UFUNCTION(
         BlueprintCallable,
-        Category = "Spice|Api|DSK",
+        Category = "MaxQ|DSK",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "COVERAGE, SURFACE, TOPOGRAPHY",
@@ -1007,7 +1007,7 @@ public:
 
     UFUNCTION(
         BlueprintCallable,
-        Category = "Spice|Api|DSK",
+        Category = "MaxQ|DSK",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "DAS, DSK, FILES",
@@ -1025,7 +1025,7 @@ public:
 
     UFUNCTION(
         BlueprintCallable,
-        Category = "Spice|Api|DSK",
+        Category = "MaxQ|DSK",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "DAS, DSK, FILES",
@@ -1044,7 +1044,7 @@ public:
 
     UFUNCTION(
         BlueprintCallable,
-        Category = "Spice|Api|DSK",
+        Category = "MaxQ|DSK",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "DAS, DSK, FILES",
@@ -1062,7 +1062,7 @@ public:
 
     UFUNCTION(
         BlueprintCallable,
-        Category = "Spice|Api|DSK",
+        Category = "MaxQ|DSK",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "DAS, DSK, FILES",
@@ -1081,7 +1081,7 @@ public:
 
     UFUNCTION(
         BlueprintCallable,
-        Category = "Spice|Api|DSK",
+        Category = "MaxQ|DSK",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "GEOMETRY, INTERCEPT, SURFACE, TOPOGRAPHY",
@@ -1102,7 +1102,7 @@ public:
 
     UFUNCTION(
         BlueprintCallable,
-        Category = "Spice|Api|DSK",
+        Category = "MaxQ|DSK",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "GEOMETRY, INTERCEPT, SURFACE, TOPOGRAPHY",
@@ -1127,7 +1127,7 @@ public:
     );
 
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Coordinates",
+        Category = "MaxQ|Coordinates",
         meta = (
             Keywords = "CONVERSION, COORDINATES",
             ShortToolTip = "Cylindrical to rectangular",
@@ -1139,7 +1139,7 @@ public:
     );
 
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Coordinates",
+        Category = "MaxQ|Coordinates",
         meta = (
             Keywords = "CONVERSION, COORDINATES",
             ShortToolTip = "Cylindrical to spherical",
@@ -1155,7 +1155,7 @@ public:
     /// <returns></returns>
     UFUNCTION(
         BlueprintCallable,
-        Category = "Spice|Api|DAF",
+        Category = "MaxQ|DAF",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "DAF, FILES",
@@ -1178,7 +1178,7 @@ public:
     /// <returns></returns>
     UFUNCTION(
         BlueprintCallable,
-        Category = "Spice|Api|DAF",
+        Category = "MaxQ|DAF",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "FILES, UTILITY",
@@ -1198,7 +1198,7 @@ public:
     /// <returns></returns>
     UFUNCTION(
         BlueprintCallable,
-        Category = "Spice|Api|DAF",
+        Category = "MaxQ|DAF",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "DAF, FILES",
@@ -1218,7 +1218,7 @@ public:
     /// <returns></returns>
     UFUNCTION(
         BlueprintCallable,
-        Category = "Spice|Api|DAF",
+        Category = "MaxQ|DAF",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "DAF, FILES",
@@ -1238,7 +1238,7 @@ public:
     /// <returns></returns>
     UFUNCTION(
         BlueprintCallable,
-        Category = "Spice|Api|DAS",
+        Category = "MaxQ|DAS",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "DAS, FILES",
@@ -1254,7 +1254,7 @@ public:
 
     UFUNCTION(
         BlueprintCallable,
-        Category = "Spice|Api|DAS",
+        Category = "MaxQ|DAS",
         meta = (
             Keywords = "DAS, FILES",
             ToolTip = "Close a DAS file"
@@ -1266,7 +1266,7 @@ public:
 
     UFUNCTION(
         BlueprintCallable,
-        Category = "Spice|Api|DAS",
+        Category = "MaxQ|DAS",
         meta = (
             ExpandEnumAsExecs = "found",
             Keywords = "DAS, DLA, FILES",
@@ -1286,7 +1286,7 @@ public:
     /// <returns></returns>
     UFUNCTION(
         BlueprintCallable,
-        Category = "Spice|Api|Time",
+        Category = "MaxQ|Time",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "TIME",
@@ -1306,7 +1306,7 @@ public:
     /// <returns>the value of the determinant found by direct application of the definition of the determinan</returns>
     UFUNCTION(
         BlueprintPure,
-        Category = "Spice|Api|Math",
+        Category = "MaxQ|Math",
         meta = (
             ShortToolTip = "Determinant of a double precision 3x3 matrix",
             Keywords = "MATH, MATRIX",
@@ -1318,7 +1318,7 @@ public:
     /// <returns>largest (positive) number that can be represented in a double precision variable</returns>
     UFUNCTION(
         BlueprintPure,
-        Category = "Spice|Api|Constants",
+        Category = "MaxQ|Constants",
         meta = (
             ShortToolTip = "Largest DP number",
             Keywords = "CONSTANTS",
@@ -1330,7 +1330,7 @@ public:
     /// <returns>smallest (negative) number that can be represented in a double precision variable</returns>
     UFUNCTION(
         BlueprintPure,
-        Category = "Spice|Api|Constants",
+        Category = "MaxQ|Constants",
         meta = (
             Keywords = "CONSTANTS",
             ShortToolTip = "Smallest DP number",
@@ -1342,7 +1342,7 @@ public:
     /// <returns>The value of pi is determined by the ACOS function</returns>
     UFUNCTION(
         BlueprintPure,
-        Category = "Spice|Api|Constants",
+        Category = "MaxQ|Constants",
         meta = (
             Keywords = "CONSTANTS",
             ShortToolTip = "Degrees per radian",
@@ -1362,7 +1362,7 @@ public:
     /// 
     UFUNCTION(
         BlueprintPure,
-        Category = "Spice|Api|SPK",
+        Category = "MaxQ|SPK",
         meta = (
             Keywords = "EPHEMERIS",
             ShortToolTip = "Equinoctial Elements to position and velocity",
@@ -1393,7 +1393,7 @@ public:
     /// <returns></returns>
     UFUNCTION(
         BlueprintCallable,
-        Category = "Spice|Api|Time",
+        Category = "MaxQ|Time",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "TIME",
@@ -1424,7 +1424,7 @@ public:
     /// <returns></returns>
     UFUNCTION(
         BlueprintCallable,
-        Category = "Spice|Api|Time",
+        Category = "MaxQ|Time",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "TIME",
@@ -1445,7 +1445,7 @@ public:
     /// <param name="et">Equivalent UTC seconds past J2000</param>
     /// <returns></returns>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Time",
+        Category = "MaxQ|Time",
         meta = (
             Keywords = "TIME",
             ShortToolTip = "Convert ET to Calendar format",
@@ -1460,7 +1460,7 @@ public:
     /// <returns></returns>
     UFUNCTION(
         BlueprintCallable,
-        Category = "Spice|Api|Rotation",
+        Category = "MaxQ|Rotation",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "MATRIX, ROTATION, TRANSFORMATION",
@@ -1488,7 +1488,7 @@ public:
     /// <returns></returns>
     UFUNCTION(
         BlueprintCallable,
-        Category = "Spice|Api|Rotation",
+        Category = "MaxQ|Rotation",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "ANGLES, DERIVATIVES, STATE",
@@ -1504,7 +1504,7 @@ public:
 
     UFUNCTION(
         BlueprintCallable,
-        Category = "Spice|Api|CK",
+        Category = "MaxQ|CK",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "EVENT, FOV, GEOMETRY, INSTRUMENT",
@@ -1525,7 +1525,7 @@ public:
 
     UFUNCTION(
         BlueprintCallable,
-        Category = "Spice|Api|CK",
+        Category = "MaxQ|CK",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "EVENT, FOV, GEOMETRY, INSTRUMENT",
@@ -1551,7 +1551,7 @@ public:
     /// <param name="z">[out]Unit vector given by x X y</param>
     /// <returns></returns>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Frames",
+        Category = "MaxQ|Frames",
         meta = (
             Keywords = "AXES, FRAMES",
             ShortToolTip = "Build a right handed coordinate frame",
@@ -1565,7 +1565,7 @@ public:
     );
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Frames",
+        Category = "MaxQ|Frames",
         meta = (
             ExpandEnumAsExecs = "found",
             Keywords = "FRAMES",
@@ -1581,7 +1581,7 @@ public:
     );
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Frames",
+        Category = "MaxQ|Frames",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "FRAMES",
@@ -1605,7 +1605,7 @@ public:
     /// <param name="found">[out] True if variable is in pool</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Kernel",
+        Category = "MaxQ|Kernel",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "CONSTANTS, FILES",
@@ -1631,7 +1631,7 @@ public:
     /// <param name="found">[out] True if variable is in pool</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly,
-        Category = "Spice|Api|Kernel",
+        Category = "MaxQ|Kernel",
         meta = (
             DeprecationMessage = "gdpool is obolete, use the K2Node_gdpool (gdpool) instead",
             ExpandEnumAsExecs = "ResultCode",
@@ -1650,7 +1650,7 @@ public:
     );
 
     UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly,
-        Category = "Spice|Api|Deprecated",
+        Category = "MaxQ|Deprecated",
         meta = (
             DeprecationMessage = "gdpool is obolete, use the K2Node_gdpool (gdpool) instead",
             ExpandEnumAsExecs = "ResultCode",
@@ -1668,7 +1668,7 @@ public:
 
 
     UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly,
-        Category = "Spice|Api|Deprecated",
+        Category = "MaxQ|Deprecated",
         meta = (
             DeprecationMessage = "gdpool is obolete, use the K2Node_gdpool (gdpool) instead",
             ExpandEnumAsExecs = "ResultCode",
@@ -1686,7 +1686,7 @@ public:
 
 
     UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly,
-        Category = "Spice|Api|Deprecated",
+        Category = "MaxQ|Deprecated",
         meta = (
             DeprecationMessage = "gdpool is obolete, use the K2Node_gdpool (gdpool) instead",
             ExpandEnumAsExecs = "ResultCode",
@@ -1704,7 +1704,7 @@ public:
 
 
     UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly,
-        Category = "Spice|Api|Deprecated",
+        Category = "MaxQ|Deprecated",
         meta = (
             DeprecationMessage = "gdpool is obolete, use the K2Node_gdpool (gdpool) instead",
             ExpandEnumAsExecs = "ResultCode",
@@ -1722,7 +1722,7 @@ public:
 
 
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Ephemeris",
+        Category = "MaxQ|Ephemeris",
         meta = (
             Keywords = "EPHEMERIS",
             ToolTip = "Get geophysical constants for TLE"
@@ -1731,7 +1731,7 @@ public:
 
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Parsing",
+        Category = "MaxQ|Parsing",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "PARSING, EPHEMERIS",
@@ -1751,7 +1751,7 @@ public:
 
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Ephemeris",
+        Category = "MaxQ|Ephemeris",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "EPHEMERIS",
@@ -1769,7 +1769,7 @@ public:
 
     [[deprecated("Use evsgp4()")]]
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Ephemeris",
+        Category = "MaxQ|Ephemeris",
         meta = (
             DeprecatedFunction,
             DeprecationMessage = "Use evsgp4",
@@ -1795,7 +1795,7 @@ public:
     /// <param name="rectan">[out] Rectangular coordinates of point</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Coordinates",
+        Category = "MaxQ|Coordinates",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "CONVERSION, COORDINATES",
@@ -1822,7 +1822,7 @@ public:
     /// <param name="bsight"></param>
     /// <param name="bounds"></param>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|NAIF IDs",
+        Category = "MaxQ|NAIF IDs",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "FOV, INSTRUMENT",
@@ -1839,7 +1839,7 @@ public:
     );
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Kernel",
+        Category = "MaxQ|Kernel",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "KERNEL, UTILITY",
@@ -1856,7 +1856,7 @@ public:
 
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Geometry Finder",
+        Category = "MaxQ|Geometry Finder",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "EPHEMERIS, EVENT, GEOMETRY, SEARCH, WINDOW",
@@ -1879,7 +1879,7 @@ public:
     );
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Geometry Finder",
+        Category = "MaxQ|Geometry Finder",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "ANGLE, EPHEMERIS, ILLUMINATION, LIGHTING, SEARCH",
@@ -1906,7 +1906,7 @@ public:
     );
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Geometry Finder",
+        Category = "MaxQ|Geometry Finder",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "EPHEMERIS, EVENT, GEOMETRY, SEARCH, WINDOW",
@@ -1930,7 +1930,7 @@ public:
     );
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Geometry Finder",
+        Category = "MaxQ|Geometry Finder",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "EVENT, GEOMETRY, SEARCH, WINDOW",
@@ -1959,7 +1959,7 @@ public:
 
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Geometry Finder",
+        Category = "MaxQ|Geometry Finder",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "EVENT, GEOMETRY, SEARCH, SEPARATION",
@@ -1987,7 +1987,7 @@ public:
 
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Geometry Finder",
+        Category = "MaxQ|Geometry Finder",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "EVENT, FOV, GEOMETRY, INSTRUMENT, SEARCH, WINDOW",
@@ -2010,7 +2010,7 @@ public:
 
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Geometry Finder",
+        Category = "MaxQ|Geometry Finder",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "EVENT, FOV, GEOMETRY, INSTRUMENT, SEARCH, WINDOW",
@@ -2032,7 +2032,7 @@ public:
 
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Geometry Finder",
+        Category = "MaxQ|Geometry Finder",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             AutoCreateRefTerm = "adjust, refval",
@@ -2056,7 +2056,7 @@ public:
 
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Geometry Finder",
+        Category = "MaxQ|Geometry Finder",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             AutoCreateRefTerm = "adjust, refval",
@@ -2082,7 +2082,7 @@ public:
     );
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Geometry Finder",
+        Category = "MaxQ|Geometry Finder",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "EVENT, GEOMETRY, SEARCH, SEPARATION",
@@ -2110,7 +2110,7 @@ public:
 
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Geometry Finder",
+        Category = "MaxQ|Geometry Finder",
         meta = (
             Keywords = "GEOMETRY",
             ShortToolTip = "GF, set a tolerance value for GF",
@@ -2120,7 +2120,7 @@ public:
 
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Geometry Finder",
+        Category = "MaxQ|Geometry Finder",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             AdvancedDisplay = "nintvls",
@@ -2157,7 +2157,7 @@ public:
     /// <returns></returns>
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Kernel",
+        Category = "MaxQ|Kernel",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "CONSTANTS, FILES",
@@ -2184,7 +2184,7 @@ public:
     /// <param name="found">[out] True if there is at least one match</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Kernel",
+        Category = "MaxQ|Kernel",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "CONSTANTS, FILES",
@@ -2211,7 +2211,7 @@ public:
     /// <param name="df">Interpolated function's derivative at x</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Polynomial",
+        Category = "MaxQ|Polynomial",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "INTERPOLATION, POLYNOMIAL",
@@ -2231,7 +2231,7 @@ public:
     /// <summary>Return half the value of pi</summary>
     /// <returns>half the value of pi</returns>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Constants", Exec,
+        Category = "MaxQ|Constants", Exec,
         meta = (
             Keywords = "CONSTANTS",
             ShortToolTip = "Half the value of pi",
@@ -2240,7 +2240,7 @@ public:
     static void halfpi(double& half_pi);
 
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Constants",
+        Category = "MaxQ|Constants",
         meta = (
             Keywords = "CONSTANTS",
             ShortToolTip = "Angle of half the value of pi",
@@ -2252,7 +2252,7 @@ public:
     /// <summary>This routine returns the 3x3 identity matrix</summary>
     /// <returns>the 3x3 Identity matrix</returns>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Matrix",
+        Category = "MaxQ|Matrix",
         meta = (
             Keywords = "MATRIX",
             ShortToolTip = "Return the 3x3 identity matrix",
@@ -2264,7 +2264,7 @@ public:
 
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Illumination",
+        Category = "MaxQ|Illumination",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             AutoCreateRefTerm = "surfaces",
@@ -2294,7 +2294,7 @@ public:
     );
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Illumination",
+        Category = "MaxQ|Illumination",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             AutoCreateRefTerm = "surfaces",
@@ -2322,7 +2322,7 @@ public:
     );
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Illumination",
+        Category = "MaxQ|Illumination",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "ANGLES, GEOMETRY, ILLUMINATION",
@@ -2347,7 +2347,7 @@ public:
     );
 
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Ellipses",
+        Category = "MaxQ|Ellipses",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "ELLIPSE, GEOMETRY, MATH",
@@ -2366,7 +2366,7 @@ public:
     /// <summary>Return the value of the largest (positive) number representable in a SpiceInt variable</summary>
     /// <returns>the largest (positive) number that can be represented in a SpiceInt variable</returns>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Constants",
+        Category = "MaxQ|Constants",
         meta = (
             Keywords = "CONSTANTS",
             ShortToolTip = "Largest integer number",
@@ -2377,7 +2377,7 @@ public:
     /// <summary>Return the value of the smallest (negative) number representable in a SpiceInt variable</summary>
     /// <returns>the smallest (negative) number that can be represented in a SpiceInt variable</returns>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Constants",
+        Category = "MaxQ|Constants",
         meta = (
             Keywords = "CONSTANTS",
             ShortToolTip = "Smallest integer number",
@@ -2391,7 +2391,7 @@ public:
     /// <returns></returns>
     UFUNCTION(
         BlueprintCallable,
-        Category = "Spice|Api|Matrix",
+        Category = "MaxQ|Matrix",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "MATH, MATRIX",
@@ -2412,7 +2412,7 @@ public:
     /// <returns></returns>
     UFUNCTION(
         BlueprintCallable,
-        Category = "Spice|Api|Matrix",
+        Category = "MaxQ|Matrix",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "MATRIX",
@@ -2428,7 +2428,7 @@ public:
 
     UFUNCTION(
         BlueprintPure,
-        Category = "Spice|Api|Matrix",
+        Category = "MaxQ|Matrix",
         meta = (
             Keywords = "MATRIX",
             ShortToolTip = "Inverse of state transformation matrix",
@@ -2440,7 +2440,7 @@ public:
     );
 
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Constants",
+        Category = "MaxQ|Constants",
         meta = (
             Keywords = "CONSTANTS",
             ShortToolTip = "Besselian Date 1900.0",
@@ -2451,7 +2451,7 @@ public:
     );
 
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Constants",
+        Category = "MaxQ|Constants",
         meta = (
             Keywords = "CONSTANTS",
             ShortToolTip = "Besselian Date 1950.0",
@@ -2464,7 +2464,7 @@ public:
     /// <summary>Return the Julian Date of 1899 DEC 31 12:00:00 (1900 JAN 0.5)</summary>
     /// <returns>the Julian Date of 1899 DEC 31 12:00:00 (1900 JAN 0.5)</returns>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Constants",
+        Category = "MaxQ|Constants",
         meta = (
             Keywords = "CONSTANTS",
             ShortToolTip = "Julian Date of 1900.0 JAN 0.5",
@@ -2477,7 +2477,7 @@ public:
     /// <summary>Return the Julian Date of 1950 JAN 01 00:00:00 (1950 JAN 1.0)</summary>
     /// <returns>the Julian Date of 1950 JAN 01 00:00:00 (1950 JAN 1.0) </returns>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Constants",
+        Category = "MaxQ|Constants",
         meta = (
             Keywords = "CONSTANTS",
             ShortToolTip = "Julian Date of 1950.0 JAN 1.0",
@@ -2488,7 +2488,7 @@ public:
     /// <summary>Return the Julian Date of 2000 JAN 01 12:00:00 (2000 JAN 1.5)</summary>
     /// <returns>the Julian Date of 2000 JAN 01 12:00:00 (2000 JAN 1.5)</returns>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Constants",
+        Category = "MaxQ|Constants",
         meta = (
             Keywords = "CONSTANTS",
             ShortToolTip = "Julian Date of 2000 JAN 1.5",
@@ -2499,7 +2499,7 @@ public:
     /// <summary>Return the Julian Date of 2100 JAN 01 12:00:00 (2100 JAN 1.5)</summary>
     /// <returns>the Julian Date of 2100 JAN 01 12:00:00 (2100 JAN 1.5)</returns>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Constants",
+        Category = "MaxQ|Constants",
         meta = (
             Keywords = "CONSTANTS",
             ShortToolTip = "Julian Date of 2100 JAN 1.5",
@@ -2510,7 +2510,7 @@ public:
     /// <summary>Return the number of seconds in a julian year</summary>
     /// <returns>The number of seconds/julian year</returns>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Constants",
+        Category = "MaxQ|Constants",
         meta = (
             Keywords = "CONSTANTS",
             ShortToolTip = "Seconds per julian year",
@@ -2519,7 +2519,7 @@ public:
     static void jyear(double& secondsPerJulianYear);
 
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Constants",
+        Category = "MaxQ|Constants",
         meta = (
             Keywords = "CONSTANTS",
             ShortToolTip = "Seconds per tropical year",
@@ -2528,7 +2528,7 @@ public:
     static void tyear(double& secondsPerTropicalYear);
 
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Constants",
+        Category = "MaxQ|Constants",
         meta = (
             Keywords = "CONSTANTS",
             ShortToolTip = "Ephemeris Period of one julian year",
@@ -2537,7 +2537,7 @@ public:
     static void jyear_period(FSEphemerisPeriod& oneJulianYear);
 
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Constants",
+        Category = "MaxQ|Constants",
         meta = (
             Keywords = "CONSTANTS",
             ShortToolTip = "Ephemeris Period of one tropical year",
@@ -2546,7 +2546,7 @@ public:
     static void tyear_period(FSEphemerisPeriod& oneTropicalYear);
 
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Coordinates",
+        Category = "MaxQ|Coordinates",
         meta = (
             Keywords = "CONVERSION, COORDINATES",
             ShortToolTip = "Latitudinal to cylindrical coordinates",
@@ -2558,7 +2558,7 @@ public:
     );
 
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Coordinates",
+        Category = "MaxQ|Coordinates",
         meta = (
             Keywords = "CONVERSION, COORDINATES",
             ShortToolTip = "Latitudinal to rectangular coordinates",
@@ -2570,7 +2570,7 @@ public:
     );
 
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Coordinates",
+        Category = "MaxQ|Coordinates",
         meta = (
             Keywords = "CONVERSION, COORDINATES",
             ShortToolTip = "Latitudinal to spherical coordinates",
@@ -2583,7 +2583,7 @@ public:
 
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|DSK",
+        Category = "MaxQ|DSK",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "COORDINATES, DSK, GEOMETRY, SURFACE",
@@ -2614,7 +2614,7 @@ public:
     /// <param name="dp">[out] Polynomial derivative at x</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Polynomial",
+        Category = "MaxQ|Polynomial",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "INTERPOLATION, POLYNOMIAL",
@@ -2633,7 +2633,7 @@ public:
 
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|DSK",
+        Category = "MaxQ|DSK",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             AdvancedDisplay = "maxn",
@@ -2667,7 +2667,7 @@ public:
     /// <param name="abcorr">[in] Aberration correction ["NONE", "LT", "LT+S"]</param>
     /// <returns>the value of L_s for the specified body at the specified time</returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|SPK",
+        Category = "MaxQ|SPK",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "GEOMETRY, TIME",
@@ -2689,7 +2689,7 @@ public:
     /// <returns></returns>
     UFUNCTION(
         BlueprintPure,
-        Category = "Spice|Api|Matrix",
+        Category = "MaxQ|Matrix",
         meta = (
             Keywords = "ASSIGNMENT, MATRIX",
             ShortToolTip = "Matrix equal to another, 3x3",
@@ -2708,7 +2708,7 @@ public:
     /// <param name="nc1r2">[in] Column dimension of m1 and length of v2</param>
     /// <param name="vout">[out] Product vector m1*v2</param>
     /// <returns></returns>
-    UFUNCTION(BlueprintCallable, Category = "Spice|Api", meta = (ToolTip = ""))
+    UFUNCTION(BlueprintCallable, Category = "MaxQ", meta = (ToolTip = ""))
         static void mxvg(
             const void* m1,
             const void* v2,
@@ -2719,7 +2719,7 @@ public:
 #endif
 
 
-    UFUNCTION(BlueprintPure, Category = "Spice|Api|Math", meta = (ToolTip = "multiplies state by state transform"))
+    UFUNCTION(BlueprintPure, Category = "MaxQ|Math", meta = (ToolTip = "multiplies state by state transform"))
     static void mxv_state(
         const FSStateTransform& m,
         const FSStateVector& statein,
@@ -2727,7 +2727,7 @@ public:
     );
 
 
-    UFUNCTION(BlueprintPure, Category = "Spice|Api|Math", meta = (ToolTip = "multiplies state by state transform transpose"))
+    UFUNCTION(BlueprintPure, Category = "MaxQ|Math", meta = (ToolTip = "multiplies state by state transform transpose"))
     static void mtxv_state(
         const FSStateTransform& m,
         const FSStateVector& statein,
@@ -2739,7 +2739,7 @@ public:
     /// <param name="q">[out] unit quaternion representing 'r'</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Matrix",
+        Category = "MaxQ|Matrix",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "MATRIX, VECTOR",
@@ -2759,7 +2759,7 @@ public:
     /// <param name="mout">[out] 3x3 double precision matrix. mout is the product m1* m2</param>
     /// <returns></returns>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Matrix",
+        Category = "MaxQ|Matrix",
         meta = (
             Keywords = "MATRIX",
             ShortToolTip = "Matrix times matrix, 3x3",
@@ -2778,7 +2778,7 @@ public:
     /// <param name="mout">[out] The product m1 times m2 transpose</param>
     /// <returns></returns>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Matrix",
+        Category = "MaxQ|Matrix",
         meta = (
             Keywords = "MATRIX",
             ShortToolTip = "Matrix times matrix transpose, 3x3",
@@ -2798,7 +2798,7 @@ public:
     /// <returns></returns>
     UFUNCTION(
         BlueprintPure,
-        Category = "Spice|Api|Matrix",
+        Category = "MaxQ|Matrix",
         meta = (
             Keywords = "MATRIX, VECTOR",
             ShortToolTip = "Matrix transpose times vector, 3x3",
@@ -2818,7 +2818,7 @@ public:
     /// <returns></returns>
     UFUNCTION(
         BlueprintPure,
-        Category = "Spice|Api|Matrix",
+        Category = "MaxQ|Matrix",
         meta = (
             Keywords = "MATRIX, VECTOR",
             ShortToolTip = "Matrix transpose times vector, 3x3",
@@ -2838,7 +2838,7 @@ public:
     /// <returns></returns>
     UFUNCTION(
         BlueprintPure,
-        Category = "Spice|Api|Matrix",
+        Category = "MaxQ|Matrix",
         meta = (
             Keywords = "MATRIX, VECTOR",
             ShortToolTip = "Matrix transpose times vector, 3x3",
@@ -2857,7 +2857,7 @@ public:
     /// <returns></returns>
     UFUNCTION(
         BlueprintPure,
-        Category = "Spice|Api|Matrix",
+        Category = "MaxQ|Matrix",
         meta = (
             Keywords = "MATRIX, VECTOR",
             ShortToolTip = "Matrix transpose times vector, 3x3",
@@ -2871,7 +2871,7 @@ public:
 
     UFUNCTION(
         BlueprintPure,
-        Category = "Spice|Api|Matrix",
+        Category = "MaxQ|Matrix",
         meta = (
             Keywords = "MATRIX, VECTOR",
             ShortToolTip = "Matrix times vector, 3x3",
@@ -2889,7 +2889,7 @@ public:
     /// <param name="mout">[out] The produce m1 transpose times m2</param>
     /// <returns></returns>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Matrix",
+        Category = "MaxQ|Matrix",
         meta = (
             Keywords = "MATRIX",
             ShortToolTip = "Matrix transpose times matrix, 3x3",
@@ -2907,7 +2907,7 @@ public:
     /// <param name="[out] angle1, angle2, angle3">Third, second, and first Euler angles, in radians</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Rotation",
+        Category = "MaxQ|Rotation",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "ANGLE, MATRIX, ROTATION, TRANSFORMATION",
@@ -2932,7 +2932,7 @@ public:
     /// <returns></returns>
     UFUNCTION(
         BlueprintPure,
-        Category = "Spice|Api|Matrix",
+        Category = "MaxQ|Matrix",
         meta = (
             Keywords = "MATRIX, VECTOR",
             ShortToolTip = "Matrix times vector, 3x3",
@@ -2951,7 +2951,7 @@ public:
     /// <returns></returns>
     UFUNCTION(
         BlueprintPure,
-        Category = "Spice|Api|Matrix",
+        Category = "MaxQ|Matrix",
         meta = (
             Keywords = "MATRIX, VECTOR",
             ShortToolTip = "Matrix times vector, 3x3",
@@ -2970,7 +2970,7 @@ public:
     /// <returns></returns>
     UFUNCTION(
         BlueprintPure,
-        Category = "Spice|Api|Matrix",
+        Category = "MaxQ|Matrix",
         meta = (
             Keywords = "MATRIX, VECTOR",
             ShortToolTip = "Matrix times vector, 3x3",
@@ -2990,7 +2990,7 @@ public:
     /// <param name="frcode">[out] The SPICE ID code of the frame</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Frames",
+        Category = "MaxQ|Frames",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "FRAMES",
@@ -3011,7 +3011,7 @@ public:
     /// <param name="dist">[out] Distance of input point to ellipse</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Ellipses",
+        Category = "MaxQ|Ellipses",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "CONIC, ELLIPSE, GEOMETRY, MATH",
@@ -3036,7 +3036,7 @@ public:
     /// <param name="alt">[out] Altitude of positn above the ellipsoid</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Ellipsoid",
+        Category = "MaxQ|Ellipsoid",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "ELLIPSOID, GEOMETRY",
@@ -3064,7 +3064,7 @@ public:
     /// <param name="dist">[out] Distance of ellipsoid from line</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Ellipses",
+        Category = "MaxQ|Ellipses",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "ELLIPSOID, GEOMETRY, MATH",
@@ -3091,7 +3091,7 @@ public:
     /// <param name="dist">[out] Distance between point and pnear</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Math",
+        Category = "MaxQ|Math",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "GEOMETRY, MATH, VECTOR",
@@ -3114,7 +3114,7 @@ public:
     /// <param name="plane">[out] A CSPICE plane structure representing the plane</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Planes",
+        Category = "MaxQ|Planes",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "GEOMETRY, MATH, PLANE",
@@ -3135,7 +3135,7 @@ public:
     /// <param name="">[out] A CSPICE plane structure representing the plane</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Planes",
+        Category = "MaxQ|Planes",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "GEOMETRY, MATH, PLANE",
@@ -3152,7 +3152,7 @@ public:
 
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|SPK",
+        Category = "MaxQ|SPK",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "ELLIPSOID, GEOMETRY, OCCULTATION",
@@ -3189,7 +3189,7 @@ public:
     /// <returns></returns>
     UFUNCTION(
         BlueprintCallable,
-        Category = "Spice|Api|Ephemeris",
+        Category = "MaxQ|Ephemeris",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "CONIC, ELEMENTS, EPHEMERIS",
@@ -3214,7 +3214,7 @@ public:
     /// <returns></returns>
     UFUNCTION(
         BlueprintCallable,
-        Category = "Spice|Api|Ephemeris",
+        Category = "MaxQ|Ephemeris",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "CONIC, ELEMENTS, EPHEMERIS",
@@ -3236,7 +3236,7 @@ public:
 
     UFUNCTION(
         BlueprintCallable,
-        Category = "Spice|Api|PCK",
+        Category = "MaxQ|PCK",
         meta = (
             Keywords = "ORIENTATION, TIME, UTILITY",
             ExpandEnumAsExecs = "ResultCode",
@@ -3254,7 +3254,7 @@ public:
 
     UFUNCTION(
         BlueprintCallable,
-        Category = "Spice|Api|PCK",
+        Category = "MaxQ|PCK",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "ORIENTATION, UTILITY",
@@ -3270,7 +3270,7 @@ public:
 
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Kernel",
+        Category = "MaxQ|Kernel",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "POOL",
@@ -3285,7 +3285,7 @@ public:
     );
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Kernel",
+        Category = "MaxQ|Kernel",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "POOL",
@@ -3300,7 +3300,7 @@ public:
     );
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Kernel",
+        Category = "MaxQ|Kernel",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "POOL",
@@ -3315,7 +3315,7 @@ public:
     );
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Kernel",
+        Category = "MaxQ|Kernel",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "POOL",
@@ -3330,7 +3330,7 @@ public:
     );
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Coordinates",
+        Category = "MaxQ|Coordinates",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "CONVERSION, COORDINATES, GEOMETRY, MATH",
@@ -3348,7 +3348,7 @@ public:
     );
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Ephemeris",
+        Category = "MaxQ|Ephemeris",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "EPHEMERIS, GEOMETRY, PHASE ANGLE, SEARCH",
@@ -3369,7 +3369,7 @@ public:
     /// <returns>pi</returns>
     UFUNCTION(
         BlueprintPure,
-        Category = "Spice|Api|Constants",
+        Category = "MaxQ|Constants",
         meta = (
             Keywords = "CONSTANTS",
             ShortToolTip = "Value of pi",
@@ -3379,7 +3379,7 @@ public:
 
 
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Constants",
+        Category = "MaxQ|Constants",
         meta = (
             Keywords = "CONSTANTS",
             ShortToolTip = "Angle of value pi",
@@ -3389,7 +3389,7 @@ public:
 
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Kernel",
+        Category = "MaxQ|Kernel",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "POOL",
@@ -3404,7 +3404,7 @@ public:
     );
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Kernel",
+        Category = "MaxQ|Kernel",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "POOL",
@@ -3426,7 +3426,7 @@ public:
     /// <param name="elout">A CSPICE ellipse resulting from the projection</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Ellipses",
+        Category = "MaxQ|Ellipses",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "ELLIPSE, GEOMETRY, MATH",
@@ -3447,7 +3447,7 @@ public:
     /// <param name="normal, constant">[out] A normal vector and constant defining the geometric plane represented by plane</param>
     /// <returns></returns>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Planes",
+        Category = "MaxQ|Planes",
         meta = (
             Keywords = "GEOMETRY, MATH, PLANE",
             ShortToolTip = "Plane to normal vector and constant",
@@ -3464,7 +3464,7 @@ public:
     /// <param name="normal, point">[out] A unit normal vector and point that define plane</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Planes",
+        Category = "MaxQ|Planes",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "GEOMETRY, MATH, PLANE",
@@ -3486,7 +3486,7 @@ public:
     /// <param name="span2>[out] A vector spanning the input plane</param>
     /// <returns></returns>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Planes",
+        Category = "MaxQ|Planes",
         meta = (
             Keywords = "GEOMETRY, MATH, PLANE",
             ShortToolTip = "Plane to point and spanning vectors",
@@ -3506,7 +3506,7 @@ public:
     /// <param name="pvprop">[out] The propagated state</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Ephemeris",
+        Category = "MaxQ|Ephemeris",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "CONIC, EPHEMERIS, UTILITY",
@@ -3529,7 +3529,7 @@ public:
     /// <param name="plane">[out] A CSPICE plane representing the plane</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Planes",
+        Category = "MaxQ|Planes",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "GEOMETRY, MATH, PLANE",
@@ -3553,7 +3553,7 @@ public:
     /// <returns></returns>
     UFUNCTION(
         BlueprintCallable,
-        Category = "Spice|Api|Frames",
+        Category = "MaxQ|Frames",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "FRAMES, TRANSFORM",
@@ -3578,7 +3578,7 @@ public:
     /// <returns></returns>
     UFUNCTION(
         BlueprintCallable,
-        Category = "Spice|Api|Frames",
+        Category = "MaxQ|Frames",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "FRAMES, TRANSFORM",
@@ -3600,7 +3600,7 @@ public:
     /// <param name="r">[out] rotation matrix corresponding to 'q'</param>
     /// <returns></returns>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Rotation",
+        Category = "MaxQ|Rotation",
         meta = (
             Keywords = "MATH, MATRIX, ROTATION",
             ShortToolTip = "Quaternion to matrix",
@@ -3617,7 +3617,7 @@ public:
     /// <param name="qout">[out] Product of 'q1' and 'q2'</param>
     /// <returns></returns>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Rotation",
+        Category = "MaxQ|Rotation",
         meta = (
             Keywords = "MATH, POINTING, ROTATION",
             ShortToolTip = "Quaternion times quaternion",
@@ -3637,7 +3637,7 @@ public:
     /// <returns></returns>
     UFUNCTION(
         BlueprintPure,
-        Category = "Spice|Api|Coordinates",
+        Category = "MaxQ|Coordinates",
         meta = (
             Keywords = "CONVERSION, COORDINATES",
             ShortToolTip = "Convert from range, right ascension, and declination to rectangular coordinates",
@@ -3657,7 +3657,7 @@ public:
     /// <returns></returns>
     UFUNCTION(
         BlueprintPure,
-        Category = "Spice|Api|Rotation",
+        Category = "MaxQ|Rotation",
         meta = (
             Keywords = "FRAMES",
             ShortToolTip = "Rotation and angular velocity to transform",
@@ -3675,7 +3675,7 @@ public:
     /// <param name="angle">[out] Angle through which the rotation is performed</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Rotation",
+        Category = "MaxQ|Rotation",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "ANGLE, MATRIX, ROTATION",
@@ -3692,7 +3692,7 @@ public:
 
 
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Coordinates",
+        Category = "MaxQ|Coordinates",
         meta = (
             Keywords = "CONVERSION, COORDINATES",
             ShortToolTip = "Rectangular coordinates to AZ/EL",
@@ -3708,7 +3708,7 @@ public:
     );
 
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Coordinates",
+        Category = "MaxQ|Coordinates",
         meta = (
             Keywords = "CONVERSION, COORDINATES",
             ShortToolTip = "Rectangular to cylindrical coordinates",
@@ -3728,7 +3728,7 @@ public:
     /// <param name="alt">[out] Altitude of the point above reference spheroid</param>
     /// <returns></returns>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Coordinates",
+        Category = "MaxQ|Coordinates",
         meta = (
             Keywords = "CONVERSION, COORDINATES",
             ShortToolTip = "Rectangular to geodetic",
@@ -3748,7 +3748,7 @@ public:
     /// <param name="latitude">[out] Latitude of the point in radians</param>
     /// <returns></returns>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Coordinates",
+        Category = "MaxQ|Coordinates",
         meta = (
             Keywords = "CONVERSION, COORDINATES",
             ShortToolTip = "Rectangular to latitudinal coordinates",
@@ -3761,7 +3761,7 @@ public:
 
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Coordinates",
+        Category = "MaxQ|Coordinates",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "CONVERSION, COORDINATES, GEOMETRY, MATH",
@@ -3787,7 +3787,7 @@ public:
     /// <param name="dec">[out] Declination in radians</param>
     /// <returns></returns>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Coordinates",
+        Category = "MaxQ|Coordinates",
         meta = (
             Keywords = "CONVERSION, COORDINATES",
             ShortToolTip = "Rectangular coordinates to RA and DEC",
@@ -3807,7 +3807,7 @@ public:
     /// <param name="lon">[out] Longitude of the point in radians</param>
     /// <returns></returns>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Coordinates",
+        Category = "MaxQ|Coordinates",
         meta = (
             Keywords = "CONVERSION, COORDINATES",
             ShortToolTip = "Rectangular to spherical coordinates",
@@ -3824,7 +3824,7 @@ public:
     /// <param name="mout">[out] Resulting rotation matrix [angle]</param>
     /// <returns></returns>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Rotation",
+        Category = "MaxQ|Rotation",
         meta = (
             Keywords = "MATRIX, ROTATION",
             ShortToolTip = "Generate a rotation matrix",
@@ -3843,7 +3843,7 @@ public:
     /// <param name="mout">[out] Resulting rotated matrix</param>
     /// <returns></returns>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Rotation",
+        Category = "MaxQ|Rotation",
         meta = (
             Keywords = "MATRIX, ROTATION",
             ShortToolTip = "Rotate a matrix",
@@ -3863,7 +3863,7 @@ public:
     /// <param name="vout">[out] Resulting vector</param>
     /// <returns></returns>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Rotation",
+        Category = "MaxQ|Rotation",
         meta = (
             Keywords = "ROTATION, VECTOR",
             ShortToolTip = "Transform a vector via a rotation",
@@ -3879,7 +3879,7 @@ public:
     /// <summary>Radians per degree</summary>
     /// <returns>Radians.  Per degree.</returns>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Constants",
+        Category = "MaxQ|Constants",
         meta = (
             Keywords = "CONSTANTS",
             ShortToolTip = "Radians per degree",
@@ -3898,7 +3898,7 @@ public:
     /// <param name="root2">[out] Root built from negative discriminant term</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Polynomial",
+        Category = "MaxQ|Polynomial",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "MATH, POLYNOMIAL, ROOT",
@@ -3922,7 +3922,7 @@ public:
     /// <param name="sclkch">[out] Character representation of a clock count</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|SCLK",
+        Category = "MaxQ|SCLK",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "CONVERSION, TIME",
@@ -3943,7 +3943,7 @@ public:
     /// <param name="sclkdp">[out] SCLK, encoded as ticks since spacecraft clock start. sclkdp need not be integral</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|SCLK",
+        Category = "MaxQ|SCLK",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "CONVERSION, TIME",
@@ -3965,7 +3965,7 @@ public:
     /// <param name="b">[out] An SCLK string</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|SCLK",
+        Category = "MaxQ|SCLK",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "CONVERSION, TIME",
@@ -3986,7 +3986,7 @@ public:
     /// <param name="sclkdp">[out] SCLK, encoded as ticks since spacecraft clock start</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|SCLK",
+        Category = "MaxQ|SCLK",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "CONVERSION, TIME",
@@ -4007,7 +4007,7 @@ public:
     /// <param name="sclkdp">[out] Encoded representation of the clock count</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|SCLK",
+        Category = "MaxQ|SCLK",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "CONVERSION, TIME",
@@ -4029,7 +4029,7 @@ public:
     /// <param name="clkstr">[out] Character representation of a clock count</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|SCLK",
+        Category = "MaxQ|SCLK",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "CONVERSION, TIME",
@@ -4051,7 +4051,7 @@ public:
     /// <param name="pstop">[out] Array of partition stop times</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|SCLK",
+        Category = "MaxQ|SCLK",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "TIME",
@@ -4072,7 +4072,7 @@ public:
     /// <param name="et">[out] Ephemeris time, seconds past J2000</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|SCLK",
+        Category = "MaxQ|SCLK",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "CONVERSION, TIME",
@@ -4093,7 +4093,7 @@ public:
     /// <param name="et">[out] Ephemeris time, seconds past J2000</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|SCLK",
+        Category = "MaxQ|SCLK",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "CONVERSION, TIME",
@@ -4114,7 +4114,7 @@ public:
     /// <param name="ticks">[out] Number of ticks represented by the clock string</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|SCLK",
+        Category = "MaxQ|SCLK",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "CONVERSION, TIME",
@@ -4130,7 +4130,7 @@ public:
     );
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Sort",
+        Category = "MaxQ|Sort",
         meta = (
             Keywords = "ARRAY, SORT",
             ShortToolTip = "Shell sort a double precision array",
@@ -4141,7 +4141,7 @@ public:
     );
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Sort",
+        Category = "MaxQ|Sort",
         meta = (
             Keywords = "ARRAY, SORT",
             ShortToolTip = "Shell sort a double precision array",
@@ -4156,7 +4156,7 @@ public:
     /// <summary>Convert spacecraft clock string to ticks</summary>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|DSK",
+        Category = "MaxQ|DSK",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             AutoCreateRefTerm = "shapeSurfaces",
@@ -4186,7 +4186,7 @@ public:
     /// <param name="handle">[in] Handle of the SPK file to be closed</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|SPK",
+        Category = "MaxQ|SPK",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "SPK",
@@ -4206,7 +4206,7 @@ public:
     /// <param name="cover">[out] Window giving coverage in `spk' for `idcode''</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|SPK",
+        Category = "MaxQ|SPK",
         meta = (
             AutoCreateRefTerm = "merge_to",
             ExpandEnumAsExecs = "ResultCode",
@@ -4243,7 +4243,7 @@ public:
     /// <param name="lt">   [out] One way light time between target and observer</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|SPK",
+        Category = "MaxQ|SPK",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "EPHEMERIS",
@@ -4279,7 +4279,7 @@ public:
     /// <param name="lt">   [out] One way light time between target and observer</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|SPK",
+        Category = "MaxQ|SPK",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "EPHEMERIS",
@@ -4316,7 +4316,7 @@ public:
     /// <param name="lt">   [out] One way light time between target and observer</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|SPK",
+        Category = "MaxQ|SPK",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "EPHEMERIS",
@@ -4354,7 +4354,7 @@ public:
     /// <param name="lt">   [out] One way light time between target and observer</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|SPK",
+        Category = "MaxQ|SPK",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "EPHEMERIS",
@@ -4388,7 +4388,7 @@ public:
     /// <param name="lt">[out] One way light time between observer and target</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|SPK",
+        Category = "MaxQ|SPK",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "EPHEMERIS",
@@ -4417,7 +4417,7 @@ public:
 /// <param name="lt">[out] One way light time between observer and target</param>
 /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|SPK",
+        Category = "MaxQ|SPK",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "EPHEMERIS",
@@ -4446,7 +4446,7 @@ public:
     /// <param name="lt">[out] Light time</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|SPK",
+        Category = "MaxQ|SPK",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "EPHEMERIS",
@@ -4474,7 +4474,7 @@ public:
     /// <param name="lt">[out] Light time</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|SPK",
+        Category = "MaxQ|SPK",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "EPHEMERIS",
@@ -4502,7 +4502,7 @@ public:
     /// <param name="lt">[out] Light time</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|SPK",
+        Category = "MaxQ|SPK",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "EPHEMERIS",
@@ -4527,7 +4527,7 @@ public:
     /// <param name="handle">[out] Loaded file's handle</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|SPK",
+        Category = "MaxQ|SPK",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "EPHEMERIS, FILES",
@@ -4547,7 +4547,7 @@ public:
     /// <param name="ids">[out] Set of ID codes of objects in SPK file</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|SPK",
+        Category = "MaxQ|SPK",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "EPHEMERIS, UTILITY",
@@ -4567,7 +4567,7 @@ public:
     /// <param name="handle">[out] A handle attached to the SPK file opened to append</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|SPK",
+        Category = "MaxQ|SPK",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "SPK",
@@ -4589,7 +4589,7 @@ public:
     /// <param name="handle">[out] The handle of the opened SPK file</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|SPK",
+        Category = "MaxQ|SPK",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "SPK",
@@ -4609,7 +4609,7 @@ public:
     /// <param name="handle">[in] Handle of file to be unloaded</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|SPK",
+        Category = "MaxQ|SPK",
         meta = (
             Keywords = "EPHEMERIS, FILES",
             ShortToolTip = "S/P Kernel, Unload ephemeris file",
@@ -4633,7 +4633,7 @@ public:
     /// <param name="epochs">[in] Epochs</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|SPK",
+        Category = "MaxQ|SPK",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "EPHEMERIS",
@@ -4655,7 +4655,7 @@ public:
     );
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|SPK",
+        Category = "MaxQ|SPK",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "EPHEMERIS",
@@ -4678,7 +4678,7 @@ public:
     /// <summary>Seconds in a day</summary>
     /// <returns>Seconds.  Per day.</returns>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Constants",
+        Category = "MaxQ|Constants",
         meta = (
             Keywords = "CONSTANTS",
             ShortToolTip = "Seconds per day",
@@ -4689,7 +4689,7 @@ public:
     /// <summary>Seconds in a day</summary>
     /// <returns>Seconds.  Per day.</returns>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Constants",
+        Category = "MaxQ|Constants",
         meta = (
             Keywords = "CONSTANTS",
             ShortToolTip = "One Day",
@@ -4698,7 +4698,7 @@ public:
     static void day_period(FSEphemerisPeriod& oneDay);
 
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Coordinates",
+        Category = "MaxQ|Coordinates",
         meta = (
             Keywords = "CONVERSION, COORDINATES",
             ShortToolTip = "Spherical to cylindrical coordinates",
@@ -4718,7 +4718,7 @@ public:
     /// <param name="lat">[out] Angle of the point from the XY plane in radians</param>
     /// <returns></returns>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Coordinates",
+        Category = "MaxQ|Coordinates",
         meta = (
             Keywords = "CONVERSION, COORDINATES",
             ShortToolTip = "Spherical to latitudinal coordinates",
@@ -4736,7 +4736,7 @@ public:
     /// <param name="rectan">[out] Rectangular coordinates of the point</param>
     /// <returns></returns>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Coordinates",
+        Category = "MaxQ|Coordinates",
         meta = (
             Keywords = "CONVERSION, COORDINATES",
             ShortToolTip = "Spherical to rectangular coordinates",
@@ -4748,7 +4748,7 @@ public:
     );
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Coordinates",
+        Category = "MaxQ|Coordinates",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "CONVERSION, COORDINATES, TRANSFORMATION",
@@ -4764,7 +4764,7 @@ public:
         );
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|DSK",
+        Category = "MaxQ|DSK",
         meta = (
             ExpandEnumAsExecs = "isname",
             Keywords = "CONVERSION, DSK, ID, NAME, STRING, SURFACE",
@@ -4779,7 +4779,7 @@ public:
     );
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|DSK",
+        Category = "MaxQ|DSK",
         meta = (
             ExpandEnumAsExecs = "isname",
             Keywords = "CONVERSION, DSK, ID, NAME, STRING, SURFACE",
@@ -4794,7 +4794,7 @@ public:
     );
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|DSK",
+        Category = "MaxQ|DSK",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             AutoCreateRefTerm = "shapeSurfaces, et",
@@ -4815,7 +4815,7 @@ public:
     );
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|DSK",
+        Category = "MaxQ|DSK",
         meta = (
             ExpandEnumAsExecs = "found",
             Keywords = "CONVERSION, DSK, ID, NAME, STRING, SURFACE",
@@ -4830,7 +4830,7 @@ public:
     );
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|DSK",
+        Category = "MaxQ|DSK",
         meta = (
             ExpandEnumAsExecs = "found",
             Keywords = "CONVERSION, DSK, ID, NAME, STRING, SURFACE",
@@ -4850,7 +4850,7 @@ public:
     /// <param name="et">[out] The equivalent value in seconds past J2000</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Time",
+        Category = "MaxQ|Time",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "TIME",
@@ -4865,7 +4865,7 @@ public:
     );
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|DSK",
+        Category = "MaxQ|DSK",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             AutoCreateRefTerm = "surfaces",
@@ -4889,7 +4889,7 @@ public:
     );
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|DSK",
+        Category = "MaxQ|DSK",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             AutoCreateRefTerm = "surfaces",
@@ -4921,7 +4921,7 @@ public:
     /// <param name="normal">[out] Outward pointing unit normal to ellipsoid at point</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Ellipsoid",
+        Category = "MaxQ|Ellipsoid",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "ELLIPSOID, GEOMETRY",
@@ -4948,7 +4948,7 @@ public:
     /// <param name="found">[out] </param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Ellipsoid",
+        Category = "MaxQ|Ellipsoid",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "ELLIPSOID, GEOMETRY, INTERSECTION",
@@ -4974,7 +4974,7 @@ public:
     /// <param name="xform">[out] A state transformation matrix</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Frames",
+        Category = "MaxQ|Frames",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "FRAMES",
@@ -4992,7 +4992,7 @@ public:
 
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|DSK",
+        Category = "MaxQ|DSK",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             AdvancedDisplay = "maxn",
@@ -5030,7 +5030,7 @@ public:
     /// <param name="output">[out] A string representation of the input epoch</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Time",
+        Category = "MaxQ|Time",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "TIME",
@@ -5047,7 +5047,7 @@ public:
 
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Rotation",
+        Category = "MaxQ|Rotation",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "ROTATION, TRANSFORMATION, FRAMES, PCK",
@@ -5070,7 +5070,7 @@ public:
     /// <param name="errmsg">Descriptive error message</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Time",
+        Category = "MaxQ|Time",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "PARSING, TIME",
@@ -5085,7 +5085,7 @@ public:
     );
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Time",
+        Category = "MaxQ|Time",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "TIME",
@@ -5103,7 +5103,7 @@ public:
     /// <param name="matrix">3x3 matrix of double precision numbers</param>
     /// <returns>trace of matrix, i.e. it is the sum of the diagonal elements of matrix</returns>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Matrix",
+        Category = "MaxQ|Matrix",
         meta = (
             Keywords = "MATRIX",
             ShortToolTip = "Trace of a 3x3 matrix",
@@ -5116,7 +5116,7 @@ public:
 
     /// <summary>Twice the value of pi</summary>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Constants",
+        Category = "MaxQ|Constants",
         meta = (
             Keywords = "CONSTANTS",
             ShortToolTip = "Twice the value of pi",
@@ -5127,7 +5127,7 @@ public:
     );
 
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Constants",
+        Category = "MaxQ|Constants",
         meta = (
             Keywords = "CONSTANTS",
             ShortToolTip = "Angle of twice the value pi",
@@ -5143,7 +5143,7 @@ public:
     /// <param name="mout">[out] Output rotation matrix</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Rotation",
+        Category = "MaxQ|Rotation",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "AXES. FRAME, ROTATION, TRANSFORMATION",
@@ -5166,7 +5166,7 @@ public:
     /// <param name="vout">[out] Normalized cross product (v1xv2) / |v1xv2|</param>
     /// <returns></returns>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Vector",
+        Category = "MaxQ|Vector",
         meta = (
             Keywords = "VECTOR",
             ShortToolTip = "Unitized cross product, 3x3",
@@ -5185,7 +5185,7 @@ public:
     /// <param name="deriv">[out] Approximate derivative of 'udfunc' at 'x'</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Math",
+        Category = "MaxQ|Math",
         meta = (
             Keywords = "DERIVATIVE, MATH",
             ShortToolTip = "First derivative of a function, df(x)/dx",
@@ -5204,7 +5204,7 @@ public:
     /// <param name="outsys">[in] The time scale associated with the function value</param>
     /// <returns> d.p. in outsys that is equivalent to the epoch on the insys time scale</returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Time",
+        Category = "MaxQ|Time",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "CONVERSION, TIME, UTILITY",
@@ -5226,7 +5226,7 @@ public:
     /// <param name="vmag">[out] Magnitude of v1</param>
     /// <returns></returns>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Vector",
+        Category = "MaxQ|Vector",
         meta = (
             Keywords = "VECTOR",
             ShortToolTip = "Unit vector and norm, 3 dimensional",
@@ -5238,7 +5238,7 @@ public:
         FSDistance& vmag
     );
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Vector",
+        Category = "MaxQ|Vector",
         meta = (
             Keywords = "VECTOR",
             ShortToolTip = "Unit vector and norm, 3 dimensional",
@@ -5250,7 +5250,7 @@ public:
         FSSpeed& vmag
     );
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Vector",
+        Category = "MaxQ|Vector",
         meta = (
             Keywords = "VECTOR",
             ShortToolTip = "Unit vector and norm, 3 dimensional",
@@ -5262,7 +5262,7 @@ public:
         FSAngularRate& vmag
     );
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Vector",
+        Category = "MaxQ|Vector",
         meta = (
             Keywords = "VECTOR",
             ShortToolTip = "Unit vector and norm, 3 dimensional",
@@ -5279,7 +5279,7 @@ public:
     /// <param name="et">[out] Output epoch, ephemeris seconds past J2000</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Time",
+        Category = "MaxQ|Time",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "TIME",
@@ -5299,7 +5299,7 @@ public:
     /// <param name="vout">[out] Sum vector, v1 + v2</param>
     /// <returns></returns>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Math",
+        Category = "MaxQ|Math",
         meta = (
             Keywords = "TIME",
             ShortToolTip = "Vector addition, 3 dimensional",
@@ -5311,7 +5311,7 @@ public:
         FSDistanceVector& vout
     );
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Vector",
+        Category = "MaxQ|Vector",
         meta = (
             Keywords = "VECTOR",
             ShortToolTip = "Vector addition, 3 dimensional",
@@ -5323,7 +5323,7 @@ public:
         FSVelocityVector& vout
     );
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Vector",
+        Category = "MaxQ|Vector",
         meta = (
             Keywords = "VECTOR",
             ShortToolTip = "Vector addition, 3 dimensional",
@@ -5335,7 +5335,7 @@ public:
         FSAngularVelocity& vout
     );
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Vector",
+        Category = "MaxQ|Vector",
         meta = (
             Keywords = "VECTOR",
             ShortToolTip = "Vector addition, 3 dimensional",
@@ -5353,7 +5353,7 @@ public:
     /// <param name="">[out] Cross product v1xv2</param>
     /// <returns></returns>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Vector",
+        Category = "MaxQ|Vector",
         meta = (
             Keywords = "VECTOR",
             ShortToolTip = "Vector cross product, 3 dimensions",
@@ -5369,7 +5369,7 @@ public:
     /// <param name="v1, v2">[in] Two 3-vectors</param>
     /// <returns>distance between v1 and v2</returns>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Vector",
+        Category = "MaxQ|Vector",
         meta = (
             Keywords = "VECTOR",
             ShortToolTip = "Vector distance",
@@ -5381,7 +5381,7 @@ public:
         double& out
     );
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Vector",
+        Category = "MaxQ|Vector",
         meta = (
             Keywords = "VECTOR",
             ShortToolTip = "Vector distance",
@@ -5393,7 +5393,7 @@ public:
         FSDistance& out
     );
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Vector",
+        Category = "MaxQ|Vector",
         meta = (
             Keywords = "VECTOR",
             ShortToolTip = "Vector distance",
@@ -5410,7 +5410,7 @@ public:
     /// <param name="v2">Second vector in the dot product</param>
     /// <returns>dot product of v1 and v2</returns>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Vector",
+        Category = "MaxQ|Vector",
         meta = (
             Keywords = "VECTOR",
             ShortToolTip = "Vector dot product, 3 dimensions",
@@ -5422,7 +5422,7 @@ public:
         double& out
     );
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Vector",
+        Category = "MaxQ|Vector",
         meta = (
             Keywords = "VECTOR",
             ShortToolTip = "Vector dot product, 3 dimensions",
@@ -5434,7 +5434,7 @@ public:
         FSDistance& out
     );
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Vector",
+        Category = "MaxQ|Vector",
         meta = (
             Keywords = "VECTOR",
             ShortToolTip = "Vector dot product, 3 dimensions",
@@ -5451,7 +5451,7 @@ public:
     /// <param name="vout">[out] value of vin</param>
     /// <returns></returns>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Vector",
+        Category = "MaxQ|Vector",
         meta = (
             Keywords = "VECTOR",
             ShortToolTip = "Vector equality, 3 dimensions",
@@ -5462,7 +5462,7 @@ public:
         FSDimensionlessVector& vout
     );
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Vector",
+        Category = "MaxQ|Vector",
         meta = (
             Keywords = "VECTOR",
             ShortToolTip = "Vector equality, 3 dimensions",
@@ -5473,7 +5473,7 @@ public:
         FSDistanceVector& vout
     );
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Vector",
+        Category = "MaxQ|Vector",
         meta = (
             Keywords = "VECTOR",
             ShortToolTip = "Vector equality, 3 dimensions",
@@ -5484,7 +5484,7 @@ public:
         FSVelocityVector& vout
     );
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Vector",
+        Category = "MaxQ|Vector",
         meta = (
             Keywords = "VECTOR",
             ShortToolTip = "Vector equality, 3 dimensions",
@@ -5500,7 +5500,7 @@ public:
     /// <param name="vout">[out] Unit vector</param>
     /// <returns></returns>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Vector",
+        Category = "MaxQ|Vector",
         meta = (
             Keywords = "VECTOR",
             ShortToolTip = "\"V - Hat\", unit vector along V, 3 dimensions",
@@ -5511,7 +5511,7 @@ public:
         FSDimensionlessVector& vout
     );
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Vector",
+        Category = "MaxQ|Vector",
         meta = (
             Keywords = "VECTOR",
             ShortToolTip = "\"V - Hat\", unit vector along V, 3 dimensions",
@@ -5522,7 +5522,7 @@ public:
         FSDimensionlessVector& vout
     );
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Vector",
+        Category = "MaxQ|Vector",
         meta = (
             Keywords = "VECTOR",
             ShortToolTip = "\"V - Hat\", unit vector along V, 3 dimensions",
@@ -5533,7 +5533,7 @@ public:
         FSDimensionlessVector& vout
     );
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Vector",
+        Category = "MaxQ|Vector",
         meta = (
             Keywords = "VECTOR",
             ShortToolTip = "\"V - Hat\", unit vector along V, 3 dimensions",
@@ -5554,7 +5554,7 @@ public:
     /// <param name="sum">[out] Linear Vector Combination a*v1 + b*v2 + c*v3</param>
     /// <returns></returns>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Vector",
+        Category = "MaxQ|Vector",
         meta = (
             Keywords = "VECTOR",
             ShortToolTip = "Vector linear combination, 3 dimensions",
@@ -5570,7 +5570,7 @@ public:
         FSDimensionlessVector& sum
     );
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Vector",
+        Category = "MaxQ|Vector",
         meta = (
             Keywords = "VECTOR",
             ShortToolTip = "Vector linear combination, 3 dimensions",
@@ -5594,7 +5594,7 @@ public:
     /// <param name="sum">[out] Linear Vector Combination a*v1 + b*v2</param>
     /// <returns></returns>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Vector",
+        Category = "MaxQ|Vector",
         meta = (
             Keywords = "VECTOR",
             ShortToolTip = "Vector linear combination, 3 dimensions",
@@ -5609,7 +5609,7 @@ public:
     );
 
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Vector",
+        Category = "MaxQ|Vector",
         meta = (
             Keywords = "VECTOR",
             ShortToolTip = "Vector linear combination, 3 dimensions",
@@ -5628,7 +5628,7 @@ public:
     /// <param name="vout">[out] Negated vector -v1</param>
     /// <returns></returns>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Vector",
+        Category = "MaxQ|Vector",
         meta = (
             Keywords = "VECTOR",
             ShortToolTip = "Minus V, \"-V\", 3 dimensions",
@@ -5641,7 +5641,7 @@ public:
 
 
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Vector",
+        Category = "MaxQ|Vector",
         meta = (
             Keywords = "VECTOR",
             ShortToolTip = "Minus V, \"-V\", 3 dimensions",
@@ -5653,7 +5653,7 @@ public:
     );
 
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Vector",
+        Category = "MaxQ|Vector",
         meta = (
             Keywords = "VECTOR",
             ShortToolTip = "Minus V, \"-V\", 3 dimensions",
@@ -5669,7 +5669,7 @@ public:
     /// <param name="v1">[in] Vector whose magnitude is to be found</param>
     /// <returns>magnitude of v1 calculated in a numerically stable way</returns>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Vector",
+        Category = "MaxQ|Vector",
         meta = (
             Keywords = "VECTOR",
             ShortToolTip = "Vector norm, 3 dimensions",
@@ -5684,7 +5684,7 @@ public:
     /// <param name="v1">[in] Vector whose magnitude is to be found</param>
     /// <returns>magnitude of v1 calculated in a numerically stable way</returns>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Vector",
+        Category = "MaxQ|Vector",
         meta = (
             Keywords = "VECTOR",
             ShortToolTip = "Vector norm, distance vector",
@@ -5699,7 +5699,7 @@ public:
     /// <param name="v1">[in] Vector whose magnitude is to be found</param>
     /// <returns>magnitude of v1 calculated in a numerically stable way</returns>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Vector",
+        Category = "MaxQ|Vector",
         meta = (
             Keywords = "VECTOR",
             ShortToolTip = "Vector norm, velocity vector",
@@ -5717,7 +5717,7 @@ public:
     /// <param name="z">[in] scalar z </param>
     /// <param name="v">[out] Equivalent 3-vector</param>
     /// <returns></returns>
-    UFUNCTION(BlueprintPure, Category = "Spice|Api|Vector", 
+    UFUNCTION(BlueprintPure, Category = "MaxQ|Vector", 
         meta = (
             Keywords = "VECTOR",
             ToolTip = "Pack three RHS scalar components into a RHS dimensionless vector"
@@ -5729,7 +5729,7 @@ public:
         FSDimensionlessVector& v
     );
 
-    UFUNCTION(BlueprintPure, Category = "Spice|Api|Vector",
+    UFUNCTION(BlueprintPure, Category = "MaxQ|Vector",
         meta = (
             Keywords = "VECTOR",
             ToolTip = "Pack three RHS scalar components into a RHS distance vector"
@@ -5741,7 +5741,7 @@ public:
         FSDistanceVector& km
     );
 
-    UFUNCTION(BlueprintPure, Category = "Spice|Api|Vector",
+    UFUNCTION(BlueprintPure, Category = "MaxQ|Vector",
         meta = (
             Keywords = "VECTOR",
             ToolTip = "Pack three RHS scalar components into a RHS velocity vector"
@@ -5753,7 +5753,7 @@ public:
         FSVelocityVector& kmps
     );
 
-    UFUNCTION(BlueprintPure, Category = "Spice|Api|Vector",
+    UFUNCTION(BlueprintPure, Category = "MaxQ|Vector",
         meta = (
             Keywords = "VECTOR",
             ToolTip = "Pack three RHS scalar components into a RHS State vector"
@@ -5776,7 +5776,7 @@ public:
     /// <param name="">[out] The component of a orthogonal to b</param>
     /// <returns></returns>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Vector",
+        Category = "MaxQ|Vector",
         meta = (
             Keywords = "VECTOR",
             ShortToolTip = "Perpendicular component of a 3-vector",
@@ -5794,7 +5794,7 @@ public:
     /// <param name="vout">[out] Vector resulting from projection</param>
     /// <returns></returns>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Planes",
+        Category = "MaxQ|Planes",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "GEOMETRY, MATH, PLAN, VECTOR",
@@ -5815,7 +5815,7 @@ public:
     /// <param name="p">[out] The projection of a onto b</param>
     /// <returns></returns>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Vector",
+        Category = "MaxQ|Vector",
         meta = (
             Keywords = "VECTOR",
             ShortToolTip = "Vector projection, 3 dimensions",
@@ -5831,7 +5831,7 @@ public:
     /// <param name="v1, v2">[in] Input vectors</param>
     /// <returns>relative difference between V1 and V2</returns>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Vector",
+        Category = "MaxQ|Vector",
         meta = (
             Keywords = "MATH, VECTOR",
             ShortToolTip = "Vector relative difference, 3 dimensions",
@@ -5850,7 +5850,7 @@ public:
     /// <param name="r">[out] Result of rotating v about axis by theta</param>
     /// <returns></returns>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Rotation",
+        Category = "MaxQ|Rotation",
         meta = (
             Keywords = "ROTATION, VECTOR",
             ShortToolTip = "Vector rotation about an axis",
@@ -5869,7 +5869,7 @@ public:
     /// <param name="vout">[out] Product vector, s*v1</param>
     /// <returns></returns>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Vector",
+        Category = "MaxQ|Vector",
         meta = (
             Keywords = "VECTOR",
             ShortToolTip = "Vector scaling, 3 dimensions",
@@ -5882,7 +5882,7 @@ public:
     );
 
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Vector",
+        Category = "MaxQ|Vector",
         meta = (
             Keywords = "VECTOR",
             ShortToolTip = "Vector scaling, 3 dimensions",
@@ -5896,7 +5896,7 @@ public:
 
 
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Vector",
+        Category = "MaxQ|Vector",
         meta = (
             Keywords = "VECTOR",
             ShortToolTip = "Vector scaling, 3 dimensions",
@@ -5914,7 +5914,7 @@ public:
     /// <param name="v2">Second vector</param>
     /// <returns>is the angle between v1 and v2 expressed in radians</returns>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Vector",
+        Category = "MaxQ|Vector",
         meta = (
             Keywords = "VECTOR",
             ShortToolTip = "Angular separation of vectors, 3 dimensions",
@@ -5932,7 +5932,7 @@ public:
     /// <param name="vout">[out] Difference vector, v1 - v2</param>
     /// <returns></returns>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Vector",
+        Category = "MaxQ|Vector",
         meta = (
             Keywords = "ANGLE, VECTOR",
             ShortToolTip = "Vector subtraction, 3 dimensions",
@@ -5950,7 +5950,7 @@ public:
     /// <param name="vout">[out] Difference vector, v1 - v2</param>
     /// <returns></returns>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Vector",
+        Category = "MaxQ|Vector",
         meta = (
             Keywords = "ANGLE, VECTOR",
             ShortToolTip = "Vector subtraction, 3 dimensions",
@@ -5968,7 +5968,7 @@ public:
     /// <param name="vout">[out] Difference vector, v1 - v2</param>
     /// <returns></returns>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Vector",
+        Category = "MaxQ|Vector",
         meta = (
             Keywords = "ANGLE, VECTOR",
             ShortToolTip = "Vector subtraction, 3 dimensions",
@@ -5981,7 +5981,7 @@ public:
     );
 
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Matrix",
+        Category = "MaxQ|Matrix",
         meta = (
             Keywords = "MATRIX, VECTOR",
             ShortToolTip = "Vector transpose times matrix times vector, 3 dim",
@@ -5998,7 +5998,7 @@ public:
     /// <param name="v">[in] 3-vector</param>
     /// <param name="x, y, z">[out] Scalar components of 3-vector</param>
     /// <returns></returns>
-    UFUNCTION(BlueprintPure, Category = "Spice|Api|Vector", meta = (Keywords = "VECTOR", ToolTip = "Unpack three RHS scalar components from a RHS dimensionless vector"))
+    UFUNCTION(BlueprintPure, Category = "MaxQ|Vector", meta = (Keywords = "VECTOR", ToolTip = "Unpack three RHS scalar components from a RHS dimensionless vector"))
     static void vupack(
         const FSDimensionlessVector& v,
         double& x,
@@ -6006,7 +6006,7 @@ public:
         double& z
     );
 
-    UFUNCTION(BlueprintPure, Category = "Spice|Api|Vector", meta = (Keywords = "VECTOR", ToolTip = "Unpack three RHS scalar components from a RHS distance vector"))
+    UFUNCTION(BlueprintPure, Category = "MaxQ|Vector", meta = (Keywords = "VECTOR", ToolTip = "Unpack three RHS scalar components from a RHS distance vector"))
     static void vupack_distance(
         const FSDistanceVector& v,
         double& x,
@@ -6015,7 +6015,7 @@ public:
     );
 
 
-    UFUNCTION(BlueprintPure, Category = "Spice|Api|Vector", meta = (Keywords = "VECTOR", ToolTip = "Unpack three RHS scalar components from a RHS velocity vector"))
+    UFUNCTION(BlueprintPure, Category = "MaxQ|Vector", meta = (Keywords = "VECTOR", ToolTip = "Unpack three RHS scalar components from a RHS velocity vector"))
     static void vupack_velocity(
         const FSVelocityVector& v,
         double& x,
@@ -6023,7 +6023,7 @@ public:
         double& z
     );
 
-    UFUNCTION(BlueprintPure, Category = "Spice|Api|Vector", meta = (Keywords = "VECTOR", ToolTip = "Unpack three THS scalar components from a RHS state vector"))
+    UFUNCTION(BlueprintPure, Category = "MaxQ|Vector", meta = (Keywords = "VECTOR", ToolTip = "Unpack three THS scalar components from a RHS state vector"))
     static void vupack_state(
         const FSStateVector& v,
         double& x,
@@ -6040,7 +6040,7 @@ public:
     /// <param name="v">[in] Vector to be tested</param>
     /// <returns>The function returns the value SPICETRUE if and only if v is the zero vector</returns>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Vector",
+        Category = "MaxQ|Vector",
         meta = (
             Keywords = "MATH, VECTOR",
             ShortToolTip = "Is a vector the zero vector?",
@@ -6062,7 +6062,7 @@ public:
     /// <returns></returns>
     UFUNCTION(
         BlueprintCallable,
-        Category = "Spice|Api|Rotation",
+        Category = "MaxQ|Rotation",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "ANGLES, DERIVATIVES, STATE",
@@ -6086,7 +6086,7 @@ public:
     /// <param name="av">[out] angular velocity associated with xform</param>
     /// <returns></returns>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Rotation",
+        Category = "MaxQ|Rotation",
         meta = (
             Keywords = "FRAMES",
             ShortToolTip = "Transform to rotation and angular velocity",
@@ -6108,7 +6108,7 @@ public:
     /// <returns></returns>
     UFUNCTION(
         BlueprintCallable,
-        Category = "Spice|Api|Coordinates",
+        Category = "MaxQ|Coordinates",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "CONVERSION, COORDINATE, EPHEMERIS, STATE",
@@ -6130,7 +6130,7 @@ public:
     /// <param name="mout">[out] Transpose of m1.  mout can overwrite m1</param>
     /// <returns></returns>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Matrix",
+        Category = "MaxQ|Matrix",
         meta = (
             Keywords = "MATRIX",
             ShortToolTip = "Transpose a matrix, 3x3",
@@ -6149,7 +6149,7 @@ public:
     /// <param name="errmsg">Descriptive error message</param>
     /// <returns></returns>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Time",
+        Category = "MaxQ|Time",
         meta = (
             Keywords = "TIME",
             ShortToolTip = "Approximate current et (suitable for visualizations)",
