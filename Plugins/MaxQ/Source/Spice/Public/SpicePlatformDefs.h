@@ -11,6 +11,7 @@
 // This allows meta-kernels to load files in the same directory.
 #if PLATFORM_WINDOWS
 #include "Windows/WindowsHWrapper.h"
+// Platform supports "Meta Kernels" if it can set the working directory...
 #define SET_WORKING_DIRECTORY_IN_FURNSH 1
 #define StackAlloc _alloca
 #define SpiceStringCopy(a,b) strcpy_s(a,b)

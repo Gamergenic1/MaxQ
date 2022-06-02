@@ -12,8 +12,6 @@
 #include "SpiceTypes.h"
 #include "SpiceK2.generated.h"
 
-#pragma once
-
 UCLASS(BlueprintType, Blueprintable)
 class SPICE_API USpiceK2 : public UBlueprintFunctionLibrary
 {

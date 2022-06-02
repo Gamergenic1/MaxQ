@@ -11,6 +11,12 @@
 #include "Misc/Paths.h"
 #include "HAL/FileManager.h"
 
+#if WITH_EDITOR
+// Supports loading plugin kernels directly
+#include "Interfaces/IPluginManager.h"
+#endif
+
+
 PRAGMA_PUSH_PLATFORM_DEFAULT_PACKING
 extern "C"
 {
@@ -75,6 +81,24 @@ void USpice::enumerate_kernels(
         }
     }
 
+#if WITH_EDITOR
+    FString pluginDir = FPaths::Combine(IPluginManager::Get().FindPlugin(TEXT("MaxQ"))->GetBaseDir(), relativeDirectory);
+    IPlatformFile& PlatformFile = FPlatformFileManager::Get().GetPlatformFile();
+    FString AbsolutePluginDir = PlatformFile.ConvertToAbsolutePathForExternalAppForRead(*pluginDir);
+
+    if (PlatformFile.DirectoryExists(*AbsolutePluginDir))
+    {
+        IFileManager::Get().FindFiles(foundFiles, *AbsolutePluginDir);
+        if (foundFiles.Num() > 0)
+        {
+            for (auto file : foundFiles)
+            {
+                kernelFilePaths.Add(FPaths::Combine(relativeDirectory, file));
+            }
+        }
+    }
+#endif
+
     ResultCode = ES_ResultCode::Success;
     ErrorMessage.Empty();
 }
@@ -102,6 +126,34 @@ void USpice::furnsh(
 
     furnsh_c(TCHAR_TO_ANSI(*fullPathToFile));
 
+#if WITH_EDITOR
+    // Oh. Em. Gee!!  A Second chance, for editor builds!  (In case we actually wanted plugin content...)
+    uint8 failed = failed_c();
+
+    if (failed)
+    {
+        // Reset the error status in SPICE
+        reset_c();
+
+        FString pluginFilePath = FPaths::Combine(IPluginManager::Get().FindPlugin(TEXT("MaxQ"))->GetBaseDir(), file);
+        IPlatformFile& PlatformFile = FPlatformFileManager::Get().GetPlatformFile();
+        FString AbsolutePluginFilePath = PlatformFile.ConvertToAbsolutePathForExternalAppForRead(*pluginFilePath);
+
+        if (PlatformFile.FileExists(*AbsolutePluginFilePath))
+        {
+            // Aight.  There's a plugin file at this relative path, so... yeah
+#ifdef SET_WORKING_DIRECTORY_IN_FURNSH
+            fullPathToDirectory = FPaths::GetPath(AbsolutePluginFilePath);
+
+            // Set the current working directory
+            _tchdir(*fullPathToDirectory);
+#endif
+
+            furnsh_c(TCHAR_TO_ANSI(*AbsolutePluginFilePath));
+        }
+    }
+#endif
+
 #ifdef SET_WORKING_DIRECTORY_IN_FURNSH
     // Reset the working directory to prior state...
     if (oldWorkingDirectory)
@@ -109,7 +161,7 @@ void USpice::furnsh(
         _tchdir(oldWorkingDirectory);
     }
 #endif
-    
+
     ErrorCheck(ResultCode, ErrorMessage);
 }
 

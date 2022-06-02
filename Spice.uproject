@@ -3,10 +3,6 @@
 	"EngineAssociation": "5.0",
 	"Category": "",
 	"Description": "",
-    "TargetPlatforms": [
-        "Win64",
-        "Mac"
-    ],
 	"Modules": [
 		{
 			"Name": "MaxQMain",
@@ -23,5 +19,10 @@
 				"Mac"
 			]
 		}
+	],
+	"TargetPlatforms": [
+		"Win64",
+		"Mac",
+		"Windows"
 	]
 }

@@ -21,36 +21,6 @@ public class SpiceTarget : TargetRules
         DefaultBuildSettings = BuildSettingsVersion.V2;
         ExtraModuleNames.AddRange( new string[] { "Spice", "MaxQMain" } );
 
-        BuildCSpiceLib(this);
-    }
-
-    static public void BuildCSpiceLib(TargetRules targetRules)
-    {
-        Log.TraceInformation("Setting PreBuildSteps");
-
-        // Q: Can the libraries pre-built and released by naif be used?
-        //    Q: On Mac?
-        //    A: Yes
-        //    Q: On Windows?
-        //    A: No, due to a C-Runtime incompatibility. For more info, see:
-        //        https://gamedevtricks.com/post/third-party-libs-2#the-problem-with-this-solution
-        // Q: Can the CSPICE library be updated?
-        //    Yes, delete windows (to trigger a rebuild) and update other platform libraries (from naif) in CSpice_Library/lib 
-
-        ReadOnlyTargetRules readOnlyTargetRules = new ReadOnlyTargetRules(targetRules);
-        
-        string BuildStep = CSpice_Library.CSpiceLibBuildStep(readOnlyTargetRules);
-        string PreBuildStep = "";
-        
-        if(targetRules.Platform == UnrealTargetPlatform.Mac)
-        {
-            PreBuildStep += "csh ";
-        }
-        
-        PreBuildStep += "$(ProjectDir)\\" + BuildStep + " \"$(ProjectDir)\\" + CSpice_Library.RelativePathToCSpiceToolkit + "\"";
-
-        PreBuildStep = PreBuildStep.Replace('/', Path.DirectorySeparatorChar).Replace('\\', Path.DirectorySeparatorChar);
-
-        targetRules.PreBuildSteps.Add(PreBuildStep);
+        // Assumes CSpice_Library has already been built.
     }
 }
