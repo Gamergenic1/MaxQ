@@ -83,11 +83,11 @@ public class CSpice_Library : ModuleRules
     {
         if (targetRules.Platform == UnrealTargetPlatform.Win64)
         {
-            return CSpice_Library.RelativePathToCSpiceToolkit + "makeall_ue.bat";
+            return RelativePathToCSpiceToolkit + "makeall_ue.bat";
         }
         else if (targetRules.Platform == UnrealTargetPlatform.Mac)
         {
-            return CSpice_Library.RelativePathToCSpiceToolkit + "makeall_ue.csh";
+            return RelativePathToCSpiceToolkit + "makeall_ue.csh";
         }
         else
         {

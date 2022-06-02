@@ -40,7 +40,6 @@
 #include "SpiceTypes.h"
 #include "Spice.generated.h"
 
-#pragma once
 
 DECLARE_DYNAMIC_DELEGATE_TwoParams(FDerivativeDelegate, double, et, double&, value);
 
