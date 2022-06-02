@@ -40,10 +40,17 @@ public class SpiceTarget : TargetRules
         ReadOnlyTargetRules readOnlyTargetRules = new ReadOnlyTargetRules(targetRules);
         
         string BuildStep = CSpice_Library.CSpiceLibBuildStep(readOnlyTargetRules);
-        string PreBuildStep = "$(ProjectDir)\\" + BuildStep + " \"$(ProjectDir)\\" + CSpice_Library.RelativePathToCSpiceToolkit + "\"";
+        string PreBuildStep = "";
+        
+        if(targetRules.Platform == UnrealTargetPlatform.Mac)
+        {
+            PreBuildStep += "csh ";
+        }
+        
+        PreBuildStep += "$(ProjectDir)\\" + BuildStep + " \"$(ProjectDir)\\" + CSpice_Library.RelativePathToCSpiceToolkit + "\"";
 
         PreBuildStep = PreBuildStep.Replace('/', Path.DirectorySeparatorChar).Replace('\\', Path.DirectorySeparatorChar);
-        
+
         targetRules.PreBuildSteps.Add(PreBuildStep);
     }
 }

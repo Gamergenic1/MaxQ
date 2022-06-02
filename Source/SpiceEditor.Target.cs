@@ -3,12 +3,17 @@
 // 
 // Project page:   https://www.gamergenic.com/project/maxq/
 // Documentation:  https://maxq.gamergenic.com/
-// GitHub:         https://github.com/Gamergenic1/MaxQ/ 
+// GitHub:         https://github.com/Gamergenic1/MaxQ/
 
 
 using UnrealBuildTool;
 using EpicGames.Core;
 
+// Note:
+// On MacOS, Xcode project generation may fail if you do not have an ios sdk installed.
+// The xcode project can be generated to exclude ios (macos only) like so:
+// sh "/Users/Shared/Epic Games/UE_5.0/Engine/Build/BatchFiles/Mac/GenerateProjectFiles.sh" -project="/Users/username/Documents/GitHub/MaxQ/Spice.uproject" -game -Platforms="Mac"
+// (of course, change the username and check the install path...)
 
 public class SpiceEditorTarget : TargetRules
 {
