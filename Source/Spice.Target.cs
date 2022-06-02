@@ -13,11 +13,10 @@ using System.IO;
 
 public class SpiceTarget : TargetRules
 {
-    public const string RelativePathToCSpiceToolkit = "Plugins/MaxQ/Source/ThirdParty/CSpice_Library/cspice/";
-    public const string RelativePathToCSpiceLib = "Plugins/MaxQ/Source/ThirdParty/CSpice_Library/lib/Win64/cspice.lib";
-
     public SpiceTarget(TargetInfo Target) : base(Target)
     {
+        Log.TraceInformation("Instantiating SpiceTarget");
+
         Type = TargetType.Game;
         DefaultBuildSettings = BuildSettingsVersion.V2;
         ExtraModuleNames.AddRange( new string[] { "Spice", "MaxQMain" } );
@@ -27,19 +26,24 @@ public class SpiceTarget : TargetRules
 
     static public void BuildCSpiceLib(TargetRules targetRules)
     {
-        string pathToCSpiceLib = CSpice_Library.CSpiceLibPath(new ReadOnlyTargetRules(targetRules));
+        Log.TraceInformation("Setting PreBuildSteps");
 
-        if (!File.Exists(pathToCSpiceLib))
-        {
-            // Note :  If the step fails, since it's a prebuild step, these rules will not be rebuilt.
-            // So, don't cause a failure here, if you're iterating on these rules.
-            // Also, changes to the invocation won't be seen until the following build!
-            System.Console.WriteLine("Rebuilding cspice toolkit lib: {0}", pathToCSpiceLib);
-            targetRules.PreBuildSteps.Add("$(ProjectDir)\\" + RelativePathToCSpiceToolkit + "makeall_ue.bat \"$(ProjectDir)\\" + RelativePathToCSpiceToolkit + "\"");
-        }
-        else
-        {
-            System.Console.WriteLine("cspice toolkit lib is up to date");
-        }
+        // Q: Can the libraries pre-built and released by naif be used?
+        //    Q: On Mac?
+        //    A: Yes
+        //    Q: On Windows?
+        //    A: No, due to a C-Runtime incompatibility. For more info, see:
+        //        https://gamedevtricks.com/post/third-party-libs-2#the-problem-with-this-solution
+        // Q: Can the CSPICE library be updated?
+        //    Yes, delete windows (to trigger a rebuild) and update other platform libraries (from naif) in CSpice_Library/lib 
+
+        ReadOnlyTargetRules readOnlyTargetRules = new ReadOnlyTargetRules(targetRules);
+        
+        string BuildStep = CSpice_Library.CSpiceLibBuildStep(readOnlyTargetRules);
+        string PreBuildStep = "$(ProjectDir)\\" + BuildStep + " \"$(ProjectDir)\\" + CSpice_Library.RelativePathToCSpiceToolkit + "\"";
+
+        PreBuildStep = PreBuildStep.Replace('/', Path.DirectorySeparatorChar).Replace('\\', Path.DirectorySeparatorChar);
+        
+        targetRules.PreBuildSteps.Add(PreBuildStep);
     }
 }
