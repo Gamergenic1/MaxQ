@@ -9,10 +9,10 @@
     "CreatedBy": "Gamergenic LLC",
     "CreatedByURL": "https://www.gamergenic.com/project/maxq/",
     "DocsURL": "https://maxq.gamergenic.com/",
-    "MarketplaceURL": "",
-    "SupportURL": "",
-    "EnabledByDefault": false,
-    "CanContainContent": false,
+    "MarketplaceURL": "com.epicgames.launcher://ue/marketplace/product/146e96d801ed4d8d930b41bfeca53733",
+    "SupportURL": "mailto:support@gamergenic.com",
+    "EnabledByDefault": true,
+    "CanContainContent": true,
     "IsBetaVersion": false,
     "Installed": false,
     "SupportedTargetPlatforms": [
@@ -41,6 +41,15 @@
         {
             "Name": "SpiceEditor",
             "Type": "Editor",
+            "LoadingPhase": "Default",
+            "WhitelistPlatforms": [
+                "Win64",
+                "Mac"
+            ]
+        },
+        {
+            "Name": "MaxQCppTutorial",
+            "Type": "Runtime",
             "LoadingPhase": "Default",
             "WhitelistPlatforms": [
                 "Win64",

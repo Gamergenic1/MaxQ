@@ -11,4 +11,6 @@ echo
 cd cspice
 chmod u+x mkprodct.csh; ./mkprodct.csh
 cd ..
+echo
+cd ..
 echo UE Toolkit Build Complete

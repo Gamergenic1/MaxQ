@@ -11,6 +11,11 @@ using UnrealBuildTool;
 
 public class CSpice_Library : ModuleRules
 {
+    // Spice and SpiceEditor BuiltTargetRules need access, so these must be constant or static.
+    public const string RelativePathToCSpiceModule = "Plugins/MaxQ/Source/ThirdParty/CSpice_Library/";
+    public const string RelativePathToCSpiceToolkit = RelativePathToCSpiceModule + "cspice/";
+    public const string RelativePathToCSpiceLibraries = RelativePathToCSpiceModule + "lib/";
+
     public CSpice_Library(ReadOnlyTargetRules Target) : base(Target)
 	{
         bAddDefaultIncludePaths = false;
@@ -40,7 +45,6 @@ public class CSpice_Library : ModuleRules
         else
         { 
             string Err = string.Format("cspice SDK not found for platform {0}", Target.Platform.ToString());
-            System.Console.WriteLine(Err);
             throw new BuildException(Err);
         }
 
@@ -51,13 +55,14 @@ public class CSpice_Library : ModuleRules
         if (!Directory.Exists(includeDir))
         {
             string Err = string.Format("cspice headers not found at {0}.  A copy of cspice/include must be present", includeDir);
-            System.Console.WriteLine(Err);
             throw new BuildException(Err);
         }
 
         PublicIncludePaths.Add(includeDir);
     }
 
+
+    // Spice and SpiceEditor BuiltTargetRules need access, so this must be static.
     static public string CSpiceLibPath(ReadOnlyTargetRules targetRules)
     {
         string libName = "/cspice.lib";
@@ -67,8 +72,27 @@ public class CSpice_Library : ModuleRules
             libName = "/cspice.a";
         }
         
-        string relativePathToCSpiceLib = "Plugins/MaxQ/Source/ThirdParty/CSpice_Library/lib/" + targetRules.Platform.ToString() + libName;
+        string relativePathToCSpiceLib = RelativePathToCSpiceLibraries + targetRules.Platform.ToString() + libName;
 
         return Path.Combine(targetRules.ProjectFile.Directory.FullName, relativePathToCSpiceLib);
+    }
+
+
+    // Spice and SpiceEditor BuiltTargetRules need access, so this must be static.
+    static public string CSpiceLibBuildStep(ReadOnlyTargetRules targetRules)
+    {
+        if (targetRules.Platform == UnrealTargetPlatform.Win64)
+        {
+            return CSpice_Library.RelativePathToCSpiceToolkit + "makeall_ue.bat";
+        }
+        else if (targetRules.Platform == UnrealTargetPlatform.Mac)
+        {
+            return CSpice_Library.RelativePathToCSpiceToolkit + "makeall_ue.csh";
+        }
+        else
+        {
+            string Err = string.Format("cspice SDK not found for platform {0}", targetRules.Platform.ToString());
+            throw new BuildException(Err);
+        }
     }
 }

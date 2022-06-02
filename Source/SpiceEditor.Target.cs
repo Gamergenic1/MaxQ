@@ -12,8 +12,10 @@ using EpicGames.Core;
 
 public class SpiceEditorTarget : TargetRules
 {
-    public SpiceEditorTarget( TargetInfo Target) : base(Target)
+    public SpiceEditorTarget(TargetInfo Target) : base(Target)
     {
+        Log.TraceInformation("Instantiating SpiceEditorTarget");
+
         Type = TargetType.Editor;
         DefaultBuildSettings = BuildSettingsVersion.V2;
         ExtraModuleNames.AddRange( new string[] { "Spice", "SpiceEditor", "SpiceUncooked", "MaxQMain" } );
@@ -22,6 +24,18 @@ public class SpiceEditorTarget : TargetRules
         bPublicSymbolsByDefault = true;  // <- Forced to true on Windows anyways
         WindowsPlatform.bStripUnreferencedSymbols = false;
 
+        UpdateDocs(Target);
         SpiceTarget.BuildCSpiceLib(this);
+    }
+
+    public void UpdateDocs(TargetInfo Target)
+    {
+        Log.TraceInformation("Setting PostBuildSteps");
+
+        // Only invoke the windows batch file on windows...
+        if (Target.Platform == UnrealTargetPlatform.Win64)
+        {
+            PostBuildSteps.Add("\"$(ProjectDir)\\updateplugindocs.bat\" \"$(ProjectDir)\"");
+        }
     }
 }

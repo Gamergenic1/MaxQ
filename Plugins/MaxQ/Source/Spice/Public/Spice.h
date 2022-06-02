@@ -25,9 +25,13 @@
 // Documentation site:
 // https://maxq.gamergenic.com/
 // 
+// Unreal Engine Plugin Source Code on GitHub:
+// https://github.com/Gamergenic1/MaxQ
+//
 // Implementation walkthrough:
 // "Adding Third-Party Libraries to Unreal Engine : NASA's SPICE Toolkit"
 // https://gamedevtricks.com/post/third-party-libs-1/
+
 
 #pragma once
 
