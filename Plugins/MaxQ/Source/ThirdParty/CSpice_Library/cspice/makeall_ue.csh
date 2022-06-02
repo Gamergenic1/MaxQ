@@ -1,7 +1,7 @@
-echo This script builds the SPICE delivery
+echo This script builds the SPICE library
 echo for the cspice package of the toolkit.
-cd $1
-if test -f "../lib/Mac/cspice.a"; then
+cd $2
+if ( -f "../lib/Mac/cspice.a" ) then
 cd src
 echo
 echo Creating cspice
@@ -13,4 +13,4 @@ cp ./lib/cspice.a ../lib/Mac
 echo UE Toolkit Build Complete
 else
 echo CSpice Toolkit - cspice.a found
-fi
+endif

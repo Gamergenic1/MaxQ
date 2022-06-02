@@ -3,7 +3,7 @@
 // 
 // Project page:   https://www.gamergenic.com/project/maxq/
 // Documentation:  https://maxq.gamergenic.com/
-// GitHub:         https://github.com/Gamergenic1/MaxQ/ /
+// GitHub:         https://github.com/Gamergenic1/MaxQ/
 
 
 #include "MaxQMainModule.h"
