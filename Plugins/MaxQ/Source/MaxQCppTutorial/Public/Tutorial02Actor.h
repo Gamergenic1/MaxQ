@@ -9,40 +9,28 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "Tutorial01Actor.generated.h"
+#include "Tutorial02Actor.generated.h"
 
 
 //-----------------------------------------------------------------------------
-// Tutorial01
-// Initialization and kernel data
+// Tutorial02
+// Time manipulation
 //-----------------------------------------------------------------------------
 
 UCLASS()
-class MAXQCPPTUTORIAL_API ATutorial01Actor : public AActor
+class MAXQCPPTUTORIAL_API ATutorial02Actor : public AActor
 {
     GENERATED_BODY()
 
-    UPROPERTY(EditInstanceOnly, Category="MaxQ|Tutorials")
-    FString RelativePathToGMKernel;
-
+public:
     UPROPERTY(EditInstanceOnly, Category = "MaxQ|Tutorials")
-    FString RelativePathToPCKKernels;
-
-    UPROPERTY(EditInstanceOnly, Category = "MaxQ|Tutorials")
-    double KilometersPerScenegraphUnit = 6000;
+    TArray<FString> RequiredKernels;
 
 public:
-    ATutorial01Actor();
-
+    ATutorial02Actor();
     void BeginPlay() override;
 
     void InitializeSpice();
-    bool LoadGMKernel(bool Squawk = true);
-    void EnumeratePCKKernels();
-    bool EnumerateAndLoadPCKKernelList(bool Squawk = true);
-    void QueryEarthsGM();
-    void QueryEarthsRadius();
-    void ScaleAllBodies();
 };
 
 

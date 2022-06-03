@@ -111,7 +111,7 @@ uint8 ErrorCheck(ES_ResultCode& ResultCode, FString& ErrorMessage)
 
         ErrorMessage = szBuffer;
 
-        UE_LOG(LogTemp, Warning, TEXT("USpice Runtime Error: %s"), *ErrorMessage);
+        UE_LOG(LogSpice, Warning, TEXT("USpice Runtime Error: %s"), *ErrorMessage);
 
         reset_c();
     }
@@ -138,7 +138,7 @@ uint8 UnexpectedErrorCheck(bool bReset)
         }
 
         FString ErrorMessage = szBuffer;
-        UE_LOG(LogTemp, Warning, TEXT("USpice Runtime Unexpected Error: %s"), *ErrorMessage);
+        UE_LOG(LogSpice, Warning, TEXT("USpice Runtime Unexpected Error: %s"), *ErrorMessage);
 
         if (bReset)
         {

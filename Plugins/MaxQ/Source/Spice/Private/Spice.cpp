@@ -132,9 +132,6 @@ void USpice::furnsh(
 
     if (failed)
     {
-        // Reset the error status in SPICE
-        reset_c();
-
         FString pluginFilePath = FPaths::Combine(IPluginManager::Get().FindPlugin(TEXT("MaxQ"))->GetBaseDir(), file);
         IPlatformFile& PlatformFile = FPlatformFileManager::Get().GetPlatformFile();
         FString AbsolutePluginFilePath = PlatformFile.ConvertToAbsolutePathForExternalAppForRead(*pluginFilePath);
@@ -142,13 +139,17 @@ void USpice::furnsh(
         if (PlatformFile.FileExists(*AbsolutePluginFilePath))
         {
             // Aight.  There's a plugin file at this relative path, so... yeah
+
 #ifdef SET_WORKING_DIRECTORY_IN_FURNSH
             fullPathToDirectory = FPaths::GetPath(AbsolutePluginFilePath);
 
             // Set the current working directory
             _tchdir(*fullPathToDirectory);
 #endif
-
+            // Reset the error status in SPICE
+            reset_c();
+            
+            // Try, try again...
             furnsh_c(TCHAR_TO_ANSI(*AbsolutePluginFilePath));
         }
     }

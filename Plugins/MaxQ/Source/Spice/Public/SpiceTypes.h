@@ -12,6 +12,8 @@
 #include "SpicePlatformDefs.h"
 #include "SpiceTypes.generated.h"
 
+SPICE_API DECLARE_LOG_CATEGORY_EXTERN(LogSpice, Log, All);
+
 UENUM(BlueprintType)
 enum class ES_ResultCode : uint8
 {
@@ -4173,7 +4175,7 @@ public:
 };
 
 
-UCLASS(BlueprintType, Blueprintable)
+UCLASS(Category = "MaxQ")
 class SPICE_API USpiceTypes : public UBlueprintFunctionLibrary
 {
     GENERATED_BODY()

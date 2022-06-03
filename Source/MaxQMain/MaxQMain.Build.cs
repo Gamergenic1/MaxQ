@@ -14,5 +14,5 @@ public class MaxQMain : ModuleRules
 	{
         PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine" });
         PrivateDependencyModuleNames.AddRange(new string[] { "Spice" });
-	}
+    }
 }

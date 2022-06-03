@@ -43,7 +43,7 @@
 
 DECLARE_DYNAMIC_DELEGATE_TwoParams(FDerivativeDelegate, double, et, double&, value);
 
-UCLASS(BlueprintType, Blueprintable)
+UCLASS(Category="MaxQ")
 class SPICE_API USpice : public UBlueprintFunctionLibrary
 {
     GENERATED_BODY()
@@ -55,6 +55,7 @@ class SPICE_API USpice : public UBlueprintFunctionLibrary
     static void SwizzleToSpice(const FQuat& ue, double(&q)[4]);
 
 public:
+
     UFUNCTION(BlueprintCallable,
         Category = "MaxQ|Utility|Kernel",
         meta = (

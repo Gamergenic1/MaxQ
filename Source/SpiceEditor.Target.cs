@@ -25,11 +25,13 @@ public class SpiceEditorTarget : TargetRules
 
         Type = TargetType.Editor;
         DefaultBuildSettings = BuildSettingsVersion.V2;
-        ExtraModuleNames.AddRange( new string[] { "Spice", "SpiceEditor", "SpiceUncooked", "MaxQMain" } );
-        
+
         bUseFastPDBLinking = false;
         bPublicSymbolsByDefault = true;  // <- Forced to true on Windows anyways
         WindowsPlatform.bStripUnreferencedSymbols = false;
+
+        ExtraModuleNames.Add("Spice");
+        ExtraModuleNames.Add("MaxQMain");
 
         UpdateDocs(Target);
         BuildCSpiceLib(this);

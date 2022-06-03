@@ -12,7 +12,7 @@
 #include "SpiceTypes.h"
 #include "SpiceK2.generated.h"
 
-UCLASS(BlueprintType, Blueprintable)
+UCLASS(Category = "MaxQ")
 class SPICE_API USpiceK2 : public UBlueprintFunctionLibrary
 {
     GENERATED_BODY()
