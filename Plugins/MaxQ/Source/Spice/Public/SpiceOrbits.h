@@ -15,7 +15,7 @@
 #include "SpiceOrbits.generated.h"
 
 
-UCLASS(BlueprintType, Blueprintable)
+UCLASS(Category = "MaxQ")
 class SPICE_API USpiceOrbits : public UBlueprintFunctionLibrary
 {
     GENERATED_BODY()

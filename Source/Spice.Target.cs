@@ -19,8 +19,9 @@ public class SpiceTarget : TargetRules
 
         Type = TargetType.Game;
         DefaultBuildSettings = BuildSettingsVersion.V2;
-        ExtraModuleNames.AddRange( new string[] { "Spice", "MaxQMain" } );
-
         // Assumes CSpice_Library has already been built.
+
+        ExtraModuleNames.Add("Spice");
+        ExtraModuleNames.Add("MaxQMain");
     }
 }

@@ -16,5 +16,17 @@ public class MaxQCppTutorial : ModuleRules
 
         PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine" });
         PrivateDependencyModuleNames.AddRange(new string[] { "Spice" });
-	}
+
+        if (Target.bBuildEditor)
+        {
+            // Add stuff that's only needed when building the editor
+            PrivateDependencyModuleNames.AddRange(
+                new string[]
+                {
+                    // For the plugin manager, which is only used to get paths to plugin test content (kernels, etc)
+                    "Projects"
+                }
+            );
+        }
+    }
 }

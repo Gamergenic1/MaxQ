@@ -21,6 +21,7 @@ extern "C"
 }
 PRAGMA_POP_PLATFORM_DEFAULT_PACKING
 
+DEFINE_LOG_CATEGORY(LogSpice);
 
 SPICE_API const FSDistance FSDistance::Zero = FSDistance(0.);
 SPICE_API const FSDistance FSDistance::OneKm = FSDistance::FromKm(1.);

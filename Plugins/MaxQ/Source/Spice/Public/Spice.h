@@ -43,7 +43,7 @@
 
 DECLARE_DYNAMIC_DELEGATE_TwoParams(FDerivativeDelegate, double, et, double&, value);
 
-UCLASS(BlueprintType, Blueprintable)
+UCLASS(Category="MaxQ")
 class SPICE_API USpice : public UBlueprintFunctionLibrary
 {
     GENERATED_BODY()
@@ -55,6 +55,7 @@ class SPICE_API USpice : public UBlueprintFunctionLibrary
     static void SwizzleToSpice(const FQuat& ue, double(&q)[4]);
 
 public:
+
     UFUNCTION(BlueprintCallable,
         Category = "MaxQ|Utility|Kernel",
         meta = (
@@ -6155,7 +6156,7 @@ public:
     // Unit Test Support
     // Random things that make it easier to validate MaxQ.
     // ------------------------------------------------------------------------
-        // Entry point to assist unit testing.
+    // Entry point to assist unit testing.
     static void get_implied_result(
         ES_ResultCode& impliedResultCode,
         FString& impliedErrorMessage
