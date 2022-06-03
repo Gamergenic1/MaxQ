@@ -50,3 +50,13 @@ https://github.com/gamergenic/ASATDebrisVisualization
 ## Implementation Principles
 See [PRINCIPLES](PRINCIPLES.md) file.
 
+# NOTICE
+## Project conversion to Plugin in-progress
+* This project is currently undergoing conversion to source code for an Unreal Engine plugin, as opposed to simply being a host application.
+* The Plugin will be distributed via the Unreal Engine marketplace, vastly simplifying distribution.
+* The Plugin will contain new tutorials directly in the Plugin itself (in progress).
+* Due to the amount of work that's in progress the documentation and Plugin source project are in a state of flux.
+* The easiest way to use MaxQ for now is would be to map the Plugins directory of this project to the Plugins directory of your own project.  You'd then enable MaxQ under plugins (category = SpaceFlight).
+* Look for MaxQ to be released in the UE Marketplace by mid-June.
+
+
