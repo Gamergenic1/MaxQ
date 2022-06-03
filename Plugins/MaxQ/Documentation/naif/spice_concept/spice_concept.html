@@ -1,0 +1,453 @@
+
+<!-- saved from url=(0048)https://naif.jpl.nasa.gov/naif/spiceconcept.html -->
+<html lang="en"><!--start head--><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title> SPICE Concept </title>
+
+
+<script language="JavaScript">
+<!--
+function lastMod()
+{
+	var monthNames = new Array( 'Jan','Feb','Mar','Apr','May','Jun','Jul','Aug', 'Sep', 'Oct', 'Nov', 'Dec' );
+
+	var lastDate = new Date( document.lastModified );
+	year = y2kYear( lastDate );
+        if (year <= 1970)
+        {
+           lastDate = new Date();
+        }
+        year = y2kYear( lastDate );
+	month = lastDate.getMonth();
+	day = lastDate.getDate();
+
+	printDate = zeroPad(day) + " " + monthNames[ month ] + " " + year ;
+	return printDate;
+}
+
+function y2kYear( theDate )
+{
+	wrongYear = theDate.getFullYear();
+	rightYear = wrongYear % 100;
+	rightYear += (rightYear < 38) ? 2000 : 1900;
+	return rightYear;
+}
+
+function zeroPad( theNumber )
+{
+	if( theNumber < 10 )
+	{
+		theNumber = "0" + theNumber;
+	}
+	return theNumber;
+}
+
+//-->
+</script>
+
+
+
+<link rel="stylesheet" href="./spice_concept_files/main.css" type="text/css">
+
+
+</head>
+<!--end head-->
+<!--start body-->
+<body bgcolor="#000000"><div id="pds-app-bar"><div class="pds-app-bar-section"><a id="pds-app-bar-title" href="https://pds.nasa.gov/" target="_home"><img src="./spice_concept_files/PDS_Planets-acr-inv-bw.png" alt="PDS Logo">Planetary Data System</a></div><div class="pds-app-bar-section"><div id="pds-app-bar-info" tabindex="0"><img alt="PDS Information" src="./spice_concept_files/info.svg"><div style="left: 287px;">Find a Node - Use these links to navigate to any of the 8 publicly accessible PDS Nodes.<br><br>This bar indicates that you are within the PDS enterprise which includes 6 science discipline nodes and 2 support nodes which are overseen by the Project Management Office at NASA's Goddard Space Flight Center (GSFC). Each node is led by an expert in the subject discipline, supported by an advisory group of other practitioners of that discipline, and subject to selection and approval under a regular NASA Research Announcement.</div></div><div id="pds-app-bar-dropdown" tabindex="0" class=""><a>Find a Node<span></span></a><ul><li tabindex="-1"><a href="https://pds-atmospheres.nmsu.edu/" target="_home" tabindex="-1">Atmospheres (ATM)</a></li><li tabindex="-1"><a href="https://pds-imaging.jpl.nasa.gov/" target="_home" tabindex="-1">Cartography and Imaging Sciences (IMG)</a></li><li tabindex="-1"><a href="https://pds-geosciences.wustl.edu/" target="_home" tabindex="-1">Geosciences (GEO)</a></li><li tabindex="-1"><a href="https://naif.jpl.nasa.gov/naif/" target="_home" tabindex="-1">Navigation &amp; Ancillary Information Facility (NAIF)</a></li><li tabindex="-1"><a href="https://pds-ppi.igpp.ucla.edu/" target="_home" tabindex="-1">Planetary Plasma Interactions (PPI)</a></li><li tabindex="-1"><a href="https://pds-rings.seti.org/" target="_home" tabindex="-1">Ring-Moon Systems (RMS)</a></li><li tabindex="-1"><a href="https://pds-smallbodies.astro.umd.edu/" target="_home" tabindex="-1">Small Bodies (SBN)</a></li></ul></div></div></div>
+<!-- Skip navigation link -->
+<a href="https://naif.jpl.nasa.gov/naif/spiceconcept.html#content"><img src="./spice_concept_files/skip.gif" alt="Skip Navigation: Avoid going through Home page links and jump straight to content" width="1" height="1" border="0"></a><br>
+<!-- End Skip navigation link -->
+
+
+<!--start header-->
+<script src="./spice_concept_files/pds-app-bar.js.download" type="text/javascript"></script>
+<link href="./spice_concept_files/pds-app-bar.css" type="text/css" rel="stylesheet">
+
+<table border="0" cellspacing="0" cellpadding="0" align="center" valign="top" bgcolor="#FFFFFF" width="750" role="presentation">
+
+<tbody><tr>
+<td width="10"><img src="./spice_concept_files/spacer.gif" alt="" width="10" height="1"></td>
+<td width="730"><img src="./spice_concept_files/spacer.gif" alt="" width="730" height="10"></td>
+<td width="10"><img src="./spice_concept_files/spacer.gif" alt="" width="10" height="1"></td>
+</tr>
+<tr>
+<td width="10"><img src="./spice_concept_files/spacer.gif" alt="" width="10" height="1"></td>
+<td>
+	<table cellpadding="0" cellspacing="0" border="0" align="center" width="730">
+		<tbody><tr>
+			<td>
+				<table cellpadding="0" cellspacing="0" border="0" align="center" width="730">
+					<tbody><tr>
+						<td width="379" bgcolor="#cccccc"><img src="./spice_concept_files/head_nasa.gif" alt="NASA Logo" border="0" width="271" height="63" usemap="#Map"></td>
+						<td width="200" bgcolor="#cccccc">&nbsp;&nbsp;&nbsp;<a class="navLnkBlack" href="http://www.nasa.gov/home"><font face="Arial, Helvetica, sans-serif" size="2">+ View the NASA Portal</font></a></td>
+						<td width="151" bgcolor="#cccccc" align="center" valign="middle"><font size="2" face="arial" color="#ffffff">&nbsp;
+						</font></td>
+					</tr>
+				</tbody></table>
+			</td>
+		</tr>
+		<tr>
+			
+        <td width="730"><a href="https://naif.jpl.nasa.gov/naif/pds.html"><img src="./spice_concept_files/home_banner4.jpg" width="730" vspace="3" height="100" alt="NAIF" border="0"></a></td>
+		</tr>
+	</tbody></table>
+</td>
+<td width="10"><img src="./spice_concept_files/spacer.gif" alt="" width="10" height="1"></td>
+</tr>
+
+<tr>
+<td width="10"><img src="./spice_concept_files/spacer.gif" alt="" width="10" height="1"></td>
+<td width="730"><img src="./spice_concept_files/spacer.gif" alt="" width="730" height="1"></td>
+<td width="10"><img src="./spice_concept_files/spacer.gif" alt="" width="10" height="1"></td>
+</tr>
+<!--end header-->
+
+<!--start leftmenu-->
+<tr>
+<td width="10"><img src="./spice_concept_files/spacer.gif" alt="" width="10" height="1"></td>
+<td width="730">
+
+<table width="730" border="0" cellspacing="0" cellpadding="2">
+<tbody><tr>
+<td width="120" bgcolor="#4879b1" valign="top">
+
+ <table width="120" border="0" cellspacing="1" cellpadding="2" class="sideBar" bgcolor="#4879b1">
+
+ <tbody><tr>
+ <td><a href="https://naif.jpl.nasa.gov/naif/index.html" class="nav"><b>Home</b></a></td>
+ </tr>
+
+<tr>
+<td><a href="https://naif.jpl.nasa.gov/naif/announcements.html" class="nav"><b>Announcements</b></a></td>
+</tr>
+    
+ <tr>
+ <td><a href="https://naif.jpl.nasa.gov/naif/aboutspice.html" class="nav"><b>About SPICE</b></a></td>
+ </tr>
+
+ <tr>
+ <td valign="top"><a href="https://naif.jpl.nasa.gov/naif/about.html" class="nav"><b>About NAIF</b></a></td>
+ </tr>
+
+ <tr>
+ <td valign="top"><a href="https://naif.jpl.nasa.gov/naif/for_projects.html" class="nav"><b>For New Projects</b></a></td>
+ </tr>
+
+ <tr>
+ <td valign="top"><a href="https://naif.jpl.nasa.gov/naif/public.html" class="nav"><b>For the Public</b></a></td>
+ </tr>
+
+ <tr>
+ <td><a href="https://naif.jpl.nasa.gov/naif/data.html" class="nav"><b>Data</b></a></td>
+ </tr>
+
+ <tr><td><a href="https://naif.jpl.nasa.gov/naif/toolkit.html" class="nav"><b>Toolkit</b></a></td>
+ </tr>
+ 
+ <tr><td><a href="https://naif.jpl.nasa.gov/naif/utilities.html" class="nav"><b>Utilities</b></a></td>
+ </tr>
+
+ <tr><td><a href="https://naif.jpl.nasa.gov/naif/webgeocalc.html" class="nav"><b>WebGeocalc</b></a></td>
+ </tr>
+
+ <tr><td><b><a href="https://naif.jpl.nasa.gov/naif/cosmographia.html" class="nav">Cosmographia</a></b></td>
+ </tr>
+
+ <tr>
+ <td><a href="https://naif.jpl.nasa.gov/naif/documentation.html" class="nav"><b>Documentation</b></a></td>
+ </tr>
+
+ <tr>
+ <td><a href="https://naif.jpl.nasa.gov/naif/tutorials.html" class="nav"><b>Tutorials</b></a></td>
+ </tr>
+
+ <tr>
+ <td><a href="https://naif.jpl.nasa.gov/naif/lessons.html" class="nav"><b>Lessons</b></a></td>
+ </tr>
+ 
+  <tr>
+ <td><a href="https://naif.jpl.nasa.gov/naif/training.html" class="nav"><b>Training</b></a></td>
+ </tr>
+
+ <tr>
+ <td><a href="https://naif.jpl.nasa.gov/naif/bugs.html" class="nav"><b>Bugs</b></a></td>
+ </tr>
+
+ <tr>
+ <td><a href="https://naif.jpl.nasa.gov/naif/links.html" class="nav"><b>Useful Links</b></a></td>
+ </tr>
+
+ 
+ <tr>
+ <td valign="top"><a href="https://naif.jpl.nasa.gov/naif/rules.html" class="nav"><b>Rules</b></a></td>
+ </tr>
+
+ <tr>
+ <td valign="top"><a href="https://naif.jpl.nasa.gov/naif/credit.html" class="nav"><b>Giving Credit</b></a></td>
+ </tr>
+
+ 
+ <tr>
+ <td valign="top"><a href="https://naif.jpl.nasa.gov/naif/feedback.html" class="nav"><b>Feedback</b></a></td>
+ </tr>
+
+<tr>
+ <td><a href="https://naif.jpl.nasa.gov/naif/support.html" class="nav"><b>Support</b></a></td>
+ </tr>
+
+<tr>
+ <td valign="top"><a href="https://naif.jpl.nasa.gov/naif/gettinghelp.html" class="nav"><b>Getting Help</b></a></td>
+ </tr>
+
+ <tr>
+ <td valign="top"><a href="https://naif.jpl.nasa.gov/naif/sitemap.html" class="nav"><b>Site Map </b></a></td>
+ </tr>
+</tbody></table>
+
+</td>
+<td valign="top" align="left" width="610">
+<!--end leftmenu-->
+
+<a name="content"></a>
+<!--start data_content-->
+
+<center>
+      <h1>The SPICE Concept</h1>
+</center>
+
+      <table width="98%" border="0" align="center">
+        <tbody><tr>
+          <td>
+            <p>The Navigation and Ancillary Information Facility (NAIF), acting 
+              under the directions of NASA's Planetary Science Division, has 
+              built an information system named "SPICE" to assist NASA scientists 
+              in planning and interpreting scientific observations from space-borne 
+              instruments, and to assist NASA engineers involved in modeling, planning and
+              executing activities needed to conduct planetary exploration missions.
+              Examples of what can be computed using SPICE are shown in <a href="https://naif.jpl.nasa.gov/naif/geometric_parameters.png">this</a> and <a href="https://naif.jpl.nasa.gov/naif/geometric_events.png">this</a> graphics.
+              
+              
+              </p><p>
+              The use of SPICE extends from mission concept development through the 
+              post-mission data analysis phase,
+              including help with correlation of individual instrument data sets with those 
+              from other instruments on the same or on other spacecraft. </p>
+            
+            <p> 
+              The primary SPICE data sets are often called "kernels" 
+              or "kernel files." SPICE kernels are composed of navigation 
+              and other ancillary information providing precision observation geometry 
+              for use by the planetary science and engineering communities. 
+              SPICE kernels are produced by the most knowledgeable 
+              sources of such information, usually located at a mission operations 
+              center. SPICE kernels should include or be accompanied by metadata—consistent 
+              with flight project data system and SPICE standards—that provide pedigree 
+              and other descriptive information needed by prospective users. </p>
+            
+            <p> The SPICE system's logical components and the actual data files—the kernels—used to realize those components are summarized below.</p>
+            
+            <p> <b>S-</b> <b>S</b>pacecraft 
+              ephemeris, given as a function of time. (<b>SPK</b>)</p>
+            
+            <p> <b>P-</b> <b>P</b>lanet, 
+              satellite, comet, or asteroid ephemerides, or more generally, location 
+              of any target body, given as a function of time. (also <b>SPK</b>)</p>
+            
+            <p>The <b>P</b> component also logically includes certain physical, dynamical 
+              and cartographic constants for target bodies, such as size and shape 
+              specifications, and orientation of the spin axis and prime meridian. (<b>PCK</b>)</p>
+            
+            <p> <b>I-</b> 
+              <b>I</b>nstrument information containing descriptive  
+              data peculiar to the geometric aspects of a particular scientific instrument, such as field-of-view 
+              size, shape and orientation parameters. (<b>IK</b>)</p>
+            
+            <p> <b>C-</b> Orientation information, containing a transformation, traditionally called the "<b>C</b>-matrix," 
+              which provides time-tagged pointing (orientation) angles for a spacecraft bus
+              or a spacecraft structure upon which science instruments are mounted. The C component may also include angular rate data for that structure. (<b>CK</b>)</p>
+            
+            <p> <b>E-</b> <b>E</b>vents 
+              information, summarizing mission activities - both planned and unanticipated. 
+              Events data are contained in the SPICE E-kernel file set, which consists 
+              of three components: Science Plans, Sequences, and Notes. (<b>EK</b>)</p>
+              
+            <p>(Note: the Events kernel is rarely used.)
+            
+            </p><p> Some additional 
+              data products are also important components of the SPICE system, 
+              even if not contained in the "SPICE" acronym.</p>
+            
+            <p> A frames 
+              kernel (<b>FK</b>) contains specifications for the assortment 
+              of reference frames that are typically used by flight projects. 
+              This file also includes mounting alignment information for instruments, 
+              antennas and perhaps other structures of interest. </p>
+              
+            <p> Spacecraft clock (<b>SCLK</b>) and leap seconds 
+              (<b>LSK</b>) kernels are also part of SPICE; these are used in converting 
+              time tags between various time measurement systems. </p>
+              
+            <p>A digital shape model kernel (<b>DSK</b>), with separate designs for both small, 
+              irregularly shaped bodies such as asteroids and comet nuclei, and for large, more uniformly shaped bodies such as the Moon, Earth and Mars, offers the possibility of using higher fidelity shape models within SPICE for those (few) bodies for which scientists have calculated detailed shape. When they exist, a DSK can often be used in place of the size and shape portion of a PCK.</p>
+              
+            <p> Perhaps the 
+              "SPICE" acronym should have been "SPICES," 
+              with the final "S" standing for "Software." 
+              The SPICE system includes the SPICE Toolkit, a large collection of 
+              allied software. The principal component of this Toolkit is a library 
+              of application program interfaces (APIs, sometimes called subroutines or modules) needed to read the kernel files and to calculate 
+              observation geometry parameters of interest to scientists —items such as range, LAT/LON, 
+              and lighting angles. Some SPICE APIs—those comprising the geometric event finder subsystem—can 
+              be used to find times when certain geometric conditions occur (e.g. occultation) or when 
+              certain geometric parameters are in a stated range or have reached a maximum or minimum.</p>
+              
+              <p>Users integrate a few 
+              SPICE Toolkit APIs into their own application 
+              programs to compute needed observation geometry parameters or times of geometric events.</p> 
+              
+              <p>The SPICE Toolkit was originally 
+              implemented in ANSI FORTRAN 77, but is now available in C, IDL, MATLAB and Java Native Interface as well. Third parties offer Toolkits in Python, Ruby, Swift and Julia. (Maybe yet others, too?)
+              </p>
+              
+            <p> NAIF has designed 
+              the SPICE architecture with portability 
+              and multimission application as principal goals. Because 
+              extensive user-focused documentation, tutorials and examples are
+              provided to customers, with a reasonable learning effort the system
+              can be confidently used by the full spectrum of the space science
+              community on mission after mission.</p>
+              
+            <p> A flight project's 
+              mission operations center concentrates on producing, cataloging 
+              and distributing complete and accurate kernels on a timely basis. 
+              Kernel updates should be made promptly when new or improved data  
+              become available. Flight project team members obtain those 
+              kernels of interest, using 
+              them in application programs hosted at their home sites to compute 
+              needed observation geometry information. Users can even 
+              update some kernels and produce their own versions of other kernels 
+              to support their own analyses or to provide their colleagues with 
+              any improvements in ancillary information resulting from their work.</p>
+              
+            <p>Each flight project delivers well documented copies of all SPICE 
+              kernels to the appropriate permanent archive facility,  
+              assuring ready availability of these data for future users. 
+              Ideally this archive is open to the international community of scientists 
+              and engineers. User-produced kernels may also be similarly archived, subject to passing a peer review. 
+              For NASA planetary missions, the NAIF Node of NASA's Planetary 
+              Data System is the archive site—this archive is open to all.</p>
+              
+            <p>While science data analysis was the original focus, SPICE is now frequently used for mission engineering and  for planning science 
+              observations. In these cases the observer could be an in-the-future "predict" 
+              spacecraft ephemeris produced by a mission design organization, 
+              a terrestrial telescope, or a user-provided instrument location. 
+              "Predict" versions of other SPICE kernels 
+              are also often made to help simulate a full data processing system. With 
+              this flexibility scientists may use SPICE throughout the experiment 
+              life cycle—from mission concept development, to mission engineering, to detailed observation design, 
+              to instrument data analysis and finally to correlation of results 
+              with those from other missions. </p>
+              
+            <p> A large set 
+              of core SPICE components has been in place for many years. Extension and adaptation of 
+              this core system to encompass broader functionality and easier use is an ongoing endeavor. This work 
+              includes provision of some broadly useful application programs and 
+              development of additional kernel types.</p>
+            
+            <p> The SPICE system has been built for and
+              is used on numerous U.S. planetary missions, such as Cassini, Mars Exploration Rover, 
+              Mars Reconnaissance
+              Orbiter and DAWN. 
+              Many international missions have, of their own volition, also decided
+              to use SPICE. Some missions from other (not planetary) disciplines also make
+              use of SPICE.
+              Limited data from some older missions such as Viking and Voyager
+              have been or are being "restored" into SPICE format. SPICE is also used in a variety of engineering tasks, such as Deep Space Network scheduling and communications.</p> 
+              
+            
+           
+          </td>
+        </tr>
+      </tbody></table>
+<!--end data_content-->
+
+<!--start bottom-->
+</td>
+</tr>
+</tbody></table>
+
+
+</td><td width="10"><img src="./spice_concept_files/spacer.gif" alt="" width="10" height="1"></td>
+
+
+</tr><tr>
+<td width="10"><img src="./spice_concept_files/spacer.gif" alt="" width="10" height="1"></td>
+<td width="730"><img src="./spice_concept_files/spacer.gif" alt="" width="730" height="5"></td>
+<td width="10"><img src="./spice_concept_files/spacer.gif" alt="" width="10" height="1"></td>
+</tr>
+
+<tr>
+<td width="10"><img src="./spice_concept_files/spacer.gif" alt="" width="10" height="1"></td>
+<td width="730"><img src="./spice_concept_files/pds_banner4.jpg" alt="PDS Menu" width="730" height="47" usemap="#pdsmenu" border="0"></td>
+<td width="10"><img src="./spice_concept_files/spacer.gif" alt="" width="10" height="1"></td>
+</tr>
+
+
+<tr align="center"> 
+<td width="10"><img src="./spice_concept_files/spacer.gif" alt="" width="10" height="1"></td>
+<td>
+          <table cellpadding="2" cellspacing="0" width="730" border="0" bgcolor="#cccccc"><tbody><tr>
+          <td valign="center" align="left" width="110">
+            <img height="70" src="./spice_concept_files/spacer.gif" alt="" width="110" border="0"></td>
+          <td width="384" align="center">
+           &nbsp;<a href="https://www.nasa.gov/" target="_blank"><font face="Arial, Helvetica, sans-serif" size="2">NASA</font></a> | 
+           <a href="http://www.caltech.edu/" target="_blank"><font face="Arial, Helvetica, sans-serif" size="2">Caltech</font></a> | 
+           <a href="https://www.jpl.nasa.gov/copyrights.php" target="_blank"><font face="Arial, Helvetica, sans-serif" size="2">Privacy</font></a><font face="Arial, Helvetica, sans-serif" size="2"> |
+           <a href="https://www.jpl.nasa.gov/imagepolicy/" target="_blank"><font face="Arial, Helvetica, sans-serif" size="2">Image Policy</font></a><font face="Arial, Helvetica, sans-serif" size="2"> | 
+           <a href="https://www.jpl.nasa.gov/faq.php" target="_blank"><font face="Arial, Helvetica, sans-serif" size="2">FAQ</font></a><font face="Arial, Helvetica, sans-serif" size="2"> |
+           <a href="https://www.jpl.nasa.gov/contact_JPL.php" target="_blank">JPL&nbsp;Feedback</a>
+          </font></font></font></td>
+          
+        <td width="219" align="right">
+            <table align="right">
+            <tbody><tr>
+            <td align="left">
+             <font face="Arial, Helvetica, sans-serif" size="2">
+            o Clearance: CL#05-2438<br>
+            o Site Manager: <a href="mailto:boris.v.semenov@jpl.nasa.gov">Boris Semenov</a><br>
+            o Webmaster: Ron Baalke<br>
+            o Last Updated: <script>document.write( lastMod() );</script>09 Jul 2021
+            </font>
+            </td>
+            </tr>
+            </tbody></table>  
+           </td>
+        </tr></tbody></table>
+	</td>
+
+<td width="10"><img src="./spice_concept_files/spacer.gif" alt="" width="10" height="1"></td>
+</tr>
+
+<tr>
+<td width="10"><img src="./spice_concept_files/spacer.gif" alt="" width="10" height="1"></td>
+<td width="730"><img src="./spice_concept_files/spacer.gif" alt="" width="730" height="10"></td>
+<td width="10"><img src="./spice_concept_files/spacer.gif" alt="" width="10" height="1"></td>
+</tr>
+
+
+</tbody></table>
+
+<map name="pdsmenu">
+  <area shape="rect" coords="0,0,90,46" href="http://pds.jpl.nasa.gov/" title="Planetary Data System Central Node">
+  <area shape="rect" coords="90,0,200,46" href="http://pds-atmospheres.nmsu.edu/" title="Atmospheres Node">
+  <area shape="rect" coords="200,0,296,46" href="http://pds-geosciences.wustl.edu/" title="Geosciences Node">
+  <area shape="rect" coords="296,0,428,46" href="http://pds-imaging.jpl.nasa.gov/" title="Imaging Node">
+  <area shape="rect" coords="428,0,562,46" href="http://pds-ppi.igpp.ucla.edu/" title="Planetary Plasma Interactions Node">
+  <area shape="rect" coords="562,0,652,46" href="http://pds-rings.seti.org/" title="Ring and Moon Systems Node">
+  <area shape="rect" coords="652,0,729,46" href="http://pds-smallbodies.astro.umd.edu/" title="Small Bodies Node">
+</map>
+
+<!--end bottom-->
+
+<!--end body-->
+
+</body></html>

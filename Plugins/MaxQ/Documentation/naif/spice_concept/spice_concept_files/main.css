@@ -1,0 +1,41 @@
+p {  font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 14px; font-style: normal; line-height: normal; }
+p.body { font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 14px; line-height: normal }
+p.note1 { font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 14px; font-weight: bold }
+
+.sectionTitle { font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 12px; font-weight: bold }
+.footer {  font-family: Arial, Helvetica, sans-serif; font-size: 10px; font-style: normal; line-height: 11px; font-weight: normal; color: #999999}
+
+a {  text-decoration: underline}
+a:hover {  color: #000000}
+a.nav:link { font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 13px; font-weight: bold; color: #FFFFFF }
+a.nav:active { font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 13px; font-weight: bold; color: #081EC2 }
+a.nav:visited { font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 13px; font-weight: bold; color: #081EC2 }
+#<!--a:visited  { color: #081EC2  }--> 
+a:visited  { color: #081EC2  }
+a.body { text-decoration: underline}
+a.leftNavUnselect { font-size: 13px; font-weight: bold; color: #FFFFFF }
+a.leftNavSelect { font-size: 13px; font-weight: bold; color: #000000 }
+
+h2 { font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 16px; font-style: normal; font-weight: bold; color: #666666}
+h1 { font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 18px; font-style: normal; font-weight: bold ; color: #666666}
+h3 { font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 14px; font-style: normal; font-weight: bold; color: #666666}
+h4 { font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 12px; font-style: normal; font-weight: bold ; color: #666666}
+h5 { font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 12px; font-style: normal; font-weight: bold }
+h6 { font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 14px; font-style: normal; font-weight: bold }
+.tableHdr {  font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 11px; font-style: normal; font-weight: bold}
+.tableBody { font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 11px; font-style: normal; font-weight: normal}
+.paraSml { font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 10px; font-style: normal; line-height: 11px; font-weight: normal}
+.paraLrg { font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 12px; font-style: normal; line-height: 14px; font-weight: normal}
+.tableHdrG { font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 11px; font-style: normal; font-weight: bold ; color: #333333}
+.bold { font-family: Verdana, Arial, Helvetica, sans-serif; font-style: normal; font-weight: bold}
+.para { font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 11px; font-style: normal; line-height: 20px; font-weight: normal }
+.para2 { font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 12px; font-style: normal; }
+.para3 { font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 14px; font-style: normal; font-weight: bold; }
+.paraBold { font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 11px; font-style: normal; line-height: 20px; font-weight: bold}
+.reg {  font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 9px; font-style: normal; font-weight: normal}
+td {  font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 14px; }
+.tdReg {  font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 11px; }
+ul {  font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 14px; font-style: normal; line-height: normal; font-weight: normal}
+ol {  font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 14px; font-style: normal; line-height: normal; font-weight: normal}
+dl {  font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 14px; font-style: normal; line-height: normal;}
+
