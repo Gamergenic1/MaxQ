@@ -1,0 +1,243 @@
+(function (window, document, undefined) {
+  if (window.PDS_App_Bar !== undefined) {
+    return;
+  }
+
+  // log proxy function
+  var log = function (msg) {
+      window.console.log(msg);
+    },
+    scriptLoader = function (script, func) {
+      if (script.onload === undefined) {
+        // IE lack of support for script onload
+        if (script.onreadystatechange !== undefined) {
+          var intervalFunc = function () {
+            if (
+              script.readyState !== "loaded" &&
+              script.readyState !== "complete"
+            ) {
+              window.setTimeout(intervalFunc, 250);
+            } else {
+              // it is loaded
+              func();
+            }
+          };
+          window.setTimeout(intervalFunc, 250);
+        } else {
+          log("ERROR: We can't track when script is loaded");
+        }
+      } else {
+        return func;
+      }
+    };
+
+  window.PDS_App_Bar = function () {
+    var app_bar = document.createElement("div"),
+      bar_first = document.createElement("div"),
+      bar_second = document.createElement("div");
+    app_bar.setAttribute("id", "pds-app-bar");
+    bar_first.className = "pds-app-bar-section";
+    bar_second.className = "pds-app-bar-section";
+
+    var bar_title = document.createElement("a"),
+      bar_logo = document.createElement("img");
+    bar_title.setAttribute("id", "pds-app-bar-title");
+    bar_title.href = "https://pds.nasa.gov/";
+    bar_title.target = "_home";
+    bar_title.innerHTML =
+      "<img src='https://pds.nasa.gov/pds-app-bar/images/PDS_Planets-acr-inv-bw.png' alt='PDS Logo'>Planetary Data System";
+    bar_first.appendChild(bar_title);
+
+    var info_container = document.createElement("div"),
+      info_icon = document.createElement("img"),
+      info_text = document.createElement("div");
+    info_container.setAttribute("id", "pds-app-bar-info");
+    info_container.setAttribute("tabindex", "0");
+    info_icon.setAttribute("alt", "PDS Information");
+    info_icon.setAttribute(
+      "src",
+      "https://pds.nasa.gov/pds-app-bar/images/info.svg"
+    );
+    info_text.innerHTML =
+      "Find a Node - Use these links to navigate to any of the 8 publicly accessible PDS Nodes." +
+      "<br/><br/>" +
+      "This bar indicates that you are within the PDS enterprise which includes 6 science discipline nodes and 2 support nodes which are overseen by the Project Management Office at NASA's Goddard Space Flight Center (GSFC). " +
+      "Each node is led by an expert in the subject discipline, supported by an advisory group of other practitioners of that discipline, and subject to selection and approval under a regular NASA Research Announcement.";
+
+    info_container.appendChild(info_icon);
+    info_container.appendChild(info_text);
+
+    var dropdown_container = document.createElement("div"),
+      dropdown_link = document.createElement("a"),
+      dropdown_caret = document.createElement("span"),
+      dropdown_list = document.createElement("ul");
+    dropdown_container.setAttribute("id", "pds-app-bar-dropdown");
+    dropdown_container.setAttribute("tabindex", "0");
+    dropdown_link.textContent = "Find a Node";
+    dropdown_link.appendChild(dropdown_caret);
+
+    var nodes = new Map();
+    nodes
+      .set("atm", ["Atmospheres (ATM)", "https://pds-atmospheres.nmsu.edu/"])
+      .set("img", [
+        "Cartography and Imaging Sciences (IMG)",
+        "https://pds-imaging.jpl.nasa.gov/",
+      ])
+      .set("geo", ["Geosciences (GEO)", "https://pds-geosciences.wustl.edu/"])
+      .set("naif", [
+        "Navigation & Ancillary Information Facility (NAIF)",
+        "https://naif.jpl.nasa.gov/naif/",
+      ])
+      .set("ppi", [
+        "Planetary Plasma Interactions (PPI)",
+        "https://pds-ppi.igpp.ucla.edu/",
+      ])
+      .set("rms", ["Ring-Moon Systems (RMS)", "https://pds-rings.seti.org/"])
+      .set("sbn", [
+        "Small Bodies (SBN)",
+        "https://pds-smallbodies.astro.umd.edu/",
+      ]);
+    for (let value of nodes.values()) {
+      let node = document.createElement("a");
+      node.textContent = value[0];
+      node.href = value[1];
+      node.target = "_home";
+      node.setAttribute("tabindex", "-1");
+      let li = document.createElement("li");
+      li.setAttribute("tabindex", "-1");
+      li.appendChild(node);
+      dropdown_list.appendChild(li);
+    }
+    dropdown_container.appendChild(dropdown_link);
+    dropdown_container.appendChild(dropdown_list);
+
+    bar_second.appendChild(info_container);
+    bar_second.appendChild(dropdown_container);
+
+    app_bar.appendChild(bar_first);
+    app_bar.appendChild(bar_second);
+
+    document.body.insertBefore(app_bar, document.body.firstChild);
+
+    // handlers for Information popup
+    var bar_first_style = bar_first.currentStyle || window.getComputedStyle(bar_first);
+    info_text.style.left = (bar_first.offsetWidth + parseFloat(bar_first_style.marginRight)).toString() + "px";
+
+    info_container.onmouseover = function () {
+      info_container.classList.add("active");
+    };
+    info_container.onmouseout = function () {
+      info_container.classList.remove("active");
+    };
+    info_container.onfocus = function () {
+      info_container.classList.add("active");
+    };
+    info_container.onblur = function () {
+      info_container.classList.remove("active");
+    };
+    info_container.addEventListener("keydown", (evt) => {
+      if (evt.code === "Escape") {
+        info_container.classList.remove("active");
+      } else if (evt.code === "Enter" || evt.code === "Space") {
+        evt.preventDefault();
+        info_container.classList.add("active");
+      }
+    });
+
+    // handlers for Nodes dropdown
+    var dropdown_list_element = dropdown_list.children,
+        dropdown_list_length = dropdown_list_element.length,
+        focused_element_index = -1,
+        focused_element_exists = false,
+        reset_dropdown_tabindices = function () {
+          for (dli of dropdown_list_element) {
+            dli.setAttribute("tabindex", "-1");
+          }
+        },
+        focus_dropdown_element = function (index) {
+          dropdown_list_element[index].setAttribute("tabindex", "0");
+          dropdown_list_element[index].focus();
+          focused_element_exists = true;
+        },
+        close_dropdown_list = function () {
+          focused_element_index = -1;
+          focused_element_exists = false;
+          dropdown_container.classList.remove("active");
+        };
+    dropdown_caret.onclick = function () {
+      if (dropdown_container.classList.contains("active")) {
+        reset_dropdown_tabindices();
+        close_dropdown_list();
+      } else {
+        dropdown_container.classList.add("active");
+      }
+    }
+    dropdown_container.onmouseover = function () {
+      dropdown_container.classList.add("active");
+    };
+    dropdown_container.onmouseout = function () {
+      reset_dropdown_tabindices();
+      close_dropdown_list();
+    };
+    dropdown_container.onfocus = function () {
+      dropdown_container.classList.add("active");
+    };
+    for (let i = 0; i < dropdown_list_length; i++) {
+      dropdown_list_element[i].addEventListener("mouseenter", (evt) => {
+        reset_dropdown_tabindices();
+        focus_dropdown_element(i);
+      }, true);
+      dropdown_list_element[i].firstElementChild.onclick = function () {
+        reset_dropdown_tabindices();
+        close_dropdown_list();
+      }
+    }
+    dropdown_container.addEventListener("keydown", (evt) => {
+      if (evt.code === "Escape" || evt.code === "Tab" || evt.shiftKey && evt.code === "Tab") {
+        if (focused_element_exists) dropdown_container.focus();
+        reset_dropdown_tabindices();
+        close_dropdown_list();
+      } else if (evt.code === "ArrowUp") {
+        evt.preventDefault();
+        if (focused_element_exists) {
+          reset_dropdown_tabindices();
+          focused_element_index === 0 ?
+              focused_element_index = dropdown_list_element.length - 1 : focused_element_index--;
+          focus_dropdown_element(focused_element_index);
+        }
+      } else if (evt.code === "ArrowDown") {
+        evt.preventDefault();
+        reset_dropdown_tabindices();
+        focused_element_index === dropdown_list_element.length - 1 ?
+            focused_element_index = 0 : focused_element_index++;
+        focus_dropdown_element(focused_element_index);
+      } else if (evt.code === "Enter" || evt.code === "Space") {
+        if (dropdown_container.classList.contains("active") && focused_element_exists) {
+          window.open(dropdown_list_element[focused_element_index].firstElementChild.href, "_home");
+          reset_dropdown_tabindices();
+          close_dropdown_list();
+        } else {
+          evt.preventDefault();
+          dropdown_container.classList.add("active");
+        }
+      }
+    });
+
+    document.body.onclick = function (e) {
+      if (
+        e.composedPath && !e.composedPath().some((el) => el.id === "pds-app-bar-dropdown") &&
+        dropdown_container.classList.contains("active")
+      ) {
+        reset_dropdown_tabindices();
+        close_dropdown_list();
+      }
+    };
+  };
+
+  // Initialize
+  if (document.readyState != "loading") PDS_App_Bar();
+  else
+    document.addEventListener("DOMContentLoaded", function () {
+      PDS_App_Bar();
+    });
+})(window, document);
