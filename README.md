@@ -50,6 +50,8 @@ https://github.com/gamergenic/ASATDebrisVisualization
 ## Implementation Principles
 See [PRINCIPLES](PRINCIPLES.md) file.
 
+---
+
 # NOTICE
 ## Project conversion to Plugin in-progress
 * This project is currently undergoing conversion to source code for an Unreal Engine plugin, as opposed to simply being a host application.
