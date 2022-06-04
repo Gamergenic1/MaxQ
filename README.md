@@ -61,4 +61,13 @@ See [PRINCIPLES](PRINCIPLES.md) file.
 * The easiest way to use MaxQ for now is would be to map the Plugins directory of this project to the Plugins directory of your own project.  You'd then enable MaxQ under plugins (category = SpaceFlight).
 * Look for MaxQ to be released in the UE Marketplace by mid-June.
 
+### Plugin Tutorials
+### Location
+* **C++**: /Plugins/MaxQ/Content/CppTutorials/Maps
+* **Blueprints**: /Plugins/MaxQ/Content/BlueprintTutorials/Maps
+
+### Content
+* **Tutorial1**: Initialization and kernel data  
+* **Tutorial2**: Time manipulation
+* (Additional Tutorials in progress)
 
