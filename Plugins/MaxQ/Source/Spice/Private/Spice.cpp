@@ -2373,13 +2373,13 @@ Exceptions
 void USpice::deltet(
     ES_ResultCode& ResultCode,
     FString& ErrorMessage,
-    const FSEphemerisTime& epoch,
+    double epoch,
     ES_EpochType eptype,
     FSEphemerisPeriod& delta
 )
 {
     // Inputs
-    SpiceDouble		_epoch = epoch.seconds;
+    SpiceDouble		_epoch = epoch;
     ConstSpiceChar* _eptype = eptype == ES_EpochType::UTC ? "UTC" : "ET";
     // Outputs
     SpiceDouble		_delta = 0;
@@ -3053,8 +3053,8 @@ void USpice::et2utc(
     FString& ErrorMessage,
     const FSEphemerisTime& et,
     ES_UTCTimeFormat format,
-    int          prec,
-    FString& utcstr
+    FString& utcstr,
+    int prec
 )
 {
     // Buffers
@@ -6306,11 +6306,11 @@ Exceptions
    Error free
 */
 void USpice::b1900(
-    FSEphemerisTime& b1900
+    double& JulianDate
 )
 {
     SpiceDouble _b1900 = b1900_c();
-    b1900 = FSEphemerisTime(_b1900);
+    JulianDate = (double)_b1900;
 }
 
 /*
@@ -6318,11 +6318,11 @@ Exceptions
    Error free
 */
 void USpice::b1950(
-    FSEphemerisTime& b1950
+    double& JulianDate
 )
 {
     SpiceDouble _b1950 = b1950_c();
-    b1950 = FSEphemerisTime(_b1950);
+    JulianDate = (double)_b1950;
 }
 
 
@@ -6331,11 +6331,11 @@ Exceptions
    Error free
 */
 void USpice::j1900(
-    FSEphemerisTime& j1900
+    double& JulianDate
 )
 {
     SpiceDouble _j1900 = j1900_c();
-    j1900 = FSEphemerisTime(_j1900);
+    JulianDate = (double)_j1900;
 }
 
 /*
@@ -6343,11 +6343,11 @@ Exceptions
    Error free
 */
 void USpice::j1950(
-    FSEphemerisTime& j1950
+    double& JulianDate
 )
 {
     SpiceDouble _j1950 = j1950_c();
-    j1950 = FSEphemerisTime(_j1950);
+    JulianDate = (double)_j1950;
 }
 
 /*
@@ -6355,11 +6355,11 @@ Exceptions
    Error free
 */
 void USpice::j2000(
-    FSEphemerisTime& j2000
+    double& JulianDate
 )
 {
     SpiceDouble _j2000 = j2000_c();
-    j2000 = FSEphemerisTime(_j2000);
+    JulianDate = (double)_j2000;
 }
 
 /*
@@ -6367,11 +6367,11 @@ Exceptions
    Error free
 */
 void USpice::j2100(
-    FSEphemerisTime& j2100
+    double& JulianDate
 )
 {
     SpiceDouble _j2100 = j2100_c();
-    j2100 = FSEphemerisTime(_j2100);
+    JulianDate = (double)_j2100;
 }
 
 
@@ -9065,13 +9065,14 @@ void USpice::spd(double& value)
     value = double(_value);
 }
 
-/*
-Exceptions
-   Error free.
-*/
 void USpice::day_period(FSEphemerisPeriod& oneDay)
 {
     oneDay = FSEphemerisPeriod::Day;
+}
+
+void USpice::j2000_epoch(FSEphemerisTime& J2000)
+{
+    J2000 = FSEphemerisTime::J2000;
 }
 
 /*

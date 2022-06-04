@@ -1290,7 +1290,7 @@ public:
     static void deltet(
         ES_ResultCode& ResultCode,
         FString& ErrorMessage,
-        const FSEphemerisTime& epoch,
+        double epoch,
         ES_EpochType            eptype,
         FSEphemerisPeriod& delta
     );
@@ -1423,15 +1423,16 @@ public:
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "TIME",
             ShortToolTip = "Ephemeris Time to UTC",
-            ToolTip = "Convert an input time from ephemeris seconds past J2000 to Calendar, Day - of - Year, or Julian Date format, UTC"
+            ToolTip = "Convert an input time from ephemeris seconds past J2000 to Calendar, Day - of - Year, or Julian Date format, UTC",
+            AdvancedDisplay = "prec"
             ))
     static void et2utc(
         ES_ResultCode& ResultCode,
         FString& ErrorMessage,
         const FSEphemerisTime& et,
         ES_UTCTimeFormat format,
-        int          prec,
-        FString& utcstr
+        FString& utcstr,
+        int prec = 4
     );
 
 
@@ -2441,7 +2442,7 @@ public:
             ToolTip = "Return the Julian Date corresponding to Besselian Date 1900.0"
             ))
     static void b1900(
-        FSEphemerisTime& b1900
+        double& JulianDate
     );
 
     UFUNCTION(BlueprintPure,
@@ -2452,7 +2453,7 @@ public:
             ToolTip = "Return the Julian Date corresponding to Besselian Date 1950.0"
             ))
     static void b1950(
-        FSEphemerisTime& b1950
+        double& JulianDate
     );
 
     /// <summary>Return the Julian Date of 1899 DEC 31 12:00:00 (1900 JAN 0.5)</summary>
@@ -2465,7 +2466,7 @@ public:
             ToolTip = "Return the Julian Date of 1899 DEC 31 12:00:00 (1900 JAN 0.5)"
             ))
     static void j1900(
-        FSEphemerisTime& j1900
+        double& JulianDate
     );
 
     /// <summary>Return the Julian Date of 1950 JAN 01 00:00:00 (1950 JAN 1.0)</summary>
@@ -2477,7 +2478,7 @@ public:
             ShortToolTip = "Julian Date of 1950.0 JAN 1.0",
             ToolTip = "Return the Julian Date of 1950 JAN 01 00:00:00 (1950 JAN 1.0)"
             ))
-    static void j1950(FSEphemerisTime& j1950);
+    static void j1950(double& JulianDate);
 
     /// <summary>Return the Julian Date of 2000 JAN 01 12:00:00 (2000 JAN 1.5)</summary>
     /// <returns>the Julian Date of 2000 JAN 01 12:00:00 (2000 JAN 1.5)</returns>
@@ -2488,7 +2489,7 @@ public:
             ShortToolTip = "Julian Date of 2000 JAN 1.5",
             ToolTip = "Return the Julian Date of 2000 JAN 01 12:00:00 (2000 JAN 1.5)"
             ))
-    static void j2000(FSEphemerisTime& j2000);
+    static void j2000(double& JulianDate);
 
     /// <summary>Return the Julian Date of 2100 JAN 01 12:00:00 (2100 JAN 1.5)</summary>
     /// <returns>the Julian Date of 2100 JAN 01 12:00:00 (2100 JAN 1.5)</returns>
@@ -2499,7 +2500,7 @@ public:
             ShortToolTip = "Julian Date of 2100 JAN 1.5",
             ToolTip = "Return the Julian Date of 2100 JAN 01 12:00:00 (2100 JAN 1.5)"
             ))
-    static void j2100(FSEphemerisTime& j2100);
+    static void j2100(double& JulianDate);
 
     /// <summary>Return the number of seconds in a julian year</summary>
     /// <returns>The number of seconds/julian year</returns>
@@ -4692,6 +4693,15 @@ public:
     static void day_period(FSEphemerisPeriod& oneDay);
 
     UFUNCTION(BlueprintPure,
+        Category = "MaxQ|Constants",
+        meta = (
+            Keywords = "CONSTANTS",
+            ShortToolTip = "Epoch at J2000",
+            ToolTip = "Return the Epoch at Julian Date of 2000 JAN 1.5 (1 Jan 2000, 11:58:55.816 UTC)"
+            ))
+    static void j2000_epoch(FSEphemerisTime& J2000);
+
+    UFUNCTION(BlueprintPure,
         Category = "MaxQ|Coordinates",
         meta = (
             Keywords = "CONVERSION, COORDINATES",
@@ -5036,7 +5046,7 @@ public:
             FString& ErrorMessage,
             FString& output,
             const FSEphemerisTime& et,
-            const FString& pictur = TEXT("MON DD,YYYY  HR:MN:SC.#### (TDB)")
+            const FString& pictur = TEXT("MON DD, YYYY HR:MN:SC.#### (TDB)")
         );
 
 

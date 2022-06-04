@@ -44,6 +44,8 @@ ATutorial01Actor::ATutorial01Actor()
 //-----------------------------------------------------------------------------
 void ATutorial01Actor::BeginPlay()
 {
+    Super::BeginPlay();
+
     Log(FString::Printf(TEXT("PluginInfo: %s"), *MaxQTutorial::MaxQPluginInfo()), FColor::Purple);
     Log(TEXT("Tutorial01: Initialization and kernel data"), FColor::Blue);
     Log(TEXT("** Please see Tutorial01Actor.cpp for more info **"), FColor::Blue);
