@@ -956,7 +956,8 @@ FString USpiceTypes::Conv_SEpheremisTimeToString(const FSEphemerisTime& et)
     SpiceChar sz[SPICE_MAX_PATH];
     memset(sz, 0, sizeof(sz));
 
-    et2utc_c(et.AsSpiceDouble(), "C", 3, SPICE_MAX_PATH, sz);
+    et2utc_c(et.AsSpiceDouble(), "C", 4, SPICE_MAX_PATH, sz);
+
     SpiceStringConcat(sz, " UTC");
 
     // Do not reset any error state, the downstream computation will detect the signal if the string failed to convert.

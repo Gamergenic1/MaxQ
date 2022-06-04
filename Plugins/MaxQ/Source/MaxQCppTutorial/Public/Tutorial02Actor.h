@@ -26,11 +26,24 @@ public:
     UPROPERTY(EditInstanceOnly, Category = "MaxQ|Tutorials")
     TArray<FString> RequiredKernels;
 
+    UPROPERTY(EditInstanceOnly, Category = "MaxQ|Tutorials")
+    FString InsightSCLKKernel;
+
+    UPROPERTY(EditInstanceOnly, Category = "MaxQ|Tutorials")
+    FString InsightMissionFKKernel;
+
+
 public:
     ATutorial02Actor();
     void BeginPlay() override;
+    void Tick(float DeltaTime) override;
 
     void InitializeSpice();
+
+    void J2000();
+    void J2020();
+    void Now();
+    void Insight();
 };
 
 

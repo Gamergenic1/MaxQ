@@ -1256,6 +1256,8 @@ struct SPICE_API FSEphemerisTime
     inline double AsSpiceDouble() const { return seconds; }
     inline double AsSeconds() const { return seconds; }
 
+    // The J2000 epoch (1 Jan 2000, 11:58:55.816 UTC)
+    // https://en.wikipedia.org/wiki/Equinox_(celestial_coordinates)#J2000.0
     static const FSEphemerisTime J2000;
 };
 
