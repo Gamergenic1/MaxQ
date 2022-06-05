@@ -28,6 +28,12 @@ class MAXQCPPTUTORIAL_API UTutorialUtilities : public UBlueprintFunctionLibrary
 public:
     UFUNCTION(BlueprintPure, Category = "MaxQTutorials", meta = (DevelopmentOnly))
     static void GetMaxQPluginInfo(FString& Info);
+
+    UFUNCTION(BlueprintPure, Category = "MaxQTutorials", meta = (DevelopmentOnly))
+    static void GetMaxQPathAbsolutified(const FString& path, FString& AbsolutePath);
+
+    UFUNCTION(BlueprintPure, Category = "MaxQTutorials", meta = (DevelopmentOnly))
+    static void GetMaxQPathsAbsolutified(const TArray<FString>& paths, TArray<FString>& AbsolutePaths);
 };
 
 namespace MaxQTutorial
@@ -35,6 +41,8 @@ namespace MaxQTutorial
     void Log(const FString& LogString, const FColor& Color = FColor::White);
     void Log(const FString& LogString, ES_ResultCode ResultCode);
     FString MaxQPluginInfo();
+    FString MaxQPathAbsolutified(const FString& path);
+    TArray<FString> MaxQPathsAbsolutified(const TArray<FString>& paths);
 }
 
 

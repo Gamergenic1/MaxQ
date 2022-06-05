@@ -22,14 +22,27 @@ class MAXQCPPTUTORIAL_API ATutorial01Actor : public AActor
 {
     GENERATED_BODY()
 
+    // Paths must work:
+    // * For game content in PIE mode
+    // * For game content in packaged builds
+    //     Note that for packaged builds you will need to add the kernel directories
+    //     To the editor config for copying raw directories
+    //     See:   DefaultGame.ini
+    //            [/Script/UnrealEd.ProjectPackagingSettings]
+    //            +DirectoriesToAlwaysStageAsNonUFS=(Path="Spice")
+    // * For plugin content in PIE mode
+    // * For plugin content in packaged builds (?)
+    // There's no good way of handling this with FFilePath/FDirectoryPath.
+    // MaxQ will first check paths relative to project, then in editor builds
+    // Check if they were realative to plugin directory
     UPROPERTY(EditInstanceOnly, Category="MaxQ|Tutorials")
     FString RelativePathToGMKernel;
 
-    UPROPERTY(EditInstanceOnly, Category = "MaxQ|Tutorials")
-    FString RelativePathToPCKKernels;
+    UPROPERTY(EditInstanceOnly, Category = "MaxQ|Tutorials", meta = (ContentDir))
+    FDirectoryPath RelativePathToPCKKernels;
 
     UPROPERTY(EditInstanceOnly, Category = "MaxQ|Tutorials")
-    double KilometersPerScenegraphUnit = 6000;
+    double KilometersPerScenegraphUnit;
 
 public:
     ATutorial01Actor();

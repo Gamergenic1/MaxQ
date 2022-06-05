@@ -33,7 +33,8 @@ ATutorial01Actor::ATutorial01Actor()
     SetRootComponent(CreateDefaultSubobject<USceneComponent>("Root"));
 
     RelativePathToGMKernel = TEXT("NonAssetData/naif/kernels/Generic/PCK/gm_de431.tpc");
-    RelativePathToPCKKernels = TEXT("NonAssetData/naif/kernels/Generic/PCK");
+    RelativePathToPCKKernels.Path = TEXT("NonAssetData/naif/kernels/Generic/PCK");
+
     KilometersPerScenegraphUnit = 6000;
 }
 
@@ -142,14 +143,16 @@ bool ATutorial01Actor::LoadGMKernel(bool Squawk)
     ES_ResultCode ResultCode = ES_ResultCode::Success;
     FString ErrorMessage = "";
 
+    FString KernelGMPath = MaxQTutorial::MaxQPathAbsolutified(RelativePathToGMKernel);
+
     // furnsh:  the most basic way to load spice kernel data
     // furnsh will look for the file relative to the project directory
     // ...if that fails, furnsh will check the plugin path (EDITOR BUILDS ONLY)
-    USpice::furnsh(ResultCode, ErrorMessage, RelativePathToGMKernel);
+    USpice::furnsh(ResultCode, ErrorMessage, KernelGMPath);
 
     if (Squawk)
     {
-        Log(FString::Printf(TEXT("LoadOneKernel loaded kernel file %s"), *RelativePathToGMKernel), ResultCode);
+        Log(FString::Printf(TEXT("LoadOneKernel loaded kernel file %s"), *KernelGMPath), ResultCode);
     }
 
     return ResultCode == ES_ResultCode::Success;
@@ -175,13 +178,15 @@ void ATutorial01Actor::EnumeratePCKKernels()
     // Will hold the relative paths we're about to enumerate...
     TArray<FString> FoundKernels;
 
+    FString KernelPCKsPath = MaxQTutorial::MaxQPathAbsolutified(RelativePathToPCKKernels.Path);
+
     // enumerate_kernels:  get a list of relative paths to all files in a directory...
     // enumerate_kernels will look for the file relative to the project directory
     // ...if that fails, furnsh will check the plugin path (EDITOR BUILDS ONLY)
     // warning, ALL files in directory are enumerated, kernels or not
-    USpice::enumerate_kernels(ResultCode, ErrorMessage, FoundKernels, RelativePathToPCKKernels);
+    USpice::enumerate_kernels(ResultCode, ErrorMessage, FoundKernels, KernelPCKsPath);
 
-    Log(FString::Printf(TEXT("EnumeratePCKKernels enumerated kernel files at %s"), *RelativePathToPCKKernels), ResultCode);
+    Log(FString::Printf(TEXT("EnumeratePCKKernels enumerated kernel files at %s"), *KernelPCKsPath), ResultCode);
 
     for (auto KernelPath : FoundKernels)
     {
@@ -210,11 +215,13 @@ bool ATutorial01Actor::EnumerateAndLoadPCKKernelList(bool Squawk)
     // return value holding enumerated list of kernel files...
     TArray<FString> FoundKernels;
 
-    USpice::enumerate_kernels(ResultCode, ErrorMessage, FoundKernels, RelativePathToPCKKernels);
+    FString KernelPCKsPath = MaxQTutorial::MaxQPathAbsolutified(RelativePathToPCKKernels.Path);
+
+    USpice::enumerate_kernels(ResultCode, ErrorMessage, FoundKernels, KernelPCKsPath);
 
     if (Squawk)
     {
-        Log(FString::Printf(TEXT("EnumerateAndLoadPCKKernelList enumerated kernel files at %s"), *RelativePathToPCKKernels), ResultCode);
+        Log(FString::Printf(TEXT("EnumerateAndLoadPCKKernelList enumerated kernel files at %s"), *KernelPCKsPath), ResultCode);
     }
 
     // If we succeeded, we have a whole list of files.   We will load them with furnsh_list.
@@ -225,7 +232,7 @@ bool ATutorial01Actor::EnumerateAndLoadPCKKernelList(bool Squawk)
 
         if (Squawk)
         {
-            Log(FString::Printf(TEXT("EnumerateAndLoadPCKKernelList loaded kernel files at %s"), *RelativePathToPCKKernels), ResultCode);
+            Log(FString::Printf(TEXT("EnumerateAndLoadPCKKernelList loaded kernel files at %s"), *KernelPCKsPath), ResultCode);
 
             for (auto KernelPath : FoundKernels)
             {
@@ -455,4 +462,3 @@ void ATutorial01Actor::ScaleAllBodies()
         }
     }
 }
-

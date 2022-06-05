@@ -102,7 +102,7 @@ void ATutorial02Actor::InitializeSpice()
     FString ErrorMessage = "";
 
     // furnsh_list will load the list of relative paths as kernel files
-    USpice::furnsh_list(ResultCode, ErrorMessage, RequiredKernels);
+    USpice::furnsh_list(ResultCode, ErrorMessage, MaxQTutorial::MaxQPathsAbsolutified(RequiredKernels));
 
     Log(TEXT("InitializeSpice loaded kernel file"), ResultCode);
 }
@@ -245,7 +245,7 @@ void ATutorial02Actor::Insight()
 
     // The FK Kernel defines reference frames of instruments, etc for the Insight mission
     // It also defines the Spacecraft ID, which we can get for "Insight"
-    USpice::furnsh(ResultCode, ErrorMessage, InsightMissionFKKernel);
+    USpice::furnsh(ResultCode, ErrorMessage, MaxQTutorial::MaxQPathAbsolutified(InsightMissionFKKernel));
     Log(FString::Printf(TEXT("Insight loaded Insight Mission FK kernel %s"), *InsightMissionFKKernel), ResultCode);
 
     // With the FK loaded, we can look up the spacecraft Id (it's -189)
@@ -258,7 +258,7 @@ void ATutorial02Actor::Insight()
     // current file is equivalent to naif0012.tls, which we've loaded already.
 
     // The SCLK Kernel allows us to convert times between ET/UTC and the Spacecraft's clock
-    USpice::furnsh(ResultCode, ErrorMessage, InsightSCLKKernel);
+    USpice::furnsh(ResultCode, ErrorMessage, MaxQTutorial::MaxQPathAbsolutified(InsightSCLKKernel));
     Log(FString::Printf(TEXT("Insight loaded Insight Mars Lander SCLK kernel %s"), *InsightSCLKKernel), ResultCode);
 
     FSEphemerisTime et;

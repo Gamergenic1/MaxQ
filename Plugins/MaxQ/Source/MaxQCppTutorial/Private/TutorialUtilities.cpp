@@ -16,9 +16,10 @@ DEFINE_LOG_CATEGORY(LogMaxQTutorials);
 
 namespace MaxQTutorial
 {
+    const FString PluginName = TEXT("MaxQ");
+
     FString MaxQPluginInfo()
     {
-        FString PluginName = TEXT("MaxQ");
         FString Info = PluginName;
 
     #if WITH_EDITOR
@@ -30,6 +31,39 @@ namespace MaxQTutorial
     #endif
 
         return Info;
+    }
+
+    void AbsolutifyMaxQPath(FString& path)
+    {
+#if WITH_EDITOR
+        FString pluginFilePath = FPaths::Combine(IPluginManager::Get().FindPlugin(*PluginName)->GetContentDir(), path);
+        IPlatformFile& PlatformFile = FPlatformFileManager::Get().GetPlatformFile();
+        FString PluginFilePath = PlatformFile.ConvertToAbsolutePathForExternalAppForRead(*pluginFilePath);
+
+        if (FPaths::FileExists(PluginFilePath) || FPaths::DirectoryExists(PluginFilePath))
+        {
+            path = PluginFilePath;
+        }
+#endif
+    }
+
+    FString MaxQPathAbsolutified(const FString& path)
+    {
+        FString AbsolutePath = path;
+        AbsolutifyMaxQPath(AbsolutePath);
+        return AbsolutePath;
+    }
+
+    TArray<FString> MaxQPathsAbsolutified(const TArray<FString>& paths)
+    {
+        TArray<FString> AbsolutePaths;
+
+        for (auto path : paths)
+        {
+            AbsolutePaths.Add(MaxQPathAbsolutified(path));
+        }
+
+        return AbsolutePaths;
     }
 
     void Log(const FString& LogString, const FColor& Color)
@@ -63,4 +97,14 @@ namespace MaxQTutorial
 void UTutorialUtilities::GetMaxQPluginInfo(FString& Info)
 {
     Info = MaxQTutorial::MaxQPluginInfo();
+}
+
+void UTutorialUtilities::GetMaxQPathAbsolutified(const FString& path, FString& AbsolutePath)
+{
+    AbsolutePath = MaxQTutorial::MaxQPathAbsolutified(path);
+}
+
+void UTutorialUtilities::GetMaxQPathsAbsolutified(const TArray<FString>& paths, TArray<FString>& AbsolutePaths)
+{
+    AbsolutePaths = MaxQTutorial::MaxQPathsAbsolutified(paths);
 }
