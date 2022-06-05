@@ -61,13 +61,13 @@ public:
         meta = (
             Keywords = "UTILITY",
             ExpandEnumAsExecs = "ResultCode",
-            ToolTip = "List files at given relative directory"
+            ToolTip = "List files (path relative to /Content directory)"
             ))
     static void enumerate_kernels(
         ES_ResultCode& ResultCode,
         FString& ErrorMessage,
         TArray<FString>& kernelFileRelativePaths,
-        const FString& relativeDirectory = TEXT("Content/Spice/Kernels/Core")
+        const FString& relativeDirectory = TEXT("NonAssetData/kernels")
         );
 
     UFUNCTION(BlueprintCallable,
@@ -75,12 +75,13 @@ public:
         meta = (
             Keywords = "UTILITY",
             ExpandEnumAsExecs = "ResultCode",
-            ToolTip = "Load a kernel file (relative path)"
+            ShortToolTip = "Load kernel file",
+            ToolTip = "Load a kernel file (path relative to /Content directory)"
             ))
     static void furnsh(
         ES_ResultCode& ResultCode,
         FString& ErrorMessage,
-        const FString& relativePath = TEXT("Content/Spice/Kernels/")
+        const FString& relativePath = TEXT("NonAssetData/kernels/gm_de431.tpc")
     );
 
     UFUNCTION(BlueprintCallable,
@@ -88,7 +89,8 @@ public:
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "UTILITY",
-            ToolTip = "Load a list of kernel files (relative paths)"
+            ShortToolTip = "Load kernel file list",
+            ToolTip = "Load a list of kernel files (paths relative to /Content directory)"
             ))
     static void furnsh_list(
         ES_ResultCode& ResultCode,
@@ -979,7 +981,7 @@ public:
         ES_ResultCode& ResultCode,
         FString& ErrorMessage,
         TArray<int>& bodids,
-        const FString& fileRelativePath = TEXT("Content/Spice/Kernels/phobos512.bds")
+        const FString& fileRelativePath = TEXT("NonAssetData/kernels/phobos512.bds")
     );
 
     UFUNCTION(
@@ -995,7 +997,7 @@ public:
         ES_ResultCode& ResultCode,
         FString& ErrorMessage,
         TArray<int>& srfids,
-        const FString& fileRelativePath = TEXT("Content/Spice/Kernels/phobos512.bds"),
+        const FString& fileRelativePath = TEXT("NonAssetData/kernels/phobos512.bds"),
         int bodyid = 401
     );
 
@@ -1846,7 +1848,7 @@ public:
         FString& ErrorMessage,
         FString& arch,
         FString& fype,
-        const FString& fileRelativePath = TEXT("Content/Spice/Kernels/pck00010.tpc")
+        const FString& fileRelativePath = TEXT("NonAssetData/kernels/pck00010.tpc")
     );
 
 
