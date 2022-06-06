@@ -10,7 +10,7 @@
 #include "Misc/Paths.h"
 #include "SpicePlatformDefs.h"
 #include "SpiceUtilities.h"
-
+#include "algorithm"
 
 PRAGMA_PUSH_PLATFORM_DEFAULT_PACKING
 extern "C"
