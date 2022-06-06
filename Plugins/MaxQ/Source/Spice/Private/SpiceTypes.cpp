@@ -21,6 +21,21 @@ extern "C"
 }
 PRAGMA_POP_PLATFORM_DEFAULT_PACKING
 
+
+// Create a future regret:
+//  1 platform differentiation
+//  2 using std::basic_ostringstream at all
+// ostringstream supports prettier angle formating in formatAngle
+#if PLATFORM_WIDECHAR_IS_CHAR16
+// Mac supports WIDECHAR as char16_t, which has no std::basic_ostringstream implementation
+#define EXTENDED_CHAR(x) x
+#define EXTENDED_CHAR_TYPE ANSICHAR
+#else
+#define EXTENDED_CHAR(x) L ## x
+#define EXTENDED_CHAR_TYPE WIDECHAR
+#endif
+
+
 DEFINE_LOG_CATEGORY(LogSpice);
 
 SPICE_API const FSDistance FSDistance::Zero = FSDistance(0.);
@@ -1828,27 +1843,34 @@ FString USpiceTypes::formatAngle(const double degrees, ES_AngleFormat format)
     // UE displays degrees incorrectly
     bool useDegreeSymbol = false;
 
-    std::wostringstream streamObj;
+    std::basic_ostringstream<EXTENDED_CHAR_TYPE> streamObj;
     int floatFormatPrecision = USpiceTypes::FloatFormatPrecision;
     streamObj << std::setprecision(USpiceTypes::FloatFormatPrecision);
 
     if (format == ES_AngleFormat::DD)
     {
-        streamObj << std::setfill(L'0') << std::setw(floatFormatPrecision + 2) << std::fixed << std::setprecision(floatFormatPrecision);
+        // note there's no ANSICHAR implementation for wostringstream::setfill...
+        streamObj << std::setfill(EXTENDED_CHAR_TYPE('0')) << std::setw(floatFormatPrecision + 2) << std::fixed << std::setprecision(floatFormatPrecision);
         streamObj << degrees;
-        if(useDegreeSymbol) streamObj << L'\370';
+#if !PLATFORM_WIDECHAR_IS_CHAR16
+        if(useDegreeSymbol) streamObj << EXTENDED_CHAR('\370');
+#endif
     }
     else if (format == ES_AngleFormat::DD_180)
     {
-        streamObj << std::setfill(L'0') << std::setw(floatFormatPrecision + 2) << std::fixed << std::setprecision(floatFormatPrecision);
+        streamObj << std::setfill(EXTENDED_CHAR_TYPE('0')) << std::setw(floatFormatPrecision + 2) << std::fixed << std::setprecision(floatFormatPrecision);
         streamObj << normalize180to180(degrees);
-        if (useDegreeSymbol) streamObj << L'\370';
+#if !PLATFORM_WIDECHAR_IS_CHAR16
+        if (useDegreeSymbol) streamObj << EXTENDED_CHAR('\370');
+#endif
     }
     else if (format == ES_AngleFormat::DD_360)
     {
-        streamObj << std::setfill(L'0') << std::setw(floatFormatPrecision + 2) << std::fixed << std::setprecision(floatFormatPrecision);
+        streamObj << std::setfill(EXTENDED_CHAR_TYPE('0')) << std::setw(floatFormatPrecision + 2) << std::fixed << std::setprecision(floatFormatPrecision);
         streamObj << normalize0to360(degrees);
-        if (useDegreeSymbol) streamObj << L'\370';
+#if !PLATFORM_WIDECHAR_IS_CHAR16
+        if (useDegreeSymbol) streamObj << EXTENDED_CHAR('\370');
+#endif
     }
     else if (format == ES_AngleFormat::DMS)
     {
@@ -1860,20 +1882,22 @@ FString USpiceTypes::formatAngle(const double degrees, ES_AngleFormat format)
         frac -= (double)deg;
         if (degrees < 0.) deg *= -1;
         streamObj << deg;
-        if (useDegreeSymbol) streamObj << L'\370';
-        streamObj << L' ';
+#if !PLATFORM_WIDECHAR_IS_CHAR16
+        if (useDegreeSymbol) streamObj << EXTENDED_CHAR('\370');
+#endif
+        streamObj << ' ';
 
         frac *= 60.;
         long amin = floorl(frac);
         frac -= (double)amin;
-        streamObj << std::setw(2) << std::setfill(L'0') << amin << L'\'';
+        streamObj << std::setw(2) << std::setfill(EXTENDED_CHAR_TYPE('0')) << amin << '\'';
 
         frac *= 60;
 
         if (frac_precision <= 0)
         {
             long asec = lround(frac);
-            streamObj << std::setw(2) << std::setfill(L'0') << asec << '"';
+            streamObj << std::setw(2) << std::setfill(EXTENDED_CHAR_TYPE('0')) << asec << '"';
         }
         else
         {
@@ -1895,14 +1919,14 @@ FString USpiceTypes::formatAngle(const double degrees, ES_AngleFormat format)
         frac *= 60.;
         long min = floorl(frac);
         frac -= (double)min;
-        streamObj << std::setw(2) << std::setfill(L'0') << min << "m ";
+        streamObj << std::setw(2) << std::setfill(EXTENDED_CHAR('0')) << min << "m ";
 
         frac *= 60;
 
         if (frac_precision <= 0)
         {
             long sec = lround(frac);
-            streamObj << std::setw(2) << std::setfill(L'0') << sec << "s ";
+            streamObj << std::setw(2) << std::setfill(EXTENDED_CHAR('0')) << sec << "s ";
         }
         else
         {
@@ -1912,7 +1936,7 @@ FString USpiceTypes::formatAngle(const double degrees, ES_AngleFormat format)
     }
     else if (format == ES_AngleFormat::DR_PI)
     {
-        streamObj << std::setfill(L'0') << std::setfill(L'0') << std::setw(floatFormatPrecision+2) << std::fixed << std::setprecision(floatFormatPrecision);
+        streamObj << std::setfill(EXTENDED_CHAR('0')) << std::setfill(EXTENDED_CHAR('0')) << std::setw(floatFormatPrecision+2) << std::fixed << std::setprecision(floatFormatPrecision);
         streamObj << normalizePiToPi(degrees / 360. * twopi_c());
     }
     else if (format == ES_AngleFormat::DR_2PI)
@@ -1922,16 +1946,15 @@ FString USpiceTypes::formatAngle(const double degrees, ES_AngleFormat format)
     }
     else
     {
-        streamObj << std::setfill(L'0') << std::setw(floatFormatPrecision + 2) << std::fixed << std::setprecision(floatFormatPrecision);
+        streamObj << std::setfill(EXTENDED_CHAR('0')) << std::setw(floatFormatPrecision + 2) << std::fixed << std::setprecision(floatFormatPrecision);
         streamObj << (degrees / 360. * twopi_c());
     }
     
-#if PLATFORM_WINDOWS
-    return FString(streamObj.str().c_str());
-#else
-    const wchar_t* str = streamObj.str().c_str();
-    return FString((WIDECHAR*)str);
-#endif
+    // Collapsing this into `FString(streamObj.str().c_str())` causes the str() to go out of scope,
+    // which would free the string buffer.  Bad.
+    // A const ref 'pins' the string returned by str() while it stays in scope.
+    const std::basic_string<EXTENDED_CHAR_TYPE>& ecstr = streamObj.str();
+    return FString(ecstr.c_str());
 }
 
 
