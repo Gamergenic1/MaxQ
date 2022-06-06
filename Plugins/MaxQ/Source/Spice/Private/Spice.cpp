@@ -6,9 +6,10 @@
 // GitHub:         https://github.com/Gamergenic1/MaxQ/ 
 
 #include "Spice.h"
+#include "HAL/FileManager.h"
+#include "Misc/Paths.h"
 #include "SpicePlatformDefs.h"
 #include "SpiceUtilities.h"
-#include "Misc/Paths.h"
 
 
 PRAGMA_PUSH_PLATFORM_DEFAULT_PACKING
