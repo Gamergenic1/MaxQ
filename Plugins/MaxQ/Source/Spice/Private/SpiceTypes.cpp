@@ -12,6 +12,7 @@
 #include <iomanip>
 #include <sstream>
 #include <string>
+#include <cmath>
 
 
 PRAGMA_PUSH_PLATFORM_DEFAULT_PACKING
