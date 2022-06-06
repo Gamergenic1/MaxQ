@@ -6,6 +6,7 @@
 // GitHub:         https://github.com/Gamergenic1/MaxQ/ 
 
 #include "Tutorial01Actor.h"
+#include "Engine/StaticMesh.h"
 #include "Components/SceneComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "Engine/Engine.h"
@@ -15,7 +16,6 @@
 #include "TutorialUtilities.h"
 
 using MaxQTutorial::Log;
-
 
 //-----------------------------------------------------------------------------
 // Tutorial01
