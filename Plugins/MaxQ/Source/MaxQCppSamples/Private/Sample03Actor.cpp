@@ -17,7 +17,7 @@ using MaxQSamples::Log;
 
 //-----------------------------------------------------------------------------
 // Sample03
-// Time manipulation
+// Basic positions and state vectors (Spice SPK)
 //-----------------------------------------------------------------------------
 ASample03Actor::ASample03Actor()
 {
@@ -104,6 +104,10 @@ void ASample03Actor::BeginPlay()
 // spkpos returns a position (computed from SPK kernel data).
 // Where is the Sun, relative to Earth? (Right Ascension/Declination angles)
 //-----------------------------------------------------------------------------
+/*
+* Additional Info: spkpos SPICE documentation
+* https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/spkpos_c.html
+*/
 
 void ASample03Actor::spkpos_inertial()
 {
@@ -241,6 +245,10 @@ void ASample03Actor::spkpos_fixed()
 // Name: spkezr_inertial
 // Desc: What direction is Mercury?  How fast is it moving?
 //-----------------------------------------------------------------------------
+/*
+* Additional Info: spkezr SPICE documentation
+* https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/spkezr_c.html
+*/
 
 void ASample03Actor::spkezr_inertial()
 {
@@ -284,6 +292,21 @@ void ASample03Actor::spkezr_inertial()
 // Name: spkezr_fixed
 // Desc: What direction is the sun wrt Moon's surface?
 //-----------------------------------------------------------------------------
+/*
+* In addition to the SPICE functionality demonstrated here, also see:
+* https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/spkcpo_c.html
+* https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/spkcvo_c.html
+* https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/spkcpt_c.html
+* https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/spkcvt_c.html
+*
+* The "Constant Position" and "Constant Velocity" observer/target
+* actions are important for things that may not be covered in SPK kernels
+*
+* Examples:
+* spaceship moving in real-time in unreal engine via UE physics
+* your home
+* etc
+*/
 
 void ASample03Actor::spkezr_fixed()
 {
@@ -369,6 +392,10 @@ void ASample03Actor::spkezr_fixed()
 // Name: azlcpo
 // Desc: What direction do we aim an antenna to communicate with Mars?
 //-----------------------------------------------------------------------------
+/*
+* Additional info: azlcpo SPICE documentation:
+* https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/azlcpo_c.html
+*/
 
 void ASample03Actor::azlcpo(ES_AberrationCorrectionWithTransmissions abcorr)
 {
