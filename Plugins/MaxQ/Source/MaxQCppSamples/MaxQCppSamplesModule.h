@@ -13,17 +13,17 @@
 #include "Modules/ModuleInterface.h"
 #include "Modules/ModuleManager.h"
 
-class MAXQCPPTUTORIAL_API FMaxQCppTutorialModule : public IModuleInterface
+class MAXQCPPSAMPLES_API FMaxQCppSamplesModule : public IModuleInterface
 {
 public:
-	static inline FMaxQCppTutorialModule& Get()
+	static inline FMaxQCppSamplesModule& Get()
 	{
-		return FModuleManager::LoadModuleChecked<FMaxQCppTutorialModule>("MaxQCppTutorial");
+		return FModuleManager::LoadModuleChecked<FMaxQCppSamplesModule>("MaxQCppSamples");
 	}
 
 	static inline bool IsAvailable()
 	{
-		return FModuleManager::Get().IsModuleLoaded("MaxQCppTutorial");
+		return FModuleManager::Get().IsModuleLoaded("MaxQCppSamples");
 	}
 };
 

@@ -9,32 +9,32 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "Tutorial02Actor.generated.h"
+#include "Sample02Actor.generated.h"
 
 
 //-----------------------------------------------------------------------------
-// Tutorial02
+// Sample02
 // Time manipulation
 //-----------------------------------------------------------------------------
 
 UCLASS()
-class MAXQCPPTUTORIAL_API ATutorial02Actor : public AActor
+class MAXQCPPSAMPLES_API ASample02Actor : public AActor
 {
     GENERATED_BODY()
 
 public:
-    UPROPERTY(EditInstanceOnly, Category = "MaxQ|Tutorials")
+    UPROPERTY(EditInstanceOnly, Category = "MaxQ|Samples")
     TArray<FString> RequiredKernels;
 
-    UPROPERTY(EditInstanceOnly, Category = "MaxQ|Tutorials")
+    UPROPERTY(EditInstanceOnly, Category = "MaxQ|Samples")
     FString InsightSCLKKernel;
 
-    UPROPERTY(EditInstanceOnly, Category = "MaxQ|Tutorials")
+    UPROPERTY(EditInstanceOnly, Category = "MaxQ|Samples")
     FString InsightMissionFKKernel;
 
 
 public:
-    ATutorial02Actor();
+    ASample02Actor();
     void BeginPlay() override;
     void Tick(float DeltaTime) override;
 

@@ -6,7 +6,7 @@
 // GitHub:         https://github.com/Gamergenic1/MaxQ/ /
 
 
-#include "MaxQCppTutorialModule.h"
+#include "MaxQCppSamplesModule.h"
 
-IMPLEMENT_MODULE(FMaxQCppTutorialModule, MaxQCppTutorial);
+IMPLEMENT_MODULE(FMaxQCppSamplesModule, MaxQCppSamples);
 
