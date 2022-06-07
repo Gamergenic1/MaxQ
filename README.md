@@ -32,20 +32,22 @@ For more information about Blueprints, see the [Unreal Engine "Blueprints - Esse
 
 ## Additional MaxQ Information
 
-MaxQ project page:  
+###### MaxQ project page:  
 https://www.gamergenic.com/project/maxq/  
 
-Unreal Engine Plugin Source Code on GitHub:
-https://github.com/Gamergenic1/MaxQ
-
-Documentation:  
+###### Documentation:  
 https://maxq.gamergenic.com/  
 
-Walkthrough of project development:  
+###### Walkthrough of project development:  
 https://gamedevtricks.com/tags/third-party-libs-series/
 
-Example Projects:
+###### Example Projects:
 https://github.com/gamergenic/ASATDebrisVisualization
+
+###### Unreal Engine Plugin Source Code on GitHub:  
+Full source code to build the plugin is available on GitHub.  
+If you have fixes or improvements you would like to contribute, pull requests to incorporate your changes will gladly be considered.  
+https://github.com/Gamergenic1/MaxQ  
 
 ## Implementation Principles
 See [PRINCIPLES](PRINCIPLES.md) file.
@@ -70,5 +72,7 @@ See [PRINCIPLES](PRINCIPLES.md) file.
 * **Sample01**: Initialization and kernel data  
 * **Sample02**: Time manipulation
 * **Sample03**: SPK Positioning
-* (Additional Tutorials in progress)
+* **Sample04**: PCK Orienting (in progress)
+* **Sample05**: Kepler Orbits (in progress)
+* (Additional Tutorials to come)
 
