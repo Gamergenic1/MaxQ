@@ -9,16 +9,16 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "Tutorial01Actor.generated.h"
+#include "Sample01Actor.generated.h"
 
 
 //-----------------------------------------------------------------------------
-// Tutorial01
+// Sample01
 // Initialization and kernel data
 //-----------------------------------------------------------------------------
 
 UCLASS()
-class MAXQCPPTUTORIAL_API ATutorial01Actor : public AActor
+class MAXQCPPSAMPLES_API ASample01Actor : public AActor
 {
     GENERATED_BODY()
 
@@ -35,17 +35,17 @@ class MAXQCPPTUTORIAL_API ATutorial01Actor : public AActor
     // There's no good way of handling this with FFilePath/FDirectoryPath.
     // MaxQ will first check paths relative to project, then in editor builds
     // Check if they were realative to plugin directory
-    UPROPERTY(EditInstanceOnly, Category="MaxQ|Tutorials")
+    UPROPERTY(EditInstanceOnly, Category="MaxQ|Samples")
     FString RelativePathToGMKernel;
 
-    UPROPERTY(EditInstanceOnly, Category = "MaxQ|Tutorials", meta = (ContentDir))
+    UPROPERTY(EditInstanceOnly, Category = "MaxQ|Samples", meta = (ContentDir))
     FDirectoryPath RelativePathToPCKKernels;
 
-    UPROPERTY(EditInstanceOnly, Category = "MaxQ|Tutorials")
+    UPROPERTY(EditInstanceOnly, Category = "MaxQ|Samples")
     double KilometersPerScenegraphUnit;
 
 public:
-    ATutorial01Actor();
+    ASample01Actor();
 
     void BeginPlay() override;
 

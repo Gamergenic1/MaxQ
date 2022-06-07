@@ -8,9 +8,9 @@
 
 using UnrealBuildTool;
 
-public class MaxQCppTutorial : ModuleRules
+public class MaxQCppSamples : ModuleRules
 {
-	public MaxQCppTutorial(ReadOnlyTargetRules Target) : base(Target)
+	public MaxQCppSamples(ReadOnlyTargetRules Target) : base(Target)
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 

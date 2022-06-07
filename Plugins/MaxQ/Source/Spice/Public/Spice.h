@@ -227,12 +227,13 @@ public:
 
 
     UFUNCTION(BlueprintCallable,
-        Category = "MaxQ|Time",
+        Category = "MaxQ|Coordinates",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "FRAMES, PCK, SPK, TIME",
             ShortToolTip = "AZ/EL, constant position observer state",
-            ToolTip = "Return the azimuth/elevation coordinates of a specified target relative to an observer"
+            ToolTip = "Return the azimuth/elevation coordinates of a specified target relative to an observer",
+            AutoCreateRefTerm = "obspos"
             ))
     static void azlcpo(
         ES_ResultCode& ResultCode,

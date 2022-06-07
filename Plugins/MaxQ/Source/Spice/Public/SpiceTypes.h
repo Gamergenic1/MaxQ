@@ -1578,6 +1578,8 @@ static inline FSVelocityVector& operator-=(FSVelocityVector& lhs, const FSVeloci
 }
 
 
+// In SPICE longitude is always given first, which is opposite of many conventions.
+// Maintaining consistency with SPICE is higher priority for MaxQ.
 USTRUCT(BlueprintType)
 struct SPICE_API FSLonLat
 {
@@ -5024,11 +5026,34 @@ public:
         return FSQuaternion::ENG(value.W, value.Y, value.X, value.Z);
     }
 
+    UFUNCTION(BlueprintPure,
+        Category = "MaxQ|Types",
+        meta = (
+            Keywords = "CONVERSION, COORDINATES, SWIZZLE",
+            ToolTip = "Normalizes internal angle 0 to 360 deg"
+            ))
+    static void NormalizeAngle0To360(
+        const FSAngle& Angle,
+        FSAngle& AngleNormalized
+    );
+
+    UFUNCTION(BlueprintPure,
+        Category = "MaxQ|Types",
+        meta = (
+            Keywords = "CONVERSION, COORDINATES, SWIZZLE",
+            ToolTip = "Normalizes internal angle -180 to +180 deg"
+            ))
+    static void NormalizeAngle180To180(
+        const FSAngle& Angle,
+        FSAngle& AngleNormalized
+    );
+
 
     UFUNCTION(BlueprintPure,
         Category = "MaxQ|Types",
         meta = (
             BlueprintAutocast,
+            Keywords = "CONVERSION, COORDINATES, SWIZZLE",
             CompactNodeTitle = "To UE Vec",
             ToolTip = "Converts a Spice dimensionless vector (double precision, RHS) to a UE Vector (single precision, LHS)"
             ))
@@ -5040,6 +5065,7 @@ public:
         Category = "MaxQ|Types",
         meta = (
             BlueprintAutocast,
+            Keywords = "CONVERSION, COORDINATES, SWIZZLE",
             CompactNodeTitle = "To UE Vec",
             ToolTip = "Converts a Spice distance vector (double precision, RHS) to a UE Vector (km, single precision, LHS)"
             ))
@@ -5051,6 +5077,7 @@ public:
         Category = "MaxQ|Types",
         meta = (
             BlueprintAutocast,
+            Keywords = "CONVERSION, COORDINATES, SWIZZLE",
             CompactNodeTitle = "To UE Vec",
             ToolTip = "Converts a Spice velocity vector (double precision, RHS) to a UE Vector (kmps, single precision, LHS)"
             ))
@@ -5062,6 +5089,7 @@ public:
         Category = "MaxQ|Types",
         meta = (
             BlueprintAutocast,
+            Keywords = "CONVERSION, COORDINATES, SWIZZLE",
             CompactNodeTitle = "From UE Vec",
             ToolTip = "Converts a UE Vector (single precision, LHS) to a Spice dimensionless vector (double precision, RHS)"
             ))
@@ -5073,6 +5101,7 @@ public:
         Category = "MaxQ|Types",
         meta = (
             BlueprintAutocast,
+            Keywords = "CONVERSION, COORDINATES, SWIZZLE",
             CompactNodeTitle = "From UE Vec",
             ToolTip = "Converts a UE Vector (km, single precision, LHS) to a Spice distance vector (double precision, RHS)"
             ))
@@ -5084,6 +5113,7 @@ public:
         Category = "MaxQ|Types",
         meta = (
             BlueprintAutocast,
+            Keywords = "CONVERSION, COORDINATES, SWIZZLE",
             CompactNodeTitle = "From UE Vec",
             ToolTip = "Converts a UE Vector (kmps, single precision, LHS) to a Spice velocity vector (double precision, RHS)"
             ))
@@ -5096,6 +5126,7 @@ public:
         Category = "MaxQ|Types",
         meta = (
             BlueprintAutocast,
+            Keywords = "CONVERSION, COORDINATES, SWIZZLE",
             CompactNodeTitle = "From UE Vec",
             ToolTip = "Converts a UE Vector (kmps, single precision, LHS) to a Spice angular velocity vector (double precision, RHS)"
             ))
@@ -5107,6 +5138,7 @@ public:
         Category = "MaxQ|Types",
         meta = (
             BlueprintAutocast,
+            Keywords = "CONVERSION, COORDINATES, SWIZZLE",
             CompactNodeTitle = "To UE Vec",
             ToolTip = "Converts a Spice angular velocity vector (double precision, RHS) to a UE Vector (kmps, single precision, LHS)"
             ))
@@ -5141,6 +5173,7 @@ public:
         Category = "MaxQ|Types",
         meta = (
             BlueprintAutocast,
+            Keywords = "CONVERSION, COORDINATES, SWIZZLE",
             CompactNodeTitle = "To UE Quat",
             ToolTip = "Converts a Spice quaternion (double precision, RHS) to a UE Quat (single precision, LHS)"
             ))
@@ -5151,6 +5184,7 @@ public:
         Category = "MaxQ|Types",
         meta = (
             BlueprintAutocast,
+            Keywords = "CONVERSION, COORDINATES, SWIZZLE",
             CompactNodeTitle = "From UE Quat",
             ToolTip = "Converts a UE Quat (single precision, LHS) to a Spice quaternion (double precision, RHS)"
             ))

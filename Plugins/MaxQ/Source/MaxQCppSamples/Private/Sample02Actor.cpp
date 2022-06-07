@@ -5,17 +5,17 @@
 // Documentation:  https://maxq.gamergenic.com/
 // GitHub:         https://github.com/Gamergenic1/MaxQ/ 
 
-#include "Tutorial02Actor.h"
+#include "Sample02Actor.h"
 #include "Components/SceneComponent.h"
 #include "Engine/Engine.h"
 #include "Spice.h"
 #include "SpiceK2.h"
-#include "TutorialUtilities.h"
+#include "SampleUtilities.h"
 
-using MaxQTutorial::Log;
+using MaxQSamples::Log;
 
 //-----------------------------------------------------------------------------
-// Tutorial02
+// Sample02
 // Time manipulation
 //-----------------------------------------------------------------------------
 /*
@@ -24,6 +24,8 @@ using MaxQTutorial::Log;
  * Plugin documentation is available in the plugin's directory
  *      /Documentation
  *          /naif - Helpful documentation on SPICE
+ *          /gamergenic
+ *              /MaxQ   - Helpful documentation on MaxQ
  */
  /* Additional Info: Files Kernels (SPICE API)
  * LSK kernels
@@ -38,7 +40,7 @@ using MaxQTutorial::Log;
 *       https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/req/time.html
 *       https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/Tutorials/pdf/individual_docs/15_time.pdf
 */
-ATutorial02Actor::ATutorial02Actor()
+ASample02Actor::ASample02Actor()
 {
     SetRootComponent(CreateDefaultSubobject<USceneComponent>("Root"));
     PrimaryActorTick.bCanEverTick = true;
@@ -63,15 +65,15 @@ ATutorial02Actor::ATutorial02Actor()
 
 //-----------------------------------------------------------------------------
 // Name: BeginPlay
-// Desc: Calls each of the tutorial/demo methods once when play begins
+// Desc: Calls each of the sample/demo methods once when play begins
 //-----------------------------------------------------------------------------
-void ATutorial02Actor::BeginPlay()
+void ASample02Actor::BeginPlay()
 {
     Super::BeginPlay();
 
-    Log(FString::Printf(TEXT("PluginInfo: %s"), *MaxQTutorial::MaxQPluginInfo()), FColor::Purple);
-    Log(TEXT("Tutorial02: Time manipulation"), FColor::Blue);
-    Log(TEXT("** Please see Tutorial02Actor.cpp for more info **"), FColor::Blue);
+    Log(FString::Printf(TEXT("PluginInfo: %s"), *MaxQSamples::MaxQPluginInfo()), FColor::Purple);
+    Log(TEXT("Sample02: Time manipulation"), FColor::Blue);
+    Log(TEXT("** Please see Sample02Actor.cpp for more info **"), FColor::Blue);
 
     InitializeSpice();
 
@@ -92,7 +94,7 @@ void ATutorial02Actor::BeginPlay()
 // Desc: Demonstrate how to initialize the SPICE module
 //-----------------------------------------------------------------------------
 
-void ATutorial02Actor::InitializeSpice()
+void ASample02Actor::InitializeSpice()
 {
     // init_all:  clears kernel memory and any error state.
     USpice::init_all();
@@ -102,7 +104,7 @@ void ATutorial02Actor::InitializeSpice()
     FString ErrorMessage = "";
 
     // furnsh_list will load the list of relative paths as kernel files
-    USpice::furnsh_list(ResultCode, ErrorMessage, MaxQTutorial::MaxQPathsAbsolutified(RequiredKernels));
+    USpice::furnsh_list(ResultCode, ErrorMessage, MaxQSamples::MaxQPathsAbsolutified(RequiredKernels));
 
     Log(TEXT("InitializeSpice loaded kernel file"), ResultCode);
 }
@@ -116,7 +118,7 @@ void ATutorial02Actor::InitializeSpice()
 // Desc: Print the J2000 Epoch
 //-----------------------------------------------------------------------------
 
-void ATutorial02Actor::J2000()
+void ASample02Actor::J2000()
 {
     // An "epoch" is a point in time.
     // The time-line commonly used in SPICE is Barycentric Dynamical Time (TDB).
@@ -160,7 +162,7 @@ naif0012.tls:
         37, @2017 - JAN - 1
 */
 
-void ATutorial02Actor::J2020()
+void ASample02Actor::J2020()
 {
     // Load j2000 with the et value correlating to J2000.
     FSEphemerisTime j2000 = FSEphemerisTime::J2000;
@@ -195,7 +197,7 @@ void ATutorial02Actor::J2020()
 // Desc: Demonstrate getting the current Ephemeris Time
 //-----------------------------------------------------------------------------
 
-void ATutorial02Actor::Now()
+void ASample02Actor::Now()
 {
     // Load j2000 with the et value correlating to J2000.
     FSEphemerisTime et; 
@@ -238,14 +240,14 @@ void ATutorial02Actor::Now()
 // Desc: Demonstrate Spacecraft clock time conversion
 //-----------------------------------------------------------------------------
 
-void ATutorial02Actor::Insight()
+void ASample02Actor::Insight()
 {
     ES_ResultCode ResultCode;
     FString ErrorMessage;
 
     // The FK Kernel defines reference frames of instruments, etc for the Insight mission
     // It also defines the Spacecraft ID, which we can get for "Insight"
-    USpice::furnsh(ResultCode, ErrorMessage, MaxQTutorial::MaxQPathAbsolutified(InsightMissionFKKernel));
+    USpice::furnsh(ResultCode, ErrorMessage, MaxQSamples::MaxQPathAbsolutified(InsightMissionFKKernel));
     Log(FString::Printf(TEXT("Insight loaded Insight Mission FK kernel %s"), *InsightMissionFKKernel), ResultCode);
 
     // With the FK loaded, we can look up the spacecraft Id (it's -189)
@@ -258,7 +260,7 @@ void ATutorial02Actor::Insight()
     // current file is equivalent to naif0012.tls, which we've loaded already.
 
     // The SCLK Kernel allows us to convert times between ET/UTC and the Spacecraft's clock
-    USpice::furnsh(ResultCode, ErrorMessage, MaxQTutorial::MaxQPathAbsolutified(InsightSCLKKernel));
+    USpice::furnsh(ResultCode, ErrorMessage, MaxQSamples::MaxQPathAbsolutified(InsightSCLKKernel));
     Log(FString::Printf(TEXT("Insight loaded Insight Mars Lander SCLK kernel %s"), *InsightSCLKKernel), ResultCode);
 
     FSEphemerisTime et;
@@ -290,7 +292,7 @@ void ATutorial02Actor::Insight()
 // Desc: Update the current epoch and Insight spacecraft clock live
 //-----------------------------------------------------------------------------
 
-void ATutorial02Actor::Tick(float DeltaTime)
+void ASample02Actor::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);
 

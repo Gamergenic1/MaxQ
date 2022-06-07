@@ -5,7 +5,7 @@
 // Documentation:  https://maxq.gamergenic.com/
 // GitHub:         https://github.com/Gamergenic1/MaxQ/ 
 
-#include "Tutorial01Actor.h"
+#include "Sample01Actor.h"
 #include "Engine/StaticMesh.h"
 #include "Components/SceneComponent.h"
 #include "Components/StaticMeshComponent.h"
@@ -13,12 +13,12 @@
 #include "EngineUtils.h"
 #include "Spice.h"
 #include "SpiceK2.h"
-#include "TutorialUtilities.h"
+#include "SampleUtilities.h"
 
-using MaxQTutorial::Log;
+using MaxQSamples::Log;
 
 //-----------------------------------------------------------------------------
-// Tutorial01
+// Sample01
 // Initialization and kernel data
 //-----------------------------------------------------------------------------
 /*
@@ -27,8 +27,10 @@ using MaxQTutorial::Log;
  * Plugin documentation is available in the plugin's directory
  *      /Documentation
  *          /naif - Helpful documentation on SPICE
+ *          /gamergenic
+ *              /MaxQ   - Helpful documentation on MaxQ
 */
-ATutorial01Actor::ATutorial01Actor()
+ASample01Actor::ASample01Actor()
 {
     SetRootComponent(CreateDefaultSubobject<USceneComponent>("Root"));
 
@@ -41,15 +43,15 @@ ATutorial01Actor::ATutorial01Actor()
 
 //-----------------------------------------------------------------------------
 // Name: BeginPlay
-// Desc: Calls each of the tutorial/demo methods once when play begins
+// Desc: Calls each of the sample/demo methods once when play begins
 //-----------------------------------------------------------------------------
-void ATutorial01Actor::BeginPlay()
+void ASample01Actor::BeginPlay()
 {
     Super::BeginPlay();
 
-    Log(FString::Printf(TEXT("PluginInfo: %s"), *MaxQTutorial::MaxQPluginInfo()), FColor::Purple);
-    Log(TEXT("Tutorial01: Initialization and kernel data"), FColor::Blue);
-    Log(TEXT("** Please see Tutorial01Actor.cpp for more info **"), FColor::Blue);
+    Log(FString::Printf(TEXT("PluginInfo: %s"), *MaxQSamples::MaxQPluginInfo()), FColor::Purple);
+    Log(TEXT("Sample01: Initialization and kernel data"), FColor::Blue);
+    Log(TEXT("** Please see Sample01Actor.cpp for more info **"), FColor::Blue);
 
     InitializeSpice();
 
@@ -74,7 +76,7 @@ void ATutorial01Actor::BeginPlay()
 // Desc: Demonstrate how to initialize the SPICE module
 //-----------------------------------------------------------------------------
 
-void ATutorial01Actor::InitializeSpice()
+void ASample01Actor::InitializeSpice()
 {
     // init_all:  clears kernel memory and any error state.
     // Before your app starts it should initialize the USpice library.
@@ -134,7 +136,7 @@ void ATutorial01Actor::InitializeSpice()
       *.xsp           Transfer format SPK (ephemeris) files.
 */
 
-bool ATutorial01Actor::LoadGMKernel(bool Squawk)
+bool ASample01Actor::LoadGMKernel(bool Squawk)
 {
     // Reinitialize kernel & error state
     USpice::init_all();
@@ -143,7 +145,7 @@ bool ATutorial01Actor::LoadGMKernel(bool Squawk)
     ES_ResultCode ResultCode = ES_ResultCode::Success;
     FString ErrorMessage = "";
 
-    FString KernelGMPath = MaxQTutorial::MaxQPathAbsolutified(RelativePathToGMKernel);
+    FString KernelGMPath = MaxQSamples::MaxQPathAbsolutified(RelativePathToGMKernel);
 
     // furnsh:  the most basic way to load spice kernel data
     // furnsh will look for the file relative to the project directory
@@ -166,7 +168,7 @@ bool ATutorial01Actor::LoadGMKernel(bool Squawk)
 // Desc: Demonstrate how to enumerate all kernel files in a project directory
 //-----------------------------------------------------------------------------
 
-void ATutorial01Actor::EnumeratePCKKernels()
+void ASample01Actor::EnumeratePCKKernels()
 {
     // Reinitialize kernel & error state
     USpice::init_all();
@@ -178,7 +180,7 @@ void ATutorial01Actor::EnumeratePCKKernels()
     // Will hold the relative paths we're about to enumerate...
     TArray<FString> FoundKernels;
 
-    FString KernelPCKsPath = MaxQTutorial::MaxQPathAbsolutified(RelativePathToPCKKernels.Path);
+    FString KernelPCKsPath = MaxQSamples::MaxQPathAbsolutified(RelativePathToPCKKernels.Path);
 
     // enumerate_kernels:  get a list of relative paths to all files in a directory...
     // enumerate_kernels will look for the file relative to the project directory
@@ -203,7 +205,7 @@ void ATutorial01Actor::EnumeratePCKKernels()
 // Desc: Demonstrate how to load all kernel files in a given directory
 //-----------------------------------------------------------------------------
 
-bool ATutorial01Actor::EnumerateAndLoadPCKKernelList(bool Squawk)
+bool ASample01Actor::EnumerateAndLoadPCKKernelList(bool Squawk)
 {
     // Reinitialize
     USpice::init_all();
@@ -215,7 +217,7 @@ bool ATutorial01Actor::EnumerateAndLoadPCKKernelList(bool Squawk)
     // return value holding enumerated list of kernel files...
     TArray<FString> FoundKernels;
 
-    FString KernelPCKsPath = MaxQTutorial::MaxQPathAbsolutified(RelativePathToPCKKernels.Path);
+    FString KernelPCKsPath = MaxQSamples::MaxQPathAbsolutified(RelativePathToPCKKernels.Path);
 
     USpice::enumerate_kernels(ResultCode, ErrorMessage, FoundKernels, KernelPCKsPath);
 
@@ -267,7 +269,7 @@ bool ATutorial01Actor::EnumerateAndLoadPCKKernelList(bool Squawk)
         code.
         https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/bods2c_c.html
 */
-void ATutorial01Actor::QueryEarthsGM()
+void ASample01Actor::QueryEarthsGM()
 {
     // Reinitialize and load the GM (gravitational constant) kernel file
     if (LoadGMKernel(false))
@@ -335,7 +337,7 @@ void ATutorial01Actor::QueryEarthsGM()
         https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/gdpool_c.html
 */
 
-void ATutorial01Actor::QueryEarthsRadius()
+void ASample01Actor::QueryEarthsRadius()
 {
     // Reinitialize and load the SPK kernels
     if (EnumerateAndLoadPCKKernelList(false))
@@ -398,7 +400,7 @@ void ATutorial01Actor::QueryEarthsRadius()
 // Demonstrate using SPICE bodvrd RADII data to set mesh dimensions
 //-----------------------------------------------------------------------------
 
-void ATutorial01Actor::ScaleAllBodies()
+void ASample01Actor::ScaleAllBodies()
 {
     Log(TEXT("ScaleAllBodies is rescaling mesh dimensions to scale (but not separation distances)"), FColor::White);
 
