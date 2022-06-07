@@ -63,11 +63,12 @@ See [PRINCIPLES](PRINCIPLES.md) file.
 
 ### Plugin Tutorials
 ### Location
-* **C++**: /Plugins/MaxQ/Content/CppTutorials/Maps
-* **Blueprints**: /Plugins/MaxQ/Content/BlueprintTutorials/Maps
+* **C++**: /Plugins/MaxQ/Content/CppSamples/Maps
+* **Blueprints**: /Plugins/MaxQ/Content/BlueprintSamples/Maps
 
 ### Content
-* **Tutorial1**: Initialization and kernel data  
-* **Tutorial2**: Time manipulation
+* **Sample01**: Initialization and kernel data  
+* **Sample02**: Time manipulation
+* **Sample03**: SPK Positioning
 * (Additional Tutorials in progress)
 
