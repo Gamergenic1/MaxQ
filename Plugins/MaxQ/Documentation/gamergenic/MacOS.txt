@@ -1,0 +1,6 @@
+Notes
+
+Regenerating Xcode project for Mac only by command line:
+sh /Users/Shared/Epic\ Games/UE_5.0/Engine/Build/BatchFiles/Mac/GenerateProjectFiles.sh -project="/Users/user/Documents/GitHub/MaxQ/Spice.uproject" -game -Platforms="Mac"
+
+
