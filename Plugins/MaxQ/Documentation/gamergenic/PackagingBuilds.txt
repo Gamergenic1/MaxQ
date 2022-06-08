@@ -1,7 +1,0 @@
-You will need to tell Unreal Engine to copy directories containing non-UE data (your kernels, etc).
-
-This can be set in BaseGame.ini
-[/Script/UnrealEd.ProjectPackagingSettings]
-+DirectoriesToAlwaysStageAsNonUFS=(Path="NonAssetData/naif/kernels")
-
-(Or in the UE editor Project Settings: Project/Packaging/"Additional Non-Asset Directories To Copy")

@@ -12,6 +12,7 @@
 #include <iomanip>
 #include <sstream>
 #include <string>
+#include <cmath>
 
 
 PRAGMA_PUSH_PLATFORM_DEFAULT_PACKING
@@ -1663,6 +1664,23 @@ FSQuaternion USpiceTypes::Conv_QuatToSQuaternion(
 /* 
  * -----------------------------------------------------------------------------------------
  */
+
+void USpiceTypes::NormalizeAngle0To360(
+    const FSAngle& Angle,
+    FSAngle& AngleNormalized
+)
+{
+    AngleNormalized = FSAngle(normalizeZeroToTwoPi(Angle.AsRadians()));
+}
+
+
+void USpiceTypes::NormalizeAngle180To180(
+    const FSAngle& Angle,
+    FSAngle& AngleNormalized
+)
+{
+    AngleNormalized = FSAngle(normalize180to180(Angle.AsRadians()));
+}
 
 
 FString USpiceTypes::Conv_SAngleToString(const FSAngle& value)

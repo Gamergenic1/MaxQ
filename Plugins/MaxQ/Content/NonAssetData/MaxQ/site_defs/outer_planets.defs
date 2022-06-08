@@ -1,0 +1,47 @@
+Created for MaxQ - (for tutorials, not for real life usage).
+
+.def file for PINPOINT generated SPK data fixing outer planets to their barycenters.
+The basic solar system SPK files contain ephemeris data for the outer planet barycenters but not the planets themselves.
+An easy fix is an SPK kernel to fix the planets to their barycenters.
+
+An SPK kernel that does this can be generated using NAIF utility 'Pinpoint' and this data file.
+
+Commandline:
+pinpoint -def outer_planets.defs -spk outer_planets.bsp
+
+
+\begindata
+      SITES         = ( 
+                       'JUPITER',
+                       'SATURN',
+                       'URANUS',
+                       'NEPTUNE',
+                       'PLUTO'
+                       )
+
+      JUPITER_FRAME  = 'ECLIPJ2000'
+      JUPITER_CENTER = 5
+      JUPITER_IDCODE =  599
+      JUPITER_XYZ   = ( 0, 0,  0 )
+
+      SATURN_FRAME  = 'ECLIPJ2000'
+      SATURN_CENTER = 6
+      SATURN_IDCODE =  699
+      SATURN_XYZ   = ( 0, 0,  0 )
+
+      URANUS_FRAME  = 'ECLIPJ2000'
+      URANUS_CENTER = 7
+      URANUS_IDCODE =  799
+      URANUS_XYZ   = ( 0, 0,  0 )
+
+      NEPTUNE_FRAME  = 'ECLIPJ2000'
+      NEPTUNE_CENTER = 8
+      NEPTUNE_IDCODE =  899
+      NEPTUNE_XYZ   = ( 0, 0,  0 )
+
+      PLUTO_FRAME  = 'ECLIPJ2000'
+      PLUTO_CENTER = 9
+      PLUTO_IDCODE =  999
+      PLUTO_XYZ   = ( 0, 0,  0 )
+
+\begintext

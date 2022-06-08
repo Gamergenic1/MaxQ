@@ -48,7 +48,7 @@
             ]
         },
         {
-            "Name": "MaxQCppTutorial",
+            "Name": "MaxQCppSamples",
             "Type": "Runtime",
             "LoadingPhase": "Default",
             "WhitelistPlatforms": [
