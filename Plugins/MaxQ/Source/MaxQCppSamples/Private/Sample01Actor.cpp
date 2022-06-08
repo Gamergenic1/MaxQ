@@ -20,6 +20,8 @@ using MaxQSamples::Log;
 //-----------------------------------------------------------------------------
 // Sample01
 // Initialization and kernel data
+// See:
+// https://maxq.gamergenic.com/getting-started/plugin-content/samples/sample-01/
 //-----------------------------------------------------------------------------
 /*
  * Additional Info:  Documentation

@@ -4258,6 +4258,17 @@ public:
     UFUNCTION(BlueprintPure, Category = "MaxQ|Stringifier", meta = (ToolTip = "Right Ascension, Declination to string", CompactNodeTitle = "$"))
     static FString FormatRADec(const FSAngle& rightAscension, const FSAngle& declination, const FString& separator = TEXT(", "));
 
+    UFUNCTION(BlueprintPure,
+    Category = "MaxQ|Types",
+    meta = (
+        BlueprintAutocast,
+        CompactNodeTitle = "$",
+        ToolTip = "Stringifies S Units"
+        ))
+    static FString Conv_S_UnitsToString(
+       ES_Units units
+    );
+
     /// <summary>Converts a distance to a double (kilometers)</summary>
     UFUNCTION(BlueprintPure, 
         Category = "MaxQ|Types",
@@ -4383,6 +4394,26 @@ public:
             ToolTip = "Converts an Epheremis Time to a String"
             ))
     static FString Conv_SEpheremisTimeToString(const FSEphemerisTime& et);
+
+    UFUNCTION(BlueprintPure,
+        Category = "MaxQ|Types",
+        meta = (
+            BlueprintAutocast,
+            CompactNodeTitle = "$",
+            ToolTip = "Converts an Epheremis Period to a String"
+            ))
+    static FString Conv_SEpheremisPeriodToString(const FSEphemerisPeriod& et);
+
+    // This is common in Tick(float DeltaTime)
+    UFUNCTION(BlueprintPure,
+        Category = "MaxQ|Types",
+        meta = (
+            BlueprintAutocast,
+            CompactNodeTitle = "$",
+            ToolTip = "Converts a Float to an Ephemeris Period"
+            ))
+    static FSEphemerisPeriod Conv_FloatToSEphemerisPeriod(float period);
+
 
     UFUNCTION(BlueprintPure,
         Category = "MaxQ|Types",
@@ -5029,7 +5060,7 @@ public:
     UFUNCTION(BlueprintPure,
         Category = "MaxQ|Types",
         meta = (
-            Keywords = "CONVERSION, COORDINATES, SWIZZLE",
+            Keywords = "CONVERSION, COORDINATES",
             ToolTip = "Normalizes internal angle 0 to 360 deg"
             ))
     static void NormalizeAngle0To360(
@@ -5040,7 +5071,7 @@ public:
     UFUNCTION(BlueprintPure,
         Category = "MaxQ|Types",
         meta = (
-            Keywords = "CONVERSION, COORDINATES, SWIZZLE",
+            Keywords = "CONVERSION, COORDINATES",
             ToolTip = "Normalizes internal angle -180 to +180 deg"
             ))
     static void NormalizeAngle180To180(
@@ -5054,8 +5085,8 @@ public:
         meta = (
             BlueprintAutocast,
             Keywords = "CONVERSION, COORDINATES, SWIZZLE",
-            CompactNodeTitle = "To UE Vec",
-            ToolTip = "Converts a Spice dimensionless vector (double precision, RHS) to a UE Vector (single precision, LHS)"
+            CompactNodeTitle = "Swizzle To UE",
+            ToolTip = "Convert/Swizzle a Spice dimensionless vector (double precision, RHS) to a UE Vector (single precision, LHS)"
             ))
         static FVector Conv_SDimensionlessToVector(
             FSDimensionlessVector value
@@ -5066,8 +5097,8 @@ public:
         meta = (
             BlueprintAutocast,
             Keywords = "CONVERSION, COORDINATES, SWIZZLE",
-            CompactNodeTitle = "To UE Vec",
-            ToolTip = "Converts a Spice distance vector (double precision, RHS) to a UE Vector (km, single precision, LHS)"
+            CompactNodeTitle = "Swizzle To UE",
+            ToolTip = "Convert/Swizzle a Spice distance vector (double precision, RHS) to a UE Vector (km, single precision, LHS)"
             ))
         static FVector Conv_SDistanceVectorToVector(
             const FSDistanceVector& value
@@ -5078,8 +5109,8 @@ public:
         meta = (
             BlueprintAutocast,
             Keywords = "CONVERSION, COORDINATES, SWIZZLE",
-            CompactNodeTitle = "To UE Vec",
-            ToolTip = "Converts a Spice velocity vector (double precision, RHS) to a UE Vector (kmps, single precision, LHS)"
+            CompactNodeTitle = "Swizzle To UE",
+            ToolTip = "Convert/Swizzle a Spice velocity vector (double precision, RHS) to a UE Vector (kmps, single precision, LHS)"
             ))
         static FVector Conv_SVelocityVectorToVector(
             const FSVelocityVector& value
@@ -5090,8 +5121,8 @@ public:
         meta = (
             BlueprintAutocast,
             Keywords = "CONVERSION, COORDINATES, SWIZZLE",
-            CompactNodeTitle = "From UE Vec",
-            ToolTip = "Converts a UE Vector (single precision, LHS) to a Spice dimensionless vector (double precision, RHS)"
+            CompactNodeTitle = "Swizzle From UE",
+            ToolTip = "Convert/Swizzle a UE Vector (single precision, LHS) to a Spice dimensionless vector (double precision, RHS)"
             ))
         static FSDimensionlessVector Conv_VectorToSDimensionless(
             const FVector& value
@@ -5102,8 +5133,8 @@ public:
         meta = (
             BlueprintAutocast,
             Keywords = "CONVERSION, COORDINATES, SWIZZLE",
-            CompactNodeTitle = "From UE Vec",
-            ToolTip = "Converts a UE Vector (km, single precision, LHS) to a Spice distance vector (double precision, RHS)"
+            CompactNodeTitle = "Swizzle From UE",
+            ToolTip = "Convert/Swizzle a UE Vector (km, single precision, LHS) to a Spice distance vector (double precision, RHS)"
             ))
         static FSDistanceVector Conv_VectorToSDistanceVector(
             const FVector& value
@@ -5114,8 +5145,8 @@ public:
         meta = (
             BlueprintAutocast,
             Keywords = "CONVERSION, COORDINATES, SWIZZLE",
-            CompactNodeTitle = "From UE Vec",
-            ToolTip = "Converts a UE Vector (kmps, single precision, LHS) to a Spice velocity vector (double precision, RHS)"
+            CompactNodeTitle = "Swizzle From UE",
+            ToolTip = "Convert/Swizzle a UE Vector (kmps, single precision, LHS) to a Spice velocity vector (double precision, RHS)"
             ))
         static FSVelocityVector Conv_VectorToSVelocityVector(
             const FVector& value
@@ -5127,8 +5158,8 @@ public:
         meta = (
             BlueprintAutocast,
             Keywords = "CONVERSION, COORDINATES, SWIZZLE",
-            CompactNodeTitle = "From UE Vec",
-            ToolTip = "Converts a UE Vector (kmps, single precision, LHS) to a Spice angular velocity vector (double precision, RHS)"
+            CompactNodeTitle = "Swizzle From UE",
+            ToolTip = "Convert/Swizzle a UE Vector (kmps, single precision, LHS) to a Spice angular velocity vector (double precision, RHS)"
             ))
     static FSAngularVelocity Conv_VectorToSAngularVelocity(
         const FVector& value
@@ -5139,8 +5170,8 @@ public:
         meta = (
             BlueprintAutocast,
             Keywords = "CONVERSION, COORDINATES, SWIZZLE",
-            CompactNodeTitle = "To UE Vec",
-            ToolTip = "Converts a Spice angular velocity vector (double precision, RHS) to a UE Vector (kmps, single precision, LHS)"
+            CompactNodeTitle = "Swizzle To UE",
+            ToolTip = "Convert/Swizzle a Spice angular velocity vector (double precision, RHS) to a UE Vector (kmps, single precision, LHS)"
             ))
     static FVector Conv_SAngularVelocityToVector(
         const FSAngularVelocity& value
@@ -5173,9 +5204,9 @@ public:
         Category = "MaxQ|Types",
         meta = (
             BlueprintAutocast,
-            Keywords = "CONVERSION, COORDINATES, SWIZZLE",
-            CompactNodeTitle = "To UE Quat",
-            ToolTip = "Converts a Spice quaternion (double precision, RHS) to a UE Quat (single precision, LHS)"
+            Keywords = "CONVERSION, COORDINATES, SWIZZLE, SWAZZLE",
+            CompactNodeTitle = "Swizzle To UE",
+            ToolTip = "Convert/Swizzle a Spice quaternion (double precision, RHS) to a UE Quat (single precision, LHS)"
             ))
     static FQuat Conv_SQuaternionToQuat(const FSQuaternion& value);
 
@@ -5184,9 +5215,9 @@ public:
         Category = "MaxQ|Types",
         meta = (
             BlueprintAutocast,
-            Keywords = "CONVERSION, COORDINATES, SWIZZLE",
-            CompactNodeTitle = "From UE Quat",
-            ToolTip = "Converts a UE Quat (single precision, LHS) to a Spice quaternion (double precision, RHS)"
+            Keywords = "CONVERSION, COORDINATES, SWIZZLE, SWAZZLE",
+            CompactNodeTitle = "Swizzle From UE",
+            ToolTip = "Convert/Swizzle a UE Quat (single precision, LHS) to a Spice quaternion (double precision, RHS)"
             ))
     static FSQuaternion Conv_QuatToSQuaternion(const FQuat& value);
 

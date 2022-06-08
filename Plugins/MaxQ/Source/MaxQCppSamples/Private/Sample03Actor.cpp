@@ -51,7 +51,7 @@ void ASample03Actor::BeginPlay()
     Super::BeginPlay();
 
     Log(FString::Printf(TEXT("PluginInfo: %s"), *MaxQSamples::MaxQPluginInfo()), FColor::Purple);
-    Log(TEXT("Sample03: Time manipulation"), FColor::Blue);
+    Log(TEXT("Sample03: Basic positions and state vectors (Spice SPK)"), FColor::Blue);
     Log(TEXT("** Please see Sample03Actor.cpp for more info **"), FColor::Blue);
     Log(TEXT("See Sample03Actor (scene instance) Details Panel for time control buttons."), FColor::Blue);
 

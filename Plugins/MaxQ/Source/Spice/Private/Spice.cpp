@@ -25,35 +25,9 @@ PRAGMA_POP_PLATFORM_DEFAULT_PACKING
 // Local #defines
 // UE has build acceleration that concatenates multiple source files.
 // A historical problem with that is #defines leaking from one cpp to the next.
-// If these were moved to a .h file they couldn't be #undefed at the end.
+// If these were moved to a .h file they couldn't be undefined at the end.
 // May need a little rewrite for any platforms that don't support stack allocations.
 #define LONG_MESSAGE_MAX_LENGTH 1841
-
-
-void USpice::SwizzleToUE(const double(&v)[3], FVector& ue)
-{
-    ue = FVector(v[1], v[0], v[2]);
-}
-
-void USpice::SwizzleToSpice(const FVector& ue, double(&v)[3])
-{
-    v[0] = ue.Y;
-    v[1] = ue.X;
-    v[2] = ue.Z;
-}
-
-void USpice::SwizzleToUE(const double(&q)[4], FQuat& ue)
-{
-    ue = FQuat(-q[2], -q[1], -q[3], q[0]);
-}
-
-void USpice::SwizzleToSpice(const FQuat& ue, double(&q)[4])
-{
-    q[0] = ue.W;
-    q[1] = -ue.Y;
-    q[2] = -ue.X;
-    q[3] = -ue.Z;
-}
 
 void USpice::enumerate_kernels(
     ES_ResultCode& ResultCode,
@@ -12319,6 +12293,35 @@ void USpice::xpose(
     // Return Value
     mout = FSRotationMatrix(_mout);
 }
+
+
+
+#pragma region deprecated
+void USpice::SwizzleToUE(const double(&v)[3], FVector& ue)
+{
+    ue = FVector(v[1], v[0], v[2]);
+}
+
+void USpice::SwizzleToSpice(const FVector& ue, double(&v)[3])
+{
+    v[0] = ue.Y;
+    v[1] = ue.X;
+    v[2] = ue.Z;
+}
+
+void USpice::SwizzleToUE(const double(&q)[4], FQuat& ue)
+{
+    ue = FQuat(-q[2], -q[1], -q[3], q[0]);
+}
+
+void USpice::SwizzleToSpice(const FQuat& ue, double(&q)[4])
+{
+    q[0] = ue.W;
+    q[1] = -ue.Y;
+    q[2] = -ue.X;
+    q[3] = -ue.Z;
+}
+#pragma endregion regionName
 
 
 // Don't leak #define's

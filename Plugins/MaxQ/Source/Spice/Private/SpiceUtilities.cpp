@@ -12,7 +12,7 @@
 // Local #defines
 // UE has build acceleration that concatenates multiple source files.
 // A historical problem with that is #defines leaking from one cpp to the next.
-// If these were moved to a .h file they couldn't be #undefed at the end.
+// If these were moved to a .h file they couldn't be #undefined at the end.
 // May need a little rewrite for any platforms that don't support stack allocations.
 #define LONG_MESSAGE_MAX_LENGTH 1841
 

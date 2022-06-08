@@ -48,12 +48,6 @@ class SPICE_API USpice : public UBlueprintFunctionLibrary
 {
     GENERATED_BODY()
 
-    // No scaling... Swizzle only!
-    static void SwizzleToUE(const double(&v)[3], FVector& ue);
-    static void SwizzleToSpice(const FVector& ue, double(&v)[3]);
-    static void SwizzleToUE(const double(&q)[4], FQuat& ue);
-    static void SwizzleToSpice(const FQuat& ue, double(&q)[4]);
-
 public:
 
     UFUNCTION(BlueprintCallable,
@@ -6174,6 +6168,19 @@ public:
             ToolTip = "Approximate current ephemeris time, based on clock of local and sketchy CRT conversion"
             ))
     static void et_now(FSEphemerisTime& Now);
+
+#pragma region deprecated
+    // No scaling... Swizzle only!  No other transformations!
+    // #todo:  Add generalized swizzle + transform functionality
+    [[deprecated("Use USpice::Swizzle()")]]
+    static void SwizzleToUE(const double(&v)[3], FVector& ue);
+    [[deprecated("Use USpice::Swizzle()")]]
+    static void SwizzleToSpice(const FVector& ue, double(&v)[3]);
+    [[deprecated("Use USpice::Swazzle")]]
+    static void SwizzleToUE(const double(&q)[4], FQuat& ue);
+    [[deprecated("Use USpice::Swazzle")]]
+    static void SwizzleToSpice(const FQuat& ue, double(&q)[4]);
+#pragma endregion deprecated
 };
 
 

@@ -982,6 +982,16 @@ FString USpiceTypes::Conv_SEpheremisTimeToString(const FSEphemerisTime& et)
     return FString(sz);
 }
 
+FString USpiceTypes::Conv_SEpheremisPeriodToString(const FSEphemerisPeriod& et)
+{
+    return FormatDouble(et.AsSeconds());
+}
+
+FSEphemerisPeriod USpiceTypes::Conv_FloatToSEphemerisPeriod(float period)
+{
+    return FSEphemerisPeriod(period);
+}
+
 double USpiceTypes::Conv_SEphemerisTimeToDouble(
     const FSEphemerisTime& value
 )
@@ -1680,6 +1690,12 @@ void USpiceTypes::NormalizeAngle180To180(
 )
 {
     AngleNormalized = FSAngle(normalize180to180(Angle.AsRadians()));
+}
+
+
+FString USpiceTypes::Conv_S_UnitsToString(ES_Units units)
+{
+    return FString(toString(units));
 }
 
 
