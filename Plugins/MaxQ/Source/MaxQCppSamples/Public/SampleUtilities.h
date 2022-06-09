@@ -20,6 +20,42 @@
 
 MAXQCPPSAMPLES_API DECLARE_LOG_CATEGORY_EXTERN(LogMaxQSamples, Log, All);
 
+
+
+//-----------------------------------------------------------------------------
+// FSolarSystemState
+// Track the state of a small demo animated solar system
+//-----------------------------------------------------------------------------
+
+USTRUCT(BlueprintType)
+struct MAXQCPPSAMPLES_API FSamplesSolarSystemState
+{
+    GENERATED_BODY();
+
+    UPROPERTY(EditInstanceOnly, Category = "MaxQ|Samples")
+    bool InitializeTimeToNow;
+
+    UPROPERTY(EditInstanceOnly, Category = "MaxQ|Samples")
+    FString InitialTime;
+
+    UPROPERTY(Transient)
+    FSEphemerisTime CurrentTime;
+
+    UPROPERTY(EditInstanceOnly, Category = "MaxQ|Samples")
+    FSEphemerisPeriod TimeScale;
+
+    UPROPERTY(EditInstanceOnly, Category = "MaxQ|Samples")
+    TMap<FName, TWeakObjectPtr<AActor> > SolarSystemBodyMap;
+
+    FSamplesSolarSystemState()
+    {
+        InitializeTimeToNow = true;
+        InitialTime = TEXT("25 DEC 2021 12:00:00");
+        TimeScale = FSEphemerisPeriod::FromSeconds(10000000.0);
+    }
+};
+
+
 UCLASS(Category="MaxQSamples")
 class MAXQCPPSAMPLES_API USampleUtilities : public UBlueprintFunctionLibrary
 {
@@ -46,6 +82,9 @@ public:
 
     UFUNCTION(BlueprintPure, Category = "MaxQSamples", meta = (DevelopmentOnly))
     static bool LoadKernelList(const FString& ListName, const TArray<FString>& KernelFiles);
+
+    UFUNCTION(BlueprintCallable, Category = "MaxQSamples", meta = (DevelopmentOnly))
+    static void InitializeTime(FSamplesSolarSystemState& SolarSystemState, bool SetInitialTime = true);
 };
 
 namespace MaxQSamples

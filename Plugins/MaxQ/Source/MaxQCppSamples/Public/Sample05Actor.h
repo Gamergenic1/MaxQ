@@ -8,6 +8,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "SampleUtilities.h"
 #include "Sample05Actor.generated.h"
 
 
@@ -22,6 +23,10 @@ UCLASS()
 class MAXQCPPSAMPLES_API ASample05Actor : public AActor
 {
     GENERATED_BODY()
+
+public:
+    UPROPERTY(EditInstanceOnly, Category = "MaxQ|Samples")
+    FSamplesSolarSystemState SolarSystemState;
 
 public:
     ASample05Actor();

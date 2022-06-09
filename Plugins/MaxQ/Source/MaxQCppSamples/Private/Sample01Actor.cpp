@@ -147,6 +147,15 @@ bool ASample01Actor::LoadGMKernel(bool Squawk)
     ES_ResultCode ResultCode = ES_ResultCode::Success;
     FString ErrorMessage = "";
 
+    // NOTE: *1*
+    // **MaxQPathAbsolutified is not normally needed** (it converts a Plugin-relative path into an absolute path)
+    // Your kernels should be placed in a sub-directory of the project's /Content directory
+    // paths in Spice are relative to /Content
+    // So, if your kernel is: /Content/Kernels/my_kernel.tf
+    // You'd just pass path "Kernels/my_kernel.tf" into furnsh.
+    // Absolute paths work if really really needed, like to load something in the plugins directory for a sample ;)
+    // Kernel files can only be copied into a shipping build as a subdirectory of /Content
+    // (Have not tested if relative directories such as "..\Other\Kernels" might work.  (Undefined behavior?)
     FString KernelGMPath = MaxQSamples::MaxQPathAbsolutified(RelativePathToGMKernel);
 
     // furnsh:  the most basic way to load spice kernel data
@@ -182,12 +191,12 @@ void ASample01Actor::EnumeratePCKKernels()
     // Will hold the relative paths we're about to enumerate...
     TArray<FString> FoundKernels;
 
+    // See NOTE: *1*, above, about MaxQPathAbsolutified
     FString KernelPCKsPath = MaxQSamples::MaxQPathAbsolutified(RelativePathToPCKKernels.Path);
 
     // enumerate_kernels:  get a list of relative paths to all files in a directory...
-    // enumerate_kernels will look for the file relative to the project directory
-    // ...if that fails, furnsh will check the plugin path (EDITOR BUILDS ONLY)
-    // warning, ALL files in directory are enumerated, kernels or not
+    // enumerate_kernels will look for the file (relative to /Content, or absolute)
+    // Note:  this returns ALL files, not just kernels!
     USpice::enumerate_kernels(ResultCode, ErrorMessage, FoundKernels, KernelPCKsPath);
 
     Log(FString::Printf(TEXT("EnumeratePCKKernels enumerated kernel files at %s"), *KernelPCKsPath), ResultCode);
@@ -219,8 +228,10 @@ bool ASample01Actor::EnumerateAndLoadPCKKernelList(bool Squawk)
     // return value holding enumerated list of kernel files...
     TArray<FString> FoundKernels;
 
+    // See NOTE: *1*, above, about MaxQPathAbsolutified
     FString KernelPCKsPath = MaxQSamples::MaxQPathAbsolutified(RelativePathToPCKKernels.Path);
 
+    // Get a list of kernels (relative to /Content, or absolute paths if KernelPCKsPath is absolute
     USpice::enumerate_kernels(ResultCode, ErrorMessage, FoundKernels, KernelPCKsPath);
 
     if (Squawk)

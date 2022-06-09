@@ -10,36 +10,8 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "SpiceTypes.h"
+#include "SampleUtilities.h"
 #include "Sample03Actor.generated.h"
-
-
-
-
-//-----------------------------------------------------------------------------
-// FSolarSystemState
-// Track the state of a small demo animated solar system
-//-----------------------------------------------------------------------------
-
-USTRUCT()
-struct MAXQCPPSAMPLES_API FSolarSystemState
-{
-    GENERATED_BODY();
-
-    UPROPERTY(EditInstanceOnly, Category = "MaxQ|Samples")
-    bool InitializeTimeToNow;
-
-    UPROPERTY(EditInstanceOnly, Category = "MaxQ|Samples")
-    FSEphemerisTime InitialTime;
-
-    UPROPERTY(Transient)
-    FSEphemerisTime CurrentTime;
-
-    UPROPERTY(EditInstanceOnly, Category = "MaxQ|Samples")
-    FSEphemerisPeriod TimeScale;
-
-    UPROPERTY(Transient)
-    TMap<FName,TWeakObjectPtr<AActor> > SolarSystemBodyMap;
-};
 
 
 //-----------------------------------------------------------------------------
@@ -66,13 +38,19 @@ public:
     FString RelativePathToOuterPlanetSPKFixups;
 
     UPROPERTY(EditInstanceOnly, Category = "MaxQ|Samples")
-    FSolarSystemState SolarSystemState;
+    FSamplesSolarSystemState SolarSystemState;
 
     UPROPERTY(EditInstanceOnly, Category = "MaxQ|Samples")
     double BodyScale;
 
     UPROPERTY(EditInstanceOnly, Category = "MaxQ|Samples")
     double DistanceScale;
+
+    UPROPERTY(EditInstanceOnly, Category = "MaxQ|Samples", Meta=(Tooltip="Center of all coordiantes are relative to in UE Space"))
+    FName OriginNaifName;
+
+    UPROPERTY(EditInstanceOnly, Category = "MaxQ|Samples", Meta = (Tooltip = "Reference Frame orientation all coordiantes are relative to in UE Space"))
+    FName OriginReferenceFrame;
 
 
 public:
@@ -86,17 +64,28 @@ public:
     void spkezr_fixed();
     void azlcpo(ES_AberrationCorrectionWithTransmissions abcorr);
 
-    void InitializeSolarSystem(FSolarSystemState& State);
-    void UpdateSolarSystem(FSolarSystemState& State, float DeltaTime);
+    void InitializeSolarSystem(FSamplesSolarSystemState& State);
+    void UpdateSolarSystem(FSamplesSolarSystemState& State, float DeltaTime);
 
-    UFUNCTION(CallInEditor)
-    void FastSpeed();
 
-    UFUNCTION(CallInEditor)
+    // Buttons for the Details Panel
+    UFUNCTION(CallInEditor, Category = "Editor")
+    void VeryFastSpeed();
+
+    UFUNCTION(CallInEditor, Category = "Editor")
+    void FasterSpeed();
+
+    UFUNCTION(CallInEditor, Category = "Editor")
+    void SlowerSpeed();
+
+    UFUNCTION(CallInEditor, Category = "Editor")
     void NormalSpeed();
 
-    UFUNCTION(CallInEditor)
+    UFUNCTION(CallInEditor, Category = "Editor")
     void GoToNow();
+
+    UFUNCTION(CallInEditor, Category = "Editor")
+    void Restart();
 };
 
 
