@@ -65,8 +65,8 @@ void ASample04Actor::BeginPlay()
     USpice::init_all();
 
     // Don't tick unless we have the kernels required to update the solar system
-    bool EnableTick;
-    if (EnableTick = USampleUtilities::LoadKernelList(TEXT("Basic"), BasicKernels))
+    bool EnableTick = USampleUtilities::LoadKernelList(TEXT("Basic"), BasicKernels);
+    if (EnableTick)
     {
         InitializeSolarSystem();
     }
