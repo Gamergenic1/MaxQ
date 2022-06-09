@@ -58,8 +58,8 @@ void ASample03Actor::BeginPlay()
     // init_all:  clears kernel memory and any error state.
     USpice::init_all();
 
-    bool EnableTick;
-    if (EnableTick = USampleUtilities::LoadKernelList(TEXT("Basic"), BasicKernels))
+    bool EnableTick = USampleUtilities::LoadKernelList(TEXT("Basic"), BasicKernels);
+    if (EnableTick)
     {
         // Use 'spkpos' to find a position in ECI Frame (Earth-Centered, Inertial)
         spkpos_inertial();
