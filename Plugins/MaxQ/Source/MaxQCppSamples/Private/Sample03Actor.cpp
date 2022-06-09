@@ -29,15 +29,14 @@ ASample03Actor::ASample03Actor()
     USampleUtilities::GetDefaultInsightMissionKernels(InsightMissionKernels);
     RelativePathToOuterPlanetSPKFixups = TEXT("NonAssetData/MaxQ/kernels/SPK/outer_planets.bsp");
 
-
-    SolarSystemState.InitializeTimeToNow = true;
-    // We can't use SPICE to initialize the default time here, as no leap second
-    // kernel has been loaded.  So, default to J2000.
-    SolarSystemState.InitialTime = FSEphemerisTime::J2000;
-    SolarSystemState.TimeScale = FSEphemerisPeriod::FromSeconds(10000000.0);
-
     BodyScale = 1000.0;
     DistanceScale = 473586.957802;
+
+    // This is the coordinate system center relative to SPICE
+    // (SSB = "Solar System Barycenter")
+    OriginNaifName = FName("SSB");
+    // This is the UE coordinate system orientation relative to SPICE
+    OriginReferenceFrame = FName("ECLIPJ2000");
 }
 
 
@@ -59,7 +58,8 @@ void ASample03Actor::BeginPlay()
     // init_all:  clears kernel memory and any error state.
     USpice::init_all();
 
-    if (USampleUtilities::LoadKernelList(TEXT("Basic"), BasicKernels))
+    bool EnableTick;
+    if (EnableTick = USampleUtilities::LoadKernelList(TEXT("Basic"), BasicKernels))
     {
         // Use 'spkpos' to find a position in ECI Frame (Earth-Centered, Inertial)
         spkpos_inertial();
@@ -91,10 +91,25 @@ void ASample03Actor::BeginPlay()
                 azlcpo(ES_AberrationCorrectionWithTransmissions::XLT_S);
             }
         }
+
+        InitializeSolarSystem(SolarSystemState);
     }
 
-    InitializeSolarSystem(SolarSystemState);
+    PrimaryActorTick.SetTickFunctionEnable(EnableTick);
 }
+
+
+//-----------------------------------------------------------------------------
+// Name: Tick
+// Desc: 
+//-----------------------------------------------------------------------------
+void ASample03Actor::Tick(float DeltaTime)
+{
+    Super::Tick(DeltaTime);
+
+    UpdateSolarSystem(SolarSystemState, DeltaTime);
+}
+
 
 // ============================================================================
 //
@@ -471,22 +486,6 @@ void ASample03Actor::azlcpo(ES_AberrationCorrectionWithTransmissions abcorr)
 }
 
 
-
-// ============================================================================
-//
-//-----------------------------------------------------------------------------
-// Name: Tick
-// Desc: 
-//-----------------------------------------------------------------------------
-
-void ASample03Actor::Tick(float DeltaTime)
-{
-    Super::Tick(DeltaTime);
-
-    UpdateSolarSystem(SolarSystemState, DeltaTime);
-}
-
-
 // ============================================================================
 //
 //-----------------------------------------------------------------------------
@@ -494,7 +493,7 @@ void ASample03Actor::Tick(float DeltaTime)
 // Desc: 
 //-----------------------------------------------------------------------------
 
-void ASample03Actor::InitializeSolarSystem(FSolarSystemState& State)
+void ASample03Actor::InitializeSolarSystem(FSamplesSolarSystemState& State)
 {
     ES_ResultCode ResultCode = ES_ResultCode::Success;
     FString ErrorMessage = "";
@@ -503,14 +502,7 @@ void ASample03Actor::InitializeSolarSystem(FSolarSystemState& State)
     USpice::furnsh(ResultCode, ErrorMessage, AbsPathToOuterPlanetSPKFixups);
     Log(FString::Printf(TEXT("InitializeSolarSystem loaded kernel file %s"), *AbsPathToOuterPlanetSPKFixups), ResultCode);
 
-    if (State.InitializeTimeToNow)
-    {
-        USpice::et_now(State.CurrentTime);
-    }
-    else
-    {
-        State.CurrentTime = State.InitialTime;
-    }
+    USampleUtilities::InitializeTime(State);
 
     AActor* Actor = nullptr;
     FString ActorName;
@@ -577,6 +569,7 @@ void ASample03Actor::InitializeSolarSystem(FSolarSystemState& State)
     }
 }
 
+
 // ============================================================================
 //
 //-----------------------------------------------------------------------------
@@ -584,10 +577,8 @@ void ASample03Actor::InitializeSolarSystem(FSolarSystemState& State)
 // Desc: 
 //-----------------------------------------------------------------------------
 
-void ASample03Actor::UpdateSolarSystem(FSolarSystemState& State, float DeltaTime)
+void ASample03Actor::UpdateSolarSystem(FSamplesSolarSystemState& State, float DeltaTime)
 {
-    Super::Tick(DeltaTime);
-
     SolarSystemState.CurrentTime += DeltaTime * SolarSystemState.TimeScale;
 
     // Intermediate outputs:
@@ -602,9 +593,11 @@ void ASample03Actor::UpdateSolarSystem(FSolarSystemState& State, float DeltaTime
     // When do we want it?   (time: now)
     FSEphemerisTime et = SolarSystemState.CurrentTime;
 
-    // Where do we want it relative to? (EARTH's position)
-    FString obs = TEXT("SSB");
-    FString ref = TEXT("ECLIPJ2000");
+    // Where do we want it relative to?
+    // SSB = Solar System Barycenter, the point the sun and planets mutually orbit
+    // ECLIPJ2000 = Inertial (non-rotating) reference frame alighned with Ecliptic (the plane of Earth's orbit)
+    FString obs = OriginNaifName.ToString();
+    FString ref = OriginReferenceFrame.ToString();
 
     // "Converged Newtonian" light time correction.
     // This means our result won't be where the sun actually *IS* right now...
@@ -618,7 +611,7 @@ void ASample03Actor::UpdateSolarSystem(FSolarSystemState& State, float DeltaTime
 
         if (Actor)
         {
-            // What do we want?  (SUN's position)
+            // Targ = NaifName = Map Key
             FString targ = BodyPair.Key.ToString();
 
             // Call SPICE, get the position in rectangular coordinates...
@@ -644,14 +637,10 @@ void ASample03Actor::UpdateSolarSystem(FSolarSystemState& State, float DeltaTime
             else
             {
                 // If the call failed, there's insufficient SPK data for this time, so reset the clock.
-                if (State.InitializeTimeToNow)
-                {
-                    USpice::et_now(State.CurrentTime);
-                }
-                else
-                {
-                    State.CurrentTime = State.InitialTime;
-                }
+                Restart();
+
+                // Slow the timescale down each time it repeats...
+                SlowerSpeed();
             }
         }
     }
@@ -666,9 +655,26 @@ void ASample03Actor::UpdateSolarSystem(FSolarSystemState& State, float DeltaTime
     }
 }
 
-void ASample03Actor::FastSpeed()
+void ASample03Actor::VeryFastSpeed()
 {
-    SolarSystemState.TimeScale = FSEphemerisPeriod::FromSeconds(10000000.0);
+    NormalSpeed();
+    FasterSpeed();
+    FasterSpeed();
+    FasterSpeed();
+    FasterSpeed();
+    FasterSpeed();
+    FasterSpeed();
+    FasterSpeed();
+}
+
+void ASample03Actor::FasterSpeed()
+{
+    SolarSystemState.TimeScale *= 10.;
+}
+
+void ASample03Actor::SlowerSpeed()
+{
+    SolarSystemState.TimeScale *= 0.1;
 }
 
 void ASample03Actor::NormalSpeed()
@@ -680,4 +686,9 @@ void ASample03Actor::GoToNow()
 {
     USpice::et_now(SolarSystemState.CurrentTime);
     NormalSpeed();
+}
+
+void ASample03Actor::Restart()
+{
+    USampleUtilities::InitializeTime(SolarSystemState, false);
 }

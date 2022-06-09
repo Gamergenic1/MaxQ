@@ -1383,6 +1383,18 @@ static inline FSEphemerisPeriod operator*(const FSEphemerisPeriod& A, double B)
     return FSEphemerisPeriod(A.AsSpiceDouble() * B);
 }
 
+static inline FSEphemerisPeriod& operator*=(FSEphemerisPeriod& lhs, double rhs) {
+
+    lhs.seconds *= rhs;
+    return lhs;
+}
+
+static inline FSEphemerisPeriod& operator/=(FSEphemerisPeriod& lhs, double rhs) {
+
+    lhs.seconds /= rhs;
+    return lhs;
+}
+
 static inline FSEphemerisPeriod operator/(const FSEphemerisPeriod& A, double B)
 {
     return FSEphemerisPeriod(A.AsSpiceDouble() / B);

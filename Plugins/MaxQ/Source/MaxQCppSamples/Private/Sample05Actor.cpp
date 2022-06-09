@@ -17,6 +17,10 @@ using MaxQSamples::Log;
 ASample05Actor::ASample05Actor()
 {
     SetRootComponent(CreateDefaultSubobject<USceneComponent>("Root"));
+
+    SolarSystemState.InitializeTimeToNow = true;
+    SolarSystemState.CurrentTime = FSEphemerisTime::J2000;
+    SolarSystemState.InitialTime = TEXT("25 DEC 2021 12:00:00 UTC");
 }
 
 

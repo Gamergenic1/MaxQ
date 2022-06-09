@@ -126,6 +126,19 @@ bool USampleUtilities::LoadKernelList(const FString& ListName, const TArray<FStr
     return ResultCode == ES_ResultCode::Success;
 }
 
+void USampleUtilities::InitializeTime(FSamplesSolarSystemState& SolarSystemState, bool SetInitialTime)
+{
+    if (SolarSystemState.InitializeTimeToNow)
+    {
+        USpice::et_now(SolarSystemState.CurrentTime);
+        if(SetInitialTime) SolarSystemState.InitialTime = USpiceTypes::Conv_SEpheremisTimeToString(SolarSystemState.CurrentTime);
+    }
+    else
+    {
+        SolarSystemState.CurrentTime = USpiceTypes::Conv_StringToSEpheremisTime(SolarSystemState.InitialTime);
+    }
+}
+
 void USampleUtilities::GetDefaultBasicKernels(TArray<FString>& BasicKernels)
 {
     BasicKernels.Empty();
