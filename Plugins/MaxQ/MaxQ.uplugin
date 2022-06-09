@@ -1,7 +1,7 @@
 {
     "FileVersion": 3,
-    "Version": 1,
-    "VersionName": "1.0067.0",
+    "Version": 2,
+    "VersionName": "1.0067.1",
     "EngineVersion": "5.0.0",
     "FriendlyName": "MaxQ Spaceflight Toolkit",
     "Description": "MaxQ is powered by the SPICE Toolkit software released by NASA/JPL/NAIF, which is the premier Space Flight toolset for space flight planning and analysis.",
