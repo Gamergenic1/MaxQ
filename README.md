@@ -32,6 +32,9 @@ For more information about Blueprints, see the [Unreal Engine "Blueprints - Esse
 
 ## Additional MaxQ Information
 
+###### MaxQ on Unreal Engine Marketplace  
+https://www.unrealengine.com/marketplace/en-US/product/146e96d801ed4d8d930b41bfeca53733
+
 ###### MaxQ project page:  
 https://www.gamergenic.com/project/maxq/  
 
