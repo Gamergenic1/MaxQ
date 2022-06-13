@@ -29,7 +29,7 @@ ASample03Actor::ASample03Actor()
     USampleUtilities::GetDefaultInsightMissionKernels(InsightMissionKernels);
     RelativePathToOuterPlanetSPKFixups = TEXT("NonAssetData/MaxQ/kernels/SPK/outer_planets.bsp");
 
-    BodyScale = 1000.0;
+    BodyScale = 500.0;
     DistanceScale = 473586.957802;
 
     // This is the coordinate system center relative to SPICE
@@ -525,47 +525,20 @@ void ASample03Actor::InitializeSolarSystem(FSamplesSolarSystemState& State)
             {
                 ActorName.RemoveAt(TrailingIndex, ActorName.Len() - TrailingIndex);
             }
-
-            FSDistanceVector Radii;
-            USpice::bodvrd_distance_vector(ResultCode, ErrorMessage, Radii, ActorName, TEXT("RADII"));
-
-            if (ResultCode == ES_ResultCode::Success)
-            {
-                // Get the dimensions of the static mesh at the root...  (ringed planets have multiple meshes)
-                UStaticMeshComponent* SM = Cast<UStaticMeshComponent>(Actor->GetRootComponent());
-
-                if (SM && SM->GetStaticMesh())
-                {
-                    // Don't scale the sun, or it's impossible to see Mercury etc without them ending up inside the sun.
-                    if(ActorName != FString("SUN"))
-                    {
-                        FBoxSphereBounds Bounds = SM->GetStaticMesh()->GetBounds();
-
-                        // ** Swizzle is the correct way to get an FVector from FSDistanceVector etc **
-                        FVector ScenegraphRadii = USpiceTypes::Swizzle(Radii.AsKilometers());
-
-                        // Swizzle does no scaling, so our values are in kilometers
-                        // Normally one scenegraph unit = one centimeter, but let's scale it all down
-                        ScenegraphRadii /= BodyScale;
-
-                        FVector ScenegraphDiameter = 2 * ScenegraphRadii;
-
-                        // Finally, set the actor's scale based on the actual size and the mesh dimensions
-                        Actor->SetActorScale3D(ScenegraphDiameter / Bounds.BoxExtent);
-                    }
-
-                    SolarSystemState.SolarSystemBodyMap.Add(FName(ActorName), Actor);
-                }
-                else
-                {
-                    Log(FString::Printf(TEXT("InitializeSolarSystem could not find static mesh for %s"), *ActorName), FColor::Red);
-                }
-            }
-            else
-            {
-                Log(FString::Printf(TEXT("InitializeSolarSystem kernel pool RADII failed for %s"), *ActorName), FColor::Red);
-            }
+            SolarSystemState.SolarSystemBodyMap.Add(FName(ActorName), Actor);
         }
+
+    }
+
+    MaxQSamples::InitBodyScales(BodyScale, State);
+    
+    // Scale the sun down, or it engulfs the solar system!
+    AActor* Sun = SolarSystemState.SolarSystemBodyMap["SUN"].Get();
+    if (Sun)
+    {
+        FVector CurrentScale = SolarSystemState.SolarSystemBodyMap["SUN"]->GetActorScale3D();
+        CurrentScale *= 0.01;
+        SolarSystemState.SolarSystemBodyMap["SUN"]->SetActorScale3D(CurrentScale);
     }
 }
 
@@ -648,9 +621,9 @@ void ASample03Actor::UpdateSolarSystem(FSamplesSolarSystemState& State, float De
     if (GEngine)
     {
         double UE_Units_Per_KM = 100 * 1000.;
-        GEngine->AddOnScreenDebugMessage(-1, 0.f, FColor::White, *FString::Printf(TEXT("Scale SUN : 1/%f"), UE_Units_Per_KM));
-        GEngine->AddOnScreenDebugMessage(-1, 0.f, FColor::White, *FString::Printf(TEXT("Scale PLANETS/MOON : 1/%f"), BodyScale * UE_Units_Per_KM));
-        GEngine->AddOnScreenDebugMessage(-1, 0.f, FColor::White, *FString::Printf(TEXT("Scale Solar System Distances : 1/%f"), DistanceScale * UE_Units_Per_KM));
+        GEngine->AddOnScreenDebugMessage(-1, 0.f, FColor::White, *FString::Printf(TEXT("Scale SUN : 1/%s (1/100 of PLANET/MOON scale)"), *USpiceTypes::FormatDoublePrecisely(BodyScale * UE_Units_Per_KM * 100, 0)));
+        GEngine->AddOnScreenDebugMessage(-1, 0.f, FColor::White, *FString::Printf(TEXT("Scale PLANETS/MOON : 1/%s"), *USpiceTypes::FormatDoublePrecisely(BodyScale * UE_Units_Per_KM, 0)));
+        GEngine->AddOnScreenDebugMessage(-1, 0.f, FColor::White, *FString::Printf(TEXT("Scale Solar System Distances : 1/%s"), *USpiceTypes::FormatDoublePrecisely(DistanceScale * UE_Units_Per_KM, 0)));
         GEngine->AddOnScreenDebugMessage(-1, 0.f, FColor::White, *FString::Printf(TEXT("Display Time: %s"), *USpiceTypes::Conv_SEpheremisTimeToString(SolarSystemState.CurrentTime)));
     }
 }

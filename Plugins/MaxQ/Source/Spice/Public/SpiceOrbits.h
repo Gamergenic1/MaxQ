@@ -58,7 +58,7 @@ public:
     );
 
     /// <summary>Renders an ellipse in debug lines</summary>
-    // For staic orbits this better than rendering orbits, slightly, because
+    // For static orbits this better than rendering orbits, slightly, because
     // you can cache the ellipse and forget about it.
     UFUNCTION(BlueprintCallable,
         Category = "MaxQ|Debug|Orbits", 

@@ -9,6 +9,8 @@
 #include "SpiceTypes.h"
 #include "Spice.h"
 #include "SampleUtilities.h"
+#include "Sample05TelemetryActor.h"
+#include "SpiceOrbits.h"
 
 using MaxQSamples::Log;
 
@@ -33,6 +35,16 @@ ASample05Actor::ASample05Actor()
     // We need to add geophysical.ker to get physical constants of Earth needed
     // to propagate TLEs.
     BasicKernels.Add(TEXT("NonAssetData/naif/kernels/Generic/PCK/geophysical.ker"));
+
+    TelemetryObjectId = TEXT("GROUP=STATIONS");
+
+    OriginNaifName = "EARTH";
+    OriginReferenceFrame = "J2000";
+    SunNaifName = "SUN";
+    DistanceScale = 25.0;
+    SolarSystemState.TimeScale = 1.0;
+
+    PrimaryActorTick.bCanEverTick = true;
 }
 
 
@@ -46,20 +58,61 @@ void ASample05Actor::BeginPlay()
 
     Log(FString::Printf(TEXT("PluginInfo: %s"), *MaxQSamples::MaxQPluginInfo()), FColor::Purple);
     Log(TEXT("Sample05: Initialization and kernel data"), FColor::Blue);
+    Log(TEXT("** Please see Sample05Actor in Scene 'Sample05' folder for button controls (details panel) **"), FColor::Yellow);
     Log(TEXT("** Please see Sample05Actor.cpp for more info **"), FColor::Blue);
     Log(TEXT("** This tutorial is only an interim version! **"), FColor::Red);
 
     // init_all:  clears kernel memory and any error state.
     USpice::init_all();
 
-    if (USampleUtilities::LoadKernelList(TEXT("Basic"), BasicKernels))
+    // Don't tick unless we have the kernels required to update the solar system
+    bool EnableTick = USampleUtilities::LoadKernelList(TEXT("Basic"), BasicKernels);
+    if (EnableTick)
     {
+        // Individual examples
         conics();
         oscelt();
         TLEs();
+
+        InitAnimation();
+
+        // Get telemetry from server and create objects in orbit
+        RequestTelemetryByHttp();
     }
+    PrimaryActorTick.SetTickFunctionEnable(EnableTick);
 }
 
+
+
+//-----------------------------------------------------------------------------
+// Name: Tick
+// Desc: 
+//-----------------------------------------------------------------------------
+void ASample05Actor::Tick(float DeltaSeconds)
+{
+    Super::Tick(DeltaSeconds);
+
+    SolarSystemState.CurrentTime += DeltaSeconds * SolarSystemState.TimeScale;
+
+    bool success = true;
+    success &= MaxQSamples::UpdateBodyPositions(OriginNaifName, OriginReferenceFrame, DistanceScale, SolarSystemState);
+    success &= MaxQSamples::UpdateBodyOrientations(OriginReferenceFrame, SolarSystemState);
+    success &= MaxQSamples::UpdateSunDirection(OriginNaifName, OriginReferenceFrame, SolarSystemState.CurrentTime, SunNaifName, SunDirectionalLight);
+
+    if (GEngine)
+    {
+        GEngine->AddOnScreenDebugMessage(-1, 0.f, FColor::White, *FString::Printf(TEXT("Time Scale: %f x"), SolarSystemState.TimeScale.AsSeconds()));
+        GEngine->AddOnScreenDebugMessage(-1, 0.f, FColor::White, *FString::Printf(TEXT("Display Time: %s"), *USpiceTypes::Conv_SEpheremisTimeToString(SolarSystemState.CurrentTime)));
+        GEngine->AddOnScreenDebugMessage(-1, 0.f, FColor::White, *FString::Printf(TEXT("Origin Reference Frame: %s"), *OriginReferenceFrame.ToString()));
+        GEngine->AddOnScreenDebugMessage(-1, 0.f, FColor::White, *FString::Printf(TEXT("Origin Observer Naif Name: %s"), *OriginNaifName.ToString()));
+    }
+
+    if (!success)
+    {
+        // Restart time...
+        Restart();
+    }
+}
 
 
 // ============================================================================
@@ -77,7 +130,6 @@ void ASample05Actor::conics()
     FString ErrorMessage;
 
     // We'll need Earth's mass for propagating orbits via conics and oscelt
-    FSMassConstant GM;
     FString NaifNameOfMass = TEXT("EARTH");
     USpice::bodvrd_mass(ResultCode, ErrorMessage, GM, NaifNameOfMass, TEXT("GM"));
 
@@ -95,7 +147,7 @@ void ASample05Actor::conics()
     {
         // From:
         // https://www.heavens-above.com/orbit.aspx?satid=20580
-        const FSDistance alt  = FSDistance::FromKm(533);
+        const FSDistance alt  = FSDistance::FromKilometers(533);
         const double e      = 0.0002312;
         const FSAngle i     = FSAngle::FromDegrees(28.4689);
         const FSAngle node  = FSAngle::FromDegrees(225.34227);
@@ -165,14 +217,14 @@ void ASample05Actor::oscelt()
 
     Log(FString::Printf(TEXT("oscelt EARTH's State Vector (ECLIP2000 Frame) = %s"), *USpiceTypes::Conv_SStateVectorToString(state)), ResultCode);
 
-    FSMassConstant GM;
+    FSMassConstant SUN_GM;
     if (ResultCode == ES_ResultCode::Success)
     {
         // We're ignoring the effects of all other bodies on the earth, only the sun
         // So, we want the mass of the Sun itself, even though we're getting the
         // orbital params relative to the Solar System Barycenter, as if the sun was there.
         FString NaifNameOfMass = TEXT("SUN");
-        USpice::bodvrd_mass(ResultCode, ErrorMessage, GM, NaifNameOfMass, TEXT("GM"));
+        USpice::bodvrd_mass(ResultCode, ErrorMessage, SUN_GM, NaifNameOfMass, TEXT("GM"));
 
         Log(FString::Printf(TEXT("oscelt Mass of SUN = %s"), *USpiceTypes::Conv_SMassConstantToString(GM)), ResultCode);
     }
@@ -181,7 +233,7 @@ void ASample05Actor::oscelt()
     if (ResultCode == ES_ResultCode::Success)
     {
         // Now, deduce the orbital elements!
-        USpice::oscelt(ResultCode, ErrorMessage, state, et, GM, ConicElements);
+        USpice::oscelt(ResultCode, ErrorMessage, state, et, SUN_GM, ConicElements);
 
         Log(FString::Printf(TEXT("oscelt EARTH's Orbital/Conic/Keplerian Elements (ECLIP2000 Frame) = %s"), *USpiceTypes::Conv_SConicElementsToString(ConicElements)), ResultCode);
     }
@@ -241,3 +293,283 @@ void ASample05Actor::TLEs()
     }
 }
 
+// ============================================================================
+//
+//-----------------------------------------------------------------------------
+// Name: InitAnimation
+// Desc: Scale the earth, etc.
+//-----------------------------------------------------------------------------
+
+void ASample05Actor::InitAnimation()
+{
+    USampleUtilities::InitializeTime(SolarSystemState);
+    MaxQSamples::InitBodyScales(DistanceScale, SolarSystemState);
+    USpice::getgeophs(EarthConstants, TEXT("EARTH"));
+}
+
+
+// ============================================================================
+//
+//-----------------------------------------------------------------------------
+// Name: RequestTelemetryByHttp
+// Desc:
+// Send a telemetry data request to Celestrak
+//-----------------------------------------------------------------------------
+
+void ASample05Actor::RequestTelemetryByHttp()
+{
+    Log(TEXT("RequestTelemetryByHttp sending telemetry request to server by http"));
+
+    // Uses the Http module to send request by http
+    FTelemetryCallback Callback;
+    Callback.BindUFunction(this, GET_FUNCTION_NAME_CHECKED(ASample05Actor, ProcessTelemetryResponseAsTLE));
+    USampleUtilities::GetTelemetryFromServer(Callback, TelemetryObjectId, TEXT("TLE"));
+}
+
+
+
+// ============================================================================
+//
+//-----------------------------------------------------------------------------
+// Name: ProcessTelemetryResponseAsTLE
+// Desc:
+// Process the server response, assuming it's a group of TLE data
+//-----------------------------------------------------------------------------
+
+void ASample05Actor::ProcessTelemetryResponseAsTLE(bool Success, const FString& ObjectId, const FString& Telemetry)
+{
+    Log(TEXT("ProcessTelemetryResponseAsTLE Telemetry response received from server"));
+    Log(FString::Printf(TEXT("ProcessTelemetryResponseAsTLE Telemetry : %s"), *(Telemetry.Left(750) + TEXT("..."))), Success ? FColor::Green : FColor::Red, 15.f);
+
+    TArray<FString> TLEArray;
+    if (Success && (0 == (Telemetry.ParseIntoArrayLines(TLEArray, true) % 3)))
+    {
+        ES_ResultCode ResultCode;
+        FString ErrorMessage;
+
+        FSEphemerisTime et;
+        FSTwoLineElements elems;
+
+        for(int i = 0; i < TLEArray.Num(); i += 3)
+        {
+            USpice::getelm(ResultCode, ErrorMessage, et, elems, TLEArray[i + 1], TLEArray[i + 2]);
+
+            if (ResultCode == ES_ResultCode::Success)
+            {
+                AddTelemetryObject(ObjectId, TLEArray[i + 0].TrimStartAndEnd(), elems);
+            }
+            else
+            {
+                Log(FString::Printf(TEXT("ProcessTelemetryResponse getelem Spice Error %s"), *ErrorMessage), ResultCode);
+            }
+
+            if (i < 10)
+            {
+                Log(FString::Printf(TEXT("** Please also see %s in Scene 'In Orbit' folder for button controls (details panel) **"), *(TLEArray[i].TrimStartAndEnd())), FColor::Orange);
+            }
+        }
+    }
+    else
+    {
+        Log(TEXT("ProcessTelemetryResponseAsTLE TLE Response is nonsense (expected 3 lines including obj name line)"), FColor::Red);
+    }
+}
+
+
+
+// ============================================================================
+//
+//-----------------------------------------------------------------------------
+// Name: 
+// Desc:
+//-----------------------------------------------------------------------------
+
+void ASample05Actor::AddTelemetryObject(const FString& ObjectId, const FString& ObjectName, const FSTwoLineElements& Elements)
+{
+    check(IsInGameThread());
+
+    if(TelemetryObjectClass)
+    {
+        FActorSpawnParameters SpawnParameters;
+        SpawnParameters.ObjectFlags |= RF_Transient;
+
+        ASample05TelemetryActor* TelemetryObject = Cast<ASample05TelemetryActor>(GetWorld()->SpawnActor(TelemetryObjectClass, NULL, NULL, SpawnParameters));
+
+        if (TelemetryObject != nullptr)
+        {
+            TelemetryObject->SetActorLabel(ObjectName);
+            TelemetryObject->SetFolderPath("In Orbit");
+            TelemetryObject->PropagateByTLEs.BindUObject(this, &ASample05Actor::PropagateTLE);
+            TelemetryObject->XformPositionCallback.BindUObject(this, &ASample05Actor::TransformPosition);
+
+            TelemetryObject->ComputeConic.BindUObject(this, &ASample05Actor::ComputeConic);
+            TelemetryObject->RenderDebugOrbit.BindUObject(this, &ASample05Actor::RenderDebugOrbit);
+            TelemetryObject->PropagateByKeplerianElements.BindUObject(this, &ASample05Actor::EvaluateOrbitalElements);
+            TelemetryObject->GetOrbitalElements.BindUObject(this, &ASample05Actor::GetOrbitalElements);
+            TelemetryObject->GetConicFromKepler.BindUObject(this, &ASample05Actor::GetConicFromKepler);
+
+            // By default only render debug orbits for ISS-related objects
+            bool bShouldRenderOrbit = ObjectName.StartsWith(TEXT("ISS"));
+
+            TelemetryObject->Init(ObjectId, ObjectName, Elements, bShouldRenderOrbit);
+        }
+    }
+}
+
+
+// ============================================================================
+//
+//-----------------------------------------------------------------------------
+// Name: 
+// Desc:
+//-----------------------------------------------------------------------------
+
+bool ASample05Actor::PropagateTLE(const FSTwoLineElements& TLEs, FSStateVector& StateVector)
+{
+    ES_ResultCode ResultCode;
+    FString ErrorMessage;
+
+    // Given "Two-Line" Elements, compute a state vector
+    USpice::evsgp4(ResultCode, ErrorMessage, StateVector, SolarSystemState.CurrentTime, EarthConstants, TLEs);
+
+    return ResultCode == ES_ResultCode::Success;
+}
+
+
+// ============================================================================
+//
+//-----------------------------------------------------------------------------
+// Name: 
+// Desc:
+//-----------------------------------------------------------------------------
+
+bool ASample05Actor::TransformPosition(const FSDistanceVector& RHSPosition, FVector& UEVector)
+{
+    // Simple transform.
+    UEVector = USpiceTypes::Conv_SDistanceVectorToVector(RHSPosition);
+
+    UEVector /= DistanceScale;
+
+    return true;
+}
+
+
+// ============================================================================
+//
+//-----------------------------------------------------------------------------
+// Name: 
+// Desc:
+//-----------------------------------------------------------------------------
+
+bool ASample05Actor::ComputeConic(const FSStateVector& StateVector, FSEllipse& OrbitalConic, bool& bIsHyperbolic)
+{
+    FSConicElements KeplerianElements;
+    bool result = GetOrbitalElements(StateVector, KeplerianElements);
+    if (result)
+    {
+        GetConicFromKepler(KeplerianElements, OrbitalConic, bIsHyperbolic);
+    }
+
+    return result;
+}
+
+
+// ============================================================================
+//
+//-----------------------------------------------------------------------------
+// Name: 
+// Desc:
+//-----------------------------------------------------------------------------
+
+void ASample05Actor::RenderDebugOrbit(const FSEllipse& OrbitalConic, bool bIsHyperbolic, const FColor& Color, float Thickness)
+{
+    USpiceOrbits::RenderDebugConic(this, OrbitalConic, bIsHyperbolic, FTransform(FScaleMatrix(1./DistanceScale)), Color, Thickness);
+}
+
+
+// ============================================================================
+//
+//-----------------------------------------------------------------------------
+// Name: 
+// Desc:
+//-----------------------------------------------------------------------------
+
+bool ASample05Actor::EvaluateOrbitalElements(const FSConicElements& KeplerianElements, FSStateVector& StateVector)
+{
+    ES_ResultCode ResultCode;
+    FString ErrorMessage;
+
+    USpice::conics(ResultCode, ErrorMessage, KeplerianElements, SolarSystemState.CurrentTime, StateVector);
+
+    return ResultCode == ES_ResultCode::Success;
+}
+
+
+// ============================================================================
+//
+//-----------------------------------------------------------------------------
+// Name: 
+// Desc:
+//-----------------------------------------------------------------------------
+
+bool ASample05Actor::GetOrbitalElements(const FSStateVector& StateVector, FSConicElements& KeplerianElements)
+{
+    ES_ResultCode ResultCode;
+    FString ErrorMessage;
+
+    // Given a state vector, compute the orbital elements
+    USpice::oscelt(ResultCode, ErrorMessage, StateVector, SolarSystemState.CurrentTime, GM, KeplerianElements);
+
+    return ResultCode == ES_ResultCode::Success;
+}
+
+
+// ============================================================================
+//
+//-----------------------------------------------------------------------------
+// Name: 
+// Desc:
+//-----------------------------------------------------------------------------
+
+bool ASample05Actor::GetConicFromKepler(const FSConicElements& KeplerianElements, FSEllipse& OrbitalConic, bool& bIsHyperbolic)
+{
+    USpiceOrbits::ComputeConic(OrbitalConic, bIsHyperbolic, SolarSystemState.CurrentTime, KeplerianElements, ("J2000"), OriginReferenceFrame.ToString());
+    return true;
+}
+
+//-----------------------------------------------------------------------------
+
+
+
+void ASample05Actor::VeryFastSpeed()
+{
+    NormalSpeed();
+    FasterSpeed();
+    FasterSpeed();
+}
+
+void ASample05Actor::FasterSpeed()
+{
+    SolarSystemState.TimeScale *= 10.;
+}
+
+void ASample05Actor::SlowerSpeed()
+{
+    SolarSystemState.TimeScale *= 0.1;
+}
+
+void ASample05Actor::NormalSpeed()
+{
+    SolarSystemState.TimeScale = 1;
+}
+
+void ASample05Actor::GoToNow()
+{
+    USpice::et_now(SolarSystemState.CurrentTime);
+    NormalSpeed();
+}
+
+void ASample05Actor::Restart()
+{
+    USampleUtilities::InitializeTime(SolarSystemState, false);
+}

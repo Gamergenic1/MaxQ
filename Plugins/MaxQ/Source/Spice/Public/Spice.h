@@ -1748,7 +1748,8 @@ public:
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "EPHEMERIS",
             ShortToolTip = "Evaluate \"two - line\" element data",
-            ToolTip = "Evaluate NORAD two-line element data for earth orbiting spacecraft"
+            ToolTip = "Evaluate NORAD two-line element data for earth orbiting spacecraft",
+            AdvancedDisplay = "IgnoreBadMeanEccentricity"
             ))
     static void evsgp4(
         ES_ResultCode& ResultCode,
@@ -1756,7 +1757,8 @@ public:
         FSStateVector& state,
         const FSEphemerisTime& et,
         const FSTLEGeophysicalConstants& geophs,
-        const FSTwoLineElements& elems
+        const FSTwoLineElements& elems,
+        bool IgnoreBadMeanEccentricity = true
     );
 
     [[deprecated("Use evsgp4()")]]
@@ -4677,26 +4679,6 @@ public:
             ToolTip = "The number of seconds in a day"
             ))
     static void spd(double& secondsPerDay);
-
-    /// <summary>Seconds in a day</summary>
-    /// <returns>Seconds.  Per day.</returns>
-    UFUNCTION(BlueprintPure,
-        Category = "MaxQ|Constants",
-        meta = (
-            Keywords = "CONSTANTS",
-            ShortToolTip = "One Day",
-            ToolTip = "Ephemeris period of one day"
-            ))
-    static void day_period(FSEphemerisPeriod& oneDay);
-
-    UFUNCTION(BlueprintPure,
-        Category = "MaxQ|Constants",
-        meta = (
-            Keywords = "CONSTANTS",
-            ShortToolTip = "Epoch at J2000",
-            ToolTip = "Return the Epoch at Julian Date of 2000 JAN 1.5 (1 Jan 2000, 11:58:55.816 UTC)"
-            ))
-    static void j2000_epoch(FSEphemerisTime& J2000);
 
     UFUNCTION(BlueprintPure,
         Category = "MaxQ|Coordinates",
