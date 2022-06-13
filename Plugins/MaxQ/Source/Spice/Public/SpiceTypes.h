@@ -562,16 +562,28 @@ public:
     inline double AsSpiceDouble() const { return km; }
     inline double AsKilometers() const { return km; }
     inline double AsMeters() const { return AsKilometers() * FSDistance_km_to_M; }
+    inline double AsFeet() const;
+    inline double AsNauticalMiles() const;
+    inline double AsStatuteMiles() const;
+    inline double AsAstronomicalUnits() const;
+    inline double AsLightYears() const;
 
-    [[deprecated("Use FromKm()")]]
-    inline static FSDistance From_Km(double _km)    { return FromKm(_km); }
+    [[deprecated("Use FromKilometers()")]]
+    inline static FSDistance From_Km(double _km)    { return FromKilometers(_km); }
     [[deprecated("Use FromMeters()")]]
     inline static FSDistance From_M(double _m)      { return FromMeters(_m * FSDistance_M_to_km); }
     [[deprecated("Use FromMeters()")]]
     inline static FSDistance From_Meters(double _m) { return FromMeters(_m); }
     
-    inline static FSDistance FromKm(double _km)    { return FSDistance(_km); }
-    inline static FSDistance FromMeters(double _m) { return FromKm(_m * FSDistance_M_to_km); }
+    inline static FSDistance FromMeters(double _m) { return FromKilometers(_m * FSDistance_M_to_km); }
+    [[deprecated("Use FromKilometers()")]]
+    inline static FSDistance FromKm(double _km)    { return FromKilometers(_km); }
+    inline static FSDistance FromKilometers(double _km)    { return FSDistance(_km); }
+    inline static FSDistance FromFeet(double _m);
+    inline static FSDistance FromNauticalMiles(double _m);
+    inline static FSDistance FromStatuteMiles(double _m);
+    inline static FSDistance FromAstronomicalUnits(double _au);
+    inline static FSDistance FromLightYears(double _ly);
 
     FSDistance(const FSDistance& other)
     {
@@ -585,8 +597,15 @@ public:
     }
 
     static const FSDistance Zero;
+    [[deprecated("Use OneMKilometer")]]
     static const FSDistance OneKm;
+    static const FSDistance OneKilometer;
     static const FSDistance OneMeter;
+    static const FSDistance OneFoot;
+    static const FSDistance OneStatuteMile;
+    static const FSDistance OneNauticalMile;
+    static const FSDistance OneAstronomicalUnit;
+    static const FSDistance OneLightYear;
 };
 
 static inline bool operator<(const FSDistance& lhs, const FSDistance& rhs)
@@ -776,6 +795,16 @@ static inline FSDistanceVector operator*(const FSDistanceVector& lhs, double rhs
 static inline FSDistanceVector operator/(const FSDistanceVector& lhs, double rhs)
 {
     return FSDistanceVector(lhs.x / rhs, lhs.y / rhs, lhs.z / rhs);
+}
+
+static inline FSDistanceVector operator*(const FSDimensionlessVector& lhs, const FSDistance& rhs)
+{
+    return FSDistanceVector(lhs.x * rhs.km, lhs.y * rhs.km, lhs.z * rhs.km);
+}
+
+static inline FSDistanceVector operator*(const FSDistance& lhs, const FSDimensionlessVector& rhs)
+{
+    return rhs * lhs;
 }
 
 static inline FSDistanceVector& operator+=(FSDistanceVector& lhs, const FSDistanceVector& rhs) {
@@ -1315,7 +1344,14 @@ struct SPICE_API FSEphemerisPeriod
     }
 
     static const FSEphemerisPeriod Zero;
+    static const FSEphemerisPeriod OneSecond;
+    static const FSEphemerisPeriod OneMinute;
+    static const FSEphemerisPeriod OneHour;
+    [[deprecated("Use OneDay")]]
     static const FSEphemerisPeriod Day;
+    static const FSEphemerisPeriod OneDay;
+    static const FSEphemerisPeriod OneTropicalYear;
+    static const FSEphemerisPeriod OneJulianYear;
 };
 
 static inline FSEphemerisPeriod operator+(const FSEphemerisPeriod& A, const FSEphemerisPeriod& B)
@@ -1551,6 +1587,16 @@ static inline FSVelocityVector operator*(double lhs, const FSVelocityVector& rhs
 static inline FSVelocityVector operator*(const FSVelocityVector& lhs, double rhs)
 {
     return FSVelocityVector(lhs.dx * rhs, lhs.dy * rhs, lhs.dz * rhs);
+}
+
+static inline FSVelocityVector operator*(const FSDimensionlessVector& lhs, const FSSpeed& rhs)
+{
+    return FSVelocityVector(lhs.x * rhs.kmps, lhs.y * rhs.kmps, lhs.z * rhs.kmps);
+}
+
+static inline FSVelocityVector operator*(const FSSpeed& lhs, const FSDimensionlessVector& rhs)
+{
+    return rhs * lhs;
 }
 
 static inline FSDistanceVector operator*(const FSEphemerisPeriod& lhs, const FSVelocityVector& rhs)
@@ -4270,6 +4316,171 @@ public:
     UFUNCTION(BlueprintPure, Category = "MaxQ|Stringifier", meta = (ToolTip = "Right Ascension, Declination to string", CompactNodeTitle = "$"))
     static FString FormatRADec(const FSAngle& rightAscension, const FSAngle& declination, const FString& separator = TEXT(", "));
 
+    UFUNCTION(BlueprintPure, Category = "MaxQ|Stringifier", meta = (ToolTip = "Distance To String", CompactNodeTitle = "$", AdvancedDisplay = "precision"))
+    static FString FormatDistance(const FSDistance& distance, ES_Units Units = ES_Units::KILOMETERS, int precision = 12);
+
+    UFUNCTION(BlueprintPure, Category = "MaxQ|Stringifier", meta = (ToolTip = "Period To String", CompactNodeTitle = "$", AdvancedDisplay = "precision"))
+    static FString FormatPeriod(const FSEphemerisPeriod& period, ES_Units Units = ES_Units::SECONDS, int precision = 12);
+
+    UFUNCTION(BlueprintPure, Category = "MaxQ|Stringifier", meta = (ToolTip = "Speed To String", CompactNodeTitle = "$", AdvancedDisplay = "precision"))
+    static FString FormatSpeed(const FSSpeed& speed, ES_Units NumeratorUnits = ES_Units::KILOMETERS, ES_Units DenominatorUnits = ES_Units::SECONDS, int precision = 12);
+
+    UFUNCTION(BlueprintPure, Category = "MaxQ|Stringifier", meta = (ToolTip = "EphemerisTime To UTC String", CompactNodeTitle = "$", AdvancedDisplay = "precision"))
+    static FString FormatUtcTime(const FSEphemerisTime& time, ES_UTCTimeFormat TimeFormat, int precision = 4);
+
+    /// <summary>Ephemeris period of one second</summary>
+    /// <returns>One Second</returns>
+    UFUNCTION(BlueprintPure,
+        Category = "MaxQ|Constants",
+        meta = (
+            Keywords = "CONSTANTS, TIME",
+            ShortToolTip = "One Second",
+            ToolTip = "Ephemeris period of one second"
+            ))
+    static void second_period(FSEphemerisPeriod& oneDay);
+
+    /// <summary>Ephemeris period of one Minute</summary>
+    /// <returns>One Minute</returns>
+    UFUNCTION(BlueprintPure,
+        Category = "MaxQ|Constants",
+        meta = (
+            Keywords = "CONSTANTS, TIME",
+            ShortToolTip = "One Minute",
+            ToolTip = "Ephemeris period of one Minute"
+            ))
+    static void minute_period(FSEphemerisPeriod& oneMinute);
+    
+    /// <summary>Ephemeris period of one Hour</summary>
+    /// <returns>One Hour</returns>
+    UFUNCTION(BlueprintPure,
+        Category = "MaxQ|Constants",
+        meta = (
+            Keywords = "CONSTANTS, TIME",
+            ShortToolTip = "One Hour",
+            ToolTip = "Ephemeris period of one Hour"
+            ))
+    static void hour_period(FSEphemerisPeriod& oneHour);
+    
+    
+    /// <summary>Ephemeris period of one day</summary>
+    /// <returns>One Day</returns>
+    UFUNCTION(BlueprintPure,
+        Category = "MaxQ|Constants",
+        meta = (
+            Keywords = "CONSTANTS, TIME",
+            ShortToolTip = "One Day",
+            ToolTip = "Ephemeris period of one day"
+            ))
+    static void day_period(FSEphemerisPeriod& oneDay);
+
+    /// <summary>Ephemeris period of one day</summary>
+    /// <returns>One Day</returns>
+    UFUNCTION(BlueprintPure,
+        Category = "MaxQ|Constants",
+        meta = (
+            Keywords = "CONSTANTS, TIME",
+            ShortToolTip = "One Tropical Year",
+            ToolTip = "Ephemeris period of one Tropical Year (time that the Sun takes to return to the same position such as vernal equinox to vernal equinox, value from the 1992 Explanatory Supplement to the Astronomical Almanac)"
+            ))
+    static void TropicalYear_period(FSEphemerisPeriod& oneTropicalYear);
+
+    /// <summary>Ephemeris period of one day</summary>
+    /// <returns>One Day</returns>
+    UFUNCTION(BlueprintPure,
+        Category = "MaxQ|Constants",
+        meta = (
+            Keywords = "CONSTANTS, TIME",
+            ShortToolTip = "One Tropical Year",
+            ToolTip = "Ephemeris period of one Julian Year (average length of the year in the Julian calendar)"
+            ))
+    static void JulianYear_period(FSEphemerisPeriod& oneJulianYear);
+
+    /// <summary>Distance of one Meter</summary>
+    /// <returns>One Meter</returns>
+    UFUNCTION(BlueprintPure,
+        Category = "MaxQ|Constants",
+        meta = (
+            Keywords = "CONSTANTS",
+            ShortToolTip = "One Meter, DISTANCE",
+            ToolTip = "Distance of one Meter"
+            ))
+    static void meter_distance(FSDistance& oneMeter);        
+    
+    /// <summary>Distance of one Kilometer</summary>
+    /// <returns>One Kilometer</returns>
+    UFUNCTION(BlueprintPure,
+        Category = "MaxQ|Constants",
+        meta = (
+            Keywords = "CONSTANTS, DISTANCE",
+            ShortToolTip = "One Kilometer",
+            ToolTip = "Distance of one meter"
+            ))
+    static void kilometer_distance(FSDistance& oneKilometer);
+
+    /// <summary>Distance of one Foot</summary>
+    /// <returns>One Foot</returns>
+    UFUNCTION(BlueprintPure,
+        Category = "MaxQ|Constants",
+        meta = (
+            Keywords = "CONSTANTS, DISTANCE",
+            ShortToolTip = "One Foot",
+            ToolTip = "Distance of one Foot"
+            ))
+    static void foot_distance(FSDistance& oneFoot);
+
+    /// <summary>Distance of Statute Mile</summary>
+    /// <returns>One Statute Mile</returns>
+    UFUNCTION(BlueprintPure,
+        Category = "MaxQ|Constants",
+        meta = (
+            Keywords = "CONSTANTS, DISTANCE",
+            ShortToolTip = "One Statute Mile",
+            ToolTip = "Distance of one Statute Mile"
+            ))
+    static void StatuteMile_distance(FSDistance& statuteMile);
+    
+    /// <summary>Distance of Nautical Mile</summary>
+    /// <returns>One Nautical Mile</returns>
+    UFUNCTION(BlueprintPure,
+        Category = "MaxQ|Constants",
+        meta = (
+            Keywords = "CONSTANTS, DISTANCE",
+            ShortToolTip = "One Nautical Mile",
+            ToolTip = "Distance of one Nautical Mile"
+            ))
+    static void NauticalMile_distance(FSDistance& nauticalMile);
+
+    /// <summary>Distance of one AstronomicalUnit</summary>
+    /// <returns>One AstronomicalUnit</returns>
+    UFUNCTION(BlueprintPure,
+        Category = "MaxQ|Constants",
+        meta = (
+            Keywords = "CONSTANTS, DISTANCE",
+            ShortToolTip = "One AU",
+            ToolTip = "Distance of one Astronomical Unit (AU)"
+            ))
+    static void AstronomicalUnit_distance(FSDistance& oneAu);
+
+    /// <summary>Distance of one Lightyear</summary>
+    /// <returns>One Lightyear</returns>
+    UFUNCTION(BlueprintPure,
+        Category = "MaxQ|Constants",
+        meta = (
+            Keywords = "CONSTANTS, DISTANCE",
+            ShortToolTip = "One LY",
+            ToolTip = "Distance of one Lightyear (LY)"
+            ))
+    static void LightYear_distance(FSDistance& oneLy);
+
+    UFUNCTION(BlueprintPure,
+        Category = "MaxQ|Constants",
+        meta = (
+            Keywords = "CONSTANTS, TIME",
+            ShortToolTip = "Epoch at J2000",
+            ToolTip = "Return the Epoch at Julian Date of 2000 JAN 1.5 (1 Jan 2000, 11:58:55.816 UTC)"
+            ))
+    static void j2000_epoch(FSEphemerisTime& J2000);
+
     UFUNCTION(BlueprintPure,
     Category = "MaxQ|Types",
     meta = (
@@ -4414,7 +4625,7 @@ public:
             CompactNodeTitle = "$",
             ToolTip = "Converts an Epheremis Period to a String"
             ))
-    static FString Conv_SEpheremisPeriodToString(const FSEphemerisPeriod& et);
+    static FString Conv_SEpheremisPeriodToString(const FSEphemerisPeriod& period);
 
     // This is common in Tick(float DeltaTime)
     UFUNCTION(BlueprintPure,
@@ -4789,6 +5000,8 @@ public:
     UFUNCTION(BlueprintPure, Category = "MaxQ|Debug", meta = (BlueprintAutocast, ToolTip = "stringifier", Keywords = "string", CompactNodeTitle = "$"))
     static FString Conv_SConicElementsToString(const FSConicElements& value);
 
+    UFUNCTION(BlueprintPure, Category = "MaxQ|Debug", meta = (BlueprintAutocast, ToolTip = "stringifier", Keywords = "string", CompactNodeTitle = "$"))
+    static FString Conv_SEphemerisPeriodToString(const FSEphemerisPeriod& value);
 
     /* Multiplication (A * B) */
     UFUNCTION(BlueprintPure, meta = (DisplayName = "matrix * matrix", CompactNodeTitle = "*", Keywords = "* multiply"), Category = "MaxQ|Math|Rotation")
@@ -4970,6 +5183,27 @@ public:
     /*  Addition (A + B) */
     UFUNCTION(BlueprintPure, meta = (DisplayName = "velocity + velocity", CompactNodeTitle = "+", Keywords = "+ add plus", CommutativeAssociativeBinaryOperator = "true"), Category = "MaxQ|Math|Velocity")
     static FSVelocityVector Add_SVelocityVectorSVelocityVector(const FSVelocityVector& A, const FSVelocityVector& B);
+
+    /* Multiplication (A * B) */
+    UFUNCTION(BlueprintPure, meta = (DisplayName = "speed * vector", CompactNodeTitle = "*", Keywords = "* multiply"), Category = "MaxQ|Math|Velocity")
+    static FSVelocityVector Multiply_SSpeedSDimensionlessVector(const FSSpeed& A, const FSDimensionlessVector& B);
+
+    /* Multiplication (A * B) */
+    UFUNCTION(BlueprintPure, meta = (DisplayName = "distance * vector", CompactNodeTitle = "*", Keywords = "* multiply"), Category = "MaxQ|Math|Velocity")
+    static FSDistanceVector Multiply_SDistanceSDimensionlessVector(const FSDistance& A, const FSDimensionlessVector& B);
+
+    UFUNCTION(BlueprintPure, meta = (DisplayName = "double * vector", CompactNodeTitle = "*", Keywords = "* multiply"), Category = "MaxQ|Math|Distance")
+    static FSDimensionlessVector Multiply_DoubleSDimensionlessVector(double A, const FSDimensionlessVector& B);
+
+    UFUNCTION(BlueprintPure, meta = (DisplayName = "speed * vector", CompactNodeTitle = "*", Keywords = "* multiply"), Category = "MaxQ|Math|Velocity")
+    static FSVelocityVector SpeedToVelocity(const FSSpeed& A, const FSDimensionlessVector& B);
+
+    UFUNCTION(BlueprintPure, meta = (DisplayName = "speed * vector", CompactNodeTitle = "*", Keywords = "* multiply"), Category = "MaxQ|Math|Velocity")
+    static FSDistanceVector DistanceToVector(const FSDistance& A, const FSDimensionlessVector& B);
+
+    UFUNCTION(BlueprintPure, meta = (DisplayName = "double * vector", CompactNodeTitle = "*", Keywords = "* multiply"), Category = "MaxQ|Math|Distance")
+    static FSDimensionlessVector ScaleDimensionlessVector(double A, const FSDimensionlessVector& B);
+
 
 
     UFUNCTION(BlueprintPure, Category = "MaxQ|Math|Time", meta = (ToolTip = "Creates a simple ephemeris time window"))

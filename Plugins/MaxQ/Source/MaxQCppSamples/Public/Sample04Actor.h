@@ -64,12 +64,15 @@ public:
 
     void InitializeSolarSystem();
     void UpdateSolarSystem(float DeltaTime);
-    bool UpdateSunDirection();
-    bool UpdateBodyPositions();
+
+    // This is what you came for!.
     bool UpdateBodyOrientations();
 
 
-    // Buttons for the Details Panel
+    //-----------------------------------------------------------------------------
+    // Button controls for the Details Panel
+    //-----------------------------------------------------------------------------
+
     UFUNCTION(CallInEditor, Category = "Editor")
     void VeryFastSpeed();
 

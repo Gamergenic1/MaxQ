@@ -101,7 +101,7 @@ void CopyTo(const FSEllipse& src, SpiceEllipse& _ellipse)
 }
 
 
-uint8 ErrorCheck(ES_ResultCode& ResultCode, FString& ErrorMessage)
+uint8 ErrorCheck(ES_ResultCode& ResultCode, FString& ErrorMessage, bool BeQuiet)
 {
     uint8 failed = failed_c();
 
@@ -126,7 +126,10 @@ uint8 ErrorCheck(ES_ResultCode& ResultCode, FString& ErrorMessage)
 
         ErrorMessage = szBuffer;
 
-        UE_LOG(LogSpice, Warning, TEXT("USpice Runtime Error: %s"), *ErrorMessage);
+        if (!BeQuiet)
+        {
+            UE_LOG(LogSpice, Warning, TEXT("USpice Runtime Error: %s"), *ErrorMessage);
+        }
 
         reset_c();
     }

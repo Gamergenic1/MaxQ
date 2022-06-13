@@ -55,7 +55,9 @@
 // (Kepler/Conic orbit data is available as well, of course.)
 
 
-UCLASS()
+class ASample05TelemetryActor;
+
+UCLASS(BlueprintType)
 class MAXQCPPSAMPLES_API ASample05Actor : public AActor
 {
     GENERATED_BODY()
@@ -65,15 +67,101 @@ public:
     UPROPERTY(EditInstanceOnly, Category = "MaxQ|Samples")
     TArray<FString> BasicKernels;
 
+    UPROPERTY(EditInstanceOnly, Category = "MaxQ|Samples")
+    FSamplesSolarSystemState SolarSystemState;
+        
+    UPROPERTY(EditInstanceOnly, Category = "MaxQ|Samples")
+    FString TelemetryObjectId;
+
+    UPROPERTY(EditInstanceOnly, Category = "MaxQ|Samples")
+    TSubclassOf<ASample05TelemetryActor> TelemetryObjectClass;
+
+    UPROPERTY(EditInstanceOnly, Category = "MaxQ|Samples")
+    FName OriginNaifName;
+
+    UPROPERTY(EditInstanceOnly, Category = "MaxQ|Samples")
+    FName OriginReferenceFrame;
+
+    UPROPERTY(EditInstanceOnly, Category = "MaxQ|Samples")
+    FName SunNaifName;
+
+    UPROPERTY(EditInstanceOnly, Category = "MaxQ|Samples")
+    TWeakObjectPtr<AActor> SunDirectionalLight;
+
+    UPROPERTY(EditInstanceOnly, Category = "MaxQ|Samples")
+    double DistanceScale;
+
+    UPROPERTY(EditInstanceOnly, Transient, Category = "MaxQ|Samples")
+    FSTLEGeophysicalConstants EarthConstants;
+
+    UPROPERTY(EditInstanceOnly, Transient, Category = "MaxQ|Samples")
+    FSMassConstant GM;
 
 public:
     ASample05Actor();
 
     void BeginPlay() override;
+    void Tick(float DeltaSeconds) override;
+    void InitAnimation();
 
+
+    // This is what you came for...
     void conics();
     void oscelt();
     void TLEs();
+    void RequestTelemetryByHttp();
+
+private:
+    UFUNCTION()
+    void ProcessTelemetryResponseAsTLE(bool Success, const FString& ObjectId, const FString& Telemetry);
+
+    void AddTelemetryObject(const FString& ObjectId, const FString& ObjectName, const FSTwoLineElements& Elements);
+
+    // This is what you came for...
+    UFUNCTION(BlueprintCallable)
+    bool PropagateTLE(const FSTwoLineElements& TLEs, FSStateVector& StateVector);
+
+    UFUNCTION(BlueprintCallable)
+    bool TransformPosition(const FSDistanceVector& RHSPosition, FVector& UEVector);
+
+    UFUNCTION(BlueprintCallable)
+    bool ComputeConic(const FSStateVector& StateVector, FSEllipse& OrbitalConicc, bool& bIsHyperbolic);
+
+    UFUNCTION(BlueprintCallable)
+    void RenderDebugOrbit(const FSEllipse& OrbitalConicc, bool bIsHyperbolic, const FColor& Color, float Thickness);
+
+    UFUNCTION(BlueprintCallable)
+    bool EvaluateOrbitalElements(const FSConicElements& KeplerianElements, FSStateVector& StateVector);
+
+    UFUNCTION(BlueprintCallable)
+    bool GetOrbitalElements(const FSStateVector& StateVector, FSConicElements& KeplerianElements);
+
+    UFUNCTION(BlueprintCallable)
+    bool GetConicFromKepler(const FSConicElements& KeplerianElements, FSEllipse& OrbitalConicc, bool& bIsHyperbolic);
+
+
+
+
+    //-----------------------------------------------------------------------------
+    // Button controls for the Details Panel
+    //-----------------------------------------------------------------------------
+    UFUNCTION(CallInEditor, Category = "Editor")
+    void VeryFastSpeed();
+
+    UFUNCTION(CallInEditor, Category = "Editor")
+    void FasterSpeed();
+
+    UFUNCTION(CallInEditor, Category = "Editor")
+    void SlowerSpeed();
+
+    UFUNCTION(CallInEditor, Category = "Editor")
+    void NormalSpeed();
+
+    UFUNCTION(CallInEditor, Category = "Editor")
+    void GoToNow();
+
+    UFUNCTION(CallInEditor, Category = "Editor")
+    void Restart();
 };
 
 

@@ -135,7 +135,7 @@ void ASample02Actor::J2000()
     Log(FString::Printf( TEXT("J2000 was: %s"), *EpochString));
 
     // Add a period of one day to et...
-    et += FSEphemerisPeriod::Day;
+    et += FSEphemerisPeriod::OneDay;
     Log(FString::Printf(TEXT("One day after J2000 was: %s"), *USpiceTypes::Conv_SEpheremisTimeToString(et)));
 }
 
@@ -179,11 +179,11 @@ void ASample02Actor::J2020()
 
     // Dividing two FSEphemerisPeriod values gives a double.
     // The period of one day is value FSEphemerisPeriod::Day
-    int days = FMath::FloorToInt64( delta / FSEphemerisPeriod::Day);    
+    int days = FMath::FloorToInt64( delta / FSEphemerisPeriod::OneDay);
     
     // The delta between the actual period, and the period for 'days' should be
     // the number of leap seconds.
-    double LeapSeconds = seconds - days * FSEphemerisPeriod::Day.AsSeconds();
+    double LeapSeconds = seconds - days * FSEphemerisPeriod::OneDay.AsSeconds();
 
     // We should see "5" seconds.
     Log(FString::Printf(TEXT("J2020-J2000 = %.6f seconds (%d days + %.6f seconds)"), seconds, days, LeapSeconds));

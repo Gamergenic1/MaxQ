@@ -24,8 +24,8 @@ ASample04Actor::ASample04Actor()
 
     SolarSystemState.TimeScale = 10000.0;
 
-    BodyScale = 100.0;
-    DistanceScale = 100.0;
+    BodyScale = 50.0;
+    DistanceScale = 200.0;
 
     // This is the coordinate system center relative to SPICE
     // (EMB = "Earth-Moon Barycenter")
@@ -97,49 +97,8 @@ void ASample04Actor::Tick(float DeltaTime)
 
 void ASample04Actor::InitializeSolarSystem()
 {
-    ES_ResultCode ResultCode = ES_ResultCode::Success;
-    FString ErrorMessage = "";
-
     USampleUtilities::InitializeTime(SolarSystemState);
-
-    for (auto BodyPair : SolarSystemState.SolarSystemBodyMap)
-    {
-        FString NaifName = BodyPair.Key.ToString();
-        AActor* Actor = BodyPair.Value.Get();
-
-        if (Actor)
-        {
-            FSDistanceVector Radii;
-            USpice::bodvrd_distance_vector(ResultCode, ErrorMessage, Radii, NaifName, TEXT("RADII"));
-
-            if (ResultCode == ES_ResultCode::Success)
-            {
-                // Get the dimensions of the static mesh at the root...  (ringed planets have multiple meshes)
-                UStaticMeshComponent* SM = Cast<UStaticMeshComponent>(Actor->GetRootComponent());
-
-                if (SM && SM->GetStaticMesh())
-                {
-                    FBoxSphereBounds Bounds = SM->GetStaticMesh()->GetBounds();
-
-                    // ** Swizzle is the correct way to get an FVector from FSDistanceVector etc **
-                    FVector ScenegraphRadii = USpiceTypes::Swizzle(Radii.AsKilometers());
-
-                    // Swizzle does no scaling, so our values are in kilometers
-                    // Normally one scenegraph unit = one centimeter, but let's scale it all down
-                    ScenegraphRadii /= BodyScale;
-
-                    FVector ScenegraphDiameter = 2 * ScenegraphRadii;
-
-                    // Finally, set the actor's scale based on the actual size and the mesh dimensions
-                    Actor->SetActorScale3D(ScenegraphDiameter / Bounds.BoxExtent);
-                }
-                else
-                {
-                    Log(FString::Printf(TEXT("InitializeSolarSystem could not find static mesh for %s"), *NaifName), FColor::Red);
-                }
-            }
-        }
-    }
+    MaxQSamples::InitBodyScales(BodyScale, SolarSystemState);
 }
 
 
@@ -156,8 +115,8 @@ void ASample04Actor::UpdateSolarSystem(float DeltaTime)
     SolarSystemState.CurrentTime += DeltaTime * SolarSystemState.TimeScale;
 
     bool success = true;
-    success &= UpdateSunDirection();
-    success &= UpdateBodyPositions();
+    success &= MaxQSamples::UpdateSunDirection(OriginNaifName, OriginReferenceFrame, SolarSystemState.CurrentTime, SunNaifName, SunDirectionalLight);
+    success &= MaxQSamples::UpdateBodyPositions(OriginNaifName, OriginReferenceFrame, DistanceScale, SolarSystemState);
     success &= UpdateBodyOrientations();
 
     if (!success)
@@ -179,109 +138,6 @@ void ASample04Actor::UpdateSolarSystem(float DeltaTime)
 }
 
 
-
-// ============================================================================
-//
-//-----------------------------------------------------------------------------
-// Name: UpdateSunDirection
-// Desc: Aim the sun's directional light
-//-----------------------------------------------------------------------------
-
-bool ASample04Actor::UpdateSunDirection()
-{
-    FSDistanceVector r;
-    FSEphemerisPeriod lt;
-
-    ES_ResultCode ResultCode;
-    FString ErrorMessage;
-
-    // When do we want it?   (time: now)
-    FSEphemerisTime et = SolarSystemState.CurrentTime;
-
-    // Call SPICE, get the position in rectangular coordinates...
-    USpice::spkpos(ResultCode, ErrorMessage, et, r, lt, SunNaifName.ToString(), OriginNaifName.ToString(), OriginReferenceFrame.ToString());
-
-    bool result = (ResultCode == ES_ResultCode::Success);
-
-    if (result)
-    {
-        // We assume we want to point the sun at the origin...
-        FSDimensionlessVector DirectionToSun;
-        FSDistance DistanceToSun;
-
-        USpice::unorm_distance(r, DirectionToSun, DistanceToSun);
-
-        FVector LightDirection = -USpiceTypes::Conv_SDimensionlessToVector(DirectionToSun);
-
-        AActor* SunActor = SunDirectionalLight.Get();
-
-        if (SunActor)
-        {
-            SunActor->SetActorRotation(LightDirection.Rotation());
-        }
-    }
-
-    return result;
-}
-
-
-// ============================================================================
-//
-//-----------------------------------------------------------------------------
-// Name: UpdateBodyPositions
-// Desc: Position and rotate the Earth and Moon
-//-----------------------------------------------------------------------------
-
-bool ASample04Actor::UpdateBodyPositions()
-{
-    FSDistanceVector r;
-    FSEphemerisPeriod lt;
-
-    ES_ResultCode ResultCode;
-    FString ErrorMessage;
-
-    // When do we want it?   (time: now)
-    FSEphemerisTime et = SolarSystemState.CurrentTime;
-
-    bool result = true;
-    for (auto BodyPair : SolarSystemState.SolarSystemBodyMap)
-    {
-        AActor* Actor = BodyPair.Value.Get();
-
-        if (Actor)
-        {
-            // Targ = NaifName = Map Key
-            FString targ = BodyPair.Key.ToString();
-
-            // Call SPICE, get the position in rectangular coordinates...
-            USpice::spkpos(ResultCode, ErrorMessage, et, r, lt, targ, OriginNaifName.ToString(), OriginReferenceFrame.ToString());
-
-            result &= (ResultCode == ES_ResultCode::Success);
-            
-            if (result)
-            {
-                // IMPORTANT NOTE:
-                // Positional data (vectors, quaternions, should only be exchanged through USpiceTypes::Conf_*
-                // SPICE coordinate systems are Right-Handed, and Unreal Engine is Left-Handed.
-                // The USpiceTypes conversions understand this, and how to convert.
-                FVector BodyLocation = USpiceTypes::Conv_SDistanceVectorToVector(r);
-
-                // Scale and set the body location
-                BodyLocation /= DistanceScale;
-                Actor->SetActorLocation(BodyLocation);
-
-                if (GEngine)
-                {
-                    GEngine->AddOnScreenDebugMessage(-1, 0.f, FColor::White, *FString::Printf(TEXT("%s r=: %s kilometers"), *BodyPair.Key.ToString(), *USpiceTypes::Conv_SDistanceToString(r.Magnitude())));
-                }
-            }
-        }
-    }
-
-    return result;
-}
-
-
 // ============================================================================
 //
 //-----------------------------------------------------------------------------
@@ -291,9 +147,6 @@ bool ASample04Actor::UpdateBodyPositions()
 
 bool ASample04Actor::UpdateBodyOrientations()
 {
-    FSDistanceVector r;
-    FSEphemerisPeriod lt;
-
     ES_ResultCode ResultCode;
     FString ErrorMessage;
 
@@ -341,6 +194,10 @@ bool ASample04Actor::UpdateBodyOrientations()
 
     return result;
 }
+
+
+
+//-----------------------------------------------------------------------------
 
 
 

@@ -39,7 +39,7 @@ ASample01Actor::ASample01Actor()
     RelativePathToGMKernel = TEXT("NonAssetData/naif/kernels/Generic/PCK/gm_de431.tpc");
     RelativePathToPCKKernels.Path = TEXT("NonAssetData/naif/kernels/Generic/PCK");
 
-    KilometersPerScenegraphUnit = 6000;
+    KilometersPerScenegraphUnit = 3000;
 }
 
 
@@ -460,7 +460,7 @@ void ASample01Actor::ScaleAllBodies()
                     // Normally one scenegraph unit = one centimeter, but let's scale it all down
                     ScenegraphRadii /= KilometersPerScenegraphUnit;
 
-                    FVector ScenegraphDiameter = 2 * ScenegraphRadii;
+                    FVector ScenegraphDiameter = ScenegraphRadii;
 
                     // Finally, set the actor's scale based on the actual size and the mesh dimensions
                     Actor->SetActorScale3D(ScenegraphDiameter / Bounds.BoxExtent);

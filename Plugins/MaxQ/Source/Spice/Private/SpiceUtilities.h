@@ -56,6 +56,6 @@ void CopyTo(const FSPlane& src, SpicePlane& _plane);
 void CopyFrom(const SpiceEllipse& _ellipse, FSEllipse& dest);
 void CopyTo(const FSEllipse& src, SpiceEllipse& _ellipse);
 
-uint8 ErrorCheck(ES_ResultCode& ResultCode, FString& ErrorMessage);
+uint8 ErrorCheck(ES_ResultCode& ResultCode, FString& ErrorMessage, bool BeQuiet = false);
 uint8 UnexpectedErrorCheck(bool bReset = true);
 

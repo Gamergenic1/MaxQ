@@ -40,8 +40,14 @@ PRAGMA_POP_PLATFORM_DEFAULT_PACKING
 DEFINE_LOG_CATEGORY(LogSpice);
 
 SPICE_API const FSDistance FSDistance::Zero = FSDistance(0.);
-SPICE_API const FSDistance FSDistance::OneKm = FSDistance::FromKm(1.);
+SPICE_API const FSDistance FSDistance::OneKm = FSDistance::FromKilometers(1.);
+SPICE_API const FSDistance FSDistance::OneKilometer = FSDistance::FromKilometers(1.);
 SPICE_API const FSDistance FSDistance::OneMeter = FSDistance::FromMeters(1.);
+SPICE_API const FSDistance FSDistance::OneFoot = FSDistance::FromFeet(1.);
+SPICE_API const FSDistance FSDistance::OneStatuteMile = FSDistance::FromStatuteMiles(1.);
+SPICE_API const FSDistance FSDistance::OneNauticalMile = FSDistance::FromNauticalMiles(1.);
+SPICE_API const FSDistance FSDistance::OneAstronomicalUnit = FSDistance::FromAstronomicalUnits(1.);
+SPICE_API const FSDistance FSDistance::OneLightYear = FSDistance::FromLightYears(1.);
 SPICE_API const FSSpeed FSSpeed::Zero = FSSpeed();
 SPICE_API const FSSpeed FSSpeed::OneKmps = FSSpeed(1.);
 SPICE_API const FSDistanceVector FSDistanceVector::Zero = FSDistanceVector();
@@ -62,7 +68,13 @@ SPICE_API const FSEulerAngularTransform FSEulerAngularTransform::Identity = FSEu
 SPICE_API const FSComplexScalar FSComplexScalar::Zero = FSComplexScalar();
 SPICE_API const FSEphemerisTime FSEphemerisTime::J2000 = FSEphemerisTime();
 SPICE_API const FSEphemerisPeriod FSEphemerisPeriod::Zero = FSEphemerisPeriod();
+SPICE_API const FSEphemerisPeriod FSEphemerisPeriod::OneSecond = FSEphemerisPeriod(1.);
+SPICE_API const FSEphemerisPeriod FSEphemerisPeriod::OneMinute = FSEphemerisPeriod(60.);
+SPICE_API const FSEphemerisPeriod FSEphemerisPeriod::OneHour = FSEphemerisPeriod(60. * 60.);
 SPICE_API const FSEphemerisPeriod FSEphemerisPeriod::Day = FSEphemerisPeriod((double) spd_c());
+SPICE_API const FSEphemerisPeriod FSEphemerisPeriod::OneDay = FSEphemerisPeriod((double) spd_c());
+SPICE_API const FSEphemerisPeriod FSEphemerisPeriod::OneJulianYear = FSEphemerisPeriod((double) jyear_c() );
+SPICE_API const FSEphemerisPeriod FSEphemerisPeriod::OneTropicalYear = FSEphemerisPeriod((double) tyear_c());
 SPICE_API const FSRotationMatrix FSRotationMatrix::Identity = FSRotationMatrix();
 SPICE_API const FSDimensionlessVector FSDimensionlessVector::Zero = FSDimensionlessVector();
 SPICE_API const FSDimensionlessVector FSDimensionlessVector::X_Axis = FSDimensionlessVector(1., 0., 0.);
@@ -70,6 +82,88 @@ SPICE_API const FSDimensionlessVector FSDimensionlessVector::Y_Axis = FSDimensio
 SPICE_API const FSDimensionlessVector FSDimensionlessVector::Z_Axis = FSDimensionlessVector(0., 0., 1.);
 SPICE_API const FSMassConstant FSMassConstant::Zero = FSMassConstant(0.);
 SPICE_API int USpiceTypes::FloatFormatPrecision = 8;
+
+
+double FSDistance::AsNauticalMiles() const
+{
+    double _nm;
+    convrt_c(km, USpiceTypes::toString(ES_Units::KILOMETERS), USpiceTypes::toString(ES_Units::NAUTICAL_MILES), &_nm);
+    UnexpectedErrorCheck(false);
+    return _nm;
+}
+
+FSDistance FSDistance::FromNauticalMiles(double _nm)
+{
+    double km;
+    convrt_c(_nm, USpiceTypes::toString(ES_Units::NAUTICAL_MILES), USpiceTypes::toString(ES_Units::KILOMETERS), &km);
+    UnexpectedErrorCheck(false);
+    return FSDistance(km);
+}
+
+double FSDistance::AsStatuteMiles() const
+{
+    double _miles;
+    convrt_c(km, USpiceTypes::toString(ES_Units::KILOMETERS), USpiceTypes::toString(ES_Units::STATUTE_MILES), &_miles);
+    UnexpectedErrorCheck(false);
+    return _miles;
+}
+
+FSDistance FSDistance::FromStatuteMiles(double _miles)
+{
+    double km;
+    convrt_c(_miles, USpiceTypes::toString(ES_Units::STATUTE_MILES), USpiceTypes::toString(ES_Units::KILOMETERS), &km);
+    UnexpectedErrorCheck(false);
+    return FSDistance(km);
+}
+
+double FSDistance::AsFeet() const
+{
+    double _feet;
+    convrt_c(km, USpiceTypes::toString(ES_Units::KILOMETERS), USpiceTypes::toString(ES_Units::FEET), &_feet);
+    UnexpectedErrorCheck(false);
+    return _feet;
+}
+
+FSDistance FSDistance::FromFeet(double _feet)
+{
+    double km;
+    convrt_c(_feet, USpiceTypes::toString(ES_Units::FEET), USpiceTypes::toString(ES_Units::KILOMETERS), &km);
+    UnexpectedErrorCheck(false);
+    return FSDistance(km);
+}
+
+double FSDistance::AsAstronomicalUnits() const
+{
+    double _au;
+    convrt_c(km, USpiceTypes::toString(ES_Units::KILOMETERS), USpiceTypes::toString(ES_Units::AU), &_au);
+    UnexpectedErrorCheck(false);
+    return _au;
+}
+
+FSDistance FSDistance::FromAstronomicalUnits(double _au)
+{
+    double km;
+    convrt_c(_au, USpiceTypes::toString(ES_Units::AU), USpiceTypes::toString(ES_Units::KILOMETERS), &km);
+    UnexpectedErrorCheck(false);
+    return FSDistance(km);
+}
+
+double FSDistance::AsLightYears() const
+{
+    double _ly;
+    convrt_c(km, USpiceTypes::toString(ES_Units::KILOMETERS), USpiceTypes::toString(ES_Units::LIGHTYEARS), &_ly);
+    UnexpectedErrorCheck(false);
+    return _ly;
+}
+
+FSDistance FSDistance::FromLightYears(double _ly)
+{
+    double km;
+    convrt_c(_ly, USpiceTypes::toString(ES_Units::LIGHTYEARS), USpiceTypes::toString(ES_Units::KILOMETERS), &km);
+    UnexpectedErrorCheck(false);
+    return FSDistance(km);
+}
+
 
 FSAngle::FSAngle()
 {
@@ -903,6 +997,78 @@ void FSDSKDescr::CopyTo(void* descr) const
 }
 
 
+void USpiceTypes::second_period(FSEphemerisPeriod& oneSecond)
+{
+    oneSecond = FSEphemerisPeriod::OneSecond;
+}
+
+void USpiceTypes::minute_period(FSEphemerisPeriod& oneMinute)
+{
+    oneMinute = FSEphemerisPeriod::OneMinute;
+}
+
+
+void USpiceTypes::hour_period(FSEphemerisPeriod& oneHour)
+{
+    oneHour = FSEphemerisPeriod::OneHour;
+}
+
+void USpiceTypes::day_period(FSEphemerisPeriod& oneDay)
+{
+    oneDay = FSEphemerisPeriod::OneDay;
+}
+
+void USpiceTypes::JulianYear_period(FSEphemerisPeriod& oneJulianYear)
+{
+    oneJulianYear = FSEphemerisPeriod::OneJulianYear;
+}
+
+void USpiceTypes::TropicalYear_period(FSEphemerisPeriod& oneTropicalYear)
+{
+    oneTropicalYear = FSEphemerisPeriod::OneTropicalYear;
+}
+
+void USpiceTypes::j2000_epoch(FSEphemerisTime& J2000)
+{
+    J2000 = FSEphemerisTime::J2000;
+}
+
+void USpiceTypes::meter_distance(FSDistance& oneMeter)
+{
+    oneMeter = FSDistance::OneMeter;
+}
+
+
+void USpiceTypes::kilometer_distance(FSDistance& oneKilometer)
+{
+    oneKilometer = FSDistance::OneKilometer;
+}
+
+void USpiceTypes::foot_distance(FSDistance& oneAu)
+{
+    oneAu = FSDistance::OneFoot;
+}
+
+void USpiceTypes::NauticalMile_distance(FSDistance& oneAu)
+{
+    oneAu = FSDistance::OneNauticalMile;
+}
+
+void USpiceTypes::StatuteMile_distance(FSDistance& oneAu)
+{
+    oneAu = FSDistance::OneStatuteMile;
+}
+
+void USpiceTypes::AstronomicalUnit_distance(FSDistance& oneAu)
+{
+    oneAu = FSDistance::OneAstronomicalUnit;
+}
+
+void USpiceTypes::LightYear_distance(FSDistance& oneLy)
+{
+    oneLy = FSDistance::OneLightYear;
+}
+
 double USpiceTypes::Conv_SDistanceToDouble(const FSDistance& value)
 {
     return value.AsSpiceDouble();
@@ -982,9 +1148,9 @@ FString USpiceTypes::Conv_SEpheremisTimeToString(const FSEphemerisTime& et)
     return FString(sz);
 }
 
-FString USpiceTypes::Conv_SEpheremisPeriodToString(const FSEphemerisPeriod& et)
+FString USpiceTypes::Conv_SEpheremisPeriodToString(const FSEphemerisPeriod& period)
 {
-    return FormatDouble(et.AsSeconds());
+    return FormatPeriod(period);
 }
 
 FSEphemerisPeriod USpiceTypes::Conv_FloatToSEphemerisPeriod(float period)
@@ -1011,6 +1177,11 @@ double USpiceTypes::Conv_SEphemerisPeriodToDouble(
 )
 {
     return value.AsSpiceDouble();
+}
+
+FString USpiceTypes::Conv_SEphemerisPeriodToString(const FSEphemerisPeriod& value)
+{
+    return FormatPeriod(value);
 }
 
 FSEphemerisPeriod USpiceTypes::Conv_DoubleToSEphemerisPeriod(
@@ -1522,6 +1693,36 @@ FSVelocityVector USpiceTypes::Add_SVelocityVectorSVelocityVector(const FSVelocit
     return A + B;
 }
 
+FSVelocityVector USpiceTypes::Multiply_SSpeedSDimensionlessVector(const FSSpeed& A, const FSDimensionlessVector& B)
+{
+    return A * B;
+}
+
+FSDistanceVector USpiceTypes::Multiply_SDistanceSDimensionlessVector(const FSDistance& A, const FSDimensionlessVector& B)
+{
+    return A * B;
+}
+
+FSDimensionlessVector USpiceTypes::Multiply_DoubleSDimensionlessVector(double A, const FSDimensionlessVector& B)
+{
+    return A * B;
+}
+
+FSVelocityVector USpiceTypes::SpeedToVelocity(const FSSpeed& A, const FSDimensionlessVector& B)
+{
+    return A * B;
+}
+
+FSDistanceVector USpiceTypes::DistanceToVector(const FSDistance& A, const FSDimensionlessVector& B)
+{
+    return A * B;
+}
+
+FSDimensionlessVector USpiceTypes::ScaleDimensionlessVector(double A, const FSDimensionlessVector& B)
+{
+    return A * B;
+}
+
 FSAngle USpiceTypes::Multiply_SAngleDouble(const FSAngle& A, double B)
 {
     return A * B;
@@ -1706,7 +1907,7 @@ FString USpiceTypes::Conv_SAngleToString(const FSAngle& value)
 
 FString USpiceTypes::Conv_SDistanceToString(const FSDistance& value)
 {
-    return FormatDouble(value.km);
+    return FormatDistance(value);
 }
 
 FString USpiceTypes::Conv_SDistanceVectorToString(const FSDistanceVector& value)
@@ -1731,7 +1932,7 @@ FString USpiceTypes::Conv_SLonLatToString(const FSLonLat& value)
 
 FString USpiceTypes::Conv_SSpeedToString(const FSSpeed& value)
 {
-    return FormatDouble(value.kmps);
+    return FormatSpeed(value);
 }
 
 FString USpiceTypes::Conv_SAngularRateToString(const FSAngularRate& value)
@@ -2103,4 +2304,60 @@ FString USpiceTypes::FormatRADec(const FSAngle& rightAscension, const FSAngle& d
     ra = normalize0to360(ra);
 
     return formatAngle(ra, ES_AngleFormat::HMS) + separator + formatAngle(dec, ES_AngleFormat::DMS);
+}
+
+FString USpiceTypes::FormatDistance(const FSDistance& distance, ES_Units Units /*= ES_Units::KILOMETERS*/, int precision)
+{
+    double value = distance.AsKilometers();
+
+    if(Units != ES_Units::KILOMETERS)
+    {
+        convrt_c(value, toString(ES_Units::KILOMETERS), toString(Units), &value);
+        UnexpectedErrorCheck(false);
+    }
+
+    return FormatDoublePrecisely(value, precision);
+}
+
+FString USpiceTypes::FormatPeriod(const FSEphemerisPeriod& period, ES_Units Units /*= ES_Units::SECONDS*/, int precision)
+{
+    double value = period.AsSeconds();
+
+    if(Units != ES_Units::SECONDS)
+    {
+        convrt_c(value, toString(ES_Units::SECONDS), toString(Units), &value);
+
+        UnexpectedErrorCheck(false);
+    }
+
+    return FormatDoublePrecisely(value, precision);
+}
+
+FString USpiceTypes::FormatSpeed(const FSSpeed& speed, ES_Units NumeratorUnits /*= ES_Units::KILOMETERS*/, ES_Units DenominatorUnits /*= ES_Units::SECONDS*/, int precision)
+{
+    double value = speed.AsKilometersPerSecond();
+
+    if(NumeratorUnits != ES_Units::KILOMETERS)
+    {
+        convrt_c(value, toString(ES_Units::KILOMETERS), toString(NumeratorUnits), &value);
+        UnexpectedErrorCheck(false);
+    }
+
+    if(DenominatorUnits != ES_Units::SECONDS)
+    {
+        double denominator = 1.;
+        convrt_c(denominator, toString(ES_Units::SECONDS), toString(DenominatorUnits), &denominator);
+        value *= denominator;
+    }
+
+    return FormatDoublePrecisely(value, precision);
+}
+
+FString USpiceTypes::FormatUtcTime(const FSEphemerisTime& time, ES_UTCTimeFormat TimeFormat, int precision)
+{
+    FString Result = TEXT("Time Format Error");
+    ES_ResultCode ResultCode;
+    FString ErrorMessage;
+    USpice::et2utc(ResultCode, ErrorMessage, time, TimeFormat, Result, precision);
+    return Result;
 }

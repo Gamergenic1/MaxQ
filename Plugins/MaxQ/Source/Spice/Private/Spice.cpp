@@ -3213,7 +3213,8 @@ void USpice::evsgp4(
     FSStateVector& state,
     const FSEphemerisTime& et,
     const FSTLEGeophysicalConstants& geophs,
-    const FSTwoLineElements& elems
+    const FSTwoLineElements& elems,
+    bool IgnoreBadMeanEccentricity
 )
 {
     // Copy inputs & default outputs...
@@ -3228,8 +3229,21 @@ void USpice::evsgp4(
     // Bundle up the output
     state = FSStateVector(_state);
 
+    if (IgnoreBadMeanEccentricity && failed_c())
+    {
+        char szBuffer[LONG_MESSAGE_MAX_LENGTH];
+
+        szBuffer[0] = '\0';
+        getmsg_c("SHORT", sizeof(szBuffer), szBuffer);
+
+        FString ShortErrorMessage(szBuffer);
+
+        szBuffer[LONG_MESSAGE_MAX_LENGTH-1] = '\0';
+        IgnoreBadMeanEccentricity &= !SpiceStringCompare(szBuffer, "SPICE(BADMECCENTRICITY)");
+    }
+
     // Error Handling
-    ErrorCheck(ResultCode, ErrorMessage);
+    ErrorCheck(ResultCode, ErrorMessage, IgnoreBadMeanEccentricity);
 }
 
 int USpice::ev2lin(
@@ -9009,15 +9023,6 @@ void USpice::spd(double& value)
     value = double(_value);
 }
 
-void USpice::day_period(FSEphemerisPeriod& oneDay)
-{
-    oneDay = FSEphemerisPeriod::Day;
-}
-
-void USpice::j2000_epoch(FSEphemerisTime& J2000)
-{
-    J2000 = FSEphemerisTime::J2000;
-}
 
 /*
 Exceptions
