@@ -6,6 +6,7 @@
 // GitHub:         https://github.com/Gamergenic1/MaxQ/ 
 
 #include "SpiceTypes.h"
+#include "Containers/StringFwd.h"
 #include "Spice.h"
 #include "SpiceUtilities.h"
 
@@ -84,6 +85,608 @@ SPICE_API const FSMassConstant FSMassConstant::Zero = FSMassConstant(0.);
 SPICE_API int USpiceTypes::FloatFormatPrecision = 8;
 
 
+FString FSDistanceVector::ToString() const
+{
+    return FString::Printf(TEXT("(%s, %s, %s)"), *USpiceTypes::FormatDouble(x.km), *USpiceTypes::FormatDouble(y.km), *USpiceTypes::FormatDouble(z.km));
+}
+
+
+FString FSDistance::ToString() const
+{
+    return USpiceTypes::FormatDistance(*this);
+}
+
+FString FSDistance::ToString(ES_Units Units, int precision /*= 12*/) const
+{
+    return USpiceTypes::FormatDistance(*this, Units, precision);
+}
+
+FString FSDimensionlessVector::ToString() const
+{
+    return FString::Printf(TEXT("(%s, %s, %s)"), *USpiceTypes::FormatDouble(x), *USpiceTypes::FormatDouble(y), *USpiceTypes::FormatDouble(z));
+}
+
+
+FString FSSpeed::ToString() const
+{
+    return USpiceTypes::FormatSpeed(*this);
+}
+
+
+FString FSSpeed::ToString(ES_Units NumeratorUnits, ES_Units DenominatorUnits /*= ES_Units::SECONDS*/, int precision /*= 12*/) const
+{
+    return USpiceTypes::FormatSpeed(*this, NumeratorUnits, DenominatorUnits, precision);
+}
+
+FString FSAngle::ToString() const
+{
+    return USpiceTypes::FormatAngle(*this);
+}
+
+FString FSAngle::ToString(ES_AngleFormat format) const
+{
+    return USpiceTypes::FormatAngle(*this, format);
+}
+
+FString FSAngularRate::ToString() const
+{
+    return USpiceTypes::FormatDouble(AsDegreesPerSecond());
+}
+
+FString FSComplexScalar::ToString() const
+{
+    return FString::Printf(TEXT("(%s + %s i)"), *USpiceTypes::FormatDouble(real), *USpiceTypes::FormatDouble(imaginary));
+}
+
+FString FSEphemerisTime::ToString() const
+{
+    SpiceChar sz[SPICE_MAX_PATH];
+    memset(sz, 0, sizeof(sz));
+
+    et2utc_c(AsSpiceDouble(), "C", 4, SPICE_MAX_PATH, sz);
+
+    SpiceStringConcat(sz, " UTC");
+
+    // Do not reset any error state, the downstream computation will detect the signal if the string failed to convert.
+    UnexpectedErrorCheck(false);
+
+    return FString(sz);
+}
+
+
+FString FSEphemerisTime::ToString(ES_UTCTimeFormat TimeFormat, int precision /*= 4*/) const
+{
+    return USpiceTypes::FormatUtcTime(*this, TimeFormat, precision);
+}
+
+FSEphemerisTime FSEphemerisTime::FromString(const FString& Str)
+{
+    double et = 0.;
+    str2et_c(TCHAR_TO_ANSI(*Str), &et);
+
+    // Do not reset any error state, the downstream computation will detect the signal if the string failed to convert.
+    UnexpectedErrorCheck(false);
+
+    return FSEphemerisTime(et);
+}
+
+FString FSEphemerisPeriod::ToString() const
+{
+    return USpiceTypes::FormatPeriod(*this);
+}
+
+FString FSEphemerisPeriod::ToString(ES_Units Units, int precision /*= 12*/) const
+{
+    return USpiceTypes::FormatPeriod(*this, Units, precision);
+}
+
+FString FSVelocityVector::ToString() const
+{
+    return FString::Printf(TEXT("(%s, %s, %s)"), *USpiceTypes::FormatDouble(dx.kmps), *USpiceTypes::FormatDouble(dy.kmps), *USpiceTypes::FormatDouble(dz.kmps));
+}
+
+FString FSLonLat::ToString() const
+{
+    return USpiceTypes::FormatLonLat(*this);
+}
+
+FString FSLonLat::ToString(const FString& separator, ES_AngleFormat format /*= ES_AngleFormat::DD*/) const
+{
+    return USpiceTypes::FormatLonLat(*this, separator, format);
+}
+
+FString FSEulerAngles::ToString() const
+{
+    return FString::Printf(TEXT("{%s %s %s}(%s * %s * %s)"), *USpiceTypes::ToString(axis3), *USpiceTypes::ToString(axis2), *USpiceTypes::ToString(axis1), *angle3.ToString(), *angle2.ToString(), *angle1.ToString());
+}
+
+FString FSAngularVelocity::ToString() const
+{
+    FSDimensionlessVector dimensionlessVector;
+    AsDimensionlessVector(dimensionlessVector);
+    return dimensionlessVector.ToString();
+}
+
+FString FSEulerAngularState::ToString() const
+{
+    return FString::Printf(TEXT("{%s %s %s}(%s * %s * %s) d/dt(%s * %s * %s)"), *USpiceTypes::ToString(axis3), *USpiceTypes::ToString(axis2), *USpiceTypes::ToString(axis1), *angle3.ToString(), *angle2.ToString(), *angle1.ToString(), *rate3.ToString(), *rate2.ToString(), *rate1.ToString());
+}
+
+FString FSMassConstant::ToString() const
+{
+    return USpiceTypes::FormatDouble(GM);
+}
+
+FString FSDimensionlessStateVector::ToString() const
+{
+    return FString::Printf(TEXT("[(%s, %s, %s); (%s, %s, %s)]"), *USpiceTypes::FormatDouble(r.x), *USpiceTypes::FormatDouble(r.y), *USpiceTypes::FormatDouble(r.z), *USpiceTypes::FormatDouble(dr.x), *USpiceTypes::FormatDouble(dr.y), *USpiceTypes::FormatDouble(dr.z));
+}
+
+FString FSStateVector::ToString() const
+{
+    return FString::Printf(TEXT("[(%s, %s, %s); (%s, %s, %s)]"), *USpiceTypes::FormatDouble(r.x.km), *USpiceTypes::FormatDouble(r.y.km), *USpiceTypes::FormatDouble(r.z.km), *USpiceTypes::FormatDouble(v.dx.kmps), *USpiceTypes::FormatDouble(v.dy.kmps), *USpiceTypes::FormatDouble(v.dz.kmps));
+}
+
+FString FSCylindricalVector::ToString() const
+{
+    return FString::Printf(TEXT("(%s, %s, %s)"), *USpiceTypes::FormatDouble(r.km), *USpiceTypes::FormatDouble(lon.degrees), *USpiceTypes::FormatDouble(z.km));
+}
+
+FString FSCylindricalVectorRates::ToString() const
+{
+    return FString::Printf(TEXT("(%s, %s, %s)"), *USpiceTypes::FormatDouble(dr.kmps), *USpiceTypes::FormatDouble(dlon.AsDegreesPerSecond()), *USpiceTypes::FormatDouble(dz.kmps));
+
+}
+
+FString FSCylindricalStateVector::ToString() const
+{
+    return FString::Printf(TEXT("[(%s, %s, %s); (%s, %s, %s)]"), *USpiceTypes::FormatDouble(r.r.km), *USpiceTypes::FormatDouble(r.lon.degrees), *USpiceTypes::FormatDouble(r.z.km), *USpiceTypes::FormatDouble(dr.dr.kmps), *USpiceTypes::FormatDouble(dr.dlon.AsDegreesPerSecond()), *USpiceTypes::FormatDouble(dr.dz.kmps));
+}
+
+FString FSLatitudinalVector::ToString() const
+{
+    return FString::Printf(TEXT("(%s; %s)"), *USpiceTypes::FormatDouble(r.km), *USpiceTypes::FormatLonLat(lonlat));
+}
+
+FString FSLatitudinalVectorRates::ToString() const
+{
+    return FString::Printf(TEXT("(%s, %s, %s)"), *USpiceTypes::FormatDouble(dr.kmps), *USpiceTypes::FormatDouble(dlon.AsDegreesPerSecond()), *USpiceTypes::FormatDouble(dlat.AsDegreesPerSecond()));
+}
+
+FString FSLatitudinalStateVector::ToString() const
+{
+    return FString::Printf(TEXT("[%s, (%s, %s); (%s, %s, %s)]"), *USpiceTypes::FormatDouble(r.r.km), *USpiceTypes::FormatDouble(r.lonlat.longitude.degrees), *USpiceTypes::FormatDouble(r.lonlat.latitude.degrees), *USpiceTypes::FormatDouble(dr.dr.kmps), *USpiceTypes::FormatDouble(dr.dlon.AsDegreesPerSecond()), *USpiceTypes::FormatDouble(dr.dlat.AsDegreesPerSecond()));
+}
+
+FString FSSphericalVector::ToString() const
+{
+    return FString::Printf(TEXT("(%s; %s, %s)"), *USpiceTypes::FormatDouble(r.km), *USpiceTypes::FormatDouble(colat.degrees), *USpiceTypes::FormatDouble(lon.degrees));
+}
+
+FString FSSphericalVectorRates::ToString() const
+{
+    return FString::Printf(TEXT("(%s, %s, %s)"), *USpiceTypes::FormatDouble(dr.kmps), *USpiceTypes::FormatDouble(dcolat.AsDegreesPerSecond()), *USpiceTypes::FormatDouble(dlon.AsDegreesPerSecond()));
+}
+
+FString FSSphericalStateVector::ToString() const
+{
+    return FString::Printf(TEXT("[(%s, %s, %s); (%s, %s, %s)]"), *USpiceTypes::FormatDouble(r.r.km), *USpiceTypes::FormatDouble(r.colat.degrees), *USpiceTypes::FormatDouble(r.lon.degrees), *USpiceTypes::FormatDouble(dr.dr.kmps), *USpiceTypes::FormatDouble(dr.dcolat.AsDegreesPerSecond()), *USpiceTypes::FormatDouble(dr.dlon.AsDegreesPerSecond()));
+}
+
+FString FSGeodeticVector::ToString() const
+{
+    return FString::Printf(TEXT("(%s; %s)"), *USpiceTypes::FormatLonLat(lonlat), *USpiceTypes::FormatDouble(alt.km));
+}
+
+FString FSGeodeticVectorRates::ToString() const
+{
+    return FString::Printf(TEXT("(%s, %s, %s)"), *USpiceTypes::FormatDouble(dlon.AsDegreesPerSecond()), *USpiceTypes::FormatDouble(dlat.AsDegreesPerSecond()), *USpiceTypes::FormatDouble(dalt.kmps));
+}
+
+FString FSGeodeticStateVector::ToString() const
+{
+    return FString::Printf(TEXT("[(%s), %s; (%s, %s, %s)]"), *USpiceTypes::FormatLonLat(r.lonlat), *USpiceTypes::FormatDouble(r.alt.km), *USpiceTypes::FormatDouble(dr.dlon.AsDegreesPerSecond()), *USpiceTypes::FormatDouble(dr.dlat.AsDegreesPerSecond()), *USpiceTypes::FormatDouble(dr.dalt.kmps));
+}
+
+FString FSPlanetographicVector::ToString() const
+{
+    return FString::Printf(TEXT("(%s; %s)"), *USpiceTypes::FormatLonLat(lonlat), *USpiceTypes::FormatDouble(alt.km));
+
+}
+
+FString FSPlanetographicVectorRates::ToString() const
+{
+    return FString::Printf(TEXT("(%s, %s, %s)"), *USpiceTypes::FormatDouble(dlon.AsDegreesPerSecond()), *USpiceTypes::FormatDouble(dlat.AsDegreesPerSecond()), *USpiceTypes::FormatDouble(dalt.kmps));
+}
+
+FString FSPlanetographicStateVector::ToString() const
+{
+    return FString::Printf(TEXT("[(%s), %s; (%s, %s, %s)]"), *USpiceTypes::FormatLonLat(r.lonlat), *USpiceTypes::FormatDouble(r.alt.km), *USpiceTypes::FormatDouble(dr.dlon.AsDegreesPerSecond()), *USpiceTypes::FormatDouble(dr.dlat.AsDegreesPerSecond()), *USpiceTypes::FormatDouble(dr.dalt.kmps));
+}
+
+FString FSStateTransform::ToString() const
+{
+    static TStringBuilder<1024> sb;
+
+    sb.Reset();
+
+    sb.AppendChar(TCHAR('('));
+    bool AppendSpace = false;    
+    for (auto vec : m)
+    {
+        if (AppendSpace)
+        {
+            sb.Append(TEXT(", "));
+            AppendSpace = true;
+        }
+        sb += vec.ToString();
+    }
+    sb.AppendChar(TCHAR(')'));
+
+    return sb.ToString();
+}
+
+FString FSRotationMatrix::ToString() const
+{
+    ES_ResultCode ResultCode;
+    FString ErrorMessage;
+
+    FSQuaternion q = FSQuaternion::Identity;
+    USpice::m2q(ResultCode, ErrorMessage, *this, q);
+
+    ErrorCheck(ResultCode, ErrorMessage);
+
+    return ResultCode == ES_ResultCode::Success ? q.ToString() : TEXT("BAD ROTATION MATRIX");
+}
+
+FString FSQuaternion::ToString() const
+{
+    FSRotationMatrix m;
+    USpice::q2m(*this, m);
+    ES_ResultCode ResultCode;
+    FString ErrorMessage;
+
+    FSDimensionlessVector RotationAxis;
+    FSAngle RotationAngle;
+    USpice::raxisa(ResultCode, ErrorMessage, m, RotationAxis, RotationAngle);
+
+    if (ResultCode == ES_ResultCode::Success)
+    {
+        return FString::Format(TEXT("{0} deg * [{1}]"), { USpiceTypes::FormatAngle(RotationAngle, ES_AngleFormat::DD), RotationAxis.ToString() });
+    }
+    else
+    {
+        return ErrorMessage;
+    }
+}
+
+FString FSEllipse::ToString() const
+{
+    return FString::Printf( TEXT("(center %s; v_major %s; v_minor %s)"), *center.ToString(), *v_major.ToString(), *v_minor.ToString() );
+}
+
+FString FSPlane::ToString() const
+{
+    return FString::Printf( TEXT("(normal %s; constant %s)"), *normal.ToString(), *constant.ToString() );
+}
+
+FString FSEulerAngularTransform::ToString() const
+{
+    static TStringBuilder<1024> sb;
+
+    sb.Reset();
+
+    sb.AppendChar(TCHAR('('));
+    bool AppendSpace = false;
+    for (auto vec : m)
+    {
+        if (AppendSpace)
+        {
+            sb.Append(TEXT(", "));
+            AppendSpace = true;
+        }
+        sb += vec.ToString();
+    }
+    sb.AppendChar(TCHAR(')'));
+
+    return sb.ToString();
+}
+
+FString FSConicElements::ToString() const
+{
+    return FString::Printf(
+        TEXT("(q %s km; e %s; i %s, node %s, peri %s; M %s Epoch %s; GM %s)"),
+        *USpiceTypes::FormatDouble(PerifocalDistance.km),
+        *USpiceTypes::FormatDouble(Eccentricity),
+        *USpiceTypes::FormatAngle(Inclination),
+        *USpiceTypes::FormatAngle(LongitudeOfAscendingNode),
+        *USpiceTypes::FormatAngle(ArgumentOfPeriapse),
+        *USpiceTypes::FormatAngle(MeanAnomalyAtEpoch),
+        *USpiceTypes::FormatDouble(Epoch.seconds),
+        *USpiceTypes::FormatDouble(GravitationalParameter.GM)
+    );
+}
+
+FString FSEquinoctialElements::ToString() const
+{
+    return FString::Printf(
+        TEXT("(a %s, h %s, k %s, MeanLongitude %s, p %s, q %s, RateOfLongitudeOfPeriapse %s, MeanLongitudeDerivative %s, RateOfLongitudeOfAscendingNode %s)"),
+        *a.ToString(),
+        *USpiceTypes::FormatDouble(h),
+        *USpiceTypes::FormatDouble(k),
+        *MeanLongitude.ToString(),
+        *USpiceTypes::FormatDouble(p),
+        *USpiceTypes::FormatDouble(q),
+        *RateOfLongitudeOfPeriapse.ToString(),
+        *MeanLongitudeDerivative.ToString(),
+        *RateOfLongitudeOfAscendingNode.ToString()
+    );
+}
+
+FString FSEphemerisTimeWindowSegment::ToString() const
+{
+    return FString::Printf(TEXT("(start %s, stop %s)"), *start.ToString(), *stop.ToString());
+}
+
+FString FSWindowSegment::ToString() const
+{
+    return FString::Printf(TEXT("(start %s, stop %s)"), *USpiceTypes::FormatDouble(start), *USpiceTypes::FormatDouble(stop));
+}
+
+FString FSPointingType2Observation::ToString() const
+{
+    return FString::Printf(TEXT("(segment %s, quat %s, avv %s rate %s)"), *segment.ToString(), *quat.ToString(), *avv.ToString(), *USpiceTypes::FormatDouble(rate));
+}
+
+FString FSPointingType1Observation::ToString() const
+{
+    return FString::Printf(TEXT("(sclkdp %s, quat %s, avv %s)"), *USpiceTypes::FormatDouble(sclkdp), *quat.ToString(), *avv.ToString());
+}
+
+FString FSPointingType5Observation::ToString() const
+{
+    static TStringBuilder<1024> sb;
+
+    sb.Reset();
+
+    sb.Appendf(TEXT("(sclkdp=%d "), *USpiceTypes::FormatDouble(sclkdp));
+    sb.Appendf(TEXT("quat=%s "), *quat.ToString());
+    sb.Appendf(TEXT("quatderiv=%s "), *quatderiv.ToString());
+    sb.Appendf(TEXT("avv=%s "), *avv.ToString());
+    sb.Appendf(TEXT("avvderiv=%s)"), *avvderiv.ToString());
+
+    return sb.ToString();
+}
+
+FString FSPKType5Observation::ToString() const
+{
+    return FString::Printf(TEXT("(et %s, state %s)"), *USpiceTypes::FormatDouble(et.AsSeconds()), *state.ToString());
+}
+
+FString FSPKType15Observation::ToString() const
+{
+    static TStringBuilder<1024> sb;
+
+    sb.Reset();
+    sb.Appendf(TEXT("(epoch=%s "), *epoch.ToString());
+    sb.Appendf(TEXT("tp=%s "), *tp.ToString());
+    sb.Appendf(TEXT("pa=%s "), *pa.ToString());
+    sb.Appendf(TEXT("p=%s "), *p.ToString());
+    sb.Appendf(TEXT("ecc=%f "), ecc);
+    sb.Appendf(TEXT("j2flg=%f "), j2flg);
+    sb.Appendf(TEXT("pv=%s "), *pv.ToString());
+    sb.Appendf(TEXT("gm=%s "), *gm.ToString());
+    sb.Appendf(TEXT("j2=%f "), j2);
+    sb.Appendf(TEXT("radius=%s)"), *radius.ToString());
+
+    return sb.ToString();
+}
+
+FString FSTwoLineElements::ToString() const
+{
+    static TStringBuilder<1024> sb;
+
+    sb.Reset();
+
+    sb.AppendChar(TCHAR('('));
+    bool AppendSpace = false;
+
+    for (int i = 0; i < elems.Num(); ++i)
+    {
+
+        if (AppendSpace)
+        {
+            sb.Append(TEXT(", "));
+            AppendSpace = true;
+        }
+        
+        switch (i)
+        {
+        case XNDT2O:
+            sb.Append(TEXT("XNDT2O="));
+            break;
+        case XNDD6O:
+            sb.Append(TEXT("XNDD6O="));
+            break;
+        case BSTAR:
+            sb.Append(TEXT("BSTAR="));
+            break;
+        case XINCL:
+            sb.Append(TEXT("XINCL="));
+            break;
+        case XNODEO:
+            sb.Append(TEXT("XNODEO="));
+            break;
+        case EO:
+            sb.Append(TEXT("EO="));
+            break;
+        case OMEGAO:
+            sb.Append(TEXT("OMEGAO="));
+            break;
+        case XMO:
+            sb.Append(TEXT("XMO="));
+            break;
+        case XNO:
+            sb.Append(TEXT("XNO="));
+            break;
+        case EPOCH:
+            sb.Append(TEXT("EPOCH="));
+            break;
+        }
+
+        sb += USpiceTypes::FormatDouble(elems[i]);
+    }
+
+    sb.AppendChar(TCHAR(')'));
+
+    return sb.ToString();
+}
+
+FString FSTLEGeophysicalConstants::ToString() const
+{
+    static TStringBuilder<1024> sb;
+
+    sb.Reset();
+
+    sb.AppendChar(TCHAR('('));
+    bool AppendSpace = false;
+
+    for (int i = 0; i < geophs.Num(); ++i)
+    {
+        if (AppendSpace)
+        {
+            sb.Append(TEXT(", "));
+            AppendSpace = true;
+        }
+        sb += USpiceTypes::FormatDouble(geophs[i]);
+    }
+
+    sb.AppendChar(TCHAR(')'));
+
+    return sb.ToString();
+}
+
+FString FSLimptPoint::ToString() const
+{
+    return FString::Printf(TEXT("(point %s; epoch %s; tangt %s)"), *point.ToString(), *epoch.ToString(), *tangt.ToString());
+}
+
+FString FSLimptCut::ToString() const
+{
+    static TStringBuilder<1024> sb;
+
+    sb.Reset();
+
+    sb.AppendChar(TCHAR('{'));
+    bool AppendSpace = false;
+
+    for (int i = 0; i < points.Num(); ++i)
+    {
+        if (AppendSpace)
+        {
+            sb.Append(TEXT(", "));
+            AppendSpace = true;
+        }
+        sb += points[i].ToString();
+    }
+
+    sb.AppendChar(TCHAR('}'));
+
+    return sb.ToString();
+}
+
+FString FSTermptPoint::ToString() const
+{
+    return FString::Printf(TEXT("(point %s; epoch %s; trmvc %s)"), *point.ToString(), *epoch.ToString(), *trmvc.ToString());
+}
+
+FString FSTermptCut::ToString() const
+{
+    static TStringBuilder<1024> sb;
+
+    sb.Reset();
+
+    sb.AppendChar(TCHAR('{'));
+    bool AppendSpace = false;
+
+    for (int i = 0; i < points.Num(); ++i)
+    {
+        if (AppendSpace)
+        {
+            sb.Append(TEXT(", "));
+            AppendSpace = true;
+        }
+        sb += points[i].ToString();
+    }
+
+    sb.AppendChar(TCHAR('}'));
+
+    return sb.ToString();
+}
+
+FString FSRay::ToString() const
+{
+    return FString::Printf(TEXT("(point %s, stop %s)"), *direction.ToString(), *direction.ToString());
+}
+
+FString FSDLADescr::ToString() const
+{
+    return FString::Printf(
+        TEXT("(bwdptr %d, fwdptr %d, ibase %d, isize %d, dbase %d, dsize %d, cbase %d, csize %d)"),
+        bwdptr,
+        fwdptr,
+        ibase,
+        isize,
+        dbase,
+        dsize,
+        cbase,
+        csize
+    );
+}
+
+FString FSDSKDescr::ToString() const
+{
+    static TStringBuilder<1024> sb;
+
+    sb.Reset();
+    sb.Appendf(TEXT("{surfce=%d "), surfce);
+    sb.Appendf(TEXT("center=%d "), center);
+    sb.Appendf(TEXT("dclass=%d "), dclass);
+    sb.Appendf(TEXT("dtype=%d "), dtype);
+    sb.Appendf(TEXT("frmcde=%d "), frmcde);
+    sb.Appendf(TEXT("corsys=%d, ("), corsys);
+
+    sb.AppendChar(TCHAR('{'));
+    bool AppendSpace = false;
+
+    for (int i = 0; i < corpar.Num(); ++i)
+    {
+        if (AppendSpace)
+        {
+            sb.Append(TEXT(", "));
+            AppendSpace = true;
+        }
+        sb.Appendf(TEXT("%f"), corpar[i]);
+    }
+
+    sb.Appendf(TEXT("), co1min=%f "), co1min);
+    sb.Appendf(TEXT("co1max=%f "), co1max);
+    sb.Appendf(TEXT("co2min=%f "), co2min);
+    sb.Appendf(TEXT("co2max=%f "), co2max);
+    sb.Appendf(TEXT("co3min=%f "), co3min);
+    sb.Appendf(TEXT("co3max=%f "), co3max);
+    sb.Appendf(TEXT("start=%f "), start);
+    sb.Appendf(TEXT("stop=%f}"), stop);
+
+    return sb.ToString();
+}
+
+FString FSPlateIndices::ToString() const
+{
+    return FString::Printf(TEXT("(%d, %d, %d)"), i0, i1, i2);
+}
+
+
 double FSDistance::AsNauticalMiles() const
 {
     double _nm;
@@ -155,6 +758,7 @@ double FSDistance::AsLightYears() const
     UnexpectedErrorCheck(false);
     return _ly;
 }
+
 
 FSDistance FSDistance::FromLightYears(double _ly)
 {
@@ -233,7 +837,6 @@ double FSDimensionlessVector::Magnitude() const
     return vnorm_c(xyz);
 }
 
-
 FSDistance FSDistanceVector::Magnitude() const
 {
     SpiceDouble xyz[3];
@@ -286,7 +889,6 @@ FSAngularRate FSAngularVelocity::Magnitude() const
     CopyTo(xyz);
     return FSAngularRate(vnorm_c(xyz));
 }
-
 
 
 /*
@@ -578,6 +1180,25 @@ FString USpiceTypes::toFString(ES_GeometricModel model, const TArray<FString>& s
     }
 
     return result;
+}
+
+FString USpiceTypes::ToString(ES_Axis Axis)
+{
+    TCHAR* sz = TEXT("No_Axis");
+    switch (Axis)
+    {
+        case ES_Axis::X:
+            sz = TEXT("X_Axis");
+            break;
+        case ES_Axis::Y:
+            sz = TEXT("Y_Axis Axis");
+            break;
+        case ES_Axis::Z:
+            sz = TEXT("Z_Axis Axis");
+            break;
+    }
+
+    return FString(sz);
 }
 
 const char* USpiceTypes::toString(ES_SubpointComputationMethod method)
@@ -997,76 +1618,14 @@ void FSDSKDescr::CopyTo(void* descr) const
 }
 
 
-void USpiceTypes::second_period(FSEphemerisPeriod& oneSecond)
-{
-    oneSecond = FSEphemerisPeriod::OneSecond;
-}
-
-void USpiceTypes::minute_period(FSEphemerisPeriod& oneMinute)
-{
-    oneMinute = FSEphemerisPeriod::OneMinute;
-}
-
-
-void USpiceTypes::hour_period(FSEphemerisPeriod& oneHour)
-{
-    oneHour = FSEphemerisPeriod::OneHour;
-}
 
 void USpiceTypes::day_period(FSEphemerisPeriod& oneDay)
 {
     oneDay = FSEphemerisPeriod::OneDay;
 }
-
-void USpiceTypes::JulianYear_period(FSEphemerisPeriod& oneJulianYear)
-{
-    oneJulianYear = FSEphemerisPeriod::OneJulianYear;
-}
-
-void USpiceTypes::TropicalYear_period(FSEphemerisPeriod& oneTropicalYear)
-{
-    oneTropicalYear = FSEphemerisPeriod::OneTropicalYear;
-}
-
 void USpiceTypes::j2000_epoch(FSEphemerisTime& J2000)
 {
     J2000 = FSEphemerisTime::J2000;
-}
-
-void USpiceTypes::meter_distance(FSDistance& oneMeter)
-{
-    oneMeter = FSDistance::OneMeter;
-}
-
-
-void USpiceTypes::kilometer_distance(FSDistance& oneKilometer)
-{
-    oneKilometer = FSDistance::OneKilometer;
-}
-
-void USpiceTypes::foot_distance(FSDistance& oneAu)
-{
-    oneAu = FSDistance::OneFoot;
-}
-
-void USpiceTypes::NauticalMile_distance(FSDistance& oneAu)
-{
-    oneAu = FSDistance::OneNauticalMile;
-}
-
-void USpiceTypes::StatuteMile_distance(FSDistance& oneAu)
-{
-    oneAu = FSDistance::OneStatuteMile;
-}
-
-void USpiceTypes::AstronomicalUnit_distance(FSDistance& oneAu)
-{
-    oneAu = FSDistance::OneAstronomicalUnit;
-}
-
-void USpiceTypes::LightYear_distance(FSDistance& oneLy)
-{
-    oneLy = FSDistance::OneLightYear;
 }
 
 double USpiceTypes::Conv_SDistanceToDouble(const FSDistance& value)
@@ -1121,36 +1680,15 @@ FSAngularRate USpiceTypes::Conv_DoubleToSAngularRate(
     return FSAngularRate(value);
 }
 
-FSEphemerisTime USpiceTypes::Conv_StringToSEpheremisTime(const FString& time)
+FSEphemerisTime USpiceTypes::Conv_StringToSEphemerisTime(const FString& time)
 {
-    double et = 0.;
-    str2et_c(TCHAR_TO_ANSI(*time), &et);
-
-    // Do not reset any error state, the downstream computation will detect the signal if the string failed to convert.
-    UnexpectedErrorCheck(false);
-
-    return FSEphemerisTime(et);
+    return FSEphemerisTime::FromString(time);
 }
 
 
-FString USpiceTypes::Conv_SEpheremisTimeToString(const FSEphemerisTime& et)
+FString USpiceTypes::Conv_SEphemerisTimeToString(const FSEphemerisTime& et)
 {
-    SpiceChar sz[SPICE_MAX_PATH];
-    memset(sz, 0, sizeof(sz));
-
-    et2utc_c(et.AsSpiceDouble(), "C", 4, SPICE_MAX_PATH, sz);
-
-    SpiceStringConcat(sz, " UTC");
-
-    // Do not reset any error state, the downstream computation will detect the signal if the string failed to convert.
-    UnexpectedErrorCheck(false);
-
-    return FString(sz);
-}
-
-FString USpiceTypes::Conv_SEpheremisPeriodToString(const FSEphemerisPeriod& period)
-{
-    return FormatPeriod(period);
+    return et.ToString();
 }
 
 FSEphemerisPeriod USpiceTypes::Conv_FloatToSEphemerisPeriod(float period)
@@ -1181,7 +1719,7 @@ double USpiceTypes::Conv_SEphemerisPeriodToDouble(
 
 FString USpiceTypes::Conv_SEphemerisPeriodToString(const FSEphemerisPeriod& value)
 {
-    return FormatPeriod(value);
+    return value.ToString();
 }
 
 FSEphemerisPeriod USpiceTypes::Conv_DoubleToSEphemerisPeriod(
@@ -1290,6 +1828,7 @@ FSQuaternion USpiceTypes::Conv_SRotationMatrixToSQuaternion(const FSRotationMatr
     
     return ResultCode == ES_ResultCode::Success ? result : FSQuaternion::Identity;
 }
+
 
 FSStateVector USpiceTypes::Conv_SDimensionlessStateVectorToSStateVector(
     const FSDimensionlessStateVector& value
@@ -1811,30 +2350,12 @@ FVector USpiceTypes::Conv_SAngularVelocityToVector(
 
 FString USpiceTypes::Conv_SAngularVelocityToString(const FSAngularVelocity& value)
 {
-    FSDimensionlessVector dimensionlessVector;
-    value.AsDimensionlessVector(dimensionlessVector);
-    return Conv_SDimensionlessVectorToString(dimensionlessVector);
+    return value.ToString();
 }
 
 FString USpiceTypes::Conv_SQuaternionToString(const FSQuaternion& value)
 {
-    FSRotationMatrix m;
-    USpice::q2m(value, m);
-    ES_ResultCode ResultCode;
-    FString ErrorMessage;
-    
-    FSDimensionlessVector RotationAxis;
-    FSAngle RotationAngle;
-    USpice::raxisa(ResultCode, ErrorMessage, m, RotationAxis, RotationAngle);
-
-    if (ResultCode == ES_ResultCode::Success)
-    {
-        return FString::Format(TEXT("{0} deg * [{1}]"), { FormatAngle(RotationAngle, ES_AngleFormat::DD), Conv_SDimensionlessVectorToString(RotationAxis) });
-    }
-    else
-    {
-        return ErrorMessage;
-    }
+    return value.ToString();
 }
 
 FSDistanceVector USpiceTypes::Conv_VectorToSDistanceVector(
@@ -1899,150 +2420,289 @@ FString USpiceTypes::Conv_S_UnitsToString(ES_Units units)
     return FString(toString(units));
 }
 
-
 FString USpiceTypes::Conv_SAngleToString(const FSAngle& value)
 {
-    return FormatAngle(value);
+    return value.ToString();
 }
 
 FString USpiceTypes::Conv_SDistanceToString(const FSDistance& value)
 {
-    return FormatDistance(value);
+    return value.ToString();
 }
 
 FString USpiceTypes::Conv_SDistanceVectorToString(const FSDistanceVector& value)
 {
-    return FString::Printf(TEXT("(%s, %s, %s)"), *FormatDouble(value.x.km), *FormatDouble(value.y.km), *FormatDouble(value.z.km));
+    return value.ToString();
 }
 
 FString USpiceTypes::Conv_SVelocityVectorToString(const FSVelocityVector& value)
 {
-    return FString::Printf(TEXT("(%s, %s, %s)"), *FormatDouble(value.dx.kmps), *FormatDouble(value.dy.kmps), *FormatDouble(value.dz.kmps));
+    return value.ToString();
 }
 
 FString USpiceTypes::Conv_SStateVectorToString(const FSStateVector& value)
 {
-    return FString::Printf(TEXT("[(%s, %s, %s); (%s, %s, %s)]"), *FormatDouble(value.r.x.km), *FormatDouble(value.r.y.km), *FormatDouble(value.r.z.km), *FormatDouble(value.v.dx.kmps), *FormatDouble(value.v.dy.kmps), *FormatDouble(value.v.dz.kmps));
+    return value.ToString();
 }
 
 FString USpiceTypes::Conv_SLonLatToString(const FSLonLat& value)
 {
-    return FormatLonLat(value);
+    return value.ToString();
 }
 
 FString USpiceTypes::Conv_SSpeedToString(const FSSpeed& value)
 {
-    return FormatSpeed(value);
+    return value.ToString();
 }
 
 FString USpiceTypes::Conv_SAngularRateToString(const FSAngularRate& value)
 {
-    return FormatDouble(value.AsDegreesPerSecond());
+    return value.ToString();
 }
 
 FString USpiceTypes::Conv_SDimensionlessVectorToString(const FSDimensionlessVector& value)
 {
-    return FString::Printf(TEXT("(%s, %s, %s)"), *FormatDouble(value.x), *FormatDouble(value.y), *FormatDouble(value.z));
+    return value.ToString();
 }
 
 FString USpiceTypes::Conv_SDimensionlessStateVectorToString(const FSDimensionlessStateVector& value)
 {
-    return FString::Printf(TEXT("[(%s, %s, %s); (%s, %s, %s)]"), *FormatDouble(value.r.x), *FormatDouble(value.r.y), *FormatDouble(value.r.z), *FormatDouble(value.dr.x), *FormatDouble(value.dr.y), *FormatDouble(value.dr.z));
+    return value.ToString();
 }
 
 FString USpiceTypes::Conv_SPlanetographicStateVectorToString(const FSPlanetographicStateVector& value)
 {
-    return FString::Printf(TEXT("[(%s), %s; (%s, %s, %s)]"), *FormatLonLat(value.r.lonlat), *FormatDouble(value.r.alt.km), *FormatDouble(value.dr.dlon.AsDegreesPerSecond()), *FormatDouble(value.dr.dlat.AsDegreesPerSecond()), *FormatDouble(value.dr.dalt.kmps));
+    return value.ToString();
 }
 
 FString USpiceTypes::Conv_SGeodeticStateVectorToString(const FSGeodeticStateVector& value)
 {
-    return FString::Printf(TEXT("[(%s), %s; (%s, %s, %s)]"), *FormatLonLat(value.r.lonlat), *FormatDouble(value.r.alt.km), *FormatDouble(value.dr.dlon.AsDegreesPerSecond()), *FormatDouble(value.dr.dlat.AsDegreesPerSecond()), *FormatDouble(value.dr.dalt.kmps));
+    return value.ToString();
 }
 
 FString USpiceTypes::Conv_SSphericalStateVectorToString(const FSSphericalStateVector& value)
 {
-    return FString::Printf(TEXT("[(%s, %s, %s); (%s, %s, %s)]"), *FormatDouble(value.r.r.km), *FormatDouble(value.r.colat.degrees), *FormatDouble(value.r.lon.degrees), *FormatDouble(value.dr.dr.kmps), *FormatDouble(value.dr.dcolat.AsDegreesPerSecond()), *FormatDouble(value.dr.dlon.AsDegreesPerSecond()));
+    return value.ToString();
 }
 
 FString USpiceTypes::Conv_SLatitudinalStateVectorToString(const FSLatitudinalStateVector& value)
 {
-    return FString::Printf(TEXT("[%s, (%s, %s); (%s, %s, %s)]"), *FormatDouble(value.r.r.km), *FormatDouble(value.r.lonlat.longitude.degrees), *FormatDouble(value.r.lonlat.latitude.degrees), *FormatDouble(value.dr.dr.kmps), *FormatDouble(value.dr.dlon.AsDegreesPerSecond()), *FormatDouble(value.dr.dlat.AsDegreesPerSecond()));
+    return value.ToString();
 }
 
 FString USpiceTypes::Conv_SCylindricalStateVectorToString(const FSCylindricalStateVector& value)
 {
-    return FString::Printf(TEXT("[(%s, %s, %s); (%s, %s, %s)]"), *FormatDouble(value.r.r.km), *FormatDouble(value.r.lon.degrees), *FormatDouble(value.r.z.km), *FormatDouble(value.dr.dr.kmps), *FormatDouble(value.dr.dlon.AsDegreesPerSecond()), *FormatDouble(value.dr.dz.kmps));
+    return value.ToString();
 }
 
 FString USpiceTypes::Conv_SPlanetographicVectorToString(const FSPlanetographicVector& value)
 {
-    return FString::Printf(TEXT("(%s; %s)"), *FormatLonLat(value.lonlat), *FormatDouble(value.alt.km));
+    return value.ToString();
 }
 
 FString USpiceTypes::Conv_SGeodeticVectorToString(const FSGeodeticVector& value)
 {
-    return FString::Printf(TEXT("(%s; %s)"), *FormatLonLat(value.lonlat), *FormatDouble(value.alt.km));
+    return value.ToString();
 }
 
 FString USpiceTypes::Conv_SSphericalVectorToString(const FSSphericalVector& value)
 {
-    return FString::Printf(TEXT("(%s; %s, %s)"), *FormatDouble(value.r.km), *FormatDouble(value.colat.degrees), *FormatDouble(value.lon.degrees));
+    return value.ToString();
 }
 
 FString USpiceTypes::Conv_SLatitudinalVectorToString(const FSLatitudinalVector& value)
 {
-    return FString::Printf(TEXT("(%s; %s)"), *FormatDouble(value.r.km), *FormatLonLat(value.lonlat));
+    return value.ToString();
 }
 
 FString USpiceTypes::Conv_SCylindricalVectorToString(const FSCylindricalVector& value)
 {
-    return FString::Printf(TEXT("(%s, %s, %s)"), *FormatDouble(value.r.km), *FormatDouble(value.lon.degrees), *FormatDouble(value.z.km));
+    return value.ToString();
 }
 
 FString USpiceTypes::Conv_SPlanetographicVectorRatesToString(const FSPlanetographicVectorRates& value)
 {
-    return FString::Printf(TEXT("(%s, %s, %s)"), *FormatDouble(value.dlon.AsDegreesPerSecond()), *FormatDouble(value.dlat.AsDegreesPerSecond()), *FormatDouble(value.dalt.kmps));
+    return value.ToString();
 }
 
 FString USpiceTypes::Conv_SGeodeticVectorRatesToString(const FSGeodeticVectorRates& value)
 {
-    return FString::Printf(TEXT("(%s, %s, %s)"), *FormatDouble(value.dlon.AsDegreesPerSecond()), *FormatDouble(value.dlat.AsDegreesPerSecond()), *FormatDouble(value.dalt.kmps));
+    return value.ToString();
 }
 
 FString USpiceTypes::Conv_SSphericalVectorRatesToString(const FSSphericalVectorRates& value)
 {
-    return FString::Printf(TEXT("(%s, %s, %s)"), *FormatDouble(value.dr.kmps), *FormatDouble(value.dcolat.AsDegreesPerSecond()), *FormatDouble(value.dlon.AsDegreesPerSecond()));
+    return value.ToString();
 }
 
 FString USpiceTypes::Conv_SLatitudinaVectorRatesToString(const FSLatitudinalVectorRates& value)
 {
-    return FString::Printf(TEXT("(%s, %s, %s)"), *FormatDouble(value.dr.kmps), *FormatDouble(value.dlon.AsDegreesPerSecond()), *FormatDouble(value.dlat.AsDegreesPerSecond()));
+    return value.ToString();
 }
 
 FString USpiceTypes::Conv_SCylindricalVectorRatesToString(const FSCylindricalVectorRates& value)
 {
-    return FString::Printf(TEXT("(%s, %s, %s)"), *FormatDouble(value.dr.kmps), *FormatDouble(value.dlon.AsDegreesPerSecond()), *FormatDouble(value.dz.kmps));
+    return value.ToString();
 }
 
 FString USpiceTypes::Conv_SConicElementsToString(const FSConicElements& value)
 {
-    return FString::Printf(
-        TEXT("(q %s km; e %s; i %s, node %s, peri %s; M %s Epoch %s; GM %s)"),
-        *FormatDouble(value.PerifocalDistance.km),
-        *FormatDouble(value.Eccentricity),
-        *FormatAngle(value.Inclination),
-        *FormatAngle(value.LongitudeOfAscendingNode),
-        *FormatAngle(value.ArgumentOfPeriapse),
-        *FormatAngle(value.MeanAnomalyAtEpoch),
-        *Conv_SEpheremisTimeToString(value.Epoch.seconds),
-        *FormatDouble(value.GravitationalParameter.GM)
-        );
+    return value.ToString();
 }
+
+FString USpiceTypes::Conv_SComplexScalarToString(const FSComplexScalar& value)
+{
+    return value.ToString();
+}
+
+
+FString USpiceTypes::Conv_SEulerAnglesToString(const FSEulerAngles& value)
+{
+    return value.ToString();
+}
+
+
+FString USpiceTypes::Conv_SEulerAngularStateToString(const FSEulerAngularState& value)
+{
+    return value.ToString();
+}
+
+
+FString USpiceTypes::Conv_SStateTransformToString(const FSStateTransform& value)
+{
+    return value.ToString();
+}
+
+
+FString USpiceTypes::Conv_SRotationMatrixToString(const FSRotationMatrix& value)
+{
+    return value.ToString();
+}
+
+
+FString USpiceTypes::Conv_SEllipseToString(const FSEllipse& value)
+{
+    return value.ToString();
+}
+
+
+FString USpiceTypes::Conv_SPlaneToString(const FSPlane& value)
+{
+    return value.ToString();
+}
+
+
+FString USpiceTypes::Conv_SEulerAngularTransformToString(const FSEulerAngularTransform& value)
+{
+    return value.ToString();
+}
+
+
+FString USpiceTypes::Conv_SWindowSegmentToString(const FSEquinoctialElements& value)
+{
+    return value.ToString();
+}
+
+
+FString USpiceTypes::Conv_SWindowSegmentToString(const FSWindowSegment& value)
+{
+    return value.ToString();
+}
+
+
+FString USpiceTypes::Conv_SPointingType2ObservationToString(const FSPointingType2Observation& value)
+{
+    return value.ToString();
+}
+
+
+FString USpiceTypes::Conv_SPointingType1ObservationToString(const FSPointingType1Observation& value)
+{
+    return value.ToString();
+}
+
+
+FString USpiceTypes::Conv_SPointingType5ObservationToString(const FSPointingType5Observation& value)
+{
+    return value.ToString();
+}
+
+
+FString USpiceTypes::Conv_SPKType5ObservationToString(const FSPKType5Observation& value)
+{
+    return value.ToString();
+}
+
+
+FString USpiceTypes::Conv_STermptPointToString(const FSTermptPoint& value)
+{
+    return value.ToString();
+}
+
+
+FString USpiceTypes::Conv_STermptCutToString(const FSTermptCut& value)
+{
+    return value.ToString();
+}
+
+
+FString USpiceTypes::Conv_STLEGeophysicalConstantsToString(const FSTLEGeophysicalConstants& value)
+{
+    return value.ToString();
+}
+
+
+FString USpiceTypes::Conv_SLimptPointToString(const FSLimptPoint& value)
+{
+    return value.ToString();
+}
+
+
+FString USpiceTypes::Conv_SLimptCutToString(const FSLimptCut& value)
+{
+    return value.ToString();
+}
+
+
+FString USpiceTypes::Conv_SPKType15ObservationToString(const FSPKType15Observation& value)
+{
+    return value.ToString();
+}
+
+
+FString USpiceTypes::Conv_STwoLineElementsToString(const FSTwoLineElements& value)
+{
+    return value.ToString();
+}
+
+
+FString USpiceTypes::Conv_SRayToString(const FSRay& value)
+{
+    return value.ToString();
+}
+
+
+FString USpiceTypes::Conv_SDLADescrToString(const FSDLADescr& value)
+{
+    return value.ToString();
+}
+
+
+FString USpiceTypes::Conv_SDSKDescrToString(const FSDSKDescr& value)
+{
+    return value.ToString();
+}
+
+
+FString USpiceTypes::Conv_SPlateIndicesToString(const FSPlateIndices& value)
+{
+    return value.ToString();
+}
+
 
 FString USpiceTypes::Conv_SMassConstantToString(const FSMassConstant& value)
 {
-    return FormatDouble(value.GM);
+    return value.ToString();
 }
 
 
@@ -2073,7 +2733,7 @@ FString USpiceTypes::FormatDoublePrecisely(double value, int precision)
 }
 
 
-FString USpiceTypes::formatAngle(const double degrees, ES_AngleFormat format)
+FString USpiceTypes::formatAngle(double degrees, ES_AngleFormat format)
 {
     // UE displays degrees incorrectly
     bool useDegreeSymbol = false;
@@ -2361,3 +3021,205 @@ FString USpiceTypes::FormatUtcTime(const FSEphemerisTime& time, ES_UTCTimeFormat
     USpice::et2utc(ResultCode, ErrorMessage, time, TimeFormat, Result, precision);
     return Result;
 }
+
+
+FSDistance USpiceTypes::SDistance_Zero()
+{
+    return FSDistance::Zero;
+}
+
+FSDistance USpiceTypes::SDistance_OneKilometer()
+{
+    return FSDistance::OneKilometer;
+}
+
+FSDistance USpiceTypes::SDistance_OneMeter()
+{
+    return FSDistance::OneMeter;
+}
+
+FSDistance USpiceTypes::SDistance_OneFoot()
+{
+    return FSDistance::OneFoot;
+}
+
+FSDistance USpiceTypes::SDistance_OneStatuteMile()
+{
+    return FSDistance::OneStatuteMile;
+}
+
+FSDistance USpiceTypes::SDistance_OneNauticalMile()
+{
+    return FSDistance::OneNauticalMile;
+}
+
+FSDistance USpiceTypes::SDistance_OneAstronomicalUnit()
+{
+    return FSDistance::OneAstronomicalUnit;
+}
+
+FSDistance USpiceTypes::SDistance_OneLightYear()
+{
+    return FSDistance::OneLightYear;
+}
+
+FSSpeed USpiceTypes::SSpeed_Zero()
+{
+    return FSSpeed::Zero;
+}
+
+FSSpeed USpiceTypes::SSpeed_OneKilomenterPerSecond()
+{
+    return FSSpeed::OneKmps;
+}
+
+FSDistanceVector USpiceTypes::SDistanceVector_Zero()
+{
+    return FSDistanceVector::Zero;
+}
+
+FSVelocityVector USpiceTypes::SVelocityVector_Zero()
+{
+    return FSVelocityVector::Zero;
+}
+
+FSStateTransform USpiceTypes::SStateTransform_Identity()
+{
+    return FSStateTransform::Identity;
+}
+
+double USpiceTypes::SAngle_pi()
+{
+    return FSAngle::pi;
+}
+
+double USpiceTypes::SAngle_halfpi()
+{
+    return FSAngle::halfpi;
+}
+
+double USpiceTypes::SAngle_twopi()
+{
+    return FSAngle::twopi;
+}
+
+double USpiceTypes::SAngle_dpr()
+{
+    return FSAngle::dpr;
+}
+
+FSAngle USpiceTypes::SAngle__0()
+{
+    return FSAngle::_0;
+}
+
+FSAngle USpiceTypes::SAngle__360()
+{
+    return FSAngle::_360;
+}
+
+FSEulerAngles USpiceTypes::SEulerAngles_Zero()
+{
+    return FSEulerAngles::Zero;
+}
+
+FSQuaternion USpiceTypes::SQuaternion_Identity()
+{
+    return FSQuaternion::Identity;
+}
+
+FSAngularRate USpiceTypes::SAngularRate_Zero()
+{
+    return FSAngularRate::Zero;
+}
+
+FSAngularVelocity USpiceTypes::SAngularVelocity_Zero()
+{
+    return FSAngularVelocity::Zero;
+}
+
+FSEulerAngularState USpiceTypes::SEulerAngularState_Zero()
+{
+    return FSEulerAngularState::Zero;
+}
+
+FSEulerAngularTransform USpiceTypes::SEulerAngularTransform_Identity()
+{
+    return FSEulerAngularTransform::Identity;
+}
+
+FSComplexScalar USpiceTypes::SComplexScalar_Zero()
+{
+    return FSComplexScalar::Zero;
+}
+
+FSEphemerisTime USpiceTypes::SEphemerisTime_J2000()
+{
+    return FSEphemerisTime::J2000;
+}
+
+FSEphemerisPeriod USpiceTypes::SEphemerisPeriod_Zero()
+{
+    return FSEphemerisPeriod::Zero;
+}
+
+FSEphemerisPeriod USpiceTypes::SEphemerisPeriod_OneSecond()
+{
+    return FSEphemerisPeriod::OneSecond;
+}
+
+FSEphemerisPeriod USpiceTypes::SEphemerisPeriod_OneMinute()
+{
+    return FSEphemerisPeriod::OneMinute;
+}
+
+FSEphemerisPeriod USpiceTypes::SEphemerisPeriod_OneHour()
+{
+    return FSEphemerisPeriod::OneHour;
+}
+
+FSEphemerisPeriod USpiceTypes::SEphemerisPeriod_OneDay()
+{
+    return FSEphemerisPeriod::OneDay;
+}
+
+FSEphemerisPeriod USpiceTypes::SEphemerisPeriod_OneJulianYear()
+{
+    return FSEphemerisPeriod::OneJulianYear;
+}
+
+FSEphemerisPeriod USpiceTypes::SEphemerisPeriod_OneTropicalYear()
+{
+    return FSEphemerisPeriod::OneTropicalYear;
+}
+
+FSRotationMatrix USpiceTypes::SRotationMatrix_Identity()
+{
+    return FSRotationMatrix::Identity;
+}
+
+FSDimensionlessVector USpiceTypes::SDimensionlessVector_Zero()
+{
+    return FSDimensionlessVector::Zero;
+}
+
+FSDimensionlessVector USpiceTypes::SDimensionlessVector_X_Axis()
+{
+    return FSDimensionlessVector::X_Axis;
+}
+
+FSDimensionlessVector USpiceTypes::SDimensionlessVector_Y_Axis()
+{
+    return FSDimensionlessVector::Y_Axis;
+}
+
+FSDimensionlessVector USpiceTypes::SDimensionlessVector_Z_Axis()
+{
+    return FSDimensionlessVector::Z_Axis;
+}
+
+FSMassConstant USpiceTypes::SMassConstant_Zero()
+{
+    return FSMassConstant::Zero;
+}
+

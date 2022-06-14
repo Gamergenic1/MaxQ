@@ -239,7 +239,7 @@ void ASample03Actor::spkpos_fixed()
     FSPlanetographicVector GeographicPosition;
     USpice::recpgr(ResultCode, ErrorMessage, r, Re, GeographicPosition, TEXT("EARTH"), GRS80_f);
 
-    Log(FString::Printf(TEXT("DSS-14 Geographic Lon/Lat/Alt = %s"), *USpiceTypes::Conv_SPlanetographicVectorToString(GeographicPosition)), ResultCode);
+    Log(FString::Printf(TEXT("DSS-14 Geographic Lon/Lat/Alt = %s"), *GeographicPosition.ToString()), ResultCode);
     Log(FString::Printf(TEXT("DSS-14 Geographic Lon/Lat = %s"), *USpiceTypes::FormatLonLat(GeographicPosition.lonlat, TEXT(", "), ES_AngleFormat::DMS)), ResultCode);
 
 
@@ -247,8 +247,8 @@ void ASample03Actor::spkpos_fixed()
     FSGeodeticVector GeodeticPosition;
     USpice::recgeo(r, Re, GeodeticPosition, GRS80_f);
 
-    Log(FString::Printf(TEXT("DSS-14 Geodetic Lon/Lat/Alt = %s"), *USpiceTypes::Conv_SGeodeticVectorToString(GeodeticPosition)), ResultCode);
-    Log(FString::Printf(TEXT("DSS-14 Geodetic Lon/Lat = %s"), *USpiceTypes::FormatLonLat(GeodeticPosition.lonlat, TEXT(", "), ES_AngleFormat::DMS)), ResultCode);
+    Log(FString::Printf(TEXT("DSS-14 Geodetic Lon/Lat/Alt = %s"), *GeodeticPosition.ToString()), ResultCode);
+    Log(FString::Printf(TEXT("DSS-14 Geodetic Lon/Lat = %s"), *GeodeticPosition.lonlat.ToString(TEXT(", "), ES_AngleFormat::DMS)), ResultCode);
 
     Log(TEXT("Note that in SPICE Longitude preceeds Latitude; MaxQ remains consistent with SPICE"));
 }
@@ -295,7 +295,7 @@ void ASample03Actor::spkezr_inertial()
     // Call SPICE, get the state vector in rectangular coordinates...
     USpice::spkezr(ResultCode, ErrorMessage, et, state, lt, targ, obs, ref, abscorr);
 
-    Log(FString::Printf(TEXT("Mercury State Vector = %s"), *USpiceTypes::Conv_SStateVectorToString(state)), ResultCode);
+    Log(FString::Printf(TEXT("Mercury State Vector = %s"), *state.ToString()), ResultCode);
 }
 
 
@@ -352,18 +352,18 @@ void ASample03Actor::spkezr_fixed()
     // Call SPICE, get the state vector in rectangular coordinates...
     USpice::spkezr(ResultCode, ErrorMessage, et, state, lt, targ, obs, ref, abscorr);
 
-    Log(FString::Printf(TEXT("Sun's State Vector in Moon's Fixed Frame = %s"), *USpiceTypes::Conv_SStateVectorToString(state)), ResultCode);
+    Log(FString::Printf(TEXT("Sun's State Vector in Moon's Fixed Frame = %s"), *state.ToString()), ResultCode);
 
     FSDistanceVector MoonRadii;
     USpice::bodvrd_distance_vector(ResultCode, ErrorMessage, MoonRadii, TEXT("MOON"));
 
     FSDistance Re = MoonRadii.x, Rp = MoonRadii.z;
-    Log(FString::Printf(TEXT("Moon's Equatorial Radius=%s km, Polar Radius=%s km"), *USpiceTypes::Conv_SDistanceToString(Re), *USpiceTypes::Conv_SDistanceToString(Rp)), ResultCode);
+    Log(FString::Printf(TEXT("Moon's Equatorial Radius=%s km, Polar Radius=%s km"), *Re.ToString(), *Rp.ToString()), ResultCode);
 
     FSGeodeticVector GeodeticPosition;
     USpice::recgeo(state.r, MoonRadii.x, GeodeticPosition, (Re-Rp)/Re);
 
-    Log(FString::Printf(TEXT("Sun's Geodetic Position in Moon's Fixed Frame = %s"), *USpiceTypes::Conv_SGeodeticVectorToString(GeodeticPosition)), ResultCode);
+    Log(FString::Printf(TEXT("Sun's Geodetic Position in Moon's Fixed Frame = %s"), *GeodeticPosition.ToString()), ResultCode);
 
     // In Frame IAU_Moon, The Sun's Longitude 180 = New Moon, 90 = First Quarter, 0 = Full Moon.
     FString MoonPhaseString;
@@ -480,9 +480,9 @@ void ASample03Actor::azlcpo(ES_AberrationCorrectionWithTransmissions abcorr)
     // Print Range/Az/El km/deg (0,-360]/deg (-180,180]
     // Compare with:
     // https://www.heavens-above.com/PlanetSummary.aspx?lat=35.4259&lng=-116.8897&loc=Mars+DSS-14&alt=0&tz=PST
-    Log(FString::Printf(TEXT("To Insight Mars Landing Site From DSS-14 %s: Range=%s km; Azimuth=%s; Elevation=%s"), *CaseName , *USpiceTypes::Conv_SDistanceToString(range), *USpiceTypes::FormatAngle(az, ES_AngleFormat::DD_360), *USpiceTypes::FormatAngle(el, ES_AngleFormat::DD_180)), ResultCode);
+    Log(FString::Printf(TEXT("To Insight Mars Landing Site From DSS-14 %s: Range=%s km; Azimuth=%s; Elevation=%s"), *CaseName , *range.ToString(), *az.ToString(ES_AngleFormat::DD_360), *el.ToString(ES_AngleFormat::DD_180)), ResultCode);
     Log(FString::Printf(TEXT("To Insight Mars Landing Site From DSS-14 %s: dRange=%f km/s; dAzimuth=%f deg/sec; dElevation=%f deg/sec"), *CaseName, speed.AsKilometersPerSecond(), daz.AsDegreesPerSecond(), del.AsDegreesPerSecond()), ResultCode);
-    Log(FString::Printf(TEXT("To Insight Mars Landing Site From DSS-14 %s light travel time= %f sec"), *CaseName, USpiceTypes::Conv_SEphemerisPeriodToDouble(lt)), ResultCode);
+    Log(FString::Printf(TEXT("To Insight Mars Landing Site From DSS-14 %s light travel time= %f sec"), *CaseName, lt.AsSeconds()), ResultCode);
 }
 
 
@@ -593,10 +593,10 @@ void ASample03Actor::UpdateSolarSystem(FSamplesSolarSystemState& State, float De
             if (ResultCode == ES_ResultCode::Success)
             {
                 // IMPORTANT NOTE:
-                // Positional data (vectors, quaternions, should only be exchanged through USpiceTypes::Conf_*
+                // Positional data (vectors, quaternions, should only be exchanged through USpiceTypes::Swizzle*
                 // SPICE coordinate systems are Right-Handed, and Unreal Engine is Left-Handed.
                 // The USpiceTypes conversions understand this, and how to convert.
-                FVector BodyLocation = USpiceTypes::Conv_SDistanceVectorToVector(r);
+                FVector BodyLocation = USpiceTypes::Swizzle(r);
 
                 // Scale and set the body location
                 BodyLocation /= DistanceScale;
@@ -604,7 +604,7 @@ void ASample03Actor::UpdateSolarSystem(FSamplesSolarSystemState& State, float De
 
                 if (GEngine)
                 {
-                    GEngine->AddOnScreenDebugMessage(-1, 0.f, FColor::White, *FString::Printf(TEXT("%s r=: %s kilometers"), *BodyPair.Key.ToString(), *USpiceTypes::Conv_SDistanceToString(r.Magnitude())));
+                    GEngine->AddOnScreenDebugMessage(-1, 0.f, FColor::White, *FString::Printf(TEXT("%s r=: %s kilometers"), *BodyPair.Key.ToString(), *r.Magnitude().ToString()));
                 }
             }
             else
@@ -624,7 +624,7 @@ void ASample03Actor::UpdateSolarSystem(FSamplesSolarSystemState& State, float De
         GEngine->AddOnScreenDebugMessage(-1, 0.f, FColor::White, *FString::Printf(TEXT("Scale SUN : 1/%s (1/100 of PLANET/MOON scale)"), *USpiceTypes::FormatDoublePrecisely(BodyScale * UE_Units_Per_KM * 100, 0)));
         GEngine->AddOnScreenDebugMessage(-1, 0.f, FColor::White, *FString::Printf(TEXT("Scale PLANETS/MOON : 1/%s"), *USpiceTypes::FormatDoublePrecisely(BodyScale * UE_Units_Per_KM, 0)));
         GEngine->AddOnScreenDebugMessage(-1, 0.f, FColor::White, *FString::Printf(TEXT("Scale Solar System Distances : 1/%s"), *USpiceTypes::FormatDoublePrecisely(DistanceScale * UE_Units_Per_KM, 0)));
-        GEngine->AddOnScreenDebugMessage(-1, 0.f, FColor::White, *FString::Printf(TEXT("Display Time: %s"), *USpiceTypes::Conv_SEpheremisTimeToString(SolarSystemState.CurrentTime)));
+        GEngine->AddOnScreenDebugMessage(-1, 0.f, FColor::White, *FString::Printf(TEXT("Display Time: %s"), *SolarSystemState.CurrentTime.ToString()));
     }
 }
 

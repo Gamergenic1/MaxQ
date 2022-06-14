@@ -294,7 +294,8 @@ void ASample01Actor::QueryEarthsGM()
         FSMassConstant GM;
         USpice::bodvrd_mass(ResultCode, ErrorMessage, GM, TEXT("EARTH"), TEXT("GM"));
 
-        Log(FString::Printf(TEXT("QueryEarthsGM bodvrd_mass - Earth's GM: %s"), *USpiceTypes::Conv_SMassConstantToString(GM)), ResultCode);
+        // Every MaxQ structure has a "ToString".
+        Log(FString::Printf(TEXT("QueryEarthsGM bodvrd_mass - Earth's GM: %s"), *GM.ToString()), ResultCode);
 
         // bodvcd_mass is another way to get a GM, by integer ID code instead of ID string.
         if (ResultCode == ES_ResultCode::Success)
@@ -310,7 +311,7 @@ void ASample01Actor::QueryEarthsGM()
                 // If we found the id code, look up its mass
                 USpice::bodvcd_mass(ResultCode, ErrorMessage, GM, Bodyid, TEXT("GM"));
 
-                Log(FString::Printf(TEXT("QueryEarthsGM bodvcd_mass - Moon's GM: %s"), *USpiceTypes::Conv_SMassConstantToString(GM)), ResultCode);
+                Log(FString::Printf(TEXT("QueryEarthsGM bodvcd_mass - Moon's GM: %s"), *GM.ToString()), ResultCode);
             }
         }
 
@@ -323,7 +324,6 @@ void ASample01Actor::QueryEarthsGM()
             double dvalue = USpiceK2::bodvrd_double_K2(ResultCode, ErrorMessage, TEXT("SUN"), TEXT("GM"));
             GM = USpiceK2::Conv_DoubleToSMassConstant_K2(dvalue);
 
-            Log(FString::Printf(TEXT("QueryEarthsGM bodvcd_mass - Sun's GM: %s"), *USpiceTypes::Conv_SMassConstantToString(GM)), ResultCode);
         }
 
         // Yet more ways: USpice::gdpool, USpiceK2::gdpool_double_K2
@@ -364,7 +364,7 @@ void ASample01Actor::QueryEarthsRadius()
         FSDistanceVector Radii;
         USpice::bodvrd_distance_vector(ResultCode, ErrorMessage, Radii, TEXT("EARTH"), TEXT("RADII"));
 
-        Log(FString::Printf(TEXT("QueryEarthsRadius bodvrd_mass - Earth's Radii: %s"), *USpiceTypes::Conv_SDistanceVectorToString(Radii)), ResultCode);
+        Log(FString::Printf(TEXT("QueryEarthsRadius bodvrd_mass - Earth's Radii: %s"), *Radii.ToString()), ResultCode);
 
         // bodvcd_distance_vector is another way to get a radii, by integer ID code instead of ID string.
         if (ResultCode == ES_ResultCode::Success)
@@ -377,10 +377,14 @@ void ASample01Actor::QueryEarthsRadius()
 
             if (FoundCode == ES_FoundCode::Found)
             {
-                // If we found the id code, look up its mass
-                USpice::bodvcd_distance_vector(ResultCode, ErrorMessage, Radii, Bodyid, TEXT("RADII"));
+                // This works too, if you're worried about misspelling somethings.
+                // There are constants for Parameter Names, Reference Frame Names, Naif Objecct Names, etc.
+                const FString& RadiiParameterName = USpice::Spice_RADII();
 
-                Log(FString::Printf(TEXT("QueryEarthsRadius bodvcd_distance_vector - Mars's Equatorial Radius: %s, Polar Radius: %s"), *USpiceTypes::Conv_SDistanceToString(Radii.x), *USpiceTypes::Conv_SDistanceToString(Radii.z)), ResultCode);
+                // If we found the id code, look up its mass
+                USpice::bodvcd_distance_vector(ResultCode, ErrorMessage, Radii, Bodyid, RadiiParameterName);
+
+                Log(FString::Printf(TEXT("QueryEarthsRadius bodvcd_distance_vector - Mars's Equatorial Radius: %s, Polar Radius: %s"), *Radii.x.ToString(), *Radii.z.ToString()), ResultCode);
             }
         }
 
@@ -394,7 +398,7 @@ void ASample01Actor::QueryEarthsRadius()
             FSDimensionlessVector dvvalue = USpiceK2::gdpool_vector_K2(ResultCode, ErrorMessage, TEXT("BODY299_RADII"));
             Radii = USpiceK2::Conv_SDimensionlessVectorToSDistanceVector_K2(dvvalue);
 
-            Log(FString::Printf(TEXT("QueryEarthsRadius gdpool_vector_K2 - Venus's Radii: %s"), *USpiceTypes::Conv_SDistanceVectorToString(Radii)), ResultCode);
+            Log(FString::Printf(TEXT("QueryEarthsRadius gdpool_vector_K2 - Venus's Radii: %s"), *Radii.ToString()), ResultCode);
         }
 
         // Yet more ways: USpice::gdpool, USpiceK2::bodvcd_vector_K2, or even bodvcd_array_K2, bodvrd_array_K2, or gdpool_array_K2

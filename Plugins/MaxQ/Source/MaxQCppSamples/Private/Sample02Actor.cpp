@@ -128,15 +128,11 @@ void ASample02Actor::J2000()
     // Often et is tracked as "seconds past J2000"
     FSEphemerisTime et = FSEphemerisTime::J2000;
 
-    // Get a string representation of J2000
-    // Also, see: USpice::et2utc, USpice::etcal, USpice::timout
-    FString EpochString = USpiceTypes::Conv_SEpheremisTimeToString(et);
-
-    Log(FString::Printf( TEXT("J2000 was: %s"), *EpochString));
+    Log(FString::Printf( TEXT("J2000 was: %s"), *et.ToString()));
 
     // Add a period of one day to et...
     et += FSEphemerisPeriod::OneDay;
-    Log(FString::Printf(TEXT("One day after J2000 was: %s"), *USpiceTypes::Conv_SEpheremisTimeToString(et)));
+    Log(FString::Printf(TEXT("One day after J2000 was: %s"), *et.ToString()));
 }
 
 
@@ -169,7 +165,7 @@ void ASample02Actor::J2020()
 
     // Create & Load a loose equivalent for J2020 epoch
     // Also, see USpice::utc2et, USpice::str2et, USpice::tparse
-    FSEphemerisTime j2020 = USpiceTypes::Conv_StringToSEpheremisTime(TEXT("1 JAN 2020 11:58:55.816 UTC"));
+    FSEphemerisTime j2020 = FSEphemerisTime::FromString(TEXT("1 JAN 2020 11:58:55.816 UTC"));
 
     // FSEphemerisPeriod can store an interval between two epochs
     FSEphemerisPeriod delta = j2020 - j2000;

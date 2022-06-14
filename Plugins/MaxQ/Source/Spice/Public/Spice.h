@@ -310,6 +310,8 @@ public:
             const FString& name = TEXT("EARTH")
         );
 
+    // Bodvrd, etc, are not deprecated for C++ usage, only Blueprints.  They're still handy from C++.
+
     /// <summary>Fetch from the kernel pool the double precision values of an item associated with a body</summary>
     /// <param name="bodyid">[in] Body ID code</param>
     /// <param name="item">[in] Item for which values are desired. ("RADII", "NUT_PREC_ANGLES", etc. )</param>
@@ -320,6 +322,7 @@ public:
     UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly,
         Category = "MaxQ|Deprecated",
         meta = (
+            DeprecatedFunction,
             DeprecationMessage = "Bodvcd is obolete, use the K2Node_bodvcd (bodcrd) instead",
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "CONSTANTS",
@@ -337,6 +340,7 @@ public:
     UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly,
         Category = "MaxQ|Deprecated",
         meta = (
+            DeprecatedFunction,
             DeprecationMessage = "Bodvcd is obolete, use the K2Node_bodvcd (bodvcd) instead",
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "CONSTANTS",
@@ -354,6 +358,7 @@ public:
     UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly,
         Category = "MaxQ|Deprecated",
         meta = (
+            DeprecatedFunction,
             DeprecationMessage = "Bodvcd is obolete, use the K2Node_bodvcd (bodvcd) instead",
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "CONSTANTS",
@@ -371,6 +376,7 @@ public:
     UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly,
         Category = "MaxQ|Deprecated",
         meta = (
+            DeprecatedFunction,
             DeprecationMessage = "Bodvcd is obolete, use the K2Node_bodcrd (bodcrd) instead",
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "CONSTANTS",
@@ -397,6 +403,7 @@ public:
     UFUNCTION(BlueprintCallable,
         Category = "MaxQ|Deprecated", BlueprintInternalUseOnly,
         meta = (
+            DeprecatedFunction,
             DeprecationMessage = "Bodvrd is obolete, use the K2Node_bodvrd (bodvrd) instead",
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "CONSTANTS",
@@ -414,6 +421,7 @@ public:
     UFUNCTION(BlueprintCallable, 
         Category = "MaxQ|Deprecated", BlueprintInternalUseOnly,
         meta = (
+            DeprecatedFunction,
             DeprecationMessage = "Bodvrd is obolete, use the K2Node_bodvrd (bodvrd) instead",
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "CONSTANTS",
@@ -432,6 +440,7 @@ public:
     UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly,
         Category = "MaxQ|Deprecated",
         meta = (
+            DeprecatedFunction,
             DeprecationMessage = "Bodvrd is obolete, use the K2Node_bodvrd (bodvrd) instead",
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "CONSTANTS",
@@ -450,6 +459,7 @@ public:
     UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly,
         Category = "MaxQ|Deprecated",
         meta = (
+            DeprecatedFunction,
             DeprecationMessage = "Bodvrd is obolete, use the K2Node_bodvrd (bodvrd) instead",
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "CONSTANTS",
@@ -2434,77 +2444,77 @@ public:
     );
 
     UFUNCTION(BlueprintPure,
-        Category = "MaxQ|Constants",
+        Category = "MaxQ|Constants|Besselian Dates",
         meta = (
             Keywords = "CONSTANTS",
             ShortToolTip = "Besselian Date 1900.0",
             ToolTip = "Return the Julian Date corresponding to Besselian Date 1900.0"
             ))
     static void b1900(
-        double& JulianDate
+        double& Seconds
     );
 
     UFUNCTION(BlueprintPure,
-        Category = "MaxQ|Constants",
+        Category = "MaxQ|Constants|Besselian Dates",
         meta = (
             Keywords = "CONSTANTS",
             ShortToolTip = "Besselian Date 1950.0",
-            ToolTip = "Return the Julian Date corresponding to Besselian Date 1950.0"
+            ToolTip = "Return the Julian Date corresponding to Besselian Date 1950.0 (double seconds)"
             ))
     static void b1950(
-        double& JulianDate
+        double& Seconds
     );
 
     /// <summary>Return the Julian Date of 1899 DEC 31 12:00:00 (1900 JAN 0.5)</summary>
     /// <returns>the Julian Date of 1899 DEC 31 12:00:00 (1900 JAN 0.5)</returns>
     UFUNCTION(BlueprintPure,
-        Category = "MaxQ|Constants",
+        Category = "MaxQ|Constants|Julian Dates",
         meta = (
             Keywords = "CONSTANTS",
             ShortToolTip = "Julian Date of 1900.0 JAN 0.5",
-            ToolTip = "Return the Julian Date of 1899 DEC 31 12:00:00 (1900 JAN 0.5)"
+            ToolTip = "Return the Julian Date of 1899 DEC 31 12:00:00 (1900 JAN 0.5) (double seconds)"
             ))
     static void j1900(
-        double& JulianDate
+        double& Seconds
     );
 
     /// <summary>Return the Julian Date of 1950 JAN 01 00:00:00 (1950 JAN 1.0)</summary>
     /// <returns>the Julian Date of 1950 JAN 01 00:00:00 (1950 JAN 1.0) </returns>
     UFUNCTION(BlueprintPure,
-        Category = "MaxQ|Constants",
+        Category = "MaxQ|Constants|Julian Dates",
         meta = (
             Keywords = "CONSTANTS",
             ShortToolTip = "Julian Date of 1950.0 JAN 1.0",
-            ToolTip = "Return the Julian Date of 1950 JAN 01 00:00:00 (1950 JAN 1.0)"
+            ToolTip = "Return the Julian Date of 1950 JAN 01 00:00:00 (1950 JAN 1.0) (double seconds)"
             ))
-    static void j1950(double& JulianDate);
+    static void j1950(double& Seconds);
 
     /// <summary>Return the Julian Date of 2000 JAN 01 12:00:00 (2000 JAN 1.5)</summary>
     /// <returns>the Julian Date of 2000 JAN 01 12:00:00 (2000 JAN 1.5)</returns>
     UFUNCTION(BlueprintPure,
-        Category = "MaxQ|Constants",
+        Category = "MaxQ|CONSTANTS|Julian Dates",
         meta = (
             Keywords = "CONSTANTS",
             ShortToolTip = "Julian Date of 2000 JAN 1.5",
             ToolTip = "Return the Julian Date of 2000 JAN 01 12:00:00 (2000 JAN 1.5)"
             ))
-    static void j2000(double& JulianDate);
+    static void j2000(double& Seconds);
 
     /// <summary>Return the Julian Date of 2100 JAN 01 12:00:00 (2100 JAN 1.5)</summary>
     /// <returns>the Julian Date of 2100 JAN 01 12:00:00 (2100 JAN 1.5)</returns>
     UFUNCTION(BlueprintPure,
-        Category = "MaxQ|Constants",
+        Category = "MaxQ|Constants|Julian Dates",
         meta = (
             Keywords = "CONSTANTS",
             ShortToolTip = "Julian Date of 2100 JAN 1.5",
             ToolTip = "Return the Julian Date of 2100 JAN 01 12:00:00 (2100 JAN 1.5)"
             ))
-    static void j2100(double& JulianDate);
+    static void j2100(double& Seconds);
 
     /// <summary>Return the number of seconds in a julian year</summary>
     /// <returns>The number of seconds/julian year</returns>
     UFUNCTION(BlueprintPure,
-        Category = "MaxQ|Constants",
+        Category = "MaxQ|Constants|Julian Dates",
         meta = (
             Keywords = "CONSTANTS",
             ShortToolTip = "Seconds per julian year",
@@ -2513,7 +2523,7 @@ public:
     static void jyear(double& secondsPerJulianYear);
 
     UFUNCTION(BlueprintPure,
-        Category = "MaxQ|Constants",
+        Category = "MaxQ|Constants|Julian Dates",
         meta = (
             Keywords = "CONSTANTS",
             ShortToolTip = "Seconds per tropical year",
@@ -2521,7 +2531,11 @@ public:
             ))
     static void tyear(double& secondsPerTropicalYear);
 
+    [[deprecated("Use SEphemerisPeriod JulianYear")]]
     UFUNCTION(BlueprintPure,
+        DeprecatedFunction,
+        DeprecationMessage = "Use SEphemerisPeriod JulianYear",
+        ExpandEnumAsExecs = "ResultCode",
         Category = "MaxQ|Constants",
         meta = (
             Keywords = "CONSTANTS",
@@ -2530,7 +2544,10 @@ public:
             ))
     static void jyear_period(FSEphemerisPeriod& oneJulianYear);
 
+    [[deprecated("Use SEphemerisPeriod TropicalYear")]]
     UFUNCTION(BlueprintPure,
+        DeprecatedFunction,
+        DeprecationMessage = "Use SEphemerisPeriod TropicalYear",
         Category = "MaxQ|Constants",
         meta = (
             Keywords = "CONSTANTS",
@@ -6139,6 +6156,236 @@ public:
             ToolTip = "Approximate current ephemeris time, based on clock of local and sketchy CRT conversion"
             ))
     static void et_now(FSEphemerisTime& Now);
+
+    UFUNCTION(BlueprintPure, meta = (ShortToolTip = "Flattening Coefficient", ToolTip = "Flattening Coefficient: (Re-Rp)/Re, where 'rp' is the polar radius of the spheroid"), Category = "MaxQ|Math")
+    static void FlatteningCoefficient(const FSDistanceVector& Radii, double& f);
+
+#pragma region NaifNames
+    // Blueprint Constants
+    // The Blueprint compiler can understand they're supposed to be constant and hoist them when possible.
+    // (Example, user calling J2000 inside a loop)
+    // An alternative would be to make an enumeration & function to look up, but then the compiler couldn't hoist.
+
+    // Inertial Reference Frames
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "J2000 EME Inertial Frame (aligned with J2000 Earth Mean Equator)", ScriptConstant = "J2000"), Category = "MaxQ|Frames|Inertial")
+    static FString Spice_J2000();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "ECLIPJ2000 Inertial Frame (aligned with J2000 Ecliptic Plane)", ScriptConstant = "ECLIPJ2000"), Category = "MaxQ|Frames|Inertial")
+    static FString Spice_ECLIPJ2000();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "MARSIAU Inertial Frame (aligned with Mars Mean Equator)", ScriptConstant = "MARSIAU"), Category = "MaxQ|Frames|Inertial")
+    static FString Spice_MARSIAU();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "Galactic System II Inertial Frame", ScriptConstant = "GALACTIC"), Category = "MaxQ|Frames|Inertial")
+    static FString Spice_GALACTIC();
+
+    // Body-Fixed Reference Frames
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "Earth Fixed-Frame, but you should use EARTH_FIXED, or ITRF if you have high precision kernels)", ScriptConstant = "IAU_EARTH"), Category = "MaxQ|Frames|Fixed")
+    static FString Spice_IAU_EARTH();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "EARTH_FIXED Earth-Fixed Frame", ScriptConstant = "EARTH_FIXED"), Category = "MaxQ|Frames|Fixed")
+    static FString Spice_EARTH_FIXED();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "ITRF93 Earth-ixed Frame", ScriptConstant = "ITRF93"), Category = "MaxQ|Frames|Fixed")
+    static FString Spice_ITRF93();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "IAU_MOON Moon-Fixed Frame", ScriptConstant = "IAU_MOON"), Category = "MaxQ|Frames|Fixed")
+    static FString Spice_IAU_MOON();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "IAU_SUN Sun-Fixed Frame", ScriptConstant = "IAU_SUN"), Category = "MaxQ|Frames|Fixed")
+    static FString Spice_IAU_SUN();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "IAU_MERCURY Mercury-Fixed Frame", ScriptConstant = "IAU_MERCURY"), Category = "MaxQ|Frames|Fixed")
+    static FString Spice_IAU_MERCURY();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "IAU_VENUS Venus-Fixed Frame", ScriptConstant = "IAU_VENUS"), Category = "MaxQ|Frames|Fixed")
+    static FString Spice_IAU_VENUS();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "IAU_MARS Mars-Fixed Frame", ScriptConstant = "IAU_MARS"), Category = "MaxQ|Frames|Fixed")
+    static FString Spice_IAU_MARS();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "IAU_DEIMOS Deimos-Fixed Frame", ScriptConstant = "IAU_DEIMOS"), Category = "MaxQ|Frames|Fixed")
+    static FString Spice_IAU_DEIMOS();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "IAU_PHOBOS Phobos-Fixed Frame", ScriptConstant = "IAU_PHOBOS"), Category = "MaxQ|Frames|Fixed")
+    static FString Spice_IAU_PHOBOS();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "IAU_JUPITER Jupiter-Fixed Frame", ScriptConstant = "IAU_JUPITER"), Category = "MaxQ|Frames|Fixed")
+    static FString Spice_IAU_JUPITER();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "IAU_SATURN Saturn-Fixed Frame", ScriptConstant = "IAU_SATURN"), Category = "MaxQ|Frames|Fixed")
+    static FString Spice_IAU_SATURN();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "IAU_NEPTUNE Naptune-Fixed Frame", ScriptConstant = "IAU_NEPTUNE"), Category = "MaxQ|Frames|Fixed")
+    static FString Spice_IAU_NEPTUNE();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "IAU_URANUS Uranus-Fixed Frame", ScriptConstant = "IAU_URANUS"), Category = "MaxQ|Frames|Fixed")
+    static FString Spice_IAU_URANUS();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "IAU_PLUTO Pluto-Fixed Frame", ScriptConstant = "IAU_PLUTO"), Category = "MaxQ|Frames|Fixed")
+    static FString Spice_IAU_PLUTO();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "IAU_CERES Ceres-Fixed Frame", ScriptConstant = "IAU_CERES"), Category = "MaxQ|Frames|Fixed")
+    static FString Spice_IAU_CERES();
+
+    // Naif Body Names
+    // See
+    // https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/req/naif_ids.html#Barycenters
+    // https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/req/naif_ids.html#Planets%20and%20Satellites
+    // Etc
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "EARTH Naif Name", ScriptConstant = "EARTH"), Category = "MaxQ|SPK|Naif Names")
+    static FString Spice_EARTH();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "MOON Naif Name", ScriptConstant = "MOON"), Category = "MaxQ|SPK|Naif Names")
+    static FString Spice_MOON();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "EMB (Earth-Moon Barycenter) Naif Name, equivalent to EARTH_BARYCENTER", ScriptConstant = "EMB"), Category = "MaxQ|SPK|Naif Names")
+    static FString Spice_EMB();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "EARTH_BARYCENTER (Earth-Moon Barycenter) Naif Name, equivalent to EMB", ScriptConstant = "EARTH_BARYCENTER"), Category = "MaxQ|SPK|Naif Names")
+    static FString Spice_EARTH_BARYCENTER();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "SUN (Mass) Naif Name", ScriptConstant = "SUN"), Category = "MaxQ|SPK|Naif Names")
+    static FString Spice_SUN();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "SSB (Solar System Barycenter) Naif Name, equivalent to SOLAR_SYSTEM_BARYCENTER", ScriptConstant = "SSB"), Category = "MaxQ|SPK|Naif Names")
+    static FString Spice_SSB();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "SOLAR_SYSTEM_BARYCENTER (Solar System Barycenter) Naif Name, equivalent to SSB", ScriptConstant = "SOLAR_SYSTEM_BARYCENTER"), Category = "MaxQ|SPK|Naif Names")
+    static FString Spice_SOLAR_SYSTEM_BARYCENTER();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "SOLAR_SYSTEM_BARYCENTER (Solar System Barycenter) Naif Name, equivalent to SSB", ScriptConstant = "SOLAR_SYSTEM_BARYCENTER"), Category = "MaxQ|SPK|Naif Names")
+    static FString Spice_MERCURY();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "VENUS Naif Name", ScriptConstant = "VENUS"), Category = "MaxQ|SPK|Naif Names")
+    static FString Spice_VENUS();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "MARS Naif Name", ScriptConstant = "MARS"), Category = "MaxQ|SPK|Naif Names")
+    static FString Spice_MARS();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "PHOBOS Naif Name", ScriptConstant = "PHOBOS"), Category = "MaxQ|SPK|Naif Names")
+    static FString Spice_PHOBOS();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "DEIMOS Naif Name", ScriptConstant = "DEIMOS"), Category = "MaxQ|SPK|Naif Names")
+    static FString Spice_DEIMOS();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "MARS_BARYCENTER Naif Name", ScriptConstant = "MARS_BARYCENTER"), Category = "MaxQ|SPK|Naif Names")
+    static FString Spice_MARS_BARYCENTER();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "JUPITER Naif Name", ScriptConstant = "JUPITER"), Category = "MaxQ|SPK|Naif Names")
+    static FString Spice_JUPITER();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "JUPITER_BARYCENTER Naif Name", ScriptConstant = "JUPITER_BARYCENTER"), Category = "MaxQ|SPK|Naif Names")
+    static FString Spice_JUPITER_BARYCENTER();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "SATURN Naif Name", ScriptConstant = "SATURN"), Category = "MaxQ|SPK|Naif Names")
+    static FString Spice_SATURN();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "SATURN_BARYCENTER Naif Name", ScriptConstant = "SATURN_BARYCENTER"), Category = "MaxQ|SPK|Naif Names")
+    static FString Spice_SATURN_BARYCENTER();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "URANUS Naif Name", ScriptConstant = "URANUS"), Category = "MaxQ|SPK|Naif Names")
+    static FString Spice_URANUS();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "URANUS_BARYCENTER Naif Name", ScriptConstant = "URANUS_BARYCENTER"), Category = "MaxQ|SPK|Naif Names")
+    static FString Spice_URANUS_BARYCENTER();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "NEPTUNE Naif Name", ScriptConstant = "NEPTUNE"), Category = "MaxQ|SPK|Naif Names")
+    static FString Spice_NEPTUNE();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "NEPTUNE_BARYCENTER Naif Name", ScriptConstant = "NEPTUNE_BARYCENTER"), Category = "MaxQ|SPK|Naif Names")
+    static FString Spice_NEPTUNE_BARYCENTER();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "PLUTO Naif Name", ScriptConstant = "PLUTO"), Category = "MaxQ|SPK|Naif Names")
+    static FString Spice_PLUTO();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "PLUTO_BARYCENTER Naif Name", ScriptConstant = "PLUTO_BARYCENTER"), Category = "MaxQ|SPK|Naif Names")
+    static FString Spice_PLUTO_BARYCENTER();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "Asteroid CERES Naif Name", ScriptConstant = "CERES"), Category = "MaxQ|SPK|Naif Names")
+    static FString Spice_CERES();
+
+    // Spacecraft
+    // See: https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/req/naif_ids.html#Spacecraft
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "Spacecraft PIONEER-6 Naif Name", ScriptConstant = "PIONEER_6"), Category = "MaxQ|SPK|Naif Names")
+    static FString Spice_PIONEER_6();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "Spacecraft PIONEER-7 Naif Name", ScriptConstant = "PIONEER_7"), Category = "MaxQ|SPK|Naif Names")
+    static FString Spice_PIONEER_7();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "Spacecraft VIKING 1 ORBITER Naif Name", ScriptConstant = "VIKING_1_ORBITER"), Category = "MaxQ|SPK|Naif Names")
+    static FString Spice_VIKING_1_ORBITER();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "Spacecraft VIKING 2 ORBITER Naif Name", ScriptConstant = "VIKING_2_ORBITER"), Category = "MaxQ|SPK|Naif Names")
+    static FString Spice_VIKING_2_ORBITER();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "Spacecraft VOYAGER 1 Naif Name", ScriptConstant = "VOYAGER_1"), Category = "MaxQ|SPK|Naif Names")
+    static FString Spice_VOYAGER_1();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "Spacecraft VOYAGER 2 Naif Name", ScriptConstant = "VOYAGER_2"), Category = "MaxQ|SPK|Naif Names")
+    static FString Spice_VOYAGER_2();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "Spacecraft HST Naif Name, equivalent to HUBBLE SPACE TELESCOPE", ScriptConstant = "HUBBLE_SPACE_TELESCOPE"), Category = "MaxQ|SPK|Naif Names")
+    static FString Spice_HST();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "Spacecraft HUBBLE SPACE TELESCOPE Naif Name, equivalent to HST", ScriptConstant = "HUBBLE_SPACE_TELESCOPE"), Category = "MaxQ|SPK|Naif Names")
+    static FString Spice_HUBBLE_SPACE_TELESCOPE();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "Spacecraft MARS PATHFINDER Naif Name", ScriptConstant = "MARS_PATHFINDER"), Category = "MaxQ|SPK|Naif Names")
+    static FString Spice_MARS_PATHFINDER();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "Spacecraft PARKER SOLAR PROBE Naif Name", ScriptConstant = "PARKER_SOLAR_PROBE"), Category = "MaxQ|SPK|Naif Names")
+    static FString Spice_PARKER_SOLAR_PROBE();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "Spacecraft JWST Naif Name, equivalent to JAMES WEBB SPACE TELESCOPE", ScriptConstant = "JWST"), Category = "MaxQ|SPK|Naif Names")
+    static FString Spice_JWST();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "Spacecraft JAMES WEBB SPACE TELESCOPE Naif Name, equivalent to JWST", ScriptConstant = "JAMES_WEBB_SPACE_TELESCOPE"), Category = "MaxQ|SPK|Naif Names")
+    static FString Spice_JAMES_WEBB_SPACE_TELESCOPE();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "Spacecraft INSIGHT Naif Name", ScriptConstant = "INSIGHT"), Category = "MaxQ|SPK|Naif Names")
+    static FString Spice_INSIGHT();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "Spacecraft OPPORTUNITY Naif Name", ScriptConstant = "OPPORTUNITY"), Category = "MaxQ|SPK|Naif Names")
+    static FString Spice_OPPORTUNITY();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "Spacecraft SPIRIT Naif Name", ScriptConstant = "SPIRIT"), Category = "MaxQ|SPK|Naif Names")
+    static FString Spice_SPIRIT();
+
+    // Ground stations
+    // https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/req/naif_ids.html#Ground%20Stations.
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "Ground Station NOTO Naif Name", ScriptConstant = "NOTO"), Category = "MaxQ|SPK|Naif Names")
+    static FString Spice_NOTO();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "Ground Station NEW NORCIA Naif Name", ScriptConstant = "NEW_NORCIA"), Category = "MaxQ|SPK|Naif Names")
+    static FString Spice_NEW_NORCIA();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "Ground Station GOLDSTONE Naif Name", ScriptConstant = "GOLDSTONE"), Category = "MaxQ|SPK|Naif Names")
+    static FString Spice_GOLDSTONE();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "Ground Station CANBERRA Naif Name", ScriptConstant = "CANBERRA"), Category = "MaxQ|SPK|Naif Names")
+    static FString Spice_CANBERRA();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "Ground Station MADRID Naif Name", ScriptConstant = "MADRID"), Category = "MaxQ|SPK|Naif Names")
+    static FString Spice_MADRID();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "Ground Station USUDA Naif Name", ScriptConstant = "USUDA"), Category = "MaxQ|SPK|Naif Names")
+    static FString Spice_USUDA();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "Ground Station DSS-05 Naif Name", ScriptConstant = "DSS_05"), Category = "MaxQ|SPK|Naif Names")
+    static FString Spice_DSS_05();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "Ground Station PARKES Naif Name", ScriptConstant = "PARKES"), Category = "MaxQ|SPK|Naif Names")
+    static FString Spice_PARKES();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "GM Property Name", ScriptConstant = "GM"), Category = "MaxQ|Kernel|Property Names")
+    static FString Spice_GM();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "RADII Property Name", ScriptConstant = "RADII"), Category = "MaxQ|Kernel|Property Names")
+    static FString Spice_RADII();
+
+#pragma endregion NaifNames
+
 
 #pragma region deprecated
     // No scaling... Swizzle only!  No other transformations!
