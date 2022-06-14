@@ -62,6 +62,11 @@ public:
     void BeginPlay() override;
     void Tick(float DeltaSeconds) override;
 
+    void pxform();
+    void sxform();
+    void sxform_xf2rav();
+    void GetUERotationAndAngularVelocity(const FName& ReferenceFrame, const FName& BodyName);
+
     void InitializeSolarSystem();
     void UpdateSolarSystem(float DeltaTime);
 

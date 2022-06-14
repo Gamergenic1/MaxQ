@@ -12299,6 +12299,93 @@ void USpice::xpose(
     mout = FSRotationMatrix(_mout);
 }
 
+void USpice::FlatteningCoefficient(const FSDistanceVector& Radii, double& f)
+{
+    f =(Radii.x - Radii.z) / Radii.x;
+}
+
+
+#pragma region NaifNames
+
+FString USpice::Spice_J2000() { return TEXT("J2000"); }
+FString USpice::Spice_ECLIPJ2000() { return TEXT("ECLIPJ2000"); }
+FString USpice::Spice_MARSIAU() { return TEXT("MARSIAU"); }
+FString USpice::Spice_GALACTIC() { return TEXT("GALACTIC"); }
+FString USpice::Spice_IAU_EARTH() { return TEXT("IAU_EARTH"); }
+FString USpice::Spice_EARTH_FIXED() { return TEXT("EARTH_FIXED"); }
+FString USpice::Spice_ITRF93() { return TEXT("ITRF93"); }
+FString USpice::Spice_IAU_MOON() { return TEXT("IAU_MOON"); }
+FString USpice::Spice_IAU_SUN() { return TEXT("IAU_SUN"); }
+FString USpice::Spice_IAU_MERCURY() { return TEXT("IAU_MERCURY"); }
+FString USpice::Spice_IAU_VENUS() { return TEXT("IAU_VENUS"); }
+FString USpice::Spice_IAU_MARS() { return TEXT("IAU_MARS"); }
+FString USpice::Spice_IAU_DEIMOS() { return TEXT("IAU_DEIMOS"); }
+FString USpice::Spice_IAU_PHOBOS() { return TEXT("IAU_PHOBOS"); }
+FString USpice::Spice_IAU_JUPITER() { return TEXT("IAU_JUPITER"); }
+FString USpice::Spice_IAU_SATURN() { return TEXT("IAU_SATURN"); }
+FString USpice::Spice_IAU_NEPTUNE() { return TEXT("IAU_NEPTUNE"); }
+FString USpice::Spice_IAU_URANUS() { return TEXT("IAU_URANUS"); }
+FString USpice::Spice_IAU_PLUTO() { return TEXT("IAU_PLUTO"); }
+FString USpice::Spice_IAU_CERES() { return TEXT("IAU_CERES"); }
+FString USpice::Spice_EARTH() { return TEXT("EARTH"); }
+FString USpice::Spice_MOON() { return TEXT("MOON"); }
+FString USpice::Spice_EMB() { return TEXT("EMB"); }
+FString USpice::Spice_EARTH_BARYCENTER() { return TEXT("EARTH_BARYCENTER"); }
+FString USpice::Spice_SUN() { return TEXT("SUN"); }
+FString USpice::Spice_SSB() { return TEXT("SSB"); }
+FString USpice::Spice_SOLAR_SYSTEM_BARYCENTER() { return TEXT("SOLAR_SYSTEM_BARYCENTER"); }
+FString USpice::Spice_MERCURY() { return TEXT("MERCURY"); }
+FString USpice::Spice_VENUS() { return TEXT("VENUS"); }
+FString USpice::Spice_MARS() { return TEXT("MARS"); }
+FString USpice::Spice_PHOBOS() { return TEXT("PHOBOS"); }
+FString USpice::Spice_DEIMOS() { return TEXT("DEIMOS"); }
+FString USpice::Spice_MARS_BARYCENTER() { return TEXT("MARS_BARYCENTER"); }
+FString USpice::Spice_JUPITER() { return TEXT("JUPITER"); }
+FString USpice::Spice_JUPITER_BARYCENTER() { return TEXT("JUPITER_BARYCENTER"); }
+FString USpice::Spice_SATURN() { return TEXT("SATURN"); }
+FString USpice::Spice_SATURN_BARYCENTER() { return TEXT("SATURN_BARYCENTER"); }
+FString USpice::Spice_URANUS() { return TEXT("URANUS"); }
+FString USpice::Spice_URANUS_BARYCENTER() { return TEXT("URANUS_BARYCENTER"); }
+FString USpice::Spice_NEPTUNE() { return TEXT("NEPTUNE"); }
+FString USpice::Spice_NEPTUNE_BARYCENTER() { return TEXT("NEPTUNE_BARYCENTER"); }
+FString USpice::Spice_PLUTO() { return TEXT("PLUTO"); }
+FString USpice::Spice_PLUTO_BARYCENTER() { return TEXT("PLUTO_BARYCENTER"); }
+FString USpice::Spice_CERES() { return TEXT("CERES"); }
+FString USpice::Spice_PIONEER_6() { return TEXT("PIONEER-6"); }
+FString USpice::Spice_PIONEER_7() { return TEXT("PIONEER-7"); }
+FString USpice::Spice_VIKING_1_ORBITER() { return TEXT("VIKING 1 ORBITER"); }
+FString USpice::Spice_VIKING_2_ORBITER() { return TEXT("VIKING 2 ORBITER"); }
+FString USpice::Spice_VOYAGER_1() { return TEXT("VOYAGER 1"); }
+FString USpice::Spice_VOYAGER_2() { return TEXT("VOYAGER 2"); }
+FString USpice::Spice_HST() { return TEXT("HST"); }
+FString USpice::Spice_HUBBLE_SPACE_TELESCOPE() { return TEXT("HUBBLE SPACE TELESCOPE"); }
+FString USpice::Spice_MARS_PATHFINDER() { return TEXT("MARS PATHFINDER"); }
+FString USpice::Spice_PARKER_SOLAR_PROBE() { return TEXT("PARKER SOLAR PROBE"); }
+FString USpice::Spice_JWST() { return TEXT("JWST"); }
+FString USpice::Spice_JAMES_WEBB_SPACE_TELESCOPE() { return TEXT("JAMES WEBB SPACE TELESCOPE"); }
+FString USpice::Spice_INSIGHT() { return TEXT("INSIGHT"); }
+FString USpice::Spice_OPPORTUNITY() { return TEXT("OPPORTUNITY"); }
+FString USpice::Spice_SPIRIT() { return TEXT("SPIRIT"); }
+FString USpice::Spice_NOTO() { return TEXT("NOTO"); }
+FString USpice::Spice_NEW_NORCIA() { return TEXT("NEW NORCIA"); }
+FString USpice::Spice_GOLDSTONE() { return TEXT("GOLDSTONE"); }
+FString USpice::Spice_CANBERRA() { return TEXT("CANBERRA"); }
+FString USpice::Spice_MADRID() { return TEXT("MADRID"); }
+FString USpice::Spice_USUDA() { return TEXT("USUDA"); }
+FString USpice::Spice_DSS_05() { return TEXT("DSS-05"); }
+FString USpice::Spice_PARKES() { return TEXT("PARKES"); }
+
+FString USpice::Spice_GM()
+{
+    return TEXT("GM");
+}
+
+FString USpice::Spice_RADII()
+{
+    return TEXT("RADII");
+}
+
+#pragma endregion NaifNames
 
 
 #pragma region deprecated

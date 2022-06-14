@@ -410,7 +410,7 @@ enum class ES_Items : uint8
 ENUM_CLASS_FLAGS(ES_Items);
 
 
-USTRUCT(BlueprintType)
+USTRUCT(BlueprintType, Category = "MaxQ|DimensionlessVector")
 struct SPICE_API FSDimensionlessVector
 {
     GENERATED_BODY()
@@ -470,6 +470,8 @@ struct SPICE_API FSDimensionlessVector
     FSDimensionlessVector Normalized() const;
 
     double Magnitude() const;
+
+    FString ToString() const;
 
     static const FSDimensionlessVector Zero;
     static const FSDimensionlessVector X_Axis;
@@ -531,7 +533,7 @@ static inline FSDimensionlessVector& operator*=(FSDimensionlessVector& lhs, doub
 #define FSDistance_km_to_M (1000.)
 #define FSDistance_M_to_km (1./FSDistance_km_to_M)
 
-USTRUCT(BlueprintType)
+USTRUCT(BlueprintType, Category = "MaxQ|Distance")
 struct SPICE_API FSDistance
 {
     GENERATED_BODY()
@@ -567,6 +569,9 @@ public:
     inline double AsStatuteMiles() const;
     inline double AsAstronomicalUnits() const;
     inline double AsLightYears() const;
+
+    FString ToString() const;
+    FString ToString(ES_Units Units, int precision = 12) const;
 
     [[deprecated("Use FromKilometers()")]]
     inline static FSDistance From_Km(double _km)    { return FromKilometers(_km); }
@@ -682,7 +687,7 @@ static inline FSDistance& operator-=(FSDistance& lhs, const FSDistance& rhs) {
 }
 
 
-USTRUCT(BlueprintType, Meta = (ToolTip = "Rectangular coordinates (X, Y, Z)"))
+USTRUCT(BlueprintType, Category = "MaxQ|DistanceVector", Meta = (ToolTip = "Rectangular coordinates (X, Y, Z)"))
 struct SPICE_API FSDistanceVector
 {
     GENERATED_BODY()
@@ -761,6 +766,8 @@ struct SPICE_API FSDistanceVector
     {
         return (Re()-Rp())/Re();
     }
+
+    FString ToString() const;
 
 
     static const FSDistanceVector Zero;
@@ -853,7 +860,7 @@ static inline FSDimensionlessVector operator/(const FSDistanceVector& lhs, const
 }
 
 
-USTRUCT(BlueprintType)
+USTRUCT(BlueprintType, Category = "MaxQ|Speed")
 struct SPICE_API FSSpeed
 {
     GENERATED_BODY()
@@ -898,6 +905,9 @@ struct SPICE_API FSSpeed
     {
         return FSSpeed(MetersPerSecond * FSDistance_M_to_km);
     }
+
+    FString ToString() const;
+    FString ToString(ES_Units NumeratorUnits, ES_Units DenominatorUnits = ES_Units::SECONDS, int precision = 12) const;
 
     static const FSSpeed Zero;
     static const FSSpeed OneKmps;
@@ -991,7 +1001,7 @@ static inline FSSpeed& operator-=(FSSpeed& lhs, const FSSpeed& rhs) {
  *  block, or we could support either or with a PREFER_NUMERICAL_STABILTY_OVER_EDITABILITY
  *  macro definition.
  */
-USTRUCT(BlueprintType)
+USTRUCT(BlueprintType, Category = "MaxQ|Angle")
 struct SPICE_API FSAngle
 {
     GENERATED_BODY()
@@ -1062,6 +1072,9 @@ public:
         return !(*this == Other);
     }
 
+    FString ToString() const;
+    FString ToString(ES_AngleFormat format) const;
+
     static const FSAngle _0;
     static const FSAngle _360;
     static const double halfpi;
@@ -1126,7 +1139,7 @@ static inline FSAngle& operator*=(FSAngle& lhs, double rhs) {
 }
 
 
-USTRUCT(BlueprintType)
+USTRUCT(BlueprintType, Category = "MaxQ|AngularRate")
 struct SPICE_API FSAngularRate
 {
     GENERATED_BODY()
@@ -1159,6 +1172,8 @@ struct SPICE_API FSAngularRate
     inline double AsSpiceDouble() const { return radiansPerSecond; }
     inline double AsRadiansPerSecond() const { return radiansPerSecond; }
     double AsDegreesPerSecond() const;
+
+    FString ToString() const;
 
     static inline FSAngularRate FromSpiceDouble(double SpiceDouble) { return FSAngularRate(SpiceDouble); }
     static inline FSAngularRate FromRadiansPerSecond(double RadiansPerSecond) { return FSAngularRate(RadiansPerSecond); }
@@ -1228,7 +1243,7 @@ static inline bool operator!=(const FSAngularRate& lhs, const FSAngularRate& rhs
 
 
 
-USTRUCT(BlueprintType)
+USTRUCT(BlueprintType, Category = "MaxQ|ComplexScalar")
 struct SPICE_API FSComplexScalar
 {
     GENERATED_BODY()
@@ -1256,11 +1271,13 @@ struct SPICE_API FSComplexScalar
         _value[1] = imaginary;
     }
 
+    FString ToString() const;
+
     static const FSComplexScalar Zero;
 };
 
 
-USTRUCT(BlueprintType)
+USTRUCT(BlueprintType, Category = "MaxQ|EphemerisTime")
 struct SPICE_API FSEphemerisTime
 {
     GENERATED_BODY()
@@ -1284,6 +1301,10 @@ struct SPICE_API FSEphemerisTime
     /// <returns>Seconds</returns>
     inline double AsSpiceDouble() const { return seconds; }
     inline double AsSeconds() const { return seconds; }
+
+    FString ToString() const;
+    FString ToString(ES_UTCTimeFormat TimeFormat, int precision = 4) const;
+    static FSEphemerisTime FromString(const FString& Str);
 
     // The J2000 epoch (1 Jan 2000, 11:58:55.816 UTC)
     // https://en.wikipedia.org/wiki/Equinox_(celestial_coordinates)#J2000.0
@@ -1311,7 +1332,7 @@ static inline bool operator>(const FSEphemerisTime& lhs, const FSEphemerisTime& 
 }
 
 
-USTRUCT(BlueprintType)
+USTRUCT(BlueprintType, Category = "MaxQ|EphemerisPeriod")
 struct SPICE_API FSEphemerisPeriod
 {
     GENERATED_BODY()
@@ -1337,6 +1358,9 @@ struct SPICE_API FSEphemerisPeriod
     /// <returns>Seconds</returns>
     inline double AsSpiceDouble() const { return seconds; }
     inline double AsSeconds() const { return seconds; }
+
+    FString ToString() const;
+    FString ToString(ES_Units Units, int precision = 12) const;
 
     static inline FSEphemerisPeriod FromSeconds(double InSeconds)
     {
@@ -1483,7 +1507,7 @@ static inline FSAngularRate operator/(const FSAngle& lhs, const FSEphemerisPerio
     return FSAngularRate(lhs.AsRadians() / rhs.AsSeconds());
 }
 
-USTRUCT(BlueprintType, Meta = (ToolTip = "Rectangular  coordinates (DX, DY, DZ)"))
+USTRUCT(BlueprintType, Category = "MaxQ|VelocityVector", Meta = (ToolTip = "Rectangular  coordinates (DX, DY, DZ)"))
 struct SPICE_API FSVelocityVector
 {
     GENERATED_BODY()
@@ -1538,6 +1562,8 @@ struct SPICE_API FSVelocityVector
     {
         return FSDimensionlessVector(dx.AsKilometersPerSecond(), dy.AsKilometersPerSecond(), dz.AsKilometersPerSecond());
     }
+
+    FString ToString() const;
 
     inline void CopyTo(double(&xyz)[3]) const
     {
@@ -1670,6 +1696,9 @@ struct SPICE_API FSLonLat
         lat = latitude;
     }
 
+    FString ToString() const;
+    FString ToString(const FString& separator, ES_AngleFormat format = ES_AngleFormat::DD) const;
+
     void CopyTo(double& lon, double& lat) const
     {
         lon = longitude.AsSpiceDouble();
@@ -1680,7 +1709,7 @@ struct SPICE_API FSLonLat
 
 
 
-USTRUCT(BlueprintType)
+USTRUCT(BlueprintType, Category = "MaxQ|EulerAngles")
 struct SPICE_API FSEulerAngles
 {
     GENERATED_BODY()
@@ -1715,6 +1744,7 @@ struct SPICE_API FSEulerAngles
     FSEulerAngles(const FSDimensionlessVector& value);
     void AsDimensionlessVector(FSDimensionlessVector& vector) const;
 
+    FString ToString() const;
 
     void CopyTo(double(&_eulang)[3], uint8& _axis3, uint8& _axis2, uint8& _axis1) const
     {
@@ -1730,7 +1760,7 @@ struct SPICE_API FSEulerAngles
 };
 
 
-USTRUCT(BlueprintType)
+USTRUCT(BlueprintType, Category = "MaxQ|AngularVelocity")
 struct SPICE_API FSAngularVelocity
 {
     GENERATED_BODY()
@@ -1778,6 +1808,8 @@ struct SPICE_API FSAngularVelocity
     {
         return FSDimensionlessVector(x.AsRadiansPerSecond(), y.AsRadiansPerSecond(), z.AsRadiansPerSecond());
     }
+
+    FString ToString() const;
 
     static FSAngularVelocity FromRadiansPerSecond(const FSDimensionlessVector& RadsPerSec)
     {
@@ -1865,7 +1897,7 @@ static inline bool operator!=(const FSAngularVelocity& lhs, const FSAngularVeloc
 
 
 
-USTRUCT(BlueprintType)
+USTRUCT(BlueprintType, Category = "MaxQ|EulerAngularState")
 struct SPICE_API FSEulerAngularState
 {
     GENERATED_BODY()
@@ -1920,13 +1952,15 @@ struct SPICE_API FSEulerAngularState
     }
 
     static const FSEulerAngularState Zero;
+
+    FString ToString() const;
 };
 
 
 
 
 
-USTRUCT(BlueprintType)
+USTRUCT(BlueprintType, Category = "MaxQ|MassConstant")
 struct SPICE_API FSMassConstant
 {
     GENERATED_BODY()
@@ -1968,6 +2002,8 @@ struct SPICE_API FSMassConstant
     }
 
     static const FSMassConstant Zero;
+
+    FString ToString() const;
 };
 
 
@@ -2018,6 +2054,8 @@ struct SPICE_API FSDimensionlessStateVector
         r = FSDimensionlessVector(_r);
         dr = FSDimensionlessVector(_dr);
     }
+
+    FString ToString() const;
 };
 
 
@@ -2069,6 +2107,8 @@ struct SPICE_API FSStateVector
         r.AsDimensionlessVector(_v.r);
         v.AsDimensionlessVector(_v.dr);
     }
+
+    FString ToString() const;
 };
 
 
@@ -2177,6 +2217,8 @@ struct SPICE_API FSCylindricalVector
         v.y = lon.AsSpiceDouble();
         v.z = z.AsSpiceDouble();
     }
+
+    FString ToString() const;
 };
 
 
@@ -2237,6 +2279,15 @@ struct SPICE_API FSCylindricalVectorRates
         v.y = dlon.AsSpiceDouble();
         v.z = dz.AsSpiceDouble();
     }
+
+    FSDimensionlessVector AsDimensionlessVector() const
+    {
+        FSDimensionlessVector v;
+        AsDimensionlessVector(v);
+        return v;
+    }
+
+    FString ToString() const;
 };
 
 
@@ -2277,6 +2328,8 @@ struct SPICE_API FSCylindricalStateVector
         r.AsDimensionlessVector(v.r);
         dr.AsDimensionlessVector(v.dr);
     }
+
+    FString ToString() const;
 };
 
 
@@ -2335,6 +2388,8 @@ struct SPICE_API FSLatitudinalVector
         v.x = r.AsSpiceDouble();
         lonlat.CopyTo(v.y, v.z);
     }
+
+    FString ToString() const;
 };
 
 
@@ -2395,6 +2450,8 @@ struct SPICE_API FSLatitudinalVectorRates
         v.y = dlon.AsSpiceDouble();
         v.z = dlat.AsSpiceDouble();
     }
+
+    FString ToString() const;
 };
 
 
@@ -2435,6 +2492,8 @@ struct SPICE_API FSLatitudinalStateVector
         r.AsDimensionlessVector(v.r);
         dr.AsDimensionlessVector(v.dr);
     }
+
+    FString ToString() const;
 };
 
 
@@ -2502,6 +2561,8 @@ struct SPICE_API FSSphericalVector
         v.y = colat.AsSpiceDouble();
         v.z = lon.AsSpiceDouble();
     }
+
+    FString ToString() const;
 };
 
 
@@ -2562,6 +2623,8 @@ struct SPICE_API FSSphericalVectorRates
         v.y = dcolat.AsSpiceDouble();
         v.z = dlon.AsSpiceDouble();
     }
+
+    FString ToString() const;
 };
 
 USTRUCT(BlueprintType, Meta = (ToolTip = "Spherical coordinates (R, COLAT, LONG, DR, DCOLAT, DLONG)"))
@@ -2601,6 +2664,8 @@ struct SPICE_API FSSphericalStateVector
         r.AsDimensionlessVector(v.r);
         dr.AsDimensionlessVector(v.dr);
     }
+
+    FString ToString() const;
 };
 
 
@@ -2659,6 +2724,8 @@ struct SPICE_API FSGeodeticVector
         lonlat.CopyTo(v.x, v.y);
         v.z = alt.AsSpiceDouble();
     }
+
+    FString ToString() const;
 };
 
 
@@ -2719,6 +2786,8 @@ struct SPICE_API FSGeodeticVectorRates
         v.y = dlat.AsSpiceDouble();
         v.z = dalt.AsSpiceDouble();
     }
+
+    FString ToString() const;
 };
 
 USTRUCT(BlueprintType, Meta = (ToolTip = "Geodetic coordinates (LONG, LAT, ALT, DLONG, DLAT, DALT"))
@@ -2758,6 +2827,8 @@ struct SPICE_API FSGeodeticStateVector
         r.AsDimensionlessVector(v.r);
         dr.AsDimensionlessVector(v.dr);
     }
+
+    FString ToString() const;
 };
 
 
@@ -2816,6 +2887,8 @@ struct SPICE_API FSPlanetographicVector
         lonlat.CopyTo(v.x, v.y);
         v.z = alt.AsSpiceDouble();
     }
+
+    FString ToString() const;
 };
 
 
@@ -2876,6 +2949,8 @@ struct SPICE_API FSPlanetographicVectorRates
         v.y = dlat.AsSpiceDouble();
         v.z = dalt.AsSpiceDouble();
     }
+
+    FString ToString() const;
 };
 
 USTRUCT(BlueprintType, Meta = (ToolTip = "Planetographic coordinates (LONG, LAT, ALT, DLONG, DLAT, DALT)"))
@@ -2915,10 +2990,12 @@ struct SPICE_API FSPlanetographicStateVector
         r.AsDimensionlessVector(v.r);
         dr.AsDimensionlessVector(v.dr);
     }
+
+    FString ToString() const;
 };
 
 
-USTRUCT(BlueprintType)
+USTRUCT(BlueprintType, Category = "MaxQ|StateTransform")
 struct SPICE_API FSStateTransform
 {
     GENERATED_BODY()
@@ -2954,12 +3031,13 @@ struct SPICE_API FSStateTransform
     }
 
     static const FSStateTransform Identity;
+    FString ToString() const;
 };
 
 
 
 
-USTRUCT(BlueprintType,
+USTRUCT(BlueprintType, Category = "MaxQ|RotationMatrix",
     Meta = (
         ShortToolTip = "C-Matrix",
         ToolTip = "3x3 Rotation Matrix (AKA C-Matrix, or Camera-Matrix)"
@@ -3007,9 +3085,10 @@ struct SPICE_API FSRotationMatrix
     }
 
     static const FSRotationMatrix Identity;
+    FString ToString() const;
 };
 
-USTRUCT(BlueprintType)
+USTRUCT(BlueprintType, Category = "MaxQ|Quaternion")
 struct SPICE_API FSQuaternion
 {
     GENERATED_BODY()
@@ -3074,6 +3153,7 @@ struct SPICE_API FSQuaternion
     }
 
     static const FSQuaternion Identity;
+    FString ToString() const;
 };
 
 SPICE_API FSRotationMatrix operator*(const FSRotationMatrix& lhs, const FSRotationMatrix& rhs);
@@ -3119,6 +3199,8 @@ public:
         v_major = FSDistanceVector(_v_major);
         v_minor = FSDistanceVector(_v_minor);
     }
+
+    FString ToString() const;
 };
 
 
@@ -3163,9 +3245,11 @@ public:
         normal = FSDimensionlessVector(_normal);
         constant = FSDistance(_constant);
     }
+
+    FString ToString() const;
 };
 
-USTRUCT(BlueprintType)
+USTRUCT(BlueprintType, Category = "MaxQ|EulerAngularTransform")
 struct SPICE_API FSEulerAngularTransform
 {
     GENERATED_BODY()
@@ -3203,7 +3287,7 @@ struct SPICE_API FSEulerAngularTransform
     }
 
     static const FSEulerAngularTransform Identity;
-
+    FString ToString() const;
 };
 
 
@@ -3319,6 +3403,8 @@ struct SPICE_API FSConicElements
 
         return *this;
     }
+
+    FString ToString() const;
 };
 
 USTRUCT(BlueprintType)
@@ -3438,6 +3524,8 @@ struct SPICE_API FSEquinoctialElements
         elts[7] = MeanLongitudeDerivative.radiansPerSecond;
         elts[8] = RateOfLongitudeOfAscendingNode.radiansPerSecond;
     }
+
+    FString ToString() const;
 };
 
 
@@ -3498,6 +3586,8 @@ struct SPICE_API FSEphemerisTimeWindowSegment
         _segment[0] = start.AsSpiceDouble();
         _segment[1] = stop.AsSpiceDouble();
     }
+
+    FString ToString() const;
 };
 
 
@@ -3549,6 +3639,8 @@ struct SPICE_API FSWindowSegment
         _segment[0] = start;
         _segment[1] = stop;
     }
+
+    FString ToString() const;
 };
 
 
@@ -3598,6 +3690,8 @@ struct SPICE_API FSPointingType2Observation
         avv.CopyTo(_avv);
         _rate = rate;
     }
+
+    FString ToString() const;
 };
 
 
@@ -3639,6 +3733,8 @@ struct SPICE_API FSPointingType1Observation
         quat.CopyTo(_quat);
         avv.CopyTo(_avv);
     }
+
+    FString ToString() const;
 };
 
 
@@ -3795,6 +3891,8 @@ struct SPICE_API FSPointingType5Observation
         FMemory::Memcpy(&_packet[0], _quat_copy, sizeof(double[4]));
         FMemory::Memcpy(&_packet[4], _avv_copy, sizeof(double[3]));
     }
+
+    FString ToString() const;
 };
 
 
@@ -3836,6 +3934,8 @@ struct SPICE_API FSPKType5Observation
         _et = et.AsSpiceDouble();
         state.CopyTo(_state);
     }
+
+    FString ToString() const;
 };
 
 
@@ -3918,6 +4018,8 @@ struct SPICE_API FSPKType15Observation
         _j2 = j2;
         _radius = radius.AsSpiceDouble();
     }
+
+    FString ToString() const;
 };
 
 
@@ -3960,6 +4062,8 @@ public:
     FSAngle M0() const { return FSAngle(elems[XMO]); }
     FSAngularRate N() const { return FSAngularRate(elems[XNO]/60.); }
     FSEphemerisTime ET() const { return FSEphemerisTime(elems[EPOCH]); }
+
+    FString ToString() const;
 };
 
 USTRUCT(BlueprintType)
@@ -3982,6 +4086,7 @@ public:
     }
 
     void CopyTo(double(&_geophs)[8]) const;
+    FString ToString() const;
 };
 
 
@@ -4024,6 +4129,8 @@ public:
         _epoch = epoch.AsSpiceDouble();
         tangt.CopyTo(_tangt);
     }
+
+    FString ToString() const;
 };
 
 
@@ -4039,6 +4146,8 @@ public:
     FSLimptCut()
     {
     }
+
+    FString ToString() const;
 };
 
 
@@ -4082,6 +4191,8 @@ public:
         _epoch = epoch.AsSpiceDouble();
         trmvc.CopyTo(_trmvc);
     }
+
+    FString ToString() const;
 };
 
 
@@ -4097,6 +4208,8 @@ public:
     FSTermptCut()
     {
     }
+
+    FString ToString() const;
 };
 
 
@@ -4121,6 +4234,8 @@ public:
         point.CopyTo(_point);
         direction.CopyTo(_direction);
     }
+
+    FString ToString() const;
 };
 
 USTRUCT(BlueprintType)
@@ -4154,6 +4269,7 @@ public:
     FSDLADescr(void* descr);
     
     void CopyTo(void* descr) const;
+    FString ToString() const;
 };
 
 
@@ -4202,6 +4318,7 @@ public:
     FSDSKDescr(void* descr);
 
     void CopyTo(void* descr) const;
+    FString ToString() const;
 };
 
 
@@ -4234,6 +4351,7 @@ public:
         i1 = _i1;
         i2 = _i2;
     }
+    FString ToString() const;
 };
 
 
@@ -4247,7 +4365,7 @@ public:
     static double normalize0to360(double degrees);
     static double normalizePiToPi(double radians);
     static double normalizeZeroToTwoPi(double radians);
-    static FString formatAngle(const double degrees, ES_AngleFormat format);
+    static FString formatAngle(double degrees, ES_AngleFormat format);
 
 public:
     // See notes below regarding EnumAsString.
@@ -4272,6 +4390,7 @@ public:
     static FString toFString(ES_ComputationMethod method, const TArray<FString>& shapeSurfaces);
     static FString toFString(ES_LimbComputationMethod method, const TArray<FString>& shapeSurfaces);
     static FString toFString(ES_Shadow shadow, ES_CurveType curveType, ES_GeometricModel method, const TArray<FString>& shapeSurfaces);
+    static FString ToString(ES_Axis Axis);
 
     // ---------------------------------------------------------------------------
     // NOTE:
@@ -4301,180 +4420,53 @@ public:
     UFUNCTION(BlueprintCallable, Category = "MaxQ|Stringifier", meta = (ToolTip = "Set precision used to format floating point values"))
     static void SetFloatToStringPrecision(int _floatPrintPrecision);
 
-    UFUNCTION(BlueprintPure, Category = "MaxQ|Stringifier", meta = (ToolTip = "double to string (uses SetFloatToStringPrecision)", CompactNodeTitle = "$"))
+    UFUNCTION(BlueprintPure, Category = "MaxQ|Stringifier", meta = (ToolTip = "double to string (uses SetFloatToStringPrecision)"))
     static FString FormatDouble(double value);
 
-    UFUNCTION(BlueprintPure, Category = "MaxQ|Stringifier", meta = (ToolTip = "double to string", CompactNodeTitle = "$"))
+    UFUNCTION(BlueprintPure, Category = "MaxQ|Stringifier", meta = (ToolTip = "double to string"))
     static FString FormatDoublePrecisely(double value, int precision = 12);
 
-    UFUNCTION(BlueprintPure, Category = "MaxQ|Stringifier", meta = (ToolTip = "SAngle to string", CompactNodeTitle = "$"))
+    UFUNCTION(BlueprintPure, Category = "MaxQ|Stringifier", meta = (ToolTip = "SAngle to string"))
     static FString FormatAngle(const FSAngle& value, ES_AngleFormat format = ES_AngleFormat::DD);
 
-    UFUNCTION(BlueprintPure, Category = "MaxQ|Stringifier", meta = (ToolTip = "SLongLat to string", CompactNodeTitle = "$"))
+    UFUNCTION(BlueprintPure, Category = "MaxQ|Stringifier", meta = (ToolTip = "SLongLat to string"))
     static FString FormatLonLat(const FSLonLat& value, const FString& separator = TEXT(", "), ES_AngleFormat format = ES_AngleFormat::DD);
 
-    UFUNCTION(BlueprintPure, Category = "MaxQ|Stringifier", meta = (ToolTip = "Right Ascension, Declination to string", CompactNodeTitle = "$"))
+    UFUNCTION(BlueprintPure, Category = "MaxQ|Stringifier", meta = (ToolTip = "Right Ascension, Declination to string"))
     static FString FormatRADec(const FSAngle& rightAscension, const FSAngle& declination, const FString& separator = TEXT(", "));
 
-    UFUNCTION(BlueprintPure, Category = "MaxQ|Stringifier", meta = (ToolTip = "Distance To String", CompactNodeTitle = "$", AdvancedDisplay = "precision"))
+    UFUNCTION(BlueprintPure, Category = "MaxQ|Stringifier", meta = (ToolTip = "Distance To String", AdvancedDisplay = "precision"))
     static FString FormatDistance(const FSDistance& distance, ES_Units Units = ES_Units::KILOMETERS, int precision = 12);
 
-    UFUNCTION(BlueprintPure, Category = "MaxQ|Stringifier", meta = (ToolTip = "Period To String", CompactNodeTitle = "$", AdvancedDisplay = "precision"))
+    UFUNCTION(BlueprintPure, Category = "MaxQ|Stringifier", meta = (ToolTip = "Period To String", AdvancedDisplay = "precision"))
     static FString FormatPeriod(const FSEphemerisPeriod& period, ES_Units Units = ES_Units::SECONDS, int precision = 12);
 
-    UFUNCTION(BlueprintPure, Category = "MaxQ|Stringifier", meta = (ToolTip = "Speed To String", CompactNodeTitle = "$", AdvancedDisplay = "precision"))
+    UFUNCTION(BlueprintPure, Category = "MaxQ|Stringifier", meta = (ToolTip = "Speed To String", AdvancedDisplay = "precision"))
     static FString FormatSpeed(const FSSpeed& speed, ES_Units NumeratorUnits = ES_Units::KILOMETERS, ES_Units DenominatorUnits = ES_Units::SECONDS, int precision = 12);
 
-    UFUNCTION(BlueprintPure, Category = "MaxQ|Stringifier", meta = (ToolTip = "EphemerisTime To UTC String", CompactNodeTitle = "$", AdvancedDisplay = "precision"))
-    static FString FormatUtcTime(const FSEphemerisTime& time, ES_UTCTimeFormat TimeFormat, int precision = 4);
+    UFUNCTION(BlueprintPure, Category = "MaxQ|Stringifier", meta = (ToolTip = "EphemerisTime To UTC String", AdvancedDisplay = "precision"))
+    static FString FormatUtcTime(const FSEphemerisTime& time, ES_UTCTimeFormat TimeFormat = ES_UTCTimeFormat::Calendar, int precision = 4);
 
-    /// <summary>Ephemeris period of one second</summary>
-    /// <returns>One Second</returns>
-    UFUNCTION(BlueprintPure,
-        Category = "MaxQ|Constants",
-        meta = (
-            Keywords = "CONSTANTS, TIME",
-            ShortToolTip = "One Second",
-            ToolTip = "Ephemeris period of one second"
-            ))
-    static void second_period(FSEphemerisPeriod& oneDay);
-
-    /// <summary>Ephemeris period of one Minute</summary>
-    /// <returns>One Minute</returns>
-    UFUNCTION(BlueprintPure,
-        Category = "MaxQ|Constants",
-        meta = (
-            Keywords = "CONSTANTS, TIME",
-            ShortToolTip = "One Minute",
-            ToolTip = "Ephemeris period of one Minute"
-            ))
-    static void minute_period(FSEphemerisPeriod& oneMinute);
-    
-    /// <summary>Ephemeris period of one Hour</summary>
-    /// <returns>One Hour</returns>
-    UFUNCTION(BlueprintPure,
-        Category = "MaxQ|Constants",
-        meta = (
-            Keywords = "CONSTANTS, TIME",
-            ShortToolTip = "One Hour",
-            ToolTip = "Ephemeris period of one Hour"
-            ))
-    static void hour_period(FSEphemerisPeriod& oneHour);
-    
-    
     /// <summary>Ephemeris period of one day</summary>
     /// <returns>One Day</returns>
+    [[deprecated("Use SEphemerisPeriod_OneDay()")]]
     UFUNCTION(BlueprintPure,
         Category = "MaxQ|Constants",
         meta = (
+            DeprecatedFunction,
+            DeprecationMessage = "Use SEphemerisPeriod_OneDay",
             Keywords = "CONSTANTS, TIME",
             ShortToolTip = "One Day",
             ToolTip = "Ephemeris period of one day"
             ))
     static void day_period(FSEphemerisPeriod& oneDay);
 
-    /// <summary>Ephemeris period of one day</summary>
-    /// <returns>One Day</returns>
+    [[deprecated("Use SEphemerisTime_J2000()")]]
     UFUNCTION(BlueprintPure,
         Category = "MaxQ|Constants",
         meta = (
-            Keywords = "CONSTANTS, TIME",
-            ShortToolTip = "One Tropical Year",
-            ToolTip = "Ephemeris period of one Tropical Year (time that the Sun takes to return to the same position such as vernal equinox to vernal equinox, value from the 1992 Explanatory Supplement to the Astronomical Almanac)"
-            ))
-    static void TropicalYear_period(FSEphemerisPeriod& oneTropicalYear);
-
-    /// <summary>Ephemeris period of one day</summary>
-    /// <returns>One Day</returns>
-    UFUNCTION(BlueprintPure,
-        Category = "MaxQ|Constants",
-        meta = (
-            Keywords = "CONSTANTS, TIME",
-            ShortToolTip = "One Tropical Year",
-            ToolTip = "Ephemeris period of one Julian Year (average length of the year in the Julian calendar)"
-            ))
-    static void JulianYear_period(FSEphemerisPeriod& oneJulianYear);
-
-    /// <summary>Distance of one Meter</summary>
-    /// <returns>One Meter</returns>
-    UFUNCTION(BlueprintPure,
-        Category = "MaxQ|Constants",
-        meta = (
-            Keywords = "CONSTANTS",
-            ShortToolTip = "One Meter, DISTANCE",
-            ToolTip = "Distance of one Meter"
-            ))
-    static void meter_distance(FSDistance& oneMeter);        
-    
-    /// <summary>Distance of one Kilometer</summary>
-    /// <returns>One Kilometer</returns>
-    UFUNCTION(BlueprintPure,
-        Category = "MaxQ|Constants",
-        meta = (
-            Keywords = "CONSTANTS, DISTANCE",
-            ShortToolTip = "One Kilometer",
-            ToolTip = "Distance of one meter"
-            ))
-    static void kilometer_distance(FSDistance& oneKilometer);
-
-    /// <summary>Distance of one Foot</summary>
-    /// <returns>One Foot</returns>
-    UFUNCTION(BlueprintPure,
-        Category = "MaxQ|Constants",
-        meta = (
-            Keywords = "CONSTANTS, DISTANCE",
-            ShortToolTip = "One Foot",
-            ToolTip = "Distance of one Foot"
-            ))
-    static void foot_distance(FSDistance& oneFoot);
-
-    /// <summary>Distance of Statute Mile</summary>
-    /// <returns>One Statute Mile</returns>
-    UFUNCTION(BlueprintPure,
-        Category = "MaxQ|Constants",
-        meta = (
-            Keywords = "CONSTANTS, DISTANCE",
-            ShortToolTip = "One Statute Mile",
-            ToolTip = "Distance of one Statute Mile"
-            ))
-    static void StatuteMile_distance(FSDistance& statuteMile);
-    
-    /// <summary>Distance of Nautical Mile</summary>
-    /// <returns>One Nautical Mile</returns>
-    UFUNCTION(BlueprintPure,
-        Category = "MaxQ|Constants",
-        meta = (
-            Keywords = "CONSTANTS, DISTANCE",
-            ShortToolTip = "One Nautical Mile",
-            ToolTip = "Distance of one Nautical Mile"
-            ))
-    static void NauticalMile_distance(FSDistance& nauticalMile);
-
-    /// <summary>Distance of one AstronomicalUnit</summary>
-    /// <returns>One AstronomicalUnit</returns>
-    UFUNCTION(BlueprintPure,
-        Category = "MaxQ|Constants",
-        meta = (
-            Keywords = "CONSTANTS, DISTANCE",
-            ShortToolTip = "One AU",
-            ToolTip = "Distance of one Astronomical Unit (AU)"
-            ))
-    static void AstronomicalUnit_distance(FSDistance& oneAu);
-
-    /// <summary>Distance of one Lightyear</summary>
-    /// <returns>One Lightyear</returns>
-    UFUNCTION(BlueprintPure,
-        Category = "MaxQ|Constants",
-        meta = (
-            Keywords = "CONSTANTS, DISTANCE",
-            ShortToolTip = "One LY",
-            ToolTip = "Distance of one Lightyear (LY)"
-            ))
-    static void LightYear_distance(FSDistance& oneLy);
-
-    UFUNCTION(BlueprintPure,
-        Category = "MaxQ|Constants",
-        meta = (
+            DeprecatedFunction,
+            DeprecationMessage = "Use SEphemerisTime_J2000",
             Keywords = "CONSTANTS, TIME",
             ShortToolTip = "Epoch at J2000",
             ToolTip = "Return the Epoch at Julian Date of 2000 JAN 1.5 (1 Jan 2000, 11:58:55.816 UTC)"
@@ -4485,8 +4477,9 @@ public:
     Category = "MaxQ|Types",
     meta = (
         BlueprintAutocast,
-        CompactNodeTitle = "$",
-        ToolTip = "Stringifies S Units"
+        DisplayName = "To String (S_Units)",
+        CompactNodeTitle = "->",
+        ToolTip = "Stringifies S_Units"
         ))
     static FString Conv_S_UnitsToString(
        ES_Units units
@@ -4604,28 +4597,34 @@ public:
         Category = "MaxQ|Types",
         meta = (
             BlueprintAutocast,
-            ShortToolTip = "String to Epheremis Time.",
-            ToolTip = "Converts a string to an Epheremis Time.  If the string fails to convert an error will remain signalled in SPICE, which the downstream computation will detect."
+            CompactNodeTitle = "->",
+            ShortToolTip = "String to Ephemeris Time.",
+            ToolTip = "Converts a string to an Ephemeris Time.  If the string fails to convert an error will remain signalled in SPICE, which the downstream computation will detect."
             ))
-    static FSEphemerisTime Conv_StringToSEpheremisTime(const FString& time);
+    static FSEphemerisTime Conv_StringToSEphemerisTime(const FString& time);
 
     UFUNCTION(BlueprintPure,
         Category = "MaxQ|Types",
         meta = (
             BlueprintAutocast,
-            CompactNodeTitle = "$",
-            ToolTip = "Converts an Epheremis Time to a String"
+            DisplayName = "To String (SEphemerisTime)",
+            CompactNodeTitle = "->",
+            ScriptMethod = "ToString",
+            ToolTip = "Converts an Ephemeris Time to a String"
             ))
-    static FString Conv_SEpheremisTimeToString(const FSEphemerisTime& et);
+    static FString Conv_SEphemerisTimeToString(const FSEphemerisTime& et);
 
     UFUNCTION(BlueprintPure,
         Category = "MaxQ|Types",
         meta = (
             BlueprintAutocast,
-            CompactNodeTitle = "$",
-            ToolTip = "Converts an Epheremis Period to a String"
+            DisplayName = "To String (SEphemerisPeriod)",
+            CompactNodeTitle = "->",
+            ScriptMethod = "ToString",
+            ToolTip = "Converts an Ephemeris Period to a String"
             ))
-    static FString Conv_SEpheremisPeriodToString(const FSEphemerisPeriod& period);
+    static FString Conv_SEphemerisPeriodToString(const FSEphemerisPeriod& period);
+
 
     // This is common in Tick(float DeltaTime)
     UFUNCTION(BlueprintPure,
@@ -4642,11 +4641,12 @@ public:
         Category = "MaxQ|Types",
         meta = (
             BlueprintAutocast,
-            CompactNodeTitle = "$",
-            ShortToolTip = "Mass Constant to string",
-            ToolTip = "Conversts a Mass Constant to a string"
+            DisplayName = "To String (SMassConstant)",
+            CompactNodeTitle = "->",
+            ScriptMethod = "ToString",
+            ToolTip = "Converts Mass Constant to a String"
             ))
-        static FString Conv_SMassConstantToString(const FSMassConstant& gm);
+    static FString Conv_SMassConstantToString(const FSMassConstant& gm);
 
 
     /// <summary>Converts a double (sec past J2000) to an ephemeris time</summary>
@@ -4922,86 +4922,317 @@ public:
         const FSPlanetographicStateVector& value
     );
 
-    UFUNCTION(BlueprintPure, Category = "MaxQ|Debug", meta = (BlueprintAutocast, ToolTip = "stringifier", Keywords = "string", CompactNodeTitle = "$"))
+    UFUNCTION(BlueprintPure,
+        Category = "MaxQ|Debug",
+        meta = (
+            BlueprintAutocast,
+            DisplayName = "To String (SAngle)",
+            CompactNodeTitle = "->",
+            ScriptMethod = "ToString",
+            ToolTip = "Converts SAngle to a String"
+            ))
     static FString Conv_SAngleToString (const FSAngle& value);
 
-    UFUNCTION(BlueprintPure, Category = "MaxQ|Debug", meta = (BlueprintAutocast, ToolTip = "stringifier", Keywords = "string", CompactNodeTitle = "$"))
+    UFUNCTION(BlueprintPure,
+        Category = "MaxQ|Debug",
+        meta = (
+            BlueprintAutocast,
+            DisplayName = "To String (SDistance)",
+            CompactNodeTitle = "->",
+            ScriptMethod = "ToString",
+            ToolTip = "Converts Distance to a String"
+            ))
     static FString Conv_SDistanceToString(const FSDistance& value);
 
-    UFUNCTION(BlueprintPure, Category = "MaxQ|Debug", meta = (BlueprintAutocast, ToolTip = "stringifier", Keywords = "string", CompactNodeTitle = "$"))
+    UFUNCTION(BlueprintPure,
+        Category = "MaxQ|Debug",
+        meta = (
+            BlueprintAutocast,
+            DisplayName = "To String (SDistanceVector)",
+            CompactNodeTitle = "->",
+            ScriptMethod = "ToString",
+            ToolTip = "Converts a DistanceVector to a String"
+            ))
     static FString Conv_SDistanceVectorToString(const FSDistanceVector& value);
 
-    UFUNCTION(BlueprintPure, Category = "MaxQ|Debug", meta = (BlueprintAutocast, ToolTip = "stringifier", Keywords = "string", CompactNodeTitle = "$"))
+    UFUNCTION(BlueprintPure,
+        Category = "MaxQ|Debug",
+        meta = (
+            BlueprintAutocast,
+            DisplayName = "To String (SVelocityVector)",
+            CompactNodeTitle = "->",
+            ScriptMethod = "ToString",
+            ToolTip = "Converts a SVelocityVector to a String"
+            ))
     static FString Conv_SVelocityVectorToString(const FSVelocityVector& value);
 
-    UFUNCTION(BlueprintPure, Category = "MaxQ|Debug", meta = (BlueprintAutocast, ToolTip = "stringifier", Keywords = "string", CompactNodeTitle = "$"))
+    UFUNCTION(BlueprintPure,
+        Category = "MaxQ|Debug",
+        meta = (
+            BlueprintAutocast,
+            DisplayName = "To String (SStateVector)",
+            CompactNodeTitle = "->",
+            ScriptMethod = "ToString",
+            ToolTip = "Converts a SStateVector to a String"
+            ))
     static FString Conv_SStateVectorToString(const FSStateVector& value);
 
-    UFUNCTION(BlueprintPure, Category = "MaxQ|Debug", meta = (BlueprintAutocast, ToolTip = "stringifier", Keywords = "string", CompactNodeTitle = "$"))
+    UFUNCTION(BlueprintPure,
+        Category = "MaxQ|Debug",
+        meta = (
+            BlueprintAutocast,
+            DisplayName = "To String (SLonLat)",
+            CompactNodeTitle = "->",
+            ScriptMethod = "ToString",
+            ToolTip = "Converts a SLonLat to a String"
+            ))
     static FString Conv_SLonLatToString(const FSLonLat& value);
 
-    UFUNCTION(BlueprintPure, Category = "MaxQ|Debug", meta = (BlueprintAutocast, ToolTip = "stringifier", Keywords = "string", CompactNodeTitle = "$"))
+    UFUNCTION(BlueprintPure,
+        Category = "MaxQ|Debug",
+        meta = (
+            BlueprintAutocast,
+            DisplayName = "To String (SSpeed)",
+            CompactNodeTitle = "->",
+            ScriptMethod = "ToString",
+            ToolTip = "Converts a SSpeed to a String"
+            ))
     static FString Conv_SSpeedToString(const FSSpeed& value);
 
-    UFUNCTION(BlueprintPure, Category = "MaxQ|Debug", meta = (BlueprintAutocast, ToolTip = "stringifier", Keywords = "string", CompactNodeTitle = "$"))
+    UFUNCTION(BlueprintPure,
+        Category = "MaxQ|Debug",
+        meta = (
+            BlueprintAutocast,
+            DisplayName = "To String (SAngularRate)",
+            CompactNodeTitle = "->",
+            ScriptMethod = "ToString",
+            ToolTip = "Converts a SAngularRate to a String"
+            ))
     static FString Conv_SAngularRateToString(const FSAngularRate& value);
 
-    UFUNCTION(BlueprintPure, Category = "MaxQ|Debug", meta = (BlueprintAutocast, ToolTip = "stringifier", Keywords = "string", CompactNodeTitle = "$"))
+    UFUNCTION(BlueprintPure,
+        Category = "MaxQ|Debug",
+        meta = (
+            BlueprintAutocast,
+            DisplayName = "To String (SDimensionlessVector)",
+            CompactNodeTitle = "->",
+            ScriptMethod = "ToString",
+            ToolTip = "Converts a SDimensionlessVector to a String"
+            ))
     static FString Conv_SDimensionlessVectorToString(const FSDimensionlessVector& value);
 
-    UFUNCTION(BlueprintPure, Category = "MaxQ|Debug", meta = (BlueprintAutocast, ToolTip = "stringifier", Keywords = "string", CompactNodeTitle = "$"))
+    UFUNCTION(BlueprintPure,
+        Category = "MaxQ|Debug",
+        meta = (
+            BlueprintAutocast,
+            DisplayName = "To String (SDimensionlessStateVector)",
+            CompactNodeTitle = "->",
+            ScriptMethod = "ToString",
+            ToolTip = "Converts a SDimensionlessStateVector to a String"
+            ))
     static FString Conv_SDimensionlessStateVectorToString(const FSDimensionlessStateVector& value);
 
-    UFUNCTION(BlueprintPure, Category = "MaxQ|Debug", meta = (BlueprintAutocast, ToolTip = "stringifier", Keywords = "string", CompactNodeTitle = "$"))
+    UFUNCTION(BlueprintPure,
+        Category = "MaxQ|Debug",
+        meta = (
+            BlueprintAutocast,
+            DisplayName = "To String (SPlanetographicStateVector)",
+            CompactNodeTitle = "->",
+            ScriptMethod = "ToString",
+            ToolTip = "Converts a SPlanetographicStateVector to a String"
+            ))
     static FString Conv_SPlanetographicStateVectorToString(const FSPlanetographicStateVector& value);
 
-    UFUNCTION(BlueprintPure, Category = "MaxQ|Debug", meta = (BlueprintAutocast, ToolTip = "stringifier", Keywords = "string", CompactNodeTitle = "$"))
+    UFUNCTION(BlueprintPure,
+        Category = "MaxQ|Debug",
+        meta = (
+            BlueprintAutocast,
+            DisplayName = "To String (SGeodeticStateVector)",
+            CompactNodeTitle = "->",
+            ScriptMethod = "ToString",
+            ToolTip = "Converts a SGeodeticStateVector to a String"
+            ))
     static FString Conv_SGeodeticStateVectorToString(const FSGeodeticStateVector& value);
 
-    UFUNCTION(BlueprintPure, Category = "MaxQ|Debug", meta = (BlueprintAutocast, ToolTip = "stringifier", Keywords = "string", CompactNodeTitle = "$"))
+    UFUNCTION(BlueprintPure,
+        Category = "MaxQ|Debug",
+        meta = (
+            BlueprintAutocast,
+            DisplayName = "To String (SSphericalStateVector)",
+            CompactNodeTitle = "->",
+            ScriptMethod = "ToString",
+            ToolTip = "Converts a SSphericalStateVector to a String"
+            ))
     static FString Conv_SSphericalStateVectorToString(const FSSphericalStateVector& value);
 
-    UFUNCTION(BlueprintPure, Category = "MaxQ|Debug", meta = (BlueprintAutocast, ToolTip = "stringifier", Keywords = "string", CompactNodeTitle = "$"))
+    UFUNCTION(BlueprintPure,
+        Category = "MaxQ|Debug",
+        meta = (
+            BlueprintAutocast,
+            DisplayName = "To String (SLatitudinalStateVector)",
+            CompactNodeTitle = "->",
+            ScriptMethod = "ToString",
+            ToolTip = "Converts a SLatitudinalStateVector to a String"
+            ))
     static FString Conv_SLatitudinalStateVectorToString(const FSLatitudinalStateVector& value);
 
-    UFUNCTION(BlueprintPure, Category = "MaxQ|Debug", meta = (BlueprintAutocast, ToolTip = "stringifier", Keywords = "string", CompactNodeTitle = "$"))
+    UFUNCTION(BlueprintPure,
+        Category = "MaxQ|Debug",
+        meta = (
+            BlueprintAutocast,
+            DisplayName = "To String (SCylindricalStateVector)",
+            CompactNodeTitle = "->",
+            ScriptMethod = "ToString",
+            ToolTip = "Converts a SCylindricalStateVector to a String"
+            ))
     static FString Conv_SCylindricalStateVectorToString(const FSCylindricalStateVector& value);
 
-    UFUNCTION(BlueprintPure, Category = "MaxQ|Debug", meta = (BlueprintAutocast, ToolTip = "stringifier", Keywords = "string", CompactNodeTitle = "$"))
+    UFUNCTION(BlueprintPure,
+        Category = "MaxQ|Debug",
+        meta = (
+            BlueprintAutocast,
+            DisplayName = "To String (SPlanetographicVector)",
+            CompactNodeTitle = "->",
+            ScriptMethod = "ToString",
+            ToolTip = "Converts a SPlanetographicVector to a String"
+            ))
     static FString Conv_SPlanetographicVectorToString(const FSPlanetographicVector& value);
 
-    UFUNCTION(BlueprintPure, Category = "MaxQ|Debug", meta = (BlueprintAutocast, ToolTip = "stringifier", Keywords = "string", CompactNodeTitle = "$"))
+    UFUNCTION(BlueprintPure,
+        Category = "MaxQ|Debug",
+        meta = (
+            BlueprintAutocast,
+            DisplayName = "To String (SGeodeticVector)",
+            CompactNodeTitle = "->",
+            ScriptMethod = "ToString",
+            ToolTip = "Converts a SGeodeticVector to a String"
+            ))
     static FString Conv_SGeodeticVectorToString(const FSGeodeticVector& value);
 
-    UFUNCTION(BlueprintPure, Category = "MaxQ|Debug", meta = (BlueprintAutocast, ToolTip = "stringifier", Keywords = "string", CompactNodeTitle = "$"))
+    UFUNCTION(BlueprintPure,
+        Category = "MaxQ|Debug",
+        meta = (
+            BlueprintAutocast,
+            DisplayName = "To String (SSphericalVector)",
+            CompactNodeTitle = "->",
+            ScriptMethod = "ToString",
+            ToolTip = "Converts a SSphericalVector to a String"
+            ))
     static FString Conv_SSphericalVectorToString(const FSSphericalVector& value);
 
-    UFUNCTION(BlueprintPure, Category = "MaxQ|Debug", meta = (BlueprintAutocast, ToolTip = "stringifier", Keywords = "string", CompactNodeTitle = "$"))
+    UFUNCTION(BlueprintPure,
+        Category = "MaxQ|Debug",
+        meta = (
+            BlueprintAutocast,
+            DisplayName = "To String (SLatitudinalVector)",
+            CompactNodeTitle = "->",
+            ScriptMethod = "ToString",
+            ToolTip = "Converts a SLatitudinalVector to a String"
+            ))
     static FString Conv_SLatitudinalVectorToString(const FSLatitudinalVector& value);
 
-    UFUNCTION(BlueprintPure, Category = "MaxQ|Debug", meta = (BlueprintAutocast, ToolTip = "stringifier", Keywords = "string", CompactNodeTitle = "$"))
+    UFUNCTION(BlueprintPure,
+        Category = "MaxQ|Debug",
+        meta = (
+            BlueprintAutocast,
+            DisplayName = "To String (SCylindricalVector)",
+            CompactNodeTitle = "->",
+            ScriptMethod = "ToString",
+            ToolTip = "Converts a SCylindricalVector to a String"
+            ))
     static FString Conv_SCylindricalVectorToString(const FSCylindricalVector& value);
 
-    UFUNCTION(BlueprintPure, Category = "MaxQ|Debug", meta = (BlueprintAutocast, ToolTip = "stringifier", Keywords = "string", CompactNodeTitle = "$"))
+    UFUNCTION(BlueprintPure,
+        Category = "MaxQ|Debug",
+        meta = (
+            BlueprintAutocast,
+            DisplayName = "To String (SPlanetographicVectorRates)",
+            CompactNodeTitle = "->",
+            ScriptMethod = "ToString",
+            ToolTip = "Converts a SPlanetographicVectorRates to a String"
+            ))
     static FString Conv_SPlanetographicVectorRatesToString(const FSPlanetographicVectorRates& value);
 
-    UFUNCTION(BlueprintPure, Category = "MaxQ|Debug", meta = (BlueprintAutocast, ToolTip = "stringifier", Keywords = "string", CompactNodeTitle = "$"))
+    UFUNCTION(BlueprintPure,
+        Category = "MaxQ|Debug",
+        meta = (
+            BlueprintAutocast,
+            DisplayName = "To String (SGeodeticVectorRates)",
+            CompactNodeTitle = "->",
+            ScriptMethod = "ToString",
+            ToolTip = "Converts a SGeodeticVectorRates to a String"
+            ))
     static FString Conv_SGeodeticVectorRatesToString(const FSGeodeticVectorRates& value);
 
-    UFUNCTION(BlueprintPure, Category = "MaxQ|Debug", meta = (BlueprintAutocast, ToolTip = "stringifier", Keywords = "string", CompactNodeTitle = "$"))
+    UFUNCTION(BlueprintPure,
+        Category = "MaxQ|Debug",
+        meta = (
+            BlueprintAutocast,
+            DisplayName = "To String (SSphericalVectorRates)",
+            CompactNodeTitle = "->",
+            ScriptMethod = "ToString",
+            ToolTip = "Converts a SSphericalVectorRates to a String"
+            ))
     static FString Conv_SSphericalVectorRatesToString(const FSSphericalVectorRates& value);
 
-    UFUNCTION(BlueprintPure, Category = "MaxQ|Debug", meta = (BlueprintAutocast, ToolTip = "stringifier", Keywords = "string", CompactNodeTitle = "$"))
+    UFUNCTION(BlueprintPure,
+        Category = "MaxQ|Debug",
+        meta = (
+            BlueprintAutocast,
+            DisplayName = "To String (SLatitudinaVectorRates)",
+            CompactNodeTitle = "->",
+            ScriptMethod = "ToString",
+            ToolTip = "Converts a SLatitudinaVectorRates to a String"
+            ))
     static FString Conv_SLatitudinaVectorRatesToString(const FSLatitudinalVectorRates& value);
 
-    UFUNCTION(BlueprintPure, Category = "MaxQ|Debug", meta = (BlueprintAutocast, ToolTip = "stringifier", Keywords = "string", CompactNodeTitle = "$"))
+    UFUNCTION(BlueprintPure,
+        Category = "MaxQ|Debug",
+        meta = (
+            BlueprintAutocast,
+            DisplayName = "To String (SCylindricalVectorRates)",
+            CompactNodeTitle = "->",
+            ScriptMethod = "ToString",
+            ToolTip = "Converts a SCylindricalVectorRates to a String"
+            ))
     static FString Conv_SCylindricalVectorRatesToString(const FSCylindricalVectorRates& value);
 
-    UFUNCTION(BlueprintPure, Category = "MaxQ|Debug", meta = (BlueprintAutocast, ToolTip = "stringifier", Keywords = "string", CompactNodeTitle = "$"))
+    UFUNCTION(BlueprintPure,
+        Category = "MaxQ|Debug",
+        meta = (
+            BlueprintAutocast,
+            DisplayName = "To String (SConicElements)",
+            CompactNodeTitle = "->",
+            ScriptMethod = "ToString",
+            ToolTip = "Converts a SConicElements to a String"
+            ))
     static FString Conv_SConicElementsToString(const FSConicElements& value);
 
-    UFUNCTION(BlueprintPure, Category = "MaxQ|Debug", meta = (BlueprintAutocast, ToolTip = "stringifier", Keywords = "string", CompactNodeTitle = "$"))
-    static FString Conv_SEphemerisPeriodToString(const FSEphemerisPeriod& value);
+    static FString Conv_SComplexScalarToString(const FSComplexScalar& value);
+    static FString Conv_SEulerAnglesToString(const FSEulerAngles& value);
+    static FString Conv_SEulerAngularStateToString(const FSEulerAngularState& value);
+    static FString Conv_SStateTransformToString(const FSStateTransform& value);
+    static FString Conv_SRotationMatrixToString(const FSRotationMatrix& value);
+    static FString Conv_SEllipseToString(const FSEllipse& value);
+    static FString Conv_SPlaneToString(const FSPlane& value);
+    static FString Conv_SEulerAngularTransformToString(const FSEulerAngularTransform& value);
+    static FString Conv_SWindowSegmentToString(const FSEquinoctialElements& value);
+    static FString Conv_SWindowSegmentToString(const FSWindowSegment& value);
+    static FString Conv_SPointingType2ObservationToString(const FSPointingType2Observation& value);
+    static FString Conv_SPointingType1ObservationToString(const FSPointingType1Observation& value);
+    static FString Conv_SPointingType5ObservationToString(const FSPointingType5Observation& value);
+    static FString Conv_SPKType5ObservationToString(const FSPKType5Observation& value);
+    static FString Conv_STermptPointToString(const FSTermptPoint& value);
+    static FString Conv_STermptCutToString(const FSTermptCut& value);
+    static FString Conv_STLEGeophysicalConstantsToString(const FSTLEGeophysicalConstants& value);
+    static FString Conv_SLimptPointToString(const FSLimptPoint& value);
+    static FString Conv_SLimptCutToString(const FSLimptCut& value);
+    static FString Conv_SPKType15ObservationToString(const FSPKType15Observation& value);
+    static FString Conv_STwoLineElementsToString(const FSTwoLineElements& value);
+    static FString Conv_SRayToString(const FSRay& value);
+    static FString Conv_SDLADescrToString(const FSDLADescr& value);
+    static FString Conv_SDSKDescrToString(const FSDSKDescr& value);
+    static FString Conv_SPlateIndicesToString(const FSPlateIndices& value);
 
     /* Multiplication (A * B) */
     UFUNCTION(BlueprintPure, meta = (DisplayName = "matrix * matrix", CompactNodeTitle = "*", Keywords = "* multiply"), Category = "MaxQ|Math|Rotation")
@@ -5427,8 +5658,10 @@ public:
         Category = "MaxQ|Types",
         meta = (
             BlueprintAutocast,
-            CompactNodeTitle = "$",
-            ToolTip = "Converts a Spice angular velocity vector to a string"
+            DisplayName = "To String (SAngularVelocity)",
+            CompactNodeTitle = "->",
+            ScriptMethod = "ToString",
+            ToolTip = "Converts a SAngularVelocity to a String"
             ))
     static FString Conv_SAngularVelocityToString(
         const FSAngularVelocity& value
@@ -5438,8 +5671,10 @@ public:
         Category = "MaxQ|Types",
         meta = (
             BlueprintAutocast,
-            CompactNodeTitle = "$",
-            ToolTip = "Converts a Spice quaternion to a string"
+            DisplayName = "To String (SQuaternion)",
+            CompactNodeTitle = "->",
+            ScriptMethod = "ToString",
+            ToolTip = "Converts a SQuaternion to a String"
             ))
     static FString Conv_SQuaternionToString(
         const FSQuaternion& value
@@ -5484,6 +5719,131 @@ public:
             ToolTip = "Converts a Spice RotationMatrix to a Quaternion"
             ))
     static FSQuaternion Conv_SRotationMatrixToSQuaternion(const FSRotationMatrix& value);
+
+    // ------------------------------------------------------------------------
+    // Blueprint Constants
+    // ------------------------------------------------------------------------
+
+    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "Zero", ScriptConstantHost = "SDistance"), Category = "MaxQ|Distance")
+    static FSDistance SDistance_Zero();
+
+    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "OneKilometer", ScriptConstantHost = "SDistance"), Category = "MaxQ|Distance")
+    static FSDistance SDistance_OneKilometer();
+
+    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "OneMeter", ScriptConstantHost = "SDistance"), Category = "MaxQ|Distance")
+    static FSDistance SDistance_OneMeter();
+
+    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "OneFoot", ScriptConstantHost = "SDistance"), Category = "MaxQ|Distance")
+    static FSDistance SDistance_OneFoot();
+
+    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "OneStatuteMile", ScriptConstantHost = "SDistance"), Category = "MaxQ|Distance")
+    static FSDistance SDistance_OneStatuteMile();
+
+    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "OneNauticalMile", ScriptConstantHost = "SDistance"), Category = "MaxQ|Distance")
+    static FSDistance SDistance_OneNauticalMile();
+
+    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "OneAstronomicalUnit", ScriptConstantHost = "SDistance"), Category = "MaxQ|Distance")
+    static FSDistance SDistance_OneAstronomicalUnit();
+
+    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "OneLightYear", ScriptConstantHost = "SDistance"), Category = "MaxQ|Distance")
+    static FSDistance SDistance_OneLightYear();
+
+    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "Zero", ScriptConstantHost = "SSpeed"), Category = "MaxQ|Speed")
+    static FSSpeed SSpeed_Zero();
+
+    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "OneKilomenterPerSecond", ScriptConstantHost = "SSpeed"), Category = "MaxQ|Speed")
+    static FSSpeed SSpeed_OneKilomenterPerSecond();
+
+    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "Zero", ScriptConstantHost = "SDistanceVector"), Category = "MaxQ|DistanceVector")
+    static FSDistanceVector SDistanceVector_Zero();
+
+    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "Zero", ScriptConstantHost = "SVelocityVector"), Category = "MaxQ|VelocityVector")
+    static FSVelocityVector SVelocityVector_Zero();
+
+    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "Identity", ScriptConstantHost = "SStateTransform"), Category = "MaxQ|StateTransform")
+    static FSStateTransform SStateTransform_Identity();
+
+    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "pi", ScriptConstantHost = "SAngle"), Category = "MaxQ|Angle")
+    static double SAngle_pi();
+
+    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "halfpi", ScriptConstantHost = "SAngle"), Category = "MaxQ|Angle")
+    static double SAngle_halfpi();
+
+    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "twopi", ScriptConstantHost = "SAngle"), Category = "MaxQ|Angle")
+    static double SAngle_twopi();
+
+    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "dpr", ScriptConstantHost = "SAngle"), Category = "MaxQ|Angle")
+    static double SAngle_dpr();
+
+    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "_0", ScriptConstantHost = "SAngle"), Category = "MaxQ|Angle")
+    static FSAngle SAngle__0();
+
+    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "_360", ScriptConstantHost = "SAngle"), Category = "MaxQ|Angle")
+    static FSAngle SAngle__360();
+
+    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "Zero", ScriptConstantHost = "SEulerAngles"), Category = "MaxQ|EulerAngles")
+    static FSEulerAngles SEulerAngles_Zero();
+
+    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "Identity", ScriptConstantHost = "SQuaternion"), Category = "MaxQ|Quaternion")
+    static FSQuaternion SQuaternion_Identity();
+
+    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "Zero", ScriptConstantHost = "SAngularRate"), Category = "MaxQ|AngularRate")
+    static FSAngularRate SAngularRate_Zero();
+
+    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "Zero", ScriptConstantHost = "SAngularVelocity"), Category = "MaxQ|AngularVelocity")
+    static FSAngularVelocity SAngularVelocity_Zero();
+
+
+    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "Zero", ScriptConstantHost = "SEulerAngularState"), Category = "MaxQ|EulerAngularState")
+    static FSEulerAngularState SEulerAngularState_Zero();
+
+    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "Identity", ScriptConstantHost = "SEulerAngularTransform"), Category = "MaxQ|EulerAngularTransform")
+    static FSEulerAngularTransform SEulerAngularTransform_Identity();
+
+    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "Zero", ScriptConstantHost = "SComplexScalar"), Category = "MaxQ|ComplexScalar")
+    static FSComplexScalar SComplexScalar_Zero();
+
+    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "J2000", ScriptConstantHost = "SEphemerisTime"), Category = "MaxQ|EphemerisTime")
+    static FSEphemerisTime SEphemerisTime_J2000();
+
+    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "Zero", ScriptConstantHost = "SEphemerisPeriod"), Category = "MaxQ|EphemerisPeriod")
+    static FSEphemerisPeriod SEphemerisPeriod_Zero();
+
+    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "OneSecond", ScriptConstantHost = "SEphemerisPeriod"), Category = "MaxQ|EphemerisPeriod")
+    static FSEphemerisPeriod SEphemerisPeriod_OneSecond();
+
+    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "OneMinute", ScriptConstantHost = "SEphemerisPeriod"), Category = "MaxQ|EphemerisPeriod")
+    static FSEphemerisPeriod SEphemerisPeriod_OneMinute();
+
+    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "OneHour", ScriptConstantHost = "SEphemerisPeriod"), Category = "MaxQ|EphemerisPeriod")
+    static FSEphemerisPeriod SEphemerisPeriod_OneHour();
+
+    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "OneDay", ScriptConstantHost = "SEphemerisPeriod"), Category = "MaxQ|EphemerisPeriod")
+    static FSEphemerisPeriod SEphemerisPeriod_OneDay();
+
+    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "OneJulianYear", ScriptConstantHost = "SEphemerisPeriod"), Category = "MaxQ|EphemerisPeriod")
+    static FSEphemerisPeriod SEphemerisPeriod_OneJulianYear();
+
+    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "OneTropicalYear", ScriptConstantHost = "SEphemerisPeriod"), Category = "MaxQ|EphemerisPeriod")
+    static FSEphemerisPeriod SEphemerisPeriod_OneTropicalYear();
+
+    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "Identity", ScriptConstantHost = "SRotationMatrix"), Category = "MaxQ|RotationMatrix")
+    static FSRotationMatrix SRotationMatrix_Identity();
+
+    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "Zero", ScriptConstantHost = "SDimensionlessVector"), Category = "MaxQ|DimensionlessVector")
+    static FSDimensionlessVector SDimensionlessVector_Zero();
+
+    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "X_Axis", ScriptConstantHost = "SDimensionlessVector"), Category = "MaxQ|DimensionlessVector")
+    static FSDimensionlessVector SDimensionlessVector_X_Axis();
+
+    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "Y_Axis", ScriptConstantHost = "SDimensionlessVector"), Category = "MaxQ|DimensionlessVector")
+    static FSDimensionlessVector SDimensionlessVector_Y_Axis();
+
+    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "Z_Axis", ScriptConstantHost = "SDimensionlessVector"), Category = "MaxQ|DimensionlessVector")
+    static FSDimensionlessVector SDimensionlessVector_Z_Axis();
+
+    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "Zero", ScriptConstantHost = "SMassConstant"), Category = "MaxQ|MassConstant")
+    static FSMassConstant SMassConstant_Zero();
 };
 
 // Don't leak preprocessor definitions, which may affect jumbo/unity builds.

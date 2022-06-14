@@ -150,7 +150,7 @@ namespace MaxQSamples
                     // Positional data (vectors, quaternions, should only be exchanged through USpiceTypes::Conf_*
                     // SPICE coordinate systems are Right-Handed, and Unreal Engine is Left-Handed.
                     // The USpiceTypes conversions understand this, and how to convert.
-                    FVector BodyLocation = USpiceTypes::Conv_SDistanceVectorToVector(r);
+                    FVector BodyLocation = USpiceTypes::Swizzle(r);
 
                     // Scale and set the body location
                     BodyLocation /= DistanceScale;
@@ -202,7 +202,7 @@ namespace MaxQSamples
                     // Positional data (vectors, quaternions, should only be exchanged through USpiceTypes::Conf_*
                     // SPICE coordinate systems are Right-Handed, and Unreal Engine is Left-Handed.
                     // The USpiceTypes conversions understand this, and how to convert.
-                    FQuat BodyOrientation = USpiceTypes::Conv_SQuaternionToQuat(q);
+                    FQuat BodyOrientation = USpiceTypes::Swazzle(q);
 
                     Actor->SetActorRotation(BodyOrientation);
                 }
@@ -233,7 +233,7 @@ namespace MaxQSamples
 
             USpice::unorm_distance(r, DirectionToSun, DistanceToSun);
 
-            FVector LightDirection = -USpiceTypes::Conv_SDimensionlessToVector(DirectionToSun);
+            FVector LightDirection = -USpiceTypes::Swizzle(DirectionToSun);
 
             AActor* SunActor = SunDirectionalLight.Get();
 
@@ -310,11 +310,11 @@ void USampleUtilities::InitializeTime(FSamplesSolarSystemState& SolarSystemState
     if (SolarSystemState.InitializeTimeToNow)
     {
         USpice::et_now(SolarSystemState.CurrentTime);
-        if(SetInitialTime) SolarSystemState.InitialTime = USpiceTypes::Conv_SEpheremisTimeToString(SolarSystemState.CurrentTime);
+        if(SetInitialTime) SolarSystemState.InitialTime = SolarSystemState.CurrentTime.ToString();
     }
     else
     {
-        SolarSystemState.CurrentTime = USpiceTypes::Conv_StringToSEpheremisTime(SolarSystemState.InitialTime);
+        SolarSystemState.CurrentTime = FSEphemerisTime::FromString(SolarSystemState.InitialTime);
     }
 }
 

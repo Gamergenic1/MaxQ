@@ -102,7 +102,7 @@ void ASample05Actor::Tick(float DeltaSeconds)
     if (GEngine)
     {
         GEngine->AddOnScreenDebugMessage(-1, 0.f, FColor::White, *FString::Printf(TEXT("Time Scale: %f x"), SolarSystemState.TimeScale.AsSeconds()));
-        GEngine->AddOnScreenDebugMessage(-1, 0.f, FColor::White, *FString::Printf(TEXT("Display Time: %s"), *USpiceTypes::Conv_SEpheremisTimeToString(SolarSystemState.CurrentTime)));
+        GEngine->AddOnScreenDebugMessage(-1, 0.f, FColor::White, *FString::Printf(TEXT("Display Time: %s"), *SolarSystemState.CurrentTime.ToString()));
         GEngine->AddOnScreenDebugMessage(-1, 0.f, FColor::White, *FString::Printf(TEXT("Origin Reference Frame: %s"), *OriginReferenceFrame.ToString()));
         GEngine->AddOnScreenDebugMessage(-1, 0.f, FColor::White, *FString::Printf(TEXT("Origin Observer Naif Name: %s"), *OriginNaifName.ToString()));
     }
@@ -133,14 +133,14 @@ void ASample05Actor::conics()
     FString NaifNameOfMass = TEXT("EARTH");
     USpice::bodvrd_mass(ResultCode, ErrorMessage, GM, NaifNameOfMass, TEXT("GM"));
 
-    Log(FString::Printf(TEXT("conics Mass Constant of EARTH = %s"), *USpiceTypes::Conv_SMassConstantToString(GM)), ResultCode);
+    Log(FString::Printf(TEXT("conics Mass Constant of EARTH = %s"), *GM.ToString()), ResultCode);
 
     // We'll also need Earth's Radius, since the orbital elements below express Rp in altitude, not radius.
     FSDistanceVector Radii;
     if (ResultCode == ES_ResultCode::Success)
     {
         USpice::bodvrd_distance_vector(ResultCode, ErrorMessage, Radii, NaifNameOfMass, TEXT("RADII"));
-        Log(FString::Printf(TEXT("conics Radii of EARTH = %s"), *USpiceTypes::Conv_SDistanceVectorToString(Radii)), ResultCode);
+        Log(FString::Printf(TEXT("conics Radii of EARTH = %s"), *Radii.ToString()), ResultCode);
     }
 
     if (ResultCode == ES_ResultCode::Success)
@@ -153,7 +153,7 @@ void ASample05Actor::conics()
         const FSAngle node  = FSAngle::FromDegrees(225.34227);
         const FSAngle arg   = FSAngle::FromDegrees(306.2587);
         const FSAngle M     = FSAngle::FromDegrees(222.7137);
-        const FSEphemerisTime epoch = USpiceTypes::Conv_StringToSEpheremisTime(TEXT("08 June 2022 22:05:53"));
+        const FSEphemerisTime epoch = FSEphemerisTime::FromString(TEXT("08 June 2022 22:05:53"));
 
         FSConicElements OrbitalElements;
         OrbitalElements.PerifocalDistance = alt + Radii.x;
@@ -173,7 +173,7 @@ void ASample05Actor::conics()
         // Get a state vector from the orbital elements!
         USpice::conics(ResultCode, ErrorMessage, OrbitalElements, et, state);
 
-        Log(FString::Printf(TEXT("Hubble Space Telescope State Vector (from Kepler Orbit) = %s"), *USpiceTypes::Conv_SStateVectorToString(state)), ResultCode);
+        Log(FString::Printf(TEXT("Hubble Space Telescope State Vector (from Kepler Orbit) = %s"), *state.ToString()), ResultCode);
     }
 }
 
@@ -215,7 +215,7 @@ void ASample05Actor::oscelt()
     // Call SPICE, get the position in rectangular coordinates...
     USpice::spkezr(ResultCode, ErrorMessage, et, state, lt, targ, obs, ref);
 
-    Log(FString::Printf(TEXT("oscelt EARTH's State Vector (ECLIP2000 Frame) = %s"), *USpiceTypes::Conv_SStateVectorToString(state)), ResultCode);
+    Log(FString::Printf(TEXT("oscelt EARTH's State Vector (ECLIP2000 Frame) = %s"), *state.ToString()), ResultCode);
 
     FSMassConstant SUN_GM;
     if (ResultCode == ES_ResultCode::Success)
@@ -226,7 +226,7 @@ void ASample05Actor::oscelt()
         FString NaifNameOfMass = TEXT("SUN");
         USpice::bodvrd_mass(ResultCode, ErrorMessage, SUN_GM, NaifNameOfMass, TEXT("GM"));
 
-        Log(FString::Printf(TEXT("oscelt Mass of SUN = %s"), *USpiceTypes::Conv_SMassConstantToString(GM)), ResultCode);
+        Log(FString::Printf(TEXT("oscelt Mass of SUN = %s"), *GM.ToString()), ResultCode);
     }
 
     FSConicElements ConicElements;
@@ -235,7 +235,7 @@ void ASample05Actor::oscelt()
         // Now, deduce the orbital elements!
         USpice::oscelt(ResultCode, ErrorMessage, state, et, SUN_GM, ConicElements);
 
-        Log(FString::Printf(TEXT("oscelt EARTH's Orbital/Conic/Keplerian Elements (ECLIP2000 Frame) = %s"), *USpiceTypes::Conv_SConicElementsToString(ConicElements)), ResultCode);
+        Log(FString::Printf(TEXT("oscelt EARTH's Orbital/Conic/Keplerian Elements (ECLIP2000 Frame) = %s"), *ConicElements.ToString()), ResultCode);
     }
 }
 
@@ -284,7 +284,7 @@ void ASample05Actor::TLEs()
 
         USpice::evsgp4(ResultCode, ErrorMessage, state, et, GeophysicalConstants, TwoLineElements);
 
-        Log(FString::Printf(TEXT("TLEs Hubble Space Telescope's State Vector (TEME Frame) = %s"), *USpiceTypes::Conv_SStateVectorToString(state)), ResultCode);
+        Log(FString::Printf(TEXT("TLEs Hubble Space Telescope's State Vector (TEME Frame) = %s"), *state.ToString()), ResultCode);
     }
 
     if (ResultCode != ES_ResultCode::Success)
@@ -446,7 +446,7 @@ bool ASample05Actor::PropagateTLE(const FSTwoLineElements& TLEs, FSStateVector& 
 bool ASample05Actor::TransformPosition(const FSDistanceVector& RHSPosition, FVector& UEVector)
 {
     // Simple transform.
-    UEVector = USpiceTypes::Conv_SDistanceVectorToVector(RHSPosition);
+    UEVector = USpiceTypes::Swizzle(RHSPosition);
 
     UEVector /= DistanceScale;
 
