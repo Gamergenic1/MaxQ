@@ -8,6 +8,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "SpiceTypes.h"
 #include "SampleUtilities.h"
 #include "UObject/WeakObjectPtrTemplates.h"
 #include "Sample04Actor.generated.h"
@@ -63,9 +64,9 @@ public:
     void Tick(float DeltaSeconds) override;
 
     void pxform();
-    void sxform();
-    void sxform_xf2rav();
-    void GetUERotationAndAngularVelocity(const FName& ReferenceFrame, const FName& BodyName);
+    void sxform(const FSEphemerisTime& et);
+    void sxform_xf2rav(const FSEphemerisTime& et);
+    void GetUERotationAndAngularVelocity(const FSEphemerisTime& et, const FName& ReferenceFrame, const FName& BodyName, bool NoDuration = false);
 
     void InitializeSolarSystem();
     void UpdateSolarSystem(float DeltaTime);
@@ -97,25 +98,25 @@ public:
     void Restart();
 
     UFUNCTION(CallInEditor, Category = "Editor")
-    void EMB() { OriginNaifName = TEXT("EMB"); }
+    void EMB() { OriginNaifName = MaxQ::Constants::Name_EMB; }
 
     UFUNCTION(CallInEditor, Category = "Editor")
-    void Earth() { OriginNaifName = TEXT("EARTH"); }
+    void Earth() { OriginNaifName = MaxQ::Constants::Name_EARTH; }
 
     UFUNCTION(CallInEditor, Category = "Editor")
-    void Moon() { OriginNaifName = TEXT("MOON"); }
+    void Moon() { OriginNaifName = MaxQ::Constants::Name_MOON; }
 
     UFUNCTION(CallInEditor, Category = "Editor")
-    void J2000() { OriginReferenceFrame = TEXT("J2000"); }
+    void J2000() { OriginReferenceFrame = MaxQ::Constants::Name_J2000; }
 
     UFUNCTION(CallInEditor, Category = "Editor")
-    void EclipJ2000() { OriginReferenceFrame = TEXT("ECLIPJ2000"); }
+    void EclipJ2000() { OriginReferenceFrame = MaxQ::Constants::Name_ECLIPJ2000; }
 
     UFUNCTION(CallInEditor, Category = "Editor")
-    void IAU_EARTH() { OriginReferenceFrame = TEXT("IAU_EARTH"); }
+    void IAU_EARTH() { OriginReferenceFrame = MaxQ::Constants::Name_IAU_EARTH; }
 
     UFUNCTION(CallInEditor, Category = "Editor")
-    void IAU_MOON() { OriginReferenceFrame = TEXT("IAU_MOON"); }
+    void IAU_MOON() { OriginReferenceFrame = MaxQ::Constants::Name_IAU_MOON; }
 };
 
 

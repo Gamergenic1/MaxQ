@@ -10,6 +10,7 @@
 #include "Spice.h"
 
 using MaxQSamples::Log;
+using namespace MaxQ::Constants;
 
 //-----------------------------------------------------------------------------
 // Sample04
@@ -29,17 +30,17 @@ ASample04Actor::ASample04Actor()
 
     // This is the coordinate system center relative to SPICE
     // (EMB = "Earth-Moon Barycenter")
-    OriginNaifName = FName("EMB");
+    OriginNaifName = Name_EMB;
     // This is the UE coordinate system orientation relative to SPICE
-    OriginReferenceFrame = FName("ECLIPJ2000");
+    OriginReferenceFrame = Name_ECLIPJ2000;
 
     // Sun is needed to determine light direction
-    SunNaifName = FName("SUN");
+    SunNaifName = Name_SUN;
     
-    PlanetFocusName = FName("EARTH");
+    PlanetFocusName = Name_EARTH;
     
     // In Spice "Satellite" = Natural Satellite, like MOON.
-    SatelliteName = FName("MOON");
+    SatelliteName = Name_MOON;
 
     // Note that SolarSystemBodyMap will be serialized with Moon and Earth
     // (In this case they won't be dynamically discovered).
@@ -64,14 +65,21 @@ void ASample04Actor::BeginPlay()
     // init_all:  clears kernel memory and any error state.
     USpice::init_all();
 
+    ES_ResultCode ResultCode;
+    FString ErrorMessage;
+    FString AbsolutePath;
+    USpice::furnsh(ResultCode, ErrorMessage, MaxQSamples::MaxQPathAbsolutified(TEXT("NonAssetData/naif/kernels/Generic/PCK/earth_fixed.tf")));
+
     // Don't tick unless we have the kernels required to update the solar system
     bool EnableTick = USampleUtilities::LoadKernelList(TEXT("Basic"), BasicKernels);
     if (EnableTick)
     {
         pxform();
-        sxform();
-        sxform_xf2rav();
-        GetUERotationAndAngularVelocity(OriginReferenceFrame, "MOON");
+        FSEphemerisTime et;
+        USpice::et_now(et);
+        sxform(et);
+        sxform_xf2rav(et);
+        GetUERotationAndAngularVelocity(et, OriginReferenceFrame, Name_MOON);
 
         InitializeSolarSystem();
     }
@@ -89,17 +97,9 @@ void ASample04Actor::Tick(float DeltaTime)
     Super::Tick(DeltaTime);
 
     UpdateSolarSystem(DeltaTime);
+    GetUERotationAndAngularVelocity(SolarSystemState.CurrentTime, OriginReferenceFrame, OriginNaifName, true);
 }
 
-
-
-// ============================================================================
-//
-//-----------------------------------------------------------------------------
-// Name: pxform
-// Desc:
-// Demonstrates pxform, getting the rotation from one frame to another
-//-----------------------------------------------------------------------------
 
 void ASample04Actor::pxform()
 {
@@ -107,43 +107,34 @@ void ASample04Actor::pxform()
     FString ErrorMessage;
 
     // Body Frame (IAU_EARTH, IAU_MOON, etc)
-    FString BodyFrame = TEXT("IAU_VENUS");
+    FString BodyFrame = IAU_VENUS;
+
+    FSEphemerisTime et;
+    USpice::et_now(et);
 
     // Note:  It can take a some effort to wrap your mind around how this works,
-    // and that's "normal".   If you have some experience with 3D graphics it's
-    // actually a bit harder, because SPICE is conceptually opposite.  (In 3D
-    // graphics we usually think of transformations as moving an object from
-    // one coordinate system to another, in SPICE transformations change the
-    // coordinate system (camera's perspective) of a stationary object.)
-
+    // and that's "normal".
+    // 
     // In the call below:
-    // "From" frame:  Our reference frame (inertial, non-rotating)
-    // "To" frame: The planet's "fixed" (body) frame that rotates
-    // We seek the orientation of the body (fixed frame) in the reference frame
+    // "From" frame:  The planet's "fixed" (body) frame that rotates
+    // "To" frame: The frame we're watching in (observer's reference frame)
+    //
+    // We seek the orientation of the body (fixed frame) in the observer frame
     // (So we can set the rotation of a planet mesh appropriately).
-    
+
     // How to think of this?
-    // You have the planet's 3D model, all the vertices are in local space.
-    // To render the planet, or to take a picture, the camera has to be in local space.
-    // If you want the picture (or render) to be from any other location, you have
-    // to take that camera and move it here for the picture or render, and then it
-    // will be correct from that camera's perspective.
-    // So... if you want to see the planet oriented correction from a distance
-    // you have to move the camera "FROM" that local "TO" the planet's body/fixed frame,
-    // and then render it.  So, the planet needs that rotation before rendering.
+    // 
     // SO... from a distance, you need:
     // pxform
-    //      FROM: Reference Frame (inertial)
-    //      TO:  Planet body frame (IAU_<planet>)
+    //      FROM: Planet body frame (IAU_<planet>)
+    //      TO:  Observer reference frame (here, ECLIPJ2000, aligned with the ecliptic plane)
     // ... And set the result to be the planet's physical rotation wrt the ref frame.
 
     // This may be helpful, or maybe not:
     // https://github.com/Gamergenic1/MaxQ/blob/main/ExternalTests/MaxQ/Spice/USpice/sxform.cpp
 
-    FString From = OriginReferenceFrame.ToString();
-    FString To = BodyFrame;
-    FSEphemerisTime et;
-    USpice::et_now(et);
+    FString From = BodyFrame;
+    FString To = OriginReferenceFrame.ToString();
 
     // Get the rotation matrix from the origin's frame to the Body frame.
     FSRotationMatrix m;
@@ -151,28 +142,52 @@ void ASample04Actor::pxform()
 
     Log(FString::Printf(TEXT("pxform: pxform transformation FROM %s TO %s"), *From, *To), ResultCode);
 
-    // We have a rotation matrix, but that's not super interesting to view raw.
-    Log(FString::Printf(TEXT("pxform: m2q gives rotation matrix as %s"), *m.ToString()), ResultCode);
-
-
-    // We can get a quaternion...
+    // We can get a quaternion... which can be used to set an actor rotation.
     FSQuaternion q;
     USpice::m2q(ResultCode, ErrorMessage, m, q);
-    Log(FString::Printf(TEXT("pxform: m2q gives rotation quaternion as %s"), *q.ToString()), ResultCode);
+    Log(FString::Printf(TEXT("pxform: m2q gives rotation quaternion as %s"), *q.ToString()), FColor::Red, 0.f);
 }
-
 
 // ============================================================================
 //
 //-----------------------------------------------------------------------------
 // Name: sxform
+// Desc:
 // Demonstrates pxform, getting the angular state transformation from one frame
 // to another.
+// The State Transformation Matrix can be used to transform a state vector
+// from one observer's coordinate system to another.
+// In this case, we want to see the Earth...
+// For a camera pointing at earth, move the observer position out to an
+// inertial frame (ECLIPJ2000, for instance).
+// And, for a state vector stationary in earth's frame... what is the new
+// state vector in the inertial frame?
 //-----------------------------------------------------------------------------
 
-void ASample04Actor::sxform()
+void ASample04Actor::sxform(const FSEphemerisTime& et)
 {
+    ES_ResultCode ResultCode;
+    FString ErrorMessage;
 
+    // Body "Fixed" Frame (IAU_EARTH, IAU_MOON, etc)
+    FString BodyFrame = MaxQ::Constants::IAU_EARTH;
+
+    // Get a state vector transformation
+    FString From = BodyFrame;
+    FString To = OriginReferenceFrame.ToString();
+
+    // Get the rotation matrix from the origin's frame to the Body frame.
+    FSStateTransform StateTransform;
+    USpice::sxform(ResultCode, ErrorMessage, StateTransform, et, From, To);
+
+    // We can transform an arbitrary state vector...
+    FSStateVector StateInEarthsFixedFrame(FSDistanceVector(6700,0,0), FSVelocityVector());
+    FSStateVector StateInObserverFrame;
+    USpice::mxv_state(StateTransform, StateInEarthsFixedFrame, StateInObserverFrame);
+
+    // Print the results
+    Log(FString::Printf(TEXT("sxform: random state in Earth's Fixed Frame=%s"), *StateInEarthsFixedFrame.ToString()));
+    Log(FString::Printf(TEXT("sxform: random state in Observer Frame=%s"), *StateInObserverFrame.ToString()));
 }
 
 
@@ -184,9 +199,78 @@ void ASample04Actor::sxform()
 // Get the angular state transformation,as a rotation and angular velocity
 //-----------------------------------------------------------------------------
 
-void ASample04Actor::sxform_xf2rav()
+void ASample04Actor::sxform_xf2rav(const FSEphemerisTime& et)
 {
+    ES_ResultCode ResultCode;
+    FString ErrorMessage;
 
+    // Body "Fixed" Frame (IAU_EARTH, IAU_MOON, etc)
+    FString BodyFrame = MaxQ::Constants::IAU_EARTH;
+
+    // This is difficult to explain.  But,... study this a bit:
+    // https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/xf2rav_c.html
+    // 
+    /*
+        av          is the angular velocity of the transformation.
+                    In other words, if `p' is the position of a fixed
+                    point in FRAME2, then from the point of view of
+                    FRAME1, `p' rotates (in a right handed sense) about
+                    an axis parallel to `av'. Moreover the rate of rotation
+                    in radians per unit time is given by the length of
+                    `av'.
+
+                    More formally, the velocity `v' of `p' in FRAME1 is
+                    given by
+                                        T
+                        v  = av x ( rot  * p )
+
+                    The components of `av' are given relative to FRAME1.
+    */
+    // Angular velocity is the A.V. of frame2, from frame1, relative to frame1.
+    // 
+    // Oh, snap.
+    // That means if we do as above, we'll have the A.V. of the inertial frame
+    // in the body frame, with respect to the body frame.
+    // That is not what we want!!  Strike that!  Reverse it!
+    // 
+    // So, we're going to get the transform oppositely and save the Angular
+    // velocity vector.
+    // 
+    // Then, we're going to make up for it by inverting the rotation matrix
+    // that we get, so we can get proper orientation as before.
+    // In the case of rotation, two "wrongs" do make "right"!
+    // (Note the opposite order, compared to above!)
+    FString From = OriginReferenceFrame.ToString();
+    FString To = BodyFrame;
+
+    // Get the state transform from the inertial frame to the body frame.
+    FSStateTransform StateTransform;
+    USpice::sxform(ResultCode, ErrorMessage, StateTransform, et, From, To);
+
+    // separate the state transform into a rotation matrix and an angular velocity.
+    FSRotationMatrix rotationMatrix;
+    FSAngularVelocity angularVelocity;
+    USpice::xf2rav(StateTransform, rotationMatrix, angularVelocity);
+
+    // Cool. cool.  cool.  The angular velocity is exactly as we want it.
+    // It's the angular velocity of earth, in the observer's frame, with respect to
+    // the observer's frame (ECLIPJ2000).
+
+    // We have to invert the rotation matrix to get the equivalent rotation as before...
+    USpice::xpose(rotationMatrix, rotationMatrix);
+
+    // We can get the rotation as a quaternion...
+    FSQuaternion q;
+    USpice::m2q(ResultCode, ErrorMessage, rotationMatrix, q);
+    Log(FString::Printf(TEXT("sxform_xf2rav: q=%s, av=%s"), *q.ToString(), *angularVelocity.ToString()), FColor::Orange, 0.f);
+
+    // At this point, we could swizzle the rotation to the UE coordinate system and place a mesh.
+    // And, we could swizzle the angular velocity vector, and set it to the Physics angular velocity,
+    // If we were about to start up some UE physics on whatever it is.
+    // see:
+    // UPrimitiveComponent::SetPhysicsAngularVelocity
+    // This will be important later when we have spacecraft flying around doing UE physics and
+    // we need to reorient the coordinate system differently around a planet etc.
 }
 
 
@@ -199,9 +283,114 @@ void ASample04Actor::sxform_xf2rav()
 //  Transform them into an Unreal Engine quaternion and vector.
 //-----------------------------------------------------------------------------
 
-void ASample04Actor::GetUERotationAndAngularVelocity(const FName& ReferenceFrame, const FName& BodyName)
+void ASample04Actor::GetUERotationAndAngularVelocity(const FSEphemerisTime& et, const FName& ReferenceFrame, const FName& BodyName, bool DontLog)
 {
+    // (Re) demonstrate how to get a rotation and angular velocity of the fixed
+    // frame with respect to the observer's frame.
+#pragma region ComputeRHSRotation
+    // Same drill as sxform_sf2rav
+    ES_ResultCode ResultCode;
+    FString ErrorMessage;
 
+    FString BodyFrame = MaxQ::Constants::IAU_EARTH;
+    FString From = OriginReferenceFrame.ToString();
+    FString To = BodyFrame;
+
+    // Get the state transform from the observer's frame to the body frame...
+    FSStateTransform StateTransform;
+    USpice::sxform(ResultCode, ErrorMessage, StateTransform, et, From, To);
+
+    // Get the rotation and angular velocity from the state transform
+    FSRotationMatrix rotationMatrix;
+    FSAngularVelocity angularVelocity;
+    FSQuaternion q;
+
+    if (ResultCode == ES_ResultCode::Success)
+    {
+        USpice::xf2rav(StateTransform, rotationMatrix, angularVelocity);
+
+        // We have to invert the rotation matrix... again
+        USpice::xpose(rotationMatrix, rotationMatrix);
+
+        // We can get a quaternion... again
+        USpice::m2q(ResultCode, ErrorMessage, rotationMatrix, q);
+    }
+#pragma endregion ComputeRHSRotation
+
+    // Demonstrate how to decompose the rotation matrix into:
+    // North Pole:
+    //    Right Ascension
+    //    Declination
+    // Prime Meridian
+    //    Rotation around north pole
+#pragma region NorthPoleAndPrimeMeridian
+    if (ResultCode == ES_ResultCode::Success)
+    {
+        // Get the north pole Right-Ascension and Declination, and the prime meridian rotation around it
+        // (just for kicks)
+        // See:
+        // https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/req/frames.html#Example%20of%20an%20Euler%20Frame
+        /*
+        The 3x3 transformation matrix M defined by the angles is
+
+           M = [angle_1]   [angle_2]   [angle_3]
+                        3           1           3
+        Vectors are mapped from the J2000 base frame to the IAU_MARS frame via left multiplication by M.
+        The relationship of these Euler angles to RA/Dec/PM for the J2000-to-IAU Mars body-fixed transformation is as follows:
+
+           angle_1 is        PM  * (radians/degree)
+           angle_2 is pi/2 - Dec * (radians/degree)
+           angle_3 is pi/2 + RA  * (radians/degree)
+        Since when we define the IAU_MARS_EULER frame we're defining the *inverse* of the above transformation, the angles for our Euler frame definition are reversed and the signs negated:
+           angle_1 is -pi/2 - RA  * (radians/degree)
+           angle_2 is -pi/2 + Dec * (radians/degree)
+           angle_3 is       - PM  * (radians/degree)
+        */
+        // (But, swap angle1 and angle3 as the order was given opposite of how m2eul works)
+
+        FSEulerAngles eulers;
+        USpice::m2eul(ResultCode, ErrorMessage, eulers, rotationMatrix, ES_Axis::Z, ES_Axis::X, ES_Axis::Z);
+
+        double const _pos90_as_radians = FSAngle::halfpi;
+        FSAngle PM = -eulers.angle1;
+        FSAngle Dec = _pos90_as_radians + eulers.angle2;
+        FSAngle RA = -eulers.angle3 - _pos90_as_radians;
+
+        PM = FSAngle(USpiceTypes::normalizeZeroToTwoPi(PM.AsRadians()));
+
+        if(GEngine) GEngine->AddOnScreenDebugMessage(-1, 0.f, FColor::Orange, *FString::Printf(TEXT("North Pole RADec: %s; Prime Meridian Rotation: %s (Frame: %s)"), *USpiceTypes::FormatRADec(RA, Dec), *PM.ToString(), *OriginReferenceFrame.ToString()));
+    }
+#pragma endregion NorthPoleAndPrimeMeridian
+
+    // Demonstrate how to "swizzle" the rotation and angular velocity
+    // From:  MaxQ/SPICE Right-Handed Coordinate System (RHS)
+    // To:  Unreal Engine Left-handed Coordinate System (LHS)
+#pragma region SwizzleToUnrealEngineLHSCoords
+    // Now, we can "Swizzle" the result into UE coordinates.
+
+    // Normalize the angular velocity so it's not just an itsy bitsy teeny tiny number
+    FQuat UnrealEngineRotation = q.Swizzle();
+    FVector UnrealEngineAngularVelocity = angularVelocity.Swizzle();
+    double AVMagnitude = UnrealEngineAngularVelocity.Length();
+    UnrealEngineAngularVelocity.Normalize(0.);
+
+    // Convert the quaternion into something more intuitive, like an axis/angle
+    FVector RotationAxis;
+    double RotationAngle;
+    UnrealEngineRotation.ToAxisAndAngle(RotationAxis, RotationAngle);
+    FString UERotation = FString::Printf(TEXT("{%f (%s)"), RotationAngle, *RotationAxis.ToString());
+
+    // Either log only to the screen or log to screen+log.
+    if (DontLog && GEngine)
+    {
+        double UE_Units_Per_KM = 100 * 1000.;
+        GEngine->AddOnScreenDebugMessage(-1, 0.f, FColor::White, *FString::Printf(TEXT("GetUERotationAndAngularVelocity: Unreal Engine q=%s, av={%f, (%s)}"), *UERotation, AVMagnitude, *UnrealEngineAngularVelocity.ToString()));
+    }
+    else
+    {
+        Log(FString::Printf(TEXT("GetUERotationAndAngularVelocity: Unreal Engine Rotation/Angular-Velocity q=%s, av={%f, (%s)}"), *UERotation, AVMagnitude, *UnrealEngineAngularVelocity.ToString()), ResultCode);
+    }
+#pragma endregion SwizzleToUnrealEngineLHSCoords
 }
 
 
@@ -259,7 +448,9 @@ void ASample04Actor::UpdateSolarSystem(float DeltaTime)
 //
 //-----------------------------------------------------------------------------
 // Name: UpdateBodyOrientations
-// Desc: This is what you came for
+// Desc:
+// This is what you came for
+// Demonstrate orienting the earth and moon at a given time.
 //-----------------------------------------------------------------------------
 
 bool ASample04Actor::UpdateBodyOrientations()
@@ -292,6 +483,8 @@ bool ASample04Actor::UpdateBodyOrientations()
             FSQuaternion q;
             USpice::m2q(ResultCode, ErrorMessage, m, q);
 
+            if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 0.f, FColor::White, *FString::Printf(TEXT("UpdateBodyOrientations (%s): m2q gives rotation quaternion as %s"), *BodyFrame, *q.ToString()));
+
             // (m2q can't fail unless 'm' isn't a rotation matrix... But if pxform succeeded, it will be)
             result &= (ResultCode == ES_ResultCode::Success);
 
@@ -302,7 +495,7 @@ bool ASample04Actor::UpdateBodyOrientations()
                 // Positional data (vectors, quaternions, should only be exchanged through USpiceTypes::Conf_*
                 // SPICE coordinate systems are Right-Handed, and Unreal Engine is Left-Handed.
                 // The USpiceTypes conversions understand this, and how to convert.
-                FQuat BodyOrientation = USpiceTypes::Swazzle(q);
+                FQuat BodyOrientation = q.Swizzle();
 
                 Actor->SetActorRotation(BodyOrientation);
             }

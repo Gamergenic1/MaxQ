@@ -14,6 +14,7 @@
 #include "SampleUtilities.h"
 
 using MaxQSamples::Log;
+using namespace MaxQ::Constants;
 
 //-----------------------------------------------------------------------------
 // Sample03
@@ -34,9 +35,9 @@ ASample03Actor::ASample03Actor()
 
     // This is the coordinate system center relative to SPICE
     // (SSB = "Solar System Barycenter")
-    OriginNaifName = FName("SSB");
+    OriginNaifName = FName(SSB);
     // This is the UE coordinate system orientation relative to SPICE
-    OriginReferenceFrame = FName("ECLIPJ2000");
+    OriginReferenceFrame = FName(ECLIPJ2000);
 }
 
 
@@ -146,14 +147,14 @@ void ASample03Actor::spkpos_inertial()
     USpice::et_now(et);
 
     // What do we want?  (SUN's position)
-    FString targ = TEXT("SUN");
+    FString targ = SUN;
 
     // Where do we want it relative to? (EARTH's position)
-    FString obs = TEXT("EARTH");
+    FString obs = EARTH;
 
     // What reference frame (coordinate system orientation)?
     // J2000 (also known as EME 2000, and is actually ICRF)
-    FString ref = TEXT("J2000");
+    FString ref = J2000;
 
     // "Converged Newtonian" light time correction.
     // This means our result won't be where the sun actually *IS* right now...
@@ -212,11 +213,11 @@ void ASample03Actor::spkpos_fixed()
     FString targ = TEXT("DSS-14");
 
     // Let's get the Latitude, Longitude, and Altitude of  
-    FString obs = TEXT("EARTH");
+    FString obs = EARTH;
 
     // ITRF is an Earth-Centered Earth-Fixed "fixed" reference frame that rotates with the earth.
     // Fixed-body (rotating) frames are usually IAU_* (IAU_MOON, IAU_EARTH, IAU_MARS, etc...)
-    FString ref = TEXT("ITRF93");
+    FString ref = ITRF93;
 
     ES_AberrationCorrectionWithNewtonians abscorr = ES_AberrationCorrectionWithNewtonians::None;
 
@@ -237,7 +238,7 @@ void ASample03Actor::spkpos_fixed()
 
     // First, the geographic coordinates
     FSPlanetographicVector GeographicPosition;
-    USpice::recpgr(ResultCode, ErrorMessage, r, Re, GeographicPosition, TEXT("EARTH"), GRS80_f);
+    USpice::recpgr(ResultCode, ErrorMessage, r, Re, GeographicPosition, EARTH, GRS80_f);
 
     Log(FString::Printf(TEXT("DSS-14 Geographic Lon/Lat/Alt = %s"), *GeographicPosition.ToString()), ResultCode);
     Log(FString::Printf(TEXT("DSS-14 Geographic Lon/Lat = %s"), *USpiceTypes::FormatLonLat(GeographicPosition.lonlat, TEXT(", "), ES_AngleFormat::DMS)), ResultCode);
@@ -279,15 +280,15 @@ void ASample03Actor::spkezr_inertial()
     USpice::et_now(et);
 
     // Where's planet Mercury right now?
-    FString targ = TEXT("MERCURY");
+    FString targ = MERCURY;
 
     // SSB = Solar System Barycenter, the point around which the planets, sun, move.
-    FString obs = TEXT("SSB");
+    FString obs = SSB;
 
     // Reference Frame for results (Coordinate System orientation only)
     // ECLIPJ2000 is aligned with the Solar System's Ecliptic Plane...
     // ...The plane the planets orbit in (roughly)
-    FString ref = TEXT("ECLIPJ2000");
+    FString ref = ECLIPJ2000;
 
     // Don't worry about light travel time (abscorr = None)
     ES_AberrationCorrectionWithNewtonians abscorr = ES_AberrationCorrectionWithNewtonians::None;
@@ -337,14 +338,14 @@ void ASample03Actor::spkezr_fixed()
     USpice::et_now(et);
 
     // Where's that sun right now?
-    FString targ = TEXT("SUN");
+    FString targ = SUN;
 
     // Position relative to Moon's center  
-    FString obs = TEXT("MOON");
+    FString obs = MOON;
 
     // Returned in Moon's Fixed Frame (IAU_* = body-fixed, rotates with surface)
     // We could determine the phase of the moon from the results...
-    FString ref = TEXT("IAU_MOON");
+    FString ref = IAU_MOON;
 
     // Don't worry about light travel time (abscorr = None)
     ES_AberrationCorrectionWithNewtonians abscorr = ES_AberrationCorrectionWithNewtonians::None;
@@ -352,7 +353,9 @@ void ASample03Actor::spkezr_fixed()
     // Call SPICE, get the state vector in rectangular coordinates...
     USpice::spkezr(ResultCode, ErrorMessage, et, state, lt, targ, obs, ref, abscorr);
 
-    Log(FString::Printf(TEXT("Sun's State Vector in Moon's Fixed Frame = %s"), *state.ToString()), ResultCode);
+    Log(FString::Printf(TEXT("Sun's State Vector in Moon's Fixed Frame (RHS, MaxQ/SPICE) = %s"), *state.ToString()), ResultCode);
+
+    Log(FString::Printf(TEXT("Sun's State Vector in Moon's Fixed Frame (LHS Unreal Engine): r=(%s) v=(%s)"), *state.r.Swizzle().ToString(), *state.v.Swizzle().ToString()), ResultCode);
 
     FSDistanceVector MoonRadii;
     USpice::bodvrd_distance_vector(ResultCode, ErrorMessage, MoonRadii, TEXT("MOON"));
@@ -533,12 +536,12 @@ void ASample03Actor::InitializeSolarSystem(FSamplesSolarSystemState& State)
     MaxQSamples::InitBodyScales(BodyScale, State);
     
     // Scale the sun down, or it engulfs the solar system!
-    AActor* Sun = SolarSystemState.SolarSystemBodyMap["SUN"].Get();
+    AActor* Sun = SolarSystemState.SolarSystemBodyMap[Name_SUN].Get();
     if (Sun)
     {
-        FVector CurrentScale = SolarSystemState.SolarSystemBodyMap["SUN"]->GetActorScale3D();
+        FVector CurrentScale = SolarSystemState.SolarSystemBodyMap[Name_SUN]->GetActorScale3D();
         CurrentScale *= 0.01;
-        SolarSystemState.SolarSystemBodyMap["SUN"]->SetActorScale3D(CurrentScale);
+        SolarSystemState.SolarSystemBodyMap[Name_SUN]->SetActorScale3D(CurrentScale);
     }
 }
 
@@ -568,7 +571,7 @@ void ASample03Actor::UpdateSolarSystem(FSamplesSolarSystemState& State, float De
 
     // Where do we want it relative to?
     // SSB = Solar System Barycenter, the point the sun and planets mutually orbit
-    // ECLIPJ2000 = Inertial (non-rotating) reference frame alighned with Ecliptic (the plane of Earth's orbit)
+    // ECLIPJ2000 = Inertial (non-rotating) reference frame aligned with Ecliptic (the plane of Earth's orbit)
     FString obs = OriginNaifName.ToString();
     FString ref = OriginReferenceFrame.ToString();
 
