@@ -5506,8 +5506,36 @@ public:
     UFUNCTION(BlueprintPure, meta = (DisplayName = "speed * vector", CompactNodeTitle = "*", Keywords = "* multiply"), Category = "MaxQ|Math|Velocity")
     static FSDistanceVector DistanceToVector(const FSDistance& A, const FSDimensionlessVector& B);
 
-    UFUNCTION(BlueprintPure, meta = (DisplayName = "double * vector", CompactNodeTitle = "*", Keywords = "* multiply"), Category = "MaxQ|Math|Distance")
+    UFUNCTION(BlueprintPure, meta = (DisplayName = "double * vector", CompactNodeTitle = "*", Keywords = "* multiply"), Category = "MaxQ|Math|Dimensionless")
     static FSDimensionlessVector ScaleDimensionlessVector(double A, const FSDimensionlessVector& B);
+
+    // Negation
+    UFUNCTION(BlueprintPure, meta = (ScriptMethod = "Negated", ScriptOperator = "neg"), Category = "MaxQ|Math|Distance")
+    static FSDistance NegateSDistance(const FSDistance& A);
+
+    UFUNCTION(BlueprintPure, meta = (ScriptMethod = "Negated", ScriptOperator = "neg"), Category = "MaxQ|Math|Speed")
+    static FSSpeed NegateSSpeed(const FSSpeed& A);
+
+    UFUNCTION(BlueprintPure, meta = (ScriptMethod = "Negated", ScriptOperator = "neg"), Category = "MaxQ|Math|Angle")
+    static FSAngle NegateSAngle(const FSAngle& A);
+
+    UFUNCTION(BlueprintPure, meta = (ScriptMethod = "Negated", ScriptOperator = "neg"), Category = "MaxQ|Math|Time")
+    static FSEphemerisPeriod NegateSEphemerisPeriod(const FSEphemerisPeriod& A);
+
+    UFUNCTION(BlueprintPure, meta = (ScriptMethod = "Negated", ScriptOperator = "neg"), Category = "MaxQ|Math|Dimensionless")
+    static FSDimensionlessVector NegateSDimensionlessVector(const FSDimensionlessVector& A);
+
+    UFUNCTION(BlueprintPure, meta = (ScriptMethod = "Negated", ScriptOperator = "neg"), Category = "MaxQ|Math|Distance")
+    static FSDistanceVector NegateSDistanceVector(const FSDistanceVector& A);
+
+    UFUNCTION(BlueprintPure, meta = (ScriptMethod = "Negated", ScriptOperator = "neg"), Category = "MaxQ|Math|Velocity")
+    static FSVelocityVector NegateSVelocityVector(const FSVelocityVector& A);
+
+    UFUNCTION(BlueprintPure, meta = (ScriptMethod = "Negated", ScriptOperator = "neg"), Category = "MaxQ|Math|Angular Rate")
+    static FSAngularRate NegateSAngularRate(const FSAngularRate& A);
+
+    UFUNCTION(BlueprintPure, meta = (ScriptMethod = "Negated", ScriptOperator = "neg"), Category = "MaxQ|Math|Angular Velocity")
+    static FSAngularVelocity NegateSAngularVelocity(const FSAngularVelocity& A);
 
 
 
@@ -5609,7 +5637,7 @@ public:
     }
 
     UFUNCTION(BlueprintPure,
-        Category = "MaxQ|Types",
+        Category = "MaxQ|Math|Angle",
         meta = (
             Keywords = "CONVERSION, COORDINATES",
             ToolTip = "Normalizes internal angle 0 to 360 deg"
@@ -5619,15 +5647,73 @@ public:
         FSAngle& AngleNormalized
     );
 
+    [[deprecated("Use NormalizeAngleMinus180To180()")]]
     UFUNCTION(BlueprintPure,
-        Category = "MaxQ|Types",
+        Category = "MaxQ|Math|Angle",
         meta = (
+            DeprecatedFunction,
+            DeprecationMessage = "Use NormalizeAngleMinus180To180",
             Keywords = "CONVERSION, COORDINATES",
             ToolTip = "Normalizes internal angle -180 to +180 deg"
             ))
     static void NormalizeAngle180To180(
         const FSAngle& Angle,
         FSAngle& AngleNormalized
+    );
+
+    UFUNCTION(BlueprintPure,
+        Category = "MaxQ|Math|Angle",
+        meta = (
+            Keywords = "CONVERSION, COORDINATES",
+            ToolTip = "Normalizes internal angle -180 to +180 deg"
+            ))
+    static void NormalizeAngleMinus180To180(
+        const FSAngle& Angle,
+        FSAngle& AngleNormalized
+    );
+
+    UFUNCTION(BlueprintPure,
+        Category = "MaxQ|Math|Angle",
+        meta = (
+            Keywords = "CONVERSION, COORDINATES",
+            ToolTip = "Normalizes angle 0 to 360 deg"
+            ))
+    static void NormalizeDegrees0To360(
+        double Degrees,
+        double& NormalizedDegrees
+    );
+
+    UFUNCTION(BlueprintPure,
+        Category = "MaxQ|Math|Angle",
+        meta = (
+            Keywords = "CONVERSION, COORDINATES",
+            ToolTip = "Normalizes angle -180 to +180 deg"
+            ))
+    static void NormalizeDegreesMinus180To180(
+        double Degrees,
+        double& NormalizedDegrees
+    );
+
+    UFUNCTION(BlueprintPure,
+        Category = "MaxQ|Types",
+        meta = (
+            Keywords = "CONVERSION, COORDINATES",
+            ToolTip = "Normalizes angle 0 to 2*PI radians"
+            ))
+        static void NormalizeRadiansZeroToTwoPi(
+            double Radians,
+            double& NormalizedRadians
+        );
+
+    UFUNCTION(BlueprintPure,
+        Category = "MaxQ|Types",
+        meta = (
+            Keywords = "CONVERSION, COORDINATES",
+            ToolTip = "Normalizes angle -PI to +PI radians"
+            ))
+    static void NormalizeRadiansMinusPiToPi(
+        double Radians,
+        double& NormalizedRadians
     );
 
 

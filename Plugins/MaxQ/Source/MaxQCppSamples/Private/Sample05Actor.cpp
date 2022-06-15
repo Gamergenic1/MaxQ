@@ -54,7 +54,6 @@ void ASample05Actor::BeginPlay()
     Log(TEXT("Sample05: Initialization and kernel data"), FColor::Blue);
     Log(TEXT("** Please see Sample05Actor in Scene 'Sample05' folder for button controls (details panel) **"), FColor::Yellow);
     Log(TEXT("** Please see Sample05Actor.cpp for more info **"), FColor::Blue);
-    Log(TEXT("** This tutorial is only an interim version! **"), FColor::Red);
 
     // init_all:  clears kernel memory and any error state.
     USpice::init_all();
@@ -409,9 +408,14 @@ void ASample05Actor::AddTelemetryObject(const FString& ObjectId, const FString& 
 
         if (TelemetryObject != nullptr)
         {
-            TelemetryObject->SetActorLabel(ObjectName);
-            TelemetryObject->SetFolderPath("In Orbit");
-
+#if WITH_EDITOR
+            // Don't set the actor label in PIE as this requires flushing async loading.
+            if (GetWorld()->WorldType == EWorldType::Editor)
+            {
+                TelemetryObject->SetActorLabel(ObjectName);
+                TelemetryObject->SetFolderPath("In Orbit");
+            }
+#endif
             // There's several ways this could have been done, obviously.
             // Is this the best?
             // Hey, there's no right or wrong solutions, only solutions optimized to different criteria.
