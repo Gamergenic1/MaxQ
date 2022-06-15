@@ -20,8 +20,6 @@ class AActor;
 // Setting orientations with PCK Kernels, Reference Frames, and more
 //-----------------------------------------------------------------------------
 
-/* THIS SAMPLE IS IN PROGRESS */
-
 UCLASS()
 class MAXQCPPSAMPLES_API ASample04Actor : public AActor
 {

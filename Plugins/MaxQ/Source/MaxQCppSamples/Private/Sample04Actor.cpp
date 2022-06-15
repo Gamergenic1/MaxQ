@@ -12,6 +12,7 @@
 using MaxQSamples::Log;
 using namespace MaxQ::Constants;
 
+
 //-----------------------------------------------------------------------------
 // Sample04
 // Setting orientations with PCK Kernels, Reference Frames, and more
