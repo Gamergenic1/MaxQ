@@ -66,11 +66,6 @@ void ASample04Actor::BeginPlay()
     // init_all:  clears kernel memory and any error state.
     USpice::init_all();
 
-    ES_ResultCode ResultCode;
-    FString ErrorMessage;
-    FString AbsolutePath;
-    USpice::furnsh(ResultCode, ErrorMessage, MaxQSamples::MaxQPathAbsolutified(TEXT("NonAssetData/naif/kernels/Generic/PCK/earth_fixed.tf")));
-
     // Don't tick unless we have the kernels required to update the solar system
     bool EnableTick = USampleUtilities::LoadKernelList(TEXT("Basic"), BasicKernels);
     if (EnableTick)
@@ -98,7 +93,7 @@ void ASample04Actor::Tick(float DeltaTime)
     Super::Tick(DeltaTime);
 
     UpdateSolarSystem(DeltaTime);
-    GetUERotationAndAngularVelocity(SolarSystemState.CurrentTime, OriginReferenceFrame, OriginNaifName, true);
+    GetUERotationAndAngularVelocity(SolarSystemState.CurrentTime, OriginReferenceFrame, Name_EARTH, true);
 }
 
 
@@ -146,7 +141,7 @@ void ASample04Actor::pxform()
     // We can get a quaternion... which can be used to set an actor rotation.
     FSQuaternion q;
     USpice::m2q(ResultCode, ErrorMessage, m, q);
-    Log(FString::Printf(TEXT("pxform: m2q gives rotation quaternion as %s"), *q.ToString()), FColor::Red, 0.f);
+    Log(FString::Printf(TEXT("pxform: m2q gives rotation quaternion as %s"), *q.ToString()), ResultCode, 60.f);
 }
 
 // ============================================================================
@@ -293,8 +288,8 @@ void ASample04Actor::GetUERotationAndAngularVelocity(const FSEphemerisTime& et, 
     ES_ResultCode ResultCode;
     FString ErrorMessage;
 
-    FString BodyFrame = MaxQ::Constants::IAU_EARTH;
-    FString From = OriginReferenceFrame.ToString();
+    FString BodyFrame = TEXT("IAU_") + BodyName.ToString();
+    FString From = ReferenceFrame.ToString();
     FString To = BodyFrame;
 
     // Get the state transform from the observer's frame to the body frame...
@@ -352,14 +347,13 @@ void ASample04Actor::GetUERotationAndAngularVelocity(const FSEphemerisTime& et, 
         FSEulerAngles eulers;
         USpice::m2eul(ResultCode, ErrorMessage, eulers, rotationMatrix, ES_Axis::Z, ES_Axis::X, ES_Axis::Z);
 
-        double const _pos90_as_radians = FSAngle::halfpi;
         FSAngle PM = -eulers.angle1;
-        FSAngle Dec = _pos90_as_radians + eulers.angle2;
-        FSAngle RA = -eulers.angle3 - _pos90_as_radians;
+        FSAngle Dec = FSAngle::halfpi + eulers.angle2;
+        FSAngle RA = -eulers.angle3 - FSAngle::halfpi;
 
-        PM = FSAngle(USpiceTypes::normalizeZeroToTwoPi(PM.AsRadians()));
+        PM = FSAngle::FromRadians(USpiceTypes::normalizeZeroToTwoPi(PM.AsRadians()));
 
-        if(GEngine) GEngine->AddOnScreenDebugMessage(-1, 0.f, FColor::Orange, *FString::Printf(TEXT("North Pole RADec: %s; Prime Meridian Rotation: %s (Frame: %s)"), *USpiceTypes::FormatRADec(RA, Dec), *PM.ToString(), *OriginReferenceFrame.ToString()));
+        if(GEngine) GEngine->AddOnScreenDebugMessage(-1, 0.f, FColor::Orange, *FString::Printf(TEXT("North Pole RADec: %s; Prime Meridian Rotation: %s (Frame: %s)"), *USpiceTypes::FormatRADec(RA, Dec), *PM.ToString(), *ReferenceFrame.ToString()));
     }
 #pragma endregion NorthPoleAndPrimeMeridian
 
@@ -385,7 +379,7 @@ void ASample04Actor::GetUERotationAndAngularVelocity(const FSEphemerisTime& et, 
     if (DontLog && GEngine)
     {
         double UE_Units_Per_KM = 100 * 1000.;
-        GEngine->AddOnScreenDebugMessage(-1, 0.f, FColor::White, *FString::Printf(TEXT("GetUERotationAndAngularVelocity: Unreal Engine q=%s, av={%f, (%s)}"), *UERotation, AVMagnitude, *UnrealEngineAngularVelocity.ToString()));
+        GEngine->AddOnScreenDebugMessage(-1, 0.f, FColor::White, *FString::Printf(TEXT("GetUERotationAndAngularVelocity: Unreal Engine (LHS coords) q=%s, av={%f, (%s)}"), *UERotation, AVMagnitude, *UnrealEngineAngularVelocity.ToString()));
     }
     else
     {

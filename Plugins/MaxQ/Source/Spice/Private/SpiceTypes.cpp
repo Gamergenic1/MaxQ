@@ -1255,7 +1255,7 @@ FString USpiceTypes::toFString(ES_GeometricModel model, const TArray<FString>& s
 
 FString USpiceTypes::ToString(ES_Axis Axis)
 {
-    TCHAR* sz = TEXT("No_Axis");
+    const TCHAR* sz = TEXT("No_Axis");
     switch (Axis)
     {
         case ES_Axis::X:
@@ -2498,7 +2498,36 @@ void USpiceTypes::NormalizeAngle180To180(
     FSAngle& AngleNormalized
 )
 {
-    AngleNormalized = FSAngle(normalize180to180(Angle.AsRadians()));
+    AngleNormalized = FSAngle(normalizePiToPi(Angle.AsRadians()));
+}
+
+void USpiceTypes::NormalizeAngleMinus180To180(
+    const FSAngle& Angle,
+    FSAngle& AngleNormalized
+)
+{
+    AngleNormalized = FSAngle(normalizePiToPi(Angle.AsRadians()));
+}
+
+void USpiceTypes::NormalizeDegrees0To360(double Degrees, double& NormalizedDegrees)
+{
+    NormalizedDegrees = normalize0to360(Degrees);
+}
+
+void USpiceTypes::NormalizeDegreesMinus180To180(double Degrees, double& NormalizedDegrees)
+{
+    NormalizedDegrees = normalize180to180(Degrees);
+}
+
+void USpiceTypes::NormalizeRadiansZeroToTwoPi(double Radians, double& NormalizedRadians)
+{
+    NormalizedRadians = normalizeZeroToTwoPi(Radians);
+}
+
+
+void USpiceTypes::NormalizeRadiansMinusPiToPi(double Radians, double& NormalizedRadians)
+{
+    NormalizedRadians = normalizePiToPi(Radians);
 }
 
 
@@ -3308,6 +3337,52 @@ FSDimensionlessVector USpiceTypes::SDimensionlessVector_Z_Axis()
 FSMassConstant USpiceTypes::SMassConstant_Zero()
 {
     return FSMassConstant::Zero;
+}
+
+
+FSAngularVelocity USpiceTypes::NegateSAngularVelocity(const FSAngularVelocity& A)
+{
+    return FSAngularVelocity(-A.x, -A.y, -A.z);
+}
+
+FSAngularRate USpiceTypes::NegateSAngularRate(const FSAngularRate& A)
+{
+    return FSAngularRate::FromRadiansPerSecond(-A.AsRadiansPerSecond());
+}
+
+FSVelocityVector USpiceTypes::NegateSVelocityVector(const FSVelocityVector& A)
+{
+    return FSVelocityVector(-A.dx, -A.dy, -A.dz);
+}
+
+FSDistanceVector USpiceTypes::NegateSDistanceVector(const FSDistanceVector& A)
+{
+    return FSDistanceVector(-A.x, -A.y, -A.z);
+}
+
+FSDimensionlessVector USpiceTypes::NegateSDimensionlessVector(const FSDimensionlessVector& A)
+{
+    return FSDimensionlessVector(-A.x, -A.y, -A.z);
+}
+
+FSEphemerisPeriod USpiceTypes::NegateSEphemerisPeriod(const FSEphemerisPeriod& A)
+{
+    return FSEphemerisPeriod::FromSeconds(-A.AsSeconds());
+}
+
+FSAngle USpiceTypes::NegateSAngle(const FSAngle& A)
+{
+    return FSAngle::FromRadians(-A.AsRadians());
+}
+
+FSSpeed USpiceTypes::NegateSSpeed(const FSSpeed& A)
+{
+    return FSSpeed::FromKilometersPerSecond(-A.AsKilometersPerSecond());
+}
+
+FSDistance USpiceTypes::NegateSDistance(const FSDistance& A)
+{
+    return FSDistance::FromKilometers(-A.AsKilometers());
 }
 
 #pragma region NaifNames

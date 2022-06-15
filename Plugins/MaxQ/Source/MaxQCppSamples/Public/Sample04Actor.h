@@ -64,7 +64,7 @@ public:
     void pxform();
     void sxform(const FSEphemerisTime& et);
     void sxform_xf2rav(const FSEphemerisTime& et);
-    void GetUERotationAndAngularVelocity(const FSEphemerisTime& et, const FName& ReferenceFrame, const FName& BodyName, bool NoDuration = false);
+    void GetUERotationAndAngularVelocity(const FSEphemerisTime& et, const FName& ReferenceFrame, const FName& BodyName, bool DontLog = false);
 
     void InitializeSolarSystem();
     void UpdateSolarSystem(float DeltaTime);

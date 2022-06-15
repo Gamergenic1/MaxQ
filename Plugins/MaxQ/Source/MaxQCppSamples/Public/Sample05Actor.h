@@ -112,25 +112,25 @@ private:
     void AddTelemetryObject(const FString& ObjectId, const FString& ObjectName, const FSTwoLineElements& Elements);
 
     // This is what you came for...
-    UFUNCTION(BlueprintCallable)
+    UFUNCTION(BlueprintCallable, Category = "MaxQ|Samples")
     bool PropagateTLE(const FSTwoLineElements& TLEs, FSStateVector& StateVector);
 
-    UFUNCTION(BlueprintCallable)
+    UFUNCTION(BlueprintCallable, Category = "MaxQ|Samples")
     bool TransformPosition(const FSDistanceVector& RHSPosition, FVector& UEVector);
 
-    UFUNCTION(BlueprintCallable)
+    UFUNCTION(BlueprintCallable, Category = "MaxQ|Samples")
     bool ComputeConic(const FSStateVector& StateVector, FSEllipse& OrbitalConicc, bool& bIsHyperbolic);
 
-    UFUNCTION(BlueprintCallable)
+    UFUNCTION(BlueprintCallable, Category = "MaxQ|Samples")
     void RenderDebugOrbit(const FSEllipse& OrbitalConicc, bool bIsHyperbolic, const FColor& Color, float Thickness);
 
-    UFUNCTION(BlueprintCallable)
+    UFUNCTION(BlueprintCallable, Category = "MaxQ|Samples")
     bool EvaluateOrbitalElements(const FSConicElements& KeplerianElements, FSStateVector& StateVector);
 
-    UFUNCTION(BlueprintCallable)
+    UFUNCTION(BlueprintCallable, Category = "MaxQ|Samples")
     bool GetOrbitalElements(const FSStateVector& StateVector, FSConicElements& KeplerianElements);
 
-    UFUNCTION(BlueprintCallable)
+    UFUNCTION(BlueprintCallable, Category = "MaxQ|Samples")
     bool GetConicFromKepler(const FSConicElements& KeplerianElements, FSEllipse& OrbitalConicc, bool& bIsHyperbolic);
 
 
