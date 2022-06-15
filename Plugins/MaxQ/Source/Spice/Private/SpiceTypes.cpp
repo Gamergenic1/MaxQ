@@ -203,8 +203,9 @@ FString FSEulerAngles::ToString() const
 FString FSAngularVelocity::ToString() const
 {
     FSDimensionlessVector dimensionlessVector;
-    AsDimensionlessVector(dimensionlessVector);
-    return dimensionlessVector.ToString();
+    FSAngularRate angularRate;
+    USpice::unorm_angular_velocity(*this, dimensionlessVector, angularRate);
+    return FString::Printf(TEXT("{%s * (%s)}"), *angularRate.ToString(), *dimensionlessVector.ToString());
 }
 
 FString FSEulerAngularState::ToString() const
@@ -304,6 +305,63 @@ FString FSPlanetographicStateVector::ToString() const
     return FString::Printf(TEXT("[(%s), %s; (%s, %s, %s)]"), *USpiceTypes::FormatLonLat(r.lonlat), *USpiceTypes::FormatDouble(r.alt.km), *USpiceTypes::FormatDouble(dr.dlon.AsDegreesPerSecond()), *USpiceTypes::FormatDouble(dr.dlat.AsDegreesPerSecond()), *USpiceTypes::FormatDouble(dr.dalt.kmps));
 }
 
+FVector FSAngularVelocity::Swizzle() const
+{
+    return USpiceTypes::Swizzle(*this);
+}
+
+FSAngularVelocity FSAngularVelocity::Swizzle(const FVector& UEVector)
+{
+    FSAngularVelocity av;
+    USpiceTypes::Swizzle(UEVector, av);
+
+    return av;
+}
+
+FVector FSDimensionlessVector::Swizzle() const
+{
+    return USpiceTypes::Swizzle(*this);
+}
+
+FSDimensionlessVector FSDimensionlessVector::Swizzle(const FVector& UEVector)
+{
+    FSDimensionlessVector vec;
+    USpiceTypes::Swizzle(UEVector, vec);
+
+    return vec;
+}
+
+
+FVector FSDistanceVector::Swizzle() const
+{
+    return USpiceTypes::Swizzle(*this);
+}
+
+FSDistanceVector FSDistanceVector::Swizzle(const FVector& UEVector)
+{
+    FSDistanceVector vec;
+    USpiceTypes::Swizzle(UEVector, vec);
+
+    return vec;
+}
+
+
+FVector FSVelocityVector::Swizzle() const
+{
+    return USpiceTypes::Swizzle(*this);
+}
+
+FSVelocityVector FSVelocityVector::Swizzle(const FVector& UEVector)
+{
+    FSVelocityVector vec;
+    USpiceTypes::Swizzle(UEVector, vec);
+
+    return vec;
+}
+
+
+
+
 FString FSStateTransform::ToString() const
 {
     static TStringBuilder<1024> sb;
@@ -359,6 +417,19 @@ FString FSQuaternion::ToString() const
         return ErrorMessage;
     }
 }
+
+FQuat FSQuaternion::Swizzle() const
+{
+    // Swazzle = Fancier name for "Swizzle"
+    // (It's actually because Blueprints doesn't support overloading names.)
+    return USpiceTypes::Swazzle(*this);
+}
+
+FSQuaternion FSQuaternion::Swizzle(const FQuat& UnrealQuat)
+{
+    return USpiceTypes::Swazzle(UnrealQuat);
+}
+
 
 FString FSEllipse::ToString() const
 {
@@ -2033,11 +2104,6 @@ FSEphemerisTime USpiceTypes::Add_SEphemerisTimeSEphemerisPeriod(const FSEphemeri
     return A + B;
 }
 
-/* Addition (A + B) */
-FSEphemerisTime USpiceTypes::Add_SEphemerisPeriodSEphemerisTime(const FSEphemerisPeriod& A, const FSEphemerisTime& B)
-{
-    return A + B;
-}
 
 
 /* Addition (A + B) */
@@ -2046,17 +2112,17 @@ FSEphemerisPeriod USpiceTypes::Add_SEphemerisPeriodSEphemerisPeriod(const FSEphe
     return A + B;
 }
 
+FSEphemerisPeriod USpiceTypes::Subtract_SEphemerisPeriodSEphemerisPeriod(const FSEphemerisPeriod& A, const FSEphemerisPeriod& B)
+{
+    return A - B;
+}
+
 /* Subtraction (A - B) */
 FSEphemerisPeriod USpiceTypes::Subtract_SEphemerisTimeSEphemerisTime(const FSEphemerisTime& A, const FSEphemerisTime& B)
 {
     return A - B;
 }
 
-/* Multiplication (A * B) */
-FSEphemerisPeriod USpiceTypes::Multiply_DoubleSEphemerisPeriod(double A, const FSEphemerisPeriod& B)
-{
-    return A * B;
-}
 
 /* Multiplication (A * B) */
 FSEphemerisPeriod USpiceTypes::Multiply_SEphemerisPeriodDouble(const FSEphemerisPeriod& A, double B)
@@ -2110,11 +2176,9 @@ bool USpiceTypes::Less_SDistanceSDistance(const FSDistance& A, const FSDistance&
     return A < B;
 }
 
-
-/* Multiplication (A * B) */
-FSDistance USpiceTypes::Multiply_DoubleSDistance(double A, const FSDistance& B)
+bool USpiceTypes::Greater_SDistanceSDistance(const FSDistance& A, const FSDistance& B)
 {
-    return A * B;
+    return A > B;
 }
 
 /* Multiplication (A * B) */
@@ -2130,20 +2194,14 @@ FSDistanceVector USpiceTypes::Multiply_SDistanceVectorDouble(const FSDistanceVec
     return A * B;
 }
 
-/* Multiplication (A * B) */
-FSDistanceVector USpiceTypes::Multiply_DoubleSDistanceVector(double A, const FSDistanceVector& B)
-{
-    return A * B;
-}
-
 /* Subtraction (A - B) */
-FSDistanceVector USpiceTypes::Subtract_DoubleSDistanceVector(const FSDistanceVector& A, const FSDistanceVector& B)
+FSDistanceVector USpiceTypes::Subtract_SDistanceVectorSDistanceVector(const FSDistanceVector& A, const FSDistanceVector& B)
 {
     return A - B;
 }
 
 /* Addition (A + B) */
-FSDistanceVector USpiceTypes::Add_DoubleSDistanceVector(const FSDistanceVector& A, const FSDistanceVector& B)
+FSDistanceVector USpiceTypes::Add_SDistanceVectorSDistanceVector(const FSDistanceVector& A, const FSDistanceVector& B)
 {
     return A + B;
 }
@@ -2159,6 +2217,10 @@ FSDistanceVector USpiceTypes::Divide_SDistanceVectorSDimensionlessVector(const F
     return A / B;
 }
 
+FSDistanceVector USpiceTypes::Divide_SDistanceVectorDouble(const FSDistanceVector& A, double B)
+{
+    return A / B;
+}
 
 bool USpiceTypes::Greater_SEphemerisTimeSEphemerisTime(const FSEphemerisTime& A, const FSEphemerisTime& B)
 {
@@ -2171,12 +2233,17 @@ bool USpiceTypes::Less_SEphemerisTimeSEphemerisTime(const FSEphemerisTime& A, co
 }
 
 
-FSSpeed USpiceTypes::Multiply_SSpeedDouble(const FSSpeed& A, double B)
+bool USpiceTypes::Greater_SEphemerisPeriodSEphemerisPeriod(const FSEphemerisPeriod& A, const FSEphemerisPeriod& B)
 {
-    return A * B;
+    return A > B;
 }
 
-FSSpeed USpiceTypes::Multiply_DoubleSSpeed(double A, const FSSpeed& B)
+bool USpiceTypes::Less_SEphemerisPeriodSEphemerisPeriod(const FSEphemerisPeriod& A, const FSEphemerisPeriod& B)
+{
+    return A < B;
+}
+
+FSSpeed USpiceTypes::Multiply_SSpeedDouble(const FSSpeed& A, double B)
 {
     return A * B;
 }
@@ -2201,12 +2268,12 @@ FSSpeed USpiceTypes::Add_SSpeedSSpeed(const FSSpeed& A, const FSSpeed& B)
     return A + B;
 }
 
-FSVelocityVector USpiceTypes::Multiply_SVelocityVectorDouble(const FSVelocityVector& A, double B)
+bool USpiceTypes::Less_SSpeedSSpeed(const FSSpeed& A, const FSSpeed& B)
 {
-    return A * B;
+    return A < B;
 }
 
-FSVelocityVector USpiceTypes::Multiply_DoubleSVelocityVector(double A, const FSVelocityVector& B)
+FSVelocityVector USpiceTypes::Multiply_SVelocityVectorDouble(const FSVelocityVector& A, double B)
 {
     return A * B;
 }
@@ -2242,9 +2309,24 @@ FSDistanceVector USpiceTypes::Multiply_SDistanceSDimensionlessVector(const FSDis
     return A * B;
 }
 
-FSDimensionlessVector USpiceTypes::Multiply_DoubleSDimensionlessVector(double A, const FSDimensionlessVector& B)
+FSDimensionlessVector USpiceTypes::Multiply_SDimensionlessVectorDouble(const FSDimensionlessVector& A, double B)
 {
     return A * B;
+}
+
+FSDimensionlessVector USpiceTypes::Divide_SDimensionlessVectorDouble(const FSDimensionlessVector& A, double B)
+{
+    return A / B;
+}
+
+FSDimensionlessVector USpiceTypes::Subtract_SDimensionlessVectorSDimensionlessVector(const FSDimensionlessVector& A, const FSDimensionlessVector& B)
+{
+    return A - B;
+}
+
+FSDimensionlessVector USpiceTypes::Add_SDimensionlessVectorSDimensionlessVector(const FSDimensionlessVector& A, const FSDimensionlessVector& B)
+{
+    return A + B;
 }
 
 FSVelocityVector USpiceTypes::SpeedToVelocity(const FSSpeed& A, const FSDimensionlessVector& B)
@@ -2260,6 +2342,11 @@ FSDistanceVector USpiceTypes::DistanceToVector(const FSDistance& A, const FSDime
 FSDimensionlessVector USpiceTypes::ScaleDimensionlessVector(double A, const FSDimensionlessVector& B)
 {
     return A * B;
+}
+
+bool USpiceTypes::Greater_SSpeedSSpeed(const FSSpeed& A, const FSSpeed& B)
+{
+    return A > B;
 }
 
 FSAngle USpiceTypes::Multiply_SAngleDouble(const FSAngle& A, double B)
@@ -3223,3 +3310,221 @@ FSMassConstant USpiceTypes::SMassConstant_Zero()
     return FSMassConstant::Zero;
 }
 
+#pragma region NaifNames
+
+using namespace MaxQ;
+
+FString USpiceTypes::Const_J2000() { return Constants::J2000; }
+FString USpiceTypes::Const_ECLIPJ2000() { return Constants::ECLIPJ2000; }
+FString USpiceTypes::Const_MARSIAU() { return Constants::MARSIAU; }
+FString USpiceTypes::Const_GALACTIC() { return Constants::GALACTIC; }
+FString USpiceTypes::Const_IAU_EARTH() { return Constants::IAU_EARTH; }
+FString USpiceTypes::Const_EARTH_FIXED() { return Constants::EARTH_FIXED; }
+FString USpiceTypes::Const_ITRF93() { return Constants::ITRF93; }
+FString USpiceTypes::Const_IAU_MOON() { return Constants::IAU_MOON; }
+FString USpiceTypes::Const_IAU_SUN() { return Constants::IAU_SUN; }
+FString USpiceTypes::Const_IAU_MERCURY() { return Constants::IAU_MERCURY; }
+FString USpiceTypes::Const_IAU_VENUS() { return Constants::IAU_VENUS; }
+FString USpiceTypes::Const_IAU_MARS() { return Constants::IAU_MARS; }
+FString USpiceTypes::Const_IAU_DEIMOS() { return Constants::IAU_DEIMOS; }
+FString USpiceTypes::Const_IAU_PHOBOS() { return Constants::IAU_PHOBOS; }
+FString USpiceTypes::Const_IAU_JUPITER() { return Constants::IAU_JUPITER; }
+FString USpiceTypes::Const_IAU_SATURN() { return Constants::IAU_SATURN; }
+FString USpiceTypes::Const_IAU_NEPTUNE() { return Constants::IAU_NEPTUNE; }
+FString USpiceTypes::Const_IAU_URANUS() { return Constants::IAU_URANUS; }
+FString USpiceTypes::Const_IAU_PLUTO() { return Constants::IAU_PLUTO; }
+FString USpiceTypes::Const_IAU_CERES() { return Constants::IAU_CERES; }
+FString USpiceTypes::Const_EARTH() { return Constants::EARTH; }
+FString USpiceTypes::Const_MOON() { return Constants::MOON; }
+FString USpiceTypes::Const_EMB() { return Constants::EMB; }
+FString USpiceTypes::Const_EARTH_BARYCENTER() { return Constants::EARTH_BARYCENTER; }
+FString USpiceTypes::Const_SUN() { return Constants::SUN; }
+FString USpiceTypes::Const_SSB() { return Constants::SSB; }
+FString USpiceTypes::Const_SOLAR_SYSTEM_BARYCENTER() { return Constants::SOLAR_SYSTEM_BARYCENTER; }
+FString USpiceTypes::Const_MERCURY() { return Constants::MERCURY; }
+FString USpiceTypes::Const_VENUS() { return Constants::VENUS; }
+FString USpiceTypes::Const_MARS() { return Constants::MARS; }
+FString USpiceTypes::Const_PHOBOS() { return Constants::PHOBOS; }
+FString USpiceTypes::Const_DEIMOS() { return Constants::DEIMOS; }
+FString USpiceTypes::Const_MARS_BARYCENTER() { return Constants::MARS_BARYCENTER; }
+FString USpiceTypes::Const_JUPITER() { return Constants::JUPITER; }
+FString USpiceTypes::Const_JUPITER_BARYCENTER() { return Constants::JUPITER_BARYCENTER; }
+FString USpiceTypes::Const_SATURN() { return Constants::SATURN; }
+FString USpiceTypes::Const_SATURN_BARYCENTER() { return Constants::SATURN_BARYCENTER; }
+FString USpiceTypes::Const_URANUS() { return Constants::URANUS; }
+FString USpiceTypes::Const_URANUS_BARYCENTER() { return Constants::URANUS_BARYCENTER; }
+FString USpiceTypes::Const_NEPTUNE() { return Constants::NEPTUNE; }
+FString USpiceTypes::Const_NEPTUNE_BARYCENTER() { return Constants::NEPTUNE_BARYCENTER; }
+FString USpiceTypes::Const_PLUTO() { return Constants::PLUTO; }
+FString USpiceTypes::Const_PLUTO_BARYCENTER() { return Constants::PLUTO_BARYCENTER; }
+FString USpiceTypes::Const_CERES() { return Constants::CERES; }
+FString USpiceTypes::Const_PIONEER_6() { return Constants::PIONEER_6; }
+FString USpiceTypes::Const_PIONEER_7() { return Constants::PIONEER_7; }
+FString USpiceTypes::Const_VIKING_1_ORBITER() { return Constants::VIKING_1_ORBITER; }
+FString USpiceTypes::Const_VIKING_2_ORBITER() { return Constants::VIKING_2_ORBITER; }
+FString USpiceTypes::Const_VOYAGER_1() { return Constants::VOYAGER_1; }
+FString USpiceTypes::Const_VOYAGER_2() { return Constants::VOYAGER_2; }
+FString USpiceTypes::Const_HST() { return Constants::HST; }
+FString USpiceTypes::Const_HUBBLE_SPACE_TELESCOPE() { return Constants::HUBBLE_SPACE_TELESCOPE; }
+FString USpiceTypes::Const_MARS_PATHFINDER() { return Constants::MARS_PATHFINDER; }
+FString USpiceTypes::Const_PARKER_SOLAR_PROBE() { return Constants::PARKER_SOLAR_PROBE; }
+FString USpiceTypes::Const_JWST() { return Constants::JWST; }
+FString USpiceTypes::Const_JAMES_WEBB_SPACE_TELESCOPE() { return Constants::JAMES_WEBB_SPACE_TELESCOPE; }
+FString USpiceTypes::Const_INSIGHT() { return Constants::INSIGHT; }
+FString USpiceTypes::Const_OPPORTUNITY() { return Constants::OPPORTUNITY; }
+FString USpiceTypes::Const_SPIRIT() { return Constants::SPIRIT; }
+FString USpiceTypes::Const_NOTO() { return Constants::NOTO; }
+FString USpiceTypes::Const_NEW_NORCIA() { return Constants::NEW_NORCIA; }
+FString USpiceTypes::Const_GOLDSTONE() { return Constants::GOLDSTONE; }
+FString USpiceTypes::Const_CANBERRA() { return Constants::CANBERRA; }
+FString USpiceTypes::Const_MADRID() { return Constants::MADRID; }
+FString USpiceTypes::Const_USUDA() { return Constants::USUDA; }
+FString USpiceTypes::Const_DSS_05() { return Constants::DSS_05; }
+FString USpiceTypes::Const_PARKES() { return Constants::PARKES; }
+FString USpiceTypes::Const_GM() { return Constants::GM; }
+FString USpiceTypes::Const_RADII() { return Constants::RADII; }
+
+namespace MaxQ::Constants
+{
+    const FString J2000(TEXT("J2000"));
+    const FString ECLIPJ2000(TEXT("ECLIPJ2000"));
+    const FString MARSIAU(TEXT("MARSIAU"));
+    const FString GALACTIC(TEXT("GALACTIC"));
+    const FString IAU_EARTH(TEXT("IAU_EARTH"));
+    const FString EARTH_FIXED(TEXT("EARTH_FIXED"));
+    const FString ITRF93(TEXT("ITRF93"));
+    const FString IAU_MOON(TEXT("IAU_MOON"));
+    const FString IAU_SUN(TEXT("IAU_SUN"));
+    const FString IAU_MERCURY(TEXT("IAU_MERCURY"));
+    const FString IAU_VENUS(TEXT("IAU_VENUS"));
+    const FString IAU_MARS(TEXT("IAU_MARS"));
+    const FString IAU_DEIMOS(TEXT("IAU_DEIMOS"));
+    const FString IAU_PHOBOS(TEXT("IAU_PHOBOS"));
+    const FString IAU_JUPITER(TEXT("IAU_JUPITER"));
+    const FString IAU_SATURN(TEXT("IAU_SATURN"));
+    const FString IAU_NEPTUNE(TEXT("IAU_NEPTUNE"));
+    const FString IAU_URANUS(TEXT("IAU_URANUS"));
+    const FString IAU_PLUTO(TEXT("IAU_PLUTO"));
+    const FString IAU_CERES(TEXT("IAU_CERES"));
+    const FString EARTH(TEXT("EARTH"));
+    const FString MOON(TEXT("MOON"));
+    const FString EMB(TEXT("EMB"));
+    const FString EARTH_BARYCENTER(TEXT("EARTH_BARYCENTER"));
+    const FString SUN(TEXT("SUN"));
+    const FString SSB(TEXT("SSB"));
+    const FString SOLAR_SYSTEM_BARYCENTER(TEXT("SOLAR_SYSTEM_BARYCENTER"));
+    const FString MERCURY(TEXT("MERCURY"));
+    const FString VENUS(TEXT("VENUS"));
+    const FString MARS(TEXT("MARS"));
+    const FString PHOBOS(TEXT("PHOBOS"));
+    const FString DEIMOS(TEXT("DEIMOS"));
+    const FString MARS_BARYCENTER(TEXT("MARS_BARYCENTER"));
+    const FString JUPITER(TEXT("JUPITER"));
+    const FString JUPITER_BARYCENTER(TEXT("JUPITER_BARYCENTER"));
+    const FString SATURN(TEXT("SATURN"));
+    const FString SATURN_BARYCENTER(TEXT("SATURN_BARYCENTER"));
+    const FString URANUS(TEXT("URANUS"));
+    const FString URANUS_BARYCENTER(TEXT("URANUS_BARYCENTER"));
+    const FString NEPTUNE(TEXT("NEPTUNE"));
+    const FString NEPTUNE_BARYCENTER(TEXT("NEPTUNE_BARYCENTER"));
+    const FString PLUTO(TEXT("PLUTO"));
+    const FString PLUTO_BARYCENTER(TEXT("PLUTO_BARYCENTER"));
+    const FString CERES(TEXT("CERES"));
+    const FString PIONEER_6(TEXT("PIONEER-6"));
+    const FString PIONEER_7(TEXT("PIONEER-7"));
+    const FString VIKING_1_ORBITER(TEXT("VIKING 1 ORBITER"));
+    const FString VIKING_2_ORBITER(TEXT("VIKING 2 ORBITER"));
+    const FString VOYAGER_1(TEXT("VOYAGER 1"));
+    const FString VOYAGER_2(TEXT("VOYAGER 2"));
+    const FString HST(TEXT("HST"));
+    const FString HUBBLE_SPACE_TELESCOPE(TEXT("HUBBLE SPACE TELESCOPE"));
+    const FString MARS_PATHFINDER(TEXT("MARS PATHFINDER"));
+    const FString PARKER_SOLAR_PROBE(TEXT("PARKER SOLAR PROBE"));
+    const FString JWST(TEXT("JWST"));
+    const FString JAMES_WEBB_SPACE_TELESCOPE(TEXT("JAMES WEBB SPACE TELESCOPE"));
+    const FString INSIGHT(TEXT("INSIGHT"));
+    const FString OPPORTUNITY(TEXT("OPPORTUNITY"));
+    const FString SPIRIT(TEXT("SPIRIT"));
+    const FString NOTO(TEXT("NOTO"));
+    const FString NEW_NORCIA(TEXT("NEW NORCIA"));
+    const FString GOLDSTONE(TEXT("GOLDSTONE"));
+    const FString CANBERRA(TEXT("CANBERRA"));
+    const FString MADRID(TEXT("MADRID"));
+    const FString USUDA(TEXT("USUDA"));
+    const FString DSS_05(TEXT("DSS-05"));
+    const FString PARKES(TEXT("PARKES"));
+    const FString GM(TEXT("GM"));
+    const FString RADII(TEXT("RADII"));
+
+    const FName Name_J2000(J2000);
+    const FName Name_ECLIPJ2000(ECLIPJ2000);
+    const FName Name_MARSIAU(MARSIAU);
+    const FName Name_GALACTIC(GALACTIC);
+    const FName Name_IAU_EARTH(IAU_EARTH);
+    const FName Name_EARTH_FIXED(EARTH_FIXED);
+    const FName Name_ITRF93(ITRF93);
+    const FName Name_IAU_MOON(IAU_MOON);
+    const FName Name_IAU_SUN(IAU_SUN);
+    const FName Name_IAU_MERCURY(IAU_MERCURY);
+    const FName Name_IAU_VENUS(IAU_VENUS);
+    const FName Name_IAU_MARS(IAU_MARS);
+    const FName Name_IAU_DEIMOS(IAU_DEIMOS);
+    const FName Name_IAU_PHOBOS(IAU_PHOBOS);
+    const FName Name_IAU_JUPITER(IAU_JUPITER);
+    const FName Name_IAU_SATURN(IAU_SATURN);
+    const FName Name_IAU_NEPTUNE(IAU_NEPTUNE);
+    const FName Name_IAU_URANUS(IAU_URANUS);
+    const FName Name_IAU_PLUTO(IAU_PLUTO);
+    const FName Name_IAU_CERES(IAU_CERES);
+    const FName Name_EARTH(EARTH);
+    const FName Name_MOON(MOON);
+    const FName Name_EMB(EMB);
+    const FName Name_EARTH_BARYCENTER(EARTH_BARYCENTER);
+    const FName Name_SUN(SUN);
+    const FName Name_SSB(SSB);
+    const FName Name_SOLAR_SYSTEM_BARYCENTER(SOLAR_SYSTEM_BARYCENTER);
+    const FName Name_MERCURY(MERCURY);
+    const FName Name_VENUS(VENUS);
+    const FName Name_MARS(MARS);
+    const FName Name_PHOBOS(PHOBOS);
+    const FName Name_DEIMOS(DEIMOS);
+    const FName Name_MARS_BARYCENTER(MARS_BARYCENTER);
+    const FName Name_JUPITER(JUPITER);
+    const FName Name_JUPITER_BARYCENTER(JUPITER_BARYCENTER);
+    const FName Name_SATURN(SATURN);
+    const FName Name_SATURN_BARYCENTER(SATURN_BARYCENTER);
+    const FName Name_URANUS(URANUS);
+    const FName Name_URANUS_BARYCENTER(URANUS_BARYCENTER);
+    const FName Name_NEPTUNE(NEPTUNE);
+    const FName Name_NEPTUNE_BARYCENTER(NEPTUNE_BARYCENTER);
+    const FName Name_PLUTO(PLUTO);
+    const FName Name_PLUTO_BARYCENTER(PLUTO_BARYCENTER);
+    const FName Name_CERES(CERES);
+    const FName Name_PIONEER_6(PIONEER_6);
+    const FName Name_PIONEER_7(PIONEER_7);
+    const FName Name_VIKING_1_ORBITER(VIKING_1_ORBITER);
+    const FName Name_VIKING_2_ORBITER(VIKING_2_ORBITER);
+    const FName Name_VOYAGER_1(VOYAGER_1);
+    const FName Name_VOYAGER_2(VOYAGER_2);
+    const FName Name_HST(HST);
+    const FName Name_HUBBLE_SPACE_TELESCOPE(HUBBLE_SPACE_TELESCOPE);
+    const FName Name_MARS_PATHFINDER(MARS_PATHFINDER);
+    const FName Name_PARKER_SOLAR_PROBE(PARKER_SOLAR_PROBE);
+    const FName Name_JWST(JWST);
+    const FName Name_JAMES_WEBB_SPACE_TELESCOPE(JAMES_WEBB_SPACE_TELESCOPE);
+    const FName Name_INSIGHT(INSIGHT);
+    const FName Name_OPPORTUNITY(OPPORTUNITY);
+    const FName Name_SPIRIT(SPIRIT);
+    const FName Name_NOTO(NOTO);
+    const FName Name_NEW_NORCIA(NEW_NORCIA);
+    const FName Name_GOLDSTONE(GOLDSTONE);
+    const FName Name_CANBERRA(CANBERRA);
+    const FName Name_MADRID(MADRID);
+    const FName Name_USUDA(USUDA);
+    const FName Name_DSS_05(DSS_05);
+    const FName Name_PARKES(PARKES);
+    const FName Name_GM(GM);
+    const FName Name_RADII(RADII);
+}
+
+#pragma endregion NaifNames
