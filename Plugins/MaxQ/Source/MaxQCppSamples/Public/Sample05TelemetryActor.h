@@ -15,6 +15,13 @@
 
 class UStaticMeshComponent;
 
+// This actor represents an object who's state was obtained
+// by the celestrak server... It updates its location
+// ("propagates" its orbit) to a given time and displays a position.
+// The orbit is updated from "Two-Line Elements" NORAD
+// type telemetry data.
+// Also, it renders a debug orbit, which is computed from it's
+// current state.
 UCLASS(BlueprintType)
 class MAXQCPPSAMPLES_API ASample05TelemetryActor : public AActor
 {

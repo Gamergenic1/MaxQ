@@ -16,13 +16,7 @@
 // Sample05
 // Kepler Orbits, TLE's, and more...
 //-----------------------------------------------------------------------------
-
-/* THIS SAMPLE IS IN PROGRESS */
-
-/* ****************************************************************************
-*  This tutorial is only an interim version.
-*  ***************************************************************************/
-
+//
 // Kepler orbits are paramatized by geometric properties.
 // * Semi-Major axis (or equivalent, such as "perifocal" distance)
 // * Elliptical Eccentricity
@@ -40,13 +34,12 @@
 // asteroids and comets.  Orbital Elements for nearly any asteroid/comet
 // Known to humans is available from NASA/JPL's Solar System Dynamics group:
 // https://ssd.jpl.nasa.gov/
-
-
+//
 // "Two Line" Element (TLE) data originated from NORAD tracking telemetry.
 // It remains valid for a brief time (a few days)
 // It's more commonly used at least with anything orbiting Earth.
 // Various orbit "propagators" have been used.  SPICE will use "sgp4" here.
-
+//
 // TLE data from Satellite Catalog (SatCat) REST APIs such as space-track.org.
 // For an example of querying this data from Unreal Engine, see:
 // https://gamedevtricks.com/post/call-satcat-rest-api-from-ue-http/
