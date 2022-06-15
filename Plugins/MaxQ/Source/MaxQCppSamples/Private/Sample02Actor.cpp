@@ -13,6 +13,7 @@
 #include "SampleUtilities.h"
 
 using MaxQSamples::Log;
+using namespace MaxQ;
 
 //-----------------------------------------------------------------------------
 // Sample02
@@ -249,7 +250,7 @@ void ASample02Actor::Insight()
     // With the FK loaded, we can look up the spacecraft Id (it's -189)
     int SpacecraftId = 0;  // -189;
     ES_FoundCode FoundCode;
-    USpice::bodn2c(FoundCode, SpacecraftId, TEXT("INSIGHT"));
+    USpice::bodn2c(FoundCode, SpacecraftId, Constants::INSIGHT);
     Log(FString::Printf(TEXT("Insight found Insight Spacecraft ID %d"), SpacecraftId), FoundCode == ES_FoundCode::Found ? FColor::Green : FColor::Red);
 
     // Note, the LSK file refers to leap seconds kernel insight.tls, but the

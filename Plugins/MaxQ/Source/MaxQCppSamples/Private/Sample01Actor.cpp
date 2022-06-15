@@ -378,8 +378,8 @@ void ASample01Actor::QueryEarthsRadius()
             if (FoundCode == ES_FoundCode::Found)
             {
                 // This works too, if you're worried about misspelling somethings.
-                // There are constants for Parameter Names, Reference Frame Names, Naif Objecct Names, etc.
-                const FString& RadiiParameterName = USpice::Spice_RADII();
+                // There are constants for Parameter Names, Reference Frame Names, Naif Object Names, etc.
+                const FString& RadiiParameterName = MaxQ::Constants::RADII;
 
                 // If we found the id code, look up its mass
                 USpice::bodvcd_distance_vector(ResultCode, ErrorMessage, Radii, Bodyid, RadiiParameterName);

@@ -255,7 +255,7 @@ namespace MaxQSamples
         }
     }
 
-    void Log(const FString& LogString, ES_ResultCode ResultCode)
+    void Log(const FString& LogString, ES_ResultCode ResultCode, float DisplayTime)
     {
         if (ResultCode == ES_ResultCode::Success)
         {
@@ -268,7 +268,7 @@ namespace MaxQSamples
 
         if (GEngine)
         {
-            GEngine->AddOnScreenDebugMessage(-1, 60.0f, ResultCode == ES_ResultCode::Success ? FColor::Green : FColor::Red, LogString);
+            GEngine->AddOnScreenDebugMessage(-1, DisplayTime, ResultCode == ES_ResultCode::Success ? FColor::Green : FColor::Red, LogString);
         }
     }
 }

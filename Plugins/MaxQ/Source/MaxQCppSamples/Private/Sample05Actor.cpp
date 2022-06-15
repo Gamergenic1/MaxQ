@@ -13,7 +13,7 @@
 #include "SpiceOrbits.h"
 
 using MaxQSamples::Log;
-
+using namespace MaxQ::Constants;
 
 /* THIS SAMPLE IS IN PROGRESS */
 
@@ -38,9 +38,9 @@ ASample05Actor::ASample05Actor()
 
     TelemetryObjectId = TEXT("GROUP=STATIONS");
 
-    OriginNaifName = "EARTH";
-    OriginReferenceFrame = "J2000";
-    SunNaifName = "SUN";
+    OriginNaifName = Name_EARTH;
+    OriginReferenceFrame = Name_J2000;
+    SunNaifName = Name_SUN;
     DistanceScale = 25.0;
     SolarSystemState.TimeScale = 1.0;
 
@@ -130,8 +130,8 @@ void ASample05Actor::conics()
     FString ErrorMessage;
 
     // We'll need Earth's mass for propagating orbits via conics and oscelt
-    FString NaifNameOfMass = TEXT("EARTH");
-    USpice::bodvrd_mass(ResultCode, ErrorMessage, GM, NaifNameOfMass, TEXT("GM"));
+    FString NaifNameOfMass = EARTH;
+    USpice::bodvrd_mass(ResultCode, ErrorMessage, GM, NaifNameOfMass, MaxQ::Constants::GM);
 
     Log(FString::Printf(TEXT("conics Mass Constant of EARTH = %s"), *GM.ToString()), ResultCode);
 
@@ -139,12 +139,15 @@ void ASample05Actor::conics()
     FSDistanceVector Radii;
     if (ResultCode == ES_ResultCode::Success)
     {
-        USpice::bodvrd_distance_vector(ResultCode, ErrorMessage, Radii, NaifNameOfMass, TEXT("RADII"));
+        USpice::bodvrd_distance_vector(ResultCode, ErrorMessage, Radii, NaifNameOfMass, RADII);
         Log(FString::Printf(TEXT("conics Radii of EARTH = %s"), *Radii.ToString()), ResultCode);
     }
 
+    // for a random orbit specified by classic kepler orbital elements,
+    // get a state vector for a given time.
     if (ResultCode == ES_ResultCode::Success)
     {
+        // A random orbit.
         // From:
         // https://www.heavens-above.com/orbit.aspx?satid=20580
         const FSDistance alt  = FSDistance::FromKilometers(533);
@@ -203,30 +206,32 @@ void ASample05Actor::oscelt()
     USpice::et_now(et);
 
     // What do we want?  (Earth's position)
-    FString targ = TEXT("EARTH");
+    FString targ = EARTH;
 
     // Where do we want it relative to? (Solar System Barycenter)
-    FString obs = TEXT("SSB");
+    FString obs = SSB;
 
     // What reference frame (coordinate system orientation)?
     // Ecliptic Plane
-    FString ref = TEXT("ECLIPJ2000");
+    FString ref = ECLIPJ2000;
 
     // Call SPICE, get the position in rectangular coordinates...
     USpice::spkezr(ResultCode, ErrorMessage, et, state, lt, targ, obs, ref);
 
     Log(FString::Printf(TEXT("oscelt EARTH's State Vector (ECLIP2000 Frame) = %s"), *state.ToString()), ResultCode);
 
+    // We need the mass of whatever we're orbiting to get the orbital elements
+    // from a state vector ('oscelt').  In this case we're orbiting the sun.
     FSMassConstant SUN_GM;
     if (ResultCode == ES_ResultCode::Success)
     {
         // We're ignoring the effects of all other bodies on the earth, only the sun
         // So, we want the mass of the Sun itself, even though we're getting the
         // orbital params relative to the Solar System Barycenter, as if the sun was there.
-        FString NaifNameOfMass = TEXT("SUN");
-        USpice::bodvrd_mass(ResultCode, ErrorMessage, SUN_GM, NaifNameOfMass, TEXT("GM"));
+        FString NaifNameOfMass = SUN;
+        USpice::bodvrd_mass(ResultCode, ErrorMessage, SUN_GM, NaifNameOfMass, MaxQ::Constants::GM);
 
-        Log(FString::Printf(TEXT("oscelt Mass of SUN = %s"), *GM.ToString()), ResultCode);
+        Log(FString::Printf(TEXT("oscelt Mass of SUN = %s"), *SUN_GM.ToString()), ResultCode);
     }
 
     FSConicElements ConicElements;
@@ -246,19 +251,23 @@ void ASample05Actor::oscelt()
 //-----------------------------------------------------------------------------
 // Name: TLEs
 // Desc:
-// Simple example of Propagating an orbit by TLE
+// Simple example of Propagating an orbit by NORAD TLE telemetry
 //-----------------------------------------------------------------------------
 
 void ASample05Actor::TLEs()
 {
+    // If you're new to "Two-Line Elements", see:
+    // https://en.wikipedia.org/wiki/Two-line_element_set
+    // 
     // A random TLE from:
     // https://www.n2yo.com/satellite/?s=20580
+    // (It's the Hubble Space Telescope).
     FString TLE_1 = TEXT("1 20580U 90037B   22159.92075888  .00001332  00000-0  67903-4 0  9998");
     FString TLE_2 = TEXT("2 20580  28.4689 225.3422 0002312 306.2587 222.7137 15.10552549564920");
 
 
-    Log(TEXT("2 20580  28.4689 225.3422 0002312 306.2587 222.7137 15.10552549564920"), FColor::White);
-    Log(TEXT("1 20580U 90037B   22159.92075888  .00001332  00000-0  67903-4 0  9998"), FColor::White);
+    Log(*TLE_2, FColor::White);
+    Log(*TLE_1, FColor::White);
     Log(TEXT("TLEs Using TLE data for Hubble Space telescope"), FColor::White);
 
     FSStateVector state;
@@ -282,6 +291,9 @@ void ASample05Actor::TLEs()
         FSTLEGeophysicalConstants GeophysicalConstants;
         USpice::getgeophs(GeophysicalConstants, TEXT("EARTH"));
 
+        // 'evsgp4' propagates TLE's.
+        // See:
+        // https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/evsgp4_c.html
         USpice::evsgp4(ResultCode, ErrorMessage, state, et, GeophysicalConstants, TwoLineElements);
 
         Log(FString::Printf(TEXT("TLEs Hubble Space Telescope's State Vector (TEME Frame) = %s"), *state.ToString()), ResultCode);
@@ -338,6 +350,8 @@ void ASample05Actor::RequestTelemetryByHttp()
 
 void ASample05Actor::ProcessTelemetryResponseAsTLE(bool Success, const FString& ObjectId, const FString& Telemetry)
 {
+    // Oh, hi!
+    // We got an object from the server... and it's TLE lines.
     Log(TEXT("ProcessTelemetryResponseAsTLE Telemetry response received from server"));
     Log(FString::Printf(TEXT("ProcessTelemetryResponseAsTLE Telemetry : %s"), *(Telemetry.Left(750) + TEXT("..."))), Success ? FColor::Green : FColor::Red, 15.f);
 
@@ -352,8 +366,11 @@ void ASample05Actor::ProcessTelemetryResponseAsTLE(bool Success, const FString& 
 
         for(int i = 0; i < TLEArray.Num(); i += 3)
         {
+            // 'getelm' parses TLE strings into a useable form.  So, process the strings
+            // from the server.
             USpice::getelm(ResultCode, ErrorMessage, et, elems, TLEArray[i + 1], TLEArray[i + 2]);
 
+            // If the object's TLEs parsed successfully, create an actor for it.
             if (ResultCode == ES_ResultCode::Success)
             {
                 AddTelemetryObject(ObjectId, TLEArray[i + 0].TrimStartAndEnd(), elems);
@@ -363,6 +380,7 @@ void ASample05Actor::ProcessTelemetryResponseAsTLE(bool Success, const FString& 
                 Log(FString::Printf(TEXT("ProcessTelemetryResponse getelem Spice Error %s"), *ErrorMessage), ResultCode);
             }
 
+            // Dump a few object names to the log.
             if (i < 10)
             {
                 Log(FString::Printf(TEXT("** Please also see %s in Scene 'In Orbit' folder for button controls (details panel) **"), *(TLEArray[i].TrimStartAndEnd())), FColor::Orange);
@@ -399,6 +417,10 @@ void ASample05Actor::AddTelemetryObject(const FString& ObjectId, const FString& 
         {
             TelemetryObject->SetActorLabel(ObjectName);
             TelemetryObject->SetFolderPath("In Orbit");
+
+            // There's several ways this could have been done, obviously.
+            // Is this the best?
+            // Hey, there's no right or wrong solutions, only solutions optimized to different criteria.
             TelemetryObject->PropagateByTLEs.BindUObject(this, &ASample05Actor::PropagateTLE);
             TelemetryObject->XformPositionCallback.BindUObject(this, &ASample05Actor::TransformPosition);
 
@@ -420,8 +442,9 @@ void ASample05Actor::AddTelemetryObject(const FString& ObjectId, const FString& 
 // ============================================================================
 //
 //-----------------------------------------------------------------------------
-// Name: 
+// Name: PropagateTLE
 // Desc:
+// ...how to propagate TLE telemetry to an orbital state vector.
 //-----------------------------------------------------------------------------
 
 bool ASample05Actor::PropagateTLE(const FSTwoLineElements& TLEs, FSStateVector& StateVector)
@@ -439,8 +462,9 @@ bool ASample05Actor::PropagateTLE(const FSTwoLineElements& TLEs, FSStateVector& 
 // ============================================================================
 //
 //-----------------------------------------------------------------------------
-// Name: 
+// Name: TransformPosition
 // Desc:
+// Swizzle and scale a vector from RHS SPICE coords to LHS UE coords.
 //-----------------------------------------------------------------------------
 
 bool ASample05Actor::TransformPosition(const FSDistanceVector& RHSPosition, FVector& UEVector)
@@ -457,8 +481,8 @@ bool ASample05Actor::TransformPosition(const FSDistanceVector& RHSPosition, FVec
 // ============================================================================
 //
 //-----------------------------------------------------------------------------
-// Name: 
-// Desc:
+// Name: ComputeConic
+// Desc: Compute an ellipse or hyperbola from a state vector
 //-----------------------------------------------------------------------------
 
 bool ASample05Actor::ComputeConic(const FSStateVector& StateVector, FSEllipse& OrbitalConic, bool& bIsHyperbolic)
@@ -477,8 +501,9 @@ bool ASample05Actor::ComputeConic(const FSStateVector& StateVector, FSEllipse& O
 // ============================================================================
 //
 //-----------------------------------------------------------------------------
-// Name: 
+// Name: RenderDebugOrbit
 // Desc:
+// Given an ellipse/hyperbola, render it with debug lines.
 //-----------------------------------------------------------------------------
 
 void ASample05Actor::RenderDebugOrbit(const FSEllipse& OrbitalConic, bool bIsHyperbolic, const FColor& Color, float Thickness)
@@ -490,8 +515,11 @@ void ASample05Actor::RenderDebugOrbit(const FSEllipse& OrbitalConic, bool bIsHyp
 // ============================================================================
 //
 //-----------------------------------------------------------------------------
-// Name: 
+// Name: EvaluateOrbitalElements
 // Desc:
+// Propagate an orbit by kepler orbital elements.
+// E.g. get a state vector for a given time.
+// Reminder: A "state vector" is a position and velocity at a point in orbit.
 //-----------------------------------------------------------------------------
 
 bool ASample05Actor::EvaluateOrbitalElements(const FSConicElements& KeplerianElements, FSStateVector& StateVector)
@@ -508,8 +536,10 @@ bool ASample05Actor::EvaluateOrbitalElements(const FSConicElements& KeplerianEle
 // ============================================================================
 //
 //-----------------------------------------------------------------------------
-// Name: 
+// Name: GetOrbitalElements
 // Desc:
+// Given a state vector, compute the keplerian orbital elements.
+// This is what 'oscelt' is for!
 //-----------------------------------------------------------------------------
 
 bool ASample05Actor::GetOrbitalElements(const FSStateVector& StateVector, FSConicElements& KeplerianElements)
@@ -527,13 +557,14 @@ bool ASample05Actor::GetOrbitalElements(const FSStateVector& StateVector, FSConi
 // ============================================================================
 //
 //-----------------------------------------------------------------------------
-// Name: 
+// Name: GetConicFromKepler
 // Desc:
+// Desc: Compute an ellipse or hyperbola from classical orbital elements.
 //-----------------------------------------------------------------------------
 
 bool ASample05Actor::GetConicFromKepler(const FSConicElements& KeplerianElements, FSEllipse& OrbitalConic, bool& bIsHyperbolic)
 {
-    USpiceOrbits::ComputeConic(OrbitalConic, bIsHyperbolic, SolarSystemState.CurrentTime, KeplerianElements, ("J2000"), OriginReferenceFrame.ToString());
+    USpiceOrbits::ComputeConic(OrbitalConic, bIsHyperbolic, SolarSystemState.CurrentTime, KeplerianElements, J2000, OriginReferenceFrame.ToString());
     return true;
 }
 
