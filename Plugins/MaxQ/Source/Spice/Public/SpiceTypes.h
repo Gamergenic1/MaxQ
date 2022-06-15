@@ -477,7 +477,19 @@ struct SPICE_API FSDimensionlessVector
     static const FSDimensionlessVector X_Axis;
     static const FSDimensionlessVector Y_Axis;
     static const FSDimensionlessVector Z_Axis;
+
+    // IMPORTANT!:
+    // Swizzles between UE/SPICE (LHS and RHS coordinate systems)
+    // You must swizzle positional data (quaternions, vectors, etc) when
+    // exchanging between SPICE and Unreal Engine scenegraph coordinates.
+    FVector Swizzle() const;
+    static FSDimensionlessVector Swizzle(const FVector& UEVector);
 };
+
+static inline FSDimensionlessVector operator+(const FSDimensionlessVector& lhs, const FSDimensionlessVector& rhs) {
+
+    return FSDimensionlessVector(lhs.x + rhs.x, lhs.y + rhs.y, lhs.z + rhs.z);
+}
 
 static inline FSDimensionlessVector operator-(const FSDimensionlessVector& value)
 {
@@ -506,6 +518,12 @@ static inline FSDimensionlessVector operator*(const FSDimensionlessVector& vecto
     return FSDimensionlessVector(scalar * vector.x, scalar * vector.y, scalar * vector.z);
 }
 
+static inline FSDimensionlessVector operator/(const FSDimensionlessVector& vector, double scalar)
+{
+    return FSDimensionlessVector(vector.x / scalar, vector.y / scalar, vector.z / scalar);
+}
+
+
 static inline FSDimensionlessVector& operator+=(FSDimensionlessVector& lhs, const FSDimensionlessVector& rhs) {
 
     lhs.x += rhs.x;
@@ -527,6 +545,14 @@ static inline FSDimensionlessVector& operator*=(FSDimensionlessVector& lhs, doub
     lhs.x *= rhs;
     lhs.y *= rhs;
     lhs.z *= rhs;
+    return lhs;
+}
+
+static inline FSDimensionlessVector& operator/=(FSDimensionlessVector& lhs, double rhs) {
+
+    lhs.x /= rhs;
+    lhs.y /= rhs;
+    lhs.z /= rhs;
     return lhs;
 }
 
@@ -769,6 +795,12 @@ struct SPICE_API FSDistanceVector
 
     FString ToString() const;
 
+    // IMPORTANT!:
+    // Swizzles between UE/SPICE (LHS and RHS coordinate systems)
+    // You must swizzle positional data (quaternions, vectors, etc) when
+    // exchanging between SPICE and Unreal Engine scenegraph coordinates.
+    FVector Swizzle() const;
+    static FSDistanceVector Swizzle(const FVector& UEVector);
 
     static const FSDistanceVector Zero;
 };
@@ -1576,6 +1608,13 @@ struct SPICE_API FSVelocityVector
     void Normalized(FSDimensionlessVector& v) const;
     FSSpeed Magnitude() const;
 
+    // IMPORTANT!:
+    // Swizzles between UE/SPICE (LHS and RHS coordinate systems)
+    // You must swizzle positional data (quaternions, vectors, etc) when
+    // exchanging between SPICE and Unreal Engine scenegraph coordinates.
+    FVector Swizzle() const;
+    static FSVelocityVector Swizzle(const FVector& UEVector);
+
     static const FSVelocityVector Zero;
 };
 
@@ -1829,6 +1868,13 @@ struct SPICE_API FSAngularVelocity
     FSAngularRate Magnitude() const;
 
     static const FSAngularVelocity Zero;
+
+    // IMPORTANT!:
+    // Swizzles between UE/SPICE (LHS and RHS coordinate systems)
+    // You must swizzle positional data (quaternions, vectors, etc) when
+    // exchanging between SPICE and Unreal Engine scenegraph coordinates.
+    FVector Swizzle() const;
+    static FSAngularVelocity Swizzle(const FVector& UEVector);
 };
 
 
@@ -3154,6 +3200,13 @@ struct SPICE_API FSQuaternion
 
     static const FSQuaternion Identity;
     FString ToString() const;
+
+    // IMPORTANT!:
+    // Swizzles between UE/SPICE (LHS and RHS coordinate systems)
+    // You must swizzle positional data (quaternions, vectors, etc) when
+    // exchanging between SPICE and Unreal Engine scenegraph coordinates.
+    FQuat Swizzle() const;
+    static FSQuaternion Swizzle(const FQuat& UnrealQuat);
 };
 
 SPICE_API FSRotationMatrix operator*(const FSRotationMatrix& lhs, const FSRotationMatrix& rhs);
@@ -4355,6 +4408,14 @@ public:
 };
 
 
+// Container for Blueprint constants
+USTRUCT(BlueprintType, Category = "MaxQ|Constants")
+struct SPICE_API FConst
+{
+    GENERATED_BODY()
+};
+
+
 UCLASS(Category = "MaxQ")
 class SPICE_API USpiceTypes : public UBlueprintFunctionLibrary
 {
@@ -4586,7 +4647,7 @@ public:
         Category = "MaxQ|Types",
         meta = (
             BlueprintAutocast,
-            CompactNodeTitle = "to double (sec)",
+            CompactNodeTitle = "to double (sec-j2000)",
             ToolTip = "Converts an ephemeris time to a double (sec past J2000)"
             ))
     static double Conv_SEphemerisTimeToDouble(
@@ -4631,7 +4692,7 @@ public:
         Category = "MaxQ|Types",
         meta = (
             BlueprintAutocast,
-            CompactNodeTitle = "$",
+            CompactNodeTitle = "->",
             ToolTip = "Converts a Float to an Ephemeris Period"
             ))
     static FSEphemerisPeriod Conv_FloatToSEphemerisPeriod(float period);
@@ -4654,7 +4715,7 @@ public:
         Category = "MaxQ|Types",
         meta = (
             BlueprintAutocast,
-            CompactNodeTitle = "from double (sec)",
+            CompactNodeTitle = "from double (sec-j2000)",
             ToolTip = "Converts a double (sec past J2000) to an ephemeris time"
             ))
     static FSEphemerisTime Conv_DoubleToSEphemerisTime(
@@ -4666,7 +4727,7 @@ public:
         Category = "MaxQ|Types",
         meta = (
             BlueprintAutocast,
-            CompactNodeTitle = "to double (sec)",
+            CompactNodeTitle = "->",
             ToolTip = "Converts an ephemeris period to a double (sec)"
             ))
     static double Conv_SEphemerisPeriodToDouble(
@@ -4678,7 +4739,7 @@ public:
         Category = "MaxQ|Types",
         meta = (
             BlueprintAutocast,
-            CompactNodeTitle = "from double (sec)",
+            CompactNodeTitle = "->",
             ToolTip = "Converts a double (sec) to an ephemeris period"
             ))
     static FSEphemerisPeriod Conv_DoubleToSEphemerisPeriod(
@@ -4690,7 +4751,7 @@ public:
         Category = "MaxQ|Types",
         meta = (
             BlueprintAutocast,
-            CompactNodeTitle = "to double",
+            CompactNodeTitle = "->",
             ToolTip = "Converts a mass constant to a double"
             ))
     static double Conv_SMassConstantToDouble(
@@ -4702,7 +4763,7 @@ public:
         Category = "MaxQ|Types",
         meta = (
             BlueprintAutocast,
-            CompactNodeTitle = "from double",
+            CompactNodeTitle = "->",
             ToolTip = "Converts a double to a mass constant"
             ))
     static FSMassConstant Conv_DoubleToSMassConstant(
@@ -5235,7 +5296,7 @@ public:
     static FString Conv_SPlateIndicesToString(const FSPlateIndices& value);
 
     /* Multiplication (A * B) */
-    UFUNCTION(BlueprintPure, meta = (DisplayName = "matrix * matrix", CompactNodeTitle = "*", Keywords = "* multiply"), Category = "MaxQ|Math|Rotation")
+    UFUNCTION(BlueprintPure, meta = (DisplayName = "matrix * matrix", CompactNodeTitle = "*", Keywords = "* multiply", CommutativeAssociativeBinaryOperator = "true"), Category = "MaxQ|Math|Rotation")
     static FSRotationMatrix Multiply_SRotationMatrixSRotationMatrix(const FSRotationMatrix& A, const FSRotationMatrix& B);
 
     UFUNCTION(BlueprintPure, meta = (DisplayName = "matrix * vector", CompactNodeTitle = "m*vec", Keywords = "* multiply"), Category = "MaxQ|Math|Rotation")
@@ -5247,37 +5308,40 @@ public:
     UFUNCTION(BlueprintPure, meta = (DisplayName = "matrix * velocity", CompactNodeTitle = "m*vel", Keywords = "* multiply"), Category = "MaxQ|Math|Rotation")
     static FSVelocityVector MultiplyVel_SRotationMatrixVelocityVector(const FSRotationMatrix& A, const FSVelocityVector& B);
 
-    UFUNCTION(BlueprintPure, meta = (DisplayName = "quaterion * quaterion", CompactNodeTitle = "*", Keywords = "* multiply"), Category = "MaxQ|Math|Rotation")
+    UFUNCTION(BlueprintPure, meta = (DisplayName = "quaterion * quaterion", CompactNodeTitle = "*", Keywords = "* multiply", CommutativeAssociativeBinaryOperator = "true"), Category = "MaxQ|Math|Rotation")
     static FSQuaternion Multiply_SQuaternionSQuaternion(const FSQuaternion& A, const FSQuaternion& B);
-
 
     /* Addition (A + B) */
     UFUNCTION(BlueprintPure, meta = (DisplayName = "time + period", CompactNodeTitle = "+", Keywords = "+ add plus"), Category = "MaxQ|Math|Time")
     static FSEphemerisTime Add_SEphemerisTimeSEphemerisPeriod(const FSEphemerisTime& A, const FSEphemerisPeriod& B);
 
-    /* Addition (A + B) */
-    UFUNCTION(BlueprintPure, meta = (DisplayName = "period + time", CompactNodeTitle = "+", Keywords = "+ add plus"), Category = "MaxQ|Math|Time")
-    static FSEphemerisTime Add_SEphemerisPeriodSEphemerisTime(const FSEphemerisPeriod& A, const FSEphemerisTime& B);
-
     /** Returns true if A is greater than B (A > B) */
-    UFUNCTION(BlueprintPure, meta = (DisplayName = "SEphemerisTime > SEphemerisTime", CompactNodeTitle = ">", Keywords = "> greater"), Category = "MaxQ|Math|DateTime")
+    UFUNCTION(BlueprintPure, meta = (DisplayName = "time > time", CompactNodeTitle = ">", Keywords = "> greater"), Category = "MaxQ|Math|DateTime")
     static bool Greater_SEphemerisTimeSEphemerisTime(const FSEphemerisTime& A, const FSEphemerisTime& B);
 
     /** Returns true if A is less than B (A < B) */
-    UFUNCTION(BlueprintPure, meta = (DisplayName = "SEphemerisTime < SEphemerisTime", CompactNodeTitle = "<", Keywords = "< less"), Category = "MaxQ|Math|DateTime")
+    UFUNCTION(BlueprintPure, meta = (DisplayName = "time < time", CompactNodeTitle = "<", Keywords = "< less"), Category = "MaxQ|Math|DateTime")
     static bool Less_SEphemerisTimeSEphemerisTime(const FSEphemerisTime& A, const FSEphemerisTime& B);
+
+    /** Returns true if A is greater than B (A > B) */
+    UFUNCTION(BlueprintPure, meta = (DisplayName = "period > period", CompactNodeTitle = ">", Keywords = "> greater"), Category = "MaxQ|Math|DateTime")
+    static bool Greater_SEphemerisPeriodSEphemerisPeriod(const FSEphemerisPeriod& A, const FSEphemerisPeriod& B);
+
+    /** Returns true if A is less than B (A < B) */
+    UFUNCTION(BlueprintPure, meta = (DisplayName = "period < period", CompactNodeTitle = "<", Keywords = "< less"), Category = "MaxQ|Math|DateTime")
+    static bool Less_SEphemerisPeriodSEphemerisPeriod(const FSEphemerisPeriod& A, const FSEphemerisPeriod& B);
 
     /* Addition (A + B) */
     UFUNCTION(BlueprintPure, meta = (DisplayName = "period + period", CompactNodeTitle = "+", Keywords = "+ add plus", CommutativeAssociativeBinaryOperator = "true"), Category = "MaxQ|Math|Time")
     static FSEphemerisPeriod Add_SEphemerisPeriodSEphemerisPeriod(const FSEphemerisPeriod& A, const FSEphemerisPeriod& B);
 
     /* Subtraction (A - B) */
+    UFUNCTION(BlueprintPure, meta = (DisplayName = "period - period", CompactNodeTitle = "-", Keywords = "- subtract minus"), Category = "MaxQ|Math|Time")
+    static FSEphemerisPeriod Subtract_SEphemerisPeriodSEphemerisPeriod(const FSEphemerisPeriod& A, const FSEphemerisPeriod& B);
+
+    /* Subtraction (A - B) */
     UFUNCTION(BlueprintPure, meta = (DisplayName = "time - time", CompactNodeTitle = "-", Keywords = "- subtract minus"), Category = "MaxQ|Math|Time")
     static FSEphemerisPeriod Subtract_SEphemerisTimeSEphemerisTime(const FSEphemerisTime& A, const FSEphemerisTime& B);
-
-    /* Multiplication (A * B) */
-    UFUNCTION(BlueprintPure, meta = (DisplayName = "double * period", CompactNodeTitle = "*", Keywords = "* multiply"), Category = "MaxQ|Math|Time")
-    static FSEphemerisPeriod Multiply_DoubleSEphemerisPeriod(double A, const FSEphemerisPeriod& B);
 
     /* Multiplication (A * B) */
     UFUNCTION(BlueprintPure, meta = (DisplayName = "period * double", CompactNodeTitle = "*", Keywords = "* multiply"), Category = "MaxQ|Math|Time")
@@ -5300,10 +5364,6 @@ public:
     UFUNCTION(BlueprintPure, meta = (DisplayName = "distance * double", CompactNodeTitle = "*", Keywords = "* multiply"), Category = "MaxQ|Math|Distance")
     static FSDistance Multiply_SDistanceDouble(const FSDistance& A, double B);
 
-    /* Multiplication (A * B) */
-    UFUNCTION(BlueprintPure, meta = (DisplayName = "double * distance", CompactNodeTitle = "*", Keywords = "* multiply"), Category = "MaxQ|Math|Distance")
-    static FSDistance Multiply_DoubleSDistance(double A, const FSDistance& B);
-
     /* Division (A / B) */
     UFUNCTION(BlueprintPure, meta = (DisplayName = "distance / double", CompactNodeTitle = "/", Keywords = "/ divide"), Category = "MaxQ|Math|Distance")
     static FSDistance Divide_SDistanceDouble(const FSDistance& A, double B);
@@ -5321,21 +5381,21 @@ public:
     static FSDistance Add_SDistanceSDistance(const FSDistance& A, const FSDistance& B);
 
     /** Returns true if A is less than B (A < B) */
-    UFUNCTION(BlueprintPure, meta = (DisplayName = "SDistance < SDistance", CompactNodeTitle = "<", Keywords = "< less"), Category = "MaxQ|Math|DateTime")
+    UFUNCTION(BlueprintPure, meta = (DisplayName = "distance < distance", CompactNodeTitle = "<", Keywords = "< less"), Category = "MaxQ|Math|Distance")
     static bool Less_SDistanceSDistance(const FSDistance& A, const FSDistance& B);
+
+    UFUNCTION(BlueprintPure, meta = (DisplayName = "distance > distance", CompactNodeTitle = ">", Keywords = "> greater"), Category = "MaxQ|Math|Distance")
+    static bool Greater_SDistanceSDistance(const FSDistance& A, const FSDistance& B);
 
     //////////////////////
     UFUNCTION(BlueprintPure, meta = (DisplayName = "distance vector * double vector", CompactNodeTitle = "*", Keywords = "* multiply"), Category = "MaxQ|Math|Distance")
     static FSDistanceVector Multiply_SDistanceVectorDouble(const FSDistanceVector& A, double B);
     
-    UFUNCTION(BlueprintPure, meta = (DisplayName = "double vector * distance vector", CompactNodeTitle = "*", Keywords = "* multiply"), Category = "MaxQ|Math|Distance")
-    static FSDistanceVector Multiply_DoubleSDistanceVector(double A, const FSDistanceVector& B);
-    
     UFUNCTION(BlueprintPure, meta = (DisplayName = "distance - distance", CompactNodeTitle = "-", Keywords = "- subtract minus"), Category = "MaxQ|Math|Distance")
-    static FSDistanceVector Subtract_DoubleSDistanceVector(const FSDistanceVector& A, const FSDistanceVector& B);
+    static FSDistanceVector Subtract_SDistanceVectorSDistanceVector(const FSDistanceVector& A, const FSDistanceVector& B);
     
     UFUNCTION(BlueprintPure, meta = (DisplayName = "distance vector + distance vector", CompactNodeTitle = "+", Keywords = "+ add plus", CommutativeAssociativeBinaryOperator = "true"), Category = "MaxQ|Math|Distance")
-    static FSDistanceVector Add_DoubleSDistanceVector(const FSDistanceVector& A, const FSDistanceVector& B);
+    static FSDistanceVector Add_SDistanceVectorSDistanceVector(const FSDistanceVector& A, const FSDistanceVector& B);
 
     UFUNCTION(BlueprintPure, meta = (DisplayName = "ratio distance vector", CompactNodeTitle = "ratio", Keywords = "/ divide"), Category = "MaxQ|Math|Distance")
     static FSDimensionlessVector Ratio_SDistanceVector(const FSDistanceVector& A, const FSDistanceVector& B);
@@ -5343,21 +5403,20 @@ public:
     UFUNCTION(BlueprintPure, meta = (DisplayName = "distance vector / distance vector", CompactNodeTitle = "/", Keywords = "/ divide"), Category = "MaxQ|Math|Distance")
     static FSDistanceVector Divide_SDistanceVectorSDimensionlessVector(const FSDistanceVector& A, const FSDimensionlessVector& B);
 
+    UFUNCTION(BlueprintPure, meta = (DisplayName = "distance vector / double", CompactNodeTitle = "/", Keywords = "/ divide"), Category = "MaxQ|Math|Distance")
+    static FSDistanceVector Divide_SDistanceVectorDouble(const FSDistanceVector& A, double B);
+
     //////////////////////
     /* Multiplication (A * B) */
     UFUNCTION(BlueprintPure, meta = (DisplayName = "speed * double", CompactNodeTitle = "*", Keywords = "* multiply"), Category = "MaxQ|Math|Speed")
     static FSSpeed Multiply_SSpeedDouble(const FSSpeed& A, double B);
-
-    /* Multiplication (A * B) */
-    UFUNCTION(BlueprintPure, meta = (DisplayName = "double * speed", CompactNodeTitle = "*", Keywords = "* multiply"), Category = "MaxQ|Math|Speed")
-    static FSSpeed Multiply_DoubleSSpeed(double A, const FSSpeed& B);
 
     /* Division (A / B) */
     UFUNCTION(BlueprintPure, meta = (DisplayName = "speed / double", CompactNodeTitle = "/", Keywords = "/ divide"), Category = "MaxQ|Math|Speed")
     static FSSpeed Divide_SSpeedDouble(FSSpeed A, double B);
 
     /* Ratio (A / B) */
-    UFUNCTION(BlueprintPure, meta = (DisplayName = "speed ratio", CompactNodeTitle = "ratio", Keywords = "/ divide"), Category = "MaxQ|Math|Speed")
+    UFUNCTION(BlueprintPure, meta = (DisplayName = "speed / speed", CompactNodeTitle = "ratio", Keywords = "/ divide"), Category = "MaxQ|Math|Speed")
     static double Ratio_SSpeed(const FSSpeed& A, const FSSpeed& B);
 
     /* Subtraction (A - B) */
@@ -5367,6 +5426,13 @@ public:
     /*  Addition (A + B) */
     UFUNCTION(BlueprintPure, meta = (DisplayName = "speed + speed", CompactNodeTitle = "+", Keywords = "+ add plus", CommutativeAssociativeBinaryOperator = "true"), Category = "MaxQ|Math|Speed")
     static FSSpeed Add_SSpeedSSpeed(const FSSpeed& A, const FSSpeed& B);
+
+    UFUNCTION(BlueprintPure, meta = (DisplayName = "speed < speed", CompactNodeTitle = "<", Keywords = "< less"), Category = "MaxQ|Math|Speed")
+    static bool Less_SSpeedSSpeed(const FSSpeed& A, const FSSpeed& B);
+
+    UFUNCTION(BlueprintPure, meta = (DisplayName = "speed > speed", CompactNodeTitle = ">", Keywords = "> greater"), Category = "MaxQ|Math|Speed")
+    static bool Greater_SSpeedSSpeed(const FSSpeed& A, const FSSpeed& B);
+
 
     //////////////////////
     //////////////////////
@@ -5395,10 +5461,6 @@ public:
     UFUNCTION(BlueprintPure, meta = (DisplayName = "velocity * double", CompactNodeTitle = "*", Keywords = "* multiply"), Category = "MaxQ|Math|Velocity")
     static FSVelocityVector Multiply_SVelocityVectorDouble(const FSVelocityVector& A, double B);
 
-    /* Multiplication (A * B) */
-    UFUNCTION(BlueprintPure, meta = (DisplayName = "double * velocity", CompactNodeTitle = "*", Keywords = "* multiply"), Category = "MaxQ|Math|Velocity")
-    static FSVelocityVector Multiply_DoubleSVelocityVector(double A, const FSVelocityVector& B);
-
     /* Division (A / B) */
     UFUNCTION(BlueprintPure, meta = (DisplayName = "velocity / double", CompactNodeTitle = "/", Keywords = "/ divide"), Category = "MaxQ|Math|Velocity")
     static FSVelocityVector Divide_SVelocityVectorDouble(const FSVelocityVector& A, double B);
@@ -5423,8 +5485,20 @@ public:
     UFUNCTION(BlueprintPure, meta = (DisplayName = "distance * vector", CompactNodeTitle = "*", Keywords = "* multiply"), Category = "MaxQ|Math|Velocity")
     static FSDistanceVector Multiply_SDistanceSDimensionlessVector(const FSDistance& A, const FSDimensionlessVector& B);
 
-    UFUNCTION(BlueprintPure, meta = (DisplayName = "double * vector", CompactNodeTitle = "*", Keywords = "* multiply"), Category = "MaxQ|Math|Distance")
-    static FSDimensionlessVector Multiply_DoubleSDimensionlessVector(double A, const FSDimensionlessVector& B);
+    UFUNCTION(BlueprintPure, meta = (DisplayName = "vector * double", CompactNodeTitle = "*", Keywords = "* multiply"), Category = "MaxQ|Math|Dimensionless")
+    static FSDimensionlessVector Multiply_SDimensionlessVectorDouble(const FSDimensionlessVector& A, double B);
+
+    /* Division (A / B) */
+    UFUNCTION(BlueprintPure, meta = (DisplayName = "vector / double", CompactNodeTitle = "/", Keywords = "/ divide"), Category = "MaxQ|Math|Dimensionless")
+    static FSDimensionlessVector Divide_SDimensionlessVectorDouble(const FSDimensionlessVector& A, double B);
+
+    /* Subtraction (A - B) */
+    UFUNCTION(BlueprintPure, meta = (DisplayName = "velocity - velocity", CompactNodeTitle = "-", Keywords = "- subtract minus"), Category = "MaxQ|Math|Dimensionless")
+    static FSDimensionlessVector Subtract_SDimensionlessVectorSDimensionlessVector(const FSDimensionlessVector& A, const FSDimensionlessVector& B);
+
+    /*  Addition (A + B) */
+    UFUNCTION(BlueprintPure, meta = (DisplayName = "velocity + velocity", CompactNodeTitle = "+", Keywords = "+ add plus", CommutativeAssociativeBinaryOperator = "true"), Category = "MaxQ|Math|Dimensionless")
+    static FSDimensionlessVector Add_SDimensionlessVectorSDimensionlessVector(const FSDimensionlessVector& A, const FSDimensionlessVector& B);
 
     UFUNCTION(BlueprintPure, meta = (DisplayName = "speed * vector", CompactNodeTitle = "*", Keywords = "* multiply"), Category = "MaxQ|Math|Velocity")
     static FSVelocityVector SpeedToVelocity(const FSSpeed& A, const FSDimensionlessVector& B);
@@ -5844,7 +5918,379 @@ public:
 
     UFUNCTION(BlueprintPure, meta = (ScriptConstant = "Zero", ScriptConstantHost = "SMassConstant"), Category = "MaxQ|MassConstant")
     static FSMassConstant SMassConstant_Zero();
+
+#pragma region NaifNames
+    // Blueprint Constants
+    // The Blueprint compiler can understand they're supposed to be constant and hoist them when possible.
+    // (Example, user calling J2000 inside a loop)
+    // An alternative would be to make an enumeration & function to look up, but then the compiler couldn't hoist.
+
+    // Inertial Reference Frames
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "J2000 EME Inertial Frame (aligned with J2000 Earth Mean Equator)", ScriptConstant = "J2000", ScriptConstantHost = "Const"), Category = "MaxQ|Frames|Inertial")
+        static FString Const_J2000();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "ECLIPJ2000 Inertial Frame (aligned with J2000 Ecliptic Plane)", ScriptConstant = "ECLIPJ2000", ScriptConstantHost = "Const"), Category = "MaxQ|Frames|Inertial")
+        static FString Const_ECLIPJ2000();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "MARSIAU Inertial Frame (aligned with Mars Mean Equator)", ScriptConstant = "MARSIAU", ScriptConstantHost = "Const"), Category = "MaxQ|Frames|Inertial")
+        static FString Const_MARSIAU();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "Galactic System II Inertial Frame", ScriptConstant = "GALACTIC", ScriptConstantHost = "Const"), Category = "MaxQ|Frames|Inertial")
+        static FString Const_GALACTIC();
+
+    // Body-Fixed Reference Frames
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "Earth Fixed-Frame, but you should use EARTH_FIXED, or ITRF if you have high precision kernels)", ScriptConstant = "IAU_EARTH", ScriptConstantHost = "Const"), Category = "MaxQ|Frames|Fixed")
+        static FString Const_IAU_EARTH();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "EARTH_FIXED Earth-Fixed Frame (requires earth_fixed.tf)", ScriptConstant = "EARTH_FIXED", ScriptConstantHost = "Const"), Category = "MaxQ|Frames|Fixed")
+        static FString Const_EARTH_FIXED();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "ITRF93 Earth-fixed Frame (binary PCK)", ScriptConstant = "ITRF93", ScriptConstantHost = "Const"), Category = "MaxQ|Frames|Fixed")
+        static FString Const_ITRF93();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "IAU_MOON Moon-Fixed Frame", ScriptConstant = "IAU_MOON", ScriptConstantHost = "Const"), Category = "MaxQ|Frames|Fixed")
+        static FString Const_IAU_MOON();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "IAU_SUN Sun-Fixed Frame", ScriptConstant = "IAU_SUN", ScriptConstantHost = "Const"), Category = "MaxQ|Frames|Fixed")
+        static FString Const_IAU_SUN();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "IAU_MERCURY Mercury-Fixed Frame", ScriptConstant = "IAU_MERCURY", ScriptConstantHost = "Const"), Category = "MaxQ|Frames|Fixed")
+        static FString Const_IAU_MERCURY();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "IAU_VENUS Venus-Fixed Frame", ScriptConstant = "IAU_VENUS", ScriptConstantHost = "Const"), Category = "MaxQ|Frames|Fixed")
+        static FString Const_IAU_VENUS();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "IAU_MARS Mars-Fixed Frame", ScriptConstant = "IAU_MARS", ScriptConstantHost = "Const"), Category = "MaxQ|Frames|Fixed")
+        static FString Const_IAU_MARS();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "IAU_DEIMOS Deimos-Fixed Frame", ScriptConstant = "IAU_DEIMOS", ScriptConstantHost = "Const"), Category = "MaxQ|Frames|Fixed")
+        static FString Const_IAU_DEIMOS();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "IAU_PHOBOS Phobos-Fixed Frame", ScriptConstant = "IAU_PHOBOS", ScriptConstantHost = "Const"), Category = "MaxQ|Frames|Fixed")
+        static FString Const_IAU_PHOBOS();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "IAU_JUPITER Jupiter-Fixed Frame", ScriptConstant = "IAU_JUPITER", ScriptConstantHost = "Const"), Category = "MaxQ|Frames|Fixed")
+        static FString Const_IAU_JUPITER();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "IAU_SATURN Saturn-Fixed Frame", ScriptConstant = "IAU_SATURN", ScriptConstantHost = "Const"), Category = "MaxQ|Frames|Fixed")
+        static FString Const_IAU_SATURN();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "IAU_NEPTUNE Naptune-Fixed Frame", ScriptConstant = "IAU_NEPTUNE", ScriptConstantHost = "Const"), Category = "MaxQ|Frames|Fixed")
+        static FString Const_IAU_NEPTUNE();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "IAU_URANUS Uranus-Fixed Frame", ScriptConstant = "IAU_URANUS", ScriptConstantHost = "Const"), Category = "MaxQ|Frames|Fixed")
+        static FString Const_IAU_URANUS();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "IAU_PLUTO Pluto-Fixed Frame", ScriptConstant = "IAU_PLUTO", ScriptConstantHost = "Const"), Category = "MaxQ|Frames|Fixed")
+        static FString Const_IAU_PLUTO();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "IAU_CERES Ceres-Fixed Frame", ScriptConstant = "IAU_CERES", ScriptConstantHost = "Const"), Category = "MaxQ|Frames|Fixed")
+        static FString Const_IAU_CERES();
+
+    // Naif Body Names
+    // See
+    // https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/req/naif_ids.html#Barycenters
+    // https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/req/naif_ids.html#Planets%20and%20Satellites
+    // Etc
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "EARTH Naif Name", ScriptConstant = "EARTH", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
+        static FString Const_EARTH();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "MOON Naif Name", ScriptConstant = "MOON", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
+        static FString Const_MOON();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "EMB (Earth-Moon Barycenter) Naif Name, equivalent to EARTH_BARYCENTER", ScriptConstant = "EMB", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
+        static FString Const_EMB();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "EARTH_BARYCENTER (Earth-Moon Barycenter) Naif Name, equivalent to EMB", ScriptConstant = "EARTH_BARYCENTER", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
+        static FString Const_EARTH_BARYCENTER();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "SUN (Mass) Naif Name", ScriptConstant = "SUN", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
+        static FString Const_SUN();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "SSB (Solar System Barycenter) Naif Name, equivalent to SOLAR_SYSTEM_BARYCENTER", ScriptConstant = "SSB", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
+        static FString Const_SSB();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "SOLAR_SYSTEM_BARYCENTER (Solar System Barycenter) Naif Name, equivalent to SSB", ScriptConstant = "SOLAR_SYSTEM_BARYCENTER", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
+        static FString Const_SOLAR_SYSTEM_BARYCENTER();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "MERCURY", ScriptConstant = "MERCURY", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
+        static FString Const_MERCURY();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "VENUS Naif Name", ScriptConstant = "VENUS", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
+        static FString Const_VENUS();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "MARS Naif Name", ScriptConstant = "MARS", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
+        static FString Const_MARS();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "PHOBOS Naif Name", ScriptConstant = "PHOBOS", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
+        static FString Const_PHOBOS();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "DEIMOS Naif Name", ScriptConstant = "DEIMOS", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
+        static FString Const_DEIMOS();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "MARS_BARYCENTER Naif Name", ScriptConstant = "MARS_BARYCENTER", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
+        static FString Const_MARS_BARYCENTER();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "JUPITER Naif Name", ScriptConstant = "JUPITER", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
+        static FString Const_JUPITER();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "JUPITER_BARYCENTER Naif Name", ScriptConstant = "JUPITER_BARYCENTER", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
+        static FString Const_JUPITER_BARYCENTER();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "SATURN Naif Name", ScriptConstant = "SATURN", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
+        static FString Const_SATURN();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "SATURN_BARYCENTER Naif Name", ScriptConstant = "SATURN_BARYCENTER", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
+        static FString Const_SATURN_BARYCENTER();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "URANUS Naif Name", ScriptConstant = "URANUS", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
+        static FString Const_URANUS();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "URANUS_BARYCENTER Naif Name", ScriptConstant = "URANUS_BARYCENTER", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
+        static FString Const_URANUS_BARYCENTER();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "NEPTUNE Naif Name", ScriptConstant = "NEPTUNE", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
+        static FString Const_NEPTUNE();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "NEPTUNE_BARYCENTER Naif Name", ScriptConstant = "NEPTUNE_BARYCENTER", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
+        static FString Const_NEPTUNE_BARYCENTER();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "PLUTO Naif Name", ScriptConstant = "PLUTO", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
+        static FString Const_PLUTO();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "PLUTO_BARYCENTER Naif Name", ScriptConstant = "PLUTO_BARYCENTER", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
+        static FString Const_PLUTO_BARYCENTER();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "Asteroid CERES Naif Name", ScriptConstant = "CERES", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
+        static FString Const_CERES();
+
+    // Spacecraft
+    // See: https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/req/naif_ids.html#Spacecraft
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "Spacecraft PIONEER-6 Naif Name", ScriptConstant = "PIONEER_6", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
+        static FString Const_PIONEER_6();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "Spacecraft PIONEER-7 Naif Name", ScriptConstant = "PIONEER_7", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
+        static FString Const_PIONEER_7();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "Spacecraft VIKING 1 ORBITER Naif Name", ScriptConstant = "VIKING_1_ORBITER", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
+        static FString Const_VIKING_1_ORBITER();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "Spacecraft VIKING 2 ORBITER Naif Name", ScriptConstant = "VIKING_2_ORBITER", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
+        static FString Const_VIKING_2_ORBITER();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "Spacecraft VOYAGER 1 Naif Name", ScriptConstant = "VOYAGER_1", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
+        static FString Const_VOYAGER_1();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "Spacecraft VOYAGER 2 Naif Name", ScriptConstant = "VOYAGER_2", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
+        static FString Const_VOYAGER_2();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "Spacecraft HST Naif Name, equivalent to HUBBLE SPACE TELESCOPE", ScriptConstant = "HST", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
+        static FString Const_HST();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "Spacecraft HUBBLE SPACE TELESCOPE Naif Name, equivalent to HST", ScriptConstant = "HUBBLE_SPACE_TELESCOPE", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
+        static FString Const_HUBBLE_SPACE_TELESCOPE();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "Spacecraft MARS PATHFINDER Naif Name", ScriptConstant = "MARS_PATHFINDER", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
+        static FString Const_MARS_PATHFINDER();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "Spacecraft PARKER SOLAR PROBE Naif Name", ScriptConstant = "PARKER_SOLAR_PROBE", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
+        static FString Const_PARKER_SOLAR_PROBE();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "Spacecraft JWST Naif Name, equivalent to JAMES WEBB SPACE TELESCOPE", ScriptConstant = "JWST", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
+        static FString Const_JWST();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "Spacecraft JAMES WEBB SPACE TELESCOPE Naif Name, equivalent to JWST", ScriptConstant = "JAMES_WEBB_SPACE_TELESCOPE", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
+        static FString Const_JAMES_WEBB_SPACE_TELESCOPE();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "Spacecraft INSIGHT Naif Name", ScriptConstant = "INSIGHT", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
+        static FString Const_INSIGHT();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "Spacecraft OPPORTUNITY Naif Name", ScriptConstant = "OPPORTUNITY", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
+        static FString Const_OPPORTUNITY();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "Spacecraft SPIRIT Naif Name", ScriptConstant = "SPIRIT", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
+        static FString Const_SPIRIT();
+
+    // Ground stations
+    // https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/req/naif_ids.html#Ground%20Stations.
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "Ground Station NOTO Naif Name", ScriptConstant = "NOTO", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
+        static FString Const_NOTO();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "Ground Station NEW NORCIA Naif Name", ScriptConstant = "NEW_NORCIA", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
+        static FString Const_NEW_NORCIA();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "Ground Station GOLDSTONE Naif Name", ScriptConstant = "GOLDSTONE", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
+        static FString Const_GOLDSTONE();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "Ground Station CANBERRA Naif Name", ScriptConstant = "CANBERRA", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
+        static FString Const_CANBERRA();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "Ground Station MADRID Naif Name", ScriptConstant = "MADRID", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
+        static FString Const_MADRID();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "Ground Station USUDA Naif Name", ScriptConstant = "USUDA", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
+        static FString Const_USUDA();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "Ground Station DSS-05 Naif Name", ScriptConstant = "DSS_05", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
+        static FString Const_DSS_05();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "Ground Station PARKES Naif Name", ScriptConstant = "PARKES", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
+        static FString Const_PARKES();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "GM Property Name", ScriptConstant = "GM", ScriptConstantHost = "Const"), Category = "MaxQ|Kernel|Property Names")
+        static FString Const_GM();
+
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "RADII Property Name", ScriptConstant = "RADII", ScriptConstantHost = "Const"), Category = "MaxQ|Kernel|Property Names")
+        static FString Const_RADII();
+
+#pragma endregion NaifNames
 };
+
+#pragma region NaifFNames
+namespace MaxQ::Constants
+{
+    extern SPICE_API const FString J2000;
+    extern SPICE_API const FString ECLIPJ2000;
+    extern SPICE_API const FString MARSIAU;
+    extern SPICE_API const FString GALACTIC;
+    extern SPICE_API const FString IAU_EARTH;
+    extern SPICE_API const FString EARTH_FIXED;
+    extern SPICE_API const FString ITRF93;
+    extern SPICE_API const FString IAU_MOON;
+    extern SPICE_API const FString IAU_SUN;
+    extern SPICE_API const FString IAU_MERCURY;
+    extern SPICE_API const FString IAU_VENUS;
+    extern SPICE_API const FString IAU_MARS;
+    extern SPICE_API const FString IAU_DEIMOS;
+    extern SPICE_API const FString IAU_PHOBOS;
+    extern SPICE_API const FString IAU_JUPITER;
+    extern SPICE_API const FString IAU_SATURN;
+    extern SPICE_API const FString IAU_NEPTUNE;
+    extern SPICE_API const FString IAU_URANUS;
+    extern SPICE_API const FString IAU_PLUTO;
+    extern SPICE_API const FString IAU_CERES;
+    extern SPICE_API const FString EARTH;
+    extern SPICE_API const FString MOON;
+    extern SPICE_API const FString EMB;
+    extern SPICE_API const FString EARTH_BARYCENTER;
+    extern SPICE_API const FString SUN;
+    extern SPICE_API const FString SSB;
+    extern SPICE_API const FString SOLAR_SYSTEM_BARYCENTER;
+    extern SPICE_API const FString MERCURY;
+    extern SPICE_API const FString VENUS;
+    extern SPICE_API const FString MARS;
+    extern SPICE_API const FString PHOBOS; 
+    extern SPICE_API const FString DEIMOS; 
+    extern SPICE_API const FString MARS_BARYCENTER;
+    extern SPICE_API const FString JUPITER;
+    extern SPICE_API const FString JUPITER_BARYCENTER;
+    extern SPICE_API const FString SATURN; 
+    extern SPICE_API const FString SATURN_BARYCENTER;
+    extern SPICE_API const FString URANUS; 
+    extern SPICE_API const FString URANUS_BARYCENTER;
+    extern SPICE_API const FString NEPTUNE;
+    extern SPICE_API const FString NEPTUNE_BARYCENTER;
+    extern SPICE_API const FString PLUTO;
+    extern SPICE_API const FString PLUTO_BARYCENTER;
+    extern SPICE_API const FString CERES;
+    extern SPICE_API const FString PIONEER_6;
+    extern SPICE_API const FString PIONEER_7;
+    extern SPICE_API const FString VIKING_1_ORBITER;
+    extern SPICE_API const FString VIKING_2_ORBITER;
+    extern SPICE_API const FString VOYAGER_1;
+    extern SPICE_API const FString VOYAGER_2;
+    extern SPICE_API const FString HST;
+    extern SPICE_API const FString HUBBLE_SPACE_TELESCOPE;
+    extern SPICE_API const FString MARS_PATHFINDER;
+    extern SPICE_API const FString PARKER_SOLAR_PROBE;
+    extern SPICE_API const FString JWST;
+    extern SPICE_API const FString JAMES_WEBB_SPACE_TELESCOPE;
+    extern SPICE_API const FString INSIGHT;
+    extern SPICE_API const FString OPPORTUNITY;
+    extern SPICE_API const FString SPIRIT; 
+    extern SPICE_API const FString NOTO;
+    extern SPICE_API const FString NEW_NORCIA;
+    extern SPICE_API const FString GOLDSTONE;
+    extern SPICE_API const FString CANBERRA;
+    extern SPICE_API const FString MADRID; 
+    extern SPICE_API const FString USUDA;
+    extern SPICE_API const FString DSS_05; 
+    extern SPICE_API const FString PARKES; 
+    extern SPICE_API const FString GM;
+    extern SPICE_API const FString RADII;
+
+    extern SPICE_API const FName Name_J2000;
+    extern SPICE_API const FName Name_ECLIPJ2000;
+    extern SPICE_API const FName Name_MARSIAU;
+    extern SPICE_API const FName Name_GALACTIC;
+    extern SPICE_API const FName Name_IAU_EARTH;
+    extern SPICE_API const FName Name_EARTH_FIXED;
+    extern SPICE_API const FName Name_ITRF93;
+    extern SPICE_API const FName Name_IAU_MOON;
+    extern SPICE_API const FName Name_IAU_SUN;
+    extern SPICE_API const FName Name_IAU_MERCURY;
+    extern SPICE_API const FName Name_IAU_VENUS;
+    extern SPICE_API const FName Name_IAU_MARS;
+    extern SPICE_API const FName Name_IAU_DEIMOS;
+    extern SPICE_API const FName Name_IAU_PHOBOS;
+    extern SPICE_API const FName Name_IAU_JUPITER;
+    extern SPICE_API const FName Name_IAU_SATURN;
+    extern SPICE_API const FName Name_IAU_NEPTUNE;
+    extern SPICE_API const FName Name_IAU_URANUS;
+    extern SPICE_API const FName Name_IAU_PLUTO;
+    extern SPICE_API const FName Name_IAU_CERES;
+    extern SPICE_API const FName Name_EARTH;
+    extern SPICE_API const FName Name_MOON;
+    extern SPICE_API const FName Name_EMB;
+    extern SPICE_API const FName Name_EARTH_BARYCENTER;
+    extern SPICE_API const FName Name_SUN;
+    extern SPICE_API const FName Name_SSB;
+    extern SPICE_API const FName Name_SOLAR_SYSTEM_BARYCENTER;
+    extern SPICE_API const FName Name_MERCURY;
+    extern SPICE_API const FName Name_VENUS;
+    extern SPICE_API const FName Name_MARS;
+    extern SPICE_API const FName Name_PHOBOS;
+    extern SPICE_API const FName Name_DEIMOS;
+    extern SPICE_API const FName Name_MARS_BARYCENTER;
+    extern SPICE_API const FName Name_JUPITER;
+    extern SPICE_API const FName Name_JUPITER_BARYCENTER;
+    extern SPICE_API const FName Name_SATURN;
+    extern SPICE_API const FName Name_SATURN_BARYCENTER;
+    extern SPICE_API const FName Name_URANUS;
+    extern SPICE_API const FName Name_URANUS_BARYCENTER;
+    extern SPICE_API const FName Name_NEPTUNE;
+    extern SPICE_API const FName Name_NEPTUNE_BARYCENTER;
+    extern SPICE_API const FName Name_PLUTO;
+    extern SPICE_API const FName Name_PLUTO_BARYCENTER;
+    extern SPICE_API const FName Name_CERES;
+    extern SPICE_API const FName Name_PIONEER_6;
+    extern SPICE_API const FName Name_PIONEER_7;
+    extern SPICE_API const FName Name_VIKING_1_ORBITER;
+    extern SPICE_API const FName Name_VIKING_2_ORBITER;
+    extern SPICE_API const FName Name_VOYAGER_1;
+    extern SPICE_API const FName Name_VOYAGER_2;
+    extern SPICE_API const FName Name_HST;
+    extern SPICE_API const FName Name_HUBBLE_SPACE_TELESCOPE;
+    extern SPICE_API const FName Name_MARS_PATHFINDER;
+    extern SPICE_API const FName Name_PARKER_SOLAR_PROBE;
+    extern SPICE_API const FName Name_JWST;
+    extern SPICE_API const FName Name_JAMES_WEBB_SPACE_TELESCOPE;
+    extern SPICE_API const FName Name_INSIGHT;
+    extern SPICE_API const FName Name_OPPORTUNITY;
+    extern SPICE_API const FName Name_SPIRIT;
+    extern SPICE_API const FName Name_NOTO;
+    extern SPICE_API const FName Name_NEW_NORCIA;
+    extern SPICE_API const FName Name_GOLDSTONE;
+    extern SPICE_API const FName Name_CANBERRA;
+    extern SPICE_API const FName Name_MADRID;
+    extern SPICE_API const FName Name_USUDA;
+    extern SPICE_API const FName Name_DSS_05;
+    extern SPICE_API const FName Name_PARKES;
+    extern SPICE_API const FName Name_GM;
+    extern SPICE_API const FName Name_RADII;
+#pragma endregion NaifFNames
+
+}
 
 // Don't leak preprocessor definitions, which may affect jumbo/unity builds.
 #undef FSDistance_km_to_M
