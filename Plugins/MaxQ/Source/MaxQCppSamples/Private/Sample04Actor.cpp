@@ -97,6 +97,15 @@ void ASample04Actor::Tick(float DeltaTime)
 }
 
 
+
+// ============================================================================
+//
+//-----------------------------------------------------------------------------
+// Name: pxform
+// Desc:
+// Compute a body's orientation
+//-----------------------------------------------------------------------------
+
 void ASample04Actor::pxform()
 {
     ES_ResultCode ResultCode;
@@ -149,7 +158,7 @@ void ASample04Actor::pxform()
 //-----------------------------------------------------------------------------
 // Name: sxform
 // Desc:
-// Demonstrates pxform, getting the angular state transformation from one frame
+// Demonstrates sxform, getting the angular state transformation from one frame
 // to another.
 // The State Transformation Matrix can be used to transform a state vector
 // from one observer's coordinate system to another.
@@ -168,11 +177,13 @@ void ASample04Actor::sxform(const FSEphemerisTime& et)
     // Body "Fixed" Frame (IAU_EARTH, IAU_MOON, etc)
     FString BodyFrame = MaxQ::Constants::IAU_EARTH;
 
-    // Get a state vector transformation
+    // As with pxform,
+    // FROM:  Body Frame
+    // TO:  Observer's frame
     FString From = BodyFrame;
     FString To = OriginReferenceFrame.ToString();
 
-    // Get the rotation matrix from the origin's frame to the Body frame.
+    // Get the state vector transformation from the body frame to the observer's frame.
     FSStateTransform StateTransform;
     USpice::sxform(ResultCode, ErrorMessage, StateTransform, et, From, To);
 
@@ -192,7 +203,7 @@ void ASample04Actor::sxform(const FSEphemerisTime& et)
 //-----------------------------------------------------------------------------
 // Name: sxform_xf2rav
 // Desc:
-// Get the angular state transformation,as a rotation and angular velocity
+// Get the angular state transformation, as a rotation and angular velocity
 //-----------------------------------------------------------------------------
 
 void ASample04Actor::sxform_xf2rav(const FSEphemerisTime& et)
@@ -243,7 +254,7 @@ void ASample04Actor::sxform_xf2rav(const FSEphemerisTime& et)
     FSStateTransform StateTransform;
     USpice::sxform(ResultCode, ErrorMessage, StateTransform, et, From, To);
 
-    // separate the state transform into a rotation matrix and an angular velocity.
+    // Separate the state transform into a rotation matrix and an angular velocity.
     FSRotationMatrix rotationMatrix;
     FSAngularVelocity angularVelocity;
     USpice::xf2rav(StateTransform, rotationMatrix, angularVelocity);
@@ -275,8 +286,8 @@ void ASample04Actor::sxform_xf2rav(const FSEphemerisTime& et)
 //-----------------------------------------------------------------------------
 // Name: GetUERotationAndAngularVelocity
 // Desc:
-//  Get the angular state transformation,as a rotation and angular velocity.
-//  Transform them into an Unreal Engine quaternion and vector.
+// Get the angular state transformation,as a rotation and angular velocity.
+// Transform them into an Unreal Engine quaternion and vector.
 //-----------------------------------------------------------------------------
 
 void ASample04Actor::GetUERotationAndAngularVelocity(const FSEphemerisTime& et, const FName& ReferenceFrame, const FName& BodyName, bool DontLog)
