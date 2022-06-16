@@ -391,8 +391,8 @@ void ASample05Actor::ProcessTelemetryResponseAsTLE(bool Success, const FString& 
 // ============================================================================
 //
 //-----------------------------------------------------------------------------
-// Name: 
-// Desc:
+// Name: AddTelemetryObject
+// Desc: Create an actor to represent a given spaceraft/object
 //-----------------------------------------------------------------------------
 
 void ASample05Actor::AddTelemetryObject(const FString& ObjectId, const FString& ObjectName, const FSTwoLineElements& Elements)

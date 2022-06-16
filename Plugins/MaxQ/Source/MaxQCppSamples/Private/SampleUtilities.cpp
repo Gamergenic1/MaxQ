@@ -23,6 +23,14 @@ namespace MaxQSamples
 {
     const FString PluginName = TEXT("MaxQ");
 
+    //-----------------------------------------------------------------------------
+    // Name: MaxQPluginInfo
+    // Desc:
+    // Report the sample's file system location, so the user can find the plugin's
+    // files if needed (to see documentation, kernels, etc)
+    // Exposed to Blueprints & the Blueprint samples also use this, because
+    // it's not implementable in Blueprints alone without a Third Party plugin.
+    //-----------------------------------------------------------------------------
     FString MaxQPluginInfo()
     {
         FString Info = PluginName;
@@ -38,6 +46,16 @@ namespace MaxQSamples
         return Info;
     }
 
+    //-----------------------------------------------------------------------------
+    // Name: AbsolutifyMaxQPath
+    // Desc:
+    // 'furnsh' accepts directories relative to the content folder OR absolute
+    // paths.
+    // To run the samples, we need to know exactly where the plugin is installed.
+    // This turns plugin-relative paths into absolute paths.  It's only needed for
+    // the sample kernels.
+    // Non-temporary variable (path-by-reference) version.
+    //-----------------------------------------------------------------------------
     void AbsolutifyMaxQPath(FString& path)
     {
 #if WITH_EDITOR
@@ -52,6 +70,13 @@ namespace MaxQSamples
 #endif
     }
 
+    //-----------------------------------------------------------------------------
+    // Name: MaxQPathAbsolutified
+    // Desc:
+    // Same as AbsolutifyMaxQPath, but returns the path via a temporary.
+    // (Programming convenience, by technically less flexible since it forces the
+    // instantiation of a return value and copy the value upon return.)
+    //-----------------------------------------------------------------------------
     FString MaxQPathAbsolutified(const FString& path)
     {
         FString AbsolutePath = path;
@@ -59,6 +84,11 @@ namespace MaxQSamples
         return AbsolutePath;
     }
 
+    //-----------------------------------------------------------------------------
+    // Name: MaxQPathsAbsolutified
+    // Desc:
+    // Same as MaxQPathAbsolutified above, but for a whole array of paths.
+    //-----------------------------------------------------------------------------
     TArray<FString> MaxQPathsAbsolutified(const TArray<FString>& paths)
     {
         TArray<FString> AbsolutePaths;
@@ -71,6 +101,14 @@ namespace MaxQSamples
         return AbsolutePaths;
     }
 
+    //-----------------------------------------------------------------------------
+    // Name: InitBodyScales
+    // Desc:
+    // Generalized scale (size) initialization for meshes in a group of solar
+    // system bodies.
+    // This keeps boilerplate scenario stuff out of the samples, so each sample
+    // can more readily highlight the interesting parts.
+    //-----------------------------------------------------------------------------
     bool InitBodyScales(float BodyScale, const FSamplesSolarSystemState& SolarSystemState)
     {
         ES_ResultCode ResultCode = ES_ResultCode::Success;
@@ -118,6 +156,13 @@ namespace MaxQSamples
         return ResultCode == ES_ResultCode::Success;
     }
 
+
+    //-----------------------------------------------------------------------------
+    // Name: UpdateBodyPositions
+    // Desc:
+    // Generalized positioning of solar system bodies.
+    // This keeps boilerplate scenario stuff out of the samples.
+    //-----------------------------------------------------------------------------
     bool UpdateBodyPositions(const FName& OriginNaifName, const FName& OriginReferenceFrame, float DistanceScale, const FSamplesSolarSystemState& SolarSystemState)
     {
         FSDistanceVector r;
@@ -162,6 +207,12 @@ namespace MaxQSamples
         return result;
     }
 
+    //-----------------------------------------------------------------------------
+    // Name: UpdateBodyOrientations
+    // Desc:
+    // Generalized orienatation updates of solar system bodies.
+    // This keeps boilerplate scenario stuff out of the samples.
+    //-----------------------------------------------------------------------------
     bool UpdateBodyOrientations(const FName& OriginReferenceFrame, const FSamplesSolarSystemState& SolarSystemState)
     {
         ES_ResultCode ResultCode;
@@ -180,7 +231,9 @@ namespace MaxQSamples
             // Body Frame (IAU_EARTH, IAU_MOON, etc)
             FString BodyFrame = TEXT("IAU_") + BodyPair.Key.ToString();
 
-            // Get the rotation matrix from the orign's frame to the Body frame.
+            // Get the rotation matrix from the body frame, to the observer's frame (coord system origin)
+            // So, to position the body from the perspective of a camera from the observer's frame,
+            // we need to rotate it by this rotation, right?  Right.
             USpice::pxform(ResultCode, ErrorMessage, m, et, BodyFrame, OriginReferenceFrame.ToString());
 
             result &= (ResultCode == ES_ResultCode::Success);
@@ -204,6 +257,7 @@ namespace MaxQSamples
                     // The USpiceTypes conversions understand this, and how to convert.
                     FQuat BodyOrientation = USpiceTypes::Swazzle(q);
 
+                    // Set the actor to the new orientation
                     Actor->SetActorRotation(BodyOrientation);
                 }
             }
@@ -212,6 +266,13 @@ namespace MaxQSamples
         return result;
     }
 
+
+    //-----------------------------------------------------------------------------
+    // Name: UpdateSunDirection
+    // Desc:
+    // Generalized directional light (sun) directional updates.
+    // This keeps boilerplate scenario stuff out of the samples.
+    //-----------------------------------------------------------------------------
     bool UpdateSunDirection(const FName& OriginNaifName, const FName& OriginReferenceFrame, const FSEphemerisTime& et, const FName& SunNaifName, const TWeakObjectPtr<AActor>& SunDirectionalLight)
     {
         FSDistanceVector r;
@@ -246,6 +307,14 @@ namespace MaxQSamples
         return result;
     }
 
+
+    //-----------------------------------------------------------------------------
+    // Name: Log
+    // Desc:
+    // Common handling of result logging.
+    // Keeps samples less verbose, more focused on features.
+    // (Caller-provided color)
+    //-----------------------------------------------------------------------------
     void Log(const FString& LogString, const FColor& Color, float DisplayTime)
     {
         UE_LOG(LogMaxQSamples, Log, TEXT("%s"), *LogString);
@@ -255,6 +324,12 @@ namespace MaxQSamples
         }
     }
 
+    //-----------------------------------------------------------------------------
+    // Name: Log
+    // Desc:
+    // Common handling of result logging.
+    // (Color inferred from ResultCode)
+    //-----------------------------------------------------------------------------
     void Log(const FString& LogString, ES_ResultCode ResultCode, float DisplayTime)
     {
         if (ResultCode == ES_ResultCode::Success)
@@ -274,26 +349,46 @@ namespace MaxQSamples
 }
 
 
+//-----------------------------------------------------------------------------
+// Name: GetMaxQPluginInfo
+// Desc: Support for Blueprint samples.
+//-----------------------------------------------------------------------------
 void USampleUtilities::GetMaxQPluginInfo(FString& Info)
 {
     Info = MaxQSamples::MaxQPluginInfo();
 }
 
+
+//-----------------------------------------------------------------------------
+// Name: GetMaxQPathAbsolutified
+// Desc: Support for Blueprint samples.
+//-----------------------------------------------------------------------------
 void USampleUtilities::GetMaxQPathAbsolutified(const FString& path, FString& AbsolutePath)
 {
     AbsolutePath = MaxQSamples::MaxQPathAbsolutified(path);
 }
 
+
+//-----------------------------------------------------------------------------
+// Name: GetMaxQPathsAbsolutified
+// Desc: Support for Blueprint samples.
+//-----------------------------------------------------------------------------
 void USampleUtilities::GetMaxQPathsAbsolutified(const TArray<FString>& paths, TArray<FString>& AbsolutePaths)
 {
     AbsolutePaths = MaxQSamples::MaxQPathsAbsolutified(paths);
 }
 
+
+//-----------------------------------------------------------------------------
+// Name: LoadKernelList
+// Desc: Commonized loading of kernel file lists.  Keeps samples less verbose.
+//-----------------------------------------------------------------------------
 bool USampleUtilities::LoadKernelList(const FString& ListName, const TArray<FString>& KernelFiles)
 {
     ES_ResultCode ResultCode = ES_ResultCode::Success;
     FString ErrorMessage = "";
 
+    // Call MaxQ/Spice to load the list of kernels.
     USpice::furnsh_list(ResultCode, ErrorMessage, MaxQSamples::MaxQPathsAbsolutified(KernelFiles));
 
     MaxQSamples::Log(FString::Printf(TEXT("Loaded %s Kernel files"), *ListName), ResultCode);
@@ -305,11 +400,23 @@ bool USampleUtilities::LoadKernelList(const FString& ListName, const TArray<FStr
     return ResultCode == ES_ResultCode::Success;
 }
 
+
+//-----------------------------------------------------------------------------
+// Name: InitializeTime
+// Desc:
+// Generalized handling of time initialization.
+// (Really belongs with InitBodyScales, UpdateBodyPositions,
+// UpdateBodyOrientations, and UpdateSunDirection.)
+// #TODO Refactor per comment
+//-----------------------------------------------------------------------------
 void USampleUtilities::InitializeTime(FSamplesSolarSystemState& SolarSystemState, bool SetInitialTime)
 {
+    // Initialize the time, from either the current time, or the InitialiTime string.
     if (SolarSystemState.InitializeTimeToNow)
     {
         USpice::et_now(SolarSystemState.CurrentTime);
+        // We may want to record the actual initial time, that way we could rewind to the
+        // exact same time later.
         if(SetInitialTime) SolarSystemState.InitialTime = SolarSystemState.CurrentTime.ToString();
     }
     else
@@ -318,6 +425,14 @@ void USampleUtilities::InitializeTime(FSamplesSolarSystemState& SolarSystemState
     }
 }
 
+
+
+//-----------------------------------------------------------------------------
+// Name: GetDefaultBasicKernels
+// Desc:
+// Load a list with basic kernels common to samples...
+// Leap-seconds, solar system PCK/masses/default-SPK.
+//-----------------------------------------------------------------------------
 void USampleUtilities::GetDefaultBasicKernels(TArray<FString>& BasicKernels)
 {
     BasicKernels.Empty();
@@ -337,6 +452,12 @@ void USampleUtilities::GetDefaultBasicKernels(TArray<FString>& BasicKernels)
     BasicKernels.Add(TEXT("NonAssetData/naif/kernels/Generic/SPK/planets/de440s.bsp"));
 }
 
+
+//-----------------------------------------------------------------------------
+// Name: GetDefaultItrf93Kernels
+// Desc:
+// Load a list with basic kernels common to high-precision Earth ITRF93 cases
+//-----------------------------------------------------------------------------
 void USampleUtilities::GetDefaultItrf93Kernels(TArray<FString>& Itrf93Kernels)
 {
     Itrf93Kernels.Empty();
@@ -363,19 +484,41 @@ void USampleUtilities::GetDefaultItrf93Kernels(TArray<FString>& Itrf93Kernels)
     Itrf93Kernels.Add(TEXT("NonAssetData/naif/kernels/Generic/SPK/stations/earthstns_itrf93_201023.bsp"));
 }
 
+
+
+//-----------------------------------------------------------------------------
+// Name: GetDefaultInsightMissionKernels
+// Desc:
+// Load a list with basic kernels common to an actual spaceflight mission.
+// 
+//-----------------------------------------------------------------------------
 void USampleUtilities::GetDefaultInsightMissionKernels(TArray<FString>& InsightMissionKernels)
 {
     InsightMissionKernels.Empty();
 
+    // Specifies the relative orientations and relations of spacecraft's parts/instruments/etc
     InsightMissionKernels.Add(TEXT("NonAssetData/naif/kernels/INSIGHT/FK/insight_v05.tf"));
+    
+    // One SPK kernel of mission data (spacecraft positions, mission landing sight, etc)
     InsightMissionKernels.Add(TEXT("NonAssetData/naif/kernels/INSIGHT/SPK/insight_ls_ops181206_iau2000_v1.bsp"));
+    
+    // The specific SPK kernel used for mars & its natural satellites while planning/analyzing the mission
     InsightMissionKernels.Add(TEXT("NonAssetData/naif/kernels/INSIGHT/SPK/mar097s.bsp"));
+
+    // This SPK kernel provides the relative position offsets of structures on the spacecraft
     InsightMissionKernels.Add(TEXT("NonAssetData/naif/kernels/INSIGHT/SPK/insight_struct_v01.bsp"));
 }
 
 
-#define LIVE_URL_BASE "https://celestrak.com"
-
+//-----------------------------------------------------------------------------
+// Name: GetTelemetryFromServer
+// Desc:
+// Fetch telemetry data from a SatCat (satellite catalog).
+// It's tied to a specific server (celestrak) so it doesn't become an overly
+// generalized "swiss army knife" used for more than intended.
+// Exposed to Blueprints & the Blueprint samples also use this, because
+// it's not implementable in Blueprints alone without a Third Party plugin.
+//-----------------------------------------------------------------------------
 void USampleUtilities::GetTelemetryFromServer(FTelemetryCallback Callback, FString ObjectId, FString Format)
 {
     // Example URLs
@@ -383,9 +526,11 @@ void USampleUtilities::GetTelemetryFromServer(FTelemetryCallback Callback, FStri
     // https://celestrak.com/NORAD/elements/gp.php?GROUP=STATIONS&FORMAT=TLE
     // https://celestrak.com/NORAD/elements/gp.php?NAME=MICROSAT-R&FORMAT=JSON
     // https://celestrak.com/NORAD/elements/gp.php?INTDES=2020-025&FORMAT=JSON-PRETTY
-    FString uriBase = LIVE_URL_BASE;
+    FString uriBase = CELESTRAK_URL_BASE;
     FString uriQuery = uriBase + TEXT("/NORAD/elements/gp.php?") + ObjectId + TEXT("&FORMAT") + Format;
 
+    // Requires inclusion of Http module.
+    // (MaxQCppSamples.Build.cs: PrivateDependencyModuleNames.Add("HTTP");)
     FHttpModule& httpModule = FHttpModule::Get();
 
     // Create an http request
@@ -394,13 +539,25 @@ void USampleUtilities::GetTelemetryFromServer(FTelemetryCallback Callback, FStri
 
     FString RequestContent;
 
+    // Set up the Http calls (GET vs POST et al, content type, URL).
     pRequest->SetVerb(TEXT("GET"));
     pRequest->SetHeader(TEXT("Content-Type"), TEXT("application/x-www-form-urlencoded"));
 
     pRequest->SetURL(uriQuery);
 
+    // Binds a "Lambda" callback.
+    // The lambda does not execute immediately.  Rather, the function we're in
+    // exits, and when the HTTP response is received the lambda will be called back.
+    // (The lambda in turn will execute a callback delegate so the caller can handle the data.)
     pRequest->OnProcessRequestComplete().BindLambda(
+        // This is a capture list.
+        // It is necessary because the function executes & returns immediately, yet
+        // the lambda needs access to some of the local variables that went out of scope.
+        // The callback preserves the local variables so the Lambda has access to them.
+        // The 'this' pointer for the object could be preserved here, but we don't need it
+        // and this is a static function anyways (no 'this' pointer to save.)
         [ObjectId, Callback](
+            // Parameters the caller (http module) send into the callback.
             FHttpRequestPtr pRequest,
             FHttpResponsePtr pResponse,
             bool connectedSuccessfully) mutable {
@@ -408,16 +565,19 @@ void USampleUtilities::GetTelemetryFromServer(FTelemetryCallback Callback, FStri
                 // Validate http called us back on the Game Thread...
                 check(IsInGameThread());
 
+                // Was the callback successful?
                 if (connectedSuccessfully) {
+                    // Yes!  Log it...
                     UE_LOG(LogTemp, Log, TEXT("Space-Track response: %s"), *(pResponse->GetContentAsString().Left(64)));
 
+                    // ...and send the data to the user
                     if (Callback.IsBound())
                     {
                         Callback.Execute(true, ObjectId, pResponse->GetContentAsString());
-                        Callback.Unbind();
                     }
                 }
                 else {
+                    // No.  Mistakes were made.
                     FString Mistake;
 
                     switch (pRequest->GetStatus()) {
@@ -427,14 +587,21 @@ void USampleUtilities::GetTelemetryFromServer(FTelemetryCallback Callback, FStri
                         Mistake = TEXT("Request failed.");
                     }
 
+                    /*
+                    Now on Kindle Prime:
+                        Strings Of Failure, or Bits of Redemption?
+                        How I learned to overcome my mistakes through the power of TCHAR Logs
+                        By SamplesUtility.cpp
+                    */
                     UE_LOG(LogTemp, Error, TEXT("GetTelemetryFromServer Error: %s"), *Mistake);
 
+                    // Confess the mistake but of course don't divulge any details to anyone.
                     if (Callback.IsBound())
                     {
                         Callback.Execute(false, ObjectId, Mistake);
-                        Callback.Unbind();
                     }
                 }
+                Callback.Unbind();
         });
 
     UE_LOG(LogTemp, Log, TEXT("request: %s; content:%s"), *uriBase, *uriQuery);

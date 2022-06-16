@@ -19,7 +19,11 @@
 // Common code used by MaxQ C++ Samples
 //-----------------------------------------------------------------------------
 
+// UE Log category for the samples.
 MAXQCPPSAMPLES_API DECLARE_LOG_CATEGORY_EXTERN(LogMaxQSamples, Log, All);
+
+// telemetry will use the celestrak server.
+#define CELESTRAK_URL_BASE "https://celestrak.com"
 
 
 

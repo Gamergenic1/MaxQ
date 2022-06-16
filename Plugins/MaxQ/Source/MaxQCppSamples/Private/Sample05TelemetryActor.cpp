@@ -41,7 +41,7 @@ void ASample05TelemetryActor::BeginPlay()
 
 //-----------------------------------------------------------------------------
 // Name: Init
-// Desc: 
+// Desc: Initialize this object with data (it's name, etc.)
 //-----------------------------------------------------------------------------
 void ASample05TelemetryActor::Init(const FString& NewObjectId, const FString& NewObjectName, const FSTwoLineElements& NewTLEs, bool bNewShouldRenderOrbit)
 {
@@ -50,22 +50,31 @@ void ASample05TelemetryActor::Init(const FString& NewObjectId, const FString& Ne
     TLElements = NewTLEs;
     bShouldRenderOrbit = false;
 
+    // Create the Nametag UI-widget.
     if (NametagWidgetInstance.Get() == nullptr && NametagWidgetClass && GetNetMode() != ENetMode::NM_DedicatedServer)
     {
         USampleNametagWidget* Nametag = CreateWidget<USampleNametagWidget>(GetWorld()->GetFirstPlayerController(), NametagWidgetClass);
 
         if (Nametag)
         {
+            // The nametag needs to know:
+            // 1. The object's name.
+            // 2. When the position updates.
+            // 3. When the nametag is visible or hidden behind the planet
             Nametag->Init(ObjectName, PositionUpdate, VisibilityUpdate);
         }
 
+        // Initially hide the nametag until we know otherwise.
         NametagWidgetInstance = Nametag;
         VisibilityUpdate.ExecuteIfBound(false);
 
+        // Use the telemetry to compute a state vector (location & velocity)
         if (ComputeConic.IsBound())
         {
             FSStateVector StateVector;
             
+            // Compute the shape of the orbit (conic: ellipse or hyperbola)
+            // This will be used to render the orbit if desired.
             if (PropagateByTLEs.Execute(TLElements, StateVector))
             {
                 if (ComputeConic.Execute(StateVector, OrbitalConic, bIsHyperbolic))
@@ -130,10 +139,10 @@ void ASample05TelemetryActor::Tick(float DeltaSeconds)
 // ============================================================================
 //
 //-----------------------------------------------------------------------------
-// Name: conics
+// Name: PropagateTLE
 // Desc:
-// Very simple example of orbital "propagation" with kepler orbital elements.
-// "Propagating" an orbit just means predicting its future location.     
+// Call the main actor, which owns the state to propagate the orbit by
+// "Two Line Element"
 //-----------------------------------------------------------------------------
 
 void ASample05TelemetryActor::PropagateTLE()
@@ -163,10 +172,10 @@ void ASample05TelemetryActor::PropagateTLE()
 // ============================================================================
 //
 //-----------------------------------------------------------------------------
-// Name: conics
+// Name: PropagateKepler
 // Desc:
-// Very simple example of orbital "propagation" with kepler orbital elements.
-// "Propagating" an orbit just means predicting its future location.     
+// Call the main actor, which owns the state to propagate the orbit by
+// "classical" orbital elements.
 //-----------------------------------------------------------------------------
 
 void ASample05TelemetryActor::PropagateKepler()
@@ -232,15 +241,20 @@ void ASample05TelemetryActor::BumpVelocity(const FSVelocityVector& Direction)
 {
     if (PropagateByKeplerianElements.IsBound() && GetOrbitalElements.IsBound() && GetConicFromKepler.IsBound())
     {
+        // Make sure the orbital elements are valid.
         GoKeplerian();
 
+        // Compute the current statevector from orbital elements.
         FSStateVector StateVector;
         if (!PropagateStateByTLEs && PropagateByKeplerianElements.Execute(KeplerianElements, StateVector))
         {
+            // Adjust the velocity.
             StateVector.v += Direction;
             
+            // Now recompute the new orbital elements
             if (GetOrbitalElements.Execute(StateVector, KeplerianElements))
             {
+                // And update the debug-orbit conic (ellipse/hyperbola) for orbit rendering
                 GetConicFromKepler.Execute(KeplerianElements, OrbitalConic, bIsHyperbolic);
             }
         }
@@ -314,7 +328,7 @@ void ASample05TelemetryActor::BumpRadial()
 
 
 //-----------------------------------------------------------------------------
-// Name: BumpRadial
+// Name: BumpAntiRadial
 // Desc:
 // Add some velocity towards the planet ("down")
 //-----------------------------------------------------------------------------
