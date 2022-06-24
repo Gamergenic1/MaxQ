@@ -354,7 +354,9 @@ void UK2Node_upack::RefreshOperand()
         auto Pin = FindPin(PinName);
         if (i < PinLabels.Num())
         {
+#if WITH_EDITORONLY_DATA
             Pin->PinFriendlyName = FText::FromString(PinLabels[i]);
+#endif
             visibilityChange |= Pin->bHidden;
             Pin->bHidden = false;
         }
@@ -440,6 +442,8 @@ void UK2Node_upack::ExpandNode(FKismetCompilerContext& CompilerContext, UEdGraph
     {
         MovePinLinksOrCopyDefaults(CompilerContext, InputPin, InternalIn);
     }
+
+    BreakAllNodeLinks();
 }
 
 void UK2Node_upack::GetMenuActions(FBlueprintActionDatabaseRegistrar& ActionRegistrar) const

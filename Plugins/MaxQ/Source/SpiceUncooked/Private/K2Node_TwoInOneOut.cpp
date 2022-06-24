@@ -103,7 +103,9 @@ void UK2Node_TwoInOneOut::AllocateInputPin(FName& PinName /*= NAME_None*/)
         NewPin->PinType.ContainerType = OperandType.Container;
     }
 
+#if WITH_EDITORONLY_DATA
     NewPin->PinFriendlyName = FText::FromString(TEXT(" "));
+#endif
     NewPin->PinToolTip = "Operand";
 }
 
@@ -448,6 +450,8 @@ void UK2Node_TwoInOneOut::ExpandNode(FKismetCompilerContext& CompilerContext, UE
     {
         MovePinLinksOrCopyDefaults(CompilerContext, OutputPin, InternalOutputPin);
     }
+
+    BreakAllNodeLinks(); 
 }
 
 #undef LOCTEXT_NAMESPACE

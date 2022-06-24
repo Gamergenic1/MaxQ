@@ -267,8 +267,16 @@ public:
 
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "MaxQ|Internal")
     static FSDimensionlessVector vminus_vector_K2(
-        const FSDimensionlessVector& v1
+        const FSDimensionlessVector& v
     );
+    static constexpr ANSICHAR* vminus_vector{ "vminus_vector_K2" };
+    static constexpr ANSICHAR* vminus_in{ "v" };
+
+    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "MaxQ|Internal")
+    static FSDimensionlessStateVector vminus_state_vector_K2(
+        const FSDimensionlessStateVector& v
+    );
+    static constexpr ANSICHAR* vminus_state_vector{ "vminus_state_vector_K2" };
 
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "MaxQ|Internal")
     static double vnorm_vector_K2(
