@@ -2,7 +2,7 @@
 
 > There are no right or wrong solutions, only solutions optimized to differing criteria.
 
-Most disagreements regarding software implementations can be root-caused to differing criteria each solution was optimized for.  Explicitly calling out a project's driving principles assists others who may utilize the project.
+Most disagreements regarding software implementations are simple consequences of differing criteria each solution was optimized for.  Explicitly calling out a project's driving principles assists others who may utilize the project.
 
 # MaxQ's key principles  
 * Optimize higher level concepts first (conceptual clarity, etc)  
