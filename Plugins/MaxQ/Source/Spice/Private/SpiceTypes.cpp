@@ -62,6 +62,7 @@ SPICE_API const FSAngle FSAngle::_0 = FSAngle();
 SPICE_API const FSAngle FSAngle::_360 = FSAngle(twopi_c());
 SPICE_API const FSEulerAngles FSEulerAngles::Zero = FSEulerAngles();
 SPICE_API const FSQuaternion FSQuaternion::Identity = FSQuaternion();
+SPICE_API const FSQuaternionDerivative FSQuaternionDerivative::Zero = FSQuaternionDerivative();
 SPICE_API const FSAngularRate FSAngularRate::Zero = FSAngularRate();
 SPICE_API const FSAngularVelocity FSAngularVelocity::Zero = FSAngularVelocity();
 SPICE_API const FSEulerAngularState FSEulerAngularState::Zero = FSEulerAngularState();
@@ -428,6 +429,23 @@ FQuat FSQuaternion::Swizzle() const
 FSQuaternion FSQuaternion::Swizzle(const FQuat& UnrealQuat)
 {
     return USpiceTypes::Swazzle(UnrealQuat);
+}
+
+FString FSQuaternionDerivative::ToString() const
+{
+    return FString::Printf(TEXT("(dx:%s, dy:%s, dz:%s, dw:%s)"), *USpiceTypes::FormatDouble(dx), *USpiceTypes::FormatDouble(dy), *USpiceTypes::FormatDouble(dz), *USpiceTypes::FormatDouble(dw));
+}
+
+FVector4 FSQuaternionDerivative::Swizzle() const
+{
+    double x = 0., y = 0., z = 0., w = 0.;
+    QENG(w, x, y, z);
+    return FVector4((FVector::FReal)y, (FVector::FReal)x, (FVector::FReal)z, (FVector::FReal)w);
+}
+
+FSQuaternionDerivative FSQuaternionDerivative::Swizzle(const FVector4& UnrealVector4)
+{
+    return FSQuaternionDerivative::ENG(UnrealVector4.W, UnrealVector4.Y, UnrealVector4.X, UnrealVector4.Z);
 }
 
 
@@ -2445,6 +2463,23 @@ FString USpiceTypes::Conv_SQuaternionToString(const FSQuaternion& value)
     return value.ToString();
 }
 
+
+FString USpiceTypes::Conv_SQuaternionDerivativeToString(const FSQuaternionDerivative& value)
+{
+    return value.ToString();
+}
+
+FVector4 USpiceTypes::Conv_SQuaternionDerivativeToVector4(const FSQuaternionDerivative& value)
+{
+    return value.Swizzle();
+}
+
+FSQuaternionDerivative USpiceTypes::Conv_Vector4ToSQuaternionDerivative(const FVector4& value)
+{
+    return FSQuaternionDerivative::Swizzle(value);
+}
+
+
 FSDistanceVector USpiceTypes::Conv_VectorToSDistanceVector(
     const FVector& value
 )
@@ -2714,7 +2749,7 @@ FString USpiceTypes::Conv_SEulerAngularTransformToString(const FSEulerAngularTra
 }
 
 
-FString USpiceTypes::Conv_SWindowSegmentToString(const FSEquinoctialElements& value)
+FString USpiceTypes::Conv_SEquinoctialElementsToString(const FSEquinoctialElements& value)
 {
     return value.ToString();
 }
@@ -3461,145 +3496,146 @@ FString USpiceTypes::Const_RADII() { return Constants::RADII; }
 
 namespace MaxQ::Constants
 {
-    const FString J2000(TEXT("J2000"));
-    const FString ECLIPJ2000(TEXT("ECLIPJ2000"));
-    const FString MARSIAU(TEXT("MARSIAU"));
-    const FString GALACTIC(TEXT("GALACTIC"));
-    const FString IAU_EARTH(TEXT("IAU_EARTH"));
-    const FString EARTH_FIXED(TEXT("EARTH_FIXED"));
-    const FString ITRF93(TEXT("ITRF93"));
-    const FString IAU_MOON(TEXT("IAU_MOON"));
-    const FString IAU_SUN(TEXT("IAU_SUN"));
-    const FString IAU_MERCURY(TEXT("IAU_MERCURY"));
-    const FString IAU_VENUS(TEXT("IAU_VENUS"));
-    const FString IAU_MARS(TEXT("IAU_MARS"));
-    const FString IAU_DEIMOS(TEXT("IAU_DEIMOS"));
-    const FString IAU_PHOBOS(TEXT("IAU_PHOBOS"));
-    const FString IAU_JUPITER(TEXT("IAU_JUPITER"));
-    const FString IAU_SATURN(TEXT("IAU_SATURN"));
-    const FString IAU_NEPTUNE(TEXT("IAU_NEPTUNE"));
-    const FString IAU_URANUS(TEXT("IAU_URANUS"));
-    const FString IAU_PLUTO(TEXT("IAU_PLUTO"));
-    const FString IAU_CERES(TEXT("IAU_CERES"));
-    const FString EARTH(TEXT("EARTH"));
-    const FString MOON(TEXT("MOON"));
-    const FString EMB(TEXT("EMB"));
-    const FString EARTH_BARYCENTER(TEXT("EARTH_BARYCENTER"));
-    const FString SUN(TEXT("SUN"));
-    const FString SSB(TEXT("SSB"));
-    const FString SOLAR_SYSTEM_BARYCENTER(TEXT("SOLAR_SYSTEM_BARYCENTER"));
-    const FString MERCURY(TEXT("MERCURY"));
-    const FString VENUS(TEXT("VENUS"));
-    const FString MARS(TEXT("MARS"));
-    const FString PHOBOS(TEXT("PHOBOS"));
-    const FString DEIMOS(TEXT("DEIMOS"));
-    const FString MARS_BARYCENTER(TEXT("MARS_BARYCENTER"));
-    const FString JUPITER(TEXT("JUPITER"));
-    const FString JUPITER_BARYCENTER(TEXT("JUPITER_BARYCENTER"));
-    const FString SATURN(TEXT("SATURN"));
-    const FString SATURN_BARYCENTER(TEXT("SATURN_BARYCENTER"));
-    const FString URANUS(TEXT("URANUS"));
-    const FString URANUS_BARYCENTER(TEXT("URANUS_BARYCENTER"));
-    const FString NEPTUNE(TEXT("NEPTUNE"));
-    const FString NEPTUNE_BARYCENTER(TEXT("NEPTUNE_BARYCENTER"));
-    const FString PLUTO(TEXT("PLUTO"));
-    const FString PLUTO_BARYCENTER(TEXT("PLUTO_BARYCENTER"));
-    const FString CERES(TEXT("CERES"));
-    const FString PIONEER_6(TEXT("PIONEER-6"));
-    const FString PIONEER_7(TEXT("PIONEER-7"));
-    const FString VIKING_1_ORBITER(TEXT("VIKING 1 ORBITER"));
-    const FString VIKING_2_ORBITER(TEXT("VIKING 2 ORBITER"));
-    const FString VOYAGER_1(TEXT("VOYAGER 1"));
-    const FString VOYAGER_2(TEXT("VOYAGER 2"));
-    const FString HST(TEXT("HST"));
-    const FString HUBBLE_SPACE_TELESCOPE(TEXT("HUBBLE SPACE TELESCOPE"));
-    const FString MARS_PATHFINDER(TEXT("MARS PATHFINDER"));
-    const FString PARKER_SOLAR_PROBE(TEXT("PARKER SOLAR PROBE"));
-    const FString JWST(TEXT("JWST"));
-    const FString JAMES_WEBB_SPACE_TELESCOPE(TEXT("JAMES WEBB SPACE TELESCOPE"));
-    const FString INSIGHT(TEXT("INSIGHT"));
-    const FString OPPORTUNITY(TEXT("OPPORTUNITY"));
-    const FString SPIRIT(TEXT("SPIRIT"));
-    const FString NOTO(TEXT("NOTO"));
-    const FString NEW_NORCIA(TEXT("NEW NORCIA"));
-    const FString GOLDSTONE(TEXT("GOLDSTONE"));
-    const FString CANBERRA(TEXT("CANBERRA"));
-    const FString MADRID(TEXT("MADRID"));
-    const FString USUDA(TEXT("USUDA"));
-    const FString DSS_05(TEXT("DSS-05"));
-    const FString PARKES(TEXT("PARKES"));
-    const FString GM(TEXT("GM"));
-    const FString RADII(TEXT("RADII"));
+    const FString J2000{ Literal::J2000 };
+    const FString ECLIPJ2000{ Literal::ECLIPJ2000 };
+    const FString MARSIAU{ Literal::MARSIAU };
+    const FString GALACTIC{ Literal::GALACTIC };
+    const FString IAU_EARTH{ Literal::IAU_EARTH };
+    const FString EARTH_FIXED{ Literal::EARTH_FIXED };
+    const FString ITRF93{ Literal::ITRF93 };
+    const FString IAU_MOON{ Literal::IAU_MOON };
+    const FString IAU_SUN{ Literal::IAU_SUN };
+    const FString IAU_MERCURY{ Literal::IAU_MERCURY };
+    const FString IAU_VENUS{ Literal::IAU_VENUS };
+    const FString IAU_MARS{ Literal::IAU_MARS };
+    const FString IAU_DEIMOS{ Literal::IAU_DEIMOS };
+    const FString IAU_PHOBOS{ Literal::IAU_PHOBOS };
+    const FString IAU_JUPITER{ Literal::IAU_JUPITER };
+    const FString IAU_SATURN{ Literal::IAU_SATURN };
+    const FString IAU_NEPTUNE{ Literal::IAU_NEPTUNE };
+    const FString IAU_URANUS{ Literal::IAU_URANUS };
+    const FString IAU_PLUTO{ Literal::IAU_PLUTO };
+    const FString IAU_CERES{ Literal::IAU_CERES };
+    const FString EARTH{ Literal::EARTH };
+    const FString MOON{ Literal::MOON };
+    const FString EMB{ Literal::EMB };
+    const FString EARTH_BARYCENTER{ Literal::EARTH_BARYCENTER };
+    const FString SUN{ Literal::SUN };
+    const FString SSB{ Literal::SSB };
+    const FString SOLAR_SYSTEM_BARYCENTER{ Literal::SOLAR_SYSTEM_BARYCENTER };
+    const FString MERCURY{ Literal::MERCURY };
+    const FString VENUS{ Literal::VENUS };
+    const FString MARS{ Literal::MARS };
+    const FString PHOBOS{ Literal::PHOBOS };
+    const FString DEIMOS{ Literal::DEIMOS };
+    const FString MARS_BARYCENTER{ Literal::MARS_BARYCENTER };
+    const FString JUPITER{ Literal::JUPITER };;
+    const FString JUPITER_BARYCENTER{ Literal::JUPITER_BARYCENTER };
+    const FString SATURN{ Literal::SATURN };
+    const FString SATURN_BARYCENTER{ Literal::SATURN_BARYCENTER };
+    const FString URANUS{ Literal::URANUS };
+    const FString URANUS_BARYCENTER{ Literal::URANUS_BARYCENTER };
+    const FString NEPTUNE{ Literal::NEPTUNE };
+    const FString NEPTUNE_BARYCENTER{ Literal::NEPTUNE_BARYCENTER };
+    const FString PLUTO{ Literal::PLUTO };
+    const FString PLUTO_BARYCENTER{ Literal::PLUTO_BARYCENTER };
+    const FString CERES{ Literal::CERES };
+    const FString PIONEER_6{ Literal::PIONEER_6 };
+    const FString PIONEER_7{ Literal::PIONEER_7 };
+    const FString VIKING_1_ORBITER{ Literal::VIKING_1_ORBITER };
+    const FString VIKING_2_ORBITER{ Literal::VIKING_2_ORBITER };
+    const FString VOYAGER_1{ Literal::VOYAGER_1 };
+    const FString VOYAGER_2{ Literal::VOYAGER_2 };
+    const FString HST{ Literal::HST };
+    const FString HUBBLE_SPACE_TELESCOPE{ Literal::HUBBLE_SPACE_TELESCOPE };
+    const FString MARS_PATHFINDER{ Literal::MARS_PATHFINDER };
+    const FString PARKER_SOLAR_PROBE{ Literal::PARKER_SOLAR_PROBE };
+    const FString JWST{ Literal::JWST };
+    const FString JAMES_WEBB_SPACE_TELESCOPE{ Literal::JAMES_WEBB_SPACE_TELESCOPE };
+    const FString INSIGHT{ Literal::INSIGHT };
+    const FString OPPORTUNITY{ Literal::OPPORTUNITY };
+    const FString SPIRIT{ Literal::SPIRIT };
+    const FString NOTO{ Literal::NOTO };
+    const FString NEW_NORCIA{ Literal::NEW_NORCIA };
+    const FString GOLDSTONE{ Literal::GOLDSTONE };
+    const FString CANBERRA{ Literal::CANBERRA };
+    const FString MADRID{ Literal::MADRID };
+    const FString USUDA{ Literal::USUDA };
+    const FString DSS_05{ Literal::DSS_05 };
+    const FString PARKES{ Literal::PARKES };
+    const FString GM{ Literal::GM };
+    const FString RADII{ Literal::RADII };
 
-    const FName Name_J2000(J2000);
-    const FName Name_ECLIPJ2000(ECLIPJ2000);
-    const FName Name_MARSIAU(MARSIAU);
-    const FName Name_GALACTIC(GALACTIC);
-    const FName Name_IAU_EARTH(IAU_EARTH);
-    const FName Name_EARTH_FIXED(EARTH_FIXED);
-    const FName Name_ITRF93(ITRF93);
-    const FName Name_IAU_MOON(IAU_MOON);
-    const FName Name_IAU_SUN(IAU_SUN);
-    const FName Name_IAU_MERCURY(IAU_MERCURY);
-    const FName Name_IAU_VENUS(IAU_VENUS);
-    const FName Name_IAU_MARS(IAU_MARS);
-    const FName Name_IAU_DEIMOS(IAU_DEIMOS);
-    const FName Name_IAU_PHOBOS(IAU_PHOBOS);
-    const FName Name_IAU_JUPITER(IAU_JUPITER);
-    const FName Name_IAU_SATURN(IAU_SATURN);
-    const FName Name_IAU_NEPTUNE(IAU_NEPTUNE);
-    const FName Name_IAU_URANUS(IAU_URANUS);
-    const FName Name_IAU_PLUTO(IAU_PLUTO);
-    const FName Name_IAU_CERES(IAU_CERES);
-    const FName Name_EARTH(EARTH);
-    const FName Name_MOON(MOON);
-    const FName Name_EMB(EMB);
-    const FName Name_EARTH_BARYCENTER(EARTH_BARYCENTER);
-    const FName Name_SUN(SUN);
-    const FName Name_SSB(SSB);
-    const FName Name_SOLAR_SYSTEM_BARYCENTER(SOLAR_SYSTEM_BARYCENTER);
-    const FName Name_MERCURY(MERCURY);
-    const FName Name_VENUS(VENUS);
-    const FName Name_MARS(MARS);
-    const FName Name_PHOBOS(PHOBOS);
-    const FName Name_DEIMOS(DEIMOS);
-    const FName Name_MARS_BARYCENTER(MARS_BARYCENTER);
-    const FName Name_JUPITER(JUPITER);
-    const FName Name_JUPITER_BARYCENTER(JUPITER_BARYCENTER);
-    const FName Name_SATURN(SATURN);
-    const FName Name_SATURN_BARYCENTER(SATURN_BARYCENTER);
-    const FName Name_URANUS(URANUS);
-    const FName Name_URANUS_BARYCENTER(URANUS_BARYCENTER);
-    const FName Name_NEPTUNE(NEPTUNE);
-    const FName Name_NEPTUNE_BARYCENTER(NEPTUNE_BARYCENTER);
-    const FName Name_PLUTO(PLUTO);
-    const FName Name_PLUTO_BARYCENTER(PLUTO_BARYCENTER);
-    const FName Name_CERES(CERES);
-    const FName Name_PIONEER_6(PIONEER_6);
-    const FName Name_PIONEER_7(PIONEER_7);
-    const FName Name_VIKING_1_ORBITER(VIKING_1_ORBITER);
-    const FName Name_VIKING_2_ORBITER(VIKING_2_ORBITER);
-    const FName Name_VOYAGER_1(VOYAGER_1);
-    const FName Name_VOYAGER_2(VOYAGER_2);
-    const FName Name_HST(HST);
-    const FName Name_HUBBLE_SPACE_TELESCOPE(HUBBLE_SPACE_TELESCOPE);
-    const FName Name_MARS_PATHFINDER(MARS_PATHFINDER);
-    const FName Name_PARKER_SOLAR_PROBE(PARKER_SOLAR_PROBE);
-    const FName Name_JWST(JWST);
-    const FName Name_JAMES_WEBB_SPACE_TELESCOPE(JAMES_WEBB_SPACE_TELESCOPE);
-    const FName Name_INSIGHT(INSIGHT);
-    const FName Name_OPPORTUNITY(OPPORTUNITY);
-    const FName Name_SPIRIT(SPIRIT);
-    const FName Name_NOTO(NOTO);
-    const FName Name_NEW_NORCIA(NEW_NORCIA);
-    const FName Name_GOLDSTONE(GOLDSTONE);
-    const FName Name_CANBERRA(CANBERRA);
-    const FName Name_MADRID(MADRID);
-    const FName Name_USUDA(USUDA);
-    const FName Name_DSS_05(DSS_05);
-    const FName Name_PARKES(PARKES);
-    const FName Name_GM(GM);
-    const FName Name_RADII(RADII);
+    const FName Name_J2000{ Literal::J2000 };
+    const FName Name_ECLIPJ2000{ Literal::ECLIPJ2000 };
+    const FName Name_MARSIAU{ Literal::MARSIAU };
+    const FName Name_GALACTIC{ Literal::GALACTIC };
+    const FName Name_IAU_EARTH{ Literal::IAU_EARTH };
+    const FName Name_EARTH_FIXED{ Literal::EARTH_FIXED };
+    const FName Name_ITRF93{ Literal::ITRF93 };
+    const FName Name_IAU_MOON{ Literal::IAU_MOON };
+    const FName Name_IAU_SUN{ Literal::IAU_SUN };
+    const FName Name_IAU_MERCURY{ Literal::IAU_MERCURY };
+    const FName Name_IAU_VENUS{ Literal::IAU_VENUS };
+    const FName Name_IAU_MARS{ Literal::IAU_MARS };
+    const FName Name_IAU_DEIMOS{ Literal::IAU_DEIMOS };
+    const FName Name_IAU_PHOBOS{ Literal::IAU_PHOBOS };
+    const FName Name_IAU_JUPITER{ Literal::IAU_JUPITER };
+    const FName Name_IAU_SATURN{ Literal::IAU_SATURN };
+    const FName Name_IAU_NEPTUNE{ Literal::IAU_NEPTUNE };
+    const FName Name_IAU_URANUS{ Literal::IAU_URANUS };
+    const FName Name_IAU_PLUTO{ Literal::IAU_PLUTO };
+    const FName Name_IAU_CERES{ Literal::IAU_CERES };
+    const FName Name_EARTH{ Literal::EARTH };
+    const FName Name_MOON{ Literal::MOON };
+    const FName Name_EMB{ Literal::EMB };
+    const FName Name_EARTH_BARYCENTER{ Literal::EARTH_BARYCENTER };
+    const FName Name_SUN{ Literal::SUN };
+    const FName Name_SSB{ Literal::SSB };
+    const FName Name_SOLAR_SYSTEM_BARYCENTER{ Literal::SOLAR_SYSTEM_BARYCENTER };
+    const FName Name_MERCURY{ Literal::MERCURY };
+    const FName Name_VENUS{ Literal::VENUS };
+    const FName Name_MARS{ Literal::MARS };
+    const FName Name_PHOBOS{ Literal::PHOBOS };
+    const FName Name_DEIMOS{ Literal::DEIMOS };
+    const FName Name_MARS_BARYCENTER{ Literal::MARS_BARYCENTER };
+    const FName Name_JUPITER{ Literal::JUPITER };
+    const FName Name_JUPITER_BARYCENTER{ Literal::JUPITER_BARYCENTER };
+    const FName Name_SATURN{ Literal::SATURN };
+    const FName Name_SATURN_BARYCENTER{ Literal::SATURN_BARYCENTER };
+    const FName Name_URANUS{ Literal::URANUS };
+    const FName Name_URANUS_BARYCENTER{ Literal::URANUS_BARYCENTER };
+    const FName Name_NEPTUNE{ Literal::NEPTUNE };
+    const FName Name_NEPTUNE_BARYCENTER{ Literal::NEPTUNE_BARYCENTER };
+    const FName Name_PLUTO{ Literal::PLUTO };
+    const FName Name_PLUTO_BARYCENTER{ Literal::PLUTO_BARYCENTER };
+    const FName Name_CERES{ Literal::CERES };
+    const FName Name_PIONEER_6{ Literal::PIONEER_6 };
+    const FName Name_PIONEER_7{ Literal::PIONEER_7 };
+    const FName Name_VIKING_1_ORBITER{ Literal::VIKING_1_ORBITER };
+    const FName Name_VIKING_2_ORBITER{ Literal::VIKING_2_ORBITER };
+    const FName Name_VOYAGER_1{ Literal::VOYAGER_1 };
+    const FName Name_VOYAGER_2{ Literal::VOYAGER_2 };
+    const FName Name_HST{ Literal::HST };
+    const FName Name_HUBBLE_SPACE_TELESCOPE{ Literal::HUBBLE_SPACE_TELESCOPE };
+    const FName Name_MARS_PATHFINDER{ Literal::MARS_PATHFINDER };
+    const FName Name_PARKER_SOLAR_PROBE{ Literal::PARKER_SOLAR_PROBE };
+    const FName Name_JWST{ Literal::JWST };
+    const FName Name_JAMES_WEBB_SPACE_TELESCOPE{ Literal::JAMES_WEBB_SPACE_TELESCOPE };
+    const FName Name_INSIGHT{ Literal::INSIGHT };
+    const FName Name_OPPORTUNITY{ Literal::OPPORTUNITY };
+    const FName Name_SPIRIT{ Literal::SPIRIT };
+    const FName Name_NOTO{ Literal::NOTO };
+    const FName Name_NEW_NORCIA{ Literal::NEW_NORCIA };
+    const FName Name_GOLDSTONE{ Literal::GOLDSTONE };
+    const FName Name_CANBERRA{ Literal::CANBERRA };
+    const FName Name_MADRID{ Literal::MADRID };
+    const FName Name_USUDA{ Literal::USUDA };
+    const FName Name_DSS_05{ Literal::DSS_05 };
+    const FName Name_PARKES{ Literal::PARKES };
+    const FName Name_GM{ Literal::GM };
+    const FName Name_RADII{ Literal::RADII };
 }
 
 #pragma endregion NaifNames
+

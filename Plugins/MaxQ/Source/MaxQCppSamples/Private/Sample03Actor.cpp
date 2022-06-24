@@ -581,14 +581,14 @@ void ASample03Actor::UpdateSolarSystem(FSamplesSolarSystemState& State, float De
     // the light arriving here now left the sun.  'lt' time ago.
     ES_AberrationCorrectionWithNewtonians abscorr = ES_AberrationCorrectionWithNewtonians::CN;
 
-    for (auto BodyPair : SolarSystemState.SolarSystemBodyMap)
+    for (const auto& [BodyNaifName, BodyActor] : SolarSystemState.SolarSystemBodyMap)
     {
-        AActor* Actor = BodyPair.Value.Get();
+        AActor* Actor = BodyActor.Get();
 
         if (Actor)
         {
             // Targ = NaifName = Map Key
-            FString targ = BodyPair.Key.ToString();
+            FString targ = BodyNaifName.ToString();
 
             // Call SPICE, get the position in rectangular coordinates...
             USpice::spkpos(ResultCode, ErrorMessage, et, r, lt, targ, obs, ref, abscorr);
@@ -607,7 +607,7 @@ void ASample03Actor::UpdateSolarSystem(FSamplesSolarSystemState& State, float De
 
                 if (GEngine)
                 {
-                    GEngine->AddOnScreenDebugMessage(-1, 0.f, FColor::White, *FString::Printf(TEXT("%s r=: %s kilometers"), *BodyPair.Key.ToString(), *r.Magnitude().ToString()));
+                    GEngine->AddOnScreenDebugMessage(-1, 0.f, FColor::White, *FString::Printf(TEXT("%s r=: %s kilometers"), *targ, *r.Magnitude().ToString()));
                 }
             }
             else

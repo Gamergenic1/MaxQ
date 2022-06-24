@@ -14,6 +14,7 @@
 #include "Spice.h"
 #include "SpiceK2.h"
 #include "SampleUtilities.h"
+#include "SpiceDiagnostics.h"
 
 using MaxQSamples::Log;
 
@@ -66,6 +67,8 @@ void ASample01Actor::BeginPlay()
     QueryEarthsGM();
 
     QueryEarthsRadius();
+
+    DumpKernelDiagnostics();
 
     ScaleAllBodies();
 }
@@ -408,6 +411,96 @@ void ASample01Actor::QueryEarthsRadius()
         Log(TEXT("QueryEarthsRadius EnumerateAndLoadPCKKernelList failed"), FColor::Red);
     }
 }
+
+
+// ============================================================================
+//
+//-----------------------------------------------------------------------------
+// Name: DumpKernelDiagnostics
+// Desc: 
+// Demonstrate interrogating kernel files regarding validity windows
+//-----------------------------------------------------------------------------
+
+void ASample01Actor::DumpKernelDiagnostics()
+{
+
+    ES_ResultCode ResultCode;
+    FString ErrorMessage;
+    FString LogString1;
+
+    FString LSKKernelPath = TEXT("NonAssetData/naif/kernels/Generic/LSK/naif0012.tls");
+    FString SPKKernelPath = TEXT("NonAssetData/naif/kernels/Generic/SPK/planets/de440s.bsp");
+ 
+    USpiceDiagnostics::DumpSpkSummary(
+        ResultCode,
+        ErrorMessage,
+        LogString1,
+        MaxQSamples::MaxQPathAbsolutified(LSKKernelPath),
+        MaxQSamples::MaxQPathAbsolutified(SPKKernelPath)
+    );
+
+    if (GEngine)
+    {
+        if (ResultCode == ES_ResultCode::Success)
+        {
+            GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, LogString1);
+        }
+        else
+        {
+            GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Red, ErrorMessage);
+        }
+    }
+
+    FString BinaryPCKKernelPath = TEXT("NonAssetData/naif/kernels/Generic/PCK/earth_200101_990628_predict.bpc");
+    FString LogString2;
+
+    USpiceDiagnostics::DumpPckSummary(
+        ResultCode,
+        ErrorMessage,
+        LogString2,
+        MaxQSamples::MaxQPathAbsolutified(LSKKernelPath),
+        MaxQSamples::MaxQPathAbsolutified(BinaryPCKKernelPath)
+    );
+
+    if (GEngine)
+    {
+        if (ResultCode == ES_ResultCode::Success)
+        {
+            GEngine->AddOnScreenDebugMessage(-1, 4.f, FColor::Blue, LogString2);
+        }
+        else
+        {
+            GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Red, ErrorMessage);
+        }
+    }
+
+    
+    FString BinarySCLKKernelPath = TEXT("NonAssetData/naif/kernels/INSIGHT/SCLK/NSY_SCLKSCET.00023.tsc");
+    FString BinaryCKKernelPath = TEXT("NonAssetData/naif/kernels/INSIGHT/CK/insight_ida_pot_210801_211218_v1.bc");
+    FString LogString3;
+
+    USpiceDiagnostics::DumpCkSummary(
+        ResultCode,
+        ErrorMessage,
+        LogString3,
+        MaxQSamples::MaxQPathAbsolutified(LSKKernelPath),
+        MaxQSamples::MaxQPathAbsolutified(BinarySCLKKernelPath),
+        MaxQSamples::MaxQPathAbsolutified(BinaryCKKernelPath)
+    );
+
+    if (GEngine)
+    {
+        if (ResultCode == ES_ResultCode::Success)
+        {
+            GEngine->AddOnScreenDebugMessage(-1, 3.f,FColor::Green, LogString3);
+        }
+        else
+        {
+            GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, ErrorMessage);
+        }
+    }
+}
+
 
 // ============================================================================
 //

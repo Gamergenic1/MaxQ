@@ -55,6 +55,7 @@ public:
     bool EnumerateAndLoadPCKKernelList(bool Squawk = true);
     void QueryEarthsGM();
     void QueryEarthsRadius();
+    void DumpKernelDiagnostics();
     void ScaleAllBodies();
 };
 

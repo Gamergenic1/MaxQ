@@ -5794,6 +5794,25 @@ void USpice::q2m(
 }
 
 /*
+* Exceptions
+   Error free.
+*/
+void USpice::qdq2av(const FSQuaternion& q, const FSQuaternionDerivative& dq, FSAngularVelocity& av)
+{
+    SpiceDouble _q[4];
+    SpiceDouble _dq[4];
+    q.CopyTo(_q);
+    dq.CopyTo(_dq);
+
+    SpiceDouble _av[3];
+    av.CopyTo(_av);
+
+    qdq2av_c(_q, _dq, _av);
+
+    av = FSAngularVelocity(_av);
+}
+
+/*
 Exceptions
    1)   If `r' is not a rotation matrix, the error SPICE(NOTAROTATION)
         is signaled
@@ -5898,7 +5917,7 @@ Exceptions
    Error free.
 */
 template<typename T>
-inline void mtxv_(
+inline void mtxv(
     const FSRotationMatrix& m1,
     const T& vin,
     T& vout
@@ -5929,7 +5948,7 @@ void USpice::mtxv(
 )
 {
     SpiceDouble _m1[3][3];  m1.CopyTo(_m1);
-    mtxv_(_m1, vin, vout);
+    ::mtxv(_m1, vin, vout);
 }
 
 
@@ -5945,7 +5964,7 @@ void USpice::mtxv_distance(
     )
 {
     SpiceDouble _m1[3][3];  m1.CopyTo(_m1);
-    mtxv_(_m1, vin, vout);
+    ::mtxv(_m1, vin, vout);
 }
 
 
@@ -5960,7 +5979,7 @@ void USpice::mtxv_velocity(
 )
 {
     SpiceDouble _m1[3][3];  m1.CopyTo(_m1);
-    mtxv_(_m1, vin, vout);
+    ::mtxv(_m1, vin, vout);
 }
 
 
@@ -5972,7 +5991,7 @@ void USpice::mtxv_angular(
 )
 {
     SpiceDouble _m1[3][3];  m1.CopyTo(_m1);
-    mtxv_(_m1, vin, vout);
+    ::mtxv(_m1, vin, vout);
 }
 
 /*
@@ -10905,7 +10924,7 @@ static FDerivativeDelegate DerivativeDelegate;
 static void __udfunc(SpiceDouble et, SpiceDouble* value)
 {
     double _value;
-    DerivativeDelegate.Execute(et, _value);
+    DerivativeDelegate.ExecuteIfBound(et, _value);
     *value = _value;
 }
 

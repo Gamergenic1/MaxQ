@@ -3633,6 +3633,21 @@ public:
             FSRotationMatrix& r
         );
 
+
+    UFUNCTION(BlueprintPure,
+        Category = "MaxQ|Rotation",
+        meta = (
+            Keywords = "MATH, MATRIX, ROTATION",
+            ShortToolTip = "Quaternion and quaternion derivative to a.v.",
+            ToolTip = "Derive angular velocity from a unit quaternion and its derivative with respect to time"
+            ))
+    static void qdq2av(
+        const FSQuaternion& q,
+        const FSQuaternionDerivative& dq,
+        FSAngularVelocity& av
+    );
+
+
     /// <summary>Multiply two quaternions</summary>
     /// <param name="q1">[in] First SPICE quaternion factor</param>
     /// <param name="q2">[in] Second SPICE quaternion factor</param>
@@ -3891,12 +3906,12 @@ public:
             ShortToolTip = "Transform a vector via a rotation",
             ToolTip = "Transform a vector to a new coordinate system rotated by angle radians about axis iaxis.This transformation rotates v1 by - angle radians about the specified axis"
             ))
-        static void rotvec(
-            const FSDistanceVector& v1,
-            const FSAngle& angle,
-            ES_Axis                 iaxis,
-            FSDistanceVector& vout
-        );
+    static void rotvec(
+        const FSDistanceVector& v1,
+        const FSAngle& angle,
+        ES_Axis                 iaxis,
+        FSDistanceVector& vout
+    );
 
     /// <summary>Radians per degree</summary>
     /// <returns>Radians.  Per degree.</returns>
@@ -5312,9 +5327,9 @@ public:
     /// <param name="vout">[out] Sum vector, v1 + v2</param>
     /// <returns></returns>
     UFUNCTION(BlueprintPure,
-        Category = "MaxQ|Math",
+        Category = "MaxQ|Vector",
         meta = (
-            Keywords = "TIME",
+            Keywords = "VECTOR",
             ShortToolTip = "Vector addition, 3 dimensional",
             ToolTip = "Add two 3 dimensional vectors"
             ))

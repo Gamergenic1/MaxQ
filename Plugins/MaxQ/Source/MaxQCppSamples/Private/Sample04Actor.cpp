@@ -468,21 +468,21 @@ bool ASample04Actor::UpdateBodyOrientations()
     FSEphemerisTime et = SolarSystemState.CurrentTime;
 
     bool result = true;
-    for (auto BodyPair : SolarSystemState.SolarSystemBodyMap)
+    for (const auto& [BodyNaifName, BodyActor] : SolarSystemState.SolarSystemBodyMap)
     {
         // The rotation matrix that will be the delta from the inertial frame
         // of the origin and the body frame of earth/moon
         FSRotationMatrix m;
 
         // Body Frame (IAU_EARTH, IAU_MOON, etc)
-        FString BodyFrame = TEXT("IAU_") + BodyPair.Key.ToString();
+        FString BodyFrame = TEXT("IAU_") + BodyNaifName.ToString();
 
         // Get the rotation matrix from the origin's frame to the Body frame.
         USpice::pxform(ResultCode, ErrorMessage, m, et, BodyFrame, OriginReferenceFrame.ToString());
 
         result &= (ResultCode == ES_ResultCode::Success);
 
-        AActor* Actor = BodyPair.Value.Get();
+        AActor* Actor = BodyActor.Get();
         if (Actor && result)
         {
             // Convert the Rotation Matrix into a SPICE Quaternion

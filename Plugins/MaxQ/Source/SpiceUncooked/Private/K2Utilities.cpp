@@ -33,3 +33,11 @@ void MovePinLinksOrCopyDefaults(FKismetCompilerContext& CompilerContext, UEdGrap
         Dest->DefaultTextValue = Source->DefaultTextValue;
     }
 }
+
+
+UEdGraphPin* GetReturnValuePin(UEdGraphNode* Node)
+{
+    UEdGraphPin* Pin = Node->FindPin(UEdGraphSchema_K2::PN_ReturnValue);
+    check(Pin == nullptr || Pin->Direction == EGPD_Output); // If pin exists, it must be output
+    return Pin;
+}

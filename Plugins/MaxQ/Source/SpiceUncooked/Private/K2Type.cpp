@@ -8,69 +8,122 @@
 #include "K2Type.h"
 
 
-SPICEUNCOOKED_API FK2Type FK2Type::Wildcard()
+const FK2Type& FK2Type::Wildcard()
 {
     static FK2Type Wildcard = FK2Type(FName("Wildcard"), UEdGraphSchema_K2::PC_Wildcard);
     return Wildcard;
 }
 
-SPICEUNCOOKED_API FK2Type FK2Type::Double()
+const FK2Type& FK2Type::Double()
 {
     static FK2Type Double = FK2Type(FName("Double"), UEdGraphSchema_K2::PC_Double);
     return Double;
 }
 
-SPICEUNCOOKED_API FK2Type FK2Type::Real()
+const FK2Type& FK2Type::Real()
 {
     static FK2Type Real = FK2Type(FName("Real"), UEdGraphSchema_K2::PC_Real);
     return Real;
 }
 
-SPICEUNCOOKED_API FK2Type FK2Type::DoubleArray()
+const FK2Type& FK2Type::DoubleArray()
 {
     static FK2Type ArrayDouble = FK2Type(FName("Array(Double)"), UEdGraphSchema_K2::PC_Double, EPinContainerType::Array);
     return ArrayDouble;
 }
 
-SPICEUNCOOKED_API FK2Type FK2Type::RealArray()
+const FK2Type& FK2Type::RealArray()
 {
     static FK2Type ArrayDouble = FK2Type(FName("Array(Real)"), UEdGraphSchema_K2::PC_Real, EPinContainerType::Array);
     return ArrayDouble;
 }
 
-
-SPICEUNCOOKED_API FK2Type FK2Type::SDimensionlessVector()
+const FK2Type& FK2Type::SDimensionlessVector()
 {
     static FK2Type DimensionlessVector = FK2Type(FSDimensionlessVector::StaticStruct());
     return DimensionlessVector;
 }
 
-SPICEUNCOOKED_API FK2Type FK2Type::SMassConstant()
+const FK2Type& FK2Type::SMassConstant()
 {
     static FK2Type MassConstant = FK2Type(FSMassConstant::StaticStruct());
     return MassConstant;
 }
 
-SPICEUNCOOKED_API FK2Type FK2Type::SDistance()
+const FK2Type& FK2Type::SDistance()
 {
     static FK2Type Distance = FK2Type(FSDistance::StaticStruct());
     return Distance;
 }
 
-SPICEUNCOOKED_API FK2Type FK2Type::SAngle()
+const FK2Type& FK2Type::SAngle()
 {
     static FK2Type Angle = FK2Type(FSAngle::StaticStruct());
     return Angle;
 }
 
-SPICEUNCOOKED_API FK2Type FK2Type::SDistanceVector()
+const FK2Type& FK2Type::SDistanceVector()
 {
     static FK2Type DistanceVector = FK2Type(FSDistanceVector::StaticStruct());
     return DistanceVector;
 }
 
-SPICEUNCOOKED_API FK2Type FK2Type::SVelocityVector()
+const FK2Type& FK2Type::SVelocityVector()
 {
     static FK2Type VelocityVector = FK2Type(FSVelocityVector::StaticStruct());
     return VelocityVector;
+}
+
+const FK2Type& FK2Type::SAngularVelocity()
+{
+    static FK2Type AngularVelocity = FK2Type(FSAngularVelocity::StaticStruct());
+    return AngularVelocity;
+}
+
+const FK2Type& FK2Type::SStateVector()
+{
+    static FK2Type StateVector = FK2Type(FSStateVector::StaticStruct());
+    return StateVector;
+}
+
+const FK2Type& FK2Type::SDimensionlessStateVector()
+{
+    static FK2Type DimensionlessStateVector = FK2Type(FSDimensionlessStateVector::StaticStruct());
+
+    return DimensionlessStateVector;
+}
+
+
+
+TArray<FString> FK2Type::GetTypePinLabels(const UScriptStruct* WhatType)
+{
+    TArray<FString> PinLabels;
+
+    if (WhatType)
+    {
+        uint8* DefaultOfType = (uint8*)alloca(WhatType->GetStructureSize());
+        WhatType->InitializeDefaultValue(DefaultOfType);
+
+        RecurseGetTypePinLabels(WhatType, DefaultOfType, FString(TEXT("")), PinLabels);
+    }
+
+    return PinLabels;
+}
+
+
+void FK2Type::RecurseGetTypePinLabels(const UScriptStruct* WhatType, const void* MemberOfType, const FString& BaseLabel, TArray<FString>& PinLabels)
+{
+    if (WhatType)
+    {
+        for (TPropertyValueIterator<FStructProperty> StructIter(WhatType, MemberOfType, EPropertyValueIteratorFlags::NoRecursion); StructIter; ++StructIter)
+        {
+            FString NewBaseOfLabel = BaseLabel + FString(TEXT(" ")) + StructIter.Key()->GetName();
+            RecurseGetTypePinLabels(StructIter.Key()->Struct, StructIter.Value(), NewBaseOfLabel, PinLabels);
+        }
+
+        for (TPropertyValueIterator<FDoubleProperty> DoubleIter(WhatType, MemberOfType, EPropertyValueIteratorFlags::NoRecursion); DoubleIter; ++DoubleIter)
+        {
+            PinLabels.Add(BaseLabel + FString(TEXT(" ")) + DoubleIter.Key()->GetName());
+        }
+    }
 }

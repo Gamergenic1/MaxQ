@@ -6,7 +6,7 @@
 // GitHub:         https://github.com/Gamergenic1/MaxQ/ 
 
 #include "K2Node_bodvrd.h"
-#include "K2Node_OperationNOutput.h"
+#include "K2Node_OutWithSelectorOp.h"
 #include "K2Utilities.h"
 #include "SpiceK2.h"
 
@@ -26,7 +26,7 @@ using namespace ENodeTitleType;
 
 UK2Node_bodvrd::UK2Node_bodvrd()
 {
-    OperationsMap = TMap<FName, FK2OperationNOutput>();
+    OperationsMap = TMap<FName, FK2SingleOutputOpWithComponentFilter>();
 
     auto op = DoubleOp(); op.FullName = op.ShortName.ToString() + "\nReturn value from the kernel pool"; OperationsMap.Emplace(op.ShortName, op);
     op = RealOp(); op.FullName = op.ShortName.ToString() + "\nReturn value from the kernel pool"; OperationsMap.Emplace(op.ShortName, op);
@@ -44,6 +44,21 @@ UK2Node_bodvrd::UK2Node_bodvrd()
     op = WildcardOp(); op.FullName = op.ShortName.ToString() + "\nReturn value from the kernel pool"; OperationsMap.Emplace(op.ShortName, op);
 
     CurrentOperation = op;
+
+#if WITH_EDITOR
+    // Ensure the specified actions actually exist!
+    for (const auto& [shortname, _op] : OperationsMap)
+    {
+        if (!_op.K2NodeName.IsNone())
+        {
+            check(USpiceK2::StaticClass()->FindFunctionByName(_op.K2NodeName));
+        }
+        if (!_op.Conversion.ConversionName.IsNone())
+        {
+            check(USpiceK2::StaticClass()->FindFunctionByName(_op.Conversion.ConversionName));
+        }
+    }
+#endif
 }
 
 
@@ -68,7 +83,7 @@ FText UK2Node_bodvrd::GetNodeTitle(Type TitleType) const
 
 FText UK2Node_bodvrd::GetMenuCategory() const
 {
-    return LOCTEXT("Category", "Spice|Api|Kernel");
+    return LOCTEXT("Category", "MaxQ|Kernel");
 }
 
 
@@ -145,88 +160,88 @@ void UK2Node_bodvrd::ExpandOperationNode(FKismetCompilerContext& CompilerContext
     MovePinLinksOrCopyDefaults(CompilerContext, thisItem, thatItem);
 }
 
-SPICEUNCOOKED_API FK2OperationNOutput UK2Node_bodvrd::WildcardOp()
+SPICEUNCOOKED_API const FK2SingleOutputOpWithComponentFilter& UK2Node_bodvrd::WildcardOp()
 {
-    static auto v = FK2OperationNOutput(FName("bodvrd"), FName("bodvrd_double_K2"), FK2Type::Wildcard());
+    static auto v {FK2SingleOutputOpWithComponentFilter(FName("bodvrd"), USpiceK2::bodvrd_double, FK2Type::Wildcard())};
     v.FullName = v.ShortName.ToString() + "\nReturn value from the kernel pool";
     return v;
 }
 
-SPICEUNCOOKED_API FK2OperationNOutput UK2Node_bodvrd::DoubleOp()
+SPICEUNCOOKED_API const FK2SingleOutputOpWithComponentFilter& UK2Node_bodvrd::DoubleOp()
 {
-    static auto v = FK2OperationNOutput(FName("bodvrd Double"), FName("bodvrd_double_K2"), FK2Type::Double());
+    static auto v {FK2SingleOutputOpWithComponentFilter(FName("bodvrd Double"), USpiceK2::bodvrd_double, FK2Type::Double())};
     return v;
 }
-SPICEUNCOOKED_API FK2OperationNOutput UK2Node_bodvrd::RealOp()
+SPICEUNCOOKED_API const FK2SingleOutputOpWithComponentFilter& UK2Node_bodvrd::RealOp()
 {
-    static auto v = FK2OperationNOutput(FName("bodvrd Real"), FName("bodvrd_double_K2"), FK2Type::Real());
-    return v;
-}
-
-SPICEUNCOOKED_API FK2OperationNOutput UK2Node_bodvrd::ArrayDoubleOp()
-{
-    static auto v = FK2OperationNOutput(FName("bodvrd Array(Double)"), FName("bodvrd_array_K2"), FK2Type::DoubleArray());
+    static auto v {FK2SingleOutputOpWithComponentFilter(FName("bodvrd Real"), USpiceK2::bodvrd_double, FK2Type::Real())};
     return v;
 }
 
-SPICEUNCOOKED_API FK2OperationNOutput UK2Node_bodvrd::ArrayRealOp()
+SPICEUNCOOKED_API const FK2SingleOutputOpWithComponentFilter& UK2Node_bodvrd::ArrayDoubleOp()
 {
-    static auto v = FK2OperationNOutput(FName("bodvrd Array(Real)"), FName("bodvrd_array_K2"), FK2Type::RealArray());
+    static auto v {FK2SingleOutputOpWithComponentFilter(FName("bodvrd Array(Double)"), USpiceK2::bodvrd_array, FK2Type::DoubleArray())};
     return v;
 }
 
-SPICEUNCOOKED_API FK2OperationNOutput UK2Node_bodvrd::SDimensionlessVectorOp()
+SPICEUNCOOKED_API const FK2SingleOutputOpWithComponentFilter& UK2Node_bodvrd::ArrayRealOp()
 {
-    static auto v = FK2OperationNOutput(FName("bodvrd SDimensionlessVector"), FName("bodvrd_vector_K2"), FK2Type::SDimensionlessVector());
+    static auto v {FK2SingleOutputOpWithComponentFilter(FName("bodvrd Array(Real)"), USpiceK2::bodvrd_array, FK2Type::RealArray())};
     return v;
 }
 
-SPICEUNCOOKED_API FK2OperationNOutput UK2Node_bodvrd::SMassConstantOp()
+SPICEUNCOOKED_API const FK2SingleOutputOpWithComponentFilter& UK2Node_bodvrd::SDimensionlessVectorOp()
 {
-    static auto v = FK2OperationNOutput(FName("bodvrd SMassConstant"), FName("bodvrd_double_K2"), FK2Conversion::DoubleToSMassConstant());
+    static auto v {FK2SingleOutputOpWithComponentFilter(FName("bodvrd SDimensionlessVector"), USpiceK2::bodvrd_vector, FK2Type::SDimensionlessVector())};
     return v;
 }
 
-SPICEUNCOOKED_API FK2OperationNOutput UK2Node_bodvrd::SDistanceOp()
+SPICEUNCOOKED_API const FK2SingleOutputOpWithComponentFilter& UK2Node_bodvrd::SMassConstantOp()
 {
-    static auto v = FK2OperationNOutput(FName("bodvrd SDistance"), FName("bodvrd_double_K2"), FK2Conversion::DoubleToSDistance());
+    static auto v {FK2SingleOutputOpWithComponentFilter(FName("bodvrd SMassConstant"), USpiceK2::bodvrd_double, FK2Conversion::DoubleToSMassConstant())};
     return v;
 }
 
-SPICEUNCOOKED_API FK2OperationNOutput UK2Node_bodvrd::SDegreesOp()
+SPICEUNCOOKED_API const FK2SingleOutputOpWithComponentFilter& UK2Node_bodvrd::SDistanceOp()
 {
-    static auto v = FK2OperationNOutput(FName("bodvrd SAngle(Degrees)"), FName("bodvrd_double_K2"), FK2Conversion::DegreesToSAngle());
+    static auto v {FK2SingleOutputOpWithComponentFilter(FName("bodvrd SDistance"), USpiceK2::bodvrd_double, FK2Conversion::DoubleToSDistance())};
     return v;
 }
 
-SPICEUNCOOKED_API FK2OperationNOutput UK2Node_bodvrd::SDistanceVectorOp()
+SPICEUNCOOKED_API const FK2SingleOutputOpWithComponentFilter& UK2Node_bodvrd::SDegreesOp()
 {
-
-    static auto v = FK2OperationNOutput(FName("bodvrd SDistanceVector"), FName("bodvrd_vector_K2"), FK2Conversion::SDimensionlessVectorToSDistanceVector());
+    static auto v {FK2SingleOutputOpWithComponentFilter(FName("bodvrd SAngle(Degrees)"), USpiceK2::bodvrd_double, FK2Conversion::DegreesToSAngle())};
     return v;
 }
 
-SPICEUNCOOKED_API FK2OperationNOutput UK2Node_bodvrd::SVelocityVectorOp()
+SPICEUNCOOKED_API const FK2SingleOutputOpWithComponentFilter& UK2Node_bodvrd::SDistanceVectorOp()
 {
-    static auto v = FK2OperationNOutput(FName("bodvrd SVelocityVector"), FName("bodvrd_vector_K2"), FK2Conversion::SDimensionlessVectorToSVelocityVector());
+
+    static auto v {FK2SingleOutputOpWithComponentFilter(FName("bodvrd SDistanceVector"), USpiceK2::bodvrd_vector, FK2Conversion::SDimensionlessVectorToSDistanceVector())};
     return v;
 }
 
-SPICEUNCOOKED_API FK2OperationNOutput UK2Node_bodvrd::SDistanceX()
+SPICEUNCOOKED_API const FK2SingleOutputOpWithComponentFilter& UK2Node_bodvrd::SVelocityVectorOp()
 {
-    static auto v = FK2OperationNOutput(FName("bodvrd SDistanceVector.X"), FName("bodvrd_vector_K2"), FK2Conversion::SDimensionlessVectorXToSDistance());
+    static auto v {FK2SingleOutputOpWithComponentFilter(FName("bodvrd SVelocityVector"), USpiceK2::bodvrd_vector, FK2Conversion::SDimensionlessVectorToSVelocityVector())};
     return v;
 }
 
-SPICEUNCOOKED_API FK2OperationNOutput UK2Node_bodvrd::SDistanceY()
+SPICEUNCOOKED_API const FK2SingleOutputOpWithComponentFilter& UK2Node_bodvrd::SDistanceX()
 {
-    static auto v = FK2OperationNOutput(FName("bodvrd SDistanceVector.Y"), FName("bodvrd_vector_K2"), FK2Conversion::SDimensionlessVectorYToSDistance());
+    static auto v {FK2SingleOutputOpWithComponentFilter(FName("bodvrd SDistanceVector.X"), USpiceK2::bodvrd_vector, FK2Conversion::SDimensionlessVectorXToSDistance())};
     return v;
 }
 
-SPICEUNCOOKED_API FK2OperationNOutput UK2Node_bodvrd::SDistanceZ()
+SPICEUNCOOKED_API const FK2SingleOutputOpWithComponentFilter& UK2Node_bodvrd::SDistanceY()
 {
-    static auto v = FK2OperationNOutput(FName("bodvrd SDistanceVector.Z"), FName("bodvrd_vector_K2"), FK2Conversion::SDimensionlessVectorZToSDistance());
+    static auto v {FK2SingleOutputOpWithComponentFilter(FName("bodvrd SDistanceVector.Y"), USpiceK2::bodvrd_vector, FK2Conversion::SDimensionlessVectorYToSDistance())};
+    return v;
+}
+
+SPICEUNCOOKED_API const FK2SingleOutputOpWithComponentFilter& UK2Node_bodvrd::SDistanceZ()
+{
+    static auto v {FK2SingleOutputOpWithComponentFilter(FName("bodvrd SDistanceVector.Z"), USpiceK2::bodvrd_vector, FK2Conversion::SDimensionlessVectorZToSDistance())};
     return v;
 }
 

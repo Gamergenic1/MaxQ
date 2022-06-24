@@ -12,32 +12,34 @@
 #include "SpiceTypes.h"
 #include "K2Type.generated.h"
 
+#define LOCTEXT_NAMESPACE "FK2Type"
+
 USTRUCT()
-struct FK2Type
+struct SPICEUNCOOKED_API FK2Type
 {
     GENERATED_BODY()
 
     UPROPERTY() FName TypeName;
     UPROPERTY() FName Category;
-    UPROPERTY() UScriptStruct* SubCategoryObject;
+    UPROPERTY() TWeakObjectPtr<UScriptStruct> SubCategoryObject;
     UPROPERTY() EPinContainerType Container;
 
     FK2Type()
     {
-        TypeName = FName("");
-        Category = FName("");
-        SubCategoryObject = nullptr;
-        Container = EPinContainerType::None;
+        TypeName = { FName() };
+        Category = { FName() };
+        SubCategoryObject = { nullptr };
+        Container = { EPinContainerType::None };
     }
 
     FK2Type(
         UScriptStruct* _type
     )
     {
-        TypeName = _type->GetFName();
-        Category = UEdGraphSchema_K2::PC_Struct;
-        SubCategoryObject = _type;
-        Container = EPinContainerType::None;
+        TypeName = { _type->GetFName() };
+        Category = { UEdGraphSchema_K2::PC_Struct };
+        SubCategoryObject = { _type };
+        Container = { EPinContainerType::None };
     }
 
     FK2Type(
@@ -46,18 +48,18 @@ struct FK2Type
         EPinContainerType _container = EPinContainerType::None
     )
     {
-        TypeName = _typename;
-        Category = _category;
-        SubCategoryObject = nullptr;
-        Container = _container;
+        TypeName = { _typename };
+        Category = { _category };
+        SubCategoryObject = { nullptr };
+        Container = { _container };
     }
 
     FK2Type(const FK2Type& other)
     {
-        TypeName = other.TypeName;
-        Category = other.Category;
-        SubCategoryObject = other.SubCategoryObject;
-        Container = other.Container;
+        TypeName = { other.TypeName };
+        Category = { other.Category };
+        SubCategoryObject = { other.SubCategoryObject };
+        Container = { other.Container };
     }
 
     FK2Type& operator= (const FK2Type& other)
@@ -75,34 +77,107 @@ struct FK2Type
         // return the existing object so we can chain this operator
         return *this;
     }
+
+    bool operator== (const FK2Type& other) const
+    {
+        // self-equality
+        if (this == &other)
+            return true;
+
+        bool equal = TypeName.Compare(other.TypeName) == 0;
+
+#if WITH_EDITOR
+        if (equal)
+        {
+            check(Category == other.Category);
+            check(Container == other.Container);
+
+            if (Category == UEdGraphSchema_K2::PC_Struct)
+            {
+                bool bSubCategoryOkay = (SubCategoryObject.Get() != nullptr) && (other.SubCategoryObject.Get() != nullptr);
+                if (bSubCategoryOkay)
+                {
+                    bSubCategoryOkay |= SubCategoryObject.Get()->IsChildOf(other.SubCategoryObject.Get());
+                }
+                check(bSubCategoryOkay);
+            }
+        }
+#endif
+
+        // return the existing object so we can chain this operator
+        return equal;
+    }
     
 
-    bool Matches(FName otherCategory, UObject* otherSubCategory, EPinContainerType otherContainer)
+    bool Matches(FName otherCategory, const UObject* otherSubCategory, EPinContainerType otherContainer) const
     {
+        if(otherCategory == UEdGraphSchema_K2::PC_Wildcard) return true;
+
         if (otherCategory == UEdGraphSchema_K2::PC_Struct)
         {
-            if (SubCategoryObject != nullptr && otherSubCategory != nullptr)
-                return otherSubCategory->GetFName() == SubCategoryObject->GetFName() && otherContainer == Container;
+            if (SubCategoryObject.Get() != nullptr && otherSubCategory != nullptr)
+                return otherSubCategory->GetFName() == SubCategoryObject.Get()->GetFName() && otherContainer == Container;
             else
                 return false;
         }
         return otherCategory == Category && otherContainer == Container;
     }
 
-    bool Matches(FEdGraphPinType pinType)
+    bool Matches(const FEdGraphPinType& pinType) const
     {
         return Matches(pinType.PinCategory, Cast<UObject>(pinType.PinSubCategoryObject), pinType.ContainerType);
     }
 
-    static SPICEUNCOOKED_API FK2Type Wildcard();
-    static SPICEUNCOOKED_API FK2Type Double();
-    static SPICEUNCOOKED_API FK2Type Real();
-    static SPICEUNCOOKED_API FK2Type DoubleArray();
-    static SPICEUNCOOKED_API FK2Type RealArray();
-    static SPICEUNCOOKED_API FK2Type SDimensionlessVector();
-    static SPICEUNCOOKED_API FK2Type SMassConstant();
-    static SPICEUNCOOKED_API FK2Type SDistance();
-    static SPICEUNCOOKED_API FK2Type SAngle();
-    static SPICEUNCOOKED_API FK2Type SDistanceVector();
-    static SPICEUNCOOKED_API FK2Type SVelocityVector();
+    bool Is(FName otherCategory, const UObject* otherSubCategory, EPinContainerType otherContainer) const
+    {
+        if (otherCategory == UEdGraphSchema_K2::PC_Struct)
+        {
+            if (SubCategoryObject.Get() != nullptr && otherSubCategory != nullptr)
+                return otherSubCategory->GetFName() == SubCategoryObject.Get()->GetFName() && otherContainer == Container;
+            else
+                return false;
+        }
+        return otherCategory == Category && otherContainer == Container;
+    }
+
+    bool Is(const FEdGraphPinType& pinType) const
+    {
+        return Is(pinType.PinCategory, Cast<UObject>(pinType.PinSubCategoryObject), pinType.ContainerType);
+    }
+
+    FString GetDisplayNameString() const
+    {
+        if(SubCategoryObject.Get()) return SubCategoryObject->GetName();
+        if (TypeName.IsNone()) return TEXT("Wildcard");
+        return TypeName.ToString();
+    }
+
+    FText GetDisplayNameText() const
+    {
+        if (SubCategoryObject.Get()) return SubCategoryObject->GetDisplayNameText();
+        if (TypeName.IsNone()) return LOCTEXT("Wildcard", "Wildcard");
+        return FText::FromName(TypeName);
+    }
+
+    static const FK2Type& Wildcard();
+    static const FK2Type& Double();
+    static const FK2Type& Real();
+    static const FK2Type& DoubleArray();
+    static const FK2Type& RealArray();
+    static const FK2Type& SDimensionlessVector();
+    static const FK2Type& SMassConstant();
+    static const FK2Type& SDistance();
+    static const FK2Type& SAngle();
+    static const FK2Type& SDistanceVector();
+    static const FK2Type& SVelocityVector();
+    static const FK2Type& SAngularVelocity();
+    static const FK2Type& SStateVector();
+    static const FK2Type& SDimensionlessStateVector();
+
+    static TArray<FString> GetTypePinLabels(const UScriptStruct* WhatType);
+
+private:
+    static void RecurseGetTypePinLabels(const UScriptStruct* WhatType, const void* MemberOfType, const FString& BaseLabel, TArray<FString>& PinLabels);
 };
+
+#undef LOCTEXT_NAMESPACE
