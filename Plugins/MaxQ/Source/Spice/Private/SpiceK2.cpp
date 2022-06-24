@@ -546,6 +546,17 @@ FSDimensionlessVector USpiceK2::vminus_vector_K2(const FSDimensionlessVector& v)
     return { _vout };
 }
 
+FSDimensionlessStateVector USpiceK2::vminus_state_vector_K2(const FSDimensionlessStateVector& v)
+{
+    ConstSpiceDouble _v1[6]{ v.r.x, v.r.y, v.r.z, v.dr.x, v.dr.y, v.dr.z };
+    constexpr SpiceInt _ndim = 6;
+    SpiceDouble _vout[6]{ 0, 0, 0 };
+
+    vminug_c(_v1, _ndim, _vout);
+
+    return { _vout };
+}
+
 double USpiceK2::vnorm_vector_K2(const FSDimensionlessVector& v)
 {
     ConstSpiceDouble _v1[3]{ v.x, v.y, v.z };

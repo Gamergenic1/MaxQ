@@ -137,8 +137,11 @@ void UK2Node_gdpool::AllocateDefaultPins()
     start->DefaultValue = FString::FromInt(start_DefaultValue);
     start->SafeSetHidden(CurrentOperation.Final.Container != EPinContainerType::Array);
 
+#if WITH_EDITORONLY_DATA
     successPin()->PinFriendlyName = LOCTEXT("SuccessPinName", "Found");
     errorPin()->PinFriendlyName = LOCTEXT("ErrorPinName", "Not Found");
+#endif
+
     successPin()->PinToolTip = TEXT("Executes if variable is in pool");
     errorPin()->PinToolTip = TEXT("Executes if variable is in not pool");
     errorMessagePin()->SafeSetHidden(true);
