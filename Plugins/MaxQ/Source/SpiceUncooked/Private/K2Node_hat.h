@@ -15,15 +15,15 @@
 #include "K2Node_AddPinInterface.h"
 #include "Chaos/Vector.h"
 #include "K2Node_MathGenericInterface.h"
-#include "K2PassThroughOp.h"
-#include "K2Node_minus.generated.h"
+#include "K2SingleInputOp.h"
+#include "K2Node_hat.generated.h"
 
 #pragma once
 
-#define LOCTEXT_NAMESPACE "K2Node_minus"
+#define LOCTEXT_NAMESPACE "K2Node_hat"
 
 UCLASS(BlueprintType, Blueprintable)
-class SPICEUNCOOKED_API UK2Node_minus : public UK2Node, public IK2Node_MathGenericInterface
+class SPICEUNCOOKED_API UK2Node_hat : public UK2Node, public IK2Node_MathGenericInterface
 {
     GENERATED_UCLASS_BODY()
 
@@ -56,15 +56,17 @@ public:
     virtual void NotifyConnectionChanged(UEdGraphPin* Pin, UEdGraphPin* Connection);
     // end of IK2Node_MathGenericInterface
 
-    bool CheckForErrors(FKismetCompilerContext& CompilerContext, FK2PassThroughOp& Operation);
+    bool CheckForErrors(FKismetCompilerContext& CompilerContext, FK2SingleInputOp& Operation);
     void CreateInputPin();
     void AllocateInputPin(FName& PinName);
 
     TArray<FK2Type> SupportedTypes;
-    TArray<FK2PassThroughOp> SupportedOperations;
+    TArray<FK2SingleInputOp> SupportedOperations;
 
     UPROPERTY()
     FK2Type OperandType;
+
+    void RefreshOperand();
 };
 
 

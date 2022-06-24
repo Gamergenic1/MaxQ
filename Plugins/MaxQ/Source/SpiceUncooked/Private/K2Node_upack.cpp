@@ -74,6 +74,7 @@ void UK2Node_upack::AllocateDefaultPins()
     auto InputPin = CreatePin(EGPD_Input, PinCategory, CreateUniquePinName(InputPinName));
     if (!OperandType.Category.IsNone() && OperandType.Category != UEdGraphSchema_K2::PC_Wildcard)
     {
+        InputPin->PinType.PinCategory = OperandType.Category;
         InputPin->PinType.PinSubCategoryObject = OperandType.SubCategoryObject;
         InputPin->PinType.ContainerType = OperandType.Container;
     }

@@ -244,8 +244,10 @@ public:
 
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "MaxQ|Internal")
     static FSDimensionlessVector vhat_vector_K2(
-        const FSDimensionlessVector& v1
+        const FSDimensionlessVector& v
     );
+    static constexpr ANSICHAR* vhat_vector{ "vhat_vector_K2" };
+    static constexpr ANSICHAR* vhat_in{ "v" };
 
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "MaxQ|Internal")
     static FSDimensionlessVector vlcom_vector_K2(
