@@ -21,9 +21,22 @@ public class SpiceUncooked : ModuleRules
                     "CoreUObject",
                     "Engine",
                     "KismetCompiler",
-                    "UnrealEd"
+                    "UnrealEd",
+                    "Slate",
+                    "SlateCore"
             });
 
-            PrivateDependencyModuleNames.AddRange(new string[] { "CSpice_Library", "Spice" });
+        PrivateDependencyModuleNames.AddRange(new string[] { "CSpice_Library", "Spice" });
+
+        if (Target.bBuildEditor)
+        {
+            // Add stuff that's only needed when building the editor
+            PrivateDependencyModuleNames.AddRange(
+                new string[]
+                {
+                    "BlueprintGraph", "ToolMenus"
+                }
+            );
+        }
     }
 }

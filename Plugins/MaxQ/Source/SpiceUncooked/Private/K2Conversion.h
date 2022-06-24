@@ -71,6 +71,27 @@ struct FK2Conversion
         // return the existing object so we can chain this operator
         return *this;
     }
+    
+    bool operator== (const FK2Conversion& other) const
+    {
+        // self-equality
+        if (this == &other)
+            return true;
+
+        bool bEqual = ConversionName.IsEqual(other.ConversionName);
+
+    #if WITH_EDITOR
+        if (bEqual)
+        {
+            check(In == other.In);
+            check(Selector == other.Selector);
+            check(Out == other.Out);
+        }
+    #endif
+
+        // return the existing object so we can chain this operator
+        return bEqual;
+    }
 
     static SPICEUNCOOKED_API FK2Conversion None();
     static SPICEUNCOOKED_API FK2Conversion DoubleToSMassConstant();
@@ -81,4 +102,10 @@ struct FK2Conversion
     static SPICEUNCOOKED_API FK2Conversion SDimensionlessVectorZToSDistance();
     static SPICEUNCOOKED_API FK2Conversion SDimensionlessVectorToSDistanceVector();
     static SPICEUNCOOKED_API FK2Conversion SDimensionlessVectorToSVelocityVector();
+    static SPICEUNCOOKED_API FK2Conversion SDimensionlessVectorToSAngularVelocity();
+    static SPICEUNCOOKED_API FK2Conversion SDistanceVectorToSDimensionlessVector();
+    static SPICEUNCOOKED_API FK2Conversion SVelocityVectorToSDimensionlessVector();
+    static SPICEUNCOOKED_API FK2Conversion SAngularVelocityToSDimensionlessVector();
+    static SPICEUNCOOKED_API FK2Conversion SDimensionlessStateVectorToSStateVector();
+    static SPICEUNCOOKED_API FK2Conversion SStateVectorToSDimensionlessStateVector();
 };

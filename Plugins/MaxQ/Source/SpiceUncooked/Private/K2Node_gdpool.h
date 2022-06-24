@@ -12,14 +12,14 @@
 #include "SpiceTypes.h"
 #include "K2Type.h"
 #include "K2Conversion.h"
-#include "K2OperationNOutput.h"
-#include "K2Node_OperationNOutput.h"
+#include "K2SingleOutputOpWithComponentFilter.h"
+#include "K2Node_OutWithSelectorOp.h"
 #include "K2Node_gdpool.generated.h"
 
 #pragma once
 
 UCLASS(BlueprintType, Blueprintable)
-class SPICEUNCOOKED_API UK2Node_gdpool : public UK2Node_OperationNOutput
+class SPICEUNCOOKED_API UK2Node_gdpool : public UK2Node_OutWithSelectorOp
 {
     GENERATED_BODY()
 
@@ -55,20 +55,20 @@ private:
     UEdGraphPin* startPin() const { return FindPinChecked(start_Field); }
 
 private:
-    static FK2OperationNOutput WildcardOp();
-    static FK2OperationNOutput DoubleOp();
-    static FK2OperationNOutput RealOp();
-    static FK2OperationNOutput ArrayDoubleOp();
-    static FK2OperationNOutput ArrayRealOp();
-    static FK2OperationNOutput SDimensionlessVectorOp();
-    static FK2OperationNOutput SMassConstantOp();
-    static FK2OperationNOutput SDistanceOp();
-    static FK2OperationNOutput SDegreesOp();
-    static FK2OperationNOutput SDistanceVectorOp();
-    static FK2OperationNOutput SVelocityVectorOp();
-    static FK2OperationNOutput SDistanceX();
-    static FK2OperationNOutput SDistanceY();
-    static FK2OperationNOutput SDistanceZ();
+    static const FK2SingleOutputOpWithComponentFilter& WildcardOp();
+    static const FK2SingleOutputOpWithComponentFilter& DoubleOp();
+    static const FK2SingleOutputOpWithComponentFilter& RealOp();
+    static const FK2SingleOutputOpWithComponentFilter& ArrayDoubleOp();
+    static const FK2SingleOutputOpWithComponentFilter& ArrayRealOp();
+    static const FK2SingleOutputOpWithComponentFilter& SDimensionlessVectorOp();
+    static const FK2SingleOutputOpWithComponentFilter& SMassConstantOp();
+    static const FK2SingleOutputOpWithComponentFilter& SDistanceOp();
+    static const FK2SingleOutputOpWithComponentFilter& SDegreesOp();
+    static const FK2SingleOutputOpWithComponentFilter& SDistanceVectorOp();
+    static const FK2SingleOutputOpWithComponentFilter& SVelocityVectorOp();
+    static const FK2SingleOutputOpWithComponentFilter& SDistanceX();
+    static const FK2SingleOutputOpWithComponentFilter& SDistanceY();
+    static const FK2SingleOutputOpWithComponentFilter& SDistanceZ();
 };
 
 

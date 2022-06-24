@@ -13,8 +13,10 @@
 #include "BlueprintActionDatabaseRegistrar.h"
 #include "BlueprintNodeSpawner.h"
 
+constexpr FLinearColor NodeBackgroundColor{ 0.1f, 0.82f, 0.2f };
 void RegisterAction(class FBlueprintActionDatabaseRegistrar& ActionRegistrar, UClass* actionKey);
-void MovePinLinksOrCopyDefaults(FKismetCompilerContext& CompilerContext, UEdGraphPin* Source, UEdGraphPin* Dest);
+void MovePinLinksOrCopyDefaults(FKismetCompilerContext& CompilerContext, UEdGraphPin* Source, UEdGraphPin* Dest);\
+UEdGraphPin* GetReturnValuePin(UEdGraphNode* Node);
 
 
 

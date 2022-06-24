@@ -30,32 +30,32 @@ namespace SpiceUtilities
 
 // Utilities useful when interacting with CSPICE
 
-FString toPath(const FString& file);
+SPICE_API FString toPath(const FString& file);
 
 template<class T>
 inline void ZeroOut(T(&value)[3][3])
 {
-    memset(value, 0, sizeof(value));
+    FMemory::Memset(value, 0);
 }
 
 template<class T>
 inline void ZeroOut(T(&value)[6][6])
 {
-    memset(value, 0, sizeof(value));
+    FMemory::Memset(value, 0);
 }
 
 
 template<class T>
 inline void ZeroOut(T& value)
 {
-    memset(&value, 0, sizeof(value));
+    FMemory::Memset(value, 0);
 }
 
-void CopyFrom(const SpicePlane& _plane, FSPlane& dest);
-void CopyTo(const FSPlane& src, SpicePlane& _plane);
-void CopyFrom(const SpiceEllipse& _ellipse, FSEllipse& dest);
-void CopyTo(const FSEllipse& src, SpiceEllipse& _ellipse);
+SPICE_API void CopyFrom(const SpicePlane& _plane, FSPlane& dest);
+SPICE_API void CopyTo(const FSPlane& src, SpicePlane& _plane);
+SPICE_API void CopyFrom(const SpiceEllipse& _ellipse, FSEllipse& dest);
+SPICE_API void CopyTo(const FSEllipse& src, SpiceEllipse& _ellipse);
 
-uint8 ErrorCheck(ES_ResultCode& ResultCode, FString& ErrorMessage, bool BeQuiet = false);
-uint8 UnexpectedErrorCheck(bool bReset = true);
+SPICE_API uint8 ErrorCheck(ES_ResultCode& ResultCode, FString& ErrorMessage, bool BeQuiet = false);
+SPICE_API uint8 UnexpectedErrorCheck(bool bReset = true);
 

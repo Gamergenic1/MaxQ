@@ -5,7 +5,7 @@
 // Documentation:  https://maxq.gamergenic.com/
 // GitHub:         https://github.com/Gamergenic1/MaxQ/ 
 
-#include "K2Node_OperationNOutput.h"
+#include "K2Node_OutWithSelectorOp.h"
 #include "K2Utilities.h"
 #include "SpiceK2.h"
 
@@ -15,22 +15,23 @@
 #include "BlueprintActionDatabaseRegistrar.h"
 #include "BlueprintNodeSpawner.h"
 #include "K2Node_CallFunction.h"
+#include "Textures/SlateIcon.h"
 
 using namespace ENodeTitleType;
 
-#define LOCTEXT_NAMESPACE "K2Node_OperationNOutput"
+#define LOCTEXT_NAMESPACE "K2Node_OutWithSelectorOp"
 
 
-UK2Node_OperationNOutput::UK2Node_OperationNOutput()
+UK2Node_OutWithSelectorOp::UK2Node_OutWithSelectorOp(const FObjectInitializer& ObjectInitializer)
+    : Super(ObjectInitializer)
 {
 }
 
-
-bool UK2Node_OperationNOutput::IsNodeSafeToIgnore() const {
+bool UK2Node_OutWithSelectorOp::IsNodeSafeToIgnore() const {
     return true;
 }
 
-void UK2Node_OperationNOutput::AllocateDefaultPins()
+void UK2Node_OutWithSelectorOp::AllocateDefaultPins()
 {
     Super::AllocateDefaultPins();
 
@@ -43,23 +44,23 @@ void UK2Node_OperationNOutput::AllocateDefaultPins()
 
     // Exec out w/return values
     // Success - Exec
-    UEdGraphPin* successPin = CreatePin(EGPD_Output, UEdGraphSchema_K2::PC_Exec, success_Field);
+    UEdGraphPin* successPin = CreatePin(EGPD_Output, UEdGraphSchema_K2::PC_Exec, successExec_PinName);
     successPin->PinToolTip = TEXT("Exit, if the action succeeds");
 
     // Success - return
-    UEdGraphPin* OutputPin = CreatePin(EGPD_Output, UEdGraphSchema_K2::PC_Wildcard, value_Field);
+    UEdGraphPin* OutputPin = CreatePin(EGPD_Output, UEdGraphSchema_K2::PC_Wildcard, returnValue_PinName);
     OutputPin->PinToolTip = "Return Value (Wildcard), if successful";
 
     // Error - Exec
-    UEdGraphPin* errorPin = CreatePin(EGPD_Output, UEdGraphSchema_K2::PC_Exec, error_Field);
+    UEdGraphPin* errorPin = CreatePin(EGPD_Output, UEdGraphSchema_K2::PC_Exec, errorExec_PinName);
     errorPin->PinToolTip = TEXT("Exit, if the action fails");
 
     // Error - return
-    UEdGraphPin* errorMessagePin = CreatePin(EGPD_Output, UEdGraphSchema_K2::PC_String, errorMessage_Field);
+    UEdGraphPin* errorMessagePin = CreatePin(EGPD_Output, UEdGraphSchema_K2::PC_String, errorMessage_PinName);
     errorMessagePin->PinToolTip = TEXT("An error message, if the action fails");
 
 
-    auto selector = CreatePin(EGPD_Input, UEdGraphSchema_K2::PC_Byte, ComponentSelectorEnum, selector_Field);
+    auto selector = CreatePin(EGPD_Input, UEdGraphSchema_K2::PC_Byte, ComponentSelectorEnum, selector_PinName);
     selector->PinToolTip = TEXT("Selects all, or X/Y/Z subcomponents");
     selector->PinType.PinSubCategoryObject = ComponentSelectorEnum;
     selector->DefaultValue = ComponentSelectorEnum->GetNameStringByValue((int64)EK2_ComponentSelector::All);
@@ -68,7 +69,7 @@ void UK2Node_OperationNOutput::AllocateDefaultPins()
     AdvancedPinDisplay = ENodeAdvancedPins::Hidden;
 }
 
-void UK2Node_OperationNOutput::NotifyPinConnectionListChanged(UEdGraphPin* Pin)
+void UK2Node_OutWithSelectorOp::NotifyPinConnectionListChanged(UEdGraphPin* Pin)
 {
     Super::NotifyPinConnectionListChanged(Pin);
 
@@ -77,6 +78,9 @@ void UK2Node_OperationNOutput::NotifyPinConnectionListChanged(UEdGraphPin* Pin)
 //        Pin->PinFriendlyName = FText::GetEmpty();
 
         FEdGraphPinType& ReturnValuePinType = Pin->PinType;
+
+        Modify();
+        Pin->Modify();
 
         ReturnValuePinType.PinCategory = UEdGraphSchema_K2::PC_Wildcard;
         ReturnValuePinType.PinSubCategory = NAME_None;
@@ -88,6 +92,7 @@ void UK2Node_OperationNOutput::NotifyPinConnectionListChanged(UEdGraphPin* Pin)
 
             if(MatchMe(CurrentOperation, ConnectedPinType, selectorPinValue()))
             {
+                returnValuePin()->Modify();
                 ReturnValuePinType.PinCategory = CurrentOperation.Final.Category;
                 ReturnValuePinType.PinSubCategoryObject = CurrentOperation.Final.SubCategoryObject;
 //                  Pin->PinFriendlyName = FText::FromName(CurrentOperation.Final.TypeName);
@@ -101,7 +106,7 @@ void UK2Node_OperationNOutput::NotifyPinConnectionListChanged(UEdGraphPin* Pin)
 }
 
 
-void UK2Node_OperationNOutput::ExpandNode(FKismetCompilerContext& CompilerContext, UEdGraph* SourceGraph)
+void UK2Node_OutWithSelectorOp::ExpandNode(FKismetCompilerContext& CompilerContext, UEdGraph* SourceGraph)
 {
     Super::ExpandNode(CompilerContext, SourceGraph);
 
@@ -112,7 +117,6 @@ void UK2Node_OperationNOutput::ExpandNode(FKismetCompilerContext& CompilerContex
         BreakAllNodeLinks();
         return;
     }
-
 
     FName OperationFunctionName;
     FName ConvFunctionName = "";
@@ -166,11 +170,11 @@ void UK2Node_OperationNOutput::ExpandNode(FKismetCompilerContext& CompilerContex
             CompilerContext.MessageLog.NotifyIntermediateObjectCreation(ConversionNode, this);
 
             auto internalReturn = InternalNode->GetReturnValuePin();
-            auto conversionInput = ConversionNode->FindPinChecked(value_Field);
+            auto conversionInput = ConversionNode->FindPinChecked(returnValue_PinName);
             auto conversionReturn = ConversionNode->GetReturnValuePin();
             auto myReturn = returnValuePin();
 
-            // Connect the interal operation's output to the conversion input
+            // Connect the internal operation's output to the conversion input
             Schema->TryCreateConnection(internalReturn, conversionInput);
             // And move this node's return to the conversion return
             MovePinLinksOrCopyDefaults(CompilerContext, myReturn, conversionReturn);
@@ -192,15 +196,15 @@ void UK2Node_OperationNOutput::ExpandNode(FKismetCompilerContext& CompilerContex
     UEdGraphPin* InternalExec = InternalNode->GetExecPin();
     MovePinLinksOrCopyDefaults(CompilerContext, NodeExec, InternalExec);
 
-    UEdGraphPin* InternalSuccess = InternalNode->FindPinChecked(success_Field);
+    UEdGraphPin* InternalSuccess = InternalNode->FindPinChecked(successExec_PinName);
     check(InternalSuccess != nullptr);
     MovePinLinksOrCopyDefaults(CompilerContext, NodeSuccess, InternalSuccess);
 
-    UEdGraphPin* InternalError = InternalNode->FindPinChecked(error_Field);
+    UEdGraphPin* InternalError = InternalNode->FindPinChecked(errorExec_PinName);
     check(InternalError != nullptr);
     MovePinLinksOrCopyDefaults(CompilerContext, NodeError, InternalError);
 
-    UEdGraphPin* InternalNodeErrorMessage = InternalNode->FindPinChecked(errorMessage_Field);
+    UEdGraphPin* InternalNodeErrorMessage = InternalNode->FindPinChecked(errorMessage_PinName);
     MovePinLinksOrCopyDefaults(CompilerContext, errorMessagePin(), InternalNodeErrorMessage);
 
     ExpandOperationNode(CompilerContext, SourceGraph, InternalNode);
@@ -208,7 +212,7 @@ void UK2Node_OperationNOutput::ExpandNode(FKismetCompilerContext& CompilerContex
     BreakAllNodeLinks();
 }
 
-void UK2Node_OperationNOutput::PreloadRequiredAssets()
+void UK2Node_OutWithSelectorOp::PreloadRequiredAssets()
 {
     PreloadObject(FSDimensionlessVector::StaticStruct());
     PreloadObject(FSMassConstant::StaticStruct());
@@ -218,16 +222,16 @@ void UK2Node_OperationNOutput::PreloadRequiredAssets()
     PreloadObject(FSVelocityVector::StaticStruct());
     PreloadObject(FK2Type::StaticStruct());
     PreloadObject(FK2Conversion::StaticStruct());
-    PreloadObject(FK2OperationNOutput::StaticStruct());
+    PreloadObject(FK2SingleOutputOpWithComponentFilter::StaticStruct());
     Super::PreloadRequiredAssets();
 }
 
 
-bool UK2Node_OperationNOutput::CheckForErrors(FKismetCompilerContext& CompilerContext)
+bool UK2Node_OutWithSelectorOp::CheckForErrors(FKismetCompilerContext& CompilerContext)
 {
     bool bError = false;
 
-    if (false)
+    if (bError)
     {
         CompilerContext.MessageLog.Error(*LOCTEXT("Error", "Node @@ had an input error.").ToString(), this);
         bError = true;
@@ -237,7 +241,7 @@ bool UK2Node_OperationNOutput::CheckForErrors(FKismetCompilerContext& CompilerCo
 }
 
 
-bool UK2Node_OperationNOutput::IsConnectionDisallowed(const UEdGraphPin* MyPin, const UEdGraphPin* OtherPin, FString& OutReason) const
+bool UK2Node_OutWithSelectorOp::IsConnectionDisallowed(const UEdGraphPin* MyPin, const UEdGraphPin* OtherPin, FString& OutReason) const
 {
     if (OtherPin)
     {
@@ -247,7 +251,7 @@ bool UK2Node_OperationNOutput::IsConnectionDisallowed(const UEdGraphPin* MyPin, 
 
             if (!compatible)
             {
-                OutReason = LOCTEXT("TypeDisallowed", "Pin does not match a supported type").ToString();
+                OutReason = TEXT("Pin does not match a supported type");
                 return true;
             }
         }
@@ -256,25 +260,25 @@ bool UK2Node_OperationNOutput::IsConnectionDisallowed(const UEdGraphPin* MyPin, 
     return Super::IsConnectionDisallowed(MyPin, OtherPin, OutReason);
 }
 
-bool UK2Node_OperationNOutput::IsOutputCompatible(const UEdGraphPin* ThePin, EK2_ComponentSelector selector) const
+bool UK2Node_OutWithSelectorOp::IsOutputCompatible(const UEdGraphPin* ThePin, EK2_ComponentSelector selector) const
 {
     if (ThePin)
     {
         // Loop through our operations and try to find a match
         auto pinType = ThePin->PinType;
 
-        FK2OperationNOutput dummyOperation;
+        FK2SingleOutputOpWithComponentFilter dummyOperation;
         return MatchMe(dummyOperation, pinType, selector);
     }
 
     return false;
 }
 
-bool UK2Node_OperationNOutput::MatchMe(FK2OperationNOutput& operation, FEdGraphPinType pinType, EK2_ComponentSelector selector) const
+bool UK2Node_OutWithSelectorOp::MatchMe(FK2SingleOutputOpWithComponentFilter& operation, FEdGraphPinType pinType, EK2_ComponentSelector selector) const
 {
     for (auto kvp : OperationsMap)
     {
-        if (kvp.Value.Final.Matches(pinType) && kvp.Value.Selector == selector)
+        if (kvp.Value.Final.Is(pinType) && kvp.Value.Selector == selector)
         {
             operation = kvp.Value;
             return true;
@@ -285,12 +289,7 @@ bool UK2Node_OperationNOutput::MatchMe(FK2OperationNOutput& operation, FEdGraphP
 }
 
 
-UEdGraphPin* UK2Node_OperationNOutput::getReturnValuePin(UK2Node_CallFunction* other) const
-{
-    return other->GetReturnValuePin();
-}
-
-EK2_ComponentSelector UK2Node_OperationNOutput::selectorPinValue() const
+EK2_ComponentSelector UK2Node_OutWithSelectorOp::selectorPinValue() const
 {
     static UEnum* ComponentSelectorEnum = FindObjectChecked<UEnum>(ANY_PACKAGE, TEXT("EK2_ComponentSelector"), /*ExactClass*/true);
     EK2_ComponentSelector selector = EK2_ComponentSelector::All;
@@ -301,5 +300,21 @@ EK2_ComponentSelector UK2Node_OperationNOutput::selectorPinValue() const
     return selector;
 }
 
+
+FSlateIcon UK2Node_OutWithSelectorOp::GetIconAndTint(FLinearColor& OutColor) const
+{
+    OutColor = FColor::Turquoise;
+    return FSlateIcon("EditorStyle", "Kismet.AllClasses.FunctionIcon");
+}
+
+FLinearColor UK2Node_OutWithSelectorOp::GetNodeTitleColor() const
+{
+    return NodeBackgroundColor;
+}
+
+void UK2Node_OutWithSelectorOp::NotifyConnectionChanged(UEdGraphPin* Pin, UEdGraphPin* Connection)
+{
+    NotifyPinConnectionListChanged(Pin);
+}
 
 #undef LOCTEXT_NAMESPACE

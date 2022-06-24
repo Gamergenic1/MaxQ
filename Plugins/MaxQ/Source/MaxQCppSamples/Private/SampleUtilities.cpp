@@ -114,10 +114,10 @@ namespace MaxQSamples
         ES_ResultCode ResultCode = ES_ResultCode::Success;
         FString ErrorMessage = "";
 
-        for (auto BodyPair : SolarSystemState.SolarSystemBodyMap)
+        for (const auto& [BodyNaifName, BodyActor] : SolarSystemState.SolarSystemBodyMap)
         {
-            FString NaifName = BodyPair.Key.ToString();
-            AActor* Actor = BodyPair.Value.Get();
+            FString NaifName = BodyNaifName.ToString();
+            AActor* Actor = BodyActor.Get();
 
             if (Actor)
             {
@@ -175,14 +175,14 @@ namespace MaxQSamples
         FSEphemerisTime et = SolarSystemState.CurrentTime;
 
         bool result = true;
-        for (auto BodyPair : SolarSystemState.SolarSystemBodyMap)
+        for (const auto& [BodyNaifName, BodyActor] : SolarSystemState.SolarSystemBodyMap)
         {
-            AActor* Actor = BodyPair.Value.Get();
+            AActor* Actor = BodyActor.Get();
 
             if (Actor)
             {
                 // Targ = NaifName = Map Key
-                FString targ = BodyPair.Key.ToString();
+                FString targ = BodyNaifName.ToString();
 
                 // Call SPICE, get the position in rectangular coordinates...
                 USpice::spkpos(ResultCode, ErrorMessage, et, r, lt, targ, OriginNaifName.ToString(), OriginReferenceFrame.ToString());
@@ -222,14 +222,14 @@ namespace MaxQSamples
         FSEphemerisTime et = SolarSystemState.CurrentTime;
 
         bool result = true;
-        for (auto BodyPair : SolarSystemState.SolarSystemBodyMap)
+        for (const auto& [BodyNaifName, BodyActor] : SolarSystemState.SolarSystemBodyMap)
         {
             // The rotation matrix that will be the delta from the inertial frame
             // of the origin and the body frame of earth/moon
             FSRotationMatrix m;
 
             // Body Frame (IAU_EARTH, IAU_MOON, etc)
-            FString BodyFrame = TEXT("IAU_") + BodyPair.Key.ToString();
+            FString BodyFrame = TEXT("IAU_") + BodyNaifName.ToString();
 
             // Get the rotation matrix from the body frame, to the observer's frame (coord system origin)
             // So, to position the body from the perspective of a camera from the observer's frame,
@@ -238,7 +238,7 @@ namespace MaxQSamples
 
             result &= (ResultCode == ES_ResultCode::Success);
 
-            AActor* Actor = BodyPair.Value.Get();
+            AActor* Actor = BodyActor.Get();
             if (Actor && result)
             {
                 // Convert the Rotation Matrix into a SPICE Quaternion

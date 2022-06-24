@@ -415,9 +415,46 @@ struct SPICE_API FSDimensionlessVector
 {
     GENERATED_BODY()
 
+    // Note *: UNREAL ENGINE SERIALIZATION's impacts on internal representation:
+    // note that UE does not support serialization of "plain" arrays.  Only TArray.
+    // TArray exposes a data pointers, so refs & pointers to an xyz[3] triplet
+    // would be possible, and then type-changing between double/SpiceDouble
+    // in-place would be possible, rather than copy operations when interfacing
+    // with Spice.
+    // But IMO that's a case of premature optimizations a hoop or two too many
+    // to jump through under a shaky assumption that the performance
+    // considerations of it will ever matter.
+    // IMO it's a safer assumption that SPICE interfacing will always be
+    // outer loop territory with performance characteristics dominated either 
+    // inside spice or by the caller.  Minimal Gains.  A few assumptions required
+    // go achieve the gains (SpiceDouble == double, etc).
+    // So, the choice is to go with the quite save individual member representation
+    // and by-member copy to/from SpiceDouble[] arrays each time they're exchanged
+    // to/from spice.  (This is deliberate, and it goes for all similar types.)
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MaxQ") double x;
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MaxQ") double y;
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MaxQ") double z;
+
+    // Note **: MODERN C++'s VIEW OF STRUCTs as POD:
+    // A tenant of "Modern C++" is:  use structs for "Plane old data" only.
+    // However.
+    // Unreal Engine attaches special meaning to USTRUCT and UCLASS.
+    // We don't want a garbage collected UCLASS for "flat" like vectors
+    // going in/out of SPICE.
+    // And... we do want operators etc  etc on things like distance vectors,
+    // right?
+    // Best practices of modern c++ are in conflict with what we want to
+    // express, largely because of Modern C++ is trying to be too cute
+    // by half with brace elision in its initialization syntax, which
+    // makes it ambiguous (to a dev), often, whether struct initializers are
+    // doing by-member initialization or invoking constructors.
+    // Anyways, to be useful our USTRUCTS need to be more than POD, have
+    // methods and constructors, the defects of Modern C++ not withstanding.
+    // If you're confused about this rant, see:
+    // https://www.open-std.org/jtc1/sc22/wg21/docs/cwg_defects.html#1270
+    // https://blog.feabhas.com/2019/04/brace-initialization-of-user-defined-types/
+    // What kind of language seemingly intentionally creates tricky interview
+    // questions, obscure bug opportunities, and high learning curves towards mastery??
 
     inline FSDimensionlessVector()
     {
@@ -433,13 +470,10 @@ struct SPICE_API FSDimensionlessVector
         z = other.z;
     }
 
-    inline FSDimensionlessVector(const double(&xyz)[3])
-    {
-        x = xyz[0];
-        y = xyz[1];
-        z = xyz[2];
-    }
-
+    // Not necessary for Modern C++ initialization syntax, because 
+    // { x, y, z } would do a by-member initialization.
+    // But, for consistency with C++98 constructors it is necessary.
+    // Many devs will want to initialize C++98 style.
     inline FSDimensionlessVector(double _x, double _y, double _z)
     {
         x = _x;
@@ -447,6 +481,15 @@ struct SPICE_API FSDimensionlessVector
         z = _z;
     }
 
+    // See note Note * (above)
+    inline FSDimensionlessVector(const double(&xyz)[3])
+    {
+        x = xyz[0];
+        y = xyz[1];
+        z = xyz[2];
+    }
+
+    // See note Note * (above)
     inline void CopyTo(double(&xyz)[3]) const
     {
         xyz[0] = x;
@@ -466,7 +509,6 @@ struct SPICE_API FSDimensionlessVector
 
     void Normalize();
     static void Normalize(FSDimensionlessVector& vector);
-    
     FSDimensionlessVector Normalized() const;
 
     double Magnitude() const;
@@ -556,8 +598,6 @@ static inline FSDimensionlessVector& operator/=(FSDimensionlessVector& lhs, doub
     return lhs;
 }
 
-#define FSDistance_km_to_M (1000.)
-#define FSDistance_M_to_km (1./FSDistance_km_to_M)
 
 USTRUCT(BlueprintType, Category = "MaxQ|Distance")
 struct SPICE_API FSDistance
@@ -566,6 +606,9 @@ struct SPICE_API FSDistance
 
 public:
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MaxQ") double km;
+
+    static constexpr double KilometersToMeters { 1000. };
+    static constexpr double MetersToKilometers { 1. / KilometersToMeters };
 
     FSDistance()
     {
@@ -589,7 +632,7 @@ public:
 
     inline double AsSpiceDouble() const { return km; }
     inline double AsKilometers() const { return km; }
-    inline double AsMeters() const { return AsKilometers() * FSDistance_km_to_M; }
+    inline double AsMeters() const { return AsKilometers() * KilometersToMeters; }
     inline double AsFeet() const;
     inline double AsNauticalMiles() const;
     inline double AsStatuteMiles() const;
@@ -602,11 +645,11 @@ public:
     [[deprecated("Use FromKilometers()")]]
     inline static FSDistance From_Km(double _km)    { return FromKilometers(_km); }
     [[deprecated("Use FromMeters()")]]
-    inline static FSDistance From_M(double _m)      { return FromMeters(_m * FSDistance_M_to_km); }
+    inline static FSDistance From_M(double _m)      { return FromMeters(_m * MetersToKilometers); }
     [[deprecated("Use FromMeters()")]]
     inline static FSDistance From_Meters(double _m) { return FromMeters(_m); }
     
-    inline static FSDistance FromMeters(double _m) { return FromKilometers(_m * FSDistance_M_to_km); }
+    inline static FSDistance FromMeters(double _m) { return FromKilometers(_m * MetersToKilometers); }
     [[deprecated("Use FromKilometers()")]]
     inline static FSDistance FromKm(double _km)    { return FromKilometers(_km); }
     inline static FSDistance FromKilometers(double _km)    { return FSDistance(_km); }
@@ -762,6 +805,13 @@ struct SPICE_API FSDistanceVector
         vector.x = x.AsSpiceDouble();
         vector.y = y.AsSpiceDouble();
         vector.z = z.AsSpiceDouble();
+    }
+
+    inline FSDimensionlessVector AsDimensionlessVector() const
+    {
+        FSDimensionlessVector vector;
+        AsDimensionlessVector(vector);
+        return vector;
     }
 
     inline FSDimensionlessVector AsKilometers() const
@@ -935,7 +985,7 @@ struct SPICE_API FSSpeed
 
     static inline FSSpeed FromMetersPerSecond(double MetersPerSecond)
     {
-        return FSSpeed(MetersPerSecond * FSDistance_M_to_km);
+        return FSSpeed(MetersPerSecond * FSDistance::MetersToKilometers);
     }
 
     FString ToString() const;
@@ -1590,6 +1640,13 @@ struct SPICE_API FSVelocityVector
         vector.z = dz.AsSpiceDouble();
     }
 
+    inline FSDimensionlessVector AsDimensionlessVector() const
+    {
+        FSDimensionlessVector vector;
+        AsDimensionlessVector(vector);
+        return vector;
+    }
+
     inline FSDimensionlessVector AsKilometersPerSecond() const
     {
         return FSDimensionlessVector(dx.AsKilometersPerSecond(), dy.AsKilometersPerSecond(), dz.AsKilometersPerSecond());
@@ -1841,6 +1898,13 @@ struct SPICE_API FSAngularVelocity
         vector.x = x.AsSpiceDouble();
         vector.y = y.AsSpiceDouble();
         vector.z = z.AsSpiceDouble();
+    }
+
+    FSDimensionlessVector AsDimensionlessVector() const
+    {
+        FSDimensionlessVector vector;
+        AsDimensionlessVector(vector);
+        return vector;
     }
 
     FSDimensionlessVector AsRadiansPerSecond() const
@@ -2152,6 +2216,13 @@ struct SPICE_API FSStateVector
     {
         r.AsDimensionlessVector(_v.r);
         v.AsDimensionlessVector(_v.dr);
+    }
+
+    FSDimensionlessStateVector AsDimensionlessStateVector() const
+    {
+        FSDimensionlessStateVector vector;
+        AsDimensionlessVectors(vector);
+        return vector;
     }
 
     FString ToString() const;
@@ -3134,6 +3205,7 @@ struct SPICE_API FSRotationMatrix
     FString ToString() const;
 };
 
+
 USTRUCT(BlueprintType, Category = "MaxQ|Quaternion")
 struct SPICE_API FSQuaternion
 {
@@ -3208,6 +3280,84 @@ struct SPICE_API FSQuaternion
     FQuat Swizzle() const;
     static FSQuaternion Swizzle(const FQuat& UnrealQuat);
 };
+
+
+
+USTRUCT(BlueprintType, Category = "MaxQ|QuaternionDerivative")
+struct SPICE_API FSQuaternionDerivative
+{
+    GENERATED_BODY()
+
+    // https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/qdq2av_c.html
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MaxQ") double dw;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MaxQ") double dx;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MaxQ") double dy;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MaxQ") double dz;
+
+    FSQuaternionDerivative(double _dw, double _dx, double _dy, double _dz)
+    {
+        dw = _dw;
+        dx = _dx;
+        dy = _dy;
+        dz = _dz;
+    }
+
+    inline void QSPICE(double& _dw, double& _dx, double& _dy, double& _dz) const
+    {
+        _dw = dw;
+        _dx = dx;
+        _dy = dy;
+        _dz = dz;
+    }
+    inline void QENG(double& _dw, double& _dx, double& _dy, double& _dz) const
+    {
+        _dw = dw;
+        _dx = -dx;
+        _dy = -dy;
+        _dz = -dz;
+    }
+    inline static FSQuaternionDerivative SPICE(double _dw, double _dx, double _dy, double _dz)
+    {
+        return FSQuaternionDerivative(_dw, _dx, _dy, _dz);
+    }
+    inline static FSQuaternionDerivative ENG(double _dw, double _dx, double _dy, double _dz)
+    {
+        return FSQuaternionDerivative(_dw, -_dx, -_dy, -_dz);
+    }
+
+    FSQuaternionDerivative()
+    {
+        dw = 0.;
+        dx = dy = dz = 0.;
+    }
+
+    FSQuaternionDerivative(const double(&_dq)[4])
+    {
+        dw = _dq[0];
+        dx = _dq[1];
+        dy = _dq[2];
+        dz = _dq[3];
+    }
+
+    void CopyTo(double(&_dq)[4]) const
+    {
+        _dq[0] = dw;
+        _dq[1] = dx;
+        _dq[2] = dy;
+        _dq[3] = dz;
+    }
+
+    static const FSQuaternionDerivative Zero;
+    FString ToString() const;
+
+    // IMPORTANT!:
+    // Swizzles between UE/SPICE (LHS and RHS coordinate systems)
+    // You must swizzle positional data (quaternions, vectors, etc) when
+    // exchanging between SPICE and Unreal Engine scenegraph coordinates.
+    FVector4 Swizzle() const;
+    static FSQuaternionDerivative Swizzle(const FVector4& UnrealQuat);
+};
+
 
 SPICE_API FSRotationMatrix operator*(const FSRotationMatrix& lhs, const FSRotationMatrix& rhs);
 SPICE_API FSDimensionlessVector operator*(const FSRotationMatrix& lhs, const FSDimensionlessVector& rhs);
@@ -4540,6 +4690,7 @@ public:
         BlueprintAutocast,
         DisplayName = "To String (S_Units)",
         CompactNodeTitle = "->",
+        Keywords = "CONVERSION",
         ToolTip = "Stringifies S_Units"
         ))
     static FString Conv_S_UnitsToString(
@@ -4552,6 +4703,7 @@ public:
         meta = (
             BlueprintAutocast,
             CompactNodeTitle = "To double (km)",
+            Keywords = "CONVERSION",
             ToolTip = "Converts a distance to a double (kilometers)"
             ))
     static double Conv_SDistanceToDouble(
@@ -4564,6 +4716,7 @@ public:
         meta = (
             BlueprintAutocast,
             CompactNodeTitle = "From double (km)",
+            Keywords = "CONVERSION",
             ToolTip = "Converts a double (kilometers) to a distance"
             ))
     static FSDistance Conv_DoubleToSDistance(
@@ -4576,6 +4729,7 @@ public:
         meta = (
             BlueprintAutocast,
             CompactNodeTitle = "to double (km/s)",
+            Keywords = "CONVERSION",
             ToolTip = "Converts a speed to a double (kilometers/sec)"
             ))
     static double Conv_SSpeedToDouble(
@@ -4588,6 +4742,7 @@ public:
         meta = (
             BlueprintAutocast,
             CompactNodeTitle = "from double (km/s)",
+            Keywords = "CONVERSION",
             ToolTip = "Converts a double (kilometers/sec) to a speed"
             ))
     static FSSpeed Conv_DoubleToSSpeed(
@@ -4600,6 +4755,7 @@ public:
         meta = (
             BlueprintAutocast,
             CompactNodeTitle = "to double (rads)",
+            Keywords = "CONVERSION",
             ToolTip = "Converts an angle to a double (radians)"
             ))
     static double Conv_SAngleToDouble(
@@ -4612,6 +4768,7 @@ public:
         meta = (
             BlueprintAutocast,
             CompactNodeTitle = "from double (rads)",
+            Keywords = "CONVERSION",
             ToolTip = "Converts an double (radians) to an angle"
             ))
     static FSAngle Conv_DoubleToSAngle(
@@ -4624,6 +4781,7 @@ public:
         meta = (
             BlueprintAutocast,
             CompactNodeTitle = "to double (rads/s)",
+            Keywords = "CONVERSION",
             ToolTip = "Converts an angular rate to a double (radians/sec)"
             ))
     static double Conv_SAngularRateToDouble(
@@ -4636,6 +4794,7 @@ public:
         meta = (
             BlueprintAutocast,
             CompactNodeTitle = "from double (rads/s)",
+            Keywords = "CONVERSION",
             ToolTip = "Converts a doouble (radians/sec) to an angular rate"
             ))
     static FSAngularRate Conv_DoubleToSAngularRate(
@@ -4648,6 +4807,7 @@ public:
         meta = (
             BlueprintAutocast,
             CompactNodeTitle = "to double (sec-j2000)",
+            Keywords = "CONVERSION",
             ToolTip = "Converts an ephemeris time to a double (sec past J2000)"
             ))
     static double Conv_SEphemerisTimeToDouble(
@@ -4660,27 +4820,30 @@ public:
             BlueprintAutocast,
             CompactNodeTitle = "->",
             ShortToolTip = "String to Ephemeris Time.",
+            Keywords = "CONVERSION",
             ToolTip = "Converts a string to an Ephemeris Time.  If the string fails to convert an error will remain signalled in SPICE, which the downstream computation will detect."
             ))
     static FSEphemerisTime Conv_StringToSEphemerisTime(const FString& time);
 
     UFUNCTION(BlueprintPure,
-        Category = "MaxQ|Types",
+        Category = "MaxQ|Stringifier",
         meta = (
             BlueprintAutocast,
             DisplayName = "To String (SEphemerisTime)",
             CompactNodeTitle = "->",
+            Keywords = "CONVERSION",
             ScriptMethod = "ToString",
             ToolTip = "Converts an Ephemeris Time to a String"
             ))
     static FString Conv_SEphemerisTimeToString(const FSEphemerisTime& et);
 
     UFUNCTION(BlueprintPure,
-        Category = "MaxQ|Types",
+        Category = "MaxQ|Stringifier",
         meta = (
             BlueprintAutocast,
             DisplayName = "To String (SEphemerisPeriod)",
             CompactNodeTitle = "->",
+            Keywords = "CONVERSION",
             ScriptMethod = "ToString",
             ToolTip = "Converts an Ephemeris Period to a String"
             ))
@@ -4693,13 +4856,14 @@ public:
         meta = (
             BlueprintAutocast,
             CompactNodeTitle = "->",
+            Keywords = "CONVERSION",
             ToolTip = "Converts a Float to an Ephemeris Period"
             ))
     static FSEphemerisPeriod Conv_FloatToSEphemerisPeriod(float period);
 
 
     UFUNCTION(BlueprintPure,
-        Category = "MaxQ|Types",
+        Category = "MaxQ|Stringifier",
         meta = (
             BlueprintAutocast,
             DisplayName = "To String (SMassConstant)",
@@ -4716,6 +4880,7 @@ public:
         meta = (
             BlueprintAutocast,
             CompactNodeTitle = "from double (sec-j2000)",
+            Keywords = "CONVERSION",
             ToolTip = "Converts a double (sec past J2000) to an ephemeris time"
             ))
     static FSEphemerisTime Conv_DoubleToSEphemerisTime(
@@ -4728,6 +4893,7 @@ public:
         meta = (
             BlueprintAutocast,
             CompactNodeTitle = "->",
+            Keywords = "CONVERSION",
             ToolTip = "Converts an ephemeris period to a double (sec)"
             ))
     static double Conv_SEphemerisPeriodToDouble(
@@ -4740,6 +4906,7 @@ public:
         meta = (
             BlueprintAutocast,
             CompactNodeTitle = "->",
+            Keywords = "CONVERSION",
             ToolTip = "Converts a double (sec) to an ephemeris period"
             ))
     static FSEphemerisPeriod Conv_DoubleToSEphemerisPeriod(
@@ -4752,6 +4919,7 @@ public:
         meta = (
             BlueprintAutocast,
             CompactNodeTitle = "->",
+            Keywords = "CONVERSION",
             ToolTip = "Converts a mass constant to a double"
             ))
     static double Conv_SMassConstantToDouble(
@@ -4764,6 +4932,7 @@ public:
         meta = (
             BlueprintAutocast,
             CompactNodeTitle = "->",
+            Keywords = "CONVERSION",
             ToolTip = "Converts a double to a mass constant"
             ))
     static FSMassConstant Conv_DoubleToSMassConstant(
@@ -4776,6 +4945,7 @@ public:
         meta = (
             BlueprintAutocast,
             CompactNodeTitle = "to dim'less (km/sec)",
+            Keywords = "CONVERSION, COORDINATES",
             ToolTip = "Converts a velocity vector to a dimensionless vector (km/sec)"
             ))
         static FSDimensionlessVector Conv_SVelocityVectorToSDimensionlessVector(
@@ -4787,6 +4957,7 @@ public:
         Category = "MaxQ|Types",
         meta = (
             BlueprintAutocast,
+            Keywords = "CONVERSION, COORDINATES",
             CompactNodeTitle = "from dim'less (km/sec)",
             ToolTip = "Converts a dimensionless vector to a velocity vector (km/sec)"
             ))
@@ -4799,6 +4970,7 @@ public:
         Category = "MaxQ|Types",
         meta = (
             BlueprintAutocast,
+            Keywords = "CONVERSION, COORDINATES",
             ToolTip = "Converts an euler angle vector (rads) to a dimensionless vector"
             ))
         static FSDimensionlessVector Conv_SEulerAnglesToSDimensionlessVector(
@@ -4810,6 +4982,7 @@ public:
         Category = "MaxQ|Types",
         meta = (
             BlueprintAutocast,
+            Keywords = "CONVERSION, COORDINATES",
             ToolTip = "Converts a dimensionless vector (rad) to an euler angle vector"
             ))
         static FSEulerAngles Conv_SDimensionlessVectorToSEulerAngles(
@@ -4821,6 +4994,7 @@ public:
         Category = "MaxQ|Types",
         meta = (
             BlueprintAutocast,
+            Keywords = "CONVERSION, COORDINATES",
             ToolTip = "Converts an angular velocity vector to a dimensionless vector (rad/sec)"
             ))
         static FSDimensionlessVector Conv_SAngularVelocityToSDimensionlessVector(
@@ -4832,6 +5006,7 @@ public:
         Category = "MaxQ|Types",
         meta = (
             BlueprintAutocast,
+            Keywords = "CONVERSION, COORDINATES",
             ToolTip = "Converts a dimensionless vector (km/sec) to an angular velocity vector"
             ))
         static FSAngularVelocity Conv_SDimensionlessVectorToSAngularVelocity(
@@ -4844,6 +5019,7 @@ public:
         meta = (
             BlueprintAutocast,
             CompactNodeTitle = "to dim'less (km)",
+            Keywords = "CONVERSION, COORDINATES",
             ToolTip = "Converts a distance vector to a dimensionless vector (km)"
             ))
         static FSDimensionlessVector Conv_SDistanceVectorToSDimensionlessVector(
@@ -4856,6 +5032,7 @@ public:
         meta = (
             BlueprintAutocast,
             CompactNodeTitle = "from dim'less (km)",
+            Keywords = "CONVERSION, COORDINATES",
             ToolTip = "Converts a dimensionless vector (double precision) to a distance vector"
             ))
     static FSDistanceVector Conv_SDimensionlessVectorToSDistanceVector(
@@ -4866,6 +5043,7 @@ public:
         Category = "MaxQ|Types",
         meta = (
             BlueprintAutocast,
+            Keywords = "CONVERSION, COORDINATES",
             ToolTip = "Converts a dimensionless vector (double precision) to a rectangular state vector"
             ))
     static FSStateVector Conv_SDimensionlessStateVectorToSStateVector(
@@ -4876,6 +5054,7 @@ public:
         Category = "MaxQ|Types",
         meta = (
             BlueprintAutocast,
+            Keywords = "CONVERSION, COORDINATES",
             ToolTip = "Converts a dimensionless vector (double precision) to a cylindrical state vector"
             ))
     static FSCylindricalStateVector Conv_SDimensionlessStateVectorToSCylindricalStateVector(
@@ -4886,6 +5065,7 @@ public:
         Category = "MaxQ|Types",
         meta = (
             BlueprintAutocast,
+            Keywords = "CONVERSION, COORDINATES",
             ToolTip = "Converts a dimensionless vector (double precision) to a latitudinal state vector"
             ))
     static FSLatitudinalStateVector Conv_SDimensionlessStateVectorToSLatitudinalStateVector(
@@ -4896,6 +5076,7 @@ public:
         Category = "MaxQ|Types",
         meta = (
             BlueprintAutocast,
+            Keywords = "CONVERSION, COORDINATES",
             ToolTip = "Converts a dimensionless vector (double precision) to a spherical state vector"
             ))
     static FSSphericalStateVector Conv_SDimensionlessStateVectorToSSphericalStateVector(
@@ -4906,6 +5087,7 @@ public:
         Category = "MaxQ|Types",
         meta = (
             BlueprintAutocast,
+            Keywords = "CONVERSION, COORDINATES",
             ToolTip = "Converts a dimensionless vector (double precision) to a geodetic state vector"
             ))
     static FSGeodeticStateVector Conv_SDimensionlessStateVectorToSGeodeticStateVector(
@@ -4917,6 +5099,7 @@ public:
         Category = "MaxQ|Types",
         meta = (
             BlueprintAutocast,
+            Keywords = "CONVERSION, COORDINATES",
             ToolTip = "Converts a dimensionless vector (double precision) to a planetographic state vector"
             ))
     static FSPlanetographicStateVector Conv_SDimensionlessStateVectorToSPlanetographicStateVector(
@@ -4927,6 +5110,7 @@ public:
         Category = "MaxQ|Types",
         meta = (
             BlueprintAutocast,
+            Keywords = "CONVERSION, COORDINATES",
             ToolTip = "Converts a rectangular state vector to a dimensionless vector (double precision)"
             ))
     static FSDimensionlessStateVector Conv_SStateVectorToSDimensionlessStateVector(
@@ -4937,6 +5121,7 @@ public:
         Category = "MaxQ|Types",
         meta = (
             BlueprintAutocast,
+            Keywords = "CONVERSION, COORDINATES",
             ToolTip = "Converts a cylindrical  state vector to a dimensionless vector (double precision)"
             ))
     static FSDimensionlessStateVector Conv_SCylindricalStateVectorToSDimensionlessStateVector(
@@ -4947,6 +5132,7 @@ public:
         Category = "MaxQ|Types",
         meta = (
             BlueprintAutocast,
+            Keywords = "CONVERSION, COORDINATES",
             ToolTip = "Converts a latitudinal state vector to a dimensionless vector (double precision)"
             ))
     static FSDimensionlessStateVector Conv_SLatitudinalStateVectorToSDimensionlessStateVector(
@@ -4957,6 +5143,7 @@ public:
         Category = "MaxQ|Types",
         meta = (
             BlueprintAutocast,
+            Keywords = "CONVERSION, COORDINATES",
             ToolTip = "Converts a spherical state vector to a dimensionless vector (double precision)"
             ))
     static FSDimensionlessStateVector Conv_SSphericalStateVectorToSDimensionlessStateVector(
@@ -4967,6 +5154,7 @@ public:
         Category = "MaxQ|Types",
         meta = (
             BlueprintAutocast,
+            Keywords = "CONVERSION, COORDINATES",
             ToolTip = "Converts a geodetic state vector to a dimensionless vector (double precision)"
             ))
     static FSDimensionlessStateVector Conv_FSGeodeticStateVectorToSDimensionlessStateVector(
@@ -4977,6 +5165,7 @@ public:
         Category = "MaxQ|Types",
         meta = (
             BlueprintAutocast,
+            Keywords = "CONVERSION, COORDINATES",
             ToolTip = "Converts a planetographic state vector to a dimensionless vector (double precision)"
             ))
     static FSDimensionlessStateVector Conv_FSPlanetographicStateVectorToSDimensionlessStateVector(
@@ -4984,10 +5173,11 @@ public:
     );
 
     UFUNCTION(BlueprintPure,
-        Category = "MaxQ|Debug",
+        Category = "MaxQ|Stringifier",
         meta = (
             BlueprintAutocast,
             DisplayName = "To String (SAngle)",
+            Keywords = "STRING",
             CompactNodeTitle = "->",
             ScriptMethod = "ToString",
             ToolTip = "Converts SAngle to a String"
@@ -4995,10 +5185,11 @@ public:
     static FString Conv_SAngleToString (const FSAngle& value);
 
     UFUNCTION(BlueprintPure,
-        Category = "MaxQ|Debug",
+        Category = "MaxQ|Stringifier",
         meta = (
             BlueprintAutocast,
             DisplayName = "To String (SDistance)",
+            Keywords = "STRING",
             CompactNodeTitle = "->",
             ScriptMethod = "ToString",
             ToolTip = "Converts Distance to a String"
@@ -5006,10 +5197,11 @@ public:
     static FString Conv_SDistanceToString(const FSDistance& value);
 
     UFUNCTION(BlueprintPure,
-        Category = "MaxQ|Debug",
+        Category = "MaxQ|Stringifier",
         meta = (
             BlueprintAutocast,
             DisplayName = "To String (SDistanceVector)",
+            Keywords = "STRING",
             CompactNodeTitle = "->",
             ScriptMethod = "ToString",
             ToolTip = "Converts a DistanceVector to a String"
@@ -5017,10 +5209,11 @@ public:
     static FString Conv_SDistanceVectorToString(const FSDistanceVector& value);
 
     UFUNCTION(BlueprintPure,
-        Category = "MaxQ|Debug",
+        Category = "MaxQ|Stringifier",
         meta = (
             BlueprintAutocast,
             DisplayName = "To String (SVelocityVector)",
+            Keywords = "STRING",
             CompactNodeTitle = "->",
             ScriptMethod = "ToString",
             ToolTip = "Converts a SVelocityVector to a String"
@@ -5028,10 +5221,11 @@ public:
     static FString Conv_SVelocityVectorToString(const FSVelocityVector& value);
 
     UFUNCTION(BlueprintPure,
-        Category = "MaxQ|Debug",
+        Category = "MaxQ|Stringifier",
         meta = (
             BlueprintAutocast,
             DisplayName = "To String (SStateVector)",
+            Keywords = "STRING",
             CompactNodeTitle = "->",
             ScriptMethod = "ToString",
             ToolTip = "Converts a SStateVector to a String"
@@ -5039,10 +5233,11 @@ public:
     static FString Conv_SStateVectorToString(const FSStateVector& value);
 
     UFUNCTION(BlueprintPure,
-        Category = "MaxQ|Debug",
+        Category = "MaxQ|Stringifier",
         meta = (
             BlueprintAutocast,
             DisplayName = "To String (SLonLat)",
+            Keywords = "STRING",
             CompactNodeTitle = "->",
             ScriptMethod = "ToString",
             ToolTip = "Converts a SLonLat to a String"
@@ -5050,10 +5245,11 @@ public:
     static FString Conv_SLonLatToString(const FSLonLat& value);
 
     UFUNCTION(BlueprintPure,
-        Category = "MaxQ|Debug",
+        Category = "MaxQ|Stringifier",
         meta = (
             BlueprintAutocast,
             DisplayName = "To String (SSpeed)",
+            Keywords = "STRING",
             CompactNodeTitle = "->",
             ScriptMethod = "ToString",
             ToolTip = "Converts a SSpeed to a String"
@@ -5061,10 +5257,11 @@ public:
     static FString Conv_SSpeedToString(const FSSpeed& value);
 
     UFUNCTION(BlueprintPure,
-        Category = "MaxQ|Debug",
+        Category = "MaxQ|Stringifier",
         meta = (
             BlueprintAutocast,
             DisplayName = "To String (SAngularRate)",
+            Keywords = "STRING",
             CompactNodeTitle = "->",
             ScriptMethod = "ToString",
             ToolTip = "Converts a SAngularRate to a String"
@@ -5072,10 +5269,11 @@ public:
     static FString Conv_SAngularRateToString(const FSAngularRate& value);
 
     UFUNCTION(BlueprintPure,
-        Category = "MaxQ|Debug",
+        Category = "MaxQ|Stringifier",
         meta = (
             BlueprintAutocast,
             DisplayName = "To String (SDimensionlessVector)",
+            Keywords = "STRING",
             CompactNodeTitle = "->",
             ScriptMethod = "ToString",
             ToolTip = "Converts a SDimensionlessVector to a String"
@@ -5083,10 +5281,11 @@ public:
     static FString Conv_SDimensionlessVectorToString(const FSDimensionlessVector& value);
 
     UFUNCTION(BlueprintPure,
-        Category = "MaxQ|Debug",
+        Category = "MaxQ|Stringifier",
         meta = (
             BlueprintAutocast,
             DisplayName = "To String (SDimensionlessStateVector)",
+            Keywords = "STRING",
             CompactNodeTitle = "->",
             ScriptMethod = "ToString",
             ToolTip = "Converts a SDimensionlessStateVector to a String"
@@ -5094,10 +5293,11 @@ public:
     static FString Conv_SDimensionlessStateVectorToString(const FSDimensionlessStateVector& value);
 
     UFUNCTION(BlueprintPure,
-        Category = "MaxQ|Debug",
+        Category = "MaxQ|Stringifier",
         meta = (
             BlueprintAutocast,
             DisplayName = "To String (SPlanetographicStateVector)",
+            Keywords = "STRING",
             CompactNodeTitle = "->",
             ScriptMethod = "ToString",
             ToolTip = "Converts a SPlanetographicStateVector to a String"
@@ -5105,10 +5305,11 @@ public:
     static FString Conv_SPlanetographicStateVectorToString(const FSPlanetographicStateVector& value);
 
     UFUNCTION(BlueprintPure,
-        Category = "MaxQ|Debug",
+        Category = "MaxQ|Stringifier",
         meta = (
             BlueprintAutocast,
             DisplayName = "To String (SGeodeticStateVector)",
+            Keywords = "STRING",
             CompactNodeTitle = "->",
             ScriptMethod = "ToString",
             ToolTip = "Converts a SGeodeticStateVector to a String"
@@ -5116,10 +5317,11 @@ public:
     static FString Conv_SGeodeticStateVectorToString(const FSGeodeticStateVector& value);
 
     UFUNCTION(BlueprintPure,
-        Category = "MaxQ|Debug",
+        Category = "MaxQ|Stringifier",
         meta = (
             BlueprintAutocast,
             DisplayName = "To String (SSphericalStateVector)",
+            Keywords = "STRING",
             CompactNodeTitle = "->",
             ScriptMethod = "ToString",
             ToolTip = "Converts a SSphericalStateVector to a String"
@@ -5127,10 +5329,11 @@ public:
     static FString Conv_SSphericalStateVectorToString(const FSSphericalStateVector& value);
 
     UFUNCTION(BlueprintPure,
-        Category = "MaxQ|Debug",
+        Category = "MaxQ|Stringifier",
         meta = (
             BlueprintAutocast,
             DisplayName = "To String (SLatitudinalStateVector)",
+            Keywords = "STRING",
             CompactNodeTitle = "->",
             ScriptMethod = "ToString",
             ToolTip = "Converts a SLatitudinalStateVector to a String"
@@ -5138,10 +5341,11 @@ public:
     static FString Conv_SLatitudinalStateVectorToString(const FSLatitudinalStateVector& value);
 
     UFUNCTION(BlueprintPure,
-        Category = "MaxQ|Debug",
+        Category = "MaxQ|Stringifier",
         meta = (
             BlueprintAutocast,
             DisplayName = "To String (SCylindricalStateVector)",
+            Keywords = "STRING",
             CompactNodeTitle = "->",
             ScriptMethod = "ToString",
             ToolTip = "Converts a SCylindricalStateVector to a String"
@@ -5149,9 +5353,10 @@ public:
     static FString Conv_SCylindricalStateVectorToString(const FSCylindricalStateVector& value);
 
     UFUNCTION(BlueprintPure,
-        Category = "MaxQ|Debug",
+        Category = "MaxQ|Stringifier",
         meta = (
             BlueprintAutocast,
+            Keywords = "STRING",
             DisplayName = "To String (SPlanetographicVector)",
             CompactNodeTitle = "->",
             ScriptMethod = "ToString",
@@ -5160,9 +5365,10 @@ public:
     static FString Conv_SPlanetographicVectorToString(const FSPlanetographicVector& value);
 
     UFUNCTION(BlueprintPure,
-        Category = "MaxQ|Debug",
+        Category = "MaxQ|Stringifier",
         meta = (
             BlueprintAutocast,
+            Keywords = "STRING",
             DisplayName = "To String (SGeodeticVector)",
             CompactNodeTitle = "->",
             ScriptMethod = "ToString",
@@ -5171,9 +5377,10 @@ public:
     static FString Conv_SGeodeticVectorToString(const FSGeodeticVector& value);
 
     UFUNCTION(BlueprintPure,
-        Category = "MaxQ|Debug",
+        Category = "MaxQ|Stringifier",
         meta = (
             BlueprintAutocast,
+            Keywords = "STRING",
             DisplayName = "To String (SSphericalVector)",
             CompactNodeTitle = "->",
             ScriptMethod = "ToString",
@@ -5182,9 +5389,10 @@ public:
     static FString Conv_SSphericalVectorToString(const FSSphericalVector& value);
 
     UFUNCTION(BlueprintPure,
-        Category = "MaxQ|Debug",
+        Category = "MaxQ|Stringifier",
         meta = (
             BlueprintAutocast,
+            Keywords = "STRING",
             DisplayName = "To String (SLatitudinalVector)",
             CompactNodeTitle = "->",
             ScriptMethod = "ToString",
@@ -5193,9 +5401,10 @@ public:
     static FString Conv_SLatitudinalVectorToString(const FSLatitudinalVector& value);
 
     UFUNCTION(BlueprintPure,
-        Category = "MaxQ|Debug",
+        Category = "MaxQ|Stringifier",
         meta = (
             BlueprintAutocast,
+            Keywords = "STRING",
             DisplayName = "To String (SCylindricalVector)",
             CompactNodeTitle = "->",
             ScriptMethod = "ToString",
@@ -5204,9 +5413,10 @@ public:
     static FString Conv_SCylindricalVectorToString(const FSCylindricalVector& value);
 
     UFUNCTION(BlueprintPure,
-        Category = "MaxQ|Debug",
+        Category = "MaxQ|Stringifier",
         meta = (
             BlueprintAutocast,
+            Keywords = "STRING",
             DisplayName = "To String (SPlanetographicVectorRates)",
             CompactNodeTitle = "->",
             ScriptMethod = "ToString",
@@ -5215,9 +5425,10 @@ public:
     static FString Conv_SPlanetographicVectorRatesToString(const FSPlanetographicVectorRates& value);
 
     UFUNCTION(BlueprintPure,
-        Category = "MaxQ|Debug",
+        Category = "MaxQ|Stringifier",
         meta = (
             BlueprintAutocast,
+            Keywords = "STRING",
             DisplayName = "To String (SGeodeticVectorRates)",
             CompactNodeTitle = "->",
             ScriptMethod = "ToString",
@@ -5226,9 +5437,10 @@ public:
     static FString Conv_SGeodeticVectorRatesToString(const FSGeodeticVectorRates& value);
 
     UFUNCTION(BlueprintPure,
-        Category = "MaxQ|Debug",
+        Category = "MaxQ|Stringifier",
         meta = (
             BlueprintAutocast,
+            Keywords = "STRING",
             DisplayName = "To String (SSphericalVectorRates)",
             CompactNodeTitle = "->",
             ScriptMethod = "ToString",
@@ -5237,9 +5449,10 @@ public:
     static FString Conv_SSphericalVectorRatesToString(const FSSphericalVectorRates& value);
 
     UFUNCTION(BlueprintPure,
-        Category = "MaxQ|Debug",
+        Category = "MaxQ|Stringifier",
         meta = (
             BlueprintAutocast,
+            Keywords = "STRING",
             DisplayName = "To String (SLatitudinaVectorRates)",
             CompactNodeTitle = "->",
             ScriptMethod = "ToString",
@@ -5248,9 +5461,10 @@ public:
     static FString Conv_SLatitudinaVectorRatesToString(const FSLatitudinalVectorRates& value);
 
     UFUNCTION(BlueprintPure,
-        Category = "MaxQ|Debug",
+        Category = "MaxQ|Stringifier",
         meta = (
             BlueprintAutocast,
+            Keywords = "STRING",
             DisplayName = "To String (SCylindricalVectorRates)",
             CompactNodeTitle = "->",
             ScriptMethod = "ToString",
@@ -5259,9 +5473,10 @@ public:
     static FString Conv_SCylindricalVectorRatesToString(const FSCylindricalVectorRates& value);
 
     UFUNCTION(BlueprintPure,
-        Category = "MaxQ|Debug",
+        Category = "MaxQ|Stringifier",
         meta = (
             BlueprintAutocast,
+            Keywords = "STRING",
             DisplayName = "To String (SConicElements)",
             CompactNodeTitle = "->",
             ScriptMethod = "ToString",
@@ -5269,30 +5484,305 @@ public:
             ))
     static FString Conv_SConicElementsToString(const FSConicElements& value);
 
+    UFUNCTION(BlueprintPure,
+        Category = "MaxQ|Stringifier",
+        meta = (
+            BlueprintAutocast,
+            Keywords = "STRING",
+            DisplayName = "To String (SComplexScalar)",
+            CompactNodeTitle = "->",
+            ScriptMethod = "ToString",
+            ToolTip = "Converts a SComplexScalar to a String"
+            ))
     static FString Conv_SComplexScalarToString(const FSComplexScalar& value);
+
+    UFUNCTION(BlueprintPure,
+        Category = "MaxQ|Stringifier",
+        meta = (
+            BlueprintAutocast,
+            Keywords = "STRING",
+            DisplayName = "To String (SEulerAngles)",
+            CompactNodeTitle = "->",
+            ScriptMethod = "ToString",
+            ToolTip = "Converts a SEulerAngles to a String"
+            ))
     static FString Conv_SEulerAnglesToString(const FSEulerAngles& value);
+
+    UFUNCTION(BlueprintPure,
+        Category = "MaxQ|Stringifier",
+        meta = (
+            BlueprintAutocast,
+            Keywords = "STRING",
+            DisplayName = "To String (SEulerAngularState)",
+            CompactNodeTitle = "->",
+            ScriptMethod = "ToString",
+            ToolTip = "Converts a SEulerAngularState to a String"
+            ))
     static FString Conv_SEulerAngularStateToString(const FSEulerAngularState& value);
+
+    UFUNCTION(BlueprintPure,
+        Category = "MaxQ|Stringifier",
+        meta = (
+            BlueprintAutocast,
+            Keywords = "STRING",
+            DisplayName = "To String (SStateTransform)",
+            CompactNodeTitle = "->",
+            ScriptMethod = "ToString",
+            ToolTip = "Converts a SStateTransform to a String"
+            ))
     static FString Conv_SStateTransformToString(const FSStateTransform& value);
+
+    UFUNCTION(BlueprintPure,
+        Category = "MaxQ|Stringifier",
+        meta = (
+            BlueprintAutocast,
+            Keywords = "STRING",
+            DisplayName = "To String (SRotationMatrix)",
+            CompactNodeTitle = "->",
+            ScriptMethod = "ToString",
+            ToolTip = "Converts a SRotationMatrix to a String"
+            ))
     static FString Conv_SRotationMatrixToString(const FSRotationMatrix& value);
+
+    UFUNCTION(BlueprintPure,
+        Category = "MaxQ|Stringifier",
+        meta = (
+            BlueprintAutocast,
+            Keywords = "STRING",
+            DisplayName = "To String (SEllipse)",
+            CompactNodeTitle = "->",
+            ScriptMethod = "ToString",
+            ToolTip = "Converts a SEllipse to a String"
+            ))
     static FString Conv_SEllipseToString(const FSEllipse& value);
+
+    UFUNCTION(BlueprintPure,
+        Category = "MaxQ|Stringifier",
+        meta = (
+            BlueprintAutocast,
+            Keywords = "STRING",
+            DisplayName = "To String (SPlane)",
+            CompactNodeTitle = "->",
+            ScriptMethod = "ToString",
+            ToolTip = "Converts a SPlane to a String"
+            ))
     static FString Conv_SPlaneToString(const FSPlane& value);
+
+    UFUNCTION(BlueprintPure,
+        Category = "MaxQ|Stringifier",
+        meta = (
+            BlueprintAutocast,
+            Keywords = "STRING",
+            DisplayName = "To String (SEulerAngular)",
+            CompactNodeTitle = "->",
+            ScriptMethod = "ToString",
+            ToolTip = "Converts a SEulerAngular to a String"
+            ))
     static FString Conv_SEulerAngularTransformToString(const FSEulerAngularTransform& value);
-    static FString Conv_SWindowSegmentToString(const FSEquinoctialElements& value);
+
+    UFUNCTION(BlueprintPure,
+        Category = "MaxQ|Stringifier",
+        meta = (
+            BlueprintAutocast,
+            Keywords = "STRING",
+            DisplayName = "To String (SEquinoctialElements)",
+            CompactNodeTitle = "->",
+            ScriptMethod = "ToString",
+            ToolTip = "Converts a SEquinoctialElements to a String"
+            ))
+    static FString Conv_SEquinoctialElementsToString(const FSEquinoctialElements& value);
+
+    UFUNCTION(BlueprintPure,
+        Category = "MaxQ|Stringifier",
+        meta = (
+            BlueprintAutocast,
+            Keywords = "STRING",
+            DisplayName = "To String (SWindowSegment)",
+            CompactNodeTitle = "->",
+            ScriptMethod = "ToString",
+            ToolTip = "Converts a SWindowSegment to a String"
+            ))
     static FString Conv_SWindowSegmentToString(const FSWindowSegment& value);
+
+    UFUNCTION(BlueprintPure,
+        Category = "MaxQ|Stringifier",
+        meta = (
+            BlueprintAutocast,
+            Keywords = "STRING",
+            DisplayName = "To String (SPointingType2Observation)",
+            CompactNodeTitle = "->",
+            ScriptMethod = "ToString",
+            ToolTip = "Converts a SPointingType2Observation to a String"
+            ))
     static FString Conv_SPointingType2ObservationToString(const FSPointingType2Observation& value);
+
+    UFUNCTION(BlueprintPure,
+        Category = "MaxQ|Stringifier",
+        meta = (
+            BlueprintAutocast,
+            Keywords = "STRING",
+            DisplayName = "To String (SPointingType1Observation)",
+            CompactNodeTitle = "->",
+            ScriptMethod = "ToString",
+            ToolTip = "Converts a SPointingType1Observation to a String"
+            ))
     static FString Conv_SPointingType1ObservationToString(const FSPointingType1Observation& value);
+
+    UFUNCTION(BlueprintPure,
+        Category = "MaxQ|Stringifier",
+        meta = (
+            BlueprintAutocast,
+            Keywords = "STRING",
+            DisplayName = "To String (SPointingType5Observation)",
+            CompactNodeTitle = "->",
+            ScriptMethod = "ToString",
+            ToolTip = "Converts a SPointingType5Observation to a String"
+            ))
     static FString Conv_SPointingType5ObservationToString(const FSPointingType5Observation& value);
+
+    UFUNCTION(BlueprintPure,
+        Category = "MaxQ|Stringifier",
+        meta = (
+            BlueprintAutocast,
+            Keywords = "STRING",
+            DisplayName = "To String (SPKType5Observation)",
+            CompactNodeTitle = "->",
+            ScriptMethod = "ToString",
+            ToolTip = "Converts a SPKType5Observation to a String"
+            ))
     static FString Conv_SPKType5ObservationToString(const FSPKType5Observation& value);
+
+    UFUNCTION(BlueprintPure,
+        Category = "MaxQ|Stringifier",
+        meta = (
+            BlueprintAutocast,
+            Keywords = "STRING",
+            DisplayName = "To String (STermptPoint)",
+            CompactNodeTitle = "->",
+            ScriptMethod = "ToString",
+            ToolTip = "Converts a STermptPoint to a String"
+            ))
     static FString Conv_STermptPointToString(const FSTermptPoint& value);
+
+    UFUNCTION(BlueprintPure,
+        Category = "MaxQ|Stringifier",
+        meta = (
+            BlueprintAutocast,
+            Keywords = "STRING",
+            DisplayName = "To String (STermptCut)",
+            CompactNodeTitle = "->",
+            ScriptMethod = "ToString",
+            ToolTip = "Converts a STermptCut to a String"
+            ))
     static FString Conv_STermptCutToString(const FSTermptCut& value);
+
+    UFUNCTION(BlueprintPure,
+        Category = "MaxQ|Stringifier",
+        meta = (
+            BlueprintAutocast,
+            Keywords = "STRING",
+            DisplayName = "To String (STLEGeophysicalConstants)",
+            CompactNodeTitle = "->",
+            ScriptMethod = "ToString",
+            ToolTip = "Converts a STLEGeophysicalConstants to a String"
+            ))
     static FString Conv_STLEGeophysicalConstantsToString(const FSTLEGeophysicalConstants& value);
+
+    UFUNCTION(BlueprintPure,
+        Category = "MaxQ|Stringifier",
+        meta = (
+            BlueprintAutocast,
+            Keywords = "STRING",
+            DisplayName = "To String (SLimptPoint)",
+            CompactNodeTitle = "->",
+            ScriptMethod = "ToString",
+            ToolTip = "Converts a SLimptPoint to a String"
+            ))
     static FString Conv_SLimptPointToString(const FSLimptPoint& value);
+
+    UFUNCTION(BlueprintPure,
+        Category = "MaxQ|Stringifier",
+        meta = (
+            BlueprintAutocast,
+            Keywords = "STRING",
+            DisplayName = "To String (SLimptCut)",
+            CompactNodeTitle = "->",
+            ScriptMethod = "ToString",
+            ToolTip = "Converts a SLimptCut to a String"
+            ))
     static FString Conv_SLimptCutToString(const FSLimptCut& value);
+
+    UFUNCTION(BlueprintPure,
+        Category = "MaxQ|Stringifier",
+        meta = (
+            BlueprintAutocast,
+            Keywords = "STRING",
+            DisplayName = "To String (SPKType15Observation)",
+            CompactNodeTitle = "->",
+            ScriptMethod = "ToString",
+            ToolTip = "Converts a SPKType15Observation to a String"
+            ))
     static FString Conv_SPKType15ObservationToString(const FSPKType15Observation& value);
+
+    UFUNCTION(BlueprintPure,
+        Category = "MaxQ|Stringifier",
+        meta = (
+            BlueprintAutocast,
+            Keywords = "STRING",
+            DisplayName = "To String (STwoLineElements)",
+            CompactNodeTitle = "->",
+            ScriptMethod = "ToString",
+            ToolTip = "Converts a STwoLineElements to a String"
+            ))
     static FString Conv_STwoLineElementsToString(const FSTwoLineElements& value);
+
+
+    UFUNCTION(BlueprintPure,
+        Category = "MaxQ|Stringifier",
+        meta = (
+            BlueprintAutocast,
+            Keywords = "STRING",
+            DisplayName = "To String (SRay)",
+            CompactNodeTitle = "->",
+            ScriptMethod = "ToString",
+            ToolTip = "Converts a SRay to a String"
+            ))
     static FString Conv_SRayToString(const FSRay& value);
+
+    UFUNCTION(BlueprintPure,
+        Category = "MaxQ|Stringifier",
+        meta = (
+            BlueprintAutocast,
+            Keywords = "STRING",
+            DisplayName = "To String (SDLADescr)",
+            CompactNodeTitle = "->",
+            ScriptMethod = "ToString",
+            ToolTip = "Converts a SDLADescr to a String"
+            ))
     static FString Conv_SDLADescrToString(const FSDLADescr& value);
+
+    UFUNCTION(BlueprintPure,
+        Category = "MaxQ|Stringifier",
+        meta = (
+            BlueprintAutocast,
+            Keywords = "STRING",
+            DisplayName = "To String (SDSKDescr)",
+            CompactNodeTitle = "->",
+            ScriptMethod = "ToString",
+            ToolTip = "Converts a SDSKDescr to a String"
+            ))
     static FString Conv_SDSKDescrToString(const FSDSKDescr& value);
+
+    UFUNCTION(BlueprintPure,
+        Category = "MaxQ|Stringifier",
+        meta = (
+            BlueprintAutocast,
+            Keywords = "STRING",
+            DisplayName = "To String (SPlateIndices)",
+            CompactNodeTitle = "->",
+            ScriptMethod = "ToString",
+            ToolTip = "Converts a SPlateIndices to a String"
+            ))
     static FString Conv_SPlateIndicesToString(const FSPlateIndices& value);
 
     /* Multiplication (A * B) */
@@ -5316,19 +5806,19 @@ public:
     static FSEphemerisTime Add_SEphemerisTimeSEphemerisPeriod(const FSEphemerisTime& A, const FSEphemerisPeriod& B);
 
     /** Returns true if A is greater than B (A > B) */
-    UFUNCTION(BlueprintPure, meta = (DisplayName = "time > time", CompactNodeTitle = ">", Keywords = "> greater"), Category = "MaxQ|Math|DateTime")
+    UFUNCTION(BlueprintPure, meta = (DisplayName = "time > time", CompactNodeTitle = ">", Keywords = "> greater"), Category = "MaxQ|Math|Time")
     static bool Greater_SEphemerisTimeSEphemerisTime(const FSEphemerisTime& A, const FSEphemerisTime& B);
 
     /** Returns true if A is less than B (A < B) */
-    UFUNCTION(BlueprintPure, meta = (DisplayName = "time < time", CompactNodeTitle = "<", Keywords = "< less"), Category = "MaxQ|Math|DateTime")
+    UFUNCTION(BlueprintPure, meta = (DisplayName = "time < time", CompactNodeTitle = "<", Keywords = "< less"), Category = "MaxQ|Math|Time")
     static bool Less_SEphemerisTimeSEphemerisTime(const FSEphemerisTime& A, const FSEphemerisTime& B);
 
     /** Returns true if A is greater than B (A > B) */
-    UFUNCTION(BlueprintPure, meta = (DisplayName = "period > period", CompactNodeTitle = ">", Keywords = "> greater"), Category = "MaxQ|Math|DateTime")
+    UFUNCTION(BlueprintPure, meta = (DisplayName = "period > period", CompactNodeTitle = ">", Keywords = "> greater"), Category = "MaxQ|Math|Time")
     static bool Greater_SEphemerisPeriodSEphemerisPeriod(const FSEphemerisPeriod& A, const FSEphemerisPeriod& B);
 
     /** Returns true if A is less than B (A < B) */
-    UFUNCTION(BlueprintPure, meta = (DisplayName = "period < period", CompactNodeTitle = "<", Keywords = "< less"), Category = "MaxQ|Math|DateTime")
+    UFUNCTION(BlueprintPure, meta = (DisplayName = "period < period", CompactNodeTitle = "<", Keywords = "< less"), Category = "MaxQ|Math|Time")
     static bool Less_SEphemerisPeriodSEphemerisPeriod(const FSEphemerisPeriod& A, const FSEphemerisPeriod& B);
 
     /* Addition (A + B) */
@@ -5478,11 +5968,11 @@ public:
     static FSVelocityVector Add_SVelocityVectorSVelocityVector(const FSVelocityVector& A, const FSVelocityVector& B);
 
     /* Multiplication (A * B) */
-    UFUNCTION(BlueprintPure, meta = (DisplayName = "speed * vector", CompactNodeTitle = "*", Keywords = "* multiply"), Category = "MaxQ|Math|Velocity")
+    UFUNCTION(BlueprintPure, meta = (DisplayName = "speed * vector", CompactNodeTitle = "*", Keywords = "* multiply"), Category = "MaxQ|Math|Speed")
     static FSVelocityVector Multiply_SSpeedSDimensionlessVector(const FSSpeed& A, const FSDimensionlessVector& B);
 
     /* Multiplication (A * B) */
-    UFUNCTION(BlueprintPure, meta = (DisplayName = "distance * vector", CompactNodeTitle = "*", Keywords = "* multiply"), Category = "MaxQ|Math|Velocity")
+    UFUNCTION(BlueprintPure, meta = (DisplayName = "distance * dimensionless", CompactNodeTitle = "*", Keywords = "* multiply"), Category = "MaxQ|Math|Distance")
     static FSDistanceVector Multiply_SDistanceSDimensionlessVector(const FSDistance& A, const FSDimensionlessVector& B);
 
     UFUNCTION(BlueprintPure, meta = (DisplayName = "vector * double", CompactNodeTitle = "*", Keywords = "* multiply"), Category = "MaxQ|Math|Dimensionless")
@@ -5500,44 +5990,45 @@ public:
     UFUNCTION(BlueprintPure, meta = (DisplayName = "velocity + velocity", CompactNodeTitle = "+", Keywords = "+ add plus", CommutativeAssociativeBinaryOperator = "true"), Category = "MaxQ|Math|Dimensionless")
     static FSDimensionlessVector Add_SDimensionlessVectorSDimensionlessVector(const FSDimensionlessVector& A, const FSDimensionlessVector& B);
 
-    UFUNCTION(BlueprintPure, meta = (DisplayName = "speed * vector", CompactNodeTitle = "*", Keywords = "* multiply"), Category = "MaxQ|Math|Velocity")
+    // Multipication works fine, so may deprecate this in the future.
+    UFUNCTION(BlueprintPure, meta = (DisplayName = "speed * vector", CompactNodeTitle = "*", Keywords = "* multiply"), Category = "MaxQ|Math|Speed")
     static FSVelocityVector SpeedToVelocity(const FSSpeed& A, const FSDimensionlessVector& B);
 
-    UFUNCTION(BlueprintPure, meta = (DisplayName = "speed * vector", CompactNodeTitle = "*", Keywords = "* multiply"), Category = "MaxQ|Math|Velocity")
+    // Multipication works fine, so may deprecate this in the future.
+    UFUNCTION(BlueprintPure, meta = (DisplayName = "distance * dimensionless", CompactNodeTitle = "*", Keywords = "* multiply"), Category = "MaxQ|Math|Distance")
     static FSDistanceVector DistanceToVector(const FSDistance& A, const FSDimensionlessVector& B);
+
 
     UFUNCTION(BlueprintPure, meta = (DisplayName = "double * vector", CompactNodeTitle = "*", Keywords = "* multiply"), Category = "MaxQ|Math|Dimensionless")
     static FSDimensionlessVector ScaleDimensionlessVector(double A, const FSDimensionlessVector& B);
 
     // Negation
     UFUNCTION(BlueprintPure, meta = (ScriptMethod = "Negated", ScriptOperator = "neg"), Category = "MaxQ|Math|Distance")
-    static FSDistance NegateSDistance(const FSDistance& A);
+    static FSDistance NegateSDistance(const FSDistance& d);
 
     UFUNCTION(BlueprintPure, meta = (ScriptMethod = "Negated", ScriptOperator = "neg"), Category = "MaxQ|Math|Speed")
-    static FSSpeed NegateSSpeed(const FSSpeed& A);
+    static FSSpeed NegateSSpeed(const FSSpeed& v);
 
     UFUNCTION(BlueprintPure, meta = (ScriptMethod = "Negated", ScriptOperator = "neg"), Category = "MaxQ|Math|Angle")
-    static FSAngle NegateSAngle(const FSAngle& A);
+    static FSAngle NegateSAngle(const FSAngle& Th);
 
     UFUNCTION(BlueprintPure, meta = (ScriptMethod = "Negated", ScriptOperator = "neg"), Category = "MaxQ|Math|Time")
-    static FSEphemerisPeriod NegateSEphemerisPeriod(const FSEphemerisPeriod& A);
+    static FSEphemerisPeriod NegateSEphemerisPeriod(const FSEphemerisPeriod& T);
 
     UFUNCTION(BlueprintPure, meta = (ScriptMethod = "Negated", ScriptOperator = "neg"), Category = "MaxQ|Math|Dimensionless")
-    static FSDimensionlessVector NegateSDimensionlessVector(const FSDimensionlessVector& A);
+    static FSDimensionlessVector NegateSDimensionlessVector(const FSDimensionlessVector& V);
 
     UFUNCTION(BlueprintPure, meta = (ScriptMethod = "Negated", ScriptOperator = "neg"), Category = "MaxQ|Math|Distance")
-    static FSDistanceVector NegateSDistanceVector(const FSDistanceVector& A);
+    static FSDistanceVector NegateSDistanceVector(const FSDistanceVector& r);
 
     UFUNCTION(BlueprintPure, meta = (ScriptMethod = "Negated", ScriptOperator = "neg"), Category = "MaxQ|Math|Velocity")
-    static FSVelocityVector NegateSVelocityVector(const FSVelocityVector& A);
+    static FSVelocityVector NegateSVelocityVector(const FSVelocityVector& v);
 
     UFUNCTION(BlueprintPure, meta = (ScriptMethod = "Negated", ScriptOperator = "neg"), Category = "MaxQ|Math|Angular Rate")
-    static FSAngularRate NegateSAngularRate(const FSAngularRate& A);
+    static FSAngularRate NegateSAngularRate(const FSAngularRate& dTh);
 
     UFUNCTION(BlueprintPure, meta = (ScriptMethod = "Negated", ScriptOperator = "neg"), Category = "MaxQ|Math|Angular Velocity")
-    static FSAngularVelocity NegateSAngularVelocity(const FSAngularVelocity& A);
-
-
+    static FSAngularVelocity NegateSAngularVelocity(const FSAngularVelocity& av);
 
     UFUNCTION(BlueprintPure, Category = "MaxQ|Math|Time", meta = (ToolTip = "Creates a simple ephemeris time window"))
     static void SingleEtWindow(
@@ -5699,7 +6190,7 @@ public:
     );
 
     UFUNCTION(BlueprintPure,
-        Category = "MaxQ|Types",
+        Category = "MaxQ|Angle",
         meta = (
             Keywords = "CONVERSION, COORDINATES",
             ToolTip = "Normalizes angle 0 to 2*PI radians"
@@ -5710,7 +6201,7 @@ public:
         );
 
     UFUNCTION(BlueprintPure,
-        Category = "MaxQ|Types",
+        Category = "MaxQ|Angle",
         meta = (
             Keywords = "CONVERSION, COORDINATES",
             ToolTip = "Normalizes angle -PI to +PI radians"
@@ -5722,7 +6213,7 @@ public:
 
 
     UFUNCTION(BlueprintPure,
-        Category = "MaxQ|Types",
+        Category = "MaxQ|Swizzle|To LHS",
         meta = (
             BlueprintAutocast,
             Keywords = "CONVERSION, COORDINATES, SWIZZLE",
@@ -5734,7 +6225,7 @@ public:
         );
 
     UFUNCTION(BlueprintPure,
-        Category = "MaxQ|Types",
+        Category = "MaxQ|Swizzle|To LHS",
         meta = (
             BlueprintAutocast,
             Keywords = "CONVERSION, COORDINATES, SWIZZLE",
@@ -5746,7 +6237,7 @@ public:
         );
 
     UFUNCTION(BlueprintPure,
-        Category = "MaxQ|Types",
+        Category = "MaxQ|Swizzle|To LHS",
         meta = (
             BlueprintAutocast,
             Keywords = "CONVERSION, COORDINATES, SWIZZLE",
@@ -5758,7 +6249,7 @@ public:
         );
 
     UFUNCTION(BlueprintPure,
-        Category = "MaxQ|Types",
+        Category = "MaxQ|Swizzle|To RHS",
         meta = (
             BlueprintAutocast,
             Keywords = "CONVERSION, COORDINATES, SWIZZLE",
@@ -5770,7 +6261,7 @@ public:
         );
 
     UFUNCTION(BlueprintPure,
-        Category = "MaxQ|Types",
+        Category = "MaxQ|Swizzle|To RHS",
         meta = (
             BlueprintAutocast,
             Keywords = "CONVERSION, COORDINATES, SWIZZLE",
@@ -5782,7 +6273,7 @@ public:
         );
 
     UFUNCTION(BlueprintPure,
-        Category = "MaxQ|Types",
+        Category = "MaxQ|Swizzle|To RHS",
         meta = (
             BlueprintAutocast,
             Keywords = "CONVERSION, COORDINATES, SWIZZLE",
@@ -5795,7 +6286,7 @@ public:
 
 
     UFUNCTION(BlueprintPure,
-        Category = "MaxQ|Types",
+        Category = "MaxQ|Swizzle|To RHS",
         meta = (
             BlueprintAutocast,
             Keywords = "CONVERSION, COORDINATES, SWIZZLE",
@@ -5807,7 +6298,7 @@ public:
     );
 
     UFUNCTION(BlueprintPure,
-        Category = "MaxQ|Types",
+        Category = "MaxQ|Swizzle|To LHS",
         meta = (
             BlueprintAutocast,
             Keywords = "CONVERSION, COORDINATES, SWIZZLE",
@@ -5819,7 +6310,7 @@ public:
     );
 
     UFUNCTION(BlueprintPure,
-        Category = "MaxQ|Types",
+        Category = "MaxQ|Stringifier",
         meta = (
             BlueprintAutocast,
             DisplayName = "To String (SAngularVelocity)",
@@ -5832,7 +6323,7 @@ public:
     );
 
     UFUNCTION(BlueprintPure,
-        Category = "MaxQ|Types",
+        Category = "MaxQ|Stringifier",
         meta = (
             BlueprintAutocast,
             DisplayName = "To String (SQuaternion)",
@@ -5846,10 +6337,10 @@ public:
 
 
     UFUNCTION(BlueprintPure,
-        Category = "MaxQ|Types",
+        Category = "MaxQ|Swizzle|To LHS",
         meta = (
             BlueprintAutocast,
-            Keywords = "CONVERSION, COORDINATES, SWIZZLE, SWAZZLE",
+            Keywords = "CONVERSION, COORDINATES, SWIZZLE, SWAZZLE, ROTATION",
             CompactNodeTitle = "Swizzle To UE",
             ToolTip = "Convert/Swizzle a Spice quaternion (double precision, RHS) to a UE Quat (single precision, LHS)"
             ))
@@ -5857,28 +6348,63 @@ public:
 
     /// <summary>Demotes a quaternion to a UE FQuat</summary>
     UFUNCTION(BlueprintPure,
-        Category = "MaxQ|Types",
+        Category = "MaxQ|Swizzle|To RHS",
         meta = (
             BlueprintAutocast,
-            Keywords = "CONVERSION, COORDINATES, SWIZZLE, SWAZZLE",
+            Keywords = "CONVERSION, COORDINATES, SWIZZLE, SWAZZLE, ROTATION",
             CompactNodeTitle = "Swizzle From UE",
             ToolTip = "Convert/Swizzle a UE Quat (single precision, LHS) to a Spice quaternion (double precision, RHS)"
             ))
     static FSQuaternion Conv_QuatToSQuaternion(const FQuat& value);
 
+
     UFUNCTION(BlueprintPure,
-        Category = "MaxQ|Types",
+        Category = "MaxQ|Stringifier",
         meta = (
             BlueprintAutocast,
+            DisplayName = "To String (SQuaternionDerivative)",
+            CompactNodeTitle = "->",
+            ScriptMethod = "ToString",
+            ToolTip = "Converts a SQuaternionDerivative to a String"
+            ))
+    static FString Conv_SQuaternionDerivativeToString(const FSQuaternionDerivative& value);
+
+    UFUNCTION(BlueprintPure,
+        Category = "MaxQ|Swizzle|To LHS",
+        meta = (
+            BlueprintAutocast,
+            Keywords = "CONVERSION, COORDINATES, SWIZZLE, SWAZZLE, ROTATION",
+            CompactNodeTitle = "Swizzle To UE",
+            ToolTip = "Converts a Quaternion Derivative to a Vector4"
+            ))
+    static FVector4 Conv_SQuaternionDerivativeToVector4(const FSQuaternionDerivative& value);
+
+    /// <summary>Demotes a quaternion to a UE FQuat</summary>
+    UFUNCTION(BlueprintPure,
+        Category = "MaxQ|Swizzle|To RHS",
+        meta = (
+            BlueprintAutocast,
+            Keywords = "CONVERSION, COORDINATES, SWIZZLE, SWAZZLE, ROTATION",
+            CompactNodeTitle = "Swizzle From UE",
+            ToolTip = "Convert/Swizzle a UE Vector4 (single precision, LHS) to a Spice quaternion (double precision, RHS)"
+            ))
+    static FSQuaternionDerivative Conv_Vector4ToSQuaternionDerivative(const FVector4& value);
+
+    UFUNCTION(BlueprintPure,
+        Category = "MaxQ|Rotation",
+        meta = (
+            BlueprintAutocast,
+            Keywords = "CONVERSION, COORDINATES, ROTATION",
             CompactNodeTitle = "To SQuaternion",
             ToolTip = "Converts a Spice quaternion to a Rotation Matrix"
             ))
     static FSRotationMatrix Conv_SQuaternionToSRotationMatrix(const FSQuaternion& value);
 
     UFUNCTION(BlueprintPure,
-        Category = "MaxQ|Types",
+        Category = "MaxQ|Rotation",
         meta = (
             BlueprintAutocast,
+            Keywords = "CONVERSION, COORDINATES, ROTATION",
             CompactNodeTitle = "To SQuaternion",
             ToolTip = "Converts a Spice RotationMatrix to a Quaternion"
             ))
@@ -6017,65 +6543,65 @@ public:
 
     // Inertial Reference Frames
     UFUNCTION(BlueprintPure, meta = (ToolTip = "J2000 EME Inertial Frame (aligned with J2000 Earth Mean Equator)", ScriptConstant = "J2000", ScriptConstantHost = "Const"), Category = "MaxQ|Frames|Inertial")
-        static FString Const_J2000();
+    static FString Const_J2000();
 
     UFUNCTION(BlueprintPure, meta = (ToolTip = "ECLIPJ2000 Inertial Frame (aligned with J2000 Ecliptic Plane)", ScriptConstant = "ECLIPJ2000", ScriptConstantHost = "Const"), Category = "MaxQ|Frames|Inertial")
-        static FString Const_ECLIPJ2000();
+    static FString Const_ECLIPJ2000();
 
     UFUNCTION(BlueprintPure, meta = (ToolTip = "MARSIAU Inertial Frame (aligned with Mars Mean Equator)", ScriptConstant = "MARSIAU", ScriptConstantHost = "Const"), Category = "MaxQ|Frames|Inertial")
-        static FString Const_MARSIAU();
+    static FString Const_MARSIAU();
 
     UFUNCTION(BlueprintPure, meta = (ToolTip = "Galactic System II Inertial Frame", ScriptConstant = "GALACTIC", ScriptConstantHost = "Const"), Category = "MaxQ|Frames|Inertial")
-        static FString Const_GALACTIC();
+    static FString Const_GALACTIC();
 
     // Body-Fixed Reference Frames
     UFUNCTION(BlueprintPure, meta = (ToolTip = "Earth Fixed-Frame, but you should use EARTH_FIXED, or ITRF if you have high precision kernels)", ScriptConstant = "IAU_EARTH", ScriptConstantHost = "Const"), Category = "MaxQ|Frames|Fixed")
-        static FString Const_IAU_EARTH();
+    static FString Const_IAU_EARTH();
 
     UFUNCTION(BlueprintPure, meta = (ToolTip = "EARTH_FIXED Earth-Fixed Frame (requires earth_fixed.tf)", ScriptConstant = "EARTH_FIXED", ScriptConstantHost = "Const"), Category = "MaxQ|Frames|Fixed")
-        static FString Const_EARTH_FIXED();
+    static FString Const_EARTH_FIXED();
 
     UFUNCTION(BlueprintPure, meta = (ToolTip = "ITRF93 Earth-fixed Frame (binary PCK)", ScriptConstant = "ITRF93", ScriptConstantHost = "Const"), Category = "MaxQ|Frames|Fixed")
-        static FString Const_ITRF93();
+    static FString Const_ITRF93();
 
     UFUNCTION(BlueprintPure, meta = (ToolTip = "IAU_MOON Moon-Fixed Frame", ScriptConstant = "IAU_MOON", ScriptConstantHost = "Const"), Category = "MaxQ|Frames|Fixed")
-        static FString Const_IAU_MOON();
+    static FString Const_IAU_MOON();
 
     UFUNCTION(BlueprintPure, meta = (ToolTip = "IAU_SUN Sun-Fixed Frame", ScriptConstant = "IAU_SUN", ScriptConstantHost = "Const"), Category = "MaxQ|Frames|Fixed")
-        static FString Const_IAU_SUN();
+    static FString Const_IAU_SUN();
 
     UFUNCTION(BlueprintPure, meta = (ToolTip = "IAU_MERCURY Mercury-Fixed Frame", ScriptConstant = "IAU_MERCURY", ScriptConstantHost = "Const"), Category = "MaxQ|Frames|Fixed")
-        static FString Const_IAU_MERCURY();
+    static FString Const_IAU_MERCURY();
 
     UFUNCTION(BlueprintPure, meta = (ToolTip = "IAU_VENUS Venus-Fixed Frame", ScriptConstant = "IAU_VENUS", ScriptConstantHost = "Const"), Category = "MaxQ|Frames|Fixed")
-        static FString Const_IAU_VENUS();
+    static FString Const_IAU_VENUS();
 
     UFUNCTION(BlueprintPure, meta = (ToolTip = "IAU_MARS Mars-Fixed Frame", ScriptConstant = "IAU_MARS", ScriptConstantHost = "Const"), Category = "MaxQ|Frames|Fixed")
-        static FString Const_IAU_MARS();
+    static FString Const_IAU_MARS();
 
     UFUNCTION(BlueprintPure, meta = (ToolTip = "IAU_DEIMOS Deimos-Fixed Frame", ScriptConstant = "IAU_DEIMOS", ScriptConstantHost = "Const"), Category = "MaxQ|Frames|Fixed")
-        static FString Const_IAU_DEIMOS();
+    static FString Const_IAU_DEIMOS();
 
     UFUNCTION(BlueprintPure, meta = (ToolTip = "IAU_PHOBOS Phobos-Fixed Frame", ScriptConstant = "IAU_PHOBOS", ScriptConstantHost = "Const"), Category = "MaxQ|Frames|Fixed")
-        static FString Const_IAU_PHOBOS();
+    static FString Const_IAU_PHOBOS();
 
     UFUNCTION(BlueprintPure, meta = (ToolTip = "IAU_JUPITER Jupiter-Fixed Frame", ScriptConstant = "IAU_JUPITER", ScriptConstantHost = "Const"), Category = "MaxQ|Frames|Fixed")
-        static FString Const_IAU_JUPITER();
+    static FString Const_IAU_JUPITER();
 
     UFUNCTION(BlueprintPure, meta = (ToolTip = "IAU_SATURN Saturn-Fixed Frame", ScriptConstant = "IAU_SATURN", ScriptConstantHost = "Const"), Category = "MaxQ|Frames|Fixed")
-        static FString Const_IAU_SATURN();
+    static FString Const_IAU_SATURN();
 
     UFUNCTION(BlueprintPure, meta = (ToolTip = "IAU_NEPTUNE Naptune-Fixed Frame", ScriptConstant = "IAU_NEPTUNE", ScriptConstantHost = "Const"), Category = "MaxQ|Frames|Fixed")
-        static FString Const_IAU_NEPTUNE();
+    static FString Const_IAU_NEPTUNE();
 
     UFUNCTION(BlueprintPure, meta = (ToolTip = "IAU_URANUS Uranus-Fixed Frame", ScriptConstant = "IAU_URANUS", ScriptConstantHost = "Const"), Category = "MaxQ|Frames|Fixed")
-        static FString Const_IAU_URANUS();
+    static FString Const_IAU_URANUS();
 
     UFUNCTION(BlueprintPure, meta = (ToolTip = "IAU_PLUTO Pluto-Fixed Frame", ScriptConstant = "IAU_PLUTO", ScriptConstantHost = "Const"), Category = "MaxQ|Frames|Fixed")
-        static FString Const_IAU_PLUTO();
+    static FString Const_IAU_PLUTO();
 
     UFUNCTION(BlueprintPure, meta = (ToolTip = "IAU_CERES Ceres-Fixed Frame", ScriptConstant = "IAU_CERES", ScriptConstantHost = "Const"), Category = "MaxQ|Frames|Fixed")
-        static FString Const_IAU_CERES();
+    static FString Const_IAU_CERES();
 
     // Naif Body Names
     // See
@@ -6083,155 +6609,155 @@ public:
     // https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/req/naif_ids.html#Planets%20and%20Satellites
     // Etc
     UFUNCTION(BlueprintPure, meta = (ToolTip = "EARTH Naif Name", ScriptConstant = "EARTH", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
-        static FString Const_EARTH();
+    static FString Const_EARTH();
 
     UFUNCTION(BlueprintPure, meta = (ToolTip = "MOON Naif Name", ScriptConstant = "MOON", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
-        static FString Const_MOON();
+    static FString Const_MOON();
 
     UFUNCTION(BlueprintPure, meta = (ToolTip = "EMB (Earth-Moon Barycenter) Naif Name, equivalent to EARTH_BARYCENTER", ScriptConstant = "EMB", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
-        static FString Const_EMB();
+    static FString Const_EMB();
 
     UFUNCTION(BlueprintPure, meta = (ToolTip = "EARTH_BARYCENTER (Earth-Moon Barycenter) Naif Name, equivalent to EMB", ScriptConstant = "EARTH_BARYCENTER", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
-        static FString Const_EARTH_BARYCENTER();
+    static FString Const_EARTH_BARYCENTER();
 
     UFUNCTION(BlueprintPure, meta = (ToolTip = "SUN (Mass) Naif Name", ScriptConstant = "SUN", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
-        static FString Const_SUN();
+    static FString Const_SUN();
 
     UFUNCTION(BlueprintPure, meta = (ToolTip = "SSB (Solar System Barycenter) Naif Name, equivalent to SOLAR_SYSTEM_BARYCENTER", ScriptConstant = "SSB", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
-        static FString Const_SSB();
+    static FString Const_SSB();
 
     UFUNCTION(BlueprintPure, meta = (ToolTip = "SOLAR_SYSTEM_BARYCENTER (Solar System Barycenter) Naif Name, equivalent to SSB", ScriptConstant = "SOLAR_SYSTEM_BARYCENTER", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
-        static FString Const_SOLAR_SYSTEM_BARYCENTER();
+    static FString Const_SOLAR_SYSTEM_BARYCENTER();
 
     UFUNCTION(BlueprintPure, meta = (ToolTip = "MERCURY", ScriptConstant = "MERCURY", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
-        static FString Const_MERCURY();
+    static FString Const_MERCURY();
 
     UFUNCTION(BlueprintPure, meta = (ToolTip = "VENUS Naif Name", ScriptConstant = "VENUS", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
-        static FString Const_VENUS();
+    static FString Const_VENUS();
 
     UFUNCTION(BlueprintPure, meta = (ToolTip = "MARS Naif Name", ScriptConstant = "MARS", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
-        static FString Const_MARS();
+    static FString Const_MARS();
 
     UFUNCTION(BlueprintPure, meta = (ToolTip = "PHOBOS Naif Name", ScriptConstant = "PHOBOS", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
-        static FString Const_PHOBOS();
+    static FString Const_PHOBOS();
 
     UFUNCTION(BlueprintPure, meta = (ToolTip = "DEIMOS Naif Name", ScriptConstant = "DEIMOS", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
-        static FString Const_DEIMOS();
+    static FString Const_DEIMOS();
 
     UFUNCTION(BlueprintPure, meta = (ToolTip = "MARS_BARYCENTER Naif Name", ScriptConstant = "MARS_BARYCENTER", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
-        static FString Const_MARS_BARYCENTER();
+    static FString Const_MARS_BARYCENTER();
 
     UFUNCTION(BlueprintPure, meta = (ToolTip = "JUPITER Naif Name", ScriptConstant = "JUPITER", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
-        static FString Const_JUPITER();
+    static FString Const_JUPITER();
 
     UFUNCTION(BlueprintPure, meta = (ToolTip = "JUPITER_BARYCENTER Naif Name", ScriptConstant = "JUPITER_BARYCENTER", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
-        static FString Const_JUPITER_BARYCENTER();
+    static FString Const_JUPITER_BARYCENTER();
 
     UFUNCTION(BlueprintPure, meta = (ToolTip = "SATURN Naif Name", ScriptConstant = "SATURN", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
-        static FString Const_SATURN();
+    static FString Const_SATURN();
 
     UFUNCTION(BlueprintPure, meta = (ToolTip = "SATURN_BARYCENTER Naif Name", ScriptConstant = "SATURN_BARYCENTER", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
-        static FString Const_SATURN_BARYCENTER();
+    static FString Const_SATURN_BARYCENTER();
 
     UFUNCTION(BlueprintPure, meta = (ToolTip = "URANUS Naif Name", ScriptConstant = "URANUS", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
-        static FString Const_URANUS();
+    static FString Const_URANUS();
 
     UFUNCTION(BlueprintPure, meta = (ToolTip = "URANUS_BARYCENTER Naif Name", ScriptConstant = "URANUS_BARYCENTER", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
-        static FString Const_URANUS_BARYCENTER();
+    static FString Const_URANUS_BARYCENTER();
 
     UFUNCTION(BlueprintPure, meta = (ToolTip = "NEPTUNE Naif Name", ScriptConstant = "NEPTUNE", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
-        static FString Const_NEPTUNE();
+    static FString Const_NEPTUNE();
 
     UFUNCTION(BlueprintPure, meta = (ToolTip = "NEPTUNE_BARYCENTER Naif Name", ScriptConstant = "NEPTUNE_BARYCENTER", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
-        static FString Const_NEPTUNE_BARYCENTER();
+    static FString Const_NEPTUNE_BARYCENTER();
 
     UFUNCTION(BlueprintPure, meta = (ToolTip = "PLUTO Naif Name", ScriptConstant = "PLUTO", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
-        static FString Const_PLUTO();
+    static FString Const_PLUTO();
 
     UFUNCTION(BlueprintPure, meta = (ToolTip = "PLUTO_BARYCENTER Naif Name", ScriptConstant = "PLUTO_BARYCENTER", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
-        static FString Const_PLUTO_BARYCENTER();
+    static FString Const_PLUTO_BARYCENTER();
 
     UFUNCTION(BlueprintPure, meta = (ToolTip = "Asteroid CERES Naif Name", ScriptConstant = "CERES", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
-        static FString Const_CERES();
+    static FString Const_CERES();
 
     // Spacecraft
     // See: https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/req/naif_ids.html#Spacecraft
     UFUNCTION(BlueprintPure, meta = (ToolTip = "Spacecraft PIONEER-6 Naif Name", ScriptConstant = "PIONEER_6", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
-        static FString Const_PIONEER_6();
+    static FString Const_PIONEER_6();
 
     UFUNCTION(BlueprintPure, meta = (ToolTip = "Spacecraft PIONEER-7 Naif Name", ScriptConstant = "PIONEER_7", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
-        static FString Const_PIONEER_7();
+    static FString Const_PIONEER_7();
 
     UFUNCTION(BlueprintPure, meta = (ToolTip = "Spacecraft VIKING 1 ORBITER Naif Name", ScriptConstant = "VIKING_1_ORBITER", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
-        static FString Const_VIKING_1_ORBITER();
+    static FString Const_VIKING_1_ORBITER();
 
     UFUNCTION(BlueprintPure, meta = (ToolTip = "Spacecraft VIKING 2 ORBITER Naif Name", ScriptConstant = "VIKING_2_ORBITER", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
-        static FString Const_VIKING_2_ORBITER();
+    static FString Const_VIKING_2_ORBITER();
 
     UFUNCTION(BlueprintPure, meta = (ToolTip = "Spacecraft VOYAGER 1 Naif Name", ScriptConstant = "VOYAGER_1", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
-        static FString Const_VOYAGER_1();
+    static FString Const_VOYAGER_1();
 
     UFUNCTION(BlueprintPure, meta = (ToolTip = "Spacecraft VOYAGER 2 Naif Name", ScriptConstant = "VOYAGER_2", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
-        static FString Const_VOYAGER_2();
+    static FString Const_VOYAGER_2();
 
     UFUNCTION(BlueprintPure, meta = (ToolTip = "Spacecraft HST Naif Name, equivalent to HUBBLE SPACE TELESCOPE", ScriptConstant = "HST", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
-        static FString Const_HST();
+    static FString Const_HST();
 
     UFUNCTION(BlueprintPure, meta = (ToolTip = "Spacecraft HUBBLE SPACE TELESCOPE Naif Name, equivalent to HST", ScriptConstant = "HUBBLE_SPACE_TELESCOPE", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
-        static FString Const_HUBBLE_SPACE_TELESCOPE();
+    static FString Const_HUBBLE_SPACE_TELESCOPE();
 
     UFUNCTION(BlueprintPure, meta = (ToolTip = "Spacecraft MARS PATHFINDER Naif Name", ScriptConstant = "MARS_PATHFINDER", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
-        static FString Const_MARS_PATHFINDER();
+    static FString Const_MARS_PATHFINDER();
 
     UFUNCTION(BlueprintPure, meta = (ToolTip = "Spacecraft PARKER SOLAR PROBE Naif Name", ScriptConstant = "PARKER_SOLAR_PROBE", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
-        static FString Const_PARKER_SOLAR_PROBE();
+    static FString Const_PARKER_SOLAR_PROBE();
 
     UFUNCTION(BlueprintPure, meta = (ToolTip = "Spacecraft JWST Naif Name, equivalent to JAMES WEBB SPACE TELESCOPE", ScriptConstant = "JWST", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
-        static FString Const_JWST();
+    static FString Const_JWST();
 
     UFUNCTION(BlueprintPure, meta = (ToolTip = "Spacecraft JAMES WEBB SPACE TELESCOPE Naif Name, equivalent to JWST", ScriptConstant = "JAMES_WEBB_SPACE_TELESCOPE", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
-        static FString Const_JAMES_WEBB_SPACE_TELESCOPE();
+    static FString Const_JAMES_WEBB_SPACE_TELESCOPE();
 
     UFUNCTION(BlueprintPure, meta = (ToolTip = "Spacecraft INSIGHT Naif Name", ScriptConstant = "INSIGHT", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
-        static FString Const_INSIGHT();
+    static FString Const_INSIGHT();
 
     UFUNCTION(BlueprintPure, meta = (ToolTip = "Spacecraft OPPORTUNITY Naif Name", ScriptConstant = "OPPORTUNITY", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
-        static FString Const_OPPORTUNITY();
+    static FString Const_OPPORTUNITY();
 
     UFUNCTION(BlueprintPure, meta = (ToolTip = "Spacecraft SPIRIT Naif Name", ScriptConstant = "SPIRIT", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
-        static FString Const_SPIRIT();
+    static FString Const_SPIRIT();
 
     // Ground stations
     // https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/req/naif_ids.html#Ground%20Stations.
     UFUNCTION(BlueprintPure, meta = (ToolTip = "Ground Station NOTO Naif Name", ScriptConstant = "NOTO", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
-        static FString Const_NOTO();
+    static FString Const_NOTO();
 
     UFUNCTION(BlueprintPure, meta = (ToolTip = "Ground Station NEW NORCIA Naif Name", ScriptConstant = "NEW_NORCIA", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
-        static FString Const_NEW_NORCIA();
+    static FString Const_NEW_NORCIA();
 
     UFUNCTION(BlueprintPure, meta = (ToolTip = "Ground Station GOLDSTONE Naif Name", ScriptConstant = "GOLDSTONE", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
-        static FString Const_GOLDSTONE();
+    static FString Const_GOLDSTONE();
 
     UFUNCTION(BlueprintPure, meta = (ToolTip = "Ground Station CANBERRA Naif Name", ScriptConstant = "CANBERRA", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
-        static FString Const_CANBERRA();
+    static FString Const_CANBERRA();
 
     UFUNCTION(BlueprintPure, meta = (ToolTip = "Ground Station MADRID Naif Name", ScriptConstant = "MADRID", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
-        static FString Const_MADRID();
+    static FString Const_MADRID();
 
     UFUNCTION(BlueprintPure, meta = (ToolTip = "Ground Station USUDA Naif Name", ScriptConstant = "USUDA", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
-        static FString Const_USUDA();
+    static FString Const_USUDA();
 
     UFUNCTION(BlueprintPure, meta = (ToolTip = "Ground Station DSS-05 Naif Name", ScriptConstant = "DSS_05", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
-        static FString Const_DSS_05();
+    static FString Const_DSS_05();
 
     UFUNCTION(BlueprintPure, meta = (ToolTip = "Ground Station PARKES Naif Name", ScriptConstant = "PARKES", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
-        static FString Const_PARKES();
+    static FString Const_PARKES();
 
     UFUNCTION(BlueprintPure, meta = (ToolTip = "GM Property Name", ScriptConstant = "GM", ScriptConstantHost = "Const"), Category = "MaxQ|Kernel|Property Names")
-        static FString Const_GM();
+    static FString Const_GM();
 
     UFUNCTION(BlueprintPure, meta = (ToolTip = "RADII Property Name", ScriptConstant = "RADII", ScriptConstantHost = "Const"), Category = "MaxQ|Kernel|Property Names")
-        static FString Const_RADII();
+    static FString Const_RADII();
 
 #pragma endregion NaifNames
 };
@@ -6239,6 +6765,79 @@ public:
 #pragma region NaifFNames
 namespace MaxQ::Constants
 {
+    namespace Literal
+    {
+        constexpr TCHAR* J2000{ TEXT("J2000") };
+        constexpr TCHAR* ECLIPJ2000{ TEXT("ECLIPJ2000") };
+        constexpr TCHAR* MARSIAU{ TEXT("MARSIAU") };
+        constexpr TCHAR* GALACTIC{ TEXT("GALACTIC") };
+        constexpr TCHAR* IAU_EARTH{ TEXT("IAU_EARTH") };
+        constexpr TCHAR* EARTH_FIXED{ TEXT("EARTH_FIXED") };
+        constexpr TCHAR* ITRF93{ TEXT("ITRF93") };
+        constexpr TCHAR* IAU_MOON{ TEXT("IAU_MOON") };
+        constexpr TCHAR* IAU_SUN{ TEXT("IAU_SUN") };
+        constexpr TCHAR* IAU_MERCURY{ TEXT("IAU_MERCURY") };
+        constexpr TCHAR* IAU_VENUS{ TEXT("IAU_VENUS") };
+        constexpr TCHAR* IAU_MARS{ TEXT("IAU_MARS") };
+        constexpr TCHAR* IAU_DEIMOS{ TEXT("IAU_DEIMOS") };
+        constexpr TCHAR* IAU_PHOBOS{ TEXT("IAU_PHOBOS") };
+        constexpr TCHAR* IAU_JUPITER{ TEXT("IAU_JUPITER") };
+        constexpr TCHAR* IAU_SATURN{ TEXT("IAU_SATURN") };
+        constexpr TCHAR* IAU_NEPTUNE{ TEXT("IAU_NEPTUNE") };
+        constexpr TCHAR* IAU_URANUS{ TEXT("IAU_URANUS") };
+        constexpr TCHAR* IAU_PLUTO{ TEXT("IAU_PLUTO") };
+        constexpr TCHAR* IAU_CERES{ TEXT("IAU_CERES") };
+        constexpr TCHAR* EARTH{ TEXT("EARTH") };
+        constexpr TCHAR* MOON{ TEXT("MOON") };
+        constexpr TCHAR* EMB{ TEXT("EMB") };
+        constexpr TCHAR* EARTH_BARYCENTER{ TEXT("EARTH_BARYCENTER") };
+        constexpr TCHAR* SUN{ TEXT("SUN") };
+        constexpr TCHAR* SSB{ TEXT("SSB") };
+        constexpr TCHAR* SOLAR_SYSTEM_BARYCENTER{ TEXT("SOLAR_SYSTEM_BARYCENTER") };
+        constexpr TCHAR* MERCURY{ TEXT("MERCURY") };
+        constexpr TCHAR* VENUS{ TEXT("VENUS") };
+        constexpr TCHAR* MARS{ TEXT("MARS") };
+        constexpr TCHAR* PHOBOS{ TEXT("PHOBOS") };
+        constexpr TCHAR* DEIMOS{ TEXT("DEIMOS") };
+        constexpr TCHAR* MARS_BARYCENTER{ TEXT("MARS_BARYCENTER") };
+        constexpr TCHAR* JUPITER{ TEXT("JUPITER") };
+        constexpr TCHAR* JUPITER_BARYCENTER{ TEXT("JUPITER_BARYCENTER") };
+        constexpr TCHAR* SATURN{ TEXT("SATURN") };
+        constexpr TCHAR* SATURN_BARYCENTER{ TEXT("SATURN_BARYCENTER") };
+        constexpr TCHAR* URANUS{ TEXT("URANUS") };
+        constexpr TCHAR* URANUS_BARYCENTER{ TEXT("URANUS_BARYCENTER") };
+        constexpr TCHAR* NEPTUNE{ TEXT("NEPTUNE") };
+        constexpr TCHAR* NEPTUNE_BARYCENTER{ TEXT("NEPTUNE_BARYCENTER") };
+        constexpr TCHAR* PLUTO{ TEXT("PLUTO") };
+        constexpr TCHAR* PLUTO_BARYCENTER{ TEXT("PLUTO_BARYCENTER") };
+        constexpr TCHAR* CERES{ TEXT("CERES") };
+        constexpr TCHAR* PIONEER_6{ TEXT("PIONEER-6") };
+        constexpr TCHAR* PIONEER_7{ TEXT("PIONEER-7") };
+        constexpr TCHAR* VIKING_1_ORBITER{ TEXT("VIKING 1 ORBITER") };
+        constexpr TCHAR* VIKING_2_ORBITER{ TEXT("VIKING 2 ORBITER") };
+        constexpr TCHAR* VOYAGER_1{ TEXT("VOYAGER 1") };
+        constexpr TCHAR* VOYAGER_2{ TEXT("VOYAGER 2") };
+        constexpr TCHAR* HST{ TEXT("HST") };
+        constexpr TCHAR* HUBBLE_SPACE_TELESCOPE{ TEXT("HUBBLE SPACE TELESCOPE") };
+        constexpr TCHAR* MARS_PATHFINDER{ TEXT("MARS PATHFINDER") };
+        constexpr TCHAR* PARKER_SOLAR_PROBE{ TEXT("PARKER SOLAR PROBE") };
+        constexpr TCHAR* JWST{ TEXT("JWST") };
+        constexpr TCHAR* JAMES_WEBB_SPACE_TELESCOPE{ TEXT("JAMES WEBB SPACE TELESCOPE") };
+        constexpr TCHAR* INSIGHT{ TEXT("INSIGHT") };
+        constexpr TCHAR* OPPORTUNITY{ TEXT("OPPORTUNITY") };
+        constexpr TCHAR* SPIRIT{ TEXT("SPIRIT") };
+        constexpr TCHAR* NOTO{ TEXT("NOTO") };
+        constexpr TCHAR* NEW_NORCIA{ TEXT("NEW NORCIA") };
+        constexpr TCHAR* GOLDSTONE{ TEXT("GOLDSTONE") };
+        constexpr TCHAR* CANBERRA{ TEXT("CANBERRA") };
+        constexpr TCHAR* MADRID{ TEXT("MADRID") };
+        constexpr TCHAR* USUDA{ TEXT("USUDA") };
+        constexpr TCHAR* DSS_05{ TEXT("DSS-05") };
+        constexpr TCHAR* PARKES{ TEXT("PARKES") };
+        constexpr TCHAR* GM{ TEXT("GM") };
+        constexpr TCHAR* RADII{ TEXT("RADII") };
+    }
+
     extern SPICE_API const FString J2000;
     extern SPICE_API const FString ECLIPJ2000;
     extern SPICE_API const FString MARSIAU;
@@ -6378,10 +6977,6 @@ namespace MaxQ::Constants
     extern SPICE_API const FName Name_PARKES;
     extern SPICE_API const FName Name_GM;
     extern SPICE_API const FName Name_RADII;
+
 #pragma endregion NaifFNames
-
 }
-
-// Don't leak preprocessor definitions, which may affect jumbo/unity builds.
-#undef FSDistance_km_to_M
-#undef FSDistance_M_to_km

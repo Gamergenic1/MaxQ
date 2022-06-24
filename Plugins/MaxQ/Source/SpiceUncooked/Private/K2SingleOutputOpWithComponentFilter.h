@@ -10,10 +10,10 @@
 #include "CoreMinimal.h"
 #include "K2Type.h"
 #include "K2Conversion.h"
-#include "K2OperationNOutput.generated.h"
+#include "K2SingleOutputOpWithComponentFilter.generated.h"
 
 USTRUCT()
-struct FK2OperationNOutput
+struct FK2SingleOutputOpWithComponentFilter
 {
     GENERATED_BODY()
         
@@ -25,7 +25,7 @@ struct FK2OperationNOutput
     UPROPERTY() FK2Type Final;
     UPROPERTY() FK2Conversion Conversion;
 
-    FK2OperationNOutput()
+    FK2SingleOutputOpWithComponentFilter()
     {
         ShortName = FName();
         FullName = FString();
@@ -36,7 +36,7 @@ struct FK2OperationNOutput
         Selector = EK2_ComponentSelector::All;
     }
 
-    FK2OperationNOutput(FName _name, FName _k2NodeName, const FK2Type& _final)
+    FK2SingleOutputOpWithComponentFilter(FName _name, FName _k2NodeName, const FK2Type& _final)
     {
         ShortName = _name;
         FullName = _name.ToString();
@@ -47,10 +47,10 @@ struct FK2OperationNOutput
         Selector = EK2_ComponentSelector::All;
     }
 
-    FK2OperationNOutput(FName _name, FName _k2NodeName, const FK2Conversion& _conversion)
+    FK2SingleOutputOpWithComponentFilter(FName _name, FName _k2NodeName, const FK2Conversion& _conversion)
     {
         ShortName = _name;
-        FullName = _name.ToString();;
+        FullName = _name.ToString();
         K2NodeName = _k2NodeName;
         Intermediate = _conversion.In;
         Selector = _conversion.Selector;
@@ -58,7 +58,7 @@ struct FK2OperationNOutput
         Conversion = _conversion;
     }
 
-    FK2OperationNOutput(const FK2OperationNOutput& other)
+    FK2SingleOutputOpWithComponentFilter(const FK2SingleOutputOpWithComponentFilter& other)
     {
         ShortName = other.ShortName;
         FullName = other.FullName;
@@ -69,7 +69,7 @@ struct FK2OperationNOutput
         Selector = other.Selector;
     }
 
-    FK2OperationNOutput& operator= (const FK2OperationNOutput& other)
+    FK2SingleOutputOpWithComponentFilter& operator= (const FK2SingleOutputOpWithComponentFilter& other)
     {
         // self-assignment guard
         if (this == &other)

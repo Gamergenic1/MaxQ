@@ -6,7 +6,7 @@
 // GitHub:         https://github.com/Gamergenic1/MaxQ/ 
 
 #include "K2Node_gdpool.h"
-#include "K2Node_OperationNOutput.h"
+#include "K2Node_OutWithSelectorOp.h"
 #include "K2Utilities.h"
 #include "SpiceK2.h"
 
@@ -26,7 +26,7 @@ using namespace ENodeTitleType;
 
 UK2Node_gdpool::UK2Node_gdpool()
 {
-    OperationsMap = TMap<FName, FK2OperationNOutput>();
+    OperationsMap = TMap<FName, FK2SingleOutputOpWithComponentFilter>();
 
     auto op = DoubleOp(); op.FullName = op.ShortName.ToString() + "\nReturn value from the kernel pool"; OperationsMap.Emplace(op.ShortName, op);
     op = RealOp(); op.FullName = op.ShortName.ToString() + "\nReturn value from the kernel pool"; OperationsMap.Emplace(op.ShortName, op);
@@ -44,6 +44,21 @@ UK2Node_gdpool::UK2Node_gdpool()
     op = WildcardOp(); op.FullName = op.ShortName.ToString() + "\nReturn value from the kernel pool"; OperationsMap.Emplace(op.ShortName, op);
 
     CurrentOperation = op;
+
+#if WITH_EDITOR
+    // Ensure the specified actions actually exist!
+    for (const auto& [shortname, _op] : OperationsMap)
+    {
+        if (!_op.K2NodeName.IsNone())
+        {
+            check(USpiceK2::StaticClass()->FindFunctionByName(_op.K2NodeName));
+        }
+        if (!_op.Conversion.ConversionName.IsNone())
+        {
+            check(USpiceK2::StaticClass()->FindFunctionByName(_op.Conversion.ConversionName));
+        }
+    }
+#endif
 }
 
 
@@ -68,7 +83,7 @@ FText UK2Node_gdpool::GetNodeTitle(Type TitleType) const
 
 FText UK2Node_gdpool::GetMenuCategory() const
 {
-    return LOCTEXT("Category", "Spice|Api|Kernel");
+    return LOCTEXT("Category", "MaxQ|Kernel");
 }
 
 
@@ -156,89 +171,89 @@ void UK2Node_gdpool::ExpandOperationNode(FKismetCompilerContext& CompilerContext
     }
 }
 
-SPICEUNCOOKED_API FK2OperationNOutput UK2Node_gdpool::WildcardOp()
+SPICEUNCOOKED_API const FK2SingleOutputOpWithComponentFilter& UK2Node_gdpool::WildcardOp()
 {
-    static auto v = FK2OperationNOutput(FName("gdpool"), FName("gdpool_double_K2"), FK2Type::Wildcard());
+    static auto v {FK2SingleOutputOpWithComponentFilter(FName("gdpool"), USpiceK2::gdpool_double, FK2Type::Wildcard())};
     v.FullName = v.ShortName.ToString() + "\nReturn value from the kernel pool";
     return v;
 }
 
-SPICEUNCOOKED_API FK2OperationNOutput UK2Node_gdpool::DoubleOp()
+SPICEUNCOOKED_API const FK2SingleOutputOpWithComponentFilter& UK2Node_gdpool::DoubleOp()
 {
-    static auto v = FK2OperationNOutput(FName("gdpool Double"), FName("gdpool_double_K2"), FK2Type::Double());
+    static auto v {FK2SingleOutputOpWithComponentFilter(FName("gdpool Double"), USpiceK2::gdpool_double, FK2Type::Double())};
     return v;
 }
 
-SPICEUNCOOKED_API FK2OperationNOutput UK2Node_gdpool::RealOp()
+SPICEUNCOOKED_API const FK2SingleOutputOpWithComponentFilter& UK2Node_gdpool::RealOp()
 {
-    static auto v = FK2OperationNOutput(FName("gdpool Real"), FName("gdpool_double_K2"), FK2Type::Real());
+    static auto v {FK2SingleOutputOpWithComponentFilter(FName("gdpool Real"), USpiceK2::gdpool_double, FK2Type::Real())};
     return v;
 }
 
-SPICEUNCOOKED_API FK2OperationNOutput UK2Node_gdpool::ArrayDoubleOp()
+SPICEUNCOOKED_API const FK2SingleOutputOpWithComponentFilter& UK2Node_gdpool::ArrayDoubleOp()
 {
-    static auto v = FK2OperationNOutput(FName("gdpool Array(Double)"), FName("gdpool_array_K2"), FK2Type::DoubleArray());
+    static auto v {FK2SingleOutputOpWithComponentFilter(FName("gdpool Array(Double)"), USpiceK2::gdpool_array, FK2Type::DoubleArray())};
     return v;
 }
 
-SPICEUNCOOKED_API FK2OperationNOutput UK2Node_gdpool::ArrayRealOp()
+SPICEUNCOOKED_API const FK2SingleOutputOpWithComponentFilter& UK2Node_gdpool::ArrayRealOp()
 {
-    static auto v = FK2OperationNOutput(FName("gdpool Array(Real)"), FName("gdpool_array_K2"), FK2Type::RealArray());
+    static auto v {FK2SingleOutputOpWithComponentFilter(FName("gdpool Array(Real)"), USpiceK2::gdpool_array, FK2Type::RealArray())};
     return v;
 }
 
-SPICEUNCOOKED_API FK2OperationNOutput UK2Node_gdpool::SDimensionlessVectorOp()
+SPICEUNCOOKED_API const FK2SingleOutputOpWithComponentFilter& UK2Node_gdpool::SDimensionlessVectorOp()
 {
-    static auto v = FK2OperationNOutput(FName("gdpool SDimensionlessVector"), FName("gdpool_vector_K2"), FK2Type::SDimensionlessVector());
+    static auto v {FK2SingleOutputOpWithComponentFilter(FName("gdpool SDimensionlessVector"), USpiceK2::gdpool_vector, FK2Type::SDimensionlessVector())};
     return v;
 }
 
-SPICEUNCOOKED_API FK2OperationNOutput UK2Node_gdpool::SMassConstantOp()
+SPICEUNCOOKED_API const FK2SingleOutputOpWithComponentFilter& UK2Node_gdpool::SMassConstantOp()
 {
-    static auto v = FK2OperationNOutput(FName("gdpool SMassConstant"), FName("gdpool_double_K2"), FK2Conversion::DoubleToSMassConstant());
+    static auto v {FK2SingleOutputOpWithComponentFilter(FName("gdpool SMassConstant"), USpiceK2::gdpool_double, FK2Conversion::DoubleToSMassConstant())};
     return v;
 }
 
-SPICEUNCOOKED_API FK2OperationNOutput UK2Node_gdpool::SDistanceOp()
+SPICEUNCOOKED_API const FK2SingleOutputOpWithComponentFilter& UK2Node_gdpool::SDistanceOp()
 {
-    static auto v = FK2OperationNOutput(FName("gdpool SDistance"), FName("gdpool_double_K2"), FK2Conversion::DoubleToSDistance());
+    static auto v {FK2SingleOutputOpWithComponentFilter(FName("gdpool SDistance"), USpiceK2::gdpool_double, FK2Conversion::DoubleToSDistance())};
     return v;
 }
 
-SPICEUNCOOKED_API FK2OperationNOutput UK2Node_gdpool::SDegreesOp()
+SPICEUNCOOKED_API const FK2SingleOutputOpWithComponentFilter& UK2Node_gdpool::SDegreesOp()
 {
-    static auto v = FK2OperationNOutput(FName("gdpool SAngle(Degrees)"), FName("gdpool_double_K2"), FK2Conversion::DegreesToSAngle());
+    static auto v {FK2SingleOutputOpWithComponentFilter(FName("gdpool SAngle(Degrees)"), USpiceK2::gdpool_double, FK2Conversion::DegreesToSAngle())};
     return v;
 }
 
-SPICEUNCOOKED_API FK2OperationNOutput UK2Node_gdpool::SDistanceVectorOp()
+SPICEUNCOOKED_API const FK2SingleOutputOpWithComponentFilter& UK2Node_gdpool::SDistanceVectorOp()
 {
 
-    static auto v = FK2OperationNOutput(FName("gdpool SDistanceVector"), FName("gdpool_vector_K2"), FK2Conversion::SDimensionlessVectorToSDistanceVector());
+    static auto v {FK2SingleOutputOpWithComponentFilter(FName("gdpool SDistanceVector"), USpiceK2::gdpool_vector, FK2Conversion::SDimensionlessVectorToSDistanceVector())};
     return v;
 }
 
-SPICEUNCOOKED_API FK2OperationNOutput UK2Node_gdpool::SVelocityVectorOp()
+SPICEUNCOOKED_API const FK2SingleOutputOpWithComponentFilter& UK2Node_gdpool::SVelocityVectorOp()
 {
-    static auto v = FK2OperationNOutput(FName("gdpool SVelocityVector"), FName("gdpool_vector_K2"), FK2Conversion::SDimensionlessVectorToSVelocityVector());
+    static auto v {FK2SingleOutputOpWithComponentFilter(FName("gdpool SVelocityVector"), USpiceK2::gdpool_vector, FK2Conversion::SDimensionlessVectorToSVelocityVector())};
     return v;
 }
 
-SPICEUNCOOKED_API FK2OperationNOutput UK2Node_gdpool::SDistanceX()
+SPICEUNCOOKED_API const FK2SingleOutputOpWithComponentFilter& UK2Node_gdpool::SDistanceX()
 {
-    static auto v = FK2OperationNOutput(FName("gdpool SDistanceVector.X"), FName("gdpool_vector_K2"), FK2Conversion::SDimensionlessVectorXToSDistance());
+    static auto v {FK2SingleOutputOpWithComponentFilter(FName("gdpool SDistanceVector.X"), USpiceK2::gdpool_vector, FK2Conversion::SDimensionlessVectorXToSDistance())};
     return v;
 }
 
-SPICEUNCOOKED_API FK2OperationNOutput UK2Node_gdpool::SDistanceY()
+SPICEUNCOOKED_API const FK2SingleOutputOpWithComponentFilter& UK2Node_gdpool::SDistanceY()
 {
-    static auto v = FK2OperationNOutput(FName("gdpool SDistanceVector.Y"), FName("gdpool_vector_K2"), FK2Conversion::SDimensionlessVectorYToSDistance());
+    static auto v {FK2SingleOutputOpWithComponentFilter(FName("gdpool SDistanceVector.Y"), USpiceK2::gdpool_vector, FK2Conversion::SDimensionlessVectorYToSDistance())};
     return v;
 }
 
-SPICEUNCOOKED_API FK2OperationNOutput UK2Node_gdpool::SDistanceZ()
+SPICEUNCOOKED_API const FK2SingleOutputOpWithComponentFilter& UK2Node_gdpool::SDistanceZ()
 {
-    static auto v = FK2OperationNOutput(FName("gdpool SDistanceVector.Z"), FName("gdpool_vector_K2"), FK2Conversion::SDimensionlessVectorZToSDistance());
+    static auto v {FK2SingleOutputOpWithComponentFilter(FName("gdpool SDistanceVector.Z"), USpiceK2::gdpool_vector, FK2Conversion::SDimensionlessVectorZToSDistance())};
     return v;
 }
 
