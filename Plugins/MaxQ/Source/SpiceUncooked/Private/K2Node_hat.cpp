@@ -5,41 +5,34 @@
 // Documentation:  https://maxq.gamergenic.com/
 // GitHub:         https://github.com/Gamergenic1/MaxQ/ 
 
-#include "K2Node_minus.h"
+#include "K2Node_hat.h"
 #include "K2Utilities.h"
 #include "Kismet2/BlueprintEditorUtils.h"
 #include "ToolMenu.h"
 #include "K2Node_CallFunction.h"
 #include "SpiceK2.h"
 #include "SpicePlatformDefs.h"
-#include "K2SingleOutputOp.h"
+#include "K2SingleInputOp.h"
 //#include "EdGraphSchema_K2.h"
 //#include "KismetCompiler.h"
 
 
-#define LOCTEXT_NAMESPACE "K2Node_minus"
+#define LOCTEXT_NAMESPACE "K2Node_hat"
 
 
-UK2Node_minus::UK2Node_minus(const FObjectInitializer& ObjectInitializer)
+UK2Node_hat::UK2Node_hat(const FObjectInitializer& ObjectInitializer)
     : Super(ObjectInitializer)
 {
-    SupportedOperations.Add(FK2PassThroughOp{ "vminus dimensionless vector", USpiceK2::vminus_vector, FK2Type::SDimensionlessVector() });
-    SupportedOperations.Add(FK2PassThroughOp{ "vminus distance vector",  USpiceK2::vminus_vector, FK2Conversion::SDistanceVectorToSDimensionlessVector(), FK2Conversion::SDimensionlessVectorToSDistanceVector() });
-    SupportedOperations.Add(FK2PassThroughOp{ "vminus velocity vector",  USpiceK2::vminus_vector, FK2Conversion::SVelocityVectorToSDimensionlessVector(), FK2Conversion::SDimensionlessVectorToSVelocityVector() });
-    SupportedOperations.Add(FK2PassThroughOp{ "vminus angular velocity",  USpiceK2::vminus_vector, FK2Conversion::SAngularVelocityToSDimensionlessVector(), FK2Conversion::SDimensionlessVectorToSAngularVelocity() });
-    SupportedOperations.Add(FK2PassThroughOp{ "vminus dimensionless state vector",  USpiceK2::vminus_state_vector, FK2Type::SDimensionlessStateVector() });
-    SupportedOperations.Add(FK2PassThroughOp{ "vminus state vector", USpiceK2::vminus_state_vector, FK2Conversion::SStateVectorToSDimensionlessStateVector(), FK2Conversion::SDimensionlessStateVectorToSStateVector() });
+    SupportedOperations.Add(FK2SingleInputOp{ "vhat dimensionless vector", USpiceK2::vhat_vector, FK2Type::SDimensionlessVector() });
+    SupportedOperations.Add(FK2SingleInputOp{ "vhat distance vector",  USpiceK2::vhat_vector, FK2Conversion::SDistanceVectorToSDimensionlessVector() });
+    SupportedOperations.Add(FK2SingleInputOp{ "vhat velocity vector",  USpiceK2::vhat_vector, FK2Conversion::SVelocityVectorToSDimensionlessVector() });
+    SupportedOperations.Add(FK2SingleInputOp{ "vhat angular velocity",  USpiceK2::vhat_vector, FK2Conversion::SAngularVelocityToSDimensionlessVector() });
 
     for (const auto& op : SupportedOperations)
     {
         SupportedTypes.Add(op.OuterType);
 
 #if WITH_EDITOR
-        // Ensure the specified actions actually exist!
-        if (!op.InnerToOuterConversion.ConversionName.IsNone())
-        {
-            check(USpiceK2::StaticClass()->FindFunctionByName(op.InnerToOuterConversion.ConversionName));
-        }
         if (!op.OuterToInnerConversion.ConversionName.IsNone())
         {
             check(USpiceK2::StaticClass()->FindFunctionByName(op.OuterToInnerConversion.ConversionName));
@@ -54,7 +47,7 @@ UK2Node_minus::UK2Node_minus(const FObjectInitializer& ObjectInitializer)
 
 
 
-void UK2Node_minus::AllocateDefaultPins()
+void UK2Node_hat::AllocateDefaultPins()
 {
     Super::AllocateDefaultPins();
 
@@ -63,13 +56,15 @@ void UK2Node_minus::AllocateDefaultPins()
     auto InputPin{ CreatePin(EGPD_Input, UEdGraphSchema_K2::PC_Wildcard, FName("vin")) };
     InputPin->PinToolTip = TEXT("Input Vector");
 
-    auto OutputPin{ CreatePin(EGPD_Output, UEdGraphSchema_K2::PC_Wildcard, FName("vout")) };
-    OutputPin->PinToolTip = TEXT("Output Vector");
+    auto OutputPin{ CreatePin(EGPD_Output, UEdGraphSchema_K2::PC_Struct, FName("vout")) };
+    OutputPin->PinToolTip = TEXT("Output Vector (SDimensionlessVector)");
+    OutputPin->PinType.PinSubCategoryObject = FSDimensionlessVector::StaticStruct();
+    OutputPin->PinType.ContainerType = EPinContainerType::None;
 
     // The module is 'uncooked' and thus only compiles with editor data, but still...
 #if WITH_EDITORONLY_DATA
     InputPin->PinFriendlyName = LOCTEXT("v", "v");
-    OutputPin->PinFriendlyName = LOCTEXT("v_negated", "-v");
+    OutputPin->PinFriendlyName = LOCTEXT("v_unit", "v-hat");
 #endif
 
     if (!OperandType.Category.IsNone() && OperandType.Category != UEdGraphSchema_K2::PC_Wildcard)
@@ -77,27 +72,37 @@ void UK2Node_minus::AllocateDefaultPins()
         InputPin->PinType.PinCategory = OperandType.Category;
         InputPin->PinType.PinSubCategoryObject = OperandType.SubCategoryObject;
         InputPin->PinType.ContainerType = OperandType.Container;
-        OutputPin->PinType.PinCategory = OperandType.Category;
-        OutputPin->PinType.PinSubCategoryObject = OperandType.SubCategoryObject;
-        OutputPin->PinType.ContainerType = OperandType.Container;
     }
 }
 
 
-void UK2Node_minus::ReconstructNode()
+void UK2Node_hat::ReconstructNode()
 {
     Super::ReconstructNode();
 }
 
-void UK2Node_minus::ReallocatePinsDuringReconstruction(TArray<UEdGraphPin*>& OldPins)
+void UK2Node_hat::ReallocatePinsDuringReconstruction(TArray<UEdGraphPin*>& OldPins)
 {
     Super::ReallocatePinsDuringReconstruction(OldPins);
 }
 
-bool UK2Node_minus::IsConnectionDisallowed(const UEdGraphPin* MyPin, const UEdGraphPin* OtherPin, FString& OutReason) const
+bool UK2Node_hat::IsConnectionDisallowed(const UEdGraphPin* MyPin, const UEdGraphPin* OtherPin, FString& OutReason) const
 {
     const auto& MyPinType = MyPin->PinType;
     const auto& OtherPinType = OtherPin->PinType;
+
+    if (MyPin->Direction == EEdGraphPinDirection::EGPD_Output)
+    {
+        if(OtherPinType.PinCategory == UEdGraphSchema_K2::PC_Wildcard) return false;
+
+        if (!FK2Type::SDimensionlessVector().Matches(OtherPinType))
+        {
+            OutReason = TEXT("Result must match SDimensionlessVector");
+            return true;
+        }
+
+        return false;
+    }
 
     bool FixedType = !OperandType.Category.IsNone() && OperandType.Category != UEdGraphSchema_K2::PC_Wildcard;
 
@@ -131,12 +136,12 @@ bool UK2Node_minus::IsConnectionDisallowed(const UEdGraphPin* MyPin, const UEdGr
 }
 
 
-void UK2Node_minus::NotifyPinConnectionListChanged(UEdGraphPin* Pin)
+void UK2Node_hat::NotifyPinConnectionListChanged(UEdGraphPin* Pin)
 {
     Super::NotifyPinConnectionListChanged(Pin);
 }
 
-void UK2Node_minus::NodeConnectionListChanged()
+void UK2Node_hat::NodeConnectionListChanged()
 {
     Super::NodeConnectionListChanged();
 
@@ -146,6 +151,8 @@ void UK2Node_minus::NodeConnectionListChanged()
 
     for (auto& Pin : Pins)
     {
+        if (Pin->Direction == EEdGraphPinDirection::EGPD_Output) continue;
+
         for (UEdGraphPin* ConnectedPin : Pin->LinkedTo)
         {
             const auto& ConnectedPinType = ConnectedPin->PinType;
@@ -163,6 +170,8 @@ void UK2Node_minus::NodeConnectionListChanged()
     {
         for (auto& Pin : Pins)
         {
+            if (Pin->Direction == EEdGraphPinDirection::EGPD_Output) continue;
+
             auto& PinType = Pin->PinType;
 
             bool bUpdatePin = PinType.PinCategory != UEdGraphSchema_K2::PC_Wildcard;
@@ -199,6 +208,8 @@ void UK2Node_minus::NodeConnectionListChanged()
         {
             for (auto& Pin : Pins)
             {
+                if (Pin->Direction == EEdGraphPinDirection::EGPD_Output) continue;
+
                 auto& PinType = Pin->PinType;
 
                 bool bUpdatePin = !OperandType.Is(PinType);
@@ -216,18 +227,21 @@ void UK2Node_minus::NodeConnectionListChanged()
     }
 }
 
-void UK2Node_minus::PinTypeChanged(UEdGraphPin* Pin)
+void UK2Node_hat::PinTypeChanged(UEdGraphPin* Pin)
 {
     Super::PinTypeChanged(Pin);
 
     const auto& PinType { Pin->PinType };
+    if (Pin->Direction == EEdGraphPinDirection::EGPD_Output) return;
+
 
     // Update the tooltip
+    Pin->PinToolTip = TEXT("Input vector");
     for (const auto& Type : SupportedTypes)
     {
         if (Type.Is(PinType))
         {
-            Pin->PinToolTip = FString::Printf(TEXT("Packed Vector (%s)"), *(Type.GetDisplayNameString()));
+            Pin->PinToolTip = FString::Printf(TEXT("Input Vector (%s)"), *(Type.GetDisplayNameString()));
             break;
         }
     }
@@ -247,7 +261,7 @@ void UK2Node_minus::PinTypeChanged(UEdGraphPin* Pin)
 }
 
 
-void UK2Node_minus::NotifyConnectionChanged(UEdGraphPin* Pin, UEdGraphPin* Connection)
+void UK2Node_hat::NotifyConnectionChanged(UEdGraphPin* Pin, UEdGraphPin* Connection)
 {
     auto& PinType = Pin->PinType;
     auto& ConnectedPinType = Connection->PinType;
@@ -260,7 +274,7 @@ void UK2Node_minus::NotifyConnectionChanged(UEdGraphPin* Pin, UEdGraphPin* Conne
 }
 
 
-bool UK2Node_minus::CheckForErrors(FKismetCompilerContext& CompilerContext, FK2PassThroughOp& Operation)
+bool UK2Node_hat::CheckForErrors(FKismetCompilerContext& CompilerContext, FK2SingleInputOp& Operation)
 {
     for (const auto& op : SupportedOperations)
     {
@@ -276,25 +290,25 @@ bool UK2Node_minus::CheckForErrors(FKismetCompilerContext& CompilerContext, FK2P
 }
 
 
-FSlateIcon UK2Node_minus::GetIconAndTint(FLinearColor& OutColor) const
+FSlateIcon UK2Node_hat::GetIconAndTint(FLinearColor& OutColor) const
 {
     OutColor = FColor::Emerald;
     return FSlateIcon("EditorStyle", "Kismet.AllClasses.FunctionIcon");
 }
 
-FLinearColor UK2Node_minus::GetNodeTitleColor() const
+FLinearColor UK2Node_hat::GetNodeTitleColor() const
 {
     return NodeBackgroundColor;
 }
 
 
-void UK2Node_minus::ExpandNode(FKismetCompilerContext& CompilerContext, UEdGraph* SourceGraph)
+void UK2Node_hat::ExpandNode(FKismetCompilerContext& CompilerContext, UEdGraph* SourceGraph)
 {
     Super::ExpandNode(CompilerContext, SourceGraph);
 
     auto Schema = Cast< UEdGraphSchema_K2 >(GetSchema());
 
-    FK2PassThroughOp Operation;
+    FK2SingleInputOp Operation;
 
     if (CheckForErrors(CompilerContext, Operation))
     {
@@ -310,7 +324,7 @@ void UK2Node_minus::ExpandNode(FKismetCompilerContext& CompilerContext, UEdGraph
     InternalNode->AllocateDefaultPins();
     CompilerContext.MessageLog.NotifyIntermediateObjectCreation(InternalNode, this);
 
-    auto InternalIn = InternalNode->FindPinChecked(FName(USpiceK2::vminus_in));
+    auto InternalIn = InternalNode->FindPinChecked(FName(USpiceK2::vhat_in));
     auto InternalOut = InternalNode->GetReturnValuePin();
 
     if (!Operation.OuterToInnerConversion.ConversionName.IsNone())
@@ -333,34 +347,17 @@ void UK2Node_minus::ExpandNode(FKismetCompilerContext& CompilerContext, UEdGraph
     }
 
 
-    if (!Operation.InnerToOuterConversion.ConversionName.IsNone())
-    {
-        auto ConversionNode = CompilerContext.SpawnIntermediateNode<UK2Node_CallFunction>(this, SourceGraph);
-
-        ConversionNode->FunctionReference.SetExternalMember(Operation.InnerToOuterConversion.ConversionName, USpiceK2::StaticClass());
-        ConversionNode->AllocateDefaultPins();
-        CompilerContext.MessageLog.NotifyIntermediateObjectCreation(ConversionNode, this);
-
-        auto ConversionValueInput = ConversionNode->FindPinChecked(FName(USpiceK2::conv_input), EEdGraphPinDirection::EGPD_Input);
-        auto ConversionOut = ConversionNode->GetReturnValuePin();
-
-        Schema->TryCreateConnection(InternalOut, ConversionValueInput);
-        MovePinLinksOrCopyDefaults(CompilerContext, OutputPin, ConversionOut);
-    }
-    else
-    {
-        MovePinLinksOrCopyDefaults(CompilerContext, OutputPin, InternalOut);
-    }
+    MovePinLinksOrCopyDefaults(CompilerContext, OutputPin, InternalOut);
 
     BreakAllNodeLinks();
 }
 
-void UK2Node_minus::GetMenuActions(FBlueprintActionDatabaseRegistrar& ActionRegistrar) const
+void UK2Node_hat::GetMenuActions(FBlueprintActionDatabaseRegistrar& ActionRegistrar) const
 {
     RegisterAction(ActionRegistrar, GetClass());
 }
 
-FText UK2Node_minus::GetNodeTitle(ENodeTitleType::Type TitleType) const
+FText UK2Node_hat::GetNodeTitle(ENodeTitleType::Type TitleType) const
 {
     constexpr bool bUseShortNameForTitle{ true };
 
@@ -368,7 +365,7 @@ FText UK2Node_minus::GetNodeTitle(ENodeTitleType::Type TitleType) const
     {
     case ENodeTitleType::FullTitle:
         /** The full title, may be multiple lines. */
-        return LOCTEXT("ListViewTitle", "vminus (experimental)");
+        return LOCTEXT("ListViewTitle", "vhat (experimental)");
         if (!bUseShortNameForTitle && !OperandType.TypeName.IsNone())
         {
             return FText::FromString(FString::Printf(TEXT("vpack %s"), *OperandType.TypeName.ToString()));
@@ -376,33 +373,31 @@ FText UK2Node_minus::GetNodeTitle(ENodeTitleType::Type TitleType) const
         break;
     case ENodeTitleType::MenuTitle:
         /** Menu Title for context menus to be displayed in context menus referencing the node. */
-        return LOCTEXT("MenuTitle", "vminus - Negate vector (experimental)");
+        return LOCTEXT("MenuTitle", "vhat - Negate vector (experimental)");
     case ENodeTitleType::ListView:
         /** More concise, single line title. */
-        return LOCTEXT("ListViewTitle", "vminus - Negate vector (experimental)");
+        return LOCTEXT("ListViewTitle", "vhat - Negate vector (experimental)");
     }
 
-    return LOCTEXT("ShortTitle", "vminus");
+    return LOCTEXT("ShortTitle", "vhat");
 }
 
-
-
-FText UK2Node_minus::GetMenuCategory() const
+FText UK2Node_hat::GetMenuCategory() const
 {
     return LOCTEXT("Category", "MaxQ|Math|Vector");
 }
 
 
-FText UK2Node_minus::GetKeywords() const
+FText UK2Node_hat::GetKeywords() const
 {
-    return LOCTEXT("Keywords", "VECTOR, NEGATE, NEGATION, NEGATIVE, INVERSE");
+    return LOCTEXT("Keywords", "VECTOR, UNIT, HAT, NORMAL");
 }
 
 
-FText UK2Node_minus::GetTooltipText() const
+FText UK2Node_hat::GetTooltipText() const
 {
     
-    FText Tooltip = LOCTEXT("Tooltip", "Negate a MaxQ vector Type. E.g., return -V (by value).\nStill experimental/under testing.\nThe intent is to support limited wildcards in a single action.\n\nSupports");
+    FText Tooltip = LOCTEXT("Tooltip", "Compute unit vector from a MaxQ vector Type. E.g., return v-hat (by value).\nStill experimental/under testing.\nThe intent is to support limited wildcards in a single action.\n\nSupports");
 
     FText ListStart = LOCTEXT("ListStart", ":\n");
     FText ListSItemeparator = LOCTEXT("ListItemSeparator", ",\n");
