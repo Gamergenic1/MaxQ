@@ -499,6 +499,14 @@ void ASample01Actor::DumpKernelDiagnostics()
             GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, ErrorMessage);
         }
     }
+
+    FString LogString4;
+    USpiceDiagnostics::DumpLoadedKernelFiles(LogString4);
+
+    if (GEngine)
+    {
+        GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::White, LogString4);
+    }
 }
 
 

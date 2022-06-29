@@ -54,6 +54,7 @@ public:
         Category = "MaxQ|Utility|Kernel",
         meta = (
             Keywords = "UTILITY",
+            AdvancedDisplay = "ErrorIfNoFilesFound",
             ExpandEnumAsExecs = "ResultCode",
             ToolTip = "List files (path relative to /Content directory)"
             ))
@@ -61,7 +62,8 @@ public:
         ES_ResultCode& ResultCode,
         FString& ErrorMessage,
         TArray<FString>& kernelFileRelativePaths,
-        const FString& relativeDirectory = TEXT("NonAssetData/kernels")
+        const FString& relativeDirectory = TEXT("NonAssetData/kernels"),
+        bool ErrorIfNoFilesFound = true
         );
 
     UFUNCTION(BlueprintCallable,
@@ -118,6 +120,7 @@ public:
     UFUNCTION(BlueprintCallable,
         Category = "MaxQ|Kernel",
         meta = (
+            AdvancedDisplay = "PrintCallstack",
             Keywords = "UTILITY",
             ToolTip = "Clear all kernel file / kernel pool"
             ))
@@ -128,21 +131,24 @@ public:
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "UTILITY",
-            ToolTip = "Clear unload kernel file"
+            ToolTip = "Unload kernel file"
             ))
     static void unload(
         ES_ResultCode& ResultCode,
         FString& ErrorMessage,
-        const FString& absolutePath
+        const FString& relativeDirectory
     );
 
     UFUNCTION(BlueprintCallable,
         Category = "MaxQ|Kernel",
         meta = (
+            AdvancedDisplay = "PrintCallstack",
             Keywords = "UTILITY",
             ToolTip = "reset/init cspice"
             ))
-    static void init_all();
+    static void init_all(
+        bool PrintCallstack = false
+    );
 
     UFUNCTION(BlueprintCallable,
         Category = "MaxQ|Error",
@@ -190,7 +196,9 @@ public:
             Keywords = "ERROR",
             ToolTip = "Set Error Output Items"
             ))
-    static void set_errprt(ES_Items items);
+    static void set_errprt(
+        UPARAM(meta = (Bitmask, BitmaskEnum = "ES_Items")) int32 items =0x10
+        );
 
     UFUNCTION(BlueprintCallable,
         Category = "MaxQ|Error",
@@ -2566,6 +2574,49 @@ public:
             ToolTip = "Return the number of seconds in a tropical year"
             ))
     static void tyear_period(FSEphemerisPeriod& oneTropicalYear);
+
+    UFUNCTION(BlueprintCallable,
+        Category = "MaxQ|Kernel",
+        meta = (
+            ExpandEnumAsExecs = "FoundCode",
+            ShortToolTip = "Kernel Data",
+            ToolTip = "Return data for the nth kernel that is among a list of specified kernel types"
+            ))
+    static void kdata(
+        ES_FoundCode& FoundCode,
+        UPARAM(Meta = (ToolTip = "The relative path of the kernel file")) FString& file,
+        UPARAM(Meta = (ToolTip = "The type of the kernel")) ES_KernelType& filtyp,
+        UPARAM(Meta = (ToolTip = "Name of the source file used to load 'file'")) FString& srcfil,
+        UPARAM(Meta = (ToolTip = "The handle attached to 'file'")) int& handle,
+        UPARAM(Meta = (ToolTip = "The kinds of kernels to count", Bitmask, BitmaskEnum = "ES_KernelType")) int32 kind = 0x7f,
+        UPARAM(Meta = (ToolTip = "Index of kernel to fetch from the list of kernels")) int which = 0
+        );
+
+    UFUNCTION(BlueprintCallable,
+        Category = "MaxQ|Kernel",
+        meta = (
+            ExpandEnumAsExecs = "FoundCode",
+            ShortToolTip = "Kernel Information",
+            ToolTip = "Return information about a loaded kernel specified by name"
+            ))
+    static void kinfo(
+        UPARAM(Meta = (ToolTip = "The type of the kernel")) ES_KernelType& filtyp,
+        UPARAM(Meta = (ToolTip = "Name of the source file used to load 'file'")) FString& srcfil,
+        UPARAM(Meta = (ToolTip = "The handle attached to 'file'")) int& handle,
+        ES_FoundCode& FoundCode,
+        UPARAM(Meta = (ToolTip = "Name of a kernel to fetch information for")) const FString& file = TEXT("NonAssetData/kernels/pck00010.tpc")
+        );
+
+    UFUNCTION(BlueprintCallable,
+    Category = "MaxQ|Kernel",
+    meta = (
+        ShortToolTip = "Kernel Totals",
+        ToolTip = "Return the number of kernels of a specified type that are currently loaded via the Furnsh action."
+        ))
+    static void ktotal(
+        UPARAM(Meta = (ToolTip = "The number of kernels of type 'kind'")) int& count,
+        UPARAM(Meta = (ToolTip = "The kinds of kernels to count", Bitmask, BitmaskEnum = "ES_KernelType")) int32 kind = 0x7f
+        );
 
     UFUNCTION(BlueprintPure,
         Category = "MaxQ|Coordinates",

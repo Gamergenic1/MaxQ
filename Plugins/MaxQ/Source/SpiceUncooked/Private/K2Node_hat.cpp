@@ -368,7 +368,7 @@ FText UK2Node_hat::GetNodeTitle(ENodeTitleType::Type TitleType) const
         return LOCTEXT("ListViewTitle", "vhat (experimental)");
         if (!bUseShortNameForTitle && !OperandType.TypeName.IsNone())
         {
-            return FText::FromString(FString::Printf(TEXT("vpack %s"), *OperandType.TypeName.ToString()));
+            return FText::FromString(FString::Printf(TEXT("vhat %s"), *OperandType.TypeName.ToString()));
         }
         break;
     case ENodeTitleType::MenuTitle:

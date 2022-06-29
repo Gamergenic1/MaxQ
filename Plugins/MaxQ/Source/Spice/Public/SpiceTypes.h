@@ -12,7 +12,13 @@
 #include "SpicePlatformDefs.h"
 #include "SpiceTypes.generated.h"
 
+// Log category for MaxQ SPICE releated messages.
 SPICE_API DECLARE_LOG_CATEGORY_EXTERN(LogSpice, Log, All);
+
+// See:
+// https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/getmsg_c.html
+// "msglen  The current maximum long error message length is in fact 1840 characters"
+constexpr uint32 SpiceLongMessageMaxLength = 1841;
 
 UENUM(BlueprintType)
 enum class ES_ResultCode : uint8
@@ -408,6 +414,21 @@ enum class ES_Items : uint8
     Default = 1 << 4 UMETA(DisplayName = "All (Default)")
 };
 ENUM_CLASS_FLAGS(ES_Items);
+
+
+UENUM(BlueprintType, meta = (Bitflags, UseEnumValuesAsMaskValuesInEditor = "true"))
+enum class ES_KernelType : uint8
+{
+    NONE    = 0      UMETA(Hidden),
+    SPK     = 1 << 0 UMETA(DisplayName = "SPK", ToolTip = "All SPK files are counted in the total."),
+    CK      = 1 << 1 UMETA(DisplayName = "CK", ToolTip = "All CK files are counted in the total."),
+    PCK     = 1 << 2 UMETA(DisplayName = "PCK", ToolTip = "All binary PCK files are counted in the total."),
+    DSK     = 1 << 3 UMETA(DisplayName = "DSK", ToolTip = "All DSK files are counted in the total."),
+    EK      = 1 << 4 UMETA(DisplayName = "EK", ToolTip = "All EK files are counted in the total."),
+    TEXT    = 1 << 5 UMETA(DisplayName = "TEXT", ToolTip = "All text kernels that are not meta-text kernels are included in the total."),
+    META    = 1 << 6 UMETA(DisplayName = "META", ToolTip = "All meta-text kernels are counted in the total.")
+};
+ENUM_CLASS_FLAGS(ES_KernelType);
 
 
 USTRUCT(BlueprintType, Category = "MaxQ|DimensionlessVector")
@@ -4602,6 +4623,8 @@ public:
     static FString toFString(ES_LimbComputationMethod method, const TArray<FString>& shapeSurfaces);
     static FString toFString(ES_Shadow shadow, ES_CurveType curveType, ES_GeometricModel method, const TArray<FString>& shapeSurfaces);
     static FString ToString(ES_Axis Axis);
+    static FString ToString(ES_KernelType KernelType);
+    static ES_KernelType FromString(const FString& KernelType);
 
     // ---------------------------------------------------------------------------
     // NOTE:

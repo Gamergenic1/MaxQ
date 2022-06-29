@@ -196,10 +196,14 @@ public:
 
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "MaxQ|Internal")
     static void unorm_vector_K2(
-        const FSDimensionlessVector& v1,
+        const FSDimensionlessVector& v,
         FSDimensionlessVector& vout,
         double& vmag
     );
+    static constexpr TCHAR* unorm_vector{ TEXT("unorm_vector_K2") };
+    static constexpr TCHAR* unorm_vector_input{ TEXT("v") };
+    static constexpr TCHAR* unorm_vector_output_mag{ TEXT("vmag") };
+    static constexpr TCHAR* unorm_vector_output_direction{ TEXT("vout") };
 
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "MaxQ|Internal")
     static FSDimensionlessVector vadd_vector_K2(
@@ -282,8 +286,10 @@ public:
 
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "MaxQ|Internal")
     static double vnorm_vector_K2(
-        const FSDimensionlessVector& v1
+        const FSDimensionlessVector& v
     );
+    static constexpr ANSICHAR* vnorm_vector{ "vnorm_vector_K2" };
+    static constexpr ANSICHAR* vnorm_in{ "v" };
 
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "MaxQ|Internal")
     static FSDimensionlessVector vpack_vector_K2(
@@ -419,6 +425,14 @@ public:
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "MaxQ|Internal")
     static FSMassConstant Conv_DoubleToSMassConstant_K2(double value);
     static constexpr ANSICHAR* Conv_DoubleToSMassConstant{ "Conv_DoubleToSMassConstant_K2" };
+
+    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "MaxQ|Internal")
+    static FSAngularRate Conv_DoubleToSAngularRate_K2(double value);
+    static constexpr ANSICHAR* Conv_DoubleToSAngularRate{ "Conv_DoubleToSAngularRate_K2" };
+
+    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "MaxQ|Internal")
+    static FSSpeed Conv_DoubleToSSpeed_K2(double value);
+    static constexpr ANSICHAR* Conv_DoubleToSSpeed{ "Conv_DoubleToSSpeed_K2" };
 
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "MaxQ|Internal")
     static FSDistance Conv_DoubleToSDistance_K2(double value);

@@ -97,6 +97,8 @@ struct FK2Conversion
     static SPICEUNCOOKED_API FK2Conversion DoubleToSMassConstant();
     static SPICEUNCOOKED_API FK2Conversion DegreesToSAngle();
     static SPICEUNCOOKED_API FK2Conversion DoubleToSDistance();
+    static SPICEUNCOOKED_API FK2Conversion DoubleToSSpeed();
+    static SPICEUNCOOKED_API FK2Conversion DoubleToSAngularRate();
     static SPICEUNCOOKED_API FK2Conversion SDimensionlessVectorXToSDistance();
     static SPICEUNCOOKED_API FK2Conversion SDimensionlessVectorYToSDistance();
     static SPICEUNCOOKED_API FK2Conversion SDimensionlessVectorZToSDistance();

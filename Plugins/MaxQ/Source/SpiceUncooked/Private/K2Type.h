@@ -168,6 +168,8 @@ struct SPICEUNCOOKED_API FK2Type
     static const FK2Type& SMassConstant();
     static const FK2Type& SDistance();
     static const FK2Type& SAngle();
+    static const FK2Type& SSpeed();
+    static const FK2Type& SAngularRate();
     static const FK2Type& SDistanceVector();
     static const FK2Type& SVelocityVector();
     static const FK2Type& SAngularVelocity();

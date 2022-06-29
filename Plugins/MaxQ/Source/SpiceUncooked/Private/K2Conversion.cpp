@@ -28,6 +28,17 @@ SPICEUNCOOKED_API FK2Conversion FK2Conversion::DoubleToSDistance() {
     return doubletosdistance;
 }
 
+SPICEUNCOOKED_API FK2Conversion FK2Conversion::DoubleToSSpeed() {
+    FK2Conversion doubletosspeed = FK2Conversion(USpiceK2::Conv_DoubleToSSpeed, FK2Type::Double(), FK2Type::SSpeed());
+    return doubletosspeed;
+}
+
+
+SPICEUNCOOKED_API FK2Conversion FK2Conversion::DoubleToSAngularRate() {
+    FK2Conversion doubletosangularrate= FK2Conversion(USpiceK2::Conv_DoubleToSAngularRate, FK2Type::Double(), FK2Type::SAngularRate());
+    return doubletosangularrate;
+}
+
 SPICEUNCOOKED_API FK2Conversion FK2Conversion::SDimensionlessVectorToSDistanceVector() {
     FK2Conversion sdimensionlessvectortodistancevector = FK2Conversion(USpiceK2::Conv_SDimensionlessVectorToSDistanceVector, FK2Type::SDimensionlessVector(), FK2Type::SDistanceVector());
     return sdimensionlessvectortodistancevector;
