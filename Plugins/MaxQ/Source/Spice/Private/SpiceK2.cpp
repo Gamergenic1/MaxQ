@@ -863,6 +863,16 @@ FSMassConstant USpiceK2::Conv_DoubleToSMassConstant_K2(double value)
     return FSMassConstant(value);
 }
 
+FSAngularRate USpiceK2::Conv_DoubleToSAngularRate_K2(double value)
+{
+    return FSAngularRate(value);
+}
+
+FSSpeed USpiceK2::Conv_DoubleToSSpeed_K2(double value)
+{
+    return FSSpeed(value);
+}
+
 FSDistance USpiceK2::Conv_DoubleToSDistance_K2(double value)
 {
     return FSDistance(value);

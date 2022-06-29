@@ -8,6 +8,7 @@
 #include "Spice.h"
 #include "HAL/FileManager.h"
 #include "Misc/Paths.h"
+#include "Misc/AssertionMacros.h"
 #include "SpicePlatformDefs.h"
 #include "SpiceUtilities.h"
 #include "algorithm"
@@ -22,26 +23,16 @@ extern "C"
 }
 PRAGMA_POP_PLATFORM_DEFAULT_PACKING
 
-// Local #defines
-// UE has build acceleration that concatenates multiple source files.
-// A historical problem with that is #defines leaking from one cpp to the next.
-// If these were moved to a .h file they couldn't be undefined at the end.
-// May need a little rewrite for any platforms that don't support stack allocations.
-#define LONG_MESSAGE_MAX_LENGTH 1841
 
 void USpice::enumerate_kernels(
     ES_ResultCode& ResultCode,
     FString& ErrorMessage,
     TArray<FString>& kernelFilePaths,
-    const FString& relativeDirectory
+    const FString& relativeDirectory,
+    bool ErrorIfNoFilesFound
 )
 {
-    FString FileDirectory = relativeDirectory;
-    if (FPaths::IsRelative(relativeDirectory))
-    {
-        auto gameDir = FPaths::ConvertRelativePathToFull(FPaths::ProjectContentDir());
-        FileDirectory = FPaths::Combine(gameDir, relativeDirectory);
-    }
+    FString FileDirectory = toPath(relativeDirectory);
     kernelFilePaths.Empty();
 
     TArray<FString> foundFiles;
@@ -52,10 +43,32 @@ void USpice::enumerate_kernels(
         {
             kernelFilePaths.Add(FPaths::Combine(relativeDirectory,file));
         }
-    }
 
-    ResultCode = ES_ResultCode::Success;
-    ErrorMessage.Empty();
+        ResultCode = ES_ResultCode::Success;
+        ErrorMessage.Empty();
+    }
+    else
+    {
+        ErrorMessage = FString::Printf(
+            TEXT("no files were found in directory %s.\n(MaxQ internally expanded the path to %s.)\nIs the relative directory given to Enumerate Kernels correct?\n") 
+            TEXT("Directories are given relative to / Content,\n   'MyProject/Content/KernelFiles/Directory1'\nwould be given as\n   'KernelFiles/Directory1' "),
+            *relativeDirectory, *FileDirectory);
+
+        if (ErrorIfNoFilesFound)
+        {
+            UE_LOG(
+                LogSpice,
+                Error,
+                TEXT("******************************************************************\nMaxQ Spice Enumerate Kernels: %s\n")
+                TEXT("***********************************************************************************"), *ErrorMessage);
+            ResultCode = ES_ResultCode::Error;
+        }
+        else
+        {
+            UE_LOG(LogSpice, Error, TEXT("MaxQ Spice Enumerate Kernels: %s"), *ErrorMessage);
+            ErrorMessage.Empty();
+        }
+    }
 }
 
 
@@ -93,7 +106,10 @@ void USpice::furnsh(
     }
 #endif
 
-    ErrorCheck(ResultCode, ErrorMessage);
+    if (!ErrorCheck(ResultCode, ErrorMessage))
+    {
+        UE_LOG(LogSpice, Log, TEXT("MaxQ SPICE 'Furnsh' loaded kernel: %s"), *fullPathToFile);
+    }
 }
 
 
@@ -131,26 +147,33 @@ void USpice::clear_all()
 {
     kclear_c();
     clpool_c();
+
+    UE_LOG(LogSpice, Log, TEXT("MaxQ SPICE 'Clear All' cleared kernel memory & pool") );
 }
 
 
 void USpice::unload(
     ES_ResultCode& ResultCode,
     FString& ErrorMessage,
-    const FString& absolutePath
+    const FString& relativeDirectory
 )
 {
+    FString absolutePath = toPath(relativeDirectory);
+
     unload_c(TCHAR_TO_ANSI(*absolutePath));
 
-    ErrorCheck(ResultCode, ErrorMessage);
+    if (!ErrorCheck(ResultCode, ErrorMessage))
+    {
+        UE_LOG(LogSpice, Log, TEXT("MaxQ SPICE 'Unload' unloaded kernel : %s"), *absolutePath);
+    }
 }
 
 
-void USpice::init_all()
+void USpice::init_all(bool PrintCallstack)
 {
-    reset_c();
+    reset();
     clear_all();
-    char szBuffer[LONG_MESSAGE_MAX_LENGTH];
+    char szBuffer[SpiceLongMessageMaxLength];
     
     SpiceStringCopy(szBuffer, "SHORT,LONG");
     errprt_c("SET", sizeof(szBuffer), szBuffer);
@@ -160,6 +183,20 @@ void USpice::init_all()
 
     SpiceStringCopy(szBuffer, "NULL");
     errdev_c("SET", sizeof(szBuffer), szBuffer);
+
+    UE_LOG(LogSpice, Log,
+        TEXT("\n*************************************************************************")
+        TEXT("\n* MaxQ SPICE 'Init All'")
+        TEXT("\n* All kernel memory and error states have been cleared and reset.")
+        TEXT("\n***********************************************************************************")
+    );
+
+#if WITH_EDITORONLY_DATA
+    if (PrintCallstack)
+    {
+        PrintScriptCallstack();
+    }
+#endif
 
     UnexpectedErrorCheck();
 }
@@ -175,6 +212,8 @@ Exceptions
 void USpice::reset()
 {
     reset_c();
+
+    UE_LOG(LogSpice, Log, TEXT("MaxQ SPICE 'Reset' reset error handling state"));
 }
 
 /*
@@ -405,39 +444,39 @@ Exceptions
       string, when list is an output.  If this value is not at least 2,
       the error SPICE(STRINGTOOSHORT) is signaled.
 */
-void USpice::set_errprt(ES_Items items)
+void USpice::set_errprt(int32 items)
 {
     char szBuffer[SPICE_MAX_PATH];
     ZeroOut(szBuffer);
 
-    if ((uint8)items & (uint8)ES_Items::Default)
+    if (items & (uint8)ES_Items::Default)
     {
-        items = (ES_Items)-1;
+        items = -1;
     }
 
     bool commaPrepened = false;
-    if ((uint8)items & (uint8)ES_Items::Short)
+    if (items & (uint8)ES_Items::Short)
     {
         if (commaPrepened) SpiceStringConcat(szBuffer, ", ");
         SpiceStringConcat(szBuffer, "SHORT");
         commaPrepened |= true;
     }
 
-    if ((uint8)items & (uint8)ES_Items::Explain)
+    if (items & (uint8)ES_Items::Explain)
     {
         if (commaPrepened) SpiceStringConcat(szBuffer, ", ");
         SpiceStringConcat(szBuffer, "EXPLAIN");
         commaPrepened |= true;
     }
 
-    if ((uint8)items & (uint8)ES_Items::Long)
+    if (items & (uint8)ES_Items::Long)
     {
         if (commaPrepened) SpiceStringConcat(szBuffer, ", ");
         SpiceStringConcat(szBuffer, "LONG");
         commaPrepened |= true;
     }
 
-    if ((uint8)items & (uint8)ES_Items::Traceback)
+    if (items & (uint8)ES_Items::Traceback)
     {
         if (commaPrepened) SpiceStringConcat(szBuffer, ", ");
         SpiceStringConcat(szBuffer, "TRACEBACK");
@@ -3217,14 +3256,14 @@ void USpice::evsgp4(
 
     if (IgnoreBadMeanEccentricity && failed_c())
     {
-        char szBuffer[LONG_MESSAGE_MAX_LENGTH];
+        char szBuffer[SpiceLongMessageMaxLength];
 
         szBuffer[0] = '\0';
         getmsg_c("SHORT", sizeof(szBuffer), szBuffer);
 
         FString ShortErrorMessage(szBuffer);
 
-        szBuffer[LONG_MESSAGE_MAX_LENGTH-1] = '\0';
+        szBuffer[SpiceLongMessageMaxLength-1] = '\0';
         IgnoreBadMeanEccentricity &= !SpiceStringCompare(szBuffer, "SPICE(BADMECCENTRICITY)");
     }
 
@@ -5428,6 +5467,175 @@ void USpice::et_now(FSEphemerisTime& Now)
     Now = FSEphemerisTime(now_j2000.GetTotalSeconds());
 }
 
+
+/*
+Exceptions
+   1)  If a file is not loaded matching the specification of `which' and
+       `kind', `found' will be SPICEFALSE, `file', `filtyp', and `srcfil'
+       will be empty and `handle' will be set to zero.
+
+   2)  If any of `file', `filtyp' or `srcfil' output strings has length
+       too short to contain the corresponding output string, the
+       string is truncated on the right.
+
+   3)  If the `kind' input string pointer is null, the error
+       SPICE(NULLPOINTER) is signaled.
+
+   4)  If the `kind' input string has zero length, the error
+       SPICE(EMPTYSTRING) is signaled.
+
+   5)  If any of the `file', `filtyp' or `srcfil' output string
+       pointers is null, the error SPICE(NULLPOINTER) is signaled.
+
+   6)  If any of the `file', `filtyp' or `srcfil' output strings has
+       length less than two characters, the error
+       SPICE(STRINGTOOSHORT) is signaled, since the output string is
+       too short to contain one character of output data plus a null
+       terminator.
+*/
+void USpice::kdata(
+    ES_FoundCode& found,
+    FString& file,
+    ES_KernelType& filtyp,
+    FString& srcfil,
+    int& handle,
+    int32 kind,
+    int      which
+)
+{
+    SpiceChar KernelFileBuffer[WINDOWS_MAX_PATH];
+    SpiceChar FileTypeBuffer[64];
+    SpiceChar SourceFileBuffer[WINDOWS_MAX_PATH];
+
+    SpiceInt        _which = which;
+    ConstSpiceChar* _kind = TCHAR_TO_ANSI(*USpiceTypes::ToString((ES_KernelType)kind));
+    SpiceInt          _fillen = sizeof(KernelFileBuffer);
+    SpiceInt          _typlen = sizeof(FileTypeBuffer);
+    SpiceInt          _srclen = sizeof(SourceFileBuffer);
+    SpiceChar* _file = KernelFileBuffer;
+    SpiceChar* _filtyp = FileTypeBuffer;
+    SpiceChar* _srcfil = SourceFileBuffer;
+    SpiceInt _handle = handle;
+    SpiceBoolean _found = SPICEFALSE;
+
+    kdata_c(
+        _which,
+        _kind,
+        _fillen,
+        _typlen,
+        _srclen,
+        _file,
+        _filtyp,
+        _srcfil,
+        &_handle,
+        &_found
+    );
+
+    file = FString(_file);
+    filtyp = USpiceTypes::FromString(FString(_filtyp));
+    srcfil = FString(_srcfil);
+    handle = _handle;
+    found = _found == SPICETRUE ? ES_FoundCode::Found : ES_FoundCode::NotFound;
+
+    UnexpectedErrorCheck();
+}
+
+/*
+Exceptions
+   1)  If the specified file is not on the list of files that are currently
+       loaded via the interface furnsh_c, `found' will be SPICEFALSE,
+       `handle' will be set to zero and `filtyp' and `srcfil' will be set to
+       empty.
+
+   2)  If any of  `filtyp' or `srcfil' output strings has length too
+       short to contain the corresponding output string, the string
+       is truncated on the right.
+
+   3)  If the `file' input string pointer is null, the error
+       SPICE(NULLPOINTER) is signaled.
+
+   4)  If the `file' input string has zero length, the error
+       SPICE(EMPTYSTRING) is signaled.
+
+   5)  If any of the `filtyp' or `srcfil' output string pointers is
+       null, the error SPICE(NULLPOINTER) is signaled.
+
+   6)  If any of the `filtyp' or `srcfil' output strings has length
+       less than two characters, the error SPICE(STRINGTOOSHORT) is
+       signaled, since the output string is too short to contain one
+       character of output data plus a null terminator.
+*/
+void USpice::kinfo(
+    ES_KernelType& filtyp,
+    FString& srcfil,
+    int& handle,
+    ES_FoundCode& found,
+    const FString& file
+)
+{
+    SpiceChar FileTypeBuffer[64];
+    SpiceChar SourceFileBuffer[WINDOWS_MAX_PATH];
+
+    ConstSpiceChar* _file = TCHAR_TO_ANSI(*toPath(file));
+    SpiceInt        _filtln = sizeof FileTypeBuffer;
+    SpiceInt        _srclen = sizeof SourceFileBuffer;
+    SpiceChar*      _filtyp = FileTypeBuffer;
+    SpiceChar*      _srcfil = SourceFileBuffer;
+    SpiceInt        _handle = handle;
+    SpiceBoolean    _found = SPICEFALSE;
+
+    kinfo_c(
+        _file,
+        _filtln,
+        _srclen,
+        _filtyp,
+        _srcfil,
+        &_handle,
+        &_found
+        );
+
+    // Never trust externalized data to be zero-terminated.
+    _filtyp[_filtln -1] = '\0';
+    _srcfil[_srclen -1] = '\0';
+    
+    filtyp = USpiceTypes::FromString(_filtyp);
+    handle = _handle;
+    srcfil = FString(_srcfil);
+
+    found = _found == SPICETRUE ? ES_FoundCode::Found : ES_FoundCode::NotFound;
+
+    UnexpectedErrorCheck();
+}
+
+
+/*
+Exceptions
+   1)  If a word on the list specified by `kind' is not recognized,
+       it is ignored.
+
+   2)  If `kind' is blank, or none of the words in `kind' is on the
+       list specified above, `count' will be returned as zero.
+
+   3)  If the `kind' input string pointer is null, the error
+       SPICE(NULLPOINTER) is signaled.
+
+   4)  If the `kind' input string has zero length, the error
+       SPICE(EMPTYSTRING) is signaled.
+*/
+
+void USpice::ktotal(
+    int& count,
+    int32 kind
+)
+{
+    ConstSpiceChar* _kind = TCHAR_TO_ANSI(*USpiceTypes::ToString((ES_KernelType)kind));
+    SpiceInt _count = count;
+
+    ktotal_c( _kind, &_count );
+
+    count = _count;
+    UnexpectedErrorCheck(false);
+}
 
 /*
 Exceptions
@@ -12359,7 +12567,3 @@ void USpice::SwizzleToSpice(const FQuat& ue, double(&q)[4])
 }
 #pragma endregion regionName
 
-
-// Don't leak #define's
-// UE has Jumbo/Unity build-acceleration which concatenates multiple source files
-#undef LONG_MESSAGE_MAX_LENGTH 

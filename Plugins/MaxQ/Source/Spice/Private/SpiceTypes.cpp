@@ -360,9 +360,6 @@ FSVelocityVector FSVelocityVector::Swizzle(const FVector& UEVector)
     return vec;
 }
 
-
-
-
 FString FSStateTransform::ToString() const
 {
     static TStringBuilder<1024> sb;
@@ -1289,6 +1286,65 @@ FString USpiceTypes::ToString(ES_Axis Axis)
 
     return FString(sz);
 }
+
+FString USpiceTypes::ToString(ES_KernelType KernelType)
+{
+    if (((uint8)KernelType & 0x7f) == 0x7f)
+    {
+        return TEXT("ALL");
+    }
+    
+    static TStringBuilder<64> sb;
+
+    sb.Reset();
+
+    if ((uint8)KernelType & (uint8)ES_KernelType::SPK)   sb += TEXT(" SPK");
+    if ((uint8)KernelType & (uint8)ES_KernelType::CK)    sb += TEXT(" CK");
+    if ((uint8)KernelType & (uint8)ES_KernelType::PCK)   sb += TEXT(" PCK");
+    if ((uint8)KernelType & (uint8)ES_KernelType::DSK)   sb += TEXT(" DSK");
+    if ((uint8)KernelType & (uint8)ES_KernelType::EK)    sb += TEXT(" EK");
+    if ((uint8)KernelType & (uint8)ES_KernelType::TEXT)  sb += TEXT(" TEXT");
+    if ((uint8)KernelType & (uint8)ES_KernelType::META)  sb += TEXT(" META");
+
+    FString result = sb.ToString();
+    result.TrimStartInline();
+    return result;
+}
+
+
+ES_KernelType USpiceTypes::FromString(const FString& KernelType)
+{
+    FString _KernelTypeString = KernelType.TrimStartAndEnd();
+    if(!_KernelTypeString.Compare(TEXT("ALL"), ESearchCase::IgnoreCase)) return (ES_KernelType) 0x7f;
+
+    static const TMap<FString,ES_KernelType> Flags 
+    {
+        // Verbose guard against brace elision cpp defect
+        TMap<FString,ES_KernelType>::ElementType{ TEXT("SPK"), ES_KernelType::SPK },
+        TMap<FString,ES_KernelType>::ElementType{ TEXT("CK"), ES_KernelType::CK },
+        TMap<FString,ES_KernelType>::ElementType{ TEXT("PCK"), ES_KernelType::PCK },
+        TMap<FString,ES_KernelType>::ElementType{ TEXT("DSK"), ES_KernelType::DSK },
+        TMap<FString,ES_KernelType>::ElementType{ TEXT("EK"), ES_KernelType::EK },
+        TMap<FString,ES_KernelType>::ElementType{ TEXT("TEXT"), ES_KernelType::TEXT },
+        TMap<FString,ES_KernelType>::ElementType{ TEXT("META"), ES_KernelType::META }
+    };
+
+    ES_KernelType Result = ES_KernelType::NONE;
+    // Reverse PCK, because CK is a substring of PCK, and we can't guaranteed map enumeration order
+    _KernelTypeString.ReplaceInline(TEXT("PCK"), TEXT("KCP"), ESearchCase::IgnoreCase);
+
+    for (const auto& [TypeText, TypeFlag] : Flags)
+    {
+        if (_KernelTypeString.ReplaceInline(*TypeText, TEXT(""), ESearchCase::IgnoreCase))
+        {
+            Result |= TypeFlag;
+            if (!_KernelTypeString.Len()) return Result;
+        }
+    }
+
+    return Result;
+}
+
 
 const char* USpiceTypes::toString(ES_SubpointComputationMethod method)
 {

@@ -56,6 +56,18 @@ const FK2Type& FK2Type::SDistance()
     return Distance;
 }
 
+const FK2Type& FK2Type::SSpeed()
+{
+    static FK2Type Speed = FK2Type(FSSpeed::StaticStruct());
+    return Speed;
+}
+
+const FK2Type& FK2Type::SAngularRate()
+{
+    static FK2Type AngularRate = FK2Type(FSAngularRate::StaticStruct());
+    return AngularRate;
+}
+
 const FK2Type& FK2Type::SAngle()
 {
     static FK2Type Angle = FK2Type(FSAngle::StaticStruct());

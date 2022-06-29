@@ -29,6 +29,7 @@ DEFINE_LOG_CATEGORY(LogSpiceDiagnostics);
 
 void USpiceDiagnostics::DumpSpkSummary(ES_ResultCode& ResultCode, FString& ErrorMessage, FString& LogString, const FString& relativeLskPath, const FString& relativeSpkPath)
 {
+    LogString.Empty();
     FString fullPathToFile = toPath(relativeSpkPath);
 
 #ifdef SET_WORKING_DIRECTORY_IN_FURNSH
@@ -181,6 +182,7 @@ void USpiceDiagnostics::DumpSpkSummary(ES_ResultCode& ResultCode, FString& Error
 
 void USpiceDiagnostics::DumpPckSummary(ES_ResultCode& ResultCode, FString& ErrorMessage, FString& LogString, const FString& relativeLskPath /*= TEXT("NonAssetData/naif/kernels/Generic/LSK/naif0012.tls")*/, const FString& relativePckPath /*= TEXT("NonAssetData/naif/kernels/Generic/PCK/earth_200101_990628_predict.bpc") */)
 {
+    LogString.Empty();
     FString fullPathToFile = toPath(relativePckPath);
 
 #ifdef SET_WORKING_DIRECTORY_IN_FURNSH
@@ -329,6 +331,7 @@ void USpiceDiagnostics::DumpPckSummary(ES_ResultCode& ResultCode, FString& Error
 
 void USpiceDiagnostics::DumpCkSummary(ES_ResultCode& ResultCode, FString& ErrorMessage, FString& LogString, const FString& relativeLskPath /*= TEXT("NonAssetData/naif/kernels/Generic/LSK/naif0012.tls")*/, const FString& relativeSclkPath /*= TEXT("NonAssetData/naif/kernels/INSIGHT/SCLK/NSY_SCLKSCET.00023.tsc")*/, const FString& relativeCkPath /*= TEXT("NonAssetData/naif/kernels/INSIGHT/CK/ckckck") */)
 {
+    LogString.Empty();
     FString fullPathToFile = toPath(relativeCkPath);
 
 #ifdef SET_WORKING_DIRECTORY_IN_FURNSH
@@ -478,4 +481,94 @@ void USpiceDiagnostics::DumpCkSummary(ES_ResultCode& ResultCode, FString& ErrorM
 #endif
 
     ErrorCheck(ResultCode, ErrorMessage);
+}
+
+void USpiceDiagnostics::DumpLoadedKernelFiles(FString& LogString)
+{
+    LogString.Empty();
+
+    // From:
+    // https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/kinfo_c.html
+
+    /*
+        Local constants.
+        */
+    constexpr uint32 FILLEN{ 256 };
+    constexpr uint32 TYPLEN{ 33 };
+    constexpr uint32 SRCLEN{ 256 };
+
+    /*
+    Local variables.
+    */
+    SpiceInt        which;
+    SpiceInt        count;
+    SpiceInt        handle;
+
+    SpiceChar       file[FILLEN];
+    SpiceChar       filtyp[TYPLEN];
+    SpiceChar       srcfil[SRCLEN];
+
+    SpiceBoolean    found;
+
+
+    /*
+        Find out the total number of kernels in the kernel pool.
+        */
+    ktotal_c("all", &count);
+
+    if (count == 0)
+    {
+        LogString += TEXT("No files loaded at this time.\n");
+    }
+    else
+    {
+        LogString += TEXT("The loaded files files are: \n\n");
+    }
+
+    /*
+        Find the file name, typeand source for each of the
+        kernels in the kernel pooland print its type.
+        */
+    for (which = 0; which < count; which++)
+    {
+
+        kdata_c(which, "all", FILLEN, TYPLEN, SRCLEN,
+            file, filtyp, srcfil, &handle, &found);
+
+        kinfo_c(file, TYPLEN, SRCLEN,
+            filtyp, srcfil, &handle, &found);
+
+        if (eqstr_c(filtyp, "SPK"))
+        {
+            LogString += FString::Printf(TEXT("%s is an SPK file.\n"), *FString(file));
+        }
+        else if (eqstr_c(filtyp, "CK"))
+        {
+            LogString += FString::Printf(TEXT("%s is a CK file.\n"), *FString(file));
+        }
+        else if (eqstr_c(filtyp, "PCK"))
+        {
+            LogString += FString::Printf(TEXT("%s is a PCK file.\n"), *FString(file));
+        }
+        else if (eqstr_c(filtyp, "DSK"))
+        {
+            LogString += FString::Printf(TEXT("%s is a DSK file.\n"), *FString(file));
+        }
+        else if (eqstr_c(filtyp, "EK"))
+        {
+            LogString += FString::Printf(TEXT("%s is an EK file.\n"), *FString(file));
+        }
+        else if (eqstr_c(filtyp, "META"))
+        {
+            LogString += FString::Printf(TEXT("%s is a meta-text kernel.\n"), *FString(file));
+        }
+        else
+        {
+            LogString += FString::Printf(TEXT("%s is a text kernel.\n"), *FString(file));
+        }
+    }
+
+    UE_LOG(LogSpiceDiagnostics, Log, TEXT("Spice Loaded Kernel Files dump diagnostic:\n%s"), *LogString);
+
+    UnexpectedErrorCheck(true);
 }

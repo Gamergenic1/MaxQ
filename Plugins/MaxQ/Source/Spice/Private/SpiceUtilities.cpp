@@ -9,12 +9,6 @@
 #include "CoreMinimal.h"
 #include "SpicePlatformDefs.h"
 
-// Local #defines
-// UE has build acceleration that concatenates multiple source files.
-// A historical problem with that is #defines leaking from one cpp to the next.
-// If these were moved to a .h file they couldn't be #undefined at the end.
-// May need a little rewrite for any platforms that don't support stack allocations.
-#define LONG_MESSAGE_MAX_LENGTH 1841
 
 namespace SpiceUtilities
 {
@@ -113,7 +107,7 @@ uint8 ErrorCheck(ES_ResultCode& ResultCode, FString& ErrorMessage, bool BeQuiet)
     else
     {
         ResultCode = ES_ResultCode::Error;
-        char szBuffer[LONG_MESSAGE_MAX_LENGTH];
+        char szBuffer[SpiceLongMessageMaxLength];
 
         szBuffer[0] = '\0';
         getmsg_c("LONG", sizeof(szBuffer), szBuffer);
@@ -144,7 +138,7 @@ uint8 UnexpectedErrorCheck(bool bReset)
 
     if (failed)
     {
-        char szBuffer[LONG_MESSAGE_MAX_LENGTH];
+        char szBuffer[SpiceLongMessageMaxLength];
 
         szBuffer[0] = '\0';
         getmsg_c("LONG", sizeof(szBuffer), szBuffer);
@@ -167,6 +161,3 @@ uint8 UnexpectedErrorCheck(bool bReset)
     return failed;
 }
 
-// Don't leak #define's
-// UE has Unity-build-acceleration which concatenates multiple source files
-#undef LONG_MESSAGE_MAX_LENGTH

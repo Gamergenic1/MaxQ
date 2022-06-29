@@ -73,4 +73,17 @@ public:
         const FString& relativeSclkPath = TEXT("NonAssetData/naif/kernels/INSIGHT/SCLK/NSY_SCLKSCET.00023.tsc"),
         const FString& relativeCkPath = TEXT("NonAssetData/naif/kernels/INSIGHT/CK/insight_ida_pot_210801_211218_v1.bc")
     );
+
+
+
+    UFUNCTION(BlueprintCallable,
+        Category = "MaxQ|Diagnostics",
+        meta = (
+            Keywords = "UTILITY",
+            ToolTip = "Dump the names of all the loaded kernel files",
+            DevelopmentOnly
+            ))
+    static void DumpLoadedKernelFiles(
+        FString& LogString
+    );
 };
