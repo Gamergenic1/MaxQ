@@ -17,7 +17,7 @@
 
 #define LOCTEXT_NAMESPACE "K2Node_norm"
 
-TArray<FK2VnormOp> UK2Node_norm::SupportedOperations
+const TArray<FK2VnormOp> UK2Node_norm::SupportedOperations
 {
     FK2VnormOp{ "vnorm dimensionless vector", FName(USpiceK2::vnorm_vector), FK2Type::SDimensionlessVector(), FK2Type::Double() },
     FK2VnormOp{ "vnorm distance vector",  USpiceK2::vnorm_vector, FK2Conversion::SDistanceVectorToSDimensionlessVector(), FK2Conversion::DoubleToSDistance() },
@@ -349,13 +349,13 @@ FText UK2Node_norm::GetNodeTitle(ENodeTitleType::Type TitleType) const
     {
     case ENodeTitleType::FullTitle:
         /** The full title, may be multiple lines. */
-        return LOCTEXT("ListViewTitle", "vnorm (experimental)");
+        return LOCTEXT("ListViewTitle", "vnorm");
     case ENodeTitleType::MenuTitle:
         /** Menu Title for context menus to be displayed in context menus referencing the node. */
-        return LOCTEXT("MenuTitle", "vnorm - Vector Magnitude (experimental)");
+        return LOCTEXT("MenuTitle", "vnorm - Vector Magnitude");
     case ENodeTitleType::ListView:
         /** More concise, single line title. */
-        return LOCTEXT("ListViewTitle", "vnorm - Vector Magnitude (experimental)");
+        return LOCTEXT("ListViewTitle", "vnorm - Vector Magnitude");
     }
 
     return LOCTEXT("ShortTitle", "vnorm");
@@ -375,8 +375,7 @@ FText UK2Node_norm::GetKeywords() const
 
 FText UK2Node_norm::GetTooltipText() const
 {
-    
-    FText Tooltip = LOCTEXT("Tooltip", "Compute the magnitude of a double precision, 3-dimensional vector.\nStill experimental/under testing.\nThe intent is to support limited wildcards in a single action.\n\nSupports");
+    FText Tooltip = LOCTEXT("Tooltip", "Compute the magnitude of a double precision, 3-dimensional vector.  Support limited wildcards in a single action.");
 
     FText ListStart = LOCTEXT("ListStart", ":\n");
     FText ListSItemeparator = LOCTEXT("ListItemSeparator", ",\n");

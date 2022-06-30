@@ -944,7 +944,7 @@ FSStateVector USpiceK2::Conv_SDimensionlessStateVectorToSStateVector_K2(const FS
 
 FSDimensionlessStateVector USpiceK2::Conv_SStateVectorToSDimensionlessStateVector_K2(const FSStateVector& value)
 {
-    return value.AsDimensionlessStateVector();
+    return value.AsDimensionlessVector();
 }
 
 FSDistance USpiceK2::Conv_SDimensionlessVector_X_ToSDistance_K2(const FSDimensionlessVector& value)

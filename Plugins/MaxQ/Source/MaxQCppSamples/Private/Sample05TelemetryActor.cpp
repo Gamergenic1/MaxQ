@@ -8,7 +8,6 @@
 #include "Sample05TelemetryActor.h"
 #include "Components/StaticMeshComponent.h"
 #include "GameFramework/PlayerController.h"
-#include "SpiceTypes.h"
 #include "Spice.h"
 #include "SampleUtilities.h"
 

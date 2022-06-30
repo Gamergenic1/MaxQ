@@ -105,6 +105,18 @@ const FK2Type& FK2Type::SDimensionlessStateVector()
     return DimensionlessStateVector;
 }
 
+const FK2Type& FK2Type::SStateTransform()
+{
+    static FK2Type StateTransform = FK2Type(FSStateTransform::StaticStruct());
+    return StateTransform;
+}
+
+const FK2Type& FK2Type::SRotationMatrix()
+{
+    static FK2Type RotationMatrix = FK2Type(FSRotationMatrix::StaticStruct());
+    return RotationMatrix;
+}
+
 
 
 TArray<FString> FK2Type::GetTypePinLabels(const UScriptStruct* WhatType)

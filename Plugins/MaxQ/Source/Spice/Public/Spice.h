@@ -38,6 +38,8 @@
 #include "CoreMinimal.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "SpiceTypes.h"
+#include "SpiceMath.h"
+#include "SpiceOperators.h"
 #include "Spice.generated.h"
 
 
@@ -3030,11 +3032,11 @@ public:
             ShortToolTip = "Matrix times vector, 3x3",
             ToolTip = "Multiply a 3x3 double precision matrix with a 3-dimensional double precision vector"
             ))
-        static void mxv_velocity(
-            const FSRotationMatrix& m1,
-            const FSVelocityVector& vin,
-            FSVelocityVector& vout
-        );
+    static void mxv_velocity(
+        const FSRotationMatrix& m1,
+        const FSVelocityVector& vin,
+        FSVelocityVector& vout
+    );
 
     /// <summary>Multiply a 3x3 double precision matrix with a 3-dimensional double precision vector</summary>
     /// <param name="m1">[in] 3x3 double precision matrix</param>

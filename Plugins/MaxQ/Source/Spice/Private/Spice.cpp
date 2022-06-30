@@ -11,6 +11,7 @@
 #include "Misc/AssertionMacros.h"
 #include "SpicePlatformDefs.h"
 #include "SpiceUtilities.h"
+#include "SpiceMath.h"
 #include "algorithm"
 
 PRAGMA_PUSH_PLATFORM_DEFAULT_PACKING
@@ -6070,13 +6071,7 @@ void USpice::mxm(
     FSRotationMatrix& mout
 )
 {
-    SpiceDouble _m1[3][3];  m1.CopyTo(_m1);
-    SpiceDouble _m2[3][3];  m2.CopyTo(_m2);
-    SpiceDouble _mout[3][3];
-
-    mxm_c(_m1, _m2, _mout);
-
-    mout = FSRotationMatrix(_mout);
+    MaxQ::Math::MxM(m1, m2, mout);
 }
 
 /*
@@ -6124,39 +6119,13 @@ void USpice::mtxm(
 Exceptions
    Error free.
 */
-template<typename T>
-inline void mtxv(
-    const FSRotationMatrix& m1,
-    const T& vin,
-    T& vout
-)
-{
-    // Inputs
-    SpiceDouble    _m1[3][3];	m1.CopyTo(_m1);
-    SpiceDouble    _vin[3];		vin.CopyTo(_vin);
-
-    // Outputs
-    SpiceDouble    _vout[3];
-
-    // Invocation
-    mtxv_c(_m1, _vin, _vout);
-
-    // Return Value
-    vout = T(_vout);
-}
-
-/*
-Exceptions
-   Error free.
-*/
 void USpice::mtxv(
-    const FSRotationMatrix& m1,
+    const FSRotationMatrix& m,
     const FSDimensionlessVector& vin,
     FSDimensionlessVector& vout
 )
 {
-    SpiceDouble _m1[3][3];  m1.CopyTo(_m1);
-    ::mtxv(_m1, vin, vout);
+    vout = MaxQ::Math::MTxV(m, vin);
 }
 
 
@@ -6166,13 +6135,12 @@ Exceptions
 */
 
 void USpice::mtxv_distance(
-        const FSRotationMatrix& m1,
+        const FSRotationMatrix& m,
         const FSDistanceVector& vin,
         FSDistanceVector& vout
     )
 {
-    SpiceDouble _m1[3][3];  m1.CopyTo(_m1);
-    ::mtxv(_m1, vin, vout);
+    vout = MaxQ::Math::MTxV(m, vin);
 }
 
 
@@ -6181,25 +6149,23 @@ Exceptions
    Error free.
 */ 
 void USpice::mtxv_velocity(
-    const FSRotationMatrix& m1,
+    const FSRotationMatrix& m,
     const FSVelocityVector& vin,
     FSVelocityVector& vout
 )
 {
-    SpiceDouble _m1[3][3];  m1.CopyTo(_m1);
-    ::mtxv(_m1, vin, vout);
+    vout = MaxQ::Math::MTxV(m, vin);
 }
 
 
 
 void USpice::mtxv_angular(
-    const FSRotationMatrix& m1,
+    const FSRotationMatrix& m,
     const FSAngularVelocity& vin,
     FSAngularVelocity& vout
 )
 {
-    SpiceDouble _m1[3][3];  m1.CopyTo(_m1);
-    ::mtxv(_m1, vin, vout);
+    vout = MaxQ::Math::MTxV(m, vin);
 }
 
 /*
@@ -6732,39 +6698,13 @@ void USpice::mequ(
     mout = FSRotationMatrix(_mout);
 }
 
-/*
-Exceptions
-   Error free.
-*/
-template<typename T>
-inline void mxv_(
-    const FSRotationMatrix& m1,
-    const T& vin,
-    T& vout
-)
-{
-    // Inputs
-    SpiceDouble    _m1[3][3];	m1.CopyTo(_m1);
-    SpiceDouble    _vin[3];		vin.CopyTo(_vin);
-
-    // Outputs
-    SpiceDouble    _vout[3];
-
-    // Invocation
-    mxv_c(_m1, _vin, _vout);
-
-    // Return Value
-    vout = T(_vout);
-}
-
-
 void USpice::mxv_angular(
-    const FSRotationMatrix& m1,
+    const FSRotationMatrix& m,
     const FSAngularVelocity& vin,
     FSAngularVelocity& vout
 )
 {
-    mxv_(m1, vin, vout);
+    vout = MaxQ::Math::MxV(m, vin);
 }
 
 
@@ -6774,75 +6714,49 @@ Exceptions
 */
 
 void USpice::mxv_distance(
-    const FSRotationMatrix& m1,
+    const FSRotationMatrix& m,
     const FSDistanceVector& vin,
     FSDistanceVector& vout
 )
 {
-    mxv_(m1, vin, vout);
+    vout = MaxQ::Math::MxV(m, vin);
 }
 
 void USpice::mxv_velocity(
-    const FSRotationMatrix& m1,
+    const FSRotationMatrix& m,
     const FSVelocityVector& vin,
     FSVelocityVector& vout
 )
 {
-    mxv_(m1, vin, vout);
+    vout = MaxQ::Math::MxV(m, vin);
 }
 
 void USpice::mxv(
-    const FSRotationMatrix& m1,
+    const FSRotationMatrix& m,
     const FSDimensionlessVector& vin,
     FSDimensionlessVector& vout
 )
 {
-    mxv_(m1, vin, vout);
+    vout = MaxQ::Math::MxV(m, vin);
 }
 
 
 void USpice::mxv_state(
     const FSStateTransform& m,
-    const FSStateVector& statein,
-    FSStateVector& stateout
+    const FSStateVector& vin,
+    FSStateVector& vout
 )
 {
-    // Input
-    double _m1[6][6];       m.CopyTo(_m1);
-    double _v2[6];          statein.CopyTo(_v2);
-    SpiceInt    _nrow1 = 6;
-    SpiceInt    _nc1r2 = 6;
-    
-    // Output
-    double _vout[6];
-
-    // Invocation
-    mxvg_c( _m1, _v2, _nrow1, _nc1r2, _vout);
-
-    // Pack outputs
-    stateout = FSStateVector(_vout);
+    vout = MaxQ::Math::MxV(m, vin);
 }
 
 void USpice::mtxv_state(
     const FSStateTransform& m,
-    const FSStateVector& statein,
-    FSStateVector& stateout
+    const FSStateVector& vin,
+    FSStateVector& vout
 )
 {
-    // Input
-    double _m1[6][6];       m.CopyTo(_m1);
-    double _v2[6];          statein.CopyTo(_v2);
-    SpiceInt    _nrow1 = 6;
-    SpiceInt    _nc1r2 = 6;
-
-    // Output
-    double _vout[6];
-
-    // Invocation
-    mtxvg_c(_m1, _v2, _nrow1, _nc1r2, _vout);
-
-    // Pack outputs
-    stateout = FSStateVector(_vout);
+    vout = MaxQ::Math::MTxV(m, vin);
 }
 
 
@@ -11358,17 +11272,7 @@ void USpice::vadd_distance(
     FSDistanceVector& vout
 )
 {
-    // Input
-    SpiceDouble _v1[3]; v1.CopyTo(_v1);
-    SpiceDouble _v2[3]; v2.CopyTo(_v2);
-    // Output
-    SpiceDouble _vout[3];
-
-    // Invocation
-    vadd_c(_v1, _v2, _vout);
-
-    // Return Value
-    vout = FSDistanceVector(_vout);
+    MaxQ::Math::Vadd(v1, v2, vout);
 }
 
 
@@ -11378,17 +11282,7 @@ void USpice::vadd_velocity(
     FSVelocityVector& vout
 )
 {
-    // Input
-    SpiceDouble _v1[3]; v1.CopyTo(_v1);
-    SpiceDouble _v2[3]; v2.CopyTo(_v2);
-    // Output
-    SpiceDouble _vout[3];
-
-    // Invocation
-    vadd_c(_v1, _v2, _vout);
-
-    // Return Value
-    vout = FSVelocityVector(_vout);
+    MaxQ::Math::Vadd(v1, v2, vout);
 }
 
 
@@ -11398,17 +11292,7 @@ void USpice::vadd_angular_velocity(
     FSAngularVelocity& vout
 )
 {
-    // Input
-    SpiceDouble _v1[3]; v1.CopyTo(_v1);
-    SpiceDouble _v2[3]; v2.CopyTo(_v2);
-    // Output
-    SpiceDouble _vout[3];
-
-    // Invocation
-    vadd_c(_v1, _v2, _vout);
-
-    // Return Value
-    vout = FSAngularVelocity(_vout);
+    MaxQ::Math::Vadd(v1, v2, vout);
 }
 
 
@@ -11418,17 +11302,7 @@ void USpice::vadd(
     FSDimensionlessVector& vout
 )
 {
-    // Input
-    SpiceDouble _v1[3]; v1.CopyTo(_v1);
-    SpiceDouble _v2[3]; v2.CopyTo(_v2);
-    // Output
-    SpiceDouble _vout[3];
-
-    // Invocation
-    vadd_c(_v1, _v2, _vout);
-
-    // Return Value
-    vout = FSDimensionlessVector(_vout);
+    MaxQ::Math::Vadd(v1, v2, vout);
 }
 
 /*
@@ -11841,31 +11715,12 @@ void USpice::vlcom_distance(
 Exceptions
    Error free.
 */
-template<typename T>
-void vminus(
-    const T& v1,
-    T& vout
-)
-{
-    // Input
-    SpiceDouble _v1[3];     v1.CopyTo(_v1);
-    // Output
-    SpiceDouble _vout[3];
-
-    // Invocation
-    vminus_c(_v1, _vout);
-
-    // Return Value
-    vout = T(_vout);
-}
-
-
 void USpice::vminus(
     const FSDimensionlessVector& v1,
     FSDimensionlessVector& vout
 )
 {
-    ::vminus(v1, vout);
+    MaxQ::Math::Vminus(v1, vout);
 }
 
 
@@ -11874,7 +11729,7 @@ void USpice::vminus_distance(
     FSDistanceVector& vout
 )
 {
-    ::vminus(v1, vout);
+    MaxQ::Math::Vminus(v1, vout);
 }
 
 
@@ -11883,7 +11738,7 @@ void USpice::vminus_velocity(
     FSVelocityVector& vout
 )
 {
-    ::vminus(v1, vout);
+    MaxQ::Math::Vminus(v1, vout);
 }
 
 
@@ -12202,29 +12057,6 @@ void USpice::vsep(
     out = FSAngle(_out);
 }
 
-/*
-Exceptions
-   Error free.
-*/
-template<typename T>
-void vsub(
-    const T& v1,
-    const T& v2,
-    T& vout
-)
-{
-    // Inputs
-    SpiceDouble _v1[3]; v1.CopyTo(_v1);
-    SpiceDouble _v2[3]; v2.CopyTo(_v2);
-    // Outputs
-    SpiceDouble _vout[3];
-
-    // Invocation
-    vsub_c(_v1, _v2, _vout);
-
-    // Return Value
-    vout = T(_vout);
-}
 
 void USpice::vsub(
     const FSDimensionlessVector& v1,
@@ -12232,7 +12064,7 @@ void USpice::vsub(
     FSDimensionlessVector& vout
 )
 {
-    ::vsub(v1, v2, vout);
+    MaxQ::Math::Vsub(v1, v2, vout);
 }
 
 void USpice::vsub_distance(
@@ -12241,7 +12073,7 @@ void USpice::vsub_distance(
     FSDistanceVector& vout
 )
 {
-    ::vsub(v1, v2, vout);
+    MaxQ::Math::Vsub(v1, v2, vout);
 }
 
 void USpice::vsub_velocity(
@@ -12250,7 +12082,7 @@ void USpice::vsub_velocity(
     FSVelocityVector& vout
 )
 {
-    ::vsub(v1, v2, vout);
+    MaxQ::Math::Vsub(v1, v2, vout);
 }
 
 

@@ -156,12 +156,16 @@ public:
         const FSRotationMatrix& m,
         const FSDimensionlessVector& v
     );
+    static constexpr TCHAR* mxv_vector{ TEXT("mxv_vector_K2") };
+    static constexpr TCHAR* mxv_vin{ TEXT("v") };
+    static constexpr TCHAR* mxv_m{ TEXT("m") };
 
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "MaxQ|Internal")
     static FSDimensionlessStateVector mxv_state_vector_K2(
         const FSStateTransform& m,
         const FSDimensionlessStateVector& v
     );
+    static constexpr TCHAR* mxv_state_vector{ TEXT("mxv_state_vector_K2") };
 
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "MaxQ|Internal")
     static FSDimensionlessVector qderiv_vector_K2(

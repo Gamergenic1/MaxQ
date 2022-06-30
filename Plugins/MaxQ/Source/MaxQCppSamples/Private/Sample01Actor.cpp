@@ -300,6 +300,11 @@ void ASample01Actor::QueryEarthsGM()
         // Every MaxQ structure has a "ToString".
         Log(FString::Printf(TEXT("QueryEarthsGM bodvrd_mass - Earth's GM: %s"), *GM.ToString()), ResultCode);
 
+        // And then there's this...:
+        GM = MaxQ::Math::bodvrd<FSMassConstant>(TEXT("EARTH"), TEXT("GM"), &ResultCode, &ErrorMessage);
+
+        Log(FString::Printf(TEXT("QueryEarthsGM MaxQ::Math::bodvrd - Earth's GM: %s"), *GM.ToString()), ResultCode);
+
         // bodvcd_mass is another way to get a GM, by integer ID code instead of ID string.
         if (ResultCode == ES_ResultCode::Success)
         {
@@ -546,8 +551,7 @@ void ASample01Actor::ScaleAllBodies()
                 ActorName.RemoveAt(TrailingIndex, ActorName.Len() - TrailingIndex);
             }
 
-            FSDistanceVector Radii;
-            USpice::bodvrd_distance_vector(ResultCode, ErrorMessage, Radii, ActorName, TEXT("RADII"));
+            FSDistanceVector Radii = MaxQ::Math::bodvrd<FSDistanceVector>(ActorName, FString(TEXT("RADII")), &ResultCode, &ErrorMessage);
 
             if (ResultCode == ES_ResultCode::Success)
             {

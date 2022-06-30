@@ -52,7 +52,7 @@ FText UK2Node_vsub::GetNodeTitle(ENodeTitleType::Type TitleType) const
     switch (TitleType)
     {
     case ENodeTitleType::FullTitle:
-        return LOCTEXT("ListViewTitle", "vsub (experimental)");
+        return LOCTEXT("ListViewTitle", "vsub");
         if (!bUseShortNameForTitle && !OperandType.TypeName.IsNone())
         {
             /** The full title, may be multiple lines. */
@@ -61,10 +61,10 @@ FText UK2Node_vsub::GetNodeTitle(ENodeTitleType::Type TitleType) const
         break;
     case ENodeTitleType::MenuTitle:
         /** Menu Title for context menus to be displayed in context menus referencing the node. */
-        return LOCTEXT("MenuTitle", "vsub - Subtract two MaxQ vectors (experimental)");
+        return LOCTEXT("MenuTitle", "vsub - Subtract two MaxQ vectors");
     case ENodeTitleType::ListView:
         /** More concise, single line title. */
-        return LOCTEXT("ListViewTitle", "vsub - Subtract two vectors (experimental)");
+        return LOCTEXT("ListViewTitle", "vsub - Subtract two vectors");
     }
 
     return LOCTEXT("ShortTitle", "vsub");
@@ -86,7 +86,7 @@ FText UK2Node_vsub::GetKeywords() const
 FText UK2Node_vsub::GetTooltipText() const
 {
 
-    FText Tooltip = LOCTEXT("Tooltip", "Subtract two MaxQ vector types.\nStill experimental/under testing.\nThe intent is to support limited wildcards in a single action.\n\nSupports");
+    FText Tooltip = LOCTEXT("Tooltip", "Subtract two MaxQ vector types.  Support limited wildcards in a single action.");
 
     FText ListStart = LOCTEXT("ListStart", ":\n");
     FText ListSItemeparator = LOCTEXT("ListSItemeparator", ",\n");

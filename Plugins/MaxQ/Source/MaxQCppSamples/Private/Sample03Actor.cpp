@@ -10,7 +10,6 @@
 #include "Engine/Engine.h"
 #include "EngineUtils.h"
 #include "Spice.h"
-#include "SpiceK2.h"
 #include "SampleUtilities.h"
 
 using MaxQSamples::Log;

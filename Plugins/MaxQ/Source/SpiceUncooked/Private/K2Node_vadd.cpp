@@ -53,7 +53,7 @@ FText UK2Node_vadd::GetNodeTitle(ENodeTitleType::Type TitleType) const
     {
     case ENodeTitleType::FullTitle:
         /** The full title, may be multiple lines. */
-        return LOCTEXT("ListViewTitle", "vadd (experimental)");
+        return LOCTEXT("ListViewTitle", "vadd");
         if (!bUseShortNameForTitle && !OperandType.TypeName.IsNone())
         {
             return FText::FromString(FString::Printf(TEXT("vadd %s"), *OperandType.TypeName.ToString()));
@@ -61,10 +61,10 @@ FText UK2Node_vadd::GetNodeTitle(ENodeTitleType::Type TitleType) const
         break;
     case ENodeTitleType::MenuTitle:
         /** Menu Title for context menus to be displayed in context menus referencing the node. */
-        return LOCTEXT("MenuTitle", "vadd - Add MaxQ vectors (experimental)");
+        return LOCTEXT("MenuTitle", "vadd - Add MaxQ vectors");
     case ENodeTitleType::ListView:
         /** More concise, single line title. */
-        return LOCTEXT("ListViewTitle", "vadd - Add vectors (experimental)");
+        return LOCTEXT("ListViewTitle", "vadd - Add vectors");
     }
 
     return LOCTEXT("ShortTitle", "vadd");
@@ -85,8 +85,7 @@ FText UK2Node_vadd::GetKeywords() const
 
 FText UK2Node_vadd::GetTooltipText() const
 {
-
-    FText Tooltip = LOCTEXT("Tooltip", "Add two (or more) MaxQ vector types.\nStill experimental/under testing.\nThe intent is to support limited wildcards in a single action.\n\nSupports");
+    FText Tooltip = LOCTEXT("Tooltip", "Add two (or more) MaxQ vector types.  Support limited wildcards in a single action.");
 
     FText ListStart = LOCTEXT("ListStart", ":\n");
     FText ListSItemeparator = LOCTEXT("ListSItemeparator", ",\n");
