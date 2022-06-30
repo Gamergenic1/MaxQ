@@ -85,6 +85,11 @@ SPICE_API const FSDimensionlessVector FSDimensionlessVector::Z_Axis = FSDimensio
 SPICE_API const FSMassConstant FSMassConstant::Zero = FSMassConstant(0.);
 SPICE_API int USpiceTypes::FloatFormatPrecision = 8;
 
+double FSDistanceVector::f() const
+{
+    return (Re() - Rp()) / Re();
+}
+
 
 FString FSDistanceVector::ToString() const
 {
@@ -2072,15 +2077,6 @@ FSDimensionlessStateVector USpiceTypes::Conv_FSPlanetographicStateVectorToSDimen
 }
 
 
-// Operators that lean on SPICE's CSPICE implementations instead of implement themselves...
-FSRotationMatrix operator*(const FSRotationMatrix& lhs, const FSRotationMatrix& rhs)
-{
-    FSRotationMatrix result;
-    USpice::mxm(lhs, rhs, result);
-    return result;
-}
-
-
 void USpiceTypes::SingleEtWindow(
     const FSEphemerisTime& et0,
     const FSEphemerisTime& et1,
@@ -2119,25 +2115,11 @@ FSRotationMatrix USpiceTypes::Multiply_SRotationMatrixSRotationMatrix(const FSRo
     return A * B;
 }
 
-
-FSDimensionlessVector operator*(const FSRotationMatrix& lhs, const FSDimensionlessVector& rhs)
-{
-    FSDimensionlessVector result;
-    USpice::mxv(lhs, rhs, result);
-    return result;
-}
-
 FSDimensionlessVector USpiceTypes::MultiplyVec_SRotationMatrixSDimensionlessVector(const FSRotationMatrix& A, const FSDimensionlessVector& B)
 {
     return A * B;
 }
 
-FSDistanceVector operator*(const FSRotationMatrix& lhs, const FSDistanceVector& rhs)
-{
-    FSDistanceVector result;
-    USpice::mxv_distance(lhs, rhs, result);
-    return result;
-}
 
 FSDistanceVector USpiceTypes::MultiplyDist_SRotationMatrixSDistanceVector(const FSRotationMatrix& A, const FSDistanceVector& B)
 {
@@ -2145,26 +2127,11 @@ FSDistanceVector USpiceTypes::MultiplyDist_SRotationMatrixSDistanceVector(const 
 }
 
 
-FSVelocityVector operator*(const FSRotationMatrix& lhs, const FSVelocityVector& rhs)
-{
-    FSVelocityVector result;
-    USpice::mxv_velocity(lhs, rhs, result);
-    return result;
-}
-
 FSVelocityVector USpiceTypes::MultiplyVel_SRotationMatrixVelocityVector(const FSRotationMatrix& A, const FSVelocityVector& B)
 {
     return A * B;
 }
 
-
-
-FSQuaternion operator*(const FSQuaternion& lhs, const FSQuaternion& rhs)
-{
-    FSQuaternion result;
-    USpice::qxq(lhs, rhs, result);
-    return result;
-}
 
 FSQuaternion USpiceTypes::Multiply_SQuaternionSQuaternion(const FSQuaternion& A, const FSQuaternion& B)
 {

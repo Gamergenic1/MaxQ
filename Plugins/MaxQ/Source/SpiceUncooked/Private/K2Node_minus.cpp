@@ -368,18 +368,18 @@ FText UK2Node_minus::GetNodeTitle(ENodeTitleType::Type TitleType) const
     {
     case ENodeTitleType::FullTitle:
         /** The full title, may be multiple lines. */
-        return LOCTEXT("ListViewTitle", "vminus (experimental)");
+        return LOCTEXT("ListViewTitle", "vminus");
         if (!bUseShortNameForTitle && !OperandType.TypeName.IsNone())
         {
-            return FText::FromString(FString::Printf(TEXT("vpack %s"), *OperandType.TypeName.ToString()));
+            return FText::FromString(FString::Printf(TEXT("vminus %s"), *OperandType.TypeName.ToString()));
         }
         break;
     case ENodeTitleType::MenuTitle:
         /** Menu Title for context menus to be displayed in context menus referencing the node. */
-        return LOCTEXT("MenuTitle", "vminus - Negate vector (experimental)");
+        return LOCTEXT("MenuTitle", "vminus - Negate vector");
     case ENodeTitleType::ListView:
         /** More concise, single line title. */
-        return LOCTEXT("ListViewTitle", "vminus - Negate vector (experimental)");
+        return LOCTEXT("ListViewTitle", "vminus - Negate vector");
     }
 
     return LOCTEXT("ShortTitle", "vminus");
@@ -401,8 +401,7 @@ FText UK2Node_minus::GetKeywords() const
 
 FText UK2Node_minus::GetTooltipText() const
 {
-    
-    FText Tooltip = LOCTEXT("Tooltip", "Negate a MaxQ vector Type. E.g., return -V (by value).\nStill experimental/under testing.\nThe intent is to support limited wildcards in a single action.\n\nSupports");
+    FText Tooltip = LOCTEXT("Tooltip", "Negate a MaxQ vector Type. E.g., return -V (by value).  Support limited wildcards in a single action.");
 
     FText ListStart = LOCTEXT("ListStart", ":\n");
     FText ListSItemeparator = LOCTEXT("ListItemSeparator", ",\n");

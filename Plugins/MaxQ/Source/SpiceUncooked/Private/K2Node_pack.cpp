@@ -476,7 +476,7 @@ FText UK2Node_pack::GetNodeTitle(ENodeTitleType::Type TitleType) const
     {
     case ENodeTitleType::FullTitle:
         /** The full title, may be multiple lines. */
-        return LOCTEXT("ListViewTitle", "vpack (experimental)");
+        return LOCTEXT("ListViewTitle", "vpack");
         if (!bUseShortNameForTitle && !OperandType.TypeName.IsNone())
         {
             return FText::FromString(FString::Printf(TEXT("vpack %s"), *OperandType.TypeName.ToString()));
@@ -484,10 +484,10 @@ FText UK2Node_pack::GetNodeTitle(ENodeTitleType::Type TitleType) const
         break;
     case ENodeTitleType::MenuTitle:
         /** Menu Title for context menus to be displayed in context menus referencing the node. */
-        return LOCTEXT("MenuTitle", "vpack - Pack/Init MaxQ vector (experimental)");
+        return LOCTEXT("MenuTitle", "vpack - Pack/Init MaxQ vector");
     case ENodeTitleType::ListView:
         /** More concise, single line title. */
-        return LOCTEXT("ListViewTitle", "vpack - Pack vector (experimental)");
+        return LOCTEXT("ListViewTitle", "vpack - Pack vector");
     }
 
     return LOCTEXT("ShortTitle", "vpack");
@@ -509,8 +509,8 @@ FText UK2Node_pack::GetKeywords() const
 
 FText UK2Node_pack::GetTooltipText() const
 {
-    
-    FText Tooltip = LOCTEXT("Tooltip", "Pack a MaxQ vector Type.\nStill experimental/under testing.\nThe intent is to support limited wildcards in a single action.\n\nSupports");
+   
+    FText Tooltip = LOCTEXT("Tooltip", "Pack a MaxQ vector Type.  Support limited wildcards in a single action.");
 
     FText ListStart = LOCTEXT("ListStart", ":\n");
     FText ListSItemeparator = LOCTEXT("ListItemSeparator", ",\n");

@@ -61,7 +61,7 @@ public:
     void CreateInputPin();
     void AllocateInputPin(FName& PinName);
 
-    static TArray<FK2VnormOp> SupportedOperations;
+    static const TArray<FK2VnormOp> SupportedOperations;
 
     UPROPERTY()
     FK2VnormOp CurrentOperation;

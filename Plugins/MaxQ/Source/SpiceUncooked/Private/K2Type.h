@@ -175,6 +175,8 @@ struct SPICEUNCOOKED_API FK2Type
     static const FK2Type& SAngularVelocity();
     static const FK2Type& SStateVector();
     static const FK2Type& SDimensionlessStateVector();
+    static const FK2Type& SRotationMatrix();
+    static const FK2Type& SStateTransform();
 
     static TArray<FString> GetTypePinLabels(const UScriptStruct* WhatType);
 

@@ -6,7 +6,6 @@
 // GitHub:         https://github.com/Gamergenic1/MaxQ/ 
 
 #include "Sample04Actor.h"
-#include "SpiceTypes.h"
 #include "Spice.h"
 
 using MaxQSamples::Log;
@@ -189,8 +188,7 @@ void ASample04Actor::sxform(const FSEphemerisTime& et)
 
     // We can transform an arbitrary state vector...
     FSStateVector StateInEarthsFixedFrame(FSDistanceVector(6700,0,0), FSVelocityVector());
-    FSStateVector StateInObserverFrame;
-    USpice::mxv_state(StateTransform, StateInEarthsFixedFrame, StateInObserverFrame);
+    FSStateVector StateInObserverFrame = StateTransform * StateInEarthsFixedFrame;
 
     // Print the results
     Log(FString::Printf(TEXT("sxform: random state in Earth's Fixed Frame=%s"), *StateInEarthsFixedFrame.ToString()));
