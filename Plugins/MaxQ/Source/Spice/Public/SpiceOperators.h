@@ -14,7 +14,7 @@ template<class VectorType>
 inline VectorType operator*(const FSRotationMatrix& lhs, const VectorType& rhs)
 {
     VectorType result;
-    MaxQ::Math::MxV(lhs, rhs, result);
+    MaxQ::Math::MxV(result, lhs, rhs);
     return result;
 }
 
@@ -22,7 +22,7 @@ template<class VectorType>
 inline VectorType operator*(const FSStateTransform& lhs, const VectorType& rhs)
 {
     VectorType result;
-    MaxQ::Math::MxV(lhs, rhs, result);
+    MaxQ::Math::MxV(result, lhs, rhs);
     return result;
 }
 

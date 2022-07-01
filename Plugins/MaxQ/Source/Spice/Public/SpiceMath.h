@@ -11,25 +11,6 @@
 
 namespace MaxQ::Math
 {
-    // Conversions from physical types to/from dimensionless types
-    template<class VectorType, class DimensionlessType>
-    inline VectorType Conv_FromDimensionlessType(const DimensionlessType& v) { return { v }; }
-
-    template<>
-    inline FSDimensionlessVector Conv_FromDimensionlessType(const FSDimensionlessVector& v) { return v; }
-
-    template<>
-    inline FSDimensionlessStateVector Conv_FromDimensionlessType(const FSDimensionlessStateVector& v) { return v; }
-
-    template<class VectorType, class DimensionlessType>
-    inline DimensionlessType Conv_AsDimensionlessType(const VectorType& v) { return v.AsDimensionlessVector(); }
-
-    template<>
-    inline FSDimensionlessVector Conv_AsDimensionlessType(const FSDimensionlessVector& v) { return v; }
-
-    template<>
-    inline FSDimensionlessStateVector Conv_AsDimensionlessType(const FSDimensionlessStateVector& v) { return v; }
-
     // bodvrd
     template<class ValueType>
     SPICE_API void bodvrd(
@@ -99,102 +80,233 @@ namespace MaxQ::Math
 
     // m * v
     template<class VectorType>
-    SPICE_API void MxV(const FSRotationMatrix& m, const VectorType& v, VectorType& vout);
+    SPICE_API void MxV(VectorType& vout, const FSRotationMatrix& m, const VectorType& v);
 
     template<class VectorType>
     inline VectorType MxV(const FSRotationMatrix& m, const VectorType& v)
     {
         VectorType vout;
-        MxV(m, v, vout);
+        MxV(vout, m, v);
         return vout;
     }
 
     template<class VectorType>
-    SPICE_API void MxV(const FSStateTransform& m, const VectorType& v, VectorType& vout);
+    SPICE_API void MxV(VectorType& vout, const FSStateTransform& m, const VectorType& v);
 
     template<class VectorType>
     inline VectorType MxV(const FSStateTransform& m, const VectorType& v)
     {
         VectorType vout;
-        MxV(m, v, vout);
+        MxV(vout, m, v);
         return vout;
     }
 
     // m_transpose * v
     template<class VectorType>
-    SPICE_API void MTxV(const FSRotationMatrix& m, const VectorType& v, VectorType& vout);
+    SPICE_API void MTxV(VectorType& vout, const FSRotationMatrix& m, const VectorType& v);
 
     template<class VectorType>
     inline VectorType MTxV(const FSRotationMatrix& m, const VectorType& v)
     {
         VectorType vout;
-        MTxV(m, v, vout);
+        MTxV(vout, m, v);
         return vout;
     }
 
     template<class VectorType>
-    SPICE_API void MTxV(const FSStateTransform& m, const VectorType& v, VectorType& vout);
+    SPICE_API void MTxV(VectorType& vout, const FSStateTransform& m, const VectorType& v);
 
     template<class VectorType>
     inline VectorType MTxV(const FSStateTransform& m, const VectorType& v)
     {
         VectorType vout;
-        MTxV(m, v, vout);
+        MTxV(vout, m, v);
         return vout;
     }
 
-    // m * m
-    SPICE_API void MxM(const FSRotationMatrix& m1, const FSRotationMatrix& m2, FSRotationMatrix& mout);
-    SPICE_API FSRotationMatrix MxM(const FSRotationMatrix& m1, const FSRotationMatrix& m2);
-    SPICE_API void MxM(const FSStateTransform& m1, const FSStateTransform& m2, FSStateTransform& mout);
-    SPICE_API FSStateTransform MxM(const FSStateTransform& m1, const FSStateTransform& m2);
-    
-    // m_transpose * m
-    SPICE_API void MTxM(const FSRotationMatrix& m1, const FSRotationMatrix& m2, FSRotationMatrix& mout);
-    SPICE_API FSRotationMatrix MTxM(const FSRotationMatrix& m1, const FSRotationMatrix& m2);
-    SPICE_API void MTxM(const FSStateTransform& m1, const FSStateTransform& m2, FSStateTransform& mout);
-    SPICE_API FSStateTransform MTxM(const FSStateTransform& m1, const FSStateTransform& m2);
-    
-    // m * m_transpose
-    SPICE_API void MxMT(const FSRotationMatrix& m1, const FSRotationMatrix& m2, FSRotationMatrix& mout);
-    SPICE_API FSRotationMatrix MxMT(const FSRotationMatrix& m1, const FSRotationMatrix& m2);
-    SPICE_API void MxMT(const FSStateTransform& m1, const FSStateTransform& m2, FSStateTransform& mout);
-    SPICE_API FSStateTransform MxMT(const FSStateTransform& m1, const FSStateTransform& m2);
 
+    // m * m
+    SPICE_API void MxM(FSRotationMatrix& mout, const FSRotationMatrix& m1, const FSRotationMatrix& m2);
+    
+    inline FSRotationMatrix MxM(const FSRotationMatrix& m1, const FSRotationMatrix& m2)
+    {
+        FSRotationMatrix mout;
+        MxM(mout, m1, m2);
+        return mout;
+    }
+    SPICE_API void MxM(FSStateTransform& mout, const FSStateTransform& m1, const FSStateTransform& m2);
+    inline FSStateTransform MxM(const FSStateTransform& m1, const FSStateTransform& m2)
+    {
+        FSStateTransform mout;
+        MxM(mout, m1, m2);
+        return mout;
+    }
+
+    // m_transpose * m
+    SPICE_API void MTxM(FSRotationMatrix& mout, const FSRotationMatrix& m1, const FSRotationMatrix& m2);
+    inline FSRotationMatrix MTxM(const FSRotationMatrix& m1, const FSRotationMatrix& m2)
+    {
+        FSRotationMatrix mout;
+        MTxM(mout, m1, m2);
+        return mout;
+    }
+    SPICE_API void MTxM(FSStateTransform& mout, const FSStateTransform& m1, const FSStateTransform& m2);
+    inline FSStateTransform MTxM(const FSStateTransform& m1, const FSStateTransform& m2)
+    {
+        FSStateTransform mout;
+        MTxM(mout, m1, m2);
+        return mout;
+    }
+
+    // m * m_transpose
+    SPICE_API void MxMT(FSRotationMatrix& mout, const FSRotationMatrix& m1, const FSRotationMatrix& m2);
+    inline FSRotationMatrix MxMT(const FSRotationMatrix& m1, const FSRotationMatrix& m2)
+    {
+        FSRotationMatrix mout;
+        MxMT(mout, m1, m2);
+        return mout;
+    }
+    SPICE_API void MxMT(FSStateTransform& mout, const FSStateTransform& m1, const FSStateTransform& m2);
+    inline FSStateTransform MxMT(const FSStateTransform& m1, const FSStateTransform& m2)
+    {
+        FSStateTransform mout;
+        MxMT(mout, m1, m2);
+        return mout;
+    }
 
     // addition
     template<class VectorType>
-    SPICE_API void Vadd(const VectorType& v1, const VectorType& v2, VectorType& vsum);
+    SPICE_API void Vadd(VectorType& vsum, const VectorType& v1, const VectorType& v2);
 
     template<class VectorType>
     inline VectorType Vadd(const VectorType& v1, const VectorType& v2)
     {
         VectorType vsum;
-        Vadd(v1, v2, vsum);
+        Vadd(vsum, v1, v2);
         return vsum;
     }
 
     // subtraction
     template<class VectorType>
-    SPICE_API void Vsub(const VectorType& v1, const VectorType& v2, VectorType& vdifference);
+    SPICE_API void Vsub(VectorType& vdifference, const VectorType& v1, const VectorType& v2);
 
     template<class VectorType>
     inline VectorType Vsub(const VectorType& v1, const VectorType& v2)
     {
         VectorType vdifference;
-        Vsub(v1, v2, vdifference);
+        Vsub(vdifference, v1, v2);
         return vdifference;
     }
 
     // negation
     template<class VectorType>
-    SPICE_API void Vminus(const VectorType& v, VectorType& vminus);
+    SPICE_API void Vminus(VectorType& vminus, const VectorType& vin);
 
     template<class VectorType>
-    inline VectorType Vminus(const VectorType& v)
+    inline VectorType Vminus(const VectorType& vin)
     {
         VectorType vminus;
-        Vminus(v, vminus);
+        Vminus(vminus, vin);
         return vminus;
+    }
+
+    template<class ParamRateType, class ParamType>
+    SPICE_API void Qderiv(ParamRateType& dfdt, const ParamType& f0, const ParamType& f2, double delta);
+
+    template<class ParamRateType, class ParamType>
+    inline ParamRateType Qderiv(const ParamType& f0, const ParamType& f2, double delta)
+    {
+        ParamRateType dfdt;
+        Qderiv(dfdt, f0, f2, delta);
+        return dfdt;
+    }
+
+    SPICE_API void TwoVec(
+        FSRotationMatrix& m,
+        ES_Axis axisa,
+        const FSDimensionlessVector& axdef,
+        ES_Axis axisp,
+        const FSDimensionlessVector& plndef,
+        ES_ResultCode* ResultCode = nullptr,
+        FString* ErrorMessage = nullptr
+    );
+
+    inline FSRotationMatrix TwoVec(
+        ES_Axis axisa,
+        const FSDimensionlessVector& axdef,
+        ES_Axis axisp,
+        const FSDimensionlessVector& plndef,
+        ES_ResultCode* ResultCode = nullptr,
+        FString* ErrorMessage = nullptr
+        )
+    {
+        FSRotationMatrix m;
+        TwoVec(m, axisa, axdef, axisp, plndef, ResultCode, ErrorMessage);
+        return m;
+    }
+
+    SPICE_API void TwoVXF(
+        FSStateTransform& m,
+        ES_Axis axisa,
+        const FSDimensionlessStateVector& axdef,
+        ES_Axis axisp,
+        const FSDimensionlessStateVector& plndef,
+        ES_ResultCode* ResultCode = nullptr,
+        FString* ErrorMessage = nullptr
+    );
+
+    inline FSStateTransform TwoVXF(
+        ES_Axis axisa,
+        const FSDimensionlessStateVector& axdef,
+        ES_Axis axisp,
+        const FSDimensionlessStateVector& plndef,
+        ES_ResultCode* ResultCode = nullptr,
+        FString* ErrorMessage = nullptr
+    )
+    {
+        FSStateTransform m;
+        TwoVXF(m, axisa, axdef, axisp, plndef, ResultCode, ErrorMessage);
+        return m;
+    }
+
+
+    // unit cross product
+    template<class VectorType>
+    SPICE_API void Ucrss(VectorType& vout, const VectorType& v1, const VectorType& v2);
+
+    template<class VectorType>
+    inline VectorType Ucrss(const VectorType& v1, const VectorType& v2)
+    {
+        VectorType vout;
+        Ucrss(vout, v1, v2);
+        return vout;
+    }
+
+    SPICE_API void Ucrss(FSDimensionlessVector& vout, const FSDistanceVector& r, const FSVelocityVector& v);
+    inline FSDimensionlessVector Ucrss(const FSDistanceVector& r, const FSVelocityVector& v)
+    {
+        FSDimensionlessVector vout;
+        Ucrss(vout, r, v);
+        return vout;
+    }
+
+    inline void Ucrss(FSDimensionlessVector& vout, const FSStateVector& state) { Ucrss(vout, state.r, state.v); }
+    inline FSDimensionlessVector Ucrss(const FSStateVector& state) { return Ucrss(state.r, state.v); }
+
+
+    // unit normal and magnitude
+    // It's not necessarily obvious which combinations exist or not, so rather than
+    // a two type template, we use explicit overloads here.
+    SPICE_API void Unorm(FSDimensionlessVector& vout, FSDistance& vmag, const FSDistanceVector& v);
+    SPICE_API void Unorm(FSDimensionlessVector& vout, FSSpeed& vmag, const FSVelocityVector& v);
+    SPICE_API void Unorm(FSDimensionlessVector& vout, FSAngularRate& vmag, const FSAngularVelocity& v);
+    SPICE_API void Unorm(FSDimensionlessVector& vout, double& vmag, const FSDimensionlessVector& v);
+
+    template<class VectorType, class ScalarType>
+    inline FSDimensionlessVector Unorm(ScalarType& vmag, const VectorType& v)
+    {
+        FSDimensionlessVector vout;
+        Unorm(vout, vmag, v);
+        return vout;
     }
 };

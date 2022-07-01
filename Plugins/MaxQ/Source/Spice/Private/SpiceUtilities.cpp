@@ -134,6 +134,17 @@ uint8 ErrorCheck(ES_ResultCode& ResultCode, FString& ErrorMessage, bool BeQuiet)
 }
 
 
+SPICE_API uint8 ErrorCheck(ES_ResultCode* ResultCode, FString* ErrorMessage, bool BeQuiet /*= false*/)
+{
+    ES_ResultCode DummyResultCode;
+    FString DummyErrorMessage;
+    if (ResultCode == nullptr) ResultCode = &DummyResultCode;
+    if (ErrorMessage == nullptr) ErrorMessage = &DummyErrorMessage;
+
+    return ErrorCheck(*ResultCode, *ErrorMessage, BeQuiet);
+}
+
+
 uint8 UnexpectedErrorCheck(bool bReset)
 {
     uint8 failed = failed_c();
