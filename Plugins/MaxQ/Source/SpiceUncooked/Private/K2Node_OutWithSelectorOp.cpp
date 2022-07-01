@@ -130,8 +130,8 @@ void UK2Node_OutWithSelectorOp::ExpandNode(FKismetCompilerContext& CompilerConte
 
         auto pinType = link->PinType;
 
-        bool found = MatchMe(CurrentOperation, pinType, selectorPinValue());
-        if (found)
+        bool bFound = MatchMe(CurrentOperation, pinType, selectorPinValue());
+        if (bFound)
         {
             link->PinType.PinCategory = CurrentOperation.Final.Category;
             link->PinType.PinSubCategoryObject = CurrentOperation.Final.SubCategoryObject;

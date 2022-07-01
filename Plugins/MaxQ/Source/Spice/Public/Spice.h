@@ -74,7 +74,7 @@ public:
             Keywords = "UTILITY",
             ExpandEnumAsExecs = "ResultCode",
             ShortToolTip = "Load kernel file",
-            ToolTip = "Load a kernel file (path relative to /Content directory)"
+            ToolTip = "Load a kernel file\n\nThe path relative to the /Content directory,\ne.g. \"kernels/gm_de431.tpc\", where this is a subdirectory of your Content directory."
             ))
     static void furnsh(
         ES_ResultCode& ResultCode,
@@ -278,11 +278,11 @@ public:
         Category = "MaxQ|Kernel",
         meta = (
             Keywords = "CONSTANTS",
-            ExpandEnumAsExecs = "found",
+            ExpandEnumAsExecs = "FoundCode",
             ToolTip = "Determine whether values exist for some item for any body in the kernel pool"
             ))
     static void bodfnd(
-        ES_FoundCode& found,
+        ES_FoundCode& FoundCode,
         int body = 399,
         const FString& item = TEXT("RADAII")
     );
@@ -292,11 +292,11 @@ public:
         Category = "MaxQ|NAIF IDs",
         meta = (
             Keywords = "BODY, CONVERSION",
-            ExpandEnumAsExecs = "found",
+            ExpandEnumAsExecs = "FoundCode",
             ToolTip = "Translate the SPICE integer code of a body into a common name for that body"
             ))
     static void bodc2n(
-        ES_FoundCode& found,
+        ES_FoundCode& FoundCode,
         int code,
         FString& name
     );
@@ -305,13 +305,13 @@ public:
     UFUNCTION(BlueprintCallable,
         Category = "MaxQ|NAIF IDs",
         meta = (
-            ExpandEnumAsExecs = "found",
+            ExpandEnumAsExecs = "FoundCode",
             Keywords = "BODY, CONVERSION, ID, NAME, UTILITY",
             ShortToolTip = "Body string to ID code translation",
             ToolTip = "Translate a string containing a body name or ID code to an integer code"
             ))
     static void bods2c(
-        ES_FoundCode& found,
+        ES_FoundCode& FoundCode,
         int& code,
         const FString& name = TEXT("EARTH")
     );
@@ -320,13 +320,13 @@ public:
     UFUNCTION(BlueprintCallable,
         Category = "MaxQ|NAIF IDs",
         meta = (
-            ExpandEnumAsExecs = "found",
+            ExpandEnumAsExecs = "FoundCode",
             Keywords = "BODY, CONVERSION, ID, NAME",
             ShortToolTip = "Body name to ID code translation",
             ToolTip = "Translate the name of a body or object to the corresponding SPICE integer ID code"
             ))
         static void bodn2c(
-            ES_FoundCode& found,
+            ES_FoundCode& FoundCode,
             int& code,
             const FString& name = TEXT("EARTH")
         );
@@ -583,14 +583,14 @@ public:
         Category = "MaxQ|CK",
         meta = (
             Keywords = "POINTING",
-            ExpandEnumAsExecs = "found",
+            ExpandEnumAsExecs = "FoundCode",
             ShortToolTip = "CK frame, find position rotation",
             ToolTip = "Find the position rotation matrix from a C-kernel (CK) frame with the specified frame class ID(CK ID) to the base frame of the highest priority CK segment containing orientation data for this CK"
             ))
     static void ckfrot(
         ES_ResultCode& ResultCode,
         FString& ErrorMessage,
-        ES_FoundCode& found,
+        ES_FoundCode& FoundCode,
         FSRotationMatrix& rotationMatrix,
         int& ref,
         int inst,
@@ -602,14 +602,14 @@ public:
         Category = "MaxQ|CK",
         meta = (
             Keywords = "POINTING",
-            ExpandEnumAsExecs = "found",
+            ExpandEnumAsExecs = "FoundCode",
             ShortToolTip = "CK frame, find state transformation",
             ToolTip = "Find the state transformation matrix from a C-kernel (CK) frame with the specified frame class ID(CK ID) to the base frame of the highest priority CK segment containing orientation and angular velocity"
             ))
     static void ckfxfm(
         ES_ResultCode& ResultCode,
         FString& ErrorMessage,
-        ES_FoundCode& found,
+        ES_FoundCode& FoundCode,
         FSStateTransform& xform,
         int& ref,
         int inst,
@@ -643,7 +643,7 @@ public:
         const FString& ref,
         FSRotationMatrix& cmat,
         double& clkout,
-        bool& found
+        bool& bFound
     );
 
     /// <summary>C-kernel, get pointing and angular velocity</summary>
@@ -674,7 +674,7 @@ public:
         FSRotationMatrix& cmat,
         FSAngularVelocity& av,
         double& clkout,
-        bool& found
+        bool& bFound
     );
 
 
@@ -1140,7 +1140,7 @@ public:
         FSDSKDescr& dskdsc,
         TArray<double> dc,
         TArray<int> ic,
-        bool& found,
+        bool& bFound,
         TArray<int> srflst,
         const FSEphemerisTime& et,
         const FSRay& ray,
@@ -1290,7 +1290,7 @@ public:
         BlueprintCallable,
         Category = "MaxQ|DAS",
         meta = (
-            ExpandEnumAsExecs = "found",
+            ExpandEnumAsExecs = "FoundCode",
             Keywords = "DAS, DLA, FILES",
             ShortToolTip = "DLA, begin forward search",
             ToolTip = "Begin a forward segment search in a DLA file"
@@ -1298,7 +1298,7 @@ public:
     static void dlabfs(
         int          handle,
         FSDLADescr& dladsc,
-        ES_FoundCode& found
+        ES_FoundCode& FoundCode
     );
 
     /// <summary>Return the value of Delta ET (ET-UTC) for an input epoch</summary>
@@ -1590,7 +1590,7 @@ public:
     UFUNCTION(BlueprintCallable,
         Category = "MaxQ|Frames",
         meta = (
-            ExpandEnumAsExecs = "found",
+            ExpandEnumAsExecs = "FoundCode",
             Keywords = "FRAMES",
             ShortToolTip = "Frame Information",
             ToolTip = "Retrieve the minimal attributes associated with a frame needed for converting transformations to and from it"
@@ -1600,7 +1600,7 @@ public:
         int& cent,
         int& frclss,
         int& clssid,
-        ES_FoundCode& found
+        ES_FoundCode& FoundCode
     );
 
     UFUNCTION(BlueprintCallable,
@@ -1639,7 +1639,7 @@ public:
         ES_ResultCode& ResultCode,
         FString& ErrorMessage,
         TArray<FString>& cvals,
-        bool& found,
+        bool& bFound,
         const FString& name = TEXT("PATH_VALUES"),
         int                 start = 0,
         int                 room = 1
@@ -1666,7 +1666,7 @@ public:
         ES_ResultCode& ResultCode,
         FString& ErrorMessage,
         TArray<double>& values,
-        bool& found,
+        bool& bFound,
         const FString& name = TEXT("BODY514_NUT_PREC_RA"),
         int                 start = 0,
         int                 room = 7
@@ -1685,7 +1685,7 @@ public:
         ES_ResultCode& ResultCode,
         FString& ErrorMessage,
         double& value,
-        bool& found,
+        bool& bFound,
         const FString& name = TEXT("BODY514_LONG_AXIS")
     );
 
@@ -1703,7 +1703,7 @@ public:
         ES_ResultCode& ResultCode,
         FString& ErrorMessage,
         FSDistance& value,
-        bool& found,
+        bool& bFound,
         const FString& name = TEXT("BODY514_LONG_AXIS")
     );
 
@@ -1721,7 +1721,7 @@ public:
         ES_ResultCode& ResultCode,
         FString& ErrorMessage,
         FSDistanceVector& value,
-        bool& found,
+        bool& bFound,
         const FString& name
     );
 
@@ -1739,7 +1739,7 @@ public:
         ES_ResultCode& ResultCode,
         FString& ErrorMessage,
         FSMassConstant& value,
-        bool& found,
+        bool& bFound,
         const FString& name = TEXT("BODY399_GM")
     );
 
@@ -2193,7 +2193,7 @@ public:
         ES_ResultCode& ResultCode,
         FString& ErrorMessage,
         TArray<int>& ivals,
-        bool& found,
+        bool& bFound,
         const FString& name,
         int             start,
         int             room
@@ -2220,7 +2220,7 @@ public:
         ES_ResultCode& ResultCode,
         FString& ErrorMessage,
         TArray<FString>& kvars,
-        bool& found,
+        bool& bFound,
         const FString& name = TEXT("BODY%%%_*"),
         int                 start = 0,
         int                 room = 100
@@ -4263,7 +4263,7 @@ public:
         FSDistanceVector& spoint,
         FSEphemerisTime& trgepc,
         FSDistanceVector& srfvec,
-        bool& found,
+        bool& bFound,
         const TArray<FString>& shapeSurfaces,
         ES_GeometricModel method = ES_GeometricModel::ELLIPSOID,
         const FString& target = TEXT("EARTH"),
@@ -4896,14 +4896,14 @@ public:
     UFUNCTION(BlueprintCallable,
         Category = "MaxQ|DSK",
         meta = (
-            ExpandEnumAsExecs = "found",
+            ExpandEnumAsExecs = "FoundCode",
             Keywords = "CONVERSION, DSK, ID, NAME, STRING, SURFACE",
             ShortToolTip = "Surface and body strings to surface ID code",
             ToolTip = "Translate a surface string, together with a body string, to the corresponding surface ID code.The input strings may contain names or integer ID codes"
             ))
     static void srfs2c(
         int& code,
-        ES_FoundCode& found,
+        ES_FoundCode& FoundCode,
         const FString& srfstr = TEXT("MGS MOLA 128 pixel/deg"),
         const FString& bodstr = TEXT("MARS")
     );
@@ -4911,14 +4911,14 @@ public:
     UFUNCTION(BlueprintCallable,
         Category = "MaxQ|DSK",
         meta = (
-            ExpandEnumAsExecs = "found",
+            ExpandEnumAsExecs = "FoundCode",
             Keywords = "CONVERSION, DSK, ID, NAME, STRING, SURFACE",
             ShortToolTip = "Surface and body strings to surface ID code",
             ToolTip = "Translate a surface string, together with a body ID code, to the corresponding surface ID code.The input surface string may contain a name or an integer ID code."
             ))
     static void srfscc(
         int& code,
-        ES_FoundCode& found,
+        ES_FoundCode& FoundCode,
         const FString& srfstr = TEXT("PHOBOS GASKELL Q512"),
         int bodyid = 401
     );
@@ -5043,7 +5043,7 @@ public:
         const FSDistance& b,
         const FSDistance& c,
         FSDistanceVector& point,
-        bool& found
+        bool& bFound
     );
 
     /// <summary>Return the state transformation matrix from one frame to another at a specified epoch</summary>

@@ -34,6 +34,19 @@ void USpice::enumerate_kernels(
 )
 {
     FString FileDirectory = toPath(relativeDirectory);
+
+    if (!FPaths::DirectoryExists(FileDirectory))
+    {
+        ErrorMessage = FString::Printf(
+            TEXT("Directory %s does not exist.\n(MaxQ internally expanded the path to %s.)\nIs the relative directory given to Enumerate Kernels correct?\n")
+            TEXT("Directories are given relative to / Content,\n   'MyProject/Content/KernelFiles/Directory1'\nwould be given as\n   'KernelFiles/Directory1' "),
+            *relativeDirectory, *FileDirectory);
+        UE_LOG(LogSpice, Error, TEXT("MaxQ Spice Enumerate Kernels: %s"), *ErrorMessage);
+        ResultCode = ES_ResultCode::Error;
+        return;
+    }
+
+
     kernelFilePaths.Empty();
 
     TArray<FString> foundFiles;
@@ -645,14 +658,14 @@ Exceptions
    Error free.
 */
 void USpice::bodfnd(
-    ES_FoundCode& found,
+    ES_FoundCode& FoundCode,
     int body,
     const FString& item
 )
 {
     SpiceBoolean result = bodfnd_c((SpiceInt)body, TCHAR_TO_ANSI(*item));
 
-    found = (result != SPICEFALSE) ? ES_FoundCode::Found : ES_FoundCode::NotFound;
+    FoundCode = (result != SPICEFALSE) ? ES_FoundCode::Found : ES_FoundCode::NotFound;
 
     // Reset the current spice error in case a spice exception happened.
     UnexpectedErrorCheck(true);
@@ -660,7 +673,7 @@ void USpice::bodfnd(
 
 
 void USpice::bodc2n(
-    ES_FoundCode& found,
+    ES_FoundCode& FoundCode,
     int code,
     FString& name
 )
@@ -680,11 +693,11 @@ void USpice::bodc2n(
     if (_found != SPICEFALSE)
     {
         name = FString(szBuffer);
-        found = ES_FoundCode::Found;
+        FoundCode = ES_FoundCode::Found;
     }
     else
     {
-        found = ES_FoundCode::NotFound;
+        FoundCode = ES_FoundCode::NotFound;
     }
 
     // Reset the current spice error in case a spice exception happened.
@@ -703,7 +716,7 @@ Exceptions
       pointer `name' is null.
 */
 void USpice::bodn2c(
-    ES_FoundCode& found,
+    ES_FoundCode& FoundCode,
     int& code,
     const FString& name
 )
@@ -717,13 +730,13 @@ void USpice::bodn2c(
     if (_found != SPICEFALSE)
     {
         code = (int)_code;
-        found = ES_FoundCode::Found;
+        FoundCode = ES_FoundCode::Found;
     }
     else
     {
         // For some reason this seems to expose a bug in UE5EA,
         // ... The caller acts as if the Found exec branch should be taken.
-        found = ES_FoundCode::NotFound;
+        FoundCode = ES_FoundCode::NotFound;
     }
 
     // Reset the current spice error in case a spice exception happened.
@@ -732,7 +745,7 @@ void USpice::bodn2c(
 
 
 void USpice::bods2c(
-    ES_FoundCode& found,
+    ES_FoundCode& FoundCode,
     int& code,
     const FString& name
 )
@@ -746,11 +759,11 @@ void USpice::bods2c(
     if (_found != SPICEFALSE)
     {
         code = (int)_code;
-        found = ES_FoundCode::Found;
+        FoundCode = ES_FoundCode::Found;
     }
     else
     {
-        found = ES_FoundCode::NotFound;
+        FoundCode = ES_FoundCode::NotFound;
     }
 
     // Reset the current spice error in case a spice exception happened.
@@ -1285,7 +1298,7 @@ void USpice::ckcov(
 void USpice::ckfrot(
     ES_ResultCode& ResultCode,
     FString& ErrorMessage,
-    ES_FoundCode& found,
+    ES_FoundCode& FoundCode,
     FSRotationMatrix& rotationMatrix,
     int& ref,
     int inst,
@@ -1297,7 +1310,7 @@ void USpice::ckfrot(
     SpiceDouble     _et = et.AsSpiceDouble();
     SpiceDouble     _m[3][3];  rotationMatrix.CopyTo(_m);
     SpiceInt        _ref = ref;
-    SpiceBoolean    _found = (found == ES_FoundCode::Found) ? SPICETRUE : SPICEFALSE;
+    SpiceBoolean    _found = (FoundCode == ES_FoundCode::Found) ? SPICETRUE : SPICEFALSE;
 
     // Invoke
     ckfrot_c(
@@ -1310,7 +1323,7 @@ void USpice::ckfrot(
 
     // Pack up outputs
     rotationMatrix = FSRotationMatrix(_m);
-    found = (_found == SPICETRUE) ? ES_FoundCode::Found : ES_FoundCode::NotFound;
+    FoundCode = (_found == SPICETRUE) ? ES_FoundCode::Found : ES_FoundCode::NotFound;
     ref = _ref;
 
     // Error Handling
@@ -1321,7 +1334,7 @@ void USpice::ckfrot(
 void USpice::ckfxfm(
     ES_ResultCode& ResultCode,
     FString& ErrorMessage,
-    ES_FoundCode& found,
+    ES_FoundCode& FoundCode,
     FSStateTransform& xform,
     int& ref,
     int inst,
@@ -1333,7 +1346,7 @@ void USpice::ckfxfm(
     SpiceDouble     _et = et.AsSpiceDouble();
     SpiceDouble     _xform[6][6];  xform.CopyTo(_xform);
     SpiceInt        _ref = ref;
-    SpiceBoolean    _found = (found == ES_FoundCode::Found) ? SPICETRUE : SPICEFALSE;
+    SpiceBoolean    _found = (FoundCode == ES_FoundCode::Found) ? SPICETRUE : SPICEFALSE;
 
     // Invoke
     ckfxfm_c(
@@ -1346,7 +1359,7 @@ void USpice::ckfxfm(
 
     // Pack up outputs
     xform = FSStateTransform(_xform);
-    found = (_found == SPICETRUE) ? ES_FoundCode::Found : ES_FoundCode::NotFound;
+    FoundCode = (_found == SPICETRUE) ? ES_FoundCode::Found : ES_FoundCode::NotFound;
     ref = _ref;
 
     // Error Handling
@@ -1375,7 +1388,7 @@ void USpice::ckgp(
     const FString& ref,
     FSRotationMatrix& cmat,
     double& clkout,
-    bool& found
+    bool& bFound
 )
 {
     // Inputs
@@ -1394,7 +1407,7 @@ void USpice::ckgp(
     // Return Values
     cmat = FSRotationMatrix(_cmat);
     clkout = _clkout;
-    found = _found ? true : false;
+    bFound = (_found == SPICETRUE);
 
     // Error Handling
     ErrorCheck(ResultCode, ErrorMessage);
@@ -1410,7 +1423,7 @@ void USpice::ckgpav(
     FSRotationMatrix& cmat,
     FSAngularVelocity& av,
     double& clkout,
-    bool& found
+    bool& bFound
 )
 {
     // Inputs
@@ -1431,7 +1444,7 @@ void USpice::ckgpav(
     cmat = FSRotationMatrix(_cmat);
     av = FSAngularVelocity(_av);
     clkout = _clkout;
-    found = _found ? true : false;
+    bFound = (_found == SPICETRUE);
 
     // Error Handling
     ErrorCheck(ResultCode, ErrorMessage);
@@ -2306,7 +2319,7 @@ void USpice::dascls(
 void USpice::dlabfs(
     int          handle,
     FSDLADescr& dladsc,
-    ES_FoundCode& found
+    ES_FoundCode& FoundCode
 )
 {
     // Input
@@ -2325,7 +2338,7 @@ void USpice::dlabfs(
 
     // Pack output
     dladsc = FSDLADescr(&_dladsc);
-    found = (_found == SPICETRUE ? ES_FoundCode::Found : ES_FoundCode::NotFound);
+    FoundCode = (_found == SPICETRUE ? ES_FoundCode::Found : ES_FoundCode::NotFound);
 
     // Error Handling
     UnexpectedErrorCheck(false);
@@ -2692,7 +2705,7 @@ void USpice::dskxsi(
     FSDSKDescr& dskdsc,
     TArray<double> dc,
     TArray<int> ic,
-    bool& found,
+    bool& bFound,
     TArray<int> srflst,
     const FSEphemerisTime& et,
     const FSRay& ray,
@@ -2752,7 +2765,7 @@ void USpice::dskxsi(
     FMemory::Memcpy(dc.GetData(), _dc, sizeof(_dc));
     dc.Init(0, SPICE_DSKXSI_DCSIZE);
     FMemory::Memcpy(ic.GetData(), _ic, sizeof(_ic));
-    found = _found == SPICETRUE ? true : false;
+    bFound = (_found == SPICETRUE);
     dladsc = FSDLADescr(&_dladsc);
     dskdsc = FSDSKDescr(&_dskdsc);
     // Error Handling
@@ -3387,7 +3400,7 @@ void USpice::gcpool(
     ES_ResultCode& ResultCode,
     FString& ErrorMessage,
     TArray<FString>&    cvals,
-    bool&               found,
+    bool& bFound,
     const FString&      name,
     int                 start,
     int                 room
@@ -3414,6 +3427,7 @@ void USpice::gcpool(
     {
         cvals.Add(FString((SpiceChar*)_cvals + i * _lenout));
     }
+    bFound = (_found == SPICETRUE);
 
     // Error Handling
     ErrorCheck(ResultCode, ErrorMessage);
@@ -3429,7 +3443,7 @@ void USpice::frinfo(
     int& cent,
     int& frclss,
     int& clssid,
-    ES_FoundCode& found
+    ES_FoundCode& FoundCode
 )
 {
     // Input
@@ -3448,7 +3462,7 @@ void USpice::frinfo(
     cent = (int)_cent;
     frclss = (int)_frclss;
     clssid = (int)_clssid;
-    found = _found == SPICETRUE ? ES_FoundCode::Found : ES_FoundCode::NotFound;
+    FoundCode = _found == SPICETRUE ? ES_FoundCode::Found : ES_FoundCode::NotFound;
 }
 
 /*
@@ -3587,7 +3601,7 @@ void USpice::gdpool(
     ES_ResultCode& ResultCode,
     FString& ErrorMessage,
     TArray<double>& values,
-    bool& found,
+    bool& bFound,
     const FString& name,
     int                 start,
     int                 room
@@ -3613,7 +3627,7 @@ void USpice::gdpool(
     {
         values.Add(*((SpiceDouble*)_values + i));
     }
-    found = _found == SPICETRUE ? true : false;
+    bFound = (_found == SPICETRUE);
 
     // Error Handling
     ErrorCheck(ResultCode, ErrorMessage);
@@ -3623,7 +3637,7 @@ void USpice::gdpool_scalar(
     ES_ResultCode& ResultCode,
     FString& ErrorMessage,
     double& value,
-    bool& found,
+    bool& bFound,
     const FString& name
 )
 {
@@ -3641,7 +3655,7 @@ void USpice::gdpool_scalar(
 
     // Return values
     value = _value;
-    found = _found == SPICETRUE ? true : false;
+    bFound = (_found == SPICETRUE);
 
     // Error Handling
     ErrorCheck(ResultCode, ErrorMessage);
@@ -3651,7 +3665,7 @@ void USpice::gdpool_distance(
     ES_ResultCode& ResultCode,
     FString& ErrorMessage,
     FSDistance& value,
-    bool& found,
+    bool& bFound,
     const FString& name
 )
 {
@@ -3669,7 +3683,7 @@ void USpice::gdpool_distance(
 
     // Return values
     value = FSDistance(_value);
-    found = _found == SPICETRUE ? true : false;
+    bFound = (_found == SPICETRUE);
 
     // Error Handling
     ErrorCheck(ResultCode, ErrorMessage);
@@ -3679,7 +3693,7 @@ void USpice::gdpool_vector(
     ES_ResultCode& ResultCode,
     FString& ErrorMessage,
     FSDistanceVector& value,
-    bool& found,
+    bool& bFound,
     const FString& name
 )
 {
@@ -3697,7 +3711,7 @@ void USpice::gdpool_vector(
 
     // Return values
     value = FSDistanceVector(_value);
-    found = _found == SPICETRUE ? true : false;
+    bFound = (_found == SPICETRUE);
 
     // Error Handling
     ErrorCheck(ResultCode, ErrorMessage);
@@ -3708,7 +3722,7 @@ void USpice::gdpool_mass(
     ES_ResultCode& ResultCode,
     FString& ErrorMessage,
     FSMassConstant& value,
-    bool& found,
+    bool& bFound,
     const FString& name
 )
 {
@@ -3726,7 +3740,7 @@ void USpice::gdpool_mass(
 
     // Return values
     value = FSMassConstant(_value);
-    found = _found == SPICETRUE ? true : false;
+    bFound = (_found == SPICETRUE);
 
     // Error Handling
     ErrorCheck(ResultCode, ErrorMessage);
@@ -4972,7 +4986,7 @@ void USpice::gipool(
     ES_ResultCode& ResultCode,
     FString& ErrorMessage,
     TArray<int>& ivals,
-    bool& found,
+    bool& bFound,
     const FString& name,
     int             start,
     int             room
@@ -4998,6 +5012,7 @@ void USpice::gipool(
     {
         ivals.Add((int)*((SpiceInt*)_ivals + i));
     }
+    bFound = (_found == SPICETRUE);
 
     // Error Handling
     ErrorCheck(ResultCode, ErrorMessage);
@@ -5007,7 +5022,7 @@ void USpice::gnpool(
     ES_ResultCode& ResultCode,
     FString& ErrorMessage,
     TArray<FString>& kvars,
-    bool& found,
+    bool& bFound,
     const FString& name,
     int                 start,
     int                 room
@@ -5034,6 +5049,7 @@ void USpice::gnpool(
     {
         kvars.Add(FString((SpiceChar*)_kvars + i * _lenout));
     }
+    bFound = (_found == SPICETRUE);
 
     // Error Handling
     ErrorCheck(ResultCode, ErrorMessage);
@@ -5509,7 +5525,7 @@ Exceptions
        terminator.
 */
 void USpice::kdata(
-    ES_FoundCode& found,
+    ES_FoundCode& FoundCode,
     FString& file,
     ES_KernelType& filtyp,
     FString& srcfil,
@@ -5550,7 +5566,7 @@ void USpice::kdata(
     filtyp = USpiceTypes::FromString(FString(_filtyp));
     srcfil = FString(_srcfil);
     handle = _handle;
-    found = _found == SPICETRUE ? ES_FoundCode::Found : ES_FoundCode::NotFound;
+    FoundCode = _found == SPICETRUE ? ES_FoundCode::Found : ES_FoundCode::NotFound;
 
     UnexpectedErrorCheck();
 }
@@ -5584,7 +5600,7 @@ void USpice::kinfo(
     ES_KernelType& filtyp,
     FString& srcfil,
     int& handle,
-    ES_FoundCode& found,
+    ES_FoundCode& FoundCode,
     const FString& file
 )
 {
@@ -5617,7 +5633,7 @@ void USpice::kinfo(
     handle = _handle;
     srcfil = FString(_srcfil);
 
-    found = _found == SPICETRUE ? ES_FoundCode::Found : ES_FoundCode::NotFound;
+    FoundCode = _found == SPICETRUE ? ES_FoundCode::Found : ES_FoundCode::NotFound;
 
     UnexpectedErrorCheck();
 }
@@ -9102,7 +9118,7 @@ void USpice::sincpt(
     FSDistanceVector& spoint,
     FSEphemerisTime& trgepc,
     FSDistanceVector& srfvec,
-    bool& found,
+    bool& bFound,
     const TArray<FString>& shapeSurfaces,
     ES_GeometricModel method,
     const FString& target,
@@ -9147,7 +9163,7 @@ void USpice::sincpt(
     spoint = FSDistanceVector(_spoint);
     trgepc = FSEphemerisTime(_trgepc);
     srfvec = FSDistanceVector(_srfvec);
-    found = _found != SPICEFALSE ? true : false;
+    bFound = _found != SPICEFALSE ? true : false;
 
     // Error Handling
     ErrorCheck(ResultCode, ErrorMessage);
@@ -10409,7 +10425,7 @@ Exceptions
 */
 void USpice::srfs2c(
     int& code,
-    ES_FoundCode& found,
+    ES_FoundCode& FoundCode,
     const FString& srfstr,
     const FString& bodstr
 )
@@ -10432,7 +10448,7 @@ void USpice::srfs2c(
 
     // Copy output
     code = (int)_code;
-    found = (_found == SPICETRUE ? ES_FoundCode::Found : ES_FoundCode::NotFound);
+    FoundCode = (_found == SPICETRUE ? ES_FoundCode::Found : ES_FoundCode::NotFound);
 
     // Clear any minor errors (empty string on input, etc)
     UnexpectedErrorCheck(true);
@@ -10458,7 +10474,7 @@ Exceptions
 */
 void USpice::srfscc(
     int& code,
-    ES_FoundCode& found,
+    ES_FoundCode& FoundCode,
     const FString& srfstr,
     int bodyid
 )
@@ -10480,7 +10496,7 @@ void USpice::srfscc(
     );
 
     code = (int)_code;
-    found = (_found == SPICETRUE ? ES_FoundCode::Found : ES_FoundCode::NotFound);
+    FoundCode = (_found == SPICETRUE ? ES_FoundCode::Found : ES_FoundCode::NotFound);
 
     // Clear any minor errors (empty string on input, etc)
     UnexpectedErrorCheck(true);
@@ -10647,7 +10663,7 @@ void USpice::surfpt(
     const FSDistance& b,
     const FSDistance& c,
     FSDistanceVector& point,
-    bool& found
+    bool& bFound
 )
 {
     // Input
@@ -10665,7 +10681,7 @@ void USpice::surfpt(
 
     // Return Value
     point = FSDistanceVector(_point);
-    found = _found ? true : false;
+    bFound = _found ? true : false;
 
     // Error Handling
     ErrorCheck(ResultCode, ErrorMessage);
