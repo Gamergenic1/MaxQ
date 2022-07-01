@@ -122,6 +122,8 @@ uint8 ErrorCheck(ES_ResultCode& ResultCode, FString& ErrorMessage, bool BeQuiet)
 
         if (!BeQuiet)
         {
+            // Only logged as a warning, because the only the application knows if it was totally unexpected,
+            // and it has the ability to categorize it as a true error.
             UE_LOG(LogSpice, Warning, TEXT("USpice Runtime Error: %s"), *ErrorMessage);
         }
 
