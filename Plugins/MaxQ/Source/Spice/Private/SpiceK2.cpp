@@ -217,216 +217,77 @@ TArray<double> USpiceK2::gdpool_array_K2(
 
 FSRotationMatrix USpiceK2::mtxm_matrix_K2(const FSRotationMatrix& m1, const FSRotationMatrix& m2)
 {
-    SpiceDouble _m1[3][3];  m1.CopyTo(_m1);
-    SpiceDouble _m2[3][3];  m2.CopyTo(_m2);
-    SpiceDouble _mout[3][3];
-
-    mtxm_c(_m1, _m2, _mout);
-
-    return FSRotationMatrix(_mout);
+    return MaxQ::Math::MTxM(m1, m2);
 }
 
 FSStateTransform USpiceK2::mtxm_state_transform_K2(const FSStateTransform& m1, const FSStateTransform& m2)
 {
-    SpiceDouble _m1[6][6];  m1.CopyTo(_m1);
-    SpiceDouble _m2[6][6];  m2.CopyTo(_m2);
-    constexpr SpiceInt    _nc1 = 6;
-    constexpr SpiceInt    _nr1r2 = 6;
-    constexpr SpiceInt    _nc2 = 6;
-
-    SpiceDouble _mout[6][6];
-
-    mtxmg_c(_m1, _m2, _nc1, _nr1r2, _nc2, _mout);
-
-    return FSStateTransform(_mout);
+    return MaxQ::Math::MTxM(m1, m2);
 }
 
 FSDimensionlessVector USpiceK2::mtxv_vector_K2(const FSRotationMatrix& m, const FSDimensionlessVector& v)
 {
-    // Inputs
-    SpiceDouble    _m[3][3];	m.CopyTo(_m);
-    SpiceDouble    _v[3];		v.CopyTo(_v);
-
-    // Outputs
-    SpiceDouble    _vout[3];
-
-    // Invocation
-    mtxv_c(_m, _v, _vout);
-
-    // Return Value
-    return FSDimensionlessVector(_vout);
+    return MaxQ::Math::MTxV(m, v);
 }
 
 FSDimensionlessStateVector USpiceK2::mtxv_state_vector_K2(const FSStateTransform& m, const FSDimensionlessStateVector& v)
 {
-    // Input
-    double _m[6][6];       m.CopyTo(_m);
-    double _v[6];          v.CopyTo(_v);
-    SpiceInt    _nrow1 = 6;
-    SpiceInt    _nc1r2 = 6;
-
-    // Output
-    double _vout[6];
-
-    // Invocation
-    mtxvg_c(_m, _v, _nrow1, _nc1r2, _vout);
-
-    // Pack outputs
-    return FSDimensionlessStateVector(_vout);
+    return MaxQ::Math::MTxV(m, v);
 }
 
 FSRotationMatrix USpiceK2::mxm_matrix_K2(const FSRotationMatrix& m1, const FSRotationMatrix& m2)
 {
-    SpiceDouble _m1[3][3];  m1.CopyTo(_m1);
-    SpiceDouble _m2[3][3];  m2.CopyTo(_m2);
-    SpiceDouble _mout[3][3];
-
-    mxm_c(_m1, _m2, _mout);
-
-    return FSRotationMatrix(_mout);
+    return MaxQ::Math::MxM(m1, m2);
 }
 
 FSStateTransform USpiceK2::mxm_state_transform_K2(const FSStateTransform& m1, const FSStateTransform& m2)
 {
-    SpiceDouble _m1[6][6];  m1.CopyTo(_m1);
-    SpiceDouble _m2[6][6];  m2.CopyTo(_m2);
-    SpiceDouble _mout[6][6];
-
-    constexpr SpiceInt nr1 = 6;
-    constexpr SpiceInt nc1r2 = 6;
-    constexpr SpiceInt nc2 = 6;
-
-    mxmg_c(_m1, _m2, nr1, nc1r2, nc2, _mout);
-
-    return FSStateTransform(_mout);
+    return MaxQ::Math::MxM(m1, m2);
 }
 
 FSRotationMatrix USpiceK2::mxmt_matrix_K2(const FSRotationMatrix& m1, const FSRotationMatrix& m2)
 {
-    SpiceDouble _m1[3][3];  m1.CopyTo(_m1);
-    SpiceDouble _m2[3][3];  m2.CopyTo(_m2);
-    SpiceDouble _mout[3][3];
-
-    mxmt_c(_m1, _m2, _mout);
-
-    return FSRotationMatrix(_mout);
+    return MaxQ::Math::MxMT(m1, m2);
 }
 
 FSStateTransform USpiceK2::mxmt_state_transform_K2(const FSStateTransform& m1, const FSStateTransform& m2)
 {
-    SpiceDouble _m1[6][6];  m1.CopyTo(_m1);
-    SpiceDouble _m2[6][6];  m2.CopyTo(_m2);
-    SpiceDouble _mout[6][6];
-
-    constexpr SpiceInt nr1 = 6;
-    constexpr SpiceInt nc1c2 = 6;
-    constexpr SpiceInt nr2 = 6;
-
-    mxmtg_c(_m1, _m2, nr1, nc1c2, nr2, _mout);
-
-    return FSStateTransform(_mout);
+    return MaxQ::Math::MxMT(m1, m2);
 }
 
 FSDimensionlessVector USpiceK2::mxv_vector_K2(const FSRotationMatrix& m, const FSDimensionlessVector& v)
 {
-    // Inputs
-    SpiceDouble    _m[3][3];	m.CopyTo(_m);
-    SpiceDouble    _v[3];		v.CopyTo(_v);
-
-    // Outputs
-    SpiceDouble    _vout[3];
-
-    // Invocation
-    mxv_c(_m, _v, _vout);
-
-    // Return Value
-    return FSDimensionlessVector(_vout);
+    return MaxQ::Math::MxV(m, v);
 }
 
 FSDimensionlessStateVector USpiceK2::mxv_state_vector_K2(const FSStateTransform& m, const FSDimensionlessStateVector& v)
 {
-    // Inputs
-    SpiceDouble    _m[6][6];	m.CopyTo(_m);
-    SpiceDouble    _v[6];		v.CopyTo(_v);
-
-    // Outputs
-    SpiceDouble    _vout[6];
-
-    constexpr SpiceInt _nr1   { 6 };
-    constexpr SpiceInt _nc1r2 { 6 };
-
-    // Invocation
-    mxvg_c(_m, _v, _nr1, _nc1r2, _vout);
-
-    // Return Value
-    return FSDimensionlessStateVector(_vout);
+    return MaxQ::Math::MxV(m, v);
 }
 
 FSDimensionlessVector USpiceK2::qderiv_vector_K2(const FSDimensionlessVector& f0, const FSDimensionlessVector& f2, double delta)
 {
-    constexpr SpiceInt _ndim { 3 };
-    SpiceDouble    _f0[3];		f0.CopyTo(_f0);
-    SpiceDouble    _f2[3];		f2.CopyTo(_f2);
-    SpiceDouble _delta = delta;
-
-    SpiceDouble    _dfdt[3];
-    qderiv_c(_ndim, _f0, _f2, _delta, _dfdt);
-
-    return FSDimensionlessVector(_dfdt);
+    return MaxQ::Math::Qderiv<FSDimensionlessVector, FSDimensionlessVector>(f0, f2, delta);
 }
 
 FSRotationMatrix USpiceK2::twovec_vector_K2(ES_ResultCode& ResultCode, FString& ErrorMessage, ES_Axis axisa, const FSDimensionlessVector& axdef, ES_Axis axisp, const FSDimensionlessVector& plndef)
 {
-    SpiceDouble _axdef[3];   axdef.CopyTo(_axdef);
-    SpiceInt    _indexa      = (SpiceInt)axisa;
-    SpiceDouble _plndef[3];  plndef.CopyTo(_plndef);
-    SpiceInt    _indexp      = (SpiceInt)axisp;
-
-    SpiceDouble _mout[3][3];
-
-    twovec_c(_axdef, _indexa, _plndef, _indexp, _mout);
-
-    return FSRotationMatrix(_mout);
+    return MaxQ::Math::TwoVec(axisa, axdef, axisp, plndef);
 }
 
 FSStateTransform USpiceK2::twovxf_state_vector_K2(ES_ResultCode& ResultCode, FString& ErrorMessage, ES_Axis axisa, const FSDimensionlessStateVector& axdef, ES_Axis axisp, const FSDimensionlessStateVector& plndef)
 {
-    SpiceDouble _axdef[6];   axdef.CopyTo(_axdef);
-    SpiceInt    _indexa = (SpiceInt)axisa;
-    SpiceDouble _plndef[6];  plndef.CopyTo(_plndef);
-    SpiceInt    _indexp = (SpiceInt)axisp;
-
-    SpiceDouble _mout[6][6];
-
-    twovxf_c(_axdef, _indexa, _plndef, _indexp, _mout);
-
-    return FSStateTransform(_mout);
+    return MaxQ::Math::TwoVXF(axisa, axdef, axisp, plndef);
 }
 
 FSDimensionlessVector USpiceK2::ucrss_vector_K2(const FSDimensionlessVector& v1, const FSDimensionlessVector& v2)
 {
-    SpiceDouble _v1[3]; v1.CopyTo(_v1);
-    SpiceDouble _v2[3]; v2.CopyTo(_v2);
-
-    SpiceDouble _vout[3]; ZeroOut(_vout);
-
-    ucrss_c(_v1, _v2, _vout);
-
-    return FSDimensionlessVector(_vout);
+    return MaxQ::Math::Ucrss(v1, v2);
 }
 
 void USpiceK2::unorm_vector_K2(const FSDimensionlessVector& v1, FSDimensionlessVector& vout, double& vmag)
 {
-    SpiceDouble _v1[3]; v1.CopyTo(_v1);
-    // Initialize outputs to whatever was passed in by reference (so that if nothing was written,
-    // we return the original value unchanged.
-    SpiceDouble _vout[3]; vout.CopyTo(_vout);
-    SpiceDouble _vmag = (SpiceDouble)vmag;
-
-    unorm_c(_v1, _vout, &_vmag);
-
-    vout = FSDimensionlessVector(_vout);
-    vmag = (double)_vmag;
+    MaxQ::Math::Unorm(vout, vmag, v1);
 }
 
 FSDimensionlessVector USpiceK2::vadd_vector_K2(const FSDimensionlessVector& v1, const FSDimensionlessVector& v2)

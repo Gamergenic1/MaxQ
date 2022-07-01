@@ -57,5 +57,6 @@ SPICE_API void CopyFrom(const SpiceEllipse& _ellipse, FSEllipse& dest);
 SPICE_API void CopyTo(const FSEllipse& src, SpiceEllipse& _ellipse);
 
 SPICE_API uint8 ErrorCheck(ES_ResultCode& ResultCode, FString& ErrorMessage, bool BeQuiet = false);
+SPICE_API uint8 ErrorCheck(ES_ResultCode* ResultCode, FString* ErrorMessage, bool BeQuiet = false);
 SPICE_API uint8 UnexpectedErrorCheck(bool bReset = true);
 

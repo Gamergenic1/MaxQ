@@ -538,6 +538,24 @@ public:
         km = _km;
     }
 
+    // For bodvrd template, basically.
+    FSDistance(double (&_km)[1])
+    {
+        km = _km[0];
+    }
+
+    FSDistance(const FSDistance& other)
+    {
+        km = other.km;
+    }
+
+    FSDistance& operator=(const FSDistance& other)
+    {
+        km = other.km;
+        return *this;
+    }
+
+
     // "AsDouble()" means the units SPICE expects, so it should really be "AsSpiceDouble"
     [[deprecated("Use AsKilometers() etc")]]
     inline double AsDouble() const  { return AsKilometers(); }
@@ -577,16 +595,7 @@ public:
     inline static FSDistance FromAstronomicalUnits(double _au);
     inline static FSDistance FromLightYears(double _ly);
 
-    FSDistance(const FSDistance& other)
-    {
-        km = other.km;
-    }
-
-    FSDistance& operator=(const FSDistance& other)
-    {
-        km = other.km;
-        return *this;
-    }
+    inline explicit operator double() const { return AsSpiceDouble(); }
 
     static const FSDistance Zero;
     [[deprecated("Use OneMKilometer")]]
@@ -723,6 +732,7 @@ struct SPICE_API FSSpeed
     /// <returns>Kilometers Per Second</returns>
     inline double AsSpiceDouble() const { return kmps; }
     inline double AsKilometersPerSecond() const { return kmps; }
+    inline explicit operator double() const { return AsSpiceDouble(); }
 
     FSSpeed(const FSSpeed& other)
     {
@@ -879,6 +889,8 @@ struct SPICE_API FSAngularRate
     inline double AsSpiceDouble() const { return radiansPerSecond; }
     inline double AsRadiansPerSecond() const { return radiansPerSecond; }
     double AsDegreesPerSecond() const;
+
+    inline explicit operator double() const { return AsSpiceDouble(); }
 
     FString ToString() const;
 
@@ -1361,6 +1373,13 @@ struct SPICE_API FSMassConstant
     {
         GM = _GM;
     }
+
+    // For bodvrd template, basically.
+    FSMassConstant(double(&_GM)[1])
+    {
+        GM = _GM[0];
+    }
+
 
     [[deprecated("Use AsKm3perSec2()")]]
     inline double AsDouble() const

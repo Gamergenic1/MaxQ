@@ -6073,7 +6073,7 @@ void USpice::mxm(
     FSRotationMatrix& mout
 )
 {
-    MaxQ::Math::MxM(m1, m2, mout);
+    MaxQ::Math::MxM(mout, m1, m2);
 }
 
 /*
@@ -6086,13 +6086,7 @@ void  USpice::mxmt(
     FSRotationMatrix& mout
 )
 {
-    SpiceDouble _m1[3][3];  m1.CopyTo(_m1);
-    SpiceDouble _m2[3][3];  m2.CopyTo(_m2);
-    SpiceDouble _mout[3][3];
-
-    mxmt_c(_m1, _m2, _mout);
-
-    mout = FSRotationMatrix(_mout);
+    MaxQ::Math::MxMT(mout, m1, m2);
 }
 
 
@@ -6106,13 +6100,7 @@ void USpice::mtxm(
     FSRotationMatrix& mout
 )
 {
-    SpiceDouble _m1[3][3];  m1.CopyTo(_m1);
-    SpiceDouble _m2[3][3];  m2.CopyTo(_m2);
-    SpiceDouble _mout[3][3];
-
-    mtxm_c(_m1, _m2, _mout);
-
-    mout = FSRotationMatrix(_mout);
+    MaxQ::Math::MTxM(mout, m1, m2);
 }
 
 
@@ -6127,7 +6115,7 @@ void USpice::mtxv(
     FSDimensionlessVector& vout
 )
 {
-    vout = MaxQ::Math::MTxV(m, vin);
+    MaxQ::Math::MTxV(vout, m, vin);
 }
 
 
@@ -6142,7 +6130,7 @@ void USpice::mtxv_distance(
         FSDistanceVector& vout
     )
 {
-    vout = MaxQ::Math::MTxV(m, vin);
+    MaxQ::Math::MTxV(vout, m, vin);
 }
 
 
@@ -6156,7 +6144,7 @@ void USpice::mtxv_velocity(
     FSVelocityVector& vout
 )
 {
-    vout = MaxQ::Math::MTxV(m, vin);
+    MaxQ::Math::MTxV(vout, m, vin);
 }
 
 
@@ -6167,7 +6155,7 @@ void USpice::mtxv_angular(
     FSAngularVelocity& vout
 )
 {
-    vout = MaxQ::Math::MTxV(m, vin);
+    MaxQ::Math::MTxV(vout, m, vin);
 }
 
 /*
@@ -6758,7 +6746,7 @@ void USpice::mtxv_state(
     FSStateVector& vout
 )
 {
-    vout = MaxQ::Math::MTxV(m, vin);
+    MaxQ::Math::MTxV(vout, m, vin);
 }
 
 
@@ -11030,17 +11018,7 @@ void USpice::ucrss(
     FSDimensionlessVector& vout
 )
 {
-    // Input
-    SpiceDouble _v1[3];     v1.CopyTo(_v1);
-    SpiceDouble _v2[3];     v2.CopyTo(_v2);
-    // Output
-    SpiceDouble _vout[3];
-
-    // Invocation
-    ucrss_c(_v1, _v2, _vout);
-
-    // Return Value
-    vout = FSDimensionlessVector(_vout);
+    MaxQ::Math::Ucrss(vout, v1, v2);
 }
 
 
@@ -11145,18 +11123,7 @@ void USpice::unorm_distance(
     FSDistance& vmag
 )
 {
-    // input
-    SpiceDouble  _v1[3];    v1.CopyTo(_v1);
-    // Outputs
-    SpiceDouble  _vout[3];
-    SpiceDouble _vmag;
-
-    // Invocation
-    unorm_c(_v1, _vout, &_vmag);
-
-    // Return Value
-    vout = FSDimensionlessVector(_vout);
-    vmag = FSDistance(_vmag);
+    MaxQ::Math::Unorm(vout, vmag, v1);
 }
 
 
@@ -11166,18 +11133,7 @@ void USpice::unorm_velocity(
     FSSpeed& vmag
 )
 {
-    // input
-    SpiceDouble  _v1[3];    v1.CopyTo(_v1);
-    // Outputs
-    SpiceDouble  _vout[3];
-    SpiceDouble _vmag;
-
-    // Invocation
-    unorm_c(_v1, _vout, &_vmag);
-
-    // Return Value
-    vout = FSDimensionlessVector(_vout);
-    vmag = FSSpeed(_vmag);
+    MaxQ::Math::Unorm(vout, vmag, v1);
 }
 
 
@@ -11187,18 +11143,7 @@ void USpice::unorm_angular_velocity(
     FSAngularRate& vmag
 )
 {
-    // input
-    SpiceDouble  _v1[3];    v1.CopyTo(_v1);
-    // Outputs
-    SpiceDouble  _vout[3];
-    SpiceDouble _vmag;
-
-    // Invocation
-    unorm_c(_v1, _vout, &_vmag);
-
-    // Return Value
-    vout = FSDimensionlessVector(_vout);
-    vmag = FSAngularRate(_vmag);
+    MaxQ::Math::Unorm(vout, vmag, v1);
 }
 
 
@@ -11208,18 +11153,7 @@ void USpice::unorm(
     double& vmag
 )
 {
-    // input
-    SpiceDouble  _v1[3];    v1.CopyTo(_v1);
-    // Outputs
-    SpiceDouble  _vout[3];
-    SpiceDouble _vmag;
-
-    // Invocation
-    unorm_c(_v1, _vout, &_vmag);
-
-    // Return Value
-    vout = FSDimensionlessVector(_vout);
-    vmag = double(_vmag);
+    MaxQ::Math::Unorm(vout, vmag, v1);
 }
 
 /*
@@ -11274,7 +11208,7 @@ void USpice::vadd_distance(
     FSDistanceVector& vout
 )
 {
-    MaxQ::Math::Vadd(v1, v2, vout);
+    MaxQ::Math::Vadd(vout, v1, v2);
 }
 
 
@@ -11284,7 +11218,7 @@ void USpice::vadd_velocity(
     FSVelocityVector& vout
 )
 {
-    MaxQ::Math::Vadd(v1, v2, vout);
+    MaxQ::Math::Vadd(vout, v1, v2);
 }
 
 
@@ -11294,7 +11228,7 @@ void USpice::vadd_angular_velocity(
     FSAngularVelocity& vout
 )
 {
-    MaxQ::Math::Vadd(v1, v2, vout);
+    MaxQ::Math::Vadd(vout, v1, v2);
 }
 
 
@@ -11304,7 +11238,7 @@ void USpice::vadd(
     FSDimensionlessVector& vout
 )
 {
-    MaxQ::Math::Vadd(v1, v2, vout);
+    MaxQ::Math::Vadd(vout, v1, v2);
 }
 
 /*
@@ -11722,7 +11656,7 @@ void USpice::vminus(
     FSDimensionlessVector& vout
 )
 {
-    MaxQ::Math::Vminus(v1, vout);
+    MaxQ::Math::Vminus(vout, v1);
 }
 
 
@@ -11731,7 +11665,7 @@ void USpice::vminus_distance(
     FSDistanceVector& vout
 )
 {
-    MaxQ::Math::Vminus(v1, vout);
+    MaxQ::Math::Vminus(vout, v1);
 }
 
 
@@ -11740,7 +11674,7 @@ void USpice::vminus_velocity(
     FSVelocityVector& vout
 )
 {
-    MaxQ::Math::Vminus(v1, vout);
+    MaxQ::Math::Vminus(vout, v1);
 }
 
 
@@ -12066,7 +12000,7 @@ void USpice::vsub(
     FSDimensionlessVector& vout
 )
 {
-    MaxQ::Math::Vsub(v1, v2, vout);
+    MaxQ::Math::Vsub(vout, v1, v2);
 }
 
 void USpice::vsub_distance(
@@ -12075,7 +12009,7 @@ void USpice::vsub_distance(
     FSDistanceVector& vout
 )
 {
-    MaxQ::Math::Vsub(v1, v2, vout);
+    MaxQ::Math::Vsub(vout, v1, v2);
 }
 
 void USpice::vsub_velocity(
@@ -12084,7 +12018,7 @@ void USpice::vsub_velocity(
     FSVelocityVector& vout
 )
 {
-    MaxQ::Math::Vsub(v1, v2, vout);
+    MaxQ::Math::Vsub(vout, v1, v2);
 }
 
 
