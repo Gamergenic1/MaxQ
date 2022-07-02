@@ -5,6 +5,13 @@
 // Documentation:  https://maxq.gamergenic.com/
 // GitHub:         https://github.com/Gamergenic1/MaxQ/ 
 
+//------------------------------------------------------------------------------
+// SpiceUncooked
+// K2 Node Compilation
+// See comments in Spice/SpiceK2.h.
+//------------------------------------------------------------------------------
+
+
 #pragma once
 
 #include "CoreMinimal.h"
@@ -15,6 +22,8 @@
 USTRUCT()
 struct FK2SingleOutputOpWithComponentFilter
 {
+    typedef FK2SingleOutputOpWithComponentFilter OperationType;
+
     GENERATED_BODY()
         
     UPROPERTY() FName ShortName;
@@ -58,7 +67,7 @@ struct FK2SingleOutputOpWithComponentFilter
         Conversion = _conversion;
     }
 
-    FK2SingleOutputOpWithComponentFilter(const FK2SingleOutputOpWithComponentFilter& other)
+    FK2SingleOutputOpWithComponentFilter(const OperationType& other)
     {
         ShortName = other.ShortName;
         FullName = other.FullName;
@@ -69,7 +78,7 @@ struct FK2SingleOutputOpWithComponentFilter
         Selector = other.Selector;
     }
 
-    FK2SingleOutputOpWithComponentFilter& operator= (const FK2SingleOutputOpWithComponentFilter& other)
+    FK2SingleOutputOpWithComponentFilter& operator= (const OperationType& other)
     {
         // self-assignment guard
         if (this == &other)
@@ -86,5 +95,32 @@ struct FK2SingleOutputOpWithComponentFilter
 
         // return the existing object so we can chain this operator
         return *this;
+    }
+
+#if WITH_EDITOR
+    void CheckClass(UClass* Class) const
+    {
+        // Ensure the specified actions actually exist!
+        if (!Conversion.ConversionName.IsNone())
+        {
+            check(Class->FindFunctionByName(Conversion.ConversionName));
+        }
+        if (!K2NodeName.IsNone())
+        {
+            check(Class->FindFunctionByName(K2NodeName));
+        }
+    }
+#endif
+
+    static TArray<FK2Type> GetTypesFromOperations(const TArray<OperationType>& ops)
+    {
+        TArray<FK2Type> types;
+
+        for (const auto& op : ops)
+        {
+            types.Add(op.Final);
+        }
+
+        return types;
     }
 };

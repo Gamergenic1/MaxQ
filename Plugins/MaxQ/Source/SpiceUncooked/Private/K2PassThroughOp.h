@@ -5,6 +5,13 @@
 // Documentation:  https://maxq.gamergenic.com/
 // GitHub:         https://github.com/Gamergenic1/MaxQ/ 
 
+//------------------------------------------------------------------------------
+// SpiceUncooked
+// K2 Node Compilation
+// See comments in Spice/SpiceK2.h.
+//------------------------------------------------------------------------------
+
+
 #pragma once
 
 #include "CoreMinimal.h"
@@ -15,6 +22,8 @@
 USTRUCT()
 struct FK2PassThroughOp
 {
+    typedef FK2PassThroughOp OperationType;
+
     GENERATED_BODY()
         
     UPROPERTY() FName ShortName;
@@ -61,7 +70,7 @@ struct FK2PassThroughOp
         check(InnerToOuterConversion.Out == OuterType);
     }
 
-    FK2PassThroughOp(const FK2PassThroughOp& other)
+    FK2PassThroughOp(const OperationType& other)
     {
         ShortName = other.ShortName;
         FullName = other.FullName;
@@ -72,7 +81,7 @@ struct FK2PassThroughOp
         InnerToOuterConversion = other.InnerToOuterConversion;
     }
 
-    FK2PassThroughOp& operator= (const FK2PassThroughOp& other)
+    FK2PassThroughOp& operator= (const OperationType& other)
     {
         // self-assignment guard
         if (this == &other)
@@ -92,7 +101,7 @@ struct FK2PassThroughOp
     }
 
 
-    bool operator== (const FK2PassThroughOp& other) const
+    bool operator== (const OperationType& other) const
     {
         // self equality
         if (this == &other)
@@ -113,5 +122,32 @@ struct FK2PassThroughOp
 #endif
 
         return bEqual;
+    }
+
+#if WITH_EDITOR
+    void CheckClass(UClass* Class) const
+    {
+        // Ensure the specified actions actually exist!
+        if (!OuterToInnerConversion.ConversionName.IsNone())
+        {
+            check(Class->FindFunctionByName(OuterToInnerConversion.ConversionName));
+        }
+        if (!K2NodeName.IsNone())
+        {
+            check(Class->FindFunctionByName(K2NodeName));
+        }
+    }
+#endif
+
+    static TArray<FK2Type> GetTypesFromOperations(const TArray<OperationType>& ops)
+    {
+        TArray<FK2Type> types;
+
+        for (const auto& op : ops)
+        {
+            types.Add(op.OuterType);
+        }
+
+        return types;
     }
 };

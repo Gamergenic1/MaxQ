@@ -5,12 +5,47 @@
 // Documentation:  https://maxq.gamergenic.com/
 // GitHub:         https://github.com/Gamergenic1/MaxQ/ 
 
+//------------------------------------------------------------------------------
+// SpiceTypes.h
+// 
+// API Comments
+// 
+// USpiceTypes : public UBlueprintFunctionLibrary
+// 
+// Purpose:
+// Blueprint implementations of CSPICE UE-Type wrappers  
+// 
+// MaxQ:
+// * Base API
+// * Refined API
+//    * C++
+//    * Blueprints
+//
+// USpiceTypes is part of the base API, where CSPICE functionality is initially
+// implemented/tested/studied.
+// 
+// This is the core Blueprint Library that exposes CSPICE types to Blueprints.
+//
+// The API here is maintained for compatibility with code depends on it (with
+// breaking changes minimized, and deprecation > replacement).
+// 
+// SpiceTypes implements both the wrapped CSPICE Types (FSDistanceVector, etc)
+// and the Blueprint Function Library that manipulates them.  This will
+// eventually be refactored and broken down into multiple smaller units.
+// E.g., this is just an initial working implementation and it's refactored
+// over time, with things moving from the Base API to the Refined API, while
+// the Base API maintains compatibility with client code.
+//  
+// See implementation comments in SpiceTypes.cpp.
+//------------------------------------------------------------------------------
+
 #pragma once
 
 #include "CoreMinimal.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "SpicePlatformDefs.h"
 #include "SpiceTypes.generated.h"
+
 
 // Log category for MaxQ SPICE releated messages.
 SPICE_API DECLARE_LOG_CATEGORY_EXTERN(LogSpice, Log, All);

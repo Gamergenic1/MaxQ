@@ -9,6 +9,22 @@
 #include "SpicePlatformDefs.h"
 #include "Spice.h"
 #include "SpiceUtilities.h"
+#include "SpiceMath.h"
+
+
+//------------------------------------------------------------------------------
+// SpiceK2.cpp
+// 
+// Implementation Comments
+// 
+// USpiceK2 : public UBlueprintFunctionLibrary
+// 
+// Purpose: 
+// Blueprint micro-operations from which K2 Node Macro-operations are assembled.
+// 
+// SpiceK2.h is part of the "refined Blueprints API".
+// See API Comments in SpiceK2.h
+//------------------------------------------------------------------------------
 
 PRAGMA_PUSH_PLATFORM_DEFAULT_PACKING
 extern "C"
@@ -17,7 +33,8 @@ extern "C"
 }
 PRAGMA_POP_PLATFORM_DEFAULT_PACKING
 
-
+using namespace MaxQ;
+using namespace MaxQ::Private;
 
 double USpiceK2::bodvrd_double_K2(
     ES_ResultCode& ResultCode,
@@ -292,27 +309,12 @@ void USpiceK2::unorm_vector_K2(const FSDimensionlessVector& v1, FSDimensionlessV
 
 FSDimensionlessVector USpiceK2::vadd_vector_K2(const FSDimensionlessVector& v1, const FSDimensionlessVector& v2)
 {
-    SpiceDouble _v1[3]; v1.CopyTo(_v1);
-    SpiceDouble _v2[3]; v2.CopyTo(_v2);
-
-    SpiceDouble _vout[3]; ZeroOut(_vout);
-
-    vadd_c(_v1, _v2, _vout);
-
-    return FSDimensionlessVector(_vout);
+    return MaxQ::Math::Vadd(v1, v2);
 }
 
 FSDimensionlessStateVector USpiceK2::vadd_state_vector_K2(const FSDimensionlessStateVector& v1, const FSDimensionlessStateVector& v2)
 {
-    SpiceDouble _v1[6]; v1.CopyTo(_v1);
-    SpiceDouble _v2[6]; v2.CopyTo(_v2);
-    constexpr SpiceInt _ndim = 6;
-
-    SpiceDouble _vout[6]; ZeroOut(_vout);
-
-    vaddg_c(_v1, _v2, _ndim, _vout);
-
-    return FSDimensionlessStateVector(_vout);
+    return MaxQ::Math::Vadd(v1, v2);
 }
 
 FSDimensionlessVector USpiceK2::vcrss_vector_K2(const FSDimensionlessVector& v1, const FSDimensionlessVector& v2)
@@ -365,57 +367,23 @@ FSDimensionlessVector USpiceK2::vhat_vector_K2(const FSDimensionlessVector& v)
 
 FSDimensionlessVector USpiceK2::vlcom_vector_K2(double a, const FSDimensionlessVector& v1, double b, const FSDimensionlessVector& v2)
 {
-    // Still deciding which form of initialization makes more sense, apologies for the inconsistency.
-    // Priorities: Robustness (runtime, and regarding maintenance, compiler-catching-errors-on-new-platforms-etc),
-    //             Concise & Understandable, Performance is a lower priority...
-    //             Because this are blueprints implementations.  The overhead of blueprints dominates whatever the compiler
-    //             does to initialize the wrapped values.
-    ConstSpiceDouble _a      { a };
-    ConstSpiceDouble _v1[3]  { v1.x, v1.y, v1.z };
-    ConstSpiceDouble _b      { b };
-    ConstSpiceDouble _v2[3]  { v2.x, v2.y, v2.z };
-    SpiceDouble _sum[3] { 0, 0, 0 };
-
-    vlcom_c(_a, _v1, _b, _v2, _sum);
-
-    return {_sum};
+    return MaxQ::Math::Vlcom(a, v1, b, v2);
 }
 
 
 FSDimensionlessVector USpiceK2::vlcom3_vector_K2(double a, const FSDimensionlessVector& v1, double b, const FSDimensionlessVector& v2, double c, const FSDimensionlessVector& v3)
 {
-    ConstSpiceDouble _a      { a };
-    ConstSpiceDouble _v1[3]  { v1.x, v1.y, v1.z };
-    ConstSpiceDouble _b      { b };
-    ConstSpiceDouble _v2[3]  { v2.x, v2.y, v2.z };
-    ConstSpiceDouble _c      { c };
-    ConstSpiceDouble _v3[3]  { v3.x, v3.y, v3.z };
-    SpiceDouble _sum[3] { 0, 0, 0 };
-
-    vlcom3_c(_a, _v1, _b, _v2, _c, _v3, _sum);
-
-    return { _sum };
+    return MaxQ::Math::Vlcom3(a, v1, b, v2, c, v3);
 }
 
 FSDimensionlessVector USpiceK2::vminus_vector_K2(const FSDimensionlessVector& v)
 {
-    ConstSpiceDouble _v1[3]  { v.x, v.y, v.z };
-    SpiceDouble _vout[3]{ 0, 0, 0 };
-
-    vminus_c(_v1, _vout);
-
-    return { _vout };
+    return MaxQ::Math::Vminus(v);
 }
 
 FSDimensionlessStateVector USpiceK2::vminus_state_vector_K2(const FSDimensionlessStateVector& v)
 {
-    ConstSpiceDouble _v1[6]{ v.r.x, v.r.y, v.r.z, v.dr.x, v.dr.y, v.dr.z };
-    constexpr SpiceInt _ndim = 6;
-    SpiceDouble _vout[6]{ 0, 0, 0 };
-
-    vminug_c(_v1, _ndim, _vout);
-
-    return { _vout };
+    return MaxQ::Math::Vminus(v);
 }
 
 double USpiceK2::vnorm_vector_K2(const FSDimensionlessVector& v)
@@ -528,27 +496,12 @@ FSAngle USpiceK2::vsep_vector_K2(const FSDimensionlessVector& v1, const FSDimens
 
 FSDimensionlessVector USpiceK2::vsub_vector_K2(const FSDimensionlessVector& v1, const FSDimensionlessVector& v2)
 {
-    ConstSpiceDouble _v1[3]{ v1.x, v1.y, v1.z };
-    ConstSpiceDouble _v2[3]{ v2.x, v2.y, v2.z };
-
-    SpiceDouble _vout[3] { 0, 0, 0 };
-
-    vsub_c(_v1, _v2, _vout);
-
-    return { _vout };
+    return MaxQ::Math::Vsub(v1, v2);
 }
 
 FSDimensionlessStateVector USpiceK2::vsub_state_vector_K2(const FSDimensionlessStateVector& v1, const FSDimensionlessStateVector& v2)
 {
-    SpiceDouble _v1[6]; v1.CopyTo(_v1);
-    SpiceDouble _v2[6]; v2.CopyTo(_v2);
-    constexpr SpiceInt _ndim = 6;
-
-    SpiceDouble _vout[6]; ZeroOut(_vout);
-
-    vsubg_c(_v1, _v2, _ndim, _vout);
-
-    return { _vout };
+    return MaxQ::Math::Vsub(v1, v2);
 }
 
 void USpiceK2::vupack_vector_K2(const FSDimensionlessVector& v, double& x, double& y, double& z)
@@ -741,7 +694,7 @@ FSDistance USpiceK2::Conv_DoubleToSDistance_K2(double value)
 
 FSAngle USpiceK2::Conv_DegreesToSAngle_K2(double value)
 {
-    return FSAngle(value * SpiceUtilities::rpd);
+    return FSAngle(value * Math::rpd);
 }
 
 FSAngle USpiceK2::Conv_RadiansToSAngle_K2(double value)
@@ -749,24 +702,20 @@ FSAngle USpiceK2::Conv_RadiansToSAngle_K2(double value)
     return FSAngle(value);
 }
 
-
 FSAngularRate USpiceK2::Conv_DegreesPersecondToSAngularRate_K2(double value)
 {
-    return FSAngularRate(value * SpiceUtilities::rpd);
+    return FSAngularRate(value * Math::rpd);
 }
-
 
 FSAngularRate USpiceK2::Conv_RadiansPersecondToSAngularRate_K2(double value)
 {
     return FSAngularRate(value);
 }
 
-
 FSAngularRate USpiceK2::Conv_MinutesPerTurnToSAngularRate_K2(double value)
 {
-    return FSAngularRate(SpiceUtilities::twopi * 60. / value);
+    return FSAngularRate(Math::twopi * 60. / value);
 }
-
 
 FSDistanceVector USpiceK2::Conv_SDimensionlessVectorToSDistanceVector_K2(const FSDimensionlessVector& value)
 {

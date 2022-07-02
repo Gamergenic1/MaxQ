@@ -5,6 +5,13 @@
 // Documentation:  https://maxq.gamergenic.com/
 // GitHub:         https://github.com/Gamergenic1/MaxQ/ 
 
+//------------------------------------------------------------------------------
+// SpiceUncooked
+// K2 Node Compilation
+// See comments in Spice/SpiceK2.h.
+//------------------------------------------------------------------------------
+
+
 #pragma once
 
 #include "CoreMinimal.h"
@@ -25,6 +32,8 @@
 USTRUCT()
 struct FK2MxVOp
 {
+    typedef FK2MxVOp OperationType;
+
     GENERATED_BODY()
 
     UPROPERTY() FName ShortName;
@@ -71,7 +80,7 @@ struct FK2MxVOp
         check(_InnerToOuterConversion.Out == OuterType);
     }
 
-    FK2MxVOp(const FK2MxVOp& other)
+    FK2MxVOp(const OperationType& other)
     {
         ShortName = other.ShortName;
         K2NodeName = other.K2NodeName;
@@ -82,7 +91,7 @@ struct FK2MxVOp
         InnerToOuterConversion = other.InnerToOuterConversion;
     }
 
-    FK2MxVOp& operator= (const FK2MxVOp& other)
+    FK2MxVOp& operator= (const OperationType& other)
     {
         // self-assignment guard
         if (this == &other)
@@ -102,7 +111,7 @@ struct FK2MxVOp
     }
 
 
-    bool operator== (const FK2MxVOp& other) const
+    bool operator== (const OperationType& other) const
     {
         // self equality
         if (this == &other)
@@ -180,6 +189,25 @@ struct FK2MxVOp
 
         return false;
     }
+
+#if WITH_EDITOR
+    void CheckClass(UClass* Class) const
+    {
+        // make sure required conversions exist...
+        if (!InnerToOuterConversion.ConversionName.IsNone())
+        {
+            check(Class->FindFunctionByName(InnerToOuterConversion.ConversionName));
+        }
+        if (!OuterToInnerConversion.ConversionName.IsNone())
+        {
+            check(Class->FindFunctionByName(OuterToInnerConversion.ConversionName));
+        }
+        if (!K2NodeName.IsNone())
+        {
+            check(Class->FindFunctionByName(K2NodeName));
+        }
+    }
+#endif
 };
 
 
@@ -193,9 +221,19 @@ class SPICEUNCOOKED_API UK2Node_mxv : public UK2Node, public IK2Node_MathGeneric
     static constexpr ANSICHAR* M = "m";
     static constexpr ANSICHAR* VOUT = "vout";
 
+    static constexpr TCHAR* VIN_tip = TEXT("Input vector");
+    static constexpr TCHAR* M_tip = TEXT("Multiplication Matrix");
+    static constexpr TCHAR* VOUT_tip = TEXT("Product (m * vin)");
+
     static const FName vin;
     static const FName m;
     static const FName vout;
+
+public:
+    UPROPERTY()
+    FK2MxVOp CurrentOperation;
+
+    typedef FK2MxVOp OperationType;
 
 public:
 
@@ -219,24 +257,13 @@ public:
     virtual FText GetTooltipText() const override;
     // end of UK2Node interface
 
-    // IK2Node_MathGenericInterface
-    virtual void NotifyConnectionChanged(UEdGraphPin* Pin, UEdGraphPin* Connection);
-    // end of IK2Node_MathGenericInterface
-
-    bool CheckForErrors(FKismetCompilerContext& CompilerContext, FK2MxVOp& Operation);
+    bool CheckForErrors(FKismetCompilerContext& CompilerContext, OperationType& Operation);
     void CreateInputPin();
     void AllocateInputPin(FName& PinName);
 
-    static const TArray<FK2MxVOp> SupportedOperations;
-
-    UPROPERTY()
-    FK2MxVOp CurrentOperation;
-
     void RefreshOperation();
 
-    void SetPinType(UEdGraphPin* Pin, const FK2Type& type, const FString& ToolTip);
-    void SetPinTypeToWildcard(UEdGraphPin* Pin, const FString& ToolTip);
-    bool SetPinType(UEdGraphPin* Pin, FName Category, TWeakObjectPtr<UScriptStruct> SubCategoryObject, EPinContainerType Container, const FString& ToolTip);
+    virtual const TArray<OperationType>& GetSupportedOperations() const;
 };
 
 

@@ -5,6 +5,52 @@
 // Documentation:  https://maxq.gamergenic.com/
 // GitHub:         https://github.com/Gamergenic1/MaxQ/ 
 
+//------------------------------------------------------------------------------
+// Spice.cpp
+// 
+// Implementation Comments
+// 
+// USpice : public UBlueprintFunctionLibrary
+// 
+// Purpose:  Blueprint implementation of a CSPICE wrapper.
+// 
+// The spice model wraps a Toolkit, and not a framework.  This means it is
+// stateless (mostly) and exposes procedural functions, etc.
+// 
+// MaxQ:
+// * Base API
+// * Refined API
+//    * C++
+//    * Blueprints
+//
+// MaxQ: Three APIs
+// * Base API :  Initial Harness for studying integration with UE
+//    ~ USpice, USpiceTypes, etc
+// * Refined API
+//    * C++ :  C++-friendly
+//      ~ SpiceMath.h, SpiceOperators.h, etc
+//    * Blueprints :  C++-friendly
+//      ~ USpiceK2, UK2Node_unorm, etc
+// 
+// USpice is part of the base API, where CSPICE functionality is initially
+// implemented/tested/studied.
+// 
+// This is the core Blueprint Library that exposes CSPICE to Blueprints.
+// It is purposefully simple and linear.
+// Here, blueprints actions are implemented by UFUNCTION reflection.
+// This means a lot of duplication due to limitations of the reflection system
+// and how it handles types.
+// When bringing up new CSPICE functionality it starts here where it's exposed
+// to Blueprints in a way that's easy to debug and determine the best manner
+// to expose it in a UE-friendly manner.
+// Many operations etc are reintegrated in the C++-friendly API (SpiceMath.h,
+// SpiceOperators.h, etc) and then the Blueprint-friendly API (K2 Nodes).
+// K2 Nodes (which support BP wildcards, so that one operation supports multiple
+// Types) as Blueprint-friendly actions.
+// The implementations here are maintained for compatibility and then may be
+// redirected at the refined API.
+//------------------------------------------------------------------------------
+
 #include "Spice.h"
 #include "HAL/FileManager.h"
 #include "Misc/Paths.h"
@@ -23,6 +69,8 @@ extern "C"
 #include "SpiceZfc.h"
 }
 PRAGMA_POP_PLATFORM_DEFAULT_PACKING
+
+using namespace MaxQ::Private;
 
 
 void USpice::enumerate_kernels(
@@ -96,7 +144,7 @@ void USpice::furnsh(
 
 #ifdef SET_WORKING_DIRECTORY_IN_FURNSH
     // Get the current working directory...
-    TCHAR buffer[WINDOWS_MAX_PATH];
+    TCHAR buffer[SPICE_MAX_PATH];
     TCHAR* oldWorkingDirectory = _tgetcwd(buffer, sizeof(buffer)/sizeof(buffer[0]));
 
     // Trim the file name to just the full directory path...
@@ -5520,9 +5568,9 @@ void USpice::kdata(
     int      which
 )
 {
-    SpiceChar KernelFileBuffer[WINDOWS_MAX_PATH];
+    SpiceChar KernelFileBuffer[SPICE_MAX_PATH];
     SpiceChar FileTypeBuffer[64];
-    SpiceChar SourceFileBuffer[WINDOWS_MAX_PATH];
+    SpiceChar SourceFileBuffer[SPICE_MAX_PATH];
 
     SpiceInt        _which = which;
     ConstSpiceChar* _kind = TCHAR_TO_ANSI(*USpiceTypes::ToString((ES_KernelType)kind));
@@ -5591,7 +5639,7 @@ void USpice::kinfo(
 )
 {
     SpiceChar FileTypeBuffer[64];
-    SpiceChar SourceFileBuffer[WINDOWS_MAX_PATH];
+    SpiceChar SourceFileBuffer[SPICE_MAX_PATH];
 
     ConstSpiceChar* _file = TCHAR_TO_ANSI(*toPath(file));
     SpiceInt        _filtln = sizeof FileTypeBuffer;
@@ -11553,21 +11601,7 @@ void USpice::vlcom3(
     FSDimensionlessVector& sum
 )
 {
-    // Input
-    SpiceDouble _a = a;
-    SpiceDouble _v1[3]; v1.CopyTo(_v1);
-    SpiceDouble _b = b;
-    SpiceDouble _v2[3]; v2.CopyTo(_v2);
-    SpiceDouble _c = c;
-    SpiceDouble _v3[3]; v3.CopyTo(_v3);
-    // Output
-    SpiceDouble _sum[3];
-
-    // Invocation
-    vlcom3_c(_a, _v1, _b, _v2, _c, _v3, _sum);
-
-    // Return Value
-    sum = FSDimensionlessVector(_sum);
+    MaxQ::Math::Vlcom3(sum, a, v1, b, v2, c, v3);
 }
 
 void USpice::vlcom3_distance(
@@ -11580,21 +11614,7 @@ void USpice::vlcom3_distance(
     FSDistanceVector& sum
 )
 {
-    // Input
-    SpiceDouble _a = a;
-    SpiceDouble _v1[3]; v1.CopyTo(_v1);
-    SpiceDouble _b = b;
-    SpiceDouble _v2[3]; v2.CopyTo(_v2);
-    SpiceDouble _c = c;
-    SpiceDouble _v3[3]; v3.CopyTo(_v3);
-    // Output
-    SpiceDouble _sum[3];
-
-    // Invocation
-    vlcom3_c(_a, _v1, _b, _v2, _c, _v3, _sum);
-
-    // Return Value
-    sum = FSDistanceVector(_sum);
+    MaxQ::Math::Vlcom3(sum, a, v1, b, v2, c, v3);
 }
 
 /*
@@ -11609,19 +11629,7 @@ void USpice::vlcom(
     FSDimensionlessVector& sum
 )
 {
-    // Input
-    SpiceDouble _a = a;
-    SpiceDouble _v1[3]; v1.CopyTo(_v1);
-    SpiceDouble _b = b;
-    SpiceDouble _v2[3]; v2.CopyTo(_v2);
-    // Output
-    SpiceDouble _sum[3];
-
-    // Invocation
-    vlcom_c(_a, _v1, _b, _v2, _sum);
-
-    // Return Value
-    sum = FSDimensionlessVector(_sum);
+    MaxQ::Math::Vlcom(sum, a, v1, b, v2);
 }
 
 void USpice::vlcom_distance(
@@ -11632,19 +11640,7 @@ void USpice::vlcom_distance(
     FSDistanceVector& sum
 )
 {
-    // Input
-    SpiceDouble _a = a;
-    SpiceDouble _v1[3]; v1.CopyTo(_v1);
-    SpiceDouble _b = b;
-    SpiceDouble _v2[3]; v2.CopyTo(_v2);
-    // Output
-    SpiceDouble _sum[3];
-
-    // Invocation
-    vlcom_c(_a, _v1, _b, _v2, _sum);
-
-    // Return Value
-    sum = FSDistanceVector(_sum);
+    MaxQ::Math::Vlcom(sum, a, v1, b, v2);
 }
 
 /*

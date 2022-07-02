@@ -5,6 +5,17 @@
 // Documentation:  https://maxq.gamergenic.com/
 // GitHub:         https://github.com/Gamergenic1/MaxQ/ 
 
+//------------------------------------------------------------------------------
+// SpicePlatformDefs.h
+// 
+// API Comments
+// 
+// Purpose: Bad stuff goes here.  It goes elsewhere too, but it also goes here.
+// "Temporary" crutches to avoid "The Unreal Engine Way" while focused on
+// initial implementations.
+// Should be private, but SpiceCooked would pull it from here in Public.
+//------------------------------------------------------------------------------
+
 #pragma once
 
 // Set the working directory locally inside furnsh?

@@ -5,6 +5,20 @@
 // Documentation:  https://maxq.gamergenic.com/
 // GitHub:         https://github.com/Gamergenic1/MaxQ/ 
 
+//------------------------------------------------------------------------------
+// USpiceDiagnostics.h
+// 
+// API Comments
+// 
+// USpiceDiagnostics : public UBlueprintFunctionLibrary
+// 
+// Purpose: 
+// Assist debugging SPICE domain.
+// Dump kernel file coverages.
+// Dump info about kernel files currently in use.
+// Available to either Blueprints or C++.
+//------------------------------------------------------------------------------
+
 #pragma once
 
 #include "CoreMinimal.h"
@@ -13,7 +27,6 @@
 #include "SpiceDiagnostics.generated.h"
 
 SPICE_API DECLARE_LOG_CATEGORY_EXTERN(LogSpiceDiagnostics, Log, All);
-
 
 UCLASS(Category = "MaxQ|Diagnostics")
 class SPICE_API USpiceDiagnostics : public UBlueprintFunctionLibrary

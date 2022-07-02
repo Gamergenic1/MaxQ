@@ -5,6 +5,28 @@
 // Documentation:  https://maxq.gamergenic.com/
 // GitHub:         https://github.com/Gamergenic1/MaxQ/ 
 
+//------------------------------------------------------------------------------
+// SpiceOperators.h
+// 
+// API Comments
+// 
+// Purpose: C++ Operators for ue-wrapped CSPICE types.
+// 
+// MaxQ:
+// * Base API
+// * Refined API
+//    * C++
+//    * Blueprints
+//
+// SpiceOperators.h is part of the "refined C++ API".
+// 
+// fyi-
+// The operators are in randomish order, sometimes grouped by operator type,
+// sometimes grouped by ue-type, sometimes just whereever Visual Assist
+// wanted to plop an implmenetation when hitting Alt-C to create an
+// implementation :-D.
+//------------------------------------------------------------------------------
+
 #pragma once
 
 #include "SpiceTypes.h"
@@ -48,14 +70,11 @@ inline FSStateTransform& operator*=(FSStateTransform& m1, const FSStateTransform
     return m1;
 }
 
-// -------------------
-
 static inline FSDimensionlessVector& operator-=(FSDimensionlessVector& lhs, const FSDimensionlessVector& rhs)
 {
     lhs = MaxQ::Math::Vsub(lhs, rhs);
     return lhs;
 }
-
 
 static inline FSDimensionlessVector& operator+=(FSDimensionlessVector& lhs, const FSDimensionlessVector& rhs)
 {
@@ -78,7 +97,6 @@ static inline FSDimensionlessVector operator-(const FSDimensionlessVector& v)
 {
     return MaxQ::Math::Vminus(v);
 }
-// -------------------
 
 static inline FSDistanceVector& operator-=(FSDistanceVector& lhs, const FSDistanceVector& rhs)
 {
@@ -108,7 +126,6 @@ static inline FSDistanceVector operator-(const FSDistanceVector& v)
 {
     return MaxQ::Math::Vminus(v);
 }
-// -------------------
 
 static inline FSVelocityVector& operator-=(FSVelocityVector& lhs, const FSVelocityVector& rhs)
 {
@@ -138,7 +155,6 @@ static inline FSVelocityVector operator-(const FSVelocityVector& v)
 {
     return MaxQ::Math::Vminus(v);
 }
-// -------------------
 
 static inline FSAngularVelocity& operator-=(FSAngularVelocity& lhs, const FSAngularVelocity& rhs)
 {
@@ -168,7 +184,6 @@ static inline FSAngularVelocity operator-(const FSAngularVelocity& v)
 {
     return MaxQ::Math::Vminus(v);
 }
-// -------------------
 
 static inline FSStateVector& operator-=(FSStateVector& lhs, const FSStateVector& rhs)
 {
@@ -198,7 +213,6 @@ static inline FSStateVector operator-(const FSStateVector& v)
 {
     return MaxQ::Math::Vminus(v);
 }
-// -------------------
 
 static inline FSDimensionlessStateVector& operator-=(FSDimensionlessStateVector& lhs, const FSDimensionlessStateVector& rhs)
 {
@@ -229,10 +243,6 @@ static inline FSDimensionlessStateVector operator-(const FSDimensionlessStateVec
     return MaxQ::Math::Vminus(v);
 }
 
-// -------------------
-
-// "exact", but probably not reliable depending on compiler flags, etc etc
-// Used in S/C for non-critical things like firing an OnChange event etc
 static inline bool operator==(const FSDimensionlessVector& lhs, const FSDimensionlessVector& rhs)
 {
     return lhs.x == rhs.x && lhs.y == rhs.y && lhs.z == rhs.z;
@@ -367,7 +377,6 @@ static inline FSDistanceVector operator*(const FSDistance& lhs, const FSDimensio
     return rhs * lhs;
 }
 
-
 static inline FSDistanceVector& operator*=(FSDistanceVector& lhs, double rhs) {
 
     lhs.x *= rhs;
@@ -380,7 +389,6 @@ static inline bool operator==(const FSDistanceVector& lhs, const FSDistanceVecto
 {
     return (lhs.x == rhs.x) && (lhs.y == rhs.y) && (lhs.z == rhs.z);
 }
-
 
 static inline bool operator!=(const FSDistanceVector& lhs, const FSDistanceVector& rhs)
 {
@@ -527,7 +535,6 @@ static inline FSAngle& operator*=(FSAngle& lhs, double rhs) {
     return lhs;
 }
 
-
 static inline FSAngularRate operator*(double lhs, const FSAngularRate& rhs)
 {
     return FSAngularRate(rhs.AsSpiceDouble() * lhs);
@@ -630,7 +637,6 @@ static inline FSEphemerisTime operator-(const FSEphemerisTime& A, const FSEpheme
     return FSEphemerisTime(A.AsSpiceDouble() - B.AsSpiceDouble());
 }
 
-
 static inline FSEphemerisPeriod& operator+=(FSEphemerisPeriod& lhs, const FSEphemerisPeriod& rhs) {
 
     lhs = FSEphemerisPeriod(lhs.AsSpiceDouble() + rhs.AsSpiceDouble());
@@ -697,7 +703,6 @@ static inline FSEphemerisPeriod operator%(const FSEphemerisPeriod& A, const FSEp
     return FSEphemerisPeriod(fmod(A.AsSpiceDouble(), B.AsSpiceDouble()));
 }
 
-
 static inline bool operator==(const FSEphemerisPeriod& lhs, const FSEphemerisPeriod& rhs)
 {
     return lhs.seconds == rhs.seconds;
@@ -707,7 +712,6 @@ static inline bool operator!=(const FSEphemerisPeriod& lhs, const FSEphemerisPer
 {
     return !(lhs == rhs);
 }
-
 
 static inline bool operator>(const FSEphemerisPeriod& A, const FSEphemerisPeriod& B)
 {

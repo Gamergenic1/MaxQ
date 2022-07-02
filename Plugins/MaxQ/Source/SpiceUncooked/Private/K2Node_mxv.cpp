@@ -5,6 +5,13 @@
 // Documentation:  https://maxq.gamergenic.com/
 // GitHub:         https://github.com/Gamergenic1/MaxQ/ 
 
+//------------------------------------------------------------------------------
+// SpiceUncooked
+// K2 Node Compilation
+// See comments in Spice/SpiceK2.h.
+//------------------------------------------------------------------------------
+
+
 #include "K2Node_mxv.h"
 #include "K2Utilities.h"
 #include "Kismet2/BlueprintEditorUtils.h"
@@ -16,43 +23,22 @@
 
 #define LOCTEXT_NAMESPACE "K2Node_mxv"
 
-const TArray<FK2MxVOp> UK2Node_mxv::SupportedOperations
-{
-    FK2MxVOp{ "mxv dimensionless vector", FName(USpiceK2::mxv_vector), FK2Type::SRotationMatrix(), FK2Type::SDimensionlessVector() },
-    FK2MxVOp{ "mxv distance vector",  USpiceK2::mxv_vector, FK2Type::SRotationMatrix(), FK2Conversion::SDistanceVectorToSDimensionlessVector(), FK2Conversion::SDimensionlessVectorToSDistanceVector() },
-    FK2MxVOp{ "mxv velocity vector",  USpiceK2::mxv_vector, FK2Type::SRotationMatrix(), FK2Conversion::SVelocityVectorToSDimensionlessVector(), FK2Conversion::SDimensionlessVectorToSVelocityVector() },
-    FK2MxVOp{ "mxv angular velocity",  USpiceK2::mxv_vector, FK2Type::SRotationMatrix(), FK2Conversion::SAngularVelocityToSDimensionlessVector(), FK2Conversion::SDimensionlessVectorToSAngularVelocity() },
-    FK2MxVOp{ "mxv dimensionless state",  USpiceK2::mxv_state_vector, FK2Type::SStateTransform(), FK2Type::SDimensionlessStateVector() },
-    FK2MxVOp{ "mxv state vector",  USpiceK2::mxv_state_vector, FK2Type::SStateTransform(), FK2Conversion::SStateVectorToSDimensionlessStateVector(), FK2Conversion::SDimensionlessStateVectorToSStateVector() }
-};
-
 const FName UK2Node_mxv::vin{ VIN };
 const FName UK2Node_mxv::m{ M };
 const FName UK2Node_mxv::vout{ VOUT };
+
 
 UK2Node_mxv::UK2Node_mxv(const FObjectInitializer& ObjectInitializer)
     : Super(ObjectInitializer)
 {
 #if WITH_EDITOR
-    for (const auto& op : SupportedOperations)
+    for (const auto& op : GetSupportedOperations())
     {
-        // make sure required conversions exist...
-        if (!op.InnerToOuterConversion.ConversionName.IsNone())
-        {
-            check(USpiceK2::StaticClass()->FindFunctionByName(op.InnerToOuterConversion.ConversionName));
-        }
-        if (!op.OuterToInnerConversion.ConversionName.IsNone())
-        {
-            check(USpiceK2::StaticClass()->FindFunctionByName(op.OuterToInnerConversion.ConversionName));
-        }
-        if (!op.K2NodeName.IsNone())
-        {
-            check(USpiceK2::StaticClass()->FindFunctionByName(op.K2NodeName));
-        }
+        op.CheckClass(USpiceK2::StaticClass());
     }
 #endif
 
-    CurrentOperation = FK2MxVOp();
+    CurrentOperation = OperationType();
 }
 
 
@@ -64,13 +50,13 @@ void UK2Node_mxv::AllocateDefaultPins()
     const UEdGraphSchema_K2* K2Schema = GetDefault<UEdGraphSchema_K2>();
 
     auto InputPin{ CreatePin(EGPD_Input, UEdGraphSchema_K2::PC_Wildcard, vin) };
-    InputPin->PinToolTip = TEXT("Input Vector");
+    InputPin->PinToolTip = VIN_tip;
 
     auto MatrixPin{ CreatePin(EGPD_Input, UEdGraphSchema_K2::PC_Wildcard, m) };
-    MatrixPin->PinToolTip = TEXT("Multiplication Matrix (SRotationMatrix or SStateTransform)");
+    MatrixPin->PinToolTip = FString::Printf(TEXT("%s (SRotationMatrix or SStateTransform)"), M_tip);
 
     auto OutputPin{ CreatePin(EGPD_Output, UEdGraphSchema_K2::PC_Wildcard, vout) };
-    OutputPin->PinToolTip = TEXT("Product (m * v)");
+    OutputPin->PinToolTip = VOUT_tip;
 
     // The module is 'uncooked' and thus only compiles with editor data, but still...
 #if WITH_EDITORONLY_DATA
@@ -81,15 +67,18 @@ void UK2Node_mxv::AllocateDefaultPins()
 
     if (!CurrentOperation.ShortName.IsNone())
     {
-        SetPinType(InputPin, CurrentOperation.OuterType, TEXT("Input vector"));
-        SetPinType(MatrixPin, CurrentOperation.MatrixType, TEXT("Multiplication Matrix"));
-        SetPinType(OutputPin, CurrentOperation.OuterType, TEXT("Product (m * vin)"));
+        SetPinType(this, InputPin, CurrentOperation.OuterType, VIN_tip);
+        SetPinType(this, MatrixPin, CurrentOperation.MatrixType, M_tip);
+        SetPinType(this, OutputPin, CurrentOperation.OuterType, VOUT_tip);
     }
 }
 
 
 bool UK2Node_mxv::IsConnectionDisallowed(const UEdGraphPin* MyPin, const UEdGraphPin* OtherPin, FString& OutReason) const
 {
+    // handles split pins
+    if(IsExactPair(MyPin, OtherPin)) return false;
+
     if (!CurrentOperation.ShortName.IsNone())
     {
         if (MyPin->PinName == vin || MyPin->PinName == vout)
@@ -102,16 +91,18 @@ bool UK2Node_mxv::IsConnectionDisallowed(const UEdGraphPin* MyPin, const UEdGrap
         }
     }
 
+    const auto Ops = GetSupportedOperations();
+
     if (MyPin->PinName == vin || MyPin->PinName == vout)
     {
-        for (const auto& Op : SupportedOperations)
+        for (const auto& Op : Ops)
         {
             if (Op.OuterType.Matches(OtherPin->PinType)) return false;
         }
     }
     else if (MyPin->PinName == m)
     {
-        for (const auto& Op : SupportedOperations)
+        for (const auto& Op : Ops)
         {
             if (Op.MatrixType.Matches(OtherPin->PinType)) return false;
         }
@@ -130,8 +121,8 @@ void UK2Node_mxv::NodeConnectionListChanged()
     auto MatrixPin = FindPinChecked(m);
     auto OutputPin = FindPinChecked(vout);
 
-    CurrentOperation = FK2MxVOp();
-    for (const auto& Op : SupportedOperations)
+    CurrentOperation = OperationType();
+    for (const auto& Op : GetSupportedOperations())
     {
         if (Op.IsUniquelyDetermined(InputPin, MatrixPin, OutputPin))
         {
@@ -144,45 +135,16 @@ void UK2Node_mxv::NodeConnectionListChanged()
 
     if (NodeIsGeneric)
     {
-        SetPinTypeToWildcard(InputPin, TEXT("Input vector"));
-        SetPinTypeToWildcard(MatrixPin, TEXT("Multiplication Matrix (SRotationMatrix or SStateTransform)"));
-        SetPinTypeToWildcard(OutputPin, TEXT("Product (m * vin)"));
+        SetPinTypeToWildcard(this, InputPin, VIN_tip);
+        SetPinTypeToWildcard(this, MatrixPin, FString::Printf(TEXT("%s (SRotationMatrix or SStateTransform)"), M_tip));
+        SetPinTypeToWildcard(this, OutputPin, TEXT("Product (m * vin)"));
     }
     else
     {
-        SetPinType(InputPin, CurrentOperation.OuterType, TEXT("Input vector"));
-        SetPinType(MatrixPin, CurrentOperation.MatrixType, TEXT("Multiplication Matrix"));
-        SetPinType(OutputPin, CurrentOperation.OuterType, TEXT("Product (m * vin)"));
+        SetPinType(this, InputPin, CurrentOperation.OuterType, VIN_tip);
+        SetPinType(this, MatrixPin, CurrentOperation.MatrixType, M_tip);
+        SetPinType(this, OutputPin, CurrentOperation.OuterType, TEXT("Product (m * vin)"));
     }
-}
-
-void UK2Node_mxv::SetPinType(UEdGraphPin* Pin, const FK2Type& type, const FString& ToolTip)
-{
-    SetPinType(Pin, type.Category, type.SubCategoryObject, type.Container, FString::Printf(TEXT("%s (%s)"), *ToolTip, *type.TypeName.ToString()));
-}
-
-void UK2Node_mxv::SetPinTypeToWildcard(UEdGraphPin* Pin, const FString& ToolTip)
-{
-    SetPinType(Pin, UEdGraphSchema_K2::PC_Wildcard, nullptr, EPinContainerType::None, ToolTip);
-}
-
-bool UK2Node_mxv::SetPinType(UEdGraphPin* Pin, FName Category, TWeakObjectPtr<UScriptStruct> SubCategoryObject, EPinContainerType Container, const FString& ToolTip)
-{
-    bool bUpdatePin = Pin->PinType.PinCategory != Category;
-    bUpdatePin |= Pin->PinType.PinSubCategoryObject != SubCategoryObject;
-    bUpdatePin |= Pin->PinType.ContainerType != Container;
-
-    if (bUpdatePin)
-    {
-        Pin->PinType.PinCategory = Category;
-        Pin->PinType.PinSubCategoryObject = SubCategoryObject;
-        Pin->PinType.ContainerType = Container;
-        Pin->PinToolTip = ToolTip;
-
-        PinTypeChanged(Pin);
-    }
-
-    return bUpdatePin;
 }
 
 
@@ -190,41 +152,17 @@ void UK2Node_mxv::PinTypeChanged(UEdGraphPin* Pin)
 {
     Super::PinTypeChanged(Pin);
 
-    // Notify any connections that this pin changed... which gives them the
-    // opportunity to adapt, themselves...
-    for (auto Connection : Pin->LinkedTo)
-    {
-        if (auto MathGeneric = Cast<IK2Node_MathGenericInterface>(Connection->GetOwningNode()))
-        {
-            MathGeneric->NotifyConnectionChanged(Connection, Pin);
-        }
-    }
-
-    const UEdGraphSchema_K2* K2Schema = GetDefault<UEdGraphSchema_K2>();
-    K2Schema->ForceVisualizationCacheClear();
+    ThisPinTypeChanged(Pin);
 }
 
 
-void UK2Node_mxv::NotifyConnectionChanged(UEdGraphPin* Pin, UEdGraphPin* Connection)
-{
-    auto& PinType = Pin->PinType;
-    auto& ConnectedPinType = Connection->PinType;
-
-    // Only consider flipping if this type is a wildcard, but the other one isn't...
-    if (PinType.PinCategory == UEdGraphSchema_K2::PC_Wildcard && ConnectedPinType.PinCategory != UEdGraphSchema_K2::PC_Wildcard)
-    {
-        NodeConnectionListChanged();
-    }
-}
-
-
-bool UK2Node_mxv::CheckForErrors(FKismetCompilerContext& CompilerContext, FK2MxVOp& Operation)
+bool UK2Node_mxv::CheckForErrors(FKismetCompilerContext& CompilerContext, OperationType& Operation)
 {
     auto InputPin = FindPinChecked(vin);
     auto MatrixPin = FindPinChecked(m);
     auto OutputPin = FindPinChecked(vout);
 
-    for (const auto& Op : SupportedOperations)
+    for (const auto& Op : GetSupportedOperations())
     {
         if (Op.Is(InputPin, MatrixPin, OutputPin))
         {
@@ -238,14 +176,13 @@ bool UK2Node_mxv::CheckForErrors(FKismetCompilerContext& CompilerContext, FK2MxV
 }
 
 
-
 void UK2Node_mxv::ExpandNode(FKismetCompilerContext& CompilerContext, UEdGraph* SourceGraph)
 {
     Super::ExpandNode(CompilerContext, SourceGraph);
 
     auto Schema = Cast< UEdGraphSchema_K2 >(GetSchema());
 
-    FK2MxVOp Operation;
+    OperationType Operation;
     if (CheckForErrors(CompilerContext, Operation))
     {
         BreakAllNodeLinks();
@@ -366,13 +303,28 @@ FText UK2Node_mxv::GetTooltipText() const
     FText ListStart = LOCTEXT("ListStart", ":\n");
     FText ListSItemeparator = LOCTEXT("ListItemSeparator", ",\n");
     bool bIsFirstItem = true;
-    for (const FK2MxVOp& Op : SupportedOperations)
+    for (const auto& Op : GetSupportedOperations())
     {
         Tooltip = Tooltip.Join(bIsFirstItem ? ListStart : ListSItemeparator, Tooltip, Op.OuterType.GetDisplayNameText());
         bIsFirstItem = false;
     }
 
     return Tooltip;
+}
+
+const TArray<UK2Node_mxv::OperationType>& UK2Node_mxv::GetSupportedOperations() const
+{
+    static const TArray<OperationType> SupportedOperations
+    {
+        OperationType{ "mxv dimensionless vector", FName(USpiceK2::mxv_vector), FK2Type::SRotationMatrix(), FK2Type::SDimensionlessVector() },
+        OperationType{ "mxv distance vector",  USpiceK2::mxv_vector, FK2Type::SRotationMatrix(), FK2Conversion::SDistanceVectorToSDimensionlessVector(), FK2Conversion::SDimensionlessVectorToSDistanceVector() },
+        OperationType{ "mxv velocity vector",  USpiceK2::mxv_vector, FK2Type::SRotationMatrix(), FK2Conversion::SVelocityVectorToSDimensionlessVector(), FK2Conversion::SDimensionlessVectorToSVelocityVector() },
+        OperationType{ "mxv angular velocity",  USpiceK2::mxv_vector, FK2Type::SRotationMatrix(), FK2Conversion::SAngularVelocityToSDimensionlessVector(), FK2Conversion::SDimensionlessVectorToSAngularVelocity() },
+        OperationType{ "mxv dimensionless state",  USpiceK2::mxv_state_vector, FK2Type::SStateTransform(), FK2Type::SDimensionlessStateVector() },
+        OperationType{ "mxv state vector",  USpiceK2::mxv_state_vector, FK2Type::SStateTransform(), FK2Conversion::SStateVectorToSDimensionlessStateVector(), FK2Conversion::SDimensionlessStateVectorToSStateVector() }
+    };
+
+    return SupportedOperations;
 }
 
 #undef LOCTEXT_NAMESPACE

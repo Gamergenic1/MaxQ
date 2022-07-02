@@ -5,6 +5,24 @@
 // Documentation:  https://maxq.gamergenic.com/
 // GitHub:         https://github.com/Gamergenic1/MaxQ/ 
 
+//------------------------------------------------------------------------------
+// SpiceOperators.cpp
+// 
+// Implementation Comments
+// 
+// C++ Operators for ue-wrapped CSPICE types.
+// 
+// Purpose:  Blueprint implementations of CSPICE Type wrappers  
+// 
+// MaxQ:
+// * Base API
+// * Refined API
+//    * C++
+//    * Blueprints
+//
+// SpiceOperators.cpp is part of the "refined C++ API".
+//------------------------------------------------------------------------------
+
 #include "SpiceOperators.h"
 
 PRAGMA_PUSH_PLATFORM_DEFAULT_PACKING

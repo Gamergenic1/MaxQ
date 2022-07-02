@@ -33,6 +33,41 @@
 // https://gamedevtricks.com/post/third-party-libs-1/
 
 
+//------------------------------------------------------------------------------
+// Spice.h
+// 
+// API Comments
+//
+// USpice : public UBlueprintFunctionLibrary
+// 
+// Purpose:  Blueprint implementation of a CSPICE wrapper.
+// 
+// MaxQ:
+// * Base API
+// * Refined API
+//    * C++
+//    * Blueprints
+//
+// MaxQ: Three APIs
+// * Base API :  Initial Harness for studying integration with UE
+//    ~ USpice, USpiceTypes, etc
+// * Refined API
+//    * C++ :  C++-friendly
+//      ~ SpiceMath.h, SpiceOperators.h, etc
+//    * Blueprints :  C++-friendly
+//      ~ USpiceK2, UK2Node_unorm, etc
+// 
+// USpice is part of the base API, where CSPICE functionality is initially
+// exposed.
+// It is maintained for backwards compatibility, when possible deprecation is
+// preferred to a breaking change.
+// What is here is usable from either blueprints or c++, but the Refined C++/
+// Blueprint APIs will be more convenient to the user when functionality is
+// migrated there.
+// 
+// See implementation comments in Spice.cpp.
+//------------------------------------------------------------------------------
+
 #pragma once
 
 #include "CoreMinimal.h"

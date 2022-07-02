@@ -5,6 +5,13 @@
 // Documentation:  https://maxq.gamergenic.com/
 // GitHub:         https://github.com/Gamergenic1/MaxQ/ 
 
+//------------------------------------------------------------------------------
+// SpiceUncooked
+// K2 Node Compilation
+// See comments in Spice/SpiceK2.h.
+//------------------------------------------------------------------------------
+
+
 #include "K2Node_OutWithSelectorOp.h"
 #include "K2Utilities.h"
 #include "SpiceK2.h"
@@ -59,7 +66,6 @@ void UK2Node_OutWithSelectorOp::AllocateDefaultPins()
     UEdGraphPin* errorMessagePin = CreatePin(EGPD_Output, UEdGraphSchema_K2::PC_String, errorMessage_PinName);
     errorMessagePin->PinToolTip = TEXT("An error message, if the action fails");
 
-
     auto selector = CreatePin(EGPD_Input, UEdGraphSchema_K2::PC_Byte, ComponentSelectorEnum, selector_PinName);
     selector->PinToolTip = TEXT("Selects all, or X/Y/Z subcomponents");
     selector->PinType.PinSubCategoryObject = ComponentSelectorEnum;
@@ -67,6 +73,11 @@ void UK2Node_OutWithSelectorOp::AllocateDefaultPins()
     selector->DefaultTextValue = FText::FromName(ComponentSelectorEnum->GetNameByValue((int64)EK2_ComponentSelector::All));
     selector->bAdvancedView = true;
     AdvancedPinDisplay = ENodeAdvancedPins::Hidden;
+
+    if (!CurrentOperation.ShortName.IsNone() && CurrentOperation.ShortName != GetWildcardOp().ShortName)
+    {
+        SetPinType(this, OutputPin, CurrentOperation.Final);
+    }
 }
 
 void UK2Node_OutWithSelectorOp::NotifyPinConnectionListChanged(UEdGraphPin* Pin)
@@ -75,33 +86,18 @@ void UK2Node_OutWithSelectorOp::NotifyPinConnectionListChanged(UEdGraphPin* Pin)
 
     if (Pin == returnValuePin())
     {
-//        Pin->PinFriendlyName = FText::GetEmpty();
-
-        FEdGraphPinType& ReturnValuePinType = Pin->PinType;
-
-        Modify();
-        Pin->Modify();
-
-        ReturnValuePinType.PinCategory = UEdGraphSchema_K2::PC_Wildcard;
-        ReturnValuePinType.PinSubCategory = NAME_None;
-        ReturnValuePinType.PinSubCategoryObject = nullptr;
-
         if (Pin->LinkedTo.Num() == 1)
         {
             const FEdGraphPinType& ConnectedPinType = Pin->LinkedTo[0]->PinType;
 
             if(MatchMe(CurrentOperation, ConnectedPinType, selectorPinValue()))
             {
-                returnValuePin()->Modify();
-                ReturnValuePinType.PinCategory = CurrentOperation.Final.Category;
-                ReturnValuePinType.PinSubCategoryObject = CurrentOperation.Final.SubCategoryObject;
-//                  Pin->PinFriendlyName = FText::FromName(CurrentOperation.Final.TypeName);
-
-                const UEdGraphSchema_K2* K2Schema = GetDefault<UEdGraphSchema_K2>();
-                K2Schema->ForceVisualizationCacheClear();
+                SetPinType(this, Pin, CurrentOperation.Final);
                 return;
             }
         }
+
+        SetPinTypeToWildcard(this, Pin);
     }
 }
 
@@ -222,7 +218,7 @@ void UK2Node_OutWithSelectorOp::PreloadRequiredAssets()
     PreloadObject(FSVelocityVector::StaticStruct());
     PreloadObject(FK2Type::StaticStruct());
     PreloadObject(FK2Conversion::StaticStruct());
-    PreloadObject(FK2SingleOutputOpWithComponentFilter::StaticStruct());
+    PreloadObject(OperationType::StaticStruct());
     Super::PreloadRequiredAssets();
 }
 
@@ -267,20 +263,20 @@ bool UK2Node_OutWithSelectorOp::IsOutputCompatible(const UEdGraphPin* ThePin, EK
         // Loop through our operations and try to find a match
         auto pinType = ThePin->PinType;
 
-        FK2SingleOutputOpWithComponentFilter dummyOperation;
+        OperationType dummyOperation;
         return MatchMe(dummyOperation, pinType, selector);
     }
 
     return false;
 }
 
-bool UK2Node_OutWithSelectorOp::MatchMe(FK2SingleOutputOpWithComponentFilter& operation, FEdGraphPinType pinType, EK2_ComponentSelector selector) const
+bool UK2Node_OutWithSelectorOp::MatchMe(OperationType& operation, FEdGraphPinType pinType, EK2_ComponentSelector selector) const
 {
-    for (auto kvp : OperationsMap)
+    for (const auto& [Key, Value] : GetOperationsMap())
     {
-        if (kvp.Value.Final.Is(pinType) && kvp.Value.Selector == selector)
+        if (Value.Final.Is(pinType) && Value.Selector == selector)
         {
-            operation = kvp.Value;
+            operation = Value;
             return true;
         }
     }
@@ -311,6 +307,7 @@ FLinearColor UK2Node_OutWithSelectorOp::GetNodeTitleColor() const
 {
     return NodeBackgroundColor;
 }
+
 
 void UK2Node_OutWithSelectorOp::NotifyConnectionChanged(UEdGraphPin* Pin, UEdGraphPin* Connection)
 {

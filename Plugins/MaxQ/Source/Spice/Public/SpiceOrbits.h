@@ -5,6 +5,19 @@
 // Documentation:  https://maxq.gamergenic.com/
 // GitHub:         https://github.com/Gamergenic1/MaxQ/ 
 
+//------------------------------------------------------------------------------
+// SpiceOrbits.h
+// 
+// API Comments
+// 
+// Purpose: Debug Orbit rendering.
+// 
+// Debug stuff.  Renders orbits.  Allows quick visualizations of a few things
+// to verify the API is functioning correctly.
+// Like, "if the observer moves from here to there and the reference frame
+// rotates, is everything's view updated appropriately?"
+//------------------------------------------------------------------------------
+
 #pragma once
 
 #include "CoreMinimal.h"
@@ -14,14 +27,10 @@
 #include "Spice.h"
 #include "SpiceOrbits.generated.h"
 
-
 UCLASS(Category = "MaxQ")
 class SPICE_API USpiceOrbits : public UBlueprintFunctionLibrary
 {
     GENERATED_BODY()
-
-public:
-    USpiceOrbits();
 
 public:
     /// <summary>Converts a distance to a double (kilometers)</summary>

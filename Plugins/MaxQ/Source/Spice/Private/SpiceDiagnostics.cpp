@@ -5,6 +5,16 @@
 // Documentation:  https://maxq.gamergenic.com/
 // GitHub:         https://github.com/Gamergenic1/MaxQ/ 
 
+//------------------------------------------------------------------------------
+// USpiceDiagnostics.cpp
+// 
+// Implementation Comments
+// 
+// USpiceDiagnostics : public UBlueprintFunctionLibrary
+// 
+// See API comments in USpiceDiagnostics.h
+//------------------------------------------------------------------------------
+
 #include "SpiceDiagnostics.h"
 #include "SpiceTypes.h"
 #include "Containers/StringFwd.h"
@@ -24,6 +34,8 @@ extern "C"
 }
 PRAGMA_POP_PLATFORM_DEFAULT_PACKING
 
+using namespace MaxQ;
+using namespace MaxQ::Private;
 
 DEFINE_LOG_CATEGORY(LogSpiceDiagnostics);
 

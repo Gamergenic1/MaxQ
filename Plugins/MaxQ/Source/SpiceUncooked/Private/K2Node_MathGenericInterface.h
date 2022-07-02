@@ -5,6 +5,13 @@
 // Documentation:  https://maxq.gamergenic.com/
 // GitHub:         https://github.com/Gamergenic1/MaxQ/ 
 
+//------------------------------------------------------------------------------
+// SpiceUncooked
+// K2 Node Compilation
+// See comments in Spice/SpiceK2.h.
+//------------------------------------------------------------------------------
+
+
 #pragma once
 
 #include "CoreMinimal.h"
@@ -28,5 +35,5 @@ class SPICEUNCOOKED_API IK2Node_MathGenericInterface
 
 public:
 
-	virtual void NotifyConnectionChanged(UEdGraphPin* Pin, UEdGraphPin* Connection) {}
+	virtual void NotifyConnectionChanged(UEdGraphPin* Pin, UEdGraphPin* Connection);
 };

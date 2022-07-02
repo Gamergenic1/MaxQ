@@ -5,6 +5,13 @@
 // Documentation:  https://maxq.gamergenic.com/
 // GitHub:         https://github.com/Gamergenic1/MaxQ/ 
 
+//------------------------------------------------------------------------------
+// SpiceUncooked
+// K2 Node Compilation
+// See comments in Spice/SpiceK2.h.
+//------------------------------------------------------------------------------
+
+
 #pragma once
 
 #include "CoreMinimal.h"
@@ -26,6 +33,15 @@ UCLASS(BlueprintType, Blueprintable)
 class SPICEUNCOOKED_API UK2Node_pack : public UK2Node, public IK2Node_MathGenericInterface
 {
     GENERATED_UCLASS_BODY()
+
+public:
+    UPROPERTY()
+    FK2Type OperandType;
+
+    UPROPERTY()
+    TArray<double> DefaultValues;
+
+    typedef FK2SingleOutputOp OperationType;
 
 public:
 
@@ -59,28 +75,19 @@ public:
     virtual FText GetTooltipText() const override;
     // end of UK2Node interface
 
-    // IK2Node_MathGenericInterface
-    virtual void NotifyConnectionChanged(UEdGraphPin* Pin, UEdGraphPin* Connection);
-    // end of IK2Node_MathGenericInterface
-
-    bool CheckForErrors(FKismetCompilerContext& CompilerContext, FK2SingleOutputOp& Operation);
+    bool CheckForErrors(FKismetCompilerContext& CompilerContext, OperationType& Operation);
     void CreateInputPin();
     void AllocateInputPin(FName& PinName);
 
-    TArray<FK2Type> SupportedTypes;
-    TArray<FK2SingleOutputOp> SupportedOperations;
     FName OutputPinName;
-
-    UPROPERTY()
-    FK2Type OperandType;
-
-    UPROPERTY()
-    TArray<double> DefaultValues;
-
 
     TArray<FString> PinLabels;
 
     void RefreshOperand();
+
+protected:
+    virtual const TArray<FK2Type>& GetSupportedTypes() const;
+    virtual const TArray<OperationType>& GetSupportedOperations() const;
 };
 
 
