@@ -5,6 +5,61 @@
 // Documentation:  https://maxq.gamergenic.com/
 // GitHub:         https://github.com/Gamergenic1/MaxQ/ 
 
+//------------------------------------------------------------------------------
+// SpiceK2.h
+// 
+// API Comments
+// 
+// USpiceK2 : public UBlueprintFunctionLibrary
+// 
+// Purpose: 
+// Blueprint micro-operations from which K2 Node Macro-operations are assembled.
+// 
+// MaxQ:
+// * Base API
+// * Refined API
+//    * C++
+//    * Blueprints
+//
+// SpiceK2.h is part of the "refined Blueprints API".
+// Callable from C++, but it's not designed bo be convenient to do so.
+// The UFUNCTIONs are "BlueprintInternalUseOnly", the nodes aren't available
+// to the blueprint editor.
+// The K2Nodes that use these nodes are located in the SpiceUncooked Module.
+// 
+//------------------------------------------------------------------------------
+// 
+// Example: compiling wildcard vcrss blueprint k2 node to specific types
+// 
+// Macro-Operation:
+//      wildcard vout, v1, v2
+//      vout = vcrss(v1, v2)
+// 
+// Macro-Op compilation command:
+//      angular_momentum h
+//      distance_vector r
+//      velocity_vector v
+//      h = vcrss(r, v)
+// 
+// Compiled Micro-Ops:
+//      angular_momentum h
+//      distance_vector r
+//      velocity_vector v
+//      dimensionless_vector v1 = (dimensionless_vector)r
+//      dimensionless_vector v2 = (dimensionless_vector)v
+//      dimensionless_vector vout = vcrss(v1, v2)
+//      h = (angular_momentum) vout
+// 
+// USpiceK2 Micro-Ops:
+//      Graph Node IN pins: FSDistanceVector r, FSVelocityVector v
+//      Graph Node OUT pins: FSAngularMomentum h
+//      FSDimensionlessVector v1 = Conv_SDistanceVectorToSDimensionlessVector(r)
+//      FSDimensionlessVector v2 = Conv_SVelocityVectorToSDimensionlessVector(v)
+//      FSDimensionlessVector vout = vcrss(v1, v2)
+//      h = Conv_SDimensionlessVectorToAngularMomentum(vout)
+// 
+//------------------------------------------------------------------------------
+
 #pragma once
 
 #include "CoreMinimal.h"

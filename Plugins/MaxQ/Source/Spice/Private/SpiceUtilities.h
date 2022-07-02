@@ -5,6 +5,22 @@
 // Documentation:  https://maxq.gamergenic.com/
 // GitHub:         https://github.com/Gamergenic1/MaxQ/ 
 
+//------------------------------------------------------------------------------
+// SpiceUtilities.h
+// 
+// Private API Comments
+// 
+// Purpose:
+// Utilities useful when interacting with CSPICE
+//
+// Internal utilities that deal with CSPICE Toolkit types (SpiceDouble,
+// SpiceEllipse, SpicePlanet, etc etc).
+// CSPICE Toolkit types cannot appear in the public headers, but we still
+// want a few utilities, etc.  This is the place for them.
+// Also... Utilities that shouldn't be exposed because they're not stable
+// (churn a lot) or otherwise just not somehting we'd like to expose...
+//------------------------------------------------------------------------------
+
 #pragma once
 
 #include "CoreMinimal.h"
@@ -17,46 +33,35 @@ extern "C"
 }
 PRAGMA_POP_PLATFORM_DEFAULT_PACKING
 
-// This is private header to the module so we don't need a namespace
-// to protect external users.  But, these are common names so putting
-// them in a namespace will at least let us qualify the name if needed.
-namespace SpiceUtilities
+namespace MaxQ::Private
 {
-    extern const double pi;
-    extern const double twopi;
-    extern const double dpr;
-    extern const double rpd;
+    FString toPath(const FString& file);
+
+    template<class T>
+    inline void ZeroOut(T(&value)[3][3])
+    {
+        FMemory::Memset(value, 0);
+    }
+
+    template<class T>
+    inline void ZeroOut(T(&value)[6][6])
+    {
+        FMemory::Memset(value, 0);
+    }
+
+
+    template<class T>
+    inline void ZeroOut(T& value)
+    {
+        FMemory::Memset(value, 0);
+    }
+
+    void CopyFrom(const SpicePlane& _plane, FSPlane& dest);
+    void CopyTo(const FSPlane& src, SpicePlane& _plane);
+    void CopyFrom(const SpiceEllipse& _ellipse, FSEllipse& dest);
+    void CopyTo(const FSEllipse& src, SpiceEllipse& _ellipse);
+
+    uint8 ErrorCheck(ES_ResultCode& ResultCode, FString& ErrorMessage, bool BeQuiet = false);
+    uint8 ErrorCheck(ES_ResultCode* ResultCode, FString* ErrorMessage, bool BeQuiet = false);
+    uint8 UnexpectedErrorCheck(bool bReset = true);
 }
-
-// Utilities useful when interacting with CSPICE
-
-SPICE_API FString toPath(const FString& file);
-
-template<class T>
-inline void ZeroOut(T(&value)[3][3])
-{
-    FMemory::Memset(value, 0);
-}
-
-template<class T>
-inline void ZeroOut(T(&value)[6][6])
-{
-    FMemory::Memset(value, 0);
-}
-
-
-template<class T>
-inline void ZeroOut(T& value)
-{
-    FMemory::Memset(value, 0);
-}
-
-SPICE_API void CopyFrom(const SpicePlane& _plane, FSPlane& dest);
-SPICE_API void CopyTo(const FSPlane& src, SpicePlane& _plane);
-SPICE_API void CopyFrom(const SpiceEllipse& _ellipse, FSEllipse& dest);
-SPICE_API void CopyTo(const FSEllipse& src, SpiceEllipse& _ellipse);
-
-SPICE_API uint8 ErrorCheck(ES_ResultCode& ResultCode, FString& ErrorMessage, bool BeQuiet = false);
-SPICE_API uint8 ErrorCheck(ES_ResultCode* ResultCode, FString* ErrorMessage, bool BeQuiet = false);
-SPICE_API uint8 UnexpectedErrorCheck(bool bReset = true);
-

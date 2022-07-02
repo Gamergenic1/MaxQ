@@ -5,6 +5,13 @@
 // Documentation:  https://maxq.gamergenic.com/
 // GitHub:         https://github.com/Gamergenic1/MaxQ/ 
 
+//------------------------------------------------------------------------------
+// SpiceUncooked
+// K2 Node Compilation
+// See comments in Spice/SpiceK2.h.
+//------------------------------------------------------------------------------
+
+
 #include "K2Node_TwoInOneOut.h"
 #include "K2Utilities.h"
 #include "Kismet2/BlueprintEditorUtils.h"
@@ -21,13 +28,18 @@
 UK2Node_TwoInOneOut::UK2Node_TwoInOneOut(const FObjectInitializer& ObjectInitializer)
     : Super(ObjectInitializer)
 {
+#if WITH_EDITOR
+    for (const auto& op : GetSupportedOperations())
+    {
+        op.CheckClass(USpiceK2::StaticClass());
+    }
+#endif
 }
 
 
 void UK2Node_TwoInOneOut::AllocateDefaultPins()
 {
     Super::AllocateDefaultPins();
-
 
     for (FName PinName : PinNames)
     {   
@@ -53,8 +65,7 @@ void UK2Node_TwoInOneOut::AllocateDefaultPins()
         UEdGraphPin* OutputPin = CreatePin(EGPD_Output, PinCategory, CreateUniquePinName(OutputPinName));
         if (!OperandType.Category.IsNone() && OperandType.Category != UEdGraphSchema_K2::PC_Wildcard)
         {
-            OutputPin->PinType.PinSubCategoryObject = OperandType.SubCategoryObject;
-            OutputPin->PinType.ContainerType = OperandType.Container;
+            SetPinType(this, OutputPin, OperandType);
         }
 
         OutputPin->PinToolTip = OutputPinName.ToString() + TEXT(" of inputs");
@@ -134,6 +145,7 @@ bool UK2Node_TwoInOneOut::IsConnectionDisallowed(const UEdGraphPin* MyPin, const
     {
         if(OtherPinType.PinCategory == UEdGraphSchema_K2::PC_Wildcard) return false;
         
+        const auto& SupportedTypes = GetSupportedTypes();
         for (int i = 0; i < SupportedTypes.Num(); ++i)
         {
             const auto& k2type = SupportedTypes[i];
@@ -185,54 +197,28 @@ void UK2Node_TwoInOneOut::NodeConnectionListChanged()
         // Switch any non-wildcard pins to wildcards.
         for (UEdGraphPin* Pin : Pins)
         {
-            auto& PinType = Pin->PinType;
-
-            bool bUpdatePin = PinType.PinCategory != UEdGraphSchema_K2::PC_Wildcard;
-            bUpdatePin |= PinType.PinSubCategoryObject != nullptr;
-            bUpdatePin |= PinType.ContainerType != EPinContainerType::None;
-
-            if (bUpdatePin)
-            {
-                PinType.PinCategory = UEdGraphSchema_K2::PC_Wildcard;
-                PinType.PinSubCategoryObject = nullptr;
-                PinType.ContainerType = EPinContainerType::None;
-
-                PinTypeChanged(Pin);
-            }
+            bOperandChanged |= SetPinTypeToWildcard(this, Pin);
         }
-        bOperandChanged = !(OperandType == FK2Type::Wildcard());
         OperandType = FK2Type::Wildcard();
     }
     else
     {
         // Find what supported operand type is connected...
-        for (const auto& op : SupportedTypes)
+        for (const auto& op : GetSupportedTypes())
         {
             if (op.Is(FoundType))
             {
                 bOperandChanged = !(OperandType == op);
                 OperandType = op;
+
+                // Flip any generic pins to this type...
+                for (UEdGraphPin* Pin : Pins)
+                {
+                    bOperandChanged |= SetPinType(this, Pin, OperandType);
+                }
+
                 break;
             }
-        }
-
-        // Flip any generic pins to this type...
-        for (UEdGraphPin* Pin : Pins)
-        {
-            auto& PinType = Pin->PinType;
-
-            bool bUpdatePin = PinType.PinCategory == UEdGraphSchema_K2::PC_Wildcard;
-
-            if (bUpdatePin)
-            {
-                PinType.PinCategory = OperandType.Category;
-                PinType.PinSubCategoryObject = OperandType.SubCategoryObject;
-                PinType.ContainerType = OperandType.Container;
-
-                PinTypeChanged(Pin);
-            }
-            
-            ensure(OperandType.Is(PinType));
         }
     }
 
@@ -252,7 +238,7 @@ void UK2Node_TwoInOneOut::PinTypeChanged(UEdGraphPin* Pin)
     Pin->PinToolTip = Pin->Direction == EEdGraphPinDirection::EGPD_Input ? TEXT("Operand") : OutputPinName.ToString() + TEXT(" of input vectors");
 
     // Update the tooltip
-    for (const auto& Type : SupportedTypes)
+    for (const auto& Type : GetSupportedTypes())
     {
         if (Type.Is(PinType))
         {
@@ -261,34 +247,13 @@ void UK2Node_TwoInOneOut::PinTypeChanged(UEdGraphPin* Pin)
         }
     }
 
-    // Notify any connections that this pin changed... which gives them the
-    // opportunity to adapt, themselves...
-    for (auto Connection : Pin->LinkedTo)
-    {
-        if (auto MathGeneric = Cast<IK2Node_MathGenericInterface>(Connection->GetOwningNode()))
-        {
-            MathGeneric->NotifyConnectionChanged(Connection, Pin);
-        }
-    }
+    ThisPinTypeChanged(Pin);
 }
 
 
-void UK2Node_TwoInOneOut::NotifyConnectionChanged(UEdGraphPin* Pin, UEdGraphPin* Connection)
+bool UK2Node_TwoInOneOut::CheckForErrors(FKismetCompilerContext& CompilerContext, OperationType& Operation)
 {
-    auto& PinType = Pin->PinType;
-    auto& ConnectedPinType = Connection->PinType;
-
-    // Only consider flipping if this type is a wildcard, but the other one isn't...
-    if (PinType.PinCategory == UEdGraphSchema_K2::PC_Wildcard && ConnectedPinType.PinCategory != UEdGraphSchema_K2::PC_Wildcard)
-    {
-        NodeConnectionListChanged();
-    }
-}
-
-
-bool UK2Node_TwoInOneOut::CheckForErrors(FKismetCompilerContext& CompilerContext, FK2PassThroughOp& Operation)
-{
-    for (const auto& op : SupportedOperations)
+    for (const auto& op : GetSupportedOperations())
     {
         if (op.OuterType == OperandType)
         {
@@ -352,7 +317,7 @@ void UK2Node_TwoInOneOut::ExpandNode(FKismetCompilerContext& CompilerContext, UE
 
     auto Schema = Cast< UEdGraphSchema_K2 >(GetSchema());
 
-    FK2PassThroughOp Operation;
+    OperationType Operation;
 
     if (CheckForErrors(CompilerContext, Operation))
     {

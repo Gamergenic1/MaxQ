@@ -5,6 +5,13 @@
 // Documentation:  https://maxq.gamergenic.com/
 // GitHub:         https://github.com/Gamergenic1/MaxQ/ 
 
+//------------------------------------------------------------------------------
+// SpiceUncooked
+// K2 Node Compilation
+// See comments in Spice/SpiceK2.h.
+//------------------------------------------------------------------------------
+
+
 #pragma once
 
 #include "CoreMinimal.h"
@@ -28,6 +35,10 @@ class SPICEUNCOOKED_API UK2Node_hat : public UK2Node, public IK2Node_MathGeneric
     GENERATED_UCLASS_BODY()
 
 public:
+    UPROPERTY()
+    FK2Type OperandType;
+    
+    typedef FK2SingleInputOp OperationType;
 
     // UEdGraphNode interface
     virtual void AllocateDefaultPins() override;
@@ -52,21 +63,15 @@ public:
     virtual FText GetTooltipText() const override;
     // end of UK2Node interface
 
-    // IK2Node_MathGenericInterface
-    virtual void NotifyConnectionChanged(UEdGraphPin* Pin, UEdGraphPin* Connection);
-    // end of IK2Node_MathGenericInterface
-
-    bool CheckForErrors(FKismetCompilerContext& CompilerContext, FK2SingleInputOp& Operation);
+    bool CheckForErrors(FKismetCompilerContext& CompilerContext, OperationType& Operation);
     void CreateInputPin();
     void AllocateInputPin(FName& PinName);
 
-    TArray<FK2Type> SupportedTypes;
-    TArray<FK2SingleInputOp> SupportedOperations;
-
-    UPROPERTY()
-    FK2Type OperandType;
-
     void RefreshOperand();
+
+protected:
+    virtual const TArray<FK2Type>& GetSupportedTypes() const;
+    virtual const TArray<OperationType>& GetSupportedOperations() const;
 };
 
 

@@ -5,12 +5,38 @@
 // Documentation:  https://maxq.gamergenic.com/
 // GitHub:         https://github.com/Gamergenic1/MaxQ/ 
 
+//------------------------------------------------------------------------------
+// SpiceMath.h
+// 
+// API Comments
+// 
+// Purpose:  C++ Math stuff
+// (like "matrix-transpose times vector" for which there's no c++ operator to
+// overload.)
+// 
+// MaxQ:
+// * Base API
+// * Refined API
+//    * C++
+//    * Blueprints
+//
+// SpiceMath.h is part of the "refined C++ API".
+//------------------------------------------------------------------------------
+
 #pragma once
 
 #include "SpiceTypes.h"
 
 namespace MaxQ::Math
 {
+    // Values from CSPICE Toolkit
+    // Which is why they're const, instead of constexpr.
+    SPICE_API extern const double pi;
+    SPICE_API extern const double halfpi;
+    SPICE_API extern const double twopi;
+    SPICE_API extern const double dpr;
+    SPICE_API extern const double rpd;
+
     // bodvrd
     template<class ValueType>
     SPICE_API void bodvrd(
@@ -308,5 +334,30 @@ namespace MaxQ::Math
         FSDimensionlessVector vout;
         Unorm(vout, vmag, v);
         return vout;
+    }
+
+
+    // Vector linear combination
+    template<class VectorType>
+    SPICE_API void Vlcom(VectorType& sum, double a, const VectorType& v1, double b, const VectorType& v2);
+
+    template<class VectorType>
+    inline VectorType Vlcom(double a, const VectorType& v1, double b, const VectorType& v2)
+    {
+        VectorType sum;
+        Vlcom(sum, a, v1, b, v2);
+        return sum;
+    }
+
+    // Vector linear combination
+    template<class VectorType>
+    SPICE_API void Vlcom3(VectorType& sum, double a, const VectorType& v1, double b, const VectorType& v2, double c, const VectorType& v3);
+
+    template<class VectorType>
+    inline VectorType Vlcom3(double a, const VectorType& v1, double b, const VectorType& v2, double c, const VectorType& v3)
+    {
+        VectorType sum;
+        Vlcom3(sum, a, v1, b, v2, c, v3);
+        return sum;
     }
 };

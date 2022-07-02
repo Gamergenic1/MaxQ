@@ -5,6 +5,13 @@
 // Documentation:  https://maxq.gamergenic.com/
 // GitHub:         https://github.com/Gamergenic1/MaxQ/ 
 
+//------------------------------------------------------------------------------
+// SpiceUncooked
+// K2 Node Compilation
+// See comments in Spice/SpiceK2.h.
+//------------------------------------------------------------------------------
+
+
 #include "K2Node_minus.h"
 #include "K2Utilities.h"
 #include "Kismet2/BlueprintEditorUtils.h"
@@ -23,33 +30,12 @@
 UK2Node_minus::UK2Node_minus(const FObjectInitializer& ObjectInitializer)
     : Super(ObjectInitializer)
 {
-    SupportedOperations.Add(FK2PassThroughOp{ "vminus dimensionless vector", USpiceK2::vminus_vector, FK2Type::SDimensionlessVector() });
-    SupportedOperations.Add(FK2PassThroughOp{ "vminus distance vector",  USpiceK2::vminus_vector, FK2Conversion::SDistanceVectorToSDimensionlessVector(), FK2Conversion::SDimensionlessVectorToSDistanceVector() });
-    SupportedOperations.Add(FK2PassThroughOp{ "vminus velocity vector",  USpiceK2::vminus_vector, FK2Conversion::SVelocityVectorToSDimensionlessVector(), FK2Conversion::SDimensionlessVectorToSVelocityVector() });
-    SupportedOperations.Add(FK2PassThroughOp{ "vminus angular velocity",  USpiceK2::vminus_vector, FK2Conversion::SAngularVelocityToSDimensionlessVector(), FK2Conversion::SDimensionlessVectorToSAngularVelocity() });
-    SupportedOperations.Add(FK2PassThroughOp{ "vminus dimensionless state vector",  USpiceK2::vminus_state_vector, FK2Type::SDimensionlessStateVector() });
-    SupportedOperations.Add(FK2PassThroughOp{ "vminus state vector", USpiceK2::vminus_state_vector, FK2Conversion::SStateVectorToSDimensionlessStateVector(), FK2Conversion::SDimensionlessStateVectorToSStateVector() });
-
-    for (const auto& op : SupportedOperations)
-    {
-        SupportedTypes.Add(op.OuterType);
-
 #if WITH_EDITOR
-        // Ensure the specified actions actually exist!
-        if (!op.InnerToOuterConversion.ConversionName.IsNone())
-        {
-            check(USpiceK2::StaticClass()->FindFunctionByName(op.InnerToOuterConversion.ConversionName));
-        }
-        if (!op.OuterToInnerConversion.ConversionName.IsNone())
-        {
-            check(USpiceK2::StaticClass()->FindFunctionByName(op.OuterToInnerConversion.ConversionName));
-        }
-        if (!op.K2NodeName.IsNone())
-        {
-            check(USpiceK2::StaticClass()->FindFunctionByName(op.K2NodeName));
-        }
-#endif
+    for (const auto& op : GetSupportedOperations())
+    {
+        op.CheckClass(USpiceK2::StaticClass());
     }
+#endif
 }
 
 
@@ -74,12 +60,8 @@ void UK2Node_minus::AllocateDefaultPins()
 
     if (!OperandType.Category.IsNone() && OperandType.Category != UEdGraphSchema_K2::PC_Wildcard)
     {
-        InputPin->PinType.PinCategory = OperandType.Category;
-        InputPin->PinType.PinSubCategoryObject = OperandType.SubCategoryObject;
-        InputPin->PinType.ContainerType = OperandType.Container;
-        OutputPin->PinType.PinCategory = OperandType.Category;
-        OutputPin->PinType.PinSubCategoryObject = OperandType.SubCategoryObject;
-        OutputPin->PinType.ContainerType = OperandType.Container;
+        SetPinType(this, InputPin, OperandType);
+        SetPinType(this, OutputPin, OperandType);
     }
 }
 
@@ -115,6 +97,7 @@ bool UK2Node_minus::IsConnectionDisallowed(const UEdGraphPin* MyPin, const UEdGr
     {
         if(OtherPinType.PinCategory == UEdGraphSchema_K2::PC_Wildcard) return false;
         
+        const auto& SupportedTypes = GetSupportedTypes();
         for (int i = 0; i < SupportedTypes.Num(); ++i)
         {
             const auto& k2type = SupportedTypes[i];
@@ -159,58 +142,26 @@ void UK2Node_minus::NodeConnectionListChanged()
         }
     }
 
+    auto InputPin = FindPinChecked(FName("vin"), EEdGraphPinDirection::EGPD_Input);
+    auto OutputPin = FindPinChecked(FName("vout"), EEdGraphPinDirection::EGPD_Output);
+
     if (NodeIsGeneric)
     {
-        for (auto& Pin : Pins)
-        {
-            auto& PinType = Pin->PinType;
-
-            bool bUpdatePin = PinType.PinCategory != UEdGraphSchema_K2::PC_Wildcard;
-            bUpdatePin |= PinType.PinSubCategoryObject != nullptr;
-            bUpdatePin |= PinType.ContainerType != EPinContainerType::None;
-
-            OperandType = FK2Type::Wildcard();
-
-            if (bUpdatePin)
-            {
-                PinType.PinCategory = UEdGraphSchema_K2::PC_Wildcard;
-                PinType.PinSubCategoryObject = nullptr;
-                PinType.ContainerType = EPinContainerType::None;
-
-                PinTypeChanged(Pin);
-            }
-        }
+        SetPinTypeToWildcard(this, InputPin);
+        SetPinTypeToWildcard(this, OutputPin);
     }
     else
     {
         // Find what supported operand type is connected...
         bool bFoundTheType = false;
-        for (const auto& op : SupportedTypes)
+        for (const auto& op : GetSupportedTypes())
         {
             if (op.Is(FoundType))
             {
                 OperandType = op;
-                bFoundTheType = true;
+                SetPinType(this, InputPin, OperandType);
+                SetPinType(this, OutputPin, OperandType);
                 break;
-            }
-        }
-
-        if (bFoundTheType)
-        {
-            for (auto& Pin : Pins)
-            {
-                auto& PinType = Pin->PinType;
-
-                bool bUpdatePin = !OperandType.Is(PinType);
-
-                if (bUpdatePin)
-                {
-                    PinType.PinCategory = OperandType.Category;
-                    PinType.PinSubCategoryObject = OperandType.SubCategoryObject;
-                    PinType.ContainerType = OperandType.Container;
-
-                    PinTypeChanged(Pin);
-                }
             }
         }
     }
@@ -223,7 +174,7 @@ void UK2Node_minus::PinTypeChanged(UEdGraphPin* Pin)
     const auto& PinType { Pin->PinType };
 
     // Update the tooltip
-    for (const auto& Type : SupportedTypes)
+    for (const auto& Type : GetSupportedTypes())
     {
         if (Type.Is(PinType))
         {
@@ -232,37 +183,13 @@ void UK2Node_minus::PinTypeChanged(UEdGraphPin* Pin)
         }
     }
 
-    // Notify any connections that this pin changed... which gives them the
-    // opportunity to adapt, themselves...
-    for (auto Connection : Pin->LinkedTo)
-    {
-        if (auto MathGeneric = Cast<IK2Node_MathGenericInterface>(Connection->GetOwningNode()))
-        {
-            MathGeneric->NotifyConnectionChanged(Connection, Pin);
-        }
-    }
-
-    const UEdGraphSchema_K2* K2Schema = GetDefault<UEdGraphSchema_K2>();
-    K2Schema->ForceVisualizationCacheClear();
+    ThisPinTypeChanged(Pin);
 }
 
 
-void UK2Node_minus::NotifyConnectionChanged(UEdGraphPin* Pin, UEdGraphPin* Connection)
+bool UK2Node_minus::CheckForErrors(FKismetCompilerContext& CompilerContext, OperationType& Operation)
 {
-    auto& PinType = Pin->PinType;
-    auto& ConnectedPinType = Connection->PinType;
-
-    // Only consider flipping if this type is a wildcard, but the other one isn't...
-    if (PinType.PinCategory == UEdGraphSchema_K2::PC_Wildcard && ConnectedPinType.PinCategory != UEdGraphSchema_K2::PC_Wildcard)
-    {
-        NodeConnectionListChanged();
-    }
-}
-
-
-bool UK2Node_minus::CheckForErrors(FKismetCompilerContext& CompilerContext, FK2PassThroughOp& Operation)
-{
-    for (const auto& op : SupportedOperations)
+    for (const auto& op : GetSupportedOperations())
     {
         if (op.OuterType == OperandType)
         {
@@ -294,7 +221,7 @@ void UK2Node_minus::ExpandNode(FKismetCompilerContext& CompilerContext, UEdGraph
 
     auto Schema = Cast< UEdGraphSchema_K2 >(GetSchema());
 
-    FK2PassThroughOp Operation;
+    OperationType Operation;
 
     if (CheckForErrors(CompilerContext, Operation))
     {
@@ -406,13 +333,38 @@ FText UK2Node_minus::GetTooltipText() const
     FText ListStart = LOCTEXT("ListStart", ":\n");
     FText ListSItemeparator = LOCTEXT("ListItemSeparator", ",\n");
     bool bIsFirstItem = true;
-    for (const FK2Type& Type : SupportedTypes)
+    for (const FK2Type& Type : GetSupportedTypes())
     {
         Tooltip = Tooltip.Join(bIsFirstItem ? ListStart : ListSItemeparator, Tooltip, Type.GetDisplayNameText());
         bIsFirstItem = false;
     }
 
     return Tooltip;
+}
+
+const TArray<FK2Type>& UK2Node_minus::GetSupportedTypes() const
+{
+    static const TArray<FK2Type> SupportedTypes
+    {
+        OperationType::GetTypesFromOperations(GetSupportedOperations())
+    };
+
+    return SupportedTypes;
+}
+
+const TArray<UK2Node_minus::OperationType>& UK2Node_minus::GetSupportedOperations() const
+{
+    static const TArray<OperationType> SupportedOperations
+    {
+        OperationType{ "vminus dimensionless vector", USpiceK2::vminus_vector, FK2Type::SDimensionlessVector() },
+        OperationType{ "vminus distance vector",  USpiceK2::vminus_vector, FK2Conversion::SDistanceVectorToSDimensionlessVector(), FK2Conversion::SDimensionlessVectorToSDistanceVector() },
+        OperationType{ "vminus velocity vector",  USpiceK2::vminus_vector, FK2Conversion::SVelocityVectorToSDimensionlessVector(), FK2Conversion::SDimensionlessVectorToSVelocityVector() },
+        OperationType{ "vminus angular velocity",  USpiceK2::vminus_vector, FK2Conversion::SAngularVelocityToSDimensionlessVector(), FK2Conversion::SDimensionlessVectorToSAngularVelocity() },
+        OperationType{ "vminus dimensionless state vector",  USpiceK2::vminus_state_vector, FK2Type::SDimensionlessStateVector() },
+        OperationType{ "vminus state vector", USpiceK2::vminus_state_vector, FK2Conversion::SStateVectorToSDimensionlessStateVector(), FK2Conversion::SDimensionlessStateVectorToSStateVector() }
+    };
+
+    return SupportedOperations;
 }
 
 #undef LOCTEXT_NAMESPACE

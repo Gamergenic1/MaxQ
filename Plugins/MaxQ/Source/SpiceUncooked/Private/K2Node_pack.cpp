@@ -5,6 +5,13 @@
 // Documentation:  https://maxq.gamergenic.com/
 // GitHub:         https://github.com/Gamergenic1/MaxQ/ 
 
+//------------------------------------------------------------------------------
+// SpiceUncooked
+// K2 Node Compilation
+// See comments in Spice/SpiceK2.h.
+//------------------------------------------------------------------------------
+
+
 #include "K2Node_pack.h"
 #include "K2Utilities.h"
 #include "Kismet2/BlueprintEditorUtils.h"
@@ -23,29 +30,12 @@
 UK2Node_pack::UK2Node_pack(const FObjectInitializer& ObjectInitializer)
     : Super(ObjectInitializer)
 {
-    SupportedOperations.Add(FK2SingleOutputOp{ "vpack dimensionless vector", USpiceK2::vpack_vector, FK2Type::SDimensionlessVector() });
-    SupportedOperations.Add(FK2SingleOutputOp{ "vpack distance vector",  USpiceK2::vpack_vector, FK2Conversion::SDimensionlessVectorToSDistanceVector() });
-    SupportedOperations.Add(FK2SingleOutputOp{ "vpack velocity vector",  USpiceK2::vpack_vector, FK2Conversion::SDimensionlessVectorToSVelocityVector() });
-    SupportedOperations.Add(FK2SingleOutputOp{ "vpack angular velocity",  USpiceK2::vpack_vector, FK2Conversion::SDimensionlessVectorToSAngularVelocity() });
-    SupportedOperations.Add(FK2SingleOutputOp{ "vpack dimensionless state vector",  USpiceK2::vpack_state_vector, FK2Type::SDimensionlessStateVector() });
-    SupportedOperations.Add(FK2SingleOutputOp{ "vpack state vector", USpiceK2::vpack_state_vector, FK2Conversion::SDimensionlessStateVectorToSStateVector() });
-
-    for (const auto& op : SupportedOperations)
-    {
-        SupportedTypes.Add(op.OuterType);
-
 #if WITH_EDITOR
-        // Ensure the specified actions actually exist!
-        if (!op.InnerToOuterConversion.ConversionName.IsNone())
-        {
-            check(USpiceK2::StaticClass()->FindFunctionByName(op.InnerToOuterConversion.ConversionName));
-        }
-        if (!op.K2NodeName.IsNone())
-        {
-            check(USpiceK2::StaticClass()->FindFunctionByName(op.K2NodeName));
-        }
-#endif
+    for (const auto& op : GetSupportedOperations())
+    {
+        op.CheckClass(USpiceK2::StaticClass());
     }
+#endif
 
     OutputPinName = "Vec";
 
@@ -139,6 +129,7 @@ bool UK2Node_pack::IsConnectionDisallowed(const UEdGraphPin* MyPin, const UEdGra
     {
         if(OtherPinType.PinCategory == UEdGraphSchema_K2::PC_Wildcard) return false;
         
+        auto& SupportedTypes = GetSupportedTypes();
         for (int i = 0; i < SupportedTypes.Num(); ++i)
         {
             const auto& k2type = SupportedTypes[i];
@@ -197,49 +188,21 @@ void UK2Node_pack::NodeConnectionListChanged()
     if (NodeIsGeneric)
     {
         // Switch non-wildcard pin to wildcards.
-        auto& PinType = OutputPin->PinType;
-
-        bool bUpdatePin = PinType.PinCategory != UEdGraphSchema_K2::PC_Wildcard;
-        bUpdatePin |= PinType.PinSubCategoryObject != nullptr;
-        bUpdatePin |= PinType.ContainerType != EPinContainerType::None;
-
-        bOperandChanged = !(OperandType == FK2Type::Wildcard());
+        SetPinTypeToWildcard(this, OutputPin);
         OperandType = FK2Type::Wildcard();
-
-        if (bUpdatePin)
-        {
-            PinType.PinCategory = UEdGraphSchema_K2::PC_Wildcard;
-            PinType.PinSubCategoryObject = nullptr;
-            PinType.ContainerType = EPinContainerType::None;
-
-            PinTypeChanged(OutputPin);
-        }
     }
     else
     {
         // Find what supported operand type is connected...
-        for (const auto& op : SupportedTypes)
+        for (const auto& op : GetSupportedTypes())
         {
             if (op.Is(FoundType))
             {
                 bOperandChanged = !(OperandType == op);
                 OperandType = op;
+                SetPinType(this, OutputPin, OperandType);
                 break;
             }
-        }
-
-        // Flip a generic pin to this type...
-        auto& PinType = OutputPin->PinType;
-
-        bool bUpdatePin = PinType.PinCategory == UEdGraphSchema_K2::PC_Wildcard;
-
-        if (bUpdatePin)
-        {
-            PinType.PinCategory = OperandType.Category;
-            PinType.PinSubCategoryObject = OperandType.SubCategoryObject;
-            PinType.ContainerType = OperandType.Container;
-
-            PinTypeChanged(OutputPin);
         }
     }
 
@@ -255,7 +218,7 @@ void UK2Node_pack::PinTypeChanged(UEdGraphPin* Pin)
     if (Pin->Direction == EEdGraphPinDirection::EGPD_Output)
     {
         // Update the tooltip
-        for (const auto& Type : SupportedTypes)
+        for (const auto& Type : GetSupportedTypes())
         {
             if (Type.Is(PinType))
             {
@@ -264,35 +227,14 @@ void UK2Node_pack::PinTypeChanged(UEdGraphPin* Pin)
             }
         }
 
-        // Notify any connections that this pin changed... which gives them the
-        // opportunity to adapt, themselves...
-        for (auto Connection : Pin->LinkedTo)
-        {
-            if (auto MathGeneric = Cast<IK2Node_MathGenericInterface>(Connection->GetOwningNode()))
-            {
-                MathGeneric->NotifyConnectionChanged(Connection, Pin);
-            }
-        }
+        ThisPinTypeChanged(Pin);
     }
 }
 
 
-void UK2Node_pack::NotifyConnectionChanged(UEdGraphPin* Pin, UEdGraphPin* Connection)
+bool UK2Node_pack::CheckForErrors(FKismetCompilerContext& CompilerContext, OperationType& Operation)
 {
-    auto& PinType = Pin->PinType;
-    auto& ConnectedPinType = Connection->PinType;
-
-    // Only consider flipping if this type is a wildcard, but the other one isn't...
-    if (PinType.PinCategory == UEdGraphSchema_K2::PC_Wildcard && ConnectedPinType.PinCategory != UEdGraphSchema_K2::PC_Wildcard)
-    {
-        NodeConnectionListChanged();
-    }
-}
-
-
-bool UK2Node_pack::CheckForErrors(FKismetCompilerContext& CompilerContext, FK2SingleOutputOp& Operation)
-{
-    for (const auto& op : SupportedOperations)
+    for (const auto& op : GetSupportedOperations())
     {
         if (op.OuterType == OperandType)
         {
@@ -399,7 +341,7 @@ void UK2Node_pack::ExpandNode(FKismetCompilerContext& CompilerContext, UEdGraph*
 
     auto Schema = Cast< UEdGraphSchema_K2 >(GetSchema());
 
-    FK2SingleOutputOp Operation;
+    OperationType Operation;
 
     if (CheckForErrors(CompilerContext, Operation))
     {
@@ -515,13 +457,38 @@ FText UK2Node_pack::GetTooltipText() const
     FText ListStart = LOCTEXT("ListStart", ":\n");
     FText ListSItemeparator = LOCTEXT("ListItemSeparator", ",\n");
     bool bIsFirstItem = true;
-    for (const FK2Type& Type : SupportedTypes)
+    for (const FK2Type& Type : GetSupportedTypes())
     {
         Tooltip = Tooltip.Join(bIsFirstItem ? ListStart : ListSItemeparator, Tooltip, Type.GetDisplayNameText());
         bIsFirstItem = false;
     }
 
     return Tooltip;
+}
+
+const TArray<FK2Type>& UK2Node_pack::GetSupportedTypes() const
+{
+    static const TArray<FK2Type> SupportedTypes
+    {
+        OperationType::GetTypesFromOperations(GetSupportedOperations())
+    };
+
+    return SupportedTypes;
+}
+
+const TArray<UK2Node_pack::OperationType>& UK2Node_pack::GetSupportedOperations() const
+{
+    static const TArray<OperationType> SupportedOperations
+    {
+        OperationType{ "vpack dimensionless vector", USpiceK2::vpack_vector, FK2Type::SDimensionlessVector() },
+        OperationType{ "vpack distance vector",  USpiceK2::vpack_vector, FK2Conversion::SDimensionlessVectorToSDistanceVector() },
+        OperationType{ "vpack velocity vector",  USpiceK2::vpack_vector, FK2Conversion::SDimensionlessVectorToSVelocityVector() },
+        OperationType{ "vpack angular velocity",  USpiceK2::vpack_vector, FK2Conversion::SDimensionlessVectorToSAngularVelocity() },
+        OperationType{ "vpack dimensionless state vector",  USpiceK2::vpack_state_vector, FK2Type::SDimensionlessStateVector() },
+        OperationType{ "vpack state vector", USpiceK2::vpack_state_vector, FK2Conversion::SDimensionlessStateVectorToSStateVector() }
+    };
+
+    return SupportedOperations;
 }
 
 #undef LOCTEXT_NAMESPACE

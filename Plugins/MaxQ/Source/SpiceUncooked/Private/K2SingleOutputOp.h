@@ -5,6 +5,13 @@
 // Documentation:  https://maxq.gamergenic.com/
 // GitHub:         https://github.com/Gamergenic1/MaxQ/ 
 
+//------------------------------------------------------------------------------
+// SpiceUncooked
+// K2 Node Compilation
+// See comments in Spice/SpiceK2.h.
+//------------------------------------------------------------------------------
+
+
 #pragma once
 
 #include "CoreMinimal.h"
@@ -15,6 +22,8 @@
 USTRUCT()
 struct FK2SingleOutputOp
 {
+    typedef FK2SingleOutputOp OperationType;
+
     GENERATED_BODY()
         
     UPROPERTY() FName ShortName;
@@ -54,7 +63,7 @@ struct FK2SingleOutputOp
         InnerToOuterConversion = _InnerToOuterConversion;
     }
 
-    FK2SingleOutputOp(const FK2SingleOutputOp& other)
+    FK2SingleOutputOp(const OperationType& other)
     {
         ShortName = other.ShortName;
         FullName = other.FullName;
@@ -64,7 +73,7 @@ struct FK2SingleOutputOp
         InnerToOuterConversion = other.InnerToOuterConversion;
     }
 
-    FK2SingleOutputOp& operator= (const FK2SingleOutputOp& other)
+    FK2SingleOutputOp& operator= (const OperationType& other)
     {
         // self-assignment guard
         if (this == &other)
@@ -83,7 +92,7 @@ struct FK2SingleOutputOp
     }
 
 
-    bool operator== (const FK2SingleOutputOp& other) const
+    bool operator== (const OperationType& other) const
     {
         // self equality
         if (this == &other)
@@ -103,5 +112,32 @@ struct FK2SingleOutputOp
 #endif
 
         return bEqual;
+    }
+
+#if WITH_EDITOR
+    void CheckClass(UClass* Class) const
+    {
+        // Ensure the specified actions actually exist!
+        if (!InnerToOuterConversion.ConversionName.IsNone())
+        {
+            check(Class->FindFunctionByName(InnerToOuterConversion.ConversionName));
+        }
+        if (!K2NodeName.IsNone())
+        {
+            check(Class->FindFunctionByName(K2NodeName));
+        }
+    }
+#endif
+
+    static TArray<FK2Type> GetTypesFromOperations(const TArray<OperationType>& ops)
+    {
+        TArray<FK2Type> types;
+
+        for (const auto& op : ops)
+        {
+            types.Add(op.OuterType);
+        }
+
+        return types;
     }
 };

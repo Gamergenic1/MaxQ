@@ -5,6 +5,13 @@
 // Documentation:  https://maxq.gamergenic.com/
 // GitHub:         https://github.com/Gamergenic1/MaxQ/ 
 
+//------------------------------------------------------------------------------
+// SpiceUncooked
+// K2 Node Compilation
+// See comments in Spice/SpiceK2.h.
+//------------------------------------------------------------------------------
+
+
 #include "K2Node_norm.h"
 #include "K2Utilities.h"
 #include "Kismet2/BlueprintEditorUtils.h"
@@ -17,37 +24,17 @@
 
 #define LOCTEXT_NAMESPACE "K2Node_norm"
 
-const TArray<FK2VnormOp> UK2Node_norm::SupportedOperations
-{
-    FK2VnormOp{ "vnorm dimensionless vector", FName(USpiceK2::vnorm_vector), FK2Type::SDimensionlessVector(), FK2Type::Double() },
-    FK2VnormOp{ "vnorm distance vector",  USpiceK2::vnorm_vector, FK2Conversion::SDistanceVectorToSDimensionlessVector(), FK2Conversion::DoubleToSDistance() },
-    FK2VnormOp{ "vnorm velocity vector",  USpiceK2::vnorm_vector, FK2Conversion::SVelocityVectorToSDimensionlessVector(), FK2Conversion::DoubleToSSpeed() },
-    FK2VnormOp{ "vnorm angular velocity",  USpiceK2::vnorm_vector, FK2Conversion::SAngularVelocityToSDimensionlessVector(), FK2Conversion::DoubleToSAngularRate() }
-};
-
 UK2Node_norm::UK2Node_norm(const FObjectInitializer& ObjectInitializer)
     : Super(ObjectInitializer)
 {
 #if WITH_EDITOR
-    for (const auto& op : SupportedOperations)
+    for (const auto& op : GetSupportedOperations())
     {
-        // make sure required conversions exist...
-        if (!op.InputToVectorConversion.ConversionName.IsNone())
-        {
-            check(USpiceK2::StaticClass()->FindFunctionByName(op.InputToVectorConversion.ConversionName));
-        }
-        if (!op.ScalarToOutputConversion.ConversionName.IsNone())
-        {
-            check(USpiceK2::StaticClass()->FindFunctionByName(op.ScalarToOutputConversion.ConversionName));
-        }
-        if (!op.K2NodeName.IsNone())
-        {
-            check(USpiceK2::StaticClass()->FindFunctionByName(op.K2NodeName));
-        }
+        op.CheckClass(USpiceK2::StaticClass());
     }
 #endif
 
-    CurrentOperation = FK2VnormOp();
+    CurrentOperation = OperationType();
 }
 
 
@@ -72,13 +59,8 @@ void UK2Node_norm::AllocateDefaultPins()
 
     if (!CurrentOperation.ShortName.IsNone())
     {
-        InputPin->PinType.PinCategory = CurrentOperation.InputVectorType.Category;
-        InputPin->PinType.PinSubCategoryObject = CurrentOperation.InputVectorType.SubCategoryObject;
-        InputPin->PinType.ContainerType = CurrentOperation.InputVectorType.Container;
-
-        OutputPin->PinType.PinCategory = CurrentOperation.OutputScalarType.Category;
-        OutputPin->PinType.PinSubCategoryObject = CurrentOperation.OutputScalarType.SubCategoryObject;
-        OutputPin->PinType.ContainerType = CurrentOperation.OutputScalarType.Container;
+        SetPinType(this, InputPin, CurrentOperation.InputVectorType);
+        SetPinType(this, OutputPin, CurrentOperation.OutputScalarType);
     }
 }
 
@@ -112,7 +94,7 @@ bool UK2Node_norm::IsConnectionDisallowed(const UEdGraphPin* MyPin, const UEdGra
         return false;
     }
 
-    for (const auto& Op : SupportedOperations)
+    for (const auto& Op : GetSupportedOperations())
     {
         const FK2Type& MatchingType = MyPin->Direction == EEdGraphPinDirection::EGPD_Input ? Op.InputVectorType : Op.OutputScalarType;
         
@@ -136,8 +118,8 @@ void UK2Node_norm::NodeConnectionListChanged()
     auto InputPin = FindPinChecked(FName("vin"));
     auto OutputPin = FindPinChecked(FName("out"));
 
-    CurrentOperation = FK2VnormOp();
-    for (const auto& Op : SupportedOperations)
+    CurrentOperation = OperationType();
+    for (const auto& Op : GetSupportedOperations())
     {
         if ((InputPin->LinkedTo.Num() > 0 && Op.InputVectorType.Is(InputPin->LinkedTo[0]->PinType)) || (OutputPin->LinkedTo.Num() > 0 && Op.OutputScalarType.Is(OutputPin->LinkedTo[0]->PinType)))
         {
@@ -150,59 +132,13 @@ void UK2Node_norm::NodeConnectionListChanged()
 
     if (NodeIsGeneric)
     {
-        bool bUpdateInputPin = InputPin->PinType.PinCategory != UEdGraphSchema_K2::PC_Wildcard;
-        bUpdateInputPin |= InputPin->PinType.PinSubCategoryObject != nullptr;
-        bUpdateInputPin |= InputPin->PinType.ContainerType != EPinContainerType::None;
-
-        if (bUpdateInputPin)
-        {
-            InputPin->PinType.PinCategory = UEdGraphSchema_K2::PC_Wildcard;
-            InputPin->PinType.PinSubCategoryObject = nullptr;
-            InputPin->PinType.ContainerType = EPinContainerType::None;
-            InputPin->PinToolTip = TEXT("Input vector");
-
-            PinTypeChanged(InputPin);
-        }
-
-        bool bUpdateOutputPin = OutputPin->PinType.PinCategory != UEdGraphSchema_K2::PC_Wildcard;
-        bUpdateOutputPin |= OutputPin->PinType.PinSubCategoryObject != nullptr;
-        bUpdateOutputPin |= OutputPin->PinType.ContainerType != EPinContainerType::None;
-
-        if (bUpdateOutputPin)
-        {
-            OutputPin->PinType.PinCategory = UEdGraphSchema_K2::PC_Wildcard;
-            OutputPin->PinType.PinSubCategoryObject = nullptr;
-            OutputPin->PinType.ContainerType = EPinContainerType::None;
-            OutputPin->PinToolTip = TEXT("Vector magnitude");
-
-            PinTypeChanged(OutputPin);
-        }
+        SetPinTypeToWildcard(this, InputPin, TEXT("Input vector"));
+        SetPinTypeToWildcard(this, OutputPin, TEXT("Vector magnitude"));
     }
     else
     {
-        bool bUpdateInputPin = !CurrentOperation.InputVectorType.Is(InputPin->PinType);
-
-        if (bUpdateInputPin)
-        {
-            InputPin->PinType.PinCategory = CurrentOperation.InputVectorType.Category;
-            InputPin->PinType.PinSubCategoryObject = CurrentOperation.InputVectorType.SubCategoryObject;
-            InputPin->PinType.ContainerType = CurrentOperation.InputVectorType.Container;
-            InputPin->PinToolTip = FString::Printf(TEXT("Input vector (%s)"), *CurrentOperation.InputVectorType.TypeName.ToString());
-
-            PinTypeChanged(InputPin);
-        }
-
-        bool bUpdateOutputPin = !CurrentOperation.InputVectorType.Is(OutputPin->PinType);
-
-        if (bUpdateOutputPin)
-        {
-            OutputPin->PinType.PinCategory = CurrentOperation.OutputScalarType.Category;
-            OutputPin->PinType.PinSubCategoryObject = CurrentOperation.OutputScalarType.SubCategoryObject;
-            OutputPin->PinType.ContainerType = CurrentOperation.OutputScalarType.Container;
-            OutputPin->PinToolTip = FString::Printf(TEXT("Magnitude (%s)"), *CurrentOperation.OutputScalarType.TypeName.ToString());
-
-            PinTypeChanged(OutputPin);
-        }
+        SetPinType(this, InputPin, CurrentOperation.InputVectorType, FString::Printf(TEXT("Input vector (%s)"), *CurrentOperation.InputVectorType.TypeName.ToString()));
+        SetPinType(this, OutputPin, CurrentOperation.OutputScalarType, FString::Printf(TEXT("Magnitude (%s)"), *CurrentOperation.OutputScalarType.TypeName.ToString()));
     }
 }
 
@@ -210,41 +146,16 @@ void UK2Node_norm::PinTypeChanged(UEdGraphPin* Pin)
 {
     Super::PinTypeChanged(Pin);
 
-    // Notify any connections that this pin changed... which gives them the
-    // opportunity to adapt, themselves...
-    for (auto Connection : Pin->LinkedTo)
-    {
-        if (auto MathGeneric = Cast<IK2Node_MathGenericInterface>(Connection->GetOwningNode()))
-        {
-            MathGeneric->NotifyConnectionChanged(Connection, Pin);
-        }
-    }
-
-    const UEdGraphSchema_K2* K2Schema = GetDefault<UEdGraphSchema_K2>();
-    K2Schema->ForceVisualizationCacheClear();
+    ThisPinTypeChanged(Pin);
 }
 
-
-void UK2Node_norm::NotifyConnectionChanged(UEdGraphPin* Pin, UEdGraphPin* Connection)
-{
-    auto& PinType = Pin->PinType;
-    auto& ConnectedPinType = Connection->PinType;
-
-    // Only consider flipping if this type is a wildcard, but the other one isn't...
-    if (PinType.PinCategory == UEdGraphSchema_K2::PC_Wildcard && ConnectedPinType.PinCategory != UEdGraphSchema_K2::PC_Wildcard)
-    {
-        NodeConnectionListChanged();
-    }
-}
-
-
-bool UK2Node_norm::CheckForErrors(FKismetCompilerContext& CompilerContext, FK2VnormOp& Operation)
+bool UK2Node_norm::CheckForErrors(FKismetCompilerContext& CompilerContext, OperationType& Operation)
 {
     auto InputPin = FindPinChecked(FName("vin"));
     auto OutputPin = FindPinChecked(FName("out"));
 
-    Operation = FK2VnormOp();
-    for (const auto& Op : SupportedOperations)
+    Operation = OperationType();
+    for (const auto& Op : GetSupportedOperations())
     {
         if ((InputPin->LinkedTo.Num() > 0 && Op.InputVectorType.Is(InputPin->LinkedTo[0]->PinType)) && (OutputPin->LinkedTo.Num() > 0 && Op.OutputScalarType.Is(OutputPin->LinkedTo[0]->PinType)))
         {
@@ -276,7 +187,7 @@ void UK2Node_norm::ExpandNode(FKismetCompilerContext& CompilerContext, UEdGraph*
 
     auto Schema = Cast< UEdGraphSchema_K2 >(GetSchema());
 
-    FK2VnormOp Operation;
+    OperationType Operation;
     if (CheckForErrors(CompilerContext, Operation))
     {
         BreakAllNodeLinks();
@@ -380,13 +291,26 @@ FText UK2Node_norm::GetTooltipText() const
     FText ListStart = LOCTEXT("ListStart", ":\n");
     FText ListSItemeparator = LOCTEXT("ListItemSeparator", ",\n");
     bool bIsFirstItem = true;
-    for (const FK2VnormOp& Op : SupportedOperations)
+    for (const OperationType& Op : GetSupportedOperations())
     {
         Tooltip = Tooltip.Join(bIsFirstItem ? ListStart : ListSItemeparator, Tooltip, Op.InputVectorType.GetDisplayNameText());
         bIsFirstItem = false;
     }
 
     return Tooltip;
+}
+
+const TArray<UK2Node_norm::OperationType>& UK2Node_norm::GetSupportedOperations() const
+{
+    static const TArray<OperationType> SupportedOperations
+    {
+        OperationType{ "vnorm dimensionless vector", FName(USpiceK2::vnorm_vector), FK2Type::SDimensionlessVector(), FK2Type::Double() },
+        OperationType{ "vnorm distance vector",  USpiceK2::vnorm_vector, FK2Conversion::SDistanceVectorToSDimensionlessVector(), FK2Conversion::DoubleToSDistance() },
+        OperationType{ "vnorm velocity vector",  USpiceK2::vnorm_vector, FK2Conversion::SVelocityVectorToSDimensionlessVector(), FK2Conversion::DoubleToSSpeed() },
+        OperationType{ "vnorm angular velocity",  USpiceK2::vnorm_vector, FK2Conversion::SAngularVelocityToSDimensionlessVector(), FK2Conversion::DoubleToSAngularRate() }
+    };
+
+    return SupportedOperations;
 }
 
 #undef LOCTEXT_NAMESPACE

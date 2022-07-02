@@ -5,6 +5,50 @@
 // Documentation:  https://maxq.gamergenic.com/
 // GitHub:         https://github.com/Gamergenic1/MaxQ/ 
 
+//------------------------------------------------------------------------------
+// SpiceTypes.cpp
+// 
+// Implementation Comments
+// 
+// USpiceTypes : public UBlueprintFunctionLibrary
+// 
+// Purpose:  Blueprint implementations of CSPICE Type wrappers
+// 
+// MaxQ:
+// * Base API
+// * Refined API
+//    * C++
+//    * Blueprints
+//
+// MaxQ: Three APIs
+// * Base API :  Initial Harness for studying integration with UE
+//    ~ USpice, USpiceTypes, etc
+// * Refined API
+//    * C++ :  C++-friendly
+//      ~ SpiceMath.h, SpiceOperators.h, etc
+//    * Blueprints :  C++-friendly
+//      ~ USpiceK2, UK2Node_unorm, etc
+// 
+// USpiceTypes is part of the base API, where CSPICE functionality is initially
+// implemented/tested/studied.
+// 
+// This is the core Blueprint Library that exposes CSPICE types to Blueprints.
+// It is purposefully simple and linear.
+// Here, blueprints actions and types are implemented by UFUNCTION reflection.
+// This means a lot of duplication due to limitations of the reflection system
+// and how it handles types.
+// When bringing up new CSPICE types it starts here where it's exposed
+// to Blueprints in a way that's easy to debug and determine the best manner
+// to expose it in a UE-friendly manner.
+// Many operators etc are reintegrated in the C++-friendly API (SpiceMath.h,
+// SpiceOperators.h, etc) and then the Blueprint-friendly API (K2 Nodes).
+// K2 Nodes support BP wildcards, so that one operation supports multiple
+// Types to support Blueprint-friendly actions.
+// The implementations here are maintained for compatibility and then may be
+// redirected at the refined API.
+//------------------------------------------------------------------------------
+
+
 #include "SpiceTypes.h"
 #include "Containers/StringFwd.h"
 #include "Spice.h"
@@ -15,7 +59,6 @@
 #include <string>
 #include <cmath>
 
-
 PRAGMA_PUSH_PLATFORM_DEFAULT_PACKING
 extern "C"
 {
@@ -23,6 +66,7 @@ extern "C"
 }
 PRAGMA_POP_PLATFORM_DEFAULT_PACKING
 
+using namespace MaxQ::Private;
 
 // Create a future regret:
 //  1 platform differentiation

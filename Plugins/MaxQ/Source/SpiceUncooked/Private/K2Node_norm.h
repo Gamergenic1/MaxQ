@@ -5,6 +5,13 @@
 // Documentation:  https://maxq.gamergenic.com/
 // GitHub:         https://github.com/Gamergenic1/MaxQ/ 
 
+//------------------------------------------------------------------------------
+// SpiceUncooked
+// K2 Node Compilation
+// See comments in Spice/SpiceK2.h.
+//------------------------------------------------------------------------------
+
+
 #pragma once
 
 #include "CoreMinimal.h"
@@ -26,6 +33,8 @@
 USTRUCT()
 struct FK2VnormOp
 {
+    typedef FK2VnormOp OperationType;
+
     GENERATED_BODY()
 
     UPROPERTY() FName ShortName;
@@ -65,7 +74,7 @@ struct FK2VnormOp
         ScalarToOutputConversion = _ScalarToOutputConversion;
     }
 
-    FK2VnormOp(const FK2VnormOp& other)
+    FK2VnormOp(const OperationType& other)
     {
         ShortName = other.ShortName;
         K2NodeName = other.K2NodeName;
@@ -75,7 +84,7 @@ struct FK2VnormOp
         ScalarToOutputConversion = other.ScalarToOutputConversion;
     }
 
-    FK2VnormOp& operator= (const FK2VnormOp& other)
+    FK2VnormOp& operator= (const OperationType& other)
     {
         // self-assignment guard
         if (this == &other)
@@ -94,7 +103,7 @@ struct FK2VnormOp
     }
 
 
-    bool operator== (const FK2VnormOp & other) const
+    bool operator== (const OperationType& other) const
     {
         // self equality
         if (this == &other)
@@ -115,6 +124,37 @@ struct FK2VnormOp
 
         return bEqual;
     }
+
+#if WITH_EDITOR
+    void CheckClass(UClass* Class) const
+    {
+        // make sure required conversions exist...
+        if (!InputToVectorConversion.ConversionName.IsNone())
+        {
+            check(Class->FindFunctionByName(InputToVectorConversion.ConversionName));
+        }
+        if (!ScalarToOutputConversion.ConversionName.IsNone())
+        {
+            check(Class->FindFunctionByName(ScalarToOutputConversion.ConversionName));
+        }
+        if (!K2NodeName.IsNone())
+        {
+            check(Class->FindFunctionByName(K2NodeName));
+        }
+    }
+#endif
+
+    static TArray<FK2Type> GetTypesFromOperations(const TArray<OperationType>& ops)
+    {
+        TArray<FK2Type> types;
+
+        for (const auto& op : ops)
+        {
+            types.Add(op.InputVectorType);
+        }
+
+        return types;
+    }
 };
 
 
@@ -123,6 +163,12 @@ UCLASS(BlueprintType, Blueprintable)
 class SPICEUNCOOKED_API UK2Node_norm : public UK2Node, public IK2Node_MathGenericInterface
 {
     GENERATED_UCLASS_BODY()
+
+public:
+    UPROPERTY()
+    FK2VnormOp CurrentOperation;
+
+    typedef FK2VnormOp OperationType;
 
 public:
 
@@ -149,20 +195,14 @@ public:
     virtual FText GetTooltipText() const override;
     // end of UK2Node interface
 
-    // IK2Node_MathGenericInterface
-    virtual void NotifyConnectionChanged(UEdGraphPin* Pin, UEdGraphPin* Connection);
-    // end of IK2Node_MathGenericInterface
-
-    bool CheckForErrors(FKismetCompilerContext& CompilerContext, FK2VnormOp& Operation);
+    bool CheckForErrors(FKismetCompilerContext& CompilerContext, OperationType& Operation);
     void CreateInputPin();
     void AllocateInputPin(FName& PinName);
 
-    static const TArray<FK2VnormOp> SupportedOperations;
-
-    UPROPERTY()
-    FK2VnormOp CurrentOperation;
-
     void RefreshOperation();
+
+protected:
+    virtual const TArray<OperationType>& GetSupportedOperations() const;
 };
 
 

@@ -5,6 +5,13 @@
 // Documentation:  https://maxq.gamergenic.com/
 // GitHub:         https://github.com/Gamergenic1/MaxQ/ 
 
+//------------------------------------------------------------------------------
+// SpiceUncooked
+// K2 Node Compilation
+// See comments in Spice/SpiceK2.h.
+//------------------------------------------------------------------------------
+
+
 #include "K2Conversion.h"
 #include "SpiceK2.h"
 
@@ -32,7 +39,6 @@ SPICEUNCOOKED_API FK2Conversion FK2Conversion::DoubleToSSpeed() {
     FK2Conversion doubletosspeed = FK2Conversion(USpiceK2::Conv_DoubleToSSpeed, FK2Type::Double(), FK2Type::SSpeed());
     return doubletosspeed;
 }
-
 
 SPICEUNCOOKED_API FK2Conversion FK2Conversion::DoubleToSAngularRate() {
     FK2Conversion doubletosangularrate= FK2Conversion(USpiceK2::Conv_DoubleToSAngularRate, FK2Type::Double(), FK2Type::SAngularRate());

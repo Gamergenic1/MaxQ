@@ -5,6 +5,13 @@
 // Documentation:  https://maxq.gamergenic.com/
 // GitHub:         https://github.com/Gamergenic1/MaxQ/ 
 
+//------------------------------------------------------------------------------
+// SpiceUncooked
+// K2 Node Compilation
+// See comments in Spice/SpiceK2.h.
+//------------------------------------------------------------------------------
+
+
 #pragma once
 
 #include "CoreMinimal.h"
@@ -25,6 +32,10 @@ public:
     virtual FText GetMenuCategory() const override;
     virtual FText GetKeywords() const override;
     virtual FText GetTooltipText() const override;
+
+protected:
+    virtual const TArray<FK2Type>& GetSupportedTypes() const override;
+    virtual const TArray<OperationType>& GetSupportedOperations() const override;
 };
 
 

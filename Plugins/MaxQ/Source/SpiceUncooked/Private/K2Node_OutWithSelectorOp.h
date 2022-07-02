@@ -5,6 +5,13 @@
 // Documentation:  https://maxq.gamergenic.com/
 // GitHub:         https://github.com/Gamergenic1/MaxQ/ 
 
+//------------------------------------------------------------------------------
+// SpiceUncooked
+// K2 Node Compilation
+// See comments in Spice/SpiceK2.h.
+//------------------------------------------------------------------------------
+
+
 #pragma once
 
 #include "CoreMinimal.h"
@@ -26,6 +33,12 @@ class SPICEUNCOOKED_API UK2Node_OutWithSelectorOp : public UK2Node, public IK2No
 {
     GENERATED_UCLASS_BODY()
 
+public:
+    UPROPERTY()
+    FK2SingleOutputOpWithComponentFilter CurrentOperation;
+
+    typedef FK2SingleOutputOpWithComponentFilter OperationType;
+
 private:
     const FName returnValue_PinName = FName(TEXT("Value"));
     const FName successExec_PinName = FName(TEXT("Success"));
@@ -34,16 +47,8 @@ private:
     const FName errorMessage_PinName = FName(TEXT("ErrorMessage"));
 
     bool CheckForErrors(FKismetCompilerContext& CompilerContext);
-    bool MatchMe(FK2SingleOutputOpWithComponentFilter& operation, FEdGraphPinType CompilerContext, EK2_ComponentSelector selector) const;
+    bool MatchMe(OperationType& operation, FEdGraphPinType CompilerContext, EK2_ComponentSelector selector) const;
 
-protected:
-    TMap<FName, FK2SingleOutputOpWithComponentFilter> OperationsMap;
-
-public:
-
-    UPROPERTY()
-    FK2SingleOutputOpWithComponentFilter CurrentOperation;
-        
 public:
 
     bool IsNodeSafeToIgnore() const override;
@@ -72,6 +77,9 @@ protected:
     virtual bool IsOutputCompatible(const UEdGraphPin* ThePin, EK2_ComponentSelector selector) const;
 
     EK2_ComponentSelector selectorPinValue() const;
+
+    virtual const TMap<FName, OperationType>& GetOperationsMap() const { static TMap<FName, OperationType> dummy; return dummy; }
+    virtual const OperationType& GetWildcardOp() const { static const OperationType dummy; return dummy; }
 };
 
 

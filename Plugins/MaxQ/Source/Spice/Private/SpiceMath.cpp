@@ -5,6 +5,24 @@
 // Documentation:  https://maxq.gamergenic.com/
 // GitHub:         https://github.com/Gamergenic1/MaxQ/ 
 
+//------------------------------------------------------------------------------
+// SpiceMath.cpp
+// 
+// API Comments
+// 
+// Purpose:  C++ Math stuff
+// (like "matrix-transpose times vector" for which there's no c++ operator to
+// overload.)
+// 
+// MaxQ:
+// * Base API
+// * Refined API
+//    * C++
+//    * Blueprints
+//
+// SpiceMath.cpp is part of the "refined C++ API".
+//------------------------------------------------------------------------------
+
 #include "SpiceMath.h"
 #include "SpiceUtilities.h"
 
@@ -15,8 +33,16 @@ extern "C"
 }
 PRAGMA_POP_PLATFORM_DEFAULT_PACKING
 
+using namespace MaxQ::Private;
+
 namespace MaxQ::Math
 {
+    SPICE_API const double pi = (double)pi_c();
+    SPICE_API const double halfpi = (double)halfpi_c();
+    SPICE_API const double twopi = (double)twopi_c();
+    SPICE_API const double dpr = (double)dpr_c();
+    SPICE_API const double rpd = (double)rpd_c();
+
     template<typename ValueType>
     SPICE_API void bodvrd(
         ValueType& Value,
@@ -584,4 +610,70 @@ namespace MaxQ::Math
     SPICE_API void Unorm(FSDimensionlessVector& vout, FSSpeed& vmag, const FSVelocityVector& v) { Unorm<FSSpeed, FSVelocityVector>(vout, vmag, v); }
     SPICE_API void Unorm(FSDimensionlessVector& vout, FSAngularRate& vmag, const FSAngularVelocity& v) { Unorm<FSAngularRate, FSAngularVelocity>(vout, vmag, v); }
     SPICE_API void Unorm(FSDimensionlessVector& vout, double& vmag, const FSDimensionlessVector& v) { Unorm<double, FSDimensionlessVector>(vout, vmag, v); };
+
+    template<class VectorType>
+    SPICE_API void Vlcom(VectorType& sum, double a, const VectorType& v1, double b, const VectorType& v2)
+    {
+        ConstSpiceDouble _a{ a };
+        SpiceDouble _v1[3]; v1.CopyTo(_v1);
+        ConstSpiceDouble _b{ b };
+        SpiceDouble _v2[3]; v2.CopyTo(_v2);
+        SpiceDouble _sum[3]; sum.CopyTo(_sum);
+
+        vlcom_c(_a, _v1, _b, _v2, _sum);
+
+        sum = { _sum };
+    }
+
+    template SPICE_API void Vlcom<FSAngularVelocity>(FSAngularVelocity&, double, const FSAngularVelocity&, double, const FSAngularVelocity&);
+    template SPICE_API void Vlcom<FSDistanceVector>(FSDistanceVector&, double, const FSDistanceVector&, double, const FSDistanceVector&);
+    template SPICE_API void Vlcom<FSVelocityVector>(FSVelocityVector&, double, const FSVelocityVector&, double, const FSVelocityVector&);
+    template SPICE_API void Vlcom<FSDimensionlessVector>(FSDimensionlessVector&, double, const FSDimensionlessVector&, double, const FSDimensionlessVector&);
+
+    template<class VectorType, SpiceInt N>
+    inline void vlcomN(VectorType& sum, double a, const VectorType& v1, double b, const VectorType& v2)
+    {
+        ConstSpiceDouble _a{ a };
+        SpiceDouble _v1[N]; v1.CopyTo(_v1);
+        ConstSpiceDouble _b{ b };
+        SpiceDouble _v2[N]; v2.CopyTo(_v2);
+        SpiceDouble _sum[N]; sum.CopyTo(_sum);
+
+        vlcomg_c(N, _a, _v1, _b, _v2, _sum);
+
+        sum = { _sum };
+    }
+
+    template<>
+    SPICE_API void Vlcom(FSDimensionlessStateVector& sum, double a, const FSDimensionlessStateVector& v1, double b, const FSDimensionlessStateVector& v2)
+    {
+        return vlcomN<FSDimensionlessStateVector,6>(sum, a, v1, b, v2);
+    }
+
+    template<>
+    SPICE_API void Vlcom(FSStateVector& sum, double a, const FSStateVector& v1, double b, const FSStateVector& v2)
+    {
+        return vlcomN<FSStateVector, 6>(sum, a, v1, b, v2);
+    }
+
+    template<class VectorType>
+    SPICE_API void Vlcom3(VectorType& sum, double a, const VectorType& v1, double b, const VectorType& v2, double c, const VectorType& v3)
+    {
+        ConstSpiceDouble _a{ a };
+        SpiceDouble _v1[3]; v1.CopyTo(_v1);
+        ConstSpiceDouble _b{ b };
+        SpiceDouble _v2[3]; v2.CopyTo(_v2);
+        ConstSpiceDouble _c{ c };
+        SpiceDouble _v3[3]; v3.CopyTo(_v3);
+        SpiceDouble _sum[3]; sum.CopyTo(_sum);
+
+        vlcom3_c(_a, _v1, _b, _v2, _c, _v3, _sum);
+
+        sum = { _sum };
+    }
+
+    template SPICE_API void Vlcom3<FSAngularVelocity>(FSAngularVelocity&, double, const FSAngularVelocity&, double, const FSAngularVelocity&, double, const FSAngularVelocity&);
+    template SPICE_API void Vlcom3<FSDistanceVector>(FSDistanceVector&, double, const FSDistanceVector&, double, const FSDistanceVector&, double, const FSDistanceVector&);
+    template SPICE_API void Vlcom3<FSVelocityVector>(FSVelocityVector&, double, const FSVelocityVector&, double, const FSVelocityVector&, double, const FSVelocityVector&);
+    template SPICE_API void Vlcom3<FSDimensionlessVector>(FSDimensionlessVector&, double, const FSDimensionlessVector&, double, const FSDimensionlessVector&, double, const FSDimensionlessVector&);
 }
