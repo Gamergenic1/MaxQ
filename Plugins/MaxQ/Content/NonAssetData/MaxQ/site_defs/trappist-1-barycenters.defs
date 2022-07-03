@@ -1,0 +1,65 @@
+Created for MaxQ - (for samples, not for real life usage).
+
+.def file for PINPOINT generated SPK data fixing trappist-01 planets to their barycenters.
+The basic solar system SPK files contain ephemeris data for the outer planet barycenters but not the planets themselves.
+An easy fix is an SPK kernel to fix the planets to their barycenters.
+
+An SPK kernel that does this can be generated using NAIF utility 'Pinpoint' and this data file.
+
+Commandline:
+pinpoint -def trappist-1-barycenters.defs -spk MaxQ-TRAPPIST_1-barycenters.bsp
+
+
+\begindata
+      SITES         = ( 
+                       'TRAPPIST_1',
+                       'TRAPPIST_1B',
+                       'TRAPPIST_1C',
+                       'TRAPPIST_1D',
+                       'TRAPPIST_1E',
+                       'TRAPPIST_1F',
+                       'TRAPPIST_1G',
+                       'TRAPPIST_1H'
+                       )
+
+      TRAPPIST_1_FRAME  = 'GALACTIC'
+      TRAPPIST_1_CENTER = 5009000
+      TRAPPIST_1_IDCODE = 5009010
+      TRAPPIST_1_XYZ   = ( 0, 0,  0 )
+
+      TRAPPIST_1B_FRAME  = 'GALACTIC'
+      TRAPPIST_1B_CENTER = 5009001
+      TRAPPIST_1B_IDCODE = 5009199
+      TRAPPIST_1B_XYZ   = ( 0, 0,  0 )
+
+      TRAPPIST_1C_FRAME  = 'GALACTIC'
+      TRAPPIST_1C_CENTER = 5009002
+      TRAPPIST_1C_IDCODE = 5009299
+      TRAPPIST_1C_XYZ   = ( 0, 0,  0 )
+
+      TRAPPIST_1D_FRAME  = 'GALACTIC'
+      TRAPPIST_1D_CENTER = 5009003
+      TRAPPIST_1D_IDCODE = 5009399
+      TRAPPIST_1D_XYZ   = ( 0, 0,  0 )
+
+      TRAPPIST_1E_FRAME  = 'GALACTIC'
+      TRAPPIST_1E_CENTER = 5009004
+      TRAPPIST_1E_IDCODE = 5009499
+      TRAPPIST_1E_XYZ   = ( 0, 0,  0 )
+
+      TRAPPIST_1F_FRAME  = 'GALACTIC'
+      TRAPPIST_1F_CENTER = 5009005
+      TRAPPIST_1F_IDCODE = 5009599
+      TRAPPIST_1F_XYZ   = ( 0, 0,  0 )
+
+      TRAPPIST_1G_FRAME  = 'GALACTIC'
+      TRAPPIST_1G_CENTER = 5009006
+      TRAPPIST_1G_IDCODE = 5009699
+      TRAPPIST_1G_XYZ   = ( 0, 0,  0 )
+
+      TRAPPIST_1H_FRAME  = 'GALACTIC'
+      TRAPPIST_1H_CENTER = 5009007
+      TRAPPIST_1H_IDCODE = 5009799
+      TRAPPIST_1H_XYZ   = ( 0, 0,  0 )
+
+\begintext

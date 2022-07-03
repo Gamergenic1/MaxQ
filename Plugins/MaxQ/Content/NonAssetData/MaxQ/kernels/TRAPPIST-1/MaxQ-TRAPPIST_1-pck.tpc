@@ -1,0 +1,247 @@
+KPL/PCK
+
+File name: MaxQ-TRAPPIST_1-pck.fk
+PCK KERNEL FILE
+===========================================================================
+
+MAXQ SAMPLE CONTENT ONLY - NOT FOR USE OR DISTRIBUTION FOR ANY OTHER PURPOSE.  
+
+This SPICE kernel is intended as sample content for MaxQ Spaceflight
+Toolkit.  MaxQ is an integration of Spice with Unreal Engine 5.
+
+Solar system reference values:
+     BODY10_GM      = ( 1.3271244004193938E+11 )
+     BODY10_RADII      = (  696000.  696000.  696000.  )
+     BODY399_GM     = ( 3.9860043543609598E+05 )
+     BODY399_RADII     = ( 6378.1366   6378.1366   6356.7519 )
+
+BODY000_GMLIST = ( 1 2 3 4 5 6 7 8 9 10
+                        199 299 
+                        301 399 
+                        401 402 499 
+                        501 502 503 504 505 599
+                        601 602 603 604 605 606 607 608 609 610 611 699
+                        701 702 703 704 705 799
+                        801 899
+                        901 902 903 904 999
+                        2000001 2000002 2000003 2000004 2000006 2000007 2000010
+                        2000015 2000016 2000029 2000052 2000065 2000087 2000088
+                        2000433 2000511 2000704 )
+
+------- 'TRAPPIST_1 SYSTEM'
+        \begindata
+         BODY000_GMLIST += ( 5009000 5009001 5009002 5009003 5009004 5009005 5009006 5009007
+                             5009199
+                             5009299
+                             5009399
+                             5009499
+                             5009599
+                             5009699
+                             5009799 )
+        \begintext
+
+From: https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/req/pck.html
+The creator of a PCK file can set the frame and epoch of the constants on a body-by-body basis, except in the case of planets and their (natural) satellites, where a single choice of frame and epoch must be used for each planetary system. For example, to use constants referenced to the B1950 frame (frame ID 2) and J1950 epoch for the Earth and Moon, use the assignments
+
+https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/req/frames.html#Complete%20List%20of%20%60%60Built%20in''%20Inertial%20Reference%20Frames
+
+       1  J2000       Earth mean equator, dynamical equinox of J2000.
+       2  B1950       Earth mean equator, dynamical equinox of B1950.
+       3  FK4         Fundamental Catalog (4). The FK4 reference
+      13  GALACTIC    Galactic System II. The Galactic System II
+                      reference frame is defined by the following
+                      rotations:
+                           o          o            o
+                      [ 327  ]  [ 62.6  ]  [ 282.25  ]
+                              3          1            3
+ 
+                      In the absence of better information, we
+                      assume the rotations are relative to the
+                      FK4 frame.
+
+2451545.0 J2000
+
+------- 'Ref Frames'
+        \begindata
+        BODY5009000_CONSTANTS_REF_FRAME   =   13
+        BODY5009000_CONSTANTS_JED_EPOCH   =   2451545.0
+        BODY5009001_CONSTANTS_REF_FRAME   =   13
+        BODY5009001_CONSTANTS_JED_EPOCH   =   2451545.0
+        BODY5009002_CONSTANTS_REF_FRAME   =   13
+        BODY5009002_CONSTANTS_JED_EPOCH   =   2451545.0
+        BODY5009003_CONSTANTS_REF_FRAME   =   13
+        BODY5009003_CONSTANTS_JED_EPOCH   =   2451545.0
+        BODY5009004_CONSTANTS_REF_FRAME   =   13
+        BODY5009004_CONSTANTS_JED_EPOCH   =   2451545.0
+        BODY5009005_CONSTANTS_REF_FRAME   =   13
+        BODY5009005_CONSTANTS_JED_EPOCH   =   2451545.0
+        BODY5009006_CONSTANTS_REF_FRAME   =   13
+        BODY5009006_CONSTANTS_JED_EPOCH   =   2451545.0
+        BODY5009007_CONSTANTS_REF_FRAME   =   13
+        BODY5009007_CONSTANTS_JED_EPOCH   =   2451545.0
+        \begintext
+
+------- 'TRAPPIST_1'
+From: https://en.wikipedia.org/wiki/TRAPPIST-1
+Mass	0.0898±0.0023[4] M☉ (solar masses)
+Radius	0.1192±0.0013[5] R☉ (solar radius)
+Rotation	3.295±0.003 days
+Temperature	2,566 K
+
+Mass
+0.0898 * 1.3271244004193938E+11 = 1.19175771158E+10
+
+Radii
+0.1192 * 696000 = 82963.2
+
+Rotation Period
+360 / 3.295 = 109.256449165
+
+        \begindata
+        BODY5009010_GM            = (      1.19175771158E+10       )
+        BODY5009010_RADII         = (  82963.2   82963.2  82963.2  )
+        BODY5009010_POLE_RA       = (      0.0       0.0      0.0  )
+        BODY5009010_POLE_DEC      = (     -90.0       0.0      0.0  )
+        BODY5009010_PM            = (      0.0     109.256449 0.0  )
+        BODY5009010_LONG_AXIS     = (      0.0                     )
+        \begintext
+
+------- 'TRAPPIST_1B'
+Mass	1.017  MEarth
+1.017 * 3.9860043543609598E+05  = 4.05376642839E+05
+
+Mean radius	1.121 REarth
+1.121 * 6378.1366 = 7149.8911286
+
+     BODY399_GM     = ( 3.9860043543609598E+05 )
+     BODY399_RADII     = ( 6378.1366   6378.1366   6356.7519 )
+
+Likely tidally locked so PM should be set accordingly
+T = 1.51087637 Earth Days
+360 / 1.51087637 = 238.272308144 degrees/day
+
+        \begindata
+        BODY5009199_GM            = (      3.9860043543609598E+05        )
+        BODY5009199_RADII         = (   7149.8911  7149.8911  7149.8911  )
+        BODY5009199_POLE_RA       = (    -90.0         0.0        0.0    )
+        BODY5009199_POLE_DEC      = (    +90.0         0.0        0.0    )
+        BODY5009199_PM            = (      0.0       238.2723081  0.0    )
+        BODY5009199_LONG_AXIS     = (      0.0                           )
+        \begintext
+
+------- 'TRAPPIST_1C'
+Radii 1.095  REarth
+1.095 * 6378.1366 = 6984.059577
+
+Mass  1.156  MEarth
+1.156 * 3.9860043543609598E+05 = 460782.103364
+
+If Tidally locked 1:1
+T = 360 / 2.42180746 = 148.649306745
+
+
+        \begindata
+        BODY5009299_GM            = (      4.60782103364E+05             )
+        BODY5009299_RADII         = (   6984.0595  6984.0595  6984.0595  )
+        BODY5009299_POLE_RA       = (    -90.0         0.0        0.0    )
+        BODY5009299_POLE_DEC      = (    +90.0         0.0        0.0    )
+        BODY5009299_PM            = (     90.0      148.649306745  0.0   )
+        BODY5009299_LONG_AXIS     = (      0.0                           )
+        \begintext
+
+
+------- 'TRAPPIST_1D'
+Radius 0.784 REarth
+0.784 * 6378.1366 = 5000.4590944
+
+Mass   0.297 MEarth
+0.297 * 3.9860043543609598E+05 = 118384.329325
+
+If tidally locked:
+T = 4.049959d
+360 / 4.049959 = 88.8897887608
+If 3:2... 133.334683141
+
+        \begindata
+        BODY5009399_GM            = (      1.18384329325E+05              )
+        BODY5009399_RADII         = (   5000.45909 5000.45909 5000.45909  )
+        BODY5009399_POLE_RA       = (    -90.0        0.0        0.0      )
+        BODY5009399_POLE_DEC      = (    +90.0        0.0        0.0      )
+        BODY5009399_PM            = (     90.0      133.33468314 0.0      )
+        BODY5009399_LONG_AXIS     = (      0.0                            )
+        \begintext
+
+
+------- 'TRAPPIST_1E'
+
+Radius = 0.910 * 6378.1366 = 5804.104306
+Mass = 0.772 * 3.9860043543609598E+05 = 307719.536157
+
+IF tidally locked
+T = 6.099043d
+360/6.099043 = 59.0256536968
+if 2:1 = 118.051307394
+
+        \begindata
+        BODY5009499_GM            = (      3.07719536157E+05               )
+        BODY5009499_RADII         = (   5804.1043   5804.1043  5804.1043   )
+        BODY5009499_POLE_RA       = (    -90.0         0.0        0.0      )
+        BODY5009499_POLE_DEC      = (    +90.0         0.0        0.0      )
+        BODY5009499_PM            = (     90.0        118.051307  0.0      )
+        BODY5009499_LONG_AXIS     = (      0.0                             )
+        \begintext
+
+
+------- 'TRAPPIST_1F'
+
+Radius = 1.045 * 6378.1366 = 6665.152747
+Mass = 0.68 * 3.9860043543609598E+05 = 271048.296097
+T = 9.206d
+360/9.206 = 39.1049315664
+if 2:1...... 
+
+        \begindata
+        BODY5009599_GM            = (      2.71048296097E+05              )
+        BODY5009599_RADII         = (   6665.1527  6665.1527  6665.1527   )
+        BODY5009599_POLE_RA       = (    +90.0        0.0        0.0      )
+        BODY5009599_POLE_DEC      = (    +90.0        0.0        0.0      )
+        BODY5009599_PM            = (     90.0       78.20986313 0.0      )
+        BODY5009599_LONG_AXIS     = (      0.0                            )
+        \begintext
+
+
+------- 'TRAPPIST_1G'
+
+Radius = 1.148 * 6378.1366 = 7322.1008168
+Mass = 1.148 * 3.9860043543609598E+05 = 457593.299881
+T = 12.424305
+360 / 12.424305 = 28.9754638187
+if 5:2.... 5/2*28.9754638187 = 72.4386595468
+
+        \begindata
+        BODY5009699_GM            = (      4.57593299881E+05             )
+        BODY5009699_RADII         = (   7322.1008  7322.1008  7322.1008  )
+        BODY5009699_POLE_RA       = (    -90.0        0.0        0.0     )
+        BODY5009699_POLE_DEC      = (    +90.0        0.0        0.0     )
+        BODY5009699_PM            = (     90.0       72.4386595  0.0     )
+        BODY5009699_LONG_AXIS     = (      0.0                           )
+        \begintext
+
+
+------- 'TRAPPIST_1H'
+Radius:  0.773 * 6378.1366 = 4930.2995918
+Mass: 0.331 * 3.9860043543609598E+05 = 131936.744129
+T = 18.868
+360/18.868 = 19.0799236803
+if 5:2.... 5/2*19.0799236803 = 47.6998092007 
+
+
+        \begindata
+        BODY5009799_GM            = (      1.31936744129E+05             )
+        BODY5009799_RADII         = (   4930.2995  4930.2995  4930.2995  )
+        BODY5009799_POLE_RA       = (    -90.0       0.0        0.0      )
+        BODY5009799_POLE_DEC      = (    +90.0       0.0         0.0     )
+        BODY5009799_PM            = (     90.0      47.69980920  0.0     )
+        BODY5009799_LONG_AXIS     = (      0.0                           )
+        \begintext
+
