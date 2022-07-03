@@ -140,124 +140,127 @@ const UK2Node_bodvcd::OperationType& UK2Node_bodvcd::WildcardOp()
     return v;
 }
 
-static const UK2Node_bodvcd::OperationType& DoubleOp()
+namespace bodvcd
 {
-    static auto v{ UK2Node_bodvcd::OperationType(FName("bodvcd Double"), USpiceK2::bodvcd_double, FK2Type::Double()) };
-    return v;
-}
+    static const UK2Node_bodvcd::OperationType& DoubleOp()
+    {
+        static auto v{ UK2Node_bodvcd::OperationType(FName("bodvcd Double"), USpiceK2::bodvcd_double, FK2Type::Double()) };
+        return v;
+    }
 
-static const UK2Node_bodvcd::OperationType& RealOp()
-{
-    static auto v{ UK2Node_bodvcd::OperationType(FName("bodvcd Real"), USpiceK2::bodvcd_double, FK2Type::Real()) };
-    return v;
-}
+    static const UK2Node_bodvcd::OperationType& RealOp()
+    {
+        static auto v{ UK2Node_bodvcd::OperationType(FName("bodvcd Real"), USpiceK2::bodvcd_double, FK2Type::Real()) };
+        return v;
+    }
 
-static const UK2Node_bodvcd::OperationType& ArrayDoubleOp()
-{
-    static auto v{ UK2Node_bodvcd::OperationType(FName("bodvcd Array(Double)"), USpiceK2::bodvcd_array, FK2Type::DoubleArray()) };
-    return v;
-}
+    static const UK2Node_bodvcd::OperationType& ArrayDoubleOp()
+    {
+        static auto v{ UK2Node_bodvcd::OperationType(FName("bodvcd Array(Double)"), USpiceK2::bodvcd_array, FK2Type::DoubleArray()) };
+        return v;
+    }
 
-static const UK2Node_bodvcd::OperationType& ArrayRealOp()
-{
-    static auto v{ UK2Node_bodvcd::OperationType(FName("bodvcd Array(Real)"), USpiceK2::bodvcd_array, FK2Type::RealArray()) };
-    return v;
-}
+    static const UK2Node_bodvcd::OperationType& ArrayRealOp()
+    {
+        static auto v{ UK2Node_bodvcd::OperationType(FName("bodvcd Array(Real)"), USpiceK2::bodvcd_array, FK2Type::RealArray()) };
+        return v;
+    }
 
-static const UK2Node_bodvcd::OperationType& SDimensionlessVectorOp()
-{
-    static auto v{ UK2Node_bodvcd::OperationType(FName("bodvcd SDimensionlessVector"), USpiceK2::bodvcd_vector, FK2Type::SDimensionlessVector()) };
-    return v;
-}
+    static const UK2Node_bodvcd::OperationType& SDimensionlessVectorOp()
+    {
+        static auto v{ UK2Node_bodvcd::OperationType(FName("bodvcd SDimensionlessVector"), USpiceK2::bodvcd_vector, FK2Type::SDimensionlessVector()) };
+        return v;
+    }
 
-static const UK2Node_bodvcd::OperationType& SMassConstantOp()
-{
-    static auto v{ UK2Node_bodvcd::OperationType(FName("bodvcd SMassConstant"), USpiceK2::bodvcd_double, FK2Conversion::DoubleToSMassConstant()) };
-    return v;
-}
+    static const UK2Node_bodvcd::OperationType& SMassConstantOp()
+    {
+        static auto v{ UK2Node_bodvcd::OperationType(FName("bodvcd SMassConstant"), USpiceK2::bodvcd_double, FK2Conversion::DoubleToSMassConstant()) };
+        return v;
+    }
 
-static const UK2Node_bodvcd::OperationType& SDistanceOp()
-{
-    static auto v{ UK2Node_bodvcd::OperationType(FName("bodvcd SDistance"), USpiceK2::bodvcd_double, FK2Conversion::DoubleToSDistance()) };
-    return v;
-}
+    static const UK2Node_bodvcd::OperationType& SDistanceOp()
+    {
+        static auto v{ UK2Node_bodvcd::OperationType(FName("bodvcd SDistance"), USpiceK2::bodvcd_double, FK2Conversion::DoubleToSDistance()) };
+        return v;
+    }
 
-static const UK2Node_bodvcd::OperationType& SDegreesOp()
-{
-    static auto v{ UK2Node_bodvcd::OperationType(FName("bodvcd SAngle(Degrees)"), USpiceK2::bodvcd_double, FK2Conversion::DegreesToSAngle()) };
-    return v;
-}
+    static const UK2Node_bodvcd::OperationType& SDegreesOp()
+    {
+        static auto v{ UK2Node_bodvcd::OperationType(FName("bodvcd SAngle(Degrees)"), USpiceK2::bodvcd_double, FK2Conversion::DegreesToSAngle()) };
+        return v;
+    }
 
-static const UK2Node_bodvcd::OperationType& SDistanceVectorOp()
-{
+    static const UK2Node_bodvcd::OperationType& SDistanceVectorOp()
+    {
 
-    static auto v{ UK2Node_bodvcd::OperationType(FName("bodvcd SDistanceVector"), USpiceK2::bodvcd_vector, FK2Conversion::SDimensionlessVectorToSDistanceVector()) };
-    return v;
-}
+        static auto v{ UK2Node_bodvcd::OperationType(FName("bodvcd SDistanceVector"), USpiceK2::bodvcd_vector, FK2Conversion::SDimensionlessVectorToSDistanceVector()) };
+        return v;
+    }
 
-static const UK2Node_bodvcd::OperationType& SVelocityVectorOp()
-{
-    static auto v{ UK2Node_bodvcd::OperationType(FName("bodvcd SVelocityVector"), USpiceK2::bodvcd_vector, FK2Conversion::SDimensionlessVectorToSVelocityVector()) };
-    return v;
-}
+    static const UK2Node_bodvcd::OperationType& SVelocityVectorOp()
+    {
+        static auto v{ UK2Node_bodvcd::OperationType(FName("bodvcd SVelocityVector"), USpiceK2::bodvcd_vector, FK2Conversion::SDimensionlessVectorToSVelocityVector()) };
+        return v;
+    }
 
-static const UK2Node_bodvcd::OperationType& SDistanceX()
-{
-    static auto v{ UK2Node_bodvcd::OperationType(FName("bodvcd SDistanceVector.X"), USpiceK2::bodvcd_vector, FK2Conversion::SDimensionlessVectorXToSDistance()) };
-    return v;
-}
+    static const UK2Node_bodvcd::OperationType& SDistanceX()
+    {
+        static auto v{ UK2Node_bodvcd::OperationType(FName("bodvcd SDistanceVector.X"), USpiceK2::bodvcd_vector, FK2Conversion::SDimensionlessVectorXToSDistance()) };
+        return v;
+    }
 
-static const UK2Node_bodvcd::OperationType& SDistanceY()
-{
-    static auto v{ UK2Node_bodvcd::OperationType(FName("bodvcd SDistanceVector.Y"), USpiceK2::bodvcd_vector, FK2Conversion::SDimensionlessVectorYToSDistance()) };
-    return v;
-}
+    static const UK2Node_bodvcd::OperationType& SDistanceY()
+    {
+        static auto v{ UK2Node_bodvcd::OperationType(FName("bodvcd SDistanceVector.Y"), USpiceK2::bodvcd_vector, FK2Conversion::SDimensionlessVectorYToSDistance()) };
+        return v;
+    }
 
-static const UK2Node_bodvcd::OperationType& SDistanceZ()
-{
-    static auto v{ UK2Node_bodvcd::OperationType(FName("bodvcd SDistanceVector.Z"), USpiceK2::bodvcd_vector, FK2Conversion::SDimensionlessVectorZToSDistance()) };
-    return v;
-}
+    static const UK2Node_bodvcd::OperationType& SDistanceZ()
+    {
+        static auto v{ UK2Node_bodvcd::OperationType(FName("bodvcd SDistanceVector.Z"), USpiceK2::bodvcd_vector, FK2Conversion::SDimensionlessVectorZToSDistance()) };
+        return v;
+    }
 
-static const TMap<FName, UK2Node_bodvcd::OperationType>& MakeOperationsMap()
-{
-    static auto OperationsMap = TMap<FName, UK2Node_bodvcd::OperationType>();
+    static const TMap<FName, UK2Node_bodvcd::OperationType>& MakeOperationsMap()
+    {
+        static auto OperationsMap = TMap<FName, UK2Node_bodvcd::OperationType>();
 
-    auto op = DoubleOp(); op.FullName = op.ShortName.ToString() + "\nReturn value from the kernel pool"; OperationsMap.Emplace(op.ShortName, op);
-    op = RealOp(); op.FullName = op.ShortName.ToString() + "\nReturn value from the kernel pool"; OperationsMap.Emplace(op.ShortName, op);
-    op = ArrayDoubleOp(); op.FullName = op.ShortName.ToString() + "\nReturn value from the kernel pool"; OperationsMap.Emplace(op.ShortName, op);
-    op = ArrayRealOp(); op.FullName = op.ShortName.ToString() + "\nReturn value from the kernel pool"; OperationsMap.Emplace(op.ShortName, op);
-    op = SDimensionlessVectorOp(); op.FullName = op.ShortName.ToString() + "\nReturn value from the kernel pool"; OperationsMap.Emplace(op.ShortName, op);
-    op = SMassConstantOp(); op.FullName = op.ShortName.ToString() + "\nReturn value from the kernel pool"; OperationsMap.Emplace(op.ShortName, op);
-    op = SDistanceOp(); op.FullName = op.ShortName.ToString() + "\nReturn value from the kernel pool"; OperationsMap.Emplace(op.ShortName, op);
-    op = SDegreesOp(); op.FullName = op.ShortName.ToString() + "\nReturn value from the kernel pool"; OperationsMap.Emplace(op.ShortName, op);
-    op = SDistanceVectorOp(); op.FullName = op.ShortName.ToString() + "\nReturn value from the kernel pool"; OperationsMap.Emplace(op.ShortName, op);
-    op = SVelocityVectorOp(); op.FullName = op.ShortName.ToString() + "\nReturn value from the kernel pool"; OperationsMap.Emplace(op.ShortName, op);
-    op = SDistanceX(); op.FullName = op.ShortName.ToString() + "\nReturn value from the kernel pool"; OperationsMap.Emplace(op.ShortName, op);
-    op = SDistanceY(); op.FullName = op.ShortName.ToString() + "\nReturn value from the kernel pool"; OperationsMap.Emplace(op.ShortName, op);
-    op = SDistanceZ(); op.FullName = op.ShortName.ToString() + "\nReturn value from the kernel pool"; OperationsMap.Emplace(op.ShortName, op);
+        auto op = DoubleOp(); op.FullName = op.ShortName.ToString() + "\nReturn value from the kernel pool"; OperationsMap.Emplace(op.ShortName, op);
+        op = RealOp(); op.FullName = op.ShortName.ToString() + "\nReturn value from the kernel pool"; OperationsMap.Emplace(op.ShortName, op);
+        op = ArrayDoubleOp(); op.FullName = op.ShortName.ToString() + "\nReturn value from the kernel pool"; OperationsMap.Emplace(op.ShortName, op);
+        op = ArrayRealOp(); op.FullName = op.ShortName.ToString() + "\nReturn value from the kernel pool"; OperationsMap.Emplace(op.ShortName, op);
+        op = SDimensionlessVectorOp(); op.FullName = op.ShortName.ToString() + "\nReturn value from the kernel pool"; OperationsMap.Emplace(op.ShortName, op);
+        op = SMassConstantOp(); op.FullName = op.ShortName.ToString() + "\nReturn value from the kernel pool"; OperationsMap.Emplace(op.ShortName, op);
+        op = SDistanceOp(); op.FullName = op.ShortName.ToString() + "\nReturn value from the kernel pool"; OperationsMap.Emplace(op.ShortName, op);
+        op = SDegreesOp(); op.FullName = op.ShortName.ToString() + "\nReturn value from the kernel pool"; OperationsMap.Emplace(op.ShortName, op);
+        op = SDistanceVectorOp(); op.FullName = op.ShortName.ToString() + "\nReturn value from the kernel pool"; OperationsMap.Emplace(op.ShortName, op);
+        op = SVelocityVectorOp(); op.FullName = op.ShortName.ToString() + "\nReturn value from the kernel pool"; OperationsMap.Emplace(op.ShortName, op);
+        op = SDistanceX(); op.FullName = op.ShortName.ToString() + "\nReturn value from the kernel pool"; OperationsMap.Emplace(op.ShortName, op);
+        op = SDistanceY(); op.FullName = op.ShortName.ToString() + "\nReturn value from the kernel pool"; OperationsMap.Emplace(op.ShortName, op);
+        op = SDistanceZ(); op.FullName = op.ShortName.ToString() + "\nReturn value from the kernel pool"; OperationsMap.Emplace(op.ShortName, op);
 
 #if WITH_EDITOR
-    // Ensure the specified actions actually exist!
-    for (const auto& [shortname, _op] : OperationsMap)
-    {
-        if (!_op.K2NodeName.IsNone())
+        // Ensure the specified actions actually exist!
+        for (const auto& [shortname, _op] : OperationsMap)
         {
-            check(USpiceK2::StaticClass()->FindFunctionByName(_op.K2NodeName));
+            if (!_op.K2NodeName.IsNone())
+            {
+                check(USpiceK2::StaticClass()->FindFunctionByName(_op.K2NodeName));
+            }
+            if (!_op.Conversion.ConversionName.IsNone())
+            {
+                check(USpiceK2::StaticClass()->FindFunctionByName(_op.Conversion.ConversionName));
+            }
         }
-        if (!_op.Conversion.ConversionName.IsNone())
-        {
-            check(USpiceK2::StaticClass()->FindFunctionByName(_op.Conversion.ConversionName));
-        }
-    }
 #endif
 
-    return OperationsMap;
+        return OperationsMap;
+    }
 }
 
 const TMap<FName, UK2Node_bodvcd::OperationType>& UK2Node_bodvcd::GetOperationsMap() const
 {
-    static const auto OperationsMap{ MakeOperationsMap() };
+    static const auto OperationsMap{ bodvcd::MakeOperationsMap() };
     return OperationsMap;
 }
 
