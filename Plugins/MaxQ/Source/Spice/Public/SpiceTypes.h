@@ -2805,6 +2805,27 @@ struct SPICE_API FSConicElements
         GravitationalParameter = FSMassConstant();
     }
 
+    FSConicElements(
+        const FSDistance& _PerifocalDistance,
+        double _Eccentricity,
+        const FSAngle& _Inclination,
+        const FSAngle& _LongitudeOfAscendingNode,
+        const FSAngle& _ArgumentOfPeriapse,
+        const FSAngle& _MeanAnomalyAtEpoch,
+        const FSEphemerisTime& _Epoch,
+        const FSMassConstant& _GravitationalParameter
+        )
+    {
+        PerifocalDistance = _PerifocalDistance;
+        Eccentricity = _Eccentricity;
+        Inclination = _Inclination;
+        LongitudeOfAscendingNode = _LongitudeOfAscendingNode;
+        ArgumentOfPeriapse = _ArgumentOfPeriapse;
+        MeanAnomalyAtEpoch = _MeanAnomalyAtEpoch;
+        Epoch = _Epoch;
+        GravitationalParameter = _GravitationalParameter;
+    }
+
     FSConicElements(const FSConicElements& other)
     {
         PerifocalDistance = other.PerifocalDistance;
