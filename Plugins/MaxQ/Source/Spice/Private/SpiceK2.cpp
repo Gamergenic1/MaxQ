@@ -5,13 +5,6 @@
 // Documentation:  https://maxq.gamergenic.com/
 // GitHub:         https://github.com/Gamergenic1/MaxQ/ 
 
-#include "SpiceK2.h"
-#include "SpicePlatformDefs.h"
-#include "Spice.h"
-#include "SpiceUtilities.h"
-#include "SpiceMath.h"
-
-
 //------------------------------------------------------------------------------
 // SpiceK2.cpp
 // 
@@ -25,6 +18,12 @@
 // SpiceK2.h is part of the "refined Blueprints API".
 // See API Comments in SpiceK2.h
 //------------------------------------------------------------------------------
+
+#include "SpiceK2.h"
+#include "SpicePlatformDefs.h"
+#include "Spice.h"
+#include "SpiceUtilities.h"
+#include "SpiceMath.h"
 
 PRAGMA_PUSH_PLATFORM_DEFAULT_PACKING
 extern "C"
