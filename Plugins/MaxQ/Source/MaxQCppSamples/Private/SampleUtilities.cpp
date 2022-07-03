@@ -46,6 +46,29 @@ namespace MaxQSamples
         return Info;
     }
 
+
+    //-----------------------------------------------------------------------------
+    // Name: AbsolutifyMaxQPath
+    // Desc:
+    // 'furnsh' accepts directories relative to the content folder OR absolute
+    // paths.
+    // To run the samples, we need to know exactly where the plugin is installed.
+    // This turns plugin-relative paths into absolute paths.  It's only needed for
+    // the sample kernels.
+    // Non-temporary variable (path-by-reference) version.
+    //-----------------------------------------------------------------------------
+    FString AbsolutifyMaxQPathForWriting(const FString& path)
+    {
+#if WITH_EDITOR
+        FString pluginFilePath = FPaths::Combine(IPluginManager::Get().FindPlugin(*PluginName)->GetContentDir(), path);
+        IPlatformFile& PlatformFile = FPlatformFileManager::Get().GetPlatformFile();
+        return PlatformFile.ConvertToAbsolutePathForExternalAppForRead(*pluginFilePath);
+#else
+        return path;
+#endif
+    }
+
+
     //-----------------------------------------------------------------------------
     // Name: AbsolutifyMaxQPath
     // Desc:
@@ -59,9 +82,8 @@ namespace MaxQSamples
     void AbsolutifyMaxQPath(FString& path)
     {
 #if WITH_EDITOR
-        FString pluginFilePath = FPaths::Combine(IPluginManager::Get().FindPlugin(*PluginName)->GetContentDir(), path);
-        IPlatformFile& PlatformFile = FPlatformFileManager::Get().GetPlatformFile();
-        FString PluginFilePath = PlatformFile.ConvertToAbsolutePathForExternalAppForRead(*pluginFilePath);
+        AbsolutifyMaxQPathForWriting(path);
+        FString PluginFilePath = AbsolutifyMaxQPathForWriting(path);
 
         if (FPaths::FileExists(PluginFilePath) || FPaths::DirectoryExists(PluginFilePath))
         {

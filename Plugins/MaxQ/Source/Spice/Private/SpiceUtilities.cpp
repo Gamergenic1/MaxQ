@@ -44,23 +44,34 @@ namespace MaxQ::Private
 {
     FString toPath(const FString& file)
     {
+        FString path = file;
+
         // BaseGame.ini [/Script/UnrealEd.ProjectPackagingSettings] DirectoriesToAlwaysStageAsNonUFS
         // is relative to the project's Content directory...  Copying kernel files, then, means the directory must be relative to the content directory
     #if WITH_EDITOR
-        if (file.StartsWith(TEXT("Content")))
+        if (path.StartsWith(TEXT("Content")))
         {
             UE_LOG(LogSpice, Error, TEXT("BREAKING SPICE BEHAVIOR CHANGE!!  Spice data must be in project /Content directory.  All paths are now relative to /Content"));
             UE_LOG(LogSpice, Error, TEXT("Is relative to Content directory: %s"), *file);
         }
     #endif
 
-        if(FPaths::IsRelative(file))
+        if(FPaths::IsRelative(path))
         {
             auto gameDir = FPaths::ConvertRelativePathToFull(FPaths::ProjectContentDir());
-            return FPaths::Combine(gameDir, file);
+            path = FPaths::Combine(gameDir, path);
         }
 
-        return file;
+        const TCHAR* PathDelimiter = FPlatformMisc::GetDefaultPathSeparator();
+        if (PathDelimiter && PathDelimiter[0] != '\\')
+        {
+            path.ReplaceInline(TEXT("\\"), PathDelimiter);
+        }
+        else
+        {
+            path.ReplaceInline(TEXT("/"), PathDelimiter);
+        }
+        return path;
     }
 
     void CopyFrom(const SpicePlane& _plane, FSPlane& dest)

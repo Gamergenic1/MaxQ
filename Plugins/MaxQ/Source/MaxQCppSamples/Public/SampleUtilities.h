@@ -116,6 +116,7 @@ namespace MaxQSamples
     void Log(const FString& LogString, const FColor& Color = FColor::White, float DisplayTime = 60.f);
     void Log(const FString& LogString, ES_ResultCode ResultCode, float DisplayTime = 60.f);
     FString MaxQPluginInfo();
+    FString AbsolutifyMaxQPathForWriting(const FString& path);
     FString MaxQPathAbsolutified(const FString& path);
     TArray<FString> MaxQPathsAbsolutified(const TArray<FString>& paths);
 
