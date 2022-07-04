@@ -42,7 +42,9 @@ double USpiceK2::bodvrd_double_K2(
     const FString& item
 )
 {
-    return MaxQ::Data::Bodvrd<double>(bodynm, item, &ResultCode, &ErrorMessage);
+    double value;
+    MaxQ::Data::Bodvrd(value, bodynm, item, &ResultCode, &ErrorMessage);
+    return value;
 }
 
 FSDimensionlessVector USpiceK2::bodvrd_vector_K2(
@@ -73,7 +75,9 @@ double USpiceK2::bodvcd_double_K2(
     const FString& item
 )
 {
-    return MaxQ::Data::Bodvcd<double>(bodyid, item, &ResultCode, &ErrorMessage);
+    double value;
+    MaxQ::Data::Bodvcd(value, bodyid, item, &ResultCode, &ErrorMessage);
+    return value;
 }
 
 FSDimensionlessVector USpiceK2::bodvcd_vector_K2(
