@@ -297,6 +297,33 @@ namespace MaxQ::Data
         }
     }
 
+
+    // With a little extra complexity we could get rid of this specialized version...
+    // Doubt if that's a net win, though.  Complexity FTL.
+    template<>
+    SPICE_API void Bodvcd(
+        double& Value,
+        int bodyid,
+        const FString& item,
+        ES_ResultCode* ResultCode,
+        FString* ErrorMessage
+    )
+    {
+        constexpr SpiceInt N = sizeof Value / sizeof SpiceDouble;
+        SpiceDouble _result[N]; ZeroOut(Value);
+        SpiceInt n_actual = 0;
+
+        bodvcd_c(bodyid, TCHAR_TO_ANSI(*item), N, &n_actual, _result);
+
+        Value = _result[0];
+
+        if (!ErrorCheck(ResultCode, ErrorMessage) && n_actual != N)
+        {
+            if (ResultCode) *ResultCode = ES_ResultCode::Error;
+            if (ErrorMessage) *ErrorMessage = FString::Printf(TEXT("Blueprint request for BODY%d_%s Expected double[%d] but proc returned double[%d]"), bodyid, *item, N, n_actual);
+        }
+    }
+
     template<typename ValueType>
     SPICE_API void Bodvcd(
         ValueType& Value,
@@ -327,32 +354,6 @@ namespace MaxQ::Data
     template SPICE_API void Bodvcd<FSDimensionlessVector>(FSDimensionlessVector&, int bodyid, const FString& item, ES_ResultCode* ResultCode, FString* ErrorMessage);
     template SPICE_API void Bodvcd<FSDistance>(FSDistance&, int bodyid, const FString& item, ES_ResultCode* ResultCode, FString* ErrorMessage);
     template SPICE_API void Bodvcd<FSMassConstant>(FSMassConstant&, int bodyid, const FString& item, ES_ResultCode* ResultCode, FString* ErrorMessage);
-
-    // With a little extra complexity we could get rid of this specialized version...
-    // Doubt if that's a net win, though.  Complexity FTL.
-    template<>
-    SPICE_API void Bodvcd(
-        double& Value,
-        int bodyid,
-        const FString& item,
-        ES_ResultCode* ResultCode,
-        FString* ErrorMessage
-    )
-    {
-        constexpr SpiceInt N = sizeof Value / sizeof SpiceDouble;
-        SpiceDouble _result[N]; ZeroOut(Value);
-        SpiceInt n_actual = 0;
-
-        bodvcd_c(bodyid, TCHAR_TO_ANSI(*item), N, &n_actual, _result);
-
-        Value = _result[0];
-
-        if (!ErrorCheck(ResultCode, ErrorMessage) && n_actual != N)
-        {
-            if (ResultCode) *ResultCode = ES_ResultCode::Error;
-            if (ErrorMessage) *ErrorMessage = FString::Printf(TEXT("Blueprint request for BODY%d_%s Expected double[%d] but proc returned double[%d]"), bodyid, *item, N, n_actual);
-        }
-    }
 
      SPICE_API bool Bodc2n(FString& name, int code /*= 399 */)
     {
