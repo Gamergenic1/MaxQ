@@ -116,7 +116,7 @@ namespace MaxQ::Data
         FString* ErrorMessage = nullptr
     )
     {
-        return Bodvcd<ValueType>(bodynm.ToString(), item.ToString(), ResultCode, ErrorMessage)
+        return Bodvrd<ValueType>(bodynm.ToString(), item.ToString(), ResultCode, ErrorMessage)
     }
 
     template<class ValueType>

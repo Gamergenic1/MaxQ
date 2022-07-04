@@ -101,7 +101,7 @@ public:
     UFUNCTION(BlueprintPure, Category = "MaxQSamples", meta = (DevelopmentOnly))
     static void GetDefaultInsightMissionKernels(TArray<FString>& InsightMissionKernels);
 
-    UFUNCTION(BlueprintPure, Category = "MaxQSamples", meta = (DevelopmentOnly))
+    UFUNCTION(BlueprintCallable, Category = "MaxQSamples", meta = (DevelopmentOnly))
     static bool LoadKernelList(const FString& ListName, const TArray<FString>& KernelFiles);
 
     UFUNCTION(BlueprintCallable, Category = "MaxQSamples", meta = (DevelopmentOnly))
