@@ -7143,15 +7143,14 @@ void USpice::pckfrm(
     ErrorCheck(ResultCode, ErrorMessage);
 }
 
-
+template<auto covfunction>
 void checkcov(
     ES_ResultCode& ResultCode,
     FString& ErrorMessage,
     const FString& pckFileRelativePath,
     int idcode,
     const TArray<FSWindowSegment>& merge_to,
-    TArray<FSWindowSegment>& coverage,
-    void (*covfunction)(ConstSpiceChar* pck, SpiceInt idcode, SpiceCell* cover)
+    TArray<FSWindowSegment>& coverage
 )
 {
     const int smallCellSize = 100;
@@ -7184,7 +7183,7 @@ void checkcov(
 
         // Invocation
         scard_c(0, _cover);
-        pckcov_c(_pck, _idcode, _cover);
+        covfunction(_pck, _idcode, _cover);
 
         haveData = !failed_c();
     }
@@ -7211,7 +7210,7 @@ void checkcov(
 
             // Re-Invocation
             scard_c(0, _cover);
-            pckcov_c(_pck, _idcode, _cover);
+            covfunction(_pck, _idcode, _cover);
 
             haveData = !failed_c();
         }
@@ -7280,7 +7279,7 @@ void USpice::pckcov(
     TArray<FSWindowSegment>& coverage
 )
 {
-    ::checkcov(ResultCode, ErrorMessage, pckFileRelativePath, idcode, merge_to, coverage, pckcov_c);
+    checkcov<pckcov_c>(ResultCode, ErrorMessage, pckFileRelativePath, idcode, merge_to, coverage);
 }
 
 
@@ -9233,7 +9232,7 @@ void USpice::spkcov(
     TArray<FSWindowSegment>& coverage
 )
 {
-    ::checkcov(ResultCode, ErrorMessage, spkFileRelativePath, idcode, merge_to, coverage, spkcov_c);
+    checkcov<spkcov_c>(ResultCode, ErrorMessage, spkFileRelativePath, idcode, merge_to, coverage);
 }
 
 

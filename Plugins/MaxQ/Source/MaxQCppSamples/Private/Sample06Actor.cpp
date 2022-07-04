@@ -36,15 +36,14 @@ ASample06Actor::ASample06Actor()
     DistanceScale = 200.0;
 
     OriginNaifName = "TRAPPIST_1_BARYCENTER";
-    OriginReferenceFrame = "GALACTIC";
+    OriginReferenceFrame = "TRAPPIST_1_ECLIPTIC";
 
     // Sun is needed to determine light direction
     SunNaifName = "TRAPPIST_1";
 
     PlanetFocusName = "TRAPPIST_1E";
 
-    RelativePathToSPKFileToWrite = TEXT("NonAssetData/MaxQ/kernels/TRAPPIST-1/MaxQ-TRAPPIST_1-orbits.bsp");
-    RelativePathToSPKFileToRead = RelativePathToSPKFileToWrite;
+    RelativePathToSPKFile = TEXT("NonAssetData/MaxQ/kernels/TRAPPIST-1/MaxQ-TRAPPIST_1-orbits.bsp");
 
     CommentsToWrite.Emplace(TEXT("Created by MaxQ Spaceflight Toolkit for Unreal Engine."));
     CommentsToWrite.Emplace(TEXT("This file should not be used for any purpose other"));
@@ -75,20 +74,44 @@ void ASample06Actor::BeginPlay()
     if (EnableTick)
     {
         InitializeSolarSystem();
-    }
 
-    FString ReadFilePath = MaxQSamples::MaxQPathAbsolutified(RelativePathToSPKFileToRead);
+        FString ReadFilePath = MaxQSamples::MaxQPathAbsolutified(RelativePathToSPKFile);
 
-    if (!ReadFilePath.IsEmpty() && FPaths::ValidatePath(ReadFilePath))
-    {
-        if (!FPaths::FileExists(ReadFilePath))
+        if (!ReadFilePath.IsEmpty() && FPaths::ValidatePath(ReadFilePath))
         {
-            GenerateTrappistSPKKernel();
+            // If the body SPK kernel doesn't exist, create a new one.
+            // Or, if the bool forces re-creation.
+            if (!FPaths::FileExists(ReadFilePath) || UpdateSpkFile)
+            {
+                GenerateTrappistSPKKernel();
+            }
         }
-    }
 
-    bool bSuccess = Furnsh(ReadFilePath);
-    Log(FString::Printf(TEXT("furnsh: %s"), *MaxQSamples::MaxQPluginInfo()), bSuccess);
+        // Try to find the coverage window in the existing file.
+        auto IdCode = 0;
+        if (Bods2c(IdCode, TEXT("TRAPPIST_1B")))
+        {
+            ES_ResultCode ResultCode;
+            FString ErrorMessage;
+            TArray<FSWindowSegment> CoverageWindows;
+            USpice::spkcov(ResultCode, ErrorMessage, ReadFilePath, IdCode, {}, CoverageWindows);
+            if (ResultCode == ES_ResultCode::Success)
+            {
+                for (const auto WindowSegment : CoverageWindows)
+                {
+                    // We found a segment!
+                    // There was probably only one.
+                    // Anyhoo, set the current solar system time to the SPK segment time.
+                    SolarSystemState.CurrentTime = FSEphemerisTime{ WindowSegment.start };
+                    SolarSystemState.InitialTime = SolarSystemState.CurrentTime.ToString();
+                    break;
+                }
+            }
+        }
+
+        bool bSuccess = Furnsh(ReadFilePath);
+        Log(FString::Printf(TEXT("furnsh: %s"), *MaxQSamples::MaxQPluginInfo()), bSuccess);
+    }
 
 
     PrimaryActorTick.SetTickFunctionEnable(EnableTick);
@@ -135,7 +158,7 @@ void ASample06Actor::UpdateSolarSystem(float DeltaTime)
     SolarSystemState.CurrentTime += DeltaTime * SolarSystemState.TimeScale;
 
     bool success = true;
-    //success &= MaxQSamples::UpdateSunDirection(OriginNaifName, OriginReferenceFrame, SolarSystemState.CurrentTime, SunNaifName, SunDirectionalLight);
+    success &= MaxQSamples::UpdateSunDirection(OriginNaifName, OriginReferenceFrame, SolarSystemState.CurrentTime, SunNaifName, SunDirectionalLight);
     success &= MaxQSamples::UpdateBodyPositions(OriginNaifName, OriginReferenceFrame, DistanceScale, SolarSystemState);
     success &= MaxQSamples::UpdateBodyOrientations(OriginReferenceFrame, SolarSystemState);
 
@@ -154,6 +177,9 @@ void ASample06Actor::UpdateSolarSystem(float DeltaTime)
         GEngine->AddOnScreenDebugMessage(-1, 0.f, FColor::White, *FString::Printf(TEXT("Display Time: %s"), *SolarSystemState.CurrentTime.ToString()));
         GEngine->AddOnScreenDebugMessage(-1, 0.f, FColor::White, *FString::Printf(TEXT("Origin Reference Frame: %s"), *OriginReferenceFrame.ToString()));
         GEngine->AddOnScreenDebugMessage(-1, 0.f, FColor::White, *FString::Printf(TEXT("Origin Observer Naif Name: %s"), *OriginNaifName.ToString()));
+
+        GEngine->AddOnScreenDebugMessage(-1, 0.f, FColor::White, TEXT("This solar system was created from scratch, using data from Wikipedia on the TRAPPIST-1 system"));
+        GEngine->AddOnScreenDebugMessage(-1, 0.f, FColor::White, TEXT("This solar system was created from scratch, using data from Wikipedia on the TRAPPIST-1 system"));
     }
 }
 
@@ -209,7 +235,7 @@ void ASample06Actor::GetDefaultTrappistKernels(TArray<FString>& TrappistSystemKe
 
 void ASample06Actor::GenerateTrappistSPKKernel()
 {
-    FString WriteFilePath = MaxQSamples::AbsolutifyMaxQPathForWriting(RelativePathToSPKFileToWrite);
+    FString WriteFilePath = MaxQSamples::AbsolutifyMaxQPathForWriting(RelativePathToSPKFile);
 
     if (!WriteFilePath.IsEmpty() && FPaths::ValidatePath(WriteFilePath))
     {
@@ -337,7 +363,7 @@ void ASample06Actor::Restart()
 }
 
 
-namespace MaxQCppSamples::Data
+namespace MaxQSamples::Data
 {
     //-----------------------------------------------------------------------------
     // Hardcoded TRAPPIST-1 System Data
@@ -475,5 +501,20 @@ namespace MaxQCppSamples::Data
 
 const TMap<FString, FSConicElements>& ASample06Actor::GetTrappist1OrbitalElements()
 {
-    return MaxQCppSamples::Data::Trappist1OrbitalElements;
+    return MaxQSamples::Data::Trappist1OrbitalElements;
+}
+
+void ASample06Actor::DebugDump()
+{
+    ES_ResultCode ResultCode;
+    FString ErrorMessage;
+
+    bool bFound;
+    TArray<FString> Results;
+    USpice::gnpool(ResultCode, ErrorMessage, Results, bFound, DebugData, 0, 10000);
+
+    for (FString result : Results)
+    {
+        UE_LOG(LogTemp, Log, TEXT("%s"), *result);
+    }
 }

@@ -54,10 +54,10 @@ class MAXQCPPSAMPLES_API ASample06Actor : public AActor
     TMap<FString, FSConicElements> OrbitalElements;
 
     UPROPERTY(EditInstanceOnly, Category = "MaxQ|Samples")
-    FString RelativePathToSPKFileToRead;
+    bool UpdateSpkFile = false;
 
     UPROPERTY(EditInstanceOnly, Category = "MaxQ|Samples")
-    FString RelativePathToSPKFileToWrite;
+    FString RelativePathToSPKFile;
 
     UPROPERTY(EditInstanceOnly, Category = "MaxQ|Samples")
     TArray<FString> CommentsToWrite;
@@ -117,7 +117,7 @@ public:
     void _1B() { OriginNaifName = "TRAPPIST_1B"; }
 
     UFUNCTION(CallInEditor, Category = "Editor")
-    void _1C() { OriginNaifName = "TRAPPIST_1D"; }
+    void _1C() { OriginNaifName = "TRAPPIST_1C"; }
 
     UFUNCTION(CallInEditor, Category = "Editor")
     void _1D() { OriginNaifName = "TRAPPIST_1D"; }
@@ -130,6 +130,9 @@ public:
 
     UFUNCTION(CallInEditor, Category = "Editor")
     void _1G() { OriginNaifName = "TRAPPIST_1G"; }
+
+    UFUNCTION(CallInEditor, Category = "Editor")
+    void _1H() { OriginNaifName = "TRAPPIST_1H"; }
 
 
     UFUNCTION(CallInEditor, Category = "Editor")
@@ -154,13 +157,19 @@ public:
         void IAU_1G() { OriginReferenceFrame = "IAU_TRAPPIST_1G"; }
 
     UFUNCTION(CallInEditor, Category = "Editor")
+        void IAU_1H() { OriginReferenceFrame = "IAU_TRAPPIST_1H"; }
+
+    UFUNCTION(CallInEditor, Category = "Editor")
+        void ECLIPTIC() { OriginReferenceFrame = "TRAPPIST_1_ECLIPTIC"; }
+
+    UFUNCTION(CallInEditor, Category = "Editor")
         void GALACTIC() { OriginReferenceFrame = "GALACTIC"; }
 
-    UFUNCTION(CallInEditor, Category = "Editor")
-    void J2000() { OriginReferenceFrame = MaxQ::Constants::Name_J2000; }
+    UPROPERTY(EditAnywhere, Category="Editor")
+    FString DebugData;
 
     UFUNCTION(CallInEditor, Category = "Editor")
-    void EclipJ2000() { OriginReferenceFrame = MaxQ::Constants::Name_ECLIPJ2000; }
+    void DebugDump();
 
 private:
     static const TMap<FString, FSConicElements>& GetTrappist1OrbitalElements();
