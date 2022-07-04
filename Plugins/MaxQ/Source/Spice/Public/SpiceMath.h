@@ -336,49 +336,45 @@ namespace MaxQ::Math
 #pragma warning( disable : 4499 )
 
     // From SPICE to UE
-    template<typename T> static FVector Swizzle(const T& value);
-
-    template<> SpiceStaticPartialTemplate FVector Swizzle<FSDimensionlessVector>(const FSDimensionlessVector& value)
+    inline static FVector Swizzle(const FSDimensionlessVector& value)
     {
         return FVector((FVector::FReal)value.y, (FVector::FReal)value.x, (FVector::FReal)value.z);
 
     }
 
-    template<> SpiceStaticPartialTemplate FVector Swizzle<FSDistanceVector>(const FSDistanceVector& value)
+    inline static FVector Swizzle(const FSDistanceVector& value)
     {
         return FVector((FVector::FReal)value.y.km, (FVector::FReal)value.x.km, (FVector::FReal)value.z.km);
     }
 
-    template<> SpiceStaticPartialTemplate FVector Swizzle<FSVelocityVector>(const FSVelocityVector& value)
+    inline static FVector Swizzle(const FSVelocityVector& value)
     {
         return FVector((FVector::FReal)value.dy.kmps, (FVector::FReal)value.dx.kmps, (FVector::FReal)value.dz.kmps);
     }
 
-    template<> SpiceStaticPartialTemplate FVector Swizzle<FSAngularVelocity>(const FSAngularVelocity& value)
+    inline static FVector Swizzle(const FSAngularVelocity& value)
     {
         // (Going from RHS/LHS negates angular velocities...)
         return FVector(-(FVector::FReal)value.y.radiansPerSecond, -(FVector::FReal)value.x.radiansPerSecond, -(FVector::FReal)value.z.radiansPerSecond);
     }
 
     // From UE to SPICE
-    template<typename T> static void Swizzle(const FVector& in, T& out);
-
-    template<> SpiceStaticPartialTemplate void Swizzle<FSDimensionlessVector>(const FVector& in, FSDimensionlessVector& out)
+    inline static void Swizzle(const FVector& in, FSDimensionlessVector& out)
     {
         out = FSDimensionlessVector(in.Y, in.X, in.Z);
     }
 
-    template<> SpiceStaticPartialTemplate void Swizzle<FSDistanceVector>(const FVector& in, FSDistanceVector& out)
+    inline static void Swizzle(const FVector& in, FSDistanceVector& out)
     {
         out = FSDistanceVector(in.Y, in.X, in.Z);
     }
 
-    template<> SpiceStaticPartialTemplate void Swizzle<FSVelocityVector>(const FVector& in, FSVelocityVector& out)
+    inline static void Swizzle(const FVector& in, FSVelocityVector& out)
     {
         out = FSVelocityVector(in.Y, in.X, in.Z);
     }
 
-    template<> SpiceStaticPartialTemplate void Swizzle<FSAngularVelocity>(const FVector& in, FSAngularVelocity& out)
+    inline static void Swizzle(const FVector& in, FSAngularVelocity& out)
     {
         // (Going from LHS/RHS negates angular velocities...)
         out = FSAngularVelocity(FSAngularRate(-in.Y), FSAngularRate(-in.X), FSAngularRate(-in.Z));
@@ -386,22 +382,22 @@ namespace MaxQ::Math
 
     template<typename T> static T Swizzle(const FVector& in);
 
-    template<> SpiceStaticPartialTemplate FSDimensionlessVector Swizzle<FSDimensionlessVector>(const FVector& in)
+    template<> inline static FSDimensionlessVector Swizzle<FSDimensionlessVector>(const FVector& in)
     {
         return FSDimensionlessVector(in.Y, in.X, in.Z);
     }
 
-    template<> SpiceStaticPartialTemplate FSDistanceVector Swizzle<FSDistanceVector>(const FVector& in)
+    template<> inline static FSDistanceVector Swizzle<FSDistanceVector>(const FVector& in)
     {
         return FSDistanceVector(in.Y, in.X, in.Z);
     }
 
-    template<> SpiceStaticPartialTemplate FSVelocityVector Swizzle<FSVelocityVector>(const FVector& in)
+    template<> inline static FSVelocityVector Swizzle<FSVelocityVector>(const FVector& in)
     {
         return FSVelocityVector(in.Y, in.X, in.Z);
     }
 
-    template<> SpiceStaticPartialTemplate FSAngularVelocity Swizzle<FSAngularVelocity>(const FVector& in)
+    template<> inline static FSAngularVelocity Swizzle<FSAngularVelocity>(const FVector& in)
     {
         // (Going from LHS/RHS negates angular velocities...)
         return FSAngularVelocity(FSAngularRate(-in.Y), FSAngularRate(-in.X), FSAngularRate(-in.Z));

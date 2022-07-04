@@ -189,36 +189,6 @@ namespace MaxQ::Data
         return FSEphemerisTime(now_j2000.GetTotalSeconds());
     }
 
-    template<typename ValueType>
-    SPICE_API void Bodvrd(
-        ValueType& Value,
-        const FString& bodynm,
-        const FString& item,
-        ES_ResultCode* ResultCode,
-        FString* ErrorMessage
-    )
-    {
-        constexpr SpiceInt N = sizeof Value / sizeof SpiceDouble;
-        SpiceDouble _result[N]; ZeroOut(Value);
-        SpiceInt n_actual = 0;
-
-        bodvrd_c(TCHAR_TO_ANSI(*bodynm), TCHAR_TO_ANSI(*item), N, &n_actual, _result);
-
-        Value = ValueType{ _result };
-
-        if (!ErrorCheck(ResultCode, ErrorMessage) && n_actual != N)
-        {
-            if (ResultCode) *ResultCode = ES_ResultCode::Error;
-            if (ErrorMessage) *ErrorMessage = FString::Printf(TEXT("Blueprint request for %s_%s Expected double[%d] but proc returned double[%d]"), *bodynm, *item, N, n_actual);
-        }
-    }
-
-    template SPICE_API void Bodvrd<FSAngularVelocity>(FSAngularVelocity&, const FString& bodynm, const FString& item, ES_ResultCode* ResultCode, FString* ErrorMessage);
-    template SPICE_API void Bodvrd<FSDistanceVector>(FSDistanceVector&, const FString& bodynm, const FString& item, ES_ResultCode* ResultCode, FString* ErrorMessage);
-    template SPICE_API void Bodvrd<FSVelocityVector>(FSVelocityVector&, const FString& bodynm, const FString& item, ES_ResultCode* ResultCode, FString* ErrorMessage);
-    template SPICE_API void Bodvrd<FSDimensionlessVector>(FSDimensionlessVector&, const FString& bodynm, const FString& item, ES_ResultCode* ResultCode, FString* ErrorMessage);
-    template SPICE_API void Bodvrd<FSDistance>(FSDistance&, const FString& bodynm, const FString& item, ES_ResultCode* ResultCode, FString* ErrorMessage);
-    template SPICE_API void Bodvrd<FSMassConstant>(FSMassConstant&, const FString& bodynm, const FString& item, ES_ResultCode* ResultCode, FString* ErrorMessage);
 
     // With a little extra complexity we could get rid of this specialized version...
     // Doubt if that's a net win, though.  Complexity FTL.
@@ -267,6 +237,63 @@ namespace MaxQ::Data
         {
             if (ResultCode) *ResultCode = ES_ResultCode::Error;
             if (ErrorMessage) *ErrorMessage = FString::Printf(TEXT("Blueprint request for %s_%s Expected double[%d] but proc returned double[%d]"), *bodynm, *item, n_expected, n_actual);
+        }
+    }
+    
+    template<typename ValueType>
+    SPICE_API void Bodvrd(
+        ValueType& Value,
+        const FString& bodynm,
+        const FString& item,
+        ES_ResultCode* ResultCode,
+        FString* ErrorMessage
+    )
+    {
+        constexpr SpiceInt N = sizeof Value / sizeof SpiceDouble;
+        SpiceDouble _result[N]; ZeroOut(Value);
+        SpiceInt n_actual = 0;
+
+        bodvrd_c(TCHAR_TO_ANSI(*bodynm), TCHAR_TO_ANSI(*item), N, &n_actual, _result);
+
+        Value = ValueType{ _result };
+
+        if (!ErrorCheck(ResultCode, ErrorMessage) && n_actual != N)
+        {
+            if (ResultCode) *ResultCode = ES_ResultCode::Error;
+            if (ErrorMessage) *ErrorMessage = FString::Printf(TEXT("Blueprint request for %s_%s Expected double[%d] but proc returned double[%d]"), *bodynm, *item, N, n_actual);
+        }
+    }
+
+    template SPICE_API void Bodvrd<FSAngularVelocity>(FSAngularVelocity&, const FString& bodynm, const FString& item, ES_ResultCode* ResultCode, FString* ErrorMessage);
+    template SPICE_API void Bodvrd<FSDistanceVector>(FSDistanceVector&, const FString& bodynm, const FString& item, ES_ResultCode* ResultCode, FString* ErrorMessage);
+    template SPICE_API void Bodvrd<FSVelocityVector>(FSVelocityVector&, const FString& bodynm, const FString& item, ES_ResultCode* ResultCode, FString* ErrorMessage);
+    template SPICE_API void Bodvrd<FSDimensionlessVector>(FSDimensionlessVector&, const FString& bodynm, const FString& item, ES_ResultCode* ResultCode, FString* ErrorMessage);
+    template SPICE_API void Bodvrd<FSDistance>(FSDistance&, const FString& bodynm, const FString& item, ES_ResultCode* ResultCode, FString* ErrorMessage);
+    template SPICE_API void Bodvrd<FSMassConstant>(FSMassConstant&, const FString& bodynm, const FString& item, ES_ResultCode* ResultCode, FString* ErrorMessage);
+
+
+
+    // TArray version...
+    // Caller must initialize TArray size to expected size
+    template<>
+    SPICE_API void Bodvcd(
+        TArray<double>& Values,
+        int bodyid,
+        const FString& item,
+        ES_ResultCode* ResultCode,
+        FString* ErrorMessage
+    )
+    {
+        SpiceDouble* _result = Values.GetData();
+        SpiceInt n_actual, n_expected = Values.Num();
+        Values.Init(0, n_expected);
+
+        bodvcd_c(bodyid, TCHAR_TO_ANSI(*item), n_expected, &n_actual, _result);
+
+        if (!ErrorCheck(ResultCode, ErrorMessage) && n_actual != n_expected)
+        {
+            if (ResultCode) *ResultCode = ES_ResultCode::Error;
+            if (ErrorMessage) *ErrorMessage = FString::Printf(TEXT("Blueprint request for BODY%d_%s Expected double[%d] but proc returned double[%d]"), bodyid, *item, n_expected, n_actual);
         }
     }
 
@@ -327,31 +354,7 @@ namespace MaxQ::Data
         }
     }
 
-    // TArray version...
-    // Caller must initialize TArray size to expected size
-    template<>
-    SPICE_API void Bodvcd(
-        TArray<double>& Values,
-        int bodyid,
-        const FString& item,
-        ES_ResultCode* ResultCode,
-        FString* ErrorMessage
-    )
-    {
-        SpiceDouble* _result = Values.GetData();
-        SpiceInt n_actual, n_expected = Values.Num();
-        Values.Init(0, n_expected);
-
-        bodvcd_c(bodyid, TCHAR_TO_ANSI(*item), n_expected, &n_actual, _result);
-
-        if (!ErrorCheck(ResultCode, ErrorMessage) && n_actual != n_expected)
-        {
-            if (ResultCode) *ResultCode = ES_ResultCode::Error;
-            if (ErrorMessage) *ErrorMessage = FString::Printf(TEXT("Blueprint request for BODY%d_%s Expected double[%d] but proc returned double[%d]"), bodyid, *item, n_expected, n_actual);
-        }
-    }
-
-    SPICE_API bool Bodc2n(FString& name, int code /*= 399 */)
+     SPICE_API bool Bodc2n(FString& name, int code /*= 399 */)
     {
         SpiceChar szBuffer[SPICE_MAX_PATH];
         ZeroOut(szBuffer);
