@@ -192,7 +192,6 @@ namespace MaxQ::Data
 
     // With a little extra complexity we could get rid of this specialized version...
     // Doubt if that's a net win, though.  Complexity FTL.
-    template<>
     SPICE_API void Bodvrd(
         double& Value,
         const FString& bodynm,
@@ -300,7 +299,6 @@ namespace MaxQ::Data
 
     // With a little extra complexity we could get rid of this specialized version...
     // Doubt if that's a net win, though.  Complexity FTL.
-    template<>
     SPICE_API void Bodvcd(
         double& Value,
         int bodyid,
