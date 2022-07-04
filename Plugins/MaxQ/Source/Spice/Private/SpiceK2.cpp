@@ -42,21 +42,7 @@ double USpiceK2::bodvrd_double_K2(
     const FString& item
 )
 {
-    SpiceDouble _result[1];
-    SpiceInt n_actual, n_expected = sizeof(_result) / sizeof(_result[0]);
-
-    ZeroOut(_result);
-    bodvrd_c(TCHAR_TO_ANSI(*bodynm), TCHAR_TO_ANSI(*item), n_expected, &n_actual, _result);
-    double ReturnValue = _result[0];
-
-    ErrorCheck(ResultCode, ErrorMessage);
-    if (ResultCode == ES_ResultCode::Success && n_actual != n_expected)
-    {
-        ResultCode = ES_ResultCode::Error;
-        ErrorMessage = FString::Printf(TEXT("Blueprint request for %s_%s Expected double[%d] but proc returned double[%d]"), *bodynm, *item, n_expected, n_actual);
-    }
-
-    return ReturnValue;
+    return MaxQ::Data::Bodvrd<double>(bodynm, item, &ResultCode, &ErrorMessage);
 }
 
 FSDimensionlessVector USpiceK2::bodvrd_vector_K2(
@@ -66,21 +52,7 @@ FSDimensionlessVector USpiceK2::bodvrd_vector_K2(
     const FString& item
 )
 {
-    SpiceDouble _result[3];
-    SpiceInt n_actual, n_expected = sizeof(_result) / sizeof(_result[0]);
-
-    ZeroOut(_result);
-    bodvrd_c(TCHAR_TO_ANSI(*bodynm), TCHAR_TO_ANSI(*item), n_expected, &n_actual, _result);
-    auto ReturnValue = FSDimensionlessVector(_result);
-
-    ErrorCheck(ResultCode, ErrorMessage);
-    if (ResultCode == ES_ResultCode::Success && n_actual != n_expected)
-    {
-        ResultCode = ES_ResultCode::Error;
-        ErrorMessage = FString::Printf(TEXT("Blueprint request for %s_%s Expected double[%d] but proc returned double[%d]"), *bodynm, *item, n_expected, n_actual);
-    }
-
-    return ReturnValue;
+    return MaxQ::Data::Bodvrd<FSDimensionlessVector>(bodynm, item, &ResultCode, &ErrorMessage);
 }
 
 TArray<double> USpiceK2::bodvrd_array_K2(
@@ -90,25 +62,7 @@ TArray<double> USpiceK2::bodvrd_array_K2(
     const FString& item
 )
 {
-    SpiceDouble _result[256];
-    SpiceInt n_actual, n_expected = sizeof(_result) / sizeof(_result[0]);
-
-    ZeroOut(_result);
-    bodvrd_c(TCHAR_TO_ANSI(*bodynm), TCHAR_TO_ANSI(*item), n_expected, &n_actual, _result);
-    
-    auto ReturnValue = TArray<double>();
-
-    ErrorCheck(ResultCode, ErrorMessage);
-
-    if (ResultCode == ES_ResultCode::Success)
-    {
-        ReturnValue.Init(0., n_actual);
-
-        check(sizeof(double) == sizeof(SpiceDouble));
-        FMemory::Memcpy(ReturnValue.GetData(), _result, n_actual * sizeof(SpiceDouble));
-    }
-
-    return ReturnValue;
+    return MaxQ::Data::Bodvrd<TArray<double>>(bodynm, item, &ResultCode, &ErrorMessage);
 }
 
 
@@ -119,21 +73,7 @@ double USpiceK2::bodvcd_double_K2(
     const FString& item
 )
 {
-    SpiceDouble _result[1];
-    SpiceInt n_actual, n_expected = sizeof(_result) / sizeof(_result[0]);
-
-    ZeroOut(_result);
-    bodvcd_c((SpiceInt)bodyid, TCHAR_TO_ANSI(*item), n_expected, &n_actual, _result);
-    double ReturnValue = _result[0];
-
-    ErrorCheck(ResultCode, ErrorMessage);
-    if (ResultCode == ES_ResultCode::Success && n_actual != n_expected)
-    {
-        ResultCode = ES_ResultCode::Error;
-        ErrorMessage = FString::Printf(TEXT("Blueprint request for BODY%d_%s Expected double[%d] but proc returned double[%d]"), bodyid, *item, n_expected, n_actual);
-    }
-
-    return ReturnValue;
+    return MaxQ::Data::Bodvcd<double>(bodyid, item, &ResultCode, &ErrorMessage);
 }
 
 FSDimensionlessVector USpiceK2::bodvcd_vector_K2(
@@ -143,21 +83,7 @@ FSDimensionlessVector USpiceK2::bodvcd_vector_K2(
     const FString& item
 )
 {
-    SpiceDouble _result[3];
-    SpiceInt n_actual, n_expected = sizeof(_result) / sizeof(_result[0]);
-
-    ZeroOut(_result);
-    bodvcd_c((SpiceInt)bodyid, TCHAR_TO_ANSI(*item), n_expected, &n_actual, _result);
-    auto ReturnValue = FSDimensionlessVector(_result);
-
-    ErrorCheck(ResultCode, ErrorMessage);
-    if (ResultCode == ES_ResultCode::Success && n_actual != n_expected)
-    {
-        ResultCode = ES_ResultCode::Error;
-        ErrorMessage = FString::Printf(TEXT("Blueprint request for BODY%d_%s Expected double[%d] but proc returned double[%d]"), bodyid, *item, n_expected, n_actual);
-    }
-
-    return ReturnValue;
+    return MaxQ::Data::Bodvcd<FSDimensionlessVector>(bodyid, item, &ResultCode, &ErrorMessage);
 }
 
 TArray<double> USpiceK2::bodvcd_array_K2(
@@ -167,25 +93,7 @@ TArray<double> USpiceK2::bodvcd_array_K2(
     const FString& item
 )
 {
-    SpiceDouble _result[256];
-    SpiceInt n_actual, n_expected = sizeof(_result) / sizeof(_result[0]);
-
-    ZeroOut(_result);
-    bodvcd_c((SpiceInt)bodyid, TCHAR_TO_ANSI(*item), n_expected, &n_actual, _result);
-
-    auto ReturnValue = TArray<double>();
-
-    ErrorCheck(ResultCode, ErrorMessage);
-
-    if (ResultCode == ES_ResultCode::Success)
-    {
-        ReturnValue.Init(0., n_actual);
-
-        check(sizeof(double) == sizeof(SpiceDouble));
-        FMemory::Memcpy(ReturnValue.GetData(), _result, n_actual * sizeof(SpiceDouble));
-    }
-
-    return ReturnValue;
+    return MaxQ::Data::Bodvcd<TArray<double>>(bodyid, item, &ResultCode, &ErrorMessage);
 }
 
 TArray<double> USpiceK2::gdpool_array_K2(

@@ -841,3 +841,4 @@ static inline bool operator!=(const FSStateVector& lhs, const FSStateVector& rhs
 }
 
 SPICE_API FSQuaternion operator*(const FSQuaternion& lhs, const FSQuaternion& rhs);
+

@@ -13,7 +13,11 @@
 #include "SpiceOrbits.h"
 
 using MaxQSamples::Log;
+using namespace MaxQ::Data;
+using namespace MaxQ::Core;
 using namespace MaxQ::Constants;
+using namespace MaxQ::Math;
+
 
 
 //-----------------------------------------------------------------------------
@@ -55,8 +59,8 @@ void ASample05Actor::BeginPlay()
     Log(TEXT("** Please see Sample05Actor in Scene 'Sample05' folder for button controls (details panel) **"), FColor::Yellow);
     Log(TEXT("** Please see Sample05Actor.cpp for more info **"), FColor::Blue);
 
-    // init_all:  clears kernel memory and any error state.
-    USpice::init_all();
+    // InitAll:  clears kernel memory and any error state.
+    InitAll();
 
     // Don't tick unless we have the kernels required to update the solar system
     bool EnableTick = USampleUtilities::LoadKernelList(TEXT("Basic"), BasicKernels);
@@ -124,15 +128,15 @@ void ASample05Actor::conics()
 
     // We'll need Earth's mass for propagating orbits via conics and oscelt
     FString NaifNameOfMass = EARTH;
-    USpice::bodvrd_mass(ResultCode, ErrorMessage, GM, NaifNameOfMass, MaxQ::Constants::GM);
+    Bodvrd(gm, EARTH, GM, &ResultCode);
 
-    Log(FString::Printf(TEXT("conics Mass Constant of EARTH = %s"), *GM.ToString()), ResultCode);
+    Log(FString::Printf(TEXT("conics Mass Constant of EARTH = %s"), *gm.ToString()), ResultCode);
 
     // We'll also need Earth's Radius, since the orbital elements below express Rp in altitude, not radius.
     FSDistanceVector Radii;
     if (ResultCode == ES_ResultCode::Success)
     {
-        USpice::bodvrd_distance_vector(ResultCode, ErrorMessage, Radii, NaifNameOfMass, RADII);
+        Bodvrd(Radii, NaifNameOfMass, RADII, &ResultCode);
         Log(FString::Printf(TEXT("conics Radii of EARTH = %s"), *Radii.ToString()), ResultCode);
     }
 
@@ -159,10 +163,9 @@ void ASample05Actor::conics()
         OrbitalElements.ArgumentOfPeriapse = arg;
         OrbitalElements.MeanAnomalyAtEpoch = M;
         OrbitalElements.Epoch = epoch;
-        OrbitalElements.GravitationalParameter = GM;
+        OrbitalElements.GravitationalParameter = gm;
 
-        FSEphemerisTime et;
-        USpice::et_now(et);
+        auto et = Now();
 
         FSStateVector state;
 
@@ -195,8 +198,7 @@ void ASample05Actor::oscelt()
     FString ErrorMessage;
 
     // When do we want it?   (time: now)
-    FSEphemerisTime et;
-    USpice::et_now(et);
+    auto et = Now();
 
     // What do we want?  (Earth's position)
     FString targ = EARTH;
@@ -222,7 +224,7 @@ void ASample05Actor::oscelt()
         // So, we want the mass of the Sun itself, even though we're getting the
         // orbital params relative to the Solar System Barycenter, as if the sun was there.
         FString NaifNameOfMass = SUN;
-        USpice::bodvrd_mass(ResultCode, ErrorMessage, SUN_GM, NaifNameOfMass, MaxQ::Constants::GM);
+        Bodvrd(SUN_GM, NaifNameOfMass, MaxQ::Constants::GM, &ResultCode);
 
         Log(FString::Printf(TEXT("oscelt Mass of SUN = %s"), *SUN_GM.ToString()), ResultCode);
     }
@@ -270,8 +272,7 @@ void ASample05Actor::TLEs()
     FString ErrorMessage;
 
     // When do we want it?   (time: now)
-    FSEphemerisTime et;
-    USpice::et_now(et);
+    auto et = Now();
 
     // First, we ask SPICE to kindly parse the TLE strings...
     FSTwoLineElements TwoLineElements;
@@ -468,7 +469,7 @@ bool ASample05Actor::PropagateTLE(const FSTwoLineElements& TLEs, FSStateVector& 
 bool ASample05Actor::TransformPosition(const FSDistanceVector& RHSPosition, FVector& UEVector)
 {
     // Simple transform.
-    UEVector = USpiceTypes::Swizzle(RHSPosition);
+    UEVector = Swizzle(RHSPosition);
 
     UEVector /= DistanceScale;
 
@@ -546,7 +547,7 @@ bool ASample05Actor::GetOrbitalElements(const FSStateVector& StateVector, FSConi
     FString ErrorMessage;
 
     // Given a state vector, compute the orbital elements
-    USpice::oscelt(ResultCode, ErrorMessage, StateVector, SolarSystemState.CurrentTime, GM, KeplerianElements);
+    USpice::oscelt(ResultCode, ErrorMessage, StateVector, SolarSystemState.CurrentTime, gm, KeplerianElements);
 
     return ResultCode == ES_ResultCode::Success;
 }
@@ -594,7 +595,7 @@ void ASample05Actor::NormalSpeed()
 
 void ASample05Actor::GoToNow()
 {
-    USpice::et_now(SolarSystemState.CurrentTime);
+    SolarSystemState.CurrentTime = Now();
     NormalSpeed();
 }
 

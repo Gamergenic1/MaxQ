@@ -89,7 +89,7 @@ public:
 
     // Note: 'GM' is perhaps a bad name, for as there's a MaxQ::Constants::GM, among other reasons.
     UPROPERTY(EditInstanceOnly, Transient, Category = "MaxQ|Samples")
-    FSMassConstant GM;
+    FSMassConstant gm;
 
 public:
     ASample05Actor();

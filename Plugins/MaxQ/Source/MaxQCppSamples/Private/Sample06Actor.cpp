@@ -12,7 +12,11 @@
 #include "Spice.h"
 
 using MaxQSamples::Log;
+using namespace MaxQ::Data;
+using namespace MaxQ::Core;
 using namespace MaxQ::Constants;
+using namespace MaxQ::Math;
+
 
 
 //-----------------------------------------------------------------------------
@@ -64,7 +68,7 @@ void ASample06Actor::BeginPlay()
     Log(TEXT("See Sample06Actor (scene instance) Details Panel for time/obs/ref control buttons."), FColor::Blue);
 
     // init_all:  clears kernel memory and any error state.
-    USpice::init_all();
+    InitAll();
 
     // Don't tick unless we have the kernels required to update the solar system
     bool EnableTick = USampleUtilities::LoadKernelList(TEXT("TRAPPIST System"), TrappistSystemKernels);
@@ -83,10 +87,8 @@ void ASample06Actor::BeginPlay()
         }
     }
 
-    ES_ResultCode ResultCode;
-    FString ErrorMessage;
-    USpice::furnsh(ResultCode, ErrorMessage, ReadFilePath);
-    Log(FString::Printf(TEXT("furnsh: %s"), *MaxQSamples::MaxQPluginInfo()), ResultCode);
+    bool bSuccess = Furnsh(ReadFilePath);
+    Log(FString::Printf(TEXT("furnsh: %s"), *MaxQSamples::MaxQPluginInfo()), bSuccess);
 
 
     PrimaryActorTick.SetTickFunctionEnable(EnableTick);
@@ -218,7 +220,7 @@ void ASample06Actor::GenerateTrappistSPKKernel()
         }
 
         // Initialize SPICE, load relevant kernels
-        USpice::init_all();
+        InitAll();
         if (!USampleUtilities::LoadKernelList(TEXT("TRAPPIST System"), TrappistSystemKernels))
         {
             MaxQSamples::Log(TEXT("Kernel load failed"), FColor::Red);
@@ -238,15 +240,11 @@ void ASample06Actor::GenerateTrappistSPKKernel()
             MaxQSamples::Log(FString::Printf(TEXT("dafac result: %s"), ErrorMessage.IsEmpty() ? TEXT("OK") : *ErrorMessage, ResultCode));
         }
 
-        FSEphemerisTime Start;
-        USpice::et_now(Start);
+        auto Start = Now();
         FSEphemerisTime Stop = Start + 30 * FSEphemerisPeriod::OneDay;
 
-        ES_FoundCode FoundCode;
         int Center = 0;
-        USpice::bods2c(FoundCode, Center, TEXT("TRAPPIST_1"));
-
-        if (FoundCode != ES_FoundCode::Found)
+        if (!Bods2c(Center, TEXT("TRAPPIST_1")))
         {
             MaxQSamples::Log(TEXT("Could not look up TRAPPIST_1"), FColor::Red);
             ResultCode = ES_ResultCode::Error;
@@ -257,8 +255,7 @@ void ASample06Actor::GenerateTrappistSPKKernel()
             for (const auto& [BodyName, ConicElements] : OrbitalElements)
             {
                 int Body = 0;
-                USpice::bods2c(FoundCode, Body, BodyName);
-                if (FoundCode != ES_FoundCode::Found)
+                if (!Bods2c(Body, BodyName))
                 {
                     MaxQSamples::Log(FString::Printf(TEXT("Could not look up %s"), *BodyName), FColor::Red);
                     ResultCode = ES_ResultCode::Error;
@@ -330,7 +327,7 @@ void ASample06Actor::NormalSpeed()
 
 void ASample06Actor::GoToNow()
 {
-    USpice::et_now(SolarSystemState.CurrentTime);
+    SolarSystemState.CurrentTime = Now();
     NormalSpeed();
 }
 

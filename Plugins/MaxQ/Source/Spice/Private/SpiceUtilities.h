@@ -64,4 +64,5 @@ namespace MaxQ::Private
     uint8 ErrorCheck(ES_ResultCode& ResultCode, FString& ErrorMessage, bool BeQuiet = false);
     uint8 ErrorCheck(ES_ResultCode* ResultCode, FString* ErrorMessage, bool BeQuiet = false);
     uint8 UnexpectedErrorCheck(bool bReset = true);
+    void MakeErrorGutter(ES_ResultCode*& pResultCode, FString*& pErrorMessage);
 }

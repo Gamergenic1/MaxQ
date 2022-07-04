@@ -114,6 +114,7 @@ public:
 namespace MaxQSamples
 {
     void Log(const FString& LogString, const FColor& Color = FColor::White, float DisplayTime = 60.f);
+    void Log(const FString& LogString, bool bSuccessCode, float DisplayTime = 60.f);
     void Log(const FString& LogString, ES_ResultCode ResultCode, float DisplayTime = 60.f);
     FString MaxQPluginInfo();
     FString AbsolutifyMaxQPathForWriting(const FString& path);

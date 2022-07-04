@@ -12,6 +12,10 @@
 #include "SampleUtilities.h"
 
 using MaxQSamples::Log;
+using namespace MaxQ::Data;
+using namespace MaxQ::Core;
+using namespace MaxQ::Constants;
+using namespace MaxQ::Math;
 
 
 ASample05TelemetryActor::ASample05TelemetryActor()
@@ -315,9 +319,8 @@ void ASample05TelemetryActor::BumpRadial()
         FSStateVector StateVector;
         if (PropagateByKeplerianElements.Execute(KeplerianElements, StateVector))
         {
-            FSDimensionlessVector Radial;
             FSDistance Speed;
-            USpice::unorm_distance(StateVector.r, Radial, Speed);
+            auto Radial = Unorm(Speed, StateVector.r);
             FSVelocityVector bump = VelocityBumpFraction * StateVector.v.Magnitude() * Radial;
 
             BumpVelocity(bump);
@@ -340,9 +343,8 @@ void ASample05TelemetryActor::BumpAntiRadial()
         FSStateVector StateVector;
         if (PropagateByKeplerianElements.Execute(KeplerianElements, StateVector))
         {
-            FSDimensionlessVector Radial;
             FSDistance Speed;
-            USpice::unorm_distance(StateVector.r, Radial, Speed);
+            auto Radial = Unorm(Speed, StateVector.r);
             FSVelocityVector bump = -VelocityBumpFraction * Radial * StateVector.v.Magnitude();
 
             BumpVelocity(bump);
@@ -367,10 +369,7 @@ void ASample05TelemetryActor::BumpNormal()
         FSStateVector StateVector;
         if (PropagateByKeplerianElements.Execute(KeplerianElements, StateVector))
         {
-            FSDimensionlessVector Radial = StateVector.r.AsKilometers();
-            FSDimensionlessVector Prograde = StateVector.v.AsKilometersPerSecond();
-            FSDimensionlessVector Normal;
-            USpice::ucrss(Radial, Prograde, Normal);
+            auto Normal = Ucrss(StateVector);
 
             FSVelocityVector bump = VelocityBumpFraction * Normal * StateVector.v.Magnitude();
             BumpVelocity(bump);
@@ -395,10 +394,7 @@ void ASample05TelemetryActor::BumpAntiNormal()
         FSStateVector StateVector;
         if (PropagateByKeplerianElements.Execute(KeplerianElements, StateVector))
         {
-            FSDimensionlessVector Radial = StateVector.r.AsKilometers();
-            FSDimensionlessVector Prograde = StateVector.v.AsKilometersPerSecond();
-            FSDimensionlessVector Normal;
-            USpice::ucrss(Radial, Prograde, Normal);
+            auto Normal = Ucrss(StateVector);
 
             FSVelocityVector bump = -VelocityBumpFraction * Normal * StateVector.v.Magnitude();
             BumpVelocity(bump);

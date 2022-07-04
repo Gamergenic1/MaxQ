@@ -171,14 +171,17 @@ namespace MaxQ::Private
 
     uint8 ErrorCheck(ES_ResultCode* ResultCode, FString* ErrorMessage, bool BeQuiet /*= false*/)
     {
-        ES_ResultCode DummyResultCode;
-        FString DummyErrorMessage;
-        if (ResultCode == nullptr) ResultCode = &DummyResultCode;
-        if (ErrorMessage == nullptr) ErrorMessage = &DummyErrorMessage;
-
+        MakeErrorGutter(ResultCode, ErrorMessage);
         return ErrorCheck(*ResultCode, *ErrorMessage, BeQuiet);
     }
 
+    void MakeErrorGutter(ES_ResultCode* &pResultCode, FString* &pErrorMessage)
+    {
+        static ES_ResultCode DummyResultCode;
+        static FString DummyErrorMessage;
+        if (pResultCode == nullptr) pResultCode = &DummyResultCode;
+        if (pErrorMessage == nullptr) pErrorMessage = &DummyErrorMessage;
+    }
 
     uint8 UnexpectedErrorCheck(bool bReset)
     {

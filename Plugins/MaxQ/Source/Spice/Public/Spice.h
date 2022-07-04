@@ -72,8 +72,11 @@
 
 #include "CoreMinimal.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
+#include "SpiceConstants.h"
 #include "SpiceTypes.h"
+#include "SpiceCore.h"
 #include "SpiceMath.h"
+#include "SpiceData.h"
 #include "SpiceOperators.h"
 #include "Spice.generated.h"
 
@@ -319,7 +322,7 @@ public:
     static void bodfnd(
         ES_FoundCode& FoundCode,
         int body = 399,
-        const FString& item = TEXT("RADAII")
+        const FString& item = TEXT("RADII")
     );
 
     /// <summary>Body name to ID code translation</summary>
