@@ -9,7 +9,11 @@
 #include "Spice.h"
 
 using MaxQSamples::Log;
+using namespace MaxQ::Data;
+using namespace MaxQ::Core;
 using namespace MaxQ::Constants;
+using namespace MaxQ::Math;
+
 
 
 //-----------------------------------------------------------------------------

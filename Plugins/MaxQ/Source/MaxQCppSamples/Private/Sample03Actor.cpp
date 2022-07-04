@@ -13,7 +13,11 @@
 #include "SampleUtilities.h"
 
 using MaxQSamples::Log;
+using namespace MaxQ::Data;
+using namespace MaxQ::Core;
 using namespace MaxQ::Constants;
+using namespace MaxQ::Math;
+
 
 //-----------------------------------------------------------------------------
 // Sample03
@@ -598,7 +602,7 @@ void ASample03Actor::UpdateSolarSystem(FSamplesSolarSystemState& State, float De
                 // Positional data (vectors, quaternions, should only be exchanged through USpiceTypes::Swizzle*
                 // SPICE coordinate systems are Right-Handed, and Unreal Engine is Left-Handed.
                 // The USpiceTypes conversions understand this, and how to convert.
-                FVector BodyLocation = USpiceTypes::Swizzle(r);
+                FVector BodyLocation = r.Swizzle();
 
                 // Scale and set the body location
                 BodyLocation /= DistanceScale;

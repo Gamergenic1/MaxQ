@@ -697,12 +697,8 @@ void USpice::bodfnd(
     const FString& item
 )
 {
-    SpiceBoolean result = bodfnd_c((SpiceInt)body, TCHAR_TO_ANSI(*item));
-
-    FoundCode = (result != SPICEFALSE) ? ES_FoundCode::Found : ES_FoundCode::NotFound;
-
-    // Reset the current spice error in case a spice exception happened.
-    UnexpectedErrorCheck(true);
+    bool bSuccess = MaxQ::Data::Bodfnd(body, item);
+    FoundCode = bSuccess ? ES_FoundCode::Found : ES_FoundCode::NotFound;
 }
 
 
@@ -712,30 +708,8 @@ void USpice::bodc2n(
     FString& name
 )
 {
-    SpiceChar szBuffer[SPICE_MAX_PATH];
-    ZeroOut(szBuffer);
-
-    SpiceBoolean _found = SPICEFALSE;
-
-    bodc2n_c(
-        (SpiceInt)code,
-        SPICE_MAX_PATH,
-        szBuffer,
-        &_found
-    );
-
-    if (_found != SPICEFALSE)
-    {
-        name = FString(szBuffer);
-        FoundCode = ES_FoundCode::Found;
-    }
-    else
-    {
-        FoundCode = ES_FoundCode::NotFound;
-    }
-
-    // Reset the current spice error in case a spice exception happened.
-    UnexpectedErrorCheck(true);
+    bool bSuccess = MaxQ::Data::Bodc2n(name, code);
+    FoundCode = bSuccess ? ES_FoundCode::Found : ES_FoundCode::NotFound;
 }
 
 
@@ -784,24 +758,8 @@ void USpice::bods2c(
     const FString& name
 )
 {
-    ConstSpiceChar* _name = TCHAR_TO_ANSI(*name);
-    SpiceInt _code = 0;
-    SpiceBoolean _found = SPICEFALSE;
-
-    bods2c_c(_name, &_code, &_found);
-
-    if (_found != SPICEFALSE)
-    {
-        code = (int)_code;
-        FoundCode = ES_FoundCode::Found;
-    }
-    else
-    {
-        FoundCode = ES_FoundCode::NotFound;
-    }
-
-    // Reset the current spice error in case a spice exception happened.
-    UnexpectedErrorCheck(true);
+    bool bSuccess = MaxQ::Data::Bods2c(code, name);
+    FoundCode = bSuccess ? ES_FoundCode::Found : ES_FoundCode::NotFound;
 }
 
 /*
@@ -842,18 +800,7 @@ void USpice::bodvcd_scalar(
     const FString& item
 )
 {
-    SpiceDouble _result[1]; _result[0] = ReturnValue;
-    SpiceInt n_actual, n_expected = sizeof(_result) / sizeof(_result[0]);
-
-    bodvcd_c(bodyid, TCHAR_TO_ANSI(*item), n_expected, &n_actual, _result);
-    
-    ReturnValue = _result[0];
-
-    if (!ErrorCheck(ResultCode, ErrorMessage) && n_actual != n_expected)
-    {
-        ResultCode = ES_ResultCode::Error;
-        ErrorMessage = FString::Printf(TEXT("Blueprint request for BODY%ld_%s Expected double[%d] but proc returned double[%d]"), bodyid, *item, n_expected, n_actual);
-    }
+    MaxQ::Data::Bodvcd(ReturnValue, bodyid, item, &ResultCode, &ErrorMessage);
 }
 
 void USpice::bodvcd_mass(
@@ -864,18 +811,7 @@ void USpice::bodvcd_mass(
     const FString& item
 )
 {
-    SpiceDouble _result[1]; _result[0] = ReturnValue.AsSpiceDouble();
-    SpiceInt n_actual, n_expected = sizeof(_result) / sizeof(_result[0]);
-
-    bodvcd_c(bodyid, TCHAR_TO_ANSI(*item), n_expected, &n_actual, _result);
-
-    ReturnValue = FSMassConstant(_result[0]);
-
-    if (!ErrorCheck(ResultCode, ErrorMessage) && n_actual != n_expected)
-    {
-        ResultCode = ES_ResultCode::Error;
-        ErrorMessage = FString::Printf(TEXT("Blueprint request for BODY%ld_%s Expected double[%d] but proc returned double[%d]"), bodyid, *item, n_expected, n_actual);
-    }
+    MaxQ::Data::Bodvcd(ReturnValue, bodyid, item, &ResultCode, &ErrorMessage);
 }
 
 void USpice::bodvcd_distance_vector(
@@ -886,19 +822,7 @@ void USpice::bodvcd_distance_vector(
     const FString& item
 )
 {
-    SpiceDouble _result[3];  ReturnValue.CopyTo(_result);
-
-    SpiceInt n_actual, n_expected = sizeof(_result) / sizeof(_result[0]);
-
-    bodvcd_c(bodyid, TCHAR_TO_ANSI(*item), n_expected, &n_actual, _result);
-
-    ReturnValue = FSDistanceVector(_result);
-
-    if (!ErrorCheck(ResultCode, ErrorMessage) && n_actual != n_expected)
-    {
-        ResultCode = ES_ResultCode::Error;
-        ErrorMessage = FString::Printf(TEXT("Blueprint request for BODY%ld_%s Expected double[%d] but proc returned double[%d]"), bodyid, *item, n_expected, n_actual);
-    }
+    MaxQ::Data::Bodvcd(ReturnValue, bodyid, item, &ResultCode, &ErrorMessage);
 }
 
 /*
@@ -944,18 +868,7 @@ void USpice::bodvcd_vector(
     const FString& item
 )
 {
-    SpiceDouble _result[3];  ReturnValue.CopyTo(_result);
-    SpiceInt n_actual, n_expected = sizeof(_result) / sizeof(_result[0]);
-
-    bodvcd_c(bodyid, TCHAR_TO_ANSI(*item), n_expected, &n_actual, _result);
-
-    ReturnValue = FSDimensionlessVector(_result);
-
-    if (!ErrorCheck(ResultCode, ErrorMessage) && n_actual != n_expected)
-    {
-        ResultCode = ES_ResultCode::Error;
-        ErrorMessage = FString::Printf(TEXT("Blueprint request for BODY%ld_%s Expected double[%d] but proc returned double[%d]"), bodyid, *item, n_expected, n_actual);
-    }
+    MaxQ::Data::Bodvcd(ReturnValue, bodyid, item, &ResultCode, &ErrorMessage);
 }
 
 
@@ -1002,18 +915,7 @@ void USpice::bodvrd_scalar(
     const FString& item
 )
 {
-    SpiceDouble _result[1]; _result[0] = ReturnValue;
-    SpiceInt n_actual, n_expected = sizeof(_result) / sizeof(_result[0]);
-
-    bodvrd_c(TCHAR_TO_ANSI(*bodynm), TCHAR_TO_ANSI(*item), n_expected, &n_actual, _result);
-    
-    ReturnValue = _result[0];
-
-    if (!ErrorCheck(ResultCode, ErrorMessage) && n_actual != n_expected)
-    {
-        ResultCode = ES_ResultCode::Error;
-        ErrorMessage = FString::Printf(TEXT("Blueprint request for %s_%s Expected double[%d] but proc returned double[%d]"), *bodynm, *item, n_expected, n_actual);
-    }
+    MaxQ::Data::Bodvrd(ReturnValue, bodynm, item, &ResultCode, &ErrorMessage);
 }
 
 void USpice::bodvrd_mass(
@@ -1024,18 +926,7 @@ void USpice::bodvrd_mass(
     const FString& item
 )
 {
-    SpiceDouble _result[1]; _result[0] = ReturnValue.AsSpiceDouble();
-    SpiceInt n_actual, n_expected = sizeof(_result) / sizeof(_result[0]);
-
-    bodvrd_c(TCHAR_TO_ANSI(*bodynm), TCHAR_TO_ANSI(*item), n_expected, &n_actual, _result);
-    
-    ReturnValue = FSMassConstant(_result[0]);
-
-    if (!ErrorCheck(ResultCode, ErrorMessage) && n_actual != n_expected)
-    {
-        ResultCode = ES_ResultCode::Error;
-        ErrorMessage = FString::Printf(TEXT("Blueprint request for %s_%s Expected double[%d] but proc returned double[%d]"), *bodynm, *item, n_expected, n_actual);
-    }
+    MaxQ::Data::Bodvrd(ReturnValue, bodynm, item, &ResultCode, &ErrorMessage);
 }
 
 void USpice::bodvrd_distance_vector(
@@ -1046,19 +937,7 @@ void USpice::bodvrd_distance_vector(
     const FString& item
 )
 {
-    SpiceDouble _result[3];  ReturnValue.CopyTo(_result);
-    SpiceInt n_actual = 0;
-    int n_expected = sizeof(_result) / sizeof(_result[0]);
-
-    bodvrd_c(TCHAR_TO_ANSI(*bodynm), TCHAR_TO_ANSI(*item), n_expected, &n_actual, _result);
-
-    ReturnValue = FSDistanceVector(_result);
-
-    if(!ErrorCheck(ResultCode, ErrorMessage) && n_actual != n_expected)
-    {
-        ResultCode = ES_ResultCode::Error;
-        ErrorMessage = FString::Printf(TEXT("Blueprint request for %s_%s Expected double[%d] but proc returned double[%d]"), *bodynm, *item, n_expected, n_actual);
-    }
+    MaxQ::Data::Bodvrd(ReturnValue, bodynm, item, &ResultCode, &ErrorMessage);
 }
 
 
@@ -1070,18 +949,7 @@ void USpice::bodvrd_vector(
     const FString& item
 )
 {
-    SpiceDouble _result[3];  ReturnValue.CopyTo(_result);
-    SpiceInt n_actual, n_expected = sizeof(_result) / sizeof(_result[0]);
-
-    bodvrd_c(TCHAR_TO_ANSI(*bodynm), TCHAR_TO_ANSI(*item), n_expected, &n_actual, _result);
-    
-    ReturnValue = FSDimensionlessVector(_result);
-
-    if (!ErrorCheck(ResultCode, ErrorMessage) && n_actual != n_expected)
-    {
-        ResultCode = ES_ResultCode::Error;
-        ErrorMessage = FString::Printf(TEXT("Blueprint request for %s_%s Expected double[%d] but proc returned double[%d]"), *bodynm, *item, n_expected, n_actual);
-    }
+    MaxQ::Data::Bodvrd(ReturnValue, bodynm, item, &ResultCode, &ErrorMessage);
 }
 
 /*

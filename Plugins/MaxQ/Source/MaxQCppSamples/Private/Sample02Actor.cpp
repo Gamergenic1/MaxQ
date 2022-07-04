@@ -13,7 +13,10 @@
 #include "SampleUtilities.h"
 
 using MaxQSamples::Log;
-using namespace MaxQ;
+using namespace MaxQ::Data;
+using namespace MaxQ::Core;
+using namespace MaxQ::Constants;
+using namespace MaxQ::Math;
 
 //-----------------------------------------------------------------------------
 // Sample02
@@ -97,15 +100,15 @@ void ASample02Actor::BeginPlay()
 
 void ASample02Actor::InitializeSpice()
 {
-    // init_all:  clears kernel memory and any error state.
-    USpice::init_all();
+    // InitAll:  clears kernel memory and any error state.
+    InitAll();
 
     // SPICE return values
     ES_ResultCode ResultCode = ES_ResultCode::Success;
     FString ErrorMessage = "";
 
     // furnsh_list will load the list of relative paths as kernel files
-    USpice::furnsh_list(ResultCode, ErrorMessage, MaxQSamples::MaxQPathsAbsolutified(RequiredKernels));
+    bool bSuccess = Furnsh(MaxQSamples::MaxQPathsAbsolutified(RequiredKernels));
 
     Log(TEXT("InitializeSpice loaded kernel file"), ResultCode);
 }
@@ -197,8 +200,7 @@ void ASample02Actor::J2020()
 void ASample02Actor::Now()
 {
     // Load j2000 with the et value correlating to J2000.
-    FSEphemerisTime et; 
-    USpice::et_now(et);
+    auto et = MaxQ::Data::Now();
 
     FString EpochString;
 
@@ -244,24 +246,22 @@ void ASample02Actor::Insight()
 
     // The FK Kernel defines reference frames of instruments, etc for the Insight mission
     // It also defines the Spacecraft ID, which we can get for "Insight"
-    USpice::furnsh(ResultCode, ErrorMessage, MaxQSamples::MaxQPathAbsolutified(InsightMissionFKKernel));
+    Furnsh(MaxQSamples::MaxQPathAbsolutified(InsightMissionFKKernel), &ResultCode);
     Log(FString::Printf(TEXT("Insight loaded Insight Mission FK kernel %s"), *InsightMissionFKKernel), ResultCode);
 
     // With the FK loaded, we can look up the spacecraft Id (it's -189)
     int SpacecraftId = 0;  // -189;
-    ES_FoundCode FoundCode;
-    USpice::bodn2c(FoundCode, SpacecraftId, Constants::INSIGHT);
-    Log(FString::Printf(TEXT("Insight found Insight Spacecraft ID %d"), SpacecraftId), FoundCode == ES_FoundCode::Found ? FColor::Green : FColor::Red);
+    bool bSuccess = Bods2c(SpacecraftId, INSIGHT);
+    Log(FString::Printf(TEXT("Insight found Insight Spacecraft ID %d"), SpacecraftId), bSuccess);
 
     // Note, the LSK file refers to leap seconds kernel insight.tls, but the
     // current file is equivalent to naif0012.tls, which we've loaded already.
 
     // The SCLK Kernel allows us to convert times between ET/UTC and the Spacecraft's clock
-    USpice::furnsh(ResultCode, ErrorMessage, MaxQSamples::MaxQPathAbsolutified(InsightSCLKKernel));
+    Furnsh(MaxQSamples::MaxQPathAbsolutified(InsightSCLKKernel), &ResultCode);
     Log(FString::Printf(TEXT("Insight loaded Insight Mars Lander SCLK kernel %s"), *InsightSCLKKernel), ResultCode);
 
-    FSEphemerisTime et;
-    USpice::et_now(et);
+    auto et = MaxQ::Data::Now();
 
     // Convert the current time to a spacecraft clock string...
     FString SpacecraftClock;
@@ -295,8 +295,7 @@ void ASample02Actor::Tick(float DeltaTime)
 
     ES_ResultCode ResultCode;
     FString ErrorMessage;
-    FSEphemerisTime et;
-    USpice::et_now(et);
+    auto et = MaxQ::Data::Now();
 
     // Update current epoch (live)
     FString EpochString;

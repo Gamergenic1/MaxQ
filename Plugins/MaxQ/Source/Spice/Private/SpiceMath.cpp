@@ -8,7 +8,7 @@
 //------------------------------------------------------------------------------
 // SpiceMath.cpp
 // 
-// API Comments
+// Implementation Comments
 // 
 // Purpose:  C++ Math stuff
 // (like "matrix-transpose times vector" for which there's no c++ operator to
@@ -25,6 +25,7 @@
 
 #include "SpiceMath.h"
 #include "SpiceUtilities.h"
+#include <cmath>
 
 PRAGMA_PUSH_PLATFORM_DEFAULT_PACKING
 extern "C"
@@ -42,112 +43,6 @@ namespace MaxQ::Math
     SPICE_API const double twopi = (double)twopi_c();
     SPICE_API const double dpr = (double)dpr_c();
     SPICE_API const double rpd = (double)rpd_c();
-
-    template<typename ValueType>
-    SPICE_API void bodvrd(
-        ValueType& Value,
-        const FString& bodynm,
-        const FString& item,
-        ES_ResultCode* ResultCode,
-        FString* ErrorMessage
-    )
-    {
-        constexpr SpiceInt N = sizeof Value / sizeof SpiceDouble;
-        SpiceDouble _result[N]; ZeroOut(Value);
-        SpiceInt n_actual = 0;
-
-        bodvrd_c(TCHAR_TO_ANSI(*bodynm), TCHAR_TO_ANSI(*item), N, &n_actual, _result);
-
-        Value = ValueType{ _result };
-
-        if (!ErrorCheck(ResultCode, ErrorMessage) && n_actual != N)
-        {
-            if (ResultCode) *ResultCode = ES_ResultCode::Error;
-            if (ErrorMessage) *ErrorMessage = FString::Printf(TEXT("Blueprint request for %s_%s Expected double[%d] but proc returned double[%d]"), *bodynm, *item, N, n_actual);
-        }
-    }
-
-    template SPICE_API void bodvrd<FSAngularVelocity>(FSAngularVelocity&, const FString& bodynm, const FString& item, ES_ResultCode* ResultCode, FString* ErrorMessage);
-    template SPICE_API void bodvrd<FSDistanceVector>(FSDistanceVector&, const FString& bodynm, const FString& item, ES_ResultCode* ResultCode, FString* ErrorMessage);
-    template SPICE_API void bodvrd<FSVelocityVector>(FSVelocityVector&, const FString& bodynm, const FString& item, ES_ResultCode* ResultCode, FString* ErrorMessage);
-    template SPICE_API void bodvrd<FSDimensionlessVector>(FSDimensionlessVector&, const FString& bodynm, const FString& item, ES_ResultCode* ResultCode, FString* ErrorMessage);
-    template SPICE_API void bodvrd<FSDistance>(FSDistance&, const FString& bodynm, const FString& item, ES_ResultCode* ResultCode, FString* ErrorMessage);
-    template SPICE_API void bodvrd<FSMassConstant>(FSMassConstant&, const FString& bodynm, const FString& item, ES_ResultCode* ResultCode, FString* ErrorMessage);
-
-    template<typename ValueType>
-    SPICE_API void bodvrd(
-        ValueType& Value,
-        const FName& bodynm,
-        const FName& item,
-        ES_ResultCode* ResultCode,
-        FString* ErrorMessage
-    )
-    {
-        bodvrd<ValueType>(Value, bodynm.ToString(), item.ToString(), ResultCode, ErrorMessage);
-    }
-
-    template SPICE_API void bodvrd<FSAngularVelocity>(FSAngularVelocity&, const FName& bodynm, const FName& item, ES_ResultCode* ResultCode, FString* ErrorMessage);
-    template SPICE_API void bodvrd<FSDistanceVector>(FSDistanceVector&, const FName& bodynm, const FName& item, ES_ResultCode* ResultCode, FString* ErrorMessage);
-    template SPICE_API void bodvrd<FSVelocityVector>(FSVelocityVector&, const FName& bodynm, const FName& item, ES_ResultCode* ResultCode, FString* ErrorMessage);
-    template SPICE_API void bodvrd<FSDimensionlessVector>(FSDimensionlessVector&, const FName& bodynm, const FName& item, ES_ResultCode* ResultCode, FString* ErrorMessage);
-    template SPICE_API void bodvrd<FSDistance>(FSDistance&, const FName& bodynm, const FName& item, ES_ResultCode* ResultCode, FString* ErrorMessage);
-    template SPICE_API void bodvrd<FSMassConstant>(FSMassConstant&, const FName& bodynm, const FName& item, ES_ResultCode* ResultCode, FString* ErrorMessage);
-    template SPICE_API void bodvrd<TArray<double>>(TArray<double>&, const FName& bodynm, const FName& item, ES_ResultCode* ResultCode, FString* ErrorMessage);
-    template SPICE_API void bodvrd<double>(double&, const FName& bodynm, const FName& item, ES_ResultCode* ResultCode, FString* ErrorMessage);
-
-    // With a little extra complexity we could get rid of this specialized version...
-    // Doubt if that's a net win, though.  Complexity FTL.
-    template<>
-    SPICE_API void bodvrd(
-        double& Value,
-        const FString& bodynm,
-        const FString& item,
-        ES_ResultCode* ResultCode,
-        FString* ErrorMessage
-    )
-    {
-        constexpr SpiceInt N = sizeof Value / sizeof SpiceDouble;
-        SpiceDouble _result[N]; ZeroOut(Value);
-        SpiceInt n_actual = 0;
-
-        bodvrd_c(TCHAR_TO_ANSI(*bodynm), TCHAR_TO_ANSI(*item), N, &n_actual, _result);
-
-        Value = _result[0];
-
-        if (!ErrorCheck(ResultCode, ErrorMessage) && n_actual != N)
-        {
-            if (ResultCode) *ResultCode = ES_ResultCode::Error;
-            if (ErrorMessage) *ErrorMessage = FString::Printf(TEXT("Blueprint request for %s_%s Expected double[%d] but proc returned double[%d]"), *bodynm, *item, N, n_actual);
-        }
-    }
-
-    template SPICE_API void bodvrd<double>(double&, const FName& bodynm, const FName& item, ES_ResultCode* ResultCode, FString* ErrorMessage);
-    
-    // TArray version...
-    // Caller must initialize TArray size to expected size
-    template<>
-    SPICE_API void bodvrd(
-        TArray<double>& Values,
-        const FString& bodynm,
-        const FString& item,
-        ES_ResultCode* ResultCode,
-        FString* ErrorMessage
-    )
-    {
-        SpiceDouble* _result = Values.GetData();
-        SpiceInt n_actual, n_expected = Values.Num();
-        Values.Init(0, n_expected);
-
-        bodvrd_c(TCHAR_TO_ANSI(*bodynm), TCHAR_TO_ANSI(*item), n_expected, &n_actual, _result);
-
-        if (!ErrorCheck(ResultCode, ErrorMessage) && n_actual != n_expected)
-        {
-            if (ResultCode) *ResultCode = ES_ResultCode::Error;
-            if (ErrorMessage) *ErrorMessage = FString::Printf(TEXT("Blueprint request for %s_%s Expected double[%d] but proc returned double[%d]"), *bodynm, *item, n_expected, n_actual);
-        }
-    }
-
-    template SPICE_API void bodvrd<TArray<double>>(TArray<double>&, const FName& bodynm, const FName& item, ES_ResultCode* ResultCode, FString* ErrorMessage);
 
     template<typename VectorType, auto func>
     inline void xV(
@@ -676,4 +571,101 @@ namespace MaxQ::Math
     template SPICE_API void Vlcom3<FSDistanceVector>(FSDistanceVector&, double, const FSDistanceVector&, double, const FSDistanceVector&, double, const FSDistanceVector&);
     template SPICE_API void Vlcom3<FSVelocityVector>(FSVelocityVector&, double, const FSVelocityVector&, double, const FSVelocityVector&, double, const FSVelocityVector&);
     template SPICE_API void Vlcom3<FSDimensionlessVector>(FSDimensionlessVector&, double, const FSDimensionlessVector&, double, const FSDimensionlessVector&, double, const FSDimensionlessVector&);
+
+    SPICE_API void M2q(
+        FSQuaternion& q,
+        const FSRotationMatrix& r,
+        ES_ResultCode* ResultCode,
+        FString* ErrorMessage
+        )
+    {
+        SpiceDouble _r[3][3];  r.CopyTo(_r);
+        SpiceDouble _q[4];  q.CopyTo(_q);
+        m2q_c(_r, _q);
+
+        q = FSQuaternion(_q);
+
+        // Error Handling
+        ErrorCheck(ResultCode, ErrorMessage);
+    }
+
+    SPICE_API void Q2m(
+        FSRotationMatrix& r,
+        const FSQuaternion& q
+        )
+    {
+        SpiceDouble _r[3][3];
+        SpiceDouble _q[4];
+        q.CopyTo(_q);
+
+        q2m_c(_q, _r);
+
+        r = FSRotationMatrix(_r);
+    }
+
+    SPICE_API void QxQ(
+        FSQuaternion& qout,
+        const FSQuaternion& q1,
+        const FSQuaternion& q2
+        )
+    {
+        SpiceDouble _qout[4];
+        SpiceDouble _q1[4];  q1.CopyTo(_q1);
+        SpiceDouble _q2[4];  q2.CopyTo(_q2);
+
+        qxq_c(_q1, _q2, _qout);
+        qout = FSQuaternion(_qout);
+    }
+
+
+    SPICE_API double normalize0to360(double degrees)
+    {
+        // First, normalize 0-360
+        degrees = std::fmod(degrees, 360);
+
+        // Pull up negative values
+        if (degrees < 0.)
+        {
+            degrees += 360.;
+        }
+
+        return degrees;
+    }
+
+    SPICE_API double normalize180to180(double degrees)
+    {
+        // First normalize 0 - 360
+        degrees = normalize0to360(degrees);
+
+        // Wrap around if need be.
+        if (degrees > 180.) degrees -= 360.;
+
+        return degrees;
+    }
+
+
+    SPICE_API double normalizeZeroToTwoPi(double radians)
+    {
+        // First, normalize 0-360
+        radians = std::fmod(radians, twopi);
+
+        // Pull up negative values
+        if (radians < 0.)
+        {
+            radians += twopi;
+        }
+
+        return radians;
+    }
+
+    SPICE_API double normalizePiToPi(double radians)
+    {
+        // First normalize 0 - 360
+        radians = normalizeZeroToTwoPi(radians);
+
+        // Wrap around if need be.
+        if (radians > pi) radians -= twopi;
+
+        return radians;
+    }
 }

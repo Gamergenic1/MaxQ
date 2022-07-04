@@ -37,73 +37,6 @@ namespace MaxQ::Math
     SPICE_API extern const double dpr;
     SPICE_API extern const double rpd;
 
-    // bodvrd
-    template<class ValueType>
-    SPICE_API void bodvrd(
-        ValueType& Value,
-        const FString& bodynm,
-        const FString& item,
-        ES_ResultCode* ResultCode = nullptr,
-        FString* ErrorMessage = nullptr
-    );
-
-    template<class ValueType>
-    SPICE_API void bodvrd(
-        ValueType& Value,
-        const FName& bodynm,
-        const FName& item,
-        ES_ResultCode* ResultCode = nullptr,
-        FString* ErrorMessage = nullptr
-    );
-
-    template<class ValueType>
-    inline void bodvrd(
-        ValueType& Value,
-        const TCHAR* bodynm,
-        const TCHAR* item,
-        ES_ResultCode* ResultCode = nullptr,
-        FString* ErrorMessage = nullptr)
-    {
-        bodvrd<VectorType>(Value, FString(bodynm), FString(item), ResultCode, ErrorMessage);
-    }
-
-    template<class ValueType>
-    inline ValueType bodvrd(
-        const FString& bodynm,
-        const FString& item,
-        ES_ResultCode* ResultCode = nullptr,
-        FString* ErrorMessage = nullptr
-    )
-    {
-        ValueType ReturnValue;
-        bodvrd<ValueType>(ReturnValue, bodynm, item, ResultCode, ErrorMessage);
-        return ReturnValue;
-    }
-
-    template<class ValueType>
-    inline ValueType bodvrd(
-        const FName& bodynm,
-        const FName& item,
-        ES_ResultCode* ResultCode = nullptr,
-        FString* ErrorMessage = nullptr
-    )
-    {
-        ValueType ReturnValue;
-        bodvrd<ValueType>(ReturnValue, bodynm, item, ResultCode, ErrorMessage);
-        return ReturnValue;
-    }
-
-
-    template<class ValueType>
-    inline ValueType bodvrd(
-        const TCHAR* bodynm,
-        const TCHAR* item,
-        ES_ResultCode* ResultCode = nullptr,
-        FString* ErrorMessage = nullptr)
-    {
-        return bodvrd<ValueType>(FString(bodynm), FString(item), ResultCode, ErrorMessage);
-    }
-
     // m * v
     template<class VectorType>
     SPICE_API void MxV(VectorType& vout, const FSRotationMatrix& m, const VectorType& v);
@@ -360,4 +293,140 @@ namespace MaxQ::Math
         Vlcom3(sum, a, v1, b, v2, c, v3);
         return sum;
     }
+
+    SPICE_API void M2q(FSQuaternion& q, const FSRotationMatrix& r, ES_ResultCode* ResultCode = nullptr, FString* ErrorMessage = nullptr);
+    inline FSQuaternion M2q(const FSRotationMatrix& r, ES_ResultCode* ResultCode = nullptr, FString* ErrorMessage = nullptr)
+    {
+        FSQuaternion q;
+        M2q(q, r, ResultCode, ErrorMessage);
+        return q;
+    }
+    SPICE_API void Q2m(FSRotationMatrix& r, const FSQuaternion& q);
+    inline FSRotationMatrix Q2m(const FSQuaternion& q)
+    {
+        FSRotationMatrix r;
+        Q2m(r, q);
+        return r;
+    }
+    SPICE_API void QxQ(FSQuaternion& qout, const FSQuaternion& q1, const FSQuaternion& q2);
+    inline FSQuaternion QxQ(const FSQuaternion& q1, const FSQuaternion& q2)
+    {
+        FSQuaternion qout;
+        QxQ(qout, q1, q2);
+        return qout;
+    }
+    SPICE_API double normalize0to360(double degrees);
+    SPICE_API double normalize180to180(double degrees);
+    SPICE_API double normalizeZeroToTwoPi(double radians);
+    SPICE_API double normalizePiToPi(double radians);
+
+    /*
+    *
+    * Swizzling Conversions
+    * For spatial data exchanged between SPICE/UE.
+    * UE uses a single-precision Left-Handed Coordinate System
+    * SPICE uses a double-precision Right-Handed Coordinate System
+    *
+    */
+
+    // Vectors...
+    // --------------
+
+#pragma warning( push )
+#pragma warning( disable : 4499 )
+
+    // From SPICE to UE
+    template<typename T> static FVector Swizzle(const T& value);
+
+    template<> SpiceStaticPartialTemplate FVector Swizzle<FSDimensionlessVector>(const FSDimensionlessVector& value)
+    {
+        return FVector((FVector::FReal)value.y, (FVector::FReal)value.x, (FVector::FReal)value.z);
+
+    }
+
+    template<> SpiceStaticPartialTemplate FVector Swizzle<FSDistanceVector>(const FSDistanceVector& value)
+    {
+        return FVector((FVector::FReal)value.y.km, (FVector::FReal)value.x.km, (FVector::FReal)value.z.km);
+    }
+
+    template<> SpiceStaticPartialTemplate FVector Swizzle<FSVelocityVector>(const FSVelocityVector& value)
+    {
+        return FVector((FVector::FReal)value.dy.kmps, (FVector::FReal)value.dx.kmps, (FVector::FReal)value.dz.kmps);
+    }
+
+    template<> SpiceStaticPartialTemplate FVector Swizzle<FSAngularVelocity>(const FSAngularVelocity& value)
+    {
+        // (Going from RHS/LHS negates angular velocities...)
+        return FVector(-(FVector::FReal)value.y.radiansPerSecond, -(FVector::FReal)value.x.radiansPerSecond, -(FVector::FReal)value.z.radiansPerSecond);
+    }
+
+    // From UE to SPICE
+    template<typename T> static void Swizzle(const FVector& in, T& out);
+
+    template<> SpiceStaticPartialTemplate void Swizzle<FSDimensionlessVector>(const FVector& in, FSDimensionlessVector& out)
+    {
+        out = FSDimensionlessVector(in.Y, in.X, in.Z);
+    }
+
+    template<> SpiceStaticPartialTemplate void Swizzle<FSDistanceVector>(const FVector& in, FSDistanceVector& out)
+    {
+        out = FSDistanceVector(in.Y, in.X, in.Z);
+    }
+
+    template<> SpiceStaticPartialTemplate void Swizzle<FSVelocityVector>(const FVector& in, FSVelocityVector& out)
+    {
+        out = FSVelocityVector(in.Y, in.X, in.Z);
+    }
+
+    template<> SpiceStaticPartialTemplate void Swizzle<FSAngularVelocity>(const FVector& in, FSAngularVelocity& out)
+    {
+        // (Going from LHS/RHS negates angular velocities...)
+        out = FSAngularVelocity(FSAngularRate(-in.Y), FSAngularRate(-in.X), FSAngularRate(-in.Z));
+    }
+
+    template<typename T> static T Swizzle(const FVector& in);
+
+    template<> SpiceStaticPartialTemplate FSDimensionlessVector Swizzle<FSDimensionlessVector>(const FVector& in)
+    {
+        return FSDimensionlessVector(in.Y, in.X, in.Z);
+    }
+
+    template<> SpiceStaticPartialTemplate FSDistanceVector Swizzle<FSDistanceVector>(const FVector& in)
+    {
+        return FSDistanceVector(in.Y, in.X, in.Z);
+    }
+
+    template<> SpiceStaticPartialTemplate FSVelocityVector Swizzle<FSVelocityVector>(const FVector& in)
+    {
+        return FSVelocityVector(in.Y, in.X, in.Z);
+    }
+
+    template<> SpiceStaticPartialTemplate FSAngularVelocity Swizzle<FSAngularVelocity>(const FVector& in)
+    {
+        // (Going from LHS/RHS negates angular velocities...)
+        return FSAngularVelocity(FSAngularRate(-in.Y), FSAngularRate(-in.X), FSAngularRate(-in.Z));
+    }
+
+#pragma warning( pop )
+
+    // Quaternions...
+    // --------------
+    // From SPICE to UE
+    inline static FQuat Swizzle(const FSQuaternion& value)
+    {
+        double x = 0., y = 0., z = 0., w = 0.;
+        value.QENG(w, x, y, z);
+        return FQuat((FVector::FReal)y, (FVector::FReal)x, (FVector::FReal)z, (FVector::FReal)w);
+    }
+
+    // From UE to SPICE
+    inline static FSQuaternion Swizzle(const FQuat& value)
+    {
+        return FSQuaternion::ENG(value.W, value.Y, value.X, value.Z);
+    }
+
+    SPICE_API double normalize0to360(double degrees);
+    SPICE_API double normalize180to180(double degrees);
+    SPICE_API double normalizeZeroToTwoPi(double radians);
+    SPICE_API double normalizePiToPi(double radians);
 };

@@ -17,6 +17,10 @@
 #include "SpiceDiagnostics.h"
 
 using MaxQSamples::Log;
+using namespace MaxQ::Data;
+using namespace MaxQ::Core;
+using namespace MaxQ::Constants;
+using namespace MaxQ::Math;
 
 //-----------------------------------------------------------------------------
 // Sample01
@@ -83,12 +87,12 @@ void ASample01Actor::BeginPlay()
 
 void ASample01Actor::InitializeSpice()
 {
-    // init_all:  clears kernel memory and any error state.
+    // MaxQ::Core::InitAll:  clears kernel memory and any error state.
     // Before your app starts it should initialize the USpice library.
     // Do this once, before you load kernel files.
-    USpice::init_all();
+    InitAll();
 
-    Log(TEXT("InitializeSpice initialized spice (init_all)"), FColor::White);
+    Log(TEXT("InitializeSpice initialized spice (InitAll)"), FColor::White);
 }
 
 
@@ -144,11 +148,7 @@ void ASample01Actor::InitializeSpice()
 bool ASample01Actor::LoadGMKernel(bool Squawk)
 {
     // Reinitialize kernel & error state
-    USpice::init_all();
-
-    // Most MaxQ USpice API calls return a result (ok/fail) and string error message (by reference)
-    ES_ResultCode ResultCode = ES_ResultCode::Success;
-    FString ErrorMessage = "";
+    InitAll();
 
     // NOTE: *1*
     // **MaxQPathAbsolutified is not normally needed** (it converts a Plugin-relative path into an absolute path)
@@ -164,14 +164,17 @@ bool ASample01Actor::LoadGMKernel(bool Squawk)
     // furnsh:  the most basic way to load spice kernel data
     // furnsh will look for the file relative to the project directory
     // ...if that fails, furnsh will check the plugin path (EDITOR BUILDS ONLY)
-    USpice::furnsh(ResultCode, ErrorMessage, KernelGMPath);
+    bool bSuccess = Furnsh(KernelGMPath);
+
+    // Another way is to use the USpice Blueprint Library:
+    // USpice::furnsh(ResultCode, ErrorMessage, KernelGMPath);
 
     if (Squawk)
     {
-        Log(FString::Printf(TEXT("LoadOneKernel loaded kernel file %s"), *KernelGMPath), ResultCode);
+        Log(FString::Printf(TEXT("LoadOneKernel loaded kernel file %s"), *KernelGMPath), bSuccess);
     }
 
-    return ResultCode == ES_ResultCode::Success;
+    return bSuccess;
 }
 
 
@@ -185,24 +188,17 @@ bool ASample01Actor::LoadGMKernel(bool Squawk)
 void ASample01Actor::EnumeratePCKKernels()
 {
     // Reinitialize kernel & error state
-    USpice::init_all();
-
-    // Most MaxQ USpice API calls return a result (ok/fail) and string error message (by reference)
-    ES_ResultCode ResultCode = ES_ResultCode::Success;
-    FString ErrorMessage = "";
-
-    // Will hold the relative paths we're about to enumerate...
-    TArray<FString> FoundKernels;
+    InitAll();
 
     // See NOTE: *1*, above, about MaxQPathAbsolutified
     FString KernelPCKsPath = MaxQSamples::MaxQPathAbsolutified(RelativePathToPCKKernels.Path);
 
-    // enumerate_kernels:  get a list of relative paths to all files in a directory...
-    // enumerate_kernels will look for the file (relative to /Content, or absolute)
+    // EnumerateDirectory:  get a list of relative paths to all files in a directory...
+    // EnumerateDirectory will look for the file (relative to /Content, or absolute)
     // Note:  this returns ALL files, not just kernels!
-    USpice::enumerate_kernels(ResultCode, ErrorMessage, FoundKernels, KernelPCKsPath);
+    const auto& FoundKernels = EnumerateDirectory(KernelPCKsPath);
 
-    Log(FString::Printf(TEXT("EnumeratePCKKernels enumerated kernel files at %s"), *KernelPCKsPath), ResultCode);
+    Log(FString::Printf(TEXT("EnumeratePCKKernels enumerated kernel files at %s"), *KernelPCKsPath), FoundKernels.Num() > 0);
 
     for (auto KernelPath : FoundKernels)
     {
@@ -222,35 +218,29 @@ void ASample01Actor::EnumeratePCKKernels()
 bool ASample01Actor::EnumerateAndLoadPCKKernelList(bool Squawk)
 {
     // Reinitialize
-    USpice::init_all();
-
-    // SPICE return values
-    ES_ResultCode ResultCode = ES_ResultCode::Success;
-    FString ErrorMessage = "";
-
-    // return value holding enumerated list of kernel files...
-    TArray<FString> FoundKernels;
+    InitAll();
 
     // See NOTE: *1*, above, about MaxQPathAbsolutified
     FString KernelPCKsPath = MaxQSamples::MaxQPathAbsolutified(RelativePathToPCKKernels.Path);
 
     // Get a list of kernels (relative to /Content, or absolute paths if KernelPCKsPath is absolute
-    USpice::enumerate_kernels(ResultCode, ErrorMessage, FoundKernels, KernelPCKsPath);
+    const auto FoundKernels = EnumerateDirectory(KernelPCKsPath);
 
+    bool bSuccess = FoundKernels.Num() > 0;
     if (Squawk)
     {
-        Log(FString::Printf(TEXT("EnumerateAndLoadPCKKernelList enumerated kernel files at %s"), *KernelPCKsPath), ResultCode);
+        Log(FString::Printf(TEXT("EnumerateAndLoadPCKKernelList enumerated kernel files at %s"), *KernelPCKsPath), bSuccess);
     }
 
     // If we succeeded, we have a whole list of files.   We will load them with furnsh_list.
-    if (ResultCode == ES_ResultCode::Success)
+    if (bSuccess)
     {
         // furnsh_list will load the list of relative paths as kernel files
-        USpice::furnsh_list(ResultCode, ErrorMessage, FoundKernels);
+        bSuccess &= Furnsh(FoundKernels);
 
         if (Squawk)
         {
-            Log(FString::Printf(TEXT("EnumerateAndLoadPCKKernelList loaded kernel files at %s"), *KernelPCKsPath), ResultCode);
+            Log(FString::Printf(TEXT("EnumerateAndLoadPCKKernelList loaded kernel files at %s"), *KernelPCKsPath), bSuccess);
 
             for (auto KernelPath : FoundKernels)
             {
@@ -259,7 +249,7 @@ bool ASample01Actor::EnumerateAndLoadPCKKernelList(bool Squawk)
         }
     }
 
-    return ResultCode == ES_ResultCode::Success;
+    return bSuccess;
 }
 
 // ============================================================================
@@ -293,33 +283,31 @@ void ASample01Actor::QueryEarthsGM()
         ES_ResultCode ResultCode = ES_ResultCode::Success;
         FString ErrorMessage = "";
 
-        // bodvrd_mass is one way of getting a GM from the kernel data
-        FSMassConstant GM;
-        USpice::bodvrd_mass(ResultCode, ErrorMessage, GM, TEXT("EARTH"), TEXT("GM"));
+        // bodvrd_mass is one way of getting a GM from the kernel data.
+        // It's in the USpice Blueprint library, which is less covenient to use
+        // than many of the alternatives to follow.
+        FSMassConstant gm;
+        USpice::bodvrd_mass(ResultCode, ErrorMessage, gm, EARTH, GM);
 
         // Every MaxQ structure has a "ToString".
-        Log(FString::Printf(TEXT("QueryEarthsGM bodvrd_mass - Earth's GM: %s"), *GM.ToString()), ResultCode);
+        Log(FString::Printf(TEXT("QueryEarthsGM bodvrd_mass - Earth's GM: %s"), *gm.ToString()), ResultCode);
 
         // And then there's this...:
-        GM = MaxQ::Math::bodvrd<FSMassConstant>(TEXT("EARTH"), TEXT("GM"), &ResultCode, &ErrorMessage);
+        gm = Bodvrd<FSMassConstant>(EARTH, GM, &ResultCode);
 
-        Log(FString::Printf(TEXT("QueryEarthsGM MaxQ::Math::bodvrd - Earth's GM: %s"), *GM.ToString()), ResultCode);
+        Log(FString::Printf(TEXT("QueryEarthsGM MaxQ::Math::bodvrd - Earth's GM: %s"), *gm.ToString()), ResultCode);
 
         // bodvcd_mass is another way to get a GM, by integer ID code instead of ID string.
         if (ResultCode == ES_ResultCode::Success)
         {
             int Bodyid;
 
-            // Look up the moon's Id
-            ES_FoundCode FoundCode;
-            USpice::bods2c(FoundCode, Bodyid, TEXT("MOON"));
-
-            if (FoundCode == ES_FoundCode::Found)
+            if (Bods2c(Bodyid, MOON))
             {
                 // If we found the id code, look up its mass
-                USpice::bodvcd_mass(ResultCode, ErrorMessage, GM, Bodyid, TEXT("GM"));
+                gm = Bodvcd<FSMassConstant>(Bodyid, GM, &ResultCode);
 
-                Log(FString::Printf(TEXT("QueryEarthsGM bodvcd_mass - Moon's GM: %s"), *GM.ToString()), ResultCode);
+                Log(FString::Printf(TEXT("QueryEarthsGM bodvcd_mass - Moon's GM: %s"), *gm.ToString()), ResultCode);
             }
         }
 
@@ -329,9 +317,8 @@ void ASample01Actor::QueryEarthsGM()
         // but Conv_DoubleToSMassConstant_K2 does...
         if (ResultCode == ES_ResultCode::Success)
         {
-            double dvalue = USpiceK2::bodvrd_double_K2(ResultCode, ErrorMessage, TEXT("SUN"), TEXT("GM"));
-            GM = USpiceK2::Conv_DoubleToSMassConstant_K2(dvalue);
-
+            double dvalue = USpiceK2::bodvrd_double_K2(ResultCode, ErrorMessage, SUN, GM);
+            gm = USpiceK2::Conv_DoubleToSMassConstant_K2(dvalue);
         }
 
         // Yet more ways: USpice::gdpool, USpiceK2::gdpool_double_K2
@@ -369,8 +356,7 @@ void ASample01Actor::QueryEarthsRadius()
         // bodvrd_distance_vector is one way of getting a RADII distance vector from the kernel data
         // .x, .y = equatorial radius
         // .z = polar radius
-        FSDistanceVector Radii;
-        USpice::bodvrd_distance_vector(ResultCode, ErrorMessage, Radii, TEXT("EARTH"), TEXT("RADII"));
+        auto Radii = Bodvrd<FSDistanceVector>(EARTH, RADII, &ResultCode);
 
         Log(FString::Printf(TEXT("QueryEarthsRadius bodvrd_mass - Earth's Radii: %s"), *Radii.ToString()), ResultCode);
 
@@ -380,19 +366,16 @@ void ASample01Actor::QueryEarthsRadius()
             int Bodyid;
 
             // Look up mars's Id
-            ES_FoundCode FoundCode;
-            USpice::bods2c(FoundCode, Bodyid, TEXT("MARS"));
-
-            if (FoundCode == ES_FoundCode::Found)
+            if (Bods2c(Bodyid, MARS))
             {
                 // This works too, if you're worried about misspelling somethings.
                 // There are constants for Parameter Names, Reference Frame Names, Naif Object Names, etc.
-                const FString& RadiiParameterName = MaxQ::Constants::RADII;
+                const FString& RadiiParameterName = RADII;
 
                 // If we found the id code, look up its mass
-                USpice::bodvcd_distance_vector(ResultCode, ErrorMessage, Radii, Bodyid, RadiiParameterName);
+                Radii = Bodvcd<FSDistanceVector>(Bodyid, RadiiParameterName, &ResultCode);
 
-                Log(FString::Printf(TEXT("QueryEarthsRadius bodvcd_distance_vector - Mars's Equatorial Radius: %s, Polar Radius: %s"), *Radii.x.ToString(), *Radii.z.ToString()), ResultCode);
+                Log(FString::Printf(TEXT("QueryEarthsRadius Bodvrd - Mars's Equatorial Radius: %s, Polar Radius: %s"), *Radii.x.ToString(), *Radii.z.ToString()), ResultCode);
             }
         }
 
@@ -551,7 +534,7 @@ void ASample01Actor::ScaleAllBodies()
                 ActorName.RemoveAt(TrailingIndex, ActorName.Len() - TrailingIndex);
             }
 
-            FSDistanceVector Radii = MaxQ::Math::bodvrd<FSDistanceVector>(ActorName, FString(TEXT("RADII")), &ResultCode, &ErrorMessage);
+            FSDistanceVector Radii = Bodvrd<FSDistanceVector>(ActorName, MaxQ::Constants::RADII, &ResultCode, &ErrorMessage);
 
             if (ResultCode == ES_ResultCode::Success)
             {
@@ -563,7 +546,7 @@ void ASample01Actor::ScaleAllBodies()
                     FBoxSphereBounds Bounds = SM->GetStaticMesh()->GetBounds();
 
                     // ** Swizzle is the correct way to get an FVector from FSDistanceVector etc **
-                    FVector ScenegraphRadii = USpiceTypes::Swizzle(Radii.AsKilometers());
+                    FVector ScenegraphRadii = Swizzle(Radii.AsKilometers());
 
                     // Swizzle does no scaling, so our values are in kilometers
                     // Normally one scenegraph unit = one centimeter, but let's scale it all down

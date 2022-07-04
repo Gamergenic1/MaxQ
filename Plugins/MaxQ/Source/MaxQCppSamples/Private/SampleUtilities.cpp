@@ -19,6 +19,12 @@ class AActor;
 
 DEFINE_LOG_CATEGORY(LogMaxQSamples);
 
+using namespace MaxQ::Data;
+using namespace MaxQ::Core;
+using namespace MaxQ::Constants;
+using namespace MaxQ::Math;
+
+
 namespace MaxQSamples
 {
     const FString PluginName = TEXT("MaxQ");
@@ -143,8 +149,7 @@ namespace MaxQSamples
 
             if (Actor)
             {
-                FSDistanceVector Radii;
-                USpice::bodvrd_distance_vector(ResultCode, ErrorMessage, Radii, NaifName, TEXT("RADII"));
+                auto Radii = Bodvrd<FSDistanceVector>(NaifName, TEXT("RADII"), &ResultCode, &ErrorMessage);
 
                 if (ResultCode == ES_ResultCode::Success)
                 {
@@ -156,7 +161,7 @@ namespace MaxQSamples
                         FBoxSphereBounds Bounds = SM->GetStaticMesh()->GetBounds();
 
                         // ** Swizzle is the correct way to get an FVector from FSDistanceVector etc **
-                        FVector ScenegraphRadii = USpiceTypes::Swizzle(Radii.AsKilometers());
+                        FVector ScenegraphRadii = Radii.AsKilometers().Swizzle();
 
                         // Swizzle does no scaling, so our values are in kilometers
                         // Normally one scenegraph unit = one centimeter, but let's scale it all down
@@ -217,7 +222,7 @@ namespace MaxQSamples
                     // Positional data (vectors, quaternions, should only be exchanged through USpiceTypes::Conf_*
                     // SPICE coordinate systems are Right-Handed, and Unreal Engine is Left-Handed.
                     // The USpiceTypes conversions understand this, and how to convert.
-                    FVector BodyLocation = USpiceTypes::Swizzle(r);
+                    FVector BodyLocation = r.Swizzle();
 
                     // Scale and set the body location
                     BodyLocation /= DistanceScale;
@@ -264,8 +269,7 @@ namespace MaxQSamples
             if (Actor && result)
             {
                 // Convert the Rotation Matrix into a SPICE Quaternion
-                FSQuaternion q;
-                USpice::m2q(ResultCode, ErrorMessage, m, q);
+                auto q = M2q(m, &ResultCode);
 
                 // (m2q can't fail unless 'm' isn't a rotation matrix... But if pxform succeeded, it will be)
                 result &= (ResultCode == ES_ResultCode::Success);
@@ -277,7 +281,7 @@ namespace MaxQSamples
                     // Positional data (vectors, quaternions, should only be exchanged through USpiceTypes::Conf_*
                     // SPICE coordinate systems are Right-Handed, and Unreal Engine is Left-Handed.
                     // The USpiceTypes conversions understand this, and how to convert.
-                    FQuat BodyOrientation = USpiceTypes::Swazzle(q);
+                    FQuat BodyOrientation = q.Swizzle();
 
                     // Set the actor to the new orientation
                     Actor->SetActorRotation(BodyOrientation);
@@ -311,15 +315,12 @@ namespace MaxQSamples
         if (result)
         {
             // We assume we want to point the sun at the origin...
-            FSDimensionlessVector DirectionToSun;
             FSDistance DistanceToSun;
 
-            USpice::unorm_distance(r, DirectionToSun, DistanceToSun);
-
-            FVector LightDirection = -USpiceTypes::Swizzle(DirectionToSun);
+            auto DirectionToSun = MaxQ::Math::Unorm(DistanceToSun, r);
+            FVector LightDirection = -DirectionToSun.Swizzle();
 
             AActor* SunActor = SunDirectionalLight.Get();
-
             if (SunActor)
             {
                 SunActor->SetActorRotation(LightDirection.Rotation());
@@ -346,15 +347,17 @@ namespace MaxQSamples
         }
     }
 
+
+
     //-----------------------------------------------------------------------------
     // Name: Log
     // Desc:
     // Common handling of result logging.
-    // (Color inferred from ResultCode)
+    // (Color inferred from bSuccessCode)
     //-----------------------------------------------------------------------------
-    void Log(const FString& LogString, ES_ResultCode ResultCode, float DisplayTime)
+    void Log(const FString& LogString, bool bSuccessCode, float DisplayTime)
     {
-        if (ResultCode == ES_ResultCode::Success)
+        if (bSuccessCode)
         {
             UE_LOG(LogMaxQSamples, Log, TEXT("%s"), *LogString);
         }
@@ -365,8 +368,20 @@ namespace MaxQSamples
 
         if (GEngine)
         {
-            GEngine->AddOnScreenDebugMessage(-1, DisplayTime, ResultCode == ES_ResultCode::Success ? FColor::Green : FColor::Red, LogString);
+            GEngine->AddOnScreenDebugMessage(-1, DisplayTime, bSuccessCode ? FColor::Green : FColor::Red, LogString);
         }
+    }
+
+
+    //-----------------------------------------------------------------------------
+    // Name: Log
+    // Desc:
+    // Common handling of result logging.
+    // (Color inferred from ResultCode)
+    //-----------------------------------------------------------------------------
+    void Log(const FString& LogString, ES_ResultCode ResultCode, float DisplayTime)
+    {
+        Log(LogString, ResultCode == ES_ResultCode::Success, DisplayTime);
     }
 }
 
@@ -411,7 +426,7 @@ bool USampleUtilities::LoadKernelList(const FString& ListName, const TArray<FStr
     FString ErrorMessage = "";
 
     // Call MaxQ/Spice to load the list of kernels.
-    USpice::furnsh_list(ResultCode, ErrorMessage, MaxQSamples::MaxQPathsAbsolutified(KernelFiles));
+    Furnsh(MaxQSamples::MaxQPathsAbsolutified(KernelFiles), &ResultCode, &ErrorMessage);
 
     MaxQSamples::Log(FString::Printf(TEXT("Loaded %s Kernel files"), *ListName), ResultCode);
     if (ResultCode != ES_ResultCode::Success)
@@ -436,7 +451,7 @@ void USampleUtilities::InitializeTime(FSamplesSolarSystemState& SolarSystemState
     // Initialize the time, from either the current time, or the InitialiTime string.
     if (SolarSystemState.InitializeTimeToNow)
     {
-        USpice::et_now(SolarSystemState.CurrentTime);
+        SolarSystemState.CurrentTime = Now();
         // We may want to record the actual initial time, that way we could rewind to the
         // exact same time later.
         if(SetInitialTime) SolarSystemState.InitialTime = SolarSystemState.CurrentTime.ToString();

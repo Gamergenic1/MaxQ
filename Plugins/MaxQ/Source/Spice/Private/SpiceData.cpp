@@ -1,0 +1,396 @@
+// Copyright 2021 Gamergenic.  See full copyright notice in SpiceK2.h.
+// Author: chucknoble@gamergenic.com | https://www.gamergenic.com
+// 
+// Project page:   https://www.gamergenic.com/project/maxq/
+// Documentation:  https://maxq.gamergenic.com/
+// GitHub:         https://github.com/Gamergenic1/MaxQ/ 
+
+//------------------------------------------------------------------------------
+// SpiceData.cpp
+// 
+// Implementation Comments
+// 
+// Purpose:  Kernel Data reads, etc
+// 
+// MaxQ:
+// * Base API
+// * Refined API
+//    * C++
+//    * Blueprints
+//
+// SpiceData.cpp is part of the "refined C++ API".
+//------------------------------------------------------------------------------
+
+#include "SpiceData.h"
+#include "SpiceUtilities.h"
+
+PRAGMA_PUSH_PLATFORM_DEFAULT_PACKING
+extern "C"
+{
+#include "SpiceUsr.h"
+}
+PRAGMA_POP_PLATFORM_DEFAULT_PACKING
+
+using namespace MaxQ::Private;
+
+namespace MaxQ::Data
+{
+    SPICE_API TArray<FString> EnumerateDirectory(const FString& relativeDirectory, bool ErrorIfNoFilesFound, ES_ResultCode* pResultCode, FString* pErrorMessage)
+    {
+        MakeErrorGutter(pResultCode, pErrorMessage);
+        ES_ResultCode& ResultCode = *pResultCode;
+        FString& ErrorMessage = *pErrorMessage;
+
+        FString FileDirectory = toPath(relativeDirectory);
+
+        if (!FPaths::DirectoryExists(FileDirectory))
+        {
+            ErrorMessage = FString::Printf(
+                TEXT("Directory %s does not exist.\n(MaxQ internally expanded the path to %s.)\nIs the relative directory given to Enumerate Kernels correct?\n")
+                TEXT("Directories are given relative to / Content,\n   'MyProject/Content/KernelFiles/Directory1'\nwould be given as\n   'KernelFiles/Directory1' "),
+                *relativeDirectory, *FileDirectory);
+            UE_LOG(LogSpice, Error, TEXT("MaxQ Spice Enumerate Kernels: %s"), *ErrorMessage);
+            ResultCode = ES_ResultCode::Error;
+            return {};
+        }
+
+        TArray<FString> kernelFilePaths {};
+
+        TArray<FString> foundFiles;
+        IFileManager::Get().FindFiles(foundFiles, *FileDirectory);
+        if (foundFiles.Num() > 0)
+        {
+            for (auto file : foundFiles)
+            {
+                kernelFilePaths.Add(FPaths::Combine(relativeDirectory, file));
+            }
+
+            ResultCode = ES_ResultCode::Success;
+            ErrorMessage.Empty();
+        }
+        else
+        {
+            ErrorMessage = FString::Printf(
+                TEXT("no files were found in directory %s.\n(MaxQ internally expanded the path to %s.)\nIs the relative directory given to Enumerate Kernels correct?\n")
+                TEXT("Directories are given relative to / Content,\n   'MyProject/Content/KernelFiles/Directory1'\nwould be given as\n   'KernelFiles/Directory1' "),
+                *relativeDirectory, *FileDirectory);
+
+            if (ErrorIfNoFilesFound)
+            {
+                UE_LOG(
+                    LogSpice,
+                    Error,
+                    TEXT("******************************************************************\nMaxQ Spice Enumerate Kernels: %s\n")
+                    TEXT("***********************************************************************************"), *ErrorMessage);
+                ResultCode = ES_ResultCode::Error;
+            }
+            else
+            {
+                UE_LOG(LogSpice, Error, TEXT("MaxQ Spice Enumerate Kernels: %s"), *ErrorMessage);
+                ErrorMessage.Empty();
+            }
+        }
+
+        return kernelFilePaths;
+    }
+
+    SPICE_API bool Furnsh(const FString& relativePath, ES_ResultCode* ResultCode, FString* ErrorMessage)
+    {
+        FString fullPathToFile {toPath(relativePath)};
+
+#ifdef SET_WORKING_DIRECTORY_IN_FURNSH
+        // Get the current working directory...
+        TCHAR buffer[SPICE_MAX_PATH];
+        TCHAR* oldWorkingDirectory = _tgetcwd(buffer, sizeof(buffer) / sizeof(buffer[0]));
+
+        // Trim the file name to just the full directory path...
+        // (There isn't a guarantee SPICE will handle the other separator)
+        FString fullPathToDirectory = FPaths::GetPath(fullPathToFile);
+        fullPathToDirectory.ReplaceCharInline('/', '\\');
+
+        if (FPaths::DirectoryExists(fullPathToDirectory))
+        {
+            // Set the current working directory
+            _tchdir(*fullPathToDirectory);
+        }
+#endif
+
+        furnsh_c(TCHAR_TO_ANSI(*fullPathToFile));
+
+#ifdef SET_WORKING_DIRECTORY_IN_FURNSH
+        // Reset the working directory to prior state...
+        if (oldWorkingDirectory)
+        {
+            _tchdir(oldWorkingDirectory);
+        }
+#endif
+
+        bool bSuccess = !ErrorCheck(ResultCode, ErrorMessage);
+        if (bSuccess)
+        {
+            UE_LOG(LogSpice, Log, TEXT("MaxQ SPICE 'Furnsh' loaded kernel: %s"), *fullPathToFile);
+        }
+        return bSuccess;
+    }
+
+    SPICE_API bool Furnsh(const TArray<FString>& relativePaths, ES_ResultCode* ResultCode, FString* ErrorMessage)
+    {
+        bool bSuccess = true;
+        for (auto file : relativePaths)
+        {
+            ES_ResultCode LocalResultCode;
+            FString LocalErrorMessage;
+            bool bLocalSuccess = Furnsh(file, &LocalResultCode, &LocalErrorMessage);
+            if (!bLocalSuccess)
+            {
+                if (ResultCode) *ResultCode = LocalResultCode;
+                if (ErrorMessage) *ErrorMessage = LocalErrorMessage;
+            }
+            bSuccess &= bLocalSuccess;
+        }
+        return bSuccess;
+    }
+
+
+    SPICE_API bool FurnshDirectory(const FString& relativeDirectory, ES_ResultCode* ResultCode, FString* ErrorMessage)
+    {
+        TArray<FString> relativePaths { EnumerateDirectory(relativeDirectory, true, ResultCode, ErrorMessage) };
+
+        if (relativePaths.Num() > 0)
+        {
+            return Furnsh(relativePaths, ResultCode, ErrorMessage);
+        }
+
+        return false;
+    }
+
+
+
+    SPICE_API bool Unload(const FString& relativePath, ES_ResultCode* ResultCode /*= nullptr*/, FString* ErrorMessage /*= nullptr */)
+    {
+        FString absolutePath = toPath(relativePath);
+
+        unload_c(TCHAR_TO_ANSI(*absolutePath));
+
+        bool bSuccess = !ErrorCheck(ResultCode, ErrorMessage);
+        if (bSuccess)
+        {
+            UE_LOG(LogSpice, Log, TEXT("MaxQ SPICE 'Unload' unloaded kernel : %s"), *absolutePath);
+        }
+        return bSuccess;
+    }
+
+    SPICE_API FSEphemerisTime Now()
+    {
+        auto now = FDateTime::UtcNow();
+        auto j2000 = FDateTime::FromJulianDay(2451545.0);
+        auto now_j2000 = now - j2000;
+
+        return FSEphemerisTime(now_j2000.GetTotalSeconds());
+    }
+
+    template<typename ValueType>
+    SPICE_API void Bodvrd(
+        ValueType& Value,
+        const FString& bodynm,
+        const FString& item,
+        ES_ResultCode* ResultCode,
+        FString* ErrorMessage
+    )
+    {
+        constexpr SpiceInt N = sizeof Value / sizeof SpiceDouble;
+        SpiceDouble _result[N]; ZeroOut(Value);
+        SpiceInt n_actual = 0;
+
+        bodvrd_c(TCHAR_TO_ANSI(*bodynm), TCHAR_TO_ANSI(*item), N, &n_actual, _result);
+
+        Value = ValueType{ _result };
+
+        if (!ErrorCheck(ResultCode, ErrorMessage) && n_actual != N)
+        {
+            if (ResultCode) *ResultCode = ES_ResultCode::Error;
+            if (ErrorMessage) *ErrorMessage = FString::Printf(TEXT("Blueprint request for %s_%s Expected double[%d] but proc returned double[%d]"), *bodynm, *item, N, n_actual);
+        }
+    }
+
+    template SPICE_API void Bodvrd<FSAngularVelocity>(FSAngularVelocity&, const FString& bodynm, const FString& item, ES_ResultCode* ResultCode, FString* ErrorMessage);
+    template SPICE_API void Bodvrd<FSDistanceVector>(FSDistanceVector&, const FString& bodynm, const FString& item, ES_ResultCode* ResultCode, FString* ErrorMessage);
+    template SPICE_API void Bodvrd<FSVelocityVector>(FSVelocityVector&, const FString& bodynm, const FString& item, ES_ResultCode* ResultCode, FString* ErrorMessage);
+    template SPICE_API void Bodvrd<FSDimensionlessVector>(FSDimensionlessVector&, const FString& bodynm, const FString& item, ES_ResultCode* ResultCode, FString* ErrorMessage);
+    template SPICE_API void Bodvrd<FSDistance>(FSDistance&, const FString& bodynm, const FString& item, ES_ResultCode* ResultCode, FString* ErrorMessage);
+    template SPICE_API void Bodvrd<FSMassConstant>(FSMassConstant&, const FString& bodynm, const FString& item, ES_ResultCode* ResultCode, FString* ErrorMessage);
+
+    // With a little extra complexity we could get rid of this specialized version...
+    // Doubt if that's a net win, though.  Complexity FTL.
+    template<>
+    SPICE_API void Bodvrd(
+        double& Value,
+        const FString& bodynm,
+        const FString& item,
+        ES_ResultCode* ResultCode,
+        FString* ErrorMessage
+    )
+    {
+        constexpr SpiceInt N = sizeof Value / sizeof SpiceDouble;
+        SpiceDouble _result[N]; ZeroOut(Value);
+        SpiceInt n_actual = 0;
+
+        bodvrd_c(TCHAR_TO_ANSI(*bodynm), TCHAR_TO_ANSI(*item), N, &n_actual, _result);
+
+        Value = _result[0];
+
+        if (!ErrorCheck(ResultCode, ErrorMessage) && n_actual != N)
+        {
+            if (ResultCode) *ResultCode = ES_ResultCode::Error;
+            if (ErrorMessage) *ErrorMessage = FString::Printf(TEXT("Blueprint request for %s_%s Expected double[%d] but proc returned double[%d]"), *bodynm, *item, N, n_actual);
+        }
+    }
+
+    // TArray version...
+    // Caller must initialize TArray size to expected size
+    template<>
+    SPICE_API void Bodvrd(
+        TArray<double>& Values,
+        const FString& bodynm,
+        const FString& item,
+        ES_ResultCode* ResultCode,
+        FString* ErrorMessage
+    )
+    {
+        SpiceDouble* _result = Values.GetData();
+        SpiceInt n_actual, n_expected = Values.Num();
+        Values.Init(0, n_expected);
+
+        bodvrd_c(TCHAR_TO_ANSI(*bodynm), TCHAR_TO_ANSI(*item), n_expected, &n_actual, _result);
+
+        if (!ErrorCheck(ResultCode, ErrorMessage) && n_actual != n_expected)
+        {
+            if (ResultCode) *ResultCode = ES_ResultCode::Error;
+            if (ErrorMessage) *ErrorMessage = FString::Printf(TEXT("Blueprint request for %s_%s Expected double[%d] but proc returned double[%d]"), *bodynm, *item, n_expected, n_actual);
+        }
+    }
+
+    template<typename ValueType>
+    SPICE_API void Bodvcd(
+        ValueType& Value,
+        int bodyid,
+        const FString& item,
+        ES_ResultCode* ResultCode,
+        FString* ErrorMessage
+    )
+    {
+        constexpr SpiceInt N = sizeof Value / sizeof SpiceDouble;
+        SpiceDouble _result[N]; ZeroOut(Value);
+        SpiceInt n_actual = 0;
+
+        bodvcd_c(bodyid, TCHAR_TO_ANSI(*item), N, &n_actual, _result);
+
+        Value = ValueType{ _result };
+
+        if (!ErrorCheck(ResultCode, ErrorMessage) && n_actual != N)
+        {
+            if (ResultCode) *ResultCode = ES_ResultCode::Error;
+            if (ErrorMessage) *ErrorMessage = FString::Printf(TEXT("Blueprint request for BODY%s_%s Expected double[%d] but proc returned double[%d]"), bodyid, *item, N, n_actual);
+        }
+    }
+
+    template SPICE_API void Bodvcd<FSAngularVelocity>(FSAngularVelocity&, int bodyid, const FString& item, ES_ResultCode* ResultCode, FString* ErrorMessage);
+    template SPICE_API void Bodvcd<FSDistanceVector>(FSDistanceVector&, int bodyid, const FString& item, ES_ResultCode* ResultCode, FString* ErrorMessage);
+    template SPICE_API void Bodvcd<FSVelocityVector>(FSVelocityVector&, int bodyid, const FString& item, ES_ResultCode* ResultCode, FString* ErrorMessage);
+    template SPICE_API void Bodvcd<FSDimensionlessVector>(FSDimensionlessVector&, int bodyid, const FString& item, ES_ResultCode* ResultCode, FString* ErrorMessage);
+    template SPICE_API void Bodvcd<FSDistance>(FSDistance&, int bodyid, const FString& item, ES_ResultCode* ResultCode, FString* ErrorMessage);
+    template SPICE_API void Bodvcd<FSMassConstant>(FSMassConstant&, int bodyid, const FString& item, ES_ResultCode* ResultCode, FString* ErrorMessage);
+
+    // With a little extra complexity we could get rid of this specialized version...
+    // Doubt if that's a net win, though.  Complexity FTL.
+    template<>
+    SPICE_API void Bodvcd(
+        double& Value,
+        int bodyid,
+        const FString& item,
+        ES_ResultCode* ResultCode,
+        FString* ErrorMessage
+    )
+    {
+        constexpr SpiceInt N = sizeof Value / sizeof SpiceDouble;
+        SpiceDouble _result[N]; ZeroOut(Value);
+        SpiceInt n_actual = 0;
+
+        bodvcd_c(bodyid, TCHAR_TO_ANSI(*item), N, &n_actual, _result);
+
+        Value = _result[0];
+
+        if (!ErrorCheck(ResultCode, ErrorMessage) && n_actual != N)
+        {
+            if (ResultCode) *ResultCode = ES_ResultCode::Error;
+            if (ErrorMessage) *ErrorMessage = FString::Printf(TEXT("Blueprint request for BODY%d_%s Expected double[%d] but proc returned double[%d]"), bodyid, *item, N, n_actual);
+        }
+    }
+
+    // TArray version...
+    // Caller must initialize TArray size to expected size
+    template<>
+    SPICE_API void Bodvcd(
+        TArray<double>& Values,
+        int bodyid,
+        const FString& item,
+        ES_ResultCode* ResultCode,
+        FString* ErrorMessage
+    )
+    {
+        SpiceDouble* _result = Values.GetData();
+        SpiceInt n_actual, n_expected = Values.Num();
+        Values.Init(0, n_expected);
+
+        bodvcd_c(bodyid, TCHAR_TO_ANSI(*item), n_expected, &n_actual, _result);
+
+        if (!ErrorCheck(ResultCode, ErrorMessage) && n_actual != n_expected)
+        {
+            if (ResultCode) *ResultCode = ES_ResultCode::Error;
+            if (ErrorMessage) *ErrorMessage = FString::Printf(TEXT("Blueprint request for BODY%d_%s Expected double[%d] but proc returned double[%d]"), bodyid, *item, n_expected, n_actual);
+        }
+    }
+
+    SPICE_API bool Bodc2n(FString& name, int code /*= 399 */)
+    {
+        SpiceChar szBuffer[SPICE_MAX_PATH];
+        ZeroOut(szBuffer);
+
+        SpiceBoolean _found = SPICEFALSE;
+
+        bodc2n_c((SpiceInt)code, sizeof(szBuffer), szBuffer, &_found);
+
+        if (_found) name = szBuffer;
+
+        // Reset the current spice error in case a spice exception happened.
+        UnexpectedErrorCheck(true);
+
+        return _found == SPICETRUE;
+    }
+
+    SPICE_API bool Bods2c(int& code, const FString& name /*= TEXT("EARTH") */)
+    {
+        ConstSpiceChar* _name = TCHAR_TO_ANSI(*name);
+        SpiceInt _code = code;
+        SpiceBoolean _found = SPICEFALSE;
+
+        bods2c_c(_name, &_code, &_found);
+
+        if (_found) code = (int)_code;
+
+        // Reset the current spice error in case a spice exception happened.
+        UnexpectedErrorCheck(true);
+
+        return _found == SPICETRUE;
+    }
+
+    SPICE_API bool Bodfnd(int body, const FString& item /*= TEXT("RADII") */)
+    {
+        SpiceBoolean _found = bodfnd_c((SpiceInt)body, TCHAR_TO_ANSI(*item));
+
+        // Reset the current spice error in case a spice exception happened.
+        UnexpectedErrorCheck(true);
+
+        return _found == SPICETRUE;
+    }
+}
