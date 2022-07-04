@@ -165,12 +165,6 @@ public:
     UFUNCTION(CallInEditor, Category = "Editor")
         void GALACTIC() { OriginReferenceFrame = "GALACTIC"; }
 
-    UPROPERTY(EditAnywhere, Category="Editor")
-    FString DebugData;
-
-    UFUNCTION(CallInEditor, Category = "Editor")
-    void DebugDump();
-
 private:
     static const TMap<FString, FSConicElements>& GetTrappist1OrbitalElements();
 };

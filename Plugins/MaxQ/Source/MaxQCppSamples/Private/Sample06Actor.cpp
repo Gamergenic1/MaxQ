@@ -33,7 +33,7 @@ ASample06Actor::ASample06Actor()
     SolarSystemState.TimeScale = 10000.0;
 
     BodyScale = 50.0;
-    DistanceScale = 200.0;
+    DistanceScale = 50.0;
 
     OriginNaifName = "TRAPPIST_1_BARYCENTER";
     OriginReferenceFrame = "TRAPPIST_1_ECLIPTIC";
@@ -47,7 +47,7 @@ ASample06Actor::ASample06Actor()
 
     CommentsToWrite.Emplace(TEXT("Created by MaxQ Spaceflight Toolkit for Unreal Engine."));
     CommentsToWrite.Emplace(TEXT("This file should not be used for any purpose other"));
-    CommentsToWrite.Emplace(TEXT("that testing MaxQ."));
+    CommentsToWrite.Emplace(TEXT("that testing MaxQ.  (C++ Sample 06)"));
 
     OrbitalElements = GetTrappist1OrbitalElements();
 }
@@ -110,7 +110,7 @@ void ASample06Actor::BeginPlay()
         }
 
         bool bSuccess = Furnsh(ReadFilePath);
-        Log(FString::Printf(TEXT("furnsh: %s"), *MaxQSamples::MaxQPluginInfo()), bSuccess);
+        Log(FString::Printf(TEXT("furnsh: %s"), *ReadFilePath), bSuccess);
     }
 
 
@@ -504,17 +504,3 @@ const TMap<FString, FSConicElements>& ASample06Actor::GetTrappist1OrbitalElement
     return MaxQSamples::Data::Trappist1OrbitalElements;
 }
 
-void ASample06Actor::DebugDump()
-{
-    ES_ResultCode ResultCode;
-    FString ErrorMessage;
-
-    bool bFound;
-    TArray<FString> Results;
-    USpice::gnpool(ResultCode, ErrorMessage, Results, bFound, DebugData, 0, 10000);
-
-    for (FString result : Results)
-    {
-        UE_LOG(LogTemp, Log, TEXT("%s"), *result);
-    }
-}
