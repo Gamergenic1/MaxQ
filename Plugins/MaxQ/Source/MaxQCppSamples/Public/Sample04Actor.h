@@ -21,7 +21,7 @@ class AActor;
 // Setting orientations with PCK Kernels, Reference Frames, and more
 //-----------------------------------------------------------------------------
 
-UCLASS()
+UCLASS(HideCategories = (Transform, Rendering, Replication, Collision, HLOD, Input, Actor, Advanced, Cooking))
 class MAXQCPPSAMPLES_API ASample04Actor : public AActor
 {
     GENERATED_BODY()

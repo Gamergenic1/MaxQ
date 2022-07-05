@@ -127,6 +127,8 @@ namespace MaxQ::Data
         return Bodvrd<ValueType>(bodynm.ToString(), item.ToString(), ResultCode, ErrorMessage)
     }
 
+    // TCHAR prevents an ambiguous definition whenever the user uses them, since both
+    // FString and FName could resolve from TCHAR*
     template<class ValueType>
     inline ValueType Bodvrd(
         const TCHAR* bodynm,
@@ -190,7 +192,48 @@ namespace MaxQ::Data
     {
         return Bodvcd<ValueType>(bodyid, item.ToString(), ResultCode, ErrorMessage)
     }
-    
+
+    SPICE_API void Gdpool(
+        double& Value,
+        const FString& item,
+        ES_ResultCode* ResultCode = nullptr,
+        FString* ErrorMessage = nullptr
+    );
+
+    inline double Gdpool(
+        const FString& item,
+        ES_ResultCode* ResultCode = nullptr,
+        FString* ErrorMessage = nullptr
+    )
+    {
+        double ReturnValue;
+        Gdpool(ReturnValue, item, ResultCode, ErrorMessage);
+        return ReturnValue;
+    }
+
+    // Gdpool
+    // Only support FStrings, at least for now...
+    template<class ValueType>
+    SPICE_API void Gdpool(
+        ValueType& Value,
+        const FString& item,
+        ES_ResultCode* ResultCode = nullptr,
+        FString* ErrorMessage = nullptr
+    );
+
+    template<class ValueType>
+    inline ValueType Gdpool(
+        const FString& item,
+        ES_ResultCode* ResultCode = nullptr,
+        FString* ErrorMessage = nullptr
+    )
+    {
+        ValueType ReturnValue;
+        Gdpool<ValueType>(ReturnValue, item, ResultCode, ErrorMessage);
+        return ReturnValue;
+    }
+
+    // Name / ID code mappins
     SPICE_API bool Bods2c(
         int& code,
         const FString& name = TEXT("EARTH")

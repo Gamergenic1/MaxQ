@@ -911,6 +911,14 @@ FSAngle::FSAngle(double __radians)
     degrees = __radians * cachedDpr;
 }
 
+FSAngle::FSAngle(const double (&__degrees)[1])
+{
+    // See notes about cachedPi in its declaration
+    cachedDpr = dpr_c();
+
+    degrees = __degrees[0];
+}
+
 double FSAngularRate::AsDegreesPerSecond() const
 {
     return radiansPerSecond * dpr_c();

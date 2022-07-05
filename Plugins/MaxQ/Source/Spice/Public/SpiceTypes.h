@@ -848,6 +848,9 @@ public:
 
     FSAngle(double __radians);
 
+    // Supports bodvrd templates, etc
+    FSAngle(const double(&__degrees)[1]);
+
 
     inline FSAngle(const FSAngle& other)
     {
@@ -876,6 +879,12 @@ public:
         FSAngle Result;
         Result.degrees = degrees;
         return Result;
+    }
+
+    // Supports Bodvrd etc templates
+    inline void CopyTo(double (&_degrees)[1]) const
+    {
+        _degrees[0] = degrees;
     }
 
 

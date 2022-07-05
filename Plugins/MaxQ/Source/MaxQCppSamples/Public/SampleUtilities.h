@@ -83,8 +83,15 @@ class MAXQCPPSAMPLES_API USampleUtilities : public UBlueprintFunctionLibrary
     GENERATED_BODY()
 
 public:
+    // Avoids needing to enable Blueprint File Utils plugin...
+    UFUNCTION(BlueprintCallable, Category = "MaxQSamples", meta = (DevelopmentOnly))
+    static void DeleteFileIfExists(const FString& Path);
+
     UFUNCTION(BlueprintPure, Category = "MaxQSamples", meta = (DevelopmentOnly))
     static void GetMaxQPluginInfo(FString& Info);
+
+    UFUNCTION(BlueprintPure, Category = "MaxQSamples", meta = (DevelopmentOnly))
+    static void AbsolutifyMaxQPathForWriting(const FString& path, FString& AbsolutePath);
 
     UFUNCTION(BlueprintPure, Category = "MaxQSamples", meta = (DevelopmentOnly))
     static void GetMaxQPathAbsolutified(const FString& path, FString& AbsolutePath);

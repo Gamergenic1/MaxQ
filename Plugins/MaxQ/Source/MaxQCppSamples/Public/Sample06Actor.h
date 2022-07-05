@@ -21,48 +21,48 @@ class AActor;
 // Authoring new planets, etc
 //-----------------------------------------------------------------------------
 
-UCLASS()
+UCLASS(Blueprintable, HideCategories=(Transform, Rendering, Replication, Collision, HLOD, Input, Actor, Advanced, Cooking))
 class MAXQCPPSAMPLES_API ASample06Actor : public AActor
 {
     GENERATED_BODY()
 
-    UPROPERTY(EditInstanceOnly, Category = "MaxQ|Samples")
+    UPROPERTY(EditAnywhere, Category = "MaxQ|Samples")
     TArray<FString> TrappistSystemKernels;
 
-    UPROPERTY(EditInstanceOnly, Category = "MaxQ|Samples")
+    UPROPERTY(EditAnywhere, Category = "MaxQ|Samples")
     FSamplesSolarSystemState SolarSystemState;
 
-    UPROPERTY(EditInstanceOnly, Category = "MaxQ|Samples")
+    UPROPERTY(EditAnywhere, Category = "MaxQ|Samples")
     double BodyScale;
 
-    UPROPERTY(EditInstanceOnly, Category = "MaxQ|Samples")
+    UPROPERTY(EditAnywhere, Category = "MaxQ|Samples")
     double DistanceScale;
 
-    UPROPERTY(EditInstanceOnly, Category = "MaxQ|Samples")
+    UPROPERTY(EditAnywhere, Category = "MaxQ|Samples")
     FName OriginNaifName;
 
-    UPROPERTY(EditInstanceOnly, Category = "MaxQ|Samples")
+    UPROPERTY(EditAnywhere, Category = "MaxQ|Samples")
     FName OriginReferenceFrame;
 
-    UPROPERTY(EditInstanceOnly, Category = "MaxQ|Samples")
+    UPROPERTY(EditAnywhere, Category = "MaxQ|Samples")
     FName SunNaifName;
 
-    UPROPERTY(EditInstanceOnly, Category = "MaxQ|Samples")
+    UPROPERTY(EditAnywhere, Category = "MaxQ|Samples")
     FName PlanetFocusName;
 
-    UPROPERTY(EditInstanceOnly, Category = "MaxQ|Samples")
+    UPROPERTY(EditAnywhere, Category = "MaxQ|Samples")
     TMap<FString, FSConicElements> OrbitalElements;
 
-    UPROPERTY(EditInstanceOnly, Category = "MaxQ|Samples")
+    UPROPERTY(EditAnywhere, Category = "MaxQ|Samples")
     bool UpdateSpkFile = false;
 
-    UPROPERTY(EditInstanceOnly, Category = "MaxQ|Samples")
+    UPROPERTY(EditAnywhere, Category = "MaxQ|Samples")
     FString RelativePathToSPKFile;
 
-    UPROPERTY(EditInstanceOnly, Category = "MaxQ|Samples")
+    UPROPERTY(EditAnywhere, Category = "MaxQ|Samples")
     TArray<FString> CommentsToWrite;
 
-    UPROPERTY(EditInstanceOnly, Category = "MaxQ|Samples")
+    UPROPERTY(EditAnywhere, Category = "MaxQ|Samples")
     TWeakObjectPtr<AActor> SunDirectionalLight;
 
 public:
@@ -111,61 +111,70 @@ public:
     void Restart();
 
     UFUNCTION(CallInEditor, Category = "Editor")
-    void SSB() { OriginNaifName = "TRAPPIST_1_BARYCENTER"; }
+    void TRAPPIST_1_SSB();
 
     UFUNCTION(CallInEditor, Category = "Editor")
-    void _1B() { OriginNaifName = "TRAPPIST_1B"; }
+    void _1B();
 
     UFUNCTION(CallInEditor, Category = "Editor")
-    void _1C() { OriginNaifName = "TRAPPIST_1C"; }
+    void _1C();
 
     UFUNCTION(CallInEditor, Category = "Editor")
-    void _1D() { OriginNaifName = "TRAPPIST_1D"; }
+    void _1D();
 
     UFUNCTION(CallInEditor, Category = "Editor")
-    void _1E() { OriginNaifName = "TRAPPIST_1E"; }
+    void _1E();
 
     UFUNCTION(CallInEditor, Category = "Editor")
-    void _1F() { OriginNaifName = "TRAPPIST_1F"; }
+    void _1F();
 
     UFUNCTION(CallInEditor, Category = "Editor")
-    void _1G() { OriginNaifName = "TRAPPIST_1G"; }
+    void _1G();
 
     UFUNCTION(CallInEditor, Category = "Editor")
-    void _1H() { OriginNaifName = "TRAPPIST_1H"; }
+    void _1H();
 
 
     UFUNCTION(CallInEditor, Category = "Editor")
-        void IAU_1() { OriginReferenceFrame = "IAU_TRAPPIST_1"; }
+        void IAU_1();
 
     UFUNCTION(CallInEditor, Category = "Editor")
-        void IAU_1B() { OriginReferenceFrame = "IAU_TRAPPIST_1B"; }
+        void IAU_1B();
 
     UFUNCTION(CallInEditor, Category = "Editor")
-        void IAU_1C() { OriginReferenceFrame = "IAU_TRAPPIST_1C"; }
+        void IAU_1C();
 
     UFUNCTION(CallInEditor, Category = "Editor")
-        void IAU_1D() { OriginReferenceFrame = "IAU_TRAPPIST_1D"; }
+        void IAU_1D();
 
     UFUNCTION(CallInEditor, Category = "Editor")
-        void IAU_1E() { OriginReferenceFrame = "IAU_TRAPPIST_1E"; }
+        void IAU_1E();
 
     UFUNCTION(CallInEditor, Category = "Editor")
-        void IAU_1F() { OriginReferenceFrame = "IAU_TRAPPIST_1F"; }
+        void IAU_1F();
 
     UFUNCTION(CallInEditor, Category = "Editor")
-        void IAU_1G() { OriginReferenceFrame = "IAU_TRAPPIST_1G"; }
+        void IAU_1G();
 
     UFUNCTION(CallInEditor, Category = "Editor")
-        void IAU_1H() { OriginReferenceFrame = "IAU_TRAPPIST_1H"; }
+        void IAU_1H();
 
     UFUNCTION(CallInEditor, Category = "Editor")
-        void ECLIPTIC() { OriginReferenceFrame = "TRAPPIST_1_ECLIPTIC"; }
+    void TRAPPIST_ECLIPTIC();
 
     UFUNCTION(CallInEditor, Category = "Editor")
-        void GALACTIC() { OriginReferenceFrame = "GALACTIC"; }
+    void ECLIPTIC_POLE();
+
+    UFUNCTION(CallInEditor, Category = "Editor")
+    void View_From_EARTH();
+
+    UFUNCTION(BlueprintNativeEvent, Category = "Editor")
+    void ResetYawPitch();
+
 
 private:
+    // The pawn camera yaw pitch roll means if the reference frame is re-set it won't actually
+    // be aligned, unless the pawn camera resets its yaw pitch roll as well
     static const TMap<FString, FSConicElements>& GetTrappist1OrbitalElements();
 };
 
