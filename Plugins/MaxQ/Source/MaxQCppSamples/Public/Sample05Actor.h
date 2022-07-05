@@ -50,7 +50,7 @@
 
 class ASample05TelemetryActor;
 
-UCLASS(BlueprintType)
+UCLASS(Blueprintable, HideCategories = (Transform, Rendering, Replication, Collision, HLOD, Input, Actor, Advanced, Cooking))
 class MAXQCPPSAMPLES_API ASample05Actor : public AActor
 {
     GENERATED_BODY()

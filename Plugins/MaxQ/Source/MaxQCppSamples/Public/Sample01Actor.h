@@ -17,7 +17,7 @@
 // Initialization and kernel data
 //-----------------------------------------------------------------------------
 
-UCLASS()
+UCLASS(HideCategories = (Transform, Rendering, Replication, Collision, HLOD, Input, Actor, Advanced, Cooking))
 class MAXQCPPSAMPLES_API ASample01Actor : public AActor
 {
     GENERATED_BODY()

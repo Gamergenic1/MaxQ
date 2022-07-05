@@ -22,7 +22,7 @@ class UStaticMeshComponent;
 // type telemetry data.
 // Also, it renders a debug orbit, which is computed from it's
 // current state.
-UCLASS(BlueprintType)
+UCLASS(Blueprintable, HideCategories = (Rendering, Replication, Collision, HLOD, Input, Actor, Advanced, Cooking))
 class MAXQCPPSAMPLES_API ASample05TelemetryActor : public AActor
 {
     GENERATED_BODY()

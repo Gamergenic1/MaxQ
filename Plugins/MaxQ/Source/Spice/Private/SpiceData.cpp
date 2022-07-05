@@ -190,6 +190,22 @@ namespace MaxQ::Data
     }
 
 
+
+    // Size of FSAngle != sizeof double, ...
+    template<>
+    SPICE_API void Bodvrd(
+        FSAngle& Value,
+        const FString& bodynm,
+        const FString& item,
+        ES_ResultCode* ResultCode,
+        FString* ErrorMessage
+    )
+    {
+        double _value;
+        Bodvrd(_value, bodynm, item, ResultCode, ErrorMessage);
+        Value = FSAngle::FromDegrees(_value);
+    }
+
     // With a little extra complexity we could get rid of this specialized version...
     // Doubt if that's a net win, though.  Complexity FTL.
     SPICE_API void Bodvrd(
@@ -269,7 +285,23 @@ namespace MaxQ::Data
     template SPICE_API void Bodvrd<FSDimensionlessVector>(FSDimensionlessVector&, const FString& bodynm, const FString& item, ES_ResultCode* ResultCode, FString* ErrorMessage);
     template SPICE_API void Bodvrd<FSDistance>(FSDistance&, const FString& bodynm, const FString& item, ES_ResultCode* ResultCode, FString* ErrorMessage);
     template SPICE_API void Bodvrd<FSMassConstant>(FSMassConstant&, const FString& bodynm, const FString& item, ES_ResultCode* ResultCode, FString* ErrorMessage);
+    template SPICE_API void Bodvrd<FSAngle>(FSAngle&, const FString& bodynm, const FString& item, ES_ResultCode* ResultCode, FString* ErrorMessage);
 
+
+    // Size of FSAngle != sizeof double, ...
+    template<>
+    SPICE_API void Bodvcd(
+        FSAngle& Value,
+        int bodyid,
+        const FString& item,
+        ES_ResultCode* ResultCode,
+        FString* ErrorMessage
+    )
+    {
+        double _value;
+        Bodvcd(_value, bodyid, item, ResultCode, ErrorMessage);
+        Value = FSAngle::FromDegrees(_value);
+    }
 
 
     // TArray version...
@@ -352,6 +384,111 @@ namespace MaxQ::Data
     template SPICE_API void Bodvcd<FSDimensionlessVector>(FSDimensionlessVector&, int bodyid, const FString& item, ES_ResultCode* ResultCode, FString* ErrorMessage);
     template SPICE_API void Bodvcd<FSDistance>(FSDistance&, int bodyid, const FString& item, ES_ResultCode* ResultCode, FString* ErrorMessage);
     template SPICE_API void Bodvcd<FSMassConstant>(FSMassConstant&, int bodyid, const FString& item, ES_ResultCode* ResultCode, FString* ErrorMessage);
+    template SPICE_API void Bodvcd<FSAngle>(FSAngle&, int bodyid, const FString& item, ES_ResultCode* ResultCode, FString* ErrorMessage);
+
+    // TArray version...
+    // Caller must initialize TArray size to expected size
+    SPICE_API void Gdpool(
+        double& Value,
+        const FString& name,
+        ES_ResultCode* ResultCode,
+        FString* ErrorMessage
+    )
+    {
+        ConstSpiceChar* _name { TCHAR_TO_ANSI(*name) };
+        SpiceInt        _start{ 0 };
+        SpiceInt        _room{ 1 };
+        SpiceInt        _n{ 0 };
+        SpiceDouble     _value { 0 };
+        SpiceBoolean    _found = SPICEFALSE;
+
+        gdpool_c(_name, _start, _room, &_n, &_value, &_found);
+
+        Value = double{ _value };
+
+        if (!ErrorCheck(ResultCode, ErrorMessage) && !_found)
+        {
+            if (ResultCode) *ResultCode = ES_ResultCode::Error;
+            if (ErrorMessage) *ErrorMessage = FString::Printf(TEXT("Could not find pool variable %s"), *name);
+        }
+    }
+
+    // Size of FSAngle != sizeof double, ...
+    template<>
+    SPICE_API void Gdpool(
+        FSAngle& Value,
+        const FString& name,
+        ES_ResultCode* ResultCode,
+        FString* ErrorMessage
+    )
+    {
+        double _value;
+        Gdpool(_value, name, ResultCode, ErrorMessage);
+        Value = FSAngle::FromDegrees(_value);
+    }
+
+    // TArray version...
+    // Caller must initialize TArray size to expected size
+    template<>
+    SPICE_API void Gdpool(
+        TArray<double>& Values,
+        const FString& name,
+        ES_ResultCode* ResultCode,
+        FString* ErrorMessage
+    )
+    {
+        ConstSpiceChar* _name{ TCHAR_TO_ANSI(*name) };
+        SpiceInt        _start{ 0 };
+        SpiceInt        _room{ Values.Num() };
+        SpiceInt        _n{ 0 };
+        SpiceDouble*    _values{ Values.GetData() };
+        SpiceBoolean    _found = SPICEFALSE;
+
+        Values.Init(0, _room);
+
+        gdpool_c(_name, _start, _room, &_n, _values, &_found);
+
+        if (!ErrorCheck(ResultCode, ErrorMessage) && !_found)
+        {
+            if (ResultCode) *ResultCode = ES_ResultCode::Error;
+            if (ErrorMessage) *ErrorMessage = FString::Printf(TEXT("Could not find pool variable %s"), *name);
+        }
+    }
+
+    template<typename ValueType>
+    SPICE_API void Gdpool(
+        ValueType& Value,
+        const FString& name,
+        ES_ResultCode* ResultCode,
+        FString* ErrorMessage
+    )
+    {
+        ConstSpiceChar* _name{ TCHAR_TO_ANSI(*name) };
+        SpiceInt        _start { 0 };
+        SpiceInt        _room { sizeof ValueType / sizeof SpiceDouble };
+        SpiceInt        _n { 0 };
+        SpiceDouble     _values[sizeof ValueType / sizeof SpiceDouble];
+        SpiceBoolean    _found = SPICEFALSE;
+
+        gdpool_c(_name, _start, _room, &_n, _values, &_found);
+
+        Value = ValueType{ _values };
+
+        if (!ErrorCheck(ResultCode, ErrorMessage) && !_found)
+        {
+            if (ResultCode) *ResultCode = ES_ResultCode::Error;
+            if (ErrorMessage) *ErrorMessage = FString::Printf(TEXT("Could not find pool variable %s"), *name );
+        }
+    }
+
+    template SPICE_API void Gdpool<FSAngularVelocity>(FSAngularVelocity&, const FString& item, ES_ResultCode* ResultCode, FString* ErrorMessage);
+    template SPICE_API void Gdpool<FSDistanceVector>(FSDistanceVector&, const FString& item, ES_ResultCode* ResultCode, FString* ErrorMessage);
+    template SPICE_API void Gdpool<FSVelocityVector>(FSVelocityVector&, const FString& item, ES_ResultCode* ResultCode, FString* ErrorMessage);
+    template SPICE_API void Gdpool<FSDimensionlessVector>(FSDimensionlessVector&, const FString& item, ES_ResultCode* ResultCode, FString* ErrorMessage);
+    template SPICE_API void Gdpool<FSDistance>(FSDistance&, const FString& item, ES_ResultCode* ResultCode, FString* ErrorMessage);
+    template SPICE_API void Gdpool<FSMassConstant>(FSMassConstant&, const FString& item, ES_ResultCode* ResultCode, FString* ErrorMessage);
+    template SPICE_API void Gdpool<FSAngle>(FSAngle&, const FString& item, ES_ResultCode* ResultCode, FString* ErrorMessage);
+
 
      SPICE_API bool Bodc2n(FString& name, int code /*= 399 */)
     {

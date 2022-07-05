@@ -17,7 +17,7 @@
 // Time manipulation
 //-----------------------------------------------------------------------------
 
-UCLASS()
+UCLASS(HideCategories = (Transform, Rendering, Replication, Collision, HLOD, Input, Actor, Advanced, Cooking))
 class MAXQCPPSAMPLES_API ASample02Actor : public AActor
 {
     GENERATED_BODY()

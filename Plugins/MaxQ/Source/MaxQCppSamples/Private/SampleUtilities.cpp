@@ -387,6 +387,25 @@ namespace MaxQSamples
 
 
 //-----------------------------------------------------------------------------
+// Name: DeleteFileIfExists
+// Desc: Deletes a kernel file so we can regenerate it.
+//       Avoids requiring the blueprint file utils plugin...
+//-----------------------------------------------------------------------------
+void USampleUtilities::DeleteFileIfExists(const FString& Path)
+{
+    FString FilePath = MaxQSamples::AbsolutifyMaxQPathForWriting(Path);
+
+    if (!FilePath.IsEmpty() && FPaths::ValidatePath(FilePath))
+    {
+        if (FPaths::FileExists(FilePath))
+        {
+            MaxQSamples::Log(FString::Printf(TEXT("File Exists, deleting %s"), *FilePath), FColor::Yellow);
+            IFileManager& FileManager = IFileManager::Get(); FileManager.Delete(*FilePath);
+        }
+    }
+}
+
+//-----------------------------------------------------------------------------
 // Name: GetMaxQPluginInfo
 // Desc: Support for Blueprint samples.
 //-----------------------------------------------------------------------------
@@ -395,6 +414,11 @@ void USampleUtilities::GetMaxQPluginInfo(FString& Info)
     Info = MaxQSamples::MaxQPluginInfo();
 }
 
+
+void USampleUtilities::AbsolutifyMaxQPathForWriting(const FString& path, FString& AbsolutePath)
+{
+    AbsolutePath = MaxQSamples::AbsolutifyMaxQPathForWriting(path);
+}
 
 //-----------------------------------------------------------------------------
 // Name: GetMaxQPathAbsolutified

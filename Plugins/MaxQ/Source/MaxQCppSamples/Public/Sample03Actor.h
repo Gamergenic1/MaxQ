@@ -19,7 +19,7 @@
 // Basic positions and state vectors (Spice SPK)
 //-----------------------------------------------------------------------------
 
-UCLASS()
+UCLASS(HideCategories = (Transform, Rendering, Replication, Collision, HLOD, Input, Actor, Advanced, Cooking))
 class MAXQCPPSAMPLES_API ASample03Actor : public AActor
 {
     GENERATED_BODY()
