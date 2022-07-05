@@ -1,6 +1,6 @@
 KPL/PCK
 
-File name: MaxQ-TRAPPIST_1-pck.fk
+File name: MaxQ-TRAPPIST_1-pck.tpc
 PCK KERNEL FILE
 ===========================================================================
 
@@ -31,6 +31,7 @@ BODY000_GMLIST = ( 1 2 3 4 5 6 7 8 9 10
 ------- 'TRAPPIST_1 SYSTEM'
         \begindata
          BODY000_GMLIST += ( 5009000 5009001 5009002 5009003 5009004 5009005 5009006 5009007
+                             5009010
                              5009199
                              5009299
                              5009399
@@ -60,25 +61,42 @@ https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/req/frames.html#Complete%20Lis
                       FK4 frame.
 
 2451545.0 J2000
+2022 July 4  12:00:00.0 (PST) = ( 710236869.184015 )
 
 ------- 'Ref Frames'
         \begindata
-        BODY5009000_CONSTANTS_REF_FRAME   =   13
-        BODY5009010_CONSTANTS_REF_FRAME   =   13
-        BODY5009199_CONSTANTS_REF_FRAME   =   13
-        BODY5009299_CONSTANTS_REF_FRAME   =   13
-        BODY5009399_CONSTANTS_REF_FRAME   =   13
-        BODY5009499_CONSTANTS_REF_FRAME   =   13
-        BODY5009599_CONSTANTS_REF_FRAME   =   13
-        BODY5009699_CONSTANTS_REF_FRAME   =   13
-        BODY5009799_CONSTANTS_REF_FRAME   =   13
-        BODY5009001_CONSTANTS_REF_FRAME   =   13
-        BODY5009002_CONSTANTS_REF_FRAME   =   13
-        BODY5009003_CONSTANTS_REF_FRAME   =   13
-        BODY5009004_CONSTANTS_REF_FRAME   =   13
-        BODY5009005_CONSTANTS_REF_FRAME   =   13
-        BODY5009006_CONSTANTS_REF_FRAME   =   13
-        BODY5009007_CONSTANTS_REF_FRAME   =   13
+        BODY5009000_CONSTS_REF_FRAME   =   1
+        BODY5009000_CONSTS_JED_EPOCH   =   ( 710236869.184015 )
+        BODY5009010_CONSTS_REF_FRAME   =   1
+        BODY5009010_CONSTS_JED_EPOCH   =   ( 710236869.184015 )
+        BODY5009199_CONSTS_REF_FRAME   =   1
+        BODY5009199_CONSTS_JED_EPOCH   =   ( 710236869.184015 )
+        BODY5009299_CONSTS_REF_FRAME   =   1
+        BODY5009299_CONSTS_JED_EPOCH   =   ( 710236869.184015 )
+        BODY5009399_CONSTS_REF_FRAME   =   1
+        BODY5009399_CONSTS_JED_EPOCH   =   ( 710236869.184015 )
+        BODY5009499_CONSTS_REF_FRAME   =   1
+        BODY5009499_CONSTS_JED_EPOCH   =   ( 710236869.184015 )
+        BODY5009599_CONSTS_REF_FRAME   =   1
+        BODY5009599_CONSTS_JED_EPOCH   =   ( 710236869.184015 )
+        BODY5009699_CONSTS_REF_FRAME   =   1
+        BODY5009699_CONSTS_JED_EPOCH   =   ( 710236869.184015 )
+        BODY5009799_CONSTS_REF_FRAME   =   1
+        BODY5009799_CONSTS_JED_EPOCH   =   ( 710236869.184015 )
+        BODY5009001_CONSTS_REF_FRAME   =   1
+        BODY5009001_CONSTS_JED_EPOCH   =   ( 710236869.184015 )
+        BODY5009002_CONSTS_REF_FRAME   =   1
+        BODY5009002_CONSTS_JED_EPOCH   =   ( 710236869.184015 )
+        BODY5009003_CONSTS_REF_FRAME   =   1
+        BODY5009003_CONSTS_JED_EPOCH   =   ( 710236869.184015 )
+        BODY5009004_CONSTS_REF_FRAME   =   1
+        BODY5009004_CONSTS_JED_EPOCH   =   ( 710236869.184015 )
+        BODY5009005_CONSTS_REF_FRAME   =   1
+        BODY5009005_CONSTS_JED_EPOCH   =   ( 710236869.184015 )
+        BODY5009006_CONSTS_REF_FRAME   =   1
+        BODY5009006_CONSTS_JED_EPOCH   =   ( 710236869.184015 )
+        BODY5009007_CONSTS_REF_FRAME   =   1
+        BODY5009007_CONSTS_JED_EPOCH   =   ( 710236869.184015 )
         \begintext
 
 ------- 'TRAPPIST_1'
@@ -100,10 +118,9 @@ Rotation Period
         \begindata
         BODY5009010_GM            = (      1.19175771158E+10       )
         BODY5009010_RADII         = (  82963.2   82963.2  82963.2  )
-        BODY5009010_POLE_RA       = (    -90.0       0.0      0.0  )
-        BODY5009010_POLE_DEC      = (      0.0       0.0      0.0  )
+        BODY5009010_POLE_RA       = (  266.622367    0.0      0.0  )
+        BODY5009010_POLE_DEC      = (    5.0414    0.0      0.0    )
         BODY5009010_PM            = (      0.0     109.256449 0.0  )
-        BODY5009010_LONG_AXIS     = (      0.0                     )
         \begintext
 
 ------- 'TRAPPIST_1B'
@@ -123,10 +140,9 @@ T = 1.51087637 Earth Days
         \begindata
         BODY5009199_GM            = (      3.9860043543609598E+05        )
         BODY5009199_RADII         = (   7149.8911  7149.8911  7149.8911  )
-        BODY5009199_POLE_RA       = (    -90.0         0.0        0.0    )
-        BODY5009199_POLE_DEC      = (      0.0         0.0        0.0    )
+        BODY5009199_POLE_RA       = (  261.622367    0.0      0.0  )
+        BODY5009199_POLE_DEC      = (   -5.0414    0.0      0.0    )
         BODY5009199_PM            = (      0.0       238.2723081  0.0    )
-        BODY5009199_LONG_AXIS     = (      0.0                           )
         \begintext
 
 ------- 'TRAPPIST_1C'
@@ -143,10 +159,9 @@ T = 360 / 2.42180746 = 148.649306745
         \begindata
         BODY5009299_GM            = (      4.60782103364E+05             )
         BODY5009299_RADII         = (   6984.0595  6984.0595  6984.0595  )
-        BODY5009299_POLE_RA       = (    -90.0         0.0        0.0    )
-        BODY5009299_POLE_DEC      = (      0.0         0.0        0.0    )
+        BODY5009299_POLE_RA       = (  254.622367    0.0      0.0  )
+        BODY5009299_POLE_DEC      = (   -2.0414    0.0      0.0    )
         BODY5009299_PM            = (     90.0      148.649306745  0.0   )
-        BODY5009299_LONG_AXIS     = (      0.0                           )
         \begintext
 
 
@@ -165,10 +180,9 @@ If 3:2... 133.334683141
         \begindata
         BODY5009399_GM            = (      1.18384329325E+05              )
         BODY5009399_RADII         = (   5000.45909 5000.45909 5000.45909  )
-        BODY5009399_POLE_RA       = (    -90.0        0.0        0.0      )
-        BODY5009399_POLE_DEC      = (      0.0        0.0        0.0      )
-        BODY5009399_PM            = (    120.0      88.8897887608 0.0      )
-        BODY5009399_LONG_AXIS     = (      0.0                            )
+        BODY5009399_POLE_RA       = (  255.622367    0.0      0.0  )
+        BODY5009399_POLE_DEC      = (   -6.0414    0.0      0.0    )
+        BODY5009399_PM            = (    75.0      88.8897887608 0.0      )
         \begintext
 
 
@@ -185,10 +199,9 @@ if 2:1 = 118.051307394
         \begindata
         BODY5009499_GM            = (      3.07719536157E+05               )
         BODY5009499_RADII         = (   5804.1043   5804.1043  5804.1043   )
-        BODY5009499_POLE_RA       = (    -90.0         0.0        0.0      )
-        BODY5009499_POLE_DEC      = (      0.0         0.0        0.0      )
-        BODY5009499_PM            = (    30.0        59.0256536968  0.0      )
-        BODY5009499_LONG_AXIS     = (      0.0                             )
+        BODY5009499_POLE_RA       = (  253.622367    0.0      0.0  )
+        BODY5009499_POLE_DEC      = (   -4.0414    0.0      0.0    )
+        BODY5009499_PM            = (   240.0        59.0256536968  0.0      )
         \begintext
 
 
@@ -203,10 +216,9 @@ if 2:1......
         \begindata
         BODY5009599_GM            = (      2.71048296097E+05              )
         BODY5009599_RADII         = (   6665.1527  6665.1527  6665.1527   )
-        BODY5009599_POLE_RA       = (    -90.0        0.0        0.0      )
-        BODY5009599_POLE_DEC      = (      2.0        0.0        0.0      )
-        BODY5009599_PM            = (     -20.0       39.1049315664 0.0      )
-        BODY5009599_LONG_AXIS     = (      0.0                            )
+        BODY5009599_POLE_RA       = (  259.622367    0.0      0.0  )
+        BODY5009599_POLE_DEC      = (   -9.0414    0.0      0.0    )
+        BODY5009599_PM            = (     175.0       39.1049315664 0.0      )
         \begintext
 
 
@@ -221,10 +233,9 @@ if 5:2.... 5/2*28.9754638187 = 72.4386595468
         \begindata
         BODY5009699_GM            = (      4.57593299881E+05             )
         BODY5009699_RADII         = (   7322.1008  7322.1008  7322.1008  )
-        BODY5009699_POLE_RA       = (    -90.0        0.0        0.0     )
-        BODY5009699_POLE_DEC      = (      0.0        0.0        0.0     )
-        BODY5009699_PM            = (     90.0       72.4386595  0.0     )
-        BODY5009699_LONG_AXIS     = (      0.0                           )
+        BODY5009699_POLE_RA       = (  246.622367    0.0      0.0  )
+        BODY5009699_POLE_DEC      = (   -1.0414    0.0      0.0    )
+        BODY5009699_PM            = (      0.0       72.4386595  0.0     )
         \begintext
 
 
@@ -239,9 +250,8 @@ if 5:2.... 5/2*19.0799236803 = 47.6998092007
         \begindata
         BODY5009799_GM            = (      1.31936744129E+05             )
         BODY5009799_RADII         = (   4930.2995  4930.2995  4930.2995  )
-        BODY5009799_POLE_RA       = (    -90.0       0.0        0.0      )
-        BODY5009799_POLE_DEC      = (      0.0       0.0         0.0     )
+        BODY5009799_POLE_RA       = (  226.622367    0.0      0.0  )
+        BODY5009799_POLE_DEC      = (   45.0414    0.0      0.0    )
         BODY5009799_PM            = (     90.0      47.69980920  0.0     )
-        BODY5009799_LONG_AXIS     = (      0.0                           )
         \begintext
 

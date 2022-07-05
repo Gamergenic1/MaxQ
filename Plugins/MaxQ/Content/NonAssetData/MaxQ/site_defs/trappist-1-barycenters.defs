@@ -4,6 +4,9 @@ Created for MaxQ - (for samples, not for real life usage).
 The basic solar system SPK files contain ephemeris data for the outer planet barycenters but not the planets themselves.
 An easy fix is an SPK kernel to fix the planets to their barycenters.
 
+See:
+https://naif.jpl.nasa.gov/pub/naif/utilities/PC_Windows_64bit/pinpoint.ug
+
 An SPK kernel that does this can be generated using NAIF utility 'Pinpoint' and this data file.
 
 Commandline:

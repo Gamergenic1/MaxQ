@@ -1,6 +1,6 @@
 KPL/FK
 
-File name: MaxQ-TRAPPIST_1-fk.fk
+File name: MaxQ-TRAPPIST_1-fk.tf
 FRAMES KERNEL FILE
 ===========================================================================
 
@@ -43,38 +43,95 @@ Define NAIF ID Code to NAIF Name mappings...
 
 Define Reference Frames...
 
+To point X axis along vector to TRAPPIST-1:
+TKFRAME_<frame>_ANGLES = ( angle_1, angle_2, angle_3 )
+TKFRAME_<frame>_AXES   = ( axis_1,  axis_2,  axis_3  )
+TKFRAME_<frame>_UNITS  = 'units_of_angles'
+
+This will make a good coordinate system to view from, one where the inclinations don't appear to be +90.
+
+RA DEC of TRAPPIST-1:
+23h06m29.368s -05d02m29.04s
+346.6223667    -5.0414000
+(ICRF3)
+
+We approximate ICRF3 as J2000
+see:
+https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/req/frames.html#ICRF%20vs%20J2000
+
+To move J2000 to point X axis to TRAPPIST-1 we rotate ZY, by RA, -DEC.
+
         \begindata
-        FRAME_TRAPPIST_1_ECLIPTIC = 1500000
-        FRAME_1500000_NAME     = 'TRAPPIST_1_ECLIPTIC'
-        FRAME_1500000_CLASS    =  4
-        FRAME_1500000_CENTER   =  5009000
+        FRAME_TRAPPIST_1_EYE   = 1500000
+        FRAME_1500000_NAME     = 'TRAPPIST_1_EYE'
+        FRAME_1500000_CLASS    = 4
+        FRAME_1500000_CENTER   = 5009000
         FRAME_1500000_CLASS_ID = 1500000
+        TKFRAME_1500000_SPEC     = 'ANGLES'
+        TKFRAME_1500000_RELATIVE = 'J2000'
+        TKFRAME_1500000_ANGLES = ( -346.6223667, -5.0414000, 0 )
+        TKFRAME_1500000_AXES   = ( 3,  2,  3  )
+        TKFRAME_1500000_UNITS  = 'DEGREES'
 
-        TKFRAME_1500000_SPEC     = 'MATRIX'
-        TKFRAME_1500000_RELATIVE = 'GALACTIC'
-        TKFRAME_1500000_MATRIX   = ( 1 0 0
-                                     0 0  1
-                                     0 -1 0 )
+        \begintext
 
-	OBJECT_5009000_FRAME   = 'TRAPPIST_1_ECLIPTIC'
+For the kepler orbits inclination to be approximately the transit inclinations, what
+we want is the Z axis pointed at Earth, though, so we need to swap:
+X->Z
+Y->Y
+Z->-X
+Then, Kepler inclinations will give us the "correct" (plausible?  defensible?) transits.
 
-        FRAME_TRAPPIST_1_PA  =  1500002
-        FRAME_1500002_NAME     = 'TRAPPIST_1_PA'
-        FRAME_1500002_CLASS    =  2
-        FRAME_1500002_CLASS_ID = 5009010
-        FRAME_1500002_CENTER   = 5009010
+        \begindata
+        FRAME_TRAPPIST_1_ECLIPTIC   = 1500001
+        FRAME_1500001_NAME     = 'TRAPPIST_1_ECLIPTIC'
+        FRAME_1500001_CLASS    = 4
+        FRAME_1500001_CENTER   = 5009000
+        FRAME_1500001_CLASS_ID = 1500001
+        TKFRAME_1500001_SPEC     = 'MATRIX'
+        TKFRAME_1500001_RELATIVE = 'TRAPPIST_1_EYE'
+        TKFRAME_1500001_MATRIX   = ( 0 0 1
+                                     0 1 0
+                                    -1 0 0 )
 
-	OBJECT_5009010_FRAME   = 'TRAPPIST_1_PA'
+	    OBJECT_5009001_FRAME   = 'TRAPPIST_1_ECLIPTIC'
+        \begintext
 
-        FRAME_IAU_TRAPPIST_1 = 1500003
-        FRAME_1500003_NAME     = 'IAU_TRAPPIST_1'
-        FRAME_1500003_CLASS    = 4
-        FRAME_1500003_CLASS_ID = 1500003
-        FRAME_1500003_CENTER   = 5009010
+But let's make an ecliptic pole frame...  One where we're viewing the system from "above"
 
-        TKFRAME_1500003_SPEC     = 'MATRIX'
-        TKFRAME_1500003_RELATIVE = 'TRAPPIST_1_PA'
-        TKFRAME_1500003_MATRIX   = ( 1 0 0
+        \begindata
+        FRAME_TRAPPIST_1_ECLIPTIC_POLE   = 1500002
+        FRAME_1500002_NAME     = 'TRAPPIST_1_ECLIPTIC_POLE'
+        FRAME_1500002_CLASS    = 4
+        FRAME_1500002_CENTER   = 5009000
+        FRAME_1500002_CLASS_ID = 1500002
+        TKFRAME_1500002_SPEC     = 'MATRIX'
+        TKFRAME_1500002_RELATIVE = 'TRAPPIST_1_EYE'
+        TKFRAME_1500002_MATRIX   = ( 0 -1 0
+                                     1  0 0
+                                     0  0 1 )
+        \begintext
+
+
+
+        \begindata
+        FRAME_TRAPPIST_1_PA  =  1500010
+        FRAME_1500010_NAME     = 'TRAPPIST_1_PA'
+        FRAME_1500010_CLASS    =  2
+        FRAME_1500010_CLASS_ID = 5009010
+        FRAME_1500010_CENTER   = 5009010
+
+	    OBJECT_5009010_FRAME   = 'TRAPPIST_1_PA'
+
+        FRAME_IAU_TRAPPIST_1 = 1500011
+        FRAME_1500011_NAME     = 'IAU_TRAPPIST_1'
+        FRAME_1500011_CLASS    = 4
+        FRAME_1500011_CLASS_ID = 1500011
+        FRAME_1500011_CENTER   = 5009010
+
+        TKFRAME_1500011_SPEC     = 'MATRIX'
+        TKFRAME_1500011_RELATIVE = 'TRAPPIST_1_PA'
+        TKFRAME_1500011_MATRIX   = ( 1 0 0
                                      0 1 0
                                      0 0 1 )
 
