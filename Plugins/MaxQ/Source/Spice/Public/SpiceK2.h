@@ -82,7 +82,7 @@ public:
         const FString& bodynm,
         const FString& item
     );
-    static constexpr ANSICHAR bodvrd_double[]{ "bodvrd_double_K2" };
+    static constexpr ANSICHAR bodvrd_double[] = "bodvrd_double_K2";
 
     UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly, Category = "MaxQ|Internal", meta = (ExpandEnumAsExecs = "ResultCode"))
     static FSDimensionlessVector bodvrd_vector_K2(
@@ -91,7 +91,7 @@ public:
         const FString& bodynm,
         const FString& item
     );
-    static constexpr ANSICHAR bodvrd_vector[]{ "bodvrd_vector_K2" };
+    static constexpr ANSICHAR bodvrd_vector[] = "bodvrd_vector_K2";
 
     UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly, Category = "MaxQ|Internal", meta = (ExpandEnumAsExecs = "ResultCode"))
     static TArray<double> bodvrd_array_K2(
@@ -100,7 +100,7 @@ public:
         const FString& bodynm,
         const FString& item
     );
-    static constexpr ANSICHAR bodvrd_array[]{ "bodvrd_array_K2" };
+    static constexpr ANSICHAR bodvrd_array[] = "bodvrd_array_K2";
 
     // bodvcd support
     UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly, Category = "MaxQ|Internal", meta = (ExpandEnumAsExecs = "ResultCode"))
@@ -110,7 +110,7 @@ public:
         int bodyid,
         const FString& item
     );
-    static constexpr ANSICHAR bodvcd_double[]{ "bodvcd_double_K2" };
+    static constexpr ANSICHAR bodvcd_double[] = "bodvcd_double_K2";
 
     UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly, Category = "MaxQ|Internal", meta = (ExpandEnumAsExecs = "ResultCode"))
     static FSDimensionlessVector bodvcd_vector_K2(
@@ -119,7 +119,7 @@ public:
         int bodyid,
         const FString& item
     );
-    static constexpr ANSICHAR bodvcd_vector[]{ "bodvcd_vector_K2" };
+    static constexpr ANSICHAR bodvcd_vector[] = "bodvcd_vector_K2";
 
     UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly, Category = "MaxQ|Internal", meta = (ExpandEnumAsExecs = "ResultCode"))
     static TArray<double> bodvcd_array_K2(
@@ -128,7 +128,7 @@ public:
         int bodyid,
         const FString& item
     );
-    static constexpr ANSICHAR bodvcd_array[]{ "bodvcd_array_K2" };
+    static constexpr ANSICHAR bodvcd_array[] = "bodvcd_array_K2";
 
     UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly, Category = "MaxQ|Internal", meta = (ExpandEnumAsExecs = "ResultCode"))
     static double gdpool_double_K2(
@@ -136,7 +136,7 @@ public:
         FString& ErrorMessage,
         const FString& name
     );
-    static constexpr ANSICHAR gdpool_double[]{ "gdpool_double_K2" };
+    static constexpr ANSICHAR gdpool_double[] = "gdpool_double_K2";
 
     UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly, Category = "MaxQ|Internal", meta = (ExpandEnumAsExecs = "ResultCode"))
     static FSDimensionlessVector gdpool_vector_K2(
@@ -144,7 +144,7 @@ public:
         FString& ErrorMessage,
         const FString& name
     );
-    static constexpr ANSICHAR gdpool_vector[]{ "gdpool_vector_K2" };
+    static constexpr ANSICHAR gdpool_vector[] = "gdpool_vector_K2";
 
     UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly, Category = "MaxQ|Internal", meta = (ExpandEnumAsExecs = "ResultCode"))
     static TArray<double> gdpool_array_K2(
@@ -153,7 +153,7 @@ public:
         const FString& name,
         int start = 0
     );
-    static constexpr ANSICHAR gdpool_array[]{ "gdpool_array_K2" };
+    static constexpr ANSICHAR gdpool_array[] = "gdpool_array_K2";
 
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "MaxQ|Internal")
     static FSRotationMatrix mtxm_matrix_K2(
@@ -211,16 +211,16 @@ public:
         const FSRotationMatrix& m,
         const FSDimensionlessVector& v
     );
-    static constexpr TCHAR mxv_vector[]{ TEXT("mxv_vector_K2") };
-    static constexpr TCHAR mxv_vin[]{ TEXT("v") };
-    static constexpr TCHAR mxv_m[]{ TEXT("m") };
+    static constexpr TCHAR mxv_vector[] = TEXT("mxv_vector_K2");
+    static constexpr TCHAR mxv_vin[] = TEXT("v");
+    static constexpr TCHAR mxv_m[] = TEXT("m");
 
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "MaxQ|Internal")
     static FSDimensionlessStateVector mxv_state_vector_K2(
         const FSStateTransform& m,
         const FSDimensionlessStateVector& v
     );
-    static constexpr TCHAR mxv_state_vector[]{ TEXT("mxv_state_vector_K2") };
+    static constexpr TCHAR mxv_state_vector[] = TEXT("mxv_state_vector_K2");
 
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "MaxQ|Internal")
     static FSDimensionlessVector qderiv_vector_K2(
@@ -259,10 +259,10 @@ public:
         FSDimensionlessVector& vout,
         double& vmag
     );
-    static constexpr TCHAR unorm_vector[]{ TEXT("unorm_vector_K2") };
-    static constexpr TCHAR unorm_vector_input[]{ TEXT("v") };
-    static constexpr TCHAR unorm_vector_output_mag[]{ TEXT("vmag") };
-    static constexpr TCHAR unorm_vector_output_direction[]{ TEXT("vout") };
+    static constexpr TCHAR unorm_vector[] = TEXT("unorm_vector_K2");
+    static constexpr TCHAR unorm_vector_input[] = TEXT("v");
+    static constexpr TCHAR unorm_vector_output_mag[] = TEXT("vmag");
+    static constexpr TCHAR unorm_vector_output_direction[] = TEXT("vout");
 
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "MaxQ|Internal")
     static FSDimensionlessVector vadd_vector_K2(
@@ -271,16 +271,16 @@ public:
     );
     // #Todo:  Convert explicitly settings this to walking meta data?
     //        It's used for initialization purposes 
-    static constexpr TCHAR vadd_vector[]{ TEXT("vadd_vector_K2") };
-    static constexpr TCHAR vadd_input1[]{ TEXT("v1") };
-    static constexpr TCHAR vadd_input2[]{ TEXT("v2") };
+    static constexpr TCHAR vadd_vector[] = TEXT("vadd_vector_K2");
+    static constexpr TCHAR vadd_input1[] = TEXT("v1");
+    static constexpr TCHAR vadd_input2[] = TEXT("v2");
 
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "MaxQ|Internal")
     static FSDimensionlessStateVector vadd_state_vector_K2(
         const FSDimensionlessStateVector& v1,
         const FSDimensionlessStateVector& v2
     );
-    static constexpr TCHAR vadd_state_vector[]{ TEXT("vadd_state_vector_K2") };
+    static constexpr TCHAR vadd_state_vector[] = TEXT("vadd_state_vector_K2");
 
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "MaxQ|Internal")
     static FSDimensionlessVector vcrss_vector_K2(
@@ -309,8 +309,8 @@ public:
     static FSDimensionlessVector vhat_vector_K2(
         const FSDimensionlessVector& v
     );
-    static constexpr ANSICHAR vhat_vector[]{ "vhat_vector_K2" };
-    static constexpr ANSICHAR vhat_in[]{ "v" };
+    static constexpr ANSICHAR vhat_vector[] = "vhat_vector_K2";
+    static constexpr ANSICHAR vhat_in[] = "v";
 
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "MaxQ|Internal")
     static FSDimensionlessVector vlcom_vector_K2(
@@ -334,21 +334,21 @@ public:
     static FSDimensionlessVector vminus_vector_K2(
         const FSDimensionlessVector& v
     );
-    static constexpr ANSICHAR vminus_vector[]{ "vminus_vector_K2" };
-    static constexpr ANSICHAR vminus_in[]{ "v" };
+    static constexpr ANSICHAR vminus_vector[] = "vminus_vector_K2";
+    static constexpr ANSICHAR vminus_in[] = "v";
 
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "MaxQ|Internal")
     static FSDimensionlessStateVector vminus_state_vector_K2(
         const FSDimensionlessStateVector& v
     );
-    static constexpr ANSICHAR vminus_state_vector[]{ "vminus_state_vector_K2" };
+    static constexpr ANSICHAR vminus_state_vector[] = "vminus_state_vector_K2";
 
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "MaxQ|Internal")
     static double vnorm_vector_K2(
         const FSDimensionlessVector& v
     );
-    static constexpr ANSICHAR vnorm_vector[]{ "vnorm_vector_K2" };
-    static constexpr ANSICHAR vnorm_in[]{ "v" };
+    static constexpr ANSICHAR vnorm_vector[] = "vnorm_vector_K2";
+    static constexpr ANSICHAR vnorm_in[] = "v";
 
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "MaxQ|Internal")
     static FSDimensionlessVector vpack_vector_K2(
@@ -356,7 +356,7 @@ public:
         double y,
         double z
     );
-    static constexpr ANSICHAR vpack_vector[]{ "vpack_vector_K2" };
+    static constexpr ANSICHAR vpack_vector[] = "vpack_vector_K2";
     static constexpr const ANSICHAR* vpack_inputs[] { "x", "y", "z", "dx", "dy", "dz" };
     static constexpr int32 vpack_inputs_n = sizeof(vpack_inputs)/sizeof(vpack_inputs[0]);
 
@@ -369,7 +369,7 @@ public:
         double dy,
         double dz
     );
-    static constexpr ANSICHAR vpack_state_vector[]{ "vpack_state_vector_K2" };
+    static constexpr ANSICHAR vpack_state_vector[] = "vpack_state_vector_K2";
 
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "MaxQ|Internal")
     static FSDimensionlessVector vperp_vector_K2(
@@ -406,9 +406,9 @@ public:
         const FSDimensionlessVector& v1,
         const FSDimensionlessVector& v2
     );
-    static constexpr TCHAR vsub_vector[]{ TEXT("vsub_vector_K2") };
-    static constexpr TCHAR vsub_input1[]{ TEXT("v1") };
-    static constexpr TCHAR vsub_input2[]{ TEXT("v2") };
+    static constexpr TCHAR vsub_vector[] = TEXT("vsub_vector_K2");
+    static constexpr TCHAR vsub_input1[] = TEXT("v1");
+    static constexpr TCHAR vsub_input2[] = TEXT("v2");
 
 
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "MaxQ|Internal")
@@ -416,7 +416,7 @@ public:
         const FSDimensionlessStateVector& v1,
         const FSDimensionlessStateVector& v2
     );
-    static constexpr TCHAR vsub_state_vector[]{ TEXT("vsub_state_vector_K2") };
+    static constexpr TCHAR vsub_state_vector[] = TEXT("vsub_state_vector_K2");
 
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "MaxQ|Internal")
     static void vupack_vector_K2(
@@ -425,9 +425,9 @@ public:
         double& y,
         double& z
     );
-    static constexpr ANSICHAR vupack_vector[]{ "vupack_vector_K2" };
-    static constexpr ANSICHAR vupack_input[]{ "v" };
-    static constexpr const ANSICHAR* vupack_outputs[]{ "x", "y", "z", "dx", "dy", "dz" };
+    static constexpr ANSICHAR vupack_vector[] = "vupack_vector_K2";
+    static constexpr ANSICHAR vupack_input[] = "v";
+    static constexpr const ANSICHAR* vupack_outputs[] { "x", "y", "z", "dx", "dy", "dz" };
     static constexpr int32 vupack_outputs_n = sizeof(vpack_inputs) / sizeof(vpack_inputs[0]);
 
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "MaxQ|Internal")
@@ -440,7 +440,7 @@ public:
         double& dy,
         double& dz
     );
-    static constexpr ANSICHAR vupack_state_vector[]{ "vupack_state_vector_K2" };
+    static constexpr ANSICHAR vupack_state_vector[] = "vupack_state_vector_K2";
 
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "MaxQ|Internal")
     static double vtmv_vector_K2(
@@ -475,91 +475,91 @@ public:
     // output converters
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "MaxQ|Internal")
     static FSEphemerisTime Conv_DoubleToSEphemerisTime_K2(double value);
-    static constexpr ANSICHAR Conv_DoubleToSEphemerisTime[]{ "Conv_DoubleToSEphemerisTime_K2" };
+    static constexpr ANSICHAR Conv_DoubleToSEphemerisTime[] = "Conv_DoubleToSEphemerisTime_K2";
 
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "MaxQ|Internal")
     static FSEphemerisPeriod Conv_DoubleToSEphemerisPeriod_K2(double value);
-    static constexpr ANSICHAR Conv_DoubleToSEphemerisPeriod[]{ "Conv_DoubleToSEphemerisPeriod_K2" };
+    static constexpr ANSICHAR Conv_DoubleToSEphemerisPeriod[] = "Conv_DoubleToSEphemerisPeriod_K2";
 
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "MaxQ|Internal")
     static FSMassConstant Conv_DoubleToSMassConstant_K2(double value);
-    static constexpr ANSICHAR Conv_DoubleToSMassConstant[]{ "Conv_DoubleToSMassConstant_K2" };
+    static constexpr ANSICHAR Conv_DoubleToSMassConstant[] = "Conv_DoubleToSMassConstant_K2";
 
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "MaxQ|Internal")
     static FSAngularRate Conv_DoubleToSAngularRate_K2(double value);
-    static constexpr ANSICHAR Conv_DoubleToSAngularRate[]{ "Conv_DoubleToSAngularRate_K2" };
+    static constexpr ANSICHAR Conv_DoubleToSAngularRate[] = "Conv_DoubleToSAngularRate_K2";
 
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "MaxQ|Internal")
     static FSSpeed Conv_DoubleToSSpeed_K2(double value);
-    static constexpr ANSICHAR Conv_DoubleToSSpeed[]{ "Conv_DoubleToSSpeed_K2" };
+    static constexpr ANSICHAR Conv_DoubleToSSpeed[] = "Conv_DoubleToSSpeed_K2";
 
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "MaxQ|Internal")
     static FSDistance Conv_DoubleToSDistance_K2(double value);
-    static constexpr ANSICHAR Conv_DoubleToSDistance[]{ "Conv_DoubleToSDistance_K2" };
+    static constexpr ANSICHAR Conv_DoubleToSDistance[] = "Conv_DoubleToSDistance_K2";
 
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "MaxQ|Internal")
     static FSAngle Conv_DegreesToSAngle_K2(double value);
-    static constexpr ANSICHAR Conv_DegreesToSAngle[]{ "Conv_DegreesToSAngle_K2" };
+    static constexpr ANSICHAR Conv_DegreesToSAngle[] = "Conv_DegreesToSAngle_K2";
 
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "MaxQ|Internal")
     static FSAngle Conv_RadiansToSAngle_K2(double value);
-    static constexpr ANSICHAR Conv_RadiansToSAngle[]{ "Conv_RadiansToSAngle_K2" };
+    static constexpr ANSICHAR Conv_RadiansToSAngle[] = "Conv_RadiansToSAngle_K2";
 
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "MaxQ|Internal")
     static FSAngularRate Conv_DegreesPersecondToSAngularRate_K2(double value);
-    static constexpr ANSICHAR Conv_DegreesPersecondToSAngularRate[]{ "Conv_DegreesPersecondToSAngularRate_K2" };
+    static constexpr ANSICHAR Conv_DegreesPersecondToSAngularRate[] = "Conv_DegreesPersecondToSAngularRate_K2";
 
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "MaxQ|Internal")
     static FSAngularRate Conv_RadiansPersecondToSAngularRate_K2(double value);
-    static constexpr ANSICHAR Conv_RadiansPersecondToSAngularRate[]{ "Conv_RadiansPersecondToSAngularRate_K2" };
+    static constexpr ANSICHAR Conv_RadiansPersecondToSAngularRate[] = "Conv_RadiansPersecondToSAngularRate_K2";
 
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "MaxQ|Internal")
     static FSAngularRate Conv_MinutesPerTurnToSAngularRate_K2(double value);
-    static constexpr ANSICHAR Conv_MinutesPerTurnToSAngularRate[]{ "Conv_MinutesPerTurnToSAngularRate_K2" };
+    static constexpr ANSICHAR Conv_MinutesPerTurnToSAngularRate[] = "Conv_MinutesPerTurnToSAngularRate_K2";
 
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "MaxQ|Internal")
     static FSDistanceVector Conv_SDimensionlessVectorToSDistanceVector_K2(const FSDimensionlessVector& value);
-    static constexpr ANSICHAR Conv_SDimensionlessVectorToSDistanceVector[]{ "Conv_SDimensionlessVectorToSDistanceVector_K2" };
+    static constexpr ANSICHAR Conv_SDimensionlessVectorToSDistanceVector[] = "Conv_SDimensionlessVectorToSDistanceVector_K2";
 
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "MaxQ|Internal")
     static FSVelocityVector Conv_SDimensionlessVectorToSVelocityVector_K2(const FSDimensionlessVector& value);
-    static constexpr ANSICHAR Conv_SDimensionlessVectorToSVelocityVector[]{ "Conv_SDimensionlessVectorToSVelocityVector_K2" };
+    static constexpr ANSICHAR Conv_SDimensionlessVectorToSVelocityVector[] = "Conv_SDimensionlessVectorToSVelocityVector_K2";
 
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "MaxQ|Internal")
     static FSAngularVelocity Conv_SDimensionlessVectorToSAngularVelocity_K2(const FSDimensionlessVector& value);
-    static constexpr ANSICHAR Conv_SDimensionlessVectorToSAngularVelocity[]{ "Conv_SDimensionlessVectorToSAngularVelocity_K2" };
+    static constexpr ANSICHAR Conv_SDimensionlessVectorToSAngularVelocity[] = "Conv_SDimensionlessVectorToSAngularVelocity_K2";
 
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "MaxQ|Internal")
     static FSDimensionlessVector Conv_SDistanceVectorToSDimensionlessVector_K2(const FSDistanceVector& value);
-    static constexpr ANSICHAR Conv_SDistanceVectorToSDimensionlessVector[]{ "Conv_SDistanceVectorToSDimensionlessVector_K2" };
+    static constexpr ANSICHAR Conv_SDistanceVectorToSDimensionlessVector[] = "Conv_SDistanceVectorToSDimensionlessVector_K2";
 
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "MaxQ|Internal")
     static FSDimensionlessVector Conv_SVelocityVectorToSDimensionlessVector_K2(const FSVelocityVector& value);
-    static constexpr ANSICHAR Conv_SVelocityVectorToSDimensionlessVector[]{ "Conv_SVelocityVectorToSDimensionlessVector_K2" };
+    static constexpr ANSICHAR Conv_SVelocityVectorToSDimensionlessVector[] = "Conv_SVelocityVectorToSDimensionlessVector_K2";
 
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "MaxQ|Internal")
     static FSDimensionlessVector Conv_SAngularVelocityToSDimensionlessVector_K2(const FSAngularVelocity& value);
-    static constexpr ANSICHAR Conv_SAngularVelocityToSDimensionlessVector[]{ "Conv_SAngularVelocityToSDimensionlessVector_K2" };
+    static constexpr ANSICHAR Conv_SAngularVelocityToSDimensionlessVector[] = "Conv_SAngularVelocityToSDimensionlessVector_K2";
 
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "MaxQ|Internal")
     static FSStateVector Conv_SDimensionlessStateVectorToSStateVector_K2(const FSDimensionlessStateVector& value);
-    static constexpr ANSICHAR Conv_SDimensionlessStateVectorToSStateVector[]{ "Conv_SDimensionlessStateVectorToSStateVector_K2" };
+    static constexpr ANSICHAR Conv_SDimensionlessStateVectorToSStateVector[] = "Conv_SDimensionlessStateVectorToSStateVector_K2";
 
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "MaxQ|Internal")
     static FSDimensionlessStateVector Conv_SStateVectorToSDimensionlessStateVector_K2(const FSStateVector& value);
-    static constexpr ANSICHAR Conv_SStateVectorToSDimensionlessStateVector[]{ "Conv_SStateVectorToSDimensionlessStateVector_K2" };
+    static constexpr ANSICHAR Conv_SStateVectorToSDimensionlessStateVector[] = "Conv_SStateVectorToSDimensionlessStateVector_K2";
 
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "MaxQ|Internal")
     static FSDistance Conv_SDimensionlessVector_X_ToSDistance_K2(const FSDimensionlessVector& value);
-    static constexpr ANSICHAR Conv_SDimensionlessVector_X_ToSDistance[]{ "Conv_SDimensionlessVector_X_ToSDistance_K2" };
+    static constexpr ANSICHAR Conv_SDimensionlessVector_X_ToSDistance[] = "Conv_SDimensionlessVector_X_ToSDistance_K2";
 
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "MaxQ|Internal")
     static FSDistance Conv_SDimensionlessVector_Y_ToSDistance_K2(const FSDimensionlessVector& value);
-    static constexpr ANSICHAR Conv_SDimensionlessVector_Y_ToSDistance[]{ "Conv_SDimensionlessVector_Y_ToSDistance_K2" };
+    static constexpr ANSICHAR Conv_SDimensionlessVector_Y_ToSDistance[] = "Conv_SDimensionlessVector_Y_ToSDistance_K2";
 
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "MaxQ|Internal")
     static FSDistance Conv_SDimensionlessVector_Z_ToSDistance_K2(const FSDimensionlessVector& value);
-    static constexpr ANSICHAR Conv_SDimensionlessVector_Z_ToSDistance[]{ "Conv_SDimensionlessVector_Z_ToSDistance_K2" };
+    static constexpr ANSICHAR Conv_SDimensionlessVector_Z_ToSDistance[] = "Conv_SDimensionlessVector_Z_ToSDistance_K2";
 
-    static constexpr TCHAR conv_input[]{ TEXT("value") };
+    static constexpr TCHAR conv_input[] = TEXT("value");
 };
