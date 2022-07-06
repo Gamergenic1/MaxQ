@@ -1,0 +1,20 @@
+Hello,
+
+Thank you for installing MaxQ Spaceflight Toolkit.  Hopefully you find it useful and develop something great with it!
+
+Online documentation is available at:
+https://maxq.gamergenic.com/
+
+An in-depth tutorial is hosted on gamedevtricks.com:
+https://gamedevtricks.com/post/third-party-libs-5/
+
+The source code to the project is hosted on GitHub:
+https://github.com/Gamergenic1/MaxQ
+
+Devs are present in the Discord Space Simulation Developers server:
+https://discord.com/invite/cVp8NeMRQN
+
+Please don't hestitate to email any questions:
+support@gamergenic.com
+
+CN
