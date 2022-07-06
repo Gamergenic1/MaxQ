@@ -216,7 +216,7 @@ namespace MaxQ::Data
         FString* ErrorMessage
     )
     {
-        constexpr SpiceInt N = sizeof Value / sizeof SpiceDouble;
+        constexpr SpiceInt N = sizeof (Value) / sizeof (SpiceDouble);
         SpiceDouble _result[N]; ZeroOut(Value);
         SpiceInt n_actual = 0;
 
@@ -264,7 +264,7 @@ namespace MaxQ::Data
         FString* ErrorMessage
     )
     {
-        constexpr SpiceInt N = sizeof Value / sizeof SpiceDouble;
+        constexpr SpiceInt N = sizeof (Value) / sizeof (SpiceDouble);
         SpiceDouble _result[N]; ZeroOut(Value);
         SpiceInt n_actual = 0;
 
@@ -285,7 +285,6 @@ namespace MaxQ::Data
     template SPICE_API void Bodvrd<FSDimensionlessVector>(FSDimensionlessVector&, const FString& bodynm, const FString& item, ES_ResultCode* ResultCode, FString* ErrorMessage);
     template SPICE_API void Bodvrd<FSDistance>(FSDistance&, const FString& bodynm, const FString& item, ES_ResultCode* ResultCode, FString* ErrorMessage);
     template SPICE_API void Bodvrd<FSMassConstant>(FSMassConstant&, const FString& bodynm, const FString& item, ES_ResultCode* ResultCode, FString* ErrorMessage);
-    template SPICE_API void Bodvrd<FSAngle>(FSAngle&, const FString& bodynm, const FString& item, ES_ResultCode* ResultCode, FString* ErrorMessage);
 
 
     // Size of FSAngle != sizeof double, ...
@@ -339,7 +338,7 @@ namespace MaxQ::Data
         FString* ErrorMessage
     )
     {
-        constexpr SpiceInt N = sizeof Value / sizeof SpiceDouble;
+        constexpr SpiceInt N = sizeof (Value) / sizeof (SpiceDouble);
         SpiceDouble _result[N]; ZeroOut(Value);
         SpiceInt n_actual = 0;
 
@@ -363,7 +362,7 @@ namespace MaxQ::Data
         FString* ErrorMessage
     )
     {
-        constexpr SpiceInt N = sizeof Value / sizeof SpiceDouble;
+        constexpr SpiceInt N = sizeof (Value) / sizeof (SpiceDouble);
         SpiceDouble _result[N]; ZeroOut(Value);
         SpiceInt n_actual = 0;
 
@@ -384,7 +383,6 @@ namespace MaxQ::Data
     template SPICE_API void Bodvcd<FSDimensionlessVector>(FSDimensionlessVector&, int bodyid, const FString& item, ES_ResultCode* ResultCode, FString* ErrorMessage);
     template SPICE_API void Bodvcd<FSDistance>(FSDistance&, int bodyid, const FString& item, ES_ResultCode* ResultCode, FString* ErrorMessage);
     template SPICE_API void Bodvcd<FSMassConstant>(FSMassConstant&, int bodyid, const FString& item, ES_ResultCode* ResultCode, FString* ErrorMessage);
-    template SPICE_API void Bodvcd<FSAngle>(FSAngle&, int bodyid, const FString& item, ES_ResultCode* ResultCode, FString* ErrorMessage);
 
     // TArray version...
     // Caller must initialize TArray size to expected size
@@ -465,9 +463,9 @@ namespace MaxQ::Data
     {
         ConstSpiceChar* _name{ TCHAR_TO_ANSI(*name) };
         SpiceInt        _start { 0 };
-        SpiceInt        _room { sizeof ValueType / sizeof SpiceDouble };
+        SpiceInt        _room { sizeof (ValueType) / sizeof (SpiceDouble) };
         SpiceInt        _n { 0 };
-        SpiceDouble     _values[sizeof ValueType / sizeof SpiceDouble];
+        SpiceDouble     _values[sizeof (ValueType) / sizeof (SpiceDouble) ];
         SpiceBoolean    _found = SPICEFALSE;
 
         gdpool_c(_name, _start, _room, &_n, _values, &_found);
@@ -487,7 +485,6 @@ namespace MaxQ::Data
     template SPICE_API void Gdpool<FSDimensionlessVector>(FSDimensionlessVector&, const FString& item, ES_ResultCode* ResultCode, FString* ErrorMessage);
     template SPICE_API void Gdpool<FSDistance>(FSDistance&, const FString& item, ES_ResultCode* ResultCode, FString* ErrorMessage);
     template SPICE_API void Gdpool<FSMassConstant>(FSMassConstant&, const FString& item, ES_ResultCode* ResultCode, FString* ErrorMessage);
-    template SPICE_API void Gdpool<FSAngle>(FSAngle&, const FString& item, ES_ResultCode* ResultCode, FString* ErrorMessage);
 
 
      SPICE_API bool Bodc2n(FString& name, int code /*= 399 */)

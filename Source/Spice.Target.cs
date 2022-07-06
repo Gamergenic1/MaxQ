@@ -23,5 +23,6 @@ public class SpiceTarget : TargetRules
 
         ExtraModuleNames.Add("Spice");
         ExtraModuleNames.Add("MaxQMain");
+        CppStandard = CppStandardVersion.Cpp17;
     }
 }

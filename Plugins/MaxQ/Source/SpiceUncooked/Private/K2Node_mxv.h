@@ -217,13 +217,13 @@ class SPICEUNCOOKED_API UK2Node_mxv : public UK2Node, public IK2Node_MathGeneric
 {
     GENERATED_UCLASS_BODY()
 
-    static constexpr ANSICHAR* VIN = "vin";
-    static constexpr ANSICHAR* M = "m";
-    static constexpr ANSICHAR* VOUT = "vout";
+    static constexpr ANSICHAR VIN[]{ "vin" };
+    static constexpr ANSICHAR M[] {"m"};
+    static constexpr ANSICHAR VOUT[] {"vout"};
 
-    static constexpr TCHAR* VIN_tip = TEXT("Input vector");
-    static constexpr TCHAR* M_tip = TEXT("Multiplication Matrix");
-    static constexpr TCHAR* VOUT_tip = TEXT("Product (m * vin)");
+    static constexpr TCHAR VIN_tip[] { TEXT("Input vector") };
+    static constexpr TCHAR M_tip[] { TEXT("Multiplication Matrix") };
+    static constexpr TCHAR VOUT_tip[] { TEXT("Product (m * vin)") };
 
     static const FName vin;
     static const FName m;

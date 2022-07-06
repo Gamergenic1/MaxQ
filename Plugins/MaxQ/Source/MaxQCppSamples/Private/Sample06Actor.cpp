@@ -168,7 +168,7 @@ void ASample06Actor::BeginPlay()
 
         // Try to find the coverage window in the existing file.
         auto IdCode = 0;
-        if (Bods2c(IdCode, TEXT("TRAPPIST_1B")))
+        if (Bods2c(IdCode, FString{ TEXT("TRAPPIST_1B") }))
         {
             ES_ResultCode ResultCode;
             FString ErrorMessage;
@@ -361,7 +361,7 @@ void ASample06Actor::GenerateTrappistSPKKernel()
 
         // We'll need the ID for the center of motion later
         int Center = 0;
-        if (!Bods2c(Center, TEXT("TRAPPIST_1")))
+        if (!Bods2c(Center, FString{ TEXT("TRAPPIST_1") }))
         {
             MaxQSamples::Log(TEXT("Could not look up TRAPPIST_1"), FColor::Red);
             ResultCode = ES_ResultCode::Error;
