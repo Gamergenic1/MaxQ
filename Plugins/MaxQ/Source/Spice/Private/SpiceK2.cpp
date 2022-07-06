@@ -465,7 +465,7 @@ double USpiceK2::vtmv_vector_K2(const FSDimensionlessVector& v1, const FSRotatio
     SpiceDouble _matrix[3][3]; matrix.CopyTo(_matrix);
     ConstSpiceDouble _v2[3]{ v2.x, v2.y, v2.z };
 
-    return { vtmv_c(_v1, _matrix, _v2) };
+    return vtmv_c(_v1, _matrix, _v2);
 }
 
 double USpiceK2::vtmv_state_vector_K2(const FSDimensionlessStateVector& v1, const FSStateTransform& matrix, const FSDimensionlessStateVector& v2)
@@ -481,14 +481,14 @@ double USpiceK2::vtmv_state_vector_K2(const FSDimensionlessStateVector& v1, cons
     constexpr SpiceInt nrow { 6 };
     constexpr SpiceInt ncol { 6 };
 
-    return { vtmvg_c(_v1, _matrix, _v2, nrow, ncol) };
+    return vtmvg_c(_v1, _matrix, _v2, nrow, ncol);
 }
 
 bool USpiceK2::vzero_vector_K2(const FSDimensionlessVector& v)
 {
     ConstSpiceDouble _v[3]{ v.x, v.y, v.z };
 
-    return { vzero_c(_v) == SPICETRUE };
+    return vzero_c(_v) == SPICETRUE;
 }
 
 bool USpiceK2::vzero_state_vector_K2(const FSDimensionlessStateVector& v)
@@ -496,7 +496,7 @@ bool USpiceK2::vzero_state_vector_K2(const FSDimensionlessStateVector& v)
     SpiceDouble _v[6];  v.CopyTo(_v);
     constexpr SpiceInt ndim{ 6 };
 
-    return { vzerog_c(_v, ndim) == SPICETRUE };
+    return vzerog_c(_v, ndim) == SPICETRUE;
 }
 
 double USpiceK2::vrel_vector_K2(const FSDimensionlessVector& v1, const FSDimensionlessVector& v2)
@@ -504,7 +504,7 @@ double USpiceK2::vrel_vector_K2(const FSDimensionlessVector& v1, const FSDimensi
     ConstSpiceDouble _v1[3]{ v1.x, v1.y, v1.z };
     ConstSpiceDouble _v2[3]{ v2.x, v2.y, v2.z };
 
-    return { vrel_c(_v1, _v2) };
+    return vrel_c(_v1, _v2);
 }
 
 FSDimensionlessVector USpiceK2::gdpool_vector_K2(

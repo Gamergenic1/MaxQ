@@ -89,7 +89,7 @@ namespace MaxQ::Data
         FString* ErrorMessage = nullptr
     )
     {
-        Bodvrd<VectorType>(Value, bodynm.ToString(), item.ToString(), ResultCode, ErrorMessage);
+        Bodvrd<ValueType>(Value, bodynm.ToString(), item.ToString(), ResultCode, ErrorMessage);
     }
 
     template<class ValueType>
@@ -100,7 +100,7 @@ namespace MaxQ::Data
         ES_ResultCode* ResultCode = nullptr,
         FString* ErrorMessage = nullptr)
     {
-        Bodvrd<VectorType>(Value, FString(bodynm), FString(item), ResultCode, ErrorMessage);
+        Bodvrd<ValueType>(Value, FString(bodynm), FString(item), ResultCode, ErrorMessage);
     }
 
     template<class ValueType>
@@ -124,7 +124,7 @@ namespace MaxQ::Data
         FString* ErrorMessage = nullptr
     )
     {
-        return Bodvrd<ValueType>(bodynm.ToString(), item.ToString(), ResultCode, ErrorMessage)
+        return Bodvrd<ValueType>(bodynm.ToString(), item.ToString(), ResultCode, ErrorMessage);
     }
 
     // TCHAR prevents an ambiguous definition whenever the user uses them, since both
@@ -166,7 +166,7 @@ namespace MaxQ::Data
         FString* ErrorMessage = nullptr
     )
     {
-        Bodvcd<VectorType>(Value, bodyid, item.ToString(), ResultCode, ErrorMessage);
+        Bodvcd<ValueType>(Value, bodyid, item.ToString(), ResultCode, ErrorMessage);
     }
 
     template<class ValueType>
@@ -190,7 +190,7 @@ namespace MaxQ::Data
         FString* ErrorMessage = nullptr
     )
     {
-        return Bodvcd<ValueType>(bodyid, item.ToString(), ResultCode, ErrorMessage)
+        return Bodvcd<ValueType>(bodyid, item.ToString(), ResultCode, ErrorMessage);
     }
 
     SPICE_API void Gdpool(
@@ -238,8 +238,8 @@ namespace MaxQ::Data
         int& code,
         const FString& name = TEXT("EARTH")
     );
-    inline bool Bods2c(int& code, FName name = "EARTH") { return Bods2c(code, name.ToString());}
-    inline bool Bods2c(int& code, TCHAR* name =TEXT("EARTH")) { return Bods2c(code, FString(name));}
+    inline bool Bods2c(int& code, FName name) { return Bods2c(code, name.ToString());}
+    inline bool Bods2c(int& code, TCHAR* name) { return Bods2c(code, FString(name));}
 
     SPICE_API bool Bodc2n(
         FString& name,
@@ -250,12 +250,13 @@ namespace MaxQ::Data
         FString _name;
         bool result = Bodc2n(_name, code);
         name = FName(_name);
+        return result;
     }
 
     SPICE_API bool Bodfnd(
         int body,
-        const FString& item = TEXT("RADII")
+        const FString& item
     );
-    inline bool Bodfnd(int body=399, FName item = "RADII") { return Bodfnd(body, item.ToString()); }
-    inline bool Bodfnd(int body=399, TCHAR* item = TEXT("RADII")) { return Bodfnd(body, FString(item)); }
+    inline bool Bodfnd(int body, FName item) { return Bodfnd(body, item.ToString()); }
+    inline bool Bodfnd(int body, TCHAR* item) { return Bodfnd(body, FString(item)); }
 };

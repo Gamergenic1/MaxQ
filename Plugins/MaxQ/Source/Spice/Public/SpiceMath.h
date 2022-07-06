@@ -382,22 +382,22 @@ namespace MaxQ::Math
 
     template<typename T> static T Swizzle(const FVector& in);
 
-    template<> inline static FSDimensionlessVector Swizzle<FSDimensionlessVector>(const FVector& in)
+    template<> FSDimensionlessVector Swizzle<FSDimensionlessVector>(const FVector& in)
     {
         return FSDimensionlessVector(in.Y, in.X, in.Z);
     }
 
-    template<> inline static FSDistanceVector Swizzle<FSDistanceVector>(const FVector& in)
+    template<> FSDistanceVector Swizzle<FSDistanceVector>(const FVector& in)
     {
         return FSDistanceVector(in.Y, in.X, in.Z);
     }
 
-    template<> inline static FSVelocityVector Swizzle<FSVelocityVector>(const FVector& in)
+    template<> FSVelocityVector Swizzle<FSVelocityVector>(const FVector& in)
     {
         return FSVelocityVector(in.Y, in.X, in.Z);
     }
 
-    template<> inline static FSAngularVelocity Swizzle<FSAngularVelocity>(const FVector& in)
+    template<> FSAngularVelocity Swizzle<FSAngularVelocity>(const FVector& in)
     {
         // (Going from LHS/RHS negates angular velocities...)
         return FSAngularVelocity(FSAngularRate(-in.Y), FSAngularRate(-in.X), FSAngularRate(-in.Z));

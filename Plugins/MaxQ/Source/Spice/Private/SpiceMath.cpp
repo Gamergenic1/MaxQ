@@ -87,7 +87,7 @@ namespace MaxQ::Math
         const VectorType& vin
     )
     {
-        constexpr SpiceInt _nc1r2 = sizeof VectorType / sizeof SpiceDouble;
+        constexpr SpiceInt _nc1r2 = sizeof(VectorType) / sizeof (SpiceDouble);
         /*
         * Not cool, according to the compiler.
         constexpr SpiceInt _nrow1 = sizeof MatrixType / sizeof VectorType;

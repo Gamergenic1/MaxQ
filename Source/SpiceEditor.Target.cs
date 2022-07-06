@@ -35,6 +35,7 @@ public class SpiceEditorTarget : TargetRules
 
         UpdateDocs(Target);
         BuildCSpiceLib(this);
+        CppStandard = CppStandardVersion.Cpp17;
     }
 
     public void UpdateDocs(TargetInfo Target)
