@@ -189,8 +189,6 @@ namespace MaxQ::Data
         return FSEphemerisTime(now_j2000.GetTotalSeconds());
     }
 
-
-
     // Size of FSAngle != sizeof double, ...
     template<>
     SPICE_API void Bodvrd(

@@ -881,6 +881,9 @@ public:
         return Result;
     }
 
+    //  Required by templates.  Ambiguous units, so best to avoid (but, they're Radians).
+    inline explicit operator double() const { return AsSpiceDouble(); }
+
     // Supports Bodvrd etc templates
     inline void CopyTo(double (&_degrees)[1]) const
     {
@@ -1226,6 +1229,16 @@ struct SPICE_API FSEulerAngles
         angle3 = _eulang[0];
         angle2 = _eulang[1];
         angle1 = _eulang[2];
+        axis3 = (ES_Axis)_axis3;
+        axis2 = (ES_Axis)_axis2;
+        axis1 = (ES_Axis)_axis1;
+    }
+
+    FSEulerAngles(double _angle3, double _angle2, double _angle1, uint8 _axis3, uint8 _axis2, uint8 _axis1)
+    {
+        angle3 = _angle3;
+        angle2 = _angle2;
+        angle1 = _angle1;
         axis3 = (ES_Axis)_axis3;
         axis2 = (ES_Axis)_axis2;
         axis1 = (ES_Axis)_axis1;

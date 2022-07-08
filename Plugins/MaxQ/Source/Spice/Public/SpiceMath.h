@@ -145,6 +145,29 @@ namespace MaxQ::Math
         return vsum;
     }
 
+    // return unit normal
+    template<class VectorType>
+    SPICE_API void Vhat(FSDimensionlessVector& vminus, const VectorType& vin);
+
+    template<class VectorType>
+    inline FSDimensionlessVector Vhat(const VectorType& vin)
+    {
+        FSDimensionlessVector vminus;
+        Vminus(vminus, vin);
+        return vminus;
+    }
+
+    // norm (magnitude)
+    SPICE_API void Vnorm(double& vnorm, const FSDimensionlessVector& v);
+    inline void Vnorm(FSDistance& vnorm, const FSDistanceVector& v) { double norm; Vnorm(norm, v.AsDimensionlessVector()); vnorm = norm;}
+    inline void Vnorm(FSSpeed& vnorm, const FSVelocityVector& v)    { double norm; Vnorm(norm, v.AsDimensionlessVector()); vnorm = norm; }
+    inline void Vnorm(FSAngularRate& vnorm, const FSAngularVelocity& v) { double norm; Vnorm(norm, v.AsDimensionlessVector()); vnorm = norm; }
+
+    inline double Vnorm(const FSDimensionlessVector& v) { double norm; Vnorm(norm, v); return norm; }
+    inline FSDistance Vnorm(const FSDistanceVector& v) { FSDistance norm; Vnorm(norm, v); return norm; }
+    inline FSSpeed Vnorm(const FSVelocityVector& v) { FSSpeed norm; Vnorm(norm, v); return norm; }
+    inline FSAngularRate Vnorm(const FSAngularVelocity& v) { FSAngularRate norm; Vnorm(norm, v); return norm; }
+
     // subtraction
     template<class VectorType>
     SPICE_API void Vsub(VectorType& vdifference, const VectorType& v1, const VectorType& v2);
@@ -156,6 +179,20 @@ namespace MaxQ::Math
         Vsub(vdifference, v1, v2);
         return vdifference;
     }
+
+    // "relative distance"
+    //             || v1 - v2 ||
+    // vrel = ------------------------
+    //        max(|| v1 ||, || v2 || )
+    SPICE_API void Vrel(double& vrel, const FSDimensionlessVector& v1, const FSDimensionlessVector& v2);
+    inline void Vrel(FSDistance& vrel, const FSDistanceVector& v1, const FSDistanceVector& v2) { double vout; Vrel(vout, v1.AsDimensionlessVector(), v2.AsDimensionlessVector()); vrel = vout; }
+    inline void Vrel(FSSpeed& vrel, const FSVelocityVector& v1, const FSVelocityVector& v2) { double vout; Vrel(vout, v1.AsDimensionlessVector(), v2.AsDimensionlessVector()); vrel = vout; }
+    inline void Vrel(FSAngularRate& vrel, const FSAngularVelocity& v1, const FSAngularVelocity& v2) { double vout; Vrel(vout, v1.AsDimensionlessVector(), v2.AsDimensionlessVector()); vrel = vout; }
+
+    inline double Vrel(const FSDimensionlessVector& v1, const FSDimensionlessVector& v2) { double vrel; Vrel(vrel, v1, v2); return vrel; }
+    inline FSDistance Vrel(const FSDistanceVector& v1, const FSDistanceVector& v2) { FSDistance vrel; Vrel(vrel, v1, v2); return vrel; }
+    inline FSSpeed Vrel(const FSVelocityVector& v1, const FSVelocityVector& v2) { FSSpeed vrel; Vrel(vrel, v1, v2); return vrel; }
+    inline FSAngularRate Vrel(const FSAngularVelocity& v1, const FSAngularVelocity& v2) { FSAngularRate vrel; Vrel(vrel, v1, v2); return vrel; }
 
     // negation
     template<class VectorType>
@@ -251,6 +288,209 @@ namespace MaxQ::Math
 
     inline void Ucrss(FSDimensionlessVector& vout, const FSStateVector& state) { Ucrss(vout, state.r, state.v); }
     inline FSDimensionlessVector Ucrss(const FSStateVector& state) { return Ucrss(state.r, state.v); }
+
+    // vector cross product
+    template<class VectorType>
+    SPICE_API void Vcrss(VectorType& vout, const VectorType& v1, const VectorType& v2);
+
+    template<class VectorType>
+    inline VectorType Vcrss(const VectorType& v1, const VectorType& v2)
+    {
+        VectorType vout;
+        Vcrss(vout, v1, v2);
+        return vout;
+    }
+
+    SPICE_API void Vcrss(FSDimensionlessVector& vout, const FSDistanceVector& r, const FSVelocityVector& v);
+    inline FSDimensionlessVector Vcrss(const FSDistanceVector& r, const FSVelocityVector& v)
+    {
+        FSDimensionlessVector vout;
+        Vcrss(vout, r, v);
+        return vout;
+    }
+
+    inline void Vcrss(FSDimensionlessVector& vout, const FSStateVector& state) { Vcrss(vout, state.r, state.v); }
+    inline FSDimensionlessVector Vcrss(const FSStateVector& state) { return Vcrss(state.r, state.v); }
+
+    SPICE_API void Vdist(
+        double& dist,
+        const FSDimensionlessVector& v1,
+        const FSDimensionlessVector& v2
+    );
+
+    inline double Vdist(
+        const FSDimensionlessVector& v1,
+        const FSDimensionlessVector& v2
+    )
+    {
+        double dist;
+        Vdist(dist, v1, v2);
+        return dist;
+    }
+
+    template<class OutputType, class VectorType>
+    SPICE_API void Vdist(
+        OutputType& dist,
+        const VectorType& v1,
+        const VectorType& v2
+    );
+
+    template<class ScalarType, class VectorType>
+    inline ScalarType Vdist(const VectorType& v1, const VectorType& v2)
+    {
+        ScalarType sout;
+        Vdist(sout, v1, v2);
+        return sout;
+    }
+
+    SPICE_API void Vdot(
+        double& dot,
+        const FSDimensionlessVector& v1,
+        const FSDimensionlessVector& v2
+    );
+
+    inline double Vdot(
+        const FSDimensionlessVector& v1,
+        const FSDimensionlessVector& v2
+    )
+    {
+        double vdot;
+        Vdot(vdot, v1, v2);
+        return vdot;
+    }
+
+    template<class ScalarType, class VectorType>
+    SPICE_API void Vdot(
+        ScalarType& dot,
+        const VectorType& v1,
+        const VectorType& v2
+    );
+
+    template<class ScalarType, class VectorType>
+    inline ScalarType Vdot(const VectorType& v1, const VectorType& v2)
+    {
+        ScalarType sout;
+        Vdot(sout, v1, v2);
+        return sout;
+    }
+
+    template<class VectorType>
+    SPICE_API void Vperp(VectorType& vout, const VectorType& v1, const VectorType& v2);
+
+    template<class VectorType>
+    inline VectorType Vperp(const VectorType& v1, const VectorType& v2)
+    {
+        VectorType vout;
+        Vperp(vout, v1, v2);
+        return vout;
+    }
+
+    template<class VectorType>
+    SPICE_API void Vprjp(VectorType& vout, const VectorType& v1, const FSPlane& plane);
+
+    template<class VectorType>
+    inline VectorType Vprjp(const VectorType& v1, const FSPlane& plane)
+    {
+        VectorType vout;
+        Vprjp(vout, v1, plane);
+        return vout;
+    }
+
+    template<class VectorType>
+    SPICE_API void Vproj(VectorType& vout, const VectorType& v1, const VectorType& v2);
+
+    template<class VectorType>
+    inline VectorType Vproj(const VectorType& v1, const VectorType& v2)
+    {
+        VectorType vout;
+        Vproj(vout, v1, v2);
+        return vout;
+    }
+
+    // scale
+    template<class VectorType>
+    SPICE_API void Vscl(VectorType& vscaled, double s, const VectorType& v);
+
+    template<class VectorType>
+    inline VectorType Vscl(double s, const VectorType& v)
+    {
+        VectorType vscaled;
+        Vscl(vscaled, s, v);
+        return vscaled;
+    }
+
+
+    template<class VectorType>
+    SPICE_API void Vsep(FSAngle& angle, const VectorType& v1, const VectorType& v2);
+
+    template<class VectorType>
+    inline FSAngle Vsep(const VectorType& v1, const VectorType& v2)
+    {
+        FSAngle angle;
+        Vsep(angle, v1, v2);
+        return angle;
+    }
+
+    template<typename ScalarType, typename VectorType>
+    SPICE_API void VTxMxV(
+        ScalarType& sout,
+        const VectorType& v1,
+        const FSRotationMatrix& m,
+        const VectorType& v2
+    );
+
+    template<class ScalarType, class VectorType>
+    inline ScalarType VTxMxV(
+    const VectorType& v1,
+        const FSRotationMatrix& m,
+        const VectorType& v2
+    )
+    {
+        ScalarType sout;
+        VTxMxV(sout, v1, m, v2);
+        return sout;
+    }
+
+    inline void VTxMxV(
+        double& sout,
+        const FSDimensionlessVector& v1,
+        const FSRotationMatrix& m,
+        const FSDimensionlessVector& v2
+    )
+    {
+        VTxMxV<double, FSDimensionlessVector>(sout, v1, m, v2);
+    }
+
+    inline double VTxMxV(
+        const FSDimensionlessVector& v1,
+        const FSRotationMatrix& m,
+        const FSDimensionlessVector& v2
+    )
+    {
+        return VTxMxV<double, FSDimensionlessVector>(v1, m, v2);
+    }
+
+
+    template<typename VectorType>
+    SPICE_API void VTxMxV(
+        double& sout,
+        const VectorType& v1,
+        const FSStateTransform& m,
+        const VectorType& v2
+    );
+
+    template<class VectorType>
+    inline double VTxMxV(
+        const VectorType& v1,
+        const FSStateTransform& m,
+        const VectorType& v2
+    )
+    {
+        double sout;
+        VTxMxV(sout, v1, m, v2);
+        return sout;
+    }
+
 
 
     // unit normal and magnitude

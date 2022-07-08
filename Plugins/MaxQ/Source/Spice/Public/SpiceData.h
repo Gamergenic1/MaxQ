@@ -62,7 +62,6 @@ namespace MaxQ::Data
 
     SPICE_API FSEphemerisTime Now();
 
-    // bodvrd
     SPICE_API void Bodvrd(
         double& Value,
         const FString& bodynm,
@@ -113,6 +112,19 @@ namespace MaxQ::Data
     {
         ValueType ReturnValue;
         Bodvrd<ValueType>(ReturnValue, bodynm, item, ResultCode, ErrorMessage);
+        return ReturnValue;
+    }
+
+    template<>
+    inline double Bodvrd(
+        const FString& bodynm,
+        const FString& item,
+        ES_ResultCode* ResultCode,
+        FString* ErrorMessage
+    )
+    {
+        double ReturnValue;
+        Bodvrd(ReturnValue, bodynm, item, ResultCode, ErrorMessage);
         return ReturnValue;
     }
 
@@ -179,6 +191,19 @@ namespace MaxQ::Data
     {
         ValueType ReturnValue;
         Bodvcd<ValueType>(ReturnValue, bodyid, item, ResultCode, ErrorMessage);
+        return ReturnValue;
+    }
+
+    template<>
+    inline double Bodvcd(
+        int bodyid,
+        const FString& item,
+        ES_ResultCode* ResultCode,
+        FString* ErrorMessage
+    )
+    {
+        double ReturnValue;
+        Bodvcd(ReturnValue, bodyid, item, ResultCode, ErrorMessage);
         return ReturnValue;
     }
 

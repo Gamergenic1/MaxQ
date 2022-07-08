@@ -42,9 +42,7 @@ double USpiceK2::bodvrd_double_K2(
     const FString& item
 )
 {
-    double value;
-    MaxQ::Data::Bodvrd(value, bodynm, item, &ResultCode, &ErrorMessage);
-    return value;
+    return MaxQ::Data::Bodvrd<double>(bodynm, item, &ResultCode, &ErrorMessage);
 }
 
 FSDimensionlessVector USpiceK2::bodvrd_vector_K2(
@@ -75,9 +73,7 @@ double USpiceK2::bodvcd_double_K2(
     const FString& item
 )
 {
-    double value;
-    MaxQ::Data::Bodvcd(value, bodyid, item, &ResultCode, &ErrorMessage);
-    return value;
+    return MaxQ::Data::Bodvcd<double>(bodyid, item, &ResultCode, &ErrorMessage);
 }
 
 FSDimensionlessVector USpiceK2::bodvcd_vector_K2(
@@ -107,6 +103,8 @@ TArray<double> USpiceK2::gdpool_array_K2(
     int start
 )
 {
+    // Not implemented by MaxQ::Data
+
     // Inputs
     ConstSpiceChar* _name = TCHAR_TO_ANSI(*name);
     SpiceInt        _start = 0;
@@ -230,34 +228,22 @@ FSDimensionlessStateVector USpiceK2::vadd_state_vector_K2(const FSDimensionlessS
 
 FSDimensionlessVector USpiceK2::vcrss_vector_K2(const FSDimensionlessVector& v1, const FSDimensionlessVector& v2)
 {
-    SpiceDouble _v1[3]; v1.CopyTo(_v1);
-    SpiceDouble _v2[3]; v2.CopyTo(_v2);
-
-    SpiceDouble _vout[3]; ZeroOut(_vout);
-
-    vcrss_c(_v1, _v2, _vout);
-
-    return FSDimensionlessVector(_vout);
+    return MaxQ::Math::Vcrss(v1, v2);
 }
 
 double USpiceK2::vdist_vector_K2(const FSDimensionlessVector& v1, const FSDimensionlessVector& v2)
 {
-    SpiceDouble _v1[3]; v1.CopyTo(_v1);
-    SpiceDouble _v2[3]; v2.CopyTo(_v2);
-
-    return (double)vdist_c(_v1, _v2);
+    return MaxQ::Math::Vdist(v1, v2);
 }
 
 double USpiceK2::vdot_vector_K2(const FSDimensionlessVector& v1, const FSDimensionlessVector& v2)
 {
-    SpiceDouble _v1[3]; v1.CopyTo(_v1);
-    SpiceDouble _v2[3]; v2.CopyTo(_v2);
-
-    return (double)vdot_c(_v1, _v2);
+    return MaxQ::Math::Vdot<double,FSDimensionlessVector>(v1, v2);
 }
 
 FSDimensionlessVector USpiceK2::vequ_vector_K2(const FSDimensionlessVector& v)
 {
+    // Not implemented by MaxQ::Math
     SpiceDouble _vin[3];  v.CopyTo(_vin);
     SpiceDouble _vout[3]; ZeroOut(_vout);
 
@@ -268,12 +254,7 @@ FSDimensionlessVector USpiceK2::vequ_vector_K2(const FSDimensionlessVector& v)
 
 FSDimensionlessVector USpiceK2::vhat_vector_K2(const FSDimensionlessVector& v)
 {
-    SpiceDouble _v1[3];  v.CopyTo(_v1);
-    SpiceDouble _vout[3]; ZeroOut(_vout);
-
-    vhat_c(_v1, _vout);
-
-    return FSDimensionlessVector(_vout);
+    return MaxQ::Math::Vhat(v);
 }
 
 FSDimensionlessVector USpiceK2::vlcom_vector_K2(double a, const FSDimensionlessVector& v1, double b, const FSDimensionlessVector& v2)
@@ -299,13 +280,12 @@ FSDimensionlessStateVector USpiceK2::vminus_state_vector_K2(const FSDimensionles
 
 double USpiceK2::vnorm_vector_K2(const FSDimensionlessVector& v)
 {
-    ConstSpiceDouble _v1[3]{ v.x, v.y, v.z };
-
-    return vnorm_c(_v1);
+    return MaxQ::Math::Vnorm(v);
 }
 
 FSDimensionlessVector USpiceK2::vpack_vector_K2(double x, double y, double z)
 {
+    // Trivial, so not implemented by MaxQ::Math
     ConstSpiceDouble _x { x };
     ConstSpiceDouble _y { y };
     ConstSpiceDouble _z { z };
@@ -318,6 +298,7 @@ FSDimensionlessVector USpiceK2::vpack_vector_K2(double x, double y, double z)
 
 FSDimensionlessStateVector USpiceK2::vpack_state_vector_K2(double x, double y, double z, double dx, double dy, double dz)
 {
+    // Trivial, so not implemented by MaxQ::Math
     SpiceDouble _v[3]{ 0, 0, 0 };
     {
         ConstSpiceDouble _x{ x };
@@ -343,66 +324,27 @@ FSDimensionlessStateVector USpiceK2::vpack_state_vector_K2(double x, double y, d
 
 FSDimensionlessVector USpiceK2::vperp_vector_K2(const FSDimensionlessVector& a, const FSDimensionlessVector& b)
 {
-    ConstSpiceDouble _a[3]{ a.x, a.y, a.z };
-    ConstSpiceDouble _b[3]{ a.x, a.y, a.z };
-
-    SpiceDouble _p[3]{ 0, 0, 0 };
-
-    vperp_c(_a, _b, _p);
-
-    return { _p };
+    return MaxQ::Math::Vperp(a, b);
 }
 
-FSDimensionlessVector USpiceK2::vprjp_vector_K2(const FSDimensionlessVector& vin, const FSPlane& plane)
+FSDimensionlessVector USpiceK2::vprjp_vector_K2(const FSDimensionlessVector& v, const FSPlane& plane)
 {
-    ConstSpiceDouble _vin[3]     { vin.x, vin.y, vin.z };
-    SpicePlane _plane;      CopyTo(plane, _plane);
-    SpiceDouble _vout[3]    { 0, 0, 0 };
-
-    vprjp_c(_vin, &_plane, _vout);
-
-    UnexpectedErrorCheck(false);
-
-    return { _vout };
+    return MaxQ::Math::Vprjp(v, plane);
 }
 
 FSDimensionlessVector USpiceK2::vproj_vector_K2(const FSDimensionlessVector& a, const FSDimensionlessVector& b)
 {
-    ConstSpiceDouble _a[3]{ a.x, a.y, a.z };
-    ConstSpiceDouble _b[3]{ a.x, a.y, a.z };
-
-    SpiceDouble _p[3]{ 0, 0, 0 };
-
-    vproj_c(_a, _b, _p);
-
-    return { _p };
+    return MaxQ::Math::Vproj(a, b);
 }
 
-FSDimensionlessVector USpiceK2::vscl_vector_K2(double s, const FSDimensionlessVector& v1)
+FSDimensionlessVector USpiceK2::vscl_vector_K2(double s, const FSDimensionlessVector& v)
 {
-    ConstSpiceDouble _s          { s };
-    ConstSpiceDouble _v1[3]      { v1.x, v1.y, v1.z };
-
-    SpiceDouble _vout[3]    { 0, 0, 0 };
-
-    vscl_c(_s, _v1, _vout);
-
-    return { _vout };
+    return MaxQ::Math::Vscl(s, v);
 }
 
 FSAngle USpiceK2::vsep_vector_K2(const FSDimensionlessVector& v1, const FSDimensionlessVector& v2)
 {
-    // Inputs
-    ConstSpiceDouble _v1[3]  { v1.x, v1.y, v1.z };
-    ConstSpiceDouble _v2[3]  { v2.x, v2.y, v2.z };
-    // Output
-    SpiceDouble _out    { 0 };
-
-    // Invocation
-    _out = vsep_c(_v1, _v2);
-
-    // Return Value
-    return { _out };
+    return MaxQ::Math::Vsep(v1, v2);
 }
 
 FSDimensionlessVector USpiceK2::vsub_vector_K2(const FSDimensionlessVector& v1, const FSDimensionlessVector& v2)
@@ -417,6 +359,7 @@ FSDimensionlessStateVector USpiceK2::vsub_state_vector_K2(const FSDimensionlessS
 
 void USpiceK2::vupack_vector_K2(const FSDimensionlessVector& v, double& x, double& y, double& z)
 {
+    // Trivial, so not implemented by MaxQ::Math
     ConstSpiceDouble _v[3]{ v.x, v.y, v.z };
     SpiceDouble _x {x};
     SpiceDouble _y {y};
@@ -431,7 +374,7 @@ void USpiceK2::vupack_vector_K2(const FSDimensionlessVector& v, double& x, doubl
 
 void USpiceK2::vupack_state_vector_K2(const FSDimensionlessStateVector& v, double& x, double& y, double& z, double& dx, double& dy, double& dz)
 {
-
+    // Trivial, so not implemented by MaxQ::Math
     {
         ConstSpiceDouble _vr[3]{ v.r.x, v.r.y, v.r.z };
         SpiceDouble _x{ x };
@@ -461,31 +404,17 @@ void USpiceK2::vupack_state_vector_K2(const FSDimensionlessStateVector& v, doubl
 
 double USpiceK2::vtmv_vector_K2(const FSDimensionlessVector& v1, const FSRotationMatrix& matrix, const FSDimensionlessVector& v2)
 {
-    ConstSpiceDouble _v1[3]{ v1.x, v1.y, v1.z };
-    SpiceDouble _matrix[3][3]; matrix.CopyTo(_matrix);
-    ConstSpiceDouble _v2[3]{ v2.x, v2.y, v2.z };
-
-    return vtmv_c(_v1, _matrix, _v2);
+    return MaxQ::Math::VTxMxV(v1, matrix, v2);
 }
 
 double USpiceK2::vtmv_state_vector_K2(const FSDimensionlessStateVector& v1, const FSStateTransform& matrix, const FSDimensionlessStateVector& v2)
 {
-    // Modern C++ brace initialization stinks here.  Too verbose, too many points of failure.
-    //
-    // SpiceDouble _v1[6] { v1.r.x, v1.r.y, v1.r.z, v1.dr.x, v1.dr.y, v1.dr.z };
-    //
-    SpiceDouble _v1[6];         v1.CopyTo(_v1);
-    SpiceDouble _matrix[6][6];  matrix.CopyTo(_matrix);
-    SpiceDouble _v2[6];         v2.CopyTo(_v2);
-    // Now, mixed style (C++98 and now Modern C++ braces).  Boo!
-    constexpr SpiceInt nrow { 6 };
-    constexpr SpiceInt ncol { 6 };
-
-    return vtmvg_c(_v1, _matrix, _v2, nrow, ncol);
+    return MaxQ::Math::VTxMxV(v1, matrix, v2);
 }
 
 bool USpiceK2::vzero_vector_K2(const FSDimensionlessVector& v)
 {
+    // Trivial, so not implemented by MaxQ::Math
     ConstSpiceDouble _v[3]{ v.x, v.y, v.z };
 
     return vzero_c(_v) == SPICETRUE;
@@ -493,6 +422,7 @@ bool USpiceK2::vzero_vector_K2(const FSDimensionlessVector& v)
 
 bool USpiceK2::vzero_state_vector_K2(const FSDimensionlessStateVector& v)
 {
+    // Trivial, so not implemented by MaxQ::Math
     SpiceDouble _v[6];  v.CopyTo(_v);
     constexpr SpiceInt ndim{ 6 };
 
@@ -501,10 +431,7 @@ bool USpiceK2::vzero_state_vector_K2(const FSDimensionlessStateVector& v)
 
 double USpiceK2::vrel_vector_K2(const FSDimensionlessVector& v1, const FSDimensionlessVector& v2)
 {
-    ConstSpiceDouble _v1[3]{ v1.x, v1.y, v1.z };
-    ConstSpiceDouble _v2[3]{ v2.x, v2.y, v2.z };
-
-    return vrel_c(_v1, _v2);
+    return MaxQ::Math::Vrel(v1, v2);
 }
 
 FSDimensionlessVector USpiceK2::gdpool_vector_K2(
@@ -513,30 +440,7 @@ FSDimensionlessVector USpiceK2::gdpool_vector_K2(
     const FString& name
 )
 {
-    // Inputs
-    ConstSpiceChar* _name = TCHAR_TO_ANSI(*name);
-    SpiceInt        _start = 0;
-    SpiceInt        _room = 3;
-    // Outputs
-    SpiceInt        _n = 0;
-    SpiceDouble     _value[3];  ZeroOut(_value);
-    SpiceBoolean    _found = SPICEFALSE;
-
-    // Invocation
-    gdpool_c(_name, _start, _room, &_n, _value, &_found);
-
-    // Return values
-    FSDimensionlessVector value = FSDimensionlessVector(_value);
-
-    // Error Handling
-    ErrorCheck(ResultCode, ErrorMessage);
-
-    if (_found != SPICETRUE)
-    {
-        ResultCode = ES_ResultCode::Error;
-    }
-
-    return value;
+    return MaxQ::Data::Gdpool<FSDimensionlessVector>(name, &ResultCode, &ErrorMessage);
 }
 
 
@@ -546,30 +450,7 @@ double USpiceK2::gdpool_double_K2(
     const FString& name
 )
 {
-    // Inputs
-    ConstSpiceChar* _name = TCHAR_TO_ANSI(*name);
-    SpiceInt        _start = 0;
-    SpiceInt        _room = 1;
-    // Outputs
-    SpiceInt        _n = 0;
-    SpiceDouble     _value = 0;
-    SpiceBoolean    _found = SPICEFALSE;
-
-    // Invocation
-    gdpool_c(_name, _start, _room, &_n, &_value, &_found);
-
-    // Return values
-    double value = _value;
-
-    // Error Handling
-    ErrorCheck(ResultCode, ErrorMessage);
-
-    if (_found != SPICETRUE)
-    {
-        ResultCode = ES_ResultCode::Error;
-    }
-
-    return value;
+    return MaxQ::Data::Gdpool(name, &ResultCode, &ErrorMessage);
 }
 
 

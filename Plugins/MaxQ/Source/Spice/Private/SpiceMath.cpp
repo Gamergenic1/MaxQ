@@ -217,8 +217,9 @@ namespace MaxQ::Math
         xM<mxmtg_c>(mout, m1, m2);
     }
 
-    template<class VectorType, auto func>
-    inline void v3op(VectorType& vout, const VectorType& v)
+
+    template<class VectorOutType, class VectorInType, auto func>
+    inline void v3op(VectorOutType& vout, const VectorInType& v)
     {
         // Inputs
         SpiceDouble    _v[3];  v.CopyTo(_v);
@@ -230,9 +231,30 @@ namespace MaxQ::Math
         func(_v, _vout);
 
         // Return Value
-        vout = VectorType{ _vout };
+        vout = VectorOutType{ _vout };
     }
 
+
+    template<class VectorType, auto func>
+    inline void v3op(VectorType& vout, const VectorType& v)
+    {
+        v3op<VectorType, VectorType, func>(vout, v);
+    }
+
+
+    template<class VOutType, class V1Type, class V2Type, auto func>
+    inline void v3sop(VOutType& sout, const V1Type& v1, const V2Type& v2)
+    {
+        // Inputs
+        SpiceDouble    _v1[3];  v1.CopyTo(_v1);
+        SpiceDouble    _v2[3];  v2.CopyTo(_v2);
+
+        // Outputs
+        SpiceDouble    _sout = static_cast<double>(sout);
+
+        // Invocation
+        sout = func(_v1, _v2);
+    }
 
     template<class VOutType, class V1Type, class V2Type, auto func>
     inline void v3op(VOutType& vout, const V1Type& v1, const V2Type& v2)
@@ -246,27 +268,11 @@ namespace MaxQ::Math
 
         // Invocation
         func(_v1, _v2, _vout);
-
+        
         // Return Value
         vout = VOutType{ _vout };
     }
 
-    template<class VectorType, auto func>
-    inline void v3op(VectorType& vout, const VectorType& v1, const VectorType& v2)
-    {
-        v3op<VectorType,VectorType,VectorType,func>(vout, v1, v2);
-    }
-
-    template<class VectorType>
-    SPICE_API void Vadd(VectorType& vsum, const VectorType& v1, const VectorType& v2)
-    {
-        v3op<VectorType,vadd_c>(vsum, v1, v2);
-    }
-
-    template SPICE_API void Vadd<FSAngularVelocity>(FSAngularVelocity&, const FSAngularVelocity&, const FSAngularVelocity&);
-    template SPICE_API void Vadd<FSDistanceVector>(FSDistanceVector&, const FSDistanceVector&, const FSDistanceVector&);
-    template SPICE_API void Vadd<FSVelocityVector>(FSVelocityVector&, const FSVelocityVector&, const FSVelocityVector&);
-    template SPICE_API void Vadd<FSDimensionlessVector>(FSDimensionlessVector&, const FSDimensionlessVector&, const FSDimensionlessVector&);
 
     template<class VectorType, auto func>
     inline void v6op(VectorType& vout, const VectorType& v)
@@ -303,6 +309,24 @@ namespace MaxQ::Math
         sum = VectorType{ _sum };
     }
 
+    template<class VectorType, auto func>
+    inline void v3op(VectorType& vout, const VectorType& v1, const VectorType& v2)
+    {
+        v3op<VectorType,VectorType,VectorType,func>(vout, v1, v2);
+    }
+
+    template<class VectorType>
+    SPICE_API void Vadd(VectorType& vsum, const VectorType& v1, const VectorType& v2)
+    {
+        v3op<VectorType,vadd_c>(vsum, v1, v2);
+    }
+
+
+    template SPICE_API void Vadd<FSAngularVelocity>(FSAngularVelocity&, const FSAngularVelocity&, const FSAngularVelocity&);
+    template SPICE_API void Vadd<FSDistanceVector>(FSDistanceVector&, const FSDistanceVector&, const FSDistanceVector&);
+    template SPICE_API void Vadd<FSVelocityVector>(FSVelocityVector&, const FSVelocityVector&, const FSVelocityVector&);
+    template SPICE_API void Vadd<FSDimensionlessVector>(FSDimensionlessVector&, const FSDimensionlessVector&, const FSDimensionlessVector&);
+
     template<>
     SPICE_API void Vadd(FSStateVector& sum, const FSStateVector& v1, const FSStateVector& v2)
     {
@@ -315,6 +339,43 @@ namespace MaxQ::Math
         v6op<FSDimensionlessStateVector, vaddg_c>(sum, v1, v2);
     }
 
+
+    template<class VectorType>
+    SPICE_API void Vhat(FSDimensionlessVector& vhat, const VectorType& v)
+    {
+        v3op<FSDimensionlessVector, VectorType,  vhat_c>(vhat, v);
+    }
+
+    template SPICE_API void Vhat<FSAngularVelocity>(FSDimensionlessVector&, const FSAngularVelocity&);
+    template SPICE_API void Vhat<FSDistanceVector>(FSDimensionlessVector&, const FSDistanceVector&);
+    template SPICE_API void Vhat<FSVelocityVector>(FSDimensionlessVector&, const FSVelocityVector&);
+    template SPICE_API void Vhat<FSDimensionlessVector>(FSDimensionlessVector&, const FSDimensionlessVector&);
+
+    SPICE_API void Vrel(double& vnorm, const FSDimensionlessVector& v1, const FSDimensionlessVector& v2)
+    {
+        SpiceDouble _v1[3]; v1.CopyTo(_v1);
+        SpiceDouble _v2[3]; v2.CopyTo(_v2);
+
+        vnorm = vrel_c(_v1, _v2);
+    }
+
+    template<class VectorType>
+    SPICE_API void Vscl(VectorType& vscaled, double s, const VectorType& v)
+    {
+        ConstSpiceDouble _s = s;
+        SpiceDouble _v[3]; v.CopyTo(_v);
+        SpiceDouble _vscaled[3]; vscaled.CopyTo(_vscaled);
+
+        vscl_c(s, _v, _vscaled);
+
+        vscaled = { _vscaled };
+    }
+    template SPICE_API void Vscl<FSAngularVelocity>(FSAngularVelocity&, double s, const FSAngularVelocity&);
+    template SPICE_API void Vscl<FSDistanceVector>(FSDistanceVector&, double s, const FSDistanceVector&);
+    template SPICE_API void Vscl<FSVelocityVector>(FSVelocityVector&, double s, const FSVelocityVector&);
+    template SPICE_API void Vscl<FSDimensionlessVector>(FSDimensionlessVector&, double s, const FSDimensionlessVector&);
+
+
     template<class VectorType>
     SPICE_API void Vsub(VectorType& vdifference, const VectorType& v1, const VectorType& v2)
     {
@@ -326,6 +387,12 @@ namespace MaxQ::Math
     template SPICE_API void Vsub<FSDistanceVector>(FSDistanceVector&, const FSDistanceVector&, const FSDistanceVector&);
     template SPICE_API void Vsub<FSVelocityVector>(FSVelocityVector&, const FSVelocityVector&, const FSVelocityVector&);
     template SPICE_API void Vsub<FSDimensionlessVector>(FSDimensionlessVector&, const FSDimensionlessVector&, const FSDimensionlessVector&);
+    
+    template<class VectorType>
+    SPICE_API void Vrel(VectorType& vdifference, const VectorType& v1, const VectorType& v2)
+    {
+        v3sop<VectorType, vrel_c>(vdifference, v1, v2);
+    }
 
     template<>
     SPICE_API void Vsub(FSStateVector& vdifference, const FSStateVector& v1, const FSStateVector& v2)
@@ -484,6 +551,65 @@ namespace MaxQ::Math
         return v3op<FSDimensionlessVector, FSDistanceVector, FSVelocityVector, ucrss_c>(vout, v1, v2);
     }
 
+    template<class VectorType>
+    SPICE_API void Vcrss(VectorType& vout, const VectorType& v1, const VectorType& v2)
+    {
+        return v3op<VectorType, vcrss_c>(vout, v1, v2);
+    }
+
+    template SPICE_API void Vcrss<FSAngularVelocity>(FSAngularVelocity&, const FSAngularVelocity&, const FSAngularVelocity&);
+    template SPICE_API void Vcrss<FSDistanceVector>(FSDistanceVector&, const FSDistanceVector&, const FSDistanceVector&);
+    template SPICE_API void Vcrss<FSVelocityVector>(FSVelocityVector&, const FSVelocityVector&, const FSVelocityVector&);
+    template SPICE_API void Vcrss<FSDimensionlessVector>(FSDimensionlessVector&, const FSDimensionlessVector&, const FSDimensionlessVector&);
+
+    SPICE_API void Vcrss(FSDimensionlessVector& vout, const FSDistanceVector& v1, const FSVelocityVector& v2)
+    {
+        return v3op<FSDimensionlessVector, FSDistanceVector, FSVelocityVector, vcrss_c>(vout, v1, v2);
+    }
+
+    template<class VectorType>
+    SPICE_API void Vperp(VectorType& vout, const VectorType& v1, const VectorType& v2)
+    {
+        return v3op<VectorType, vperp_c>(vout, v1, v2);
+    }
+
+    template SPICE_API void Vperp<FSAngularVelocity>(FSAngularVelocity&, const FSAngularVelocity&, const FSAngularVelocity&);
+    template SPICE_API void Vperp<FSDistanceVector>(FSDistanceVector&, const FSDistanceVector&, const FSDistanceVector&);
+    template SPICE_API void Vperp<FSVelocityVector>(FSVelocityVector&, const FSVelocityVector&, const FSVelocityVector&);
+    template SPICE_API void Vperp<FSDimensionlessVector>(FSDimensionlessVector&, const FSDimensionlessVector&, const FSDimensionlessVector&);
+
+    template<class VectorType>
+    SPICE_API void Vproj(VectorType& vout, const VectorType& v1, const VectorType& v2)
+    {
+        return v3op<VectorType, vproj_c>(vout, v1, v2);
+    }
+
+    template SPICE_API void Vproj<FSAngularVelocity>(FSAngularVelocity&, const FSAngularVelocity&, const FSAngularVelocity&);
+    template SPICE_API void Vproj<FSDistanceVector>(FSDistanceVector&, const FSDistanceVector&, const FSDistanceVector&);
+    template SPICE_API void Vproj<FSVelocityVector>(FSVelocityVector&, const FSVelocityVector&, const FSVelocityVector&);
+    template SPICE_API void Vproj<FSDimensionlessVector>(FSDimensionlessVector&, const FSDimensionlessVector&, const FSDimensionlessVector&);
+
+
+    template<class VectorType>
+    SPICE_API void Vprjp(VectorType& vout, const VectorType& v, const FSPlane& plane)
+    {
+        SpiceDouble _vin[3]; v.CopyTo(_vin);
+        SpicePlane _plane;          CopyTo(plane, _plane);
+        SpiceDouble _vout[3]{ 0, 0, 0 };
+
+        vprjp_c(_vin, &_plane, _vout);
+
+        UnexpectedErrorCheck(false);
+
+        vout = { _vout };
+    }
+
+    template SPICE_API void Vprjp<FSAngularVelocity>(FSAngularVelocity&, const FSAngularVelocity&, const FSPlane&);
+    template SPICE_API void Vprjp<FSDistanceVector>(FSDistanceVector&, const FSDistanceVector&, const FSPlane&);
+    template SPICE_API void Vprjp<FSVelocityVector>(FSVelocityVector&, const FSVelocityVector&, const FSPlane&);
+    template SPICE_API void Vprjp<FSDimensionlessVector>(FSDimensionlessVector&, const FSDimensionlessVector&, const FSPlane&);
+
+
     template<class ScalarType, class VectorType>
     inline void Unorm(FSDimensionlessVector& vout, ScalarType& vmag, const VectorType& v)
     {
@@ -571,6 +697,122 @@ namespace MaxQ::Math
     template SPICE_API void Vlcom3<FSDistanceVector>(FSDistanceVector&, double, const FSDistanceVector&, double, const FSDistanceVector&, double, const FSDistanceVector&);
     template SPICE_API void Vlcom3<FSVelocityVector>(FSVelocityVector&, double, const FSVelocityVector&, double, const FSVelocityVector&, double, const FSVelocityVector&);
     template SPICE_API void Vlcom3<FSDimensionlessVector>(FSDimensionlessVector&, double, const FSDimensionlessVector&, double, const FSDimensionlessVector&, double, const FSDimensionlessVector&);
+
+
+    template<class OutputType, class VectorType>
+    SPICE_API void Vdot(
+        OutputType& dot,
+        const VectorType& v1,
+        const VectorType& v2
+    )
+    {
+        v3sop<OutputType, VectorType, VectorType, vdot_c>(dot, v1, v2);
+    }
+
+    template SPICE_API void Vdot<double, FSDimensionlessVector>(double&, const FSDimensionlessVector&, const FSDimensionlessVector&);
+    template SPICE_API void Vdot<FSDistance, FSDistanceVector>(FSDistance&, const FSDistanceVector&, const FSDistanceVector&);
+    template SPICE_API void Vdot<FSSpeed, FSVelocityVector>(FSSpeed&, const FSVelocityVector&, const FSVelocityVector&);
+    template SPICE_API void Vdot<FSAngularRate, FSAngularVelocity>(FSAngularRate&, const FSAngularVelocity&, const FSAngularVelocity&);
+
+
+    SPICE_API void Vdot(
+        double& dot,
+        const FSDimensionlessVector& v1,
+        const FSDimensionlessVector& v2
+    )
+
+    {
+        Vdot<double,FSDimensionlessVector>(dot, v1, v2);
+    }
+
+    SPICE_API void Vdist(
+        double& dist,
+        const FSDimensionlessVector& v1,
+        const FSDimensionlessVector& v2
+    )
+    {
+        v3sop<double, FSDimensionlessVector, FSDimensionlessVector, vdist_c>(dist, v1, v2);
+    }
+
+
+    template<class OutputType, class VectorType>
+    SPICE_API void Vdist(
+        OutputType& dist,
+        const VectorType& v1,
+        const VectorType& v2
+    )
+    {
+        v3sop<OutputType, VectorType, VectorType, vdist_c>(dist, v1, v2);
+    }
+
+    template SPICE_API void Vdist<double, FSDimensionlessVector>(double&, const FSDimensionlessVector&, const FSDimensionlessVector&);
+    template SPICE_API void Vdist<FSDistance, FSDistanceVector>(FSDistance&, const FSDistanceVector&, const FSDistanceVector&);
+    template SPICE_API void Vdist<FSSpeed, FSVelocityVector>(FSSpeed&, const FSVelocityVector&, const FSVelocityVector&);
+    template SPICE_API void Vdist<FSAngularRate, FSAngularVelocity>(FSAngularRate&, const FSAngularVelocity&, const FSAngularVelocity&);
+
+    SPICE_API void Vnorm(double& vnorm, const FSDimensionlessVector& v)
+    {
+        SpiceDouble _v[3]; v.CopyTo(_v);
+
+        vnorm = vnorm_c(_v);
+    }
+
+    template<class VectorType>
+    SPICE_API void Vsep(FSAngle& angle, const VectorType& v1, const VectorType& v2)
+    {
+        v3sop<FSAngle, VectorType, VectorType, vsep_c>(angle, v1, v2);
+    }
+    template SPICE_API void Vsep<FSDimensionlessVector>(FSAngle&, const FSDimensionlessVector&, const FSDimensionlessVector&);
+    template SPICE_API void Vsep<FSDistanceVector>(FSAngle&, const FSDistanceVector&, const FSDistanceVector&);
+    template SPICE_API void Vsep<FSVelocityVector>(FSAngle&, const FSVelocityVector&, const FSVelocityVector&);
+    template SPICE_API void Vsep<FSAngularVelocity>(FSAngle&, const FSAngularVelocity&, const FSAngularVelocity&);
+
+
+
+    template<typename ScalarType, typename VectorType>
+    SPICE_API void VTxMxV(
+        ScalarType& sout,
+        const VectorType& v1,
+        const FSRotationMatrix& m,
+        const VectorType& v2
+    )
+    {
+        // Inputs
+        SpiceDouble    _v1[3];		v1.CopyTo(_v1);
+        SpiceDouble    _m[3][3];	m.CopyTo(_m);
+        SpiceDouble    _v2[3];		v2.CopyTo(_v2);
+
+        // Invocation
+        sout = vtmv_c(_v1, _m, _v2);
+    }
+
+    template SPICE_API void VTxMxV<double, FSDimensionlessVector>(double&, const FSDimensionlessVector&, const FSRotationMatrix&, const FSDimensionlessVector&);
+    template SPICE_API void VTxMxV<FSDistance, FSDistanceVector>(FSDistance&, const FSDistanceVector&, const FSRotationMatrix&, const FSDistanceVector&);
+    template SPICE_API void VTxMxV<FSSpeed, FSVelocityVector>(FSSpeed&, const FSVelocityVector&, const FSRotationMatrix&, const FSVelocityVector&);
+    template SPICE_API void VTxMxV<FSAngularRate, FSAngularVelocity>(FSAngularRate&, const FSAngularVelocity&, const FSRotationMatrix&, const FSAngularVelocity&);
+
+    template<typename VectorType>
+    SPICE_API void VTxMxV(
+        double& sout,
+        const VectorType& v1,
+        const FSStateTransform& m,
+        const VectorType& v2
+    )
+    {
+        // Inputs
+        SpiceDouble    _v1[6];		v1.CopyTo(_v1);
+        SpiceDouble    _m[6][6];	m.CopyTo(_m);
+        SpiceDouble    _v2[6];		v2.CopyTo(_v2);
+
+        constexpr SpiceInt _nrow = 6;
+        constexpr SpiceInt _ncol = 6;
+
+        // Invocation
+        sout = vtmvg_c(_v1, _m, _v2, _nrow, _ncol);
+    }
+    template SPICE_API void VTxMxV<FSDimensionlessStateVector>(double&, const FSDimensionlessStateVector&, const FSStateTransform&, const FSDimensionlessStateVector&);
+    template SPICE_API void VTxMxV<FSStateVector>(double&, const FSStateVector&, const FSStateTransform&, const FSStateVector&);
+
 
     SPICE_API void M2q(
         FSQuaternion& q,
