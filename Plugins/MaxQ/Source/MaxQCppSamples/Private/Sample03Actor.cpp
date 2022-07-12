@@ -420,7 +420,7 @@ void ASample03Actor::spkezr_fixed()
 
 void ASample03Actor::azlcpo(ES_AberrationCorrectionWithTransmissions abcorr)
 {
-    FString CaseName = USpiceTypes::toString(abcorr);
+    FString CaseName = MaxQ::Core::ToANSIString(abcorr);
     switch (abcorr)
     {
     case ES_AberrationCorrectionWithTransmissions::LT_S:
