@@ -72,6 +72,9 @@ PRAGMA_POP_PLATFORM_DEFAULT_PACKING
 
 using namespace MaxQ::Private;
 
+// Private helper for readability purposes
+inline ES_FoundCode GetFoundCode(SpiceBoolean FoundCode) { return FoundCode == SPICETRUE ? ES_FoundCode::Found : ES_FoundCode::NotFound; }
+
 
 void USpice::enumerate_kernels(
     ES_ResultCode& ResultCode,
@@ -613,7 +616,7 @@ void USpice::azlcpo(
     ConstSpiceChar* _method         = nullptr;
     ConstSpiceChar* _target         = TCHAR_TO_ANSI(*target);
     SpiceDouble         _et         = et.AsSpiceDouble();
-    ConstSpiceChar* _abcorr         = USpiceTypes::toString(abcorr);
+    ConstSpiceChar* _abcorr         = MaxQ::Core::ToANSIString(abcorr);
     SpiceBoolean        _azccw      = azccw ? SPICETRUE : SPICEFALSE;
     SpiceBoolean        _elplsz     = elplsz ? SPICETRUE : SPICEFALSE;
     SpiceDouble    _obspos[3];      obspos.CopyTo(_obspos);
@@ -712,7 +715,7 @@ void USpice::bodfnd(
 )
 {
     bool bSuccess = MaxQ::Data::Bodfnd(body, item);
-    FoundCode = bSuccess ? ES_FoundCode::Found : ES_FoundCode::NotFound;
+    FoundCode = GetFoundCode(bSuccess);
 }
 
 
@@ -723,7 +726,7 @@ void USpice::bodc2n(
 )
 {
     bool bSuccess = MaxQ::Data::Bodc2n(name, code);
-    FoundCode = bSuccess ? ES_FoundCode::Found : ES_FoundCode::NotFound;
+    FoundCode = GetFoundCode(bSuccess);
 }
 
 
@@ -749,16 +752,10 @@ void USpice::bodn2c(
 
     bodn2c_c(_name, &_code, &_found);
 
+    FoundCode = GetFoundCode(_found);
     if (_found != SPICEFALSE)
     {
         code = (int)_code;
-        FoundCode = ES_FoundCode::Found;
-    }
-    else
-    {
-        // For some reason this seems to expose a bug in UE5EA,
-        // ... The caller acts as if the Found exec branch should be taken.
-        FoundCode = ES_FoundCode::NotFound;
     }
 
     // Reset the current spice error in case a spice exception happened.
@@ -773,7 +770,7 @@ void USpice::bods2c(
 )
 {
     bool bSuccess = MaxQ::Data::Bods2c(code, name);
-    FoundCode = bSuccess ? ES_FoundCode::Found : ES_FoundCode::NotFound;
+    FoundCode = GetFoundCode(bSuccess);
 }
 
 /*
@@ -1226,7 +1223,9 @@ void USpice::ckfrot(
     SpiceDouble     _et = et.AsSpiceDouble();
     SpiceDouble     _m[3][3];  rotationMatrix.CopyTo(_m);
     SpiceInt        _ref = ref;
-    SpiceBoolean    _found = (FoundCode == ES_FoundCode::Found) ? SPICETRUE : SPICEFALSE;
+    // Behavior change: FoundCode no longer preserves input.
+    // Blueprints treat the param as an OUT unless we call it out as as REF with UPARAM, so there's really no point.
+    SpiceBoolean    _found {SPICEFALSE };
 
     // Invoke
     ckfrot_c(
@@ -1239,7 +1238,7 @@ void USpice::ckfrot(
 
     // Pack up outputs
     rotationMatrix = FSRotationMatrix(_m);
-    FoundCode = (_found == SPICETRUE) ? ES_FoundCode::Found : ES_FoundCode::NotFound;
+    FoundCode = GetFoundCode(_found);
     ref = _ref;
 
     // Error Handling
@@ -1262,7 +1261,10 @@ void USpice::ckfxfm(
     SpiceDouble     _et = et.AsSpiceDouble();
     SpiceDouble     _xform[6][6];  xform.CopyTo(_xform);
     SpiceInt        _ref = ref;
-    SpiceBoolean    _found = (FoundCode == ES_FoundCode::Found) ? SPICETRUE : SPICEFALSE;
+    // Behavior change: FoundCode no longer preserves input.
+    // Blueprints treat the param as an OUT unless we call it out as as REF with UPARAM, so there's really no point.
+    SpiceBoolean    _found{ SPICEFALSE };
+
 
     // Invoke
     ckfxfm_c(
@@ -1275,7 +1277,7 @@ void USpice::ckfxfm(
 
     // Pack up outputs
     xform = FSStateTransform(_xform);
-    FoundCode = (_found == SPICETRUE) ? ES_FoundCode::Found : ES_FoundCode::NotFound;
+    FoundCode = GetFoundCode(_found);
     ref = _ref;
 
     // Error Handling
@@ -1827,8 +1829,8 @@ void USpice::convrt(
 {
     // Inputs
     SpiceDouble		_x = in_value;
-    ConstSpiceChar* _in = USpiceTypes::toString(in);
-    ConstSpiceChar* _out = USpiceTypes::toString(out);
+    ConstSpiceChar* _in = MaxQ::Core::ToANSIString(in);
+    ConstSpiceChar* _out = MaxQ::Core::ToANSIString(out);
     // Outputs
     SpiceDouble		_y = 0;
 
@@ -2243,7 +2245,7 @@ void USpice::dlabfs(
     
     // Outputs
     SpiceDLADescr _dladsc;  ZeroOut(_dladsc);
-    SpiceBoolean  _found = SPICEFALSE;
+    SpiceBoolean  _found { SPICEFALSE };
     
     // Invocation
     dlabfs_c(
@@ -2254,7 +2256,7 @@ void USpice::dlabfs(
 
     // Pack output
     dladsc = FSDLADescr(&_dladsc);
-    FoundCode = (_found == SPICETRUE ? ES_FoundCode::Found : ES_FoundCode::NotFound);
+    FoundCode = GetFoundCode(_found);
 
     // Error Handling
     UnexpectedErrorCheck(false);
@@ -3378,7 +3380,7 @@ void USpice::frinfo(
     cent = (int)_cent;
     frclss = (int)_frclss;
     clssid = (int)_clssid;
-    FoundCode = _found == SPICETRUE ? ES_FoundCode::Found : ES_FoundCode::NotFound;
+    FoundCode = GetFoundCode(_found);
 }
 
 /*
@@ -3444,7 +3446,7 @@ void USpice::fovray(
     ConstSpiceChar* _inst = TCHAR_TO_ANSI(*inst);
     SpiceDouble     _raydir[3]; raydir.CopyTo(_raydir);
     ConstSpiceChar* _rframe = TCHAR_TO_ANSI(*rframe);
-    ConstSpiceChar*  _abcorr = USpiceTypes::toString(abcorr);
+    ConstSpiceChar*  _abcorr = MaxQ::Core::ToANSIString(abcorr);
     ConstSpiceChar* _observer = TCHAR_TO_ANSI(*observer);
     SpiceDouble     _et = et.AsSpiceDouble();
 
@@ -3485,9 +3487,9 @@ void USpice::fovtrg(
     // Inputs
     ConstSpiceChar* _inst   = TCHAR_TO_ANSI(*inst);
     ConstSpiceChar* _target = TCHAR_TO_ANSI(*target);
-    ConstSpiceChar* _tshape = USpiceTypes::toString(tshape);
+    ConstSpiceChar* _tshape = MaxQ::Core::ToANSIString(tshape);
     ConstSpiceChar* _tframe = TCHAR_TO_ANSI(*tframe);
-    ConstSpiceChar* _abcorr = USpiceTypes::toString(abcorr);
+    ConstSpiceChar* _abcorr = MaxQ::Core::ToANSIString(abcorr);
     ConstSpiceChar* _obsrvr = TCHAR_TO_ANSI(*obsrvr);
     SpiceDouble    _et      = et.AsSpiceDouble();
     
@@ -3871,9 +3873,9 @@ void USpice::gfdist(
 
     // Inputs
     ConstSpiceChar* _target = TCHAR_TO_ANSI(*target);
-    ConstSpiceChar* _abcorr = USpiceTypes::toString(abcorr);
+    ConstSpiceChar* _abcorr = MaxQ::Core::ToANSIString(abcorr);
     ConstSpiceChar* _obsrvr = TCHAR_TO_ANSI(*obsrvr);
-    ConstSpiceChar* _relate = USpiceTypes::toString(relate);
+    ConstSpiceChar* _relate = MaxQ::Core::ToANSIString(relate);
     SpiceDouble     _refval = refval.AsSpiceDouble();
     SpiceDouble     _adjust = adjust.AsSpiceDouble();
     SpiceDouble     _step   = step.AsSpiceDouble();
@@ -3969,14 +3971,14 @@ void USpice::gfilum(
     // The docs:
     // "The only choice currently supported is 'Ellipsoid'"
     ConstSpiceChar* _method = "Ellipsoid";
-    ConstSpiceChar* _angtyp = USpiceTypes::toString(angtyp);
+    ConstSpiceChar* _angtyp = MaxQ::Core::ToANSIString(angtyp);
     ConstSpiceChar* _target = TCHAR_TO_ANSI(*target);
     ConstSpiceChar* _illmn  = TCHAR_TO_ANSI(*illmn);
     ConstSpiceChar* _fixref = TCHAR_TO_ANSI(*fixref);
-    ConstSpiceChar* _abcorr = USpiceTypes::toString(abcorr);
+    ConstSpiceChar* _abcorr = MaxQ::Core::ToANSIString(abcorr);
     ConstSpiceChar* _obsrvr = TCHAR_TO_ANSI(*obsrvr);
     SpiceDouble     _spoint[3]; spoint.CopyTo(_spoint);
-    ConstSpiceChar* _relate = USpiceTypes::toString(relate);
+    ConstSpiceChar* _relate = MaxQ::Core::ToANSIString(relate);
     SpiceDouble     _refval = refval.AsSpiceDouble();
     SpiceDouble     _adjust = adjust.AsSpiceDouble();
     SpiceDouble     _step   = step.AsSpiceDouble();
@@ -4080,12 +4082,12 @@ void USpice::gfoclt(
 
     ConstSpiceChar* _occtyp;
     ConstSpiceChar* _front = TCHAR_TO_ANSI(*front);
-    ConstSpiceChar* _fshape = TCHAR_TO_ANSI(*USpiceTypes::toFString(frontShape, frontShapeSurfaces));
+    ConstSpiceChar* _fshape = TCHAR_TO_ANSI(*MaxQ::Core::ToString(frontShape, frontShapeSurfaces));
     ConstSpiceChar* _fframe = TCHAR_TO_ANSI(*frontframe);
     ConstSpiceChar* _back = TCHAR_TO_ANSI(*back);
-    ConstSpiceChar* _bshape = TCHAR_TO_ANSI(*USpiceTypes::toFString(backShape, backShapeSurfaces));
+    ConstSpiceChar* _bshape = TCHAR_TO_ANSI(*MaxQ::Core::ToString(backShape, backShapeSurfaces));
     ConstSpiceChar* _bframe = TCHAR_TO_ANSI(*backFrame);
-    ConstSpiceChar* _abcorr = USpiceTypes::toString(abcorr);
+    ConstSpiceChar* _abcorr = MaxQ::Core::ToANSIString(abcorr);
     ConstSpiceChar* _obsrvr = TCHAR_TO_ANSI(*obsrvr);
     SpiceDouble     _step = step.AsSpiceDouble();
     
@@ -4183,9 +4185,9 @@ void USpice::gfpa(
 
     ConstSpiceChar* _target = TCHAR_TO_ANSI(*target);
     ConstSpiceChar* _illmn = TCHAR_TO_ANSI(*illmn);
-    ConstSpiceChar* _abcorr = USpiceTypes::toString(abcorr);
+    ConstSpiceChar* _abcorr = MaxQ::Core::ToANSIString(abcorr);
     ConstSpiceChar* _obsrvr = TCHAR_TO_ANSI(*obsrvr);
-    ConstSpiceChar* _relate = USpiceTypes::toString(relate);
+    ConstSpiceChar* _relate = MaxQ::Core::ToANSIString(relate);
     SpiceDouble     _refval = refval.AsSpiceDouble();
     SpiceDouble     _adjust = adjust.AsSpiceDouble();
     SpiceDouble     _step = step.AsSpiceDouble();
@@ -4283,11 +4285,11 @@ void USpice::gfposc(
     // Inputs
     ConstSpiceChar* _target = TCHAR_TO_ANSI(*target);
     ConstSpiceChar* _frame  = TCHAR_TO_ANSI(*frame);
-    ConstSpiceChar* _abcorr = USpiceTypes::toString(abcorr);
+    ConstSpiceChar* _abcorr = MaxQ::Core::ToANSIString(abcorr);
     ConstSpiceChar* _obsrvr = TCHAR_TO_ANSI(*obsrvr);
-    ConstSpiceChar* _crdsys = USpiceTypes::toString(crdsys);
-    ConstSpiceChar* _coord  = USpiceTypes::toString(coord);
-    ConstSpiceChar* _relate = USpiceTypes::toString(relate);
+    ConstSpiceChar* _crdsys = MaxQ::Core::ToANSIString(crdsys);
+    ConstSpiceChar* _coord  = MaxQ::Core::ToANSIString(coord);
+    ConstSpiceChar* _relate = MaxQ::Core::ToANSIString(relate);
     SpiceDouble     _refval = refval;
     SpiceDouble     _adjust = adjust;
     SpiceDouble     _step   = step.AsSpiceDouble();
@@ -4357,7 +4359,7 @@ void USpice::gfrfov(
     ConstSpiceChar* _inst   = TCHAR_TO_ANSI(*inst);
     SpiceDouble     _raydir[3];  raydir.CopyTo(_raydir);
     ConstSpiceChar* _rframe = TCHAR_TO_ANSI(*rframe);
-    ConstSpiceChar* _abcorr = USpiceTypes::toString(abcorr);
+    ConstSpiceChar* _abcorr = MaxQ::Core::ToANSIString(abcorr);
     ConstSpiceChar* _obsrvr = TCHAR_TO_ANSI(*obsrvr);
     SpiceDouble     _step   = step.AsSpiceDouble();
 
@@ -4431,9 +4433,9 @@ void USpice::gfrr(
 
     // Inputs
     ConstSpiceChar* _target = TCHAR_TO_ANSI(*target);
-    ConstSpiceChar* _abcorr = USpiceTypes::toString(abcorr);
+    ConstSpiceChar* _abcorr = MaxQ::Core::ToANSIString(abcorr);
     ConstSpiceChar* _obsrvr = TCHAR_TO_ANSI(*obsrvr);
-    ConstSpiceChar* _relate = USpiceTypes::toString(relate);
+    ConstSpiceChar* _relate = MaxQ::Core::ToANSIString(relate);
     SpiceDouble     _refval = refval.AsSpiceDouble();
     SpiceDouble     _adjust = adjust.AsSpiceDouble();
     SpiceDouble     _step = step.AsSpiceDouble();
@@ -4534,7 +4536,7 @@ void USpice::gfsep(
     }
 
     ConstSpiceChar* _targ1 = TCHAR_TO_ANSI(*targ1);
-    ConstSpiceChar* _shape1 = USpiceTypes::toString(shape1);
+    ConstSpiceChar* _shape1 = MaxQ::Core::ToANSIString(shape1);
     /*
     * From the docs:
         gfsep_c does not currently use
@@ -4544,14 +4546,14 @@ void USpice::gfsep(
     */
     ConstSpiceChar* _frame1 = "NULL";
     ConstSpiceChar* _targ2 = TCHAR_TO_ANSI(*targ2);
-    ConstSpiceChar* _shape2 = USpiceTypes::toString(shape2);
+    ConstSpiceChar* _shape2 = MaxQ::Core::ToANSIString(shape2);
     /*
     * (comments from _frame1 apply)
     */
     ConstSpiceChar* _frame2 = "NULL";
-    ConstSpiceChar* _abcorr = USpiceTypes::toString(abcorr);
+    ConstSpiceChar* _abcorr = MaxQ::Core::ToANSIString(abcorr);
     ConstSpiceChar* _obsrvr = TCHAR_TO_ANSI(*obsrvr);
-    ConstSpiceChar* _relate = USpiceTypes::toString(relate);
+    ConstSpiceChar* _relate = MaxQ::Core::ToANSIString(relate);
     SpiceDouble     _refval = refval.AsSpiceDouble();
     SpiceDouble     _adjust = adjust.AsSpiceDouble();
     SpiceDouble     _step = step.AsSpiceDouble();
@@ -4655,13 +4657,13 @@ void USpice::gfsntc(
     ConstSpiceChar* _fixref = TCHAR_TO_ANSI(*fixref);
     // The docs list "Ellipsoid" as the only accepted value.
     ConstSpiceChar* _method = "Ellipsoid";
-    ConstSpiceChar* _abcorr = USpiceTypes::toString(abcorr);
+    ConstSpiceChar* _abcorr = MaxQ::Core::ToANSIString(abcorr);
     ConstSpiceChar* _obsrvr = TCHAR_TO_ANSI(*obsrvr);
     ConstSpiceChar* _dref   = TCHAR_TO_ANSI(*dref);
     SpiceDouble     _dvec[3]; dvec.CopyTo(_dvec);
-    ConstSpiceChar* _crdsys = USpiceTypes::toString(crdsys);
-    ConstSpiceChar* _coord  = USpiceTypes::toString(coord);
-    ConstSpiceChar* _relate = USpiceTypes::toString(relate);
+    ConstSpiceChar* _crdsys = MaxQ::Core::ToANSIString(crdsys);
+    ConstSpiceChar* _coord  = MaxQ::Core::ToANSIString(coord);
+    ConstSpiceChar* _relate = MaxQ::Core::ToANSIString(relate);
     SpiceDouble     _refval = refval;
     SpiceDouble     _adjust = adjust;
     SpiceDouble     _step   = step.AsSpiceDouble();
@@ -4753,9 +4755,9 @@ void USpice::gftfov(
     // Inputs
     ConstSpiceChar* _inst = TCHAR_TO_ANSI(*inst);
     ConstSpiceChar* _target = TCHAR_TO_ANSI(*inst);
-    ConstSpiceChar* _tshape = USpiceTypes::toString(tshape);
+    ConstSpiceChar* _tshape = MaxQ::Core::ToANSIString(tshape);
     ConstSpiceChar* _tframe = TCHAR_TO_ANSI(*inst);
-    ConstSpiceChar* _abcorr = USpiceTypes::toString(abcorr);
+    ConstSpiceChar* _abcorr = MaxQ::Core::ToANSIString(abcorr);
     ConstSpiceChar* _obsrvr = TCHAR_TO_ANSI(*inst);
     SpiceDouble     _step = step.AsSpiceDouble();
 
@@ -4840,12 +4842,12 @@ void USpice::gfsubc(
     // Inputs
     ConstSpiceChar* _target = TCHAR_TO_ANSI(*target);
     ConstSpiceChar* _fixref = TCHAR_TO_ANSI(*fixref);
-    ConstSpiceChar* _method = USpiceTypes::toString(method);
-    ConstSpiceChar* _abcorr = USpiceTypes::toString(abcorr);
+    ConstSpiceChar* _method = MaxQ::Core::ToANSIString(method);
+    ConstSpiceChar* _abcorr = MaxQ::Core::ToANSIString(abcorr);
     ConstSpiceChar* _obsrvr = TCHAR_TO_ANSI(*obsrvr);
-    ConstSpiceChar* _crdsys = USpiceTypes::toString(crdsys);
-    ConstSpiceChar* _coord = USpiceTypes::toString(coord);
-    ConstSpiceChar* _relate = USpiceTypes::toString(relate);
+    ConstSpiceChar* _crdsys = MaxQ::Core::ToANSIString(crdsys);
+    ConstSpiceChar* _coord = MaxQ::Core::ToANSIString(coord);
+    ConstSpiceChar* _relate = MaxQ::Core::ToANSIString(relate);
     SpiceDouble     _refval = (SpiceDouble)refval;
     SpiceDouble     _adjust = (SpiceDouble)adjust;
     SpiceDouble     _step = step.AsSpiceDouble();
@@ -4994,12 +4996,12 @@ void USpice::illumf(
 )
 {
     // Inputs
-    ConstSpiceChar* _method = TCHAR_TO_ANSI(*USpiceTypes::toFString(method, surfaces));
+    ConstSpiceChar* _method = TCHAR_TO_ANSI(*MaxQ::Core::ToString(method, surfaces));
     ConstSpiceChar* _target = TCHAR_TO_ANSI(*target);
     ConstSpiceChar* _ilusrc = TCHAR_TO_ANSI(*ilusrc);
     SpiceDouble     _et = et.AsSpiceDouble();
     ConstSpiceChar* _fixref = TCHAR_TO_ANSI(*fixref);
-    ConstSpiceChar* _abcorr = USpiceTypes::toString(abcorr);
+    ConstSpiceChar* _abcorr = MaxQ::Core::ToANSIString(abcorr);
     ConstSpiceChar* _obsrvr = TCHAR_TO_ANSI(*obsrvr);
     SpiceDouble     _spoint[3]; spoint.CopyTo(_spoint);
 
@@ -5065,12 +5067,12 @@ void USpice::illumg(
 )
 {
     // Inputs
-    ConstSpiceChar* _method = TCHAR_TO_ANSI(*USpiceTypes::toFString(method, surfaces));
+    ConstSpiceChar* _method = TCHAR_TO_ANSI(*MaxQ::Core::ToString(method, surfaces));
     ConstSpiceChar* _target = TCHAR_TO_ANSI(*target);
     ConstSpiceChar* _ilusrc = TCHAR_TO_ANSI(*ilusrc);
     SpiceDouble     _et = et.AsSpiceDouble();
     ConstSpiceChar* _fixref = TCHAR_TO_ANSI(*fixref);
-    ConstSpiceChar* _abcorr = USpiceTypes::toString(abcorr);
+    ConstSpiceChar* _abcorr = MaxQ::Core::ToANSIString(abcorr);
     ConstSpiceChar* _obsrvr = TCHAR_TO_ANSI(*obsrvr);
     SpiceDouble     _spoint[3]; spoint.CopyTo(_spoint);
     
@@ -5209,7 +5211,7 @@ void USpice::ilumin(
     ConstSpiceChar* _target = TCHAR_TO_ANSI(*target);
     SpiceDouble     _et     = et.AsSpiceDouble();
     ConstSpiceChar* _fixref = TCHAR_TO_ANSI(*fixref);
-    ConstSpiceChar* _abcorr = USpiceTypes::toString(abcorr);
+    ConstSpiceChar* _abcorr = MaxQ::Core::ToANSIString(abcorr);
     ConstSpiceChar* _obsrvr = TCHAR_TO_ANSI(*obsrvr);
     SpiceDouble     _spoint[3]; spoint.CopyTo(_spoint);
 
@@ -5455,7 +5457,7 @@ void USpice::kdata(
     SpiceChar SourceFileBuffer[SPICE_MAX_PATH];
 
     SpiceInt        _which = which;
-    ConstSpiceChar* _kind = TCHAR_TO_ANSI(*USpiceTypes::ToString((ES_KernelType)kind));
+    ConstSpiceChar* _kind = TCHAR_TO_ANSI(*MaxQ::Core::ToString((ES_KernelType)kind));
     SpiceInt          _fillen = sizeof(KernelFileBuffer);
     SpiceInt          _typlen = sizeof(FileTypeBuffer);
     SpiceInt          _srclen = sizeof(SourceFileBuffer);
@@ -5463,7 +5465,7 @@ void USpice::kdata(
     SpiceChar* _filtyp = FileTypeBuffer;
     SpiceChar* _srcfil = SourceFileBuffer;
     SpiceInt _handle = handle;
-    SpiceBoolean _found = SPICEFALSE;
+    SpiceBoolean _found { SPICEFALSE };
 
     kdata_c(
         _which,
@@ -5479,10 +5481,10 @@ void USpice::kdata(
     );
 
     file = FString(_file);
-    filtyp = USpiceTypes::FromString(FString(_filtyp));
+    filtyp = MaxQ::Core::Parse<ES_KernelType>(_filtyp);
     srcfil = FString(_srcfil);
     handle = _handle;
-    FoundCode = _found == SPICETRUE ? ES_FoundCode::Found : ES_FoundCode::NotFound;
+    FoundCode = GetFoundCode(_found);
 
     UnexpectedErrorCheck();
 }
@@ -5545,11 +5547,11 @@ void USpice::kinfo(
     _filtyp[_filtln -1] = '\0';
     _srcfil[_srclen -1] = '\0';
     
-    filtyp = USpiceTypes::FromString(_filtyp);
+    filtyp = MaxQ::Core::Parse<ES_KernelType>(_filtyp);
     handle = _handle;
     srcfil = FString(_srcfil);
 
-    FoundCode = _found == SPICETRUE ? ES_FoundCode::Found : ES_FoundCode::NotFound;
+    FoundCode = GetFoundCode(_found);
 
     UnexpectedErrorCheck();
 }
@@ -5575,7 +5577,7 @@ void USpice::ktotal(
     int32 kind
 )
 {
-    ConstSpiceChar* _kind = TCHAR_TO_ANSI(*USpiceTypes::ToString((ES_KernelType)kind));
+    ConstSpiceChar* _kind = TCHAR_TO_ANSI(*MaxQ::Core::ToString((ES_KernelType)kind));
     SpiceInt _count = count;
 
     ktotal_c( _kind, &_count );
@@ -5747,7 +5749,7 @@ void USpice::latsrf(
     )
 {
     // Input
-    ConstSpiceChar* _method = TCHAR_TO_ANSI(*USpiceTypes::toFString(method, shapeSurfaces));
+    ConstSpiceChar* _method = TCHAR_TO_ANSI(*MaxQ::Core::ToString(method, shapeSurfaces));
     ConstSpiceChar* _target = TCHAR_TO_ANSI(*target);
     SpiceDouble     _et     = et.AsSpiceDouble();
     ConstSpiceChar* _fixref = TCHAR_TO_ANSI(*fixref);
@@ -5818,12 +5820,12 @@ void USpice::limbpt(
     )
 {
     // Inputs
-    ConstSpiceChar* _method = TCHAR_TO_ANSI(*USpiceTypes::toFString(method, shapeSurfaces));
+    ConstSpiceChar* _method = TCHAR_TO_ANSI(*MaxQ::Core::ToString(method, shapeSurfaces));
     ConstSpiceChar* _target = TCHAR_TO_ANSI(*target);
     SpiceDouble     _et = et.AsSpiceDouble();
     ConstSpiceChar* _fixref = TCHAR_TO_ANSI(*fixref);
-    ConstSpiceChar* _abcorr = USpiceTypes::toString(abcorr);
-    ConstSpiceChar* _corloc = USpiceTypes::toString(corloc);
+    ConstSpiceChar* _abcorr = MaxQ::Core::ToANSIString(abcorr);
+    ConstSpiceChar* _corloc = MaxQ::Core::ToANSIString(corloc);
     ConstSpiceChar* _obsrvr = TCHAR_TO_ANSI(*obsrvr);
     SpiceDouble     _refvec[3];  refvec.CopyTo(_refvec);
     SpiceDouble     _rolstp = rolstp.AsSpiceDouble();
@@ -6989,12 +6991,12 @@ void USpice::occult(
 {
     // Inputs
     ConstSpiceChar* _targ1 = TCHAR_TO_ANSI(*targ1);
-    ConstSpiceChar* _shape1 = TCHAR_TO_ANSI(*USpiceTypes::toFString(shape1, shape1Surfaces));
+    ConstSpiceChar* _shape1 = TCHAR_TO_ANSI(*MaxQ::Core::ToString(shape1, shape1Surfaces));
     ConstSpiceChar* _frame1 = TCHAR_TO_ANSI(*frame1);
     ConstSpiceChar* _targ2 = TCHAR_TO_ANSI(*targ2);
-    ConstSpiceChar* _shape2 = TCHAR_TO_ANSI(*USpiceTypes::toFString(shape2, shape2Surfaces));
+    ConstSpiceChar* _shape2 = TCHAR_TO_ANSI(*MaxQ::Core::ToString(shape2, shape2Surfaces));
     ConstSpiceChar* _frame2 = TCHAR_TO_ANSI(*frame2);
-    ConstSpiceChar* _abcorr = USpiceTypes::toString(abcorr);
+    ConstSpiceChar* _abcorr = MaxQ::Core::ToANSIString(abcorr);
     ConstSpiceChar* _obsrvr = TCHAR_TO_ANSI(*obsrvr);
     SpiceDouble        _et = et.AsSpiceDouble();
 
@@ -7532,7 +7534,7 @@ FSAngle USpice::phaseq(
     ConstSpiceChar* _target = TCHAR_TO_ANSI(*target);
     ConstSpiceChar* _illmn = TCHAR_TO_ANSI(*illmn);
     ConstSpiceChar* _obsrvr = TCHAR_TO_ANSI(*obsrvr);
-    ConstSpiceChar* _abcorr = USpiceTypes::toString(abcorr);
+    ConstSpiceChar* _abcorr = MaxQ::Core::ToANSIString(abcorr);
 
     // Invocation
     SpiceDouble result = phaseq_c(
@@ -9031,11 +9033,11 @@ void USpice::sincpt(
 )
 {
     // Inputs
-    ConstSpiceChar* _method = TCHAR_TO_ANSI(*USpiceTypes::toFString(method, shapeSurfaces));
+    ConstSpiceChar* _method = TCHAR_TO_ANSI(*MaxQ::Core::ToString(method, shapeSurfaces));
     ConstSpiceChar* _target = TCHAR_TO_ANSI(*target);
     SpiceDouble     _et     = et.AsSpiceDouble();
     ConstSpiceChar* _fixref = TCHAR_TO_ANSI(*fixref);
-    ConstSpiceChar* _abcorr = USpiceTypes::toString(abcorr);
+    ConstSpiceChar* _abcorr = MaxQ::Core::ToANSIString(abcorr);
     ConstSpiceChar* _obsrvr = TCHAR_TO_ANSI(*obsrvr);
     ConstSpiceChar* _dref   = TCHAR_TO_ANSI(*dref);
     SpiceDouble    _dvec[3];  dvec.CopyTo(_dvec);
@@ -9291,8 +9293,8 @@ void USpice::spkcpo(
     ConstSpiceChar* _target = TCHAR_TO_ANSI(*target);
     SpiceDouble     _et = et.AsSpiceDouble();
     ConstSpiceChar* _outref = TCHAR_TO_ANSI(*outref);
-    ConstSpiceChar* _refloc = USpiceTypes::toString(refloc);
-    ConstSpiceChar* _abcorr = USpiceTypes::toString(abcorr);
+    ConstSpiceChar* _refloc = MaxQ::Core::ToANSIString(refloc);
+    ConstSpiceChar* _abcorr = MaxQ::Core::ToANSIString(abcorr);
     SpiceDouble     _obspos[3]; obspos.CopyTo(_obspos);
     ConstSpiceChar* _obsctr = TCHAR_TO_ANSI(*obsctr);
     ConstSpiceChar* _obsref = TCHAR_TO_ANSI(*obsref);
@@ -9380,8 +9382,8 @@ void USpice::spkcpt(
     ConstSpiceChar* _trgref = TCHAR_TO_ANSI(*trgref);
     SpiceDouble     _et = et.AsSpiceDouble();
     ConstSpiceChar* _outref = TCHAR_TO_ANSI(*outref);
-    ConstSpiceChar* _refloc = USpiceTypes::toString(refloc);
-    ConstSpiceChar* _abcorr = USpiceTypes::toString(abcorr);
+    ConstSpiceChar* _refloc = MaxQ::Core::ToANSIString(refloc);
+    ConstSpiceChar* _abcorr = MaxQ::Core::ToANSIString(abcorr);
     ConstSpiceChar* _obsrvr = TCHAR_TO_ANSI(*obsrvr);
     // Outputs
     SpiceDouble     _state[6];  ZeroOut(_state);
@@ -9466,8 +9468,8 @@ void USpice::spkcvo(
     ConstSpiceChar* _target = TCHAR_TO_ANSI(*target);
     SpiceDouble     _et = et.AsSpiceDouble();
     ConstSpiceChar* _outref = TCHAR_TO_ANSI(*outref);
-    ConstSpiceChar* _refloc = USpiceTypes::toString(refloc);
-    ConstSpiceChar* _abcorr = USpiceTypes::toString(abcorr);
+    ConstSpiceChar* _refloc = MaxQ::Core::ToANSIString(refloc);
+    ConstSpiceChar* _abcorr = MaxQ::Core::ToANSIString(abcorr);
     SpiceDouble     _obssta[6]; obssta.CopyTo(_obssta);
     SpiceDouble     _obsepc = obsepc.AsSpiceDouble();
     ConstSpiceChar* _obsctr = TCHAR_TO_ANSI(*obsctr);
@@ -9558,8 +9560,8 @@ void USpice::spkcvt(
     ConstSpiceChar* _trgref = TCHAR_TO_ANSI(*trgref);
     SpiceDouble     _et = et.AsSpiceDouble();
     ConstSpiceChar* _outref = TCHAR_TO_ANSI(*outref);
-    ConstSpiceChar* _refloc = USpiceTypes::toString(refloc);
-    ConstSpiceChar* _abcorr = USpiceTypes::toString(abcorr);
+    ConstSpiceChar* _refloc = MaxQ::Core::ToANSIString(refloc);
+    ConstSpiceChar* _abcorr = MaxQ::Core::ToANSIString(abcorr);
     ConstSpiceChar* _obsrvr = TCHAR_TO_ANSI(*obsrvr);
     // Outputs
     SpiceDouble     _state[6];  ZeroOut(_state);
@@ -9622,7 +9624,7 @@ void USpice::spkezp(
     SpiceDouble _ptarg[3];
     ZeroOut(_ptarg);
 
-    ConstSpiceChar* _abcorr = USpiceTypes::toString(abcorr);
+    ConstSpiceChar* _abcorr = MaxQ::Core::ToANSIString(abcorr);
 
     spkezp_c(targ, et.seconds, TCHAR_TO_ANSI(*ref), _abcorr, obs, _ptarg, &_lt);
 
@@ -9667,7 +9669,7 @@ void USpice::spkezr(
     SpiceDouble _lt = lt.AsSpiceDouble();
     SpiceDouble _state[6];  state.CopyTo(_state);
 
-    ConstSpiceChar* _abcorr = USpiceTypes::toString(abcorr);
+    ConstSpiceChar* _abcorr = MaxQ::Core::ToANSIString(abcorr);
 
     spkezr_c(TCHAR_TO_ANSI(*targ), et.seconds, TCHAR_TO_ANSI(*ref), _abcorr, TCHAR_TO_ANSI(*obs), _state, &_lt);
 
@@ -9772,7 +9774,7 @@ void USpice::spkpos(
     SpiceDouble _ptarg[3];  ptarg.CopyTo(_ptarg);
     ZeroOut(_ptarg);
 
-    ConstSpiceChar* _abcorr = USpiceTypes::toString(abcorr);
+    ConstSpiceChar* _abcorr = MaxQ::Core::ToANSIString(abcorr);
 
     spkpos_c(TCHAR_TO_ANSI(*targ), et.seconds, TCHAR_TO_ANSI(*ref), _abcorr, TCHAR_TO_ANSI(*obs), _ptarg, &_lt);
 
@@ -10113,7 +10115,7 @@ void USpice::srfc2s(
 
     // Bundle outputs
     srfstr = FString(_srfstr);
-    isname = (_isname == SPICETRUE ? ES_FoundCode::Found : ES_FoundCode::NotFound);
+    isname = GetFoundCode(_isname);
 
     // Clear any minor errors (empty string on input, etc)
     UnexpectedErrorCheck(true);
@@ -10179,7 +10181,7 @@ void USpice::srfcss(
     );
 
     srfstr = FString(_srfstr);
-    isname = (_isname == SPICETRUE ? ES_FoundCode::Found : ES_FoundCode::NotFound);
+    isname =GetFoundCode(_isname);
 
     // Clear any minor errors (empty string on input, etc)
     UnexpectedErrorCheck(true);
@@ -10256,7 +10258,7 @@ void USpice::srfnrm(
     )
 {
     // Input
-    ConstSpiceChar* _method = TCHAR_TO_ANSI(*USpiceTypes::toFString(method, shapeSurfaces));
+    ConstSpiceChar* _method = TCHAR_TO_ANSI(*MaxQ::Core::ToString(method, shapeSurfaces));
     ConstSpiceChar* _target = TCHAR_TO_ANSI(*target);
     SpiceDouble     _et = et.AsSpiceDouble();
     ConstSpiceChar* _fixref = TCHAR_TO_ANSI(*fixref);
@@ -10351,7 +10353,7 @@ void USpice::srfs2c(
 
     // Copy output
     code = (int)_code;
-    FoundCode = (_found == SPICETRUE ? ES_FoundCode::Found : ES_FoundCode::NotFound);
+    FoundCode = GetFoundCode(_found);
 
     // Clear any minor errors (empty string on input, etc)
     UnexpectedErrorCheck(true);
@@ -10399,7 +10401,7 @@ void USpice::srfscc(
     );
 
     code = (int)_code;
-    FoundCode = (_found == SPICETRUE ? ES_FoundCode::Found : ES_FoundCode::NotFound);
+    FoundCode = GetFoundCode(_found);
 
     // Clear any minor errors (empty string on input, etc)
     UnexpectedErrorCheck(true);
@@ -10427,11 +10429,11 @@ void USpice::subpnt(
 )
 {
     // Input
-    ConstSpiceChar* _method = TCHAR_TO_ANSI(*USpiceTypes::toFString(method, surfaces));
+    ConstSpiceChar* _method = TCHAR_TO_ANSI(*MaxQ::Core::ToString(method, surfaces));
     ConstSpiceChar* _target = TCHAR_TO_ANSI(*target);
     SpiceDouble     _et = et.AsSpiceDouble();
     ConstSpiceChar* _fixref = TCHAR_TO_ANSI(*fixref);
-    ConstSpiceChar* _abcorr = USpiceTypes::toString(abcorr);
+    ConstSpiceChar* _abcorr = MaxQ::Core::ToANSIString(abcorr);
     ConstSpiceChar* _obsrvr = TCHAR_TO_ANSI(*obsrvr);
     
     // Output
@@ -10481,11 +10483,11 @@ void USpice::subslr(
     const FString& obsrvr
 )
 {
-    ConstSpiceChar* _method = TCHAR_TO_ANSI(*USpiceTypes::toFString(method, surfaces));
+    ConstSpiceChar* _method = TCHAR_TO_ANSI(*MaxQ::Core::ToString(method, surfaces));
     ConstSpiceChar* _target = TCHAR_TO_ANSI(*target);
     SpiceDouble     _et = et.AsSpiceDouble();
     ConstSpiceChar* _fixref = TCHAR_TO_ANSI(*fixref);
-    ConstSpiceChar* _abcorr = USpiceTypes::toString(abcorr);
+    ConstSpiceChar* _abcorr = MaxQ::Core::ToANSIString(abcorr);
     ConstSpiceChar* _obsrvr = TCHAR_TO_ANSI(*obsrvr);
     SpiceDouble     _spoint[3]; ZeroOut(_spoint);
     SpiceDouble    _trgepc = 0.;
@@ -10656,13 +10658,13 @@ void USpice::termpt(
 )
 {
     // Inputs
-    ConstSpiceChar* _method = TCHAR_TO_ANSI(*USpiceTypes::toFString(shadow, curveType, method, shapeSurfaces));
+    ConstSpiceChar* _method = TCHAR_TO_ANSI(*MaxQ::Core::ToString(shadow, curveType, method, shapeSurfaces));
     ConstSpiceChar* _ilusrc = TCHAR_TO_ANSI(*ilusrc);
     ConstSpiceChar* _target = TCHAR_TO_ANSI(*target);
     SpiceDouble     _et = et.AsSpiceDouble();
     ConstSpiceChar* _fixref = TCHAR_TO_ANSI(*fixref);
-    ConstSpiceChar* _abcorr = USpiceTypes::toString(abcorr);
-    ConstSpiceChar* _corloc = USpiceTypes::toString(abcorr);;
+    ConstSpiceChar* _abcorr = MaxQ::Core::ToANSIString(abcorr);
+    ConstSpiceChar* _corloc = MaxQ::Core::ToANSIString(abcorr);;
     ConstSpiceChar* _obsrvr = TCHAR_TO_ANSI(*obsrvr);
     SpiceDouble     _refvec[3];  refvec.CopyTo(_refvec);
     SpiceDouble     _rolstp = rolstp.AsSpiceDouble();
@@ -11025,8 +11027,8 @@ void USpice::unitim(
 {
     // Inputs
     SpiceDouble     _epoch = epoch;
-    ConstSpiceChar* _insys = USpiceTypes::toString(insys);
-    ConstSpiceChar* _outsys = USpiceTypes::toString(outsys);
+    ConstSpiceChar* _insys = MaxQ::Core::ToANSIString(insys);
+    ConstSpiceChar* _outsys = MaxQ::Core::ToANSIString(outsys);
 
     // Output 
     SpiceDouble _out;
@@ -12132,8 +12134,8 @@ void USpice::xfmsta(
     SpiceDouble     _input_state[6];
     in.CopyTo(_input_state);
 
-    ConstSpiceChar* _input_coord_sys = USpiceTypes::toString(input_coord_sys);
-    ConstSpiceChar* _output_coord_sys = USpiceTypes::toString(output_coord_sys);
+    ConstSpiceChar* _input_coord_sys = MaxQ::Core::ToANSIString(input_coord_sys);
+    ConstSpiceChar* _output_coord_sys = MaxQ::Core::ToANSIString(output_coord_sys);
     ConstSpiceChar* _body = TCHAR_TO_ANSI(*body);
     // Output
     SpiceDouble _output_state[6];       ZeroOut(_output_state);
