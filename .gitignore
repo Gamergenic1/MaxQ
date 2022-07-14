@@ -41,6 +41,9 @@
 *.VC.db
 *.VC.opendb
 
+# Local documentation stuff
+*.pptx
+
 # Precompiled Assets
 SourceArt/**/*.png
 SourceArt/**/*.tga
