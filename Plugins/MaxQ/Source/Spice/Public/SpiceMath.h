@@ -147,14 +147,14 @@ namespace MaxQ::Math
 
     // return unit normal
     template<class VectorType>
-    SPICE_API void Vhat(FSDimensionlessVector& vminus, const VectorType& vin);
+    SPICE_API void Vhat(FSDimensionlessVector& vhat, const VectorType& vin);
 
     template<class VectorType>
     inline FSDimensionlessVector Vhat(const VectorType& vin)
     {
-        FSDimensionlessVector vminus;
-        Vminus(vminus, vin);
-        return vminus;
+        FSDimensionlessVector vhat;
+        Vhat(vhat, vin);
+        return vhat;
     }
 
     // norm (magnitude)
