@@ -106,7 +106,6 @@ TArray<double> USpiceK2::gdpool_array_K2(
     // Not implemented by MaxQ::Data
 
     // Inputs
-    ConstSpiceChar* _name = TCHAR_TO_ANSI(*name);
     SpiceInt        _start = 0;
     SpiceInt        _room = 200;
     // Outputs
@@ -117,7 +116,8 @@ TArray<double> USpiceK2::gdpool_array_K2(
 
     // Invocation
     memset(_values, 0, buffer_size);
-    gdpool_c(_name, _start, _room, &_n, _values, &_found);
+
+    gdpool_c(TCHAR_TO_ANSI(*name), _start, _room, &_n, _values, &_found);
 
     // Return values
     TArray<double> value = TArray<double>();

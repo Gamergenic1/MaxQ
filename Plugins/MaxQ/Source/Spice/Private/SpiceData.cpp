@@ -218,7 +218,9 @@ namespace MaxQ::Data
         SpiceDouble _result[N]; ZeroOut(Value);
         SpiceInt n_actual = 0;
 
-        bodvrd_c(TCHAR_TO_ANSI(*bodynm), TCHAR_TO_ANSI(*item), N, &n_actual, _result);
+        auto _bodynm = StringCast<ANSICHAR>(*bodynm);
+        auto _item = StringCast<ANSICHAR>(*item);
+        bodvrd_c(_bodynm.Get(), _item.Get(), N, &n_actual, _result);
 
         Value = _result[0];
 
@@ -244,7 +246,9 @@ namespace MaxQ::Data
         SpiceInt n_actual, n_expected = Values.Num();
         Values.Init(0, n_expected);
 
-        bodvrd_c(TCHAR_TO_ANSI(*bodynm), TCHAR_TO_ANSI(*item), n_expected, &n_actual, _result);
+        auto _bodynm = StringCast<ANSICHAR>(*bodynm);
+        auto _item = StringCast<ANSICHAR>(*item);
+        bodvrd_c(_bodynm.Get(), _item.Get(), n_expected, &n_actual, _result);
 
         if (!ErrorCheck(ResultCode, ErrorMessage) && n_actual != n_expected)
         {
@@ -266,7 +270,10 @@ namespace MaxQ::Data
         SpiceDouble _result[N]; ZeroOut(Value);
         SpiceInt n_actual = 0;
 
-        bodvrd_c(TCHAR_TO_ANSI(*bodynm), TCHAR_TO_ANSI(*item), N, &n_actual, _result);
+        auto _bodynm = StringCast<ANSICHAR>(*bodynm);
+        auto _item = StringCast<ANSICHAR>(*item);
+
+        bodvrd_c(_bodynm.Get(), _item.Get(), N, &n_actual, _result);
 
         Value = ValueType{ _result };
 
@@ -391,14 +398,13 @@ namespace MaxQ::Data
         FString* ErrorMessage
     )
     {
-        ConstSpiceChar* _name { TCHAR_TO_ANSI(*name) };
         SpiceInt        _start{ 0 };
         SpiceInt        _room{ 1 };
         SpiceInt        _n{ 0 };
         SpiceDouble     _value { 0 };
         SpiceBoolean    _found = SPICEFALSE;
 
-        gdpool_c(_name, _start, _room, &_n, &_value, &_found);
+        gdpool_c(TCHAR_TO_ANSI(*name), _start, _room, &_n, &_value, &_found);
 
         Value = double{ _value };
 
@@ -433,7 +439,6 @@ namespace MaxQ::Data
         FString* ErrorMessage
     )
     {
-        ConstSpiceChar* _name{ TCHAR_TO_ANSI(*name) };
         SpiceInt        _start{ 0 };
         SpiceInt        _room{ Values.Num() };
         SpiceInt        _n{ 0 };
@@ -442,7 +447,7 @@ namespace MaxQ::Data
 
         Values.Init(0, _room);
 
-        gdpool_c(_name, _start, _room, &_n, _values, &_found);
+        gdpool_c(TCHAR_TO_ANSI(*name), _start, _room, &_n, _values, &_found);
 
         if (!ErrorCheck(ResultCode, ErrorMessage) && !_found)
         {
@@ -459,14 +464,13 @@ namespace MaxQ::Data
         FString* ErrorMessage
     )
     {
-        ConstSpiceChar* _name{ TCHAR_TO_ANSI(*name) };
         SpiceInt        _start { 0 };
         SpiceInt        _room { sizeof (ValueType) / sizeof (SpiceDouble) };
         SpiceInt        _n { 0 };
         SpiceDouble     _values[sizeof (ValueType) / sizeof (SpiceDouble) ];
         SpiceBoolean    _found = SPICEFALSE;
 
-        gdpool_c(_name, _start, _room, &_n, _values, &_found);
+        gdpool_c(TCHAR_TO_ANSI(*name), _start, _room, &_n, _values, &_found);
 
         Value = ValueType{ _values };
 
@@ -504,11 +508,9 @@ namespace MaxQ::Data
 
     SPICE_API bool Bods2c(int& code, const FString& name /*= TEXT("EARTH") */)
     {
-        ConstSpiceChar* _name = TCHAR_TO_ANSI(*name);
         SpiceInt _code = code;
         SpiceBoolean _found = SPICEFALSE;
-
-        bods2c_c(_name, &_code, &_found);
+        bods2c_c(TCHAR_TO_ANSI(*name), &_code, &_found);
 
         if (_found) code = (int)_code;
 
@@ -520,7 +522,7 @@ namespace MaxQ::Data
 
     SPICE_API bool Bodfnd(int body, const FString& item /*= TEXT("RADII") */)
     {
-        SpiceBoolean _found = bodfnd_c((SpiceInt)body, TCHAR_TO_ANSI(*item));
+        SpiceBoolean _found = bodfnd_c(body, TCHAR_TO_ANSI(*item));
 
         // Reset the current spice error in case a spice exception happened.
         UnexpectedErrorCheck(true);
