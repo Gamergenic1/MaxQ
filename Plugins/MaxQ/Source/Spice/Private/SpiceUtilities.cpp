@@ -37,6 +37,7 @@
 //------------------------------------------------------------------------------
 
 #include "SpiceUtilities.h"
+#include "Misc/AssertionMacros.h"
 #include "CoreMinimal.h"
 #include "SpicePlatformDefs.h"
 
@@ -160,6 +161,8 @@ namespace MaxQ::Private
                 // Only logged as a warning, because the only the application knows if it was totally unexpected,
                 // and it has the ability to categorize it as a true error.
                 UE_LOG(LogSpice, Warning, TEXT("USpice Runtime Error: %s"), *ErrorMessage);
+
+                PrintScriptCallstack();
             }
 
             reset_c();
@@ -202,6 +205,8 @@ namespace MaxQ::Private
 
             FString ErrorMessage = szBuffer;
             UE_LOG(LogSpice, Warning, TEXT("USpice Runtime Unexpected Error: %s"), *ErrorMessage);
+
+            PrintScriptCallstack();
 
             if (bReset)
             {

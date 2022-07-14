@@ -143,38 +143,7 @@ void USpice::furnsh(
     const FString& file
 )
 {
-    FString fullPathToFile = toPath(file);
-
-#ifdef SET_WORKING_DIRECTORY_IN_FURNSH
-    // Get the current working directory...
-    TCHAR buffer[SPICE_MAX_PATH];
-    TCHAR* oldWorkingDirectory = _tgetcwd(buffer, sizeof(buffer)/sizeof(buffer[0]));
-
-    // Trim the file name to just the full directory path...
-    FString fullPathToDirectory = FPaths::GetPath(fullPathToFile);
-    fullPathToDirectory.ReplaceCharInline('/', '\\');
-
-    if (FPaths::DirectoryExists(fullPathToDirectory))
-    {
-        // Set the current working directory
-        _tchdir(*fullPathToDirectory);
-    }
-#endif
-
-    furnsh_c(TCHAR_TO_ANSI(*fullPathToFile));
-
-#ifdef SET_WORKING_DIRECTORY_IN_FURNSH
-    // Reset the working directory to prior state...
-    if (oldWorkingDirectory)
-    {
-        _tchdir(oldWorkingDirectory);
-    }
-#endif
-
-    if (!ErrorCheck(ResultCode, ErrorMessage))
-    {
-        UE_LOG(LogSpice, Log, TEXT("MaxQ SPICE 'Furnsh' loaded kernel: %s"), *fullPathToFile);
-    }
+    MaxQ::Data::Furnsh(file, &ResultCode, &ErrorMessage);
 }
 
 
@@ -184,12 +153,7 @@ void USpice::furnsh_list(
     const TArray<FString>& files
 )
 {
-    for (auto file : files)
-    {
-        furnsh(ResultCode, ErrorMessage, file);
-
-        if (ResultCode != ES_ResultCode::Success) break;
-    }
+    MaxQ::Data::Furnsh(files, &ResultCode, &ErrorMessage);
 }
 
 
@@ -224,7 +188,6 @@ void USpice::unload(
 )
 {
     FString absolutePath = toPath(relativeDirectory);
-
     unload_c(TCHAR_TO_ANSI(*absolutePath));
 
     if (!ErrorCheck(ResultCode, ErrorMessage))
@@ -600,14 +563,14 @@ void USpice::azlcpo(
 {
     // Unpack inputs, default outputs
     ConstSpiceChar* _method         = nullptr;
-    ConstSpiceChar* _target         = TCHAR_TO_ANSI(*target);
+    auto _target         = StringCast<ANSICHAR>(*target);
     SpiceDouble         _et         = et.AsSpiceDouble();
-    ConstSpiceChar* _abcorr         = MaxQ::Core::ToANSIString(abcorr);
+    ConstSpiceChar*     _abcorr     = MaxQ::Core::ToANSIString(abcorr);
     SpiceBoolean        _azccw      = azccw ? SPICETRUE : SPICEFALSE;
     SpiceBoolean        _elplsz     = elplsz ? SPICETRUE : SPICEFALSE;
-    SpiceDouble    _obspos[3];      obspos.CopyTo(_obspos);
-    ConstSpiceChar* _obsctr         = TCHAR_TO_ANSI(*obsctr);
-    ConstSpiceChar* _obsref         = TCHAR_TO_ANSI(*obsref);
+    SpiceDouble         _obspos[3];      obspos.CopyTo(_obspos);
+    auto                _obsctr     = StringCast<ANSICHAR>(*obsctr);
+    auto                _obsref     = StringCast<ANSICHAR>(*obsref);
     SpiceDouble         _azlsta[6]; azlsta.CopyTo(_azlsta);
     SpiceDouble _lt                 = lt.AsSpiceDouble();
 
@@ -619,14 +582,14 @@ void USpice::azlcpo(
     // Invoke
     azlcpo_c(
         _method,
-        _target,
+        _target.Get(),
         _et,
         _abcorr,
         _azccw,
         _elplsz,
         _obspos,
-        _obsctr,
-        _obsref,
+        _obsctr.Get(),
+        _obsref.Get(),
         _azlsta,
         &_lt
     );
@@ -732,11 +695,10 @@ void USpice::bodn2c(
     const FString& name
 )
 {
-    ConstSpiceChar* _name = TCHAR_TO_ANSI(*name);
     SpiceInt _code = 0;
     SpiceBoolean _found = SPICEFALSE;
 
-    bodn2c_c(_name, &_code, &_found);
+    bodn2c_c(TCHAR_TO_ANSI(*name), &_code, &_found);
 
     FoundCode = GetFoundCode(_found);
     if (_found != SPICEFALSE)
@@ -1089,7 +1051,7 @@ void USpice::ckcov(
     const int largeCellSize = 10000;
 
     // Inputs
-    ConstSpiceChar* _ck = TCHAR_TO_ANSI(*toPath(ck_relative_path));
+    auto            _ck = StringCast<ANSICHAR>(*toPath(ck_relative_path));
     SpiceInt        _idcode = idcode;
     SpiceBoolean    _needav = need_av ? SPICETRUE : SPICEFALSE;
     SpiceDouble     _tol = tol;
@@ -1137,7 +1099,7 @@ void USpice::ckcov(
         }
 
         // Invocation
-        ckcov_c(_ck, _idcode, _needav, _level, _tol, _timsys, _cover);
+        ckcov_c(_ck.Get(), _idcode, _needav, _level, _tol, _timsys, _cover);
 
         haveData = !failed_c();
     }
@@ -1163,7 +1125,7 @@ void USpice::ckcov(
             }
 
             // Re-Invocation
-            ckcov_c(_ck, _idcode, _needav, _level, _tol, _timsys, _cover);
+            ckcov_c(_ck.Get(), _idcode, _needav, _level, _tol, _timsys, _cover);
 
             haveData = !failed_c();
         }
@@ -1299,14 +1261,14 @@ void USpice::ckgp(
     SpiceInt        _inst = inst;
     SpiceDouble     _sclkdp = sclkdp;
     SpiceDouble     _tol = tol;
-    ConstSpiceChar* _ref = TCHAR_TO_ANSI(*ref);
+    auto            _ref = StringCast<ANSICHAR>(*ref);
     // Outputs
     SpiceDouble     _cmat[3][3];    ZeroOut(_cmat);
     SpiceDouble     _clkout = 0;
     SpiceBoolean    _found = SPICEFALSE;
 
     // Invocation
-    ckgp_c(_inst, _sclkdp, _tol, _ref, _cmat, &_clkout, &_found);
+    ckgp_c(_inst, _sclkdp, _tol, _ref.Get(), _cmat, &_clkout, &_found);
 
     // Return Values
     cmat = FSRotationMatrix(_cmat);
@@ -1334,7 +1296,7 @@ void USpice::ckgpav(
     SpiceInt        _inst = inst;
     SpiceDouble     _sclkdp = sclkdp;
     SpiceDouble     _tol = tol;
-    ConstSpiceChar* _ref = TCHAR_TO_ANSI(*ref);
+    auto            _ref = StringCast<ANSICHAR>(*ref);
     // Outputs
     SpiceDouble     _cmat[3][3];    ZeroOut(_cmat);
     SpiceDouble     _av[3];         ZeroOut(_av);
@@ -1342,7 +1304,7 @@ void USpice::ckgpav(
     SpiceBoolean    _found = SPICEFALSE;
 
     // Invocation
-    ckgpav_c(_inst, _sclkdp, _tol, _ref, _cmat, _av, &_clkout, &_found);
+    ckgpav_c(_inst, _sclkdp, _tol, _ref.Get(), _cmat, _av, &_clkout, &_found);
 
     // Return Values
     cmat = FSRotationMatrix(_cmat);
@@ -1361,13 +1323,10 @@ void USpice::cklpf(
     int& handle
 )
 {
-    ConstSpiceChar* _fname = TCHAR_TO_ANSI(*toPath(relativePath));
-
-    // Outputs
     SpiceInt _handle = 0;
 
     // Invocation
-    cklpf_c(_fname, &_handle);
+    cklpf_c(TCHAR_TO_ANSI(*toPath(relativePath)), &_handle);
 
     // Return Values
     handle = _handle;
@@ -1417,14 +1376,11 @@ void USpice::ckobj(
     // Spice cells are static, so reinitialize.
     scard_c(0, &idscell);
 
-    // Inputs
-    ConstSpiceChar* _fname = TCHAR_TO_ANSI(*toPath(relativePath));
-
     // Outputs
     SpiceCell* _ids = &idscell;
 
     // Invocation
-    ckobj_c(_fname, _ids);
+    ckobj_c(TCHAR_TO_ANSI(*toPath(relativePath)), _ids);
 
     ids = TArray<int>();
     int count = card_c(_ids);
@@ -1458,14 +1414,14 @@ void USpice::ckopn(
 )
 {
     // Inputs
-    ConstSpiceChar* _fname = TCHAR_TO_ANSI(*toPath(relativePath));
-    ConstSpiceChar* _ifname = TCHAR_TO_ANSI(*ifname);
+    auto _fname = StringCast<ANSICHAR>(*toPath(relativePath));
+    auto _ifname = StringCast<ANSICHAR>(*ifname);
     SpiceInt        _ncomch = ncomch;
     // Outputs
     SpiceInt        _handle = 0;
 
     // Invocation
-    ckopn_c(_fname, _ifname, _ncomch, &_handle);
+    ckopn_c(_fname.Get(), _ifname.Get(), _ncomch, &_handle);
 
     // Return Values
     handle = _handle;
@@ -1512,9 +1468,9 @@ void USpice::ckw01(
     SpiceDouble     _begtim = begtim;
     SpiceDouble     _endtim = endtim;
     SpiceInt        _inst = inst;
-    ConstSpiceChar* _ref = TCHAR_TO_ANSI(*ref);
-    SpiceBoolean        _avflag = avflag ? SPICETRUE : SPICEFALSE;
-    ConstSpiceChar* _segid = TCHAR_TO_ANSI(*segid);
+    auto            _ref = StringCast<ANSICHAR>(*ref);
+    SpiceBoolean    _avflag = avflag ? SPICETRUE : SPICEFALSE;
+    auto            _segid = StringCast<ANSICHAR>(*segid);
     SpiceInt        _nrec = records.Num();
     SpiceDouble* _sclkdp = (SpiceDouble*)StackAlloc(_nrec * sizeof(SpiceDouble));
     SpiceDouble(*_quats)[4] = (SpiceDouble(*)[4])StackAlloc(_nrec * sizeof(SpiceDouble[4]));
@@ -1528,7 +1484,7 @@ void USpice::ckw01(
     }
 
     // Invocation
-    ckw01_c(_handle, _begtim, _endtim, _inst, _ref, _avflag, _segid, _nrec, _sclkdp, _quats, _avvs);
+    ckw01_c(_handle, _begtim, _endtim, _inst, _ref.Get(), _avflag, _segid.Get(), _nrec, _sclkdp, _quats, _avvs);
 
     // Error Handling
     ErrorCheck(ResultCode, ErrorMessage);
@@ -1552,8 +1508,8 @@ void USpice::ckw02(
     SpiceDouble     _begtim = begtim;
     SpiceDouble     _endtim = endtim;
     SpiceInt        _inst = inst;
-    ConstSpiceChar* _ref = TCHAR_TO_ANSI(*ref);
-    ConstSpiceChar* _segid = TCHAR_TO_ANSI(*segid);
+    auto            _ref = StringCast<ANSICHAR>(*ref);
+    auto            _segid = StringCast<ANSICHAR>(*segid);
     SpiceInt        _nrec = records.Num();
     SpiceDouble* _start = (SpiceDouble*)StackAlloc(_nrec * sizeof(SpiceDouble));
     SpiceDouble* _stop = (SpiceDouble*)StackAlloc(_nrec * sizeof(SpiceDouble));
@@ -1570,7 +1526,7 @@ void USpice::ckw02(
     }
 
     // Invocation
-    ckw02_c(_handle, _begtim, _endtim, _inst, _ref, _segid, _nrec, _start, _stop, _quats, _avvs, _rates);
+    ckw02_c(_handle, _begtim, _endtim, _inst, _ref.Get(), _segid.Get(), _nrec, _start, _stop, _quats, _avvs, _rates);
 
     // Error Handling
     ErrorCheck(ResultCode, ErrorMessage);
@@ -1595,9 +1551,9 @@ void USpice::ckw03(
     SpiceDouble     _begtim = begtim;
     SpiceDouble     _endtim = endtim;
     SpiceInt        _inst = inst;
-    ConstSpiceChar* _ref = TCHAR_TO_ANSI(*ref);
+    auto            _ref = StringCast<ANSICHAR>(*ref);
     SpiceBoolean    _avflag = avflag ? SPICETRUE : SPICEFALSE;
-    ConstSpiceChar* _segid = TCHAR_TO_ANSI(*segid);
+    auto            _segid = StringCast<ANSICHAR>(*segid);
     SpiceInt        _nrec = records.Num();
     SpiceDouble* _sclkdp = (SpiceDouble*)StackAlloc(_nrec * sizeof(SpiceDouble));
     SpiceDouble(*_quats)[4] = (SpiceDouble(*)[4])StackAlloc(_nrec * sizeof(SpiceDouble[4]));
@@ -1618,7 +1574,7 @@ void USpice::ckw03(
     }
 
     // Invocation
-    ckw03_c(_handle, _begtim, _endtim, _inst, _ref, _avflag, _segid, _nrec, _sclkdp, _quats, _avvs, _nints, _starts);
+    ckw03_c(_handle, _begtim, _endtim, _inst, _ref.Get(), _avflag, _segid.Get(), _nrec, _sclkdp, _quats, _avvs, _nints, _starts);
 
     // Error Handling
     ErrorCheck(ResultCode, ErrorMessage);
@@ -1648,9 +1604,9 @@ void USpice::ckw05(
     SpiceDouble     _begtim = begtim;
     SpiceDouble     _endtim = endtim;
     SpiceInt        _inst = inst;
-    ConstSpiceChar* _ref = TCHAR_TO_ANSI(*ref);
+    auto            _ref = StringCast<ANSICHAR>(*ref);
     SpiceBoolean    _avflag = avflag ? SPICETRUE : SPICEFALSE;
-    ConstSpiceChar* _segid = TCHAR_TO_ANSI(*segid);
+    auto            _segid = StringCast<ANSICHAR>(*segid);
     SpiceDouble         _rate = rate;
 
     SpiceInt        _nints = starts.Num();
@@ -1703,7 +1659,7 @@ void USpice::ckw05(
     // message for it.
 
     // Invocation
-    ckw05_c(_handle, _subtyp, _degree, _begtim, _endtim, _inst, _ref, _avflag, _segid, _n, _sclkdp, _packts, _rate, _nints, _starts);
+    ckw05_c(_handle, _subtyp, _degree, _begtim, _endtim, _inst, _ref.Get(), _avflag, _segid.Get(), _n, _sclkdp, _packts, _rate, _nints, _starts);
 
     // Error Handling
     ErrorCheck(ResultCode, ErrorMessage);
@@ -2092,10 +2048,11 @@ void USpice::dafopr(
     int& handle
 )
 {
-    // Input
-    ConstSpiceChar* _fname = TCHAR_TO_ANSI(*toPath(relativePath));
     // Output
     SpiceInt        _handle = 0;
+    
+    // Input (Temporary pointer, do not use after Invocation)
+    ConstSpiceChar* _fname = TCHAR_TO_ANSI(*toPath(relativePath));
 
     // Invocation
     dafopr_c(_fname, &_handle);
@@ -2161,10 +2118,10 @@ void USpice::dafopw(
     int& handle
 )
 {
-    // Input
-    ConstSpiceChar* _fname = TCHAR_TO_ANSI(*toPath(relativePath));
     // Output
     SpiceInt        _handle = 0;
+    // Input (Temporary pointer, do not dereference after Invocation)
+    ConstSpiceChar* _fname = TCHAR_TO_ANSI(*toPath(relativePath));
 
     // Invocation
     dafopw_c(_fname, &_handle);
@@ -2184,10 +2141,10 @@ void USpice::dasopr(
     int& handle
 )
 {
-    // Input
-    ConstSpiceChar* _fname = TCHAR_TO_ANSI(*toPath(relativePath));
     // Output
     SpiceInt        _handle = 0;
+    // Input (Temporary pointer, do not dereference after Invocation)
+    ConstSpiceChar* _fname = TCHAR_TO_ANSI(*toPath(relativePath));
 
     // Invocation
     dasopr_c(_fname, &_handle);
@@ -2382,12 +2339,14 @@ void USpice::dskobj(
 {
     const int MAXID = 10000;
 
-    // Input
-    ConstSpiceChar* _dskfnm = TCHAR_TO_ANSI(*toPath(fileRelativePath));
     // Output
     SPICEINT_CELL(_bodids, MAXID);
+    
     // Spice cells are static, so reinitialize.
     scard_c(0, &_bodids);
+
+    // Input (Temporary pointer, do not dereference after Invocation)
+    ConstSpiceChar* _dskfnm = TCHAR_TO_ANSI(*toPath(fileRelativePath));
 
     // Invocation
     dskobj_c(_dskfnm, &_bodids);
@@ -2411,15 +2370,16 @@ void USpice::dsksrf(
     int bodyid
 )
 {
-    const int MAXID = 10000;
+    constexpr int MAXID = 10000;
 
-    // Input
-    ConstSpiceChar* _dskfnm = TCHAR_TO_ANSI(*toPath(fileRelativePath));
-    SpiceInt        _bodyid = (SpiceInt)bodyid;
     // Output
     SPICEINT_CELL(_srfids, MAXID);
     // Spice cells are static, so reinitialize.
     scard_c(0, &_srfids);
+
+    SpiceInt        _bodyid = (SpiceInt)bodyid;
+    // Input (Temporary pointer, do not dereference after Invocation)
+    ConstSpiceChar* _dskfnm = TCHAR_TO_ANSI(*toPath(fileRelativePath));
 
     // Invocation
     dsksrf_c(_dskfnm, _bodyid, &_srfids);
@@ -2620,11 +2580,11 @@ void USpice::dskxsi(
     // Inputs
     // pri - "In the N0066 SPICE Toolkit, this is the only allowed value."
     SpiceBoolean    _pri = SPICEFALSE;
-    ConstSpiceChar* _target = TCHAR_TO_ANSI(*target);
+    auto            _target = StringCast<ANSICHAR>(*target);
     SpiceInt        _nsurf = srflst.Num();
     SpiceInt*       _srflst = (SpiceInt*)srflst.GetData();
     SpiceDouble     _et = et.AsSpiceDouble();
-    ConstSpiceChar* _fixref = TCHAR_TO_ANSI(*fixref);
+    auto            _fixref = StringCast<ANSICHAR>(*fixref);
     SpiceDouble     _vertex[3];
     SpiceDouble     _raydir[3]; ray.CopyTo(_vertex, _raydir);
 
@@ -2642,11 +2602,11 @@ void USpice::dskxsi(
     // Invocation
     dskxsi_c(
         _pri,
-        _target,
+        _target.Get(),
         _nsurf,
         _srflst,
         _et,
-        _fixref,
+        _fixref.Get(),
         _vertex,
         _raydir,
         _maxd,
@@ -2692,11 +2652,11 @@ void USpice::dskxv(
     // Inputs
     // pri - "In the N0066 SPICE Toolkit, this is the only allowed value"
     SpiceBoolean        _pri = SPICEFALSE;
-    ConstSpiceChar*     _target = TCHAR_TO_ANSI(*target);
+    auto                _target = StringCast<ANSICHAR>(*target);
     SpiceInt            _nsurf = srflst.Num();
     SpiceInt*           _srflst = (SpiceInt*)srflst.GetData();
     SpiceDouble         _et = et.AsSpiceDouble();
-    ConstSpiceChar*     _fixref = TCHAR_TO_ANSI(*fixref);
+    auto                _fixref = StringCast<ANSICHAR>(*fixref);
     SpiceInt            _nrays = rayarray.Num();
     SpiceDouble(*_vtxarr)[3] = (SpiceDouble(*)[3])StackAlloc(_nrays * sizeof(SpiceDouble[3]));
     SpiceDouble(*_dirarr)[3] = (SpiceDouble(*)[3])StackAlloc(_nrays * sizeof(SpiceDouble[3]));
@@ -2713,11 +2673,11 @@ void USpice::dskxv(
     // Invocation
     dskxv_c(
         _pri,
-        _target,
+        _target.Get(),
         _nsurf,
         _srflst,
         _et,
-        _fixref,
+        _fixref.Get(),
         _nrays,
         _vtxarr,
         _dirarr,
@@ -3311,7 +3271,6 @@ void USpice::gcpool(
 )
 {
     // Inputs
-    ConstSpiceChar* _name = TCHAR_TO_ANSI(*name);
     SpiceInt        _start = start;
     SpiceInt        _room = room;
     SpiceInt        _lenout = SPICE_MAX_PATH;
@@ -3323,7 +3282,7 @@ void USpice::gcpool(
 
     // Invocation
     FMemory::Memset(_cvals, 0, buffer_size);
-    gcpool_c(_name, _start, _room, _lenout, &_n, _cvals, &_found);
+    gcpool_c(TCHAR_TO_ANSI(*name), _start, _room, _lenout, &_n, _cvals, &_found);
 
     // Return Values
     cvals = TArray<FString>();
@@ -3429,11 +3388,11 @@ void USpice::fovray(
 )
 {
     // Inputs
-    ConstSpiceChar* _inst = TCHAR_TO_ANSI(*inst);
+    auto            _inst = StringCast<ANSICHAR>(*inst);
     SpiceDouble     _raydir[3]; raydir.CopyTo(_raydir);
-    ConstSpiceChar* _rframe = TCHAR_TO_ANSI(*rframe);
+    auto            _rframe = StringCast<ANSICHAR>(*rframe);
     ConstSpiceChar*  _abcorr = MaxQ::Core::ToANSIString(abcorr);
-    ConstSpiceChar* _observer = TCHAR_TO_ANSI(*observer);
+    auto            _observer = StringCast<ANSICHAR>(*observer);
     SpiceDouble     _et = et.AsSpiceDouble();
 
     // Output
@@ -3441,11 +3400,11 @@ void USpice::fovray(
 
     // Invocation
     fovray_c(
-        _inst,
+        _inst.Get(),
         _raydir,
-        _rframe,
+        _rframe.Get(),
         _abcorr,
-        _observer,
+        _observer.Get(),
         &_et,
         &_visible
     );
@@ -3471,12 +3430,12 @@ void USpice::fovtrg(
     )
 {
     // Inputs
-    ConstSpiceChar* _inst   = TCHAR_TO_ANSI(*inst);
-    ConstSpiceChar* _target = TCHAR_TO_ANSI(*target);
+    auto            _inst   = StringCast<ANSICHAR>(*inst);
+    auto            _target = StringCast<ANSICHAR>(*target);
     ConstSpiceChar* _tshape = MaxQ::Core::ToANSIString(tshape);
-    ConstSpiceChar* _tframe = TCHAR_TO_ANSI(*tframe);
+    auto            _tframe = StringCast<ANSICHAR>(*tframe);
     ConstSpiceChar* _abcorr = MaxQ::Core::ToANSIString(abcorr);
-    ConstSpiceChar* _obsrvr = TCHAR_TO_ANSI(*obsrvr);
+    auto            _obsrvr = StringCast<ANSICHAR>(*obsrvr);
     SpiceDouble    _et      = et.AsSpiceDouble();
     
     // Output
@@ -3484,12 +3443,12 @@ void USpice::fovtrg(
 
     // Invocation
     fovtrg_c(
-        _inst,
-        _target,
+        _inst.Get(),
+        _target.Get(),
         _tshape,
-        _tframe,
+        _tframe.Get(),
         _abcorr,
-        _obsrvr,
+        _obsrvr.Get(),
         &_et,
         &_visible
     );
@@ -3512,7 +3471,6 @@ void USpice::gdpool(
 )
 {
     // Inputs
-    ConstSpiceChar* _name = TCHAR_TO_ANSI(*name);
     SpiceInt        _start = start;
     SpiceInt        _room = room;
     // Outputs
@@ -3523,7 +3481,7 @@ void USpice::gdpool(
 
     // Invocation
     FMemory::Memset(_values, 0, buffer_size);
-    gdpool_c(_name, _start, _room, &_n, _values, &_found);
+    gdpool_c(TCHAR_TO_ANSI(*name), _start, _room, &_n, _values, &_found);
 
     // Return values
     values = TArray<double>();
@@ -3546,7 +3504,6 @@ void USpice::gdpool_scalar(
 )
 {
     // Inputs
-    ConstSpiceChar* _name = TCHAR_TO_ANSI(*name);
     SpiceInt        _start = 0;
     SpiceInt        _room = 1;
     // Outputs
@@ -3555,7 +3512,7 @@ void USpice::gdpool_scalar(
     SpiceBoolean    _found = SPICEFALSE;
 
     // Invocation
-    gdpool_c(_name, _start, _room, &_n, &_value, &_found);
+    gdpool_c(TCHAR_TO_ANSI(*name), _start, _room, &_n, &_value, &_found);
 
     // Return values
     value = _value;
@@ -3574,7 +3531,6 @@ void USpice::gdpool_distance(
 )
 {
     // Inputs
-    ConstSpiceChar* _name = TCHAR_TO_ANSI(*name);
     SpiceInt        _start = 0;
     SpiceInt        _room = 1;
     // Outputs
@@ -3583,7 +3539,7 @@ void USpice::gdpool_distance(
     SpiceBoolean    _found = SPICEFALSE;
 
     // Invocation
-    gdpool_c(_name, _start, _room, &_n, &_value, &_found);
+    gdpool_c(TCHAR_TO_ANSI(*name), _start, _room, &_n, &_value, &_found);
 
     // Return values
     value = FSDistance(_value);
@@ -3602,7 +3558,6 @@ void USpice::gdpool_vector(
 )
 {
     // Inputs
-    ConstSpiceChar* _name = TCHAR_TO_ANSI(*name);
     SpiceInt        _start = 0;
     SpiceInt        _room = 3;
     // Outputs
@@ -3611,7 +3566,7 @@ void USpice::gdpool_vector(
     SpiceBoolean    _found = SPICEFALSE;
 
     // Invocation
-    gdpool_c(_name, _start, _room, &_n, _value, &_found);
+    gdpool_c(TCHAR_TO_ANSI(*name), _start, _room, &_n, _value, &_found);
 
     // Return values
     value = FSDistanceVector(_value);
@@ -3631,7 +3586,6 @@ void USpice::gdpool_mass(
 )
 {
     // Inputs
-    ConstSpiceChar* _name = TCHAR_TO_ANSI(*name);
     SpiceInt        _start = 0;
     SpiceInt        _room = 1;
     // Outputs
@@ -3640,7 +3594,7 @@ void USpice::gdpool_mass(
     SpiceBoolean    _found = SPICEFALSE;
 
     // Invocation
-    gdpool_c(_name, _start, _room, &_n, &_value, &_found);
+    gdpool_c(TCHAR_TO_ANSI(*name), _start, _room, &_n, &_value, &_found);
 
     // Return values
     value = FSMassConstant(_value);
@@ -3750,7 +3704,6 @@ void USpice::getfat(
     const FString& fileRelativePath
 )
 {
-    ConstSpiceChar* _file = TCHAR_TO_ANSI(*toPath(fileRelativePath));
     
     SpiceChar szArchBuffer[SPICE_MAX_PATH];
     ZeroOut(szArchBuffer);
@@ -3764,7 +3717,7 @@ void USpice::getfat(
     SpiceChar*      _type = szTypeBuffer;
 
     getfat_c(
-        _file,
+        TCHAR_TO_ANSI(*toPath(fileRelativePath)),
         _arclen,
         _typlen,
         _arch,
@@ -3858,9 +3811,9 @@ void USpice::gfdist(
     }
 
     // Inputs
-    ConstSpiceChar* _target = TCHAR_TO_ANSI(*target);
+    auto            _target = StringCast<ANSICHAR>(*target);
     ConstSpiceChar* _abcorr = MaxQ::Core::ToANSIString(abcorr);
-    ConstSpiceChar* _obsrvr = TCHAR_TO_ANSI(*obsrvr);
+    auto            _obsrvr = StringCast<ANSICHAR>(*obsrvr);
     ConstSpiceChar* _relate = MaxQ::Core::ToANSIString(relate);
     SpiceDouble     _refval = refval.AsSpiceDouble();
     SpiceDouble     _adjust = adjust.AsSpiceDouble();
@@ -3896,9 +3849,9 @@ void USpice::gfdist(
 
     // Invocation
     gfdist_c(
-        _target,
+        _target.Get(),
         _abcorr,
-        _obsrvr,
+        _obsrvr.Get(),
         _relate,
         _refval,
         _adjust,
@@ -3958,11 +3911,11 @@ void USpice::gfilum(
     // "The only choice currently supported is 'Ellipsoid'"
     ConstSpiceChar* _method = "Ellipsoid";
     ConstSpiceChar* _angtyp = MaxQ::Core::ToANSIString(angtyp);
-    ConstSpiceChar* _target = TCHAR_TO_ANSI(*target);
-    ConstSpiceChar* _illmn  = TCHAR_TO_ANSI(*illmn);
-    ConstSpiceChar* _fixref = TCHAR_TO_ANSI(*fixref);
+    auto            _target = StringCast<ANSICHAR>(*target);
+    auto            _illmn  = StringCast<ANSICHAR>(*illmn);
+    auto            _fixref = StringCast<ANSICHAR>(*fixref);
     ConstSpiceChar* _abcorr = MaxQ::Core::ToANSIString(abcorr);
-    ConstSpiceChar* _obsrvr = TCHAR_TO_ANSI(*obsrvr);
+    auto            _obsrvr = StringCast<ANSICHAR>(*obsrvr);
     SpiceDouble     _spoint[3]; spoint.CopyTo(_spoint);
     ConstSpiceChar* _relate = MaxQ::Core::ToANSIString(relate);
     SpiceDouble     _refval = refval.AsSpiceDouble();
@@ -4003,11 +3956,11 @@ void USpice::gfilum(
     gfilum_c(
         _method,
         _angtyp,
-        _target,
-        _illmn,
-        _fixref,
+        _target.Get(),
+        _illmn.Get(),
+        _fixref.Get(),
         _abcorr,
-        _obsrvr,
+        _obsrvr.Get(),
         _spoint,
         _relate,
         _refval,
@@ -4067,14 +4020,14 @@ void USpice::gfoclt(
     }
 
     ConstSpiceChar* _occtyp;
-    ConstSpiceChar* _front = TCHAR_TO_ANSI(*front);
-    ConstSpiceChar* _fshape = TCHAR_TO_ANSI(*MaxQ::Core::ToString(frontShape, frontShapeSurfaces));
-    ConstSpiceChar* _fframe = TCHAR_TO_ANSI(*frontframe);
-    ConstSpiceChar* _back = TCHAR_TO_ANSI(*back);
-    ConstSpiceChar* _bshape = TCHAR_TO_ANSI(*MaxQ::Core::ToString(backShape, backShapeSurfaces));
-    ConstSpiceChar* _bframe = TCHAR_TO_ANSI(*backFrame);
+    auto            _front = StringCast<ANSICHAR>(*front);
+    auto            _fshape = StringCast<ANSICHAR>(*MaxQ::Core::ToString(frontShape, frontShapeSurfaces));
+    auto            _fframe = StringCast<ANSICHAR>(*frontframe);
+    auto            _back  = StringCast<ANSICHAR>(*back);
+    auto            _bshape = StringCast<ANSICHAR>(*MaxQ::Core::ToString(backShape, backShapeSurfaces));
+    auto            _bframe = StringCast<ANSICHAR>(*backFrame);
     ConstSpiceChar* _abcorr = MaxQ::Core::ToANSIString(abcorr);
-    ConstSpiceChar* _obsrvr = TCHAR_TO_ANSI(*obsrvr);
+    auto            _obsrvr = StringCast<ANSICHAR>(*obsrvr);
     SpiceDouble     _step = step.AsSpiceDouble();
     
     SPICEDOUBLE_CELL(_cnfine, MAXWIN);
@@ -4112,14 +4065,14 @@ void USpice::gfoclt(
     // Invocation
     gfoclt_c(
         _occtyp,
-        _front,
-        _fshape,
-        _fframe,
-        _back,
-        _bshape,
-        _bframe,
+        _front.Get(),
+        _fshape.Get(),
+        _fframe.Get(),
+        _back.Get(),
+        _bshape.Get(),
+        _bframe.Get(),
         _abcorr,
-        _obsrvr,
+        _obsrvr.Get(),
         _step,
         &_cnfine,
         &_result
@@ -4169,10 +4122,10 @@ void USpice::gfpa(
         return;
     }
 
-    ConstSpiceChar* _target = TCHAR_TO_ANSI(*target);
-    ConstSpiceChar* _illmn = TCHAR_TO_ANSI(*illmn);
+    auto            _target = StringCast<ANSICHAR>(*target);
+    auto            _illmn  = StringCast<ANSICHAR>(*illmn);
     ConstSpiceChar* _abcorr = MaxQ::Core::ToANSIString(abcorr);
-    ConstSpiceChar* _obsrvr = TCHAR_TO_ANSI(*obsrvr);
+    auto            _obsrvr = StringCast<ANSICHAR>(*obsrvr);
     ConstSpiceChar* _relate = MaxQ::Core::ToANSIString(relate);
     SpiceDouble     _refval = refval.AsSpiceDouble();
     SpiceDouble     _adjust = adjust.AsSpiceDouble();
@@ -4207,10 +4160,10 @@ void USpice::gfpa(
     scard_c(0, &_result);
 
     gfpa_c(
-        _target,
-        _illmn,
+        _target.Get(),
+        _illmn.Get(),
         _abcorr,
-        _obsrvr,
+        _obsrvr.Get(),
         _relate,
         _refval,
         _adjust,
@@ -4269,10 +4222,10 @@ void USpice::gfposc(
 
 
     // Inputs
-    ConstSpiceChar* _target = TCHAR_TO_ANSI(*target);
-    ConstSpiceChar* _frame  = TCHAR_TO_ANSI(*frame);
+    auto            _target = StringCast<ANSICHAR>(*target);
+    auto            _frame  = StringCast<ANSICHAR>(*frame);
     ConstSpiceChar* _abcorr = MaxQ::Core::ToANSIString(abcorr);
-    ConstSpiceChar* _obsrvr = TCHAR_TO_ANSI(*obsrvr);
+    auto            _obsrvr = StringCast<ANSICHAR>(*obsrvr);
     ConstSpiceChar* _crdsys = MaxQ::Core::ToANSIString(crdsys);
     ConstSpiceChar* _coord  = MaxQ::Core::ToANSIString(coord);
     ConstSpiceChar* _relate = MaxQ::Core::ToANSIString(relate);
@@ -4297,10 +4250,10 @@ void USpice::gfposc(
 
     // Invocation
     gfposc_c(
-        _target,
-        _frame,
+        _target.Get(),
+        _frame.Get(),
         _abcorr,
-        _obsrvr,
+        _obsrvr.Get(),
         _crdsys,
         _coord,
         _relate,
@@ -4342,11 +4295,11 @@ void USpice::gfrfov(
 {
     const int MAXWIN = 200;
 
-    ConstSpiceChar* _inst   = TCHAR_TO_ANSI(*inst);
+    auto            _inst   = StringCast<ANSICHAR>(*inst);
     SpiceDouble     _raydir[3];  raydir.CopyTo(_raydir);
-    ConstSpiceChar* _rframe = TCHAR_TO_ANSI(*rframe);
+    auto            _rframe = StringCast<ANSICHAR>(*rframe);
     ConstSpiceChar* _abcorr = MaxQ::Core::ToANSIString(abcorr);
-    ConstSpiceChar* _obsrvr = TCHAR_TO_ANSI(*obsrvr);
+    auto            _obsrvr = StringCast<ANSICHAR>(*obsrvr);
     SpiceDouble     _step   = step.AsSpiceDouble();
 
     SPICEDOUBLE_CELL(_cnfine, MAXWIN);
@@ -4364,11 +4317,11 @@ void USpice::gfrfov(
 
     // Invocation
     gfrfov_c(
-        _inst,
+        _inst.Get(),
         _raydir,
-        _rframe,
+        _rframe.Get(),
         _abcorr,
-        _obsrvr,
+        _obsrvr.Get(),
         _step,
         &_cnfine,
         &_result
@@ -4418,9 +4371,9 @@ void USpice::gfrr(
     }
 
     // Inputs
-    ConstSpiceChar* _target = TCHAR_TO_ANSI(*target);
+    auto            _target = StringCast<ANSICHAR>(*target);
     ConstSpiceChar* _abcorr = MaxQ::Core::ToANSIString(abcorr);
-    ConstSpiceChar* _obsrvr = TCHAR_TO_ANSI(*obsrvr);
+    auto            _obsrvr = StringCast<ANSICHAR>(*obsrvr);
     ConstSpiceChar* _relate = MaxQ::Core::ToANSIString(relate);
     SpiceDouble     _refval = refval.AsSpiceDouble();
     SpiceDouble     _adjust = adjust.AsSpiceDouble();
@@ -4457,9 +4410,9 @@ void USpice::gfrr(
 
     // Invocation
     gfrr_c(
-        _target,
+        _target.Get(),
         _abcorr,
-        _obsrvr,
+        _obsrvr.Get(),
         _relate,
         _refval,
         _adjust,
@@ -4521,7 +4474,7 @@ void USpice::gfsep(
         return;
     }
 
-    ConstSpiceChar* _targ1 = TCHAR_TO_ANSI(*targ1);
+    auto            _targ1 = StringCast<ANSICHAR>(*targ1);
     ConstSpiceChar* _shape1 = MaxQ::Core::ToANSIString(shape1);
     /*
     * From the docs:
@@ -4531,14 +4484,14 @@ void USpice::gfsep(
         "POINT" and "SPHERE" shaped bodies.
     */
     ConstSpiceChar* _frame1 = "NULL";
-    ConstSpiceChar* _targ2 = TCHAR_TO_ANSI(*targ2);
+    auto            _targ2 = StringCast<ANSICHAR>(*targ2);
     ConstSpiceChar* _shape2 = MaxQ::Core::ToANSIString(shape2);
     /*
     * (comments from _frame1 apply)
     */
     ConstSpiceChar* _frame2 = "NULL";
     ConstSpiceChar* _abcorr = MaxQ::Core::ToANSIString(abcorr);
-    ConstSpiceChar* _obsrvr = TCHAR_TO_ANSI(*obsrvr);
+    auto            _obsrvr = StringCast<ANSICHAR>(*obsrvr);
     ConstSpiceChar* _relate = MaxQ::Core::ToANSIString(relate);
     SpiceDouble     _refval = refval.AsSpiceDouble();
     SpiceDouble     _adjust = adjust.AsSpiceDouble();
@@ -4575,14 +4528,14 @@ void USpice::gfsep(
 
     // Invocation
     gfsep_c(
-        _targ1,
+        _targ1.Get(),
         _shape1,
         _frame1,
-        _targ2,
+        _targ2.Get(),
         _shape2,
         _frame2,
         _abcorr,
-        _obsrvr,
+        _obsrvr.Get(),
         _relate,
         _refval,
         _adjust,
@@ -4639,13 +4592,13 @@ void USpice::gfsntc(
         return;
     }
     
-    ConstSpiceChar* _target = TCHAR_TO_ANSI(*target);
-    ConstSpiceChar* _fixref = TCHAR_TO_ANSI(*fixref);
+    auto            _target = StringCast<ANSICHAR>(*target);
+    auto            _fixref = StringCast<ANSICHAR>(*fixref);
     // The docs list "Ellipsoid" as the only accepted value.
     ConstSpiceChar* _method = "Ellipsoid";
     ConstSpiceChar* _abcorr = MaxQ::Core::ToANSIString(abcorr);
-    ConstSpiceChar* _obsrvr = TCHAR_TO_ANSI(*obsrvr);
-    ConstSpiceChar* _dref   = TCHAR_TO_ANSI(*dref);
+    auto            _obsrvr = StringCast<ANSICHAR>(*obsrvr);
+    auto            _dref   = StringCast<ANSICHAR>(*dref);
     SpiceDouble     _dvec[3]; dvec.CopyTo(_dvec);
     ConstSpiceChar* _crdsys = MaxQ::Core::ToANSIString(crdsys);
     ConstSpiceChar* _coord  = MaxQ::Core::ToANSIString(coord);
@@ -4685,12 +4638,12 @@ void USpice::gfsntc(
 
     // Invocation
     gfsntc_c(
-        _target,
-        _fixref,
+        _target.Get(),
+        _fixref.Get(),
         _method,
         _abcorr,
-        _obsrvr,
-        _dref,
+        _obsrvr.Get(),
+        _dref.Get(),
         _dvec,
         _crdsys,
         _coord,
@@ -4739,12 +4692,12 @@ void USpice::gftfov(
     const int MAXWIN = 200;
 
     // Inputs
-    ConstSpiceChar* _inst = TCHAR_TO_ANSI(*inst);
-    ConstSpiceChar* _target = TCHAR_TO_ANSI(*inst);
+    auto            _inst   = StringCast<ANSICHAR>(*inst);
+    auto            _target = StringCast<ANSICHAR>(*target);
     ConstSpiceChar* _tshape = MaxQ::Core::ToANSIString(tshape);
-    ConstSpiceChar* _tframe = TCHAR_TO_ANSI(*inst);
+    auto            _tframe = StringCast<ANSICHAR>(*tframe);
     ConstSpiceChar* _abcorr = MaxQ::Core::ToANSIString(abcorr);
-    ConstSpiceChar* _obsrvr = TCHAR_TO_ANSI(*inst);
+    auto            _obsrvr = StringCast<ANSICHAR>(*obsrvr);
     SpiceDouble     _step = step.AsSpiceDouble();
 
     SPICEDOUBLE_CELL(_cnfine, MAXWIN);
@@ -4762,12 +4715,12 @@ void USpice::gftfov(
 
     // Invocation
     gftfov_c(
-        _inst,
-        _target,
+        _inst.Get(),
+        _target.Get(),
         _tshape,
-        _tframe,
+        _tframe.Get(),
         _abcorr,
-        _obsrvr,
+        _obsrvr.Get(),
         _step,
         &_cnfine,
         &_result
@@ -4826,11 +4779,11 @@ void USpice::gfsubc(
     const int MAXWIN = 200;
 
     // Inputs
-    ConstSpiceChar* _target = TCHAR_TO_ANSI(*target);
-    ConstSpiceChar* _fixref = TCHAR_TO_ANSI(*fixref);
+    auto            _target = StringCast<ANSICHAR>(*target);
+    auto            _fixref = StringCast<ANSICHAR>(*fixref);
     ConstSpiceChar* _method = MaxQ::Core::ToANSIString(method);
     ConstSpiceChar* _abcorr = MaxQ::Core::ToANSIString(abcorr);
-    ConstSpiceChar* _obsrvr = TCHAR_TO_ANSI(*obsrvr);
+    auto            _obsrvr = StringCast<ANSICHAR>(*obsrvr);
     ConstSpiceChar* _crdsys = MaxQ::Core::ToANSIString(crdsys);
     ConstSpiceChar* _coord = MaxQ::Core::ToANSIString(coord);
     ConstSpiceChar* _relate = MaxQ::Core::ToANSIString(relate);
@@ -4855,11 +4808,11 @@ void USpice::gfsubc(
 
     // Invocation
     gfsubc_c(
-        _target,
-        _fixref,
+        _target.Get(),
+        _fixref.Get(),
         _method,
         _abcorr,
-        _obsrvr,
+        _obsrvr.Get(),
         _crdsys,
         _coord,
         _relate,
@@ -4897,7 +4850,6 @@ void USpice::gipool(
 )
 {
     // Inputs
-    ConstSpiceChar* _name = TCHAR_TO_ANSI(*name);
     SpiceInt        _start = start;
     SpiceInt        _room = room;
     // Outputs
@@ -4908,7 +4860,7 @@ void USpice::gipool(
 
     // invocation
     FMemory::Memset(_ivals, 0, buffer_size);
-    gipool_c(_name, _start, _room, &_n, _ivals, &_found);
+    gipool_c(TCHAR_TO_ANSI(*name), _start, _room, &_n, _ivals, &_found);
 
     // Return values
     ivals = TArray<int>();
@@ -4933,7 +4885,6 @@ void USpice::gnpool(
 )
 {
     // Inputs
-    ConstSpiceChar* _name = TCHAR_TO_ANSI(*name);
     SpiceInt        _start = start;
     SpiceInt        _room = room;
     SpiceInt        _lenout = SPICE_MAX_PATH;
@@ -4945,7 +4896,7 @@ void USpice::gnpool(
 
     // Invocation
     FMemory::Memset(_kvars, 0, buffer_size);
-    gnpool_c(_name, _start, _room, _lenout, &_n, _kvars, &_found);
+    gnpool_c(TCHAR_TO_ANSI(*name), _start, _room, _lenout, &_n, _kvars, &_found);
 
     // Return Values
     kvars = TArray<FString>();
@@ -4982,13 +4933,13 @@ void USpice::illumf(
 )
 {
     // Inputs
-    ConstSpiceChar* _method = TCHAR_TO_ANSI(*MaxQ::Core::ToString(method, surfaces));
-    ConstSpiceChar* _target = TCHAR_TO_ANSI(*target);
-    ConstSpiceChar* _ilusrc = TCHAR_TO_ANSI(*ilusrc);
+    auto            _method = StringCast<ANSICHAR>(*MaxQ::Core::ToString(method, surfaces));
+    auto            _target = StringCast<ANSICHAR>(*target);
+    auto            _ilusrc = StringCast<ANSICHAR>(*ilusrc);
     SpiceDouble     _et = et.AsSpiceDouble();
-    ConstSpiceChar* _fixref = TCHAR_TO_ANSI(*fixref);
+    auto            _fixref = StringCast<ANSICHAR>(*fixref);
     ConstSpiceChar* _abcorr = MaxQ::Core::ToANSIString(abcorr);
-    ConstSpiceChar* _obsrvr = TCHAR_TO_ANSI(*obsrvr);
+    auto            _obsrvr = StringCast<ANSICHAR>(*obsrvr);
     SpiceDouble     _spoint[3]; spoint.CopyTo(_spoint);
 
     // Outputs
@@ -5002,13 +4953,13 @@ void USpice::illumf(
 
     // Invocation
     illumf_c(
-        _method,
-        _target,
-        _ilusrc,
+        _method.Get(),
+        _target.Get(),
+        _ilusrc.Get(),
         _et,
-        _fixref,
+        _fixref.Get(),
         _abcorr,
-        _obsrvr,
+        _obsrvr.Get(),
         _spoint,
         &_trgepc,
         _srfvec,
@@ -5053,13 +5004,13 @@ void USpice::illumg(
 )
 {
     // Inputs
-    ConstSpiceChar* _method = TCHAR_TO_ANSI(*MaxQ::Core::ToString(method, surfaces));
-    ConstSpiceChar* _target = TCHAR_TO_ANSI(*target);
-    ConstSpiceChar* _ilusrc = TCHAR_TO_ANSI(*ilusrc);
+    auto            _method = StringCast<ANSICHAR>(*MaxQ::Core::ToString(method, surfaces));
+    auto            _target = StringCast<ANSICHAR>(*target);
+    auto            _ilusrc = StringCast<ANSICHAR>(*ilusrc);
     SpiceDouble     _et = et.AsSpiceDouble();
-    ConstSpiceChar* _fixref = TCHAR_TO_ANSI(*fixref);
+    auto            _fixref = StringCast<ANSICHAR>(*fixref);
     ConstSpiceChar* _abcorr = MaxQ::Core::ToANSIString(abcorr);
-    ConstSpiceChar* _obsrvr = TCHAR_TO_ANSI(*obsrvr);
+    auto            _obsrvr = StringCast<ANSICHAR>(*obsrvr);
     SpiceDouble     _spoint[3]; spoint.CopyTo(_spoint);
     
     // Outputs
@@ -5071,13 +5022,13 @@ void USpice::illumg(
 
     // Invocation
     illumg_c(
-        _method,
-        _target,
-        _ilusrc,
+        _method.Get(),
+        _target.Get(),
+        _ilusrc.Get(),
         _et,
-        _fixref,
+        _fixref.Get(),
         _abcorr,
-        _obsrvr,
+        _obsrvr.Get(),
         _spoint,
         &_trgepc,
         _srfvec,
@@ -5193,12 +5144,12 @@ void USpice::ilumin(
 )
 {
     // Inputs
-    ConstSpiceChar* _method = TCHAR_TO_ANSI(*method);
-    ConstSpiceChar* _target = TCHAR_TO_ANSI(*target);
+    auto            _method = StringCast<ANSICHAR>(*method);
+    auto            _target = StringCast<ANSICHAR>(*target);
     SpiceDouble     _et     = et.AsSpiceDouble();
-    ConstSpiceChar* _fixref = TCHAR_TO_ANSI(*fixref);
+    auto            _fixref = StringCast<ANSICHAR>(*fixref);
     ConstSpiceChar* _abcorr = MaxQ::Core::ToANSIString(abcorr);
-    ConstSpiceChar* _obsrvr = TCHAR_TO_ANSI(*obsrvr);
+    auto            _obsrvr = StringCast<ANSICHAR>(*obsrvr);
     SpiceDouble     _spoint[3]; spoint.CopyTo(_spoint);
 
     // Outputs
@@ -5212,12 +5163,12 @@ void USpice::ilumin(
 
     // invocation
     ilumin_c(
-        _method,
-        _target,
+        _method.Get(),
+        _target.Get(),
         _et,
-        _fixref,
+        _fixref.Get(),
         _abcorr,
-        _obsrvr,
+        _obsrvr.Get(),
         _spoint,
         &_trgepc,
         _srfvec,
@@ -5372,7 +5323,6 @@ void USpice::tparse(
     ZeroOut(szBuffer);
 
     // Inputs
-    ConstSpiceChar* _string = TCHAR_TO_ANSI(*string);
     SpiceInt        _lenout = sizeof(szBuffer);
 
     // Outputs
@@ -5380,7 +5330,7 @@ void USpice::tparse(
     SpiceChar* _errmsg = szBuffer;
 
 
-    tparse_c(_string, _lenout, &_sp2000, _errmsg);
+    tparse_c(TCHAR_TO_ANSI(*string), _lenout, &_sp2000, _errmsg);
 
     if (SpiceStringLengthN(_errmsg, _lenout))
     {
@@ -5443,7 +5393,6 @@ void USpice::kdata(
     SpiceChar SourceFileBuffer[SPICE_MAX_PATH];
 
     SpiceInt        _which = which;
-    ConstSpiceChar* _kind = TCHAR_TO_ANSI(*MaxQ::Core::ToString((ES_KernelType)kind));
     SpiceInt          _fillen = sizeof(KernelFileBuffer);
     SpiceInt          _typlen = sizeof(FileTypeBuffer);
     SpiceInt          _srclen = sizeof(SourceFileBuffer);
@@ -5452,6 +5401,8 @@ void USpice::kdata(
     SpiceChar* _srcfil = SourceFileBuffer;
     SpiceInt _handle = handle;
     SpiceBoolean _found { SPICEFALSE };
+    // Warning:  Temp var, do not dereference after kdata_c invocation
+    ConstSpiceChar* _kind = TCHAR_TO_ANSI(*MaxQ::Core::ToString((ES_KernelType)kind));
 
     kdata_c(
         _which,
@@ -5511,13 +5462,14 @@ void USpice::kinfo(
     SpiceChar FileTypeBuffer[64];
     SpiceChar SourceFileBuffer[SPICE_MAX_PATH];
 
-    ConstSpiceChar* _file = TCHAR_TO_ANSI(*toPath(file));
     SpiceInt        _filtln = sizeof FileTypeBuffer;
     SpiceInt        _srclen = sizeof SourceFileBuffer;
     SpiceChar*      _filtyp = FileTypeBuffer;
     SpiceChar*      _srcfil = SourceFileBuffer;
     SpiceInt        _handle = handle;
     SpiceBoolean    _found = SPICEFALSE;
+    // Warning: temp ptr, do not dereference after kinfo_v
+    ConstSpiceChar* _file = TCHAR_TO_ANSI(*toPath(file));
 
     kinfo_c(
         _file,
@@ -5563,8 +5515,9 @@ void USpice::ktotal(
     int32 kind
 )
 {
-    ConstSpiceChar* _kind = TCHAR_TO_ANSI(*MaxQ::Core::ToString((ES_KernelType)kind));
     SpiceInt _count = count;
+    // Warning:  Temp var
+    ConstSpiceChar* _kind = TCHAR_TO_ANSI(*MaxQ::Core::ToString((ES_KernelType)kind));
 
     ktotal_c( _kind, &_count );
 
@@ -5735,10 +5688,10 @@ void USpice::latsrf(
     )
 {
     // Input
-    ConstSpiceChar* _method = TCHAR_TO_ANSI(*MaxQ::Core::ToString(method, shapeSurfaces));
-    ConstSpiceChar* _target = TCHAR_TO_ANSI(*target);
+    auto            _method = StringCast<ANSICHAR>(*MaxQ::Core::ToString(method, shapeSurfaces));
+    auto            _target = StringCast<ANSICHAR>(*target);
     SpiceDouble     _et     = et.AsSpiceDouble();
-    ConstSpiceChar* _fixref = TCHAR_TO_ANSI(*fixref);
+    auto            _fixref = StringCast<ANSICHAR>(*fixref);
 
     // lonlat.GetData() would work if the ONLY data in the SLonLat structures are the members we declared.
     // But, even if that were to be true now, it may not always be.  So, we copy.
@@ -5757,10 +5710,10 @@ void USpice::latsrf(
 
     // Invocation
     latsrf_c(
-        _method,
-        _target,
+        _method.Get(),
+        _target.Get(),
         _et,
-        _fixref,
+        _fixref.Get(),
         _npts,
         _lonlat,    
         _srfpts
@@ -5806,13 +5759,13 @@ void USpice::limbpt(
     )
 {
     // Inputs
-    ConstSpiceChar* _method = TCHAR_TO_ANSI(*MaxQ::Core::ToString(method, shapeSurfaces));
-    ConstSpiceChar* _target = TCHAR_TO_ANSI(*target);
+    auto            _method = StringCast<ANSICHAR>(*MaxQ::Core::ToString(method, shapeSurfaces));
+    auto            _target = StringCast<ANSICHAR>(*target);
     SpiceDouble     _et = et.AsSpiceDouble();
-    ConstSpiceChar* _fixref = TCHAR_TO_ANSI(*fixref);
+    auto            _fixref = StringCast<ANSICHAR>(*fixref);
     ConstSpiceChar* _abcorr = MaxQ::Core::ToANSIString(abcorr);
     ConstSpiceChar* _corloc = MaxQ::Core::ToANSIString(corloc);
-    ConstSpiceChar* _obsrvr = TCHAR_TO_ANSI(*obsrvr);
+    auto            _obsrvr = StringCast<ANSICHAR>(*obsrvr);
     SpiceDouble     _refvec[3];  refvec.CopyTo(_refvec);
     SpiceDouble     _rolstp = rolstp.AsSpiceDouble();
     SpiceInt        _ncuts = ncuts;
@@ -5831,13 +5784,13 @@ void USpice::limbpt(
 
     // Invocation
     limbpt_c(
-        _method,
-        _target,
+        _method.Get(),
+        _target.Get(),
         _et,
-        _fixref,
+        _fixref.Get(),
         _abcorr,
         _corloc,
-        _obsrvr,
+        _obsrvr.Get(),
         _refvec,
         _rolstp,
         _ncuts,
@@ -6558,7 +6511,6 @@ void USpice::lspcn(
 )
 {
     // Inputs
-    ConstSpiceChar* _body = TCHAR_TO_ANSI(*body);
     SpiceDouble		_et = et.AsSpiceDouble();
     ConstSpiceChar* _abcorr;
     switch (abcorr)
@@ -6575,7 +6527,7 @@ void USpice::lspcn(
     }
 
     // Invocation
-    SpiceDouble _lon = lspcn_c(_body, _et, _abcorr);
+    SpiceDouble _lon = lspcn_c(TCHAR_TO_ANSI(*body), _et, _abcorr);
 
     // Return Value
     lon = FSAngle(_lon);
@@ -6687,13 +6639,11 @@ void USpice::namfrm(
     int& frcode
 )
 {
-    // Input
-    ConstSpiceChar* _frname = TCHAR_TO_ANSI(*frname);
     // Output
     SpiceInt       _frcode = 0;
 
     // Invocation
-    namfrm_c(_frname, &_frcode);
+    namfrm_c(TCHAR_TO_ANSI(*frname), &_frcode);
 
     // Return Value
     frcode = int(_frcode);
@@ -6976,14 +6926,14 @@ void USpice::occult(
 )
 {
     // Inputs
-    ConstSpiceChar* _targ1 = TCHAR_TO_ANSI(*targ1);
-    ConstSpiceChar* _shape1 = TCHAR_TO_ANSI(*MaxQ::Core::ToString(shape1, shape1Surfaces));
-    ConstSpiceChar* _frame1 = TCHAR_TO_ANSI(*frame1);
-    ConstSpiceChar* _targ2 = TCHAR_TO_ANSI(*targ2);
-    ConstSpiceChar* _shape2 = TCHAR_TO_ANSI(*MaxQ::Core::ToString(shape2, shape2Surfaces));
-    ConstSpiceChar* _frame2 = TCHAR_TO_ANSI(*frame2);
+    auto            _targ1  = StringCast<ANSICHAR>(*targ1);
+    auto            _shape1 = StringCast<ANSICHAR>(*MaxQ::Core::ToString(shape1, shape1Surfaces));
+    auto            _frame1 = StringCast<ANSICHAR>(*frame1);
+    auto            _targ2  = StringCast<ANSICHAR>(*targ2);
+    auto            _shape2 = StringCast<ANSICHAR>(*MaxQ::Core::ToString(shape2, shape2Surfaces));
+    auto            _frame2 = StringCast<ANSICHAR>(*frame2);
     ConstSpiceChar* _abcorr = MaxQ::Core::ToANSIString(abcorr);
-    ConstSpiceChar* _obsrvr = TCHAR_TO_ANSI(*obsrvr);
+    auto            _obsrvr = StringCast<ANSICHAR>(*obsrvr);
     SpiceDouble        _et = et.AsSpiceDouble();
 
     // Output
@@ -6991,14 +6941,14 @@ void USpice::occult(
 
     // Invocation
     occult_c(
-        _targ1,
-        _shape1,
-        _frame1,
-        _targ2,
-        _shape2,
-        _frame2,
+        _targ1.Get(),
+        _shape1.Get(),
+        _frame1.Get(),
+        _targ2.Get(),
+        _shape2.Get(),
+        _frame2.Get(),
         _abcorr,
-        _obsrvr,
+        _obsrvr.Get(),
         _et,
         &_ocltid
     );
@@ -7110,14 +7060,11 @@ void USpice::pckfrm(
     // Spice cells are static, so reinitialize.
     scard_c(0, &idscell);
 
-    // Inputs
-    auto _pck = TCHAR_TO_ANSI(*toPath(pckRelativePath));
-
     // Outputs
     SpiceCell* _ids = &idscell;
 
     // Invocation
-    spkobj_c(_pck, _ids);
+    spkobj_c(TCHAR_TO_ANSI(*toPath(pckRelativePath)), _ids);
 
     ids = TArray<int>();
     int count = card_c(_ids);
@@ -7145,8 +7092,8 @@ void checkcov(
     const int largeCellSize = 10000;
 
     // Inputs
-    ConstSpiceChar* _pck = TCHAR_TO_ANSI(*toPath(pckFileRelativePath));
-    SpiceInt        _idcode = idcode;
+    auto       _pck = StringCast<ANSICHAR>(*toPath(pckFileRelativePath));
+    SpiceInt   _idcode = idcode;
     SpiceCell* _cover;
 
     SpiceBoolean haveData = false;
@@ -7171,7 +7118,7 @@ void checkcov(
 
         // Invocation
         scard_c(0, _cover);
-        covfunction(_pck, _idcode, _cover);
+        covfunction(_pck.Get(), _idcode, _cover);
 
         haveData = !failed_c();
     }
@@ -7198,7 +7145,7 @@ void checkcov(
 
             // Re-Invocation
             scard_c(0, _cover);
-            covfunction(_pck, _idcode, _cover);
+            covfunction(_pck.Get(), _idcode, _cover);
 
             haveData = !failed_c();
         }
@@ -7321,18 +7268,16 @@ void USpice::pcpool_list(
     for (int i = 0; i < count; ++i)
     {
         const FString& fstringValue = cvals[i];
-        const char* src = TCHAR_TO_ANSI(*fstringValue);
         char* dest = (char*)buffer + i * string_size;
-        SpiceStringCopy3(dest, buffer_size, src);
+        SpiceStringCopy3(dest, buffer_size, TCHAR_TO_ANSI(*fstringValue));
     }
 
     // Inputs
-    ConstSpiceChar* _name = TCHAR_TO_ANSI(*name);
     SpiceInt        _n = (SpiceInt)count;
     SpiceInt        _lenvals = (SpiceInt)maxLen;
     const void*     _cvals = buffer;
 
-    pcpool_c(_name, _n, _lenvals, _cvals);
+    pcpool_c(TCHAR_TO_ANSI(*name), _n, _lenvals, _cvals);
 
     // Error Handling
     ErrorCheck(ResultCode, ErrorMessage);
@@ -7346,12 +7291,12 @@ void USpice::pcpool(
 )
 {
     // Inputs
-    ConstSpiceChar* _name = TCHAR_TO_ANSI(*name);
+    auto         _name = StringCast<ANSICHAR>(*name);
     SpiceInt        _n = 1;
-    SpiceInt        _lenvals = (SpiceInt)(cval.Len()+1);
-    const void* _cvals = TCHAR_TO_ANSI(*cval);
+    SpiceInt  _lenvals = (SpiceInt)(cval.Len()+1);
+    auto        _cvals = StringCast<ANSICHAR>(*cval);
 
-    pcpool_c(_name, _n, _lenvals, _cvals);
+    pcpool_c(_name.Get(), _n, _lenvals, _cvals.Get());
 
     // Error Handling
     ErrorCheck(ResultCode, ErrorMessage);
@@ -7392,12 +7337,11 @@ void USpice::pdpool_list(
     if (sizeof(double) == sizeof(ConstSpiceDouble))
     {
         // Inputs
-        ConstSpiceChar*     _name = TCHAR_TO_ANSI(*name);
         SpiceInt            _n = dvals.Num();
         ConstSpiceDouble*   _dvals = dvals.GetData();
 
         // Invocation
-        pdpool_c(_name, _n, _dvals);
+        pdpool_c(TCHAR_TO_ANSI(*name), _n, _dvals);
     }
     else
     {
@@ -7422,12 +7366,11 @@ void USpice::pdpool(
 )
 {
     // Inputs
-    ConstSpiceChar* _name = TCHAR_TO_ANSI(*name);
     SpiceInt            _n = 1;
     SpiceDouble _dval = (SpiceDouble)dval;
 
     // Invocation
-    pdpool_c(_name, _n, &_dval);
+    pdpool_c(TCHAR_TO_ANSI(*name), _n, &_dval);
 
     // Error Handling
     ErrorCheck(ResultCode, ErrorMessage);
@@ -7484,7 +7427,6 @@ void USpice::pgrrec(
 )
 {
     // Inputs
-    ConstSpiceChar* _body = TCHAR_TO_ANSI(*body);
     SpiceDouble     _lon = planetographicVec.lonlat.longitude.AsSpiceDouble();
     SpiceDouble     _lat = planetographicVec.lonlat.latitude.AsSpiceDouble();
     SpiceDouble     _alt = planetographicVec.alt.AsSpiceDouble();
@@ -7495,7 +7437,7 @@ void USpice::pgrrec(
     SpiceDouble     _rectan[3]; ZeroOut(_rectan);
 
     // Invocation
-    pgrrec_c(_body, _lon, _lat, _alt, _re, _f, _rectan);
+    pgrrec_c(TCHAR_TO_ANSI(*body), _lon, _lat, _alt, _re, _f, _rectan);
 
     // Copy output
     rectan = FSDistanceVector(_rectan);
@@ -7517,17 +7459,17 @@ FSAngle USpice::phaseq(
 {
     // Inputs
     SpiceDouble     _et = et.AsSpiceDouble();
-    ConstSpiceChar* _target = TCHAR_TO_ANSI(*target);
-    ConstSpiceChar* _illmn = TCHAR_TO_ANSI(*illmn);
-    ConstSpiceChar* _obsrvr = TCHAR_TO_ANSI(*obsrvr);
+    auto            _target = StringCast<ANSICHAR>(*target);
+    auto            _illmn = StringCast<ANSICHAR>(*illmn);
+    auto            _obsrvr = StringCast<ANSICHAR>(*obsrvr);
     ConstSpiceChar* _abcorr = MaxQ::Core::ToANSIString(abcorr);
 
     // Invocation
     SpiceDouble result = phaseq_c(
         _et,
-        _target,
-        _illmn,
-        _obsrvr,
+        _target.Get(),
+        _illmn.Get(),
+        _obsrvr.Get(),
         _abcorr
     );
 
@@ -7584,12 +7526,11 @@ void USpice::pipool_list(
     if (sizeof(int) == sizeof(SpiceInt))
     {
         // Inputs
-        ConstSpiceChar* _name = TCHAR_TO_ANSI(*name);
         SpiceInt          _n = ivals.Num();
         ConstSpiceInt* _ivals = (SpiceInt*)ivals.GetData();
 
         // Invocation
-        pipool_c(_name, _n, _ivals);
+        pipool_c(TCHAR_TO_ANSI(*name), _n, _ivals);
     }
     else
     {
@@ -7615,12 +7556,11 @@ void USpice::pipool(
 )
 {
     // Inputs
-    ConstSpiceChar* _name = TCHAR_TO_ANSI(*name);
     SpiceInt        _n = 1;
     SpiceInt        _ival = (SpiceInt)ival;
 
     // Invocation
-    pipool_c(_name, _n, &_ival);
+    pipool_c(TCHAR_TO_ANSI(*name), _n, &_ival);
 
     // Error Handling
     ErrorCheck(ResultCode, ErrorMessage);
@@ -7853,7 +7793,9 @@ void USpice::pxform(
 )
 {
     SpiceDouble _rotate[3][3]; rotate.CopyTo(_rotate);
-    pxform_c(TCHAR_TO_ANSI(*from), TCHAR_TO_ANSI(*to), et.seconds, _rotate);
+    auto _from = StringCast<ANSICHAR>(*from);
+    auto _to = StringCast<ANSICHAR>(*to);
+    pxform_c(_from.Get(), _to.Get(), et.seconds, _rotate);
     rotate = FSRotationMatrix(_rotate);
 
     ErrorCheck(ResultCode, ErrorMessage);
@@ -7870,7 +7812,9 @@ void USpice::pxfrm2(
 )
 {
     SpiceDouble _rotate[3][3];
-    pxfrm2_c(TCHAR_TO_ANSI(*from), TCHAR_TO_ANSI(*to), etfrom.seconds, etto.seconds, _rotate);
+    auto _from = StringCast<ANSICHAR>(*from);
+    auto _to = StringCast<ANSICHAR>(*to);
+    pxfrm2_c(_from.Get(), _to.Get(), etfrom.seconds, etto.seconds, _rotate);
     rotate = FSRotationMatrix(_rotate);
 
     ErrorCheck(ResultCode, ErrorMessage);
@@ -8120,7 +8064,6 @@ void USpice::recpgr(
 )
 {
     // Inputs
-    ConstSpiceChar*  _body          = TCHAR_TO_ANSI(*body);;
     SpiceDouble      _rectan[3];    rectan.CopyTo(_rectan);
     SpiceDouble     _re             = re.AsSpiceDouble();
     SpiceDouble     _f              = (SpiceDouble)f;
@@ -8131,7 +8074,7 @@ void USpice::recpgr(
     SpiceDouble _alt = 0.;
 
     // Invocation
-    recpgr_c(_body, _rectan, _re, _f, &_lon, &_lat, &_alt);
+    recpgr_c(TCHAR_TO_ANSI(*body), _rectan, _re, _f, &_lon, &_lat, &_alt);
 
     // Copy outputs
     auto lonlat = FSLonLat(_lon, _lat);
@@ -8605,14 +8548,11 @@ void USpice::scencd(
     double& sclkdp
 )
 {
-    // Inputs
-    SpiceInt        _sc = sc;
-    ConstSpiceChar* _sclkch = TCHAR_TO_ANSI(*sclkch);
     // Outputs
     SpiceDouble     _sclkdp = 0;
 
     // Invocation
-    scencd_c(_sc, _sclkch, &_sclkdp);
+    scencd_c(sc, TCHAR_TO_ANSI(*sclkch), &_sclkdp);
 
     // Return Values
     sclkdp = double(_sclkdp);
@@ -8760,14 +8700,11 @@ void USpice::scs2e(
     FSEphemerisTime& et
 )
 {
-    // Inputs
-    SpiceInt        _sc = sc;
-    ConstSpiceChar* _sclkch = TCHAR_TO_ANSI(*sclkch);
     // Outputs
     SpiceDouble     _et = 0;
 
     // Invocation
-    scs2e_c(_sc, _sclkch, &_et);
+    scs2e_c(sc, TCHAR_TO_ANSI(*sclkch), &_et);
 
     // Return Values
     et = FSEphemerisTime(_et);
@@ -8856,14 +8793,11 @@ void USpice::sctiks(
     double& ticks
 )
 {
-    // Inputs
-    SpiceInt           _sc = sc;
-    ConstSpiceChar* _clkstr = TCHAR_TO_ANSI(*clkstr);
     // Outputs
     SpiceDouble _ticks = 0;
 
     // Invocation
-    sctiks_c(_sc, _clkstr, &_ticks);
+    sctiks_c(sc, TCHAR_TO_ANSI(*clkstr), &_ticks);
 
     // Return Values
     ticks = double(_ticks);
@@ -9019,14 +8953,14 @@ void USpice::sincpt(
 )
 {
     // Inputs
-    ConstSpiceChar* _method = TCHAR_TO_ANSI(*MaxQ::Core::ToString(method, shapeSurfaces));
-    ConstSpiceChar* _target = TCHAR_TO_ANSI(*target);
+    auto            _method = StringCast<ANSICHAR>(*MaxQ::Core::ToString(method, shapeSurfaces));
+    auto            _target = StringCast<ANSICHAR>(*target);
     SpiceDouble     _et     = et.AsSpiceDouble();
-    ConstSpiceChar* _fixref = TCHAR_TO_ANSI(*fixref);
+    auto            _fixref = StringCast<ANSICHAR>(*fixref);
     ConstSpiceChar* _abcorr = MaxQ::Core::ToANSIString(abcorr);
-    ConstSpiceChar* _obsrvr = TCHAR_TO_ANSI(*obsrvr);
-    ConstSpiceChar* _dref   = TCHAR_TO_ANSI(*dref);
-    SpiceDouble    _dvec[3];  dvec.CopyTo(_dvec);
+    auto            _obsrvr = StringCast<ANSICHAR>(*obsrvr);
+    auto            _dref   = StringCast<ANSICHAR>(*dref);
+    SpiceDouble     _dvec[3];  dvec.CopyTo(_dvec);
     
     // Outputs
     SpiceDouble  _spoint[3];    ZeroOut(_spoint);
@@ -9036,13 +8970,13 @@ void USpice::sincpt(
 
     // Invocation
     sincpt_c(
-        _method,
-        _target,
+        _method.Get(),
+        _target.Get(),
         _et,
-        _fixref,
+        _fixref.Get(),
         _abcorr,
-        _obsrvr,
-        _dref,
+        _obsrvr.Get(),
+        _dref.Get(),
         _dvec,
         _spoint,
         &_trgepc,
@@ -9276,14 +9210,14 @@ void USpice::spkcpo(
 )
 {
     // Inputs
-    ConstSpiceChar* _target = TCHAR_TO_ANSI(*target);
+    auto            _target = StringCast<ANSICHAR>(*target);
     SpiceDouble     _et = et.AsSpiceDouble();
-    ConstSpiceChar* _outref = TCHAR_TO_ANSI(*outref);
-    ConstSpiceChar* _refloc = MaxQ::Core::ToANSIString(refloc);
-    ConstSpiceChar* _abcorr = MaxQ::Core::ToANSIString(abcorr);
+    auto            _outref = StringCast<ANSICHAR>(*outref);
+    auto            _refloc = MaxQ::Core::ToANSIString(refloc);
+    auto            _abcorr = MaxQ::Core::ToANSIString(abcorr);
     SpiceDouble     _obspos[3]; obspos.CopyTo(_obspos);
-    ConstSpiceChar* _obsctr = TCHAR_TO_ANSI(*obsctr);
-    ConstSpiceChar* _obsref = TCHAR_TO_ANSI(*obsref);
+    auto            _obsctr = StringCast<ANSICHAR>(*obsctr);
+    auto            _obsref = StringCast<ANSICHAR>(*obsref);
     // Outputs
     SpiceDouble     _state[6];  ZeroOut(_state);
     SpiceDouble     _lt = 0;
@@ -9291,14 +9225,14 @@ void USpice::spkcpo(
 
     // Invocation
     spkcpo_c(
-        _target,
+        _target.Get(),
         _et,
-        _outref,
+        _outref.Get(),
         _refloc,
         _abcorr,
         _obspos,
-        _obsctr,
-        _obsref,
+        _obsctr.Get(),
+        _obsref.Get(),
         _state,
         &_lt
     );
@@ -9364,13 +9298,13 @@ void USpice::spkcpt(
 {
     // Inputs
     SpiceDouble     _trgpos[3]; trgpos.CopyTo(_trgpos);
-    ConstSpiceChar* _trgctr = TCHAR_TO_ANSI(*trgctr);
-    ConstSpiceChar* _trgref = TCHAR_TO_ANSI(*trgref);
+    auto            _trgctr = StringCast<ANSICHAR>(*trgctr);
+    auto            _trgref = StringCast<ANSICHAR>(*trgref);
     SpiceDouble     _et = et.AsSpiceDouble();
-    ConstSpiceChar* _outref = TCHAR_TO_ANSI(*outref);
+    auto            _outref = StringCast<ANSICHAR>(*outref);
     ConstSpiceChar* _refloc = MaxQ::Core::ToANSIString(refloc);
     ConstSpiceChar* _abcorr = MaxQ::Core::ToANSIString(abcorr);
-    ConstSpiceChar* _obsrvr = TCHAR_TO_ANSI(*obsrvr);
+    auto            _obsrvr = StringCast<ANSICHAR>(*obsrvr);
     // Outputs
     SpiceDouble     _state[6];  ZeroOut(_state);
     SpiceDouble     _lt = 0;
@@ -9379,13 +9313,13 @@ void USpice::spkcpt(
     // Invocation
     spkcpt_c(
         _trgpos,
-        _trgctr,
-        _trgref,
+        _trgctr.Get(),
+        _trgref.Get(),
         _et,
-        _outref,
+        _outref.Get(),
         _refloc,
         _abcorr,
-        _obsrvr,
+        _obsrvr.Get(),
         _state,
         &_lt
     );
@@ -9451,30 +9385,30 @@ void USpice::spkcvo(
 )
 {
     // Inputs
-    ConstSpiceChar* _target = TCHAR_TO_ANSI(*target);
+    auto            _target = StringCast<ANSICHAR>(*target);
     SpiceDouble     _et = et.AsSpiceDouble();
-    ConstSpiceChar* _outref = TCHAR_TO_ANSI(*outref);
+    auto            _outref = StringCast<ANSICHAR>(*outref);
     ConstSpiceChar* _refloc = MaxQ::Core::ToANSIString(refloc);
     ConstSpiceChar* _abcorr = MaxQ::Core::ToANSIString(abcorr);
     SpiceDouble     _obssta[6]; obssta.CopyTo(_obssta);
     SpiceDouble     _obsepc = obsepc.AsSpiceDouble();
-    ConstSpiceChar* _obsctr = TCHAR_TO_ANSI(*obsctr);
-    ConstSpiceChar* _obsref = TCHAR_TO_ANSI(*obsref);
+    auto            _obsctr = StringCast<ANSICHAR>(*obsctr);
+    auto            _obsref = StringCast<ANSICHAR>(*obsref);
     // Outputs
     SpiceDouble     _state[6];  ZeroOut(_state);
     SpiceDouble     _lt = 0;
 
     // Invocation
     spkcvo_c(
-        _target,
+        _target.Get(),
         _et,
-        _outref,
+        _outref.Get(),
         _refloc,
         _abcorr,
         _obssta,
         _obsepc,
-        _obsctr,
-        _obsref,
+        _obsctr.Get(),
+        _obsref.Get(),
         _state,
         &_lt
     );
@@ -9542,13 +9476,13 @@ void USpice::spkcvt(
     // Inputs
     SpiceDouble     _trgsta[6]; trgsta.CopyTo(_trgsta);
     SpiceDouble     _trgepc = trgepc.AsSpiceDouble();
-    ConstSpiceChar* _trgctr = TCHAR_TO_ANSI(*trgctr);
-    ConstSpiceChar* _trgref = TCHAR_TO_ANSI(*trgref);
+    auto            _trgctr = StringCast<ANSICHAR>(*trgctr);
+    auto            _trgref = StringCast<ANSICHAR>(*trgref);
     SpiceDouble     _et = et.AsSpiceDouble();
-    ConstSpiceChar* _outref = TCHAR_TO_ANSI(*outref);
+    auto            _outref = StringCast<ANSICHAR>(*outref);
     ConstSpiceChar* _refloc = MaxQ::Core::ToANSIString(refloc);
     ConstSpiceChar* _abcorr = MaxQ::Core::ToANSIString(abcorr);
-    ConstSpiceChar* _obsrvr = TCHAR_TO_ANSI(*obsrvr);
+    auto            _obsrvr = StringCast<ANSICHAR>(*obsrvr);
     // Outputs
     SpiceDouble     _state[6];  ZeroOut(_state);
     SpiceDouble     _lt = lt.AsSpiceDouble();
@@ -9557,13 +9491,13 @@ void USpice::spkcvt(
     spkcvt_c(
         _trgsta,
         _trgepc,
-        _trgctr,
-        _trgref,
+        _trgctr.Get(),
+        _trgref.Get(),
         _et,
-        _outref,
+        _outref.Get(),
         _refloc,
         _abcorr,
-        _obsrvr,
+        _obsrvr.Get(),
         _state,
         &_lt
     );
@@ -9657,7 +9591,11 @@ void USpice::spkezr(
 
     ConstSpiceChar* _abcorr = MaxQ::Core::ToANSIString(abcorr);
 
-    spkezr_c(TCHAR_TO_ANSI(*targ), et.seconds, TCHAR_TO_ANSI(*ref), _abcorr, TCHAR_TO_ANSI(*obs), _state, &_lt);
+    auto _targ = StringCast<ANSICHAR>(*targ);
+    auto _ref = StringCast<ANSICHAR>(*ref);
+    auto _obs = StringCast<ANSICHAR>(*obs);
+
+    spkezr_c(_targ.Get(), et.seconds, _ref.Get(), _abcorr, _obs.Get(), _state, &_lt);
 
     ErrorCheck(ResultCode, ErrorMessage);
 
@@ -9688,7 +9626,7 @@ void USpice::spkgeo(
     SpiceDouble _state[6];
     ZeroOut(_state);
 
-    spkgeo_c((SpiceInt)targ, et.seconds, TCHAR_TO_ANSI(*ref), (SpiceInt)obs, _state, &_lt);
+    spkgeo_c(targ, et.seconds, TCHAR_TO_ANSI(*ref), obs, _state, &_lt);
 
     lt = FSEphemerisPeriod(_lt);
     state = FSStateVector(_state);
@@ -9718,7 +9656,7 @@ void USpice::spkgps(
     SpiceDouble _pos[3];
     ZeroOut(_pos);
 
-    spkgps_c((SpiceInt)targ, et.seconds, TCHAR_TO_ANSI(*ref), (SpiceInt)obs, _pos, &_lt);
+    spkgps_c(targ, et.seconds, TCHAR_TO_ANSI(*ref), obs, _pos, &_lt);
 
     lt = FSEphemerisPeriod(_lt);
     pos = FSDistanceVector(_pos);
@@ -9762,7 +9700,11 @@ void USpice::spkpos(
 
     ConstSpiceChar* _abcorr = MaxQ::Core::ToANSIString(abcorr);
 
-    spkpos_c(TCHAR_TO_ANSI(*targ), et.seconds, TCHAR_TO_ANSI(*ref), _abcorr, TCHAR_TO_ANSI(*obs), _ptarg, &_lt);
+    auto _targ = StringCast<ANSICHAR>(*targ);
+    auto _ref = StringCast<ANSICHAR>(*ref);
+    auto _obs = StringCast<ANSICHAR>(*obs);
+
+    spkpos_c(_targ.Get(), et.seconds, _ref.Get(), _abcorr, _obs.Get(), _ptarg, &_lt);
 
     lt = FSEphemerisPeriod(_lt);
     ptarg = FSDistanceVector(_ptarg);
@@ -9791,14 +9733,11 @@ void USpice::spklef(
     int& handle
 )
 {
-    // Input
-    ConstSpiceChar* _filename = TCHAR_TO_ANSI(*toPath(relativePath));
-
     // Output
     SpiceInt        _handle = 0;
 
     // Invocation
-    spklef_c(_filename, &_handle);
+    spklef_c(TCHAR_TO_ANSI(*toPath(relativePath)), &_handle);
 
     // Return Value
     handle = int(_handle);
@@ -9843,20 +9782,17 @@ void USpice::spkobj(
     TArray<int>& ids
 )
 {
-    const int MAXOBJ = 1000;
+    constexpr int MAXOBJ = 1000;
 
     SPICEINT_CELL(idscell, MAXOBJ);
     // Spice cells are static, so reinitialize.
     scard_c(0, &idscell);
 
-    // Inputs
-    ConstSpiceChar* _fname = TCHAR_TO_ANSI(*toPath(relativePath));
-
     // Outputs
     SpiceCell* _ids = &idscell;
 
     // Invocation
-    spkobj_c(_fname, _ids);
+    spkobj_c(TCHAR_TO_ANSI(*toPath(relativePath)), _ids);
 
     ids = TArray<int>();
     int count = card_c(_ids);
@@ -9897,14 +9833,11 @@ void USpice::spkopa(
     int& handle
 )
 {
-    // Inputs
-    ConstSpiceChar* _file = TCHAR_TO_ANSI(*toPath(relativePath));
-
     // Output
     SpiceInt _handle = 0;
 
     // Invocation
-    spkopa_c(_file, &_handle);
+    spkopa_c(TCHAR_TO_ANSI(*toPath(relativePath)), &_handle);
 
     // Return Value
     handle = int(_handle);
@@ -9939,15 +9872,15 @@ void USpice::spkopn(
 )
 {
     // Inputs
-    ConstSpiceChar* _file = TCHAR_TO_ANSI(*toPath(relativePath));
+    auto _file = StringCast<ANSICHAR>(*toPath(relativePath));
 
-    ConstSpiceChar* _ifname = TCHAR_TO_ANSI(*ifname);
+    auto _ifname = StringCast<ANSICHAR>(*ifname);
     SpiceInt        _ncomch = ncomch;
     // Output
     SpiceInt        _handle = 0;
 
     // Invocation
-    spkopn_c(_file, _ifname, _ncomch, &_handle);
+    spkopn_c(_file.Get(), _ifname.Get(), _ncomch, &_handle);
 
     // Return Value
     handle = int(_handle);
@@ -9993,10 +9926,10 @@ void USpice::spkw05(
     SpiceInt         _handle = handle;
     SpiceInt         _body = body;
     SpiceInt         _center = center;
-    ConstSpiceChar* _frame = TCHAR_TO_ANSI(*frame);
+    auto             _frame = StringCast<ANSICHAR>(*frame);
     SpiceDouble      _first = first.AsSpiceDouble();
     SpiceDouble      _last = last.AsSpiceDouble();
-    ConstSpiceChar* _segid = TCHAR_TO_ANSI(*segid);
+    auto             _segid = StringCast<ANSICHAR>(*segid);
     SpiceDouble      _gm = gm.AsSpiceDouble();
     SpiceInt         _n = states.Num();
 
@@ -10014,10 +9947,10 @@ void USpice::spkw05(
         _handle,
         _body,
         _center,
-        _frame,
+        _frame.Get(),
         _first,
         _last,
-        _segid,
+        _segid.Get(),
         _gm,
         _n,
         _states,
@@ -10042,13 +9975,13 @@ void USpice::spkw15(
 )
 {
     // Inputs
-    SpiceInt         _handle = handle;
-    SpiceInt         _body = body;
-    SpiceInt         _center = center;
-    ConstSpiceChar*  _frame = TCHAR_TO_ANSI(*frame);
-    SpiceDouble      _first = first.AsSpiceDouble();
-    SpiceDouble      _last = last.AsSpiceDouble();
-    ConstSpiceChar*  _segid = TCHAR_TO_ANSI(*segid);
+    SpiceInt    _handle = handle;
+    SpiceInt    _body = body;
+    SpiceInt    _center = center;
+    auto        _frame = StringCast<ANSICHAR>(*frame);
+    SpiceDouble _first = first.AsSpiceDouble();
+    SpiceDouble _last = last.AsSpiceDouble();
+    auto        _segid = StringCast<ANSICHAR>(*segid);
 
     SpiceDouble _epoch;
     SpiceDouble _tp[3];
@@ -10062,7 +9995,7 @@ void USpice::spkw15(
     SpiceDouble _radius;
     state.CopyTo(_epoch, _tp, _pa, _p, _ecc, _j2flg, _pv, _gm, _j2, _radius);
 
-    spkw15_c(_handle, _body, _center, _frame, _first, _last, _segid, _epoch, _tp, _pa, _p, _ecc, _j2flg, _pv, _gm, _j2, _radius);
+    spkw15_c(_handle, _body, _center, _frame.Get(), _first, _last, _segid.Get(), _epoch, _tp, _pa, _p, _ecc, _j2flg, _pv, _gm, _j2, _radius);
 
     // Error handling
     ErrorCheck(ResultCode, ErrorMessage);
@@ -10150,7 +10083,6 @@ void USpice::srfcss(
 
     // Inputs
     SpiceInt            _code = (SpiceInt)code;
-    ConstSpiceChar*     _bodstr = TCHAR_TO_ANSI(*bodstr);
 
     // Output
     SpiceInt            _srflen = SPICE_SRF_SFNMLN;
@@ -10160,7 +10092,7 @@ void USpice::srfcss(
     // Invocation
     srfcss_c(
         _code,
-        _bodstr,
+        TCHAR_TO_ANSI(*bodstr),
         _srflen,
         _srfstr,
         &_isname
@@ -10244,11 +10176,11 @@ void USpice::srfnrm(
     )
 {
     // Input
-    ConstSpiceChar* _method = TCHAR_TO_ANSI(*MaxQ::Core::ToString(method, shapeSurfaces));
-    ConstSpiceChar* _target = TCHAR_TO_ANSI(*target);
-    SpiceDouble     _et = et.AsSpiceDouble();
-    ConstSpiceChar* _fixref = TCHAR_TO_ANSI(*fixref);
-    SpiceInt        _npts = srfpts.Num();
+    auto        _method = StringCast<ANSICHAR>(*MaxQ::Core::ToString(method, shapeSurfaces));
+    auto        _target = StringCast<ANSICHAR>(*target);
+    SpiceDouble _et = et.AsSpiceDouble();
+    auto        _fixref = StringCast<ANSICHAR>(*fixref);
+    SpiceInt    _npts = srfpts.Num();
 
     // Use the heap instead of a stack alloc... This is an unbounded memory request for a very lengthy operation.
     // It would be better if we could avoid the intermediate buffers of course and just work the the array buffers
@@ -10267,10 +10199,10 @@ void USpice::srfnrm(
 
     // Invocation
     srfnrm_c(
-        _method,
-        _target,
+        _method.Get(),
+        _target.Get(),
         _et,
-        _fixref,
+        _fixref.Get(),
         _npts,
         _srfpts,
         _normls
@@ -10322,8 +10254,8 @@ void USpice::srfs2c(
 )
 {
     // Inputs
-    ConstSpiceChar* _srfstr = TCHAR_TO_ANSI(*srfstr);
-    ConstSpiceChar* _bodstr = TCHAR_TO_ANSI(*bodstr);
+    auto _srfstr = StringCast<ANSICHAR>(*srfstr);
+    auto _bodstr = StringCast<ANSICHAR>(*bodstr);
     
     // Output buffers
     SpiceInt        _code = 0;
@@ -10331,8 +10263,8 @@ void USpice::srfs2c(
 
     // Invocation
     srfs2c_c(
-        _srfstr,
-        _bodstr,
+        _srfstr.Get(),
+        _bodstr.Get(),
         &_code,
         &_found
     );
@@ -10370,18 +10302,14 @@ void USpice::srfscc(
     int bodyid
 )
 {
-    // Input
-    ConstSpiceChar* _srfstr = TCHAR_TO_ANSI(*srfstr);
-    SpiceInt        _bodyid = (SpiceInt)bodyid;
-    
     // Output
     SpiceInt        _code = 0;
     SpiceBoolean    _found = SPICEFALSE;
 
     // Invocation
     srfscc_c(
-        _srfstr,
-        _bodyid,
+        TCHAR_TO_ANSI(*srfstr),
+        bodyid,
         &_code,
         &_found
     );
@@ -10415,12 +10343,12 @@ void USpice::subpnt(
 )
 {
     // Input
-    ConstSpiceChar* _method = TCHAR_TO_ANSI(*MaxQ::Core::ToString(method, surfaces));
-    ConstSpiceChar* _target = TCHAR_TO_ANSI(*target);
+    auto            _method = StringCast<ANSICHAR>(*MaxQ::Core::ToString(method, surfaces));
+    auto            _target = StringCast<ANSICHAR>(*target);
     SpiceDouble     _et = et.AsSpiceDouble();
-    ConstSpiceChar* _fixref = TCHAR_TO_ANSI(*fixref);
+    auto            _fixref = StringCast<ANSICHAR>(*fixref);
     ConstSpiceChar* _abcorr = MaxQ::Core::ToANSIString(abcorr);
-    ConstSpiceChar* _obsrvr = TCHAR_TO_ANSI(*obsrvr);
+    auto            _obsrvr = StringCast<ANSICHAR>(*obsrvr);
     
     // Output
     SpiceDouble    _spoint[3];  ZeroOut(_spoint);
@@ -10429,12 +10357,12 @@ void USpice::subpnt(
 
     // Invocation
     subpnt_c(
-        _method,
-        _target,
+        _method.Get(),
+        _target.Get(),
         _et,
-        _fixref,
+        _fixref.Get(),
         _abcorr,
-        _obsrvr,
+        _obsrvr.Get(),
         _spoint,
         &_trgepc,
         _srfvec
@@ -10469,23 +10397,23 @@ void USpice::subslr(
     const FString& obsrvr
 )
 {
-    ConstSpiceChar* _method = TCHAR_TO_ANSI(*MaxQ::Core::ToString(method, surfaces));
-    ConstSpiceChar* _target = TCHAR_TO_ANSI(*target);
+    auto            _method = StringCast<ANSICHAR>(*MaxQ::Core::ToString(method, surfaces));
+    auto            _target = StringCast<ANSICHAR>(*target);
     SpiceDouble     _et = et.AsSpiceDouble();
-    ConstSpiceChar* _fixref = TCHAR_TO_ANSI(*fixref);
+    auto            _fixref = StringCast<ANSICHAR>(*fixref);
     ConstSpiceChar* _abcorr = MaxQ::Core::ToANSIString(abcorr);
-    ConstSpiceChar* _obsrvr = TCHAR_TO_ANSI(*obsrvr);
+    auto            _obsrvr = StringCast<ANSICHAR>(*obsrvr);
     SpiceDouble     _spoint[3]; ZeroOut(_spoint);
     SpiceDouble    _trgepc = 0.;
     SpiceDouble     _srfvec[3]; ZeroOut(_srfvec);
 
     subslr_c(
-        _method,
-        _target,
+        _method.Get(),
+        _target.Get(),
         _et,
-        _fixref,
+        _fixref.Get(),
         _abcorr,
-        _obsrvr,
+        _obsrvr.Get(),
         _spoint,
         &_trgepc,
         _srfvec
@@ -10599,14 +10527,14 @@ void USpice::sxform(
 )
 {
     // Input
-    SpiceChar* _from = TCHAR_TO_ANSI(*from);
-    SpiceChar* _to = TCHAR_TO_ANSI(*to);
+    auto _from = StringCast<ANSICHAR>(*from);
+    auto _to   = StringCast<ANSICHAR>(*to);
     SpiceDouble _et = et.AsSpiceDouble();
     // Output
     SpiceDouble _xform[6][6];  xform.CopyTo(_xform);
 
     // Invocation
-    sxform_c(_from, _to, _et, _xform);
+    sxform_c(_from.Get(), _to.Get(), _et, _xform);
 
     // Error Handling
     ErrorCheck(ResultCode, ErrorMessage);
@@ -10644,14 +10572,14 @@ void USpice::termpt(
 )
 {
     // Inputs
-    ConstSpiceChar* _method = TCHAR_TO_ANSI(*MaxQ::Core::ToString(shadow, curveType, method, shapeSurfaces));
-    ConstSpiceChar* _ilusrc = TCHAR_TO_ANSI(*ilusrc);
-    ConstSpiceChar* _target = TCHAR_TO_ANSI(*target);
+    auto            _method = StringCast<ANSICHAR>(*MaxQ::Core::ToString(shadow, curveType, method, shapeSurfaces));
+    auto            _ilusrc = StringCast<ANSICHAR>(*ilusrc);
+    auto            _target = StringCast<ANSICHAR>(*target);
     SpiceDouble     _et = et.AsSpiceDouble();
-    ConstSpiceChar* _fixref = TCHAR_TO_ANSI(*fixref);
+    auto            _fixref = StringCast<ANSICHAR>(*fixref);
     ConstSpiceChar* _abcorr = MaxQ::Core::ToANSIString(abcorr);
     ConstSpiceChar* _corloc = MaxQ::Core::ToANSIString(abcorr);;
-    ConstSpiceChar* _obsrvr = TCHAR_TO_ANSI(*obsrvr);
+    auto            _obsrvr = StringCast<ANSICHAR>(*obsrvr);
     SpiceDouble     _refvec[3];  refvec.CopyTo(_refvec);
     SpiceDouble     _rolstp = rolstp.AsSpiceDouble();
     SpiceInt        _ncuts = ncuts;
@@ -10668,14 +10596,14 @@ void USpice::termpt(
 
     // Invocation
     termpt_c(
-        _method,
-        _ilusrc,
-        _target,
+        _method.Get(),
+        _ilusrc.Get(),
+        _target.Get(),
         _et,
-        _fixref,
+        _fixref.Get(),
         _abcorr,
         _corloc,
-        _obsrvr,
+        _obsrvr.Get(),
         _refvec,
         _rolstp,
         _ncuts,
@@ -10774,7 +10702,6 @@ void USpice::tisbod(
 )
 {
     // Input
-    ConstSpiceChar* _ref = TCHAR_TO_ANSI(*ref);
     SpiceInt        _body = body;
     SpiceDouble     _et = et.AsSpiceDouble();
     // Output
@@ -10782,7 +10709,7 @@ void USpice::tisbod(
 
     // Invocation
     tisbod_c(
-        _ref,
+        TCHAR_TO_ANSI(*ref),
         _body,
         _et,
         _tsipm
@@ -10809,9 +10736,6 @@ void USpice::tpictr(
     SpiceChar szErrmsg[SPICE_MAX_PATH];
     ZeroOut(szErrmsg);
 
-    // Input
-    ConstSpiceChar* _sample = TCHAR_TO_ANSI(*sample);
-    
     // Outputs
     SpiceInt         _pictln = SPICE_MAX_PATH;
     SpiceInt         _errmln = SPICE_MAX_PATH;
@@ -10821,7 +10745,7 @@ void USpice::tpictr(
 
     // Invocation
     tpictr_c(
-        _sample,
+        TCHAR_TO_ANSI(*sample),
         _pictln,
         _errmln,
         _pictur,
@@ -11098,14 +11022,11 @@ void USpice::utc2et(
     FSEphemerisTime& et
 )
 {
-    // Input
-    ConstSpiceChar* _utcstr = TCHAR_TO_ANSI(*utcstr);
-
     // Output
     SpiceDouble _et = 0;
 
     // Invocation
-    utc2et_c(_utcstr, &_et);
+    utc2et_c(TCHAR_TO_ANSI(*utcstr), &_et);
 
     // Return Value
     et = FSEphemerisTime(_et);
@@ -12122,12 +12043,11 @@ void USpice::xfmsta(
 
     ConstSpiceChar* _input_coord_sys = MaxQ::Core::ToANSIString(input_coord_sys);
     ConstSpiceChar* _output_coord_sys = MaxQ::Core::ToANSIString(output_coord_sys);
-    ConstSpiceChar* _body = TCHAR_TO_ANSI(*body);
     // Output
     SpiceDouble _output_state[6];       ZeroOut(_output_state);
 
     // Invocation
-    xfmsta_c(_input_state, _input_coord_sys, _output_coord_sys, _body, _output_state);
+    xfmsta_c(_input_state, _input_coord_sys, _output_coord_sys, TCHAR_TO_ANSI(*body), _output_state);
 
     // Return Value
     out = FSDimensionlessStateVector(_output_state);

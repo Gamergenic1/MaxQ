@@ -49,7 +49,9 @@ void USpiceOrbits::EvaluateOrbit(
     if (orbitReferenceFrame.Compare(observerReferenceFrame, ESearchCase::IgnoreCase))
     {
         double m[3][3];
-        pxform_c(TCHAR_TO_ANSI(*orbitReferenceFrame), TCHAR_TO_ANSI(*observerReferenceFrame), et.AsSpiceDouble(), m);
+        auto _orbitReferenceFrame = StringCast<ANSICHAR>(*orbitReferenceFrame);
+        auto _observerReferenceFrame = StringCast<ANSICHAR>(*observerReferenceFrame);
+        pxform_c(_orbitReferenceFrame.Get(), _observerReferenceFrame.Get(), et.AsSpiceDouble(), m);
 
         // Clear any errors if necessary
         ErrorCheck(ResultCode, ErrorMessage);
@@ -141,7 +143,9 @@ void USpiceOrbits::ComputeConic(
     if (!orbitReferenceFrame.Equals(observerReferenceFrame, ESearchCase::IgnoreCase))
     {
         double m[3][3];
-        pxform_c(TCHAR_TO_ANSI(*orbitReferenceFrame), TCHAR_TO_ANSI(*observerReferenceFrame), et.AsSpiceDouble(), m);
+        auto _orbitReferenceFrame = StringCast<ANSICHAR>(*orbitReferenceFrame);
+        auto _observerReferenceFrame = StringCast<ANSICHAR>(*observerReferenceFrame);
+        pxform_c(_orbitReferenceFrame.Get(), _observerReferenceFrame.Get(), et.AsSpiceDouble(), m);
 
         // Clear any errors if necessary
         ES_ResultCode ResultCode;

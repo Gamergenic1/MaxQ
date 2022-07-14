@@ -91,6 +91,9 @@ namespace MaxQ::Data
         Bodvrd<ValueType>(Value, bodynm.ToString(), item.ToString(), ResultCode, ErrorMessage);
     }
 
+    // Note that an ANSICHAR version could avoid a bunch of string conversions, but that's an optimization to use only if a
+    // proven problem exists.  The performance of Bodvrd is likely to be dominated by whatever's going on in bodvrd_c, not
+    // string conversions.
     template<class ValueType>
     inline void Bodvrd(
         ValueType& Value,
