@@ -328,6 +328,18 @@ public:
         FString& name
     );
 
+    /// <summary> Define a body name/ID code pair for later translation via bodn2c_c or bodc2n_c.< / summary>
+    UFUNCTION(BlueprintCallable,
+        Category = "MaxQ|NAIF IDs",
+        meta = (
+            Keywords = "BODY, CONVERSION",
+            ToolTip = "Define a body name/ID code pair for later translation via bodn2c_c or bodc2n_c"
+            ))
+    static void boddef(
+        const FString& name = TEXT("OUMUAMUA"),
+        int code = 3788040
+    );
+
     /// <summary>Body name to ID code translation</summary>
     UFUNCTION(BlueprintCallable,
         Category = "MaxQ|NAIF IDs",

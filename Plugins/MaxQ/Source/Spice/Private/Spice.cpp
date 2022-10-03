@@ -678,6 +678,14 @@ void USpice::bodc2n(
     FoundCode = GetFoundCode(bSuccess);
 }
 
+void USpice::boddef(
+    const FString& name,
+    int code
+)
+{
+    MaxQ::Data::Boddef(name, code);
+}
+
 
 /*
 Exceptions
