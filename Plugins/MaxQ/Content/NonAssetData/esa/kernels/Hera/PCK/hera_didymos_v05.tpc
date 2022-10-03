@@ -1,0 +1,128 @@
+KPL/PCK
+
+Binary Asteroid System Didymos Planetary Constants Kernel
+===========================================================================
+
+   This planetary constants kernel contains constants information for
+   the binary asteroid system Didymos.
+
+
+Version and date
+--------------------------------------------------------
+
+   Version 0.5 -- February 7, 2022 -- Alfredo Escalante Lopez, ESAC/ESA
+
+      Corrected description of Didymos pole and prime meridian values.
+
+   Version 0.4 -- November 8, 2021 -- Alfredo Escalante Lopez, ESAC/ESA
+
+      Corrected Didymos spin axis to be quasi-parallel to Ecliptic South.
+
+      Corrected Didymos radii values.
+
+   Version 0.3 -- April 16, 2021 -- Alfredo Escalante Lopez, ESAC/ESA
+
+      Corrected Didymos pole declination to be quasi-parallel to
+      orbital spin pole (close to ECLIPTIC Z-axis).
+
+   Version 0.2 -- March 26, 2020 -- Marc Costa Sitja, ESAC/ESA
+
+      Updated radii and orientation values for Didymain from latest report.
+
+   Version 0.1 -- September 9, 2019 -- Marc Costa Sitja, ESAC/ESA
+
+      Updated Hera ID according to standard ESOC provisional numbering:
+      from -667 to -999. Changed DIDYMOS to DIDYMAIN and added the IDs.
+
+   Version 0.0 -- March 1, 2019 -- Marc Costa Sitja, ESAC/ESA
+
+      This is a preliminary PCK containing draft values for the pole
+      direction, prime meridian location, rotation period and shape
+      (from [1].)
+
+
+Disclaimer
+--------------------------------------------------------
+
+     This constants file may not contain the parameter values that you
+     prefer. Note that this file may be readily modified by you or
+     anyone else. ESS suggests that you inspect this file visually
+     before proceeding with any critical or extended data processing.
+
+
+References
+--------------------------------------------------------
+
+   1. ``Planetary Constants Kernels Required Reading''
+
+   2. ``Kernel Pool Required Reading''
+
+   3. ``ASTEROID IMPACT MISSION: DIDYMOS AND EJECTA REFERENCE MODEL'',
+      Issue 5, Revision 2, 01/09/2016
+
+   4. ``HERA DIDYMOS REFERENCE MODEL'', ESA-TECSP-AD-017258,
+      Issue 5, Revision 3, 03/02/2020.
+
+   5. https://physics.nist.gov/cgi-bin/cuu/Value?bg
+
+
+Orientation constants for asteroid system
+--------------------------------------------------------
+
+     The inertial reference frame for these constants is J2000; this is
+     the default reference frame for PCK orientation data.
+
+     The epoch of the constants is J2000; this is Julian ephemeris date
+     (JED) 2451545.0.
+
+     The NAIF integer code for Didymain is 2065803. See the NAIF_IDs
+     required reading for further information on NAIF integer codes.
+
+
+Values in the Current Version 0.4
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+   The Didymos pole and prime meridian values are shown below.
+
+      RA  Didymain = 320.6 deg             Right Ascension in ECLIPJ2000  [4]
+      DEC Didymain = -78.6 deg             Declination in ECLIPJ2000      [4]
+      W   Didymain = N/D   deg             Prime Meridian
+      w   Didymain = 3823.0088 deg/day   Rotation rate (Period of 2.2600h)[4]
+
+      \begindata
+
+         BODY-658030_POLE_RA    = (  60.936309840897856     0.0      0.0 )
+         BODY-658030_POLE_DEC   = ( -71.674565992873852     0.0      0.0 )
+         BODY-658030_PM         = (   0.0      3823.0088495575224    0.0 )
+
+      \begintext
+
+
+Old values
+~~~~~~~~~~
+
+      RA  Didymain = 310 deg             Right Ascension in ECLIPJ2000     [3]
+      DEC Didymain = -84 deg             Declination in ECLIPJ2000         [3]
+      W   Didymain = N/D deg             Prime Meridian
+      w   Didymain = 3823.0088 deg/day   Rotation rate (Period of 2.2600h) [3]
+
+         BODY-658030_POLE_RA    = (  78.21828945997879      0.0      0.0 )
+         BODY-658030_POLE_DEC   = ( -70.78798538514438      0.0      0.0 )
+         BODY-658030_PM         = (   0.0      3823.0088495575224    0.0 )
+
+
+Radii for asteroid system
+--------------------------------------------------------
+
+     The Didymain and Didymoon radii from [4] are provided in the
+     keyword below.
+
+     \begindata
+
+        BODY-658030_RADII      = ( 0.4160    0.4185      0.3930     )
+        BODY-658031_RADII      = ( 0.1038    0.0798      0.0665     )
+
+     \begintext
+
+
+End of PCK file.
