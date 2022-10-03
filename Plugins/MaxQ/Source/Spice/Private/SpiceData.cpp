@@ -529,4 +529,11 @@ namespace MaxQ::Data
 
         return _found == SPICETRUE;
     }
+
+    SPICE_API void Boddef(const FString& name, int code /*= 3788040 */)
+    {
+        boddef_c(TCHAR_TO_ANSI(*name), (SpiceInt)code);
+
+        UnexpectedErrorCheck(true);
+    }
 }

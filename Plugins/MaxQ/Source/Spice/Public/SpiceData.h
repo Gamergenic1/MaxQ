@@ -287,4 +287,12 @@ namespace MaxQ::Data
     );
     inline bool Bodfnd(int body, FName item) { return Bodfnd(body, item.ToString()); }
     inline bool Bodfnd(int body, TCHAR* item) { return Bodfnd(body, FString(item)); }
+
+
+    SPICE_API void Boddef(
+        const FString& name,
+        int code = 3788040
+    );
+    inline void Boddef(FName name = "OUMUAMUA", int code = 3788040) { return Boddef(name.ToString(), code); }
+    inline void Boddef(TCHAR* name = TEXT("OUMUAMUA"), int code = 3788040) { return Boddef(FString(name), code); }
 };
