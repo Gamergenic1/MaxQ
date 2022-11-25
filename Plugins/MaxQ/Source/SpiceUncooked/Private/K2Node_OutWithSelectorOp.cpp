@@ -42,8 +42,6 @@ void UK2Node_OutWithSelectorOp::AllocateDefaultPins()
 {
     Super::AllocateDefaultPins();
 
-    static UEnum* ComponentSelectorEnum = FindObjectChecked<UEnum>(ANY_PACKAGE, TEXT("EK2_ComponentSelector"), /*ExactClass*/true);
-
     const UEdGraphSchema_K2* K2Schema = GetDefault<UEdGraphSchema_K2>();
 
     // Exec pins - In
@@ -66,12 +64,17 @@ void UK2Node_OutWithSelectorOp::AllocateDefaultPins()
     UEdGraphPin* errorMessagePin = CreatePin(EGPD_Output, UEdGraphSchema_K2::PC_String, errorMessage_PinName);
     errorMessagePin->PinToolTip = TEXT("An error message, if the action fails");
 
-    auto selector = CreatePin(EGPD_Input, UEdGraphSchema_K2::PC_Byte, ComponentSelectorEnum, selector_PinName);
-    selector->PinToolTip = TEXT("Selects all, or X/Y/Z subcomponents");
-    selector->PinType.PinSubCategoryObject = ComponentSelectorEnum;
-    selector->DefaultValue = ComponentSelectorEnum->GetNameStringByValue((int64)EK2_ComponentSelector::All);
-    selector->DefaultTextValue = FText::FromName(ComponentSelectorEnum->GetNameByValue((int64)EK2_ComponentSelector::All));
-    selector->bAdvancedView = true;
+    static UEnum* ComponentSelectorEnum = FindObject<UEnum>(FTopLevelAssetPath(TEXT("/Script/SpiceUncooked.EK2_ComponentSelector")), /*ExactClass*/true);
+    if (ensure(IsValid(ComponentSelectorEnum)))
+    {
+        auto selector = CreatePin(EGPD_Input, UEdGraphSchema_K2::PC_Byte, ComponentSelectorEnum, selector_PinName);
+        selector->PinToolTip = TEXT("Selects all, or X/Y/Z subcomponents");
+        selector->PinType.PinSubCategoryObject = ComponentSelectorEnum;
+        selector->DefaultValue = ComponentSelectorEnum->GetNameStringByValue((int64)EK2_ComponentSelector::All);
+        selector->DefaultTextValue = FText::FromName(ComponentSelectorEnum->GetNameByValue((int64)EK2_ComponentSelector::All));
+        selector->bAdvancedView = true;
+    }
+
     AdvancedPinDisplay = ENodeAdvancedPins::Hidden;
 
     if (!CurrentOperation.ShortName.IsNone() && CurrentOperation.ShortName != GetWildcardOp().ShortName)
@@ -287,13 +290,19 @@ bool UK2Node_OutWithSelectorOp::MatchMe(OperationType& operation, FEdGraphPinTyp
 
 EK2_ComponentSelector UK2Node_OutWithSelectorOp::selectorPinValue() const
 {
-    static UEnum* ComponentSelectorEnum = FindObjectChecked<UEnum>(ANY_PACKAGE, TEXT("EK2_ComponentSelector"), /*ExactClass*/true);
-    EK2_ComponentSelector selector = EK2_ComponentSelector::All;
-    if (selectorPin() != nullptr)
+    static UEnum* ComponentSelectorEnum = FindObject<UEnum>(FTopLevelAssetPath(TEXT("/Script/SpiceUncooked.EK2_ComponentSelector")), /*ExactClass*/true);
+
+    if (ensure(IsValid(ComponentSelectorEnum)))
     {
-        selector = (EK2_ComponentSelector)ComponentSelectorEnum->GetValueByNameString(selectorPin()->DefaultValue);
+        EK2_ComponentSelector selector = EK2_ComponentSelector::All;
+        if (selectorPin() != nullptr)
+        {
+            selector = (EK2_ComponentSelector)ComponentSelectorEnum->GetValueByNameString(selectorPin()->DefaultValue);
+        }
+        return selector;
     }
-    return selector;
+
+    return EK2_ComponentSelector::All;
 }
 
 

@@ -25,6 +25,7 @@ public class SpiceEditorTarget : TargetRules
 
         Type = TargetType.Editor;
         DefaultBuildSettings = BuildSettingsVersion.V2;
+        IncludeOrderVersion = EngineIncludeOrderVersion.Unreal5_1;
 
         bUseFastPDBLinking = false;
         bPublicSymbolsByDefault = true;  // <- Forced to true on Windows anyways
@@ -123,7 +124,17 @@ public class SpiceEditorTarget : TargetRules
         else
         {
             string Err = string.Format("cspice SDK not found for platform {0}", targetRules.Platform.ToString());
+
+            // UE 5.0 did not invoke this for linux (which is not whitelisted as a project platform
+            // UE 5.1 does, and the tooling fails here if an error is thrown.
+            // TODO:  Find a graceful way of declining linux while not failing build tools on supported playforms.
+            //        Or, (preferably), just add linux support.
+
+            /*  
             throw new BuildException(Err);
+            */
+
+            return Err;
         }
     }
 }

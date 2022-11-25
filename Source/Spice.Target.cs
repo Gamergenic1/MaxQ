@@ -19,6 +19,8 @@ public class SpiceTarget : TargetRules
 
         Type = TargetType.Game;
         DefaultBuildSettings = BuildSettingsVersion.V2;
+        IncludeOrderVersion = EngineIncludeOrderVersion.Unreal5_1;
+
         // Assumes CSpice_Library has already been built.
 
         ExtraModuleNames.Add("Spice");

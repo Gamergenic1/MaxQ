@@ -39,6 +39,7 @@
 #include "SpiceUtilities.h"
 #include "Misc/AssertionMacros.h"
 #include "CoreMinimal.h"
+#include "Misc/Paths.h"
 #include "SpicePlatformDefs.h"
 
 namespace MaxQ::Private
