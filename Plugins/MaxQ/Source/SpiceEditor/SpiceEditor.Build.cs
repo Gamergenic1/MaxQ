@@ -16,7 +16,6 @@ public class SpiceEditor : ModuleRules
 
         PublicDependencyModuleNames.AddRange(new string[] {
                     "Core", "CoreUObject", "Engine",
-                    "InputBlueprintNodes",
                     "InputCore",
                     "KismetCompiler",
                     "PropertyEditor",

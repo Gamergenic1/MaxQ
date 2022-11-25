@@ -92,7 +92,13 @@ public class CSpice_Library : ModuleRules
         else
         {
             string Err = string.Format("cspice SDK not found for platform {0}", targetRules.Platform.ToString());
+
+            return Err;
+
+            /*  
             throw new BuildException(Err);
+            */
+            
         }
     }
 }
