@@ -17,7 +17,7 @@ public class MaxQCppSamples : ModuleRules
         PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine" });
         PrivateDependencyModuleNames.AddRange(new string[] { "Spice" });
 
-        PrivateDependencyModuleNames.AddRange(new string[] { "HTTP", "Json", "JsonUtilities", "UMG", "Kismet" });
+        PrivateDependencyModuleNames.AddRange(new string[] { "HTTP", "Json", "JsonUtilities", "UMG" });
 
         if (Target.bBuildEditor)
         {
