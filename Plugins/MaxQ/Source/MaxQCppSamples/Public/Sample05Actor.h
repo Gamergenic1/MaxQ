@@ -107,7 +107,9 @@ public:
 
 private:
     UFUNCTION()
-    void ProcessTelemetryResponseAsTLE(bool Success, const FString& ObjectId, const FString& Telemetry);
+    void ProcessTelemetryResponseAsTLE(const FString& ObjectId, const FString& Telemetry);
+    UFUNCTION()
+    void ProcessTelemetryResponseError(const FString& ObjectId, const FString& Telemetry);
 
     void AddTelemetryObject(const FString& ObjectId, const FString& ObjectName, const FSTwoLineElements& Elements);
 

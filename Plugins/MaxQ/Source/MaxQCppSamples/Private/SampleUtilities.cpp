@@ -571,6 +571,10 @@ void USampleUtilities::GetDefaultInsightMissionKernels(TArray<FString>& InsightM
 }
 
 
+/* DEPRECATED */
+// telemetry will use the celestrak server.
+#define CELESTRAK_URL_BASE "https://celestrak.com"
+
 //-----------------------------------------------------------------------------
 // Name: GetTelemetryFromServer
 // Desc:
@@ -669,3 +673,6 @@ void USampleUtilities::GetTelemetryFromServer(FTelemetryCallback Callback, FStri
 
     pRequest->ProcessRequest();
 }
+
+#undef CELESTRAK_URL_BASE
+/* /DEPRECATED */
