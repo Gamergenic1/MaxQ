@@ -10,6 +10,7 @@
 #include "CoreMinimal.h"
 #include "SpiceTypes.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
+#include "Kismet/BlueprintAsyncActionBase.h"
 #include "UObject/WeakObjectPtrTemplates.h"
 #include "SampleUtilities.generated.h"
 
@@ -21,11 +22,6 @@
 
 // UE Log category for the samples.
 MAXQCPPSAMPLES_API DECLARE_LOG_CATEGORY_EXTERN(LogMaxQSamples, Log, All);
-
-// telemetry will use the celestrak server.
-#define CELESTRAK_URL_BASE "https://celestrak.com"
-
-
 
 //-----------------------------------------------------------------------------
 // FSolarSystemState
@@ -61,11 +57,14 @@ struct MAXQCPPSAMPLES_API FSamplesSolarSystemState
 };
 
 
+/* DEPRECATED */
 //-----------------------------------------------------------------------------
 // FCelestrakTLERequest
 // Ask Celestrak for TLE Data
 //-----------------------------------------------------------------------------
 DECLARE_DYNAMIC_DELEGATE_ThreeParams(FTelemetryCallback, bool, Success, const FString&, ObjectId, const FString&, Telemetry);
+/* /DEPRECATED */
+
 DECLARE_DYNAMIC_DELEGATE_OneParam(FPositionUpdate, const FVector&, Position);
 DECLARE_DYNAMIC_DELEGATE_OneParam(FVisibilityUpdate, bool, bIsVisible);
 DECLARE_DELEGATE_RetVal_ThreeParams(bool, FComputeConic, const FSStateVector&, FSEllipse&, bool&);
@@ -114,8 +113,10 @@ public:
     UFUNCTION(BlueprintCallable, Category = "MaxQSamples", meta = (DevelopmentOnly))
     static void InitializeTime(FSamplesSolarSystemState& SolarSystemState, bool SetInitialTime = true);
 
-    UFUNCTION(BlueprintCallable, Category = "MaxQSamples", meta = (DevelopmentOnly))
+    /* DEPRECATED */
+    UFUNCTION(BlueprintCallable, Category = "MaxQSamples", meta = (DevelopmentOnly, DeprecatedFunction, DeprecationMessage = "Use IssueTelemetryRequest"))
     static void GetTelemetryFromServer(FTelemetryCallback Callback, FString ObjectId = TEXT("CATNR=25544"), FString Format = TEXT("TLE"));
+    /* /DEPRECATED */
 };
 
 namespace MaxQSamples

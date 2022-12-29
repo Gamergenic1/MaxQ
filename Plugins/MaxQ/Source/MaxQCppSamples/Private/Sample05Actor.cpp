@@ -11,6 +11,7 @@
 #include "SampleUtilities.h"
 #include "Sample05TelemetryActor.h"
 #include "SpiceOrbits.h"
+#include "GetTelemetryFromServer.h"
 
 using MaxQSamples::Log;
 using namespace MaxQ::Data;
@@ -327,30 +328,34 @@ void ASample05Actor::RequestTelemetryByHttp()
     Log(TEXT("RequestTelemetryByHttp sending telemetry request to server by http"));
 
     // Uses the Http module to send request by http
-    FTelemetryCallback Callback;
-    Callback.BindUFunction(this, GET_FUNCTION_NAME_CHECKED(ASample05Actor, ProcessTelemetryResponseAsTLE));
-    USampleUtilities::GetTelemetryFromServer(Callback, TelemetryObjectId, TEXT("TLE"));
-}
+    UGetTelemetryFromServer_AsyncExecution* Request = UGetTelemetryFromServer_AsyncExecution::IssueTelemetryRequest(GetWorld(), TelemetryObjectId, TEXT("TLE"));
+    if (ensure(IsValid(Request)))
+    {
+        Request->OnSuccess.AddDynamic(this, &ASample05Actor::ProcessTelemetryResponseAsTLE);
+        Request->OnError.AddDynamic(this, &ASample05Actor::ProcessTelemetryResponseError);
+    }
 
+    // Now that the delegates are bound the request can be triggered.
+    Request->Activate();
+}
 
 
 // ============================================================================
 //
 //-----------------------------------------------------------------------------
 // Name: ProcessTelemetryResponseAsTLE
-// Desc:
-// Process the server response, assuming it's a group of TLE data
+// Desc: Process a successful result from the server
 //-----------------------------------------------------------------------------
 
-void ASample05Actor::ProcessTelemetryResponseAsTLE(bool Success, const FString& ObjectId, const FString& Telemetry)
+void ASample05Actor::ProcessTelemetryResponseAsTLE(const FString& ObjectId, const FString& Telemetry)
 {
     // Oh, hi!
     // We got an object from the server... and it's TLE lines.
     Log(TEXT("ProcessTelemetryResponseAsTLE Telemetry response received from server"));
-    Log(FString::Printf(TEXT("ProcessTelemetryResponseAsTLE Telemetry : %s"), *(Telemetry.Left(750) + TEXT("..."))), Success ? FColor::Green : FColor::Red, 15.f);
+    Log(FString::Printf(TEXT("ProcessTelemetryResponseAsTLE Telemetry : %s"), *(Telemetry.Left(750) + TEXT("..."))), FColor::Green, 15.f);
 
     TArray<FString> TLEArray;
-    if (Success && (0 == (Telemetry.ParseIntoArrayLines(TLEArray, true) % 3)))
+    if (0 == (Telemetry.ParseIntoArrayLines(TLEArray, true) % 3))
     {
         ES_ResultCode ResultCode;
         FString ErrorMessage;
@@ -358,7 +363,7 @@ void ASample05Actor::ProcessTelemetryResponseAsTLE(bool Success, const FString& 
         FSEphemerisTime et;
         FSTwoLineElements elems;
 
-        for(int i = 0; i < TLEArray.Num(); i += 3)
+        for (int i = 0; i < TLEArray.Num(); i += 3)
         {
             // 'getelm' parses TLE strings into a useable form.  So, process the strings
             // from the server.
@@ -387,6 +392,18 @@ void ASample05Actor::ProcessTelemetryResponseAsTLE(bool Success, const FString& 
     }
 }
 
+
+// ============================================================================
+//
+//-----------------------------------------------------------------------------
+// Name: ProcessTelemetryResponseError
+// Desc: Process an HTTP request error
+//-----------------------------------------------------------------------------
+
+void ASample05Actor::ProcessTelemetryResponseError(const FString& ObjectId, const FString& Error)
+{
+    Log(FString::Printf(TEXT("%s ProcessTelemetryResponseAsTLE TLE error: %s"), *ObjectId, *Error), FColor::Red);
+}
 
 
 // ============================================================================
