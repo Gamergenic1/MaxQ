@@ -144,11 +144,11 @@ public:
     // can break functionality and it's NOT caught at compile time.
     // It also breaks end-user code which may have already been tested etc etc.
     // EnumAsString is suitable for diagnostic messages etc etc.
-    template<typename T> inline static const FString EnumAsString(const char* EnumName, T EnumValue)
+    template<typename T> inline static const FString EnumAsString(UObject* Outer, const char* EnumName, T EnumValue)
     {
         static const FString InvalidEnum("Invalid");
 
-        const UEnum* EnumPtr = FindObject<UEnum>(ANY_PACKAGE, UTF8_TO_TCHAR(EnumName), true);
+        const UEnum* EnumPtr = FindObject<UEnum>(Outer, UTF8_TO_TCHAR(EnumName), true);
         if (!EnumPtr)
         {
             return InvalidEnum;

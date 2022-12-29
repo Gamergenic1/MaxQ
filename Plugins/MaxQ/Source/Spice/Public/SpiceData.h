@@ -294,5 +294,5 @@ namespace MaxQ::Data
         int code = 3788040
     );
     inline void Boddef(FName name = "OUMUAMUA", int code = 3788040) { return Boddef(name.ToString(), code); }
-    inline void Boddef(TCHAR* name = TEXT("OUMUAMUA"), int code = 3788040) { return Boddef(FString(name), code); }
+    inline void Boddef(TCHAR* name, int code = 3788040) { return Boddef(FString(name), code); }
 };
