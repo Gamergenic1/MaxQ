@@ -1864,125 +1864,125 @@ public:
     // Blueprint Constants
     // ------------------------------------------------------------------------
 
-    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "Zero", ScriptConstantHost = "SDistance"), Category = "MaxQ|Distance")
+    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "Zero", ScriptConstantHost = "/Script/Spice.SDistance"), Category = "MaxQ|Distance")
     static FSDistance SDistance_Zero();
 
-    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "OneKilometer", ScriptConstantHost = "SDistance"), Category = "MaxQ|Distance")
+    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "OneKilometer", ScriptConstantHost = "/Script/Spice.SDistance"), Category = "MaxQ|Distance")
     static FSDistance SDistance_OneKilometer();
 
-    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "OneMeter", ScriptConstantHost = "SDistance"), Category = "MaxQ|Distance")
+    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "OneMeter", ScriptConstantHost = "/Script/Spice.SDistance"), Category = "MaxQ|Distance")
     static FSDistance SDistance_OneMeter();
 
-    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "OneFoot", ScriptConstantHost = "SDistance"), Category = "MaxQ|Distance")
+    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "OneFoot", ScriptConstantHost = "/Script/Spice.SDistance"), Category = "MaxQ|Distance")
     static FSDistance SDistance_OneFoot();
 
-    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "OneStatuteMile", ScriptConstantHost = "SDistance"), Category = "MaxQ|Distance")
+    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "OneStatuteMile", ScriptConstantHost = "/Script/Spice.SDistance"), Category = "MaxQ|Distance")
     static FSDistance SDistance_OneStatuteMile();
 
-    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "OneNauticalMile", ScriptConstantHost = "SDistance"), Category = "MaxQ|Distance")
+    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "OneNauticalMile", ScriptConstantHost = "/Script/Spice.SDistance"), Category = "MaxQ|Distance")
     static FSDistance SDistance_OneNauticalMile();
 
-    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "OneAstronomicalUnit", ScriptConstantHost = "SDistance"), Category = "MaxQ|Distance")
+    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "OneAstronomicalUnit", ScriptConstantHost = "/Script/Spice.SDistance"), Category = "MaxQ|Distance")
     static FSDistance SDistance_OneAstronomicalUnit();
 
-    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "OneLightYear", ScriptConstantHost = "SDistance"), Category = "MaxQ|Distance")
+    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "OneLightYear", ScriptConstantHost = "/Script/Spice.SDistance"), Category = "MaxQ|Distance")
     static FSDistance SDistance_OneLightYear();
 
-    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "Zero", ScriptConstantHost = "SSpeed"), Category = "MaxQ|Speed")
+    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "Zero", ScriptConstantHost = "/Script/Spice.SSpeed"), Category = "MaxQ|Speed")
     static FSSpeed SSpeed_Zero();
 
-    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "OneKilomenterPerSecond", ScriptConstantHost = "SSpeed"), Category = "MaxQ|Speed")
+    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "OneKilomenterPerSecond", ScriptConstantHost = "/Script/Spice.SSpeed"), Category = "MaxQ|Speed")
     static FSSpeed SSpeed_OneKilomenterPerSecond();
 
-    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "Zero", ScriptConstantHost = "SDistanceVector"), Category = "MaxQ|DistanceVector")
+    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "Zero", ScriptConstantHost = "/Script/Spice.SDistanceVector"), Category = "MaxQ|DistanceVector")
     static FSDistanceVector SDistanceVector_Zero();
 
-    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "Zero", ScriptConstantHost = "SVelocityVector"), Category = "MaxQ|VelocityVector")
+    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "Zero", ScriptConstantHost = "/Script/Spice.SVelocityVector"), Category = "MaxQ|VelocityVector")
     static FSVelocityVector SVelocityVector_Zero();
 
-    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "Identity", ScriptConstantHost = "SStateTransform"), Category = "MaxQ|StateTransform")
+    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "Identity", ScriptConstantHost = "/Script/Spice.SStateTransform"), Category = "MaxQ|StateTransform")
     static FSStateTransform SStateTransform_Identity();
 
-    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "pi", ScriptConstantHost = "SAngle"), Category = "MaxQ|Angle")
+    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "pi", ScriptConstantHost = "/Script/Spice.SAngle"), Category = "MaxQ|Angle")
     static double SAngle_pi();
 
-    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "halfpi", ScriptConstantHost = "SAngle"), Category = "MaxQ|Angle")
+    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "halfpi", ScriptConstantHost = "/Script/Spice.SAngle"), Category = "MaxQ|Angle")
     static double SAngle_halfpi();
 
-    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "twopi", ScriptConstantHost = "SAngle"), Category = "MaxQ|Angle")
+    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "twopi", ScriptConstantHost = "/Script/Spice.SAngle"), Category = "MaxQ|Angle")
     static double SAngle_twopi();
 
-    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "dpr", ScriptConstantHost = "SAngle"), Category = "MaxQ|Angle")
+    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "dpr", ScriptConstantHost = "/Script/Spice.SAngle"), Category = "MaxQ|Angle")
     static double SAngle_dpr();
 
-    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "_0", ScriptConstantHost = "SAngle"), Category = "MaxQ|Angle")
+    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "_0", ScriptConstantHost = "/Script/Spice.SAngle"), Category = "MaxQ|Angle")
     static FSAngle SAngle__0();
 
-    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "_360", ScriptConstantHost = "SAngle"), Category = "MaxQ|Angle")
+    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "_360", ScriptConstantHost = "/Script/Spice.SAngle"), Category = "MaxQ|Angle")
     static FSAngle SAngle__360();
 
-    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "Zero", ScriptConstantHost = "SEulerAngles"), Category = "MaxQ|EulerAngles")
+    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "Zero", ScriptConstantHost = "/Script/Spice.SEulerAngles"), Category = "MaxQ|EulerAngles")
     static FSEulerAngles SEulerAngles_Zero();
 
-    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "Identity", ScriptConstantHost = "SQuaternion"), Category = "MaxQ|Quaternion")
+    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "Identity", ScriptConstantHost = "/Script/Spice.SQuaternion"), Category = "MaxQ|Quaternion")
     static FSQuaternion SQuaternion_Identity();
 
-    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "Zero", ScriptConstantHost = "SAngularRate"), Category = "MaxQ|AngularRate")
+    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "Zero", ScriptConstantHost = "/Script/Spice.SAngularRate"), Category = "MaxQ|AngularRate")
     static FSAngularRate SAngularRate_Zero();
 
-    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "Zero", ScriptConstantHost = "SAngularVelocity"), Category = "MaxQ|AngularVelocity")
+    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "Zero", ScriptConstantHost = "/Script/Spice.SAngularVelocity"), Category = "MaxQ|AngularVelocity")
     static FSAngularVelocity SAngularVelocity_Zero();
 
 
-    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "Zero", ScriptConstantHost = "SEulerAngularState"), Category = "MaxQ|EulerAngularState")
+    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "Zero", ScriptConstantHost = "/Script/Spice.SEulerAngularState"), Category = "MaxQ|EulerAngularState")
     static FSEulerAngularState SEulerAngularState_Zero();
 
-    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "Identity", ScriptConstantHost = "SEulerAngularTransform"), Category = "MaxQ|EulerAngularTransform")
+    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "Identity", ScriptConstantHost = "/Script/Spice.SEulerAngularTransform"), Category = "MaxQ|EulerAngularTransform")
     static FSEulerAngularTransform SEulerAngularTransform_Identity();
 
-    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "Zero", ScriptConstantHost = "SComplexScalar"), Category = "MaxQ|ComplexScalar")
+    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "Zero", ScriptConstantHost = "/Script/Spice.SComplexScalar"), Category = "MaxQ|ComplexScalar")
     static FSComplexScalar SComplexScalar_Zero();
 
-    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "J2000", ScriptConstantHost = "SEphemerisTime"), Category = "MaxQ|EphemerisTime")
+    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "J2000", ScriptConstantHost = "/Script/Spice.SEphemerisTime"), Category = "MaxQ|EphemerisTime")
     static FSEphemerisTime SEphemerisTime_J2000();
 
-    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "Zero", ScriptConstantHost = "SEphemerisPeriod"), Category = "MaxQ|EphemerisPeriod")
+    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "Zero", ScriptConstantHost = "/Script/Spice.SEphemerisPeriod"), Category = "MaxQ|EphemerisPeriod")
     static FSEphemerisPeriod SEphemerisPeriod_Zero();
 
-    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "OneSecond", ScriptConstantHost = "SEphemerisPeriod"), Category = "MaxQ|EphemerisPeriod")
+    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "OneSecond", ScriptConstantHost = "/Script/Spice.SEphemerisPeriod"), Category = "MaxQ|EphemerisPeriod")
     static FSEphemerisPeriod SEphemerisPeriod_OneSecond();
 
-    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "OneMinute", ScriptConstantHost = "SEphemerisPeriod"), Category = "MaxQ|EphemerisPeriod")
+    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "OneMinute", ScriptConstantHost = "/Script/Spice.SEphemerisPeriod"), Category = "MaxQ|EphemerisPeriod")
     static FSEphemerisPeriod SEphemerisPeriod_OneMinute();
 
-    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "OneHour", ScriptConstantHost = "SEphemerisPeriod"), Category = "MaxQ|EphemerisPeriod")
+    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "OneHour", ScriptConstantHost = "/Script/Spice.SEphemerisPeriod"), Category = "MaxQ|EphemerisPeriod")
     static FSEphemerisPeriod SEphemerisPeriod_OneHour();
 
-    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "OneDay", ScriptConstantHost = "SEphemerisPeriod"), Category = "MaxQ|EphemerisPeriod")
+    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "OneDay", ScriptConstantHost = "/Script/Spice.SEphemerisPeriod"), Category = "MaxQ|EphemerisPeriod")
     static FSEphemerisPeriod SEphemerisPeriod_OneDay();
 
-    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "OneJulianYear", ScriptConstantHost = "SEphemerisPeriod"), Category = "MaxQ|EphemerisPeriod")
+    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "OneJulianYear", ScriptConstantHost = "/Script/Spice.SEphemerisPeriod"), Category = "MaxQ|EphemerisPeriod")
     static FSEphemerisPeriod SEphemerisPeriod_OneJulianYear();
 
-    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "OneTropicalYear", ScriptConstantHost = "SEphemerisPeriod"), Category = "MaxQ|EphemerisPeriod")
+    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "OneTropicalYear", ScriptConstantHost = "/Script/Spice.SEphemerisPeriod"), Category = "MaxQ|EphemerisPeriod")
     static FSEphemerisPeriod SEphemerisPeriod_OneTropicalYear();
 
-    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "Identity", ScriptConstantHost = "SRotationMatrix"), Category = "MaxQ|RotationMatrix")
+    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "Identity", ScriptConstantHost = "/Script/Spice.SRotationMatrix"), Category = "MaxQ|RotationMatrix")
     static FSRotationMatrix SRotationMatrix_Identity();
 
-    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "Zero", ScriptConstantHost = "SDimensionlessVector"), Category = "MaxQ|DimensionlessVector")
+    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "Zero", ScriptConstantHost = "/Script/Spice.SDimensionlessVector"), Category = "MaxQ|DimensionlessVector")
     static FSDimensionlessVector SDimensionlessVector_Zero();
 
-    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "X_Axis", ScriptConstantHost = "SDimensionlessVector"), Category = "MaxQ|DimensionlessVector")
+    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "X_Axis", ScriptConstantHost = "/Script/Spice.SDimensionlessVector"), Category = "MaxQ|DimensionlessVector")
     static FSDimensionlessVector SDimensionlessVector_X_Axis();
 
-    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "Y_Axis", ScriptConstantHost = "SDimensionlessVector"), Category = "MaxQ|DimensionlessVector")
+    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "Y_Axis", ScriptConstantHost = "/Script/Spice.SDimensionlessVector"), Category = "MaxQ|DimensionlessVector")
     static FSDimensionlessVector SDimensionlessVector_Y_Axis();
 
-    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "Z_Axis", ScriptConstantHost = "SDimensionlessVector"), Category = "MaxQ|DimensionlessVector")
+    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "Z_Axis", ScriptConstantHost = "/Script/Spice.SDimensionlessVector"), Category = "MaxQ|DimensionlessVector")
     static FSDimensionlessVector SDimensionlessVector_Z_Axis();
 
-    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "Zero", ScriptConstantHost = "SMassConstant"), Category = "MaxQ|MassConstant")
+    UFUNCTION(BlueprintPure, meta = (ScriptConstant = "Zero", ScriptConstantHost = "/Script/Spice.SMassConstant"), Category = "MaxQ|MassConstant")
     static FSMassConstant SMassConstant_Zero();
 
 #pragma region NaifNames
@@ -1992,65 +1992,65 @@ public:
     // An alternative would be to make an enumeration & function to look up, but then the compiler couldn't hoist.
 
     // Inertial Reference Frames
-    UFUNCTION(BlueprintPure, meta = (ToolTip = "J2000 EME Inertial Frame (aligned with J2000 Earth Mean Equator)", ScriptConstant = "J2000", ScriptConstantHost = "Const"), Category = "MaxQ|Frames|Inertial")
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "J2000 EME Inertial Frame (aligned with J2000 Earth Mean Equator)", ScriptConstant = "J2000", ScriptConstantHost = "/Script/Spice.Const"), Category = "MaxQ|Frames|Inertial")
     static FString Const_J2000();
 
-    UFUNCTION(BlueprintPure, meta = (ToolTip = "ECLIPJ2000 Inertial Frame (aligned with J2000 Ecliptic Plane)", ScriptConstant = "ECLIPJ2000", ScriptConstantHost = "Const"), Category = "MaxQ|Frames|Inertial")
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "ECLIPJ2000 Inertial Frame (aligned with J2000 Ecliptic Plane)", ScriptConstant = "ECLIPJ2000", ScriptConstantHost = "/Script/Spice.Const"), Category = "MaxQ|Frames|Inertial")
     static FString Const_ECLIPJ2000();
 
-    UFUNCTION(BlueprintPure, meta = (ToolTip = "MARSIAU Inertial Frame (aligned with Mars Mean Equator)", ScriptConstant = "MARSIAU", ScriptConstantHost = "Const"), Category = "MaxQ|Frames|Inertial")
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "MARSIAU Inertial Frame (aligned with Mars Mean Equator)", ScriptConstant = "MARSIAU", ScriptConstantHost = "/Script/Spice.Const"), Category = "MaxQ|Frames|Inertial")
     static FString Const_MARSIAU();
 
-    UFUNCTION(BlueprintPure, meta = (ToolTip = "Galactic System II Inertial Frame", ScriptConstant = "GALACTIC", ScriptConstantHost = "Const"), Category = "MaxQ|Frames|Inertial")
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "Galactic System II Inertial Frame", ScriptConstant = "GALACTIC", ScriptConstantHost = "/Script/Spice.Const"), Category = "MaxQ|Frames|Inertial")
     static FString Const_GALACTIC();
 
     // Body-Fixed Reference Frames
-    UFUNCTION(BlueprintPure, meta = (ToolTip = "Earth Fixed-Frame, but you should use EARTH_FIXED, or ITRF if you have high precision kernels)", ScriptConstant = "IAU_EARTH", ScriptConstantHost = "Const"), Category = "MaxQ|Frames|Fixed")
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "Earth Fixed-Frame, but you should use EARTH_FIXED, or ITRF if you have high precision kernels)", ScriptConstant = "IAU_EARTH", ScriptConstantHost = "/Script/Spice.Const"), Category = "MaxQ|Frames|Fixed")
     static FString Const_IAU_EARTH();
 
-    UFUNCTION(BlueprintPure, meta = (ToolTip = "EARTH_FIXED Earth-Fixed Frame (requires earth_fixed.tf)", ScriptConstant = "EARTH_FIXED", ScriptConstantHost = "Const"), Category = "MaxQ|Frames|Fixed")
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "EARTH_FIXED Earth-Fixed Frame (requires earth_fixed.tf)", ScriptConstant = "EARTH_FIXED", ScriptConstantHost = "/Script/Spice.Const"), Category = "MaxQ|Frames|Fixed")
     static FString Const_EARTH_FIXED();
 
-    UFUNCTION(BlueprintPure, meta = (ToolTip = "ITRF93 Earth-fixed Frame (binary PCK)", ScriptConstant = "ITRF93", ScriptConstantHost = "Const"), Category = "MaxQ|Frames|Fixed")
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "ITRF93 Earth-fixed Frame (binary PCK)", ScriptConstant = "ITRF93", ScriptConstantHost = "/Script/Spice.Const"), Category = "MaxQ|Frames|Fixed")
     static FString Const_ITRF93();
 
-    UFUNCTION(BlueprintPure, meta = (ToolTip = "IAU_MOON Moon-Fixed Frame", ScriptConstant = "IAU_MOON", ScriptConstantHost = "Const"), Category = "MaxQ|Frames|Fixed")
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "IAU_MOON Moon-Fixed Frame", ScriptConstant = "IAU_MOON", ScriptConstantHost = "/Script/Spice.Const"), Category = "MaxQ|Frames|Fixed")
     static FString Const_IAU_MOON();
 
-    UFUNCTION(BlueprintPure, meta = (ToolTip = "IAU_SUN Sun-Fixed Frame", ScriptConstant = "IAU_SUN", ScriptConstantHost = "Const"), Category = "MaxQ|Frames|Fixed")
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "IAU_SUN Sun-Fixed Frame", ScriptConstant = "IAU_SUN", ScriptConstantHost = "/Script/Spice.Const"), Category = "MaxQ|Frames|Fixed")
     static FString Const_IAU_SUN();
 
-    UFUNCTION(BlueprintPure, meta = (ToolTip = "IAU_MERCURY Mercury-Fixed Frame", ScriptConstant = "IAU_MERCURY", ScriptConstantHost = "Const"), Category = "MaxQ|Frames|Fixed")
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "IAU_MERCURY Mercury-Fixed Frame", ScriptConstant = "IAU_MERCURY", ScriptConstantHost = "/Script/Spice.Const"), Category = "MaxQ|Frames|Fixed")
     static FString Const_IAU_MERCURY();
 
-    UFUNCTION(BlueprintPure, meta = (ToolTip = "IAU_VENUS Venus-Fixed Frame", ScriptConstant = "IAU_VENUS", ScriptConstantHost = "Const"), Category = "MaxQ|Frames|Fixed")
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "IAU_VENUS Venus-Fixed Frame", ScriptConstant = "IAU_VENUS", ScriptConstantHost = "/Script/Spice.Const"), Category = "MaxQ|Frames|Fixed")
     static FString Const_IAU_VENUS();
 
-    UFUNCTION(BlueprintPure, meta = (ToolTip = "IAU_MARS Mars-Fixed Frame", ScriptConstant = "IAU_MARS", ScriptConstantHost = "Const"), Category = "MaxQ|Frames|Fixed")
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "IAU_MARS Mars-Fixed Frame", ScriptConstant = "IAU_MARS", ScriptConstantHost = "/Script/Spice.Const"), Category = "MaxQ|Frames|Fixed")
     static FString Const_IAU_MARS();
 
-    UFUNCTION(BlueprintPure, meta = (ToolTip = "IAU_DEIMOS Deimos-Fixed Frame", ScriptConstant = "IAU_DEIMOS", ScriptConstantHost = "Const"), Category = "MaxQ|Frames|Fixed")
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "IAU_DEIMOS Deimos-Fixed Frame", ScriptConstant = "IAU_DEIMOS", ScriptConstantHost = "/Script/Spice.Const"), Category = "MaxQ|Frames|Fixed")
     static FString Const_IAU_DEIMOS();
 
-    UFUNCTION(BlueprintPure, meta = (ToolTip = "IAU_PHOBOS Phobos-Fixed Frame", ScriptConstant = "IAU_PHOBOS", ScriptConstantHost = "Const"), Category = "MaxQ|Frames|Fixed")
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "IAU_PHOBOS Phobos-Fixed Frame", ScriptConstant = "IAU_PHOBOS", ScriptConstantHost = "/Script/Spice.Const"), Category = "MaxQ|Frames|Fixed")
     static FString Const_IAU_PHOBOS();
 
-    UFUNCTION(BlueprintPure, meta = (ToolTip = "IAU_JUPITER Jupiter-Fixed Frame", ScriptConstant = "IAU_JUPITER", ScriptConstantHost = "Const"), Category = "MaxQ|Frames|Fixed")
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "IAU_JUPITER Jupiter-Fixed Frame", ScriptConstant = "IAU_JUPITER", ScriptConstantHost = "/Script/Spice.Const"), Category = "MaxQ|Frames|Fixed")
     static FString Const_IAU_JUPITER();
 
-    UFUNCTION(BlueprintPure, meta = (ToolTip = "IAU_SATURN Saturn-Fixed Frame", ScriptConstant = "IAU_SATURN", ScriptConstantHost = "Const"), Category = "MaxQ|Frames|Fixed")
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "IAU_SATURN Saturn-Fixed Frame", ScriptConstant = "IAU_SATURN", ScriptConstantHost = "/Script/Spice.Const"), Category = "MaxQ|Frames|Fixed")
     static FString Const_IAU_SATURN();
 
-    UFUNCTION(BlueprintPure, meta = (ToolTip = "IAU_NEPTUNE Naptune-Fixed Frame", ScriptConstant = "IAU_NEPTUNE", ScriptConstantHost = "Const"), Category = "MaxQ|Frames|Fixed")
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "IAU_NEPTUNE Naptune-Fixed Frame", ScriptConstant = "IAU_NEPTUNE", ScriptConstantHost = "/Script/Spice.Const"), Category = "MaxQ|Frames|Fixed")
     static FString Const_IAU_NEPTUNE();
 
-    UFUNCTION(BlueprintPure, meta = (ToolTip = "IAU_URANUS Uranus-Fixed Frame", ScriptConstant = "IAU_URANUS", ScriptConstantHost = "Const"), Category = "MaxQ|Frames|Fixed")
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "IAU_URANUS Uranus-Fixed Frame", ScriptConstant = "IAU_URANUS", ScriptConstantHost = "/Script/Spice.Const"), Category = "MaxQ|Frames|Fixed")
     static FString Const_IAU_URANUS();
 
-    UFUNCTION(BlueprintPure, meta = (ToolTip = "IAU_PLUTO Pluto-Fixed Frame", ScriptConstant = "IAU_PLUTO", ScriptConstantHost = "Const"), Category = "MaxQ|Frames|Fixed")
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "IAU_PLUTO Pluto-Fixed Frame", ScriptConstant = "IAU_PLUTO", ScriptConstantHost = "/Script/Spice.Const"), Category = "MaxQ|Frames|Fixed")
     static FString Const_IAU_PLUTO();
 
-    UFUNCTION(BlueprintPure, meta = (ToolTip = "IAU_CERES Ceres-Fixed Frame", ScriptConstant = "IAU_CERES", ScriptConstantHost = "Const"), Category = "MaxQ|Frames|Fixed")
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "IAU_CERES Ceres-Fixed Frame", ScriptConstant = "IAU_CERES", ScriptConstantHost = "/Script/Spice.Const"), Category = "MaxQ|Frames|Fixed")
     static FString Const_IAU_CERES();
 
     // Naif Body Names
@@ -2058,155 +2058,155 @@ public:
     // https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/req/naif_ids.html#Barycenters
     // https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/req/naif_ids.html#Planets%20and%20Satellites
     // Etc
-    UFUNCTION(BlueprintPure, meta = (ToolTip = "EARTH Naif Name", ScriptConstant = "EARTH", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "EARTH Naif Name", ScriptConstant = "EARTH", ScriptConstantHost = "/Script/Spice.Const"), Category = "MaxQ|SPK|Naif Names")
     static FString Const_EARTH();
 
-    UFUNCTION(BlueprintPure, meta = (ToolTip = "MOON Naif Name", ScriptConstant = "MOON", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "MOON Naif Name", ScriptConstant = "MOON", ScriptConstantHost = "/Script/Spice.Const"), Category = "MaxQ|SPK|Naif Names")
     static FString Const_MOON();
 
-    UFUNCTION(BlueprintPure, meta = (ToolTip = "EMB (Earth-Moon Barycenter) Naif Name, equivalent to EARTH_BARYCENTER", ScriptConstant = "EMB", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "EMB (Earth-Moon Barycenter) Naif Name, equivalent to EARTH_BARYCENTER", ScriptConstant = "EMB", ScriptConstantHost = "/Script/Spice.Const"), Category = "MaxQ|SPK|Naif Names")
     static FString Const_EMB();
 
-    UFUNCTION(BlueprintPure, meta = (ToolTip = "EARTH_BARYCENTER (Earth-Moon Barycenter) Naif Name, equivalent to EMB", ScriptConstant = "EARTH_BARYCENTER", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "EARTH_BARYCENTER (Earth-Moon Barycenter) Naif Name, equivalent to EMB", ScriptConstant = "EARTH_BARYCENTER", ScriptConstantHost = "/Script/Spice.Const"), Category = "MaxQ|SPK|Naif Names")
     static FString Const_EARTH_BARYCENTER();
 
-    UFUNCTION(BlueprintPure, meta = (ToolTip = "SUN (Mass) Naif Name", ScriptConstant = "SUN", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "SUN (Mass) Naif Name", ScriptConstant = "SUN", ScriptConstantHost = "/Script/Spice.Const"), Category = "MaxQ|SPK|Naif Names")
     static FString Const_SUN();
 
-    UFUNCTION(BlueprintPure, meta = (ToolTip = "SSB (Solar System Barycenter) Naif Name, equivalent to SOLAR_SYSTEM_BARYCENTER", ScriptConstant = "SSB", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "SSB (Solar System Barycenter) Naif Name, equivalent to SOLAR_SYSTEM_BARYCENTER", ScriptConstant = "SSB", ScriptConstantHost = "/Script/Spice.Const"), Category = "MaxQ|SPK|Naif Names")
     static FString Const_SSB();
 
-    UFUNCTION(BlueprintPure, meta = (ToolTip = "SOLAR_SYSTEM_BARYCENTER (Solar System Barycenter) Naif Name, equivalent to SSB", ScriptConstant = "SOLAR_SYSTEM_BARYCENTER", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "SOLAR_SYSTEM_BARYCENTER (Solar System Barycenter) Naif Name, equivalent to SSB", ScriptConstant = "SOLAR_SYSTEM_BARYCENTER", ScriptConstantHost = "/Script/Spice.Const"), Category = "MaxQ|SPK|Naif Names")
     static FString Const_SOLAR_SYSTEM_BARYCENTER();
 
-    UFUNCTION(BlueprintPure, meta = (ToolTip = "MERCURY", ScriptConstant = "MERCURY", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "MERCURY", ScriptConstant = "MERCURY", ScriptConstantHost = "/Script/Spice.Const"), Category = "MaxQ|SPK|Naif Names")
     static FString Const_MERCURY();
 
-    UFUNCTION(BlueprintPure, meta = (ToolTip = "VENUS Naif Name", ScriptConstant = "VENUS", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "VENUS Naif Name", ScriptConstant = "VENUS", ScriptConstantHost = "/Script/Spice.Const"), Category = "MaxQ|SPK|Naif Names")
     static FString Const_VENUS();
 
-    UFUNCTION(BlueprintPure, meta = (ToolTip = "MARS Naif Name", ScriptConstant = "MARS", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "MARS Naif Name", ScriptConstant = "MARS", ScriptConstantHost = "/Script/Spice.Const"), Category = "MaxQ|SPK|Naif Names")
     static FString Const_MARS();
 
-    UFUNCTION(BlueprintPure, meta = (ToolTip = "PHOBOS Naif Name", ScriptConstant = "PHOBOS", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "PHOBOS Naif Name", ScriptConstant = "PHOBOS", ScriptConstantHost = "/Script/Spice.Const"), Category = "MaxQ|SPK|Naif Names")
     static FString Const_PHOBOS();
 
-    UFUNCTION(BlueprintPure, meta = (ToolTip = "DEIMOS Naif Name", ScriptConstant = "DEIMOS", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "DEIMOS Naif Name", ScriptConstant = "DEIMOS", ScriptConstantHost = "/Script/Spice.Const"), Category = "MaxQ|SPK|Naif Names")
     static FString Const_DEIMOS();
 
-    UFUNCTION(BlueprintPure, meta = (ToolTip = "MARS_BARYCENTER Naif Name", ScriptConstant = "MARS_BARYCENTER", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "MARS_BARYCENTER Naif Name", ScriptConstant = "MARS_BARYCENTER", ScriptConstantHost = "/Script/Spice.Const"), Category = "MaxQ|SPK|Naif Names")
     static FString Const_MARS_BARYCENTER();
 
-    UFUNCTION(BlueprintPure, meta = (ToolTip = "JUPITER Naif Name", ScriptConstant = "JUPITER", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "JUPITER Naif Name", ScriptConstant = "JUPITER", ScriptConstantHost = "/Script/Spice.Const"), Category = "MaxQ|SPK|Naif Names")
     static FString Const_JUPITER();
 
-    UFUNCTION(BlueprintPure, meta = (ToolTip = "JUPITER_BARYCENTER Naif Name", ScriptConstant = "JUPITER_BARYCENTER", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "JUPITER_BARYCENTER Naif Name", ScriptConstant = "JUPITER_BARYCENTER", ScriptConstantHost = "/Script/Spice.Const"), Category = "MaxQ|SPK|Naif Names")
     static FString Const_JUPITER_BARYCENTER();
 
-    UFUNCTION(BlueprintPure, meta = (ToolTip = "SATURN Naif Name", ScriptConstant = "SATURN", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "SATURN Naif Name", ScriptConstant = "SATURN", ScriptConstantHost = "/Script/Spice.Const"), Category = "MaxQ|SPK|Naif Names")
     static FString Const_SATURN();
 
-    UFUNCTION(BlueprintPure, meta = (ToolTip = "SATURN_BARYCENTER Naif Name", ScriptConstant = "SATURN_BARYCENTER", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "SATURN_BARYCENTER Naif Name", ScriptConstant = "SATURN_BARYCENTER", ScriptConstantHost = "/Script/Spice.Const"), Category = "MaxQ|SPK|Naif Names")
     static FString Const_SATURN_BARYCENTER();
 
-    UFUNCTION(BlueprintPure, meta = (ToolTip = "URANUS Naif Name", ScriptConstant = "URANUS", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "URANUS Naif Name", ScriptConstant = "URANUS", ScriptConstantHost = "/Script/Spice.Const"), Category = "MaxQ|SPK|Naif Names")
     static FString Const_URANUS();
 
-    UFUNCTION(BlueprintPure, meta = (ToolTip = "URANUS_BARYCENTER Naif Name", ScriptConstant = "URANUS_BARYCENTER", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "URANUS_BARYCENTER Naif Name", ScriptConstant = "URANUS_BARYCENTER", ScriptConstantHost = "/Script/Spice.Const"), Category = "MaxQ|SPK|Naif Names")
     static FString Const_URANUS_BARYCENTER();
 
-    UFUNCTION(BlueprintPure, meta = (ToolTip = "NEPTUNE Naif Name", ScriptConstant = "NEPTUNE", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "NEPTUNE Naif Name", ScriptConstant = "NEPTUNE", ScriptConstantHost = "/Script/Spice.Const"), Category = "MaxQ|SPK|Naif Names")
     static FString Const_NEPTUNE();
 
-    UFUNCTION(BlueprintPure, meta = (ToolTip = "NEPTUNE_BARYCENTER Naif Name", ScriptConstant = "NEPTUNE_BARYCENTER", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "NEPTUNE_BARYCENTER Naif Name", ScriptConstant = "NEPTUNE_BARYCENTER", ScriptConstantHost = "/Script/Spice.Const"), Category = "MaxQ|SPK|Naif Names")
     static FString Const_NEPTUNE_BARYCENTER();
 
-    UFUNCTION(BlueprintPure, meta = (ToolTip = "PLUTO Naif Name", ScriptConstant = "PLUTO", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "PLUTO Naif Name", ScriptConstant = "PLUTO", ScriptConstantHost = "/Script/Spice.Const"), Category = "MaxQ|SPK|Naif Names")
     static FString Const_PLUTO();
 
-    UFUNCTION(BlueprintPure, meta = (ToolTip = "PLUTO_BARYCENTER Naif Name", ScriptConstant = "PLUTO_BARYCENTER", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "PLUTO_BARYCENTER Naif Name", ScriptConstant = "PLUTO_BARYCENTER", ScriptConstantHost = "/Script/Spice.Const"), Category = "MaxQ|SPK|Naif Names")
     static FString Const_PLUTO_BARYCENTER();
 
-    UFUNCTION(BlueprintPure, meta = (ToolTip = "Asteroid CERES Naif Name", ScriptConstant = "CERES", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "Asteroid CERES Naif Name", ScriptConstant = "CERES", ScriptConstantHost = "/Script/Spice.Const"), Category = "MaxQ|SPK|Naif Names")
     static FString Const_CERES();
 
     // Spacecraft
     // See: https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/req/naif_ids.html#Spacecraft
-    UFUNCTION(BlueprintPure, meta = (ToolTip = "Spacecraft PIONEER-6 Naif Name", ScriptConstant = "PIONEER_6", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "Spacecraft PIONEER-6 Naif Name", ScriptConstant = "PIONEER_6", ScriptConstantHost = "/Script/Spice.Const"), Category = "MaxQ|SPK|Naif Names")
     static FString Const_PIONEER_6();
 
-    UFUNCTION(BlueprintPure, meta = (ToolTip = "Spacecraft PIONEER-7 Naif Name", ScriptConstant = "PIONEER_7", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "Spacecraft PIONEER-7 Naif Name", ScriptConstant = "PIONEER_7", ScriptConstantHost = "/Script/Spice.Const"), Category = "MaxQ|SPK|Naif Names")
     static FString Const_PIONEER_7();
 
-    UFUNCTION(BlueprintPure, meta = (ToolTip = "Spacecraft VIKING 1 ORBITER Naif Name", ScriptConstant = "VIKING_1_ORBITER", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "Spacecraft VIKING 1 ORBITER Naif Name", ScriptConstant = "VIKING_1_ORBITER", ScriptConstantHost = "/Script/Spice.Const"), Category = "MaxQ|SPK|Naif Names")
     static FString Const_VIKING_1_ORBITER();
 
-    UFUNCTION(BlueprintPure, meta = (ToolTip = "Spacecraft VIKING 2 ORBITER Naif Name", ScriptConstant = "VIKING_2_ORBITER", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "Spacecraft VIKING 2 ORBITER Naif Name", ScriptConstant = "VIKING_2_ORBITER", ScriptConstantHost = "/Script/Spice.Const"), Category = "MaxQ|SPK|Naif Names")
     static FString Const_VIKING_2_ORBITER();
 
-    UFUNCTION(BlueprintPure, meta = (ToolTip = "Spacecraft VOYAGER 1 Naif Name", ScriptConstant = "VOYAGER_1", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "Spacecraft VOYAGER 1 Naif Name", ScriptConstant = "VOYAGER_1", ScriptConstantHost = "/Script/Spice.Const"), Category = "MaxQ|SPK|Naif Names")
     static FString Const_VOYAGER_1();
 
-    UFUNCTION(BlueprintPure, meta = (ToolTip = "Spacecraft VOYAGER 2 Naif Name", ScriptConstant = "VOYAGER_2", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "Spacecraft VOYAGER 2 Naif Name", ScriptConstant = "VOYAGER_2", ScriptConstantHost = "/Script/Spice.Const"), Category = "MaxQ|SPK|Naif Names")
     static FString Const_VOYAGER_2();
 
-    UFUNCTION(BlueprintPure, meta = (ToolTip = "Spacecraft HST Naif Name, equivalent to HUBBLE SPACE TELESCOPE", ScriptConstant = "HST", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "Spacecraft HST Naif Name, equivalent to HUBBLE SPACE TELESCOPE", ScriptConstant = "HST", ScriptConstantHost = "/Script/Spice.Const"), Category = "MaxQ|SPK|Naif Names")
     static FString Const_HST();
 
-    UFUNCTION(BlueprintPure, meta = (ToolTip = "Spacecraft HUBBLE SPACE TELESCOPE Naif Name, equivalent to HST", ScriptConstant = "HUBBLE_SPACE_TELESCOPE", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "Spacecraft HUBBLE SPACE TELESCOPE Naif Name, equivalent to HST", ScriptConstant = "HUBBLE_SPACE_TELESCOPE", ScriptConstantHost = "/Script/Spice.Const"), Category = "MaxQ|SPK|Naif Names")
     static FString Const_HUBBLE_SPACE_TELESCOPE();
 
-    UFUNCTION(BlueprintPure, meta = (ToolTip = "Spacecraft MARS PATHFINDER Naif Name", ScriptConstant = "MARS_PATHFINDER", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "Spacecraft MARS PATHFINDER Naif Name", ScriptConstant = "MARS_PATHFINDER", ScriptConstantHost = "/Script/Spice.Const"), Category = "MaxQ|SPK|Naif Names")
     static FString Const_MARS_PATHFINDER();
 
-    UFUNCTION(BlueprintPure, meta = (ToolTip = "Spacecraft PARKER SOLAR PROBE Naif Name", ScriptConstant = "PARKER_SOLAR_PROBE", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "Spacecraft PARKER SOLAR PROBE Naif Name", ScriptConstant = "PARKER_SOLAR_PROBE", ScriptConstantHost = "/Script/Spice.Const"), Category = "MaxQ|SPK|Naif Names")
     static FString Const_PARKER_SOLAR_PROBE();
 
-    UFUNCTION(BlueprintPure, meta = (ToolTip = "Spacecraft JWST Naif Name, equivalent to JAMES WEBB SPACE TELESCOPE", ScriptConstant = "JWST", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "Spacecraft JWST Naif Name, equivalent to JAMES WEBB SPACE TELESCOPE", ScriptConstant = "JWST", ScriptConstantHost = "/Script/Spice.Const"), Category = "MaxQ|SPK|Naif Names")
     static FString Const_JWST();
 
-    UFUNCTION(BlueprintPure, meta = (ToolTip = "Spacecraft JAMES WEBB SPACE TELESCOPE Naif Name, equivalent to JWST", ScriptConstant = "JAMES_WEBB_SPACE_TELESCOPE", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "Spacecraft JAMES WEBB SPACE TELESCOPE Naif Name, equivalent to JWST", ScriptConstant = "JAMES_WEBB_SPACE_TELESCOPE", ScriptConstantHost = "/Script/Spice.Const"), Category = "MaxQ|SPK|Naif Names")
     static FString Const_JAMES_WEBB_SPACE_TELESCOPE();
 
-    UFUNCTION(BlueprintPure, meta = (ToolTip = "Spacecraft INSIGHT Naif Name", ScriptConstant = "INSIGHT", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "Spacecraft INSIGHT Naif Name", ScriptConstant = "INSIGHT", ScriptConstantHost = "/Script/Spice.Const"), Category = "MaxQ|SPK|Naif Names")
     static FString Const_INSIGHT();
 
-    UFUNCTION(BlueprintPure, meta = (ToolTip = "Spacecraft OPPORTUNITY Naif Name", ScriptConstant = "OPPORTUNITY", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "Spacecraft OPPORTUNITY Naif Name", ScriptConstant = "OPPORTUNITY", ScriptConstantHost = "/Script/Spice.Const"), Category = "MaxQ|SPK|Naif Names")
     static FString Const_OPPORTUNITY();
 
-    UFUNCTION(BlueprintPure, meta = (ToolTip = "Spacecraft SPIRIT Naif Name", ScriptConstant = "SPIRIT", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "Spacecraft SPIRIT Naif Name", ScriptConstant = "SPIRIT", ScriptConstantHost = "/Script/Spice.Const"), Category = "MaxQ|SPK|Naif Names")
     static FString Const_SPIRIT();
 
     // Ground stations
     // https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/req/naif_ids.html#Ground%20Stations.
-    UFUNCTION(BlueprintPure, meta = (ToolTip = "Ground Station NOTO Naif Name", ScriptConstant = "NOTO", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "Ground Station NOTO Naif Name", ScriptConstant = "NOTO", ScriptConstantHost = "/Script/Spice.Const"), Category = "MaxQ|SPK|Naif Names")
     static FString Const_NOTO();
 
-    UFUNCTION(BlueprintPure, meta = (ToolTip = "Ground Station NEW NORCIA Naif Name", ScriptConstant = "NEW_NORCIA", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "Ground Station NEW NORCIA Naif Name", ScriptConstant = "NEW_NORCIA", ScriptConstantHost = "/Script/Spice.Const"), Category = "MaxQ|SPK|Naif Names")
     static FString Const_NEW_NORCIA();
 
-    UFUNCTION(BlueprintPure, meta = (ToolTip = "Ground Station GOLDSTONE Naif Name", ScriptConstant = "GOLDSTONE", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "Ground Station GOLDSTONE Naif Name", ScriptConstant = "GOLDSTONE", ScriptConstantHost = "/Script/Spice.Const"), Category = "MaxQ|SPK|Naif Names")
     static FString Const_GOLDSTONE();
 
-    UFUNCTION(BlueprintPure, meta = (ToolTip = "Ground Station CANBERRA Naif Name", ScriptConstant = "CANBERRA", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "Ground Station CANBERRA Naif Name", ScriptConstant = "CANBERRA", ScriptConstantHost = "/Script/Spice.Const"), Category = "MaxQ|SPK|Naif Names")
     static FString Const_CANBERRA();
 
-    UFUNCTION(BlueprintPure, meta = (ToolTip = "Ground Station MADRID Naif Name", ScriptConstant = "MADRID", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "Ground Station MADRID Naif Name", ScriptConstant = "MADRID", ScriptConstantHost = "/Script/Spice.Const"), Category = "MaxQ|SPK|Naif Names")
     static FString Const_MADRID();
 
-    UFUNCTION(BlueprintPure, meta = (ToolTip = "Ground Station USUDA Naif Name", ScriptConstant = "USUDA", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "Ground Station USUDA Naif Name", ScriptConstant = "USUDA", ScriptConstantHost = "/Script/Spice.Const"), Category = "MaxQ|SPK|Naif Names")
     static FString Const_USUDA();
 
-    UFUNCTION(BlueprintPure, meta = (ToolTip = "Ground Station DSS-05 Naif Name", ScriptConstant = "DSS_05", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "Ground Station DSS-05 Naif Name", ScriptConstant = "DSS_05", ScriptConstantHost = "/Script/Spice.Const"), Category = "MaxQ|SPK|Naif Names")
     static FString Const_DSS_05();
 
-    UFUNCTION(BlueprintPure, meta = (ToolTip = "Ground Station PARKES Naif Name", ScriptConstant = "PARKES", ScriptConstantHost = "Const"), Category = "MaxQ|SPK|Naif Names")
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "Ground Station PARKES Naif Name", ScriptConstant = "PARKES", ScriptConstantHost = "/Script/Spice.Const"), Category = "MaxQ|SPK|Naif Names")
     static FString Const_PARKES();
 
-    UFUNCTION(BlueprintPure, meta = (ToolTip = "GM Property Name", ScriptConstant = "GM", ScriptConstantHost = "Const"), Category = "MaxQ|Kernel|Property Names")
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "GM Property Name", ScriptConstant = "GM", ScriptConstantHost = "/Script/Spice.Const"), Category = "MaxQ|Kernel|Property Names")
     static FString Const_GM();
 
-    UFUNCTION(BlueprintPure, meta = (ToolTip = "RADII Property Name", ScriptConstant = "RADII", ScriptConstantHost = "Const"), Category = "MaxQ|Kernel|Property Names")
+    UFUNCTION(BlueprintPure, meta = (ToolTip = "RADII Property Name", ScriptConstant = "RADII", ScriptConstantHost = "/Script/Spice.Const"), Category = "MaxQ|Kernel|Property Names")
     static FString Const_RADII();
 
 #pragma endregion NaifNames
