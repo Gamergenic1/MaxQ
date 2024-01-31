@@ -61,8 +61,8 @@ namespace MaxQ::Private
     void CopyFrom(const SpiceEllipse& _ellipse, FSEllipse& dest);
     void CopyTo(const FSEllipse& src, SpiceEllipse& _ellipse);
 
-    uint8 ErrorCheck(ES_ResultCode& ResultCode, FString& ErrorMessage, bool BeQuiet = false);
     uint8 ErrorCheck(ES_ResultCode* ResultCode, FString* ErrorMessage, bool BeQuiet = false);
+    uint8 ErrorCheck(ES_ResultCode& ResultCode, FString& ErrorMessage, bool BeQuiet = false);
     uint8 UnexpectedErrorCheck(bool bReset = true);
     void MakeErrorGutter(ES_ResultCode*& pResultCode, FString*& pErrorMessage);
 }

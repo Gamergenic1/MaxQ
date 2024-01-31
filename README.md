@@ -75,7 +75,9 @@ See [PRINCIPLES](PRINCIPLES.md) file.
 * **Sample01**: Initialization and kernel data  
 * **Sample02**: Time manipulation
 * **Sample03**: SPK Positioning
-* **Sample04**: PCK Orienting (in progress)
-* **Sample05**: Kepler Orbits (in progress)
-* (Additional Tutorials to come)
+* **Sample04**: PCK Orienting
+* **Sample05**: Kepler Orbits
+* **Sample06**: Custom Kernels (Trappist-1 System)
 
+### Other
+* If a service-side implementation of SPICE is useful, see npm package '@gamergenic/js-spice'.

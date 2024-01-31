@@ -1,6 +1,6 @@
 {
 	"FileVersion": 3,
-	"EngineAssociation": "5.2",
+	"EngineAssociation": "5.3",
 	"Category": "",
 	"Description": "",
 	"Modules": [
@@ -12,28 +12,16 @@
 	],
 	"Plugins": [
 		{
-			"Name": "GLTFImporter",
-			"Enabled": true
-		},
-		{
 			"Name": "MaxQ",
 			"Enabled": true,
 			"SupportedTargetPlatforms": [
 				"Win64",
-				"Mac"
-			]
-		},
-		{
-			"Name": "Bridge",
-			"Enabled": true,
-			"SupportedTargetPlatforms": [
-				"Win64",
-				"Mac"
+        "Mac"
 			]
 		}
 	],
-	"TargetPlatforms": [
-		"Win64",
-		"Mac"
-	]
+  "TargetPlatforms": [
+    "Win64",
+    "Mac"
+  ]
 }

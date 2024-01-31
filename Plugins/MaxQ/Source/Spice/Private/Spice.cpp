@@ -2059,11 +2059,10 @@ void USpice::dafopr(
     // Output
     SpiceInt        _handle = 0;
     
-    // Input (Temporary pointer, do not use after Invocation)
-    ConstSpiceChar* _fname = TCHAR_TO_ANSI(*toPath(relativePath));
-
+    FString Path = toPath(relativePath);
+    
     // Invocation
-    dafopr_c(_fname, &_handle);
+    dafopr_c(StringCast<ANSICHAR>(*Path).Get(), &_handle);
 
     // Return Value
     handle = _handle;
@@ -2128,11 +2127,10 @@ void USpice::dafopw(
 {
     // Output
     SpiceInt        _handle = 0;
-    // Input (Temporary pointer, do not dereference after Invocation)
-    ConstSpiceChar* _fname = TCHAR_TO_ANSI(*toPath(relativePath));
+    FString Path = toPath(relativePath);
 
     // Invocation
-    dafopw_c(_fname, &_handle);
+    dafopw_c(StringCast<ANSICHAR>(*Path).Get(), &_handle);
 
     // Return Value
     handle = _handle;
@@ -2151,11 +2149,11 @@ void USpice::dasopr(
 {
     // Output
     SpiceInt        _handle = 0;
-    // Input (Temporary pointer, do not dereference after Invocation)
-    ConstSpiceChar* _fname = TCHAR_TO_ANSI(*toPath(relativePath));
+
+    FString Path = toPath(relativePath);
 
     // Invocation
-    dasopr_c(_fname, &_handle);
+    dasopr_c(StringCast<ANSICHAR>(*Path).Get(), &_handle);
 
     // Return Value
     handle = _handle;
@@ -2353,11 +2351,10 @@ void USpice::dskobj(
     // Spice cells are static, so reinitialize.
     scard_c(0, &_bodids);
 
-    // Input (Temporary pointer, do not dereference after Invocation)
-    ConstSpiceChar* _dskfnm = TCHAR_TO_ANSI(*toPath(fileRelativePath));
+    FString Path = toPath(fileRelativePath);
 
     // Invocation
-    dskobj_c(_dskfnm, &_bodids);
+    dskobj_c(StringCast<ANSICHAR>(*Path).Get(), &_bodids);
 
     // Pack outputs
     bodids = TArray<int>();
@@ -2386,11 +2383,11 @@ void USpice::dsksrf(
     scard_c(0, &_srfids);
 
     SpiceInt        _bodyid = (SpiceInt)bodyid;
-    // Input (Temporary pointer, do not dereference after Invocation)
-    ConstSpiceChar* _dskfnm = TCHAR_TO_ANSI(*toPath(fileRelativePath));
+
+    FString Path = toPath(fileRelativePath);
 
     // Invocation
-    dsksrf_c(_dskfnm, _bodyid, &_srfids);
+    dsksrf_c(StringCast<ANSICHAR>(*Path).Get(), _bodyid, &_srfids);
 
     // Pack outputs
     srfids = TArray<int>();
@@ -5410,11 +5407,12 @@ void USpice::kdata(
     SpiceInt _handle = handle;
     SpiceBoolean _found { SPICEFALSE };
     // Warning:  Temp var, do not dereference after kdata_c invocation
-    ConstSpiceChar* _kind = TCHAR_TO_ANSI(*MaxQ::Core::ToString((ES_KernelType)kind));
+
+    FString Kind = MaxQ::Core::ToString((ES_KernelType)kind);
 
     kdata_c(
         _which,
-        _kind,
+        StringCast<ANSICHAR>(*Kind).Get(),
         _fillen,
         _typlen,
         _srclen,
@@ -5477,10 +5475,10 @@ void USpice::kinfo(
     SpiceInt        _handle = handle;
     SpiceBoolean    _found = SPICEFALSE;
     // Warning: temp ptr, do not dereference after kinfo_v
-    ConstSpiceChar* _file = TCHAR_TO_ANSI(*toPath(file));
+    FString Path = toPath(file);
 
     kinfo_c(
-        _file,
+        StringCast<ANSICHAR>(*Path).Get(),
         _filtln,
         _srclen,
         _filtyp,
@@ -5524,10 +5522,10 @@ void USpice::ktotal(
 )
 {
     SpiceInt _count = count;
-    // Warning:  Temp var
-    ConstSpiceChar* _kind = TCHAR_TO_ANSI(*MaxQ::Core::ToString((ES_KernelType)kind));
 
-    ktotal_c( _kind, &_count );
+    FString Kind = MaxQ::Core::ToString((ES_KernelType)kind);
+
+    ktotal_c( StringCast<ANSICHAR>(*Kind).Get(), &_count );
 
     count = _count;
     UnexpectedErrorCheck(false);
@@ -7072,7 +7070,7 @@ void USpice::pckfrm(
     SpiceCell* _ids = &idscell;
 
     // Invocation
-    spkobj_c(TCHAR_TO_ANSI(*toPath(pckRelativePath)), _ids);
+    pckfrm_c(TCHAR_TO_ANSI(*toPath(pckRelativePath)), _ids);
 
     ids = TArray<int>();
     int count = card_c(_ids);

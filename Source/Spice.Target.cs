@@ -7,19 +7,14 @@
 
 
 using UnrealBuildTool;
-using EpicGames.Core;
-using System.Collections.Generic;
-using System.IO;
 
 public class SpiceTarget : TargetRules
 {
     public SpiceTarget(TargetInfo Target) : base(Target)
     {
-        Log.TraceInformation("Instantiating SpiceTarget");
-
         Type = TargetType.Game;
         DefaultBuildSettings = BuildSettingsVersion.V2;
-        IncludeOrderVersion = EngineIncludeOrderVersion.Unreal5_1;
+        IncludeOrderVersion = EngineIncludeOrderVersion.Latest;
 
         // Assumes CSpice_Library has already been built.
 
