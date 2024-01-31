@@ -21,11 +21,9 @@ public class SpiceEditorTarget : TargetRules
 {
     public SpiceEditorTarget(TargetInfo Target) : base(Target)
     {
-        Log.TraceInformation("Instantiating SpiceEditorTarget");
-
         Type = TargetType.Editor;
         DefaultBuildSettings = BuildSettingsVersion.V2;
-        IncludeOrderVersion = EngineIncludeOrderVersion.Unreal5_1;
+        IncludeOrderVersion = EngineIncludeOrderVersion.Latest;
 
         bUseFastPDBLinking = false;
         bPublicSymbolsByDefault = true;  // <- Forced to true on Windows anyways
@@ -41,8 +39,6 @@ public class SpiceEditorTarget : TargetRules
 
     public void UpdateDocs(TargetInfo Target)
     {
-        Log.TraceInformation("Setting PostBuildSteps");
-
         // Only invoke the windows batch file on windows...
         if (Target.Platform == UnrealTargetPlatform.Win64)
         {
@@ -55,8 +51,6 @@ public class SpiceEditorTarget : TargetRules
     // SpiceEditorChanges as well.
     static public void BuildCSpiceLib(TargetRules targetRules)
     {
-        Log.TraceInformation("Setting PreBuildSteps");
-
         // Q: Can the libraries pre-built and released by naif be used?
         //    Q: On Mac?
         //    A: Yes

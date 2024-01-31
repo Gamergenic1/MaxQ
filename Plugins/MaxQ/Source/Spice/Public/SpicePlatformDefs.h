@@ -46,4 +46,17 @@
 #define PRAGMA_PUSH_PLATFORM_DEFAULT_PACKING
 #define PRAGMA_POP_PLATFORM_DEFAULT_PACKING
 #define SpiceStaticPartialTemplate 
+#elif PLATFORM_ANDROID
+#include <string.h>
+#define StackAlloc alloca
+#define SpiceStringCopy(a,b) strlcpy(a,b, sizeof(a))
+#define SpiceStringCopy3(a,b,c) strlcpy(a,c,b)
+#define SpiceStringCopyN strncpy
+#define SpiceStringConcat strcat
+#define SpiceStringCompare strcmp
+#define SpiceStringLengthN strnlen
+#define SPICE_MAX_PATH 255
+#define PRAGMA_PUSH_PLATFORM_DEFAULT_PACKING
+#define PRAGMA_POP_PLATFORM_DEFAULT_PACKING
+#define SpiceStaticPartialTemplate 
 #endif
