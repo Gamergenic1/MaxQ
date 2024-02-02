@@ -20,8 +20,9 @@
 			]
 		}
 	],
-  "TargetPlatforms": [
-    "Win64",
-    "Mac"
-  ]
+	"TargetPlatforms": [
+		"Win64",
+		"Mac",
+		"Android"
+	]
 }
