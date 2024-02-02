@@ -18,18 +18,33 @@ public class CSpice_Library : ModuleRules
         string cspiceDir = Path.Combine(ModuleDirectory, "cspice/");
         string includeDir = Path.Combine(cspiceDir, "include/");
         string libDir = Path.Combine(ModuleDirectory, "lib", Target.Platform.ToString());
-        string libName = Target.Platform == UnrealTargetPlatform.Mac ? libName = "cspice.a" : "cspice.lib";
-        string libFile = Path.Combine(libDir, libName);
+        if(Target.Platform == UnrealTargetPlatform.Win64)
+        {
 
+        }
+        else if (Target.Platform == UnrealTargetPlatform.Mac)
+        {
+        }
+        else if (Target.Platform == UnrealTargetPlatform.Mac)
+        {
+        }
+
+        string libName;
         if (Target.Platform == UnrealTargetPlatform.Win64)
         {
+            libName = "cspice.lib";
             PublicDefinitions.Add("MSDOS=1");
             PublicDefinitions.Add("OMIT_BLANK_CC=1");
             PublicDefinitions.Add("NON_ANSI_STDIO=1");
         }
         else if (Target.Platform == UnrealTargetPlatform.Mac)
         {
+            libName = "cspice.lib";
             PublicDefinitions.Add("CSPICE_MAC_OSX_INTEL_64BIT_GCC=1");
+        }
+        else if (Target.Platform == UnrealTargetPlatform.Android)
+        {
+            libName = "libcspice.lib";
         }
         /*
         Add conditionals for any other platforms you want to support via recompilation here:
@@ -44,6 +59,7 @@ public class CSpice_Library : ModuleRules
             string Err = string.Format("cspice SDK not found for platform {0}", Target.Platform.ToString());
             throw new BuildException(Err);
         }
+        string libFile = Path.Combine(libDir, libName);
 
         Type = ModuleRules.ModuleType.External;
         PrecompileForTargets = PrecompileTargetsType.Any;

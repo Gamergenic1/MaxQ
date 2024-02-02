@@ -16,12 +16,13 @@
 			"Enabled": true,
 			"SupportedTargetPlatforms": [
 				"Win64",
-        "Mac"
+				"Mac"
 			]
 		}
 	],
-  "TargetPlatforms": [
-    "Win64",
-    "Mac"
-  ]
+	"TargetPlatforms": [
+		"Win64",
+		"Mac",
+		"Android"
+	]
 }
