@@ -34,7 +34,11 @@ public class SpiceEditorTarget : TargetRules
 
         UpdateDocs(Target);
         BuildCSpiceLib(this);
-        CppStandard = CppStandardVersion.Cpp17;
+
+        CppStandard = CppStandardVersion.Default;
+        bLegacyParentIncludePaths = false;
+        WindowsPlatform.bStrictConformanceMode = true;
+        bValidateFormatStrings = true;
     }
 
     public void UpdateDocs(TargetInfo Target)

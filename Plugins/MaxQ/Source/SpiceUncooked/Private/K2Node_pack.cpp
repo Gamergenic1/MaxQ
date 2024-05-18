@@ -412,18 +412,13 @@ void UK2Node_pack::GetMenuActions(FBlueprintActionDatabaseRegistrar& ActionRegis
 
 FText UK2Node_pack::GetNodeTitle(ENodeTitleType::Type TitleType) const
 {
-    constexpr bool bUseShortNameForTitle{ true };
+    constexpr bool bUseShortNameForTitle{ false };
 
     switch (TitleType)
     {
     case ENodeTitleType::FullTitle:
         /** The full title, may be multiple lines. */
         return LOCTEXT("ListViewTitle", "vpack");
-        if (!bUseShortNameForTitle && !OperandType.TypeName.IsNone())
-        {
-            return FText::FromString(FString::Printf(TEXT("vpack %s"), *OperandType.TypeName.ToString()));
-        }
-        break;
     case ENodeTitleType::MenuTitle:
         /** Menu Title for context menus to be displayed in context menus referencing the node. */
         return LOCTEXT("MenuTitle", "vpack - Pack/Init MaxQ vector");
