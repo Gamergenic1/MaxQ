@@ -9,6 +9,11 @@
 #include "HttpModule.h"
 #include "Interfaces/IHttpRequest.h"
 #include "Interfaces/IHttpResponse.h"
+#include "Engine/Engine.h"
+#include "Engine/StaticMesh.h"
+#include "HAL/FileManager.h"
+#include "Misc/Paths.h"
+#include "Components/StaticMeshComponent.h"
 #include "Spice.h"
 
 #if WITH_EDITOR
@@ -646,7 +651,7 @@ void USampleUtilities::GetTelemetryFromServer(FTelemetryCallback Callback, FStri
                     FString Mistake;
 
                     switch (pRequest->GetStatus()) {
-                    case EHttpRequestStatus::Failed_ConnectionError:
+                    case EHttpRequestStatus::Failed:
                         Mistake = TEXT("Connection failed.");
                     default:
                         Mistake = TEXT("Request failed.");

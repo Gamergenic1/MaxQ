@@ -11,6 +11,7 @@
 #include "SampleUtilities.h"
 #include "Sample05TelemetryActor.h"
 #include "SpiceOrbits.h"
+#include "Engine/Engine.h"
 #include "GetTelemetryFromServer.h"
 
 using MaxQSamples::Log;

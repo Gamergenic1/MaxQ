@@ -12,6 +12,7 @@
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "Kismet/BlueprintAsyncActionBase.h"
 #include "UObject/WeakObjectPtrTemplates.h"
+#include "GameFramework/Actor.h"
 #include "SampleUtilities.generated.h"
 
 
