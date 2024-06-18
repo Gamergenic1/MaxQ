@@ -289,18 +289,18 @@ void UK2Node_minus::GetMenuActions(FBlueprintActionDatabaseRegistrar& ActionRegi
 
 FText UK2Node_minus::GetNodeTitle(ENodeTitleType::Type TitleType) const
 {
-    constexpr bool bUseShortNameForTitle{ true };
+    // constexpr bool bUseShortNameForTitle{ true };
 
     switch (TitleType)
     {
     case ENodeTitleType::FullTitle:
         /** The full title, may be multiple lines. */
         return LOCTEXT("ListViewTitle", "vminus");
-        if (!bUseShortNameForTitle && !OperandType.TypeName.IsNone())
-        {
-            return FText::FromString(FString::Printf(TEXT("vminus %s"), *OperandType.TypeName.ToString()));
-        }
-        break;
+        // if (!bUseShortNameForTitle && !OperandType.TypeName.IsNone())
+        // {
+        //     return FText::FromString(FString::Printf(TEXT("vminus %s"), *OperandType.TypeName.ToString()));
+        // }
+        // break;
     case ENodeTitleType::MenuTitle:
         /** Menu Title for context menus to be displayed in context menus referencing the node. */
         return LOCTEXT("MenuTitle", "vminus - Negate vector");

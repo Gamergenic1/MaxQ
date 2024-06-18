@@ -17,6 +17,8 @@
 
 #pragma once
 
+#include "CoreMinimal.h"
+
 #pragma region NaifFNames
 namespace MaxQ::Constants
 {

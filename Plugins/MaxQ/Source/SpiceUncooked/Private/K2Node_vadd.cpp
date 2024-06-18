@@ -26,18 +26,18 @@ UK2Node_vadd::UK2Node_vadd()
 
 FText UK2Node_vadd::GetNodeTitle(ENodeTitleType::Type TitleType) const
 {
-    constexpr bool bUseShortNameForTitle{ true };
+    // constexpr bool bUseShortNameForTitle{ true };
 
     switch (TitleType)
     {
     case ENodeTitleType::FullTitle:
         /** The full title, may be multiple lines. */
         return LOCTEXT("ListViewTitle", "vadd");
-        if (!bUseShortNameForTitle && !OperandType.TypeName.IsNone())
-        {
-            return FText::FromString(FString::Printf(TEXT("vadd %s"), *OperandType.TypeName.ToString()));
-        }
-        break;
+        // if (!bUseShortNameForTitle && !OperandType.TypeName.IsNone())
+        // {
+        //     return FText::FromString(FString::Printf(TEXT("vadd %s"), *OperandType.TypeName.ToString()));
+        // }
+        // break;
     case ENodeTitleType::MenuTitle:
         /** Menu Title for context menus to be displayed in context menus referencing the node. */
         return LOCTEXT("MenuTitle", "vadd - Add MaxQ vectors");

@@ -28,6 +28,7 @@ public class SpiceEditorTarget : TargetRules
         bUseFastPDBLinking = false;
         bPublicSymbolsByDefault = true;  // <- Forced to true on Windows anyways
         WindowsPlatform.bStripUnreferencedSymbols = false;
+        bOverrideBuildEnvironment = true;
 
         ExtraModuleNames.Add("Spice");
         ExtraModuleNames.Add("MaxQMain");

@@ -96,7 +96,7 @@ void UGetTelemetryFromServer_AsyncExecution::Activate()
                     FString Mistake;
 
                     switch (pRequest->GetStatus()) {
-                    case EHttpRequestStatus::Failed_ConnectionError:
+                    case EHttpRequestStatus::Failed:
                         Mistake = TEXT("Connection failed.");
                     default:
                         Mistake = TEXT("Request failed.");

@@ -25,6 +25,8 @@
 #pragma once
 
 #include "SpiceTypes.h"
+#include "Misc/Paths.h"
+#include "HAL/FileManager.h"
 
 namespace MaxQ::Data
 {

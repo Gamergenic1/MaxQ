@@ -11,6 +11,7 @@
 #include "SpiceConstants.h"
 #include "SpiceTypes.h"
 #include "SampleUtilities.h"
+#include "GameFramework/Actor.h"
 #include "UObject/WeakObjectPtrTemplates.h"
 #include "Sample06Actor.generated.h"
 
