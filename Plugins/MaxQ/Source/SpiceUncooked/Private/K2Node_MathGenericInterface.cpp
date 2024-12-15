@@ -14,6 +14,7 @@
 
 #include "K2Node_MathGenericInterface.h"
 #include "EdGraphSchema_K2.h"
+#include "K2Node.h"
 
 
 void IK2Node_MathGenericInterface::NotifyConnectionChanged(UEdGraphPin* Pin, UEdGraphPin* Connection)

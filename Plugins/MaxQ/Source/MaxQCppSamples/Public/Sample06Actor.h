@@ -8,6 +8,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GameFramework/Actor.h"
 #include "SpiceConstants.h"
 #include "SpiceTypes.h"
 #include "SampleUtilities.h"

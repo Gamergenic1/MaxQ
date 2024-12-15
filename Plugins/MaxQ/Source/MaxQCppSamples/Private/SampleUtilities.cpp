@@ -10,6 +10,14 @@
 #include "Interfaces/IHttpRequest.h"
 #include "Interfaces/IHttpResponse.h"
 #include "Spice.h"
+#include "Misc/Paths.h"
+#include "HAL/PlatformFileManager.h"
+#include "GenericPlatform/GenericPlatformFile.h"
+#include "GameFramework/Actor.h"
+#include "Engine/Engine.h"
+#include "HAL/FileManager.h"
+#include "Components/StaticMeshComponent.h"
+#include "Engine/StaticMesh.h"
 
 #if WITH_EDITOR
 #include "Interfaces/IPluginManager.h"
@@ -646,8 +654,11 @@ void USampleUtilities::GetTelemetryFromServer(FTelemetryCallback Callback, FStri
                     FString Mistake;
 
                     switch (pRequest->GetStatus()) {
-                    case EHttpRequestStatus::Failed_ConnectionError:
-                        Mistake = TEXT("Connection failed.");
+                    case EHttpRequestStatus::Failed:
+                        if (pRequest->GetFailureReason() == EHttpFailureReason::ConnectionError)
+                        {
+                            Mistake = TEXT("Connection failed.");
+                        }
                     default:
                         Mistake = TEXT("Request failed.");
                     }

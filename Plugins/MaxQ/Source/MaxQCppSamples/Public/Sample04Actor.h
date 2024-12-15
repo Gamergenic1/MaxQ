@@ -8,13 +8,13 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GameFramework/Actor.h"
 #include "SpiceConstants.h"
 #include "SpiceTypes.h"
 #include "SampleUtilities.h"
 #include "UObject/WeakObjectPtrTemplates.h"
 #include "Sample04Actor.generated.h"
 
-class AActor;
 
 //-----------------------------------------------------------------------------
 // Sample04

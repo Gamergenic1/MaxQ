@@ -9,6 +9,7 @@
 
 #include "CoreMinimal.h"
 #include "SampleUtilities.h"
+#include "GameFramework/Actor.h"
 #include "Sample05Actor.generated.h"
 
 

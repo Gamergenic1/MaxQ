@@ -17,6 +17,10 @@
 
 #pragma once
 
+#include "HAL/Platform.h"
+#include "Containers/UnrealString.h"
+#include "UObject/NameTypes.h"
+
 #pragma region NaifFNames
 namespace MaxQ::Constants
 {

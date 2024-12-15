@@ -22,7 +22,7 @@ public class SpiceEditorTarget : TargetRules
     public SpiceEditorTarget(TargetInfo Target) : base(Target)
     {
         Type = TargetType.Editor;
-        DefaultBuildSettings = BuildSettingsVersion.V2;
+        DefaultBuildSettings = BuildSettingsVersion.V5;
         IncludeOrderVersion = EngineIncludeOrderVersion.Latest;
 
         bUseFastPDBLinking = false;
@@ -34,7 +34,7 @@ public class SpiceEditorTarget : TargetRules
 
         UpdateDocs(Target);
         BuildCSpiceLib(this);
-        CppStandard = CppStandardVersion.Cpp17;
+        CppStandard = CppStandardVersion.Cpp20;
     }
 
     public void UpdateDocs(TargetInfo Target)
