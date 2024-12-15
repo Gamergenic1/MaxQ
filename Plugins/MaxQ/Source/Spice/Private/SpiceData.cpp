@@ -23,6 +23,8 @@
 
 #include "SpiceData.h"
 #include "SpiceUtilities.h"
+#include "Misc/Paths.h"
+#include "HAL/FileManager.h"
 
 PRAGMA_PUSH_PLATFORM_DEFAULT_PACKING
 extern "C"
@@ -378,7 +380,7 @@ namespace MaxQ::Data
         if (!ErrorCheck(ResultCode, ErrorMessage) && n_actual != N)
         {
             if (ResultCode) *ResultCode = ES_ResultCode::Error;
-            if (ErrorMessage) *ErrorMessage = FString::Printf(TEXT("Blueprint request for BODY%s_%s Expected double[%d] but proc returned double[%d]"), bodyid, *item, N, n_actual);
+            if (ErrorMessage) *ErrorMessage = FString::Printf(TEXT("Blueprint request for BODY%d_%s Expected double[%d] but proc returned double[%d]"), bodyid, *item, N, n_actual);
         }
     }
 

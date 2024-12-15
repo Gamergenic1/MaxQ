@@ -20,6 +20,7 @@
 
 #include "CoreMinimal.h"
 #include "SpicePlatformDefs.h"
+#include "SpiceEnums.generated.h"
 
 UENUM(BlueprintType)
 enum class ES_ResultCode : uint8

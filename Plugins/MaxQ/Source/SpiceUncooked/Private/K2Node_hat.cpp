@@ -288,11 +288,12 @@ FText UK2Node_hat::GetNodeTitle(ENodeTitleType::Type TitleType) const
     case ENodeTitleType::FullTitle:
         /** The full title, may be multiple lines. */
         return LOCTEXT("ListViewTitle", "vhat");
-        if (!bUseShortNameForTitle && !OperandType.TypeName.IsNone())
+        // commented out to avoid compilation error C4702: unreachable code
+        /*if (!bUseShortNameForTitle && !OperandType.TypeName.IsNone())
         {
             return FText::FromString(FString::Printf(TEXT("vhat %s"), *OperandType.TypeName.ToString()));
         }
-        break;
+        break;*/
     case ENodeTitleType::MenuTitle:
         /** Menu Title for context menus to be displayed in context menus referencing the node. */
         return LOCTEXT("MenuTitle", "vhat - Unit vector");
