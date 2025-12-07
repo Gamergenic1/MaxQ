@@ -23,6 +23,7 @@
 #include "BlueprintNodeSpawner.h"
 #include "K2Node_CallFunction.h"
 #include "Textures/SlateIcon.h"
+#include "UObject/UObjectGlobals.h"
 
 using namespace ENodeTitleType;
 
@@ -64,7 +65,7 @@ void UK2Node_OutWithSelectorOp::AllocateDefaultPins()
     UEdGraphPin* errorMessagePin = CreatePin(EGPD_Output, UEdGraphSchema_K2::PC_String, errorMessage_PinName);
     errorMessagePin->PinToolTip = TEXT("An error message, if the action fails");
 
-    static UEnum* ComponentSelectorEnum = FindObject<UEnum>(FTopLevelAssetPath(TEXT("/Script/SpiceUncooked.EK2_ComponentSelector")), /*ExactClass*/true);
+    static UEnum* ComponentSelectorEnum = FindObject<UEnum>(FTopLevelAssetPath(TEXT("/Script/SpiceUncooked.EK2_ComponentSelector")), EFindObjectFlags::ExactClass);
     if (ensure(IsValid(ComponentSelectorEnum)))
     {
         auto selector = CreatePin(EGPD_Input, UEdGraphSchema_K2::PC_Byte, ComponentSelectorEnum, selector_PinName);
@@ -290,7 +291,7 @@ bool UK2Node_OutWithSelectorOp::MatchMe(OperationType& operation, FEdGraphPinTyp
 
 EK2_ComponentSelector UK2Node_OutWithSelectorOp::selectorPinValue() const
 {
-    static UEnum* ComponentSelectorEnum = FindObject<UEnum>(FTopLevelAssetPath(TEXT("/Script/SpiceUncooked.EK2_ComponentSelector")), /*ExactClass*/true);
+    static UEnum* ComponentSelectorEnum = FindObject<UEnum>(FTopLevelAssetPath(TEXT("/Script/SpiceUncooked.EK2_ComponentSelector")), EFindObjectFlags::ExactClass);
 
     if (ensure(IsValid(ComponentSelectorEnum)))
     {

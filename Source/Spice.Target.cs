@@ -13,7 +13,7 @@ public class SpiceTarget : TargetRules
     public SpiceTarget(TargetInfo Target) : base(Target)
     {
         Type = TargetType.Game;
-        DefaultBuildSettings = BuildSettingsVersion.V5;
+        DefaultBuildSettings = BuildSettingsVersion.V6;
         IncludeOrderVersion = EngineIncludeOrderVersion.Latest;
         CppStandard = CppStandardVersion.Cpp20;
 

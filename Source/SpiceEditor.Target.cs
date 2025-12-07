@@ -22,11 +22,10 @@ public class SpiceEditorTarget : TargetRules
     public SpiceEditorTarget(TargetInfo Target) : base(Target)
     {
         Type = TargetType.Editor;
-        DefaultBuildSettings = BuildSettingsVersion.V5;
+        DefaultBuildSettings = BuildSettingsVersion.V6;
         IncludeOrderVersion = EngineIncludeOrderVersion.Latest;
         CppStandard = CppStandardVersion.Cpp20;
 
-        bUseFastPDBLinking = false;
         bPublicSymbolsByDefault = true;  // <- Forced to true on Windows anyways
         WindowsPlatform.bStripUnreferencedSymbols = false;
 
