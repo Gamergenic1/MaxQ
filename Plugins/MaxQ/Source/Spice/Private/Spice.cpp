@@ -130,6 +130,7 @@ void USpice::enumerate_kernels(
         }
         else
         {
+            // Caller tolerated empty directory; log warning only and keep ResultCode Success
             UE_LOG(LogSpice, Warning, TEXT("MaxQ Spice Enumerate Kernels: %s"), *ErrorMessage);
             ResultCode = ES_ResultCode::Success;
             ErrorMessage.Empty();

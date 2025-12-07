@@ -86,6 +86,7 @@ namespace MaxQ::Data
             }
             else
             {
+                // Caller tolerated empty directory; log warning only and keep ResultCode Success
                 UE_LOG(LogSpice, Warning, TEXT("MaxQ Spice Enumerate Kernels: %s"), *ErrorMessage);
                 ResultCode = ES_ResultCode::Success;
                 ErrorMessage.Empty();
@@ -233,7 +234,7 @@ namespace MaxQ::Data
     }
 
     // TArray version...
-    // Caller must initialize TArray size to expected size
+    // Caller must set Num() to the expected element count before calling
     template<>
     SPICE_API void Bodvrd(
         TArray<double>& Values,
@@ -244,6 +245,7 @@ namespace MaxQ::Data
     )
     {
         SpiceInt n_expected = Values.Num();
+        // Initialize before taking the buffer to avoid stale/null pointers
         Values.Init(0, n_expected);
         SpiceDouble* _result = Values.GetData();
         SpiceInt n_actual = 0;
@@ -311,7 +313,7 @@ namespace MaxQ::Data
 
 
     // TArray version...
-    // Caller must initialize TArray size to expected size
+    // Caller must set Num() to the expected element count before calling
     template<>
     SPICE_API void Bodvcd(
         TArray<double>& Values,
@@ -322,6 +324,7 @@ namespace MaxQ::Data
     )
     {
         SpiceInt n_expected = Values.Num();
+        // Initialize before taking the buffer to avoid stale/null pointers
         Values.Init(0, n_expected);
         SpiceDouble* _result = Values.GetData();
         SpiceInt n_actual = 0;
@@ -433,7 +436,7 @@ namespace MaxQ::Data
     }
 
     // TArray version...
-    // Caller must initialize TArray size to expected size
+    // Caller must set Num() to the expected element count before calling
     template<>
     SPICE_API void Gdpool(
         TArray<double>& Values,
@@ -447,6 +450,7 @@ namespace MaxQ::Data
         SpiceInt        _n{ 0 };
         SpiceBoolean    _found = SPICEFALSE;
 
+        // Initialize before taking the buffer to avoid stale/null pointers
         Values.Init(0, _room);
         SpiceDouble*    _values{ Values.GetData() };
 
