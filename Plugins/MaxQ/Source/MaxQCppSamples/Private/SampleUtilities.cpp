@@ -9,6 +9,12 @@
 #include "HttpModule.h"
 #include "Interfaces/IHttpRequest.h"
 #include "Interfaces/IHttpResponse.h"
+#include "GameFramework/Actor.h"
+#include "Components/StaticMeshComponent.h"
+#include "Engine/Engine.h"
+#include "Engine/StaticMesh.h"
+#include "HAL/FileManager.h"
+#include "Misc/Paths.h"
 #include "Spice.h"
 
 #if WITH_EDITOR

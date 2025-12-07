@@ -12,9 +12,9 @@
 #include "SpiceTypes.h"
 #include "SampleUtilities.h"
 #include "UObject/WeakObjectPtrTemplates.h"
+#include "GameFramework/Actor.h"
 #include "Sample06Actor.generated.h"
 
-class AActor;
 
 //-----------------------------------------------------------------------------
 // Sample06

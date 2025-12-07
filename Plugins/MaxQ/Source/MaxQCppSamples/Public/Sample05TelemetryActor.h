@@ -11,6 +11,7 @@
 #include "SpiceTypes.h"
 #include "SampleUtilities.h"
 #include "SampleNametagWidget.h"
+#include "GameFramework/Actor.h"
 #include "Sample05TelemetryActor.generated.h"
 
 class UStaticMeshComponent;

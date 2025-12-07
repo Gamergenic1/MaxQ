@@ -22,6 +22,8 @@
 //------------------------------------------------------------------------------
 
 #include "SpiceData.h"
+#include "Misc/Paths.h"
+#include "HAL/FileManager.h"
 #include "SpiceUtilities.h"
 
 PRAGMA_PUSH_PLATFORM_DEFAULT_PACKING
