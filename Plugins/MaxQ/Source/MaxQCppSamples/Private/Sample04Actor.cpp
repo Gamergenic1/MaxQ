@@ -6,6 +6,7 @@
 // GitHub:         https://github.com/Gamergenic1/MaxQ/ 
 
 #include "Sample04Actor.h"
+#include "Engine/Engine.h"
 #include "Spice.h"
 
 using MaxQSamples::Log;

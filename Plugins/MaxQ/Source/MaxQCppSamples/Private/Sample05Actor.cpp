@@ -6,12 +6,14 @@
 // GitHub:         https://github.com/Gamergenic1/MaxQ/ 
 
 #include "Sample05Actor.h"
+#include "Engine/Engine.h"
 #include "SpiceTypes.h"
 #include "Spice.h"
 #include "SampleUtilities.h"
 #include "Sample05TelemetryActor.h"
 #include "SpiceOrbits.h"
 #include "GetTelemetryFromServer.h"
+
 
 using MaxQSamples::Log;
 using namespace MaxQ::Data;

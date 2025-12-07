@@ -9,6 +9,7 @@
 #include "Misc/Paths.h"
 #include "HAL/FileManager.h"
 #include "GenericPlatform/GenericPlatformMisc.h"
+#include "Engine/Engine.h"
 #include "Spice.h"
 
 using MaxQSamples::Log;
