@@ -86,7 +86,9 @@ namespace MaxQ::Data
             }
             else
             {
-                UE_LOG(LogSpice, Error, TEXT("MaxQ Spice Enumerate Kernels: %s"), *ErrorMessage);
+                // Caller tolerated empty directory; log warning only and keep ResultCode Success
+                UE_LOG(LogSpice, Warning, TEXT("MaxQ Spice Enumerate Kernels: %s"), *ErrorMessage);
+                ResultCode = ES_ResultCode::Success;
                 ErrorMessage.Empty();
             }
         }
@@ -232,7 +234,7 @@ namespace MaxQ::Data
     }
 
     // TArray version...
-    // Caller must initialize TArray size to expected size
+    // Caller must set Num() to the expected element count before calling
     template<>
     SPICE_API void Bodvrd(
         TArray<double>& Values,
@@ -242,9 +244,11 @@ namespace MaxQ::Data
         FString* ErrorMessage
     )
     {
-        SpiceDouble* _result = Values.GetData();
-        SpiceInt n_actual, n_expected = Values.Num();
+        SpiceInt n_expected = Values.Num();
+        // Initialize before taking the buffer to avoid stale/null pointers
         Values.Init(0, n_expected);
+        SpiceDouble* _result = Values.GetData();
+        SpiceInt n_actual = 0;
 
         auto _bodynm = StringCast<ANSICHAR>(*bodynm);
         auto _item = StringCast<ANSICHAR>(*item);
@@ -309,7 +313,7 @@ namespace MaxQ::Data
 
 
     // TArray version...
-    // Caller must initialize TArray size to expected size
+    // Caller must set Num() to the expected element count before calling
     template<>
     SPICE_API void Bodvcd(
         TArray<double>& Values,
@@ -319,9 +323,11 @@ namespace MaxQ::Data
         FString* ErrorMessage
     )
     {
-        SpiceDouble* _result = Values.GetData();
-        SpiceInt n_actual, n_expected = Values.Num();
+        SpiceInt n_expected = Values.Num();
+        // Initialize before taking the buffer to avoid stale/null pointers
         Values.Init(0, n_expected);
+        SpiceDouble* _result = Values.GetData();
+        SpiceInt n_actual = 0;
 
         bodvcd_c(bodyid, TCHAR_TO_ANSI(*item), n_expected, &n_actual, _result);
 
@@ -430,7 +436,7 @@ namespace MaxQ::Data
     }
 
     // TArray version...
-    // Caller must initialize TArray size to expected size
+    // Caller must set Num() to the expected element count before calling
     template<>
     SPICE_API void Gdpool(
         TArray<double>& Values,
@@ -442,10 +448,11 @@ namespace MaxQ::Data
         SpiceInt        _start{ 0 };
         SpiceInt        _room{ Values.Num() };
         SpiceInt        _n{ 0 };
-        SpiceDouble*    _values{ Values.GetData() };
         SpiceBoolean    _found = SPICEFALSE;
 
+        // Initialize before taking the buffer to avoid stale/null pointers
         Values.Init(0, _room);
+        SpiceDouble*    _values{ Values.GetData() };
 
         gdpool_c(TCHAR_TO_ANSI(*name), _start, _room, &_n, _values, &_found);
 

@@ -106,7 +106,8 @@ TArray<double> USpiceK2::gdpool_array_K2(
     // Not implemented by MaxQ::Data
 
     // Inputs
-    SpiceInt        _start = 0;
+    // Honor caller-specified start index; clamp to zero for safety
+    SpiceInt        _start = FMath::Max(0, start);
     SpiceInt        _room = 200;
     // Outputs
     SpiceInt        _n = 0;
