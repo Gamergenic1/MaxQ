@@ -54,7 +54,6 @@ void UK2Node_pack::AllocateDefaultPins()
 
     const UEdGraphSchema_K2* K2Schema = GetDefault<UEdGraphSchema_K2>();
 
-//    for (const auto& PinName : USpiceK2::vpack_inputs)
     for (int i = 0; i < USpiceK2::vpack_inputs_n; ++i)
     {
         const auto& PinName = USpiceK2::vpack_inputs[i];
@@ -418,12 +417,11 @@ FText UK2Node_pack::GetNodeTitle(ENodeTitleType::Type TitleType) const
     {
     case ENodeTitleType::FullTitle:
         /** The full title, may be multiple lines. */
-        return LOCTEXT("ListViewTitle", "vpack");
         if (!bUseShortNameForTitle && !OperandType.TypeName.IsNone())
         {
             return FText::FromString(FString::Printf(TEXT("vpack %s"), *OperandType.TypeName.ToString()));
         }
-        break;
+        return LOCTEXT("ListViewTitle", "vpack");
     case ENodeTitleType::MenuTitle:
         /** Menu Title for context menus to be displayed in context menus referencing the node. */
         return LOCTEXT("MenuTitle", "vpack - Pack/Init MaxQ vector");

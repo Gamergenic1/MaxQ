@@ -95,10 +95,13 @@ void UGetTelemetryFromServer_AsyncExecution::Activate()
                     // No.  Mistakes were made.
                     FString Mistake;
 
-                    switch (pRequest->GetStatus()) {
-                    case EHttpRequestStatus::Failed_ConnectionError:
+                    const EHttpRequestStatus::Type Status = pRequest->GetStatus();
+                    if (Status == EHttpRequestStatus::Failed && pRequest->GetFailureReason() == EHttpFailureReason::ConnectionError)
+                    {
                         Mistake = TEXT("Connection failed.");
-                    default:
+                    }
+                    else
+                    {
                         Mistake = TEXT("Request failed.");
                     }
 

@@ -20,8 +20,6 @@
 #include "SpiceK2.h"
 #include "SpicePlatformDefs.h"
 #include "K2SingleInputOp.h"
-//#include "EdGraphSchema_K2.h"
-//#include "KismetCompiler.h"
 
 
 #define LOCTEXT_NAMESPACE "K2Node_upack"
@@ -401,12 +399,11 @@ FText UK2Node_upack::GetNodeTitle(ENodeTitleType::Type TitleType) const
     {
     case ENodeTitleType::FullTitle:
         /** The full title, may be multiple lines. */
-        return LOCTEXT("ListViewTitle", "vupack");
         if (!bUseShortNameForTitle && !OperandType.TypeName.IsNone())
         {
             return FText::FromString(FString::Printf(TEXT("vupack %s"), *OperandType.TypeName.ToString()));
         }
-        break;
+        return LOCTEXT("ListViewTitle", "vupack");
     case ENodeTitleType::MenuTitle:
         /** Menu Title for context menus to be displayed in context menus referencing the node. */
         return LOCTEXT("MenuTitle", "vupack - Unpack MaxQ vector");
@@ -415,7 +412,7 @@ FText UK2Node_upack::GetNodeTitle(ENodeTitleType::Type TitleType) const
         return LOCTEXT("ListViewTitle", "vupack - Unpack vector");
     }
 
-    return LOCTEXT("ShortTitle", "vpack");
+    return LOCTEXT("ShortTitle", "vupack");
 }
 
 
