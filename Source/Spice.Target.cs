@@ -13,13 +13,13 @@ public class SpiceTarget : TargetRules
     public SpiceTarget(TargetInfo Target) : base(Target)
     {
         Type = TargetType.Game;
-        DefaultBuildSettings = BuildSettingsVersion.V2;
+        DefaultBuildSettings = BuildSettingsVersion.V5;
         IncludeOrderVersion = EngineIncludeOrderVersion.Latest;
+        CppStandard = CppStandardVersion.Cpp20;
 
         // Assumes CSpice_Library has already been built.
 
         ExtraModuleNames.Add("Spice");
         ExtraModuleNames.Add("MaxQMain");
-        CppStandard = CppStandardVersion.Cpp17;
     }
 }

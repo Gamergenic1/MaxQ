@@ -345,13 +345,13 @@ void ASample06Actor::GenerateTrappistSPKKernel()
         // Open a new SPK file for writing
         USpice::spkopn(ResultCode, ErrorMessage, WriteFilePath, FPaths::GetCleanFilename(WriteFilePath), CommentsToWrite.Num() * 128, Handle);
 
-        MaxQSamples::Log(FString::Printf(TEXT("spkopn file %s"), *WriteFilePath, ResultCode));
+        MaxQSamples::Log(FString::Printf(TEXT("spkopn file %s (code %d)"), *WriteFilePath, static_cast<int32>(ResultCode)));
 
         // Add the comments to the SPK file
         if (ResultCode == ES_ResultCode::Success)
         {
             USpice::dafac(ResultCode, ErrorMessage, Handle, CommentsToWrite);
-            MaxQSamples::Log(FString::Printf(TEXT("dafac result: %s"), ErrorMessage.IsEmpty() ? TEXT("OK") : *ErrorMessage, ResultCode));
+            MaxQSamples::Log(FString::Printf(TEXT("dafac result: %s (code %d)"), ErrorMessage.IsEmpty() ? TEXT("OK") : *ErrorMessage, static_cast<int32>(ResultCode)));
         }
 
         // We compute SPK positions from now, through 30 days into the future,
@@ -420,7 +420,7 @@ void ASample06Actor::GenerateTrappistSPKKernel()
 
             if (ResultCode != ES_ResultCode::Success)
             {
-                MaxQSamples::Log(FString::Printf(TEXT("spkcls file %s"), *WriteFilePath, ResultCode));
+                MaxQSamples::Log(FString::Printf(TEXT("spkcls file %s (code %d)"), *WriteFilePath, static_cast<int32>(ResultCode)));
             }
         }
     }
