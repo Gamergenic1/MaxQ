@@ -1348,8 +1348,11 @@ FString USpiceTypes::FormatDoublePrecisely(double value, int precision)
     // Create an output string stream
     std::ostringstream streamObj;
 
+    // Use caller-specified precision when provided, otherwise fall back to the global default
+    int usePrecision = precision >= 0 ? precision : FloatFormatPrecision;
+
     // Set precision
-    streamObj << std::setprecision(FloatFormatPrecision);
+    streamObj << std::setprecision(usePrecision);
     
     // Add double to stream
     streamObj << value;
@@ -1633,6 +1636,7 @@ FString USpiceTypes::FormatSpeed(const FSSpeed& speed, ES_Units NumeratorUnits /
     {
         double denominator = 1.;
         convrt_c(denominator, MaxQ::Core::ToANSIString(ES_Units::SECONDS), MaxQ::Core::ToANSIString(DenominatorUnits), &denominator);
+        UnexpectedErrorCheck(false);
         value *= denominator;
     }
 

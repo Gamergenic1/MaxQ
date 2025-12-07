@@ -86,7 +86,8 @@ namespace MaxQ::Data
             }
             else
             {
-                UE_LOG(LogSpice, Error, TEXT("MaxQ Spice Enumerate Kernels: %s"), *ErrorMessage);
+                UE_LOG(LogSpice, Warning, TEXT("MaxQ Spice Enumerate Kernels: %s"), *ErrorMessage);
+                ResultCode = ES_ResultCode::Success;
                 ErrorMessage.Empty();
             }
         }
@@ -242,9 +243,10 @@ namespace MaxQ::Data
         FString* ErrorMessage
     )
     {
-        SpiceDouble* _result = Values.GetData();
-        SpiceInt n_actual, n_expected = Values.Num();
+        SpiceInt n_expected = Values.Num();
         Values.Init(0, n_expected);
+        SpiceDouble* _result = Values.GetData();
+        SpiceInt n_actual = 0;
 
         auto _bodynm = StringCast<ANSICHAR>(*bodynm);
         auto _item = StringCast<ANSICHAR>(*item);
@@ -319,9 +321,10 @@ namespace MaxQ::Data
         FString* ErrorMessage
     )
     {
-        SpiceDouble* _result = Values.GetData();
-        SpiceInt n_actual, n_expected = Values.Num();
+        SpiceInt n_expected = Values.Num();
         Values.Init(0, n_expected);
+        SpiceDouble* _result = Values.GetData();
+        SpiceInt n_actual = 0;
 
         bodvcd_c(bodyid, TCHAR_TO_ANSI(*item), n_expected, &n_actual, _result);
 
@@ -442,10 +445,10 @@ namespace MaxQ::Data
         SpiceInt        _start{ 0 };
         SpiceInt        _room{ Values.Num() };
         SpiceInt        _n{ 0 };
-        SpiceDouble*    _values{ Values.GetData() };
         SpiceBoolean    _found = SPICEFALSE;
 
         Values.Init(0, _room);
+        SpiceDouble*    _values{ Values.GetData() };
 
         gdpool_c(TCHAR_TO_ANSI(*name), _start, _room, &_n, _values, &_found);
 

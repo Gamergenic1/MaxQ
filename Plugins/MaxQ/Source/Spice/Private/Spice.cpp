@@ -130,7 +130,8 @@ void USpice::enumerate_kernels(
         }
         else
         {
-            UE_LOG(LogSpice, Error, TEXT("MaxQ Spice Enumerate Kernels: %s"), *ErrorMessage);
+            UE_LOG(LogSpice, Warning, TEXT("MaxQ Spice Enumerate Kernels: %s"), *ErrorMessage);
+            ResultCode = ES_ResultCode::Success;
             ErrorMessage.Empty();
         }
     }
